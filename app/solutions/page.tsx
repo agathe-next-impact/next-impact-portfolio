@@ -106,10 +106,10 @@ export default function SolutionsPage() {
                       titre1="Des sites web puissants"
                       titre2="adaptés à vos ambitions"
                       sousTitre="Du site vitrine administrable à l'application web haute performance, nous choisissons l'architecture qui sert vos objectifs de croissance."
-                      cta1Text="Découvrir nos offres"
-                      cta1Link="#offres"
-                      cta2Text="Demander un audit gratuit"
-                      cta2Link="/contact"
+                      cta1Text="Démo"
+                      cta1Link="/demo"
+                      cta2Text="Contact"
+                      cta2Link="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
                       illustration="/illustrations/tech-ecosystem.svg"
                     />
                     <SolutionsOffers offers={offers} />

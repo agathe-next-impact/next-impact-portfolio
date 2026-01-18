@@ -1,13 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MagicCard } from "@/components/magicui/magic-card";
-import { CTASection } from "@/components/cta-section";
 import { Metadata } from "next";
 
 // meta données dynamiques pour la page d'étude de cas
@@ -16,11 +14,18 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
+
   const caseStudy = CASE_STUDIES.find((study) => study.slug === params.slug);
   if (!caseStudy) {
     return {
       title: "Étude de cas introuvable",
       description: "L'étude de cas demandée n'existe pas.",
+      openGraph: {
+        title: "Étude de cas introuvable",
+        description: "L'étude de cas demandée n'existe pas.",
+        url: `https://next-impact.digital/etudes-de-cas/${params.slug}`,
+        type: "article",
+      },
     };
   }
 
@@ -41,6 +46,7 @@ export async function generateMetadata({
         },
       ],
     },
+    metadataBase: new URL("https://next-impact.digital"),
   };
 }
 
@@ -50,9 +56,12 @@ type ClientType =
   | "PME"
   | "Association"
   | "Indépendant"
-  | "Tous";
+  | "ESS"
+  | "Tous"
+  | "Groupement"
+  | "Institutionnel";
 type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
-type Year = number | null;
+type Year = number | null;  
 
 interface CaseStudy {
   id: string;
@@ -82,6 +91,7 @@ interface CaseStudy {
   technologies: string[];
   duration: string;
   website?: string;
+  demoLink?: string;
 }
 
 // Données d'exemple (à remplacer par vos vraies données)
@@ -109,15 +119,18 @@ const CASE_STUDIES: CaseStudy[] = [
       "Augmentation du nombre de groupes locaux constitués",
       "Navigation fluide et responsive",
     ],
-    gallery: {
-      url: "/img/desktop-screen-egc.png",
-      alt: "Page d'accueil du site Les Etats Généraux Communaux",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-egc.png",
+        alt: "Page d'accueil du site Les Etats Généraux Communaux",
+      },
+    ],
     detailedDescription:
       "Les Etats Généraux Communaux est un site vitrine conçu pour promouvoir un événement citoyen visant à encourager la participation locale. Le site met en avant les ressources, les actualités et facilite la constitution des groupes locaux.\n\nNous avons développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant l'événement et ses objectifs.\n\nLe site comprend une section de ressources téléchargeables, un calendrier des événements et une carte interactive des groupes locaux constitués.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de sensibiliser le public à l'initiative.",
     technologies: ["WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel"],
     duration: "4 semaines",
     website: "https://lesetatsgenerauxcommunaux.org",
+    demoLink: "https://youtu.be/dJIndpLBm7o",
   },
   {
     id: "1",
@@ -149,10 +162,12 @@ const CASE_STUDIES: CaseStudy[] = [
       author: "Christophe Riboulet",
       position: "PDG, Proditec",
     },
-    gallery: {
-      url: "/img/desktop-screen-proditec.jpg",
-      alt: "Page d'accueil du site Proditec",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-proditec.jpg",
+        alt: "Page d'accueil du site Proditec",
+      },
+    ],
     detailedDescription: `Proditec, une entreprise spécialisée dans la robotique industrielle, avait besoin d'une refonte complète de son site web pour 
       refléter son travail et sa reconnaissance internationale. Leur ancien site était obsolète, difficile à naviguer et à administrer et ne prenait 
       pas en charge le multilingue.\n\nNous avons créé un site WordPress avec un design responsive et une interface 
@@ -196,10 +211,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Section Agenda pour les événements",
       "Administration simplifiée via WordPress en Headless",
     ],
-    gallery: {
-      url: "/img/desktop-screen-lesdoleances.jpg",
-      alt: "Page d'accueil du site Les Doléances",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-lesdoleances.jpg",
+        alt: "Page d'accueil du site Les Doléances",
+      },
+    ],
     detailedDescription:
       "L'association Les Doléances, nouvellement créée a pour vocation de mettre à disposition des citoyens les Doléances de 2018-2019. Pour évoquer l'esprit communautaire et participatif, ainsi que la liberté d'accès à l'information, un template très largement inspiré de Wikipédia a été choisi.\n\nLe site est construit sur WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant l'action et la démarche.\n\nLe site comprend une cartographie de ses groupes locaux et une section d'articles catégorisés.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de sensibiliser le public aux actions de l'association.",
     technologies: [
@@ -211,6 +228,7 @@ const CASE_STUDIES: CaseStudy[] = [
     ],
     duration: "2 mois",
     website: "https://lesdoleances.fr",
+    demoLink: "https://youtu.be/_OjiGiOWJus?si=7pcNT3Zx_dxLJqUa",
   },
   {
     id: "4",
@@ -237,10 +255,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Tenue du délai de 10 jours",
       "Administration simplifiée pour l'équipe marketing",
     ],
-    gallery: {
-      url: "/img/desktop-screen-sowee.png",
-      alt: "Interface de la section blog Sowee",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-sowee.png",
+        alt: "Interface de la section blog Sowee",
+      },
+    ],
     detailedDescription:
       "Sowee, une entreprise spécialisée dans les solutions énergétiques, souhaitait créer une section blog pour son portail Drupal tout en utilisant WordPress. L'objectif était de fournir un espace où l'équipe marketing pourrait publier des articles sur les tendances du secteur, les innovations et les conseils pour les consommateurs.\n\nNous avons développé un thème WordPress personnalisé en respectant les maquettes fournies par l'équipe marketing. Le design est moderne et épuré, avec une navigation intuitive pour les lecteurs.\n\nLa section blog permet à l'équipe de publier facilement des articles, d'ajouter des images et de gérer les catégories.",
     technologies: [
@@ -252,6 +272,7 @@ const CASE_STUDIES: CaseStudy[] = [
     ],
     duration: "5 jours",
     website: "https://sowee.fr/conseils",
+    demoLink: "https://youtu.be/PHImvgHrScE",
   },
   {
     id: "5",
@@ -285,15 +306,18 @@ const CASE_STUDIES: CaseStudy[] = [
       author: "Luc Poigniez",
       position: "Fondateur, Agence Créaclic",
     },
-    gallery: {
-      url: "/img/desktop-screen-salondelacarrosserie.jpg",
-      alt: "Page d'accueil du site Salon de la Carrosserie",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-salondelacarrosserie.jpg",
+        alt: "Page d'accueil du site Salon de la Carrosserie",
+      },
+    ],
     detailedDescription:
       "Le Salon de la Carrosserie, un événement majeur pour les professionnels du secteur, avait besoin d'un site vitrine pour promouvoir l'événement et faciliter l'inscription des exposants. L'objectif était de créer un site moderne et fonctionnel qui reflète l'importance de l'événement.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. La page d'accueil présente les informations clés sur l'événement, les exposants et les partenaires.\n\nUn espace d'inscription pour les exposants a été mis en place, permettant aux entreprises de s'inscrire facilement et de gérer leurs disponibilités. Le site est entièrement responsive et optimisé pour le référencement naturel.",
     technologies: ["WordPress", "Elementor Pro", "Ultimate Member"],
     duration: "15 jours",
     website: "https://salondelacarrosserie.com",
+    demoLink: "https://youtu.be/s_tyz8ubqSo",
   },
   {
     id: "6",
@@ -328,10 +352,12 @@ const CASE_STUDIES: CaseStudy[] = [
       author: "Jean Karinthi",
       position: "Fondateur, Tiers Lieu L'Hermitage",
     },
-    gallery: {
-      url: "/img/desktop-screen-hermitage.jpg",
-      alt: "Page d'accueil du site Tiers Lieu L'Hermitage",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-hermitage.jpg",
+        alt: "Page d'accueil du site Tiers Lieu L'Hermitage",
+      },
+    ],
     detailedDescription:
       "Le Tiers Lieu L'Hermitage, un espace collaboratif d'innovation rurale, souhaitait moderniser son site vitrine tout en conservant son identité. Le site existant était construit avec Divi, ce qui posait des problèmes de performance et de stabilité.\n\nNous avons entrepris une refonte progressive du site en passant à Elementor, un constructeur de pages plus performant et flexible. Le design a été modernisé pour refléter l'identité du Tiers Lieu tout en restant fidèle à ses valeurs.\n\nDes fonctionnalités ont été ajoutées pour faciliter les dons récurrents et les dons dédiés à des projets spécifiques. Le site est désormais stable, rapide et facile à administrer.",
     technologies: [
@@ -368,10 +394,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Développement des moyens de contact",
       "Amélioration de la sécurité du site",
     ],
-    gallery: {
-      url: "/img/desktop-screen-erp-services.jpg",
-      alt: "Page de service du site ERP Services",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-erp-services.jpg",
+        alt: "Page de service du site ERP Services",
+      },
+    ],
     detailedDescription:
       "ERP Services, un bureau d'études en ingénierie, avait besoin d'une refonte de son site vitrine pour améliorer la performance et la sécurité tout en conservant l'identité visuelle existante. Le site devait également être plus facile à administrer pour l'équipe interne.\n\nNous avons réalisé une refonte à l'identique du site existant, en améliorant les performances et la sécurité. Le design a été légèrement revu pour une meilleure lisibilité et une navigation intuitive.\n\nLe site met en avant les projets phares d'ERP Services avec des descriptions détaillées et des photos de haute qualité. Des moyens de contact ont été développés pour faciliter la prise de contact avec les clients potentiels.",
     technologies: ["WordPress", "Elementor Pro", "LiteSpeed Cache"],
@@ -400,10 +428,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Stabilisation du site avec une réduction significative des bugs",
       "Amélioration de la vitesse de chargement du site",
     ],
-    gallery: {
-      url: "/img/desktop-screen-senza-nature.jpg",
-      alt: "Page d'accueil du site Senza Nature",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-senza-nature.jpg",
+        alt: "Page d'accueil du site Senza Nature",
+      },
+    ],
     detailedDescription:
       "Senza Nature, une entreprise spécialisée dans la vente de produits naturels et bio, avait besoin d'un support et suivi global du site e-commerce pour vendre ses produits en ligne. L'objectif était de maintenir une boutique en ligne stable et performante tout en réalisant des évolutions continues.\n\nNous avons mis en place un suivi global du site, en assurant la maintenance, les mises à jour et les évolutions nécessaires. Le site est construit sur WooCommerce, permettant une gestion facile des produits et des commandes.\n\nDes optimisations techniques ont été mises en place pour améliorer la vitesse de chargement du site, ce qui a permis d'atteindre un score PageSpeed élevé sur mobile et desktop.",
     technologies: ["WordPress", "Woocommerce", "LiteSpeed Cache"],
@@ -435,15 +465,18 @@ const CASE_STUDIES: CaseStudy[] = [
       "Descriptions détaillées des œuvres",
       "Facilitation de la prise de contact avec les acheteurs",
     ],
-    gallery: {
-      url: "/img/desktop-screen-wagner-hamisky.jpg",
-      alt: "Page d'accueil du site Wagner Hamisky",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-wagner-hamisky.jpg",
+        alt: "Page d'accueil du site Wagner Hamisky",
+      },
+    ],
     detailedDescription:
       "Wagner Hamisky, une galerie d'art spécialisée dans la restauration d'œuvres d'art, souhaitait créer un site vitrine pour présenter ses artistes et leurs œuvres, à l'occasion de son ouverture. L'objectif était de fournir un espace d'exposition tout en facilitant la prise de contact avec les clients potentiels.\n\nNous avons développé un site WordPress avec un design moderne et épuré, mettant en avant les œuvres des deux artistes. Le site comprend une galerie d'images et des descriptions détaillées des œuvres..\n\nLe site est entièrement optimisé pour une gestion simple du catalogue des œuvres afin de permettre l'autonomie ultérieure.",
     technologies: ["WordPress", "Thème custom", "ACF Pro"],
     duration: "3 semaines",
     website: "https://wagner-hamisky.com",
+    demoLink: "https://youtu.be/Zv7SUqZPo08",
   },
   {
     id: "10",
@@ -469,15 +502,18 @@ const CASE_STUDIES: CaseStudy[] = [
       "Espace dédié aux partenaires et sponsors",
       "Stabilisation du site avec une réduction significative des bugs",
     ],
-    gallery: {
-      url: "/img/desktop-screen-mediatico.jpg",
-      alt: "Page d'accueil du site Mediatico",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-mediatico.jpg",
+        alt: "Page d'accueil du site Mediatico",
+      },
+    ],
     detailedDescription:
       "Mediatico, un média en ligne dédié à l'actualité de l'économie sociale et solidaire, souhaitait refondre son média pour présenter ses articles et ses partenaires. L'objectif était de fournir un espace d'information accessible et attrayant pour les lecteurs.\n\nNous avons développé un site WordPress avec un design moderne et une navigation intuitive. Le site met en avant les articles récents, les partenaires et sponsors, ainsi qu'un espace dédié aux publications des visiteurs.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, permettant à Mediatico d'attirer un large public intéressé par l'ESS.",
     technologies: ["WordPress", "Gutenberg", "Thème custom"],
     duration: "4 semaines",
     website: "https://mediatico.fr",
+    demoLink: "https://youtu.be/2RfDio_6oQQ",
   },
   {
     id: "11",
@@ -503,15 +539,18 @@ const CASE_STUDIES: CaseStudy[] = [
       "Mise en ligne avant l'événement de lancement de l'association",
       "Simple à administrer pour l'équipe interne",
     ],
-    gallery: {
-      url: "/img/desktop-screen-infralliance.jpg",
-      alt: "Page d'accueil du site Connexion Plus",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-infralliance.jpg",
+        alt: "Page d'accueil du site Connexion Plus",
+      },
+    ],
     detailedDescription:
       "Infralliance, un think and do tank des opérateurs d'infrastructures numériques, souhaitait créer un site vitrine pour présenter ses actions et ses membres.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les actions de l'association, ainsi que son réseau d'opérateurs d'infrastructures numériques.\n\nLe site a été mis en ligne avant l'événement de lancement de l'association, permettant à Infralliance de communiquer efficacement sur ses enjeux et ses projets.",
     technologies: ["WordPress", "Elementor Pro", "Advanced Custom Fields"],
     duration: "2 semaines",
     website: "https://infralliance.net",
+    demoLink: "https://youtu.be/LtMBegTX06Q",
   },
   {
     id: "12",
@@ -537,10 +576,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Espace dédié aux membres pour publier des actualités",
       "Facilitation de la prise de contact pour les partenaires et le public",
     ],
-    gallery: {
-      url: "/img/desktop-screen-gem-connexion.jpg",
-      alt: "Page d'accueil du site GEM Connexion",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-gem-connexion.jpg",
+        alt: "Page d'accueil du site GEM Connexion",
+      },
+    ],
     detailedDescription:
       "GEM Connexion Plus, un groupe d'entraide mutuelle (GEM) parisien, souhaitait créer un site vitrine pour donner de la visibilité à ses activités et à ses projets. L'objectif était de fournir un espace professionnel et moderne pour attirer de nouveaux membres et partenaires.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les activités du GEM, ainsi que les projets en cours.\n\nUn espace dédié aux membres a été intégré, permettant à chacun de publier ses actualités et de partager ses expériences. Le site est entièrement responsive et optimisé pour le référencement naturel.",
     technologies: [
@@ -575,10 +616,12 @@ const CASE_STUDIES: CaseStudy[] = [
       "Interface utilisateur intuitive pour les communes",
       "Suivi des demandes de subventions simplifié pour le SDEVO",
     ],
-    gallery: {
-      url: "/img/desktop-screen-sdevo.png",
-      alt: "Page de gestion des subventions du SDEVO",
-    },
+    gallery: [
+      {
+        url: "/img/desktop-screen-sdevo.png",
+        alt: "Page de gestion des subventions du SDEVO",
+      },
+    ],
     detailedDescription:
       "Le Syndicat départemental des énergies du Val d'Oise (SDEVO) souhaitait créer un plugin WordPress pour gérer les demandes de subventions des communes. L'objectif était de permettre aux communes de soumettre leurs demandes en ligne et de faciliter le suivi pour le SDEVO.\n\nNous avons développé un plugin personnalisé qui permet aux communes de soumettre leurs demandes de subventions via une interface utilisateur intuitive. Le plugin gère également le suivi des demandes, permettant au SDEVO de centraliser et de suivre les demandes de manière efficace.\n\nLe plugin est entièrement intégré à WordPress, ce qui permet une gestion facile et une administration simplifiée pour les utilisateurs du SDEVO.",
     technologies: ["WordPress", "PHP", "Plugin custom"],
@@ -636,17 +679,37 @@ export default async function CaseStudyPage({
 }: {
   params: { slug: string };
 }) {
-  const resolvedParams = await params;
-  const caseStudy = CASE_STUDIES.find(
-    (study) => study.slug === resolvedParams.slug
+
+      // Utilitaire pour transformer un lien YouTube en embed
+      function toYoutubeEmbed(url) {
+        if (!url) return url;
+        if (url.includes('youtube.com/embed/')) return url;
+        const matchShort = url.match(/youtu\.be\/([\w-]+)/);
+        if (matchShort) return `https://www.youtube.com/embed/${matchShort[1]}`;
+        const matchLong = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
+        if (matchLong) return `https://www.youtube.com/embed/${matchLong[1]}`;
+        return url;
+      }
+
+  const caseStudy = CASE_STUDIES.find(  
+    (study) => study.slug === params.slug
   );
 
   if (!caseStudy) {
-    notFound();
+    // Gestion d'erreur explicite : affiche une page d'erreur personnalisée ou Next.js 404
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center text-center p-8">
+        <h1 className="text-3xl font-bold mb-4">Étude de cas introuvable</h1>
+        <p className="mb-6">L'étude de cas demandée n'existe pas ou a été supprimée.</p>
+        <Link href="/etudes-de-cas" className="text-blue-600 hover:underline">Retour aux réalisations</Link>
+      </main>
+    );
+    // Ou, pour afficher la page 404 native :
+    // notFound();
   }
 
   // Obtenir des études de cas similaires
-  const similarCaseStudies = getSimilarCaseStudies(caseStudy);
+  const similarCaseStudies = getSimilarCaseStudies(caseStudy); 
 
   return (
     <main className="min-h-screen">
@@ -659,7 +722,7 @@ export default async function CaseStudyPage({
           <ArrowLeft className="h-4 w-4 mr-2" />
           Retour aux réalisations
         </Link>
-        <h1 className="text-3xl md:text-4xl lg:text-5xl text-regularblue mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl text-regularblue font-semibold mb-4">
           {caseStudy.title}
         </h1>
         <p className="text-xl max-w-3xl text-regularblue/70">
@@ -675,28 +738,39 @@ export default async function CaseStudyPage({
       </div>
 
       {/* Contenu principal */}
-      <div className="container px-4 md:px-6 pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      <div className="container py-6 bg-white/30 backdrop-blur-xl border-y border-lightblue/20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start px-4 md:px-6">
           <div className="lg:col-span-2 space-y-10">
             {/* Galerie */}
             <section>
-              <h2 className="text-2xl  mb-6 text-regularblue">
+              <h2 className="text-3xl mb-6 text-regularblue font-medium">
                 Aperçu du projet
               </h2>
               <div className="rounded-lg border overflow-hidden">
-                <Image
-                  src={caseStudy.gallery.url || "/placeholder.svg"}
-                  alt={caseStudy.gallery.alt}
-                  width={800}
-                  height={500}
-                  className="w-full object-cover"
-                />
+                {caseStudy.demoLink ? (
+                  <iframe
+                    src={toYoutubeEmbed(caseStudy.demoLink) + '?autoplay=0&rel=0&modestbranding=1'}
+                    title="Vidéo du projet"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full aspect-video border-0"
+                  />
+                ) : (
+                  <Image
+                    src={caseStudy.gallery[0]?.url || "/placeholder.svg"}
+                    alt={caseStudy.gallery[0]?.alt || "Aperçu du projet"}
+                    width={800}
+                    height={500}
+                    className="w-full object-cover"
+                  />
+                )}
               </div>
+
             </section>
 
             {/* Présentation du projet */}
             <section>
-              <h2 className="text-2xl  mb-6 text-regularblue">
+              <h2 className="text-3xl mb-6 text-regularblue font-medium">
                 Présentation du projet
               </h2>
               <div className="prose max-w-none">
@@ -716,7 +790,7 @@ export default async function CaseStudyPage({
             {/* Objectifs et résultats */}
             <section className="grid md:grid-cols-2 gap-8">
               <div>
-                <h2 className="text-2xl  mb-6 text-regularblue">Objectifs</h2>
+                <h2 className="text-3xl mb-6 text-regularblue font-medium">Objectifs</h2>
                 <ul className="space-y-3">
                   {caseStudy.objectives.map((objective, index) => (
                     <li key={index} className="flex items-start">
@@ -729,7 +803,7 @@ export default async function CaseStudyPage({
                 </ul>
               </div>
               <div>
-                <h2 className="text-2xl  mb-6 text-regularblue">Résultats</h2>
+                <h2 className="text-3xl mb-6 text-regularblue font-medium">Résultats</h2>
                 <ul className="space-y-3">
                   {caseStudy.results.map((result, index) => (
                     <li key={index} className="flex items-start">
@@ -746,7 +820,7 @@ export default async function CaseStudyPage({
             {/* Témoignage client */}
             {caseStudy.testimonial && (
               <section className="bg-extralightblue/10 p-6 rounded-2xl">
-                <h2 className="text-2xl  mb-6 text-regularblue">
+                <h2 className="text-3xl mb-6 text-regularblue font-medium">
                   Témoignage client
                 </h2>
                 <blockquote className="relative">
@@ -780,7 +854,7 @@ export default async function CaseStudyPage({
           <div className="lg:col-span-1 sticky top-16 self-start">
             <MagicCard className="rounded-2xl bg-white border-none">
               <div className="p-6 top-8">
-                <h2 className="text-xl  mb-6 text-regularblue">
+                <h2 className="text-3xl mb-6 text-regularblue font-medium">
                   Informations du projet
                 </h2>
 
@@ -900,7 +974,7 @@ export default async function CaseStudyPage({
 
         {/* Autres projets similaires */}
         <section className="my-16">
-          <h2 className="text-2xl  text-regularblue mb-8">
+          <h2 className="text-4xl font-medium text-regularblue mb-8">
             Projets similaires
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -913,7 +987,7 @@ export default async function CaseStudyPage({
                 <Card className="h-full overflow-hidden">
                   <div className="flex items-center justify-center aspect-video overflow-hidden">
                     <img
-                      src={study.gallery.url || "/placeholder.svg"}
+                      src={study.gallery[0]?.url || "/placeholder.svg"}
                       alt={study.title}
                       className="w-full h-full object-cover object-top transition-transform hover:scale-105 duration-300"
                     />
@@ -943,9 +1017,6 @@ export default async function CaseStudyPage({
             ))}
           </div>
         </section>
-
-        {/* Call to action */}
-        <CTASection />
       </div>
     </main>
   );

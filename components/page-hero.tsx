@@ -37,7 +37,9 @@ export default function PageHero({
         <p className="text-xl text-regularblue/80 text-left mb-8">
           {sousTitre}
         </p>
+
         <div className="flex flex-col sm:flex-row gap-4">
+        {cta1Link && cta1Text && (
           <Link href={cta1Link}>
             <Button
               size="lg"
@@ -46,7 +48,10 @@ export default function PageHero({
               {cta1Text}
             </Button>
           </Link>
-          <Link href={cta2Link}>
+        )}
+
+          {cta2Link && cta2Text && (
+          <Link href={cta2Link} target="_blank">
             <Button
               size="lg"
               className="gap-1 rounded-full text-lg font-googletitre text-white bg-coral hover:bg-coral/90"
@@ -55,6 +60,8 @@ export default function PageHero({
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
+        )}
+
         </div>
       </div>
       <div className="mx-auto max-w-md md:max-w-none animate-fadeInUp">

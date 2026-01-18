@@ -21,8 +21,8 @@ export function CTASection() {
                   className="gap-1 text-lg font-medium rounded-full text-white bg-regularblue hover:bg-regularblue/90 hover:text-white transition-all duration-300"
                   asChild
                 >
-                  <a href="tel:0673981638">
-                    Appeler <ArrowRight className="h-4 w-4" />
+                  <a href="https://calendar.app.google/HuwRpoVGoKBj2PkX8" target="_blank" rel="noopener noreferrer">
+                    RDV en visio <ArrowRight className="h-4 w-4" />
                   </a>
                 </Button>
                 <Button
@@ -31,8 +31,8 @@ export function CTASection() {
                   className="gap-1 text-lg font-medium rounded-full bg-coral text-white hover:bg-coral/90 hover:text-white transition-all duration-300"
                   asChild
                 >
-                  <a href="mailto:agathe@next-impact.digital">
-                    Envoyer un mail <ArrowRight className="h-4 w-4" />
+                  <a href="mailto:agathe@next-impact.digital" target="_blank" rel="noopener noreferrer">
+                    Mail <ArrowRight className="h-4 w-4" />
                   </a>
                 </Button>
               </div>

@@ -49,7 +49,7 @@ export default function Hero() {
           </p>
 
           <div className="mt-4 flex flex-col sm:flex-row gap-5">
-            <Link href="/solutions/wordpress" className="group">
+            <Link href="/solutions" className="group">
               <Button
                 size="lg"
                 variant="outline"

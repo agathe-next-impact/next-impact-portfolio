@@ -303,17 +303,18 @@ export default function Header() {
           <div className="flex items-center gap-4 pr-4">
             <Link
               href="tel:0673981638">
-                <PhoneIcon className="text-mediumblue h-5" />
+                <PhoneIcon className="text-regularblue h-6" />
             </Link>
             <Link
             href="mailto:agathe@next-impact.digital"
             >
-              <MailIcon className="text-mediumblue h-5" />
+              <MailIcon className="text-regularblue h-6" />
             </Link>
             <Link
               href="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
+              target="_blank"
             >
-              <CalendarIcon className="text-mediumblue h-5" />
+              <CalendarIcon className="text-regularblue h-6" />
             </Link>
           </div>
 

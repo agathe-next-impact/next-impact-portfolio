@@ -34,10 +34,11 @@ export default function CaseStudiesPage() {
         sousTitre="Penser besoin de la vie réelle, comprendre les enjeux concrets du client constituent la base de la mise au point d'une solution adaptée." 
         badge="Études de cas"
         illustration="/illustrations/user-experience.svg"
-        cta1Link="/solutions"
         cta1Text="Solutions"
-        cta2Link="/demo"
-        cta2Text="Démo"
+        cta1Link="/solutions"
+        cta2Text="Contact"
+        cta2Link="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
+        illustration="/illustrations/tech-ecosystem.svg"
       />
 
       <div className="container mx-auto mt-12">

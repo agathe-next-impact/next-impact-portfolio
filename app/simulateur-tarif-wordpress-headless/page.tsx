@@ -35,8 +35,8 @@ export default function Home() {
         illustration="/illustrations/pricing-simulator.svg"
         cta1Link=""
         cta1Text=""
-        cta2Link="https://calendar.app.google/JYUYKed5GoiA2Z5p6"
-        cta2Text="Prendre rendez-vous"
+        cta2Link=""
+        cta2Text=""
       />
       <section className="container mx-auto mt-12 px-6 lg:px-8">
       <PricingCalculator />
