@@ -39,9 +39,6 @@ export function NavBar() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/" className='font-googletitre text-regularblue text-lg font-medium px-6'>Accueil</Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
               <Link href="/solutions" className='font-googletitre text-regularblue text-lg font-medium px-6'>Solutions</Link>
             </NavigationMenuItem>
             {/*}
@@ -76,10 +73,13 @@ export function NavBar() {
               <Link href="/demo" className='font-googletitre text-regularblue text-lg font-medium px-6'>Démo</Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/etudes-de-cas" className='font-googletitre text-regularblue text-lg font-medium px-2'>Etudes de cas</Link>
-            </NavigationMenuItem>         
+              <Link href="/audit-migration-wordpress" className='font-googletitre text-regularblue text-lg font-medium px-2'>Audit</Link>
+            </NavigationMenuItem>       
             <NavigationMenuItem>
               <Link href="/simulateur-tarif-wordpress-headless" className='font-googletitre text-regularblue text-lg font-medium px-6'>Tarifs</Link>
+            </NavigationMenuItem>      
+            <NavigationMenuItem>
+              <Link href="/etudes-de-cas" className='font-googletitre text-regularblue text-lg font-medium px-2'>Etudes de cas</Link>
             </NavigationMenuItem>    
             {/*}
             <NavigationMenuItem>
@@ -171,11 +171,11 @@ export function NavBar() {
                   </button>
                 </div>
                 <div className="-mt-3 p-4 space-y-0 bg-white">
-                  <MobileMenuLink href="/" onClick={handleMenuClick}>Accueil</MobileMenuLink>
                   <MobileMenuLink href="/solutions" onClick={handleMenuClick}>Solutions</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
+                  <MobileMenuLink href="/audit-migration-wordpress" onClick={handleMenuClick}>Audit</MobileMenuLink>
+                  <MobileMenuLink href="/simulateur-tarif-wordpress-headless" onClick={handleMenuClick}>Tarifs</MobileMenuLink>                  
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
-                  <MobileMenuLink href="/simulateur-tarif-wordpress-headless" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
                 </div>
                 <div className="p-4 bg-white">
                   <div className="mt-6 flex flex-col gap-2">

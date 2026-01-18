@@ -12,7 +12,15 @@ export function getTransporter() {
   });
 }
 
-export async function sendMail(options: Parameters<typeof nodemailer.createTransport>[0] & { to: string | string[], subject: string, html: string, attachments?: any[] }) {
+export interface MailOptions {
+  to: string | string[];
+  subject: string;
+  html: string;
+  attachments?: any[];
+  from?: string; // Add this line
+}
+
+export async function sendMail(options: MailOptions) {
   const transporter = getTransporter();
   return transporter.sendMail(options);
 }
