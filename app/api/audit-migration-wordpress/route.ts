@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
                 <li><b>URL à auditer :</b> ${url}</li>
               </ul>
             </div>
-            <a href=\"https://calendar.google.com/appointments/schedules/AcZssZ0DdDYNLPk20uSgeX5ny-OQqZokHR7FcfOlXY5Cjy0C0LPmPCFUPxIaLyCYoaARUQdR0x4CzVxC\" class=\"cta\">Prenez rendez-vous dès maintenant</a>
+            <a style="color:white" href="https://calendar.google.com/appointments/schedules/AcZssZ0DdDYNLPk20uSgeX5ny-OQqZokHR7FcfOlXY5Cjy0C0LPmPCFUPxIaLyCYoaARUQdR0x4CzVxC">Prenez rendez-vous dès maintenant</a>
             <div class=\"footer\">
               Next Impact • agathe@next-impact.digital<br>
               2026 &copy; Tous droits réservés
