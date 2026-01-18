@@ -54,7 +54,7 @@ const [isPlaying, setIsPlaying] = useState(false)
 				cta2Link="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
 				illustration="/illustrations/data-flow-animated.svg" // Remplacez par une illustration pertinente
 			/>
-			<main className="max-w-5xl mx-auto px-4 py-12">
+			<main id="demo-main-video" className="max-w-5xl mx-auto px-4 py-12">
                 
           {/* Video container with animations */}
           <div
