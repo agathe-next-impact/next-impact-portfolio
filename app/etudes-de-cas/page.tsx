@@ -4,10 +4,10 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Réalisations de site web WordPress | Next Impact",
+    title: "Etudes de cas de site web WordPress | Next Impact",
     description: "Découvrez nos études de cas de création de sites web WordPress pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigences de qualité ou applications web.",
     openGraph: {
-      title: "Réalisations de site web WordPress  | Next Impact",
+      title: "Etudes de cas de site web WordPress  | Next Impact",
       url: "https://next-impact.digital/etudes-de-cas",
       siteName: "Next Impact - Développeuse WordPress Freelance",
       description: "Découvrez nos études de cas de création de sites web WordPress pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigences de qualité ou applications web.",
