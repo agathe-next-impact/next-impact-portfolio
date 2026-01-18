@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
             .container { max-width: 600px; margin: 40px auto; background: rgba(255,255,255,0.95); border-radius: 1rem; box-shadow: 0 4px 24px rgba(30,41,59,0.08); padding: 2rem; border: 1px solid #e0e7ef; }
             .badge { display: inline-block; background: #1F54BF; color: rgba(255,255,255,0.95); font-size: 12px; font-weight: 600; text-transform: uppercase; border-radius: 999px; padding: 6px 18px; margin-bottom: 18px; letter-spacing: 1px; }
             h1 { color: #1F54BF; font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; }
-            .subtitle { color: #FF6B6B; font-size: 1.2rem; margin-bottom: 1.5rem; }
+            .subtitle { color: #1F54BF; font-size: 1.2rem; margin-bottom: 1.5rem; }
             .content { color: #021373; font-size: 1rem; margin-bottom: 2rem; }
             .cta { display: inline-block; background: #FF6B6B; color: rgba(255,255,255,0.95); font-weight: 500; border-radius: 999px; padding: 10px 32px; text-decoration: none; font-size: 1rem; margin-top: 1rem; }
             .footer { color: #021373; font-size: 0.9rem; margin-top: 2rem; text-align: center; }
@@ -53,7 +53,6 @@ export async function POST(req: NextRequest) {
         <body>
           <div class=\"container\">
             <div class=\"header\"><a href=\"https://next-impact.digital\"><img src=\"https://next-impact.digital/logo-bleu.png\" alt=\"Next Impact Logo\" width=\"120\" /></a></div>
-            <span class=\"badge\">WORDPRESS HEADLESS</span>
             <h1>Merci pour votre demande d'audit</h1>
             <div class=\"subtitle\">Migration WordPress vers Headless</div>
             <div class=\"content\">
@@ -69,6 +68,7 @@ export async function POST(req: NextRequest) {
                 <li><b>URL à auditer :</b> ${url}</li>
               </ul>
             </div>
+            <a href=\"https://next-impact.digital\" class=\"cta\">Visitez notre site</a>
             <div class=\"footer\">
               Next Impact • agathe@next-impact.digital<br>
               2026 &copy; Tous droits réservés
