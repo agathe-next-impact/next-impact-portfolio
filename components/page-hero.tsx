@@ -38,7 +38,7 @@ export default function PageHero({
           {sousTitre}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row items-start gap-4">
         {cta1Link && cta1Text && (
           <Link href={cta1Link}>
             <Button

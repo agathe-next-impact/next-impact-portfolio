@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="h-screen relative pt-12 pb-24 md:pt-24 md:pb-24 flex items-center overflow-hidden">
+    <section className="md:h-screen relative pt-12 pb-24 md:pt-24 md:pb-24 flex items-center overflow-hidden">
 
       <div className="container grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Text Content */}
@@ -44,7 +44,7 @@ export default function Hero() {
             />
           </div>
 
-          <p className="mt-16 font-googletexte text-xl text-regularblue max-w-xl">
+          <p className="mt-16 font-googletexte text-lg md:text-xl text-regularblue max-w-xl">
             Pour un WordPress ultra-rapide, moderne et flexible grâce au headless CMS.
           </p>
 

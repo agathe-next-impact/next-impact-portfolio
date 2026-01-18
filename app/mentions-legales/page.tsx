@@ -2,7 +2,7 @@ import React from "react";
 
 const LegalNotice = () => {
   return (
-    <div className="flex flex-col gap-2 prose mx-auto mt-24 px-48 pt-8 pb-24 border-y border-lightblue/30 bg-white/5 backdrop-blur-lg">
+    <div className="flex flex-col gap-2 prose mx-auto mt-24 px-2 md:px-48 pt-8 pb-24 border-y border-lightblue/30 bg-white md:bg-white/5 backdrop-blur-lg">
         <h1 className="font-medium text-center mb-12">
               Mentions légales et RGPD
             </h1>

@@ -170,61 +170,28 @@ export function NavBar() {
                     <CloseIcon className="w-10 h-10 text-regularblue" />
                   </button>
                 </div>
-                <div className="p-4 space-y-0">
+                <div className="-mt-3 p-4 space-y-0 bg-white">
                   <MobileMenuLink href="/" onClick={handleMenuClick}>Accueil</MobileMenuLink>
                   <MobileMenuLink href="/solutions" onClick={handleMenuClick}>Solutions</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
                   <MobileMenuLink href="/simulateur-tarif-wordpress-headless" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
-                  {/* Ressources sous-menu */}
-                  <div>
-                    <button
-                      className={cn(
-                        "w-full text-left py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
-                        openSubMenu === "ressources" && "bg-lightblue/10"
-                      )}
-                      onClick={() => handleToggleSubMenu("ressources")}
-                      aria-expanded={openSubMenu === "ressources"}
-                    >
-                      Ressources
-                      <span className={cn("transition-transform", openSubMenu === "ressources" ? "rotate-180" : "")}>
-                        <ChevronDown className="inline w-5 h-5 ml-2" />
-                      </span>
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {openSubMenu === "ressources" && (
-                        <motion.div
-                          key="ressources-sub"
-                          initial={{ y: -20, opacity: 0, height: 0 }}
-                          animate={{ y: 0, opacity: 1, height: "auto" }}
-                          exit={{ y: -20, opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="pl-4 overflow-hidden"
-                        >
-                          <MobileMenuLink href="/cms-headless" onClick={handleMenuClick} className="pl-4">Quiz WordPress ou Headless ?</MobileMenuLink>
-                          <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick} className="pl-4">Simulateur de budget</MobileMenuLink>
-                          <MobileMenuLink href="/cahier-des-charges" onClick={handleMenuClick} className="pl-4">Générateur de cahier des charges</MobileMenuLink>
-                          <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pl-4">Documentation & Blog</MobileMenuLink>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 bg-white">
                   <div className="mt-6 flex flex-col gap-2">
                     <Button
-                      className="w-full md:flex gap-1 rounded-full px-6 bg-pink-700 hover:bg-pink-700/90 text-white transition-all duration-900 ease-in-out"
+                      className="w-full md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/90 text-white hover:text-white transition-all duration-900 ease-in-out"
                       asChild
                     >
-                      <a href="tel:0673981638">Appeler</a>
+                      <a href="https://calendar.app.google/HuwRpoVGoKBj2PkX8" target="_blank">RDV en visio</a>
                     </Button>
                     <Button
-                      className="md:flex gap-1 rounded-full px-6 border-pink-600 text-pink-600 hover:bg-transparent hover:text-pink-600"
+                      className="w-full md:flex gap-1 rounded-full px-6 bg-coral hover:bg-coral/90 text-white hover:text-white transition-all duration-900 ease-in-out"
                       variant="outline"
                       asChild
                       size="sm"
                     >
-                      <a href="mailto:agathe@next-impact.digital">E-mail</a>
+                      <a href="mailto:agathe@next-impact.digital">Mail</a>
                     </Button>
                   </div>
                 </div>

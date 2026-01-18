@@ -6,10 +6,10 @@ export default function FAQ() {
         <section id="faq">
             <div className="container">
                 <div className="text-center md:mb-16">
-                    <h2 className="text-4xl md:text-5xl text-regularblue font-medium mb-6">Questions fréquentes</h2>
-                    <p className="text-xl max-w-3xl mx-auto text-regularblue/70">
+                    <h2 className="text-3xl md:text-5xl text-regularblue font-medium mb-6">Questions fréquentes</h2>
+                    <div className="hidden md:visible md:text-xl max-w-3xl mx-auto text-regularblue/70">
                         Vous avez des questions ? Voici les réponses aux questions les plus fréquentes que je reçois.
-                    </p>
+                    </div>
                 </div>
                 
             <div className="mx-auto max-w-3xl py-12">

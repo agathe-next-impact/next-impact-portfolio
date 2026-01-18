@@ -49,8 +49,8 @@ const MainVideo: React.FC<MainVideoProps> = ({ url, title, poster, infoTitle, in
         <div className="p-6 bg-white/30 backdrop-blur-sm border border-regularblue/20 rounded-2xl mt-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="space-y-2">
-              {infoTitle && <h3 className="font-semibold text-3xl text-foreground">{infoTitle}</h3>}
-              {infoDescription && <p className="text-lg text-mediumble">{infoDescription}</p>}
+              {infoTitle && <h3 className="font-semibold text-2xl md:text-3xl text-foreground">{infoTitle}</h3>}
+              {infoDescription && <p className="md:text-lg text-mediumble">{infoDescription}</p>}
               <div className="h-6" />
               {websiteLink && (
                 <Link href={websiteLink} target="_blank" className="text-coral font-medium underline hover:text-coral/80 text-lg transition">

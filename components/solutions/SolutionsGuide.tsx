@@ -5,7 +5,7 @@ export default function SolutionsGuide({ needsGuide }: { needsGuide: any[] }) {
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
         <div className="text-center mb-16 animate-fadeInUp">
-          <h2 className="text-5xl font-googletitre font-medium mb-6 text-regularblue">
+          <h2 className="text-4xl md:text-5xl font-googletitre font-medium mb-6 text-regularblue">
             Aidez-moi à <span className="text-coral">choisir</span>
           </h2>
           <p className="text-lg text-regularblue/80">Identifiez la solution adaptée à votre besoin principal</p>

@@ -50,11 +50,11 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
   return (
     <section id={sectionId}>
       <div className="container">
-        <div className="text-center md:mb-16">
-          <h2 className="text-4xl md:text-5xl text-regularblue font-medium mb-6">{title}</h2>
-          <p className="text-xl max-w-3xl mx-auto text-regularblue/70">{description}</p>
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-5xl text-regularblue font-medium mb-6">{title}</h2>
+          <p className="text-base md:text-xl max-w-3xl mx-auto text-regularblue/70">{description}</p>
         </div>
-        <div className="mx-auto max-w-3xl py-12">
+        <div className="mx-auto max-w-3xl md:py-12">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, idx) => (
               <AccordionItem value={`item-${idx + 1}`} key={idx}>

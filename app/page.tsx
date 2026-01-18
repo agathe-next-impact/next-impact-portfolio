@@ -108,10 +108,10 @@ export default function Home() {
         {/* Advantages Section */}
         <section className="w-full mx-auto px-6 py-24 mt-24 mb-36 backdrop-blur-lg border-y border-yellow-100/70 bg-yellow-100/5">
           <div className="pb-12 text-center">
-            <h2 className="text-4xl md:text-5xl text-regularblue mb-6 font-medium">
+            <h2 className="text-3xl md:text-5xl text-regularblue mb-6 font-medium">
               Pourquoi choisir WordPress Headless ?
             </h2>
-            <p className="text-xl text-regularblue/70 max-w-3xl mx-auto">
+            <p className="md:text-xl text-regularblue/70 max-w-3xl mx-auto">
               Bénéficiez de la puissance de WordPress pour la gestion de contenu
               avec la flexibilité et la performance d'un front-end moderne en
               Next.js.
@@ -138,7 +138,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl text-regularblue mb-6 font-medium">
               Etudes de cas
             </h2>
-            <p className="text-xl text-regularblue/70 max-w-3xl mx-auto">
+            <p className="md:text-xl text-regularblue/70 max-w-3xl mx-auto">
               Chaque projet est unique et conçu pour répondre aux besoins
               spécifiques de mes clients.
             </p>

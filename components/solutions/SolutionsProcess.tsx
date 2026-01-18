@@ -3,7 +3,7 @@ export default function SolutionsProcess({ processSteps }: { processSteps: any[]
     <section className="bg-white/50 backdrop-blur-lg border-y border-extralightblue/30 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="text-center mb-16 animate-fadeInUp">
-          <h2 className="text-5xl font-googletitre font-medium text-regularblue mb-6 text-balance">
+          <h2 className="text-3xl md:text-5xl font-googletitre font-medium text-regularblue mb-6 text-balance">
             Notre <span className="text-lightblue">processus</span>
           </h2>
           <p className="text-lg text-mediumblue/70 max-w-3xl mx-auto">

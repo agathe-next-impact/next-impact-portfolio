@@ -1,16 +1,16 @@
 const ServicesSection = () => (
   <div className="w-full max-w-7xl mx-auto mt-24 px-6 py-12">
     <div className="mb-6 text-center bg-white/50 backdrop-blur-sm p-6 rounded-2xl border border-extralightblue/30">
-      <h2 className="text-3xl text-mediumblue/70 tracking-tight font-googletexte mb-4 line-clamp-5">
-        <div className="text-5xl text-regularblue font-googletitre font-medium">Services</div> WordPress & Headless
+      <h2 className="text-2xl md:text-3xl text-mediumblue/70 tracking-tight font-googletexte mb-4 line-clamp-5">
+        <div className="text-4xl md:text-5xl text-regularblue font-googletitre font-medium">Services</div> WordPress & Headless
       </h2>
-      <p className="text-regularblue/80 text-lg max-w-3xl mx-auto">
+      <p className="text-regularblue/80 md:text-lg max-w-3xl mx-auto">
         Grâce à des développements spécifiques alignés sur vos besoins,
         nous créons des sites web WordPress, WordPress custom et des
         WordPress Headless qui allient performance, design actuel,
         puissance et évolutivité.
       </p>
-      <h3 className="text-2xl mb-8">
+      <h3 className="text-xl md:text-2xl mb-8">
         <strong>Résultat</strong> : Un site alliant performance et le
         back-office le plus utilisé
       </h3>
