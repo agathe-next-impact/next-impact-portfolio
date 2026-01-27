@@ -13,7 +13,7 @@ const prompt = `
 
 ---
 
-**Étape 1 : Diagnostic d'Identité (Scan Précis)**
+Étape 1 : ### **Votre organisation**
 *Effectue une analyse croisée du contenu visible (Header, Footer, Page "À Propos").*
 
 1.  **Secteur d'activité :** (Ex: E-commerce B2C, SaaS B2B, Média, etc.)
@@ -24,9 +24,8 @@ const prompt = `
 
 ---
 
-**Étape 2 : Analyse Stratégique (Format Markdown)**
+Étape 2 : ### **Analyse Stratégique et recommandations** 
 
-### Syntèse de l'Audit d'opportunité de migration vers WordPress Headless pour **{$url}**
 * **Conseil Principal :** Recommande si une migration vers une architecture Headless est pertinente ou non, avec une justification concise.
 * **Résumé :** Fournis un bref résumé des points clés de l'analyse.
 
@@ -63,7 +62,7 @@ export default function AuditSiteIaClient() {
     <main>
       <PageLayout 
         titre="Faut-il migrer vers WordPress Headless ?"
-        sousTitre="Tester gratuitement en 10 secondes si votre site WordPress est prêt pour une migration headless grâce à notre audit IA."
+        sousTitre="Tester en 10 secondes ce que WordPress Headless peut apporter à votre site web."
       >
         <div className="relative max-w-5xl my-16 mx-auto bg-white/10 backdrop-blur-md border p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch

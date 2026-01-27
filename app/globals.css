@@ -142,7 +142,7 @@ html, body {
     line-height: 1.35;
   }
   h3 {
-    @apply text-xl pt-6 pb-2 ;
+    @apply text-xl pt-6 pb-2 text-mediumblue;
     line-height: 1.4;
   }
   h4 {
@@ -171,16 +171,19 @@ html, body {
     font-family: 'Quicksand', sans-serif;
   }
   #gemini-search-result h1 {
-    @apply text-regularblue text-3xl pt-4 pb-2;
+    @apply text-mediumblue text-4xl pt-4 pb-2;
     line-height: 1.4;
       }
   #gemini-search-result h2, #gemini-search-result h3 {
-    @apply text-mediumblue text-2xl;
+    @apply text-mediumblue text-3xl;
     line-height: 1.35;
   }
   #gemini-search-result p {
     @apply text-mediumblue text-base;
     line-height: 1.7;
+  }
+  .prose h3 {
+    @apply text-3xl;
   }
 }
 

@@ -154,7 +154,7 @@ export default function Realisations({ count }: RealisationsProps) {
       <div className="container relative p-0">
         <Tabs defaultValue="derniers" className="w-full">
           <div className="flex justify-center mb-12">
-            <TabsList className="flex flex-wrap md:bg-white bg-transparent p-1 rounded-full">
+            <TabsList className="flex flex-wrap md:bg-white/10 bg-transparent backdrop-blur-sm p-1 rounded-full">
               <TabsTrigger
                 value="derniers"
                 className="rounded-full data-[state=active]:bg-background/10"
@@ -201,7 +201,7 @@ export default function Realisations({ count }: RealisationsProps) {
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="h-full"
                     >
-                      <div className="group relative overflow-hidden rounded-2xl bg-background transition-all duration-500 hover:shadow h-full flex flex-col">
+                      <div className="group relative overflow-hidden rounded-2xl bg-mediumblue/30 backdrop-blur-md transition-all duration-500 border border-1 border-white/10 hover:shadow h-full flex flex-col">
                         <div className="flex align-middle aspect-video overflow-hidden">
                           <img
                             src={project.image}
@@ -214,17 +214,17 @@ export default function Realisations({ count }: RealisationsProps) {
                         </div>
                         <div className="p-6 flex flex-col flex-1">
                           <Link href={project.link}>
-                            <h3 className="text-2xl font-medium transition-colors duration-300 text-regularblue group-hover:text-regularblue/70">
+                            <h3 className="text-2xl font-medium transition-colors duration-300 text-white group-hover:text-white/70">
                               {project.title}
                             </h3>
-                            <p className="mt-2 text-regularblue/70 text-sm group-hover:text-regularblue/50">
+                            <p className="mt-2 text-white/70 text-sm group-hover:text-white/50">
                               {project.description}
                             </p>
                           </Link>
                           <div className="mt-4 mt-auto">
                             <Link
                               href={project.link}
-                              className="inline-flex items-center text-sm font-medium  text-regularblue group-hover:text-regularblue/70 transition-all duration-300 hover:translate-x-1"
+                              className="inline-flex items-center text-sm font-medium  text-white group-hover:text-white/70 transition-all duration-300 hover:translate-x-1"
                             >
                               Voir le projet
                               <ArrowRight className="ml-1 h-4 w-4" />

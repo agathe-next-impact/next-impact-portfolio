@@ -44,7 +44,15 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>   
+      <body>           
+        {/* Background SVG */}
+        <div className="fixed inset-0 z-0">
+          <img
+            src="/img/chipset-tech-background.svg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
         <Header />
         {children}
         <Footer />

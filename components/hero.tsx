@@ -21,14 +21,7 @@ export default function Hero() {
   return (
     <>
       <section className="h-screen flex items-center relative overflow-hidden">
-        {/* Background SVG */}
-        <div className="fixed inset-0 z-0">
-          <img
-            src="/img/chipset-tech-background.svg"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
+
         <div className="container flex flex-col lg:flex-row justify-between lg:justify-evenly items-end gap-12 lg:gap-24 px-4 md:px-6 relative">
           {/* Text Content */}
           <div className="flex flex-col lg:col-span-7 bg-white/10 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-12 lg:mt-0">
@@ -81,7 +74,7 @@ export default function Hero() {
                   href="#audit"
                   className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
                 >
-                  Tester mon site 
+                  Tester votre site 
                 </Link>
                 <LucideArrowUpRight className="w-8 h-8 text-darkblue" />
               </Button>

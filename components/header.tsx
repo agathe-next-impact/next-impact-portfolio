@@ -38,8 +38,8 @@ export function NavBar() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/services" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Services
+              <Link href="/solutions" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Solutions
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -57,11 +57,13 @@ export function NavBar() {
                 Audit
               </Link>
             </NavigationMenuItem>
+                           {/*
             <NavigationMenuItem>
               <Link href="/simulateur-tarifs" className="font-googletitre text-white/90 text-lg text-regular px-2">
                 Tarifs
               </Link>
             </NavigationMenuItem>
+            */}
           </NavigationMenuList>
         </NavigationMenu>
       </nav>
@@ -271,13 +273,13 @@ export default function Header() {
             <DatabaseIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
           </div>*/}
-          <Link href="/contact" className="hidden md:inline-block">
+          <Link href="tel:0673981638" className="hidden md:inline-block">
             <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
-          <Link href="/contact">
+          <Link href="mailto:agathe@next-impact.digital" className="hidden md:inline-block">
             <MailIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
-          <Link href="/contact" className="hidden md:inline-block">
+          <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank" className="hidden md:inline-block">
             <ScreenShareIcon className="w-6 h-6 text-white/90 hover:text-white transition" />         
           </Link>
         </div>

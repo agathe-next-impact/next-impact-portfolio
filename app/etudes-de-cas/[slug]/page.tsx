@@ -651,18 +651,18 @@ export default async function CaseStudyPage({
   return (
     <main className="min-h-screen">
       {/* Hero section avec image et titre */}
-      <div className="container relative h-full flex flex-col justify-end py-16 px-4 md:px-6">
+      <div className="container relative h-full flex flex-col justify-end py-4 mt-10 mb-20 px-4 md:px-6 bg-mediumblue/50 backdrop-blur-md rounded-3xl">
         <Link
           href="/etudes-de-cas"
-          className="text-regularblue/70 mb-4 flex items-center hover:underline"
+          className="text-white/70 mb-4 flex items-center hover:underline"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Retour aux réalisations
         </Link>
-        <h1 className="text-3xl md:text-4xl lg:text-5xl text-regularblue mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl text-white mb-4">
           {caseStudy.title}
         </h1>
-        <p className="text-xl max-w-3xl text-regularblue/70">
+        <p className="text-xl max-w-3xl text-white/70">
           {caseStudy.description}
         </p>
         <Image
@@ -675,12 +675,12 @@ export default async function CaseStudyPage({
       </div>
 
       {/* Contenu principal */}
-      <div className="container px-4 md:px-6 pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      <div className="container relative z-10 px-4 md:px-6 pb-6 -mt-12 rounded-3xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-white/80 backdrop-blur-sm p-8 rounded-3xl z-50">
           <div className="lg:col-span-2 space-y-10">
             {/* Galerie */}
             <section>
-              <h2 className="text-2xl  mb-6 text-regularblue">
+              <h2 className="text-2xl mb-6 text-mediumblue">
                 Aperçu du projet
               </h2>
               <div className="rounded-lg border overflow-hidden">
@@ -696,7 +696,7 @@ export default async function CaseStudyPage({
 
             {/* Présentation du projet */}
             <section>
-              <h2 className="text-2xl  mb-6 text-regularblue">
+              <h2 className="text-2xl mb-6 text-mediumblue">
                 Présentation du projet
               </h2>
               <div className="prose max-w-none">
@@ -705,7 +705,7 @@ export default async function CaseStudyPage({
                   .map((paragraph, index) => (
                     <p
                       key={index}
-                      className="mb-4 text-regularblue/80 leading-relaxed"
+                      className="mb-4 text-mediumblue/80 leading-relaxed"
                     >
                       {paragraph}
                     </p>
@@ -716,27 +716,27 @@ export default async function CaseStudyPage({
             {/* Objectifs et résultats */}
             <section className="grid md:grid-cols-2 gap-8">
               <div>
-                <h2 className="text-2xl  mb-6 text-regularblue">Objectifs</h2>
+                <h2 className="text-2xl mb-6 text-mediumblue">Objectifs</h2>
                 <ul className="space-y-3">
                   {caseStudy.objectives.map((objective, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="h-6 w-6 rounded-full bg-lightblue/10 text-lightblue/70 flex items-center justify-center mr-3 mt-0.5">
+                      <div className="h-6 w-6 rounded-full bg-transparent text-lightyellow flex items-center justify-center mr-3 mt-0.5">
                         <ChevronRight className="h-4 w-4" />
                       </div>
-                      <span className=" text-regularblue/80">{objective}</span>
+                      <span className=" text-mediumblue/80">{objective}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h2 className="text-2xl  mb-6 text-regularblue">Résultats</h2>
+                <h2 className="text-2xl mb-6 text-mediumblue">Résultats</h2>
                 <ul className="space-y-3">
                   {caseStudy.results.map((result, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="h-6 w-6 rounded-full bg-lightblue/10 text-lightblue/70 flex items-center justify-center mr-3 mt-0.5">
+                      <div className="h-6 w-6 rounded-full bg-transparent text-lightyellow flex items-center justify-center mr-3 mt-0.5">
                         <ChevronRight className="h-4 w-4" />
                       </div>
-                      <span className=" text-regularblue/80">{result}</span>
+                      <span className=" text-mediumblue/80">{result}</span>
                     </li>
                   ))}
                 </ul>
@@ -745,12 +745,12 @@ export default async function CaseStudyPage({
 
             {/* Témoignage client */}
             {caseStudy.testimonial && (
-              <section className="bg-extralightblue/10 p-6 rounded-2xl">
-                <h2 className="text-2xl  mb-6 text-regularblue">
+              <section className="bg-mediumblue/90 backdrop-blur-xl p-6 rounded-2xl">
+                <h2 className="text-2xl mb-6 text-white/80">
                   Témoignage client
                 </h2>
                 <blockquote className="relative">
-                  <div className="text-lg italic text-mediumblue mb-4">
+                  <div className="italic text-white/70 mb-4">
                     "{caseStudy.testimonial.content}"
                   </div>
                   <footer className="flex items-center">
@@ -764,10 +764,10 @@ export default async function CaseStudyPage({
                       />
                     </div>
                     <div>
-                      <div className="font-googletitre">
+                      <div className="font-googletitre text-white/80">
                         {caseStudy.testimonial.author}
                       </div>
-                      <div className="text-sm text-regularblue">
+                      <div className="text-sm text-white/70">
                         {caseStudy.testimonial.position}
                       </div>
                     </div>
@@ -778,49 +778,47 @@ export default async function CaseStudyPage({
           </div>
           {/* Sidebar avec informations du projet */}
           <div className="lg:col-span-1 sticky top-16 self-start">
-            <MagicCard className="rounded-2xl bg-white border-none">
-              <div className="p-6 top-8">
-                <h2 className="text-xl  mb-6 text-regularblue">
+              <div className="p-6 top-8 bg-mediumblue backdrop-blur-md rounded-2xl">
+                <h2 className="text-xl mb-6 text-white">
                   Informations du projet
                 </h2>
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-regularblue mb-1">
+                    <h3 className="text-sm font-medium text-white/70 mb-1">
                       Client
                     </h3>
                     <div className="flex items-center">
                       <Badge
                         variant="outline"
-                        className="bg-lightblue/10 text-regularblue font-medium"
+                        className="bg-lightblue/10 text-white/70 font-medium"
                       >
                         {caseStudy.clientType}
                       </Badge>
-                      <span className="ml-2 font-medium font-googletitre text-lg">
+                      <span className="ml-2 font-medium font-googletitre text-lg text-white">
                         {caseStudy.clientName}
                       </span>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-regularblue mb-1">
+                    <h3 className="text-sm font-medium text-white/70 mb-1">
                       Date de réalisation
                     </h3>
                     <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-2 text-lightblue" />
-                      <span className="font-medium font-googletitre text-lg">
-                        {caseStudy.date.month &&
-                          monthNames[caseStudy.date.month - 1]}{" "}
+                      <Calendar className="h-4 w-4 mr-2 text-extralightblue" />
+                      <span className="font-medium font-googletitre text-lg text-white">
+                        {caseStudy.date.month && monthNames[caseStudy.date.month - 1]}{" "}
                         {caseStudy.date.year}
                       </span>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-regularblue mb-1">
+                    <h3 className="text-sm font-medium text-white/70 mb-1">
                       Durée du projet
                     </h3>
-                    <span className="font-medium font-googletitre text-lg">
+                    <span className="font-medium font-googletitre text-lg text-white">
                       {caseStudy.duration}
                     </span>
                   </div>
@@ -828,15 +826,15 @@ export default async function CaseStudyPage({
                   <Separator />
 
                   <div>
-                    <h3 className="text-sm font-medium text-regularblue mb-2">
+                    <h3 className="text-sm font-medium text-white/70 mb-2">
                       Technologies utilisées
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {caseStudy.technologies.map((tech, index) => (
                         <Badge
                           key={index}
-                          variant="secondary"
-                          className="bg-lightblue/10 text-regularblue font-medium"
+                          variant="outline"
+                          className="bg-extralightblue/10 text-white/70 font-medium"
                         >
                           {tech}
                         </Badge>
@@ -845,7 +843,7 @@ export default async function CaseStudyPage({
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-regularblue mb-2">
+                    <h3 className="text-sm font-medium text-white/80 mb-2">
                       Tags
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -853,7 +851,7 @@ export default async function CaseStudyPage({
                         <Badge
                           key={index}
                           variant="outline"
-                          className="bg-lightblue/10 text-regularblue font-medium"
+                          className="bg-extralightblue/10 text-white/80 font-medium"
                         >
                           {tag}
                         </Badge>
@@ -863,14 +861,14 @@ export default async function CaseStudyPage({
 
                   {caseStudy.website && (
                     <div>
-                      <h3 className="text-sm font-medium text-regularblue mb-2">
+                      <h3 className="text-sm font-medium text-white/80 mb-2">
                         Site web
                       </h3>
                       <a
                         href={caseStudy.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-regularblue font-googletitre hover:underline"
+                        className="text-white/80 font-googletitre hover:underline"
                       >
                         {caseStudy.website}
                       </a>
@@ -894,13 +892,12 @@ export default async function CaseStudyPage({
                   </div>
                 </div>
               </div>
-            </MagicCard>
           </div>
         </div>
 
         {/* Autres projets similaires */}
         <section className="my-16">
-          <h2 className="text-2xl  text-regularblue mb-8">
+          <h2 className="text-2xl text-white mb-8">
             Projets similaires
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -908,9 +905,9 @@ export default async function CaseStudyPage({
               <Link
                 key={study.id}
                 href={`/etudes-de-cas/${study.slug}`}
-                className="block transition-transform hover:scale-[1.02] rounded-lg"
+                className="block rounded-lg"
               >
-                <Card className="h-full overflow-hidden">
+                <Card className="h-full overflow-hidden bg-mediumblue/40 backdrop-blur-lg border-1 border-white/10 rounded-2xl shadow-lg">
                   <div className="flex items-center justify-center aspect-video overflow-hidden">
                     <img
                       src={study.gallery.url || "/placeholder.svg"}
@@ -918,23 +915,23 @@ export default async function CaseStudyPage({
                       className="w-full h-full object-cover object-top transition-transform hover:scale-105 duration-300"
                     />
                   </div>
-                  <CardContent className="p-5">
+                  <CardContent className="p-5 h-full">
                     <div className="flex justify-between items-start mb-3">
                       <Badge
                         variant="outline"
-                        className="bg-lightblue/10 text-regularblue font-medium"
+                        className="bg-extralightblue/10 text-white font-medium"
                       >
                         {study.clientType}
                       </Badge>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-white/70">
                         {study.date.month && monthNames[study.date.month - 1]}{" "}
                         {study.date.year}
                       </div>
                     </div>
-                    <h3 className="text-xl  text-regularblue mb-2">
+                    <h3 className="text-xl  text-white mb-2">
                       {study.title}
                     </h3>
-                    <p className="text-regularblue/80 mb-4 line-clamp-3">
+                    <p className="text-white/80 mb-4 line-clamp-3">
                       {study.description}
                     </p>
                   </CardContent>
@@ -943,9 +940,6 @@ export default async function CaseStudyPage({
             ))}
           </div>
         </section>
-
-        {/* Call to action */}
-        <CTASection />
       </div>
     </main>
   );

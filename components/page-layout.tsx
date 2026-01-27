@@ -9,7 +9,7 @@ interface PageLayoutProps {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ titre, sousTitre, children }) => (
-    <div className="relative w-full h-[125vh] flex flex-col">
+    <div className="relative w-full min-h-screen flex flex-col">
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
             <img src="/img/chipset-tech-background.svg" alt="" className="w-full h-full object-cover" />
