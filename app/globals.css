@@ -184,8 +184,12 @@ html, body {
     @apply text-3xl;
   }
 
+  .prose h1 {
+    @apply text-3xl;
+  }
   .prose code {
     @apply text-regularblue font-googletexte;
   }
+  
 }
 

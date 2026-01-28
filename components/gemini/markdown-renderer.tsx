@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
 import { marked } from "marked";
+import { parseMarkdownTable, parseAllMarkdownTables } from "./parseMarkdownTable";
+import ComparisonTable from "./ComparisonTable";
+import RecommendedStackCard from "./RecommendedStackCard";
+import { parseRecommendedStack } from "./parseRecommendedStack";
+//
 
 interface MarkdownRendererProps {
   content: string;
@@ -8,80 +13,96 @@ interface MarkdownRendererProps {
 }
 
 export default function MarkdownRenderer({ content, className = "", analyzedUrl }: MarkdownRendererProps & { analyzedUrl?: string }) {
-  
   // --- 1. Nettoyage du contenu (Identique à avant) ---
   let cleanContent = content;
   const identityRegex = /(\*\*Étape 1\s?:[\s\S]*?)(?=\*\*Étape 2)/i;
-  
   if (identityRegex.test(cleanContent)) {
     cleanContent = cleanContent.replace(identityRegex, "");
   }
-
   const step2TitleRegex = /\*\*Étape 2\s?:\s?Analyse Stratégique\s?\(Format Markdown\)\*\*/i;
   cleanContent = cleanContent.replace(step2TitleRegex, "");
   cleanContent = cleanContent.trim();
-  
+
   // --- 2. Configuration du Renderer Custom pour les Tableaux ---
   const renderer = new marked.Renderer();
-
-  // Personnalisation du conteneur de tableau (pour le scroll et le style carte)
-  renderer.table = ({ header, body }: { header: string, body: string }) => {
+  renderer.table = (table) => {
     return `
       <div class="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 shadow-sm bg-white/50 backdrop-blur-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead class="bg-mediumblue/5 text-mediumblue font-googletitre border-b border-mediumblue/10">
-              ${header}
+              ${table.header}
             </thead>
             <tbody class="divide-y divide-mediumblue/10 bg-transparent">
-              ${body}
+              ${table.body}
             </tbody>
           </table>
         </div>
       </div>
     `;
   };
-
-  // Personnalisation des cellules
-  renderer.tablecell = ({ content, flags }: { content: string, flags: { header: boolean, align: string } }) => {
-    const isHeader = flags.header;
+  renderer.tablecell = (cell) => {
+    const isHeader = cell.header;
     const Tag = isHeader ? 'th' : 'td';
-    
-    // Styles de base
     let classes = isHeader 
       ? "px-6 py-4 font-semibold uppercase tracking-wider text-xs whitespace-nowrap" 
       : "px-6 py-4 text-gray-600";
-    
-    // Logique pour centrer les colonnes de comparaison (souvent les colonnes 2 et +)
-    // Astuce : on ne peut pas facilement savoir l'index ici sans contexte global, 
-    // mais on peut forcer l'alignement via markdown (:--:) ou CSS global
-    
-    return `<${Tag} class="${classes}">${content}</${Tag}>`;
+    return `<${Tag} class="${classes}">${cell.text}</${Tag}>`;
   };
-
-  // Appliquer le renderer SANS affecter l'instance globale si possible, 
-  // mais marked.use est global. On l'utilise ici pour s'assurer que ce composant rend bien comme prévu.
-  // Note : Dans une très grosse app, on préférerait "new Marked({ renderer })"
   marked.use({ renderer });
 
   // --- 3. Ajout du Titre H1 dynamiquement ---
-  const finalContent = `# Voici l'audit stratégique de votre site ${analyzedUrl ? analyzedUrl : ''}\n\n` + cleanContent;
+  const finalContent = `# Audit stratégique de votre site ${analyzedUrl ? analyzedUrl : ''}\n\n` + cleanContent;
+
+  // Extraction de tous les tableaux
+  const allTables = parseAllMarkdownTables(cleanContent);
+
+  // Supprime tous les tableaux du markdown pour ne pas les afficher deux fois
+  let markdownSansTables = cleanContent;
+  if (allTables && allTables.length > 0) {
+    allTables.forEach(tbl => {
+      markdownSansTables = markdownSansTables.replace(tbl.raw, "");
+    });
+  }
+
+  // Extraction de la stack recommandée
+  const stackData = parseRecommendedStack(content);
+
+  // Supprime la section stack du markdown pour ne pas l'afficher deux fois
+  let finalContentWithoutStack = markdownSansTables;
+  if (stackData && stackData.raw) {
+    finalContentWithoutStack = markdownSansTables.replace(stackData.raw, "");
+  }
 
   // Rendu
-  const htmlContent = marked.parse(finalContent) as string;
+  const htmlContent = marked.parse(`# ${analyzedUrl ? analyzedUrl : ''}\n\n` + finalContentWithoutStack) as string;
 
   return (
-    <div
-      className={`prose prose-lg dark:prose-invert max-w-none 
-      prose-headings:font-googletitre prose-headings:font-semibold prose-headings:text-mediumblue
-      prose-h1:text-3xl prose-h2:text-3xl prose-h3:text-2xl 
-      prose-p:text-mediumblue prose-li:text-mediumblue 
-      prose-strong:text-mediumblue prose-strong:font-semibold
-      prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
-      prose:code:text-regularblue prose:code:text-googletitre prose-code:font-medium
-      prose-img:rounded-xl prose-img:shadow-lg
-      ${className}`}
-      dangerouslySetInnerHTML={{ __html: htmlContent }}
-    />
+    <>
+      <div>
+        <div
+          className={`prose prose-lg dark:prose-invert max-w-none 
+        prose-headings:font-googletitre prose-headings:font-semibold prose-headings:text-mediumblue
+        prose-h1:text-3xl prose-h2:text-3xl prose-h3:text-2xl 
+        prose-p:text-mediumblue prose-li:text-mediumblue 
+        prose-strong:text-mediumblue prose-strong:font-semibold
+        prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
+        prose:code:text-regularblue prose:code:text-googletitre prose-code:font-medium
+        prose-img:rounded-xl prose-img:shadow-lg
+        ${className}`}
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        />
+        {allTables && allTables.map((tbl, idx) => (
+          <ComparisonTable key={idx} headers={tbl.headers} rows={tbl.rows} />
+        ))}
+        {stackData && stackData.stack && (
+          <RecommendedStackCard
+            title="Stack recommandée"
+            stack={stackData.stack}
+            highlights={stackData.highlights}
+          />
+        )}
+      </div>
+    </>
   );
 }

@@ -49,7 +49,7 @@ export default function SolutionsOffers({ offers }: { offers: any[] }) {
                   ))}
                 </ul>
               </CardContent>
-              <Link href="/simulateur-tarifs" className="w-full mt-auto">
+              <Link href="https://calendar.app.google/ZagmCTp8PBTczTnJA" className="w-full mt-auto" target="_blank" rel="noopener noreferrer">
                 <Button
                   className={`w-full h-12 font-medium font-googletitre text-base rounded-full shadow ${
                     offer.recommended
@@ -57,7 +57,7 @@ export default function SolutionsOffers({ offers }: { offers: any[] }) {
                       : "bg-orange hover:bg-orange/90 text-darkblue"
                   }`}
                 >
-                  Simuler mon tarif
+                  En savoir plus
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

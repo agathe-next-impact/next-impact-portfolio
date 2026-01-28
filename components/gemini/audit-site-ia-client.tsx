@@ -17,11 +17,11 @@ const prompt = `
 **Mission :** Audit stratégique de l'URL {$url} pour évaluer la pertinence d'une migration vers une architecture Headless.
 
 **Synthèse globale des résultats
-*Insère une synthèse visuelle des résultats et de la recommandation*
+*Insère une synthèse des résultats et de la recommandation sans évoquer l'identité issue du diagnostic*
 ---
 
 **Étape 1 : Diagnostic d'Identité (Scan Précis)**
-*Effectue une analyse croisée du contenu visible (Header, Footer, Page "À Propos") et des métadonnées de la page d'accueil.*
+*Effectue une analyse croisée des metadonnées et dans un deuxième temps du contenu visible (Header, Footer, Page "À Propos").*
 
 1.  **Nature de l'organisation :** (Ex: Entreprise privée, Association, Collectivité, Institution publique, Startup, Indépendant/Freelance, ONG, etc.)
 2.  **Secteur d'activité :** (Ex: E-commerce B2C, SaaS B2B, Média, etc.)
@@ -40,7 +40,7 @@ const prompt = `
 *   **Indice de modernité :** [Note sur 10] évaluant la performance et l'expérience globale par rapport aux standards actuels.
 
 ### 2. Pertinence d'une Migration WordPress Headless
-*   **Verdict Stratégique :** [Accélérer / Maintenir / Pivoter]. Justifie en une phrase.
+*   **Verdict Stratégique :** [Migrer rapidement / Maintenir WordPress monolithique / Migrer progressivement]. Justifie en une phrase.
 *   **Enjeu de Différenciation :** Comment le Headless peut-il transformer l'expérience (ex: ultra-rapide, personnalisée) pour créer un avantage concurrentiel ?
 *   **Justification Business :** Quels sont les arguments clés (ROI potentiel) justifiant l'investissement face aux gains attendus en performance, SEO et agilité marketing ?
 
@@ -71,7 +71,7 @@ export default function AuditSiteIaClient() {
     <main>
       <PageLayout 
         titre="Faut-il migrer vers WordPress Headless ?"
-        sousTitre="Tester en 10 secondes ce que WordPress Headless peut apporter à votre site web."
+        sousTitre="Testez ce que WordPress Headless peut apporter à votre site web."
       >
         <div className="relative md:max-w-5xl my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-4 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch

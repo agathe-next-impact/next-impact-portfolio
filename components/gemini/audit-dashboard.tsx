@@ -39,7 +39,11 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
   if (score >= 8) { scoreColor = "text-emerald-600 border-emerald-600"; scoreBg="bg-emerald-50"; }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <>
+    <h1 className="text-2xl md:text-3xl font-googletitre font-semibold text-center text-mediumblue mb-6">
+      Audit d'opportunité pour une migration WordPress Headless
+     </h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
       {/* Carte 1: Score Global */}
       <div className={`p-6 rounded-2xl border flex flex-col items-center justify-center gap-2 ${scoreBg} ${scoreColor.replace('text-', 'border-opacity-20 border-')}`}>
         <h3 className="text-xs font-bold uppercase tracking-widest opacity-70 flex items-center gap-2">
@@ -60,10 +64,10 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
         <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
             <Activity className="size-4"/> Verdict Stratégique
         </h3>
-        <div className={`px-4 py-1.5 rounded-full font-bold text-sm border ${
-            verdict.includes("Accélérer") ? "bg-emerald-100 text-emerald-800 border-emerald-200" :
-            verdict.includes("Pivoter") ? "bg-orange-100 text-orange-800 border-orange-200" :
-            "bg-blue-100 text-blue-800 border-blue-200"
+        <div className={`px-4 py-1.5 rounded-full font-bold text-base uppercase ${
+            verdict.includes("Accélérer") ? "text-emerald-800" :
+            verdict.includes("Pivoter") ? "text-orange-800" :
+            "text-blue-800"
         }`}>
             {verdict}
         </div>
@@ -72,18 +76,8 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
         </p>
       </div>
 
-       {/* Carte 3: Identité */}
-       <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
-            <TrendingUp className="size-4"/> Profil Détecté
-        </h3>
-        <div className="text-lg font-semibold text-slate-800 leading-tight">
-            {nature}
-        </div>
-        <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 bg-slate-100 rounded text-slate-500">
-             Analyse prédictive
-        </span>
-      </div>
+
     </div>
+    </>
   );
 }
