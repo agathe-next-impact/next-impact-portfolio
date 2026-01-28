@@ -8,34 +8,67 @@ interface MarkdownRendererProps {
 }
 
 export default function MarkdownRenderer({ content, className = "", analyzedUrl }: MarkdownRendererProps & { analyzedUrl?: string }) {
-  // Masquer spécifiquement la section "Étape 1 : Diagnostic d'Identité"
-  // On cherche le début de l'étape 1 et on supprime jusqu'au début de l'étape 2 ou jusqu'à la fin si pas d'étape 2 (bien que le prompt demande étape 2)
-  // On utilise une regex qui capture de "**Étape 1" jusqu'à "**Étape 2" (non inclus) ou la fin du fichier si non trouvé.
-  // Modification pour être robuste : on remplace par une chaîne vide.
   
+  // --- 1. Nettoyage du contenu (Identique à avant) ---
   let cleanContent = content;
-
-  // Regex pour retirer l'étape 1
-  // On assume que le prompt génère "**Étape 1 :" ou "**Étape 1**" etc.
-  // Le prompt attendu est "**Étape 1 : Diagnostic d'Identité"
   const identityRegex = /(\*\*Étape 1\s?:[\s\S]*?)(?=\*\*Étape 2)/i;
   
   if (identityRegex.test(cleanContent)) {
     cleanContent = cleanContent.replace(identityRegex, "");
   }
 
-  // Masquer la ligne "Étape 2 : Analyse Stratégique (Format Markdown)"
   const step2TitleRegex = /\*\*Étape 2\s?:\s?Analyse Stratégique\s?\(Format Markdown\)\*\*/i;
   cleanContent = cleanContent.replace(step2TitleRegex, "");
-
-  // Nettoyer les espaces inutiles au début
   cleanContent = cleanContent.trim();
-
-
-  // Configuration de marked pour gerer les sauts de ligne si besoin (gfm est true par defaut)
   
+  // --- 2. Configuration du Renderer Custom pour les Tableaux ---
+  const renderer = new marked.Renderer();
+
+  // Personnalisation du conteneur de tableau (pour le scroll et le style carte)
+  renderer.table = ({ header, body }: { header: string, body: string }) => {
+    return `
+      <div class="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 shadow-sm bg-white/50 backdrop-blur-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-mediumblue/5 text-mediumblue font-googletitre border-b border-mediumblue/10">
+              ${header}
+            </thead>
+            <tbody class="divide-y divide-mediumblue/10 bg-transparent">
+              ${body}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  };
+
+  // Personnalisation des cellules
+  renderer.tablecell = ({ content, flags }: { content: string, flags: { header: boolean, align: string } }) => {
+    const isHeader = flags.header;
+    const Tag = isHeader ? 'th' : 'td';
+    
+    // Styles de base
+    let classes = isHeader 
+      ? "px-6 py-4 font-semibold uppercase tracking-wider text-xs whitespace-nowrap" 
+      : "px-6 py-4 text-gray-600";
+    
+    // Logique pour centrer les colonnes de comparaison (souvent les colonnes 2 et +)
+    // Astuce : on ne peut pas facilement savoir l'index ici sans contexte global, 
+    // mais on peut forcer l'alignement via markdown (:--:) ou CSS global
+    
+    return `<${Tag} class="${classes}">${content}</${Tag}>`;
+  };
+
+  // Appliquer le renderer SANS affecter l'instance globale si possible, 
+  // mais marked.use est global. On l'utilise ici pour s'assurer que ce composant rend bien comme prévu.
+  // Note : Dans une très grosse app, on préférerait "new Marked({ renderer })"
+  marked.use({ renderer });
+
+  // --- 3. Ajout du Titre H1 dynamiquement ---
+  const finalContent = `# Voici l'audit stratégique de votre site ${analyzedUrl ? analyzedUrl : ''}\n\n` + cleanContent;
+
   // Rendu
-  const htmlContent = marked.parse(cleanContent) as string;
+  const htmlContent = marked.parse(finalContent) as string;
 
   return (
     <div
@@ -47,11 +80,7 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
       prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
       prose:code:text-regularblue prose:code:text-googletitre prose-code:font-medium
       prose-img:rounded-xl prose-img:shadow-lg
-      prose-table:w-full prose-table:border-collapse prose-table:my-6
-      prose-thead:bg-mediumblue/10 prose-thead:text-mediumblue
-      prose-th:border prose-th:border-mediumblue/20 prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:font-semibold
-      prose-td:border prose-td:border-mediumblue/20 prose-td:px-4 prose-td:py-2 prose-td:text-mediumblue
-      prose-tr:even:bg-mediumblue/5 ${className}`}
+      ${className}`}
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );

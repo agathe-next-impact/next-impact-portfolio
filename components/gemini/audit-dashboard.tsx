@@ -41,8 +41,8 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
       {/* Carte 1: Score Global */}
-      <div className={`p-6 rounded-2xl border flex flex-col items-center justify-start gap-2 ${scoreBg} ${scoreColor.replace('text-', 'border-opacity-20 border-')}`}>
-        <h3 className="text-xs font-bold uppercase tracking-widest opacity-70 flex items-center gap-2 text-mediumblue">
+      <div className={`p-6 rounded-2xl border flex flex-col items-center justify-center gap-2 ${scoreBg} ${scoreColor.replace('text-', 'border-opacity-20 border-')}`}>
+        <h3 className="text-xs font-bold uppercase tracking-widest opacity-70 flex items-center gap-2">
             <Gauge className="size-4"/> Indice de Modernité
         </h3>
         <div className="relative size-20 flex items-center justify-center mt-1">
@@ -56,8 +56,8 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
       </div>
 
       {/* Carte 2: Verdict */}
-      <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-start gap-3 text-center backdrop-blur-sm">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-mediumblue flex items-center gap-2">
+      <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
             <Activity className="size-4"/> Verdict Stratégique
         </h3>
         <div className={`px-4 py-1.5 rounded-full font-bold text-sm border ${
@@ -67,20 +67,20 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
         }`}>
             {verdict}
         </div>
-        <p className="text-[10px] uppercase tracking-wide text-mediumblue/80">
+        <p className="text-[10px] uppercase tracking-wide text-slate-400">
             Recommandation IA
         </p>
       </div>
 
        {/* Carte 3: Identité */}
-       <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-start gap-3 text-center backdrop-blur-sm">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-mediumblue flex items-center gap-2">
+       <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
             <TrendingUp className="size-4"/> Profil Détecté
         </h3>
-        <div className="text-lg font-semibold text-darkblue leading-tight">
+        <div className="text-lg font-semibold text-slate-800 leading-tight">
             {nature}
         </div>
-        <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 bg-slate-100 rounded text-darkblue">
+        <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 bg-slate-100 rounded text-slate-500">
              Analyse prédictive
         </span>
       </div>
