@@ -76,7 +76,7 @@ export default function Hero() {
 
   return (
     <>
-      <main className="h-screen flex items-center relative overflow-hidden">
+      <main className="h-screen flex items-center relative overflow-hidden pt-36 md:pt-0">
 
         <div className="container flex flex-col lg:flex-row justify-between lg:justify-evenly items-end gap-12 lg:gap-24 px-4 md:px-6 relative">
           {/* Text Content */}
@@ -87,7 +87,7 @@ export default function Hero() {
             <div className="mt-2 text-4xl lg:text-5xl text-lightyellow font-googletitre font-medium">
               WordPress Headless
             </div>            
-            <div className="mt-5 flex items-center justify-start gap-4">
+            <div className="mt-5 flex flex-wrap items-center justify-start gap-4">
               <Image
                 src="/img/logo-wordpress-blanc.webp"
                 alt="Logo WordPress"
