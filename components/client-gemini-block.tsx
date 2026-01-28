@@ -7,21 +7,91 @@ const GeminiSearch = dynamic(() => import("@/components/gemini/gemini-search"));
 export default function ClientGeminiBlock() {
   // L'instruction système définit le "rôle" et le contexte global.
   // Elle doit être passée séparément du prompt dans l'appel API.
-  const system_instruction = `Tu es un expert en stratégie digitale et UX. Ton analyse est factuelle, basée sur les standards technologiques et marketing actuels. Tu fournis des recommandations claires et justifiées pour un public de décideurs (CEO, CTO).`;
+  const system_instruction = `Tu es un expert en stratégie digitale et UX avec une forte compétence en audit technique.
+Ta méthode est rigoureuse :
+1. OBSERVATION : Tu extrais d'abord les données factuelles (métadonnées, structure légale, vocabulaire utilisé).
+2. ANALYSE : Tu croises ces données pour établir un diagnostic précis de l'identité de l'organisation.
+3. RECOMMANDATION : Tu fournis des conseils stratégiques basés sur ces preuves.
+Ton ton est direct, professionnel et factuel.`;
 
   // Le prompt se concentre sur les tâches à accomplir.
   const prompt = `
-**Mission :** Audit stratégique de l'URL **{$url}** pour évaluer la pertinence d'une migration vers une architecture Headless.
+**Mission :** Audit stratégique de l'URL {$url} pour évaluer la pertinence d'une migration vers une architecture Headless.
+
+🛑 **PROCÉDURE ANTI-HALLUCINATION OBLIGATOIRE :**
+
+**Étape A : Extraction des métadonnées (exécution prioritaire)**
+1. Extrais EXACTEMENT le contenu des balises suivantes de la homepage :
+   - <title> : [copie exacte ou "Non détecté"]
+   - <meta name="description"> : [copie exacte ou "Non détecté"]
+   - <meta property="og:title"> : [copie exacte ou "Non détecté"]
+   - <meta property="og:description"> : [copie exacte ou "Non détecté"]
+2. Inspecte le footer pour identifier le statut juridique (SARL, SAS, Association loi 1901, ONG, Fondation, Service Public, etc.)
+3. Scan du header/navigation : recherche des termes explicites (Boutique, Agence, Média, Ministère, Université, Observatoire, Think Tank, etc.)
+
+**Étape B : Validation croisée**
+- Confronte les 3 sources (métadonnées + footer + navigation)
+- Si divergence entre sources : indique "⚠️ Incohérence détectée" et cite chaque source avec son contenu exact
+- Si aucune information claire : écris "Non déterminé (absence de données)" au lieu d'inventer
+
+**🎯 GRILLE DE DÉTECTION SECTEUR (exécution obligatoire) :**
+Recherche ces MOTS-CLÉS EXACTS (et leurs VARIANTES) dans title/meta/navigation/footer :
+
+**E-commerce** : "boutique", "shop", "e-shop", "e-commerce", "panier", "acheter", "ajouter au panier", "commander", "commande", "produits", "livraison", "expédition", "prix €", "prix", "stock", "catalogue", "vente en ligne"
+**SaaS/Software** : "plateforme", "solution", "logiciel", "software", "application", "app", "API", "dashboard", "tableau de bord", "abonnement", "subscription", "démo", "demo", "essai gratuit", "free trial", "pricing", "tarifs", "SaaS"
+**Agence/Conseil** : "agence" + ("web"|"digitale"|"communication"|"créative"|"marketing"), "studio créatif", "cabinet conseil", "expertise", "accompagnement", "nos clients", "portfolio", "réalisations", "projets", "cas clients", "nos services" + design/développement
+**Média/Presse** : "actualités", "news", "articles", "journal", "magazine", "édition", "rédaction", "journaliste", "reporter", "abonnez-vous", "newsletter", "dernières nouvelles", "info", "presse"
+**Association/ONG** : "association", "loi 1901", "association loi", "ONG", "adhérer", "adhésion", "faire un don", "donner", "donation", "bénévoles", "volontaires", "mission sociale", "but non lucratif", "non-profit", "collectif", "mouvement citoyen"
+**Think Tank/Recherche** : "think tank", "think and do tank", "études", "publications", "recherche", "research", "observatoire", "analyses", "policy", "rapport", "policy paper", "working paper", "centre de recherche", "institut", "laboratoire d'idées"
+**Institution/Gov** : "ministère", "ministre", "gouvernement", "gouvernemental", "public", "administration", "service public", "légifrance", "république", "état", "collectivité", "préfecture", "mairie", "conseil régional", "agence publique"
+**Éducation** : "formation", "formations", "université", "école", "institut", "cours", "étudiants", "élèves", "diplôme", "certification", "certifié", "apprentissage", "enseignement", "pédagogie", "campus", "académie"
+**Industrie/B2B** : "fabricant", "fabrication", "industriel", "industrie", "manufacture", "fournisseur", "grossiste", "devis", "sur mesure", "capacité production", "usine", "production", "B2B", "professionnel", "distributeur"
+
+⚠️ **RÈGLES DE DÉSAMBIGUÏSATION :**
+- "Agence" SEUL → Vérifier contexte : si + "web"/"digitale"/"communication" → Agence/Conseil, si + "publique"/"gouvernement" → Institution
+- "Studio" SEUL → Vérifier : si + "créatif"/"design"/"graphique" → Agence, sinon "Non déterminé"
+- "Plateforme" SEUL → Insuffisant, chercher "abonnement"/"SaaS"/"API" pour confirmer
+- "Services" SEUL → Trop générique, ignorer
+
+SCORING :
+- 3+ mots-clés d'un secteur → Confiance 90%
+- 2 mots-clés → Confiance 70%
+- 1 mot-clé OU déduction visuelle → Confiance <50% → "Non déterminé"
+- Mots-clés de 2 secteurs différents → Indiquer "Secteur hybride : [Secteur1] + [Secteur2]"
+
+**Étape C : Règles strictes**
+- NE JAMAIS réécrire, paraphraser ou deviner les métadonnées
+- NE JAMAIS qualifier par défaut une entité d'"entreprise" sans preuve explicite
+- NE PAS utiliser d'informations externes (SERP, mémoire de conversations précédentes)
+- TOUJOURS citer la source exacte entre crochets : [title], [footer], [nav], [meta-description]
+
+**Seuil de confiance :**
+- Si confiance < 80% sur la nature/secteur : écrire "Non déterminé (données insuffisantes)"
+- Si contradiction entre sources : lister toutes les hypothèses avec leur source
+- EXEMPLES D'ERREURS À ÉVITER :
+  ❌ "Entreprise" quand footer dit "Association loi 1901"
+  ❌ "E-commerce" quand c'est un site vitrine institutionnel
+  ❌ "Agence" quand c'est un Think Tank
 
 ---
 
 **Étape 1 : Diagnostic d'Identité (Scan Précis)**
-*Effectue une analyse croisée du contenu visible (Header, Footer, Page "À Propos").*
 
-1.  **Secteur d'activité :** (Ex: E-commerce B2C, SaaS B2B, Média, etc.)
-2.  **Proposition de valeur :** Quelle est la promesse principale faite au client ?
-3.  **Mission :** Cite un court extrait du site qui valide cette proposition.
-4.  **Cibles prioritaires :** Identifie les 2 profils d'utilisateurs les plus évidents.
+⚠️ **[SECTION INTERNE - NE PAS AFFICHER DANS LA RÉPONSE]**
+Métadonnées extraites (pour validation uniquement) :
+- Title : [copie exacte]
+- Meta-description : [copie exacte]
+- Statut juridique (footer) : [extrait exact ou "Non détecté"]
+- Type identifié (navigation/header) : [termes clés trouvés]
+**[FIN SECTION INTERNE]**
+
+### Votre organisation
+1.  **Nature de l'entité :** [Association / Entreprise / Think Tank / ONG / Institution / Service Public / Non déterminé] — Source : [title/footer/nav]
+2.  **Secteur d'activité :** [Secteur identifié] — Mots-clés détectés : "[mot1]", "[mot2]", "[mot3]" — Score confiance : [X]%
+3.  **Proposition de valeur :** Quelle est la promesse principale faite au client ? — Extrait exact : "[citation courte du site]"
+4.  **Mission :** Cite un court extrait du site qui valide cette proposition.
+5.  **Cibles prioritaires :** Identifie les 2 profils d'utilisateurs les plus évidents.
+
 *Si le site est inaccessible ou le contenu protégé, réponds uniquement : "Accès bloqué : Diagnostic impossible." et arrête l'analyse.*
 
 ---

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Suppression globale de l'outline sur les champs de formulaire au focus, active et focus-visible */
 input:focus, input:active, input:focus-visible,
 textarea:focus, textarea:active, textarea:focus-visible,
@@ -6,9 +10,6 @@ button:focus, button:active, button:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 html, body {
   font-family: var(--font-inter), 'Open Sans', Arial, Helvetica, sans-serif;
@@ -181,6 +182,10 @@ html, body {
   }
   .prose h3 {
     @apply text-3xl;
+  }
+
+  .prose code {
+    @apply text-regularblue font-googletexte;
   }
 }
 

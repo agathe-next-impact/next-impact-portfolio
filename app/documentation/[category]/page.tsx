@@ -10,7 +10,8 @@ import { Metadata } from "next";
 export const revalidate = 86400;
 
 // meta données dynamiques pour la page d'étude de cas
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const categoryInfo = {
     bases: {
       title: "Marketing Digital",
@@ -60,9 +61,9 @@ export async function generateMetadata({ params }: { params: { category: string 
 
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string
-  }
+  }>
 }
 
 export function generateStaticParams() {
@@ -73,7 +74,8 @@ export function generateStaticParams() {
   }))
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage(props: CategoryPageProps) {
+  const params = await props.params;
   const { category } = params
   const articles =  getArticlesByCategory(category)
 

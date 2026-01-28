@@ -108,6 +108,9 @@ export function NavBar() {
                     width={40}
                     height={40}
                     className="mr-2"
+                    priority
+                    fetchPriority="high"
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                   <button
                     className="p-2 rounded-md focus:outline-none"
@@ -239,6 +242,9 @@ export default function Header() {
               alt="Next Impact Digital"
               width={40}
               height={40}
+              priority
+              fetchPriority="high"
+              style={{ width: 'auto', height: 'auto' }}
             />
           </Link>
         </div>

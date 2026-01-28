@@ -8,8 +8,9 @@ import ShareSocial from "@/components/share-social"
 import { Metadata } from "next";
 
 // meta données dynamiques pour la page d'étude de cas
-export async function generateMetadata({ params }: { params: { category: string; slug: string } }): Promise<Metadata> {
-  const post = await getArticleBySlug(params.category, params.slug);
+export async function generateMetadata(props: { params: Promise<{ category: string; slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const post = getArticleBySlug(params.category, params.slug);
   if (!post) {
     return {
       title: "Article introuvable",
@@ -39,10 +40,10 @@ export async function generateMetadata({ params }: { params: { category: string;
 
 
 interface ArticlePageProps {
-  params: {
+  params: Promise<{
     category: string
     slug: string
-  }
+  }>
 }
 
  
@@ -74,7 +75,8 @@ export function generateTableOfContents(content: string) {
   return toc;
 }
 
-export default function ArticlePage({ params }: ArticlePageProps) {
+export default async function ArticlePage(props: ArticlePageProps) {
+    const params = await props.params;
     const article = getArticleBySlug(params.category, params.slug)
     const relatedArticles = (getArticlesByCategory(params.category))
       .filter((a) => a.slug !== params.slug)

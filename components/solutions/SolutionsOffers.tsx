@@ -11,21 +11,29 @@ export default function SolutionsOffers({ offers }: { offers: any[] }) {
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8">
           {offers.map((offer, index) => (
-            <Card key={index} className="flex flex-col h-full hover:shadow-lg transition-shadow duration-300 border-primary/10">
-              <CardHeader>
-                <div className="relative w-12 h-12 mb-4">
+            <Card key={index} className="flex flex-col h-full bg-mediumblue/60 backdrop-blur-lg rounded-3xl hover:shadow-lg transition-shadow duration-300 border-white/10 p-4">
+              <div className="mb-4 grid grid-cols-[auto_1fr]">
+              <CardHeader className="items-center gap-4">
+                <div className="w-14 h-14 flex-shrink-0">
                   <Image 
                     src={offer.icon} 
                     alt={offer.title} 
-                    fill
                     className="object-contain"
+                    width={52}
+                    height={52}
                   />
                 </div>
+                <CardDescription className={`text-2xl font-googletitre font-semibold text-lightyellow
+                  ${offer.recommended ? 'text-lightyellow' : 'text-amber-400'}`}
+                >
+                  {offer.name}
+                <p className="text-2xl md:text-lg text-white">{offer.tech}</p>
+                </CardDescription>
+
                 <CardTitle className="text-xl font-bold text-primary">{offer.title}</CardTitle>
               </CardHeader>
-              <CardDescription className="text-2xl font-googletitre font-semibold text-lightyellow">{offer.name}</CardDescription>
+              </div>
               <CardContent>
-                <p className="text-2xl md:text-lg text-white">{offer.tech}</p>
                 <p className={`text-xl mb-6 ${
                   offer.recommended
                     ? "text-lightyellow hover:text-lightyellow/90"
@@ -41,18 +49,18 @@ export default function SolutionsOffers({ offers }: { offers: any[] }) {
                   ))}
                 </ul>
               </CardContent>
-              <Button
-                className={`w-full h-12 font-medium font-googletitre text-base rounded-full shadow ${
-                  offer.recommended
-                    ? "bg-lightyellow hover:bg-lightyellow/90 text-darkblue"
-                    : "bg-orange hover:bg-orange/90 text-darkblue"
-                }`}
-              >
-                <Link href="/simulateur-tarif-wordpress-headless" className="flex items-center justify-center w-full font-medium text-xl text-darkblue hover:text-darkblue/90">
-                Simuler mon tarif
-                <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <Link href="/simulateur-tarifs" className="w-full mt-auto">
+                <Button
+                  className={`w-full h-12 font-medium font-googletitre text-base rounded-full shadow ${
+                    offer.recommended
+                      ? "bg-lightyellow hover:bg-lightyellow/90 text-darkblue"
+                      : "bg-orange hover:bg-orange/90 text-darkblue"
+                  }`}
+                >
+                  Simuler mon tarif
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </Card>
           ))}
         </div>

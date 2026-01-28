@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { marked } from "marked";
 import { Button } from "../ui/button";
 import { MailIcon, PhoneIcon, ScreenShareIcon } from "lucide-react";
+import MarkdownRenderer from "./markdown-renderer";
+import AuditDashboard from "./audit-dashboard"; // Import du nouveau composant
 
 interface AuditSendFormProps {
   markdownFull: string;
@@ -51,17 +53,11 @@ export default function AuditSendFormClient({
 
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow mt-8">
-      {/* Affichage intégral du résultat d'analyse */}
-      <div
-        className="prose prose-lg dark:prose-invert max-w-none 
-        prose-headings:font-googletitre prose-headings:font-semibold prose-headings:text-mediumblue
-        prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl 
-        prose-p:text-mediumblue prose-li:text-mediumblue 
-        prose-strong:text-mediumblue prose-strong:font-semibold
-        prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
-        prose-img:rounded-xl prose-img:shadow-lg"
-        dangerouslySetInnerHTML={{ __html: marked.parse(markdownFull) }}
-      />
+      {/* Dashboard Visuel (Badges, Jauges) */}
+      <AuditDashboard markdown={markdownFull} />
+
+      {/* Affichage intégral du résultat d'analyse via le nouveau composant */}
+      <MarkdownRenderer content={markdownFull} analyzedUrl={url} />
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
         <a

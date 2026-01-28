@@ -60,7 +60,7 @@ export default function HomeClient() {
           >
         
             {/* Video wrapper */}
-            <div className="relative border border-border rounded-2xl overflow-hidden transform transition-transform duration-500" onClick={handlePlayVideo} style={{ cursor: 'pointer' }}>
+            <div className="relative border border-border rounded-t-2xl overflow-hidden transform transition-transform duration-500" onClick={handlePlayVideo} style={{ cursor: 'pointer' }}>
               {/* Video placeholder */}
 
               <div style={{ width: '100%', paddingTop: '56.25%', position: 'relative' }}>
@@ -80,10 +80,9 @@ export default function HomeClient() {
                       alt={mainVideo.title} 
                       fill
                       className="object-cover"
+                      priority
+                      fetchPriority="high"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                      <svg className="w-20 h-20 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path></svg>
-                    </div>
                   </div>
                  )}
                </div>

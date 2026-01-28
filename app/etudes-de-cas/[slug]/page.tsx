@@ -14,11 +14,10 @@ import { Metadata } from "next";
 export const revalidate = 21600;
 
 // meta données dynamiques pour la page d'étude de cas
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
   const caseStudy = CASE_STUDIES.find((study) => study.slug === params.slug);
   if (!caseStudy) {
     return {
@@ -730,6 +729,8 @@ export default async function CaseStudyPage({
           width={150}
           height={150}
           className="object-contain mt-12"
+          priority
+          fetchPriority="high"
         />
         )}
       </div>
@@ -764,6 +765,8 @@ export default async function CaseStudyPage({
                     width={800}
                     height={500}
                     className="w-full object-cover"
+                    priority
+                    fetchPriority="high"
                   />
                 )}
               </div>

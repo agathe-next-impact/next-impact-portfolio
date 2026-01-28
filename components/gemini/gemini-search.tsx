@@ -38,15 +38,31 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
   const handleSubmit = async (e?: React.FormEvent, auto = false) => {
     if (e) e.preventDefault();
-    if (!url.trim()) return;
+    
+    // Validation et normalisation de l'URL
+    const trimmedUrl = url.trim();
+    if (!trimmedUrl) {
+      setError("Veuillez saisir une URL");
+      return;
+    }
+    
+    // Vérifier que l'URL commence par http:// ou https://
+    if (!trimmedUrl.match(/^https?:\/\/.+/)) {
+      setError("L'URL doit commencer par http:// ou https://");
+      return;
+    }
+    
     setLoading(true);
     setError(null);
     setResult(null);
+    
+    console.log('🎯 Envoi URL à analyser:', trimmedUrl);
+    
     try {
       const res = await fetch("/api/gemini-analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, prompt, systemInstruction }),
+        body: JSON.stringify({ url: trimmedUrl, prompt, systemInstruction }),
       });
       if (!res.ok) {
         const errorData = await res.json();
