@@ -8,9 +8,9 @@ export default function Process() {
   const timelineRef = useRef<HTMLDivElement>(null);
 
     return (
-        <section className="container mx-auto px-4 py-24">
+        <section className="container mx-auto px-4 md:py-24">
           <div className="w-max mx-auto text-center mb-12 bg-mediumblue/70 backdrop-blur-xl p-6 rounded-2xl border border-lightblue/20">
-            <h2 className="text-4xl font-medium text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-medium text-white mb-4">
               Projet en 5 étapes
             </h2>
             <p className="text-lg text-white/80">
@@ -73,15 +73,15 @@ export default function Process() {
                         : "mr-auto text-left"
                     }`}
                   >
-                    <div className="bg-white/60 rounded-2xl border border-white/30 p-6">
-                      <div className="flex flex-col items-start gap-2 mb-2">
-                        <div className="text-sm px-2 py-1 rounded-full bg-lightblue/20 text-mediumblue font-medium">
+                    <div className="bg-mediumblue/80 backdrop-blur-sm rounded-2xl border border-white/30 p-6">
+                      <div className="flex flex-col items-start gap-4 md:gap-2 mb-2">
+                        <div className="text-sm px-2 py-1 rounded-full bg-lightblue/20 text-white/80 font-medium">
                           {phase.duration}
                         </div>
-                        <div className="text-xl font-googletitre font-medium text-mediumblue">
+                        <div className="text-xl font-googletitre font-medium text-lightyellow">
                           {phase.title}
                         </div>
-                      <p className="text-lg text-mediumblue md:text-left text-center">
+                      <p className="text-lg md:text-base text-white/80 text-left">
                         {phase.description}
                       </p>
                       </div>

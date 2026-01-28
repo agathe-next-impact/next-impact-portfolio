@@ -19,7 +19,7 @@ export default function SolutionsPage() {
       target: "Pour les TPE/PME et créateurs",
       concept: "Un site robuste avec une autonomie totale.",
       icon: "/icons/wordpress-icon.svg",
-      color: "#719ED9",
+      color: "oklch(87.9% 0.169 91.605)",
       features: ["Budget maîtrisé", "Mise en ligne rapide", "Évolutif via plugins", "Formation incluse"],
       recommended: false,
     },
@@ -29,7 +29,7 @@ export default function SolutionsPage() {
       target: "Enjeux d'image, de SEO et de performance",
       concept: "La puissance des technologies modernes.",
       icon: "/icons/speed-icon.svg",
-      color: "#FF6B6B",
+      color: "#F2E57E",
       features: [
         "Flexibilité totale du design",
         "Score PageSpeed maximum",
@@ -44,7 +44,7 @@ export default function SolutionsPage() {
       target: "Pour des fonctionnalités spécifiques",
       concept: "L'expérience utilisateur fluide d'une application.",
       icon: "/icons/saas-features-icon.svg",
-      color: "#719ED9",
+      color: "oklch(87.9% 0.169 91.605)",
       features: [
         "Interactions dynamiques",
         "Espace client complexe",

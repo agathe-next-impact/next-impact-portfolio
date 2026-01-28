@@ -78,6 +78,7 @@ interface CaseStudy {
     url: string;
     alt: string;
   }[];
+  youtubeVideoId?: string;
   detailedDescription: string;
   technologies: string[];
   duration: string;
@@ -86,6 +87,47 @@ interface CaseStudy {
 
 // Données d'exemple (à remplacer par vos vraies données)
 const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: "3",
+    slug: "next-event",
+    title: "Next Event - Démo WordPress Headless",
+    description: "Site de démonstration pour une billetterie événementielle.",
+    imageUrl: "/img/desktop-screen-next-event.jpg",
+    clientType: "PME",
+    clientName: "Next Event",
+    date: {
+      month: 10,
+      year: 2025,
+    },
+    tags: ["Evénementiel", "WordPress", "Headless", "Next.js"],
+    objectives: [
+      "Présenter les événements de manière professionnelle",
+      "Faciliter la gestion des billets et inscriptions",
+      "Offrir une expérience utilisateur fluide et rapide",
+    ],
+    results: [
+      "Système d'agenda et de gestion des événements fonctionnel",
+      "Intégration d'une billetterie fonctionnelle",
+      "Navigation fluide et responsive",
+    ],
+    youtubeVideoId: "I1qi5o31Lnk",
+    gallery: 
+      {
+        url: "/img/desktop-screen-next-event.jpg",
+        alt: "Page d'accueil du site Next Event",
+      },
+    detailedDescription:
+      "Next Event est un site de démonstration conçu pour présenter une solution de billetterie événementielle utilisant WordPress en mode Headless. Le site met en avant les événements à venir, permet la gestion des billets et offre une expérience utilisateur optimale.\n\nNous avons développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant les événements et facilitant la navigation.\n\nLe site comprend un système d'agenda pour les événements, une billetterie intégrée et des pages dédiées pour chaque événement.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de promouvoir les événements efficacement.",
+    technologies: [
+      "WordPress",
+      "Headless CMS",
+      "Next.js",
+      "Tailwind CSS",
+      "Vercel",
+    ],
+    duration: "3 semaines",
+    website: "https://next-event.fr",
+  },
   {
     id: "0",
     slug: "les-etats-generaux-communaux",
@@ -109,13 +151,20 @@ const CASE_STUDIES: CaseStudy[] = [
       "Augmentation du nombre de groupes locaux constitués",
       "Navigation fluide et responsive",
     ],
+    youtubeVideoId: "dJIndpLBm7o",
     gallery: {
       url: "/img/desktop-screen-egc.png",
       alt: "Page d'accueil du site Les Etats Généraux Communaux",
     },
     detailedDescription:
       "Les Etats Généraux Communaux est un site vitrine conçu pour promouvoir un événement citoyen visant à encourager la participation locale. Le site met en avant les ressources, les actualités et facilite la constitution des groupes locaux.\n\nNous avons développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant l'événement et ses objectifs.\n\nLe site comprend une section de ressources téléchargeables, un calendrier des événements et une carte interactive des groupes locaux constitués.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de sensibiliser le public à l'initiative.",
-    technologies: ["WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel"],
+    technologies: [
+      "WordPress",
+      "Headless CMS",
+      "Next.js",
+      "Tailwind CSS",
+      "Vercel",
+    ],
     duration: "4 semaines",
     website: "https://lesetatsgenerauxcommunaux.org",
   },
@@ -178,7 +227,7 @@ const CASE_STUDIES: CaseStudy[] = [
     title: "Association des Doléances",
     description:
       "Création d'un site vitrine inspiré de Wikipédia destiné à promouvoir l'action de l'association.",
-    imageUrl: "/img/logo-doleances.png",
+    imageUrl: "",
     clientType: "Association",
     clientName: "Association Les Doléances",
     date: {
@@ -196,6 +245,7 @@ const CASE_STUDIES: CaseStudy[] = [
       "Section Agenda pour les événements",
       "Administration simplifiée via WordPress en Headless",
     ],
+    youtubeVideoId: "_OjiGiOWJus",
     gallery: {
       url: "/img/desktop-screen-lesdoleances.jpg",
       alt: "Page d'accueil du site Les Doléances",
@@ -237,6 +287,7 @@ const CASE_STUDIES: CaseStudy[] = [
       "Tenue du délai de 10 jours",
       "Administration simplifiée pour l'équipe marketing",
     ],
+    youtubeVideoId: "PHImvgHrScE",
     gallery: {
       url: "/img/desktop-screen-sowee.png",
       alt: "Interface de la section blog Sowee",
@@ -285,6 +336,7 @@ const CASE_STUDIES: CaseStudy[] = [
       author: "Luc Poigniez",
       position: "Fondateur, Agence Créaclic",
     },
+    youtubeVideoId: "s_tyz8ubqSo",
     gallery: {
       url: "/img/desktop-screen-salondelacarrosserie.jpg",
       alt: "Page d'accueil du site Salon de la Carrosserie",
@@ -435,6 +487,7 @@ const CASE_STUDIES: CaseStudy[] = [
       "Descriptions détaillées des œuvres",
       "Facilitation de la prise de contact avec les acheteurs",
     ],
+    youtubeVideoId: "Zv7SUqZPo08",
     gallery: {
       url: "/img/desktop-screen-wagner-hamisky.jpg",
       alt: "Page d'accueil du site Wagner Hamisky",
@@ -469,6 +522,7 @@ const CASE_STUDIES: CaseStudy[] = [
       "Espace dédié aux partenaires et sponsors",
       "Stabilisation du site avec une réduction significative des bugs",
     ],
+    youtubeVideoId: "2RfDio_6oQQ",
     gallery: {
       url: "/img/desktop-screen-mediatico.jpg",
       alt: "Page d'accueil du site Mediatico",
@@ -503,6 +557,7 @@ const CASE_STUDIES: CaseStudy[] = [
       "Mise en ligne avant l'événement de lancement de l'association",
       "Simple à administrer pour l'équipe interne",
     ],
+    youtubeVideoId: "LtMBegTX06Q",
     gallery: {
       url: "/img/desktop-screen-infralliance.jpg",
       alt: "Page d'accueil du site Connexion Plus",
@@ -605,7 +660,7 @@ const monthNames = [
 // Fonction pour obtenir les études de cas similaires
 function getSimilarCaseStudies(
   currentStudy: CaseStudy,
-  limit = 3
+  limit = 3,
 ): CaseStudy[] {
   // Filtrer pour exclure l'étude de cas actuelle et trouver des études similaires
   // basées sur le type de client ou les tags communs
@@ -617,7 +672,7 @@ function getSimilarCaseStudies(
 
     // Vérifier s'il y a des tags communs
     const commonTags = study.tags.filter((tag) =>
-      currentStudy.tags.includes(tag)
+      currentStudy.tags.includes(tag),
     );
 
     return sameClientType || commonTags.length > 0;
@@ -638,7 +693,7 @@ export default async function CaseStudyPage({
 }) {
   const resolvedParams = await params;
   const caseStudy = CASE_STUDIES.find(
-    (study) => study.slug === resolvedParams.slug
+    (study) => study.slug === resolvedParams.slug,
   );
 
   if (!caseStudy) {
@@ -665,6 +720,7 @@ export default async function CaseStudyPage({
         <p className="text-xl max-w-3xl text-white/70">
           {caseStudy.description}
         </p>
+        {caseStudy.imageUrl && (
         <Image
           src={caseStudy.imageUrl}
           alt={caseStudy.title}
@@ -672,31 +728,47 @@ export default async function CaseStudyPage({
           height={150}
           className="object-contain mt-12"
         />
+        )}
       </div>
 
       {/* Contenu principal */}
       <div className="container relative z-10 px-4 md:px-6 pb-6 -mt-12 rounded-3xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-white/80 backdrop-blur-sm p-8 rounded-3xl z-50">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-white/80 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
           <div className="lg:col-span-2 space-y-10">
             {/* Galerie */}
             <section>
-              <h2 className="text-2xl mb-6 text-mediumblue">
+              <h2 className="text-2xl md:mb-6 text-mediumblue">
                 Aperçu du projet
               </h2>
               <div className="rounded-lg border overflow-hidden">
-                <Image
-                  src={caseStudy.gallery.url || "/placeholder.svg"}
-                  alt={caseStudy.gallery.alt}
-                  width={800}
-                  height={500}
-                  className="w-full object-cover"
-                />
+                {caseStudy.youtubeVideoId ? (
+                  <div
+                    className="relative w-full"
+                    style={{ paddingBottom: "56.25%" }}
+                  >
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
+                      title={caseStudy.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src={caseStudy.gallery.url || "/placeholder.svg"}
+                    alt={caseStudy.gallery.alt}
+                    width={800}
+                    height={500}
+                    className="w-full object-cover"
+                  />
+                )}
               </div>
             </section>
 
             {/* Présentation du projet */}
             <section>
-              <h2 className="text-2xl mb-6 text-mediumblue">
+              <h2 className="text-2xl md:mb-6 text-mediumblue">
                 Présentation du projet
               </h2>
               <div className="prose max-w-none">
@@ -705,7 +777,7 @@ export default async function CaseStudyPage({
                   .map((paragraph, index) => (
                     <p
                       key={index}
-                      className="mb-4 text-mediumblue/80 leading-relaxed"
+                      className="mb-4 text-mediumblue/80 md:leading-relaxed"
                     >
                       {paragraph}
                     </p>
@@ -716,27 +788,27 @@ export default async function CaseStudyPage({
             {/* Objectifs et résultats */}
             <section className="grid md:grid-cols-2 gap-8">
               <div>
-                <h2 className="text-2xl mb-6 text-mediumblue">Objectifs</h2>
+                <h2 className="text-2xl md:mb-6 text-mediumblue">Objectifs</h2>
                 <ul className="space-y-3">
                   {caseStudy.objectives.map((objective, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="h-6 w-6 rounded-full bg-transparent text-lightyellow flex items-center justify-center mr-3 mt-0.5">
+                    <li key={index} className="w-full flex justify-start items-start">
+                      <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
                         <ChevronRight className="h-4 w-4" />
                       </div>
-                      <span className=" text-mediumblue/80">{objective}</span>
+                      <span className="w-full text-mediumblue/80">{objective}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h2 className="text-2xl mb-6 text-mediumblue">Résultats</h2>
+                <h2 className="text-2xl md:mb-6 text-mediumblue">Résultats</h2>
                 <ul className="space-y-3">
                   {caseStudy.results.map((result, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="h-6 w-6 rounded-full bg-transparent text-lightyellow flex items-center justify-center mr-3 mt-0.5">
+                    <li key={index} className="w-full flex justify-start items-start">
+                      <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
                         <ChevronRight className="h-4 w-4" />
                       </div>
-                      <span className=" text-mediumblue/80">{result}</span>
+                      <span className="w-full text-mediumblue/80">{result}</span>
                     </li>
                   ))}
                 </ul>
@@ -746,7 +818,7 @@ export default async function CaseStudyPage({
             {/* Témoignage client */}
             {caseStudy.testimonial && (
               <section className="bg-mediumblue/90 backdrop-blur-xl p-6 rounded-2xl">
-                <h2 className="text-2xl mb-6 text-white/80">
+                <h2 className="text-2xl md:mb-6 text-white/80">
                   Témoignage client
                 </h2>
                 <blockquote className="relative">
@@ -778,128 +850,127 @@ export default async function CaseStudyPage({
           </div>
           {/* Sidebar avec informations du projet */}
           <div className="lg:col-span-1 sticky top-16 self-start">
-              <div className="p-6 top-8 bg-mediumblue backdrop-blur-md rounded-2xl">
-                <h2 className="text-xl mb-6 text-white">
-                  Informations du projet
-                </h2>
+            <div className="p-4 md:p-6 top-8 bg-mediumblue backdrop-blur-md rounded-2xl">
+              <h2 className="text-xl md:mb-6 text-white">
+                Informations du projet
+              </h2>
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-white/70 mb-1">
-                      Client
-                    </h3>
-                    <div className="flex items-center">
-                      <Badge
-                        variant="outline"
-                        className="bg-lightblue/10 text-white/70 font-medium"
-                      >
-                        {caseStudy.clientType}
-                      </Badge>
-                      <span className="ml-2 font-medium font-googletitre text-lg text-white">
-                        {caseStudy.clientName}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-white/70 mb-1">
-                      Date de réalisation
-                    </h3>
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-2 text-extralightblue" />
-                      <span className="font-medium font-googletitre text-lg text-white">
-                        {caseStudy.date.month && monthNames[caseStudy.date.month - 1]}{" "}
-                        {caseStudy.date.year}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-white/70 mb-1">
-                      Durée du projet
-                    </h3>
-                    <span className="font-medium font-googletitre text-lg text-white">
-                      {caseStudy.duration}
-                    </span>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h3 className="text-sm font-medium text-white/70 mb-2">
-                      Technologies utilisées
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {caseStudy.technologies.map((tech, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="bg-extralightblue/10 text-white/70 font-medium"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-white/80 mb-2">
-                      Tags
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {caseStudy.tags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="bg-extralightblue/10 text-white/80 font-medium"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {caseStudy.website && (
-                    <div>
-                      <h3 className="text-sm font-medium text-white/80 mb-2">
-                        Site web
-                      </h3>
-                      <a
-                        href={caseStudy.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/80 font-googletitre hover:underline"
-                      >
-                        {caseStudy.website}
-                      </a>
-                    </div>
-                  )}
-
-                  <Separator />
-
-                  <div>
-                    <Button
-                      className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 hover:text-white transition-all duration-900 ease-in-out"
-                      asChild
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-sm font-medium text-white/70 md:mb-1">
+                    Client
+                  </h3>
+                  <div className="flex flex-col items-start gap-4">
+                    <Badge
+                      variant="outline"
+                      className="bg-lightblue/10 text-white/70 font-medium"
                     >
-                      <Link
-                        target="_blank"
-                        href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
-                      >
-                        Discuter de votre projet
-                      </Link>
-                    </Button>
+                      {caseStudy.clientType}
+                    </Badge>
+                    <div className="font-medium font-googletitre text-lg text-white">
+                      {caseStudy.clientName}
+                    </div>
                   </div>
                 </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-white/70 mb-1">
+                    Date de réalisation
+                  </h3>
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-2 text-extralightblue" />
+                    <span className="font-medium font-googletitre text-lg text-white">
+                      {caseStudy.date.month &&
+                        monthNames[caseStudy.date.month - 1]}{" "}
+                      {caseStudy.date.year}
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-white/70 mb-1">
+                    Durée du projet
+                  </h3>
+                  <span className="font-medium font-googletitre text-lg text-white">
+                    {caseStudy.duration}
+                  </span>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-sm font-medium text-white/70 mb-2">
+                    Technologies utilisées
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {caseStudy.technologies.map((tech, index) => (
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="bg-extralightblue/10 text-white/70 font-medium"
+                      >
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-white/80 mb-2">
+                    Tags
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {caseStudy.tags.map((tag, index) => (
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="bg-extralightblue/10 text-white/80 font-medium"
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {caseStudy.website && (
+                  <div>
+                    <h3 className="text-sm font-medium text-white/80 mb-2">
+                      Site web
+                    </h3>
+                    <a
+                      href={caseStudy.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/80 font-googletitre hover:underline"
+                    >
+                      {caseStudy.website}
+                    </a>
+                  </div>
+                )}
+
+                <Separator />
+
+                <div>
+                  <Button
+                    className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 hover:text-white transition-all duration-900 ease-in-out"
+                    asChild
+                  >
+                    <Link
+                      target="_blank"
+                      href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
+                    >
+                      Discuter de votre projet
+                    </Link>
+                  </Button>
+                </div>
               </div>
+            </div>
           </div>
         </div>
 
         {/* Autres projets similaires */}
         <section className="my-16">
-          <h2 className="text-2xl text-white mb-8">
-            Projets similaires
-          </h2>
+          <h2 className="text-2xl text-white mb-8">Projets similaires</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {similarCaseStudies.map((study) => (
               <Link
@@ -928,9 +999,7 @@ export default async function CaseStudyPage({
                         {study.date.year}
                       </div>
                     </div>
-                    <h3 className="text-xl  text-white mb-2">
-                      {study.title}
-                    </h3>
+                    <h3 className="text-xl  text-white mb-2">{study.title}</h3>
                     <p className="text-white/80 mb-4 line-clamp-3">
                       {study.description}
                     </p>

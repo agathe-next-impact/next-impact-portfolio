@@ -34,17 +34,12 @@ export function NavBar() {
   return (
     <>
       {/* Desktop */}
-      <nav className="hidden md:flex">
+      <nav className="hidden md:flex px-4 py-2">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/solutions" className="font-googletitre text-white/90 text-lg text-regular px-2">
                 Solutions
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Etudes de cas
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -55,6 +50,11 @@ export function NavBar() {
             <NavigationMenuItem>
               <Link href="/audit-site-ia" className="font-googletitre text-white/90 text-lg text-regular px-2">
                 Audit
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Etudes de cas
               </Link>
             </NavigationMenuItem>
                            {/*
@@ -69,16 +69,16 @@ export function NavBar() {
       </nav>
 
       {/* Mobile */}
-      <nav className="flex w-full md:hidden items-center justify-end">
+      <nav className="flex w-full md:hidden items-center justify-end sticky">
         <button
           className="p-2 rounded-md"
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           onClick={() => setMobileOpen((open) => !open)}
         >
           {mobileOpen ? (
-            <CloseIcon className="w-10 h-10 text-regularblue" />
+            <CloseIcon className="w-10 h-10 text-white" />
           ) : (
-            <MenuIcon className="w-10 h-10 text-regularblue" />
+            <MenuIcon className="w-10 h-10 text-white" />
           )}
         </button>
         <AnimatePresence>
@@ -99,11 +99,11 @@ export function NavBar() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -300, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="fixed top-0 left-0 z-50 h-full w-full bg-gradient-to-b from-mediumblue/20 to-mediumblue/60 bg-opacity-80 backdrop-blur-md shadow-lg"
+                className="fixed top-0 left-0 z-50 h-full w-full shadow-lg"
               >
-                <div className="flex items-center justify-between px-6 py-2 border-b">
+                <div className="flex items-center justify-between px-6 py-2 bg-darkblue border-b">
                   <Image
-                    src="/img/logo-small.png"
+                    src="/img/logo-blanc-carre.png"
                     alt="Next Impact Digital"
                     width={40}
                     height={40}
@@ -114,19 +114,31 @@ export function NavBar() {
                     aria-label="Fermer le menu"
                     onClick={handleMenuClick}
                   >
-                    <CloseIcon className="w-10 h-10 text-regularblue" />
+                    <CloseIcon className="w-10 h-10 text-white" />
                   </button>
                 </div>
-                <div className="p-4 space-y-0">
-                  <MobileMenuLink href="/services" onClick={handleMenuClick}>Services</MobileMenuLink>
-                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Réalisations</MobileMenuLink>
+                <div className="h-screen p-4 space-y-0 bg-darkblue backdrop-blur-md">
+                  <MobileMenuLink href="/solutions" onClick={handleMenuClick}>Solutions</MobileMenuLink>
                   <MobileMenuLink href="/demonstration-headless" onClick={handleMenuClick}>Démo</MobileMenuLink>
-                  <MobileMenuLink href="/ressources" onClick={handleMenuClick}>Audit</MobileMenuLink>
-                  <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
-                  {/* Sous-menu "Vous êtes" */}
+                  <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
+                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick} className="pb-8">Etudes de cas</MobileMenuLink>
+
+                  <div className="pl-4 pt-8 flex items-center gap-8 border-t">
+                    <Link href="tel:0673981638" className="md:inline-block">
+                      <PhoneCallIcon className="w-8 h-8 text-white/90 hover:text-white transition" />
+                    </Link>
+                    <Link href="mailto:agathe@next-impact.digital" className="md:inline-block">
+                      <MailIcon className="w-8 h-8 text-white/90 hover:text-white transition" />
+                    </Link>
+                    <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank" className="md:inline-block">
+                      <ScreenShareIcon className="w-8 h-8 text-white/90 hover:text-white transition" />         
+                    </Link>
+                  </div>
+                  {/* <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink> */}
+                  {/* Sous-menu "Vous êtes"
                   <button
                     className={cn(
-                      "w-full text-left py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
+                      "w-full text-left py-3 px-4 rounded-md text-white font-medium text-2xl hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
                       openSubMenu === "vous-etes" && "bg-lightblue/10"
                     )}
                     onClick={() => handleToggleSubMenu("vous-etes")}
@@ -150,11 +162,12 @@ export function NavBar() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                  {/* Liens directs */}
+                 Liens directs 
                   <MobileMenuLink href="/a-propos" onClick={handleMenuClick}>A propos</MobileMenuLink>
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick}>Documentation</MobileMenuLink>
                   <MobileMenuLink href="/contact" onClick={handleMenuClick}>Contact</MobileMenuLink>
-                </div>
+                */}
+                  </div>
               </motion.div>
             </>
           )}
@@ -179,7 +192,7 @@ const MobileMenuLink = ({
     href={href}
     onClick={onClick}
     className={cn(
-      "block py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition",
+      "block py-3 px-4 rounded-md text-white text-2xl hover:bg-lightblue/10 transition",
       className
     )}
   >
@@ -217,7 +230,7 @@ ListItem.displayName = "ListItem";
 
 export default function Header() {
   return (
-    <header className="border-b top-0 z-50 shadow-sm sticky backdrop-blur-md">
+    <header className="border-b top-0 z-50 shadow-sm sticky bg-mediumblue/60 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between px-2">
         <div className="basis-3/12 pt-2 md:pl-0 pl-4">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">

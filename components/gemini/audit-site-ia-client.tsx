@@ -64,7 +64,7 @@ export default function AuditSiteIaClient() {
         titre="Faut-il migrer vers WordPress Headless ?"
         sousTitre="Tester en 10 secondes ce que WordPress Headless peut apporter à votre site web."
       >
-        <div className="relative max-w-5xl my-16 mx-auto bg-white/10 backdrop-blur-md border p-12 border-1 border-white/10 rounded-2xl">
+        <div className="relative md:max-w-5xl my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-4 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}
           prompt={prompt}
@@ -79,7 +79,7 @@ export default function AuditSiteIaClient() {
           ].map((benefit, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+              className="hidden md:flex flex-col items-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-10 h-10 rounded-lg flex items-center justify-center">
                 <benefit.icon className="h-5 w-5" style={{ color: benefit.color }} />

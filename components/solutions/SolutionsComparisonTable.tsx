@@ -30,7 +30,7 @@ export function SolutionsComparisonTable() {
   ];
 
   return (
-    <section className="py-20 md:py-20">
+    <section className="py-0 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-semibold text-white/80 text-center mb-10">
           Comparatif des packs
@@ -43,16 +43,16 @@ export function SolutionsComparisonTable() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[#719ED9]/30 bg-[#D0DCF2]/10">
-                    <th className="text-left p-6 text-white font-semibold font-googletitre text-lg">
+                    <th className="text-left p-6 text-white font-semibold font-googletitre text-xl">
                       Fonctionnalité
                     </th>
-                    <th className="text-center p-6 text-lightyellow font-semibold font-googletitre text-lg">
+                    <th className="text-center p-6 text-lightyellow font-semibold font-googletitre text-xl">
                       Essentiel
                     </th>
-                    <th className="text-center p-6 text-coral font-semibold font-googletitre text-lg">
+                    <th className="text-center p-6 text-coral font-semibold font-googletitre text-xl">
                       Premium
                     </th>
-                    <th className="text-center p-6 text-orange font-semibold font-googletitre text-lg">
+                    <th className="text-center p-6 text-orange font-semibold font-googletitre text-xl">
                       Ultimate
                     </th>
                   </tr>
@@ -63,8 +63,8 @@ export function SolutionsComparisonTable() {
                       key={idx}
                       className="border-b border-[#719ED9]/20 hover:bg-[#D0DCF2]/10 transition-colors"
                     >
-                      <td className="p-6 text-white/80">{row.feature}</td>
-                      <td className="p-6 text-center">
+                      <td className="p-6 text-white/80 text-lg">{row.feature}</td>
+                      <td className="p-6 text-center text-lg">
                         {typeof row.pack1 === "boolean" ? (
                           row.pack1 ? (
                             <CheckCircle2 className="h-5 w-5 text-lightyellow mx-auto" />
@@ -112,11 +112,11 @@ export function SolutionsComparisonTable() {
         {/* Mobile version: cartes empilées */}
         <div className="md:hidden space-y-8">
           {comparison.map((row, idx) => (
-            <Card key={idx} className="p-6 bg-white border-[#719ED9]/30 shadow-md">
-              <div className="font-semibold text-lightyellow mb-2 text-lg">{row.feature}</div>
+            <Card key={idx} className="p-6 bg-mediumblue/60 border-[#719ED9]/30 shadow-md">
+              <div className="md:font-semibold text-white mb-2 text-2xl md:text-lg">{row.feature}</div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-lightyellow">Essentiel</span>
+                  <span className="font-googletitre text-lightyellow text-xl">Essentiel</span>
                   {typeof row.pack1 === "boolean" ? (
                     row.pack1 ? (
                       <CheckCircle2 className="h-5 w-5 text-lightyellow" />
@@ -124,11 +124,11 @@ export function SolutionsComparisonTable() {
                       <X className="h-5 w-5 text-lightyellow" />
                     )
                   ) : (
-                    <span className="text-white/80">{row.pack1}</span>
+                    <span className="text-white/80 text-lg">{row.pack1}</span>
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-coral">Premium</span>
+                  <span className="font-googletitre text-coral text-xl">Premium</span>
                   {typeof row.pack2 === "boolean" ? (
                     row.pack2 ? (
                       <CheckCircle2 className="h-5 w-5 text-coral" />
@@ -136,11 +136,11 @@ export function SolutionsComparisonTable() {
                       <X className="h-5 w-5 text-coral/30" />
                     )
                   ) : (
-                    <span className="text-white/80 font-semibold">{row.pack2}</span>
+                    <span className="text-white/80 font-medium text-lg">{row.pack2}</span>
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-orange">Ultimate</span>
+                  <span className="font-googletitre text-orange text-xl">Ultimate</span>
                   {typeof row.pack3 === "boolean" ? (
                     row.pack3 ? (
                       <CheckCircle2 className="h-5 w-5 text-orange" />
@@ -148,7 +148,7 @@ export function SolutionsComparisonTable() {
                       <X className="h-5 w-5 text-[#F29F05]/30" />
                     )
                   ) : (
-                    <span className="text-white/80 font-semibold">{row.pack3}</span>
+                    <span className="text-white/80 font-medium text-lg">{row.pack3}</span>
                   )}
                 </div>
               </div>

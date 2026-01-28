@@ -31,7 +31,7 @@ export default function CaseStudiesPage() {
         titre="Études de cas"
         sousTitre="Découvrez nos réalisations de sites web WordPress pour divers secteurs d'activité."
       >
-      <div className="mt-8 mb-16">
+      <div className="mt-8 mb-16 px-4">
         <Realisations count={30} />
       </div>
 

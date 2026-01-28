@@ -50,7 +50,7 @@ export default function AuditSendFormClient({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-6 bg-white/50 backdrop-blur-lg rounded-2xl shadow mt-8">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow mt-8">
       {/* Affichage intégral du résultat d'analyse */}
       <div
         className="prose prose-lg dark:prose-invert max-w-none 

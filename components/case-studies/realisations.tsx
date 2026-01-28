@@ -8,6 +8,16 @@ import Link from "next/link";
 // Définition des projets
 const PROJECTS = [
   {
+    id: 5,
+    title: "Next Event - Démo WordPress Headless",
+    type: "headless",
+    image: "/img/desktop-screen-next-event.jpg",
+    alt: "Site de démonstration Next Event",
+    description: "Site de démonstration pour une billetterie événementielle.",
+    link: "/etudes-de-cas/next-event",
+    tab: ["derniers", "headless"],
+  },
+  {
     id: 3,
     title: "Les Etats Généraux Communaux",
     type: "headless",

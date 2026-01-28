@@ -8,11 +8,11 @@ export function ExpandableCardDemo() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative my-48 py-24 bg-white/5 backdrop-blur-lg border-y border-white/10 mb-12 px-4 md:px-8 lg:px-16">
-      <div className="pb-24">
+    <section className="relative my-12 md:my-48 py-12 md:py-24 bg-white/5 backdrop-blur-lg border-y border-white/10 mb-12 px-4 md:px-8 lg:px-16">
+      <div className="pb-12 md:pb-24">
         <h2 className="font-googletexte text-4xl tracking-tight text-center text-white mb-2">
           WordPress Headless :{" "}
-          <span className="font-googletitre text-lightyellow text-5xl font-medium">
+          <span className="font-googletitre text-lightyellow text-4xl md:text-5xl font-medium">
             quelques explications ?
           </span>
         </h2>
@@ -29,16 +29,16 @@ export function ExpandableCardDemo() {
               aria-expanded={openIndex === idx}
               aria-controls={`panel-${idx}`}
             >
-              <div className="flex gap-4 flex-col md:flex-row w-full">
+              <div className="flex md:gap-4 flex-col md:flex-row justify-between items-center wrap w-full">
                 <img
                   width={100}
                   height={100}
                   src={card.src}
                   alt={card.title}
-                  className="h-full w-40 md:h-14 md:w-14 rounded-lg object-cover object-top hover:blur-sm transition-all duration-300"
+                  className="h-20 w-20 md:h-30 md:w-30 rounded-lg object-cover object-top hover:blur-sm transition-all duration-300"
                 />
                 <div className="flex flex-col items-center md:items-start justify-center flex-1">
-                  <h3 className="font-medium text-lightyellow text-center md:text-left text-3xl">
+                  <h3 className="font-medium text-lightyellow text-left text-3xl">
                     {card.title}
                   </h3>
                   <p className="text-white/70 text-base text-left">
@@ -165,7 +165,7 @@ const cards = [
             un site web en séparant totalement deux éléments qui, auparavant,
             étaient soudés ensemble :
           </div>
-          <div className="flex items-center justify-center gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             {/* Carte Backoffice */}
             <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
               <img
@@ -184,7 +184,7 @@ const cards = [
             <img
               src="/icons/plugin-icon.svg"
               alt="Plugin"
-              className="w-24 h-24"
+              className="w-10 h-10"
             />
             {/* Carte Interface Visiteur */}
             <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
@@ -235,13 +235,13 @@ const cards = [
             normes SEO et un sécurité optimisées.
           </div>
           {/* Carte 1 */}
-          <div className="flex flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+          <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
             <img
               src="/icons/dashboard-icon.svg"
               alt="Admin WordPress"
-              className="w-36 h-36 object-contain"
+              className="w-20 md:w-36 md:h-36 object-contain mb-2"
             />
-            <div className="ml-6 flex flex-col">
+            <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-4">
               Admin WordPress
             </span>
@@ -252,13 +252,13 @@ const cards = [
             </div>
           </div>
           {/* Carte 2 */}
-          <div className="flex flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+          <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
             <img
               src="/icons/desktop-headless-icon.svg"
               alt="Liberté de design"
-              className="w-36 h-36 object-contain"
+              className="w-20 md:w-36 md:h-36 object-contain mb-2"
             />
-            <div className="ml-6 flex flex-col">
+            <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-4">
               Liberté de design
             </span>
@@ -269,13 +269,13 @@ const cards = [
             </div>
           </div>
           {/* Carte 5 */}
-          <div className="flex items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+          <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
             <img
               src="/icons/shield-icon.svg"
               alt="Sécurité totale"
-              className="w-36 h-36 mb-2"
+              className="w-20 md:w-36 md:h-36 mb-4"
             />
-            <div className="ml-6 flex flex-col">
+            <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">
               Sécurité totale
             </span>
@@ -286,13 +286,13 @@ const cards = [
             </div>
           </div>
           {/* Carte 3 */}
-          <div className="flex items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+          <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
             <img
               src="/icons/speed-icon.svg"
               alt="Vitesse fulgurante"
-              className="w-36 h-36 mb-2"
+              className="w-20 md:w-36 md:h-36 mb-4"
             />
-            <div className="ml-6 flex flex-col">
+            <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">
               Vitesse fulgurante
             </span>
@@ -303,13 +303,13 @@ const cards = [
             </div>
           </div>
           {/* Carte 4 */}
-          <div className="flex items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+          <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
             <img
               src="/icons/globe-network-icon.svg"
               alt="SEO de haut niveau"
-              className="w-36 h-36 mb-2"
+              className="w-20 md:w-36 md:h-36 mb-2"
             />
-            <div className="ml-6 flex flex-col">
+            <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">
               SEO de haut niveau
             </span>
@@ -339,7 +339,7 @@ const cards = [
             nécessaire pour tous. Elle s'adresse aux projets où le site web est
             un moteur de croissance critique et non une simple carte de visite.
           </div>
-          <div className="grid grid-cols-2 gap-6 place-items-center items-start">
+          <div className="grid md:grid-cols-2 gap-6 place-items-center items-start">
             {/* Cartes pme */}
             <div className="col-span-1 space-y-12">
             <div className="flex flex-col gap-2 bg-mediumblue/10 rounded-xl w-full max-w-96 h-max shadow-md border border-lightyellow/20">

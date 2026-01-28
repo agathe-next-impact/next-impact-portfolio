@@ -2,8 +2,8 @@ import { Button } from "./ui/button";
 import { LucideArrowUpRight } from "lucide-react";
 export function CTASection() {
   return (
-    <section className="relative w-full py-16">
-      <div className="container relative z-10 flex flex-col items-center justify-center px-4 md:px-6">
+    <section className="relative w-full py-8 md:py-16">
+      <div className="container relative z-10 flex flex-col items-center justify-center px-0 md:px-6">
         <div className="border border-white/20 rounded-2xl shadow-lg p-8 md:p-12 max-w-2xl w-full flex flex-col items-center bg-mediumblue text-center gap-6">
           <h2 className="text-4xl md:text-5xl font-googletitre font-medium text-white tracking-tight mb-2">
             Prêt à transformer votre présence en ligne ?
