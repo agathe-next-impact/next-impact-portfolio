@@ -169,7 +169,7 @@ export default function Hero() {
           <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center gap-4 z-10">
             Faut-il migrer en headless ?
           </h2>
-        <div className="w-full max-w-full mx-auto xxl:max-w-4xl flex flex-col relative md:px-20 md:pl-48 xxl:pl-72 md:mt-8 xxl:mt-0">
+        <div className="w-full max-w-full mx-auto xxl:max-w-4xl flex flex-col relative md:px-20 md:mt-8 xxl:mt-0">
           <div className="text-left font-googletexte text-2xl lg:text-3xl text-darkblue font-regular mt-1 xxl:mt-24 lg:pt-6 z-10">
             <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
               Audit gratuit 
