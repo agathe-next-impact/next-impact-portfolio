@@ -1,15 +1,67 @@
-"use client";
-
 import type { Metadata } from 'next'
+import localFont from 'next/font/local'
 import Header from '@/components/header'
 import './globals.css'
-import Script from "next/script";
-import { Particles } from "@/components/magicui/particles";
-import Footer from '@/components/footer';
+import Script from "next/script"
+import Footer from '@/components/footer'
+import Image from 'next/image'
 
+const inter = localFont({
+  src: [
+    {
+      path: '../public/fonts/Inter-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Inter-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Inter-SemiBold.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Inter-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
+const nunito = localFont({
+  src: [
+    {
+      path: '../public/fonts/Nunito-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Nunito-SemiBold.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Nunito-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-nunito',
+  display: 'swap',
+})
 
-
+export const metadata: Metadata = {
+  metadataBase: new URL('https://next-impact.digital'),
+  title: 'Next Impact - Tout pour lancer son site',
+  icons: {
+    icon: '/img/logo-small.webp',
+  },
+}
 
 export default function RootLayout({
   children,
@@ -17,19 +69,11 @@ export default function RootLayout({
   children: React.ReactNode 
 }>) {
   return (
-    <html lang="fr" className="scroll-smooth">
-      <head>
-        <meta charSet="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />    
-        <link rel="icon" href="/img/logo-small.png" />
-        <title>Next Impact - Tout pour lancer son site</title> 
-        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-        <link rel="preconnect" href="https://fonts.gstatic.com"></link>
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Quicksand:wght@300..700&family=Inter:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet"></link>
+    <html lang="fr" className={`scroll-smooth ${inter.variable} ${nunito.variable}`}>
+      <body>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-3D5PKXEN72"
           strategy="afterInteractive"
-          async
         />
         <Script
           id="gtag-init"
@@ -43,20 +87,21 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body>           
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
-          <img
+          <Image
             src="/img/chipset-tech-background.svg"
             alt=""
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
+            quality={90}
           />
         </div>
         <Header />
         {children}
         <Footer />
-        </body>
+      </body>
     </html>
   )
 }

@@ -1,8 +1,11 @@
 
 // Update the import path if the file is named differently or located elsewhere
-import CmsQuizComponent from "@/components/cms-choice-quiz";
+import CmsQuizComponent from "@/components/cms-choice-quiz-wrapper";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
+
+// Revalidate toutes les 24 heures
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

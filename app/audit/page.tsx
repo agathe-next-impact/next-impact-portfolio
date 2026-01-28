@@ -1,4 +1,4 @@
-import { WebsiteAuditTool } from "@/components/audit/website-audit-tool"
+import WebsiteAuditTool from "@/components/audit/website-audit-tool-wrapper"
 
 export default function Home() {
   return (

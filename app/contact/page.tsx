@@ -5,6 +5,9 @@ import { MagicCard } from "@/components/magicui/magic-card";
 import { Metadata } from "next";
 import { CDCCard } from "@/components/tools";
 
+// Revalidate toutes les 6 heures
+export const revalidate = 21600;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Contact | Next Impact",

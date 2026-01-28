@@ -19,7 +19,7 @@ import {
   type MotionStyle,
   type MotionValue,
   type Variants,
-} from "motion/react"
+} from "framer-motion"
 import Balancer from "react-wrap-balancer"
 
 import { cn } from "@/lib/utils"
@@ -206,14 +206,12 @@ function useNumberCycler(
 
   // Setup timer function
   const setupTimer = useCallback(() => {
-    console.log("Setting up timer")
     // Clear any existing timer
     if (timerRef.current) {
       clearTimeout(timerRef.current)
     }
 
     timerRef.current = setTimeout(() => {
-      console.log("Timer triggered, advancing to next step")
       setCurrentNumber((prev) => (prev + 1) % totalSteps)
       setIsManualInteraction(false)
       // Recursively setup next timer
@@ -223,7 +221,6 @@ function useNumberCycler(
 
   // Handle manual increment
   const increment = useCallback(() => {
-    console.log("Manual increment triggered")
     setIsManualInteraction(true)
     setCurrentNumber((prev) => (prev + 1) % totalSteps)
 
@@ -233,11 +230,9 @@ function useNumberCycler(
 
   // Initial timer setup and cleanup
   useEffect(() => {
-    console.log("Initial timer setup")
     setupTimer()
 
     return () => {
-      console.log("Cleaning up timer")
       if (timerRef.current) {
         clearTimeout(timerRef.current)
       }
@@ -246,11 +241,7 @@ function useNumberCycler(
 
   // Debug logging
   useEffect(() => {
-    console.log("Current state:", {
-      currentNumber,
-      isManualInteraction,
-      hasTimer: !!timerRef.current,
-    })
+    // State changed
   }, [currentNumber, isManualInteraction])
 
   return {

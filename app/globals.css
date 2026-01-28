@@ -10,11 +10,8 @@ button:focus, button:active, button:focus-visible {
 @tailwind components;
 @tailwind utilities;
 
-/* Importation de la police Open Sans depuis Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-
 html, body {
-  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

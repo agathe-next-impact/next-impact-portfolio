@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",
@@ -57,21 +57,21 @@ export default function ApplicationsHeadless() {
   const applications = [
     {
       key: "intranet",
-      image: "/img/intranet.jpg",
+      image: "/img/intranet.webp",
       title: "Intranets et Collaboratif",
       description: "Interfaces modernes pour la collaboration",
       examples: ["Extranets", "Intranets", "Plateformes collaboratives"],
     },
     {
       key: "b2b",
-      image: "/img/portail-infos.jpg",
+      image: "/img/portail-infos.webp",
       title: "Portails clients",
       description: "Dashboards, espaces de commande, suivi de projets",
       examples: ["Sass", "B2B", "B2C"],
     },
     {
       key: "saas",
-      image: "/img/pme-commerciale-luxe.jpg",
+      image: "/img/pme-commerciale-luxe.webp",
       title: "Design abouti et performances",
       description: "Conception d'interfaces utilisateur modernes et performantes",
       examples: ["Site à fort trafic", "Site avec enjeu d'image"],

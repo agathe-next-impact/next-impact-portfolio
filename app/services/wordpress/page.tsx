@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Next Impact - Développeuse WordPress Freelance",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",
@@ -51,28 +51,28 @@ export async function generateMetadata(): Promise<Metadata> {
 const applications = [
   {
     key: "corporate",
-    image: "/img/pme-homepage.jpg",
+    image: "/img/pme-homepage.webp",
     title: "Sites corporate",
     description: "Présentation d'entreprise, services, équipes",
     examples: ["Groupes industriels", "PME", "Artisans"],
   },
   {
     key: "institutionnel",
-    image: "/img/tourisme.jpg",
+    image: "/img/tourisme.webp",
     title: "Sites institutionnels",
     description: "Collectivités, associations, fondations",
     examples: ["Mairies", "ESS", "Associations"],
   },
   {
     key: "services",
-    image: "/img/rh.jpg",
+    image: "/img/rh.webp",
     title: "Sites de société de services",
     description: "Cabinets, consultants, professions libérales",
     examples: ["Avocats", "Consultants", "Médecins"],
   },
   {
     key: "portail",
-    image: "/img/portail-infos.jpg",
+    image: "/img/portail-infos.webp",
     title: "Portails d'information",
     description: "Actualités, documentation, ressources",
     examples: ["Centres de formation", "Médias", "Écoles"],

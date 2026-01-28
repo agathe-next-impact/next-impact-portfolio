@@ -10,6 +10,9 @@ import { MagicCard } from "@/components/magicui/magic-card";
 import { CTASection } from "@/components/cta-section";
 import { Metadata } from "next";
 
+// Revalidate toutes les 6 heures
+export const revalidate = 21600;
+
 // meta données dynamiques pour la page d'étude de cas
 export async function generateMetadata({
   params,
@@ -979,11 +982,12 @@ export default async function CaseStudyPage({
                 className="block rounded-lg"
               >
                 <Card className="h-full overflow-hidden bg-mediumblue/40 backdrop-blur-lg border-1 border-white/10 rounded-2xl shadow-lg">
-                  <div className="flex items-center justify-center aspect-video overflow-hidden">
-                    <img
+                  <div className="relative aspect-video overflow-hidden">
+                    <Image
                       src={study.gallery.url || "/placeholder.svg"}
                       alt={study.title}
-                      className="w-full h-full object-cover object-top transition-transform hover:scale-105 duration-300"
+                      fill
+                      className="object-cover object-top transition-transform hover:scale-105 duration-300"
                     />
                   </div>
                   <CardContent className="p-5 h-full">

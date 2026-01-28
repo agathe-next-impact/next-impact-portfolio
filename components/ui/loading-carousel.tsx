@@ -12,7 +12,7 @@ import {
   Variants,
   motion,
   useAnimation,
-} from "motion/react"
+} from "framer-motion"
 
 import { cn } from "@/lib/utils"
 import {

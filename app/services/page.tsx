@@ -27,6 +27,9 @@ import { ApplicationsTabs } from "@/components/applications-tabs";
 import { FeaturesTabs } from "@/components/services/features";
 import { Metadata } from "next";
 
+// Revalidate toutes les heures
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title:
@@ -43,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",
@@ -57,21 +60,21 @@ export default function ApplicationsHeadless() {
   const applications = [
     {
       key: "Next.js",
-      image: "/img/intranet.jpg",
+      image: "/img/intranet.webp",
       title: "Next.js",
       description: "Interfaces modernes pour la collaboration",
       examples: ["Extranets", "Intranets", "Plateformes collaboratives"],
     },
     {
       key: "WordPress",
-      image: "/img/portail-infos.jpg",
+      image: "/img/portail-infos.webp",
       title: "WordPress",
       description: "Dashboards, espaces de commande, suivi de projets",
       examples: ["Sass", "B2B", "B2C"],
     },
     {
       key: "Headless CMS",
-      image: "/img/pme-commerciale-luxe.jpg",
+      image: "/img/pme-commerciale-luxe.webp",
       title: "Headless CMS",
       description:
         "Conception d'interfaces utilisateur modernes et performantes",

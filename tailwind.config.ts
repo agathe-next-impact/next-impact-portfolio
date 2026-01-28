@@ -28,9 +28,9 @@ const config: Config = {
 	   },
 	   extend: {
 		   fontFamily: {
-			   sans: ['Open Sans', 'Arial', 'Helvetica', 'sans-serif'],
-			   googletitre: ['"Nunito"', 'sans-serif'],
-			   googletexte: ['"Inter"', 'sans-serif'],
+			   sans: ['var(--font-inter)', 'Open Sans', 'Arial', 'Helvetica', 'sans-serif'],
+			   googletitre: ['var(--font-nunito)', '"Nunito"', 'sans-serif'],
+			   googletexte: ['var(--font-inter)', '"Inter"', 'sans-serif'],
 		   },
 		fontWeight: {
 			light: '300',

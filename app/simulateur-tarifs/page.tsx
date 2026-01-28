@@ -1,5 +1,8 @@
-import PricingCalculator from "@/components/pricing-calculator/pricing-calculator"
+import PricingCalculator from "@/components/pricing-calculator/pricing-calculator-wrapper"
 import { Metadata } from "next";
+
+// Revalidate toutes les 24 heures
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -13,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Next Impact - Développeuse WordPress Freelance",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",

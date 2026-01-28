@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Définition des projets
 const PROJECTS = [
@@ -11,7 +12,7 @@ const PROJECTS = [
     id: 5,
     title: "Next Event - Démo WordPress Headless",
     type: "headless",
-    image: "/img/desktop-screen-next-event.jpg",
+    image: "/img/desktop-screen-next-event.webp",
     alt: "Site de démonstration Next Event",
     description: "Site de démonstration pour une billetterie événementielle.",
     link: "/etudes-de-cas/next-event",
@@ -21,7 +22,7 @@ const PROJECTS = [
     id: 3,
     title: "Les Etats Généraux Communaux",
     type: "headless",
-    image: "/img/desktop-screen-egc.png",
+    image: "/img/desktop-screen-egc.webp",
     alt: "Site vitrine des Etats Généraux Communaux",
     description: "Site vitrine des Etats Généraux Communaux",
     link: "/etudes-de-cas/les-etats-generaux-communaux",
@@ -31,7 +32,7 @@ const PROJECTS = [
     id: 4,
     title: "Les Doléances",
     type: "headless",
-    image: "/img/desktop-screen-lesdoleances.png",
+    image: "/img/desktop-screen-lesdoleances.webp",
     alt: "Vitrine des Doléances",
     description: "Vitrine des Doléances de 2018-2019",
     link: "/etudes-de-cas/doleances",
@@ -41,7 +42,7 @@ const PROJECTS = [
     id: 1,
     title: "Proditec",
     type: "corporate",
-    image: "/img/desktop-screen-proditec.jpg",
+    image: "/img/desktop-screen-proditec.webp",
     alt: "Site corporate Proditec",
     description: "Site corporate multilingue",
     link: "/etudes-de-cas/proditec",
@@ -51,7 +52,7 @@ const PROJECTS = [
     id: 2,
     title: "Sowee",
     type: "institution",
-    image: "/img/desktop-screen-sowee.jpg",
+    image: "/img/desktop-screen-sowee.webp",
     alt: "Section blog de Sowee",
     description: "Section blog de Sowee",
     link: "/etudes-de-cas/sowee",
@@ -61,7 +62,7 @@ const PROJECTS = [
     id: 11,
     title: "Infralliance",
     type: "institutional",
-    image: "/img/desktop-screen-infralliance.jpg",
+    image: "/img/desktop-screen-infralliance.webp",
     alt: "Site vitrine d'Infrallian",
     description: "Site vitrine de d'Infralliance",
     link: "/etudes-de-cas/infralliance",
@@ -71,7 +72,7 @@ const PROJECTS = [
     id: 12,
     title: "Syndicat départemental d'énergie du Val d'Oise",
     type: "institutional",
-    image: "/img/desktop-screen-sdevo.png",
+    image: "/img/desktop-screen-sdevo.webp",
     alt: "Plugin de gestion des subventions SDEVO",
     description: "Plugin de gestion des subventions SDEVO",
     link: "/etudes-de-cas/sdevo",
@@ -81,7 +82,7 @@ const PROJECTS = [
     id: 6,
     title: "Salon de la Carrosserie 2024",
     type: "corporate",
-    image: "/img/desktop-screen-salondelacarrosserie.jpg",
+    image: "/img/desktop-screen-salondelacarrosserie.webp",
     alt: "Site vitrine du Salon de la Carrosserie 2024",
     description: "Site vitrine du Salon de la Carrosserie 2024",
     link: "/etudes-de-cas/salon-de-la-carrosserie",
@@ -91,7 +92,7 @@ const PROJECTS = [
     id: 7,
     title: "Tiers Lieu L'Hermitage",
     type: "ess",
-    image: "/img/desktop-screen-hermitage.jpg",
+    image: "/img/desktop-screen-hermitage.webp",
     alt: "Site vitrine du Tiers Lieu L'Hermitage",
     description: "Site vitrine du Tiers Lieu L'Hermitage",
     link: "/etudes-de-cas/hermitage",
@@ -101,7 +102,7 @@ const PROJECTS = [
     id: 8,
     title: "ERP Services",
     type: "corporate",
-    image: "/img/desktop-screen-erp-services.jpg",
+    image: "/img/desktop-screen-erp-services.webp",
     alt: "Site vitrine d'ERP Services",
     description: "Site vitrine d'ERP Services",
     link: "/etudes-de-cas/erp-services",
@@ -111,7 +112,7 @@ const PROJECTS = [
     id: 10,
     title: "Wagner Hamisky",
     type: "corporate",
-    image: "/img/desktop-screen-wagner-hamisky.jpg",
+    image: "/img/desktop-screen-wagner-hamisky.webp",
     alt: "Site vitrine Wagner Hamisky",
     description: "Site vitrine de la galerie Wagner Hamisky",
     link: "/etudes-de-cas/wagner-hamisky",
@@ -121,7 +122,7 @@ const PROJECTS = [
     id: 14,
     title: "Mediatico",
     type: "ess",
-    image: "/img/desktop-screen-mediatico.jpg",
+    image: "/img/desktop-screen-mediatico.webp",
     alt: "Site vitrine de Mediatico",
     description: "Site vitrine de Mediatico",
     link: "/etudes-de-cas/mediatico",
@@ -131,7 +132,7 @@ const PROJECTS = [
     id: 9,
     title: "Senza Nature",
     type: "corporate",
-    image: "/img/desktop-screen-senza-nature.jpg",
+    image: "/img/desktop-screen-senza-nature.webp",
     alt: "Site ecommerce Senza Nature",
     description: "Site ecommerce Senza Nature",
     link: "/etudes-de-cas/senza-nature",
@@ -141,7 +142,7 @@ const PROJECTS = [
     id: 13,
     title: "Connexion Plus",
     type: "ess",
-    image: "/img/desktop-screen-gem-connexion.jpg",
+    image: "/img/desktop-screen-gem-connexion.webp",
     alt: "Connexion Plus - Développeuse WordPress Freelance",
     description: "Site vitrine Connexion Plus",
     link: "/etudes-de-cas/connexion-plus",
@@ -212,14 +213,12 @@ export default function Realisations({ count }: RealisationsProps) {
                       className="h-full"
                     >
                       <div className="group relative overflow-hidden rounded-2xl bg-mediumblue/30 backdrop-blur-md transition-all duration-500 border border-1 border-white/10 hover:shadow h-full flex flex-col">
-                        <div className="flex align-middle aspect-video overflow-hidden">
-                          <img
+                        <div className="relative aspect-video overflow-hidden">
+                          <Image
                             src={project.image}
                             alt={project.alt}
-                            height={200}
-                            width={200}
-                            loading="lazy"
-                            className="w-full mx-auto object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                           />
                         </div>
                         <div className="p-6 flex flex-col flex-1">

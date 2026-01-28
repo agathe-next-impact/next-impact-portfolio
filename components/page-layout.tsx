@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 interface PageLayoutProps {
     titre: string;
@@ -12,7 +13,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({ titre, sousTitre, children }) =
     <div className="relative w-full min-h-screen flex flex-col">
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
-            <img src="/img/chipset-tech-background.svg" alt="" className="w-full h-full object-cover" />
+            <Image 
+                src="/img/chipset-tech-background.svg" 
+                alt="" 
+                fill
+                className="object-cover"
+                priority
+                quality={90}
+            />
         </div>
         {/* Layout principal */}
         <section className="relative w-full pt-4 md:pt-8 lg:pt-12 xl:pt-12">

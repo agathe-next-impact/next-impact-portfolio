@@ -103,7 +103,7 @@ export function NavBar() {
               >
                 <div className="flex items-center justify-between px-6 py-2 bg-darkblue border-b">
                   <Image
-                    src="/img/logo-blanc-carre.png"
+                    src="/img/logo-blanc-carre.webp"
                     alt="Next Impact Digital"
                     width={40}
                     height={40}

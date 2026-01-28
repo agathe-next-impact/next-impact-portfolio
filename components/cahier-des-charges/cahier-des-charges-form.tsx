@@ -16,7 +16,6 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { generatePDF } from "@/lib/pdf-generator";
 import { DocumentPreview } from "@/components/cahier-des-charges/document-preview";
 import { Loader2, FileText, Eye, ArrowBigDown } from "lucide-react";
 
@@ -36,7 +35,6 @@ type FormField = {
 
 export function CahierDesChargesForm() {
   const [formData, setFormData] = useState<Record<string, any>>({});
-  const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("form");
 
   const handleInputChange = (id: string, value: string | boolean) => {
@@ -68,16 +66,7 @@ export function CahierDesChargesForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsGenerating(true);
-
-    try {
-      await generatePDF(formData);
-    } catch (error) {
-      console.error("Erreur lors de la génération du PDF:", error);
-      alert("Une erreur est survenue lors de la génération du PDF.");
-    } finally {
-      setIsGenerating(false);
-    }
+    setActiveTab("preview");
   };
 
   return (
@@ -227,20 +216,6 @@ export function CahierDesChargesForm() {
               className="gap-1 rounded-full text-regularblue bg-extralightblue/40 hover:bg-extralightblue/30 text-base font-regular"
             >
               Retour au formulaire
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={isGenerating}
-              className="gap-1 rounded-full text-white bg-regularblue/90 hover:bg-regularblue/80 text-base font-regular"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Génération en cours...
-                </>
-              ) : (
-                "Télécharger le PDF"
-              )}
             </Button>
           </div>
         </TabsContent>

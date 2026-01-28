@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ContactFormModal } from "./ContactFormModal" // Assure-toi que ce composant existe et est importé
-import { downloadPDF } from "@/lib/pdf-generator"
 
 
 interface DocumentPreviewProps {
@@ -681,9 +680,6 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
             onClose={() => setShowContactForm(false)}
           />
         )}
-      <button 
-      className="bg-regularblue hover:bg-regularblue/80 text-white text-base font-regular px-4 py-2 rounded-full transition"
-      onClick={() => downloadPDF(formData)}>Télécharger le PDF</button>
       </div>
 
 

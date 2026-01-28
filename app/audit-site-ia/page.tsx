@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 import AuditSiteIaClient from "@/components/gemini/audit-site-ia-client";
 
+// Revalidate toutes les 24 heures
+export const revalidate = 86400;
+
 export async function generateMetadata() {
   return {
     title: "Faut-il migrer vers WordPress Headless ? | Next Impact",

@@ -1,4 +1,6 @@
-import { Card } from "@/components/ui/card"
+import React from 'react'
+import Image from 'next/image'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
@@ -8,47 +10,37 @@ export default function SolutionsOffers({ offers }: { offers: any[] }) {
     <section id="offres">
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8">
-          {offers.map((offer, idx) => (
-            <Card
-              key={idx}
-              className={`relative p-4 md:p-8 bg-mediumblue rounded-2xl border-[1px] shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
-                offer.recommended
-                  ? "border-orange/70"
-                  : "border-lightblue/30 hover:border-regularblue/50"
-              }`}
-              style={{ animationDelay: `${idx * 0.15}s` }}
-            >
-              {offer.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange text-white font-m px-4 py-1 rounded-full text-sm shadow-md">
-                  Recommandé
+          {offers.map((offer, index) => (
+            <Card key={index} className="flex flex-col h-full hover:shadow-lg transition-shadow duration-300 border-primary/10">
+              <CardHeader>
+                <div className="relative w-12 h-12 mb-4">
+                  <Image 
+                    src={offer.icon} 
+                    alt={offer.title} 
+                    fill
+                    className="object-contain"
+                  />
                 </div>
-              )}
-              <div className="flex items-center gap-4 mb-6">
-                <div
-                  className="w-16 h-16 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: `${offer.color}20` }}
-                >
-                  <img src={offer.icon || "/placeholder.svg"} alt={offer.name} className="w-10 h-10" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-googletitre font-semibold text-lightyellow">{offer.name}</h3>
-                  <p className="text-2xl md:text-lg text-white">{offer.tech}</p>
-                </div>
-              </div>
-              <p className={`text-xl mb-6 ${
+                <CardTitle className="text-xl font-bold text-primary">{offer.title}</CardTitle>
+              </CardHeader>
+              <CardDescription className="text-2xl font-googletitre font-semibold text-lightyellow">{offer.name}</CardDescription>
+              <CardContent>
+                <p className="text-2xl md:text-lg text-white">{offer.tech}</p>
+                <p className={`text-xl mb-6 ${
                   offer.recommended
                     ? "text-lightyellow hover:text-lightyellow/90"
                     : "text-amber-300 hover:text-amber-300/90"
                 }`}
-              >{offer.concept}</p>
-              <ul className="space-y-3 mb-8">
-                {offer.features.map((feature: string, fidx: number) => (
-                  <li key={fidx} className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: offer.color }} />
-                    <span className="text-white/80">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+                >{offer.concept}</p>
+                <ul className="space-y-3 mb-8">
+                  {offer.features.map((feature: string, fidx: number) => (
+                    <li key={fidx} className="flex items-center gap-3">
+                      <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: offer.color }} />
+                      <span className="text-white/80">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
               <Button
                 className={`w-full h-12 font-medium font-googletitre text-base rounded-full shadow ${
                   offer.recommended

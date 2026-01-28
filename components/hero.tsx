@@ -12,7 +12,6 @@ import {
   PresentationIcon,
 } from "lucide-react";
 import AiAuditBannerSVG from "./AiAuditBannerSVG";
-import GeminiSearch from "./gemini/gemini-search";
 
 export default function Hero() {
   const { scrollY } = useScroll();
@@ -81,19 +80,19 @@ export default function Hero() {
             </div>            
             <div className="mt-5 flex items-center justify-start gap-4">
               <Image
-                src="/img/logo-wordpress-blanc.png"
+                src="/img/logo-wordpress-blanc.webp"
                 alt="Logo WordPress"
                 width={45}
                 height={60}
               />
               <Image
-                src="/img/logo-nextjs-blanc.png"
+                src="/img/logo-nextjs-blanc.webp"
                 alt="Logo Next.js"
                 width={80}
                 height={80}
               />
               <Image
-                src="/img/logo-astro-blanc.png"
+                src="/img/logo-astro-blanc.webp"
                 alt="Logo Astro"
                 width={90}
                 height={80}
@@ -137,7 +136,7 @@ export default function Hero() {
               {/* Placeholder for profile image - replace with actual image */}
               <div className="bg-gradient-to-br from-brand-400/80 to-brand-600/80 w-full h-full flex items-center justify-center">
                 <Image
-                  src="/img/avatar.png" // Replace with your image path
+                  src="/img/avatar.webp" // Replace with your image path
                   alt="Profile"
                   className="bg-white object-cover w-full h-full rounded-xl"
                   width={500} // Adjust width as needed
@@ -169,7 +168,7 @@ export default function Hero() {
           <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center gap-4 z-10">
             Faut-il migrer en headless ?
           </h2>
-        <div className="w-full max-w-full mx-auto xxl:max-w-4xl flex flex-col relative md:px-20 md:mt-8 xxl:mt-0">
+        <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative md:px-20 md:mt-8 xl:mt-0 xl:px-0">
           <div className="text-left font-googletexte text-2xl lg:text-3xl text-darkblue font-regular mt-1 xxl:mt-24 lg:pt-6 z-10">
             <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
               Audit gratuit 
@@ -186,10 +185,11 @@ export default function Hero() {
           position: "absolute",
           top: 140,
           left: 0,
-          width: "90vw",
+          width: "70vw",
           height: "100vh",
           zIndex: 0,
           overflow: "hidden",
+          opacity: 0.4,
         }}
         className="md:top-[-120px]">
             <AiAuditBannerSVG />

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
 export function ExpandableCardDemo() {
@@ -30,7 +30,7 @@ export function ExpandableCardDemo() {
               aria-controls={`panel-${idx}`}
             >
               <div className="flex md:gap-4 flex-col md:flex-row justify-between items-center wrap w-full">
-                <img
+                <Image
                   width={100}
                   height={100}
                   src={card.src}
@@ -168,10 +168,12 @@ const cards = [
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             {/* Carte Backoffice */}
             <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
-              <img
+              <Image
                 src="/icons/dashboard-icon.svg"
                 alt="Backoffice"
-                className="w-10 h-10 mb-2"
+                width={40}
+                height={40}
+                className="mb-2"
               />
               <span className="font-medium text-white font-googletitre text-2xl mb-1">
                 Admin WordPress
@@ -181,17 +183,20 @@ const cards = [
               </span>
             </div>
             {/* Icône plugin */}
-            <img
+            <Image
               src="/icons/plugin-icon.svg"
               alt="Plugin"
-              className="w-10 h-10"
+              width={40}
+              height={40}
             />
             {/* Carte Interface Visiteur */}
             <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
-              <img
+              <Image
                 src="/icons/desktop-headless-icon.svg"
                 alt="Interface web"
-                className="w-10 h-10 mb-2"
+                width={40}
+                height={40}
+                className="mb-2"
               />
               <span className="font-medium text-white font-googletitre text-2xl mb-1">
                 Interface web
@@ -236,10 +241,12 @@ const cards = [
           </div>
           {/* Carte 1 */}
           <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
-            <img
+            <Image
               src="/icons/dashboard-icon.svg"
               alt="Admin WordPress"
-              className="w-20 md:w-36 md:h-36 object-contain mb-2"
+              width={144}
+              height={144}
+              className="object-contain mb-2 w-20 md:w-36"
             />
             <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-4">
@@ -253,10 +260,12 @@ const cards = [
           </div>
           {/* Carte 2 */}
           <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
-            <img
+            <Image
               src="/icons/desktop-headless-icon.svg"
               alt="Liberté de design"
-              className="w-20 md:w-36 md:h-36 object-contain mb-2"
+              width={144}
+              height={144}
+              className="object-contain mb-2 w-20 md:w-36"
             />
             <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-4">
@@ -270,10 +279,12 @@ const cards = [
           </div>
           {/* Carte 5 */}
           <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
-            <img
+            <Image
               src="/icons/shield-icon.svg"
               alt="Sécurité totale"
-              className="w-20 md:w-36 md:h-36 mb-4"
+              width={144}
+              height={144}
+              className="mb-4 w-20 md:w-36"
             />
             <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">
@@ -287,10 +298,12 @@ const cards = [
           </div>
           {/* Carte 3 */}
           <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
-            <img
+            <Image
               src="/icons/speed-icon.svg"
               alt="Vitesse fulgurante"
-              className="w-20 md:w-36 md:h-36 mb-4"
+              width={144}
+              height={144}
+              className="mb-4 w-20 md:w-36"
             />
             <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">
@@ -304,10 +317,12 @@ const cards = [
           </div>
           {/* Carte 4 */}
           <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
-            <img
+            <Image
               src="/icons/globe-network-icon.svg"
               alt="SEO de haut niveau"
-              className="w-20 md:w-36 md:h-36 mb-2"
+              width={144}
+              height={144}
+              className="mb-2 w-20 md:w-36"
             />
             <div className="md:ml-6 flex flex-col">
             <span className="font-medium text-white font-googletitre text-2xl mb-1">

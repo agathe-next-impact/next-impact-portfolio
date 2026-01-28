@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 import HomeClient from "@/components/home-client";
 
+// Revalidate toutes les heures
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Développeuse WordPress Freelance | Next Impact",
@@ -15,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Next Impact - Développeuse WordPress Freelance",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",

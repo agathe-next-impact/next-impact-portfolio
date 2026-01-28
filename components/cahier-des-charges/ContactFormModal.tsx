@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { generatePDFBlob } from "@/lib/pdf-generator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -11,8 +10,8 @@ type ContactFormModalProps = {
   onClose: () => void;
 };
 
-// Fonction dédiée pour envoyer le PDF et les infos du formulaire
-async function sendContactFormWithPdf({
+// Fonction dédiée pour envoyer les infos du formulaire
+async function sendContactForm({
   nom,
   email,
   message,
@@ -23,19 +22,6 @@ async function sendContactFormWithPdf({
   message: string;
   formData: Record<string, any>;
 }) {
-  const pdfBlob = await generatePDFBlob(formData);
-  if (!(pdfBlob instanceof Blob)) {
-    throw new Error("La génération du PDF a échoué.");
-  }
-
-  // Convertit le Blob PDF en base64 pur
-  const pdfBase64 = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(pdfBlob);
-  });
-
   // Envoie la requête à l'API
   const res = await fetch("/api/contact", {
     method: "POST",
@@ -44,7 +30,7 @@ async function sendContactFormWithPdf({
       name: nom,
       email,
       message,
-      pdfBase64,
+      formData, // On envoie les données brutes à l'API
     }),
   });
 
@@ -74,7 +60,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
     setError(null);
 
     try {
-      await sendContactFormWithPdf({
+      await sendContactForm({
         nom: fields.nom,
         email: fields.email,
         message: fields.message,

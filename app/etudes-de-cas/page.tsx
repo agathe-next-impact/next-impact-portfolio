@@ -2,6 +2,9 @@ import Realisations from "@/components/case-studies/realisations"
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
 
+// Revalidate toutes les 6 heures
+export const revalidate = 21600;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Réalisations de site web WordPress | Next Impact",
@@ -14,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "/img/avatar.png",
+          url: "/img/avatar.webp",
           width: 1200,
           height: 630,
           alt: "Next Impact - Développeuse WordPress Freelance",

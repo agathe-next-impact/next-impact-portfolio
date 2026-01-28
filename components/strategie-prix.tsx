@@ -14,7 +14,7 @@ import { MagicCard } from "./magicui/magic-card";
 export default function StrategiePrix() {
   const featuredAddons = [
     {
-      image: "/img/delay.jpg",
+      image: "/img/delay.webp",
       title: "Délais raccourcis",
       description:
         "L'assistance de l'IA permet de réduire considérablement les délais de design, développement et optimisation SEO.",
@@ -27,7 +27,7 @@ export default function StrategiePrix() {
       ],
     },
     {
-      image: "/img/budget.jpeg",  
+      image: "/img/budget.webp",  
       title: "Budget réduit",
       description:
         "Le gain de temps généré par l'usage de l'IA permet une réduction directe du budget alloué au développement.",
@@ -40,7 +40,7 @@ export default function StrategiePrix() {
       ],
     },
     {
-      image: "/img/team.jpeg",   
+      image: "/img/team.webp",   
       title: "Equipe restreinte",
       description:
         "Une équipe composée de 2 à 3 personnes suffit à présent pour réaliser des projets complexes.",
@@ -60,7 +60,7 @@ export default function StrategiePrix() {
       description: "Vitrine, Corporate, Institutionnel",
       price: "à partir de 900€",
       period: "",
-      image: "/img/logo-wordpress-small.png",
+      image: "/img/logo-wordpress-small.webp",
       link: "/services/wordpress#tarifs",
     },
     {
@@ -68,7 +68,7 @@ export default function StrategiePrix() {
       description: "Communautaire, Intranet, Application web",
       price: "à partir de 1600€",
       period: "",
-      image: "/img/logo-nextjs.png",
+      image: "/img/logo-nextjs.webp",
       link: "/services/headless#tarifs",
     },
   ];

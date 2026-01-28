@@ -24,7 +24,7 @@ const Hero =
 const solution = {
     title: "Pourquoi un site vitrine quand on est artisan ?",
     subtitle: "Une vitrine de démonstration de votre savoir-faire pour attirer et convaincre de nouveaux clients.",
-    imageUrl: "/img/artisan-plombier.jpg",
+    imageUrl: "/img/artisan-plombier.webp",
     features: [
         "Un site professionnel qui démontre votre savoir-faire",
         "Un formulaire de contact efficace",
@@ -37,22 +37,22 @@ const gains = {
     subtitle: "Une véritable démonstration de votre savoir-faire pour attirer et convaincre de nouveaux clients.",
     landingCards: [
         {
-            imageUrl: "/img/artisan-paysagiste.jpg",
+            imageUrl: "/img/artisan-paysagiste.webp",
             title: "Démontrer la qualité de votre travail",
             text: "Mettre en avant ses réalisations pour convaincre plus rapidement",
         },
         {
-            imageUrl: "/img/artisan-coiffeur.jpg",
+            imageUrl: "/img/artisan-coiffeur.webp",
             title: "Toucher de nouveaux clients",
             text: "Elargir sa clientèle potentielle et être découvert par de nouveaux types de clients",
         },
         {
-            imageUrl: "/img/artisan-ebeniste.jpg",
+            imageUrl: "/img/artisan-ebeniste.webp",
             title: "Être visible localement sur Google",
             text: "Etre trouvé rapidement par des clients locaux ou distants",
         },
         {
-            imageUrl: "/img/desktop-screen-artisan.jpg",
+            imageUrl: "/img/desktop-screen-artisan.webp",
             title: "Être contacté facilement",
             text: "Donner la possibilité à vos clients de demander vos services immédiatement",
         },
@@ -119,7 +119,7 @@ const tarifs = {
 
 const Faq = {
     title: "Foire aux questions",
-    image: "/img/artisan-mobile.jpg",
+    image: "/img/artisan-mobile.webp",
     imageAlt: "Foire aux questions pour artisans",
     questions: [
         {

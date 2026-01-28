@@ -1,6 +1,9 @@
 import PageLayout from "@/components/page-layout";
-import { CahierDesChargesForm } from "@/components/cahier-des-charges/cahier-des-charges-form"
+import CahierDesChargesForm from "@/components/cahier-des-charges/cahier-des-charges-form-wrapper"
 import { Metadata } from "next";
+
+// Revalidate toutes les 24 heures
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

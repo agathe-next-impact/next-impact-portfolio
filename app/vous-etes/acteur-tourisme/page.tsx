@@ -24,7 +24,7 @@ export default function LandingTourisme() {
     title: "Pourquoi un site web est essentiel pour les lieux touristiques ?",
     subtitle:
       "Une vitrine pour attirer avant et pendant les séjours de vacances et les week-ends dans votre région.",
-    imageUrl: "/img/tourisme.jpg",
+    imageUrl: "/img/tourisme.webp",
     features: [
       "Visibilité locale, nationale et internationale",
       "Prévisites et histoires captivantes de votre lieu",
@@ -39,22 +39,22 @@ export default function LandingTourisme() {
       "Attirer plus de visiteurs, valoriser votre savoir-faire et développer votre activité avec un site web bien pensé",
     landingCards: [
       {
-        imageUrl: "/img/tourisme-ferme.jpg",
+        imageUrl: "/img/tourisme-ferme.webp",
         title: "Être visible sur Google",
         text: "Être trouvé par des visiteurs potentiels avant et pendant leur séjour",
       },
       {
-        imageUrl: "/img/tourisme-valeur.jpg",
+        imageUrl: "/img/tourisme-valeur.webp",
         title: "Mettre en valeur pour convaincre",
         text: "Permettre aux futurs visiteurs de se projeter et de choisir votre lieu",
       },
       {
-        imageUrl: "/img/tourisme-infos-pratiques.jpg",
+        imageUrl: "/img/tourisme-infos-pratiques.webp",
         title: "Rendre les informations pratiques accessibles",
         text: "Horaires, tarifs, accès, activités proposées, tout est à portée de clic",
       },
       {
-        imageUrl: "/img/tourisme-blog.jpg",
+        imageUrl: "/img/tourisme-blog.webp",
         title: "Créer un lien durable",
         text: "Newsletter, réseaux, fidélisation pour créer une communauté autour de votre lieu",
       },
@@ -127,7 +127,7 @@ export default function LandingTourisme() {
 
   const Faq = {
     title: "Foire aux questions",
-    image: "/img/tourisme-mobile.jpg",
+    image: "/img/tourisme-mobile.webp",
     imageAlt: "Foire aux questions pour acteurs du tourisme",
     questions: [
       {

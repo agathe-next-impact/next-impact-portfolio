@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button"
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
 import { Metadata } from "next";
 
+// Revalidate toutes les 24 heures
+export const revalidate = 86400;
+
 // meta données dynamiques pour la page d'étude de cas
 export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
   const categoryInfo = {
@@ -128,7 +131,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {articles.map((article) => (
                 <div
                   key={article.slug}
-                  className="group relative rounded-lg bg-white border p-6 border border-lightblue/10 hover:border-lightblue/20 hover:bg-extrelightblue/ transition-colors">
+                  className="group relative rounded-lg bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 hover:bg-extrelightblue/5 transition-colors">
                   <div className="space-y-2">
                     <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
                     <p className="text-mediumblue text-sm">{article.description}</p>

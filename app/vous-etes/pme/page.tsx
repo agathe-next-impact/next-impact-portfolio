@@ -23,7 +23,7 @@ export default function LandingPMEIndustrielle() {
     title: " Pourquoi investir dans un site premium ?",
     subtitle:
       "Votre professionnalisme, votre expertise et vos compétences techniques se doivent d'être mis en avant avec un site reflétant la qualité et la précision de vow services et produits.",
-    imageUrl: "/img/pme-indus-homepage.jpg",
+    imageUrl: "/img/pme-indus-homepage.webp",
     features: [
       "Un design professionnel, aligné sur votre identité visuelle",
       "Un site optimisé pour le référencement naturel (SEO) afin d'être visible sur Google",
@@ -37,22 +37,22 @@ export default function LandingPMEIndustrielle() {
       "Un site professionnel pour une image et des fonctionnalités à l'image de votre expertise.",
     landingCards: [
       {
-        imageUrl: "/img/pme-indus-contact.jpg",
+        imageUrl: "/img/pme-indus-contact.webp",
         title: "Visibilité",
         text: "Être trouvé par des clients locaux ou distants, en France et à l'international",
       },
       {
-        imageUrl: "/img/pme-indus-expertise.jpg",
+        imageUrl: "/img/pme-indus-expertise.webp",
         title: "Réassurance",
         text: "Présenter clairement votre activité, vos process, votre savoir-faire, votre parc machine",
       },
       {
-        imageUrl: "/img/pme-indus-reassurance.jpg",
+        imageUrl: "/img/pme-indus-reassurance.webp",
         title: "Preuve de votre expertise",
         text: "Gagner en légitimité auprès de vos clients, prospects et partenaires",
       },
       {
-        imageUrl: "/img/pme-indus-support.jpg",
+        imageUrl: "/img/pme-indus-support.webp",
         title: "Qualité perçue",
         text: "Interconnecter vos systèmes pour une relation optimisée avec vos clients",
       },
@@ -119,7 +119,7 @@ export default function LandingPMEIndustrielle() {
   };
   const Faq = {
     title: "Foire aux questions",
-    image: "/img/pme-indus-mobile.jpg",
+    image: "/img/pme-indus-mobile.webp",
     imageAlt: "Foire aux questions pour PME industrielles",
     questions: [
       {
