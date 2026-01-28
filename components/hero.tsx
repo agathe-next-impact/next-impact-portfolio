@@ -12,125 +12,67 @@ import {
   PresentationIcon,
 } from "lucide-react";
 import AiAuditBannerSVG from "./AiAuditBannerSVG";
-
-// Dynamic import OUTSIDE the component to prevent re-creation on each render
 const GeminiSearch = dynamic(() => import("@/components/gemini/gemini-search"), { ssr: false });
 
+// Prompt et instruction identiques à ClientGeminiBlock
+const system_instruction = `Tu es un expert en stratégie digitale et UX avec une forte compétence en audit technique.
+Ta méthode est rigoureuse :
+1. OBSERVATION : Tu extrais d'abord les données factuelles (métadonnées, structure légale, vocabulaire utilisé).
+2. ANALYSE : Tu croises ces données pour établir un diagnostic précis de l'identité de l'organisation.
+3. RECOMMANDATION : Tu fournis des conseils stratégiques basés sur ces preuves.
+Ton ton est direct, professionnel et factuel.`;
+const prompt = `
+**Mission :** Audit stratégique de l'URL {$url} pour évaluer la pertinence d'une migration vers une architecture Headless.
+
+**Synthèse globale des résultats
+*Insère une synthèse des résultats et de la recommandation sans évoquer l'identité issue du diagnostic*
+---
+
+**Étape 1 : Diagnostic d'Identité (Scan Précis)**
+*Effectue une analyse croisée des metadonnées et dans un deuxième temps du contenu visible (Header, Footer, Page "À Propos").*
+
+1.  **Nature de l'organisation :** (Ex: Entreprise privée, Association, Collectivité, Institution publique, Startup, Indépendant/Freelance, ONG, etc.)
+2.  **Secteur d'activité :** (Ex: E-commerce B2C, SaaS B2B, Média, etc.)
+3.  **Proposition de valeur :** Quelle est la promesse principale faite au client ?
+3.  **Mission :** Cite un court extrait du site qui valide cette proposition.
+4.  **Cibles prioritaires :** Identifie les 2 profils d'utilisateurs les plus évidents.
+*Si le site est inaccessible ou le contenu protégé, réponds uniquement : "Accès bloqué : Diagnostic impossible." et arrête l'analyse.*
+
+---
+
+**Étape 2 : Analyse Stratégique (Format Markdown)**
+
+### 1. Positionnement Actuel
+*   **Perception de marque :** Le design et la navigation du site inspirent-ils confiance et modernité, ou montrent-ils des signes de retard technologique (lenteur, design daté) ?
+*   **Friction UX Majeure :** Quel est le principal obstacle visible dans le parcours utilisateur (ex: formulaire complexe, navigation peu claire, temps de chargement) ?
+*   **Indice de modernité :** [Note sur 10] évaluant la performance et l'expérience globale par rapport aux standards actuels.
+
+### 2. Pertinence d'une Migration WordPress Headless
+*   **Verdict Stratégique :** [Migrer rapidement / Maintenir WordPress monolithique / Migrer progressivement]. Justifie en une phrase.
+*   **Enjeu de Différenciation :** Comment le Headless peut-il transformer l'expérience (ex: ultra-rapide, personnalisée) pour créer un avantage concurrentiel ?
+*   **Justification Business :** Quels sont les arguments clés (ROI potentiel) justifiant l'investissement face aux gains attendus en performance, SEO et agilité marketing ?
+
+### 3. Indicateurs d'Impact Business
+*   **Performance & SEO :** Quel serait l'impact de temps de chargement quasi-instantanés (Core Web Vitals optimaux) sur le classement Google et le taux de rebond ?
+*   **Agilité Marketing :** Explique comment le Headless permettrait aux équipes de lancer plus rapidement des campagnes ou de nouveaux contenus sans dépendre du back-end.
+
+### 4. Leviers de Croissance via Headless
+*Identifie 3 fonctionnalités de 3 niveaux de complexité que le Headless rendrait possibles.*
+1. Rapide
+2. Moyennement complexe
+3. Très complexe
+
+### 5. Stack recommandée (uniquement si migration recommandée et sur WordPress Headless)
+
+Comparatif des stacks : WordPress monolithique, WP Astro, WP Next.js
+Recommandation de stack
+---
+
+**Instruction de sortie :** Réponds exclusivement en Markdown. La structure doit suivre les titres et les points de l'étape 2. Assure la capitalisation française du texte. Et n'introduit pas trop d'icones
+`;
+
 export default function Hero() {
-  const { scrollY } = useScroll();
-  
-  // Prompt et instruction identiques à ClientGeminiBlock
-  const system_instruction = `Tu es un expert en stratégie digitale et UX. Ton analyse est factuelle, basée sur les standards technologiques et marketing actuels. Tu fournis des recommandations claires et justifiées pour un public de décideurs (CEO, CTO).`;
-  const prompt = `
-  **Mission :** Audit stratégique de l'URL **{$url}** pour évaluer la pertinence d'une migration vers une architecture Headless.
-  
-  🛑 **PROCÉDURE ANTI-HALLUCINATION OBLIGATOIRE :**
-  
-  **Étape A : Extraction des métadonnées (exécution prioritaire)**
-  1. Extrais EXACTEMENT le contenu des balises suivantes de la homepage :
-     - <title> : [copie exacte ou "Non détecté"]
-     - <meta name="description"> : [copie exacte ou "Non détecté"]
-     - <meta property="og:title"> : [copie exacte ou "Non détecté"]
-     - <meta property="og:description"> : [copie exacte ou "Non détecté"]
-  2. Inspecte le footer pour identifier le statut juridique (SARL, SAS, Association loi 1901, ONG, Fondation, Service Public, etc.)
-  3. Scan du header/navigation : recherche des termes explicites (Boutique, Agence, Média, Ministère, Université, Observatoire, Think Tank, etc.)
-  
-  **Étape B : Validation croisée**
-  - Confronte les 3 sources (métadonnées + footer + navigation)
-  - Si divergence entre sources : indique "⚠️ Incohérence détectée" et cite chaque source avec son contenu exact
-  - Si aucune information claire : écris "Non déterminé (absence de données)" au lieu d'inventer
-  
-  **🎯 GRILLE DE DÉTECTION SECTEUR (exécution obligatoire) :**
-  Recherche ces MOTS-CLÉS EXACTS (et leurs VARIANTES) dans title/meta/navigation/footer :
-  
-  **E-commerce** : "boutique", "shop", "e-shop", "e-commerce", "panier", "acheter", "ajouter au panier", "commander", "commande", "produits", "livraison", "expédition", "prix €", "prix", "stock", "catalogue", "vente en ligne"
-  **SaaS/Software** : "plateforme", "solution", "logiciel", "software", "application", "app", "API", "dashboard", "tableau de bord", "abonnement", "subscription", "démo", "demo", "essai gratuit", "free trial", "pricing", "tarifs", "SaaS"
-  **Agence/Conseil** : "agence" + ("web"|"digitale"|"communication"|"créative"|"marketing"), "studio créatif", "cabinet conseil", "expertise", "accompagnement", "nos clients", "portfolio", "réalisations", "projets", "cas clients", "nos services" + design/développement
-  **Média/Presse** : "actualités", "news", "articles", "journal", "magazine", "édition", "rédaction", "journaliste", "reporter", "abonnez-vous", "newsletter", "dernières nouvelles", "info", "presse"
-  **Association/ONG** : "association", "loi 1901", "association loi", "ONG", "adhérer", "adhésion", "faire un don", "donner", "donation", "bénévoles", "volontaires", "mission sociale", "but non lucratif", "non-profit", "collectif", "mouvement citoyen"
-  **Think Tank/Recherche** : "think tank", "think and do tank", "études", "publications", "recherche", "research", "observatoire", "analyses", "policy", "rapport", "policy paper", "working paper", "centre de recherche", "institut", "laboratoire d'idées"
-  **Institution/Gov** : "ministère", "ministre", "gouvernement", "gouvernemental", "public", "administration", "service public", "légifrance", "république", "état", "collectivité", "préfecture", "mairie", "conseil régional", "agence publique"
-  **Éducation** : "formation", "formations", "université", "école", "institut", "cours", "étudiants", "élèves", "diplôme", "certification", "certifié", "apprentissage", "enseignement", "pédagogie", "campus", "académie"
-  **Industrie/B2B** : "fabricant", "fabrication", "industriel", "industrie", "manufacture", "fournisseur", "grossiste", "devis", "sur mesure", "capacité production", "usine", "production", "B2B", "professionnel", "distributeur"
-  
-  ⚠️ **RÈGLES DE DÉSAMBIGUÏSATION :**
-  - "Agence" SEUL → Vérifier contexte : si + "web"/"digitale"/"communication" → Agence/Conseil, si + "publique"/"gouvernement" → Institution
-  - "Studio" SEUL → Vérifier : si + "créatif"/"design"/"graphique" → Agence, sinon "Non déterminé"
-  - "Plateforme" SEUL → Insuffisant, chercher "abonnement"/"SaaS"/"API" pour confirmer
-  - "Services" SEUL → Trop générique, ignorer
-  
-  SCORING :
-  - 3+ mots-clés d'un secteur → Confiance 90%
-  - 2 mots-clés → Confiance 70%
-  - 1 mot-clé OU déduction visuelle → Confiance <50% → "Non déterminé"
-  - Mots-clés de 2 secteurs différents → Indiquer "Secteur hybride : [Secteur1] + [Secteur2]"
-  
-  **Étape C : Règles strictes**
-  - NE JAMAIS réécrire, paraphraser ou deviner les métadonnées
-  - NE JAMAIS qualifier par défaut une entité d'"entreprise" sans preuve explicite
-  - NE PAS utiliser d'informations externes (SERP, mémoire de conversations précédentes)
-  - TOUJOURS citer la source exacte entre crochets : [title], [footer], [nav], [meta-description]
-  
-  **Seuil de confiance :**
-  - Si confiance < 80% sur la nature/secteur : écrire "Non déterminé (données insuffisantes)"
-  - Si contradiction entre sources : lister toutes les hypothèses avec leur source
-  - EXEMPLES D'ERREURS À ÉVITER :
-    ❌ "Entreprise" quand footer dit "Association loi 1901"
-    ❌ "E-commerce" quand c'est un site vitrine institutionnel
-    ❌ "Agence" quand c'est un Think Tank
-  
-  ---
-  
-  Étape 1 : ### **Votre organisation**
-  
-  ⚠️ **[SECTION INTERNE - NE PAS AFFICHER DANS LA RÉPONSE]**
-  Métadonnées extraites (pour validation uniquement) :
-  - Title : [copie exacte]
-  - Meta-description : [copie exacte]
-  - Statut juridique (footer) : [extrait exact ou "Non détecté"]
-  - Type identifié (navigation/header) : [termes clés trouvés]
-  **[FIN SECTION INTERNE]**
-  
-  **Analyse :**
-  1.  **Nature de l'entité :** [Association / Entreprise / Think Tank / ONG / Institution / Service Public / Non déterminé] — Source : [title/footer/nav]
-  2.  **Secteur d'activité :** [Secteur identifié] — Mots-clés détectés : "[mot1]", "[mot2]", "[mot3]" — Score confiance : [X]%
-  3.  **Proposition de valeur :** Quelle est la promesse principale faite au client ? — Extrait exact : "[citation courte du site]"
-  4.  **Mission :** Cite un court extrait du site qui valide cette proposition.
-  5.  **Cibles prioritaires :** Identifie les 2 profils d'utilisateurs les plus évidents.
-  
-  *Si le site est inaccessible ou le contenu protégé, réponds uniquement : "Accès bloqué : Diagnostic impossible." et arrête l'analyse.*
-  
-  ---
-  
-  Étape 2 : ### **Analyse Stratégique et recommandations** 
-  
-  * **Conseil Principal :** Recommande si une migration vers une architecture Headless est pertinente ou non, avec une justification concise.
-  * **Résumé :** Fournis un bref résumé des points clés de l'analyse.
-  
-  ### 1. Positionnement Actuel
-  *   **Perception de marque :** Le design et la navigation du site inspirent-ils confiance et modernité, ou montrent-ils des signes de retard technologique (lenteur, design daté) ?
-  *   **Friction UX Majeure :** Quel est le principal obstacle visible dans le parcours utilisateur (ex: formulaire complexe, navigation peu claire, temps de chargement) ?
-  *   **Indice de modernité :** [Note sur 10] évaluant la performance et l'expérience globale par rapport aux standards actuels.
-  
-  ### 2. Pertinence d'une Migration Headless
-  *   **Verdict Stratégique :** [Accélérer / Maintenir / Pivoter]. Justifie en une phrase.
-  *   **Enjeu de Différenciation :** Comment le Headless peut-il transformer l'expérience (ex: ultra-rapide, personnalisée) pour créer un avantage concurrentiel ?
-  *   **Justification Business :** Quels sont les arguments clés (ROI potentiel) justifiant l'investissement face aux gains attendus en performance, SEO et agilité marketing ?
-  
-  ### 3. Indicateurs d'Impact Business
-  *   **Performance & SEO :** Quel serait l'impact de temps de chargement quasi-instantanés (Core Web Vitals optimaux) sur le classement Google et le taux de rebond ?
-  *   **Agilité Marketing :** Explique comment le Headless permettrait aux équipes de lancer plus rapidement des campagnes ou de nouveaux contenus sans dépendre du back-end.
-  
-  ### 4. Leviers de Croissance via Headless
-  *Identifie 3 fonctionnalités innovantes ou à haute valeur ajoutée que le Headless rendrait possibles.*
-  1.  (Ex: Configurateur de produit 3D)
-  2.  (Ex: Portail client personnalisé et immersif)
-  3.  (Ex: Intégration d'une IA de recommandation)
-  
-  ---
-  
-  **Instruction de sortie :** Réponds exclusivement en Markdown. La structure doit suivre les titres et les points de l'étape 2.
-  `;
+  const url = ""; // Default empty URL or set a default value
 
   return (
     <>
@@ -185,7 +127,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
               <Button className="mx-0 inline-flex bg-coral py-1 px-6 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in">
                 <Link
-                  href="/demo"
+                  href="/demonstration-headless"
                   className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
                 >
                   Démo
@@ -275,14 +217,86 @@ export default function Hero() {
           </div>
           <div className="w-full max-w-6xl mx-auto relative h-full overflow-hidden">
             <div className="relative z-10">
-              <GeminiSearch 
-                systemInstruction={system_instruction}
-                prompt={prompt}
-                onResult={() => {}}
-              />
+        <div className="relative md:max-w-5xl my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-4 md:p-12 border-1 border-white/10 rounded-2xl">
+        <GeminiSearch
+          onResult={() => {}}
+          prompt={prompt}
+          systemInstruction={system_instruction}
+          defaultUrl={url}
+        />
+        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
+              </div>
+            </div>
+        </div>
+        </div>
+        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
+              </div>
+            </div>
+        </div>
+        </div>
+        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
+              </div>
+            </div>
+            <div
+              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
+            >
+              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
+                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
+              </div>
+        </div>
+        </div>
             </div>
           </div>
-        </div>
       </section>
     </>
   );
