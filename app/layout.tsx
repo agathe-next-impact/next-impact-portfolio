@@ -88,7 +88,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <ExitIntentPopup />
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
           <Image
