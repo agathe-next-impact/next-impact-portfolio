@@ -52,7 +52,7 @@ export default function AuditSendFormClient({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow mt-8">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-2 md:p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow mt-8">
       {/* Dashboard Visuel (Badges, Jauges) */}
       <AuditDashboard markdown={markdownFull} />
 
@@ -75,9 +75,9 @@ export default function AuditSendFormClient({
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-          className="bg-lightyellow/70 backdrop-blur-sm text-mediumblue font-googletitre font-medium text-lg px-6 py-3 rounded-full shadow hover:bg-lightyellow/80 transition text-center"
+          className="bg-lightyellow/70 backdrop-blur-sm text-mediumblue font-googletitre text-lg px-6 py-3 rounded-full shadow hover:bg-lightyellow/80 transition text-center"
         >
-          <ScreenShareIcon className="inline-block mr-2 size-7" />
+          <ScreenShareIcon className="inline-block mr-2 size-7 font-medium" />
           En discuter en visio
         </a>
       </div>

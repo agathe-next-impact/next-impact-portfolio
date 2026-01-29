@@ -12,9 +12,9 @@ export function CTASection() {
             Réservez une consultation gratuite de 15 minutes pour discuter de votre projet et découvrir comment nous pouvons vous aider.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mt-2">
-            <Button className="inline-flex bg-coral py-2 px-8 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in font-googletitre text-darkblue text-lg font-semibold w-full sm:w-auto" asChild>
+            <Button className="inline-flex bg-coral py-2 px-8 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in font-googletitre text-white text-lg font-semibold w-full sm:w-auto" asChild>
               <a href="mailto:agathe@next-impact.digital">
-                Envoyer un mail <LucideArrowUpRight className="ml-2 h-5 w-5 text-darkblue" />
+                Envoyer un mail <LucideArrowUpRight className="ml-2 h-5 w-5 text-white" />
               </a>
             </Button>
             <Button className="inline-flex bg-lightyellow py-2 px-8 rounded-2xl shadow-lg hover:bg-lightyellow/80 transition duration-300 ease-in font-googletitre text-darkblue text-lg font-semibold w-full sm:w-auto" asChild>

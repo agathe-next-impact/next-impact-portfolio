@@ -56,7 +56,6 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
     setError(null);
     setResult(null);
     
-    console.log('🎯 Envoi URL à analyser:', trimmedUrl);
     
     try {
       const res = await fetch("/api/gemini-analyze", {
@@ -84,7 +83,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       {!loading && !showResultPage && (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 mx-auto"
+          className="flex flex-col gap-6 mx-auto px-0 md:px-4 pt-4"
         >
           <div className="flex items-end">
             <label

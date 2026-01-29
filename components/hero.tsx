@@ -184,22 +184,22 @@ export default function Hero() {
       </main>
 
       {/*Gemini Search Section */}
-      <section id="audit" className="bg-white/5 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 px-4 md:px-6 py-16 md:py-32 relative">
+      <section id="audit" className="bg-white/5 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 md:py-32 relative">
 
-          <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center gap-4 z-10">
+          <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center px-4 gap-4 z-10">
             Faut-il migrer en headless ?
           </h2>
-        <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative md:px-20 md:mt-8 xl:mt-0 xl:px-0">
+        <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative px-4 md:px-20 md:mt-8 xl:mt-0 xl:px-0">
           <div className="text-left font-googletexte text-2xl lg:text-3xl text-darkblue font-regular mt-1 xxl:mt-24 lg:pt-6 z-10">
             <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
               Audit gratuit 
             </span>
             {" "}
             <span className="text-white/70">
-             en 10 secondes
+             rapide et personnalisé
             </span>
             <p className="text-white/70 text-lg md:text-xl mt-2 md:mb-8">
-              Analysez votre site WordPress et recevez un rapport complet avec des recommandations personnalisées pour une migration en headless CMS.
+              Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless.
             </p>
           </div>
           <div style={{
@@ -217,7 +217,7 @@ export default function Hero() {
           </div>
           <div className="w-full max-w-6xl mx-auto relative h-full overflow-hidden">
             <div className="relative z-10">
-        <div className="relative md:max-w-5xl my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-4 md:p-12 border-1 border-white/10 rounded-2xl">
+        <div className="relative md:max-w-5xl my-16 mx-0 md:mx-auto bg-white/10 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}
           prompt={prompt}

@@ -181,11 +181,10 @@ html, body {
     line-height: 1.7;
   }
   .prose h3 {
-    @apply text-3xl;
+    @apply text-2xl md:text-3xl;
   }
-
   .prose h1 {
-    @apply text-3xl;
+    @apply text-2xl md:text-3xl;
   }
   .prose code {
     @apply text-regularblue font-googletexte;

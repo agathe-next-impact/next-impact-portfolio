@@ -70,10 +70,10 @@ export default function AuditSiteIaClient() {
   return (
     <main>
       <PageLayout 
-        titre="Faut-il migrer vers WordPress Headless ?"
-        sousTitre="Testez ce que WordPress Headless peut apporter à votre site web."
+        titre="Faut-il migrer en Headless ?"
+        sousTitre="Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless."
       >
-        <div className="relative md:max-w-5xl my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-4 md:p-12 border-1 border-white/10 rounded-2xl">
+        <div className="relative md:max-w-5xl my-8 md:my-16 mx-4 md:mx-auto bg-white/10 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}
           prompt={prompt}
