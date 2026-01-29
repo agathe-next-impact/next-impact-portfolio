@@ -76,11 +76,11 @@ export default function Hero() {
 
   return (
     <>
-      <main className="h-screen flex items-center relative overflow-hidden pt-36 md:pt-0">
+      <main className="h-full md:h-screen flex items-center relative overflow-hidden">
 
         <div className="container flex flex-col lg:flex-row justify-between lg:justify-evenly items-end gap-12 lg:gap-24 px-4 md:px-6 relative">
           {/* Text Content */}
-          <div className="flex flex-col lg:col-span-7 bg-white/10 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-12 lg:mt-0">
+          <div className="flex flex-col lg:col-span-7 bg-white/10 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-4 md:mt-12 lg:mt-0">
             <div className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
               Développeuse 
             </div>
@@ -117,7 +117,7 @@ export default function Hero() {
                 style={{ width: 'auto', height: 'auto' }}
               />
             </div>
-            <p className="mt-16 font-googletexte md:text-xl text-white/80 max-w-xl">
+            <p className="mt-10 md:mt-16 font-googletexte md:text-xl text-white/80 max-w-xl">
               Pour un WordPress ultra-rapide, moderne et flexible grâce au
               headless CMS.
             </p>
