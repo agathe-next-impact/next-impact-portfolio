@@ -718,7 +718,7 @@ export default async function CaseStudyPage({
       <ArticleJsonLd
         title={caseStudy.title}
         description={caseStudy.description}
-        image={caseStudy.imageUrl || caseStudy.gallery.url}
+        image={caseStudy.gallery.url || caseStudy.imageUrl}
         datePublished={publishedDate}
         url={`/etudes-de-cas/${caseStudy.slug}`}
       />
