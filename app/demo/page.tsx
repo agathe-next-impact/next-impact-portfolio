@@ -1,8 +1,22 @@
-"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata({
+    title: "Démo WordPress Headless en vidéo",
+    description:
+      "Découvrez en vidéo le fonctionnement de nos solutions WordPress Headless avec Next.js. Exemples de projets réels : billeterie, sites associatifs et plateformes citoyennes.",
+    path: "/demo",
+    keywords: ["démo WordPress", "vidéo WordPress Headless", "Next.js demo", "exemples projets"],
+  });
+}
+
+function DemoPageClient() {
 
 
 function toYoutubeEmbed(url: string) {
@@ -41,14 +55,14 @@ const demoVideos = [
   },
 ];
 
-export default function DemoPage() {
-const [isPlaying, setIsPlaying] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
-	return (
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
     <main>
       <PageLayout 
         titre="WordPress Headless en action"
@@ -138,5 +152,19 @@ const [isPlaying, setIsPlaying] = useState(false)
       </div>
       </PageLayout>
     </main>
-	);
+  );
+}
+
+export default function DemoPage() {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Démo", url: "/demo" },
+  ];
+
+  return (
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <DemoPageClient />
+    </>
+  );
 }

@@ -5,7 +5,8 @@ import './globals.css'
 import Script from "next/script"
 import Footer from '@/components/footer'
 import Image from 'next/image'
-import { ExitIntentPopup } from '@/components/exit-intent-popup'
+import { MetadataDebugger } from '@/components/metadata-debugger'
+import { OrganizationJsonLd } from '@/components/json-ld'
 
 const inter = localFont({
   src: [
@@ -72,6 +73,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${nunito.variable}`}>
       <body>
+        <OrganizationJsonLd />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-3D5PKXEN72"
           strategy="afterInteractive"
@@ -102,6 +104,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <MetadataDebugger />
       </body>
     </html>
   )

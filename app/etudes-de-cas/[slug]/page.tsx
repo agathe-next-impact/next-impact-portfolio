@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { CTASection } from "@/components/cta-section";
 import { Metadata } from "next";
+import { generateArticleMetadata } from "@/lib/metadata";
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les 6 heures
 export const revalidate = 21600;
@@ -26,24 +28,16 @@ export async function generateMetadata(props: {
     };
   }
 
-  return {
-    title: `${caseStudy.title} | Next Impact`,
+  return generateArticleMetadata({
+    title: caseStudy.title,
     description: caseStudy.description,
-    openGraph: {
-      title: `${caseStudy.title} | Next Impact`,
-      description: caseStudy.description,
-      url: `https://next-impact.digital/etudes-de-cas/${caseStudy.slug}`,
-      type: "article",
-      images: [
-        {
-          url: caseStudy.imageUrl,
-          width: 1200,
-          height: 630,
-          alt: caseStudy.title,
-        },
-      ],
-    },
-  };
+    slug: caseStudy.slug,
+    image: caseStudy.imageUrl,
+    publishedTime: caseStudy.date.year && caseStudy.date.month
+      ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
+      : new Date().toISOString(),
+    tags: caseStudy.technologies,
+  });
 }
 
 // Types pour les études de cas
@@ -705,8 +699,31 @@ export default async function CaseStudyPage({
   // Obtenir des études de cas similaires
   const similarCaseStudies = getSimilarCaseStudies(caseStudy);
 
+  // Fil d'Ariane pour le SEO
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Études de cas", url: "/etudes-de-cas" },
+    { name: caseStudy.title, url: `/etudes-de-cas/${caseStudy.slug}` },
+  ];
+
+  // Date de publication pour JSON-LD
+  const publishedDate = caseStudy.date.year && caseStudy.date.month
+    ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
+    : new Date().toISOString();
+
   return (
-    <main className="min-h-screen">
+    <>
+      {/* Données structurées pour le SEO */}
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ArticleJsonLd
+        title={caseStudy.title}
+        description={caseStudy.description}
+        image={caseStudy.imageUrl || caseStudy.gallery.url}
+        datePublished={publishedDate}
+        url={`/etudes-de-cas/${caseStudy.slug}`}
+      />
+
+      <main className="min-h-screen">
       {/* Hero section avec image et titre */}
       <div className="container relative h-full flex flex-col justify-end py-4 mt-10 mb-20 px-4 md:px-6 bg-mediumblue/50 backdrop-blur-md rounded-3xl">
         <Link
@@ -1018,5 +1035,6 @@ export default async function CaseStudyPage({
         </section>
       </div>
     </main>
+    </>
   );
 }

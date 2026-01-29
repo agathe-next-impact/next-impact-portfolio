@@ -8,7 +8,14 @@ import Process from "@/components/process"
 import SolutionsFAQ from "@/components/solutions/SolutionsFAQ"
 import { ArrowRight, CheckCircle2, ChevronDown, Zap, Shield, Users, TrendingUp, Rocket, Smartphone, Monitor, Code, Settings, FileSearch, GraduationCap } from "lucide-react"
 import PageLayout from "@/components/page-layout"
-
+import { generatePageMetadata } from "@/lib/metadata";
+export async function generateMetadata() {
+  return generatePageMetadata({
+    title: "Solutions WordPress Headless - Next Impact",
+    description: "Des solutions WordPress Headless avec Astro et Next.js pour des sites web performants, sécurisés et évolutifs adaptés à vos besoins.",
+    path: "/solutions"
+  });
+}
 
 export default function SolutionsPage() {
 
