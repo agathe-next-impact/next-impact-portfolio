@@ -1,23 +1,47 @@
-"use client"
-
-
-import SolutionsOffers from "@/components/solutions/SolutionsOffers"
-import { SolutionsComparisonTable } from "@/components/solutions/SolutionsComparisonTable"
-import SolutionsGuide from "@/components/solutions/SolutionsGuide"
-import Process from "@/components/process"
-import SolutionsFAQ from "@/components/solutions/SolutionsFAQ"
-import { ArrowRight, CheckCircle2, ChevronDown, Zap, Shield, Users, TrendingUp, Rocket, Smartphone, Monitor, Code, Settings, FileSearch, GraduationCap } from "lucide-react"
-import PageLayout from "@/components/page-layout"
+import SolutionsOffers from "@/components/solutions/SolutionsOffers";
+import { SolutionsComparisonTable } from "@/components/solutions/SolutionsComparisonTable";
+import SolutionsGuide from "@/components/solutions/SolutionsGuide";
+import Process from "@/components/process";
+import SolutionsFAQ from "@/components/solutions/SolutionsFAQ";
+import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-export async function generateMetadata() {
+import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/json-ld";
+import {
+  ArrowRight,
+  CheckCircle2,
+  ChevronDown,
+  Zap,
+  Shield,
+  Users,
+  TrendingUp,
+  Rocket,
+  Smartphone,
+  Monitor,
+  Code,
+  Settings,
+  FileSearch,
+  GraduationCap,
+} from "lucide-react";
+import PageLayout from "@/components/page-layout";
+
+export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Solutions WordPress Headless - Next Impact",
-    description: "Des solutions WordPress Headless avec Astro et Next.js pour des sites web performants, sécurisés et évolutifs adaptés à vos besoins.",
-    path: "/solutions"
+    title: "Solutions WordPress Headless Next.js et Astro - Next Impact",
+    description:
+      "Découvrez nos solutions WordPress adaptées à vos besoins : Essentiel (WordPress standard), Premium (WordPress + Astro) et Ultimate (WordPress Headless + Next.js). De la TPE à l'entreprise avec besoins avancés.",
+    path: "/solutions",
+    keywords: [
+      "solutions WordPress",
+      "WordPress Headless",
+      "Astro",
+      "Next.js",
+      "site web sur mesure",
+      "développement web",
+    ],
   });
 }
 
-export default function SolutionsPage() {
+function SolutionsPageClient() {
 
   const offers = [
     {
@@ -103,7 +127,7 @@ export default function SolutionsPage() {
       answer:
         "Les plugins front-end (sliders, formulaires affichés) sont remplacés par des équivalents plus performants. Les plugins back-end (SEO, analytics, sécurité) continuent de fonctionner normalement.",
     },
-  ]
+  ];
 
   return (
     <main>
@@ -111,14 +135,35 @@ export default function SolutionsPage() {
         titre="Nos solutions WordPress"
         sousTitre="Choisissez la solution adaptée à vos besoins et à votre budget."
       >
-                  <div className="mt-8 mb-6 space-y-24">
-                    <SolutionsOffers offers={offers} />
-                    <SolutionsComparisonTable />
-                    <SolutionsGuide needsGuide={needsGuide} />
-                    <Process />
-                    <SolutionsFAQ faqs={faqs} />
-                  </div>
+        <div className="mt-8 mb-6 space-y-24">
+          <SolutionsOffers offers={offers} />
+          <SolutionsComparisonTable />
+          <SolutionsGuide needsGuide={needsGuide} />
+          <Process />
+          <SolutionsFAQ faqs={faqs} />
+        </div>
       </PageLayout>
     </main>
-)}
+  );
+}
+
+export default function SolutionsPage() {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Solutions", url: "/solutions" },
+  ];
+
+  return (
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ServiceJsonLd
+        name="Solutions WordPress sur mesure"
+        description="Solutions WordPress adaptées à tous vos projets : WordPress standard, WordPress + Astro pour la performance, ou WordPress Headless + Next.js pour les applications web avancées."
+        serviceType="Développement Web"
+        url="/solutions"
+      />
+      <SolutionsPageClient />
+    </>
+  );
+}
                                      

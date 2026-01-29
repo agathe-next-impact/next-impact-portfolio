@@ -154,7 +154,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 export const pageMetadata = {
   home: (): Metadata =>
     generatePageMetadata({
-      title: "Développeuse WordPress Freelance",
+      title: "Développeuse WordPress Freelance - Next Impact",
       description:
         "Développeuse WordPress freelance spécialisée en sites web corporate et applications web Headless. Création, refonte, audit et conseil pour des projets sur-mesure.",
       path: "/",
@@ -163,7 +163,7 @@ export const pageMetadata = {
 
   services: (): Metadata =>
     generatePageMetadata({
-      title: "Service de création de site web WordPress Headless Next.js",
+      title: "Service de création de site web WordPress Headless Next.js - Next Impact",
       description:
         "Service de création de site web WordPress Headless Next.js pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigeances de qualité ou applications web.",
       path: "/services",
@@ -172,7 +172,7 @@ export const pageMetadata = {
 
   audit: (): Metadata =>
     generatePageMetadata({
-      title: "Audit de site web WordPress gratuit",
+      title: "Audit de site web WordPress gratuit - Next Impact",
       description:
         "Obtenez un audit gratuit de votre site WordPress : performance, SEO, sécurité et accessibilité. Analyse complète et recommandations personnalisées.",
       path: "/audit",
@@ -195,7 +195,7 @@ export const pageMetadata = {
 
   caseStudies: (): Metadata =>
     generatePageMetadata({
-      title: "Études de cas - Projets WordPress réalisés",
+      title: "Études de cas - Projets WordPress réalisés par Next Impact",
       description:
         "Découvrez mes réalisations WordPress et Headless : sites corporate, applications web, refonte et optimisation. Projets détaillés avec résultats.",
       path: "/etudes-de-cas",
