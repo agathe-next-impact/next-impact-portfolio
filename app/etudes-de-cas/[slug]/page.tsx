@@ -716,7 +716,7 @@ export default async function CaseStudyPage({
       {/* Données structurées pour le SEO */}
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ArticleJsonLd
-        title={caseStudy.title}
+        title={`Etude de cas ${caseStudy.title} - Next Impact`}
         description={caseStudy.description}
         image={caseStudy.gallery.url || caseStudy.imageUrl}
         datePublished={publishedDate}
