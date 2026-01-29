@@ -5,6 +5,7 @@ import './globals.css'
 import Script from "next/script"
 import Footer from '@/components/footer'
 import Image from 'next/image'
+import { ExitIntentPopup } from '@/components/exit-intent-popup'
 
 const inter = localFont({
   src: [
@@ -87,6 +88,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <ExitIntentPopup />
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
           <Image
