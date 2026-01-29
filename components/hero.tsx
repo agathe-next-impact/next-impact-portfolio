@@ -248,54 +248,8 @@ export default function Hero() {
             </div>
         </div>
         </div>
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
-              </div>
-            </div>
-        </div>
-        </div>
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
-              </div>
-        </div>
-        </div>
-            </div>
+      </div>
+                  </div>
           </div>
       </section>
     </>
