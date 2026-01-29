@@ -127,7 +127,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
               <Button className="mx-0 inline-flex bg-coral py-1 px-6 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in">
                 <Link
-                  href="/demonstration-headless"
+                  href="/demo"
                   className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
                 >
                   Démo
