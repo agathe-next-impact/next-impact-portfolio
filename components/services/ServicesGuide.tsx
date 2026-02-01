@@ -6,7 +6,7 @@ interface GuideItem {
   solution: string
 }
 
-export default function SolutionsGuide({ needsGuide }: { needsGuide: GuideItem[] }) {
+export default function ServicesGuide({ needsGuide }: { needsGuide: GuideItem[] }) {
   return (
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
@@ -20,7 +20,7 @@ export default function SolutionsGuide({ needsGuide }: { needsGuide: GuideItem[]
           {needsGuide.map((item, idx) => (
             <div
               key={idx}
-              className="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-white/10 backdrop-blur-lg rounded-2xl border border-lightblue/10 hover:bg-white/5 transition-all"
+              className="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-darkblue/80 backdrop-blur-lg rounded-2xl border border-lightblue/10 transition-all"
               style={{ animationDelay: `${idx * 0.1}s` }}
             >
               <div className="flex items-center gap-4">
@@ -30,8 +30,7 @@ export default function SolutionsGuide({ needsGuide }: { needsGuide: GuideItem[]
                 <p className="text-mediumblue/80 text-lg text-white transition-colors">"{item.need}"</p>
               </div>
               <div className="flex items-center gap-3 md:ml-auto">
-                <ArrowRight className="h-5 w-5 text-white transition-colors" />
-                <span className="font-googletitre font-medium text-xl whitespace-nowrap text-lightyellow transition-colors">{item.solution}</span>
+                <span className="font-googletitre font-medium text-xl whitespace-nowrap text-lightyellow transition-colors"> / {item.solution}</span>
               </div>
             </div>
           ))}

@@ -24,7 +24,7 @@ import Process from "@/components/process";
 import { CTASection } from "@/components/cta-section";
 import { DecisionHelper } from "@/components/decision-helper";
 import { ApplicationsTabs } from "@/components/applications-tabs";
-import { FeaturesTabs } from "@/components/services/features";
+import { FeaturesTabs } from "@/components/services-old/features";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -27,10 +27,10 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
       if (depth === 1) {
         className = "text-4xl font-medium text-regularblue";
       } else if (depth === 2) {
-        className = "text-3xl font-medium text-regularblue";
+        className = "text-3xl font-medium text-mediumblue";
         border = `<hr class="border-t-[1px] border-extralightblue mt-12 mb-2" />`;
       } else {
-        className = "text-2xl font-medium text-regularblue";
+        className = "text-2xl font-medium text-mediumblue";
       }
 
       return `${border}<h${depth} id="${anchor}" class="${className}">${text}</h${depth}>`;
@@ -47,5 +47,5 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
     }
   }, [content]);
 
-  return <div className="prose prose-lg dark:prose-invert" dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div className="article-text text-mediumblue" dangerouslySetInnerHTML={{ __html: html }} />;
 }

@@ -80,7 +80,7 @@ export default function Hero() {
 
         <div className="container flex flex-col lg:flex-row justify-between lg:justify-evenly items-end gap-12 lg:gap-24 px-4 md:px-6 relative">
           {/* Text Content */}
-          <div className="flex flex-col lg:col-span-7 bg-white/10 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-4 md:mt-12 lg:mt-0">
+          <div className="flex flex-col lg:col-span-7 bg-darkblue/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-4 md:mt-12 lg:mt-0">
             <div className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
               Développeuse 
             </div>
@@ -127,7 +127,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
               <Button className="mx-0 inline-flex bg-coral py-1 px-6 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in">
                 <Link
-                  href="/demonstration-headless"
+                  href="/demo"
                   className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
                 >
                   Démo
@@ -184,7 +184,7 @@ export default function Hero() {
       </main>
 
       {/*Gemini Search Section */}
-      <section id="audit" className="bg-white/5 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 md:py-32 relative">
+      <section id="audit" className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 md:py-32 relative">
 
           <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center px-4 gap-4 z-10">
             Faut-il migrer en headless ?
@@ -217,7 +217,7 @@ export default function Hero() {
           </div>
           <div className="w-full max-w-6xl mx-auto relative h-full overflow-hidden">
             <div className="relative z-10">
-        <div className="relative md:max-w-5xl my-16 mx-0 md:mx-auto bg-white/10 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
+        <div className="relative md:max-w-5xl my-16 mx-0 md:mx-auto bg-darkblue/50 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}
           prompt={prompt}
@@ -248,54 +248,8 @@ export default function Hero() {
             </div>
         </div>
         </div>
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
-              </div>
-            </div>
-        </div>
-        </div>
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
-              </div>
-        </div>
-        </div>
-            </div>
+      </div>
+                  </div>
           </div>
       </section>
     </>

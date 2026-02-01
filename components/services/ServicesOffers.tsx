@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 
-export default function SolutionsOffers({ offers }: { offers: any[] }) {
+export default function ServicesOffers({ offers }: { offers: any[] }) {
   return (
     <section id="offres">
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">

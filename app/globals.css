@@ -189,6 +189,14 @@ html, body {
   .prose code {
     @apply text-regularblue font-googletexte;
   }
-  
+  .mentions-legales h2 {
+    @apply text-3xl;
+  }
+  .article-text p, .article-text li {
+    @apply text-mediumblue/80;
+  }
+  .article-text h1, .article-text h2, .article-text h3, .article-text h4 {
+    @apply text-darkblue;
+  }
 }
 

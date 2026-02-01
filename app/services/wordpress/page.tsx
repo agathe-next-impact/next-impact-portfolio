@@ -23,7 +23,7 @@ import { CMSQuizCard, PriceQuizCard } from "@/components/tools";
 import Process from "@/components/process";
 import { DecisionHelper } from "@/components/decision-helper";
 import { ApplicationsTabs } from "@/components/applications-tabs";
-import { FeaturesTabs } from "@/components/services/features";
+import { FeaturesTabs } from "@/components/services-old/features";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {

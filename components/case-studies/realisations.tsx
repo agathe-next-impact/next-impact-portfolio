@@ -5,9 +5,20 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { title } from "node:process";
 
 // Définition des projets
 const PROJECTS = [
+  {
+    id: 15,
+    title: "Comme des fous - Media WordPress Headless",
+    type: "headless",
+    image: "/img/desktop-screen-comme-des-fous.jpg",
+    alt: "Site du média Comme des fous",
+    description: "Site du média participatif Comme des fous",
+    link: "/etudes-de-cas/comme-des-fous",
+    tab: ["derniers", "headless"],
+  },
   {
     id: 5,
     title: "Next Event - Démo WordPress Headless",

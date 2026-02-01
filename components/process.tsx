@@ -73,7 +73,7 @@ export default function Process() {
                         : "mr-auto text-left"
                     }`}
                   >
-                    <div className="bg-mediumblue/80 backdrop-blur-sm rounded-2xl border border-white/30 p-6">
+                    <div className="bg-mediumblue/80 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
                       <div className="flex flex-col items-start gap-4 md:gap-2 mb-2">
                         <div className="text-sm px-2 py-1 rounded-full bg-lightblue/20 text-white/80 font-medium">
                           {phase.duration}

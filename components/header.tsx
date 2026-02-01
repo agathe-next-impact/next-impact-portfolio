@@ -38,12 +38,12 @@ export function NavBar() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/solutions" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Solutions
+              <Link href="/services" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Services
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/demonstration-headless" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/demo" className="font-googletitre text-white/90 text-lg text-regular px-2">
                 Démo
               </Link>
             </NavigationMenuItem>
@@ -121,8 +121,8 @@ export function NavBar() {
                   </button>
                 </div>
                 <div className="h-screen p-4 space-y-0 bg-darkblue backdrop-blur-md">
-                  <MobileMenuLink href="/solutions" onClick={handleMenuClick}>Solutions</MobileMenuLink>
-                  <MobileMenuLink href="/demonstration-headless" onClick={handleMenuClick}>Démo</MobileMenuLink>
+                  <MobileMenuLink href="/services" onClick={handleMenuClick}>Services</MobileMenuLink>
+                  <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
                   <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick} className="pb-8">Etudes de cas</MobileMenuLink>
 

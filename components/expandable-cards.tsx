@@ -8,7 +8,7 @@ export function ExpandableCardDemo() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative my-12 md:my-48 py-12 md:py-24 bg-white/5 backdrop-blur-lg border-y border-white/10 mb-12 px-4 md:px-8 lg:px-16">
+    <section className="relative my-12 md:my-48 py-12 md:py-24 bg-mediumblue/60 backdrop-blur-lg border-y border-white/10 mb-12 px-4 md:px-8 lg:px-16">
       <div className="pb-12 md:pb-24">
         <h2 className="font-googletexte text-4xl tracking-tight text-center text-white mb-2">
           WordPress Headless :{" "}
@@ -24,7 +24,7 @@ export function ExpandableCardDemo() {
         {cards.map((card, idx) => (
           <li key={card.title} className="w-full">
             <button
-              className="w-full p-4 flex flex-col md:flex-row justify-between items-center bg-mediumblue/60 hover:bg-mediumblue/50 backdrop-blur-xl rounded-xl cursor-pointer focus:outline-none"
+              className="w-full p-4 flex flex-col md:flex-row justify-between items-center bg-darkblue/60 hover:bg-darkblue/50 backdrop-blur-xl rounded-xl cursor-pointer focus:outline-none border-1 border-white/20"
               onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
               aria-expanded={openIndex === idx}
               aria-controls={`panel-${idx}`}
@@ -60,7 +60,7 @@ export function ExpandableCardDemo() {
                     scale: { duration: 0.25 },
                   }}
                   style={{ originY: 0.1 }}
-                  className="overflow-hidden bg-mediumblue rounded-xl shadow-inner mt-4"
+                  className="overflow-hidden bg-darkblue/50 rounded-xl shadow-inner mt-4"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}

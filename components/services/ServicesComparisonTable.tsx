@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { CheckCircle2, X } from "lucide-react";
 
-export function SolutionsComparisonTable() {
+export function ServicesComparisonTable() {
   const comparison = [
     {
       feature: "Autonomie Marketing",

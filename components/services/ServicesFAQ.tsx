@@ -1,6 +1,6 @@
 import FaqSchema from "./FaqSchema";
 
-export default function SolutionsFAQ({ faqs }: { faqs: { question: string; answer: React.ReactNode }[] }) {
+export default function ServicesFAQ({ faqs }: { faqs: { question: string; answer: React.ReactNode }[] }) {
   return (
     <main className="w-full">
     <FaqSchema

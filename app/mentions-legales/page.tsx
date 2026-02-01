@@ -1,11 +1,13 @@
-import React from "react";
+import PageLayout from "@/components/page-layout"
 
 const LegalNotice = () => {
   return (
-    <div className="w-10/12 flex flex-col gap-2 prose mx-auto px-4 py-8">
-        <h1 className="font-medium text-center">
-              Mentions légales et RGPD
-            </h1>
+    <main>
+      <PageLayout
+        titre="Mentions légales et RGPD"
+        sousTitre=""
+      >
+    <div className="mentions-legales flex flex-col gap-2 mx-auto mt-12 px-20 py-8 bg-extralightblue backdrop-blur-lg border-white/10">
                 <h2 className="text-regularblue">Définitions</h2>
                 <p><b>Client :</b> tout professionnel ou personne physique capable au sens des articles 1123 et suivants du Code civil, ou personne morale, qui visite le Site objet des présentes conditions générales.<br />
                 <b>Prestations et Services :</b> <a href="https://next-impact.digital">https://next-impact.digital</a> met à disposition des Clients :</p>
@@ -174,8 +176,8 @@ const LegalNotice = () => {
                 <h2 className="text-regularblue">9. Liens hypertextes « cookies » et balises (“tags”) internet</h2>
                 <p>
                 Le site <a href="https://next-impact.digital">https://next-impact.digital</a> contient un certain nombre de liens hypertextes vers d’autres sites, mis en place avec l’autorisation de <a href="https://next-impact.digital">https://next-impact.digital</a>. Cependant, <a href="https://next-impact.digital">https://next-impact.digital</a> n’a pas la possibilité de vérifier le contenu des sites ainsi visités, et n’assumera en conséquence aucune responsabilité de ce fait.</p>
-                Sauf si vous décidez de désactiver les cookies, vous acceptez que le site puisse les utiliser. Vous pouvez à tout moment désactiver ces cookies et ce gratuitement à partir des possibilités de désactivation qui vous sont offertes et rappelées ci-après, sachant que cela peut réduire ou empêcher l’accessibilité à tout ou partie des Services proposés par le site.
-                <p></p>
+                <p>Sauf si vous décidez de désactiver les cookies, vous acceptez que le site puisse les utiliser. Vous pouvez à tout moment désactiver ces cookies et ce gratuitement à partir des possibilités de désactivation qui vous sont offertes et rappelées ci-après, sachant que cela peut réduire ou empêcher l’accessibilité à tout ou partie des Services proposés par le site.
+                </p>
 
                 <h3 className="text-regularblue">9.1. « COOKIES »</h3>
                  <p>
@@ -215,6 +217,8 @@ const LegalNotice = () => {
                 Tout litige en relation avec l’utilisation du site <a href="https://next-impact.digital">https://next-impact.digital</a> est soumis au droit français. 
                 En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de AURILLAC</p>
             </div>
+      </PageLayout>
+    </main>
     );
 };
 

@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { CTASection } from "@/components/cta-section";
 import { Metadata } from "next";
+import { generateArticleMetadata } from "@/lib/metadata";
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les 6 heures
 export const revalidate = 21600;
@@ -26,24 +28,16 @@ export async function generateMetadata(props: {
     };
   }
 
-  return {
-    title: `${caseStudy.title} | Next Impact`,
+  return generateArticleMetadata({
+    title: caseStudy.title,
     description: caseStudy.description,
-    openGraph: {
-      title: `${caseStudy.title} | Next Impact`,
-      description: caseStudy.description,
-      url: `https://next-impact.digital/etudes-de-cas/${caseStudy.slug}`,
-      type: "article",
-      images: [
-        {
-          url: caseStudy.imageUrl,
-          width: 1200,
-          height: 630,
-          alt: caseStudy.title,
-        },
-      ],
-    },
-  };
+    slug: caseStudy.slug,
+    image: caseStudy.imageUrl,
+    publishedTime: caseStudy.date.year && caseStudy.date.month
+      ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
+      : new Date().toISOString(),
+    tags: caseStudy.technologies,
+  });
 }
 
 // Types pour les études de cas
@@ -89,6 +83,47 @@ interface CaseStudy {
 
 // Données d'exemple (à remplacer par vos vraies données)
 const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: "15",
+    slug: "comme-des-fous",
+    title: "Comme des fous",
+    description: "Site du média participatif Comme des fous",
+    imageUrl: "",
+    clientType: "PME",
+    clientName: "Comme des fous",
+    date: {
+      month: 1,
+      year: 2026,
+    },
+    tags: ["Média", "WordPress", "Headless", "Next.js"],
+    objectives: [
+      "Migrer le site existant vers une architecture Headless",
+      "Améliorer les performances et la rapidité du site",
+      "Offrir une meilleure expérience utilisateur",
+    ],
+    results: [
+      "Temps de chargement de 56 à 98 sur PageSpeed Insights",
+      "Expérience utilisateur fluide et réactive",
+      "Interface d'administration inchangée pour les rédacteurs",
+      "Récupération de tout le contenu existant du site WordPress",
+    ],
+    youtubeVideoId: "6vUSbG6F50w",
+    gallery: {
+      url: "/img/desktop-screen-comme-des-fous.jpg",
+      alt: "Comme des fous",
+    },
+    detailedDescription: `Comme des fous est un média participatif qui souhaitait moderniser son site web en adoptant une architecture Headless. 
+    L'objectif principal était d'améliorer l'expérience utilisateur tout en offrant des performances optimales.
+    \n\nNous avons migré le site existant vers une architecture Headless en utilisant WordPress comme CMS pour la gestion de contenu et Next.js pour le front-end. 
+    Cette approche a permis de séparer la gestion du contenu de l'affichage, offrant ainsi une plus grande flexibilité et des performances accrues.
+    \n\nLe nouveau site offre une expérience utilisateur fluide et réactive, avec des temps de chargement considérablement réduits. 
+    De plus, les rédacteurs ont pu conserver exactement la même interface d'administration WordPress qu'ils connaissaient déjà, facilitant ainsi la transition.
+    \n\nNous avons également conservé tout le contenu existant et la structure du site WordPress, seul le front-end a changé, 
+    garantissant ainsi une continuité pour les lecteurs fidèles du média.",
+    `,
+    technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
+    duration: "2 mois",
+  },
   {
     id: "3",
     slug: "next-event",
@@ -705,8 +740,31 @@ export default async function CaseStudyPage({
   // Obtenir des études de cas similaires
   const similarCaseStudies = getSimilarCaseStudies(caseStudy);
 
+  // Fil d'Ariane pour le SEO
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Études de cas", url: "/etudes-de-cas" },
+    { name: caseStudy.title, url: `/etudes-de-cas/${caseStudy.slug}` },
+  ];
+
+  // Date de publication pour JSON-LD
+  const publishedDate = caseStudy.date.year && caseStudy.date.month
+    ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
+    : new Date().toISOString();
+
   return (
-    <main className="min-h-screen">
+    <>
+      {/* Données structurées pour le SEO */}
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ArticleJsonLd
+        title={`Etude de cas ${caseStudy.title} - Next Impact`}
+        description={caseStudy.description}
+        image={caseStudy.gallery.url || caseStudy.imageUrl}
+        datePublished={publishedDate}
+        url={`/etudes-de-cas/${caseStudy.slug}`}
+      />
+
+      <main className="min-h-screen">
       {/* Hero section avec image et titre */}
       <div className="container relative h-full flex flex-col justify-end py-4 mt-10 mb-20 px-4 md:px-6 bg-mediumblue/50 backdrop-blur-md rounded-3xl">
         <Link
@@ -737,7 +795,7 @@ export default async function CaseStudyPage({
 
       {/* Contenu principal */}
       <div className="container relative z-10 px-4 md:px-6 pb-6 -mt-12 rounded-3xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-white/80 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-extralightblue/90 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
           <div className="lg:col-span-2 space-y-10">
             {/* Galerie */}
             <section>
@@ -958,7 +1016,7 @@ export default async function CaseStudyPage({
 
                 <div>
                   <Button
-                    className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 hover:text-white transition-all duration-900 ease-in-out"
+                    className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 text-white hover:text-white transition-all duration-900 ease-in-out"
                     asChild
                   >
                     <Link
@@ -1018,5 +1076,6 @@ export default async function CaseStudyPage({
         </section>
       </div>
     </main>
+    </>
   );
 }

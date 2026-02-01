@@ -83,7 +83,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Partager sur ${platform.name}`}
-          className="text-regularblue rounded-full p-2 transition-colors"
+          className="text-extralightblue rounded-full p-2 transition-colors"
         >
           <platform.icon size={16} />
         </a>
@@ -96,7 +96,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
             navigator.clipboard.writeText(replacedUrl)
           }
         }}
-        className="text-regularblue rounded-full p-2 transition-colors"
+        className="text-extralightblue rounded-full p-2 transition-colors"
         title="Copier le lien"
       >
         <FaShareAlt size={16} />

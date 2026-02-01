@@ -164,10 +164,10 @@ export default function DocTabs() {
                       {marketingArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -186,10 +186,10 @@ export default function DocTabs() {
                       {designArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -208,10 +208,10 @@ export default function DocTabs() {
                       {projetArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -230,10 +230,10 @@ export default function DocTabs() {
                       {wordpressArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -252,10 +252,10 @@ export default function DocTabs() {
                       {headlessCmsArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -274,10 +274,10 @@ export default function DocTabs() {
                       {seoArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>
@@ -296,10 +296,10 @@ export default function DocTabs() {
                       {blogArticles.map((article) => (
                         <div
                           key={article.slug}
-                          className="group relative rounded-xl bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
+                          className="group relative rounded-xl bg-mediumblue/80 backdrop-blur-md p-6 border border-lightblue/10 hover:border-lightblue/20 transition-colors">
                           <div className="space-y-2 text-left">
-                            <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                            <p className="text-mediumblue text-sm">
+                            <h3 className="text-xl font-medium text-white/80">{article.title}</h3>
+                            <p className="text-white/80 text-sm">
                               {article.description}
                             </p>
                           </div>

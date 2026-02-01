@@ -120,12 +120,14 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       )}
 
       {loading && (
-        <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6 rounded-2xl shadow">
+        <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6">
           <TypewriterLoading
             messages={[
               "Analyse en cours...",
-              "Traitement de votre audit...",
-              "Génération du rapport...",
+              "C'est un peu long...",
+              "C'est détaillé...",
+              "C'est personnalisé...",
+              "Presque fini...",
             ]}
             speed={40}
             className="h-6 mt-12 text-2xl"
