@@ -1,364 +1,117 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  CheckCircle,
-  ArrowRight,
-  Zap,
-  Smartphone,
-  Database,
-  Code,
-  ArrowLeft,
-  TrendingUp,
-} from "lucide-react";
-import { PriceQuizCard } from "@/components/tools";
-import { CMSQuizCard } from "@/components/tools";
-import Process from "@/components/process";
-import { CTASection } from "@/components/cta-section";
-import { DecisionHelper } from "@/components/decision-helper";
-import { ApplicationsTabs } from "@/components/applications-tabs";
-import { FeaturesTabs } from "@/components/services/features";
-import { Metadata } from "next";
+"use client"
 
-// Revalidate toutes les heures
-export const revalidate = 3600;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title:
-      "Service de création de site web WordPress Headless Next.js | Next Impact",
-    description:
-      "Service de création de site web WordPress Headless Next.js pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigeances de qualité ou appplications web.",
-    openGraph: {
-      title:
-        "Service de création de site web WordPress Headless Next.js | Next Impact",
-      url: "https://next-impact.digital/services/headless",
-      siteName: "Next Impact - Développeuse WordPress Freelance",
-      description:
-        "Service de création de site web WordPress pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigeances de qualité ou appplications web.",
-      type: "website",
-      images: [
-        {
-          url: "/img/avatar.webp",
-          width: 1200,
-          height: 630,
-          alt: "Next Impact - Développeuse WordPress Freelance",
-        },
-      ],
-    },
-  };
-}
+import SolutionsOffers from "@/components/solutions/SolutionsOffers"
+import { SolutionsComparisonTable } from "@/components/solutions/SolutionsComparisonTable"
+import SolutionsGuide from "@/components/solutions/SolutionsGuide"
+import Process from "@/components/process"
+import SolutionsFAQ from "@/components/solutions/SolutionsFAQ"
+import { ArrowRight, CheckCircle2, ChevronDown, Zap, Shield, Users, TrendingUp, Rocket, Smartphone, Monitor, Code, Settings, FileSearch, GraduationCap } from "lucide-react"
+import PageLayout from "@/components/page-layout"
 
-export default function ApplicationsHeadless() {
-  const applications = [
+
+export default function SolutionsPage() {
+
+  const offers = [
     {
-      key: "Next.js",
-      image: "/img/intranet.webp",
-      title: "Next.js",
-      description: "Interfaces modernes pour la collaboration",
-      examples: ["Extranets", "Intranets", "Plateformes collaboratives"],
+      name: "ESSENTIEL",
+      tech: "WordPress Standard",
+      target: "Pour les TPE/PME et créateurs",
+      concept: "Un site robuste avec une autonomie totale.",
+      icon: "/icons/wordpress-icon.svg",
+      color: "oklch(87.9% 0.169 91.605)",
+      features: ["Budget maîtrisé", "Mise en ligne rapide", "Évolutif via plugins", "Formation incluse"],
+      recommended: false,
     },
     {
-      key: "WordPress",
-      image: "/img/portail-infos.webp",
-      title: "WordPress",
-      description: "Dashboards, espaces de commande, suivi de projets",
-      examples: ["Sass", "B2B", "B2C"],
-    },
-    {
-      key: "Headless CMS",
-      image: "/img/pme-commerciale-luxe.webp",
-      title: "Headless CMS",
-      description:
-        "Conception d'interfaces utilisateur modernes et performantes",
-      examples: ["Site à fort trafic", "Site avec enjeu d'image"],
-    },
-  ];
-  const features = [
-    {
-      title: "WordPress",
-      description:
-        "Le moteur de site le plus utilisé au monde. Idéal pour les blogs, sites vitrines et petits e-commerces.",
-      detailedDescription:
-        "Pour qui ? PME, indépendants, et entreprises souhaitant gérer leur contenu quotidiennement.",
-      benefits: [
-        "Interface familière : Vous modifiez vos textes et images sans nous appeler.",
-        "Évolutif : Des milliers de fonctionnalités prêtes à l'emploi.",
-        "Budget maîtrisé : Développement plus rapide.",
+      name: "PREMIUM",
+      tech: "WordPress + Astro",
+      target: "Enjeux d'image, de SEO et de performance",
+      concept: "La puissance des technologies modernes.",
+      icon: "/icons/speed-icon.svg",
+      color: "#F2E57E",
+      features: [
+        "Flexibilité totale du design",
+        "Score PageSpeed maximum",
+        "Sécurité maximale (statique)",
+        "SEO optimisé nativement",
       ],
-      color: "transparent",
+      recommended: true,
     },
     {
-      title: "Design et Expérience Utilisateur Modernes",
-      description: "Interfaces avancées avec animations ",
-      detailedDescription:
-        "Création d'interfaces utilisateur modernes et interactives pour une expérience optimale.",
-      benefits: [
-        "Animations fluides",
-        "Composants réutilisables",
-        "Accessibilité renforcée",
+      name: "ULTIMATE",
+      tech: "WordPress + Next.js",
+      target: "Pour des fonctionnalités spécifiques",
+      concept: "L'expérience utilisateur fluide d'une application.",
+      icon: "/icons/saas-features-icon.svg",
+      color: "oklch(87.9% 0.169 91.605)",
+      features: [
+        "Interactions dynamiques",
+        "Espace client complexe",
+        "Flexibilité totale du design",
+        "Intégrations API illimitées",
       ],
-      color: "transparent",
+      recommended: false,
+    },
+  ]
+
+
+  const needsGuide = [
+    {
+      need: "Je veux changer mes menus et mon design seul",
+      solution: "WordPress Classique",
+      icon: Monitor,
     },
     {
-      title: "Administration WordPress personnalisée",
-      description: "Interface d'administration sur mesure pour les équipes",
-      detailedDescription:
-        "Personnalisation de l'interface d'administration WordPress pour une gestion simplifiée.",
-      benefits: [
-        "Champs personnalisés",
-        "Menus simplifiés",
-        "Rôles et permissions avancés",
-      ],
-      color: "transparent",
+      need: "Mon site actuel est trop lent et daté",
+      solution: "Astro + Headless",
+      icon: TrendingUp,
     },
     {
-      title: "Performances Accrues",
-      description: "Chargement instantané, cache intelligent, CDN global",
-      detailedDescription:
-        "Optimisation des performances pour un chargement ultra-rapide et une expérience utilisateur fluide.",
-      benefits: [
-        "Génération statique",
-        "Lazy loading",
-        "Monitoring temps réel",
-      ],
-      color: "transparent",
+      need: "Je veux un portail client avec des services en ligne",
+      solution: "Next.js + Headless",
+      icon: Smartphone,
     },
-  ];
+  ]
+
+
+  const faqs = [
+    {
+      question: "Est-ce que je pourrai toujours modifier mes textes ?",
+      answer:
+        "Oui, pour les 3 solutions. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
+    },
+    {
+      question: "Le Headless est-il plus cher à maintenir ?",
+      answer:
+        "Légèrement, car il y a deux systèmes à maintenir (WordPress + front-end). Cependant, la sécurité renforcée et les performances accrues réduisent souvent les coûts d'intervention d'urgence et de perte de trafic.",
+    },
+    {
+      question: "Combien de temps prend la mise en place ?",
+      answer:
+        "Comptez 2-4 semaines pour un site WordPress classique, 4-6 semaines pour une solution Astro, et 6-10 semaines pour une architecture Next.js complète, selon la complexité du projet.",
+    },
+    {
+      question: "Mes plugins WordPress fonctionneront-ils encore ?",
+      answer:
+        "Les plugins front-end (sliders, formulaires affichés) sont remplacés par des équivalents plus performants. Les plugins back-end (SEO, analytics, sécurité) continuent de fonctionner normalement.",
+    },
+  ]
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 md:py-16 pt-16 text-center">
-        <Badge
-          variant="outline"
-          className="mb-4 border-regularblue/20 text-regularblue"
-        >
-          Architecture moderne pour projets ambitieux
-        </Badge>
-        <h1 className="text-5xl md:text-6xl font-medium tracking-tight mb-6">
-          Sites web <span className="text-regularblue/80">Headless</span>
-        </h1>
-        <p className="text-xl text-regularblue/80 max-w-3xl mx-auto mb-8">
-          L'architecture qui libère votre contenu de ses contraintes d'affichage
-          en séparant la gestion de contenu de son affichage pour une
-          flexibilité maximale.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="#services">
-            <Button
-              size="lg"
-              className="gap-1 rounded-full text-white bg-regularblue/90 hover:bg-regularblue/80"
-            >
-              Services
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href="#tarifs">
-            <Button
-              size="lg"
-              className="gap-1 rounded-full text-regularblue bg-extralightblue/40 hover:bg-extralightblue/30"
-            >
-              Tarifs
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Applications (en tabs) */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-medium text-regularblue mb-4">
-            Offre de WordPress Headless
-          </h2>
-          <p className="text-lg text-regularblue/80">
-            Des solutions techniques avancées pour des besoins spécifiques
-          </p>
-        </div>
-        <ApplicationsTabs applications={applications} />
-      </section>
-
-      {/* Technical Services */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[1700px] left-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-pink-200 to-blue-200 opacity-20 blur-3xl"></div>
-        <div className="absolute top-[2200px] right-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-blue-200 to-pink-200 opacity-10 blur-3xl"></div>
-      </div>
-      <section className="pt-16" id="services">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-medium text-regularblue mb-4">
-              Services techniques détaillés
-            </h2>
-            <p className="text-lg text-regularblue/80">
-              Une expertise technique complète pour votre projet
-            </p>
-          </div>
-
-          <FeaturesTabs features={features} />
-        </div>
-      </section>
-
-      {/* Case Studies */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[2800px] left-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-pink-400 to-blue-400 opacity-10 blur-3xl"></div>
-        <div className="absolute top-[3200px] right-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-blue-400 to-pink-400 opacity-10 blur-3xl"></div>
-      </div>
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-medium text-regularblue mb-4">
-              Cas d'usage détaillés
-            </h2>
-            <p className="text-lg text-regularblue/80">
-              Exemples concrets d'applications réalisées
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "Billeterie en ligne",
-                need: "Gestion de 100k+ événements",
-                solution:
-                  "WordPress pour paramétrage, Next.js pour l'affichage",
-                result: "Facilité de gestion, performances optimales",
-                metrics: [
-                  "Performance +300%",
-                  "UX moderne",
-                  "Données temps réel",
-                ],
-              },
-              {
-                title: "Site Corporate exigeant",
-                need: "Présence en ligne haut de gamme",
-                solution:
-                  "WordPress la gestion des contenus, Next.js pour l'UI/UX",
-                result: "Site exigeant, performant et simple à administrer",
-                metrics: [
-                  "Image de marque renforcée",
-                  "Temps de chargement maximal",
-                  "Gestion simplifiée pour les équipes",
-                ],
-              },
-              {
-                title: "Wiki Collaboratif",
-                need: "Collaboration et partage de données",
-                solution: "WordPress headless + Next.js",
-                result: "Espaces membres modernisés et haute performance",
-                metrics: [
-                  "Simplicité d'utilisation",
-                  "Accès rapide aux données",
-                  "Sécurité renforcée",
-                ],
-              },
-              {
-                title: "Extranet B2B",
-                need: "Gestion de données clients et partenaires",
-                solution: "WordPress + Next.js + intégrations métier",
-                result: "Interface moderne, données unifiées",
-                metrics: [
-                  "Intégration CRM/ERP",
-                  "Gains de temps",
-                  "Satisfaction des partenaires",
-                ],
-              },
-            ].map((caseStudy, index) => (
-              <Card key={index} className="border-blue-100">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl font-googletitre text-regularblue font-medium">
-                      {caseStudy.title}
-                    </CardTitle>
+    <main>
+      <PageLayout
+        titre="Nos solutions WordPress"
+        sousTitre="Choisissez la solution adaptée à vos besoins et à votre budget."
+      >
+                  <div className="mt-8 mb-6 space-y-24">
+                    <SolutionsOffers offers={offers} />
+                    <SolutionsComparisonTable />
+                    <SolutionsGuide needsGuide={needsGuide} />
+                    <Process />
+                    <SolutionsFAQ faqs={faqs} />
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <strong className="text-sm font-googletitre text-regularblue">
-                      Besoin :
-                    </strong>
-                    <p className="text-sm text-regularblue/80">
-                      {caseStudy.need}
-                    </p>
-                  </div>
-                  <div>
-                    <strong className="text-sm font-googletitre text-regularblue">
-                      Solution :
-                    </strong>
-                    <p className="text-sm text-regularblue/80">
-                      {caseStudy.solution}
-                    </p>
-                  </div>
-                  <div>
-                    <strong className="text-sm font-googletitre text-regularblue">
-                      Résultat :
-                    </strong>
-                    <p className="text-sm text-regularblue/80">
-                      {caseStudy.result}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {caseStudy.metrics.map((metric, i) => (
-                      <Badge
-                        key={i}
-                        variant="secondary"
-                        className="text-xs bg-lightblue/10 text-regularblue"
-                      >
-                        {metric}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[5600px] left-0 h-[800px] w-[50vw] rounded-full bg-gradient-to-r from-pink-400 to-blue-400 opacity-5 blur-3xl"></div>
-        <div className="absolute top-[5900px] right-0 h-[800px] w-[50vw] rounded-full bg-gradient-to-r from-blue-400 to-pink-400 opacity-5 blur-3xl"></div>
-      </div>
-
-      <Process />
-
-      {/* Decision Helper */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[6200px] left-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-pink-400 to-blue-400 opacity-5 blur-3xl"></div>
-        <div className="absolute top-[6400px] right-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-blue-400 to-pink-400 opacity-5 blur-3xl"></div>
-      </div>
-      <DecisionHelper />
-      <CMSQuizCard />
-
-      {/* CTA Section */}
-      <CTASection />
-
-      {/* Navigation */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center">
-          <Link
-            href="/services/wordpress"
-            className="inline-flex items-center text-regularblue hover:text-regularblue/80"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Découvrir les Sites Corporate
-          </Link>
-          <Link
-            href="/cms-headless"
-            className="inline-flex items-center text-regularblue hover:text-regularblue/80"
-          >
-            Choisir entre WordPress CMS et Headless
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-    </div>
-  );
-}
+      </PageLayout>
+    </main>
+)}
+                                     
