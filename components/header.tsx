@@ -124,9 +124,13 @@ export function NavBar() {
                   <MobileMenuLink href="/services" onClick={handleMenuClick}>Services</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
                   <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
-                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick} className="pb-8">Etudes de cas</MobileMenuLink>
+                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
+                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-8">Documentation</MobileMenuLink>
 
                   <div className="pl-4 pt-8 flex items-center gap-8 border-t">
+                    <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
+                      <File className="w-8 h-8 text-white/90 hover:text-white transition" />
+                    </Link>
                     <Link href="tel:0673981638" className="md:inline-block">
                       <PhoneCallIcon className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
@@ -168,7 +172,6 @@ export function NavBar() {
                  Liens directs 
                   <MobileMenuLink href="/a-propos" onClick={handleMenuClick}>A propos</MobileMenuLink>
                   */}
-                  <MobileMenuLink href="/documentation" onClick={handleMenuClick}>Documentation</MobileMenuLink>
                   {/*<MobileMenuLink href="/contact" onClick={handleMenuClick}>Contact</MobileMenuLink>
                 */}
                   </div>
@@ -290,6 +293,9 @@ export default function Header() {
             <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
           </div>*/}
+          <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" className="hidden md:inline-block">
+            <File className="w-6 h-6 text-white/90 hover:text-white transition" />
+          </Link>
           <Link href="/documentation" className="hidden md:inline-block">
             <DatabaseIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
