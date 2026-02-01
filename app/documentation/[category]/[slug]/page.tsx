@@ -93,14 +93,14 @@ export default async function ArticlePage(props: ArticlePageProps) {
             <div className="hidden md:flex items-center gap-2 mb-8">
               <Link href="/documentation" className="text-sm text-extralightblue hover:text-extralightblue/80">
                 Documentation
-              </Link>
+              </Link>{/*}
               <span className="text-extralightblue/80 text-xs">/</span>
               <Link
                 href={`/documentation/${article.category}`}
                 className="text-sm text-extralightblue/80 hover:text-extralightblue/80"
               >
                 {article.category.charAt(0).toUpperCase() + article.category.slice(1).replace(/-/g, " ")}
-              </Link>
+              </Link>*/}
               <span className="text-extralightblue/80 text-xs">/</span>
               <span className="font-googletitre text-extralightblue text-sm font-medium">{article.title}</span>
               </div>

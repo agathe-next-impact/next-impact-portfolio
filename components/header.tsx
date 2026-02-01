@@ -167,8 +167,9 @@ export function NavBar() {
                   </AnimatePresence>
                  Liens directs 
                   <MobileMenuLink href="/a-propos" onClick={handleMenuClick}>A propos</MobileMenuLink>
+                  */}
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick}>Documentation</MobileMenuLink>
-                  <MobileMenuLink href="/contact" onClick={handleMenuClick}>Contact</MobileMenuLink>
+                  {/*<MobileMenuLink href="/contact" onClick={handleMenuClick}>Contact</MobileMenuLink>
                 */}
                   </div>
               </motion.div>
