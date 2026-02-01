@@ -85,13 +85,13 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
   }
 
   return (
-    <div className="relative w-full max-w-md" ref={searchRef}>
+    <div className="relative w-full max-w-xl" ref={searchRef}>
       <div className="relative">
         <Input
           ref={inputRef}
           type="search"
           placeholder="Rechercher dans la documentation..."
-          className="w-full rounded-full appearance-none bg-background pl-8 pr-10 shadow-none"
+          className="w-full rounded-full appearance-none pl-8 pr-10 shadow-none ring-0 focus:ring-0 bg-extralightblue"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsSearching(true)}
@@ -101,25 +101,25 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
       </div>
 
       {isSearching && (searchQuery || filteredCategories.length > 0 || filteredArticles.length > 0) && (
-        <div className="absolute top-full z-10 mt-2 w-full rounded-md bg-white shadow-md">
-          <div className="p-4">
+        <div className="absolute top-full z-10 w-full rounded-md bg-darkblue/90 shadow-md">
+          <div className="p-2">
             {filteredCategories.length === 0 && filteredArticles.length === 0 ? (
               <p className="text-center text-sm py-6">No results found</p>
             ) : (
               <>
                 {filteredCategories.length > 0 && (
                   <div className="mb-4">
-                    <h3 className="text-sm font-medium text-mediumblue mb-2">Categories</h3>
+                    <h3 className="text-sm font-medium text-white mb-2">Categories</h3>
                     <ul className="space-y-2">
                       {filteredCategories.map((category) => (
                         <li key={category.id}>
                           <Link
                             href={category.url}
-                            className="block rounded-md p-2 hover:bg-extralightblue/20"
+                            className="block rounded-md p-2 hover:bg-mediumblue/50 border-b border-white/10"
                             onClick={() => setIsSearching(false)}
                           >
-                            <div className="font-medium">{category.title}</div>
-                            <div className="text-sm text-mediumblue">{category.description}</div>
+                            <div className="font-medium text-white">{category.title}</div>
+                            <div className="text-sm text-extralightblue/70">{category.description}</div>
                           </Link>
                         </li>
                       ))}
@@ -129,18 +129,18 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
 
                 {filteredArticles.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-medium text-mediumblue mb-2">Articles</h3>
+                    <h3 className="text-sm font-medium text-white mb-2">Articles</h3>
                     <ul className="space-y-2">
                       {filteredArticles.map((article) => (
                         <li key={article.slug}>
                           <Link
                             href={`/documentation/${article.category}/${article.slug}`}
-                            className="block rounded-md p-2 hover:bg-extralightblue/20"
+                            className="block p-2 hover:bg-mediumblue/50 border-b border-white/10"
                             onClick={() => setIsSearching(false)}
                           >
-                            <div className="font-medium">{article.title}</div>
-                            <div className="text-sm text-mediumblue">{article.description}</div>
-                            <div className="mt-1 text-xs text-regularblue/80">
+                            <div className="font-medium text-white">{article.title}</div>
+                            <div className="text-sm text-extralightblue/70">{article.description}</div>
+                            <div className="mt-1 text-xs text-extralightblue/80">
                               Categorie: {categories.find((c) => c.id === article.category)?.title || article.category}
                             </div>
                           </Link>

@@ -1,4 +1,5 @@
 import DocTabs from "@/components/documentation/doc-tabs";
+import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
 
 // Revalidate toutes les 24 heures
@@ -31,22 +32,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function DocumentationPage() {
   return (
-    <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 md:py-16 pt-16 text-center">
-        <h1 className="text-5xl md:text-6xl tracking-tight mt-12 mb-6">
-          Ressources
-        </h1>
-        <p className="text-xl text-regularblue/80 max-w-3xl mx-auto">
-          Explorez notre documentation complète pour maîtriser WordPress,
-          Next.js et les technologies web modernes. Des guides pratiques aux
-          tutoriels avancés, trouvez tout ce dont vous avez besoin pour réussir
-          vos projets.
-        </p>
+    <main>
+      <PageLayout
+        titre="Ressources"
+        sousTitre="La documentation complète pour maîtriser WordPress, Next.js, les technologies web modernes et réussir vos projets."
+      >
         <div className="container mx-auto py-12">
           <DocTabs />
         </div>
-      </section>
+      </PageLayout>
     </main>
   );
 }

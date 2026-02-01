@@ -95,7 +95,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           </div>
           <input
             id="gemini_url"
-            className="w-xl bg-white/80 border rounded-2xl p-2 -mt-4 mb-2 focus-visible:bg-white"
+            className="w-xl bg-white/90 border rounded-full p-2 -mt-4 mb-2 focus-visible:bg-white"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://test.com"

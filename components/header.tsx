@@ -288,10 +288,10 @@ export default function Header() {
           <Link href="/a-propos" className="hidden md:inline-block">
             <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
+          </div>*/}
           <Link href="/documentation" className="hidden md:inline-block">
             <DatabaseIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
-          </div>*/}
           <Link href="tel:0673981638" className="hidden md:inline-block">
             <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
