@@ -50,6 +50,7 @@ async function getDocumentationCategories() {
 
 // Études de cas — tous les slugs existants
 const caseStudiesSlugs = [
+  "comme-des-fous",
   "proditec",
   "doleances",
   "french-touch-seeds",
@@ -95,27 +96,13 @@ export async function GET() {
       { path: "", changefreq: "weekly", priority: 1.0, lastmod: today },
       // Pages de services — haute priorité (pages de conversion)
       { path: "services", changefreq: "weekly", priority: 0.9, lastmod: today },
-      { path: "services/wordpress", changefreq: "weekly", priority: 0.9, lastmod: today },
-      { path: "services/headless", changefreq: "weekly", priority: 0.9, lastmod: today },
-      { path: "solutions", changefreq: "weekly", priority: 0.9, lastmod: today },
-      { path: "cms-headless", changefreq: "weekly", priority: 0.8, lastmod: today },
-      { path: "wp-headless", changefreq: "weekly", priority: 0.8, lastmod: today },
       // Pages ciblage audience — bonne priorité
-      { path: "vous-etes", changefreq: "monthly", priority: 0.8, lastmod: today },
-      { path: "vous-etes/artisan", changefreq: "monthly", priority: 0.8, lastmod: today },
-      { path: "vous-etes/pme", changefreq: "monthly", priority: 0.8, lastmod: today },
-      { path: "vous-etes/acteur-tourisme", changefreq: "monthly", priority: 0.8, lastmod: today },
+      
       // Hub études de cas & documentation
       { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
       // Pages de conversion / outils
-      { path: "contact", changefreq: "monthly", priority: 0.7, lastmod: today },
-      { path: "devis", changefreq: "monthly", priority: 0.7, lastmod: today },
-      { path: "cahier-des-charges", changefreq: "monthly", priority: 0.7, lastmod: today },
-      { path: "simulateur-tarifs", changefreq: "monthly", priority: 0.6, lastmod: today },
-      { path: "audit", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "audit-site-ia", changefreq: "monthly", priority: 0.6, lastmod: today },
-      { path: "brief", changefreq: "monthly", priority: 0.5, lastmod: today },
       // Pages légales
       { path: "mentions-legales", changefreq: "yearly", priority: 0.3, lastmod: today },
     ];
