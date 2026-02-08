@@ -1,5 +1,6 @@
-"use client"
-
+import { Metadata } from "next"
+import { pageMetadata } from "@/lib/metadata"
+import { ServiceJsonLd, FAQJsonLd } from "@/components/json-ld"
 
 import ServicesOffers from "@/components/services/ServicesOffers"
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable"
@@ -9,6 +10,12 @@ import ServicesFAQ from "@/components/services/ServicesFAQ"
 import { ArrowRight, CheckCircle2, ChevronDown, Zap, Shield, Users, TrendingUp, Rocket, Smartphone, Monitor, Code, Settings, FileSearch, GraduationCap } from "lucide-react"
 import PageLayout from "@/components/page-layout"
 
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata.services()
+}
+
+// Revalidate toutes les 24 heures
+export const revalidate = 86400
 
 export default function ServicesPage() {
 
@@ -100,6 +107,18 @@ export default function ServicesPage() {
 
   return (
     <main>
+      <ServiceJsonLd
+        name="Services de création de site web WordPress Headless"
+        description="Services de création de site WordPress, Astro et Next.js. Solutions adaptées aux PME, entreprises et startups avec des besoins spécifiques de performance et de fonctionnalités."
+        serviceType="Développement web"
+        url="/services"
+      />
+      <FAQJsonLd
+        questions={faqs.map(faq => ({
+          question: faq.question,
+          answer: faq.answer,
+        }))}
+      />
       <PageLayout
         titre="Nos services WordPress"
         sousTitre="Choisissez la solution adaptée à vos besoins et à votre budget."
@@ -113,5 +132,5 @@ export default function ServicesPage() {
                   </div>
       </PageLayout>
     </main>
-)}
-                                     
+  )
+}

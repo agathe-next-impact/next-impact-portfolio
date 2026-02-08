@@ -32,7 +32,7 @@ export async function generateMetadata(props: {
     title: caseStudy.title,
     description: caseStudy.description,
     slug: caseStudy.slug,
-    image: caseStudy.imageUrl,
+    image: caseStudy.gallery[0]?.url || caseStudy.imageUrl,
     publishedTime: caseStudy.date.year && caseStudy.date.month
       ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
       : new Date().toISOString(),

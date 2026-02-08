@@ -2,31 +2,53 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 
+const baseUrl = "https://next-impact.digital";
 
 // Récupère dynamiquement les slugs de la documentation (avec catégories)
 async function getDocumentationSlugs() {
   const docsDir = path.join(process.cwd(), "content/documentation");
   const categories = await fs.readdir(docsDir, { withFileTypes: true });
-  let slugs: string[] = [];
+  const slugs: { slug: string; lastmod: string }[] = [];
 
   for (const entry of categories) {
     if (entry.isDirectory()) {
       const categoryDir = path.join(docsDir, entry.name);
       const files = await fs.readdir(categoryDir);
-      const categorySlugs = files
-        .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
-        .map((file) => `${entry.name}/${file.replace(/\.mdx?$/, "")}`);
-      slugs = slugs.concat(categorySlugs);
+      for (const file of files) {
+        if (file.endsWith(".md") || file.endsWith(".mdx")) {
+          const filePath = path.join(categoryDir, file);
+          const stat = await fs.stat(filePath);
+          slugs.push({
+            slug: `${entry.name}/${file.replace(/\.mdx?$/, "")}`,
+            lastmod: stat.mtime.toISOString().split("T")[0],
+          });
+        }
+      }
     }
-    // Si tu veux aussi les fichiers à la racine de documentation, décommente ci-dessous :
-    // else if (entry.isFile() && (entry.name.endsWith(".md") || entry.name.endsWith(".mdx"))) {
-    //   slugs.push(entry.name.replace(/\.mdx?$/, ""));
-    // }
   }
   return slugs;
 }
 
-// Simule la liste des slugs dynamiques (à remplacer par une vraie source si besoin)
+// Récupère dynamiquement les catégories de documentation
+async function getDocumentationCategories() {
+  const docsDir = path.join(process.cwd(), "content/documentation");
+  const categories = await fs.readdir(docsDir, { withFileTypes: true });
+  const result: { slug: string; lastmod: string }[] = [];
+
+  for (const entry of categories) {
+    if (entry.isDirectory()) {
+      const categoryDir = path.join(docsDir, entry.name);
+      const stat = await fs.stat(categoryDir);
+      result.push({
+        slug: entry.name,
+        lastmod: stat.mtime.toISOString().split("T")[0],
+      });
+    }
+  }
+  return result;
+}
+
+// Études de cas — tous les slugs existants
 const caseStudiesSlugs = [
   "proditec",
   "doleances",
@@ -37,74 +59,125 @@ const caseStudiesSlugs = [
   "erp-services",
   "senza-nature",
   "wagner-hamisky",
+  "comme-des-fous",
+  "next-event",
+  "les-etats-generaux-communaux",
+  "mediatico",
+  "infralliance",
+  "connexion-plus",
 ];
 
+// Génère une entrée <url> XML
+function urlEntry(
+  loc: string,
+  opts: { changefreq: string; priority: number; lastmod?: string }
+) {
+  return `
+  <url>
+    <loc>${loc}</loc>${opts.lastmod ? `\n    <lastmod>${opts.lastmod}</lastmod>` : ""}
+    <changefreq>${opts.changefreq}</changefreq>
+    <priority>${opts.priority}</priority>
+  </url>`;
+}
 
 export async function GET() {
   try {
-    // Liste des routes principales à indexer
-    const pages = [
-      "",
-      "services/wordpress",
-      "services/headless",
-      "etudes-de-cas",
-      "cahier-des-charges",
-      "simulateur-tarifs",
-      "cms-headless",
-      // Ajoute d'autres routes si besoin
+    const today = new Date().toISOString().split("T")[0];
+
+    // Pages statiques avec priorités hiérarchisées
+    const staticPages: {
+      path: string;
+      changefreq: string;
+      priority: number;
+      lastmod: string;
+    }[] = [
+      // Homepage — priorité max
+      { path: "", changefreq: "weekly", priority: 1.0, lastmod: today },
+      // Pages de services — haute priorité (pages de conversion)
+      { path: "services", changefreq: "weekly", priority: 0.9, lastmod: today },
+      { path: "services/wordpress", changefreq: "weekly", priority: 0.9, lastmod: today },
+      { path: "services/headless", changefreq: "weekly", priority: 0.9, lastmod: today },
+      { path: "solutions", changefreq: "weekly", priority: 0.9, lastmod: today },
+      { path: "cms-headless", changefreq: "weekly", priority: 0.8, lastmod: today },
+      { path: "wp-headless", changefreq: "weekly", priority: 0.8, lastmod: today },
+      // Pages ciblage audience — bonne priorité
+      { path: "vous-etes", changefreq: "monthly", priority: 0.8, lastmod: today },
+      { path: "vous-etes/artisan", changefreq: "monthly", priority: 0.8, lastmod: today },
+      { path: "vous-etes/pme", changefreq: "monthly", priority: 0.8, lastmod: today },
+      { path: "vous-etes/acteur-tourisme", changefreq: "monthly", priority: 0.8, lastmod: today },
+      // Hub études de cas & documentation
+      { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
+      { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
+      // Pages de conversion / outils
+      { path: "contact", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "devis", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "cahier-des-charges", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "simulateur-tarifs", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "audit", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "audit-site-ia", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "brief", changefreq: "monthly", priority: 0.5, lastmod: today },
+      // Pages légales
+      { path: "mentions-legales", changefreq: "yearly", priority: 0.3, lastmod: today },
     ];
 
-    const baseUrl = "https://next-impact.digital";
-
-// Ajoute les pages dynamiques études de cas
-  const caseStudiesUrls = caseStudiesSlugs.map(
-    (slug) => `
-  <url>
-    <loc>${baseUrl}/etudes-de-cas/${slug}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`
-  );
-
-    // Récupère dynamiquement les slugs de la documentation (avec catégories)
-    const documentationSlugs = await getDocumentationSlugs();
-    const documentationUrls = documentationSlugs.map(
-      (slug) => `
-    <url>
-      <loc>${baseUrl}/documentation/${slug}</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.6</priority>
-    </url>`
+    // Études de cas dynamiques
+    const caseStudiesUrls = caseStudiesSlugs.map((slug) =>
+      urlEntry(`${baseUrl}/etudes-de-cas/${slug}`, {
+        changefreq: "monthly",
+        priority: 0.7,
+        lastmod: today,
+      })
     );
 
-    const urls = [
-      ...pages.map(
-        (page) => `
-    <url>
-      <loc>${baseUrl}/${page}</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>`
+    // Catégories de documentation
+    const docCategories = await getDocumentationCategories();
+    const docCategoryUrls = docCategories.map((cat) =>
+      urlEntry(`${baseUrl}/documentation/${cat.slug}`, {
+        changefreq: "weekly",
+        priority: 0.7,
+        lastmod: cat.lastmod,
+      })
+    );
+
+    // Articles de documentation dynamiques (avec lastmod réel)
+    const documentationSlugs = await getDocumentationSlugs();
+    const documentationUrls = documentationSlugs.map((doc) =>
+      urlEntry(`${baseUrl}/documentation/${doc.slug}`, {
+        changefreq: "monthly",
+        priority: 0.6,
+        lastmod: doc.lastmod,
+      })
+    );
+
+    // Assemblage final
+    const allUrls = [
+      ...staticPages.map((page) =>
+        urlEntry(`${baseUrl}/${page.path}`, {
+          changefreq: page.changefreq,
+          priority: page.priority,
+          lastmod: page.lastmod,
+        })
       ),
       ...caseStudiesUrls,
+      ...docCategoryUrls,
       ...documentationUrls,
     ].join("");
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${urls}
-  </urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allUrls}
+</urlset>`;
 
     return new NextResponse(xml, {
       headers: {
         "Content-Type": "application/xml",
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
       },
     });
   } catch (e) {
-    // Log l'erreur pour debug
     console.error("Erreur génération sitemap:", e);
     return new NextResponse(
-      "<?xml version='1.0'?><urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'></urlset>",
+      '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>',
       {
         status: 200,
         headers: { "Content-Type": "application/xml" },

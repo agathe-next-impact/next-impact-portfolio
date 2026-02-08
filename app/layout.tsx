@@ -7,6 +7,7 @@ import Footer from '@/components/footer'
 import Image from 'next/image'
 import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
+import { ClarityScript } from '@/components/clarity-script'
 
 const inter = localFont({
   src: [
@@ -90,6 +91,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <ClarityScript />
         {/* Background SVG */}
         <div className="fixed inset-0 z-0">
           <Image

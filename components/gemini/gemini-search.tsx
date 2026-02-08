@@ -107,7 +107,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           <Button
             type="submit"
             variant="default"
-            className="bg-lightyellow hover:bg-lightyellow/90 text-darkblue px-6 py-2 text-xl font-googletitre font-medium flex items-center justify-center"
+            className="bg-coral hover:bg-coral/90 text-darkblue px-6 py-2 text-xl font-googletitre font-semibold flex items-center justify-center"
             disabled={loading || !url.trim()}
           >
             Lancer l'analyse
