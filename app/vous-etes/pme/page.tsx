@@ -4,6 +4,7 @@ import GainsLanding from "@/components/ui/gains-landing";
 import { TarifsLanding } from "@/components/ui/tarifs-landing";
 import { FaqLanding } from "@/components/ui/faq-landing";
 import { CTASection } from "@/components/cta-section";
+import PageLayout from "@/components/page-layout";
 
 export default function LandingPMEIndustrielle() {
   const Hero = {
@@ -14,8 +15,7 @@ export default function LandingPMEIndustrielle() {
     buttonText: "Faire une estimation",
     buttonLink: "/simulateur-tarifs",
     buttonVariant: "primary",
-    button2Link:
-      "https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress",
+    button2Link: "https://calendar.app.google/b4CimH2Yej2k4keG8",
     button2Text: "Prendre rendez-vous",
     button2Variant: "secondary",
   };
@@ -23,7 +23,7 @@ export default function LandingPMEIndustrielle() {
     title: " Pourquoi investir dans un site premium ?",
     subtitle:
       "Votre professionnalisme, votre expertise et vos compétences techniques se doivent d'être mis en avant avec un site reflétant la qualité et la précision de vow services et produits.",
-    imageUrl: "/img/pme-indus-homepage.webp",
+    imageUrl: "/img/pme-indus-contact.webp",
     features: [
       "Un design professionnel, aligné sur votre identité visuelle",
       "Un site optimisé pour le référencement naturel (SEO) afin d'être visible sur Google",
@@ -128,14 +128,12 @@ export default function LandingPMEIndustrielle() {
           "En moyenne, la création d'un site vitrine prend entre 4 à 6 semaines, selon la complexité du projet et la disponibilité des contenus.",
       },
       {
-        question:
-          "Est-ce que je peux mettre à jour le site moi-même ?",
+        question: "Est-ce que je peux mettre à jour le site moi-même ?",
         answer:
           "Oui, nous vous formons à l'utilisation du CMS WordPress pour que vous puissiez facilement mettre à jour vos contenus (textes, images, etc.) sans compétences techniques particulières.",
       },
       {
-        question:
-          "Est-ce que le site est optimisé SEO ?",
+        question: "Est-ce que le site est optimisé SEO ?",
         answer:
           "Oui, tous nos sites sont optimisés pour le SEO afin de vous aider à être visible sur les moteurs de recherche comme Google.",
       },
@@ -160,16 +158,11 @@ export default function LandingPMEIndustrielle() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <HeroLanding
-        badgeText={Hero.badgeText}
-        title={Hero.title}
-        subtitle={Hero.subtitle}
-        buttonText={Hero.buttonText}
-        buttonLink={Hero.buttonLink}
-        buttonVariant={Hero.buttonVariant}
-      />
+    <PageLayout
+      titre="Headless pour PME"
+      sousTitre="Développez une expérience digitale et des services en ligne ambitieux."
+    >
+
 
       {/* Pourquoi un site vitrine */}
       <SolutionLanding
@@ -180,11 +173,6 @@ export default function LandingPMEIndustrielle() {
       />
 
       {/* Solution*/}
-
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[1000px] left-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-pink-200 to-blue-200 opacity-20 blur-3xl"></div>
-        <div className="absolute top-[1600px] right-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-blue-200 to-pink-200 opacity-10 blur-3xl"></div>
-      </div>
       <GainsLanding
         title={gains.title}
         subtitle={gains.subtitle}
@@ -200,19 +188,12 @@ export default function LandingPMEIndustrielle() {
 
       {/* FAQ */}
 
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[2000px] left-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-pink-200 to-blue-200 opacity-20 blur-3xl"></div>
-        <div className="absolute top-[2600px] right-0 h-[600px] w-[50vw] rounded-full bg-gradient-to-r from-blue-200 to-pink-200 opacity-10 blur-3xl"></div>
-      </div>
       <FaqLanding
         title={Faq.title}
         image={Faq.image}
         imageAlt={Faq.imageAlt}
         items={Faq.questions}
       />
-
-      {/* CTA final */}
-      <CTASection />
-    </div>
+    </PageLayout>
   );
 }

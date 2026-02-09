@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
-import { title } from 'process';
 
 interface SolutionLandingProps {
     title?: string;
@@ -17,12 +16,12 @@ export default function SolutionLanding({
     }: SolutionLandingProps
 ) {
     return (
-    <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-medium text-regularblue mb-4">
+    <section className="bg-mediumblue/60 w-full mx-auto mt-24 flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
+        <div className="max-w-5xl mx-auto mb-12">
+          <h2 className="text-3xl font-medium text-white mb-4">
             {title}
           </h2>
-          <p className="text-lg text-regularblue/80">
+          <p className="text-lg text-white/80">
             {subtitle}
           </p>
         </div>
@@ -39,10 +38,10 @@ export default function SolutionLanding({
         </div>
         <div className="max-w-2xl mx-auto">
         {features && features.length > 0 && (
-            <ul className="mt-6 space-y-6 text-mediumblue text-lg">
+            <ul className="mt-6 space-y-6 text-white text-lg">
                 {features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-regularblue" />
+                    <li key={idx} className="flex items-center gap-3 text-white/80">
+                        <CheckCircle className="h-5 w-5 text-coral" />
                         {feature}
                     </li>
                 ))}
