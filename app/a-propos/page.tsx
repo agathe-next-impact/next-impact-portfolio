@@ -101,7 +101,7 @@ export default function AProposPage() {
           </div>
 
           {/* Pilier 1 - IA */}
-          <div className="flex flex-col md:flex border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
             <div className="basis-1/3 flex items-center gap-3 mb-4">
               <Image
                 src="/icons/globe-network-icon.svg"
