@@ -313,7 +313,7 @@ export default function EligibilityForm() {
             </Button>
             <div className="flex items-center gap-2 text-white/60 font-googletexte text-sm">
               <Info className="h-4 w-4" />
-              <span>Calcul basé sur votre statut et votre budget.</span>
+              <span className="text-white/60">Calcul basé sur votre statut et votre budget.</span>
             </div>
           </div>
         </form>
