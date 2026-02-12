@@ -152,8 +152,15 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           </Button>
           {error && <div className="text-red-500">{error}</div>}
           {optinRefused && (
-            <div className="bg-amber-50 border border-amber-300 text-amber-800 rounded-xl px-4 py-3 text-sm font-googletexte">
-              Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé. Cliquez sur &quot;Lancer l&apos;analyse&quot; pour réessayer.
+            <div className="bg-amber-50 border border-amber-300 text-amber-800 rounded-xl px-4 py-3 text-sm font-googletexte flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <span>Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé.</span>
+              <button
+                type="button"
+                onClick={() => { setOptinRefused(false); setShowOptin(true); }}
+                className="shrink-0 bg-coral text-white font-semibold px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors"
+              >
+                Remplir mes coordonnées
+              </button>
             </div>
           )}
         </form>

@@ -26,10 +26,10 @@ const slides = [
             qui allient éthique sociale et standards de performance des géants
             de la Tech.
           </p>
-        <div className="bg-white/5 p-4 sm:p-6 rounded-2xl border-l-4 border-lightyellow text-lightyellow text-sm sm:text-base">
+        <div className="bg-white/5 p-4 sm:p-6 rounded-2xl border-l-4 border-lightyellow text-lightyellow md:text-lg">
             Acteurs de l'ESS :<span className="text-white"> Tarifs solidaires</span>
         </div>
-        <div className="bg-white/5 p-4 sm:p-6 rounded-2xl border-l-4 border-lightyellow text-lightyellow text-sm sm:text-base">
+        <div className="bg-white/5 p-4 sm:p-6 rounded-2xl border-l-4 border-lightyellow text-lightyellow md:text-lg">
           Entreprises :<span className="text-white"> Soutien à l'impact social, solidaire et environnemental pour les entreprises</span>
         </div>
       </div>
@@ -80,26 +80,26 @@ const slides = [
       <div className="space-y-6">
         <div className="grid gap-4">
           <div className="bg-white/5 p-3 sm:p-5 rounded-2xl border-l-4 border-lightyellow hover:scale-[1.02] transition-transform">
-            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 text-sm sm:text-base">
+            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 md:text-lg">
               Interface répondant aux standards de la Tech
             </h4>
-            <p className="text-white/70 font-googletexte text-sm sm:text-base">
+            <p className="text-white/70 font-googletexte md:text-lg">
               Design moderne, navigation fluide, et intégration d&apos;APItierces pour enrichir l&apos;expérience utilisateur
             </p>
           </div>
           <div className="bg-white/5 p-3 sm:p-5 rounded-2xl border-l-4 border-lightblue hover:scale-[1.02] transition-transform">
-            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 text-sm sm:text-base">
+            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 md:text-lg">
               Services en ligne à forte valeur ajoutée
             </h4>
-            <p className="text-white/70 font-googletexte text-sm sm:text-base">
+            <p className="text-white/70 font-googletexte md:text-lg">
               Espaces membres, services en ligne sur-mesure et fonctionnalités dynamiques
             </p>
           </div>
           <div className="bg-white/5 p-3 sm:p-5 rounded-2xl border-l-4 border-lightblue hover:scale-[1.02] transition-transform">
-            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 text-sm sm:text-base">
+            <h4 className="font-googletitre font-medium text-lightyellow mb-1 sm:mb-2 flex items-center gap-2 md:text-lg">
               Expérience « App »
             </h4>
-            <p className="text-white/70 font-googletexte text-sm sm:text-base">
+            <p className="text-white/70 font-googletexte md:text-lg">
               Rapidité, Fluidité totale (Next.js), mode hors-ligne pour le terrain, et
               sécurité absolue des données sensibles
             </p>
@@ -119,18 +119,18 @@ const slides = [
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-darkblue/60 text-lightyellow">
-                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-sm md:text-base">
+                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-base">
                   Enjeu
                 </th>
-                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-sm md:text-base">
+                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-base">
                   WordPress Classique
                 </th>
-                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-sm md:text-base">
+                <th className="p-3 md:p-4 text-left font-googletitre font-medium text-base">
                   Web App Headless
                 </th>
               </tr>
             </thead>
-            <tbody className="font-googletexte text-white/80 text-sm md:text-base">
+            <tbody className="font-googletexte text-white/80 text-base">
               <tr className="border-b border-white/10 hover:bg-white/5 transition-colors">
                 <td className="p-3 md:p-4 text-lightyellow">
                   Crédibilité
@@ -185,14 +185,14 @@ const slides = [
             { enjeu: "Impact Éco", wp: "Consommation serveur élevée", headless: "Sobriété numérique (Statique/Edge)" },
           ].map((row) => (
             <div key={row.enjeu} className="bg-white/5 rounded-xl p-4 space-y-2">
-              <p className="text-lightyellow font-googletitre font-medium text-sm">{row.enjeu}</p>
+              <p className="text-lightyellow font-googletitre font-medium text-base">{row.enjeu}</p>
               <div className="flex items-start gap-2">
-                <span className="text-white/40 text-xs shrink-0 mt-0.5">WP</span>
-                <p className="text-white/60 font-googletexte text-sm">{row.wp}</p>
+                <span className="text-white/40 text-xs w-14 shrink-0 mt-0.5">WP</span>
+                <p className="text-white/60 font-googletexte text-base">{row.wp}</p>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-lightyellow/70 text-xs shrink-0 mt-0.5">Headless</span>
-                <p className="text-white/90 font-googletexte text-sm">{row.headless}</p>
+                <span className="text-lightyellow/70 text-xs w-14 shrink-0 mt-0.5">Headless</span>
+                <p className="text-white/90 font-googletexte text-base">{row.headless}</p>
               </div>
             </div>
           ))}
