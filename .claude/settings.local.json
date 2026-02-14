@@ -4,7 +4,9 @@
       "Bash(npx next build:*)",
       "Bash(npx tsc:*)",
       "Bash(npm ls:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "WebFetch(domain:whatcms.org)",
+      "Bash(test:*)"
     ]
   }
 }

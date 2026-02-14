@@ -4,7 +4,7 @@ import { TypewriterLoading } from "../ui/typewriter-loading";
 import dynamic from "next/dynamic";
 const AuditSendFormClient = dynamic(() => import("./AuditSendFormClient"), { ssr: false });
 import { Button } from "../ui/button";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, AlertTriangle, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -35,13 +35,18 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
   const [optinEmail, setOptinEmail] = useState("");
   const [optinRefused, setOptinRefused] = useState(false);
 
+  // CMS detection state
+  const [cmsDetecting, setCmsDetecting] = useState(false);
+  const [showNotWordPress, setShowNotWordPress] = useState(false);
+  const [detectedCms, setDetectedCms] = useState<string | null>(null);
+
   // User info collected from optin
   const [userInfo, setUserInfo] = useState<{ name: string; company: string; email: string } | null>(null);
 
-  // Lance l'audit automatiquement si defaultUrl est fourni
+  // Lance la détection CMS automatiquement si defaultUrl est fourni
   React.useEffect(() => {
-    if (defaultUrl && defaultUrl.trim() && !result && !loading) {
-      setShowOptin(true);
+    if (defaultUrl && defaultUrl.trim() && !result && !loading && !cmsDetecting) {
+      detectCms(defaultUrl.trim());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultUrl]);
@@ -66,11 +71,53 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
     return true;
   };
 
+  const detectCms = async (targetUrl: string) => {
+    setCmsDetecting(true);
+    setError(null);
+    setDetectedCms(null);
+
+    try {
+      const res = await fetch("/api/detect-cms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: targetUrl }),
+      });
+
+      if (res.status === 429) {
+        const data = await res.json();
+        setError(data.error || "Service temporairement indisponible, veuillez réessayer.");
+        return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Erreur lors de la détection du CMS");
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.isWordPress && data.isMonolithic) {
+        // WordPress monolithique détecté → afficher l'optin
+        setDetectedCms("WordPress");
+        setShowOptin(true);
+      } else {
+        // Pas WordPress monolithique → afficher le popup informatif
+        setDetectedCms(data.detectedCms);
+        setShowNotWordPress(true);
+      }
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de la détection du CMS");
+    } finally {
+      setCmsDetecting(false);
+    }
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateUrl()) return;
     setOptinRefused(false);
-    setShowOptin(true);
+    detectCms(url.trim());
   };
 
   const handleOptinSubmit = (e: React.FormEvent) => {
@@ -115,7 +162,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
   return (
     <>
-      {!loading && !showResultPage && (
+      {!loading && !cmsDetecting && !showResultPage && (
         <form
           onSubmit={handleFormSubmit}
           className="flex flex-col gap-6 mx-auto px-0 md:px-4 pt-4"
@@ -135,7 +182,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             onChange={(e) => { setUrl(e.target.value); setOptinRefused(false); }}
             placeholder="https://test.com"
             required
-            disabled={loading}
+            disabled={loading || cmsDetecting}
             type="url"
             pattern="https?://.+"
           />
@@ -143,7 +190,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             type="submit"
             variant="default"
             className="bg-coral hover:bg-coral/90 text-darkblue px-6 py-2 text-xl font-googletitre font-semibold flex items-center justify-center"
-            disabled={loading || !url.trim()}
+            disabled={loading || cmsDetecting || !url.trim()}
           >
             Lancer l&apos;analyse
             <span className="ml-2 flex items-center text-darkblue">
@@ -166,7 +213,15 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
         </form>
       )}
 
-      {/* Popup optin */}
+      {/* Loading détection CMS */}
+      {cmsDetecting && (
+        <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6">
+          <Loader2 className="size-8 animate-spin text-coral mb-4" />
+          <p className="text-white/80 font-googletexte text-lg">Vérification du CMS en cours...</p>
+        </div>
+      )}
+
+      {/* Popup optin (WordPress monolithique détecté) */}
       <Dialog open={showOptin} onOpenChange={(open) => { if (!open) handleOptinClose(); }}>
         <DialogContent className="bg-darkblue border-mediumblue/30 sm:max-w-md">
           <DialogHeader>
@@ -175,7 +230,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               Avant de lancer l&apos;audit
             </DialogTitle>
             <DialogDescription className="text-white/70 font-googletexte">
-              Renseignez vos coordonnées pour recevoir votre rapport d&apos;audit complet.
+              WordPress monolithique détecté. Renseignez vos coordonnées pour recevoir votre rapport d&apos;audit complet.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleOptinSubmit} className="flex flex-col gap-4 mt-2">
@@ -231,6 +286,40 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               Vos données sont utilisées uniquement pour vous envoyer votre rapport.
             </p>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Popup site non WordPress monolithique */}
+      <Dialog open={showNotWordPress} onOpenChange={(open) => { if (!open) setShowNotWordPress(false); }}>
+        <DialogContent className="bg-darkblue border-mediumblue/30 sm:max-w-md pb-4">
+          <DialogHeader>
+            <DialogTitle className="text-white font-googletitre text-xl flex items-center gap-2">
+              <AlertTriangle className="size-5 text-orange" />
+              Site non WordPress monolithique
+            </DialogTitle>
+            <DialogDescription className="text-white/70 font-googletexte">
+              {detectedCms
+                ? `Le site analysé utilise ${detectedCms} et non WordPress monolithique.`
+                : "Aucun CMS WordPress monolithique n'a été détecté sur ce site."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 mt-2">
+            <p className="text-white/60 text-sm font-googletexte">
+              Notre audit de migration headless est spécifiquement conçu pour les sites WordPress monolithiques.
+              {detectedCms && detectedCms !== "WordPress" && (
+                <> Votre site semble utiliser <strong className="text-white/80">{detectedCms}</strong>.</>
+              )}
+              {!detectedCms && (
+                <> Le CMS utilisé par ce site n&apos;a pas pu être identifié, ou il ne s&apos;agit pas d&apos;un CMS standard.</>
+              )}
+            </p>
+            <Button
+              onClick={() => setShowNotWordPress(false)}
+              className="bg-coral hover:bg-coral/90 text-darkblue font-googletitre font-semibold"
+            >
+              Compris
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
