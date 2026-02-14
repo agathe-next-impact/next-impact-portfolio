@@ -4,31 +4,33 @@ import { Metadata } from "next";
  * Configuration des métadonnées par défaut du site
  */
 export const siteConfig = {
-  name: "Next Impact - Développeuse WordPress Freelance",
+  name: "Next Impact",
   title: "Next Impact",
   description:
-    "Développeuse WordPress freelance spécialisée en sites web corporate et applications web Headless. Création, refonte, audit et conseil pour des projets sur-mesure.",
-  url: "https://next-impact.digital",
+    "Développeuse freelance spécialisée WordPress Headless + Next.js & Astro. " +
+    "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants.",
+  url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact - Développeuse WordPress Freelance",
+    alt: "Next Impact — WordPress Headless & Next.js",
   },
-  creator: "Agathe - Next Impact",
+  creator: "Agathe Karinthi-Martin",
   keywords: [
     "WordPress",
+    "WordPress Headless",
     "Freelance",
     "Développeuse",
-    "Headless",
     "Next.js",
+    "Astro",
     "React",
     "Site web",
     "Application web",
-    "CMS",
+    "CMS Headless",
   ],
-  authors: [{ name: "Agathe", url: "https://next-impact.digital" }],
+  authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
 };
 
 /**
@@ -99,7 +101,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 
   // Construction des métadonnées
   const metadata: Metadata = {
-    title: `${title} | ${siteConfig.title}`,
+    title,
     description,
     keywords: allKeywords,
     authors: authors
@@ -154,25 +156,39 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 export const pageMetadata = {
   home: (): Metadata =>
     generatePageMetadata({
-      title: "Développeuse WordPress Freelance - Next Impact",
+      title: "Experte WordPress Headless & Next.js — Freelance",
       description:
-        "Développeuse WordPress freelance spécialisée en sites web corporate et applications web Headless. Création, refonte, audit et conseil pour des projets sur-mesure.",
+        "Développeuse freelance spécialisée WordPress Headless + Next.js & Astro. " +
+        "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants. " +
+        "Audit gratuit — réservez une consultation.",
       path: "/",
-      keywords: ["WordPress freelance", "développeuse web", "création site"],
+      keywords: [
+        "WordPress Headless freelance",
+        "développeuse Next.js",
+        "création site headless",
+        "migration WordPress Headless",
+      ],
     }),
 
   services: (): Metadata =>
     generatePageMetadata({
-      title: "Service de création de site web WordPress Headless Next.js - Next Impact",
+      title: "Services WordPress Headless, Next.js & Astro — Création, Refonte, Audit",
       description:
-        "Service de création de site web WordPress Headless Next.js pour les entreprises. Solutions adaptées aux sites à fonctionnalités avancées, exigeances de qualité ou applications web.",
+        "WordPress classique, WordPress custom ou WordPress Headless : " +
+        "des solutions adaptées à votre projet. TPE, PME, services marketing. " +
+        "Devis gratuit.",
       path: "/services",
-      keywords: ["services WordPress", "headless CMS", "développement web"],
+      keywords: [
+        "services WordPress Headless",
+        "création site Next.js",
+        "développement Astro",
+        "refonte WordPress",
+      ],
     }),
 
   audit: (): Metadata =>
     generatePageMetadata({
-      title: "Audit de site web WordPress gratuit - Next Impact",
+      title: "Audit de site web WordPress gratuit",
       description:
         "Obtenez un audit gratuit de votre site WordPress : performance, SEO, sécurité et accessibilité. Analyse complète et recommandations personnalisées.",
       path: "/audit",
@@ -186,52 +202,58 @@ export const pageMetadata = {
 
   contact: (): Metadata =>
     generatePageMetadata({
-      title: "Contact - Demande de devis WordPress",
+      title: "Contact — Demande de devis WordPress Headless",
       description:
         "Contactez-moi pour discuter de votre projet WordPress ou Headless. Devis gratuit et personnalisé sous 48h.",
       path: "/contact",
-      keywords: ["contact", "devis WordPress", "demande projet"],
+      keywords: ["contact", "devis WordPress Headless", "demande projet"],
     }),
 
   caseStudies: (): Metadata =>
     generatePageMetadata({
-      title: "Études de cas - Projets WordPress réalisés par Next Impact",
+      title: "Études de cas WordPress Headless — Réalisations",
       description:
-        "Découvrez mes réalisations WordPress et Headless : sites corporate, applications web, refonte et optimisation. Projets détaillés avec résultats.",
+        "Découvrez les projets réalisés : sites corporate, institutionnels, ESS, " +
+        "headless. Résultats concrets en performance, design et conversion.",
       path: "/etudes-de-cas",
-      keywords: ["portfolio", "réalisations WordPress", "études de cas"],
+      keywords: [
+        "portfolio WordPress Headless",
+        "réalisations Next.js",
+        "études de cas",
+      ],
       image: "/img/desktop-screen-next-event.jpg",
     }),
 
   documentation: (): Metadata =>
     generatePageMetadata({
-      title: "Documentation technique WordPress et Headless",
+      title: "Ressources WordPress Headless & Next.js",
       description:
-        "Guides techniques, tutoriels et bonnes pratiques WordPress, Headless CMS, Next.js et React. Ressources pour développeurs et chefs de projet.",
+        "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
+        "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
       path: "/documentation",
       keywords: [
-        "documentation WordPress",
-        "tutoriels",
+        "documentation WordPress Headless",
+        "tutoriels Next.js",
         "guides techniques",
       ],
     }),
 
   simulateurTarifs: (): Metadata =>
     generatePageMetadata({
-      title: "Simulateur de tarifs - Estimation projet WordPress",
+      title: "Simulateur de tarifs — Estimation projet WordPress",
       description:
         "Estimez le coût de votre projet WordPress ou Headless en quelques clics. Simulateur gratuit pour obtenir une fourchette de prix instantanée.",
       path: "/simulateur-tarifs",
       keywords: [
         "simulateur prix",
-        "tarifs WordPress",
+        "tarifs WordPress Headless",
         "coût site web",
       ],
     }),
 
   brief: (): Metadata =>
     generatePageMetadata({
-      title: "Brief projet - Cahier des charges WordPress",
+      title: "Brief projet — Cahier des charges WordPress",
       description:
         "Créez votre brief de projet WordPress interactif. Outil gratuit pour structurer vos besoins et obtenir un devis précis.",
       path: "/brief",

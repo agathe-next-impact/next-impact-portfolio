@@ -59,10 +59,47 @@ const nunito = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://next-impact.digital'),
-  title: 'Next Impact - Tout pour lancer son site',
+  metadataBase: new URL('https://www.next-impact.digital'),
+  title: {
+    default: 'Next Impact — Experte WordPress Headless & Next.js',
+    template: '%s | Next Impact',
+  },
+  description:
+    'Solutions WordPress Headless avec Next.js et Astro. ' +
+    'Création, refonte, audit et conseil par une développeuse freelance.',
   icons: {
     icon: '/img/logo-small.webp',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'Next Impact',
+    title: 'Next Impact — Experte WordPress Headless & Next.js',
+    description:
+      'Développeuse freelance spécialisée WordPress Headless. ' +
+      'Création, refonte et audit de sites ultra-performants.',
+    url: 'https://www.next-impact.digital',
+    images: [
+      {
+        url: '/img/desktop-screen-next-impact.png',
+        width: 1200,
+        height: 630,
+        alt: 'Next Impact — WordPress Headless & Next.js',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Next Impact — Experte WordPress Headless & Next.js',
+    description:
+      'Développeuse freelance spécialisée WordPress Headless + Next.js.',
+    images: ['/img/desktop-screen-next-impact.png'],
+  },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'fr-FR': '/',
+    },
   },
 }
 

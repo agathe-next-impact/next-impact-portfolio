@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import {
   CheckCircle,
@@ -27,17 +28,17 @@ import TarifsESSCarousel from "@/components/tarifs/TarifsESSCarousel";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Tarifs solidaires - Une technologie d'excellence pour tous les impacts",
+    title: "Tarifs WordPress Headless & Next.js — Forfaits transparents",
     description:
-      "Tarification solidaire basée sur la péréquation : offre Solidaire dès 2 450 €, offre Équilibre à 4 500 €, offre Soutien à partir de 6 500 €. Le numérique performant accessible à l'ESS.",
+      "Tarification solidaire basée sur la péréquation. Offre Solidaire dès 2 250 €, " +
+      "Équilibre à 4 000 €, Soutien à partir de 5 000 €. WordPress Headless accessible à tous.",
     path: "/tarifs",
     keywords: [
-      "tarifs",
+      "tarifs WordPress Headless",
       "prix site web",
       "tarification solidaire",
       "péréquation",
       "ESS",
-      "WordPress Headless",
       "Next.js",
       "association",
     ],
@@ -47,7 +48,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 86400;
 
 export default function TarifsPage() {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Tarifs", url: "/tarifs" },
+  ];
+
   return (
+    <>
+    <BreadcrumbJsonLd items={breadcrumbItems} />
     <PageLayout
       titre="Technologies au service de l'impact."
       sousTitre="Notre tarification solidaire est basée sur la péréquation : la réussite des projets « Business » finance l'accessibilité numérique du secteur associatif."
@@ -417,5 +425,6 @@ export default function TarifsPage() {
       </section>
 
     </PageLayout>
+    </>
   );
 }
