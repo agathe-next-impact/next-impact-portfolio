@@ -19,7 +19,7 @@ const slides = [
           l'ESS et des associations devient un enjeu de survie.
         </p>
           <p className="text-base sm:text-lg font-googletexte text-white/80">
-            Nous créons des{" "}
+            Je crée des{" "}
             <span className="text-lightyellow">
               Web Apps et plateformes Headless
             </span>{" "}

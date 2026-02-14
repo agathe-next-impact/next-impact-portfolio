@@ -88,7 +88,7 @@ export default function EligibilityForm() {
         message:
           "Vous êtes éligible au Tarif Équilibre. C'est le tarif juste pour une structure en croissance.",
         highlight:
-          "Nous ajustons le périmètre selon vos besoins (Astro ou Next.js).",
+          "J'ajuste le périmètre selon vos besoins (Astro ou Next.js).",
       });
       return;
     }

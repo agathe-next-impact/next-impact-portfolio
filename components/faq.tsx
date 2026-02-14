@@ -23,7 +23,7 @@ export default function FAQ() {
                     offrant plus de flexibilité et de performance pour des projets complexes ou multi-plateformes. <br /><br />
                     Le choix dépend de vos besoins : WordPress classique pour la simplicité et les coûts maîtrisés, 
                     Headless pour des performances optimales et une expérience utilisateur sur-mesure. 
-                    Nous analyserons votre projet pour trouver l'approche la plus adaptée.
+                    J'analyserai votre projet pour trouver l'approche la plus adaptée.
                     <br /><br />Quizz en ligne :  
                     <a href="/cms-headless" className="text-regularblue font-medium hover:underline"> Choisir mon CMS</a>.
                   </AccordionContent>
@@ -43,9 +43,9 @@ export default function FAQ() {
                 <AccordionItem value="item-3">
                   <AccordionTrigger>Mon site actuel peut-il être migré vers WordPress sans perdre mon référencement et mes données ?</AccordionTrigger>
                   <AccordionContent>
-                    Oui, nous réalisons des migrations complètes en préservant votre SEO grâce aux redirections 301, à la conservation de vos URLs et métadonnées. 
+                    Oui, je réalise des migrations complètes en préservant votre SEO grâce aux redirections 301, à la conservation de vos URLs et métadonnées. 
                     Toutes vos données (contenus, images, utilisateurs) sont transférées et vérifiées minutieusement. <br /><br />
-                    Nous metterons en place un plan de migration détaillé avec sauvegarde complète de l'existant et tests approfondis avant la mise en ligne. 
+                    Je mettrai en place un plan de migration détaillé avec sauvegarde complète de l'existant et tests approfondis avant la mise en ligne. 
                     Le référencement est généralement maintenu, voire amélioré grâce à l'optimisation technique de WordPress.
                   </AccordionContent>
                 </AccordionItem>

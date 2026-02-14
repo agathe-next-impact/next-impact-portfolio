@@ -9,7 +9,7 @@ export function CTASection() {
             Prêt à transformer votre présence en ligne ?
           </h2>
           <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-4 font-googletexte">
-            Réservez une consultation gratuite de 15 minutes pour discuter de votre projet et découvrir comment nous pouvons vous aider.
+            Réservez une consultation gratuite de 15 minutes pour discuter de votre projet et découvrir comment je peux vous aider.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mt-2">
             <Button className="inline-flex bg-coral py-2 px-8 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in font-googletitre text-white text-lg font-semibold w-full sm:w-auto" asChild>

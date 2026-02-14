@@ -138,7 +138,7 @@ export default function LandingTourisme() {
       {
         question: "Peut-on intégrer un système de réservation ou de billetterie ?",
         answer:
-          "Oui. Selon votre besoin, nous pouvons intégrer un système de réservation externe (Camping.com, OpenAgenda, BilletWeb, etc.) ou développer un formulaire sur mesure avec agenda.",
+          "Oui. Selon votre besoin, je peux intégrer un système de réservation externe (Camping.com, OpenAgenda, BilletWeb, etc.) ou développer un formulaire sur mesure avec agenda.",
       },
       {
         question: "Est-ce que le site m'appartient ?",
