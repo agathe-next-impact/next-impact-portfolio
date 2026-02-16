@@ -73,7 +73,7 @@ function DemoPageClient() {
     <main>
       <PageLayout
         titre="WordPress Headless en action"
-        sousTitre="Découvrez en vidéo le fonctionnement de notre solution WordPress Headless Next.js."
+        sousTitre="Découvrez en vidéo le fonctionnement d'un WordPress Headless Next.js."
       >
         <div id="demo-main-video" className="mt-8 mb-16">
           <section className="max-w-5xl mx-auto px-4 py-12">
