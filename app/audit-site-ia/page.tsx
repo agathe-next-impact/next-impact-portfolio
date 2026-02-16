@@ -9,16 +9,18 @@ export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Audit d'opportunité de migration WordPress Headless avec IA",
+    title: "Audit gratuit : faut-il migrer en WordPress Headless ?",
     description:
-      "Obtenez un audit complet de migration vers WordPress Headless pour votre site web en quelques secondes. Analyse sur votre url avec recommandations personnalisées.",
+      "Testez votre site WordPress gratuitement. " +
+      "Rapport personnalisé avec recommandations de migration headless, " +
+      "ROI projeté et gains de performance.",
     path: "/audit-site-ia",
     keywords: [
-      "audit site web",
+      "audit site web gratuit",
       "audit Headless",
       "migration WordPress Headless",
       "audit IA site web",
-      "WordPress Headless IA",
+      "WordPress Headless",
     ],
   });
 }

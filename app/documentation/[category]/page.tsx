@@ -40,16 +40,18 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
   const description = info?.description || `Articles et ressources sur ${title}.`;
 
   return {
-    title: `${title} | Documentation | Next Impact`,
+    title: `${title} | Documentation`,
     description,
+    alternates: { canonical: `/documentation/${params.category}` },
     openGraph: {
-      title: `${title} | Documentation | Next Impact`,
+      title: `${title} | Documentation`,
       description,
-      url: `https://next-impact.digital/documentation/${params.category}`,
+      url: `https://www.next-impact.digital/documentation/${params.category}`,
       type: "website",
+      siteName: "Next Impact",
       images: [
         {
-          url: "https://next-impact.digital/img/avatar.png",
+          url: "/img/desktop-screen-next-impact.png",
           width: 1200,
           height: 630,
           alt: title,

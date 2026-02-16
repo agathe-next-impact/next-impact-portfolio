@@ -19,16 +19,18 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
   }
 
   return {
-    title: `${post.title} | Next Impact`,
+    title: post.title,
     description: post.description,
+    alternates: { canonical: `/documentation/${post.category}/${post.slug}` },
     openGraph: {
-      title: `${post.title} | Next Impact`,
+      title: post.title,
       description: post.description,
-      url: `https://next-impact.digital/documentation/${post.category}/${post.slug}`,
+      url: `https://www.next-impact.digital/documentation/${post.category}/${post.slug}`,
       type: "article",
+      siteName: "Next Impact",
       images: [
         {
-          url: "https://next-impact.digital/img/avatar.png",
+          url: "/img/desktop-screen-next-impact.png",
           width: 1200,
           height: 630,
           alt: post.title,

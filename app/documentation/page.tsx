@@ -7,23 +7,25 @@ export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title:
-      "Ressources de création de sites web WordPress & Headless | Next Impact",
+    title: "Ressources WordPress Headless & Next.js",
     description:
-      "Explorez notre documentation complète pour maîtriser WordPress, Next.js et les technologies web modernes. Des guides pratiques aux tutoriels avancés, trouvez tout ce dont vous avez besoin pour réussir vos projets.",
+      "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
+      "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
+    alternates: { canonical: "/documentation" },
     openGraph: {
-      title: "Ressources WordPress & Headless | Next Impact",
-      url: "https://next-impact.digital",
+      title: "Ressources WordPress Headless & Next.js",
+      url: "https://www.next-impact.digital/documentation",
       description:
-        "Explorez notre documentation complète pour maîtriser WordPress, Next.js et les technologies web modernes. Des guides pratiques aux tutoriels avancés, trouvez tout ce dont vous avez besoin pour réussir vos projets.",
+        "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
+        "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
       type: "website",
-      siteName: "Next Impact - Développeuse WordPress Freelance",
+      siteName: "Next Impact",
       images: [
         {
-          url: "/img/avatar.webp",
+          url: "/img/desktop-screen-next-impact.png",
           width: 1200,
           height: 630,
-          alt: "Next Impact - Développeuse WordPress Freelance",
+          alt: "Next Impact — WordPress Headless & Next.js",
         },
       ],
     },

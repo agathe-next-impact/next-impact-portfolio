@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { pageMetadata } from "@/lib/metadata"
-import { ServiceJsonLd, FAQJsonLd } from "@/components/json-ld"
+import { ServiceJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 
 import ServicesOffers from "@/components/services/ServicesOffers"
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable"
@@ -105,8 +105,14 @@ export default function ServicesPage() {
     },
   ]
 
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Services", url: "/services" },
+  ];
+
   return (
     <main>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <ServiceJsonLd
         name="Services de création de site web WordPress Headless"
         description="Services de création de site WordPress, Astro et Next.js. Solutions adaptées aux PME, entreprises et startups avec des besoins spécifiques de performance et de fonctionnalités."

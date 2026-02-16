@@ -4,17 +4,17 @@ import { BreadcrumbJsonLd } from "@/components/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Démo vidéo de WordPress Headless",
+    title: "Démo WordPress Headless Next.js — Billeterie événementielle",
     description:
-      "Comment fonctionne WordPress Headless avec Next.js ? Découvrez notre démo vidéo présentant une plateforme événementielle complète propulsée par WordPress Headless.",
+      "Découvrez en live le fonctionnement d'un WordPress Headless " +
+      "avec Next.js sur le cas d'une billeterie en ligne. " +
+      "Performance, flexibilité et back-office WordPress.",
     path: "/demo",
     keywords: [
-      "solutions WordPress",
-      "WordPress Headless",
-      "Astro",
-      "Next.js",
-      "Démo WordPress Headless",
-      "Vidéo WordPress Headless",
+      "démo WordPress Headless",
+      "WordPress Headless Next.js",
+      "billeterie événementielle",
+      "vidéo WordPress Headless",
     ],
   });
 }

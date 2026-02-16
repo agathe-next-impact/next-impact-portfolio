@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function AProposPage() {
   return (
     <PageLayout
-      titre="Next Impact"
+      titre="A propos"
       sousTitre="L'architecture Headless au service de l'ESS et de l'impact social."
     >
 

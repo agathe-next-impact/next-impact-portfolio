@@ -147,11 +147,11 @@ const CASE_STUDIES: CaseStudy[] = [
     },
     detailedDescription: `Comme des fous est un média participatif qui souhaitait moderniser son site web en adoptant une architecture Headless. 
     L'objectif principal était d'améliorer l'expérience utilisateur tout en offrant des performances optimales.
-    \n\nNous avons migré le site existant vers une architecture Headless en utilisant WordPress comme CMS pour la gestion de contenu et Next.js pour le front-end. 
+    \n\J'ai migré le site existant vers une architecture Headless en utilisant WordPress comme CMS pour la gestion de contenu et Next.js pour le front-end. 
     Cette approche a permis de séparer la gestion du contenu de l'affichage, offrant ainsi une plus grande flexibilité et des performances accrues.
     \n\nLe nouveau site offre une expérience utilisateur fluide et réactive, avec des temps de chargement considérablement réduits. 
     De plus, les rédacteurs ont pu conserver exactement la même interface d'administration WordPress qu'ils connaissaient déjà, facilitant ainsi la transition.
-    \n\nNous avons également conservé tout le contenu existant et la structure du site WordPress, seul le front-end a changé, 
+    \n\J'ai également conservé tout le contenu existant et la structure du site WordPress, seul le front-end a changé, 
     garantissant ainsi une continuité pour les lecteurs fidèles du média.",
     `,
     technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
@@ -188,7 +188,7 @@ const CASE_STUDIES: CaseStudy[] = [
         alt: "Page d'accueil du site Next Event",
       },
     detailedDescription:
-      "Next Event est un site de démonstration conçu pour présenter une solution de billetterie événementielle utilisant WordPress en mode Headless. Le site met en avant les événements à venir, permet la gestion des billets et offre une expérience utilisateur optimale.\n\nNous avons développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant les événements et facilitant la navigation.\n\nLe site comprend un système d'agenda pour les événements, une billetterie intégrée et des pages dédiées pour chaque événement.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de promouvoir les événements efficacement.",
+      "Next Event est un site de démonstration conçu pour présenter une solution de billetterie événementielle utilisant WordPress en mode Headless. Le site met en avant les événements à venir, permet la gestion des billets et offre une expérience utilisateur optimale.\n\nJ'ai développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant les événements et facilitant la navigation.\n\nLe site comprend un système d'agenda pour les événements, une billetterie intégrée et des pages dédiées pour chaque événement.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de promouvoir les événements efficacement.",
     technologies: [
       "WordPress",
       "Headless CMS",
@@ -228,7 +228,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Les Etats Généraux Communaux",
     },
     detailedDescription:
-      "Les Etats Généraux Communaux est un site vitrine conçu pour promouvoir un événement citoyen visant à encourager la participation locale. Le site met en avant les ressources, les actualités et facilite la constitution des groupes locaux.\n\nNous avons développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant l'événement et ses objectifs.\n\nLe site comprend une section de ressources téléchargeables, un calendrier des événements et une carte interactive des groupes locaux constitués.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de sensibiliser le public à l'initiative.",
+      "Les Etats Généraux Communaux est un site vitrine conçu pour promouvoir un événement citoyen visant à encourager la participation locale. Le site met en avant les ressources, les actualités et facilite la constitution des groupes locaux.\n\nJ'ai développé un site WordPress en Headless avec Next.js, permettant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant l'événement et ses objectifs.\n\nLe site comprend une section de ressources téléchargeables, un calendrier des événements et une carte interactive des groupes locaux constitués.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, afin d'attirer un maximum de visiteurs et de sensibiliser le public à l'initiative.",
     technologies: [
       "WordPress",
       "Headless CMS",
@@ -275,7 +275,7 @@ const CASE_STUDIES: CaseStudy[] = [
     },
     detailedDescription: `Proditec, une entreprise spécialisée dans la robotique industrielle, avait besoin d'une refonte complète de son site web pour 
       refléter son travail et sa reconnaissance internationale. Leur ancien site était obsolète, difficile à naviguer et à administrer et ne prenait 
-      pas en charge le multilingue.\n\nNous avons créé un site WordPress avec un design responsive et une interface 
+      pas en charge le multilingue.\n\nJ'ai créé un site WordPress avec un design responsive et une interface 
       utilisateur et administrateur technique et efficace pour être utilisées par tous.
       Le site est entièrement multilingue grâce à l'intégration de Polylang, 
       permettant aux visiteurs de choisir leur langue préférée.
@@ -364,7 +364,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Interface de la section blog Sowee",
     },
     detailedDescription:
-      "Sowee, une entreprise spécialisée dans les solutions énergétiques, souhaitait créer une section blog pour son portail Drupal tout en utilisant WordPress. L'objectif était de fournir un espace où l'équipe marketing pourrait publier des articles sur les tendances du secteur, les innovations et les conseils pour les consommateurs.\n\nNous avons développé un thème WordPress personnalisé en respectant les maquettes fournies par l'équipe marketing. Le design est moderne et épuré, avec une navigation intuitive pour les lecteurs.\n\nLa section blog permet à l'équipe de publier facilement des articles, d'ajouter des images et de gérer les catégories.",
+      "Sowee, une entreprise spécialisée dans les solutions énergétiques, souhaitait créer une section blog pour son portail Drupal tout en utilisant WordPress. L'objectif était de fournir un espace où l'équipe marketing pourrait publier des articles sur les tendances du secteur, les innovations et les conseils pour les consommateurs.\n\nJ'ai développé un thème WordPress personnalisé en respectant les maquettes fournies par l'équipe marketing. Le design est moderne et épuré, avec une navigation intuitive pour les lecteurs.\n\nLa section blog permet à l'équipe de publier facilement des articles, d'ajouter des images et de gérer les catégories.",
     technologies: [
       "GeneratePress",
       "WordPress",
@@ -413,7 +413,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Salon de la Carrosserie",
     },
     detailedDescription:
-      "Le Salon de la Carrosserie, un événement majeur pour les professionnels du secteur, avait besoin d'un site vitrine pour promouvoir l'événement et faciliter l'inscription des exposants. L'objectif était de créer un site moderne et fonctionnel qui reflète l'importance de l'événement.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. La page d'accueil présente les informations clés sur l'événement, les exposants et les partenaires.\n\nUn espace d'inscription pour les exposants a été mis en place, permettant aux entreprises de s'inscrire facilement et de gérer leurs disponibilités. Le site est entièrement responsive et optimisé pour le référencement naturel.",
+      "Le Salon de la Carrosserie, un événement majeur pour les professionnels du secteur, avait besoin d'un site vitrine pour promouvoir l'événement et faciliter l'inscription des exposants. L'objectif était de créer un site moderne et fonctionnel qui reflète l'importance de l'événement.\n\nJ'ai développé un site WordPress avec un design épuré et une navigation intuitive. La page d'accueil présente les informations clés sur l'événement, les exposants et les partenaires.\n\nUn espace d'inscription pour les exposants a été mis en place, permettant aux entreprises de s'inscrire facilement et de gérer leurs disponibilités. Le site est entièrement responsive et optimisé pour le référencement naturel.",
     technologies: ["WordPress", "Elementor Pro", "Ultimate Member"],
     duration: "15 jours",
     website: "https://salondelacarrosserie.com",
@@ -456,7 +456,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Tiers Lieu L'Hermitage",
     },
     detailedDescription:
-      "Le Tiers Lieu L'Hermitage, un espace collaboratif d'innovation rurale, souhaitait moderniser son site vitrine tout en conservant son identité. Le site existant était construit avec Divi, ce qui posait des problèmes de performance et de stabilité.\n\nNous avons entrepris une refonte progressive du site en passant à Elementor, un constructeur de pages plus performant et flexible. Le design a été modernisé pour refléter l'identité du Tiers Lieu tout en restant fidèle à ses valeurs.\n\nDes fonctionnalités ont été ajoutées pour faciliter les dons récurrents et les dons dédiés à des projets spécifiques. Le site est désormais stable, rapide et facile à administrer.",
+      "Le Tiers Lieu L'Hermitage, un espace collaboratif d'innovation rurale, souhaitait moderniser son site vitrine tout en conservant son identité. Le site existant était construit avec Divi, ce qui posait des problèmes de performance et de stabilité.\n\nJ'ai entrepris une refonte progressive du site en passant à Elementor, un constructeur de pages plus performant et flexible. Le design a été modernisé pour refléter l'identité du Tiers Lieu tout en restant fidèle à ses valeurs.\n\nDes fonctionnalités ont été ajoutées pour faciliter les dons récurrents et les dons dédiés à des projets spécifiques. Le site est désormais stable, rapide et facile à administrer.",
     technologies: [
       "WordPress",
       "Elementor Pro",
@@ -496,7 +496,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page de service du site ERP Services",
     },
     detailedDescription:
-      "ERP Services, un bureau d'études en ingénierie, avait besoin d'une refonte de son site vitrine pour améliorer la performance et la sécurité tout en conservant l'identité visuelle existante. Le site devait également être plus facile à administrer pour l'équipe interne.\n\nNous avons réalisé une refonte à l'identique du site existant, en améliorant les performances et la sécurité. Le design a été légèrement revu pour une meilleure lisibilité et une navigation intuitive.\n\nLe site met en avant les projets phares d'ERP Services avec des descriptions détaillées et des photos de haute qualité. Des moyens de contact ont été développés pour faciliter la prise de contact avec les clients potentiels.",
+      "ERP Services, un bureau d'études en ingénierie, avait besoin d'une refonte de son site vitrine pour améliorer la performance et la sécurité tout en conservant l'identité visuelle existante. Le site devait également être plus facile à administrer pour l'équipe interne.\n\nJ'ai réalisé une refonte à l'identique du site existant, en améliorant les performances et la sécurité. Le design a été légèrement revu pour une meilleure lisibilité et une navigation intuitive.\n\nLe site met en avant les projets phares d'ERP Services avec des descriptions détaillées et des photos de haute qualité. Des moyens de contact ont été développés pour faciliter la prise de contact avec les clients potentiels.",
     technologies: ["WordPress", "Elementor Pro", "LiteSpeed Cache"],
     duration: "2 semaines",
   },
@@ -528,7 +528,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Senza Nature",
     },
     detailedDescription:
-      "Senza Nature, une entreprise spécialisée dans la vente de produits naturels et bio, avait besoin d'un support et suivi global du site e-commerce pour vendre ses produits en ligne. L'objectif était de maintenir une boutique en ligne stable et performante tout en réalisant des évolutions continues.\n\nNous avons mis en place un suivi global du site, en assurant la maintenance, les mises à jour et les évolutions nécessaires. Le site est construit sur WooCommerce, permettant une gestion facile des produits et des commandes.\n\nDes optimisations techniques ont été mises en place pour améliorer la vitesse de chargement du site, ce qui a permis d'atteindre un score PageSpeed élevé sur mobile et desktop.",
+      "Senza Nature, une entreprise spécialisée dans la vente de produits naturels et bio, avait besoin d'un support et suivi global du site e-commerce pour vendre ses produits en ligne. L'objectif était de maintenir une boutique en ligne stable et performante tout en réalisant des évolutions continues.\n\nJ'ai mis en place un suivi global du site, en assurant la maintenance, les mises à jour et les évolutions nécessaires. Le site est construit sur WooCommerce, permettant une gestion facile des produits et des commandes.\n\nDes optimisations techniques ont été mises en place pour améliorer la vitesse de chargement du site, ce qui a permis d'atteindre un score PageSpeed élevé sur mobile et desktop.",
     technologies: ["WordPress", "Woocommerce", "LiteSpeed Cache"],
     duration: "depuis 2024",
     website: "https://senza-nature.com",
@@ -564,7 +564,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Wagner Hamisky",
     },
     detailedDescription:
-      "Wagner Hamisky, une galerie d'art spécialisée dans la restauration d'œuvres d'art, souhaitait créer un site vitrine pour présenter ses artistes et leurs œuvres, à l'occasion de son ouverture. L'objectif était de fournir un espace d'exposition tout en facilitant la prise de contact avec les clients potentiels.\n\nNous avons développé un site WordPress avec un design moderne et épuré, mettant en avant les œuvres des deux artistes. Le site comprend une galerie d'images et des descriptions détaillées des œuvres..\n\nLe site est entièrement optimisé pour une gestion simple du catalogue des œuvres afin de permettre l'autonomie ultérieure.",
+      "Wagner Hamisky, une galerie d'art spécialisée dans la restauration d'œuvres d'art, souhaitait créer un site vitrine pour présenter ses artistes et leurs œuvres, à l'occasion de son ouverture. L'objectif était de fournir un espace d'exposition tout en facilitant la prise de contact avec les clients potentiels.\n\nJ'ai développé un site WordPress avec un design moderne et épuré, mettant en avant les œuvres des deux artistes. Le site comprend une galerie d'images et des descriptions détaillées des œuvres..\n\nLe site est entièrement optimisé pour une gestion simple du catalogue des œuvres afin de permettre l'autonomie ultérieure.",
     technologies: ["WordPress", "Thème custom", "ACF Pro"],
     duration: "3 semaines",
     website: "https://wagner-hamisky.com",
@@ -599,7 +599,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Mediatico",
     },
     detailedDescription:
-      "Mediatico, un média en ligne dédié à l'actualité de l'économie sociale et solidaire, souhaitait refondre son média pour présenter ses articles et ses partenaires. L'objectif était de fournir un espace d'information accessible et attrayant pour les lecteurs.\n\nNous avons développé un site WordPress avec un design moderne et une navigation intuitive. Le site met en avant les articles récents, les partenaires et sponsors, ainsi qu'un espace dédié aux publications des visiteurs.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, permettant à Mediatico d'attirer un large public intéressé par l'ESS.",
+      "Mediatico, un média en ligne dédié à l'actualité de l'économie sociale et solidaire, souhaitait refondre son média pour présenter ses articles et ses partenaires. L'objectif était de fournir un espace d'information accessible et attrayant pour les lecteurs.\n\nJ'ai développé un site WordPress avec un design moderne et une navigation intuitive. Le site met en avant les articles récents, les partenaires et sponsors, ainsi qu'un espace dédié aux publications des visiteurs.\n\nLe site est entièrement responsive et optimisé pour le référencement naturel, permettant à Mediatico d'attirer un large public intéressé par l'ESS.",
     technologies: ["WordPress", "Gutenberg", "Thème custom"],
     duration: "4 semaines",
     website: "https://mediatico.fr",
@@ -634,7 +634,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site Connexion Plus",
     },
     detailedDescription:
-      "Infralliance, un think and do tank des opérateurs d'infrastructures numériques, souhaitait créer un site vitrine pour présenter ses actions et ses membres.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les actions de l'association, ainsi que son réseau d'opérateurs d'infrastructures numériques.\n\nLe site a été mis en ligne avant l'événement de lancement de l'association, permettant à Infralliance de communiquer efficacement sur ses enjeux et ses projets.",
+      "Infralliance, un think and do tank des opérateurs d'infrastructures numériques, souhaitait créer un site vitrine pour présenter ses actions et ses membres.\n\nJ'ai développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les actions de l'association, ainsi que son réseau d'opérateurs d'infrastructures numériques.\n\nLe site a été mis en ligne avant l'événement de lancement de l'association, permettant à Infralliance de communiquer efficacement sur ses enjeux et ses projets.",
     technologies: ["WordPress", "Elementor Pro", "Advanced Custom Fields"],
     duration: "2 semaines",
     website: "https://infralliance.net",
@@ -668,7 +668,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page d'accueil du site GEM Connexion",
     },
     detailedDescription:
-      "GEM Connexion Plus, un groupe d'entraide mutuelle (GEM) parisien, souhaitait créer un site vitrine pour donner de la visibilité à ses activités et à ses projets. L'objectif était de fournir un espace professionnel et moderne pour attirer de nouveaux membres et partenaires.\n\nNous avons développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les activités du GEM, ainsi que les projets en cours.\n\nUn espace dédié aux membres a été intégré, permettant à chacun de publier ses actualités et de partager ses expériences. Le site est entièrement responsive et optimisé pour le référencement naturel.",
+      "GEM Connexion Plus, un groupe d'entraide mutuelle (GEM) parisien, souhaitait créer un site vitrine pour donner de la visibilité à ses activités et à ses projets. L'objectif était de fournir un espace professionnel et moderne pour attirer de nouveaux membres et partenaires.\n\nJ'ai développé un site WordPress avec un design épuré et une navigation intuitive. Le site met en avant les activités du GEM, ainsi que les projets en cours.\n\nUn espace dédié aux membres a été intégré, permettant à chacun de publier ses actualités et de partager ses expériences. Le site est entièrement responsive et optimisé pour le référencement naturel.",
     technologies: [
       "WordPress",
       "Thème communautaire",
@@ -706,7 +706,7 @@ const CASE_STUDIES: CaseStudy[] = [
       alt: "Page de gestion des subventions du SDEVO",
     },
     detailedDescription:
-      "Le Syndicat départemental des énergies du Val d'Oise (SDEVO) souhaitait créer un plugin WordPress pour gérer les demandes de subventions des communes. L'objectif était de permettre aux communes de soumettre leurs demandes en ligne et de faciliter le suivi pour le SDEVO.\n\nNous avons développé un plugin personnalisé qui permet aux communes de soumettre leurs demandes de subventions via une interface utilisateur intuitive. Le plugin gère également le suivi des demandes, permettant au SDEVO de centraliser et de suivre les demandes de manière efficace.\n\nLe plugin est entièrement intégré à WordPress, ce qui permet une gestion facile et une administration simplifiée pour les utilisateurs du SDEVO.",
+      "Le Syndicat départemental des énergies du Val d'Oise (SDEVO) souhaitait créer un plugin WordPress pour gérer les demandes de subventions des communes. L'objectif était de permettre aux communes de soumettre leurs demandes en ligne et de faciliter le suivi pour le SDEVO.\n\nJ'ai développé un plugin personnalisé qui permet aux communes de soumettre leurs demandes de subventions via une interface utilisateur intuitive. Le plugin gère également le suivi des demandes, permettant au SDEVO de centraliser et de suivre les demandes de manière efficace.\n\nLe plugin est entièrement intégré à WordPress, ce qui permet une gestion facile et une administration simplifiée pour les utilisateurs du SDEVO.",
     technologies: ["WordPress", "PHP", "Plugin custom"],
     duration: "3 semaines",
   },

@@ -26,10 +26,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({ titre, sousTitre, children }) =
         <section className="relative w-full pt-4 md:pt-8 lg:pt-12 xl:pt-12">
             <div className="container px-4 md:px-6">
                 <div className="flex justify-center space-y-4 py-8">
-                    <h1 className="font-medium text-center text-white/80">{titre}</h1>
+                    <h1 className="font-medium text-center text-white">{titre}</h1>
                 </div>
                 {sousTitre && (
-                    <p className="text-xl text-white/70 text-center max-w-2xl mx-auto">{sousTitre}</p>
+                    <p className="text-xl text-white/80 text-center max-w-2xl mx-auto">{sousTitre}</p>
                 )}
             </div>
         </section>

@@ -58,8 +58,8 @@ export function NavBar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/a-propos" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                A propos
+              <Link href="/tarifs" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Tarifs
               </Link>
             </NavigationMenuItem>
                            {/*
@@ -130,10 +130,13 @@ export function NavBar() {
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
                   <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
-                  <MobileMenuLink href="/a-propos" onClick={handleMenuClick}>A propos</MobileMenuLink>
+                  <MobileMenuLink href="/tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-8">Documentation</MobileMenuLink>
 
                   <div className="pl-4 pt-8 flex items-center gap-8 border-t">
+                    <Link href="/a-propos" onClick={handleMenuClick}>
+                    <UserCheck className="w-8 h-8 text-white/90 hover:text-white transition" />
+                    </Link>
                     <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
                       <File className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
@@ -299,6 +302,9 @@ export default function Header() {
             <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
           </div>*/}
+          <Link href="/a-propos" className="hidden md:inline-block">
+          <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
+          </Link>
           <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" className="hidden md:inline-block">
             <File className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>

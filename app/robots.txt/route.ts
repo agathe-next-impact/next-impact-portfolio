@@ -3,13 +3,12 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const content = `
 # Next Impact — robots.txt
-# https://next-impact.digital
+# https://www.next-impact.digital
 
 # Règles par défaut — autoriser l'indexation
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /demo/
 Disallow: /_next/
 
 # Google — accès complet
@@ -31,7 +30,6 @@ Allow: /cms-headless
 Allow: /wp-headless
 Allow: /
 Disallow: /api/
-Disallow: /demo/
 
 User-agent: ChatGPT-User
 Allow: /
@@ -52,7 +50,7 @@ User-agent: PerplexityBot
 Allow: /
 
 # Sitemaps
-Sitemap: https://next-impact.digital/sitemap.xml
+Sitemap: https://www.next-impact.digital/sitemap.xml
   `.trim();
 
   return new NextResponse(content, {

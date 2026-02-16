@@ -30,12 +30,13 @@ export function OrganizationJsonLd() {
     "@type": "ProfessionalService",
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}${siteConfig.ogImage}`,
+    logo: `${siteConfig.url}/img/logo-blanc-carre.png`,
     description: siteConfig.description,
     founder: {
       "@type": "Person",
-      name: "Agathe",
-      jobTitle: "Développeuse WordPress Freelance",
+      name: "Agathe Karinthi-Martin",
+      jobTitle: "Développeuse WordPress Headless",
+      url: "https://www.linkedin.com/in/agat-dev/",
     },
     address: {
       "@type": "PostalAddress",
@@ -46,14 +47,24 @@ export function OrganizationJsonLd() {
       name: "France",
     },
     serviceType: [
-      "Développement WordPress",
-      "WordPress Headless",
+      "Création de sites WordPress Headless",
+      "Migration WordPress vers Headless",
+      "Audit de site WordPress",
       "Développement Next.js",
-      "Audit de site web",
-      "Conseil technique",
+      "Développement Astro",
+    ],
+    priceRange: "€€",
+    knowsAbout: [
+      "WordPress",
+      "WordPress Headless",
+      "Next.js",
+      "Astro",
+      "WPGraphQL",
+      "React",
+      "TypeScript",
     ],
     sameAs: [
-      // Ajouter les profils sociaux ici
+      "https://www.linkedin.com/in/agat-dev/",
     ],
   };
 
