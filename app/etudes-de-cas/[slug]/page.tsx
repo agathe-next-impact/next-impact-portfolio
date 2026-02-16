@@ -1055,8 +1055,7 @@ export default async function CaseStudyPage({
                   >
                     <Link
                       target="_blank"
-                      href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
-                    >
+                      href="https://calendar.google.com/appointments/schedules/AcZssZ3_G3KezHg_JuQ6H4LiHqNU9EBclgf7kqfEEe7_i3nl1ssS70QyLTy2LTDU0evRlq7ZJxexe6Ze">
                       Discuter de votre projet
                     </Link>
                   </Button>
