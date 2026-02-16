@@ -84,6 +84,39 @@ interface CaseStudy {
 // Données d'exemple (à remplacer par vos vraies données)
 const CASE_STUDIES: CaseStudy[] = [
   {
+    id: "16",
+    slug: "comme-des-fous-jeux",
+    title: "Comme des fous - Jeux en ligne",
+    description: "Jeux en ligne du média participatif Comme des fous",
+    imageUrl: "",
+    clientType: "Association",
+    clientName: "Comme des fous",
+    date: {
+      month: 2,
+      year: 2026,
+    },
+    tags: ["Média", "WordPress", "Headless", "Next.js"],
+    objectives: [
+      "Créer une section de jeux en ligne pour engager les lecteurs",
+      "Utiliser une architecture Headless pour une meilleure performance",
+      "Offrir une expérience utilisateur ludique et interactive",
+    ],
+    results: [
+      "Section de jeux en ligne intégrée avec succès",
+      "Engagement accru des lecteurs avec les jeux",
+      "Expérience utilisateur fluide et réactive",
+    ],
+    youtubeVideoId: "SIj61ECS1Mo",
+    gallery: {
+      url: "/img/desktop-screen-comme-des-fous-jeux.jpg",
+      alt: "Jeux en ligne du média Comme des fous",
+    },
+    detailedDescription: `Comme des fous, un média participatif, souhaitait créer une section de jeux en ligne pour engager davantage ses lecteurs. L'objectif était d'offrir une expérience ludique et interactive tout en utilisant une architecture Headless pour garantir des performances optimales.\n\nNous avons développé une section de jeux en ligne intégrée au site WordPress en mode Headless avec Next.js. Les jeux sont conçus pour être engageants et interactifs, encourageant les lecteurs à passer plus de temps sur le site.\n\nLa section de jeux a été un succès, avec un engagement accru des lecteurs et une expérience utilisateur fluide et réactive.`,
+    technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
+    duration: "15 jours",
+    website: "https://jeux.commedesfous.com",
+  },
+  {
     id: "15",
     slug: "comme-des-fous",
     title: "Comme des fous",
@@ -123,6 +156,7 @@ const CASE_STUDIES: CaseStudy[] = [
     `,
     technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
     duration: "2 mois",
+    website: "https://commedesfous.com",
   },
   {
     id: "3",

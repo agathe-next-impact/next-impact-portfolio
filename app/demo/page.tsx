@@ -52,6 +52,14 @@ function DemoPageClient() {
       projectDescription:
         "Une plateforme pour les États Généraux Communaux utilisant WordPress Headless avec Next.js",
     },
+    {
+      title: "Démo 4",
+      url: "https://youtu.be/SIj61ECS1Mo",
+      projectLink: "/etudes-de-cas/comme-des-fous-jeux",
+      projectName: "Section de jeux en ligne pour Comme des Fous",
+      projectDescription:
+        "Une section de jeux en ligne intégrée au site de Comme des Fous, développée en WordPress Headless avec Next.js",
+    }
   ];
 
   const [isPlaying, setIsPlaying] = useState(false);

@@ -10,6 +10,16 @@ import { title } from "node:process";
 // Définition des projets
 const PROJECTS = [
   {
+    id: 16,
+    title: "Comme des fous - Jeux en ligne",
+    type: "headless",
+    image: "/img/desktop-screen-comme-des-fous-jeux.jpg",
+    alt: "Jeux en ligne du média Comme des fous",
+    description: "Jeux en ligne du média participatif Comme des fous",
+    link: "/etudes-de-cas/comme-des-fous-jeux",
+    tab: ["derniers", "headless"],
+  },
+  {
     id: 15,
     title: "Comme des fous - Media WordPress Headless",
     type: "headless",
