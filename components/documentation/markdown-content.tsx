@@ -23,17 +23,17 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
         .replace(/[^\wÀ-ÖØ-öø-ÿ-]/g, "");
 
       let className = "";
-      let border = "";
+      let separator = "";
       if (depth === 1) {
         className = "text-4xl font-medium text-regularblue";
       } else if (depth === 2) {
         className = "text-3xl font-medium text-mediumblue";
-        border = `<hr class="border-t-[1px] border-extralightblue mt-12 mb-2" />`;
+        separator = `<div class="mt-12 mb-4 flex items-center gap-3"><div class="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent"></div><div class="h-1.5 w-1.5 rounded-full bg-regularblue/30"></div><div class="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent"></div></div>`;
       } else {
         className = "text-2xl font-medium text-mediumblue";
       }
 
-      return `${border}<h${depth} id="${anchor}" class="${className}">${text}</h${depth}>`;
+      return `${separator}<h${depth} id="${anchor}" class="${className}">${text}</h${depth}>`;
     };
 
     marked.setOptions({

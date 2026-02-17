@@ -199,15 +199,28 @@ html, body {
   .mentions-legales h2 {
     @apply text-3xl;
   }
+  /* ── Article text – base ── */
   .article-text {
     @apply font-googletexte leading-relaxed;
   }
+
+  /* ── Paragraphs ── */
   .article-text p {
-    @apply text-mediumblue/80 text-base mb-5;
+    @apply text-mediumblue/80 text-base mb-6;
+    line-height: 1.8;
   }
+  .article-text > p:first-child {
+    @apply text-lg text-mediumblue/90 font-medium;
+    line-height: 1.75;
+  }
+
+  /* ── List items base ── */
   .article-text li {
     @apply text-mediumblue/80;
+    line-height: 1.75;
   }
+
+  /* ── Headings ── */
   .article-text h1, .article-text h2, .article-text h3, .article-text h4 {
     @apply text-darkblue font-googletitre;
   }
@@ -215,71 +228,136 @@ html, body {
     @apply text-3xl font-medium mb-4 mt-8;
   }
   .article-text h2 {
-    @apply text-2xl font-medium mb-3 mt-10;
+    @apply text-2xl font-medium mb-4 mt-6 pl-4 border-l-4 border-regularblue/60 py-1;
   }
   .article-text h3 {
-    @apply text-xl font-medium mb-3 mt-8;
+    @apply text-xl font-medium mb-3 mt-8 relative pl-5;
   }
+  .article-text h3::before {
+    content: "—";
+    @apply absolute left-0 text-regularblue/50 font-bold;
+  }
+
+  /* ── Unordered lists ── */
   .article-text ul, .article-text ol {
-    @apply mb-5 pl-6 space-y-2;
+    @apply mb-6 pl-6 space-y-2.5;
   }
   .article-text ul {
     list-style-type: none;
   }
   .article-text ul li {
-    @apply relative pl-5;
+    @apply relative pl-6;
   }
   .article-text ul li::before {
-    content: "";
-    @apply absolute left-0 top-2.5 h-1.5 w-1.5 rounded-full bg-regularblue/50;
+    content: "›";
+    @apply absolute left-0 top-0 text-regularblue/70 text-lg font-bold;
   }
+
+  /* ── Ordered lists ── */
   .article-text ol {
-    @apply list-decimal;
+    list-style-type: none;
+    counter-reset: article-counter;
   }
   .article-text ol li {
-    @apply pl-1;
+    @apply relative pl-8;
+    counter-increment: article-counter;
   }
-  .article-text ol li::marker {
-    @apply text-regularblue/50 font-medium;
+  .article-text ol li::before {
+    content: counter(article-counter);
+    @apply absolute left-0 top-0.5 w-5 h-5 rounded-full bg-regularblue/15 text-regularblue text-xs font-bold flex items-center justify-center;
   }
+
+  /* ── Blockquotes ── */
   .article-text blockquote {
-    @apply border-l-4 border-regularblue/30 bg-regularblue/5 rounded-r-2xl px-5 py-4 my-6 italic;
+    @apply relative border-l-4 border-regularblue/40 bg-gradient-to-r from-regularblue/5 to-transparent rounded-r-2xl pl-10 pr-5 py-5 my-8 italic;
+  }
+  .article-text blockquote::before {
+    content: "\201C";
+    @apply absolute left-3 -top-2 text-4xl text-regularblue/25 font-serif;
   }
   .article-text blockquote p {
-    @apply text-mediumblue/70 mb-0;
+    @apply text-mediumblue/70 mb-0 text-base;
   }
+
+  /* ── Inline code ── */
   .article-text code {
     @apply text-regularblue bg-regularblue/10 rounded-md px-1.5 py-0.5 text-sm font-mono;
   }
+
+  /* ── Code blocks ── */
   .article-text pre {
-    @apply rounded-2xl bg-darkblue text-extralightblue/80 p-5 my-6 overflow-x-auto text-sm leading-relaxed;
+    @apply relative rounded-2xl bg-darkblue text-extralightblue/80 p-5 my-8 overflow-x-auto text-sm leading-relaxed;
+  }
+  .article-text pre::before {
+    content: "CODE";
+    @apply absolute top-3 right-4 text-[10px] tracking-widest text-lightblue/30 font-mono uppercase;
   }
   .article-text pre code {
     @apply bg-transparent p-0 text-inherit rounded-none;
   }
+
+  /* ── Links ── */
   .article-text a {
-    @apply text-regularblue underline underline-offset-2 decoration-regularblue/30 hover:decoration-regularblue/60 transition-colors;
+    @apply text-regularblue underline underline-offset-4 decoration-regularblue/30 hover:decoration-regularblue/80 transition-all duration-200;
   }
+
+  /* ── Strong / bold ── */
   .article-text strong {
     @apply text-darkblue font-semibold;
+    box-shadow: inset 0 -0.35em 0 0 rgba(31, 84, 191, 0.08);
   }
+
+  /* ── Images ── */
   .article-text img {
-    @apply rounded-2xl my-6 shadow-lg;
+    @apply rounded-2xl my-8 shadow-lg;
   }
+
+  /* ── Horizontal rules (section separators) ── */
   .article-text hr {
-    @apply border-extralightblue my-10;
+    @apply my-12 border-none h-px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--lightblue) 20%,
+      var(--regularblue) 50%,
+      var(--lightblue) 80%,
+      transparent 100%
+    );
+    opacity: 0.3;
   }
+
+  /* ── Tables ── */
   .article-text table {
-    @apply w-full my-6 text-sm border-collapse;
+    @apply w-full my-8 text-sm border-collapse rounded-xl overflow-hidden;
   }
   .article-text th {
-    @apply bg-regularblue/10 text-darkblue font-medium text-left px-4 py-2.5 border-b-2 border-regularblue/20;
+    @apply bg-regularblue/10 text-darkblue font-semibold text-left px-4 py-3 border-b-2 border-regularblue/20 text-xs uppercase tracking-wider;
   }
   .article-text td {
-    @apply px-4 py-2.5 border-b border-extralightblue text-mediumblue/70;
+    @apply px-4 py-3 border-b border-extralightblue/80 text-mediumblue/70;
+  }
+  .article-text tr:nth-child(even) td {
+    @apply bg-regularblue/[0.02];
   }
   .article-text tr:hover td {
     @apply bg-regularblue/5;
+  }
+
+  /* ── Override article-text styles inside diagnostic ── */
+  .article-text .diagnostic-dark h3,
+  .article-text .diagnostic-dark h4 {
+    @apply text-white border-none pl-0;
+  }
+  .article-text .diagnostic-dark h3::before {
+    content: none;
+  }
+  .article-text .diagnostic-dark p,
+  .article-text .diagnostic-dark span,
+  .article-text .diagnostic-dark li {
+    @apply text-white/70;
+  }
+  .article-text .diagnostic-dark a {
+    @apply text-white/70 no-underline;
   }
 }
 

@@ -222,8 +222,8 @@ function getRecommendation(score: number): Recommendation {
       description:
         "Votre contexte actuel est mieux servi par un WordPress bien configuré. Optimisez le cache, les images et l'hébergement pour des résultats immédiats.",
       color: "text-coral",
-      bgColor: "bg-coral/5",
-      borderColor: "border-coral/20",
+      bgColor: "bg-coral/10",
+      borderColor: "border-coral/30",
       articles: [
         {
           title: "Pourquoi utiliser WordPress",
@@ -246,8 +246,8 @@ function getRecommendation(score: number): Recommendation {
       description:
         "Votre situation se prête aux deux approches. Arbitrez selon vos priorités : le headless si la performance ou le multi-canal est stratégique, le traditionnel si le budget ou le calendrier prime.",
       color: "text-orange",
-      bgColor: "bg-orange/5",
-      borderColor: "border-orange/20",
+      bgColor: "bg-orange/10",
+      borderColor: "border-orange/30",
       articles: [
         {
           title: "Quand utiliser WordPress headless",
@@ -268,9 +268,9 @@ function getRecommendation(score: number): Recommendation {
     title: "WordPress headless fortement recommandé",
     description:
       "Les bénéfices du headless — performance sub-seconde, design sur mesure, distribution multi-canal — justifient pleinement l'investissement dans votre contexte.",
-    color: "text-regularblue",
-    bgColor: "bg-regularblue/5",
-    borderColor: "border-regularblue/20",
+    color: "text-lightblue",
+    bgColor: "bg-regularblue/15",
+    borderColor: "border-regularblue/30",
     articles: [
       {
         title: "Comment créer un headless",
@@ -351,7 +351,7 @@ function ScoreGauge({ score }: { score: number }) {
         <div className="relative flex flex-col items-center -mt-1">
           <div
             className={cn(
-              "h-5 w-5 rounded-full border-[3px] border-white shadow-md",
+              "h-5 w-5 rounded-full border-[3px] border-darkblue shadow-md shadow-black/30",
               score < 5
                 ? "bg-coral"
                 : score <= 10
@@ -362,7 +362,7 @@ function ScoreGauge({ score }: { score: number }) {
         </div>
       </motion.div>
 
-      <div className="flex justify-between mt-3 text-[11px] font-googletexte text-mediumblue/80">
+      <div className="flex justify-between mt-3 text-[11px] font-googletexte text-white/50">
         <span>WP traditionnel</span>
         <span>Zone mixte</span>
         <span>Headless</span>
@@ -398,19 +398,19 @@ function StepBreakdown({ answers }: { answers: (number | null)[][] }) {
             transition={{ delay: 1 + stepIdx * 0.1 }}
             className="flex items-center gap-3"
           >
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-regularblue/10">
-              <Icon className="h-3.5 w-3.5 text-regularblue" />
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10">
+              <Icon className="h-3.5 w-3.5 text-lightblue" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-googletexte text-mediumblue/80 truncate">
+                <span className="text-xs font-googletexte text-white/70 truncate">
                   {step.title}
                 </span>
-                <span className="text-xs font-mono text-mediumblue/80 ml-2">
+                <span className="text-xs font-mono text-white/50 ml-2">
                   {stepScore}/{step.maxPoints}
                 </span>
               </div>
-              <div className="h-1.5 rounded-full bg-extralightblue overflow-hidden">
+              <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
                 <motion.div
                   className={cn(
                     "h-full rounded-full",
@@ -557,21 +557,21 @@ export function HeadlessDiagnostic() {
   };
 
   return (
-    <div className="my-10 rounded-3xl border border-extralightblue bg-white overflow-hidden shadow-sm">
+    <div className="diagnostic-dark my-10 rounded-3xl border border-lightblue/20 bg-gradient-to-br from-darkblue to-mediumblue overflow-hidden shadow-lg">
       {/* Barre de progression */}
       {currentStep >= 0 && (
         <div className="px-6 pt-5 pb-0">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-googletexte text-mediumblue/80">
+            <span className="text-xs font-googletexte text-white/60">
               {currentStep >= 5
                 ? "Résultats"
                 : `Étape ${currentStep + 1} sur 5`}
             </span>
-            <span className="text-xs font-mono text-mediumblue/80">
+            <span className="text-xs font-mono text-white/60">
               {Math.round(progressPercent)}%
             </span>
           </div>
-          <Progress value={progressPercent} className="h-1.5 bg-extralightblue" />
+          <Progress value={progressPercent} className="h-1.5 bg-white/10" />
         </div>
       )}
 
@@ -590,20 +590,20 @@ export function HeadlessDiagnostic() {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="flex flex-col items-center text-center py-8"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-regularblue/10 mb-5">
-                <Sparkles className="h-8 w-8 text-regularblue" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 mb-5">
+                <Sparkles className="h-8 w-8 text-lightblue" />
               </div>
-              <h3 className="font-googletitre text-2xl md:text-3xl font-medium text-darkblue mb-3">
+              <h3 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-3">
                 Auto-diagnostic headless
               </h3>
-              <p className="font-googletexte text-mediumblue/80 max-w-md mb-8 text-sm leading-relaxed">
+              <p className="font-googletexte text-white/60 max-w-md mb-8 text-sm leading-relaxed">
                 Évaluez en 5 critères si l&apos;architecture WordPress headless
                 + Next.js est adaptée à votre projet. Résultat personnalisé et
                 partageable.
               </p>
               <button
                 onClick={goNext}
-                className="inline-flex items-center gap-2 rounded-2xl bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-white hover:bg-mediumblue transition-colors"
+                className="inline-flex items-center gap-2 rounded-2xl bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-white hover:bg-lightblue hover:text-darkblue transition-colors"
               >
                 Commencer le diagnostic
                 <ArrowRight className="h-4 w-4" />
@@ -628,14 +628,14 @@ export function HeadlessDiagnostic() {
                 return (
                   <div>
                     <div className="flex items-center gap-3 mb-1">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-regularblue/10">
-                        <Icon className="h-5 w-5 text-regularblue" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                        <Icon className="h-5 w-5 text-lightblue" />
                       </div>
                       <div>
-                        <h3 className="font-googletitre text-lg font-medium text-darkblue">
+                        <h3 className="font-googletitre text-lg font-medium text-white">
                           {step.title}
                         </h3>
-                        <p className="text-xs font-googletexte text-mediumblue/80">
+                        <p className="text-xs font-googletexte text-white/60">
                           {step.description}
                         </p>
                       </div>
@@ -644,7 +644,7 @@ export function HeadlessDiagnostic() {
                     <div className="space-y-6 mt-6">
                       {step.questions.map((q, qIdx) => (
                         <div key={qIdx}>
-                          <p className="font-googletexte text-sm font-medium text-mediumblue mb-3">
+                          <p className="font-googletexte text-sm font-medium text-white/90 mb-3">
                             {q.question}
                           </p>
                           <div className="space-y-2">
@@ -659,8 +659,8 @@ export function HeadlessDiagnostic() {
                                     "w-full text-left rounded-xl px-4 py-3 text-sm font-googletexte transition-all border",
                                     "flex items-center justify-between gap-3",
                                     isSelected
-                                      ? "bg-regularblue/10 border-regularblue/40 text-darkblue"
-                                      : "bg-white border-extralightblue text-mediumblue/80 hover:bg-regularblue/5 hover:border-regularblue/20"
+                                      ? "bg-regularblue/20 border-regularblue/50 text-white"
+                                      : "bg-white/5 border-lightblue/15 text-white/70 hover:bg-white/10 hover:border-lightblue/30"
                                   )}
                                 >
                                   <div className="flex items-center gap-3">
@@ -669,7 +669,7 @@ export function HeadlessDiagnostic() {
                                         "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all",
                                         isSelected
                                           ? "border-regularblue bg-regularblue"
-                                          : "border-extralightblue"
+                                          : "border-white/30"
                                       )}
                                     >
                                       {isSelected && (
@@ -686,10 +686,10 @@ export function HeadlessDiagnostic() {
                                     className={cn(
                                       "shrink-0 rounded-full px-2 py-0.5 text-xs font-mono",
                                       opt.points > 0
-                                        ? "bg-regularblue/10 text-regularblue"
+                                        ? "bg-regularblue/20 text-lightblue"
                                         : opt.points < 0
-                                          ? "bg-coral/10 text-coral"
-                                          : "bg-extralightblue text-mediumblue/80"
+                                          ? "bg-coral/20 text-coral"
+                                          : "bg-white/10 text-white/50"
                                     )}
                                   >
                                     {opt.points > 0 ? `+${opt.points}` : opt.points}{" "}
@@ -706,7 +706,7 @@ export function HeadlessDiagnostic() {
                     <div className="flex items-center justify-between mt-8">
                       <button
                         onClick={goPrev}
-                        className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-googletexte text-mediumblue/80 hover:text-mediumblue hover:bg-extralightblue/50 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors"
                       >
                         <ArrowLeft className="h-4 w-4" />
                         {currentStep === 0 ? "Accueil" : "Précédent"}
@@ -717,8 +717,8 @@ export function HeadlessDiagnostic() {
                         className={cn(
                           "inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-googletitre font-medium transition-all",
                           canProceed
-                            ? "bg-regularblue text-white hover:bg-mediumblue"
-                            : "bg-extralightblue text-mediumblue/80 cursor-not-allowed"
+                            ? "bg-regularblue text-white hover:bg-lightblue hover:text-darkblue"
+                            : "bg-white/10 text-white/30 cursor-not-allowed"
                         )}
                       >
                         {currentStep === 4 ? "Voir les résultats" : "Suivant"}
@@ -754,7 +754,7 @@ export function HeadlessDiagnostic() {
                   }}
                   className="inline-flex flex-col items-center"
                 >
-                  <span className="text-xs font-googletexte text-mediumblue/80 mb-1">
+                  <span className="text-xs font-googletexte text-white/60 mb-1">
                     Votre score
                   </span>
                   <span
@@ -765,7 +765,7 @@ export function HeadlessDiagnostic() {
                   >
                     <AnimatedScore value={totalScore} />
                   </span>
-                  <span className="text-sm font-googletexte text-mediumblue/80 mt-1">
+                  <span className="text-sm font-googletexte text-white/60 mt-1">
                     sur {TOTAL_MAX} points
                   </span>
                 </motion.div>
@@ -800,7 +800,7 @@ export function HeadlessDiagnostic() {
                     >
                       {recommendation.title}
                     </h4>
-                    <p className="text-sm font-googletexte text-mediumblue/80 mt-1 leading-relaxed">
+                    <p className="text-sm font-googletexte text-white/70 mt-1 leading-relaxed">
                       {recommendation.description}
                     </p>
                   </div>
@@ -814,7 +814,7 @@ export function HeadlessDiagnostic() {
                 transition={{ delay: 0.8 }}
                 className="mt-6"
               >
-                <h4 className="text-xs font-googletexte text-mediumblue/80 uppercase tracking-wider mb-3">
+                <h4 className="text-xs font-googletexte text-white/50 uppercase tracking-wider mb-3">
                   Détail par critère
                 </h4>
                 <StepBreakdown answers={answers} />
@@ -827,7 +827,7 @@ export function HeadlessDiagnostic() {
                 transition={{ delay: 1.4 }}
                 className="mt-6"
               >
-                <h4 className="text-xs font-googletexte text-mediumblue/80 uppercase tracking-wider mb-3">
+                <h4 className="text-xs font-googletexte text-white/50 uppercase tracking-wider mb-3">
                   Articles recommandés
                 </h4>
                 <div className="space-y-2">
@@ -835,7 +835,7 @@ export function HeadlessDiagnostic() {
                     <Link
                       key={article.href}
                       href={article.href}
-                      className="flex items-center gap-2 rounded-xl border border-extralightblue px-4 py-2.5 text-sm font-googletexte text-mediumblue/80 hover:text-regularblue hover:bg-regularblue/5 hover:border-regularblue/20 transition-all"
+                      className="flex items-center gap-2 rounded-xl border border-lightblue/15 px-4 py-2.5 text-sm font-googletexte text-white/70 hover:text-white hover:bg-white/10 hover:border-lightblue/30 transition-all"
                     >
                       <ChevronRight className="h-3.5 w-3.5 shrink-0" />
                       {article.title}
@@ -848,14 +848,14 @@ export function HeadlessDiagnostic() {
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
                 <button
                   onClick={reset}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-extralightblue px-4 py-2.5 text-sm font-googletexte text-mediumblue/80 hover:text-mediumblue hover:bg-extralightblue/50 transition-colors flex-1"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-lightblue/20 px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors flex-1"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Refaire le diagnostic
                 </button>
                 <button
                   onClick={shareResults}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-white hover:bg-mediumblue transition-colors flex-1"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-white hover:bg-lightblue hover:text-darkblue transition-colors flex-1"
                 >
                   <Share2 className="h-4 w-4" />
                   {copied ? "Lien copié !" : "Partager le résultat"}
