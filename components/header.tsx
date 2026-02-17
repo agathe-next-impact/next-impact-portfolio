@@ -313,9 +313,6 @@ export default function Header() {
           <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" className="hidden md:inline-block">
             <File className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>
-          <Link href="/documentation" className="hidden md:inline-block">
-            <DatabaseIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
           <Link href="tel:0673981638" className="hidden md:inline-block">
             <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
           </Link>

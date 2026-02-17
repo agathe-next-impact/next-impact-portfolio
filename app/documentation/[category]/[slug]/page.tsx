@@ -195,7 +195,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   </div>
                 </div>
                 <div className="ml-auto">
-                  <ShareSocial url={`/documentation/${article.category}/${article.slug}`} />
+                  <ShareSocial url={`/documentation/${article.category}/${article.slug}`} title={article.title} />
                 </div>
               </div>
             </div>
