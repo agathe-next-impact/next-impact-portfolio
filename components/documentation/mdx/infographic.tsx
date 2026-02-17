@@ -31,12 +31,12 @@ export function FlowDiagram({ nodes, direction = "horizontal", accent = "blue" }
   return (
     <div className={cn(
       "my-8 flex items-center gap-3 flex-wrap justify-center",
-      !isHorizontal && "flex-col"
+      !isHorizontal ? "flex-col" : "flex-col sm:flex-row"
     )}>
       {nodes.map((node, i) => (
         <div key={i} className={cn("contents")}>
           <div className={cn(
-            "rounded-2xl border p-4 text-center min-w-[120px] max-w-[200px]",
+            "rounded-2xl border p-3 sm:p-4 text-center min-w-[100px] sm:min-w-[120px] max-w-[200px] w-full sm:w-auto",
             style.nodeBg, style.nodeBorder
           )}>
             {node.icon && <span className="text-2xl mb-1 block">{node.icon}</span>}
@@ -75,16 +75,16 @@ const layerColors = {
 export function ArchitectureDiagram({ layers, title }: ArchitectureDiagramProps) {
   if (!layers || !Array.isArray(layers)) return null;
   return (
-    <div className="my-8 rounded-2xl border border-extralightblue bg-extralightblue/20 p-6">
+    <div className="my-8 rounded-2xl border border-extralightblue bg-extralightblue/20 p-3 sm:p-6">
       {title && (
-        <p className="text-center font-googletitre font-medium text-darkblue text-sm mb-5">{title}</p>
+        <p className="text-center font-googletitre font-medium text-darkblue text-sm mb-3 sm:mb-5">{title}</p>
       )}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         {layers.map((layer, i) => {
           const style = layerColors[layer.color || "blue"];
           return (
             <div key={i}>
-              <div className={cn("rounded-xl border p-4", style.bg, style.border)}>
+              <div className={cn("rounded-xl border p-3 sm:p-4", style.bg, style.border)}>
                 <p className="text-xs font-googletexte font-medium text-mediumblue/80 uppercase tracking-wider mb-2">
                   {layer.label}
                 </p>
@@ -120,7 +120,7 @@ export function HighlightBox({ title, children, accent = "blue" }: HighlightBoxP
   const isOrange = accent === "orange";
   return (
     <div className={cn(
-      "my-8 rounded-2xl p-6 border",
+      "my-8 rounded-2xl p-4 sm:p-6 border",
       isOrange ? "bg-orange/5 border-orange/20" : "bg-regularblue/5 border-regularblue/20"
     )}>
       {title && (

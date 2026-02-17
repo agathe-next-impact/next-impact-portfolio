@@ -829,8 +829,8 @@ export default async function CaseStudyPage({
 
       {/* Contenu principal */}
       <div className="container relative z-10 px-4 md:px-6 pb-6 -mt-12 rounded-3xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-extralightblue/90 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
-          <div className="lg:col-span-2 space-y-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-start bg-extralightblue/90 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-10">
             {/* Galerie */}
             <section>
               <h2 className="text-2xl md:mb-6 text-mediumblue">
@@ -884,7 +884,7 @@ export default async function CaseStudyPage({
             </section>
 
             {/* Objectifs et résultats */}
-            <section className="grid md:grid-cols-2 gap-8">
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               <div>
                 <h2 className="text-2xl md:mb-6 text-mediumblue">Objectifs</h2>
                 <ul className="space-y-3">
@@ -1066,9 +1066,9 @@ export default async function CaseStudyPage({
         </div>
 
         {/* Autres projets similaires */}
-        <section className="my-16">
-          <h2 className="text-2xl text-white mb-8">Projets similaires</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="my-8 sm:my-16">
+          <h2 className="text-2xl text-white mb-6 sm:mb-8">Projets similaires</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {similarCaseStudies.map((study) => (
               <Link
                 key={study.id}

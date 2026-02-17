@@ -24,15 +24,15 @@ export function ComparisonTable({ headers, rows, highlight }: ComparisonTablePro
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr>
-            <th className="text-left px-4 py-3 bg-extralightblue/50 text-darkblue font-googletitre font-medium border-b border-extralightblue w-1/3" />
+            <th className="text-left px-2 sm:px-4 py-2 sm:py-3 bg-extralightblue/50 text-darkblue font-googletitre font-medium border-b border-extralightblue w-1/3 text-xs sm:text-sm" />
             <th className={cn(
-              "text-center px-4 py-3 font-googletitre font-medium border-b border-extralightblue",
+              "text-center px-2 sm:px-4 py-2 sm:py-3 font-googletitre font-medium border-b border-extralightblue text-xs sm:text-sm",
               highlight === "left" ? "bg-regularblue/10 text-regularblue" : "bg-extralightblue/50 text-darkblue"
             )}>
               {headers[0]}
             </th>
             <th className={cn(
-              "text-center px-4 py-3 font-googletitre font-medium border-b border-extralightblue",
+              "text-center px-2 sm:px-4 py-2 sm:py-3 font-googletitre font-medium border-b border-extralightblue text-xs sm:text-sm",
               highlight === "right" ? "bg-regularblue/10 text-regularblue" : "bg-extralightblue/50 text-darkblue"
             )}>
               {headers[1]}
@@ -42,17 +42,17 @@ export function ComparisonTable({ headers, rows, highlight }: ComparisonTablePro
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="hover:bg-regularblue/5 transition-colors">
-              <td className="px-4 py-3 text-darkblue font-googletexte font-medium border-b border-extralightblue/50">
+              <td className="px-2 sm:px-4 py-2 sm:py-3 text-darkblue font-googletexte font-medium border-b border-extralightblue/50 text-xs sm:text-sm">
                 {row.label}
               </td>
               <td className={cn(
-                "text-center px-4 py-3 border-b border-extralightblue/50",
+                "text-center px-2 sm:px-4 py-2 sm:py-3 border-b border-extralightblue/50",
                 highlight === "left" && "bg-regularblue/5"
               )}>
                 <CellValue value={row.left} />
               </td>
               <td className={cn(
-                "text-center px-4 py-3 border-b border-extralightblue/50",
+                "text-center px-2 sm:px-4 py-2 sm:py-3 border-b border-extralightblue/50",
                 highlight === "right" && "bg-regularblue/5"
               )}>
                 <CellValue value={row.right} />

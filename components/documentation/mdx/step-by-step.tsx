@@ -30,12 +30,12 @@ interface StepProps {
 
 export function Step({ number, title, children }: StepProps) {
   return (
-    <div className="relative pl-12 pb-8 last:pb-0">
+    <div className="relative pl-9 sm:pl-12 pb-6 sm:pb-8 last:pb-0">
       {/* Vertical line */}
-      <div className="absolute left-[15px] top-10 bottom-0 w-px bg-extralightblue last:hidden" />
+      <div className="absolute left-[11px] sm:left-[15px] top-8 sm:top-10 bottom-0 w-px bg-extralightblue last:hidden" />
       {/* Number circle */}
-      <div className="absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-regularblue/10 border border-regularblue/20">
-        <span className="text-sm font-googletitre font-bold text-regularblue">{number}</span>
+      <div className="absolute left-0 top-0 flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-regularblue/10 border border-regularblue/20">
+        <span className="text-xs sm:text-sm font-googletitre font-bold text-regularblue">{number}</span>
       </div>
       {/* Content */}
       <div>

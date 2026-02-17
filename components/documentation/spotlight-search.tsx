@@ -112,26 +112,26 @@ export function SpotlightSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed left-1/2 top-[20%] z-[70] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-3xl border border-lightblue/20 bg-darkblue/90 backdrop-blur-xl shadow-2xl shadow-darkblue/50 overflow-hidden"
+            className="fixed left-4 right-4 top-[15%] sm:left-1/2 sm:right-auto sm:top-[20%] sm:w-[calc(100%-2rem)] z-[70] max-w-lg sm:-translate-x-1/2 rounded-3xl border border-lightblue/20 bg-darkblue/90 backdrop-blur-xl shadow-2xl shadow-darkblue/50 overflow-hidden"
           >
             {/* Search input */}
-            <div className="flex items-center gap-3 border-b border-lightblue/10 px-5 py-4">
+            <div className="flex items-center gap-2 sm:gap-3 border-b border-lightblue/10 px-3 sm:px-5 py-3 sm:py-4">
               <Search className="h-5 w-5 text-lightblue/80 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Rechercher dans la documentation..."
+                placeholder="Rechercher..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-transparent text-white placeholder:text-white/80 outline-none text-base font-googletexte"
+                className="flex-1 min-w-0 bg-transparent text-white placeholder:text-white/80 outline-none text-sm sm:text-base font-googletexte"
               />
-              <kbd className="rounded-md bg-white/10 px-2 py-0.5 text-xs text-white/80 font-mono shrink-0">
+              <kbd className="hidden sm:inline-block rounded-md bg-white/10 px-2 py-0.5 text-xs text-white/80 font-mono shrink-0">
                 Esc
               </kbd>
             </div>
 
             {/* Results */}
-            <div className="max-h-80 overflow-y-auto p-2">
+            <div className="max-h-[60vh] sm:max-h-80 overflow-y-auto p-1.5 sm:p-2">
               {filtered.length === 0 ? (
                 <p className="py-8 text-center text-sm text-white/80 font-googletexte">
                   Aucun résultat trouvé
@@ -142,15 +142,15 @@ export function SpotlightSearch() {
                     key={`${article.category}-${article.slug}`}
                     onClick={() => handleSelect(article)}
                     className={cn(
-                      "flex w-full items-start gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
+                      "flex w-full items-start gap-2 sm:gap-3 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-left transition-all duration-200",
                       index === activeIndex
                         ? "bg-regularblue/20 border border-regularblue/30 text-white"
                         : "text-white/80 hover:bg-mediumblue/40 border border-transparent"
                     )}
                   >
                     <FileText className="mt-0.5 h-4 w-4 shrink-0 text-lightblue/80" />
-                    <div>
-                      <div className="text-sm font-medium font-googletexte text-inherit">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-medium font-googletexte text-inherit truncate">
                         {article.title}
                       </div>
                       <p className="text-xs text-white/80 line-clamp-1 font-googletexte">

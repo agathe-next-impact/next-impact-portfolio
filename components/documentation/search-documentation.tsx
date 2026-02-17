@@ -85,8 +85,8 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
   }
 
   return (
-    <div className="relative w-full max-w-xl" ref={searchRef}>
-      <div className="relative">
+    <div className="w-full" ref={searchRef}>
+      <div className="relative max-w-2xl mx-auto">
         <Input
           ref={inputRef}
           type="search"
@@ -97,61 +97,58 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
           onFocus={() => setIsSearching(true)}
           onKeyDown={handleKeyDown}
         />
-        {/* Croix supprimée */}
       </div>
 
-      {isSearching && (searchQuery || filteredCategories.length > 0 || filteredArticles.length > 0) && (
-        <div className="absolute top-full z-10 w-full rounded-md bg-darkblue/90 shadow-md">
-          <div className="p-2">
-            {filteredCategories.length === 0 && filteredArticles.length === 0 ? (
-              <p className="text-center text-sm py-6">No results found</p>
-            ) : (
-              <>
-                {filteredCategories.length > 0 && (
-                  <div className="mb-4">
-                    <h3 className="text-sm font-medium text-white mb-2">Categories</h3>
-                    <ul className="space-y-2">
-                      {filteredCategories.map((category) => (
-                        <li key={category.id}>
-                          <Link
-                            href={category.url}
-                            className="block rounded-md p-2 hover:bg-mediumblue/50 border-b border-white/10"
-                            onClick={() => setIsSearching(false)}
-                          >
-                            <div className="font-medium text-white">{category.title}</div>
-                            <div className="text-sm text-extralightblue/70">{category.description}</div>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+      {isSearching && searchQuery.trim() !== "" && (
+        <div className="mt-6 w-full">
+          {filteredCategories.length === 0 && filteredArticles.length === 0 ? (
+            <p className="text-center text-sm text-white/80 py-6">Aucun résultat trouvé</p>
+          ) : (
+            <div className="space-y-6">
+              {filteredCategories.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium font-googletexte text-white/80 mb-3">Catégories</h3>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {filteredCategories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={category.url}
+                        className="block rounded-xl p-4 bg-mediumblue/80 backdrop-blur-md border border-lightblue/10 hover:border-lightblue/20 transition-colors"
+                        onClick={() => setIsSearching(false)}
+                      >
+                        <div className="font-medium font-googletexte text-white">{category.title}</div>
+                        <div className="text-sm text-white/80 font-googletexte mt-1">{category.description}</div>
+                      </Link>
+                    ))}
                   </div>
-                )}
+                </div>
+              )}
 
-                {filteredArticles.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-white mb-2">Articles</h3>
-                    <ul className="space-y-2">
-                      {filteredArticles.map((article) => (
-                        <li key={article.slug}>
-                          <Link
-                            href={`/documentation/${article.category}/${article.slug}`}
-                            className="block p-2 hover:bg-mediumblue/50 border-b border-white/10"
-                            onClick={() => setIsSearching(false)}
-                          >
-                            <div className="font-medium text-white">{article.title}</div>
-                            <div className="text-sm text-extralightblue/70">{article.description}</div>
-                            <div className="mt-1 text-xs text-extralightblue/80">
-                              Categorie: {categories.find((c) => c.id === article.category)?.title || article.category}
-                            </div>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+              {filteredArticles.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium font-googletexte text-white/80 mb-3">
+                    Articles ({filteredArticles.length})
+                  </h3>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {filteredArticles.map((article) => (
+                      <Link
+                        key={article.slug}
+                        href={`/documentation/${article.category}/${article.slug}`}
+                        className="block rounded-xl p-4 bg-mediumblue/80 backdrop-blur-md border border-lightblue/10 hover:border-lightblue/20 transition-colors"
+                        onClick={() => setIsSearching(false)}
+                      >
+                        <div className="font-medium font-googletexte text-white">{article.title}</div>
+                        <div className="text-sm text-white/80 font-googletexte mt-1 line-clamp-2">{article.description}</div>
+                        <div className="mt-2 text-xs text-extralightblue/80 font-googletexte">
+                          {categories.find((c) => c.id === article.category)?.title || article.category}
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                )}
-              </>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

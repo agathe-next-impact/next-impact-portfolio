@@ -44,13 +44,13 @@ function CalloutDemo() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide sm:overflow-visible sm:flex-wrap">
         {calloutVariants.map((v) => (
           <button
             key={v}
             onClick={() => setVariant(v)}
             className={cn(
-              "rounded-full px-3 py-1 text-xs font-googletexte border transition-all",
+              "rounded-full px-3 py-1 text-xs font-googletexte border transition-all whitespace-nowrap shrink-0",
               variant === v
                 ? "bg-regularblue/30 text-white border-regularblue/40"
                 : "bg-darkblue/40 text-white/80 border-lightblue/10 hover:text-white/80"
@@ -60,7 +60,7 @@ function CalloutDemo() {
           </button>
         ))}
       </div>
-      <div className="rounded-2xl bg-extralightblue/90 p-5">
+      <div className="rounded-2xl bg-extralightblue/90 p-3 sm:p-5">
         <div className="article-text text-mediumblue">
           <Callout variant={variant} title={`Exemple de callout « ${variant} »`}>
             Ce composant adapte son icône, sa couleur et son style en fonction de la variante sélectionnée. Il est utilisé dans les articles pour contextualiser l&apos;information selon le profil du lecteur.
@@ -131,7 +131,7 @@ function StatsDemo() {
           </button>
         ))}
       </div>
-      <div className="rounded-2xl bg-extralightblue/90 p-5">
+      <div className="rounded-2xl bg-extralightblue/90 p-3 sm:p-5">
         <div className="article-text text-mediumblue">
           <StatGrid>
             <StatCard value="40%" label="du web mondial" description="Part de marché WordPress" accent={accent} />
@@ -185,7 +185,7 @@ function FlowDemo() {
           </button>
         ))}
       </div>
-      <div className="rounded-2xl bg-extralightblue/90 p-5">
+      <div className="rounded-2xl bg-extralightblue/90 p-3 sm:p-5">
         <div className="article-text text-mediumblue">
           <FlowDiagram
             nodes={[
@@ -241,7 +241,7 @@ function HighlightDemo() {
           </button>
         ))}
       </div>
-      <div className="rounded-2xl bg-extralightblue/90 p-5">
+      <div className="rounded-2xl bg-extralightblue/90 p-3 sm:p-5">
         <div className="article-text text-mediumblue">
           <HighlightBox title="Points clés à retenir" accent={accent}>
             <ul>
@@ -273,7 +273,7 @@ export function MdxGallery() {
   const activeItem = components.find((c) => c.id === active)!;
 
   return (
-    <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-6 md:p-8 space-y-6">
+    <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
       <div>
         <h3 className="font-googletitre text-xl text-white font-medium">
           Galerie de composants MDX
@@ -284,13 +284,13 @@ export function MdxGallery() {
       </div>
 
       {/* Component selector */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {components.map((c) => (
           <button
             key={c.id}
             onClick={() => setActive(c.id)}
             className={cn(
-              "rounded-full px-3 py-1.5 text-xs font-googletexte border transition-all duration-200",
+              "rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-googletexte border transition-all duration-200",
               active === c.id
                 ? "bg-regularblue/30 text-white border-regularblue/40"
                 : "bg-darkblue/40 text-white/80 border-lightblue/10 hover:bg-darkblue/60 hover:text-white/80"

@@ -103,41 +103,44 @@ export function VideoGallery() {
         </div>
 
         {/* Playlist */}
-        <div className="lg:col-span-2 space-y-2">
-          <p className="text-xs text-white/80 font-googletexte uppercase tracking-wider mb-3">
+        <div className="lg:col-span-2 space-y-1 sm:space-y-2">
+          <p className="text-xs text-white/80 font-googletexte uppercase tracking-wider mb-2 sm:mb-3">
             {videos.length} projets
           </p>
-          {videos.map((video, index) => (
-            <button
-              key={video.id}
-              onClick={() => setActiveId(video.id)}
-              className={cn(
-                "flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-all duration-200 border",
-                activeId === video.id
-                  ? "bg-regularblue/15 border-regularblue/30 text-white"
-                  : "border-transparent text-white/80 hover:bg-darkblue/40 hover:text-white/80"
-              )}
-            >
-              <span
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-hide">
+            {videos.map((video, index) => (
+              <button
+                key={video.id}
+                onClick={() => setActiveId(video.id)}
                 className={cn(
-                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-mono",
+                  "flex items-center gap-2 sm:gap-3 rounded-2xl p-2 sm:p-3 text-left transition-all duration-200 border shrink-0 lg:shrink lg:w-full",
+                  "min-w-[200px] lg:min-w-0",
                   activeId === video.id
-                    ? "bg-orange/20 text-orange"
-                    : "bg-darkblue/40 text-white/80"
+                    ? "bg-regularblue/15 border-regularblue/30 text-white"
+                    : "border-transparent text-white/80 hover:bg-darkblue/40 hover:text-white/80"
                 )}
               >
-                {index + 1}
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-medium font-googletexte truncate">
-                  {video.title}
-                </p>
-                <p className="text-xs text-white/80 font-googletexte truncate">
-                  {video.description}
-                </p>
-              </div>
-            </button>
-          ))}
+                <span
+                  className={cn(
+                    "flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-xl text-xs font-mono",
+                    activeId === video.id
+                      ? "bg-orange/20 text-orange"
+                      : "bg-darkblue/40 text-white/80"
+                  )}
+                >
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs sm:text-sm font-medium font-googletexte truncate">
+                    {video.title}
+                  </p>
+                  <p className="text-xs text-white/80 font-googletexte truncate hidden sm:block">
+                    {video.description}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

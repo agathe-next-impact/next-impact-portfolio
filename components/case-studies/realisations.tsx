@@ -185,35 +185,35 @@ export default function Realisations({ count }: RealisationsProps) {
     <section id="realisations" className="relative overflow-hidden">
       <div className="container relative p-0">
         <Tabs defaultValue="derniers" className="w-full">
-          <div className="flex justify-center mb-12">
-            <TabsList className="flex flex-wrap md:bg-white/10 bg-transparent backdrop-blur-sm p-1 rounded-full">
+          <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
+            <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
               <TabsTrigger
                 value="derniers"
-                className="rounded-full data-[state=active]:bg-background/10"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
                 Réalisations marquantes
               </TabsTrigger>
               <TabsTrigger
                 value="corporate"
-                className="rounded-full data-[state=active]:bg-background/10"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
                 Corporate
               </TabsTrigger>
               <TabsTrigger
                 value="institutional"
-                className="rounded-full data-[state=active]:bg-background/10"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
                 Institutionnel
               </TabsTrigger>
-			        <TabsTrigger
+              <TabsTrigger
                 value="ess"
-                className="rounded-full data-[state=active]:bg-background/10"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
                 ESS
               </TabsTrigger>
               <TabsTrigger
                 value="headless"
-                className="rounded-full data-[state=active]:bg-background/10"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
                 Headless
               </TabsTrigger>
