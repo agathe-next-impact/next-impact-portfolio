@@ -1,0 +1,242 @@
+---
+title: "Déployer un site headless avec Vercel et Next.js"
+description: "Guide de déploiement d'un frontend Next.js sur Vercel connecté à un WordPress headless en production."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 21
+---
+
+## Vue d'ensemble du déploiement headless
+
+En architecture headless, le frontend Next.js et le backend WordPress sont hébergés séparément. Le frontend est déployé sur une plateforme optimisée pour les applications JavaScript (Vercel, Netlify, AWS Amplify), tandis que WordPress reste sur un hébergement PHP classique ou managé.
+
+<ArchitectureDiagram
+  title="Infrastructure de déploiement headless"
+  layers={[
+    { label: "CDN / Edge Network", items: ["Distribution mondiale", "Cache statique", "Protection DDoS", "Certificat SSL"], color: "dark" },
+    { label: "Frontend — Vercel", items: ["Next.js (SSR + SSG)", "Fonctions Serverless", "Preview Deployments", "Analytics"], color: "blue" },
+    { label: "API", items: ["REST API / WPGraphQL", "Webhooks ISR", "Authentification"], color: "orange" },
+    { label: "Backend — WordPress", items: ["Hébergement PHP managé", "Base de données MySQL", "Médias (CDN images)", "Back-office"], color: "dark" },
+  ]}
+/>
+
+## Pourquoi Vercel pour un frontend Next.js
+
+Vercel est la plateforme créée par l'équipe qui développe Next.js. Elle offre une intégration native avec toutes les fonctionnalités du framework.
+
+<StatGrid>
+  <StatCard value="~50" label="régions edge" description="Réseau mondial de distribution pour des temps de réponse minimaux" accent="blue" />
+  <StatCard value="<1s" label="de déploiement à déploiement" description="Chaque push Git déclenche un build et un déploiement automatique" accent="orange" />
+  <StatCard value="100%" label="de compatibilité Next.js" description="ISR, Server Components, Middleware, Image Optimization natifs" accent="coral" />
+</StatGrid>
+
+## Connecter le dépôt Git
+
+<StepByStep>
+  <Step number={1} title="Créer un compte Vercel">
+    Rendez-vous sur vercel.com et connectez-vous avec votre compte GitHub, GitLab ou Bitbucket. Le plan gratuit (Hobby) est suffisant pour un projet personnel ou un prototype.
+  </Step>
+  <Step number={2} title="Importer le dépôt Git">
+    Cliquez sur "New Project" et sélectionnez le dépôt contenant votre application Next.js. Vercel détecte automatiquement le framework et configure les paramètres de build.
+  </Step>
+  <Step number={3} title="Configurer les variables d'environnement">
+    Ajoutez les variables d'environnement nécessaires dans les paramètres du projet Vercel : `WORDPRESS_API_URL`, `WORDPRESS_AUTH_TOKEN`, `REVALIDATION_SECRET`. Ces valeurs sont chiffrées et accessibles uniquement au moment du build et de l'exécution serverless.
+  </Step>
+  <Step number={4} title="Lancer le premier déploiement">
+    Cliquez sur "Deploy". Vercel exécute `npm install`, puis `next build`, puis déploie le résultat sur son réseau edge. L'URL de production est disponible immédiatement.
+  </Step>
+</StepByStep>
+
+## Variables d'environnement
+
+Les variables d'environnement sont configurées dans le tableau de bord Vercel (Settings > Environment Variables). Elles peuvent être définies par environnement : Production, Preview et Development.
+
+```bash
+# Variables nécessaires pour un frontend headless
+WORDPRESS_API_URL=https://admin.votre-site.fr/wp-json
+WORDPRESS_AUTH_TOKEN=token_secret_pour_endpoints_protégés
+REVALIDATION_SECRET=secret_partagé_pour_webhooks_isr
+
+# Variables optionnelles
+NEXT_PUBLIC_SITE_URL=https://www.votre-site.fr
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+<Callout variant="developpeur" title="Différence entre variables serveur et client">
+Les variables préfixées par `NEXT_PUBLIC_` sont incluses dans le bundle JavaScript envoyé au navigateur. Ne stockez jamais de secrets (tokens, clés API privées) dans des variables `NEXT_PUBLIC_`. Les variables sans préfixe sont accessibles uniquement côté serveur (Server Components, Route Handlers, fonctions serverless).
+</Callout>
+
+## Paramètres de build
+
+Vercel détecte automatiquement un projet Next.js et applique les paramètres suivants :
+
+| Paramètre | Valeur par défaut | Personnalisation |
+|---|---|---|
+| Framework Preset | Next.js | Automatique |
+| Build Command | `next build` | Modifiable (`npm run build`) |
+| Output Directory | `.next` | Automatique |
+| Install Command | `npm install` | Modifiable (`pnpm install`, `yarn`) |
+| Node.js Version | 18.x | Configurable (18.x, 20.x) |
+
+## Preview Deployments
+
+Chaque pull request ou push sur une branche non-production génère automatiquement un "Preview Deployment" avec une URL unique. Cette fonctionnalité permet de vérifier visuellement les modifications avant de les fusionner.
+
+```
+# Exemple d'URL de preview
+https://votre-projet-git-branch-name-votre-equipe.vercel.app
+```
+
+Les preview deployments utilisent les variables d'environnement de l'environnement "Preview", ce qui permet de pointer vers un serveur WordPress de staging si nécessaire.
+
+## Domaine personnalisé
+
+La configuration du domaine personnalisé s'effectue dans Settings > Domains :
+
+1. Ajoutez votre domaine (par exemple `www.votre-site.fr`)
+2. Configurez les enregistrements DNS chez votre registrar :
+   - `CNAME` : `www` vers `cname.vercel-dns.com`
+   - `A` : `@` vers `76.76.21.21` (pour le domaine apex sans www)
+3. Vercel génère et renouvelle automatiquement le certificat SSL
+
+<Callout variant="tip" title="Séparation des domaines">
+Utilisez des domaines ou sous-domaines distincts pour le frontend et le backend. Par exemple : `www.votre-site.fr` pour le frontend Next.js et `admin.votre-site.fr` pour le back-office WordPress. Cette séparation clarifie l'architecture et facilite la gestion des certificats SSL et des règles DNS.
+</Callout>
+
+## Hébergement WordPress : les options
+
+Le backend WordPress nécessite un hébergement PHP avec MySQL. Plusieurs options existent selon les besoins de performance et de budget.
+
+<ComparisonTable
+  headers={["Hébergement mutualisé", "VPS / Serveur dédié", "WordPress managé"]}
+  rows={[
+    { label: "Coût mensuel", left: "5-15 €", right: "25-100 €" },
+    { label: "Performance", left: "Variable, ressources partagées", right: "Élevée, ressources dédiées" },
+    { label: "Administration", left: "Minimale", right: "Complète (VPS) ou déléguée (managé)" },
+    { label: "Exemples", left: "OVH, o2switch", right: "Kinsta, WP Engine, DigitalOcean" },
+    { label: "Adapté pour", left: "Sites à faible trafic, prototypes", right: "Production, trafic élevé" },
+  ]}
+/>
+
+En mode headless, les performances du serveur WordPress ont moins d'impact sur l'expérience utilisateur car les pages sont pré-générées (SSG) ou mises en cache (ISR). Le serveur WordPress est sollicité principalement au moment du build et lors des revalidations.
+
+## Pipeline CI/CD : déploiement automatique
+
+Le pipeline CI/CD avec Vercel fonctionne automatiquement :
+
+1. **Push sur `main`** : déclenche un déploiement en production
+2. **Push sur une branche** : déclenche un preview deployment
+3. **Pull request** : crée un preview deployment et ajoute un commentaire avec l'URL
+
+Aucune configuration CI/CD supplémentaire n'est nécessaire. Pour des besoins avancés (tests avant déploiement, linting), ajoutez des GitHub Actions en complément.
+
+```yaml
+# .github/workflows/ci.yml — tests avant déploiement
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+```
+
+## Revalidation à la demande (On-Demand ISR)
+
+L'ISR (Incremental Static Regeneration) permet de mettre à jour les pages statiques sans redéployer l'ensemble du site. Un webhook WordPress déclenche la revalidation lorsqu'un contenu est modifié.
+
+```typescript
+// app/api/revalidate/route.ts
+import { revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const secret = request.headers.get('x-revalidation-secret');
+
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return NextResponse.json({ message: 'Invalid secret' }, { status: 401 });
+  }
+
+  const { post_type, slug } = body;
+
+  if (post_type === 'post') {
+    revalidatePath(`/articles/${slug}`);
+    revalidatePath('/articles');
+  } else if (post_type === 'page') {
+    revalidatePath(`/${slug}`);
+  }
+
+  revalidatePath('/'); // Revalider la page d'accueil
+
+  return NextResponse.json({ revalidated: true });
+}
+```
+
+Côté WordPress, un hook envoie la requête de revalidation lors de la publication ou de la mise à jour d'un contenu :
+
+```php
+// functions.php — webhook de revalidation ISR
+add_action('save_post', function ($post_id) {
+  if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) return;
+
+  $post = get_post($post_id);
+  if ($post->post_status !== 'publish') return;
+
+  wp_remote_post('https://www.votre-site.fr/api/revalidate', [
+    'headers' => [
+      'Content-Type' => 'application/json',
+      'x-revalidation-secret' => REVALIDATION_SECRET,
+    ],
+    'body' => json_encode([
+      'post_type' => $post->post_type,
+      'slug' => $post->post_name,
+    ]),
+  ]);
+}, 10, 1);
+```
+
+## Monitoring et analytics
+
+Vercel fournit des outils de suivi intégrés :
+
+- **Analytics** : trafic, pages vues, visiteurs uniques
+- **Speed Insights** : Core Web Vitals mesurés sur les données terrain (LCP, CLS, FID)
+- **Logs** : logs des fonctions serverless et des erreurs de build
+- **Usage** : consommation de bande passante, invocations serverless, temps d'exécution
+
+## Plateformes alternatives
+
+<ComparisonTable
+  headers={["Vercel", "Netlify", "AWS Amplify"]}
+  rows={[
+    { label: "Compatibilité Next.js", left: "Native et complète", right: "Bonne (quelques limitations ISR)" },
+    { label: "Plan gratuit", left: "Hobby (1 membre)", right: "Starter (1 membre)" },
+    { label: "Edge Functions", left: "Oui (Middleware natif)", right: "Oui" },
+    { label: "Preview Deployments", left: "Automatique par PR", right: "Automatique par PR" },
+    { label: "Écosystème", left: "Intégration Next.js native", right: "Plus généraliste" },
+  ]}
+/>
+
+<Callout variant="decideur" title="Coûts en production">
+Le plan gratuit de Vercel convient pour un site personnel ou un prototype. En production avec du trafic significatif, le plan Pro (20 $/mois par membre) offre des limites plus élevées en bande passante, en invocations serverless et en membres d'équipe. Les sites à très fort trafic doivent évaluer le plan Enterprise avec des tarifs personnalisés.
+</Callout>
+
+<Quiz
+  question="Qu'est-ce que l'On-Demand ISR permet de faire dans un site headless ?"
+  options={[
+    "Reconstruire l'intégralité du site à chaque modification de contenu",
+    "Mettre à jour des pages statiques individuelles sans redéployer le site entier",
+    "Générer les pages côté client dans le navigateur du visiteur",
+    "Remplacer le cache du navigateur à chaque visite"
+  ]}
+  answer={1}
+  explanation="L'ISR à la demande (On-Demand ISR) permet de revalider des pages statiques spécifiques lorsqu'un contenu est modifié dans WordPress. Un webhook déclenche la revalidation uniquement des pages concernées, sans nécessiter un redéploiement complet du site. Cela combine les avantages du rendu statique (performance, SEO) avec la fraîcheur du contenu dynamique."
+/>

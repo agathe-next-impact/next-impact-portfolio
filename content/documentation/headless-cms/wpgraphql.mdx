@@ -1,0 +1,353 @@
+---
+title: "WPGraphQL : requêter WordPress avec GraphQL"
+description: "Installer et utiliser WPGraphQL pour exposer le contenu WordPress via un endpoint GraphQL performant."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 8
+---
+
+## GraphQL et REST : deux approches pour accéder aux données
+
+L'API REST de WordPress expose des endpoints fixes : chaque URL retourne une structure de données prédéfinie. GraphQL fonctionne différemment : un endpoint unique (`/graphql`) reçoit des requêtes qui décrivent précisément les données souhaitées. Le serveur retourne exactement ces données, rien de plus.
+
+<ComparisonTable
+  headers={["API REST", "GraphQL (WPGraphQL)"]}
+  highlight="right"
+  rows={[
+    { label: "Endpoints", left: "Un endpoint par ressource (/posts, /pages, /media)", right: "Un endpoint unique (/graphql)" },
+    { label: "Données retournées", left: "Structure fixe — tous les champs de la ressource", right: "Uniquement les champs demandés dans la requête" },
+    { label: "Relations", left: "Requêtes multiples ou paramètre _embed", right: "Relations résolues en une seule requête" },
+    { label: "Overfetching", left: "Fréquent — données inutiles transférées", right: "Éliminé — réponse sur mesure" },
+    { label: "Underfetching", left: "Fréquent — nécessite plusieurs requêtes", right: "Éliminé — toutes les données en une requête" },
+    { label: "Documentation", left: "Manuelle ou via le schéma REST", right: "Auto-générée et explorable via GraphiQL" },
+    { label: "Typage", left: "Non typé nativement", right: "Schéma fortement typé" }
+  ]}
+/>
+
+Le problème principal de l'API REST dans un contexte headless est le transfert de données inutiles (overfetching). Pour afficher une liste d'articles avec titre, slug et image, l'API REST retourne l'intégralité de chaque article : contenu complet, meta-données, données de l'auteur, etc. Avec GraphQL, la requête spécifie exactement `title`, `slug` et `featuredImage`, et la réponse ne contient que ces champs.
+
+## Installer WPGraphQL
+
+WPGraphQL est un plugin gratuit et open-source qui ajoute un serveur GraphQL à WordPress. Il est disponible sur le répertoire officiel des plugins WordPress.
+
+<StepByStep>
+  <Step number={1} title="Installer le plugin">
+    Dans le back-office WordPress, accédez à Extensions > Ajouter. Recherchez "WPGraphQL" et cliquez sur "Installer". Activez le plugin une fois l'installation terminée.
+  </Step>
+  <Step number={2} title="Vérifier l'endpoint">
+    L'endpoint GraphQL est immédiatement disponible à l'adresse `https://votre-site.com/graphql`. Vous pouvez le tester dans un navigateur : une page d'erreur JSON confirme que le serveur GraphQL est actif.
+  </Step>
+  <Step number={3} title="Accéder à GraphiQL IDE">
+    Dans le menu WordPress, un nouvel onglet "GraphQL" apparaît. Il donne accès à GraphiQL, un environnement interactif qui permet de composer, tester et documenter des requêtes GraphQL directement dans le navigateur.
+  </Step>
+  <Step number={4} title="Configurer les réglages">
+    Dans GraphQL > Settings, vous pouvez personnaliser le chemin de l'endpoint, activer le mode debug et configurer les types de contenu exposés.
+  </Step>
+</StepByStep>
+
+## Écrire des requêtes GraphQL
+
+### Requête de base : récupérer des articles
+
+```graphql
+query DerniersArticles {
+  posts(first: 10) {
+    nodes {
+      id
+      title
+      slug
+      date
+      excerpt
+    }
+  }
+}
+```
+
+Cette requête retourne exactement 5 champs pour chacun des 10 derniers articles. En REST, la même opération retournerait plus de 30 champs par article.
+
+### Requête avec relations imbriquées
+
+GraphQL résout les relations en une seule requête. Pour récupérer des articles avec leur auteur et leur image mise en avant :
+
+```graphql
+query ArticlesComplets {
+  posts(first: 6) {
+    nodes {
+      title
+      slug
+      date
+      author {
+        node {
+          name
+          avatar {
+            url
+          }
+        }
+      }
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+}
+```
+
+En REST, cette même combinaison de données nécessiterait au minimum 3 requêtes séparées (articles, auteurs, médias) ou l'utilisation du paramètre `_embed` qui retourne un volume de données bien supérieur au nécessaire.
+
+### Requêter des pages
+
+```graphql
+query PageParSlug {
+  pageBy(uri: "a-propos") {
+    title
+    content
+    date
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+      }
+    }
+  }
+}
+```
+
+### Récupérer les médias
+
+```graphql
+query GalerieImages {
+  mediaItems(first: 20) {
+    nodes {
+      sourceUrl
+      altText
+      mediaDetails {
+        width
+        height
+        sizes {
+          name
+          sourceUrl
+          width
+          height
+        }
+      }
+    }
+  }
+}
+```
+
+## Variables et fragments
+
+### Variables
+
+Les variables rendent les requêtes réutilisables en séparant la structure de la requête des valeurs dynamiques.
+
+```graphql
+query ArticleParSlug($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    title
+    content
+    date
+    author {
+      node {
+        name
+      }
+    }
+  }
+}
+```
+
+Variables JSON associées :
+
+```json
+{
+  "slug": "mon-article-headless"
+}
+```
+
+En JavaScript (côté Next.js) :
+
+```javascript
+async function fetchPost(slug) {
+  const query = `
+    query ArticleParSlug($slug: ID!) {
+      post(id: $slug, idType: SLUG) {
+        title
+        content
+        date
+        author {
+          node { name }
+        }
+      }
+    }
+  `;
+
+  const response = await fetch('https://votre-site.com/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables: { slug } })
+  });
+
+  const { data } = await response.json();
+  return data.post;
+}
+```
+
+### Fragments
+
+Les fragments évitent la répétition de champs communs entre plusieurs requêtes.
+
+```graphql
+fragment InfoArticle on Post {
+  title
+  slug
+  date
+  excerpt
+  featuredImage {
+    node {
+      sourceUrl
+      altText
+    }
+  }
+}
+
+query AccueilEtBlog {
+  articlesRecents: posts(first: 3) {
+    nodes {
+      ...InfoArticle
+    }
+  }
+  articlesPopulaires: posts(first: 3, where: { orderby: { field: COMMENT_COUNT, order: DESC } }) {
+    nodes {
+      ...InfoArticle
+    }
+  }
+}
+```
+
+## Pagination par curseur
+
+WPGraphQL utilise une pagination par curseur, conforme à la spécification Relay. Ce système est plus fiable que la pagination par offset, car il n'est pas affecté par l'insertion ou la suppression de contenu entre deux requêtes.
+
+```graphql
+query ArticlesPagines($after: String) {
+  posts(first: 10, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      title
+      slug
+      date
+    }
+  }
+}
+```
+
+Pour récupérer la page suivante, transmettez la valeur de `endCursor` dans la variable `$after` de la requête suivante. Répétez l'opération tant que `hasNextPage` est `true`.
+
+<Callout variant="tip" title="Pagination et génération statique">
+En SSG (Static Site Generation) avec Next.js, la pagination par curseur permet de pré-générer toutes les pages de listing au build. Bouclez sur les requêtes en suivant les curseurs jusqu'à ce que `hasNextPage` soit `false`, puis générez une page statique pour chaque lot de résultats.
+</Callout>
+
+## Mutations : écrire des données
+
+Les mutations permettent de créer, modifier ou supprimer du contenu. Elles nécessitent une authentification.
+
+```graphql
+mutation CreerArticle($title: String!, $content: String!) {
+  createPost(input: {
+    title: $title
+    content: $content
+    status: DRAFT
+  }) {
+    post {
+      id
+      title
+      slug
+      status
+    }
+  }
+}
+```
+
+<Callout variant="warning" title="Authentification des mutations">
+Les mutations nécessitent un utilisateur WordPress authentifié avec les permissions appropriées. Utilisez un plugin comme WPGraphQL JWT Authentication ou transmettez un Application Password via l'en-tête Authorization. Les mutations ne doivent jamais être exécutées depuis le navigateur du visiteur.
+</Callout>
+
+## Intégration avec Advanced Custom Fields
+
+Le plugin WPGraphQL for ACF expose automatiquement les champs ACF dans le schéma GraphQL. Après installation, les champs personnalisés sont accessibles dans les requêtes.
+
+```graphql
+query ProjetPortfolio($slug: ID!) {
+  projet(id: $slug, idType: SLUG) {
+    title
+    projetFields {
+      client
+      annee
+      url
+      technologies
+      description
+    }
+    featuredImage {
+      node {
+        sourceUrl
+      }
+    }
+  }
+}
+```
+
+Le champ `projetFields` correspond au groupe de champs ACF assigné au type de contenu "Projet". Chaque champ ACF est automatiquement typé dans le schéma GraphQL (String, Int, Float, Boolean, MediaItem, etc.).
+
+## Performances : REST vs GraphQL en chiffres
+
+<StatGrid>
+  <StatCard value="1" label="requête" description="GraphQL résout articles + auteurs + images en une seule requête" accent="blue" />
+  <StatCard value="-60%" label="de données transférées" description="Réduction moyenne du volume JSON par rapport à REST avec _embed" accent="orange" />
+  <StatCard value="3-5" label="requêtes REST" description="Nombre de requêtes nécessaires pour obtenir les mêmes données imbriquées" accent="coral" />
+</StatGrid>
+
+<ArchitectureDiagram
+  title="Architecture WordPress + WPGraphQL + Next.js"
+  layers={[
+    { label: "WordPress CMS", items: ["Contenu", "ACF", "Médias", "Taxonomies"], color: "dark" },
+    { label: "WPGraphQL", items: ["Schéma typé", "Endpoint /graphql", "GraphiQL IDE"], color: "blue" },
+    { label: "Next.js Frontend", items: ["Server Components", "fetch GraphQL", "SSG / SSR", "Cache"], color: "orange" }
+  ]}
+/>
+
+## Bonnes pratiques
+
+- Utilisez des noms explicites pour vos requêtes (`query DerniersArticles`, pas `query Q1`) : cela facilite le debug et le monitoring.
+- Limitez la profondeur des requêtes pour éviter les requêtes trop coûteuses côté serveur. WPGraphQL inclut une protection par défaut contre les requêtes excessivement profondes.
+- Utilisez les fragments pour les structures de données récurrentes dans votre application.
+- Activez le cache HTTP (`Cache-Control`) ou un plugin de cache objet (Redis) côté WordPress pour accélérer les réponses GraphQL.
+- Combinez WPGraphQL avec `next/cache` ou `unstable_cache` dans Next.js pour mettre en cache les résultats des requêtes et réduire la charge sur le serveur WordPress.
+
+<Quiz
+  question="Quel est l'avantage principal de GraphQL par rapport à l'API REST pour un frontend headless ?"
+  options={[
+    "GraphQL est plus rapide car il utilise un protocole binaire",
+    "GraphQL permet au client de spécifier exactement les données dont il a besoin, éliminant l'overfetching",
+    "GraphQL ne nécessite pas d'authentification pour les mutations",
+    "GraphQL remplace entièrement la base de données MySQL"
+  ]}
+  answer={1}
+  explanation="GraphQL permet au client de déclarer précisément les champs nécessaires dans chaque requête. Le serveur ne retourne que ces champs, ce qui élimine l'overfetching (données inutiles transférées) et l'underfetching (données manquantes nécessitant des requêtes supplémentaires). Le protocole reste HTTP standard, et l'authentification reste nécessaire pour les opérations d'écriture."
+/>

@@ -1,0 +1,152 @@
+---
+title: Comment créer des maquettes ?
+description: Comment créer des maquettes pour son site web ?
+category: design-ui-ux
+author: Next Impact
+date: "2025-03-15"
+order: 2
+---
+
+La conception d'un site web ne se limite pas au choix des couleurs et des polices. En amont du design visuel, une étape structurante conditionne la qualité du produit final : la création de maquettes. Les maquettes permettent de formaliser la disposition des éléments, de valider les choix d'interface avec les parties prenantes et de poser les bases d'une expérience utilisateur (UX, c'est-à-dire la qualité globale de l'interaction entre l'utilisateur et le produit) maîtrisée. Cet article détaille ce qu'est une maquette, son rôle dans le processus de conception, les outils disponibles et les étapes pour en produire de manière efficace.
+
+## Qu'est-ce qu'une maquette de site web ?
+
+Une maquette de site web est une représentation visuelle statique d'une page ou d'un écran. Contrairement au prototype, qui intègre des interactions simulées (clics, transitions, navigation), la maquette se concentre sur la disposition des éléments, la hiérarchie visuelle et les choix graphiques. Elle se situe dans le processus de conception entre le wireframe (schéma structurel simplifié) et le prototype interactif.
+
+Les maquettes peuvent varier en niveau de fidélité : du croquis papier rapide (basse fidélité) à la représentation pixel-perfect produite dans un outil de design numérique (haute fidélité). Elles permettent de visualiser précisément le rendu final avant la phase de développement, ce qui réduit les risques d'erreurs et les coûts de correction.
+
+## Pourquoi créer des maquettes de site web ? Les avantages clés
+
+### 1.  Meilleure communication entre les parties prenantes
+
+La conception web implique une collaboration entre clients, designers et développeurs. La maquette sert de support de communication visuel commun, réduisant les ambiguïtés liées aux descriptions textuelles ou verbales.
+
+### 2.  Gain de temps et réduction des coûts
+
+La maquette permet de détecter les problèmes d'ergonomie, de hiérarchie visuelle ou de lisibilité avant la phase de développement. Corriger un problème en maquette prend quelques minutes ; le corriger dans le code peut nécessiter plusieurs heures.
+
+### 3.  Optimisation de l'expérience utilisateur
+
+Travailler sur maquette permet d'adopter une approche centrée utilisateur (user-centered design) dès le début du projet : structuration claire du contenu, navigation logique et interface cohérente.
+
+### 4.  Établissement d'une vision claire
+
+Une représentation visuelle concrète aligne toutes les parties prenantes sur un objectif commun et maintient la cohérence du projet tout au long de son développement.
+
+## Outils pour créer des maquettes de site web
+
+Chaque outil de maquettage possède des caractéristiques spécifiques adaptées à différents contextes de travail :
+
+### 1.  Adobe XD
+
+Outil de conception polyvalent permettant de produire des maquettes haute fidélité et des prototypes interactifs, intégré à l'écosystème Adobe.
+
+### 2.  Figma
+
+Outil de design collaboratif fonctionnant dans le navigateur. Il permet le travail simultané de plusieurs intervenants sur un même fichier, avec un système de composants réutilisables et de variables de design (design tokens).
+
+### 3.  Sketch
+
+Outil de conception vectorielle apprécié pour la précision de ses rendus et la richesse de son écosystème de plugins, limité à macOS.
+
+### 4.  Balsamiq
+
+Outil spécialisé dans les wireframes basse fidélité, permettant de produire rapidement des schémas structurels sans se préoccuper du rendu graphique.
+
+### 5.  Canva
+
+Outil accessible orienté vers les non-designers, adapté aux maquettes simples mais limité en fonctionnalités de prototypage et de gestion de composants.
+
+<ComparisonTable
+  headers={["Figma", "Adobe XD"]}
+  rows={[
+    { label: "Collaboration", left: "Temps reel, multi-utilisateurs", right: "Limitee, partage de fichiers" },
+    { label: "Fidelite", left: "Haute et basse fidelite", right: "Principalement haute fidelite" },
+    { label: "Prix", left: "Gratuit (plan starter)", right: "Payant (abonnement Adobe)" },
+    { label: "Prototypage", left: "Integre et avance", right: "Integre et performant" },
+    { label: "Plateforme", left: "Web (toutes plateformes)", right: "Desktop (Windows/Mac)" },
+    { label: "Ideal pour", left: "Equipes collaboratives", right: "Designers integres a l'ecosysteme Adobe" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="developpeur" title="Extraction des proprietes CSS depuis la maquette">
+Lors de l'integration front-end, utilisez le mode d'inspection (Inspect) de Figma ou Adobe XD pour extraire directement les proprietes CSS : couleurs, marges (padding/margin), tailles de police (font-size), interlignes (line-height) et graisses (font-weight). Cette methode garantit la fidelite entre la maquette et le code produit.
+</Callout>
+
+## Guide étape par étape pour créer une maquette de site web
+
+<StepByStep>
+<Step number={1} title="Identifier les besoins et les objectifs">
+
+Définissez l'objectif du site et identifiez le public cible (personas). Listez les fonctionnalités attendues et validez les orientations de design avec les parties prenantes avant de commencer la conception.
+
+</Step>
+<Step number={2} title="Dessiner un wireframe">
+
+Produisez un schéma structurel qui définit la disposition des blocs principaux : header, navigation, zones de contenu, sidebar éventuelle et footer. Le wireframe se concentre sur l'architecture de l'information (information architecture), pas sur l'esthétique.
+
+</Step>
+<Step number={3} title="Definir la palette de couleurs et la typographie">
+
+Sélectionnez des couleurs alignées avec l'identité de marque et choisissez une combinaison typographique (titrage + corps de texte) qui garantit la lisibilité et la cohérence visuelle sur tous les écrans.
+
+</Step>
+<Step number={4} title="Creer une maquette basse fidelite">
+
+Utilisez un outil comme Balsamiq ou les fonctionnalités de wireframing de Figma pour produire une version schématique de l'interface, centrée sur la structure et la hiérarchie du contenu.
+
+</Step>
+<Step number={5} title="Developper une maquette haute fidelite">
+
+Intégrez les visuels, appliquez la palette de couleurs, ajustez la typographie et les espacements pour produire un rendu proche du résultat final. Figma, Adobe XD ou Sketch sont adaptés à cette étape.
+
+</Step>
+<Step number={6} title="Recueillir les retours et iterer">
+
+Partagez la maquette avec les parties prenantes et les utilisateurs cibles. Collectez les retours, priorisez les ajustements et itérez (c'est-à-dire répétez le cycle de modification et de validation) avant de transmettre les fichiers au développement.
+
+</Step>
+</StepByStep>
+
+## Bonnes pratiques pour la conception de maquettes
+
+1.  Appliquer une approche centrée utilisateur
+
+Chaque décision de design doit être guidée par les besoins et les comportements des utilisateurs cibles, identifiés lors de la phase de recherche UX.
+
+1.  Privilégier la clarté
+
+Évitez la surcharge visuelle. Une interface épurée, avec une hiérarchie visuelle claire (taille, contraste, espacement), améliore la lisibilité et réduit la charge cognitive de l'utilisateur.
+
+1.  Tester plusieurs variantes
+
+Produisez deux ou trois versions d'un même écran pour comparer les approches et identifier la plus efficace via des tests utilisateur ou des revues de design.
+
+1.  Utiliser un système de grille
+
+Alignez tous les éléments sur une grille (grid system), typiquement en 12 colonnes pour le desktop. La grille garantit l'alignement, la régularité des espacements et la cohérence entre les pages.
+
+1.  Concevoir en responsive dès le départ
+
+Chaque maquette doit prévoir au minimum trois points de rupture (breakpoints) pour couvrir les formats desktop, tablette et mobile.
+
+<Callout variant="developpeur" title="Maquetter en responsive des le depart">
+Concevez vos maquettes dans au moins trois largeurs de reference : desktop (1440px), tablette (768px) et mobile (375px). Dans Figma, utilisez les frames et les auto-layouts pour gerer ces variantes dans un meme fichier et garantir la coherence des espacements entre les breakpoints.
+</Callout>
+
+## La maquette, étape structurante du processus de conception
+
+La création de maquettes est une étape indispensable dans tout projet web. Elle permet de valider les choix d'interface avant le développement, de réduire les coûts de correction et de garantir une expérience utilisateur cohérente. Une démarche méthodique, associée aux outils adaptés, est la condition d'un processus de conception efficace.
+
+<Quiz
+  question="Quelle est la difference principale entre une maquette et un prototype ?"
+  options={[
+    "La maquette est plus couteuse a produire qu'un prototype",
+    "La maquette est statique tandis que le prototype est interactif",
+    "Le prototype est toujours en noir et blanc",
+    "Il n'y a aucune difference entre les deux"
+  ]}
+  answer={1}
+  explanation="La maquette est une representation visuelle statique qui definit la disposition des elements, la hierarchie visuelle et les choix graphiques. Le prototype, lui, integre des interactions simulees (clics, transitions, navigation) permettant de tester les parcours utilisateur avant le developpement."
+/>

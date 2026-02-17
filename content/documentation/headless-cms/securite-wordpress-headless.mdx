@@ -1,0 +1,270 @@
+---
+title: "Sécuriser un WordPress headless"
+description: "Bonnes pratiques de sécurité pour protéger l'API, le back-end WordPress et le frontend Next.js en architecture headless."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 17
+---
+
+## Surface d'attaque réduite : l'avantage structurel du headless
+
+En architecture traditionnelle, WordPress expose simultanément son back-office, ses thèmes PHP et ses plugins au public. En mode headless, le thème WordPress n'est plus accessible aux visiteurs. Seule l'API (REST ou GraphQL) est exposée, ce qui réduit considérablement le nombre de vecteurs d'attaque.
+
+<ComparisonTable
+  headers={["WordPress traditionnel", "WordPress headless"]}
+  highlight="right"
+  rows={[
+    { label: "Surface d'attaque", left: "Thème, plugins frontend, admin, API", right: "API uniquement (REST ou GraphQL)" },
+    { label: "Accès admin", left: "Accessible publiquement via /wp-admin", right: "Restreint par IP ou VPN" },
+    { label: "Injection via thème", left: "Possible (failles XSS dans les templates PHP)", right: "Impossible (aucun thème public actif)" },
+    { label: "Exposition serveur", left: "PHP, MySQL et WordPress sur le même serveur public", right: "WordPress isolé, frontend sur un CDN séparé" },
+  ]}
+/>
+
+Cette séparation ne dispense pas de sécuriser chaque couche individuellement. Les sections suivantes détaillent les mesures à appliquer sur le back-end WordPress, l'API et le frontend Next.js.
+
+## Sécuriser le back-office WordPress
+
+### Restreindre l'accès à wp-admin
+
+Le panneau d'administration WordPress ne doit être accessible qu'aux adresses IP autorisées. Cette restriction s'applique au niveau du serveur web (Apache ou Nginx).
+
+```nginx
+# Nginx — restriction d'accès à wp-admin par IP
+location /wp-admin {
+  allow 203.0.113.10;   # IP du bureau
+  allow 198.51.100.0/24; # plage VPN
+  deny all;
+}
+
+location /wp-login.php {
+  allow 203.0.113.10;
+  allow 198.51.100.0/24;
+  deny all;
+}
+```
+
+### Authentification à deux facteurs (2FA)
+
+Installez un plugin 2FA (WP 2FA, Two Factor Authentication) pour exiger un code temporaire en plus du mot de passe. Cette mesure neutralise les attaques par force brute et les compromissions de mots de passe.
+
+### Limiter les tentatives de connexion
+
+Le plugin Limit Login Attempts Reloaded bloque les adresses IP après un nombre configurable d'échecs de connexion. Paramétrage recommandé : 3 tentatives avant blocage de 15 minutes, puis blocage progressif.
+
+<StepByStep>
+  <Step number={1} title="Restreindre les IP autorisées sur wp-admin">
+    Configurez votre serveur web (Nginx ou Apache) pour n'autoriser que les adresses IP de votre équipe ou de votre VPN. Toute tentative d'accès depuis une IP non autorisée reçoit une erreur 403.
+  </Step>
+  <Step number={2} title="Activer l'authentification 2FA">
+    Installez un plugin 2FA et configurez-le pour tous les comptes ayant le rôle éditeur ou supérieur. Privilégiez les applications TOTP (Google Authenticator, Authy) aux codes par SMS.
+  </Step>
+  <Step number={3} title="Limiter les tentatives de connexion">
+    Installez Limit Login Attempts Reloaded et configurez un seuil de 3 tentatives. Les blocages progressifs découragent les attaques automatisées.
+  </Step>
+  <Step number={4} title="Désactiver XML-RPC">
+    Le protocole XML-RPC est un vecteur d'attaque par force brute et DDoS. En mode headless, il n'a aucune utilité. Désactivez-le dans le fichier .htaccess ou via un plugin.
+  </Step>
+</StepByStep>
+
+### Désactiver XML-RPC
+
+Le fichier `xmlrpc.php` permet des connexions distantes à WordPress. En architecture headless, il n'est pas utilisé et constitue un vecteur d'attaque (brute force, DDoS par pingback). Désactivez-le :
+
+```php
+// functions.php — désactiver XML-RPC
+add_filter('xmlrpc_enabled', '__return_false');
+```
+
+```nginx
+# Nginx — bloquer xmlrpc.php au niveau serveur
+location = /xmlrpc.php {
+  deny all;
+}
+```
+
+### Masquer la version de WordPress
+
+La version de WordPress est exposée par défaut dans le code source HTML et dans les en-têtes HTTP. Cette information facilite le ciblage d'exploits connus.
+
+```php
+// functions.php — supprimer la version WordPress
+remove_action('wp_head', 'wp_generator');
+add_filter('the_generator', '__return_empty_string');
+```
+
+## Sécuriser l'API
+
+### Authentification des endpoints sensibles
+
+L'API REST de WordPress est partiellement publique par défaut. Les endpoints de lecture (articles, pages) sont accessibles sans authentification, ce qui est nécessaire pour le frontend. En revanche, les endpoints d'écriture et les données sensibles doivent exiger une authentification.
+
+```php
+// Restreindre l'accès API aux utilisateurs authentifiés pour certains endpoints
+add_filter('rest_authentication_errors', function ($result) {
+  if (!empty($result)) {
+    return $result;
+  }
+  if (!is_user_logged_in()) {
+    // Autoriser uniquement les endpoints publics
+    $public_routes = ['/wp/v2/posts', '/wp/v2/pages', '/wp/v2/categories'];
+    $current_route = $_SERVER['REQUEST_URI'];
+    // Bloquer les endpoints non publics
+  }
+  return $result;
+});
+```
+
+### Rate limiting
+
+Le rate limiting limite le nombre de requêtes API par unité de temps et par adresse IP. Sans cette protection, un attaquant peut surcharger le serveur ou extraire massivement les données.
+
+```nginx
+# Nginx — rate limiting sur l'API REST
+limit_req_zone $binary_remote_addr zone=api:10m rate=30r/m;
+
+location /wp-json/ {
+  limit_req zone=api burst=10 nodelay;
+  proxy_pass http://wordpress_backend;
+}
+```
+
+### Configuration CORS
+
+Les en-têtes CORS (Cross-Origin Resource Sharing) contrôlent quels domaines peuvent interroger l'API. Limitez les origines autorisées au domaine de votre frontend.
+
+```php
+// functions.php — restreindre CORS à votre frontend
+add_action('rest_api_init', function () {
+  remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
+  add_filter('rest_pre_serve_request', function ($value) {
+    header('Access-Control-Allow-Origin: https://www.votre-site.fr');
+    header('Access-Control-Allow-Methods: GET, OPTIONS');
+    header('Access-Control-Allow-Headers: Authorization, Content-Type');
+    return $value;
+  });
+});
+```
+
+<Callout variant="tip" title="Clé API pour le frontend">
+Pour les endpoints publics, utilisez une clé API transmise dans un en-tête personnalisé (par exemple `X-API-Key`). Cette clé n'est pas un mécanisme de sécurité fort (elle est visible dans le code client), mais elle permet de filtrer les requêtes non légitimes et de faciliter le rate limiting par client.
+</Callout>
+
+## Durcir wp-config.php
+
+Le fichier `wp-config.php` contient les informations de connexion à la base de données et les clés de sécurité. Appliquez ces mesures :
+
+```php
+// wp-config.php — mesures de durcissement
+
+// Désactiver l'éditeur de fichiers dans l'admin
+define('DISALLOW_FILE_EDIT', true);
+
+// Forcer HTTPS pour l'admin
+define('FORCE_SSL_ADMIN', true);
+
+// Limiter les révisions d'articles (réduction de la surface de données)
+define('WP_POST_REVISIONS', 5);
+
+// Désactiver le mode debug en production
+define('WP_DEBUG', false);
+define('WP_DEBUG_DISPLAY', false);
+define('WP_DEBUG_LOG', false);
+```
+
+## Variables d'environnement et gestion des secrets
+
+Les secrets (clés API, tokens, identifiants de base de données) ne doivent jamais figurer dans le code source versionné.
+
+<Callout variant="developpeur" title="Règle absolue : aucun secret dans le code">
+Utilisez des variables d'environnement pour stocker les secrets. Côté Next.js, les variables préfixées par `NEXT_PUBLIC_` sont exposées au navigateur. Les clés API WordPress, tokens et identifiants de base de données doivent utiliser des variables sans ce préfixe, accessibles uniquement côté serveur.
+</Callout>
+
+```bash
+# .env.local (Next.js) — jamais commité dans Git
+WORDPRESS_API_URL=https://admin.votre-site.fr/wp-json
+WORDPRESS_AUTH_TOKEN=votre_token_secret
+REVALIDATION_SECRET=votre_secret_isr
+
+# Ces variables sont accessibles côté serveur uniquement
+# NE PAS utiliser NEXT_PUBLIC_ pour les secrets
+```
+
+## En-têtes de sécurité sur le frontend Next.js
+
+Le fichier `next.config.js` permet de définir des en-têtes HTTP de sécurité appliqués à toutes les réponses du frontend.
+
+```javascript
+// next.config.js — en-têtes de sécurité
+const securityHeaders = [
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-XSS-Protection', value: '1; mode=block' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  {
+    key: 'Content-Security-Policy',
+    value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://admin.votre-site.fr data:;"
+  },
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+];
+
+module.exports = {
+  async headers() {
+    return [{ source: '/(.*)', headers: securityHeaders }];
+  },
+};
+```
+
+## HTTPS et protection DDoS
+
+### HTTPS partout
+
+Le chiffrement TLS est obligatoire sur les deux couches :
+- **Frontend** : certificat géré automatiquement par Vercel, Netlify ou votre hébergeur
+- **Backend WordPress** : certificat Let's Encrypt ou fourni par l'hébergeur, avec redirection HTTP vers HTTPS
+
+### Protection DDoS via CDN
+
+Le frontend Next.js déployé sur Vercel ou Netlify bénéficie nativement de la protection DDoS du CDN. Pour le backend WordPress, placez-le derrière Cloudflare ou un service équivalent.
+
+<ArchitectureDiagram
+  title="Architecture sécurisée WordPress headless"
+  layers={[
+    { label: "Protection périmétrique", items: ["CDN / Cloudflare", "Protection DDoS", "Rate limiting", "WAF"], color: "dark" },
+    { label: "Backend WordPress", items: ["IP whitelisting", "2FA", "XML-RPC désactivé", "wp-config durci"], color: "blue" },
+    { label: "Couche API", items: ["CORS restreint", "Authentification", "Rate limiting API", "HTTPS"], color: "orange" },
+    { label: "Frontend Next.js", items: ["En-têtes CSP", "Variables d'environnement", "Audit npm", "HTTPS"], color: "dark" },
+  ]}
+/>
+
+## Audit des dépendances
+
+Les dépendances npm du projet Next.js peuvent contenir des vulnérabilités connues. Intégrez l'audit dans votre pipeline CI/CD.
+
+```bash
+# Vérifier les vulnérabilités des dépendances
+npm audit
+
+# Corriger automatiquement les vulnérabilités compatibles
+npm audit fix
+
+# Surveiller en continu (GitHub Dependabot ou Snyk)
+```
+
+<Callout variant="tip" title="Audit automatisé">
+Activez GitHub Dependabot ou Snyk sur votre dépôt. Ces outils détectent les vulnérabilités dans les dépendances et proposent des mises à jour automatiques via des pull requests.
+</Callout>
+
+<Quiz
+  question="En architecture headless, pourquoi est-il recommandé de désactiver XML-RPC sur WordPress ?"
+  options={[
+    "Parce que XML-RPC est nécessaire uniquement pour l'API GraphQL",
+    "Parce que XML-RPC est un vecteur d'attaque par force brute et DDoS, inutile en mode headless",
+    "Parce que XML-RPC ralentit les performances de l'API REST",
+    "Parce que XML-RPC est incompatible avec Next.js"
+  ]}
+  answer={1}
+  explanation="Le protocole XML-RPC permet des connexions distantes à WordPress (publication via des clients externes, pingbacks). En architecture headless, le frontend communique via l'API REST ou GraphQL, rendant XML-RPC inutile. Or, ce protocole est fréquemment exploité pour des attaques par force brute (tentatives de connexion multiples dans une seule requête) et pour des attaques DDoS par amplification de pingback. Le désactiver supprime ces vecteurs d'attaque sans aucun impact fonctionnel."
+/>

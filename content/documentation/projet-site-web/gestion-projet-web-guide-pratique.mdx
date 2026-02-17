@@ -1,0 +1,158 @@
+---
+title: Gestion de projet web - Comment
+description: Guide pratique
+category: projet-site-web
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+Ce guide detaille la methodologie operationnelle pour mener un projet de site web WordPress, de la phase de cadrage a la maintenance post-lancement. Il couvre les quatre phases principales du cycle de vie du projet : planification, conception et developpement, creation de contenu et optimisation SEO, tests et mise en production. Chaque phase produit des livrables specifiques qui alimentent la phase suivante.
+
+## La gestion d'un projet WordPress : un processus structure
+
+La maitrise d'un projet web repose sur un processus structure en phases, avec des livrables identifies et des criteres de validation a chaque etape. WordPress, en tant que CMS modulaire et extensible, offre une grande flexibilite technique, mais cette flexibilite necessite un cadrage rigoureux pour eviter les derives de perimetre et garantir la coherence du produit final.
+
+<FlowDiagram
+  nodes={[
+    { label: "Planification", description: "Objectifs, perimetre, ressources", icon: "📋" },
+    { label: "Conception", description: "Theme, plugins, structure", icon: "🎨" },
+    { label: "Contenu & SEO", description: "Redaction et optimisation", icon: "✍️" },
+    { label: "Tests & Lancement", description: "Recette et mise en production", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+<StepByStep>
+<Step number={1} title="Phase 1 : Planification">
+
+La planification est la phase de cadrage du projet. Elle produit les documents de reference qui encadrent l'ensemble de la realisation.
+
+### Definir les objectifs
+
+Formalisez la finalite du site (site vitrine, blog, e-commerce, plateforme applicative) et les KPI associes. Les KPI (indicateurs cles de performance) sont les metriques quantifiables qui permettront d'evaluer le succes du projet : volume de trafic, taux de conversion, nombre de leads generes, chiffre d'affaires en ligne.
+
+**Exemple :** Pour un site vitrine de photographe, les KPI cles seraient le nombre de demandes de devis recues via le formulaire de contact et le taux de conversion visiteur-vers-contact.
+
+### Delimiter le perimetre
+
+Le perimetre (scope) definit ce qui est inclus et ce qui est exclu du projet. Documentez-le dans le cahier des charges :
+
+- Pages a realiser (accueil, a propos, services, portfolio, contact, etc.)
+- Fonctionnalites specifiques (formulaire de contact, systeme de reservation, integration de reseaux sociaux, espace membre)
+
+### Identifier les ressources
+
+Etablissez le plan de charge en listant les ressources necessaires :
+
+- Ressources humaines : chef de projet, developpeur, designer, redacteur, administrateur systeme
+- Infrastructure technique : hebergement web (SiteGround, OVH, AWS), nom de domaine, certificat SSL
+- Budget : ventilation par poste avec une marge pour aleas (10 a 15 % du budget total) couvrant themes premium, plugins, outils tiers
+
+</Step>
+<Step number={2} title="Phase 2 : Conception et Developpement">
+
+Cette phase transforme les specifications du cahier des charges en un produit fonctionnel.
+
+### Choisir un theme adapte
+
+Selectionnez un theme WordPress conforme aux exigences du cahier des charges en termes de design et de performance. Privilegiez un theme optimise pour le responsive design et les Core Web Vitals (comme Astra, GeneratePress ou Flavor) pour garantir un temps de chargement optimal et un affichage conforme sur l'ensemble des terminaux cibles.
+
+### Integrer les plugins necessaires
+
+Les plugins etendent les fonctionnalites natives de WordPress. Selectionnez-les en fonction des besoins documentes dans le cahier des charges :
+
+- **Yoast SEO** ou **Rank Math** pour la gestion du referencement on-page
+- **WooCommerce** pour les fonctionnalites e-commerce
+- **WPForms** ou **Gravity Forms** pour les formulaires avances
+
+<Callout variant="warning" title="Gestion des dependances plugins">
+Chaque plugin ajoute est une dependance supplementaire qui impacte les performances du site et augmente la surface d'attaque en termes de securite. Limitez le nombre de plugins aux fonctionnalites strictement necessaires. Verifiez leur compatibilite avec votre version de WordPress et leur frequence de mise a jour avant installation.
+</Callout>
+
+### Definir la structure du site
+
+Produisez un sitemap (plan de site) qui formalise l'arborescence hierarchique des contenus. La structure de navigation doit refleter la hierarchie de l'information et faciliter a la fois le parcours utilisateur et l'indexation par les moteurs de recherche.
+
+<Callout variant="tip" title="Page builders">
+Les constructeurs de pages (Elementor, Beaver Builder) permettent de creer des mises en page personnalisees via une interface visuelle drag-and-drop, sans intervention sur le code source. Ils sont adaptes aux projets ou le client doit pouvoir modifier le contenu en autonomie.
+</Callout>
+
+</Step>
+<Step number={3} title="Phase 3 : Creation de contenu et optimisation SEO">
+
+Le contenu est le principal vecteur de valeur d'un site web. Son optimisation SEO conditionne sa visibilite dans les resultats de recherche.
+
+### Rediger un contenu structure et cible
+
+Produisez le contenu en fonction des personas definies au cadrage. Chaque page doit repondre a une intention de recherche specifique et respecter les criteres suivants :
+
+- Structure semantique claire (utilisation des balises Hn hierarchisees)
+- Integration naturelle des mots-cles cibles identifie lors de la recherche de mots-cles
+- Contenu factuel, pertinent et a valeur ajoutee pour l'utilisateur
+
+**Exemple :** Pour un site culinaire, chaque page recette doit inclure un balisage Schema.org (structured data) de type Recipe, des descriptions detaillees, des visuels optimises et un temps de lecture estime.
+
+### Optimiser le balisage SEO
+
+Chaque page doit comporter un balisage SEO complet :
+
+- **Balise title** : unique, descriptive, integrant le mot-cle principal (60 caracteres max)
+- **Meta-description** : synthetisant le contenu de la page et incitant au clic (155 caracteres max)
+- **Titres Hn** : structure hierarchique coherente (un seul H1 par page, H2 pour les sections principales, H3 pour les sous-sections)
+- **Attribut alt des images** : description textuelle du contenu visuel pour l'accessibilite et le SEO
+
+<Callout variant="tip" title="Conseil SEO technique">
+Structurez vos titres de maniere hierarchique (H1, H2, H3) et integrez vos mots-cles principaux dans les 100 premiers mots de chaque page. Cela facilite le crawl et ameliore la pertinence percue par les algorithmes de classement des moteurs de recherche.
+</Callout>
+
+</Step>
+<Step number={4} title="Phase 4 : Tests, lancement et maintenance">
+
+La phase de recette et de mise en production determine la qualite du livrable final.
+
+### Executer le plan de recette
+
+Le plan de recette (testing plan) couvre les verifications suivantes :
+
+- **Compatibilite mobile** : verification du rendu responsive sur les principaux terminaux (iOS, Android) et resolutions d'ecran
+- **Performance** : mesure des temps de chargement et des scores Core Web Vitals via des outils comme GTmetrix, Lighthouse ou PageSpeed Insights. L'objectif est un score LCP (Largest Contentful Paint) inferieur a 2,5 secondes.
+- **Tests fonctionnels** : verification de tous les liens, formulaires, parcours d'achat et integrations tierces
+
+### Proceder a la mise en production
+
+Une fois la recette validee, executez la procedure de deploiement (deploy checklist). Preparez un plan de communication pour le lancement : annonce sur les reseaux sociaux, newsletter, campagne d'acquisition.
+
+### Mettre en place la maintenance
+
+La maintenance est une activite recurrente et continue :
+
+- Mises a jour de WordPress, des themes et des plugins selon un calendrier defini (hebdomadaire ou mensuel)
+- Surveillance de la securite via des plugins dedies (Wordfence, Sucuri) et monitoring des logs serveur
+- Suivi des KPI avec un outil d'analytics (Google Analytics 4, Matomo) et production de rapports de performance periodiques
+
+<Callout variant="tip" title="Calendrier de maintenance">
+Formalisez un calendrier de maintenance mensuel integrant les mises a jour, les sauvegardes, les audits de securite et la revue des metriques de performance. Un processus de maintenance planifie previent les incidents de securite et garantit la stabilite du site en production.
+</Callout>
+
+</Step>
+</StepByStep>
+
+## Vers l'autonomie dans vos projets WordPress
+
+La gestion d'un projet WordPress requiert a la fois de la rigueur methodologique et une maitrise technique du CMS. En suivant ce processus structure -- cadrage, conception, production de contenu, recette et maintenance -- vous couvrez l'ensemble du cycle de vie du projet et maximisez les chances de livrer un produit conforme aux exigences initiales.
+
+Pour approfondir chaque phase, consultez les autres articles de cette documentation qui detaillent les aspects specifiques : cahier des charges, architecture de l'information, optimisation SEO et strategies de maintenance.
+
+<Quiz
+  question="Pourquoi est-il deconseille de multiplier les plugins WordPress ?"
+  options={[
+    "Les plugins sont tous payants et augmentent le cout du projet",
+    "WordPress limite le nombre de plugins a 5 par site",
+    "Chaque plugin supplementaire degrade les performances, augmente la surface d'attaque securitaire et cree des risques de conflit entre extensions",
+    "Les plugins ne fonctionnent pas sur les appareils mobiles"
+  ]}
+  answer={2}
+  explanation="Chaque plugin ajoute impacte les performances du site (temps de chargement, consommation memoire) et augmente la surface d'attaque en termes de securite. De plus, les incompatibilites entre plugins sont une source frequente de bugs. Il est recommande de limiter les plugins aux fonctionnalites strictement necessaires et de verifier leur compatibilite et leur maintien actif avant installation."
+/>

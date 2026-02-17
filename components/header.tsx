@@ -53,6 +53,11 @@ export function NavBar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
+              <Link href="/documentation" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Comprendre
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-lg text-regular px-2">
                 Etudes de cas
               </Link>
@@ -131,7 +136,7 @@ export function NavBar() {
                   <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
                   <MobileMenuLink href="/tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
-                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-8">Documentation</MobileMenuLink>
+                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-8">Comprendre</MobileMenuLink>
 
                   <div className="pl-4 pt-8 flex items-center gap-8 border-t">
                     <Link href="/a-propos" onClick={handleMenuClick}>

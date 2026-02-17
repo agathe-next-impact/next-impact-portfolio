@@ -1,0 +1,176 @@
+---
+title: WordPress headless en pratique
+description: Comment utiliser WordPress en headless ?
+category: headless-cms
+author: Next Impact
+date: "2025-03-20"
+order: 6
+---
+
+## Comment WordPress devient "headless" ?
+
+WordPress integre nativement une API REST depuis la version 4.7 (decembre 2016). Cette API expose les contenus (articles, pages, taxonomies, medias) sous forme de endpoints JSON accessibles par n'importe quel client HTTP. Aucune installation supplementaire n'est necessaire : toute instance WordPress en version 4.7 ou superieure peut fonctionner en mode headless.
+
+<FlowDiagram
+  nodes={[
+    { label: "WordPress", description: "Back-office — creation et gestion du contenu", icon: "✍️" },
+    { label: "API REST", description: "Endpoints JSON — exposition structuree des donnees", icon: "🔄" },
+    { label: "Frontend moderne", description: "Application cliente — rendu et affichage", icon: "🖥️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+L'API REST fonctionne selon le protocole HTTP standard :
+
+- Le frontend envoie une requete GET vers un endpoint (par exemple `/wp-json/wp/v2/posts`)
+- WordPress retourne les donnees au format JSON
+- Le frontend parse le JSON et genere le HTML correspondant
+
+Une alternative a l'API REST est WPGraphQL, un plugin qui ajoute un endpoint GraphQL. GraphQL permet au frontend de specifier exactement les champs dont il a besoin, ce qui reduit la quantite de donnees transferees.
+
+## L'editeur Gutenberg : une structure de contenu adaptee au headless
+
+L'editeur par blocs de WordPress (Gutenberg, integre depuis WordPress 5.0) decompose le contenu en blocs semantiques. Cette structure est particulierement adaptee a une architecture headless.
+
+Avant Gutenberg :
+
+```
+Article = un seul champ HTML monolithique
+
+```
+
+Avec Gutenberg :
+
+```
+Article = [Bloc Titre] + [Bloc Image] + [Bloc Paragraphe] + [Bloc Liste] + [Bloc Citation]
+
+```
+
+Les avantages de cette structure pour le headless :
+
+- Chaque bloc est un objet JSON avec un type et des attributs, ce qui permet au frontend de le rendre avec ses propres composants
+- Le contenu est reutilisable : un meme bloc peut etre affiche differemment selon le contexte (site web, application mobile, newsletter)
+- La coherence est garantie car la structure est imposee par le schema de blocs
+
+## Ce qui change selon votre role
+
+### Pour les redacteurs de contenu
+
+<Callout variant="utilisateur" title="Pour les redacteurs : l'interface d'administration reste identique">
+Le back-office WordPress ne change pas en mode headless. La creation d'articles, la gestion des medias et le workflow de publication restent identiques. Le decoupage headless s'opere exclusivement cote serveur et cote client, sans impact sur l'interface d'administration.
+</Callout>
+
+Ce qui reste identique :
+
+- Interface d'administration WordPress inchangee
+- Creation d'articles et de pages via Gutenberg
+- Gestion de la mediatheque (upload, edition, organisation)
+- Workflow de publication (brouillon, relecture, publication)
+
+Ce qui s'ameliore :
+
+- Le contenu est consommable par plusieurs clients (site web, app mobile, borne interactive)
+- La previsualisation peut s'effectuer sur le rendu reel du frontend
+- Les temps de publication sont optimises car le backend n'a plus a generer le HTML public
+
+### Pour les visiteurs du site
+
+<ComparisonTable
+  headers={["WordPress traditionnel", "WordPress headless"]}
+  rows={[
+    { label: "Chargement", left: "3-5 secondes (rendu PHP serveur)", right: "Moins d'1 seconde (HTML pre-genere ou SSR optimise)" },
+    { label: "Design", left: "Contraint par le systeme de themes PHP", right: "Libre — tout composant UI est implementable" },
+    { label: "Experience", left: "Navigation avec rechargement complet de page", right: "Navigation fluide de type SPA (Single Page Application)" }
+  ]}
+  highlight="right"
+/>
+
+WordPress traditionnel :
+
+- Chargement : 3 a 5 secondes (le serveur PHP genere le HTML a chaque requete)
+- Design : contraint par le systeme de themes et les templates PHP
+- Experience : rechargement complet de la page a chaque navigation
+
+WordPress headless :
+
+- Chargement : moins d'1 seconde (HTML pre-genere via SSG ou rendu serveur optimise via SSR)
+- Design : aucune contrainte de theme, le frontend est entierement custom
+- Experience : navigation fluide sans rechargement complet (client-side routing)
+
+## Un exemple de workflow etape par etape
+
+Situation : publication d'un nouvel article "10 conseils jardinage"
+
+<Callout variant="decideur" title="Ce que le headless apporte au workflow">
+L'etape supplementaire dans le processus headless (le frontend qui consomme l'API) est ce qui permet d'obtenir un site performant avec un design entierement personnalise. Cette couche de decouplage (separation backend/frontend) est la source des gains de performance et de flexibilite.
+</Callout>
+
+WordPress traditionnel :
+
+1. Le redacteur publie l'article dans WordPress
+2. WordPress genere le HTML via le theme PHP actif
+3. Le visiteur recoit cette page generee par PHP
+
+WordPress headless :
+
+<StepByStep>
+  <Step number={1} title="Redaction dans WordPress">
+    Le redacteur cree l'article dans le back-office WordPress. L'interface et le workflow sont identiques au mode traditionnel.
+  </Step>
+  <Step number={2} title="Exposition via l'API">
+    WordPress stocke le contenu en base de donnees et l'expose automatiquement via l'API REST (ou GraphQL). Cette etape ne necessite aucune intervention manuelle.
+  </Step>
+  <Step number={3} title="Consommation par le frontend">
+    L'application frontend (Next.js, Nuxt.js, Gatsby) envoie une requete a l'API, recupere le JSON et genere le HTML avec ses propres composants et styles.
+  </Step>
+  <Step number={4} title="Rendu cote visiteur">
+    Le visiteur recoit une page optimisee : HTML pre-genere ou rendu serveur, avec navigation client-side, images optimisees et temps de chargement reduit.
+  </Step>
+</StepByStep>
+
+1. Le redacteur publie l'article dans WordPress (identique)
+2. WordPress expose le contenu via l'API REST ou GraphQL
+3. Le frontend consomme l'API et genere le HTML avec ses propres composants
+4. Le visiteur recoit une page optimisee avec navigation fluide et chargement rapide
+
+## Les plugins et fonctionnalites
+
+Ce qui fonctionne sans modification :
+
+- Plugins de gestion de contenu (ACF, formulaires, galeries)
+- Plugins SEO (Yoast SEO, Rank Math) — les metadonnees sont exposees via l'API
+- Gestion des utilisateurs et des roles
+- Plugins de sauvegarde et de securite backend
+
+Ce qui est remplace ou adapte :
+
+- Les themes WordPress ne sont plus utilises (le rendu est assure par le frontend)
+- Le cache WordPress cote serveur est remplace par le cache CDN et le pre-rendu statique
+- Certains plugins qui injectent du HTML dans le frontend (sliders, popups) doivent etre remplaces par des composants frontend natifs
+
+## Questions frequentes
+
+"La migration est-elle complexe ?"
+Pour les redacteurs, il n'y a pas de migration : l'interface reste la meme. La complexite se situe dans le developpement du frontend, qui est un projet de developpement web a part entiere.
+
+"La previsualisation est-elle possible ?"
+Oui. Next.js propose un mode "Preview" qui permet de visualiser un brouillon sur le rendu reel du frontend. D'autres frameworks offrent des mecanismes equivalents.
+
+"Le contenu existant est-il compatible ?"
+L'integralite du contenu existant est accessible via l'API REST. Les articles, pages, medias et taxonomies sont exposes sans modification.
+
+"Est-il possible de revenir en arriere ?"
+Oui. WordPress reste intact. Il suffit de reactiver un theme pour retrouver le fonctionnement traditionnel. Le contenu n'est pas affecte par le mode headless.
+
+<Quiz
+  question="Que faut-il installer sur WordPress pour le faire fonctionner en mode headless ?"
+  options={[
+    "Un plugin commercial dedie au mode headless",
+    "Rien — WordPress integre nativement l'API REST depuis la version 4.7 (2016)",
+    "Un theme specifique compatible headless",
+    "Une reinstallation complete de WordPress"
+  ]}
+  answer={1}
+  explanation="WordPress expose nativement ses contenus via une API REST depuis la version 4.7, sortie en decembre 2016. Toute installation WordPress a jour peut donc fonctionner en mode headless sans plugin supplementaire. L'ajout optionnel de WPGraphQL permet d'utiliser le protocole GraphQL en complement ou en remplacement de l'API REST."
+/>

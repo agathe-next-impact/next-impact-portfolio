@@ -1,0 +1,305 @@
+---
+title: "SSG, SSR et ISR avec Next.js"
+description: "Comprendre les stratégies de rendu Next.js (SSG, SSR, ISR) et choisir la bonne approche pour chaque page."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 12
+---
+
+## Les strategies de rendu Next.js
+
+Next.js propose plusieurs strategies pour generer le HTML d'une page. Chaque strategie determine a quel moment le HTML est produit : au moment du build, a chaque requete, ou de maniere incrementale. Le choix de la strategie impacte directement le temps de chargement, la fraicheur du contenu et les couts d'hebergement.
+
+<FlowDiagram
+  nodes={[
+    { label: "SSG", description: "HTML genere au build — servi depuis le CDN", icon: "📦" },
+    { label: "ISR", description: "HTML statique regenere en arriere-plan a intervalle configure", icon: "🔄" },
+    { label: "SSR", description: "HTML genere a chaque requete sur le serveur", icon: "⚙️" },
+    { label: "CSR", description: "HTML genere dans le navigateur via JavaScript", icon: "🖥️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Static Site Generation (SSG)
+
+La generation statique produit le HTML au moment du build (`next build`). Les fichiers HTML resultants sont deployes sur un CDN et servis directement au navigateur sans aucun traitement serveur a chaque requete.
+
+### Fonctionnement
+
+1. Au moment du build, Next.js execute les fonctions de chargement de donnees
+2. Les donnees sont injectees dans les composants React
+3. Le HTML est genere et stocke sous forme de fichiers statiques
+4. A chaque requete, le CDN sert le fichier HTML pre-genere
+
+### Implementation avec l'App Router
+
+Dans l'App Router, une page est statique par defaut si elle ne depend d'aucune donnee dynamique. Pour une page qui consomme l'API WordPress :
+
+```tsx
+// app/blog/page.tsx — Page statique generee au build
+export default async function BlogPage() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?per_page=20&_embed`,
+    { cache: 'force-cache' } // Comportement statique explicite
+  );
+  const posts = await res.json();
+
+  return (
+    <main>
+      <h1>Articles</h1>
+      {posts.map((post: any) => (
+        <article key={post.id}>
+          <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+        </article>
+      ))}
+    </main>
+  );
+}
+```
+
+Pour les routes dynamiques, `generateStaticParams` indique a Next.js quels parametres pre-generer :
+
+```tsx
+// app/blog/[slug]/page.tsx
+export async function generateStaticParams() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?per_page=100`
+  );
+  const posts = await res.json();
+  return posts.map((post: any) => ({ slug: post.slug }));
+}
+```
+
+### Quand utiliser SSG
+
+- Pages dont le contenu change rarement (mentions legales, a propos, FAQ)
+- Articles de blog publies sans modification frequente
+- Pages de categories et d'archives
+
+<StatGrid>
+  <StatCard value="< 50ms" label="TTFB (Time to First Byte)" description="Le fichier HTML est servi directement depuis le CDN, sans traitement serveur" accent="blue" />
+  <StatCard value="0" label="Cout serveur par requete" description="Aucune execution serveur — les fichiers statiques sont servis par le CDN" accent="orange" />
+  <StatCard value="Build" label="Fraicheur du contenu" description="Le contenu est a jour au moment du dernier build uniquement" accent="coral" />
+</StatGrid>
+
+## Server-Side Rendering (SSR)
+
+Le rendu cote serveur genere le HTML a chaque requete. Le serveur Next.js interroge l'API WordPress, execute les composants React et retourne le HTML au navigateur.
+
+### Implementation
+
+Pour forcer le rendu SSR, utilisez l'option `cache: 'no-store'` sur les appels fetch, ou exportez `dynamic = 'force-dynamic'` :
+
+```tsx
+// app/recherche/page.tsx — Page rendue a chaque requete
+export const dynamic = 'force-dynamic';
+
+export default async function RecherchePage({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
+  const query = searchParams.q ?? '';
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?search=${query}&_embed`,
+    { cache: 'no-store' }
+  );
+  const posts = await res.json();
+
+  return (
+    <main>
+      <h1>Resultats pour "{query}"</h1>
+      {posts.map((post: any) => (
+        <article key={post.id}>
+          <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+        </article>
+      ))}
+    </main>
+  );
+}
+```
+
+### Quand utiliser SSR
+
+- Pages de recherche dont le contenu depend des parametres de requete
+- Pages personnalisees selon l'utilisateur connecte
+- Pages affichant des donnees en temps reel (stock, prix, disponibilite)
+
+## Incremental Static Regeneration (ISR)
+
+L'ISR combine la performance du statique avec la fraicheur du dynamique. Les pages sont generees au build comme en SSG, puis regenerees en arriere-plan apres un intervalle configure.
+
+### Fonctionnement detaille
+
+<StepByStep>
+  <Step number={1} title="Build initial">
+    Au moment du build, Next.js genere les pages statiques et les deploie sur le CDN. Ces pages sont servies aux visiteurs.
+  </Step>
+  <Step number={2} title="Premiere requete apres expiration">
+    Lorsqu'un visiteur accede a une page dont l'intervalle de revalidation est depasse, il recoit la version en cache (stale). En arriere-plan, Next.js declenche la regeneration.
+  </Step>
+  <Step number={3} title="Regeneration en arriere-plan">
+    Next.js interroge l'API WordPress, genere le nouveau HTML et remplace la version en cache. Ce processus est invisible pour le visiteur.
+  </Step>
+  <Step number={4} title="Requetes suivantes">
+    Les visiteurs suivants recoivent la version regeneree. Le cycle recommence a l'expiration du prochain intervalle.
+  </Step>
+</StepByStep>
+
+Ce mecanisme est appele **stale-while-revalidate** : le visiteur recoit toujours une reponse immediate (la version en cache), et la mise a jour s'effectue en arriere-plan.
+
+### Implementation
+
+```tsx
+// app/blog/[slug]/page.tsx — Page statique avec revalidation ISR
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?slug=${params.slug}&_embed`,
+    { next: { revalidate: 3600 } } // Regeneration toutes les heures
+  );
+  const posts = await res.json();
+  const post = posts[0];
+
+  return (
+    <article>
+      <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+      <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+    </article>
+  );
+}
+```
+
+### Revalidation a la demande
+
+Plutot que d'attendre l'expiration de l'intervalle, un webhook WordPress peut declencher la regeneration immediatement :
+
+```typescript
+// app/api/revalidate/route.ts
+import { revalidatePath } from 'next/cache';
+import { NextRequest } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const secret = request.nextUrl.searchParams.get('secret');
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return new Response('Non autorise', { status: 401 });
+  }
+
+  const body = await request.json();
+  const slug = body.post_name;
+
+  revalidatePath(`/blog/${slug}`);
+  revalidatePath('/blog'); // Regenere aussi la page de liste
+
+  return Response.json({ revalidated: true, slug });
+}
+```
+
+Cote WordPress, un plugin ou un hook `publish_post` envoie une requete POST vers cette route a chaque publication.
+
+## Chargement de donnees cote client
+
+Pour les donnees qui changent frequemment et ne necessitent pas d'indexation SEO (commentaires, nombre de vues, statut de connexion), le chargement cote client est preferable.
+
+```tsx
+'use client';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export function CommentSection({ postId }: { postId: number }) {
+  const { data, error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/comments?post=${postId}`,
+    fetcher,
+    { refreshInterval: 30000 } // Rafraichissement toutes les 30 secondes
+  );
+
+  if (isLoading) return <p>Chargement des commentaires...</p>;
+  if (error) return <p>Erreur lors du chargement</p>;
+
+  return (
+    <section>
+      <h3>{data.length} commentaire(s)</h3>
+      {data.map((comment: any) => (
+        <div key={comment.id}>
+          <strong>{comment.author_name}</strong>
+          <div dangerouslySetInnerHTML={{ __html: comment.content.rendered }} />
+        </div>
+      ))}
+    </section>
+  );
+}
+```
+
+## Matrice de decision
+
+<ComparisonTable
+  headers={["SSG", "ISR", "SSR", "CSR"]}
+  rows={[
+    { label: "Moment de generation", left: "Au build", center: "Au build + regeneration periodique", right: "A chaque requete", extra: "Dans le navigateur" },
+    { label: "Performance (TTFB)", left: "Optimale (CDN)", center: "Optimale (CDN + revalidation)", right: "Variable (execution serveur)", extra: "Apres chargement JS" },
+    { label: "Fraicheur du contenu", left: "Dernier build", center: "Derniere revalidation", right: "Temps reel", extra: "Temps reel" },
+    { label: "SEO", left: "Optimal", center: "Optimal", right: "Optimal", extra: "Limite (contenu genere par JS)" },
+    { label: "Cout serveur", left: "Minimal (CDN)", center: "Faible (regeneration ponctuelle)", right: "Proportionnel au trafic", extra: "Minimal (statique + API)" },
+    { label: "Cas d'usage WordPress", left: "Pages statiques, CGV, FAQ", center: "Articles, categories, pages", right: "Recherche, contenu personnalise", extra: "Commentaires, favoris, panier" }
+  ]}
+  highlight="center"
+/>
+
+## Approche hybride : combiner les strategies
+
+L'un des avantages de Next.js est la possibilite de combiner plusieurs strategies dans un meme projet. Chaque route peut utiliser sa propre strategie.
+
+```
+app/
+  page.tsx              → SSG (page d'accueil statique)
+  blog/
+    page.tsx            → ISR revalidate: 3600 (liste des articles)
+    [slug]/
+      page.tsx          → ISR revalidate: 3600 (detail article)
+  recherche/
+    page.tsx            → SSR (resultats de recherche dynamiques)
+  compte/
+    page.tsx            → SSR (contenu personnalise)
+```
+
+<Callout variant="developpeur" title="Regle pratique pour le choix de strategie">
+Pour un site WordPress headless standard, la strategie ISR avec revalidation a la demande est le choix par defaut recommande. Elle couvre la majorite des cas d'usage (articles, pages, categories) en combinant performance statique et fraicheur du contenu. Reservez le SSR aux pages qui dependent de parametres de requete ou de l'utilisateur connecte, et le SSG pur aux pages dont le contenu ne change qu'a chaque deploiement.
+</Callout>
+
+## Impact sur les performances
+
+<StatGrid>
+  <StatCard value="50ms" label="TTFB en SSG/ISR" description="Les pages pre-generees sont servies depuis le CDN le plus proche du visiteur" accent="blue" />
+  <StatCard value="200-500ms" label="TTFB en SSR" description="Le serveur genere le HTML a chaque requete — le temps depend de la latence API WordPress" accent="orange" />
+  <StatCard value="1-3s" label="TTFB en CSR" description="Le navigateur charge le JavaScript, puis effectue les appels API avant d'afficher le contenu" accent="coral" />
+</StatGrid>
+
+## Ce qu'il faut retenir
+
+<HighlightBox title="Points essentiels" accent="blue">
+
+1. **SSG** genere le HTML au build. Performance maximale, mais le contenu n'est mis a jour qu'apres un nouveau build.
+
+2. **SSR** genere le HTML a chaque requete. Contenu toujours a jour, mais temps de reponse plus eleve et cout serveur proportionnel au trafic.
+
+3. **ISR** combine SSG et revalidation periodique. La strategie recommandee par defaut pour un site WordPress headless.
+
+4. **L'approche hybride** permet d'utiliser la strategie adaptee a chaque route dans un meme projet.
+
+5. **La revalidation a la demande** via webhook est la methode la plus efficace pour synchroniser le contenu WordPress avec le frontend Next.js.
+
+</HighlightBox>
+
+<Quiz
+  question="Quelle strategie de rendu Next.js est recommandee par defaut pour les articles d'un blog WordPress headless ?"
+  options={[
+    "SSG pur — les articles ne changent jamais apres publication",
+    "SSR — le contenu doit etre genere a chaque requete pour etre a jour",
+    "ISR avec revalidation — combine la performance statique avec la possibilite de mettre a jour le contenu sans rebuild",
+    "CSR (Client-Side Rendering) — le navigateur charge le contenu via l'API"
+  ]}
+  answer={2}
+  explanation="L'ISR (Incremental Static Regeneration) est la strategie recommandee pour les articles de blog. Les pages sont pre-generees au build (performance optimale), puis regenerees en arriere-plan a intervalle configure ou a la demande via webhook. Le visiteur recoit toujours une page statique rapide, et le contenu est mis a jour sans necessiter un rebuild complet du site."
+/>

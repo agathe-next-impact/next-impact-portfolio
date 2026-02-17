@@ -1,0 +1,338 @@
+---
+title: "WooCommerce en mode headless"
+description: "Implémenter une boutique e-commerce avec WooCommerce comme backend headless et Next.js comme frontend."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 24
+---
+
+## WooCommerce comme backend e-commerce headless
+
+WooCommerce est le plugin e-commerce le plus utilisé sur WordPress, avec plus de 5 millions d'installations actives. En mode headless, WooCommerce conserve son rôle de gestion des produits, commandes, clients et paiements, tandis que le frontend Next.js prend en charge l'affichage du catalogue et le parcours d'achat.
+
+<ArchitectureDiagram
+  title="Architecture WooCommerce headless"
+  layers={[
+    { label: "Frontend Next.js", items: ["Catalogue produits", "Panier (état client)", "Tunnel de commande", "Compte client"], color: "blue" },
+    { label: "API WooCommerce", items: ["Store API (panier, checkout)", "REST API v3 (produits, commandes)", "Webhooks"], color: "orange" },
+    { label: "Backend WooCommerce", items: ["Gestion des produits", "Traitement des commandes", "Paiements (Stripe, PayPal)", "Inventaire et expédition"], color: "dark" },
+  ]}
+/>
+
+<StatGrid>
+  <StatCard value="5M+" label="installations actives" description="WooCommerce est le plugin e-commerce WordPress le plus déployé" accent="blue" />
+  <StatCard value="2" label="API disponibles" description="REST API v3 (admin) et Store API (frontend/panier)" accent="orange" />
+  <StatCard value="100+" label="passerelles de paiement" description="Extensions de paiement compatibles avec WooCommerce" accent="coral" />
+</StatGrid>
+
+## Les deux API de WooCommerce
+
+WooCommerce expose deux API distinctes, chacune adaptée à un usage spécifique.
+
+<ComparisonTable
+  headers={["REST API v3", "Store API"]}
+  highlight="right"
+  rows={[
+    { label: "Usage principal", left: "Administration (CRUD produits, commandes)", right: "Frontend (panier, checkout, catalogue public)" },
+    { label: "Authentification", left: "Clés API (consumer key / secret)", right: "Nonce ou sans authentification pour le panier" },
+    { label: "Endpoint de base", left: "/wp-json/wc/v3/", right: "/wp-json/wc/store/v1/" },
+    { label: "Panier", left: "Non disponible", right: "Gestion complète (ajout, suppression, mise à jour)" },
+    { label: "Checkout", left: "Non disponible", right: "Endpoint de commande intégré" },
+    { label: "Adapté au headless", left: "Pour la gestion back-office", right: "Pour le parcours d'achat frontend" },
+  ]}
+/>
+
+<Callout variant="developpeur" title="Store API : l'API conçue pour le headless">
+La Store API est l'API recommandée pour le frontend headless. Contrairement à la REST API v3 qui est orientée administration, la Store API gère nativement le panier, le checkout et l'affichage du catalogue sans nécessiter de clés d'authentification pour les opérations publiques. Elle est maintenue par l'équipe WooCommerce et fait partie du plugin WooCommerce Blocks.
+</Callout>
+
+## Authentification des API
+
+### REST API v3 (opérations d'administration)
+
+```typescript
+// lib/woocommerce.ts — client REST API v3
+const WC_API_URL = process.env.WOOCOMMERCE_API_URL; // https://admin.votre-site.fr/wp-json/wc/v3
+const WC_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY;
+const WC_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
+
+export async function fetchWooCommerce(endpoint: string) {
+  const credentials = Buffer.from(`${WC_KEY}:${WC_SECRET}`).toString('base64');
+
+  const response = await fetch(`${WC_API_URL}/${endpoint}`, {
+    headers: {
+      'Authorization': `Basic ${credentials}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.json();
+}
+```
+
+### Store API (opérations frontend)
+
+```typescript
+// lib/store-api.ts — client Store API
+const STORE_API_URL = process.env.NEXT_PUBLIC_STORE_API_URL;
+// https://admin.votre-site.fr/wp-json/wc/store/v1
+
+export async function fetchStoreAPI(endpoint: string, options?: RequestInit) {
+  const response = await fetch(`${STORE_API_URL}/${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+    credentials: 'include', // envoie les cookies de session (panier)
+  });
+
+  return response.json();
+}
+```
+
+## Affichage du catalogue produits
+
+```typescript
+// app/boutique/page.tsx — page catalogue
+async function getProducts() {
+  const products = await fetch(
+    `${process.env.WOOCOMMERCE_API_URL}/products?per_page=24&status=publish`,
+    {
+      headers: {
+        'Authorization': `Basic ${Buffer.from(
+          `${process.env.WOOCOMMERCE_CONSUMER_KEY}:${process.env.WOOCOMMERCE_CONSUMER_SECRET}`
+        ).toString('base64')}`,
+      },
+      next: { revalidate: 3600 }, // Revalider toutes les heures
+    }
+  ).then(res => res.json());
+
+  return products;
+}
+
+export default async function BoutiquePage() {
+  const products = await getProducts();
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {products.map((product: any) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+}
+```
+
+## Gestion du panier
+
+Le panier est l'élément central du parcours d'achat. En mode headless, deux approches sont possibles.
+
+### Approche 1 : Panier côté client (recommandé pour la performance)
+
+L'état du panier est géré dans le navigateur (Context API, Zustand ou Redux). Cette approche offre une réactivité maximale car aucune requête réseau n'est nécessaire pour ajouter ou retirer un produit.
+
+```typescript
+// stores/cart-store.ts — gestion du panier côté client avec Zustand
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+};
+
+type CartStore = {
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
+  clearCart: () => void;
+  total: () => number;
+};
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => set((state) => {
+        const existing = state.items.find((i) => i.id === item.id);
+        if (existing) {
+          return {
+            items: state.items.map((i) =>
+              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+            ),
+          };
+        }
+        return { items: [...state.items, { ...item, quantity: 1 }] };
+      }),
+      removeItem: (id) => set((state) => ({
+        items: state.items.filter((i) => i.id !== id),
+      })),
+      updateQuantity: (id, quantity) => set((state) => ({
+        items: state.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
+      })),
+      clearCart: () => set({ items: [] }),
+      total: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+    }),
+    { name: 'cart-storage' }
+  )
+);
+```
+
+### Approche 2 : Panier côté serveur (via Store API)
+
+Le panier est géré par WooCommerce via la Store API. Chaque opération (ajout, suppression) effectue une requête vers le backend. Cette approche garantit la synchronisation avec l'inventaire en temps réel.
+
+```typescript
+// Ajouter un produit au panier via Store API
+async function addToCart(productId: number, quantity: number = 1) {
+  return fetchStoreAPI('cart/add-item', {
+    method: 'POST',
+    body: JSON.stringify({ id: productId, quantity }),
+  });
+}
+
+// Récupérer le contenu du panier
+async function getCart() {
+  return fetchStoreAPI('cart');
+}
+```
+
+## Tunnel de commande (checkout)
+
+Le checkout est l'étape la plus sensible du parcours e-commerce. La Store API expose un endpoint dédié qui gère la création de commande, le calcul des taxes et des frais de livraison.
+
+```typescript
+// app/checkout/actions.ts — action serveur pour le checkout
+'use server';
+
+export async function createOrder(formData: {
+  billing: BillingAddress;
+  shipping: ShippingAddress;
+  cartItems: CartItem[];
+}) {
+  const response = await fetch(
+    `${process.env.WOOCOMMERCE_API_URL}/orders`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${Buffer.from(
+          `${process.env.WOOCOMMERCE_CONSUMER_KEY}:${process.env.WOOCOMMERCE_CONSUMER_SECRET}`
+        ).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payment_method: 'stripe',
+        billing: formData.billing,
+        shipping: formData.shipping,
+        line_items: formData.cartItems.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      }),
+    }
+  );
+
+  return response.json();
+}
+```
+
+## Intégration des passerelles de paiement
+
+### Stripe
+
+Stripe est la passerelle la plus courante en headless. L'intégration utilise Stripe Elements côté frontend et le webhook Stripe côté WooCommerce pour confirmer les paiements.
+
+<StepByStep>
+  <Step number={1} title="Installer le plugin WooCommerce Stripe Gateway">
+    Installez et configurez le plugin dans WooCommerce. Renseignez vos clés API Stripe (publishable key et secret key) dans les paramètres du plugin.
+  </Step>
+  <Step number={2} title="Créer un Payment Intent côté serveur">
+    Lors du checkout, créez un Payment Intent via l'API Stripe depuis une route API Next.js. Le montant correspond au total de la commande WooCommerce.
+  </Step>
+  <Step number={3} title="Intégrer Stripe Elements côté frontend">
+    Utilisez `@stripe/react-stripe-js` pour afficher le formulaire de carte bancaire. Le composant `PaymentElement` gère la saisie et la validation des données de paiement.
+  </Step>
+  <Step number={4} title="Confirmer le paiement et créer la commande">
+    Après confirmation du paiement par Stripe, créez la commande WooCommerce via l'API REST. Le webhook Stripe met à jour le statut de la commande automatiquement.
+  </Step>
+</StepByStep>
+
+## Variations de produits et inventaire
+
+Les produits variables (tailles, couleurs) sont exposés par l'API REST v3 via l'endpoint `/products/{id}/variations`. Chaque variation possède son propre SKU, prix et stock.
+
+```typescript
+// Récupérer les variations d'un produit
+async function getProductVariations(productId: number) {
+  return fetchWooCommerce(`products/${productId}/variations?per_page=100`);
+}
+```
+
+La synchronisation de l'inventaire est automatique : WooCommerce décrémente le stock lors de la création d'une commande. En mode headless, le stock affiché sur le frontend est actualisé lors de chaque revalidation ISR ou lors d'un appel direct à l'API.
+
+## Taxes et frais de livraison
+
+WooCommerce gère nativement le calcul des taxes et des frais de livraison selon les zones géographiques configurées. La Store API retourne ces calculs dans la réponse du panier :
+
+```json
+{
+  "totals": {
+    "subtotal": "4500",
+    "tax_total": "900",
+    "shipping_total": "590",
+    "total": "5990",
+    "currency_code": "EUR"
+  }
+}
+```
+
+Les montants sont exprimés en centimes. Le frontend doit les formater pour l'affichage (5990 centimes = 59,90 EUR).
+
+## Performance pour les grands catalogues
+
+<Callout variant="tip" title="Stratégies pour les catalogues volumineux">
+Pour les boutiques avec plus de 1 000 produits, combinez ISR avec pagination côté API. Pré-générez les pages des produits les plus consultés (top 100-200) avec `generateStaticParams` et laissez les autres se générer à la demande (fallback dynamique). Utilisez `revalidate: 3600` pour rafraîchir les données produit toutes les heures.
+</Callout>
+
+```typescript
+// app/produits/[slug]/page.tsx — génération statique des produits populaires
+export async function generateStaticParams() {
+  // Pré-générer uniquement les 200 produits les plus populaires
+  const products = await fetchWooCommerce(
+    'products?per_page=200&orderby=popularity&_fields=slug'
+  );
+  return products.map((p: any) => ({ slug: p.slug }));
+}
+```
+
+## Comparaison avec d'autres solutions headless commerce
+
+<ComparisonTable
+  headers={["WooCommerce headless", "Shopify Storefront API", "Medusa.js"]}
+  rows={[
+    { label: "Coût", left: "Gratuit (open source)", right: "À partir de 39 $/mois (Shopify) | Gratuit (Medusa)" },
+    { label: "Hébergement", left: "Auto-hébergé (serveur PHP)", right: "SaaS (Shopify) | Auto-hébergé (Medusa)" },
+    { label: "Flexibilité", left: "Élevée (accès complet au code)", right: "Limitée (Shopify) | Élevée (Medusa)" },
+    { label: "Écosystème plugins", left: "Très riche (milliers d'extensions)", right: "Riche (Shopify) | En croissance (Medusa)" },
+    { label: "API", left: "REST + Store API", right: "GraphQL Storefront | REST + API custom" },
+    { label: "Adapté si", left: "Site WordPress existant, budget limité", right: "E-commerce pur (Shopify) | Projet sur mesure (Medusa)" },
+  ]}
+/>
+
+<Quiz
+  question="Quelle API WooCommerce est recommandée pour gérer le panier d'achat dans un frontend headless ?"
+  options={[
+    "L'API REST v3 avec les clés consumer key / consumer secret",
+    "L'API XML-RPC de WordPress",
+    "La Store API (wc/store/v1) conçue pour les opérations frontend",
+    "L'API GraphQL via WPGraphQL"
+  ]}
+  answer={2}
+  explanation="La Store API (/wp-json/wc/store/v1/) est l'API spécifiquement conçue pour les opérations frontend en mode headless. Elle gère nativement le panier (ajout, suppression, mise à jour), le checkout et l'affichage du catalogue sans nécessiter de clés d'authentification pour les opérations publiques. La REST API v3, quant à elle, est orientée administration et ne dispose pas d'endpoint de gestion du panier."
+/>

@@ -1,0 +1,312 @@
+---
+title: "Authentification et gestion des sessions"
+description: "Gérer l'authentification utilisateur entre WordPress et un frontend Next.js avec JWT et cookies sécurisés."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 16
+---
+
+## Pourquoi l'authentification est differente en headless
+
+Dans une architecture WordPress traditionnelle, l'authentification repose sur des cookies de session PHP. Le navigateur envoie le cookie a chaque requete vers le meme domaine, et WordPress verifie la session cote serveur. Ce mecanisme fonctionne car le frontend et le backend partagent le meme domaine.
+
+En architecture headless, le frontend (Next.js) et le backend (WordPress) sont deployes sur des domaines differents (par exemple `www.monsite.fr` et `admin.monsite.fr`). Les cookies de session WordPress ne sont pas envoyes aux requetes vers le frontend. Il faut donc un mecanisme d'authentification qui fonctionne entre domaines.
+
+<FlowDiagram
+  nodes={[
+    { label: "Utilisateur", description: "Saisit ses identifiants sur le frontend Next.js", icon: "👤" },
+    { label: "Frontend Next.js", description: "Envoie les identifiants a l'API WordPress", icon: "🖥️" },
+    { label: "WordPress API", description: "Verifie les identifiants et retourne un token JWT", icon: "🔐" },
+    { label: "Session", description: "Le token est stocke dans un cookie httpOnly securise", icon: "🍪" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Les methodes d'authentification disponibles
+
+Trois methodes principales permettent d'authentifier un utilisateur entre un frontend Next.js et un backend WordPress.
+
+<ComparisonTable
+  headers={["Application Passwords", "JWT (JSON Web Tokens)", "OAuth 2.0"]}
+  rows={[
+    { label: "Complexite de mise en place", left: "Faible — natif depuis WordPress 5.6", center: "Moyenne — necessite un plugin WordPress", right: "Elevee — necessite un serveur d'autorisation" },
+    { label: "Cas d'usage", left: "Acces API serveur-a-serveur (scripts, CI/CD)", center: "Authentification utilisateur frontend-backend", right: "Integration tierce, SSO (Single Sign-On)" },
+    { label: "Securite", left: "Token statique — ne peut pas etre revoque sans regeneration", center: "Token avec expiration — peut etre renouvele via refresh token", right: "Protocole standardise avec scopes et consentement" },
+    { label: "Stockage cote client", left: "Non recommande (token permanent)", center: "Cookie httpOnly ou memoire", right: "Cookie httpOnly" },
+    { label: "Recommandation", left: "Scripts et automatisations serveur", center: "Cas standard pour les sites headless", right: "Applications multi-services ou SSO" }
+  ]}
+  highlight="center"
+/>
+
+<Callout variant="developpeur" title="Application Passwords : uniquement pour le serveur">
+Les Application Passwords generes par WordPress sont des tokens permanents qui ne peuvent pas etre revoques individuellement. Ils sont concus pour les scripts serveur-a-serveur (deploiement, synchronisation de contenu), pas pour l'authentification d'utilisateurs finaux. Ne stockez jamais un Application Password dans le navigateur.
+</Callout>
+
+## Authentification JWT : implementation complete
+
+Le JWT (JSON Web Token) est le mecanisme le plus adapte pour l'authentification utilisateur dans une architecture headless. Le principe est le suivant : l'utilisateur envoie ses identifiants, le serveur retourne un token signe, et le client joint ce token a chaque requete authentifiee.
+
+### Installation du plugin JWT cote WordPress
+
+<StepByStep>
+  <Step number={1} title="Installer le plugin JWT Authentication">
+    Installez le plugin **JWT Authentication for WP-API** depuis le repertoire WordPress ou via WP-CLI :
+
+    ```bash
+    wp plugin install jwt-authentication-for-wp-rest-api --activate
+    ```
+  </Step>
+  <Step number={2} title="Configurer la cle secrete JWT">
+    Ajoutez une cle secrete dans le fichier `wp-config.php`. Cette cle est utilisee pour signer les tokens. Utilisez une chaine aleatoire de 64 caracteres minimum.
+
+    ```php
+    // wp-config.php
+    define('JWT_AUTH_SECRET_KEY', 'votre-cle-secrete-aleatoire-de-64-caracteres-minimum');
+    define('JWT_AUTH_CORS_ENABLE', true);
+    ```
+  </Step>
+  <Step number={3} title="Configurer le fichier .htaccess">
+    Le serveur Apache doit transmettre l'en-tete `Authorization` a PHP. Ajoutez cette regle dans le fichier `.htaccess` :
+
+    ```apache
+    # .htaccess
+    RewriteEngine On
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+    ```
+  </Step>
+  <Step number={4} title="Tester l'endpoint de connexion">
+    Le plugin cree un endpoint `/wp-json/jwt-auth/v1/token` qui accepte les identifiants et retourne un token JWT.
+
+    ```bash
+    curl -X POST https://admin.monsite.fr/wp-json/jwt-auth/v1/token \
+      -H "Content-Type: application/json" \
+      -d '{"username": "utilisateur", "password": "mot-de-passe"}'
+    ```
+
+    Reponse attendue :
+
+    ```json
+    {
+      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+      "user_email": "utilisateur@monsite.fr",
+      "user_nicename": "utilisateur",
+      "user_display_name": "Jean Dupont"
+    }
+    ```
+  </Step>
+</StepByStep>
+
+### Implementation cote Next.js
+
+#### Route API de connexion
+
+La route API Next.js sert d'intermediaire entre le formulaire de connexion et l'API WordPress. Elle stocke le token dans un cookie httpOnly, inaccessible au JavaScript cote client.
+
+```typescript
+// app/api/auth/login/route.ts
+import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const { username, password } = await request.json();
+
+  const wpRes = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/jwt-auth/v1/token`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    }
+  );
+
+  if (!wpRes.ok) {
+    return Response.json(
+      { error: 'Identifiants invalides' },
+      { status: 401 }
+    );
+  }
+
+  const data = await wpRes.json();
+
+  // Stockage du token dans un cookie httpOnly securise
+  cookies().set('auth_token', data.token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 7, // 7 jours
+    path: '/',
+  });
+
+  return Response.json({
+    user_email: data.user_email,
+    user_display_name: data.user_display_name,
+  });
+}
+```
+
+#### Route API de deconnexion
+
+```typescript
+// app/api/auth/logout/route.ts
+import { cookies } from 'next/headers';
+
+export async function POST() {
+  cookies().delete('auth_token');
+  return Response.json({ success: true });
+}
+```
+
+#### Middleware de protection des routes
+
+Le middleware Next.js intercepte les requetes avant le rendu des pages. Il verifie la presence du cookie d'authentification et redirige vers la page de connexion si necessaire.
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+const protectedRoutes = ['/compte', '/favoris', '/panier'];
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('auth_token')?.value;
+  const isProtected = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (isProtected && !token) {
+    const loginUrl = new URL('/connexion', request.url);
+    loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/compte/:path*', '/favoris/:path*', '/panier/:path*'],
+};
+```
+
+## Stockage du token : cookie httpOnly ou localStorage ?
+
+<ComparisonTable
+  headers={["Cookie httpOnly", "localStorage"]}
+  rows={[
+    { label: "Accessible au JavaScript client", left: "Non — inaccessible aux scripts, protege contre les attaques XSS", right: "Oui — lisible par tout script execute sur la page" },
+    { label: "Envoye automatiquement", left: "Oui — inclus dans chaque requete vers le meme domaine", right: "Non — doit etre ajoute manuellement a chaque requete" },
+    { label: "Protection XSS", left: "Le token ne peut pas etre vole par un script malveillant", right: "Un script XSS peut lire et exfiltrer le token" },
+    { label: "Protection CSRF", left: "Necessite un token anti-CSRF supplementaire", right: "Non concerne (le token n'est pas envoye automatiquement)" },
+    { label: "Recommandation", left: "Methode recommandee pour la production", right: "Acceptable pour le prototypage uniquement" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="developpeur" title="Regle de securite fondamentale">
+Ne stockez jamais un token JWT dans le localStorage en production. Un script malveillant injecte dans la page (attaque XSS) peut lire le localStorage et exfiltrer le token. Les cookies httpOnly sont inaccessibles au JavaScript client, ce qui elimine ce vecteur d'attaque. La contrepartie est de configurer une protection CSRF pour les requetes qui modifient des donnees.
+</Callout>
+
+## Configuration CORS
+
+Le backend WordPress doit autoriser les requetes provenant du domaine du frontend. Cette configuration s'effectue dans un plugin ou dans `functions.php` :
+
+```php
+// functions.php — Configuration CORS pour le headless
+function headless_cors_headers() {
+    $allowed_origins = [
+        'https://www.monsite.fr',
+        'https://staging.monsite.fr',
+    ];
+
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Allow-Credentials: true');
+    }
+}
+add_action('rest_api_init', function () {
+    remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
+    add_filter('rest_pre_serve_request', function ($value) {
+        headless_cors_headers();
+        return $value;
+    });
+});
+```
+
+## Acces au contenu selon le role
+
+En WordPress headless, certains contenus peuvent etre reserves aux utilisateurs connectes ou a des roles specifiques. La verification s'effectue cote serveur dans les Server Components de Next.js :
+
+```tsx
+// app/compte/page.tsx
+import { cookies } from 'next/headers';
+
+async function getCurrentUser(token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/users/me`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    }
+  );
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export default async function ComptePage() {
+  const token = cookies().get('auth_token')?.value;
+  if (!token) return <p>Acces non autorise</p>;
+
+  const user = await getCurrentUser(token);
+  if (!user) return <p>Session expiree</p>;
+
+  return (
+    <main>
+      <h1>Bonjour {user.name}</h1>
+      <p>Role : {user.roles[0]}</p>
+    </main>
+  );
+}
+```
+
+## Considerations de securite
+
+<HighlightBox title="Checklist de securite pour l'authentification headless" accent="coral">
+
+1. **HTTPS obligatoire** : toutes les communications entre le frontend, le backend et le navigateur doivent transiter en HTTPS. Les tokens transmis en HTTP sont interceptables.
+
+2. **Cookie httpOnly + Secure + SameSite** : le token JWT doit etre stocke dans un cookie avec les attributs `httpOnly`, `secure` (HTTPS uniquement) et `sameSite: lax` ou `strict`.
+
+3. **Expiration du token** : configurez une duree de vie courte pour le token d'acces (15 minutes a 1 heure) et utilisez un refresh token avec une duree plus longue (7 jours).
+
+4. **Cle secrete forte** : la cle `JWT_AUTH_SECRET_KEY` doit etre une chaine aleatoire de 64 caracteres minimum, differente pour chaque environnement (production, staging, developpement).
+
+5. **Validation cote serveur** : ne faites jamais confiance aux donnees du token cote client. Toute verification de permission doit s'effectuer cote serveur (middleware Next.js ou API WordPress).
+
+6. **CORS restrictif** : n'autorisez que les domaines de votre frontend dans la configuration CORS. N'utilisez jamais `Access-Control-Allow-Origin: *` avec des cookies d'authentification.
+
+</HighlightBox>
+
+## Ce qu'il faut retenir
+
+<StatGrid>
+  <StatCard value="JWT" label="Methode recommandee" description="Le JWT est le mecanisme standard pour l'authentification utilisateur en architecture headless" accent="blue" />
+  <StatCard value="httpOnly" label="Stockage du token" description="Le cookie httpOnly protege le token contre les attaques XSS — ne jamais utiliser localStorage en production" accent="orange" />
+  <StatCard value="HTTPS" label="Transport obligatoire" description="Toutes les communications authentifiees doivent transiter en HTTPS pour prevenir l'interception des tokens" accent="coral" />
+</StatGrid>
+
+<Quiz
+  question="Pourquoi le stockage du token JWT dans le localStorage est-il deconseille en production ?"
+  options={[
+    "Parce que le localStorage a une limite de taille de 5 Mo",
+    "Parce que le localStorage n'est pas supporte par tous les navigateurs",
+    "Parce qu'un script malveillant (attaque XSS) peut lire le localStorage et exfiltrer le token",
+    "Parce que le localStorage est vide apres la fermeture du navigateur"
+  ]}
+  answer={2}
+  explanation="Le localStorage est accessible a tout script JavaScript execute sur la page. En cas d'attaque XSS (injection de code malveillant), un attaquant peut lire le token JWT depuis le localStorage et l'utiliser pour usurper l'identite de l'utilisateur. Les cookies httpOnly sont inaccessibles au JavaScript client, ce qui elimine ce vecteur d'attaque. C'est pourquoi le cookie httpOnly est la methode de stockage recommandee en production."
+/>

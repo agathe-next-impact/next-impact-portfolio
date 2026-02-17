@@ -1,0 +1,343 @@
+---
+title: "Migrer d'un WordPress classique vers le headless"
+description: "Guide complet de migration d'un WordPress monolithique vers une architecture headless Next.js, étape par étape."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 22
+---
+
+## Évaluer la faisabilité de la migration
+
+Avant de migrer un site WordPress classique vers une architecture headless, il faut évaluer si le projet est adapté à cette transition. Tous les sites ne bénéficient pas du découplage, et certaines configurations rendent la migration plus coûteuse que le gain attendu.
+
+### Critères favorables à la migration
+
+- Le site a des exigences de performance élevées (Core Web Vitals, temps de chargement)
+- Le contenu doit être distribué sur plusieurs canaux (site web, application mobile, bornes)
+- Le design actuel est limité par les contraintes du thème WordPress
+- L'équipe de développement maîtrise React / Next.js
+- Le site utilise principalement du contenu structuré (articles, pages, CPT avec ACF)
+
+### Critères défavorables
+
+- Le site repose fortement sur des plugins qui génèrent du HTML côté frontend (page builders, sliders complexes, formulaires avec logique avancée)
+- L'équipe technique n'a pas de compétences JavaScript frontend
+- Le budget ne couvre pas le développement d'un frontend sur mesure
+- Le site n'a pas de problème de performance ni de besoin multi-canal
+
+<Callout variant="tip" title="La migration n'est pas obligatoire">
+Le headless est une architecture, pas une obligation. Un site WordPress classique bien optimisé avec un thème léger peut atteindre d'excellentes performances. La migration se justifie lorsque les limites du monolithique deviennent un frein mesurable au projet.
+</Callout>
+
+## Phase 1 : Audit et inventaire du site existant
+
+La première phase consiste à documenter l'intégralité du site existant. Cet inventaire sert de référence tout au long de la migration.
+
+<StepByStep>
+  <Step number={1} title="Inventaire des contenus">
+    Listez tous les types de contenu : articles, pages, Custom Post Types, taxonomies (catégories, étiquettes, taxonomies personnalisées). Comptez le volume de chaque type. Identifiez les champs personnalisés (ACF, meta-données) associés à chaque type.
+  </Step>
+  <Step number={2} title="Inventaire des plugins">
+    Classez chaque plugin actif en trois catégories : (A) plugins backend qui restent compatibles en headless (ACF, Yoast SEO, WooCommerce), (B) plugins dont la fonctionnalité devra être recréée côté frontend (sliders, formulaires de contact, galeries), (C) plugins devenus inutiles (plugins de cache page, minification CSS/JS du thème).
+  </Step>
+  <Step number={3} title="Cartographie des URLs">
+    Exportez la liste complète des URLs indexées par les moteurs de recherche (via Google Search Console ou un crawl Screaming Frog). Chaque URL existante devra avoir un équivalent ou une redirection 301 dans la nouvelle architecture.
+  </Step>
+  <Step number={4} title="Relevé des performances actuelles">
+    Mesurez les Core Web Vitals actuels (LCP, FID/INP, CLS) avec PageSpeed Insights ou Lighthouse. Ces mesures serviront de point de comparaison pour valider les gains après migration.
+  </Step>
+</StepByStep>
+
+### Modèle d'inventaire des plugins
+
+| Plugin | Catégorie | Action en headless |
+|--------|-----------|-------------------|
+| Advanced Custom Fields | A - Backend | Conserver, exposer via API/GraphQL |
+| Yoast SEO | A - Backend | Conserver, récupérer les meta via API |
+| Contact Form 7 | B - Frontend | Remplacer par un formulaire React + API route |
+| Elementor | C - Inutile | Supprimer, le frontend Next.js le remplace |
+| WP Super Cache | C - Inutile | Supprimer, Next.js gère le cache (SSG/ISR) |
+| WooCommerce | A - Backend | Conserver, utiliser l'API WooCommerce |
+| Slider Revolution | B - Frontend | Remplacer par un composant React |
+
+## Phase 2 : Mise en place de la couche API
+
+Cette phase prépare WordPress à fonctionner comme un backend headless sans affecter le site en production.
+
+### Installer et configurer les plugins API
+
+```bash
+# Plugins à installer sur le WordPress existant
+# WPGraphQL (si vous choisissez GraphQL)
+# WPGraphQL for ACF (pour exposer les champs ACF)
+# Yoast SEO for WPGraphQL (pour les meta SEO)
+```
+
+### Vérifier l'exposition des contenus
+
+Testez que tous les types de contenu sont accessibles via l'API :
+
+```bash
+# Vérifier les articles
+curl https://votre-site.com/wp-json/wp/v2/posts?per_page=1
+
+# Vérifier les pages
+curl https://votre-site.com/wp-json/wp/v2/pages?per_page=1
+
+# Vérifier les CPT (si applicable)
+curl https://votre-site.com/wp-json/wp/v2/projets?per_page=1
+
+# Vérifier l'endpoint GraphQL
+curl -X POST https://votre-site.com/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ posts(first: 1) { nodes { title } } }"}'
+```
+
+### Ajouter les CPT manquants à l'API
+
+Si des Custom Post Types existants n'ont pas `show_in_rest => true`, corrigez leur enregistrement :
+
+```php
+// Ajouter show_in_rest à un CPT existant enregistré par un plugin tiers
+add_filter('register_post_type_args', function ($args, $post_type) {
+  if ($post_type === 'portfolio') {
+    $args['show_in_rest'] = true;
+    $args['rest_base'] = 'portfolios';
+    $args['show_in_graphql'] = true;
+    $args['graphql_single_name'] = 'portfolio';
+    $args['graphql_plural_name'] = 'portfolios';
+  }
+  return $args;
+}, 10, 2);
+```
+
+## Phase 3 : Développement du frontend Next.js
+
+Le frontend est développé en parallèle, sur un domaine de staging séparé, pendant que le site WordPress continue de fonctionner normalement.
+
+<ArchitectureDiagram
+  title="Architecture pendant la migration"
+  layers={[
+    { label: "Production (inchangée)", items: ["WordPress + Thème PHP", "votre-site.com", "Trafic utilisateur normal"], color: "dark" },
+    { label: "API (ajoutée)", items: ["WPGraphQL / REST API", "Même instance WordPress", "Accessible par le staging"], color: "blue" },
+    { label: "Staging (nouveau)", items: ["Next.js Frontend", "staging.votre-site.com", "Développement et tests"], color: "orange" }
+  ]}
+/>
+
+### Structure de projet recommandée
+
+```
+frontend/
+├── app/
+│   ├── layout.tsx              # Layout principal
+│   ├── page.tsx                # Page d'accueil
+│   ├── blog/
+│   │   ├── page.tsx            # Listing articles
+│   │   └── [slug]/page.tsx     # Article individuel
+│   ├── [slug]/page.tsx         # Pages WordPress
+│   └── projets/
+│       ├── page.tsx            # Listing projets (CPT)
+│       └── [slug]/page.tsx     # Projet individuel
+├── lib/
+│   ├── wordpress.ts            # Fonctions de requête API
+│   └── types.ts                # Types TypeScript
+├── components/
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   └── ...
+└── next.config.js
+```
+
+### Reconstituer les pages une par une
+
+Procédez page par page, en commençant par les plus simples :
+
+1. Pages statiques (À propos, Contact, Mentions légales)
+2. Listing d'articles et article individuel
+3. Pages de taxonomies (catégories, étiquettes)
+4. Custom Post Types et leurs archives
+5. Page d'accueil (souvent la plus complexe)
+6. Fonctionnalités interactives (recherche, formulaires, filtres)
+
+## Phase 4 : Mappage des URLs et redirections
+
+La préservation des URLs existantes est critique pour le SEO. Chaque URL indexée doit soit conserver le même chemin dans la nouvelle architecture, soit être redirigée via un code 301.
+
+<Callout variant="warning" title="Ne cassez jamais les URLs existantes">
+Une URL modifiée sans redirection 301 perd son historique de référencement. Les moteurs de recherche considèrent la nouvelle URL comme une page entièrement nouvelle. Si le site a des pages bien positionnées, la perte de trafic peut être significative et longue à récupérer.
+</Callout>
+
+### Mappage des structures d'URL
+
+| URL WordPress | URL Next.js | Action |
+|------|------|--------|
+| `/2024/11/mon-article/` | `/blog/mon-article` | Redirection 301 |
+| `/category/technologie/` | `/blog/categorie/technologie` | Redirection 301 |
+| `/a-propos/` | `/a-propos` | Conservation (même chemin) |
+| `/wp-content/uploads/...` | Inchangé (même serveur) | Proxy ou CDN |
+
+### Implémenter les redirections dans Next.js
+
+```javascript
+// next.config.js
+const nextConfig = {
+  async redirects() {
+    return [
+      // Redirection du format date WordPress vers le nouveau format
+      {
+        source: '/:year(\\d{4})/:month(\\d{2})/:slug',
+        destination: '/blog/:slug',
+        permanent: true, // 301
+      },
+      // Redirection des catégories
+      {
+        source: '/category/:slug',
+        destination: '/blog/categorie/:slug',
+        permanent: true,
+      },
+      // Redirection des tags
+      {
+        source: '/tag/:slug',
+        destination: '/blog/tag/:slug',
+        permanent: true,
+      },
+      // Redirection du flux RSS
+      {
+        source: '/feed',
+        destination: '/rss.xml',
+        permanent: true,
+      },
+    ];
+  },
+};
+```
+
+## Phase 5 : Préservation du SEO
+
+### Métadonnées et balises meta
+
+Récupérez les données SEO depuis Yoast SEO ou Rank Math via l'API :
+
+```graphql
+query ArticleSEO($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    title
+    seo {
+      title
+      metaDesc
+      canonical
+      opengraphTitle
+      opengraphDescription
+      opengraphImage {
+        sourceUrl
+      }
+      twitterTitle
+      twitterDescription
+    }
+  }
+}
+```
+
+### Sitemap XML
+
+Générez le sitemap dynamiquement dans Next.js en récupérant toutes les URLs depuis l'API WordPress :
+
+```typescript
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await fetchAllPosts();
+  const pages = await fetchAllPages();
+
+  const postUrls = posts.map((post) => ({
+    url: `https://votre-site.com/blog/${post.slug}`,
+    lastModified: new Date(post.modified),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  const pageUrls = pages.map((page) => ({
+    url: `https://votre-site.com/${page.slug}`,
+    lastModified: new Date(page.modified),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  return [
+    { url: 'https://votre-site.com', priority: 1.0 },
+    ...pageUrls,
+    ...postUrls,
+  ];
+}
+```
+
+## Phase 6 : Basculement DNS et mise en production
+
+<FlowDiagram
+  nodes={[
+    { label: "Tests finaux", description: "Validation complète sur l'environnement de staging", icon: "✅" },
+    { label: "Basculement DNS", description: "Le domaine pointe vers le serveur Next.js", icon: "🔀" },
+    { label: "Monitoring", description: "Surveillance des erreurs 404, performances et indexation", icon: "📊" },
+    { label: "Validation", description: "Vérification post-migration pendant 2 à 4 semaines", icon: "🔍" }
+  ]}
+  accent="blue"
+/>
+
+### Stratégie de basculement sans interruption
+
+1. **Déployez le frontend Next.js** sur son hébergement définitif (Vercel, serveur Node.js, etc.)
+2. **Configurez le domaine** : le domaine principal pointe vers le frontend Next.js. Le backend WordPress est accessible via un sous-domaine (`admin.votre-site.com` ou `cms.votre-site.com`).
+3. **Réduisez le TTL DNS** à 300 secondes (5 minutes) au moins 48 heures avant le basculement. Cela accélère la propagation du changement.
+4. **Basculez les enregistrements DNS** : modifiez le A record (ou CNAME) pour pointer vers le serveur Next.js.
+5. **Vérifiez le certificat SSL** : assurez-vous que le certificat HTTPS est actif sur le nouveau serveur avant le basculement.
+
+### Plan de rollback
+
+Si un problème critique est détecté après le basculement :
+
+1. Restaurez les enregistrements DNS précédents (le TTL réduit permet une propagation en 5 minutes)
+2. Le site WordPress original reprend le trafic immédiatement
+3. Aucun contenu n'est perdu car WordPress reste intact pendant toute la migration
+
+<Callout variant="decideur" title="Le WordPress original reste intact">
+À aucun moment de la migration le site WordPress original n'est modifié de manière destructive. Les plugins API sont ajoutés, mais le thème et le rendu frontend continuent de fonctionner. Le rollback consiste simplement à repointer le DNS vers le serveur WordPress.
+</Callout>
+
+## Checklist de validation post-migration
+
+<ComparisonTable
+  headers={["Vérification", "Outil / Méthode"]}
+  rows={[
+    { label: "Aucune erreur 404", left: "Crawler (Screaming Frog)", right: "Vérifier toutes les URLs de l'inventaire initial" },
+    { label: "Redirections 301 actives", left: "curl -I ou httpstatus.io", right: "Tester chaque ancien format d'URL" },
+    { label: "Métadonnées SEO présentes", left: "Inspecteur de balises", right: "title, description, og:image sur chaque page" },
+    { label: "Sitemap XML accessible", left: "/sitemap.xml", right: "Soumettre dans Google Search Console" },
+    { label: "Core Web Vitals", left: "PageSpeed Insights", right: "Comparer avec les mesures pré-migration" },
+    { label: "Formulaires fonctionnels", left: "Tests manuels", right: "Soumission, validation, notification email" },
+    { label: "Images chargées", left: "DevTools > Network", right: "Vérifier les formats (WebP/AVIF), dimensions, alt" },
+    { label: "Indexation Google", left: "Google Search Console", right: "Surveiller le rapport de couverture pendant 4 semaines" }
+  ]}
+/>
+
+## Erreurs courantes à éviter
+
+<StatGrid>
+  <StatCard value="N°1" label="URLs cassées" description="Ne pas mapper toutes les anciennes URLs vers des redirections 301" accent="coral" />
+  <StatCard value="N°2" label="SEO oublié" description="Ne pas récupérer les meta-données Yoast/Rank Math via l'API" accent="coral" />
+  <StatCard value="N°3" label="Migration Big Bang" description="Tout migrer en une fois au lieu de procéder page par page" accent="coral" />
+  <StatCard value="N°4" label="Pas de rollback" description="Ne pas prévoir de plan de retour arrière en cas de problème" accent="coral" />
+</StatGrid>
+
+<Quiz
+  question="Pourquoi faut-il réduire le TTL DNS avant le basculement vers le frontend Next.js ?"
+  options={[
+    "Pour améliorer la vitesse de chargement du site",
+    "Pour permettre aux navigateurs de vider leur cache",
+    "Pour que le changement d'adresse IP se propage rapidement à tous les serveurs DNS",
+    "Pour activer le protocole HTTPS sur le nouveau serveur"
+  ]}
+  answer={2}
+  explanation="Le TTL (Time To Live) indique aux serveurs DNS combien de temps ils peuvent mettre en cache l'adresse IP associée au domaine. Avec un TTL de 86400 secondes (24 heures, valeur courante), les serveurs DNS continueraient de pointer vers l'ancien serveur pendant 24 heures après le changement. En réduisant le TTL à 300 secondes avant la migration, la propagation du nouvel enregistrement DNS s'effectue en moins de 5 minutes, ce qui minimise la période d'interruption et permet un rollback rapide si nécessaire."
+/>

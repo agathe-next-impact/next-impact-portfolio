@@ -1,0 +1,186 @@
+---
+title: Dois-je passer au headless ?
+description: Guide de décision simple
+category: headless-cms
+author: Next Impact
+date: "2025-03-15"
+order: 4
+---
+
+## Auto-diagnostic interactif
+
+<Callout variant="tip" title="Évaluation personnalisée de votre situation">
+Répondez aux 5 critères ci-dessous pour obtenir une recommandation détaillée. Votre résultat est partageable via un lien unique.
+</Callout>
+
+<HeadlessDiagnostic />
+
+## Exemples concrets par profil
+
+<ComparisonTable
+  headers={["Blog culinaire personnel", "E-commerce mode 500 produits"]}
+  rows={[
+    { label: "Performance", left: "Temps de chargement acceptable (0 pt)", right: "Site lent, impact sur les ventes (6 pts)" },
+    { label: "Design", left: "Thème adapté aux besoins (0 pt)", right: "Thème limitant pour le catalogue (3 pts)" },
+    { label: "Multi-canal", left: "Site web uniquement (0 pt)", right: "Application mobile prévue (3 pts)" },
+    { label: "Budget", left: "Inférieur à 2 000 EUR (-2 pts)", right: "5 000 EUR disponibles (2 pts)" },
+    { label: "Autonomie", left: "Gestion autonome totale (-1 pt)", right: "Prestataire dédié (3 pts)" },
+    { label: "Business", left: "Blog personnel (0 pt)", right: "E-commerce concurrentiel (4 pts)" },
+    { label: "Total", left: "-3 pts : WP traditionnel", right: "21 pts : headless recommandé" }
+  ]}
+  highlight="right"
+/>
+
+### Profil 1 : Blog culinaire personnel
+
+- Performance : temps de chargement acceptable (0 point)
+- Design : thème existant adapté (0 point)
+- Multi-canal : site web uniquement (0 point)
+- Budget : inférieur à 2 000 EUR (-2 points)
+- Autonomie : gestion autonome totale souhaitée (-1 point)
+- Business : blog personnel (0 point)
+- Total : -3 points
+
+Recommandation : WordPress traditionnel. Optimiser le cache (WP Super Cache ou W3 Total Cache), les images et l'hébergement.
+
+### Profil 2 : E-commerce mode avec 500 produits
+
+- Performance : temps de chargement élevé, impact mesurable sur les conversions (6 points)
+- Design : thème WooCommerce limitant pour la mise en valeur des produits (3 points)
+- Multi-canal : application mobile prévue dans la roadmap (3 points)
+- Budget : 5 000 EUR disponibles (2 points)
+- Autonomie : prestataire dédié au développement (3 points)
+- Business : e-commerce dans un secteur concurrentiel (4 points)
+- Total : 21 points
+
+Recommandation : migration headless justifiée. Le gain de performance et la capacité multi-canal offrent un retour sur investissement mesurable.
+
+### Profil 3 : Site vitrine cabinet de conseil
+
+- Performance : temps de chargement correct mais perfectible (1 point)
+- Design : besoin d'une image plus professionnelle et moderne (2 points)
+- Multi-canal : site web uniquement (0 point)
+- Budget : 3 000 EUR (0 point)
+- Autonomie : contenu géré en interne, technique déléguée (1 point)
+- Business : secteur traditionnel avec clients exigeants sur le digital (2 points)
+- Total : 6 points
+
+Recommandation : les deux architectures sont viables. Headless si l'image digitale est un facteur de différenciation dans l'acquisition client. WordPress traditionnel optimisé dans le cas contraire.
+
+## Cas particuliers
+
+### Envisager le headless malgré un score faible si :
+
+- La concurrence directe adopte des technologies modernes (risque de décalage)
+- La cible utilisateur est fortement digitalisée (milléniaux, secteur tech, B2B SaaS)
+- Une croissance rapide du trafic ou des fonctionnalités est anticipée
+- L'objectif est de pérenniser la plateforme technique sur 5 ans et plus
+
+### Rester sur du traditionnel malgré un score élevé si :
+
+- Vous souhaitez une autonomie totale et ne disposez pas d'un accompagnement technique
+- Le projet dépend de plugins WordPress spécifiques sans équivalent headless (LMS complexe, marketplace, etc.)
+- Le calendrier ne permet pas un développement sur mesure de qualité
+- Le budget réel est insuffisant pour couvrir les deux couches (back-end + front-end)
+
+## Stratégies de transition
+
+<StepByStep>
+  <Step number={1} title="Option 1 : Migration directe">
+    Passage complet à l'architecture headless en un seul projet. Plus efficient en termes de délai total, mais nécessite une phase de recette rigoureuse. Recommandé si votre score est supérieur à 12 et qu'un accompagnement technique est en place.
+  </Step>
+  <Step number={2} title="Option 2 : Approche progressive — Phase 1">
+    Optimiser le WordPress traditionnel existant : mise en cache agressive, CDN, optimisation des requêtes. Structurer le contenu avec ACF en prévision du headless. Identifier un prestataire technique pour le développement front-end.
+  </Step>
+  <Step number={3} title="Option 2 : Approche progressive — Phase 2">
+    Déployer une section du site en headless (page d'accueil ou landing pages) tout en conservant le reste en WordPress traditionnel. Valider l'architecture et le workflow en conditions réelles.
+  </Step>
+  <Step number={4} title="Option 2 : Approche progressive — Phase 3">
+    Migrer l'intégralité du site vers le front-end headless après validation de la phase 2. Le prestataire est rodé et les processus sont en place.
+  </Step>
+  <Step number={5} title="Option 3 : Préparation sans migration immédiate">
+    Optimiser le WordPress traditionnel actuel. Structurer le contenu pour une future migration (custom fields, custom post types). Identifier un prestataire technique et constituer le budget pour une migration planifiée ultérieurement.
+  </Step>
+</StepByStep>
+
+### Option 1 : Migration directe
+
+- Basculement complet vers l'architecture headless
+- Délai total optimisé, mais phase de recette indispensable
+- Recommandé si le score est supérieur à 12
+
+### Option 2 : Approche progressive
+
+Phase 1 : optimiser le WordPress existant
+
+- Mise en cache, CDN, optimisation des performances
+- Structuration du contenu avec ACF pour préparer l'exposition API
+- Identification d'un prestataire pour le développement front-end
+
+Phase 2 : déployer une section en headless
+
+- Page d'accueil ou landing pages migrées en premier
+- Le reste du site reste en WordPress traditionnel
+- Validation de l'architecture en conditions réelles
+
+Phase 3 : migration complète
+
+- Basculement du site entier après validation de la phase 2
+- Prestataire rodé et processus maîtrisés
+
+### Option 3 : Préparation sans migration immédiate
+
+- WordPress traditionnel optimisé pour le court terme
+- Identification d'un prestataire technique et préparation du cahier des charges
+- Constitution du budget et planification de la migration à moyen terme
+
+## Questions pour valider votre décision
+
+### Questions techniques
+
+1. "Les limitations de mon WordPress actuel sont-elles structurelles (architecture monolithique) ou conjoncturelles (mauvaise configuration, hébergement inadapté) ?"
+2. "Mon prestataire ou mon équipe peut-il gérer deux environnements de production (WordPress + front-end) ?"
+3. "Les gains mesurables (performance, multi-canal, maintenabilité) justifient-ils la complexité supplémentaire ?"
+
+### Questions business
+
+1. "Mes utilisateurs ou clients perçoivent-ils les limitations actuelles (lenteur, design daté, fonctionnalités manquantes) ?"
+2. "La migration headless contribue-t-elle directement à un objectif business mesurable (taux de conversion, acquisition, rétention) ?"
+3. "Le retour sur investissement est-il estimable et réaliste sur 12-24 mois ?"
+
+### Questions organisationnelles
+
+1. "L'équipe éditoriale et technique est-elle prête à adapter son workflow ?"
+2. "Le calendrier permet-il un développement de qualité (8 semaines minimum pour un site vitrine) ?"
+3. "La maintenance long terme (mises à jour, supervision, évolutions) est-elle assurée ?"
+
+## Le critère de décision final
+
+"Les bénéfices concrets et mesurables du headless (temps de chargement sous la seconde, design sur mesure, distribution multi-canal) justifient-ils un investissement 2 a 3 fois supérieur et une complexité technique accrue ?"
+
+Si oui : le headless est la bonne architecture pour votre projet.
+Si la réponse n'est pas claire : un WordPress traditionnel bien optimisé (cache, CDN, hébergement performant) répondra à vos besoins.
+
+## Conclusion
+
+L'architecture headless et l'architecture monolithique WordPress ne sont pas en opposition. Ce sont deux approches techniques adaptées à des contextes différents.
+
+WordPress traditionnel reste le choix optimal pour la majorité des sites web : blogs, sites vitrines, petits e-commerces et projets avec budget limité.
+
+WordPress headless devient pertinent quand les exigences dépassent les capacités d'une architecture monolithique : performance sub-seconde, interfaces sur mesure, distribution multi-canal.
+
+L'exécution compte autant que le choix d'architecture. Un WordPress traditionnel bien configuré et optimisé apportera plus de valeur qu'un headless mal conçu ou sous-dimensionné.
+
+Si l'hésitation persiste, commencez par optimiser votre WordPress actuel au maximum (cache, CDN, optimisation des requêtes, hébergement adapté). Si ces optimisations ne suffisent pas à atteindre vos objectifs, le headless sera la prochaine étape logique.
+
+<Quiz
+  question="Un e-commerce avec 500 produits, un temps de chargement élevé et un budget de 5 000 EUR devrait-il passer au headless ?"
+  options={[
+    "Non, WordPress traditionnel suffit pour un e-commerce",
+    "Oui, car son score d'évaluation est élevé (21 points) et le retour sur investissement est probable",
+    "Seulement s'il dispose déjà d'une application mobile",
+    "Il devrait attendre 2 ans avant de prendre une décision"
+  ]}
+  answer={1}
+  explanation="Avec un score de 21 points (performance critique pour les conversions, design contraint par le thème, application mobile dans la roadmap, budget suffisant, prestataire dédié et secteur concurrentiel), la migration headless est fortement recommandée. Les gains de performance, la liberté de design et la capacité multi-canal justifient l'investissement."
+/>

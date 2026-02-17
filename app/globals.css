@@ -192,11 +192,87 @@ html, body {
   .mentions-legales h2 {
     @apply text-3xl;
   }
-  .article-text p, .article-text li {
+  .article-text {
+    @apply font-googletexte leading-relaxed;
+  }
+  .article-text p {
+    @apply text-mediumblue/80 text-base mb-5;
+  }
+  .article-text li {
     @apply text-mediumblue/80;
   }
   .article-text h1, .article-text h2, .article-text h3, .article-text h4 {
-    @apply text-darkblue;
+    @apply text-darkblue font-googletitre;
+  }
+  .article-text h1 {
+    @apply text-3xl font-medium mb-4 mt-8;
+  }
+  .article-text h2 {
+    @apply text-2xl font-medium mb-3 mt-10;
+  }
+  .article-text h3 {
+    @apply text-xl font-medium mb-3 mt-8;
+  }
+  .article-text ul, .article-text ol {
+    @apply mb-5 pl-6 space-y-2;
+  }
+  .article-text ul {
+    list-style-type: none;
+  }
+  .article-text ul li {
+    @apply relative pl-5;
+  }
+  .article-text ul li::before {
+    content: "";
+    @apply absolute left-0 top-2.5 h-1.5 w-1.5 rounded-full bg-regularblue/50;
+  }
+  .article-text ol {
+    @apply list-decimal;
+  }
+  .article-text ol li {
+    @apply pl-1;
+  }
+  .article-text ol li::marker {
+    @apply text-regularblue/50 font-medium;
+  }
+  .article-text blockquote {
+    @apply border-l-4 border-regularblue/30 bg-regularblue/5 rounded-r-2xl px-5 py-4 my-6 italic;
+  }
+  .article-text blockquote p {
+    @apply text-mediumblue/70 mb-0;
+  }
+  .article-text code {
+    @apply text-regularblue bg-regularblue/10 rounded-md px-1.5 py-0.5 text-sm font-mono;
+  }
+  .article-text pre {
+    @apply rounded-2xl bg-darkblue text-extralightblue/80 p-5 my-6 overflow-x-auto text-sm leading-relaxed;
+  }
+  .article-text pre code {
+    @apply bg-transparent p-0 text-inherit rounded-none;
+  }
+  .article-text a {
+    @apply text-regularblue underline underline-offset-2 decoration-regularblue/30 hover:decoration-regularblue/60 transition-colors;
+  }
+  .article-text strong {
+    @apply text-darkblue font-semibold;
+  }
+  .article-text img {
+    @apply rounded-2xl my-6 shadow-lg;
+  }
+  .article-text hr {
+    @apply border-extralightblue my-10;
+  }
+  .article-text table {
+    @apply w-full my-6 text-sm border-collapse;
+  }
+  .article-text th {
+    @apply bg-regularblue/10 text-darkblue font-medium text-left px-4 py-2.5 border-b-2 border-regularblue/20;
+  }
+  .article-text td {
+    @apply px-4 py-2.5 border-b border-extralightblue text-mediumblue/70;
+  }
+  .article-text tr:hover td {
+    @apply bg-regularblue/5;
   }
 }
 

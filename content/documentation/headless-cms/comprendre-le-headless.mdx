@@ -1,0 +1,119 @@
+---
+title: Comprendre le headless
+description: Qu'est-ce que le headless et WordPress utilisé en headless ?
+category: headless-cms
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+# Qu'est-ce qu'un site web traditionnel ?
+
+Dans une architecture WordPress traditionnelle, le CMS gère simultanément le stockage des données, la logique métier et le rendu HTML. Concrètement :
+
+- Le contenu (articles, pages, médias) est stocké dans une base de données MySQL
+- Le thème PHP génère le HTML, le CSS et contrôle la mise en page
+- Le visiteur reçoit directement le rendu produit par le serveur WordPress
+- Modifier le design implique d'intervenir sur le thème, qui est couplé à la logique d'affichage du contenu
+
+Ce couplage fort entre contenu et présentation signifie que toute modification visuelle nécessite de travailler dans le même environnement que la gestion de contenu.
+
+## Le concept "headless" : séparation back-end / front-end
+
+L'architecture headless repose sur un principe de découplage : le CMS (back-end) ne gère plus que le stockage et la structuration du contenu, tandis qu'un ou plusieurs front-ends indépendants se chargent de l'affichage.
+
+<FlowDiagram
+  nodes={[
+    { label: "Back-end WordPress", description: "Stockage et gestion du contenu via la base de données", icon: "📦" },
+    { label: "API", description: "Interface de communication (REST ou GraphQL)", icon: "🔗" },
+    { label: "Front-end", description: "Application web, mobile ou autre canal d'affichage", icon: "🖥️" },
+  ]}
+  accent="blue"
+/>
+
+Le contenu reste dans WordPress et sa base de données. Plusieurs front-ends peuvent consommer ce contenu via une API. Chaque front-end dispose de sa propre stack technologique et de son propre design. Modifier un front-end n'a aucun impact sur les autres ni sur le back-end.
+
+## Pourquoi on appelle ça "headless" ?
+
+Le terme "head" désigne la couche de présentation d'un CMS, c'est-a-dire le thème qui génère les pages HTML visibles par l'utilisateur. "Headless" signifie que cette couche de présentation a été retirée du CMS. Le back-end WordPress ne produit plus de HTML destiné aux visiteurs : il expose ses données via une API, et c'est une application front-end distincte qui prend en charge le rendu.
+
+<Callout variant="tip" title="Principe de découplage">
+Le back-end (WordPress) diffuse le contenu sous forme de données structurées (JSON). Un ou plusieurs front-ends consomment ces données via l'API et les restituent chacun avec leur propre interface. Ce découplage permet de faire évoluer chaque couche indépendamment.
+</Callout>
+
+## L'architecture headless en détail
+
+<ArchitectureDiagram
+  title="Architecture WordPress Headless"
+  layers={[
+    { label: "Back-end (CMS)", items: ["WordPress", "Base de données", "API REST / GraphQL"], color: "dark" },
+    { label: "Couche API", items: ["WPGraphQL", "REST API", "Authentification"], color: "blue" },
+    { label: "Front-end", items: ["Next.js", "React", "Tailwind CSS"], color: "orange" },
+  ]}
+/>
+
+## L'évolution de WordPress vers le headless
+
+WordPress existe depuis 2003 et propulse environ 40 % des sites web dans le monde. L'adoption de l'architecture headless répond à des besoins croissants en performance, en flexibilité de design et en distribution multi-canal.
+
+<ComparisonTable
+  headers={["WordPress Traditionnel", "WordPress Headless"]}
+  highlight="right"
+  rows={[
+    { label: "Affichage", left: "Un seul front-end, couplé au thème PHP", right: "Plusieurs front-ends indépendants possibles" },
+    { label: "Création", left: "Contraint par les capacités du thème", right: "Liberté totale sur la stack front-end" },
+    { label: "Performance", left: "Rendu serveur PHP à chaque requête", right: "SSG/SSR avec Next.js, pages pré-générées et mises en cache" },
+    { label: "Sécurité", left: "WordPress exposé publiquement", right: "WordPress isolé, surface d'attaque réduite" },
+    { label: "SEO", left: "Dépendant de plugins (Yoast, Rank Math)", right: "Contrôle natif des balises meta, SSR et Core Web Vitals optimisés" },
+    { label: "Multi-canal", left: false, right: true },
+  ]}
+/>
+
+<StatGrid>
+  <StatCard value="40%" label="du web mondial" description="Part de marché de WordPress (W3Techs)" accent="blue" />
+  <StatCard value="×3" label="plus rapide" description="Gain de performance moyen en architecture headless avec SSG" accent="orange" />
+  <StatCard value="100%" label="de choix technologique" description="Aucune contrainte sur le framework front-end utilisé" accent="coral" />
+</StatGrid>
+
+## Concrètement, qu'est-ce que ça change pour vous ?
+
+<Callout variant="utilisateur" title="Si vous gérez le contenu">
+L'interface d'administration WordPress reste identique. La rédaction, la publication et l'organisation du contenu ne changent pas. Seule la couche d'affichage est remplacée par un front-end moderne.
+</Callout>
+
+<Callout variant="decideur" title="Si vous visitez le site">
+Les temps de chargement passent sous la seconde grâce au pré-rendu et à la distribution via CDN. L'interface est plus fluide et le design n'est plus contraint par un thème WordPress.
+</Callout>
+
+<Callout variant="developpeur" title="Si vous développez le site">
+Vous travaillez avec une stack front-end moderne (React, Next.js, TypeScript). Le code est découplé, testable et versionné indépendamment du back-end WordPress.
+</Callout>
+
+## Les étapes pour passer au headless
+
+<StepByStep>
+  <Step number={1} title="Conserver WordPress comme CMS">
+    Le contenu et l'interface d'administration restent en place. La base de données est préservée, aucune migration de contenu n'est nécessaire.
+  </Step>
+  <Step number={2} title="Activer l'API">
+    WordPress expose nativement une API REST. Le plugin WPGraphQL peut être ajouté pour disposer d'un endpoint GraphQL, qui offre des requêtes plus ciblées et performantes.
+  </Step>
+  <Step number={3} title="Développer le front-end">
+    Une application front-end est créée avec un framework comme Next.js. Elle consomme les données de l'API WordPress et gère le rendu des pages.
+  </Step>
+  <Step number={4} title="Connecter les deux couches">
+    Le front-end effectue des requêtes vers l'API WordPress pour récupérer le contenu, puis génère les pages avec un design sur mesure, en SSG (Static Site Generation) ou SSR (Server-Side Rendering).
+  </Step>
+</StepByStep>
+
+<Quiz
+  question="Dans une architecture headless, où est stocké le contenu ?"
+  options={[
+    "Dans le front-end (Next.js)",
+    "Dans le back-end (WordPress)",
+    "Dans le navigateur du visiteur",
+    "Dans un fichier HTML statique"
+  ]}
+  answer={1}
+  explanation="Le contenu reste dans WordPress (le back-end) et sa base de données MySQL. Le front-end récupère ce contenu via l'API (REST ou GraphQL) et se charge du rendu. C'est le principe du découplage : le CMS gère les données, le front-end gère la présentation."
+/>

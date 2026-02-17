@@ -6,7 +6,9 @@
       "Bash(npm ls:*)",
       "Bash(findstr:*)",
       "WebFetch(domain:whatcms.org)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

@@ -1,42 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface TableOfContentsPopupProps {
   tableOfContents: { id: string; text: string; level: number }[];
 }
 
-export default function TableOfContentsPopup({ tableOfContents }: TableOfContentsPopupProps) {
-  // Affichage direct de la table des matières, sans bouton et sans puces
-  const getClassByLevel = (level: number) => {
-    switch (level) {
-      case 1:
-        return "text-lg font-bold text-mediumblue/90";
-      case 2:
-        return "text-base font-medium text-mediumblue mb-8";
-      case 3:
-        return "text-sm font-normal text-mediumblue/80 mb-8";
-      default:
-        return "text-sm font-normal text-gray-500";
-    }
-  };
+export default function TableOfContentsPopup({
+  tableOfContents,
+}: TableOfContentsPopupProps) {
+  const [activeId, setActiveId] = useState<string>("");
+
+  useEffect(() => {
+    const headings = tableOfContents
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (headings.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+    return () => observer.disconnect();
+  }, [tableOfContents]);
+
+  if (tableOfContents.length === 0) return null;
 
   return (
-    <nav className="relative w-full h-max bg-darkblue/80 pl-4 pt-2 pb-2 pr-2 rounded-lg">
-      <ol className="h-max space-y-8 list-decimal m-0">
-        {tableOfContents
-          .filter((item) => item.level === 2)
-          .map((item) => (
-            <li key={item.id} className={getClassByLevel(item.level)}>
-              <a
-                href={`#${item.id}`}
-                className="text-white hover:text-lightblue transition-colors duration-200"
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
-      </ol>
+    <nav className="relative w-full h-max bg-darkblue/60 backdrop-blur-sm border border-lightblue/10 p-5 rounded-2xl">
+      <p className="text-xs text-white/80 font-googletexte uppercase tracking-wider mb-4">
+        Sommaire
+      </p>
+      <ul className="space-y-0.5">
+        {tableOfContents.map((item) => (
+          <li key={item.id}>
+            <a
+              href={`#${item.id}`}
+              className={cn(
+                "block rounded-lg px-3 py-1.5 font-googletexte transition-all duration-200",
+                item.level === 3 ? "pl-6 text-xs" : "text-sm",
+                activeId === item.id
+                  ? "text-white bg-regularblue/15 border-l-2 border-orange"
+                  : "text-white/80 hover:text-white/80 hover:bg-darkblue/40 border-l-2 border-transparent"
+              )}
+            >
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

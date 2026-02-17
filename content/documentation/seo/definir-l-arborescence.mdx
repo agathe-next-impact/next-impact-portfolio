@@ -1,0 +1,172 @@
+---
+title: Comment définir l'arborescence
+description: Comment définir son arborescence pour le SEO ?
+category: seo
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+L'arborescence d'un site web conditionne directement sa capacité à être crawlé, indexé et classé par les moteurs de recherche. Une architecture bien conçue améliore le crawl budget (le nombre de pages que Googlebot explore lors de chaque passage), facilite la distribution du PageRank interne et réduit le taux de rebond en rendant la navigation prévisible pour l'utilisateur.
+
+Cet article détaille la structure d'une arborescence orientée SEO : les principes de hiérarchisation, les étapes de planification, les bonnes pratiques d'implémentation sur WordPress et des exemples concrets d'architectures efficaces.
+
+---
+
+## Qu'est-ce qu'une architecture de site web et pourquoi est-elle importante ?
+
+L'arborescence (ou architecture de l'information) désigne l'organisation hiérarchique des pages d'un site. Elle se décompose en niveaux : la page d'accueil (niveau 0), les sections principales (niveau 1), les sous-sections (niveau 2) et les pages de contenu final (niveau 3+). Chaque niveau supplémentaire augmente la profondeur de crawl, c'est-à-dire le nombre de clics nécessaires pour que Googlebot atteigne une page donnée.
+
+<FlowDiagram
+  nodes={[
+    { label: "Accueil", description: "Page d'accueil (niveau 0)", icon: "🏠" },
+    { label: "Sections principales", description: "Services, Blog, À propos...", icon: "🌿" },
+    { label: "Sous-sections", description: "Catégories et sous-pages", icon: "🍃" },
+    { label: "Pages spécifiques", description: "Articles, fiches produit...", icon: "📄" }
+  ]}
+  direction="vertical"
+  accent="blue"
+/>
+
+### Pourquoi l'architecture de site est-elle essentielle ?
+
+-  Navigation claire pour les utilisateurs
+
+Une structure prévisible réduit le nombre de clics nécessaires pour accéder à l'information. Cela diminue le taux de rebond et augmente la durée moyenne de session, deux signaux comportementaux que Google prend en compte dans son algorithme de classement.
+
+-  Optimisation pour les moteurs de recherche (SEO)
+
+Googlebot suit les liens internes pour découvrir les pages d'un site. Une arborescence plate et logique garantit que toutes les pages reçoivent du PageRank interne (la valeur transmise de page en page via les liens) et sont crawlées régulièrement. À l'inverse, une structure trop profonde isole certaines pages du flux de crawl.
+
+-  Maintenance simplifiée
+
+Une architecture cohérente facilite l'ajout de nouveaux contenus sans créer de pages orphelines (pages sans aucun lien interne pointant vers elles), qui sont invisibles pour les robots d'indexation.
+
+<Callout variant="tip" title="Impact SEO direct">
+Chaque niveau de profondeur dilue le PageRank transmis par la page d'accueil. Les pages stratégiques (pages de conversion, landing pages, pages piliers) doivent rester accessibles en 3 clics maximum depuis la page d'accueil pour conserver un poids SEO suffisant et être crawlées fréquemment.
+</Callout>
+
+Une architecture maîtrisée constitue donc le socle technique sur lequel reposent votre stratégie de contenu et votre acquisition de trafic organique.
+
+---
+
+## Planification : comment concevoir l'architecture de votre site WordPress
+
+Avant toute implémentation dans WordPress, la phase de planification détermine la qualité de l'arborescence finale. Voici les étapes à suivre.
+
+<StepByStep>
+<Step number={1} title="Définissez vos objectifs">
+Identifiez les objectifs business du site : e-commerce, génération de leads, publication de contenu éditorial. Chaque objectif implique des types de pages différents (fiches produit, landing pages, articles de blog) et donc une structure spécifique.
+</Step>
+
+<Step number={2} title="Répertoriez vos contenus">
+Listez l'ensemble des contenus à publier : pages institutionnelles, articles, fiches produit, études de cas. Classez-les par intention de recherche (informationnelle, transactionnelle, navigationnelle) pour déterminer leur place dans la hiérarchie.
+</Step>
+
+<Step number={3} title="Regroupez les contenus par thèmes">
+Organisez les contenus en silos thématiques (groupes de pages traitant d'un même sujet). Ces silos correspondent aux sections principales du site (ex. : "Services", "Blog", "Contact"). Le siloing thématique renforce la pertinence sémantique de chaque section aux yeux des moteurs de recherche.
+</Step>
+
+<Step number={4} title="Créez un plan visuel">
+Utilisez des outils de diagramme (Lucidchart, Whimsical, ou un simple tableur) pour représenter l'arborescence sous forme d'organigramme. Vérifiez que chaque page est accessible en 3 niveaux maximum et qu'aucune page orpheline n'existe.
+</Step>
+
+<Step number={5} title="Réduisez la profondeur">
+Limitez le nombre de niveaux hiérarchiques. Une arborescence à 3 niveaux (accueil > section > page) est recommandée pour la majorité des sites. Chaque niveau supplémentaire réduit la fréquence de crawl et le PageRank transmis aux pages concernées.
+</Step>
+</StepByStep>
+
+Cette phase de planification évite les refontes coûteuses après le lancement et garantit une base technique solide pour le référencement.
+
+---
+
+## Meilleures pratiques pour l'architecture d'un site WordPress
+
+### 1.  Faire simple et intuitif
+
+La règle des 3 clics stipule que toute page doit être accessible depuis la page d'accueil en 3 clics maximum. Cette règle a un double impact : elle améliore l'expérience utilisateur et garantit que Googlebot atteint l'ensemble du site lors de chaque crawl.
+
+<Callout variant="tip" title="La règle des 3 clics">
+Au-delà de l'ergonomie, cette règle a un impact direct sur le SEO technique. Les pages situées à plus de 3 niveaux de profondeur reçoivent moins de PageRank interne et sont crawlées moins fréquemment par Googlebot, ce qui retarde leur indexation et réduit leur potentiel de positionnement.
+</Callout>
+
+### 2.  Utiliser un menu clair
+
+Le menu de navigation principal est le premier vecteur de distribution du PageRank interne : chaque lien présent dans le menu transmet de la valeur SEO aux pages ciblées. Limitez le menu à 5-7 entrées principales pour éviter la dilution et regroupez les pages par catégories sémantiquement cohérentes.
+
+### 3.  Créer des URLs conviviales
+
+Les URLs doivent être lisibles, courtes et contenir le mot-clé principal de la page (ex. : `votre-site.com/services-conception-web`). Activez la structure de permalien "Nom de l'article" dans WordPress. Évitez les paramètres dynamiques (`?id=123`) qui nuisent à la lisibilité et peuvent générer du contenu dupliqué.
+
+### 4.  Ajouter une fonction de recherche
+
+Un moteur de recherche interne permet aux utilisateurs d'accéder directement au contenu recherché, réduisant le nombre de pages vues sans engagement (pogo-sticking). Sur les sites à fort volume de pages (100+), c'est un complément indispensable à la navigation principale.
+
+### 5.  Optimiser pour le mobile
+
+Depuis le passage au Mobile-First Indexing, Google utilise la version mobile du site pour l'indexation et le classement. Vérifiez que l'arborescence reste navigable sur écran réduit : menus hamburger fonctionnels, taille des zones cliquables conforme aux recommandations (48x48 px minimum), et temps de chargement mobile optimisé.
+
+---
+
+## Implémenter votre arborescence sur WordPress
+
+Une fois la planification terminée, l'implémentation dans WordPress suit un processus structuré.
+
+### Étapes :
+
+1.  Créer les pages principales
+
+Ajoutez les pages principales (Accueil, À propos, Blog, Contact) via l'onglet "Pages" du tableau de bord. Définissez la page d'accueil statique dans Paramètres > Lecture pour contrôler le point d'entrée du crawl.
+
+1.  Organiser les catégories et sous-catégories
+
+Créez les catégories WordPress en miroir de votre arborescence. Chaque catégorie génère une URL d'archive qui sera indexée : assurez-vous qu'elle contient un texte de présentation optimisé et n'est pas en `noindex` par défaut.
+
+1.  Concevoir un menu de navigation
+
+Dans Apparence > Menus, structurez les pages et catégories dans le menu principal. Ordonnez les éléments par priorité SEO : les pages ciblant les mots-clés à plus fort volume de recherche doivent apparaître en premier.
+
+1.  Configurer vos URLs (permalinks)
+
+Dans Paramètres > Permaliens, activez la structure "Nom de l'article" (`/%postname%/`). Évitez les structures incluant la date (`/%year%/%monthnum%/`) qui augmentent inutilement la profondeur des URLs.
+
+1.  Personnaliser avec un plugin si besoin
+
+Des constructeurs de pages (Elementor, Beaver Builder) permettent de personnaliser les templates sans intervenir sur le code. Veillez cependant à ce que les plugins utilisés ne génèrent pas de markup HTML superflu qui alourdirait le DOM et dégraderait les Core Web Vitals (LCP, CLS en particulier).
+
+---
+
+## Exemples d'architectures de site web
+
+Voici trois exemples d'arborescences adaptées à des typologies de sites courantes.
+
+<FlowDiagram
+  nodes={[
+    { label: "Accueil", description: "Page d'accueil du photographe", icon: "📷" },
+    { label: "Portfolio", description: "Galeries de photos", icon: "🖼️" },
+    { label: "Services", description: "Prestations proposées", icon: "💼" },
+    { label: "À propos", description: "Présentation", icon: "👤" },
+    { label: "Contact", description: "Formulaire de contact", icon: "✉️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+-  Site de photographe freelance  : Accueil > Portfolio > Services > À propos > Contact — Architecture plate à 2 niveaux, adaptée aux sites vitrine avec peu de pages.
+-  Boutique en ligne de mode  : Accueil > Nouveautés > Femmes > Hommes > Accessoires > Blog > Contact — Architecture à 3 niveaux avec catégories produit, où chaque catégorie contient des sous-catégories et des fiches produit.
+-  Blog éditorial  : Blog > Voyage > Style de vie > Technologie > À propos > Contact — Architecture organisée en silos thématiques, où chaque catégorie forme un cocon sémantique reliant les articles entre eux par maillage interne.
+
+---
+
+## Synthèse : l'arborescence comme levier SEO
+
+Définir l'arborescence d'un site WordPress est une étape déterminante pour le référencement naturel. Elle conditionne la distribution du PageRank interne, la fréquence de crawl des pages et la capacité du site à se positionner sur les requêtes ciblées.
+
+Les principes à retenir : limiter la profondeur à 3 niveaux, organiser les contenus en silos thématiques, structurer les URLs avec les mots-clés cibles, et vérifier l'absence de pages orphelines. L'arborescence doit être planifiée avant le développement, car une refonte structurelle post-lancement implique des redirections 301 en masse et un risque de perte de positionnement.
+
+<Quiz
+  question="Combien de clics maximum un utilisateur devrait-il avoir besoin pour atteindre n'importe quelle page de votre site ?"
+  options={["1 clic", "3 clics", "5 clics", "7 clics"]}
+  answer={1}
+  explanation="La règle des 3 clics est un standard en UX et en SEO technique. Au-delà de 3 niveaux de profondeur, les pages reçoivent moins de PageRank interne, sont crawlées moins fréquemment par Googlebot et voient leur potentiel de positionnement diminuer. Cette règle s'applique aussi bien à la navigation utilisateur qu'à la structure de liens internes."
+/>

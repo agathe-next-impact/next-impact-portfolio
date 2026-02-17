@@ -1,50 +1,57 @@
 import Link from "next/link"
-import { ArrowLeft, BookOpen } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 
-import { Button } from "@/components/ui/button"
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
+import { CategoryPageContent } from "@/components/documentation/category-theme-cards"
 import { Metadata } from "next";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
 
-// meta données dynamiques pour la page d'étude de cas
+const categoryInfo: Record<string, { title: string; description: string }> = {
+  "marketing-digital": {
+    title: "Marketing Digital",
+    description: "Découvrez les principes et concepts de base du marketing digital.",
+  },
+  seo: {
+    title: "SEO",
+    description: "Guides et ressources pour maîtriser le SEO de votre site.",
+  },
+  "design-ui-ux": {
+    title: "Design & UI/UX",
+    description: "Créez des expériences utilisateurs engageantes et accessibles.",
+  },
+  "projet-site-web": {
+    title: "Projet de site web",
+    description: "Préparer et mener un projet de site web de A à Z.",
+  },
+  wordpress: {
+    title: "WordPress",
+    description: "Bonnes pratiques et guides pour WordPress.",
+  },
+  "headless-cms": {
+    title: "Headless CMS",
+    description: "Architecture headless, API REST et découplage front/back.",
+  },
+  blog: {
+    title: "Blog",
+    description: "Les dernières actualités et analyses.",
+  },
+}
+
 export async function generateMetadata(props: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const categoryInfo = {
-    bases: {
-      title: "Marketing Digital",
-      description: "Découvrez les principes et concepts de base du marketing digital",
-    },
-    seo: {
-      title: "Search Engine Optimization (SEO)",
-      description: "Comprehensive guides and resources to help you master SEO for your website.",
-    },
-    uxui: {
-      title: "UX/UI Design",
-      description: "Learn how to create user-friendly and engaging website experiences.",
-    },
-    content: {
-      title: "Content Strategy",
-      description: "Develop effective content strategies to engage and convert your audience.",
-    },
-    analytics: {
-      title: "Analytics",
-      description: "Understand how to measure and analyze your website's performance.",
-    },
-  };
-
-  const info = categoryInfo[params.category as keyof typeof categoryInfo];
+  const info = categoryInfo[params.category];
   const title = info?.title || params.category.charAt(0).toUpperCase() + params.category.slice(1).replace(/-/g, " ");
   const description = info?.description || `Articles et ressources sur ${title}.`;
 
   return {
-    title: `${title} | Documentation`,
+    title: `${title} | Comprendre`,
     description,
     alternates: { canonical: `/documentation/${params.category}` },
     openGraph: {
-      title: `${title} | Documentation`,
+      title: `${title} | Comprendre`,
       description,
       url: `https://www.next-impact.digital/documentation/${params.category}`,
       type: "website",
@@ -61,7 +68,6 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
   };
 }
 
-
 interface CategoryPageProps {
   params: Promise<{
     category: string
@@ -70,90 +76,51 @@ interface CategoryPageProps {
 
 export function generateStaticParams() {
   const categories = getAllCategories()
-
-  return categories.map((category) => ({
-    category,
-  }))
+  return categories.map((category) => ({ category }))
 }
 
 export default async function CategoryPage(props: CategoryPageProps) {
   const params = await props.params;
   const { category } = params
-  const articles =  getArticlesByCategory(category)
+  const articles = getArticlesByCategory(category)
 
   if (articles.length === 0) {
     notFound()
   }
 
-
-  // Titre et description de la catégorie
-  const categoryInfo = {
-    bases: {
-      title: "Marketing Digital",
-      description: "Découvrez les principes et concepts de base du marketing digital",
-    },
-    seo: {
-      title: "Search Engine Optimization (SEO)",
-      description: "Comprehensive guides and resources to help you master SEO for your website.",
-    },
-    "ux-ui": {
-      title: "UX/UI Design",
-      description: "Learn how to create user-friendly and engaging website experiences.",
-    },
-    content: {
-      title: "Content Strategy",
-      description: "Develop effective content strategies to engage and convert your audience.",
-    },
-    analytics: {
-      title: "Analytics",
-      description: "Understand how to measure and analyze your website's performance.",
-    },
-  }
-
-  const categoryTitle =
-    categoryInfo[category as keyof typeof categoryInfo]?.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
-
+  const info = categoryInfo[category]
+  const categoryTitle = info?.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
+  const categoryDescription = info?.description || ""
 
   return (
-    <div className="flex flex-col min-h-screen">
-
+    <div className="relative min-h-screen">
       <main className="flex-1">
-        <section className="w-full py-6 md:py-12 lg:py-16">
+        <section className="w-full py-8 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6">
-            <div className="space-y-2 pb-4">
-                <h1 className="text-3xl tracking-tighter sm:text-4xl md:text-5xl">{categoryTitle}</h1>
-            </div>
-            <div className="flex justify-between items-center mb-8">
-              <Link href="/documentation">
-                <Button className="text-regularblue bg-transparent hover:bg-lightblue/10 rounded-full" size="sm">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Retour à la documentation
-                </Button>
+            {/* Header */}
+            <div className="mb-8">
+              <Link
+                href="/documentation"
+                className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10 mb-6"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Comprendre
               </Link>
+              <h1 className="font-googletitre text-3xl sm:text-4xl md:text-5xl font-medium text-white tracking-tight">
+                {categoryTitle}
+              </h1>
+              {categoryDescription && (
+                <p className="mt-3 text-lg text-white/80 font-googletexte max-w-2xl">
+                  {categoryDescription}
+                </p>
+              )}
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {articles.map((article) => (
-                <div
-                  key={article.slug}
-                  className="group relative rounded-lg bg-white p-6 border border-lightblue/10 hover:border-lightblue/20 hover:bg-extrelightblue/5 transition-colors">
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-medium text-regularblue">{article.title}</h3>
-                    <p className="text-mediumblue text-sm">{article.description}</p>
-                  </div>
-                  <Link
-                    href={`/documentation/${article.category}/${article.slug}`}
-                    className="absolute inset-0 rounded-lg"
-                    aria-label={article.title}
-                  >
-                    <span className="sr-only">{article.title}</span>
-                  </Link>
-                </div>
-              ))}
-            </div>
+
+            {/* Theme cards + Articles grid */}
+            <CategoryPageContent articles={articles} category={category} />
           </div>
         </section>
       </main>
     </div>
   )
 }
-
