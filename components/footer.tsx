@@ -38,7 +38,7 @@ export default function Footer() {
         {/* Colonne 2 : Logo certification */}
         <div className="flex flex-col items-center justify-center gap-3">
           <Image
-            src="/img/badge-certification.png"
+            src="/img/logo-activateurs.svg"
             alt="Certification"
             width={120}
             height={120}
