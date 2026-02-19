@@ -2,12 +2,29 @@ import { Metadata } from "next"
 import { pageMetadata } from "@/lib/metadata"
 import { ServiceJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 
-import ServicesOffers from "@/components/services/ServicesOffers"
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable"
-import ServicesGuide from "@/components/services/ServicesGuide"
 import Process from "@/components/process"
 import ServicesFAQ from "@/components/services/ServicesFAQ"
-import { ArrowRight, CheckCircle2, ChevronDown, Zap, Shield, Users, TrendingUp, Rocket, Smartphone, Monitor, Code, Settings, FileSearch, GraduationCap } from "lucide-react"
+import {
+  ArrowRight,
+  Heart,
+  Scale,
+  Rocket,
+  Palette,
+  Code,
+  BookOpen,
+  Shield,
+  Search,
+  Database,
+  Zap,
+  Headphones,
+  Award,
+  ClipboardCheck,
+  Play,
+  Lightbulb,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import PageLayout from "@/components/page-layout"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,69 +35,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 86400
 
 export default function ServicesPage() {
-
-  const offers = [
-    {
-      name: "ESSENTIEL",
-      tech: "WordPress Standard",
-      target: "Pour les TPE/PME et créateurs",
-      concept: "Un site robuste avec une autonomie totale.",
-      icon: "/icons/wordpress-icon.svg",
-      color: "oklch(87.9% 0.169 91.605)",
-      features: ["Budget maîtrisé", "Mise en ligne rapide", "Évolutif via plugins", "Formation incluse"],
-      recommended: false,
-    },
-    {
-      name: "PREMIUM",
-      tech: "WordPress + Astro",
-      target: "Enjeux d'image, de SEO et de performance",
-      concept: "La puissance des technologies modernes.",
-      icon: "/icons/speed-icon.svg",
-      color: "#F2E57E",
-      features: [
-        "Flexibilité totale du design",
-        "Score PageSpeed maximum",
-        "Sécurité maximale (statique)",
-        "SEO optimisé nativement",
-      ],
-      recommended: true,
-    },
-    {
-      name: "ULTIMATE",
-      tech: "WordPress + Next.js",
-      target: "Pour des fonctionnalités spécifiques",
-      concept: "L'expérience utilisateur fluide d'une application.",
-      icon: "/icons/saas-features-icon.svg",
-      color: "oklch(87.9% 0.169 91.605)",
-      features: [
-        "Interactions dynamiques",
-        "Espace client complexe",
-        "Flexibilité totale du design",
-        "Intégrations API illimitées",
-      ],
-      recommended: false,
-    },
-  ]
-
-
-  const needsGuide = [
-    {
-      need: "Je veux changer mes menus et mon design seul",
-      solution: "WordPress Classique",
-      icon: Monitor,
-    },
-    {
-      need: "Mon site actuel est trop lent et daté",
-      solution: "Astro + Headless",
-      icon: TrendingUp,
-    },
-    {
-      need: "Je veux un portail client avec des services en ligne",
-      solution: "Next.js + Headless",
-      icon: Smartphone,
-    },
-  ]
-
 
   const faqs = [
     {
@@ -127,15 +81,294 @@ export default function ServicesPage() {
       />
       <PageLayout
         titre="Nos services WordPress"
-        sousTitre="Choisissez la solution adaptée à vos besoins et à votre budget."
+        sousTitre="Notre tarification solidaire est basée sur la péréquation : la réussite des projets « Business » finance l'accessibilité numérique du secteur associatif."
       >
-                  <div className="mt-8 mb-6 space-y-24">
-                    <ServicesOffers offers={offers} />
-                    <ServicesComparisonTable />
-                    <ServicesGuide needsGuide={needsGuide} />
-                    <Process />
-                    <ServicesFAQ faqs={faqs} />
+        <div className="mt-8 mb-6 space-y-24">
+
+
+
+          {/* Section 3 Packs Tarifs */}
+          <section className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                {/* Offre Solidaire */}
+                <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Heart className="h-8 w-8 text-coral shrink-0" />
+                      <h3 className="text-2xl font-googletitre font-semibold text-coral">
+                        OFFRE SOLIDAIRE
+                      </h3>
+                    </div>
+                    <p className="text-base text-white/60 font-googletexte italic mb-4">
+                      Le boost de lancement
+                    </p>
+                    <p className="text-4xl font-googletitre font-medium text-white mb-1">
+                      Depuis 2 250 <span className="text-2xl text-white/60">€</span>
+                    </p>
+                    <p className="text-sm text-white/40 font-googletexte">
+                      TJM réduit : 350 €
+                    </p>
                   </div>
+
+                  <div className="space-y-4 flex-1">
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Pour qui ?
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        Petites assos (budget &lt; 100k€), projets d&apos;utilité sociale en démarrage.
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Technologie
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        WordPress Headless via <strong className="text-lightyellow">Starter Kit Next.js</strong> (optimisé pour le coût).
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Ce qui est inclus
+                      </p>
+                      <ul className="space-y-2">
+                        <li className="flex items-start gap-3">
+                          <Palette className="h-4 w-4 text-coral mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Design éco-conçu (base)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Code className="h-4 w-4 text-coral mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">5 pages clés</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <BookOpen className="h-4 w-4 text-coral mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Formation autonomie</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Shield className="h-4 w-4 text-coral mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Sécurité maximale</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <Link href="/tarifs/eligibilite" className="mt-8">
+                    <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-coral hover:bg-coral/90 text-white">
+                      Vérifier mon éligibilité
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Offre Équilibre */}
+                <div className="flex flex-col border-2 border-lightyellow/30 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300 relative">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="bg-lightyellow text-darkblue text-sm font-googletitre font-semibold px-4 py-1 rounded-full">
+                      Recommandé ESS
+                    </span>
+                  </div>
+
+                  <div className="mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Scale className="h-8 w-8 text-lightyellow shrink-0" />
+                      <h3 className="text-2xl font-googletitre font-semibold text-lightyellow">
+                        OFFRE ÉQUILIBRE
+                      </h3>
+                    </div>
+                    <p className="text-base text-white/60 font-googletexte italic mb-4">
+                      La performance durable
+                    </p>
+                    <p className="text-4xl font-googletitre font-medium text-white mb-1">
+                      Depuis 4 000 <span className="text-2xl text-white/60">€</span>
+                    </p>
+                    <p className="text-sm text-white/40 font-googletexte">
+                      TJM pivot : 450 €
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 flex-1">
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Pour qui ?
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        SCOP, SCIC, assos employeuses, fondations à budget moyen.
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Technologie
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        WordPress Headless <strong className="text-lightyellow">sur-mesure</strong> (Astro ou Next.js).
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Ce qui est inclus
+                      </p>
+                      <ul className="space-y-2">
+                        <li className="flex items-start gap-3">
+                          <Palette className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Design personnalisé</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Search className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Stratégie SEO avancée</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Database className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Migration de données</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Zap className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Accompagnement stratégique</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <Link href="/tarifs/eligibilite" className="mt-8">
+                    <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow hover:bg-lightyellow/90 text-darkblue">
+                      Vérifier mon éligibilité
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Offre Soutien */}
+                <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Rocket className="h-8 w-8 text-lightblue shrink-0" />
+                      <h3 className="text-2xl font-googletitre font-semibold text-extralightblue">
+                        OFFRE SOUTIEN
+                      </h3>
+                    </div>
+                    <p className="text-base text-white/60 font-googletexte italic mb-4">
+                      L&apos;excellence engagée
+                    </p>
+                    <p className="text-4xl font-googletitre font-medium text-white mb-1">
+                      Depuis 5 000 <span className="text-2xl text-white/60">€</span>
+                    </p>
+                    <p className="text-sm text-white/40 font-googletexte">
+                      TJM corporate : 650 €
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 flex-1">
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Pour qui ?
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        PME, grands comptes, structures ESS à fort CA (&gt; 500k€).
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Technologie
+                      </p>
+                      <p className="text-white/80 font-googletexte leading-relaxed">
+                        Architecture Headless <strong className="text-lightblue">complexe</strong>, multisites ou besoins API spécifiques.
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Ce qui est inclus
+                      </p>
+                      <ul className="space-y-2">
+                        <li className="flex items-start gap-3">
+                          <Palette className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">UI/UX sur-mesure totale</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Zap className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Performances critiques</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Shield className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Sécurité renforcée</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <Headphones className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                          <span className="text-white/80 font-googletexte text-sm">Support prioritaire</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-sm text-white/50 font-googletexte uppercase tracking-widest mb-2">
+                        Impact social
+                      </p>
+                      <div className="flex items-start gap-3">
+                        <Award className="h-4 w-4 text-lightblue mt-0.5 shrink-0" />
+                        <p className="text-white/70 font-googletexte text-sm leading-relaxed">
+                          <strong className="text-lightblue">Financeur</strong> : cette offre subventionne directement 40% d&apos;un projet solidaire.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" className="mt-8" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-regularblue hover:bg-regularblue/90 text-white">
+                      Discuter de mon projet
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <ServicesComparisonTable />
+
+          {/* Bandeau Audit / Démo / Comprendre */}
+          <section className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              <Link href="/audit-site-ia" className="group">
+                <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-coral/40 transition-all duration-300">
+                  <ClipboardCheck className="h-12 w-12 text-coral mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Audit</h3>
+                  <p className="text-white/60 font-googletexte text-sm leading-relaxed">
+                    Évaluez votre présence numérique et identifiez les axes d&apos;amélioration.
+                  </p>
+                </div>
+              </Link>
+
+              <Link href="/demo" className="group">
+                <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightyellow/40 transition-all duration-300">
+                  <Play className="h-12 w-12 text-lightyellow mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Démo</h3>
+                  <p className="text-white/60 font-googletexte text-sm leading-relaxed">
+                    Découvrez en live la puissance du WordPress Headless sur votre projet.
+                  </p>
+                </div>
+              </Link>
+
+              <Link href="/tarifs/eligibilite" className="group">
+                <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
+                  <Lightbulb className="h-12 w-12 text-lightblue mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Tarif</h3>
+                  <p className="text-white/60 font-googletexte text-sm leading-relaxed">
+                    Estimez et comprenez notre modèle de tarification solidaire.
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </section>
+
+          <Process />
+          <ServicesFAQ faqs={faqs} />
+        </div>
       </PageLayout>
     </main>
   )
