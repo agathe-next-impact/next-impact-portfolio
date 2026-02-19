@@ -129,8 +129,8 @@ export default function RootLayout({
           }}
         />
         <ClarityScript />
-        {/* Background SVG */}
-        <div className="fixed inset-0 z-0">
+        {/* Background SVG – fixed on all devices */}
+        <div className="fixed inset-0 z-0 will-change-transform" style={{ WebkitBackfaceVisibility: 'hidden' }}>
           <Image
             src="/img/chipset-tech-background.svg"
             alt=""

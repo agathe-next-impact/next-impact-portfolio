@@ -15,6 +15,16 @@ html, body {
   font-family: var(--font-inter), 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
+/* Force fixed background on mobile (iOS Safari fix) */
+html {
+  height: -webkit-fill-available;
+}
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+}
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;
