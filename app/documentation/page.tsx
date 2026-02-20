@@ -1,5 +1,4 @@
 import { BentoGrid } from "@/components/documentation/bento-grid";
-import { ProfilePicker } from "@/components/documentation/profile-picker";
 import { DemoShowcase } from "@/components/documentation/demo-showcase";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
@@ -42,7 +41,6 @@ export default function DocumentationPage() {
         sousTitre="Le centre de ressources pour comprendre WordPress Headless et Next.js."
       >
         <div className="container mx-auto py-12">
-          <ProfilePicker />
           <BentoGrid />
           <DemoShowcase />
         </div>

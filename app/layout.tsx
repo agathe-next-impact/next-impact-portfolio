@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
 import { ClarityScript } from '@/components/clarity-script'
+import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 
 const inter = localFont({
   src: [
@@ -140,10 +141,12 @@ export default function RootLayout({
             quality={90}
           />
         </div>
-        <Header />
-        {children}
-        <Footer />
-        <MetadataDebugger />
+        <DocumentationModeProvider>
+          <Header />
+          {children}
+          <Footer />
+          <MetadataDebugger />
+        </DocumentationModeProvider>
       </body>
     </html>
   )

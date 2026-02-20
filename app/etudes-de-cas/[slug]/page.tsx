@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, ChevronRight } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { CTASection } from "@/components/cta-section";
+import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
+import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
 import { Metadata } from "next";
 import { generateArticleMetadata } from "@/lib/metadata";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
@@ -864,54 +866,14 @@ export default async function CaseStudyPage({
               </div>
             </section>
 
-            {/* Présentation du projet */}
-            <section>
-              <h2 className="text-2xl md:mb-6 text-mediumblue">
-                Présentation du projet
-              </h2>
-              <div className="prose max-w-none">
-                {caseStudy.detailedDescription
-                  .split("\n\n")
-                  .map((paragraph, index) => (
-                    <p
-                      key={index}
-                      className="mb-4 text-mediumblue/80 md:leading-relaxed"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-              </div>
-            </section>
-
-            {/* Objectifs et résultats */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <div>
-                <h2 className="text-2xl md:mb-6 text-mediumblue">Objectifs</h2>
-                <ul className="space-y-3">
-                  {caseStudy.objectives.map((objective, index) => (
-                    <li key={index} className="w-full flex justify-start items-start">
-                      <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <span className="w-full text-mediumblue/80">{objective}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h2 className="text-2xl md:mb-6 text-mediumblue">Résultats</h2>
-                <ul className="space-y-3">
-                  {caseStudy.results.map((result, index) => (
-                    <li key={index} className="w-full flex justify-start items-start">
-                      <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                      <span className="w-full text-mediumblue/80">{result}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
+            {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil) */}
+            <CaseStudyProfileContent
+              slug={caseStudy.slug}
+              defaultDescription={caseStudy.description}
+              defaultDetailedDescription={caseStudy.detailedDescription}
+              defaultObjectives={caseStudy.objectives}
+              defaultResults={caseStudy.results}
+            />
 
             {/* Témoignage client */}
             {caseStudy.testimonial && (
@@ -1049,16 +1011,7 @@ export default async function CaseStudyPage({
                 <Separator />
 
                 <div>
-                  <Button
-                    className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 text-white hover:text-white transition-all duration-900 ease-in-out"
-                    asChild
-                  >
-                    <Link
-                      target="_blank"
-                      href="https://calendar.google.com/appointments/schedules/AcZssZ3_G3KezHg_JuQ6H4LiHqNU9EBclgf7kqfEEe7_i3nl1ssS70QyLTy2LTDU0evRlq7ZJxexe6Ze">
-                      Discuter de votre projet
-                    </Link>
-                  </Button>
+                  <CaseStudyCTA />
                 </div>
               </div>
             </div>

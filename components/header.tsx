@@ -15,6 +15,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { GlobalProfileSwitcher } from "@/components/global-profile-switcher";
 
 export function NavBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -39,7 +40,7 @@ export function NavBar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/services" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Services
+                Services & Tarifs
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -62,26 +63,14 @@ export function NavBar() {
                 Etudes de cas
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/tarifs" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Tarifs
-              </Link>
-            </NavigationMenuItem>
-                           {/*
-            <NavigationMenuItem>
-              <Link href="/simulateur-tarifs" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Tarifs
-              </Link>
-            </NavigationMenuItem>
-            */}
           </NavigationMenuList>
         </NavigationMenu>
       </nav>
 
       {/* Mobile */}
-      <nav className="flex w-full md:hidden items-center justify-end sticky">
+      <nav className="flex md:hidden items-center sticky">
         <button
-          className="p-2 rounded-md"
+          className="p-2 rounded-md shrink-0"
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           onClick={() => setMobileOpen((open) => !open)}
         >
@@ -131,14 +120,13 @@ export function NavBar() {
                   </button>
                 </div>
                 <div className="h-screen p-4 space-y-0 bg-darkblue backdrop-blur-md">
-                  <MobileMenuLink href="/services" onClick={handleMenuClick}>Services</MobileMenuLink>
+                  <MobileMenuLink href="/services" onClick={handleMenuClick}>Services & Tarifs</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
                   <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
-                  <MobileMenuLink href="/tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink>
-                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-8">Comprendre</MobileMenuLink>
+                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">Comprendre</MobileMenuLink>
 
-                  <div className="pl-4 pt-8 flex items-center gap-8 border-t">
+                  <div className="pl-4 pt-4 flex items-center gap-8 border-t border-white/10">
                     <Link href="/a-propos" onClick={handleMenuClick}>
                     <UserCheck className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
@@ -251,78 +239,51 @@ ListItem.displayName = "ListItem";
 
 export default function Header() {
   return (
-    <header className="border-b top-0 z-50 shadow-sm sticky bg-mediumblue/60 backdrop-blur-md">
-      <div className="container flex h-16 items-center justify-between px-2">
-        <div className="basis-3/12 pt-2 md:pl-0 pl-4">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <Image
-              src="/img/logo-blanc-carre.png"
-              alt="Next Impact Digital"
-              width={40}
-              height={40}
-              priority
-              fetchPriority="high"
-              style={{ width: 'auto', height: 'auto' }}
-            />
-          </Link>
-        </div>
-        <div className="basis-6/12 flex lg:justify-center justify-start">
-          <NavBar />
-        </div>
+    <header className="flex items-center justify-between border-b top-0 z-50 px-4 shadow-sm sticky bg-mediumblue/60 backdrop-blur-md h-16">
+      {/* Logo */}
+      <div className="shrink-0 pt-1">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+          <Image
+            src="/img/logo-blanc-carre.png"
+            alt="Next Impact Digital"
+            width={30}
+            height={30}
+            priority
+            fetchPriority="high"
+            style={{ width: 'auto', height: 'auto' }}
+          />
+        </Link>
+      </div>
 
-        <div className="md:basis-3/12 md:flex justify-end items-center gap-4 hidden">
-          {/*<div className="relative group">
-            <button
-              className="flex items-center gap-2 px-3 py-2 text-white"
-              type="button"
-              aria-haspopup="listbox"
-              aria-expanded="false"
-            >
-              <span className="font-normal text-white">Vous êtes</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            <div className="absolute right-0 w-44 rounded-lg shadow-xl bg-gradient-to-b from-white/40 to-white/90 bg-opacity-90 backdrop-blur-sm border border-lightblue/30 z-50 hidden group-hover:block group-focus-within:block">
-              <ul role="listbox">
-                <li>
-                  <Link
-                    href="/vous-etes/pme"
-                    className="block px-4 py-2 hover:bg-lightblue/30 text-white rounded transition"
-                    role="option"
-                  >
-                    PME
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/vous-etes/ess"
-                    className="block px-4 py-2 text-white hover:bg-lightblue/30 hover:text-white rounded transition"
-                    role="option"
-                  >
-                    ESS
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          <Link href="/a-propos" className="hidden md:inline-block">
-            <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
-          </div>*/}
-          <Link href="/a-propos" className="hidden md:inline-block">
+      {/* Desktop nav (centre) */}
+      <div className="hidden md:flex lg:justify-center justify-start pl-4">
+        <NavBar />
+      </div>
+
+      {/* Mobile : switcher centré + hamburger */}
+      <div className="flex md:hidden flex-1 items-center justify-end gap-2">
+        <GlobalProfileSwitcher />
+        <NavBar />
+      </div>
+
+      {/* Desktop : icônes de droite */}
+      <div className="hidden md:flex items-center gap-4">
+        <GlobalProfileSwitcher />
+        <Link href="/a-propos">
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
-          <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" className="hidden md:inline-block">
-            <File className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
-          <Link href="tel:0673981638" className="hidden md:inline-block">
-            <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
-          <Link href="mailto:agathe@next-impact.digital" className="hidden md:inline-block">
-            <MailIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
-          </Link>
-          <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank" className="hidden md:inline-block">
-            <ScreenShareIcon className="w-6 h-6 text-white/90 hover:text-white transition" />         
-          </Link>
-        </div>
+        </Link>
+        <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
+          <File className="w-6 h-6 text-white/90 hover:text-white transition" />
+        </Link>
+        <Link href="tel:0673981638">
+          <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
+        </Link>
+        <Link href="mailto:agathe@next-impact.digital">
+          <MailIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
+        </Link>
+        <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank">
+          <ScreenShareIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
+        </Link>
       </div>
     </header>
   );

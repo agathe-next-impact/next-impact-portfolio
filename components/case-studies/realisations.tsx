@@ -177,14 +177,15 @@ const getProjectsByTab = (tab: string, count: number) =>
 
 interface RealisationsProps {
   count?: number;
+  defaultTab?: string;
 }
 
-export default function Realisations({ count }: RealisationsProps) {
+export default function Realisations({ count, defaultTab = "derniers" }: RealisationsProps) {
   // Limiter le nombre de réalisations affichées par tab
   return (
     <section id="realisations" className="relative overflow-hidden">
       <div className="container relative p-0">
-        <Tabs defaultValue="derniers" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
             <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
               <TabsTrigger
