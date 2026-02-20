@@ -7,9 +7,10 @@ export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Outils gratuits — Simulateur ROI & Audit de site web",
+    title: "Boîte à outils — Simulateur ROI, Benchmarking & Audit",
     description:
-      "Calculez le manque à gagner dû à un site lent, projetez vos revenus après migration Headless et auditez votre site web gratuitement.",
+      "Des outils gratuits pour évaluer, mesurer et projeter la performance de votre présence digitale. " +
+      "Simulateur de ROI, benchmarking concurrentiel et audit de site web.",
     path: "/outils",
     keywords: [
       "simulateur ROI",
@@ -18,6 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "migration headless",
       "vitesse site web",
       "optimisation conversion",
+      "benchmarking concurrentiel",
     ],
   })
 }

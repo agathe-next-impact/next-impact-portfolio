@@ -2,35 +2,25 @@ import { BentoGrid } from "@/components/documentation/bento-grid";
 import { DemoShowcase } from "@/components/documentation/demo-showcase";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return generatePageMetadata({
     title: "Comprendre — WordPress Headless & Next.js",
     description:
-      "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
-      "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
-    alternates: { canonical: "/documentation" },
-    openGraph: {
-      title: "Comprendre — WordPress Headless & Next.js",
-      url: "https://www.next-impact.digital/documentation",
-      description:
-        "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
-        "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
-      type: "website",
-      siteName: "Next Impact",
-      images: [
-        {
-          url: "/img/desktop-screen-next-impact.png",
-          width: 1200,
-          height: 630,
-          alt: "Next Impact — WordPress Headless & Next.js",
-        },
-      ],
-    },
-  };
+      "Le centre de ressources pour comprendre WordPress Headless et Next.js. " +
+      "Guides techniques, tutoriels et bonnes pratiques pour développeurs et chefs de projet.",
+    path: "/documentation",
+    keywords: [
+      "documentation WordPress Headless",
+      "tutoriels Next.js",
+      "guides techniques",
+      "ressources développeurs",
+    ],
+  });
 }
 
 export default function DocumentationPage() {

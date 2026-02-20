@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
 import { CategoryPageContent } from "@/components/documentation/category-theme-cards"
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
@@ -46,26 +47,12 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
   const title = info?.title || params.category.charAt(0).toUpperCase() + params.category.slice(1).replace(/-/g, " ");
   const description = info?.description || `Articles et ressources sur ${title}.`;
 
-  return {
+  return generatePageMetadata({
     title: `${title} | Comprendre`,
     description,
-    alternates: { canonical: `/documentation/${params.category}` },
-    openGraph: {
-      title: `${title} | Comprendre`,
-      description,
-      url: `https://www.next-impact.digital/documentation/${params.category}`,
-      type: "website",
-      siteName: "Next Impact",
-      images: [
-        {
-          url: "/img/desktop-screen-next-impact.png",
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-    },
-  };
+    path: `/documentation/${params.category}`,
+    keywords: ["documentation", params.category, "guide", "comprendre"],
+  });
 }
 
 interface CategoryPageProps {

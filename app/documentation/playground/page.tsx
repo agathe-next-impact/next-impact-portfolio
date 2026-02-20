@@ -9,13 +9,18 @@ import { TypographyShowcase } from "@/components/documentation/typography-showca
 import { ColorPaletteShowcase } from "@/components/documentation/color-palette-showcase";
 import { VideoGallery } from "@/components/documentation/video-gallery";
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Playground | Comprendre",
-  description:
-    "Testez les composants UI en temps réel, visionnez les démos vidéo et explorez le design system Next Impact.",
-  alternates: { canonical: "/documentation/playground" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata({
+    title: "Playground | Comprendre",
+    description:
+      "Explorez le design system, visionnez les démos et testez les composants en temps réel. " +
+      "Typographie, couleurs, animations et composants UI Next Impact.",
+    path: "/documentation/playground",
+    keywords: ["playground", "design system", "composants UI", "démos"],
+  });
+}
 
 export default function PlaygroundPage() {
   return (

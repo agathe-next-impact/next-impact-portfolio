@@ -14,6 +14,7 @@ import { MobileToc } from "@/components/documentation/mobile-toc"
 import { ArticleSequentialNav } from "@/components/documentation/article-sequential-nav"
 import { RelatedArticles } from "@/components/documentation/related-articles"
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -40,26 +41,13 @@ export async function generateMetadata(props: { params: Promise<{ category: stri
     };
   }
 
-  return {
+  return generatePageMetadata({
     title: post.title,
     description: post.description,
-    alternates: { canonical: `/documentation/${post.category}/${post.slug}` },
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      url: `https://www.next-impact.digital/documentation/${post.category}/${post.slug}`,
-      type: "article",
-      siteName: "Next Impact",
-      images: [
-        {
-          url: "/img/desktop-screen-next-impact.png",
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-  };
+    path: `/documentation/${post.category}/${post.slug}`,
+    type: "article",
+    keywords: ["documentation", post.category, "article", "comprendre"],
+  });
 }
 
 

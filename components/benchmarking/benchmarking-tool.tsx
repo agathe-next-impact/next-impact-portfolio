@@ -104,6 +104,12 @@ function barWidth(value: number, max: number) {
   return `${Math.min((value / max) * 100, 100)}%`
 }
 
+const URL_REGEX = /^https:\/\/[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+\/?.*$/
+
+function isValidUrl(value: string): boolean {
+  return URL_REGEX.test(value.trim())
+}
+
 function extractName(url: string): string {
   try {
     const hostname = new URL(
@@ -283,6 +289,7 @@ export default function BenchmarkingTool() {
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<BenchmarkResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [urlErrors, setUrlErrors] = useState<{ site?: string; competitors: (string | null)[] }>({ competitors: [null, null, null] })
 
   const updateCompetitor = (index: number, value: string) => {
     const next = [...competitors]
@@ -293,6 +300,24 @@ export default function BenchmarkingTool() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!url.trim() || competitors.some((c) => !c.trim())) return
+
+    const FORMAT_MSG = "Format attendu : https://domaine.xx"
+    const newErrors: typeof urlErrors = { competitors: [null, null, null] }
+    let hasError = false
+
+    if (!isValidUrl(url)) {
+      newErrors.site = FORMAT_MSG
+      hasError = true
+    }
+    competitors.forEach((c, i) => {
+      if (!isValidUrl(c)) {
+        newErrors.competitors[i] = FORMAT_MSG
+        hasError = true
+      }
+    })
+
+    setUrlErrors(newErrors)
+    if (hasError) return
 
     setIsLoading(true)
     setError(null)

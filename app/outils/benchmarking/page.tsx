@@ -12,7 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
     title: "Benchmarking Concurrentiel — Comparez votre site aux leaders",
     description:
-      "Comparez les performances de votre site web avec les leaders de votre secteur. Audit PageSpeed, Core Web Vitals et analyse concurrentielle gratuite.",
+      "Mesurez les performances réelles de votre site face à vos concurrents directs via Google PageSpeed. " +
+      "Audit Core Web Vitals et analyse concurrentielle gratuite.",
     path: "/outils/benchmarking",
     keywords: [
       "benchmarking concurrentiel",
