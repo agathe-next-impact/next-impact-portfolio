@@ -38,7 +38,7 @@ export function HomepageProfileBanner() {
                     )}
                   >
                     <Icon className={cn("h-4 w-4", profile.accentColor)} />
-                    <span className="font-googletexte">{profile.label}</span>
+                    <span className="font-googletexte text-white">{profile.label}</span>
                   </button>
                 );
               })}

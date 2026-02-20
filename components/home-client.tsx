@@ -1,7 +1,5 @@
 "use client";
 import dynamic from "next/dynamic";
-import { HomepageProfileBanner } from "./homepage-profile-banner";
-
 // Dynamic imports pour les composants lourds
 const Hero = dynamic(() => import("@/components/hero"), {
   loading: () => <div className="min-h-screen" />
@@ -15,9 +13,6 @@ export default function HomeClient() {
   return (
     <>
       <main className="flex-1">
-        {/* Profile selection banner */}
-        <HomepageProfileBanner />
-
         {/* Hero Section */}
         <Hero />
 

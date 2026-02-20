@@ -9,6 +9,7 @@ import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
 import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
+import { HomepageProfileBanner } from '@/components/homepage-profile-banner'
 
 const inter = localFont({
   src: [
@@ -143,6 +144,7 @@ export default function RootLayout({
         </div>
         <DocumentationModeProvider>
           <Header />
+          <HomepageProfileBanner />
           {children}
           <Footer />
           <MetadataDebugger />
