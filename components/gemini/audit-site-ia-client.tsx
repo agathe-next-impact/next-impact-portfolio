@@ -2,6 +2,8 @@
 import PageLayout from "@/components/page-layout";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 const GeminiSearch = dynamic(() => import("@/components/gemini/gemini-search"), { ssr: false });
@@ -73,6 +75,15 @@ export default function AuditSiteIaClient() {
         titre="Faut-il migrer en Headless ?"
         sousTitre="Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless."
       >
+        <div className="container px-4 md:px-6">
+          <Link
+            href="/outils"
+            className="inline-flex items-center gap-1.5 text-sm text-extralightblue/60 hover:text-white transition mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Retour aux outils
+          </Link>
+        </div>
         <div className="relative md:max-w-5xl my-8 md:my-16 mx-4 md:mx-auto bg-mediumblue/60 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}

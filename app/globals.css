@@ -206,6 +206,9 @@ body {
   .prose code {
     @apply text-regularblue font-googletexte;
   }
+  .prose li {
+    @apply text-mediumblue/80;
+  }
   .mentions-legales h2 {
     @apply text-3xl;
   }
@@ -368,6 +371,9 @@ body {
   }
   .article-text .diagnostic-dark a {
     @apply text-white/70 no-underline;
+  }
+  li {
+    @apply text-white/80;
   }
 }
 

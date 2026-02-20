@@ -49,8 +49,8 @@ export function NavBar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/audit-site-ia" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Audit
+              <Link href="/outils" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                Outils
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -122,7 +122,7 @@ export function NavBar() {
                 <div className="h-screen p-4 space-y-0 bg-darkblue backdrop-blur-md">
                   <MobileMenuLink href="/services" onClick={handleMenuClick}>Services & Tarifs</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
-                  <MobileMenuLink href="/audit-site-ia" onClick={handleMenuClick}>Audit</MobileMenuLink>
+                  <MobileMenuLink href="/outils" onClick={handleMenuClick}>Outils</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">Comprendre</MobileMenuLink>
 
@@ -256,7 +256,7 @@ export default function Header() {
       </div>
 
       {/* Desktop nav (centre) */}
-      <div className="hidden md:flex lg:justify-center justify-start pl-4">
+      <div className="w-full hidden md:flex justify-start pl-4">
         <NavBar />
       </div>
 

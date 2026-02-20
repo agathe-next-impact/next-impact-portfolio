@@ -50,6 +50,11 @@ const nextConfig = {
         destination: '/services/eligibilite',
         permanent: true,
       },
+      {
+        source: '/audit',
+        destination: '/outils',
+        permanent: true,
+      },
     ]
   },
 }

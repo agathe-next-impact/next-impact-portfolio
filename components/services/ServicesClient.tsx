@@ -167,12 +167,12 @@ export default function ServicesClient() {
         {/* Bandeau Audit / Démo / Éligibilité */}
         <section className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <Link href="/audit-site-ia" className="group">
+            <Link href="/outils" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-coral/40 transition-all duration-300">
                 <ClipboardCheck className="h-12 w-12 text-coral mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Audit</h3>
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Outils</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Évaluez votre présence numérique et identifiez les axes d&apos;amélioration.
+                  Simulateur ROI, audit de site et diagnostic IA pour évaluer votre présence digitale.
                 </p>
               </div>
             </Link>
