@@ -137,7 +137,7 @@ function InlineLearningPath() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-googletexte text-sm font-medium text-white">
+                    <p className="font-googletexte font-medium text-white">
                       {step.title}
                     </p>
                     <p className="text-xs text-white/80 font-googletexte mt-0.5">
