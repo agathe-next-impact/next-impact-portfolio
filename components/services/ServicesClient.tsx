@@ -187,12 +187,12 @@ export default function ServicesClient() {
               </div>
             </Link>
 
-            <Link href="/services/eligibilite" className="group">
+            <Link href="/contact" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
                 <Lightbulb className="h-12 w-12 text-lightblue mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Éligibilité</h3>
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Déterminez votre offre</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Estimez et comprenez notre modèle de tarification solidaire.
+                  Répondez à quelques questions pour découvrir l&apos;offre adaptée à votre structure.
                 </p>
               </div>
             </Link>
@@ -215,33 +215,7 @@ export default function ServicesClient() {
           </motion.div>
         </AnimatePresence>
 
-        {/* CTA Final — contenu adaptatif */}
-        <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
-          <div className="max-w-2xl mx-auto px-4 text-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`cta-${profileId || "default"}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-6">
-                  {variant.ctaTitle}
-                </h2>
-                <p className="text-lg text-white/70 font-googletexte mb-8">
-                  {variant.ctaDescription}
-                </p>
-                <Link href={variant.ctaHref}>
-                  <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full shadow bg-coral hover:bg-coral/90 text-white">
-                    {variant.ctaLabel}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </section>
+
 
       </div>
     </PageLayout>

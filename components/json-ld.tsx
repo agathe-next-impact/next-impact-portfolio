@@ -215,14 +215,94 @@ export function ContactPageJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
+    name: "Contact — Next Impact Digital",
+    description:
+      "Trouvez l'offre adaptée à votre structure. Audit IA gratuit, appel visio et devis personnalisé sous 48h.",
     url: `${siteConfig.url}/contact`,
     mainEntity: {
       "@type": "ProfessionalService",
       name: siteConfig.name,
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "Customer Service",
-        availableLanguage: "French",
+      url: siteConfig.url,
+      logo: `${siteConfig.url}/img/logo-blanc-carre.png`,
+      image: `${siteConfig.url}/img/contact-facilitation.jpg`,
+      telephone: "+33673981638",
+      email: "agathe@next-impact.digital",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "4 rue du centre",
+        addressLocality: "Trizac",
+        postalCode: "15400",
+        addressCountry: "FR",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 45.2547,
+        longitude: 2.5264,
+      },
+      areaServed: {
+        "@type": "Country",
+        name: "France",
+      },
+      priceRange: "€€",
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: "+33673981638",
+          email: "agathe@next-impact.digital",
+          availableLanguage: ["French", "English"],
+          contactOption: "TollFree",
+        },
+      ],
+      potentialAction: [
+        {
+          "@type": "ReserveAction",
+          name: "Planifier un appel visio de découverte",
+          target: "https://calendar.app.google/CiBQuqFLNu3vJwSc7",
+          description: "Appel de découverte gratuit de 15 minutes",
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Demander un devis",
+          target: `${siteConfig.url}/contact`,
+          description: "Devis personnalisé sous 48h",
+        },
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Offres WordPress Headless",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            name: "Offre Solidaire",
+            description: "Site WordPress Headless pour associations et acteurs de l'ESS",
+            price: "2250",
+            priceCurrency: "EUR",
+            url: `${siteConfig.url}/services`,
+          },
+          {
+            "@type": "Offer",
+            name: "Offre Équilibre",
+            description: "Site performant avec accompagnement sur mesure",
+            price: "4000",
+            priceCurrency: "EUR",
+            url: `${siteConfig.url}/services`,
+          },
+          {
+            "@type": "Offer",
+            name: "Offre Soutien",
+            description: "Architecture WordPress Headless complète pour PME et grands comptes",
+            price: "5000",
+            priceCurrency: "EUR",
+            url: `${siteConfig.url}/services`,
+          },
+        ],
       },
     },
   };

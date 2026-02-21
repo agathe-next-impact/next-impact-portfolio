@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { CheckCircle, BookOpen, FileText, Wrench } from "lucide-react";
+import { CheckCircle, BookOpen, SearchCheck, Network } from "lucide-react";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { Progress } from "@/components/ui/progress";
@@ -22,22 +22,22 @@ const defaultCards: BentoCardConfig[] = [
     textColor: "text-white",
   },
   {
-    id: "projet-site-web",
-    title: "Projet de site web",
-    description: "Cadrer et piloter votre projet.",
-    icon: FileText,
-    href: "/documentation/projet-site-web",
+    id: "audit-ia",
+    title: "Audit de migration IA",
+    description: "Analysez votre site : performance, SEO et conversion.",
+    icon: SearchCheck,
+    href: "/audit-site-ia",
     colSpan: "md:col-span-1",
     rowSpan: "",
     gradient: "bg-darkblue/90",
     textColor: "text-white",
   },
   {
-    id: "nextjs",
-    title: "Tester Next.js",
-    description: "Design system et playground interactif.",
-    icon: Wrench,
-    href: "/documentation/playground",
+    id: "mind-map",
+    title: "Mind Map",
+    description: "Explorez l'architecture headless de façon interactive.",
+    icon: Network,
+    href: "/documentation/mind-map",
     colSpan: "md:col-span-1",
     rowSpan: "",
     gradient: "bg-gradient-to-br from-lightblue/30 to-mediumblue/80 backdrop-blur-sm",

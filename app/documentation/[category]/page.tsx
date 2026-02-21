@@ -6,6 +6,7 @@ import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
 import { CategoryPageContent } from "@/components/documentation/category-theme-cards"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
@@ -79,8 +80,15 @@ export default async function CategoryPage(props: CategoryPageProps) {
   const categoryTitle = info?.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
   const categoryDescription = info?.description || ""
 
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Comprendre", url: "/documentation" },
+    { name: categoryTitle, url: `/documentation/${category}` },
+  ];
+
   return (
     <div className="relative min-h-screen">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <main className="flex-1">
         <section className="w-full py-8 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6">

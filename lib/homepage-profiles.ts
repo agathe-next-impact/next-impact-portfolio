@@ -119,11 +119,11 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Mention « Mécène de la transition numérique » ajoutée à votre communication.",
       },
     },
-    ctaTitle: "Vérifiez votre tarif en 2 minutes",
+    ctaTitle: "Déterminez votre offre",
     ctaDescription:
-      "Répondez à quelques questions pour découvrir l'offre adaptée à votre structure et les aides auxquelles vous avez droit.",
-    ctaLabel: "Tester mon éligibilité",
-    ctaHref: "/services/eligibilite",
+      "Répondez à quelques questions pour découvrir l'offre adaptée à votre structure et votre budget.",
+    ctaLabel: "Déterminer mon offre",
+    ctaHref: "/contact",
     faqs: [
       {
         question: "Est-ce que je pourrai toujours modifier mes textes ?",
@@ -168,11 +168,11 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "40% de votre investissement finance directement un projet solidaire — valorisable en RSE.",
       },
     },
-    ctaTitle: "Évaluez votre retour sur investissement",
+    ctaTitle: "Déterminez votre offre",
     ctaDescription:
       "En 2 minutes, découvrez l'offre adaptée à votre structure et estimez les gains de performance attendus.",
-    ctaLabel: "Calculer mon tarif",
-    ctaHref: "/services/eligibilite",
+    ctaLabel: "Déterminer mon offre",
+    ctaHref: "/contact",
     faqs: [
       {
         question: "Quel est le retour sur investissement concret ?",
@@ -217,11 +217,11 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Vous n'avez rien de nouveau à apprendre : c'est toujours WordPress.",
       },
     },
-    ctaTitle: "Découvrez l'offre adaptée à vos besoins",
+    ctaTitle: "Déterminez votre offre",
     ctaDescription:
       "Répondez à quelques questions simples pour identifier la formule qui correspond le mieux à votre organisation.",
-    ctaLabel: "Trouver mon offre",
-    ctaHref: "/services/eligibilite",
+    ctaLabel: "Déterminer mon offre",
+    ctaHref: "/contact",
     faqs: [
       {
         question: "Vais-je devoir apprendre un nouvel outil ?",

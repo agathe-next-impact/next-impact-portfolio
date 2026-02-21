@@ -15,6 +15,7 @@ import { ArticleSequentialNav } from "@/components/documentation/article-sequent
 import { RelatedArticles } from "@/components/documentation/related-articles"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd, ArticleJsonLd } from "@/components/json-ld";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -111,8 +112,24 @@ export default async function ArticlePage(props: ArticlePageProps) {
     const readingTime = article?.content ? estimateReadingTime(article.content) : 0
     const categoryLabel = categoryLabels[article.category] || article.category.charAt(0).toUpperCase() + article.category.slice(1).replace(/-/g, " ")
 
+    const breadcrumbItems = [
+      { name: "Accueil", url: "/" },
+      { name: "Comprendre", url: "/documentation" },
+      { name: categoryLabel, url: `/documentation/${params.category}` },
+      { name: article.title, url: `/documentation/${params.category}/${params.slug}` },
+    ];
+
     return (
       <div className="relative min-h-screen">
+        <BreadcrumbJsonLd items={breadcrumbItems} />
+        <ArticleJsonLd
+          title={article.title}
+          description={article.description}
+          image="/img/desktop-screen-next-impact.png"
+          datePublished={typeof article.date === "string" ? article.date : new Date().toISOString()}
+          author={article.author || "Next Impact"}
+          url={`/documentation/${article.category}/${article.slug}`}
+        />
         <ReadingProgress />
         <ArticleReadTracker category={params.category} slug={params.slug} />
         <ScrollToTop />

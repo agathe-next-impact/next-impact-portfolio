@@ -3,6 +3,7 @@ import { DemoShowcase } from "@/components/documentation/demo-showcase";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
@@ -24,8 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function DocumentationPage() {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Comprendre", url: "/documentation" },
+  ];
+
   return (
     <main>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <PageLayout
         titre="Comprendre"
         sousTitre="Le centre de ressources pour comprendre WordPress Headless et Next.js."

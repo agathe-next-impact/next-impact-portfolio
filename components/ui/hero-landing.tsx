@@ -47,7 +47,7 @@ export default function HeroLanding({
                     </Button>
                 </Link>
                 <a
-                    href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
+                    href="https://calendar.app.google/CiBQuqFLNu3vJwSc7"
                     target="_blank"
                     rel="noopener noreferrer"
                 >

@@ -202,11 +202,22 @@ export const pageMetadata = {
 
   contact: (): Metadata =>
     generatePageMetadata({
-      title: "Contact — Demande de devis WordPress Headless",
+      title: "Contact — Devis WordPress Headless & Appel Découverte Gratuit",
       description:
-        "Contactez-moi pour discuter de votre projet WordPress ou Headless. Devis gratuit et personnalisé sous 48h.",
+        "Trouvez l'offre adaptée à votre structure en 4 étapes. " +
+        "Association, PME ou Grand Compte : audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
       path: "/contact",
-      keywords: ["contact", "devis WordPress Headless", "demande projet"],
+      image: "/img/contact-facilitation.jpg",
+      keywords: [
+        "contact développeuse WordPress Headless",
+        "devis site WordPress Headless",
+        "demande de projet web",
+        "rendez-vous visio freelance",
+        "péréquation solidaire",
+        "audit site gratuit",
+        "appel découverte",
+        "tarif site Next.js",
+      ],
     }),
 
   caseStudies: (): Metadata =>

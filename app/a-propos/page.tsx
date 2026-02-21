@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import AboutClient from "@/components/about/AboutClient";
+import { BreadcrumbJsonLd, PersonJsonLd } from "@/components/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -20,5 +21,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function AProposPage() {
-  return <AboutClient />;
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "À propos", url: "/a-propos" },
+  ];
+
+  return (
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <PersonJsonLd />
+      <AboutClient />
+    </>
+  );
 }

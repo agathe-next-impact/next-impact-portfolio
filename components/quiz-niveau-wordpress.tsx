@@ -301,7 +301,7 @@ export default function QuizNiveauWordpress() {
                 Découvrir {result.title}
               </a>
               <a
-                href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
+                href="https://calendar.app.google/CiBQuqFLNu3vJwSc7"
                 className="text-sm font-googletitre rounded-full bg-white px-4 py-2 text-regularblue border border-regularblue"
               >
                 Rendez-vous conseil gratuit

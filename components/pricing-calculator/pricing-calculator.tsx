@@ -96,7 +96,7 @@ const additionalServicesData: Record<AdditionalService, AdditionalServiceData> =
   },
 }
 
-const CALENDLY_LINK = "https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
+const CALENDLY_LINK = "https://calendar.app.google/CiBQuqFLNu3vJwSc7"
 
 export default function PricingCalculator() {
   const [websiteType, setWebsiteType] = useState<WebsiteType>("vitrine")

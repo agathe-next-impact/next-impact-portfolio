@@ -374,13 +374,22 @@ export default function BenchmarkingTool() {
                 <Input
                   id="bench-url"
                   type="text"
-                  placeholder="www.votre-site.fr"
+                  placeholder="https://www.votre-site.fr"
                   value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40"
+                  onChange={(e) => {
+                    setUrl(e.target.value)
+                    if (urlErrors.site) setUrlErrors((prev) => ({ ...prev, site: undefined }))
+                  }}
+                  className={cn(
+                    "pl-10 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
+                    urlErrors.site ? "border-coral" : "border-white/20"
+                  )}
                   required
                 />
               </div>
+              {urlErrors.site && (
+                <p className="text-xs text-coral font-googletexte">{urlErrors.site}</p>
+              )}
             </div>
 
             <Separator className="bg-white/10" />
@@ -392,25 +401,42 @@ export default function BenchmarkingTool() {
               </Label>
               <div className="grid gap-3 md:grid-cols-3">
                 {competitors.map((comp, i) => (
-                  <div key={i} className="relative">
-                    <div
-                      className={cn(
-                        "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white",
-                        i === 0 && "bg-blue-500",
-                        i === 1 && "bg-purple-500",
-                        i === 2 && "bg-cyan-500"
-                      )}
-                    >
-                      {i + 1}
+                  <div key={i} className="space-y-1">
+                    <div className="relative">
+                      <div
+                        className={cn(
+                          "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white",
+                          i === 0 && "bg-blue-500",
+                          i === 1 && "bg-purple-500",
+                          i === 2 && "bg-cyan-500"
+                        )}
+                      >
+                        {i + 1}
+                      </div>
+                      <Input
+                        type="text"
+                        placeholder={`\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`}
+                        value={comp}
+                        onChange={(e) => {
+                          updateCompetitor(i, e.target.value)
+                          if (urlErrors.competitors[i]) {
+                            setUrlErrors((prev) => {
+                              const next = [...prev.competitors]
+                              next[i] = null
+                              return { ...prev, competitors: next }
+                            })
+                          }
+                        }}
+                        className={cn(
+                          "pl-7 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
+                          urlErrors.competitors[i] ? "border-coral" : "border-white/20"
+                        )}
+                        required
+                      />
                     </div>
-                    <Input
-                      type="text"
-                      placeholder={`\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0www.concurrent-${i + 1}.fr`}
-                      value={comp}
-                      onChange={(e) => updateCompetitor(i, e.target.value)}
-                      className="pl-7 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40"
-                      required
-                    />
+                    {urlErrors.competitors[i] && (
+                      <p className="text-xs text-coral font-googletexte">{urlErrors.competitors[i]}</p>
+                    )}
                   </div>
                 ))}
               </div>

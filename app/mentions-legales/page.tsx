@@ -1,8 +1,27 @@
 import PageLayout from "@/components/page-layout"
+import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata({
+    title: "Mentions légales et RGPD",
+    description:
+      "Mentions légales, conditions générales d'utilisation et politique de protection des données personnelles (RGPD) du site Next Impact.",
+    path: "/mentions-legales",
+    noindex: true,
+  });
+}
 
 const LegalNotice = () => {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Mentions légales", url: "/mentions-legales" },
+  ];
+
   return (
     <main>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <PageLayout
         titre="Mentions légales et RGPD"
         sousTitre=""

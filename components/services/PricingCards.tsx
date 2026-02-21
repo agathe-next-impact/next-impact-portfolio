@@ -86,9 +86,9 @@ export function PricingCards() {
               </div>
             </div>
 
-            <Link href="/services/eligibilite" className="mt-8">
+            <Link href="/contact" className="mt-8">
               <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-coral hover:bg-coral/90 text-white">
-                Vérifier mon éligibilité
+                Déterminer mon offre
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -164,9 +164,9 @@ export function PricingCards() {
               </div>
             </div>
 
-            <Link href="/services/eligibilite" className="mt-8">
+            <Link href="/contact" className="mt-8">
               <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow hover:bg-lightyellow/90 text-darkblue">
-                Vérifier mon éligibilité
+                Déterminer mon offre
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>

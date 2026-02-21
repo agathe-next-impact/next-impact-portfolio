@@ -10,6 +10,7 @@ import { ColorPaletteShowcase } from "@/components/documentation/color-palette-s
 import { VideoGallery } from "@/components/documentation/video-gallery";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -23,8 +24,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function PlaygroundPage() {
+  const breadcrumbItems = [
+    { name: "Accueil", url: "/" },
+    { name: "Comprendre", url: "/documentation" },
+    { name: "Playground", url: "/documentation/playground" },
+  ];
+
   return (
     <div className="relative min-h-screen">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <main className="flex-1">
         <section className="w-full py-8 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6">

@@ -125,6 +125,7 @@ export function NavBar() {
                   <MobileMenuLink href="/outils" onClick={handleMenuClick}>Outils</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">Comprendre</MobileMenuLink>
+                  <MobileMenuLink href="/contact" onClick={handleMenuClick} className="pb-4">Contact</MobileMenuLink>
 
                   <div className="pl-4 pt-4 flex items-center gap-8 border-t border-white/10">
                     <Link href="/a-propos" onClick={handleMenuClick}>
@@ -133,15 +134,7 @@ export function NavBar() {
                     <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
                       <File className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
-                    <Link href="tel:0673981638" className="md:inline-block">
-                      <PhoneCallIcon className="w-8 h-8 text-white/90 hover:text-white transition" />
-                    </Link>
-                    <Link href="mailto:agathe@next-impact.digital" className="md:inline-block">
-                      <MailIcon className="w-8 h-8 text-white/90 hover:text-white transition" />
-                    </Link>
-                    <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank" className="md:inline-block">
-                      <ScreenShareIcon className="w-8 h-8 text-white/90 hover:text-white transition" />         
-                    </Link>
+
                   </div>
                   {/* <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink> */}
                   {/* Sous-menu "Vous êtes"
@@ -269,20 +262,17 @@ export default function Header() {
       {/* Desktop : icônes de droite */}
       <div className="hidden md:flex items-center gap-4">
         <GlobalProfileSwitcher />
+        <NavigationMenu>
+          <NavigationMenuList>
+        <NavigationMenuItem>
+          <Link href="/contact" className="font-googletitre text-white/90 text-lg text-regular px-2">
+            Contact
+          </Link>
+        </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
         <Link href="/a-propos">
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </Link>
-        <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
-          <File className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </Link>
-        <Link href="tel:0673981638">
-          <PhoneCallIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </Link>
-        <Link href="mailto:agathe@next-impact.digital">
-          <MailIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </Link>
-        <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank">
-          <ScreenShareIcon className="w-6 h-6 text-white/90 hover:text-white transition" />
         </Link>
       </div>
     </header>
