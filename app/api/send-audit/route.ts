@@ -1,16 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { sendMail } from "@/lib/sendMail";
 import { renderAuditEmailHtml } from "@/lib/audit-email-renderer";
-
-const transporter = nodemailer.createTransport({
-  host: process.env.NODEMAILER_HOST,
-  port: Number(process.env.NODEMAILER_PORT) || 465,
-  secure: true,
-  auth: {
-    user: process.env.NODEMAILER_USER,
-    pass: process.env.NODEMAILER_PASS,
-  },
-});
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,8 +21,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const from = `"Next Impact Audit" <${process.env.NODEMAILER_USER}>`;
-
     // Rendu HTML identique au site (dashboard + tableaux + stack + markdown)
     const auditHtml = renderAuditEmailHtml(markdown, url);
 
@@ -40,8 +28,7 @@ export async function POST(req: NextRequest) {
     const fontTexte = "'Inter', Arial, sans-serif";
 
     // 1. Email admin : coordonnées + audit complet rendu
-    await transporter.sendMail({
-      from,
+    await sendMail({
       to: adminTo,
       subject: `Nouvel audit IA demandé — ${url}`,
       html: `
@@ -72,8 +59,7 @@ export async function POST(req: NextRequest) {
     });
 
     // 2. Email utilisateur : message d'accompagnement + audit rendu
-    await transporter.sendMail({
-      from,
+    await sendMail({
       to: email,
       subject: `Votre audit IA est prêt — ${url}`,
       html: `

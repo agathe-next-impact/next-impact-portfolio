@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { sendMail } from "@/lib/sendMail";
 
 export async function POST(request: Request) {
   try {
@@ -24,36 +24,7 @@ export async function POST(request: Request) {
       );
     }
 
-    let recipientEmail = "agathe@next-impact.digital";
-
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpPort = process.env.SMTP_PORT;
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    // Gmail requires the "from" address to match the authenticated user
-    const smtpFrom = process.env.SMTP_FROM || `Next Impact <${smtpUser}>`;
-
-    // Check if SMTP is configured
-    if (!smtpHost || !smtpUser || !smtpPass) {
-      console.error(
-        "SMTP not configured. Newsletter subscription logged but not sent via email.",
-      );
-      return NextResponse.json({
-        message: "Inscription enregistrée ! Les données ont été transmises.",
-        note: "Pour recevoir les inscriptions par email, configurez les variables d'environnement SMTP.",
-      });
-    }
-
-    // Create transporter
-    const transporter = nodemailer.createTransport({
-      host: smtpHost,
-      port: Number.parseInt(smtpPort || "587"),
-      secure: smtpPort === "465",
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-    });
+    const recipientEmail = "agathe@next-impact.digital";
 
     // Email to admin
     const adminEmailHtml = `
@@ -105,38 +76,19 @@ export async function POST(request: Request) {
     `;
 
     try {
-      console.log("[Newsletter] Attempting to send email...");
-      console.log("[Newsletter] SMTP Host:", smtpHost);
-      console.log("[Newsletter] SMTP Port:", smtpPort);
-      console.log("[Newsletter] SMTP User:", smtpUser);
-      console.log("[Newsletter] From:", smtpFrom);
-      console.log("[Newsletter] To Admin:", recipientEmail);
-      console.log("[Newsletter] To Subscriber:", email);
-
-      // Verify SMTP connection first
-      await transporter.verify();
-      console.log("[Newsletter] SMTP connection verified successfully");
-
-      // Send email to admin
-      const adminResult = await transporter.sendMail({
-        from: smtpFrom,
-        to: recipientEmail,
-        subject: "Nouvelle inscription à la newsletter",
-        html: adminEmailHtml,
-      });
-      console.log("[Newsletter] Admin email sent:", adminResult.messageId);
-
-      // Send confirmation email to subscriber
-      const subscriberResult = await transporter.sendMail({
-        from: smtpFrom,
-        to: email,
-        subject: "Votre livre blanc WordPress Headless - Next Impact",
-        html: subscriberEmailHtml,
-      });
-      console.log(
-        "[Newsletter] Subscriber email sent:",
-        subscriberResult.messageId,
-      );
+      // Send both emails
+      await Promise.all([
+        sendMail({
+          to: recipientEmail,
+          subject: "Nouvelle inscription à la newsletter",
+          html: adminEmailHtml,
+        }),
+        sendMail({
+          to: email,
+          subject: "Votre livre blanc WordPress Headless - Next Impact",
+          html: subscriberEmailHtml,
+        }),
+      ]);
 
       return NextResponse.json({
         message:

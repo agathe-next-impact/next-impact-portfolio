@@ -177,13 +177,7 @@ export default function DemoClient() {
               ))}
             </div>
 
-            {/* Livre blanc */}
-            <div className="mt-16">
-              <p className="text-sm text-white/40 font-googletexte uppercase tracking-wider mb-4">
-                Pour aller plus loin
-              </p>
-              <LivreBlancBanner />
-            </div>
+
           </section>
         </div>
       </PageLayout>
