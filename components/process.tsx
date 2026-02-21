@@ -78,9 +78,9 @@ export default function Process() {
                         <div className="text-sm px-2 py-1 rounded-full bg-lightblue/20 text-white/80 font-medium">
                           {phase.duration}
                         </div>
-                        <div className="text-xl font-googletitre font-medium text-lightyellow">
+                        <h3 className="text-xl font-googletitre font-medium text-lightyellow">
                           {phase.title}
-                        </div>
+                        </h3>
                       <p className="text-lg md:text-base text-white/80 text-left">
                         {phase.description}
                       </p>

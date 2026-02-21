@@ -77,7 +77,7 @@ export function ContactFunnel() {
 
   return (
     <section className="container mx-auto px-4">
-      <div className="max-w-5xl mx-auto flex flex-col items-center gap-10 bg-darkblue/40 backdrop-blur-xl rounded-3xl p-8 md:p-12">
+      <div className="max-w-5xl mx-auto flex flex-col items-center gap-6 md:gap-10 bg-darkblue/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-12">
         {/* Progress bar */}
         <FunnelProgress currentStep={step} totalSteps={TOTAL_STEPS} />
 
@@ -99,7 +99,7 @@ export function ContactFunnel() {
         </AnimatePresence>
 
         {/* Steps container */}
-        <div className="w-full relative min-h-[420px] flex items-start justify-center">
+        <div className="w-full relative min-h-[380px] sm:min-h-[420px] flex items-start justify-center">
           <AnimatePresence mode="wait" custom={direction}>
             {step === 1 && (
               <motion.div

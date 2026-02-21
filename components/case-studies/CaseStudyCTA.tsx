@@ -2,6 +2,7 @@
 
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import Link from "next/link";
 
 const CTA_BY_PROFILE = {
@@ -32,18 +33,29 @@ export default function CaseStudyCTA() {
   const cta = profileId ? CTA_BY_PROFILE[profileId] : CTA_BY_PROFILE.default;
 
   return (
-    <Button
-      className="md:flex gap-1 rounded-full px-6 bg-regularblue hover:bg-regularblue/80 text-white hover:text-white transition-all duration-900 ease-in-out"
-      asChild
-    >
-      <Link
-        href={cta.href}
-        {...(cta.external
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
+    <div className="flex flex-col sm:flex-row items-center gap-3">
+      <Button
+        className="md:flex gap-1 rounded-full px-6 bg-regularblue text-darkblue md:text-lg hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300 ease-in-out"
+        asChild
       >
-        {cta.label}
+        <Link
+          href={cta.href}
+          {...(cta.external
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+        >
+          {cta.label}
+        </Link>
+      </Button>
+      <Link
+        href="/ressources/livre_blanc_wp_headless.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors font-googletexte"
+      >
+        <FileText className="w-3.5 h-3.5" />
+        Comprendre WordPress Headless
       </Link>
-    </Button>
+    </div>
   );
 }

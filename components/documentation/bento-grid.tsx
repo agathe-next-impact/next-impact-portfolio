@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { CheckCircle, BookOpen, SearchCheck, Network } from "lucide-react";
+import { CheckCircle, BookOpen, SearchCheck, Network, FileText } from "lucide-react";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { Progress } from "@/components/ui/progress";
@@ -18,18 +18,7 @@ const defaultCards: BentoCardConfig[] = [
     href: "/documentation/headless-cms",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
-    gradient: "bg-gradient-to-br from-regularblue via-mediumblue to-darkblue",
-    textColor: "text-white",
-  },
-  {
-    id: "audit-ia",
-    title: "Audit de migration IA",
-    description: "Analysez votre site : performance, SEO et conversion.",
-    icon: SearchCheck,
-    href: "/audit-site-ia",
-    colSpan: "md:col-span-1",
-    rowSpan: "",
-    gradient: "bg-darkblue/90",
+    gradient: "bg-mediumblue/40 backdrop-blur-xl border-lightblue/20",
     textColor: "text-white",
   },
   {
@@ -40,8 +29,31 @@ const defaultCards: BentoCardConfig[] = [
     href: "/documentation/mind-map",
     colSpan: "md:col-span-1",
     rowSpan: "",
-    gradient: "bg-gradient-to-br from-lightblue/30 to-mediumblue/80 backdrop-blur-sm",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-lightblue/20",
     textColor: "text-white",
+  },
+  {
+    id: "audit-ia",
+    title: "Audit de migration IA",
+    description: "Analysez votre site : performance, SEO et conversion.",
+    icon: SearchCheck,
+    href: "/audit-site-ia",
+    colSpan: "md:col-span-1",
+    rowSpan: "",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
+    textColor: "text-white",
+  },
+  {
+    id: "livre-blanc",
+    title: "Livre Blanc",
+    description: "Téléchargez le guide complet : qu'est-ce que WordPress Headless ?",
+    icon: FileText,
+    href: "/ressources/livre_blanc_wp_headless.pdf",
+    colSpan: "md:col-span-3",
+    rowSpan: "",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-orange/20",
+    textColor: "text-white",
+    external: true,
   },
 ];
 
@@ -66,11 +78,10 @@ function InlineLearningPath() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
       className={cn(
-        "md:col-span-2 md:row-span-2 rounded-3xl border border-lightblue/10 p-6 md:p-8 overflow-hidden",
-        "bg-gradient-to-br",
-        profileId === "decideur" && "from-orange/20 via-mediumblue to-darkblue",
-        profileId === "utilisateur" && "from-regularblue/20 via-mediumblue to-darkblue",
-        profileId === "developpeur" && "from-lightblue/20 via-mediumblue to-darkblue"
+        "md:col-span-2 md:row-span-2 rounded-3xl border p-6 md:p-8 overflow-hidden bg-mediumblue/40 backdrop-blur-xl",
+        profileId === "decideur" && "border-orange/20",
+        profileId === "utilisateur" && "border-regularblue/20",
+        profileId === "developpeur" && "border-lightblue/20"
       )}
     >
       {/* Header */}
@@ -187,10 +198,15 @@ export function BentoGrid() {
               "cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-regularblue/10 hover:border-lightblue/20",
               card.colSpan,
               card.rowSpan,
-              card.gradient
+              card.gradient,
+              card.id.includes("mindmap") || card.id === "mind-map" ? "hidden md:block" : ""
             )}
           >
-            <Link href={card.href} className="absolute inset-0 z-10">
+            <Link
+              href={card.href}
+              className="absolute inset-0 z-10"
+              {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
               <span className="sr-only">{card.title}</span>
             </Link>
             <div className="relative z-0 flex flex-col justify-between h-full min-h-[160px]">

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu as MenuIcon, X as CloseIcon, ScreenShareIcon, File, BadgeEuro, Euro, DatabaseIcon, Presentation, UserCheck } from "lucide-react";
+import { Menu as MenuIcon, X as CloseIcon, ScreenShareIcon, File, BookOpenText, BadgeEuro, Euro, DatabaseIcon, Presentation, UserCheck } from "lucide-react";
 import { ChevronDown, PhoneCallIcon, MailIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -271,6 +271,14 @@ export default function Header() {
         </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        <Link
+          href="/ressources/livre_blanc_wp_headless.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Livre blanc : Qu'est-ce que WordPress Headless ?"
+        >
+          <BookOpenText className="w-6 h-6 text-white/90 hover:text-white transition" />
+        </Link>
         <Link href="/a-propos">
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
         </Link>

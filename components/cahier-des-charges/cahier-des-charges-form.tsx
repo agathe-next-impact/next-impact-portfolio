@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,11 +14,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentPreview } from "@/components/cahier-des-charges/document-preview";
-import { Loader2, FileText, Eye, ArrowBigDown } from "lucide-react";
+import { FileText, Eye, ArrowRight } from "lucide-react";
 
 type FormSection = {
   id: string;
@@ -36,6 +37,11 @@ type FormField = {
 export function CahierDesChargesForm() {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [activeTab, setActiveTab] = useState<string>("form");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleInputChange = (id: string, value: string | boolean) => {
     setFormData((prev) => ({
@@ -66,53 +72,100 @@ export function CahierDesChargesForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setActiveTab("preview");
+    handleTabChange("preview");
   };
 
+  const filledCount = Object.values(formData).filter((v) => {
+    if (typeof v === "string") return v.trim().length > 0;
+    if (typeof v === "boolean") return v;
+    if (typeof v === "object" && v !== null) return Object.values(v).some((item: any) => item?.checked);
+    return false;
+  }).length;
+
   return (
-    <div className="space-y-8 mb-20">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="hidden md:flex justify-center mb-6">
-          <TabsList className="grid grid-cols-2 w-[400px] bg-white rounded-full">
-            <TabsTrigger value="form" className="flex items-center gap-2">
-              <FileText className="h-4 w-4 mr-4" />
+    <section className="w-full max-w-6xl mx-auto">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+        {/* Tab navigation */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex justify-center mb-8"
+        >
+          <TabsList className="flex bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1">
+            <TabsTrigger value="form" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
+              <FileText className="h-4 w-4 mr-4"  />
               Formulaire
             </TabsTrigger>
-            <TabsTrigger value="preview" className="flex items-center gap-2">
+            <TabsTrigger value="preview" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
               <Eye className="h-4 w-4 mr-4" />
-              Prévisualisation
+              Apercu
             </TabsTrigger>
           </TabsList>
-        </div>
+        </motion.div>
 
         <TabsContent value="form">
-          <form onSubmit={handleSubmit} className="space-y-8 bg-extralightblue rounded-2xl p-6 md:p-8">
-            <Accordion
-              type="multiple"
-              defaultValue={formSections.length > 0 ? [formSections[0].id] : []}
-              className="w-full"
-            >
-              {formSections.map((section) => (
-                <AccordionItem key={section.id} value={section.id}>
-                  <AccordionTrigger className="text-xl font-semibold">
-                    {section.title}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <Card className="p-0 bg-transparent border-none">
-                      <CardContent className="pt-6 px-0">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {/* Progress indicator */}
+            <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-6 flex items-center justify-between">
+              <p className="text-sm text-white/60 font-googletexte">
+                <span className="text-lightyellow font-bold">{filledCount}</span> champ{filledCount > 1 ? "s" : ""} rempli{filledCount > 1 ? "s" : ""}
+              </p>
+              <Button
+                onClick={() => handleTabChange("preview")}
+                variant="ghost"
+                className="gap-2 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded-full"
+              >
+                Voir l&apos;apercu
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-4 md:p-8">
+                <h2 className="text-white font-googletitre text-2xl font-medium mb-1">
+                  Votre projet
+                </h2>
+                <p className="text-white/60 font-googletexte text-sm mb-6">
+                  Remplissez les sections ci-dessous pour générer votre cahier des charges
+                </p>
+
+                <Accordion
+                  type="multiple"
+                  defaultValue={formSections.length > 0 ? [formSections[0].id] : []}
+                  className="w-full"
+                >
+                  {formSections.map((section) => (
+                    <AccordionItem key={section.id} value={section.id}>
+                      <AccordionTrigger className="text-lg md:text-xl font-semibold font-googletitre">
+                        {section.title}
+                      </AccordionTrigger>
+                      <AccordionContent>
                         <div className="grid gap-6">
                           {section.fields.map((field) => (
                             <div key={field.id} className="space-y-2">
                               {field.type === "checkboxGroup" ? (
                                 <>
-                                  <Label className="text-base font-medium text-regularblue">
+                                  <Label className="text-sm font-semibold text-white/80 font-googletitre">
                                     {field.label}
                                   </Label>
-                                  <div className="grid gap-3 pt-2">
+                                  <div className="grid gap-3 pt-2 sm:grid-cols-2">
                                     {field.options?.map((option) => (
                                       <div
                                         key={option.id}
-                                        className="flex items-start space-x-2"
+                                        className="flex items-start space-x-2.5 p-2.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+                                        onClick={() =>
+                                          handleCheckboxGroupChange(
+                                            field.id,
+                                            option.id,
+                                            !(formData[field.id]?.[option.id]?.checked),
+                                            option.label
+                                          )
+                                        }
                                       >
                                         <Checkbox
                                           id={`${field.id}-${option.id}`}
@@ -128,10 +181,11 @@ export function CahierDesChargesForm() {
                                               option.label
                                             )
                                           }
+                                          onClick={(e) => e.stopPropagation()}
                                         />
                                         <Label
                                           htmlFor={`${field.id}-${option.id}`}
-                                          className="text-sm text-regularblue/90 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                          className="text-sm text-white/70 font-googletexte font-normal leading-tight cursor-pointer"
                                         >
                                           {option.label}
                                         </Label>
@@ -140,7 +194,7 @@ export function CahierDesChargesForm() {
                                   </div>
                                 </>
                               ) : field.type === "checkbox" ? (
-                                <div className="flex items-start space-x-2">
+                                <div className="flex items-start space-x-2.5 p-2.5 rounded-lg hover:bg-white/5 transition-colors">
                                   <Checkbox
                                     id={field.id}
                                     checked={formData[field.id] || false}
@@ -153,7 +207,7 @@ export function CahierDesChargesForm() {
                                   />
                                   <Label
                                     htmlFor={field.id}
-                                    className="text-sm text-lightblue font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    className="text-sm text-white/70 font-googletexte font-normal leading-tight cursor-pointer"
                                   >
                                     {field.label}
                                   </Label>
@@ -162,7 +216,7 @@ export function CahierDesChargesForm() {
                                 <>
                                   <Label
                                     htmlFor={field.id}
-                                    className="text-base font-medium text-regularblue"
+                                    className="text-sm font-semibold text-white/80 font-googletitre"
                                   >
                                     {field.label}
                                   </Label>
@@ -177,7 +231,7 @@ export function CahierDesChargesForm() {
                                           e.target.value
                                         )
                                       }
-                                      className="min-h-[100px] placeholder:text-lightblue"
+                                      className="min-h-[100px] bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 rounded-xl"
                                     />
                                   ) : (
                                     <Input
@@ -190,6 +244,7 @@ export function CahierDesChargesForm() {
                                           e.target.value
                                         )
                                       }
+                                      className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
                                     />
                                   )}
                                 </>
@@ -197,30 +252,50 @@ export function CahierDesChargesForm() {
                             </div>
                           ))}
                         </div>
-                      </CardContent>
-                    </Card>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
 
-          </form>
+                <Separator className="bg-white/10 my-6" />
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    type="submit"
+                    className="gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold shadow px-8"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Voir l&apos;apercu du document
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </motion.div>
         </TabsContent>
 
         <TabsContent value="preview">
-          <DocumentPreview formData={formData} />
-          <div className="flex justify-center mt-8 gap-6">
-            <Button
-              onClick={() => setActiveTab("form")}
-              variant="outline"
-              className="gap-1 rounded-full text-regularblue bg-extralightblue/40 hover:bg-extralightblue/30 text-base font-regular"
-            >
-              Retour au formulaire
-            </Button>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-6"
+          >
+            <DocumentPreview formData={formData} />
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button
+                onClick={() => handleTabChange("form")}
+                variant="ghost"
+                className="gap-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 border border-white/20 font-googletitre"
+              >
+                <FileText className="w-4 h-4" />
+                Retour au formulaire
+              </Button>
+            </div>
+          </motion.div>
         </TabsContent>
       </Tabs>
-    </div>
+    </section>
   );
 }
 

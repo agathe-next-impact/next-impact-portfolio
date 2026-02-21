@@ -14,6 +14,8 @@ import {
   ClipboardCheck,
   Calculator,
   BarChart3,
+  FileText,
+  Download,
   Mail,
   Phone,
   MapPin,
@@ -99,7 +101,7 @@ function CTALeadMagnet() {
         {/* CTA Button */}
         <motion.div custom={4} variants={fadeUp} className="flex justify-center mt-auto">
           <Button
-            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-2.5 px-6 rounded-full shadow-lg hover:bg-lightyellow/90 hover:shadow-lightyellow/20 hover:shadow-xl transition-all duration-300 font-googletitre text-sm font-semibold"
+            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-2.5 px-6 rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300 font-googletitre text-sm md:text-lg font-semibold"
             asChild
           >
             <Link href="/audit">
@@ -170,7 +172,7 @@ function CTAConversion() {
         {/* CTA Button — le plus voyant */}
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
           <Button
-            className="inline-flex items-center gap-2 bg-coral text-white py-3 px-8 rounded-full shadow-lg shadow-coral/25 hover:bg-coral/90 hover:shadow-coral/40 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 font-googletitre text-base font-semibold"
+            className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full shadow-lg shadow-coral/25 hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/contact">
@@ -235,7 +237,7 @@ function CTASimulateurROI() {
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
           <Button
-            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightyellow/15 hover:bg-lightyellow/90 hover:shadow-lightyellow/30 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 font-googletitre text-base font-semibold"
+            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightyellow/15 hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/outils/simulateur-roi">
@@ -300,7 +302,7 @@ function CTABenchmarking() {
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
           <Button
-            className="inline-flex items-center gap-2 bg-lightblue text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightblue/15 hover:bg-lightblue/90 hover:shadow-lightblue/30 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 font-googletitre text-base font-semibold"
+            className="inline-flex items-center gap-2 bg-lightblue text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightblue/15 hover:shadow-[0_0_20px_rgba(113,158,217,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/outils/benchmarking">
@@ -315,9 +317,74 @@ function CTABenchmarking() {
 }
 
 /* ─────────────────────────────────────────────
+   2d. CTA Livre Blanc
+   ───────────────────────────────────────────── */
+function CTALivreBlanc() {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      className="relative w-full"
+    >
+      <div className="relative overflow-hidden border-2 border-orange/30 rounded-3xl p-6 md:p-8 bg-gradient-to-br from-mediumblue to-darkblue/60 h-full flex flex-col">
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-orange/5 rounded-full blur-3xl pointer-events-none" />
+
+        <motion.div custom={0} variants={fadeUp} className="relative z-10 flex justify-center mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange/10 border border-orange/20 text-orange text-xs font-googletexte">
+            <FileText className="w-3.5 h-3.5" />
+            Guide gratuit
+          </span>
+        </motion.div>
+
+        <motion.h2
+          custom={1}
+          variants={fadeUp}
+          className="relative z-10 text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
+        >
+          Qu&apos;est-ce que WordPress Headless ?
+        </motion.h2>
+
+        <motion.p
+          custom={2}
+          variants={fadeUp}
+          className="relative z-10 text-sm md:text-base text-white/80 font-googletexte text-center mx-auto mb-3 leading-relaxed"
+        >
+          Découvrez dans notre livre blanc{" "}
+          <span className="text-orange font-semibold">
+            tout ce qu&apos;il faut savoir sur l&apos;architecture headless
+          </span>{" "}
+          : avantages, cas d&apos;usage et mise en œuvre.
+        </motion.p>
+
+        <motion.p
+          custom={3}
+          variants={fadeUp}
+          className="relative z-10 text-xs md:text-sm text-white/60 font-googletexte text-center mx-auto mb-6"
+        >
+          Un guide complet pour comprendre, évaluer et adopter WordPress Headless.
+        </motion.p>
+
+        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
+          <Button
+            className="inline-flex items-center gap-2 bg-orange text-darkblue py-3 px-8 rounded-full shadow-lg shadow-orange/15 hover:shadow-[0_0_20px_rgba(242,159,5,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
+            asChild
+          >
+            <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer">
+              <Download className="w-4 h-4" />
+              Télécharger le livre blanc
+            </Link>
+          </Button>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────
    3. Bloc Réassurance — Coordonnées directes
    ───────────────────────────────────────────── */
-function BlocReassurance() {
+export function BlocReassurance() {
   return (
     <motion.div
       initial="hidden"
@@ -335,7 +402,7 @@ function BlocReassurance() {
             Parlons de votre projet
           </h3>
           <p className="text-white/60 font-googletexte max-w-md mx-auto">
-            Pas besoin d&apos;outils interactifs ? Contactez-moi directement.
+            Pas besoin de tester ? Contactez-moi directement.
           </p>
         </motion.div>
 
@@ -372,11 +439,11 @@ function BlocReassurance() {
                 Next Impact Digital
               </p>
               <p className="text-white/70 font-googletexte text-sm">
-                EI Agathe Martin
+                EI Agathe Karinthi-Martin
               </p>
               <div className="flex items-start gap-2 text-white/50 font-googletexte text-sm pt-1">
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>4 rue du centre, 15400 Trizac</span>
+                <span className="text-white/80">4 rue du centre, 15400 Trizac</span>
               </div>
             </div>
 
@@ -411,13 +478,14 @@ function BlocReassurance() {
 /* ─────────────────────────────────────────────
    Sélection des cartes par profil / contexte
    ───────────────────────────────────────────── */
-type CardId = "audit" | "conversion" | "roi" | "benchmarking";
+type CardId = "audit" | "conversion" | "roi" | "benchmarking" | "livre-blanc";
 
 const CARD_COMPONENTS: Record<CardId, React.FC> = {
   audit: CTALeadMagnet,
   conversion: CTAConversion,
   roi: CTASimulateurROI,
   benchmarking: CTABenchmarking,
+  "livre-blanc": CTALivreBlanc,
 };
 
 /** Pages où chaque carte est redondante — si on est dessus, on l'exclut */
@@ -426,14 +494,15 @@ const CARD_PAGES: Record<CardId, string[]> = {
   conversion: ["/contact"],
   roi: ["/outils/simulateur-roi", "/simulateur-tarifs"],
   benchmarking: ["/outils/benchmarking"],
+  "livre-blanc": ["/documentation"],
 };
 
 /** Ordre de priorité des cartes par profil (pages classiques) */
 const PROFILE_CARDS: Record<ProfileId | "default", CardId[]> = {
-  decideur:     ["roi", "conversion", "benchmarking", "audit"],
-  utilisateur:  ["benchmarking", "conversion", "roi", "audit"],
-  developpeur:  ["benchmarking", "roi", "conversion", "audit"],
-  default:      ["conversion", "roi", "benchmarking", "audit"],
+  decideur:     ["livre-blanc", "roi", "conversion", "benchmarking", "audit"],
+  utilisateur:  ["benchmarking", "conversion", "livre-blanc", "roi", "audit"],
+  developpeur:  ["benchmarking", "roi", "conversion", "audit", "livre-blanc"],
+  default:      ["conversion", "livre-blanc", "roi", "benchmarking", "audit"],
 };
 
 /** Ordre des cartes outils (pages outils) */
@@ -473,7 +542,11 @@ function useSelectedCards(): [React.FC, React.FC] {
    Export : Structure complète 3 niveaux
    ───────────────────────────────────────────── */
 export function CTASection() {
+  const pathname = usePathname();
   const [CardA, CardB] = useSelectedCards();
+
+  // Pas de boîtes CTA sur la page Boîte à outils
+  if (pathname === "/outils") return null;
 
   return (
     <section className="relative w-full py-12 md:py-20">

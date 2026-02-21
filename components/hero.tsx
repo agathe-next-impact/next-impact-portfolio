@@ -95,12 +95,12 @@ export default function Hero() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
+                <h1 className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
                   {variant.headline}
-                </div>
-                <div className="mt-2 text-4xl lg:text-5xl text-lightyellow font-googletitre font-medium">
+                </h1>
+                <p className="mt-2 text-4xl lg:text-5xl text-lightyellow font-googletitre font-medium">
                   {variant.subHeadline}
-                </div>
+                </p>
               </motion.div>
             </AnimatePresence>
             <div className="mt-5 flex flex-wrap items-center justify-start gap-4">
@@ -145,11 +145,11 @@ export default function Hero() {
                   {variant.description}
                 </p>
 
-                <p className="mt-4 mb-4 font-googletitre font-semibold text-white text-lg">
-                  {variant.ctaQuestion}
+                <p className="mt-4 mb-4 font-googletexte italic text-white/70 text-base">
+                  {variant.valueProposition}
                 </p>
                 <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
-                  <Button className="mx-0 inline-flex bg-coral py-1 px-6 rounded-2xl shadow-lg hover:bg-coral/80 transition duration-300 ease-in">
+                  <Button className="mx-0 inline-flex bg-orange py-2 px-8 rounded-2xl shadow-lg shadow-orange/25 hover:shadow-[0_0_20px_rgba(242,159,5,0.45)] hover:scale-[1.02] transition-all duration-300 ease-in">
                     <Link
                       href={variant.ctaPrimary.href}
                       className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
@@ -158,14 +158,14 @@ export default function Hero() {
                     </Link>
                     <LucideArrowUpRight className="w-8 h-8 text-darkblue" />
                   </Button>
-                  <Button className="mx-0 inline-flex bg-lightyellow py-1 px-6 rounded-2xl shadow-lg hover:bg-lightyellow/80 transition duration-300 ease-in">
+                  <Button className="mx-0 inline-flex border border-white/30 bg-transparent py-2 px-8 rounded-2xl hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300 ease-in">
                     <Link
                       href={variant.ctaSecondary.href}
-                      className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
+                      className="gap-2 text-white font-googletitre font-semibold text-lg"
                     >
                       {variant.ctaSecondary.label}
                     </Link>
-                    <LucideArrowUpRight className="w-8 h-8 text-darkblue" />
+                    <LucideArrowUpRight className="w-8 h-8 text-white/70" />
                   </Button>
                 </div>
               </motion.div>
@@ -215,14 +215,16 @@ export default function Hero() {
             {variant.auditTitle}
           </h2>
         <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative px-4 md:px-20 md:mt-8 xl:mt-0 xl:px-0">
-          <div className="text-left font-googletexte text-2xl lg:text-3xl text-darkblue font-regular mt-1 xxl:mt-24 lg:pt-6 z-10">
-            <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
-              {variant.auditSubtitle}
-            </span>
-            {" "}
-            <span className="text-white/70">
-             rapide et personnalisé
-            </span>
+          <div className="text-left mt-1 xxl:mt-24 lg:pt-6 z-10">
+            <h3 className="font-googletexte text-2xl lg:text-3xl">
+              <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
+                {variant.auditSubtitle}
+              </span>
+              {" "}
+              <span className="text-white/70">
+               rapide et personnalisé
+              </span>
+            </h3>
             <p className="text-white/70 text-lg md:text-xl mt-2 md:mb-8">
               {variant.auditDescription}
             </p>

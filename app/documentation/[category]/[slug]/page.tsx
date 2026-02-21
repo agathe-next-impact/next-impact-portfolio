@@ -13,6 +13,7 @@ import { ScrollToTop } from "@/components/documentation/scroll-to-top"
 import { MobileToc } from "@/components/documentation/mobile-toc"
 import { ArticleSequentialNav } from "@/components/documentation/article-sequential-nav"
 import { RelatedArticles } from "@/components/documentation/related-articles"
+import { ArticleInternalLinks } from "@/components/documentation/documentation-internal-links"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ArticleJsonLd } from "@/components/json-ld";
@@ -95,15 +96,40 @@ export default async function ArticlePage(props: ArticlePageProps) {
     const prevArticle = currentIndex > 0 ? categoryArticles[currentIndex - 1] : null
     const nextArticle = currentIndex < categoryArticles.length - 1 ? categoryArticles[currentIndex + 1] : null
 
-    const relatedCandidates = categoryArticles
+    // Same-category related articles
+    const sameCategoryCandidates = categoryArticles
       .filter((a) =>
         a.slug !== params.slug &&
         a.slug !== prevArticle?.slug &&
         a.slug !== nextArticle?.slug
       )
-      .slice(0, 5)
+      .slice(0, 3)
 
-    const relatedWithTime = relatedCandidates.map((a) => {
+    // Cross-category related articles
+    const RELATED_CATEGORIES: Record<string, string[]> = {
+      "headless-cms": ["wordpress", "seo", "projet-site-web"],
+      wordpress: ["headless-cms", "design-ui-ux", "projet-site-web"],
+      seo: ["marketing-digital", "headless-cms", "projet-site-web"],
+      "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
+      "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
+      "projet-site-web": ["headless-cms", "design-ui-ux", "seo"],
+      blog: ["headless-cms", "wordpress"],
+    }
+
+    const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []
+    const crossCategoryArticles = relatedCategorySlugs
+      .flatMap((cat) => getArticlesByCategory(cat).slice(0, 2))
+      .slice(0, 3)
+
+    // Combine: prioritize same-category, then add cross-category
+    const allRelatedCandidates = [
+      ...sameCategoryCandidates,
+      ...crossCategoryArticles.filter(
+        (a) => !sameCategoryCandidates.some((s) => s.slug === a.slug && s.category === a.category)
+      ),
+    ].slice(0, 5)
+
+    const relatedWithTime = allRelatedCandidates.map((a) => {
       const full = getArticleBySlug(a.category, a.slug)
       return { ...a, readingTime: estimateReadingTime(full.content) }
     })
@@ -214,7 +240,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
               </aside>
               <div id="article-body" className="col-span-1 lg:col-span-3 flex flex-col gap-8">
                 {/* Reading area */}
-                <div className="w-full p-5 md:p-10 bg-extralightblue/90 rounded-3xl shadow-sm">
+                <div className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl shadow-sm">
                   {article.isMdx ? (
                     <MdxContent source={article.content} />
                   ) : (
@@ -233,6 +259,9 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   articles={relatedWithTime}
                   categoryLabels={categoryLabels}
                 />
+
+                {/* Liens internes vers outils et services */}
+                <ArticleInternalLinks category={params.category} />
               </div>
             </div>
           </div>

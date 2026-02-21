@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Video } from "lucide-react";
+import { ArrowRight, Video, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const CALENDAR_LINK = "https://calendar.app.google/CiBQuqFLNu3vJwSc7";
@@ -41,9 +41,9 @@ function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
       highlightColor: "text-coral",
       description:
         "Grâce à notre modèle de péréquation, bénéficiez d'un site ultra-rapide, sécurisé et éco-conçu qui soutiendra vos campagnes de dons sans jamais ralentir.",
-      ctaLabel: "Planifier un appel de découverte (15 min)",
+      ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
-      ctaColor: "bg-coral hover:bg-coral/90 text-white",
+      ctaColor: "bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)]",
     };
   }
 
@@ -57,9 +57,9 @@ function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
       highlightColor: "text-lightyellow",
       description:
         "Votre association mérite un site performant qui porte votre mission. Bénéficiez de notre expertise technique à un tarif adapté au secteur associatif.",
-      ctaLabel: "Planifier un appel de découverte (15 min)",
+      ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
-      ctaColor: "bg-lightyellow hover:bg-lightyellow/90 text-darkblue",
+      ctaColor: "bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)]",
     };
   }
 
@@ -79,8 +79,8 @@ function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
         "Boostez vos conversions en passant au WordPress Headless. En prime, en choisissant Next Impact, vous devenez Mécène et financez la transition numérique d'une association locale !",
       ctaLabel: "Demander mon Audit IA Gratuit",
       ctaColor: isSoutien
-        ? "bg-regularblue hover:bg-regularblue/90 text-white"
-        : "bg-lightyellow hover:bg-lightyellow/90 text-darkblue",
+        ? "bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)]"
+        : "bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)]",
     };
   }
 
@@ -95,7 +95,7 @@ function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
       description:
         "Même avec un budget limité, des optimisations rapides peuvent faire une vraie différence. Commençons par identifier les leviers les plus impactants pour votre activité.",
       ctaLabel: "Demander mon Audit IA Gratuit",
-      ctaColor: "bg-coral hover:bg-coral/90 text-white",
+      ctaColor: "bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)]",
     };
   }
 
@@ -108,9 +108,9 @@ function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
     highlightColor: "text-extralightblue",
     description:
       "Votre budget permet un site sur mesure, ultra-performant et éco-conçu. Nous construirons ensemble une plateforme qui maximise votre impact.",
-    ctaLabel: "Planifier un appel de découverte (15 min)",
+    ctaLabel: "Planifier un appel de découverte",
     ctaLink: CALENDAR_LINK,
-    ctaColor: "bg-regularblue hover:bg-regularblue/90 text-white",
+    ctaColor: "bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)]",
   };
 }
 
@@ -131,7 +131,7 @@ export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResul
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="w-full max-w-xl mx-auto"
     >
-      <div className="border border-white/10 rounded-2xl p-8 md:p-10 bg-mediumblue/60 backdrop-blur-lg text-center space-y-6">
+      <div className="border border-white/10 rounded-xl sm:rounded-2xl p-5 sm:p-8 md:p-10 bg-mediumblue/60 backdrop-blur-lg text-center space-y-4 sm:space-y-6">
         {/* Badge */}
         <motion.span
           initial={{ opacity: 0, y: -10 }}
@@ -157,7 +157,7 @@ export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResul
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className={`text-4xl font-googletitre font-medium ${offer.highlightColor}`}
+          className={`text-2xl sm:text-3xl md:text-4xl font-googletitre font-medium ${offer.highlightColor}`}
         >
           {offer.highlight}
         </motion.p>
@@ -191,19 +191,19 @@ export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResul
         >
           {offer.ctaLink ? (
             <Link href={offer.ctaLink} target="_blank" rel="noopener noreferrer" onClick={onCtaClick}>
-              <Button className={`h-14 px-10 font-bold font-googletitre text-lg rounded-full shadow ${offer.ctaColor}`}>
+              <Button className={`whitespace-normal text-center h-auto min-h-[3rem] py-3 px-5 text-sm sm:min-h-[3.5rem] sm:px-10 sm:text-lg font-bold font-googletitre rounded-full shadow ${offer.ctaColor}`}>
                 {offer.ctaLabel}
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
               </Button>
             </Link>
           ) : (
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-3 sm:gap-4">
               <Button
                 onClick={onCtaClick}
-                className={`h-14 px-10 font-bold font-googletitre text-lg rounded-full shadow cursor-pointer ${offer.ctaColor}`}
+                className={`whitespace-normal text-center h-auto min-h-[3rem] py-3 px-5 text-sm sm:min-h-[3.5rem] sm:px-10 sm:text-lg font-bold font-googletitre rounded-full shadow cursor-pointer ${offer.ctaColor}`}
               >
                 {offer.ctaLabel}
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
               </Button>
               <Link
                 href={CALENDAR_LINK}
@@ -216,6 +216,24 @@ export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResul
               </Link>
             </div>
           )}
+        </motion.div>
+
+        {/* Livre blanc */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="pt-4 border-t border-white/10 mt-4"
+        >
+          <Link
+            href="/ressources/livre_blanc_wp_headless.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-googletexte text-white/50 hover:text-white transition-colors"
+          >
+            <FileText className="w-4 h-4" />
+            En attendant, découvrez notre livre blanc WordPress Headless
+          </Link>
         </motion.div>
       </div>
     </motion.div>

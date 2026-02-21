@@ -33,9 +33,9 @@ function MdxH2({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="mt-12 mb-4 flex items-center gap-3">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent" />
-        <div className="h-1.5 w-1.5 rounded-full bg-regularblue/30" />
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent" />
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange/40 to-transparent" />
+        <div className="h-1.5 w-1.5 rounded-full bg-coral/30" />
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange/40 to-transparent" />
       </div>
       <h2 id={id}>{children}</h2>
     </>
@@ -76,7 +76,7 @@ export async function MdxContent({ source }: MdxContentProps) {
   });
 
   return (
-    <div className="article-text text-mediumblue">
+    <div className="article-text text-white/80">
       {content}
     </div>
   );

@@ -420,3 +420,122 @@ export function ReviewJsonLd({
 
   return <JsonLd data={data} />;
 }
+
+/**
+ * Données structurées pour une page de collection (liste d'articles, études de cas, outils)
+ */
+export function CollectionPageJsonLd({
+  name,
+  description,
+  url,
+  items,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  items: Array<{ name: string; url: string; description?: string }>;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        url: item.url.startsWith("http")
+          ? item.url
+          : `${siteConfig.url}${item.url}`,
+        ...(item.description && { description: item.description }),
+      })),
+    },
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
+ * Données structurées pour une application web / outil interactif
+ */
+export function WebApplicationJsonLd({
+  name,
+  description,
+  url,
+  applicationCategory = "BusinessApplication",
+  offers,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+  offers?: { price: string; priceCurrency?: string };
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name,
+    description,
+    url: url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+    applicationCategory,
+    operatingSystem: "All",
+    browserRequirements: "Requires JavaScript",
+    offers: {
+      "@type": "Offer",
+      price: offers?.price || "0",
+      priceCurrency: offers?.priceCurrency || "EUR",
+    },
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
+ * Données structurées pour une vidéo
+ */
+export function VideoObjectJsonLd({
+  name,
+  description,
+  thumbnailUrl,
+  uploadDate,
+  contentUrl,
+  embedUrl,
+}: {
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  uploadDate: string;
+  contentUrl?: string;
+  embedUrl?: string;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    description,
+    thumbnailUrl: thumbnailUrl.startsWith("http")
+      ? thumbnailUrl
+      : `${siteConfig.url}${thumbnailUrl}`,
+    uploadDate,
+    ...(contentUrl && { contentUrl }),
+    ...(embedUrl && { embedUrl }),
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.url}/img/logo-blanc-carre.png`,
+      },
+    },
+  };
+
+  return <JsonLd data={data} />;
+}

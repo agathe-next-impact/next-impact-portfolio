@@ -9,7 +9,7 @@ export default function Footer() {
       <CTASection />
 
       {/* Footer info */}
-      <div className="container grid grid-cols-1 md:grid-cols-2 gap-10 py-8 border-t border-white/10">
+      <div className="container grid grid-cols-1 md:grid-cols-3 gap-10 py-8 border-t border-white/10">
         {/* Colonne 1 : Liens */}
         <div className="flex flex-col gap-3">
           <h3 className="font-googletitre text-white text-lg font-semibold mb-2">
@@ -34,7 +34,28 @@ export default function Footer() {
           </nav>
         </div>
 
-        {/* Colonne 2 : Logo certification */}
+        {/* Colonne 2 : Ressources */}
+        <div className="flex flex-col gap-3">
+          <h3 className="font-googletitre text-white text-lg font-semibold mb-2">
+            Ressources
+          </h3>
+          <nav className="flex flex-col gap-2">
+            <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Livre blanc WordPress Headless
+            </Link>
+            <Link href="/audit-site-ia" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Audit IA gratuit
+            </Link>
+            <Link href="/outils/simulateur-roi" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Simulateur ROI
+            </Link>
+            <Link href="/outils/benchmarking" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Benchmarking
+            </Link>
+          </nav>
+        </div>
+
+        {/* Colonne 3 : Logo certification */}
         <div className="flex flex-col items-center justify-center gap-3">
           <Image
             src="/img/logo-activateurs.svg"

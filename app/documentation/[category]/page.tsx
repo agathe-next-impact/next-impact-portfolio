@@ -4,6 +4,8 @@ import { notFound } from "next/navigation"
 
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
 import { CategoryPageContent } from "@/components/documentation/category-theme-cards"
+import { CrossCategoryNav } from "@/components/documentation/cross-category-nav"
+import { CategoryToolsLinks } from "@/components/documentation/documentation-internal-links"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
@@ -113,6 +115,12 @@ export default async function CategoryPage(props: CategoryPageProps) {
 
             {/* Theme cards + Articles grid */}
             <CategoryPageContent articles={articles} category={category} />
+
+            {/* Catégories associées */}
+            <CrossCategoryNav currentCategory={category} />
+
+            {/* Outils utiles */}
+            <CategoryToolsLinks category={category} />
           </div>
         </section>
       </main>

@@ -752,6 +752,97 @@ function getSimilarCaseStudies(
   }).slice(0, limit);
 }
 
+// Chiffres clés par étude de cas
+const RESULT_HIGHLIGHTS: Record<string, { value: string; label: string }[]> = {
+  "comme-des-fous-jeux": [
+    { value: "15 jours", label: "Délai de livraison" },
+    { value: "100%", label: "Expérience interactive" },
+    { value: "Headless", label: "Architecture Next.js" },
+  ],
+  "comme-des-fous": [
+    { value: "98/100", label: "Score PageSpeed" },
+    { value: "+42 pts", label: "Gain de performance" },
+    { value: "0 interruption", label: "Pour les rédacteurs" },
+  ],
+  "next-event": [
+    { value: "3 semaines", label: "Délai de réalisation" },
+    { value: "Agenda", label: "Gestion des événements" },
+    { value: "Billetterie", label: "Intégrée et fonctionnelle" },
+  ],
+  "les-etats-generaux-communaux": [
+    { value: "4 semaines", label: "Délai de réalisation" },
+    { value: "J-0", label: "Livré avant l'événement" },
+    { value: "Carte", label: "Groupes locaux interactifs" },
+  ],
+  "proditec": [
+    { value: "98/100", label: "Score PageSpeed" },
+    { value: "+30%", label: "Accessibilité améliorée" },
+    { value: "5 langues", label: "Support multilingue" },
+  ],
+  "doleances": [
+    { value: "2 mois", label: "Délai de réalisation" },
+    { value: "Carte", label: "Groupes locaux interactifs" },
+    { value: "Headless", label: "Architecture Next.js" },
+  ],
+  "sowee": [
+    { value: "5 jours", label: "Délai de livraison" },
+    { value: "100%", label: "Fidélité aux maquettes" },
+    { value: "Autonomie", label: "Pour l'équipe marketing" },
+  ],
+  "salon-de-la-carrosserie": [
+    { value: "15 jours", label: "Délai de livraison" },
+    { value: "Inscriptions", label: "Espace exposants en ligne" },
+    { value: "SEO", label: "Référencement optimisé" },
+  ],
+  "hermitage": [
+    { value: "+30 pts", label: "Score PageSpeed" },
+    { value: "Elementor", label: "Migration depuis Divi" },
+    { value: "Dons", label: "Récurrents et dédiés" },
+  ],
+  "erp-services": [
+    { value: "99/100", label: "Score PageSpeed mobile" },
+    { value: "+54 pts", label: "Gain de performance" },
+    { value: "2 semaines", label: "Délai de livraison" },
+  ],
+  "senza-nature": [
+    { value: "-90%", label: "Réduction des bugs" },
+    { value: "+50%", label: "Vitesse de chargement" },
+    { value: "Continu", label: "Accompagnement depuis 2024" },
+  ],
+  "wagner-hamisky": [
+    { value: "3 semaines", label: "Délai de livraison" },
+    { value: "2 artistes", label: "Exposés en ligne" },
+    { value: "Autonomie", label: "Gestion du catalogue" },
+  ],
+  "mediatico": [
+    { value: "4 semaines", label: "Délai de réalisation" },
+    { value: "FSE", label: "Full Site Editing WordPress" },
+    { value: "0 bug", label: "Stabilisation réussie" },
+  ],
+  "infralliance": [
+    { value: "2 semaines", label: "Délai de livraison" },
+    { value: "J-0", label: "Livré avant le lancement" },
+    { value: "Autonomie", label: "Administration simplifiée" },
+  ],
+  "connexion-plus": [
+    { value: "4 semaines", label: "Délai de réalisation" },
+    { value: "Co-construction", label: "Ateliers participatifs" },
+    { value: "Membres", label: "Publication autonome" },
+  ],
+  "sdevo": [
+    { value: "3 semaines", label: "Délai de livraison" },
+    { value: "Plugin", label: "Solution sur-mesure" },
+    { value: "100%", label: "Suivi simplifié" },
+  ],
+};
+
+// Couleurs d'accent pour les boîtes de résultats
+const highlightColors = [
+  { border: "border-coral/30", bg: "bg-coral/10", text: "text-coral" },
+  { border: "border-orange/30", bg: "bg-orange/10", text: "text-orange" },
+  { border: "border-lightblue/30", bg: "bg-lightblue/10", text: "text-lightblue" },
+];
+
 // Fonction pour générer les chemins statiques
 export async function generateStaticParams() {
   return CASE_STUDIES.map((study) => ({
@@ -831,11 +922,11 @@ export default async function CaseStudyPage({
 
       {/* Contenu principal */}
       <div className="container relative z-10 px-4 md:px-6 pb-6 -mt-12 rounded-3xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-start bg-extralightblue/90 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-start bg-mediumblue/90 backdrop-blur-sm p-4 md:p-8 rounded-3xl z-50">
           <div className="lg:col-span-2 space-y-6 sm:space-y-10">
             {/* Galerie */}
             <section>
-              <h2 className="text-2xl md:mb-6 text-mediumblue">
+              <h2 className="text-2xl md:mb-6 text-white/80">
                 Aperçu du projet
               </h2>
               <div className="rounded-lg border overflow-hidden">
@@ -865,6 +956,30 @@ export default async function CaseStudyPage({
                 )}
               </div>
             </section>
+
+            {/* Chiffres clés */}
+            {RESULT_HIGHLIGHTS[caseStudy.slug] && (
+              <section className="bg-mediumblue/80 backdrop-blur-md rounded-2xl p-4 sm:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                  {RESULT_HIGHLIGHTS[caseStudy.slug].map((highlight, index) => {
+                    const color = highlightColors[index % highlightColors.length];
+                    return (
+                      <div
+                        key={index}
+                        className={`rounded-2xl border p-4 sm:p-6 text-center ${color.bg} ${color.border}`}
+                      >
+                        <p className={`text-xl sm:text-3xl font-googletitre font-bold mb-1 ${color.text}`}>
+                          {highlight.value}
+                        </p>
+                        <p className="text-xs sm:text-sm font-googletexte font-medium text-white/80">
+                          {highlight.label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
 
             {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil) */}
             <CaseStudyProfileContent

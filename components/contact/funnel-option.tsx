@@ -19,7 +19,7 @@ export function FunnelOption({ icon, label, description, selected, onClick }: Fu
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "w-full flex items-center gap-4 p-6 rounded-2xl border text-left transition-all duration-300 cursor-pointer",
+        "w-full flex items-center gap-3 sm:gap-4 p-4 sm:p-6 rounded-xl sm:rounded-2xl border text-left transition-all duration-300 cursor-pointer",
         "bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg",
         selected
           ? "border-lightyellow/40 shadow-lg"

@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { X, Send, CheckCircle2 } from "lucide-react";
 
 type ContactFormModalProps = {
   formData: Record<string, any>;
   onClose: () => void;
 };
 
-// Fonction dédiée pour envoyer les infos du formulaire
 async function sendContactForm({
   nom,
   email,
@@ -22,7 +23,6 @@ async function sendContactForm({
   message: string;
   formData: Record<string, any>;
 }) {
-  // Envoie la requête à l'API
   const res = await fetch("/api/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -30,7 +30,7 @@ async function sendContactForm({
       name: nom,
       email,
       message,
-      formData, // On envoie les données brutes à l'API
+      formData,
     }),
   });
 
@@ -67,21 +67,21 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
         formData,
       });
       setSent(true);
-    } catch (err) {
+    } catch {
       setError("Erreur lors de l'envoi. Merci de réessayer.");
     } finally {
       setSending(false);
     }
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       <motion.div
         key="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
+        className="fixed inset-0 z-50 bg-mediumblue/60 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={onClose}
       >
         <motion.div
@@ -90,23 +90,27 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="bg-white rounded-xl shadow-xl max-w-md w-full p-8 relative"
+          className="rounded-2xl border border-white/10 bg-darkblue/80 backdrop-blur-xl shadow-2xl shadow-black/40 max-w-md w-full p-6 md:p-8 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
-            className="absolute top-3 right-3 text-regularblue hover:text-mediumblue text-xl"
+            className="absolute top-4 right-4 text-white/40 hover:text-white transition p-1 rounded-full hover:bg-white/10"
             onClick={onClose}
             aria-label="Fermer"
             type="button"
           >
-            ×
+            <X className="w-5 h-5" />
           </button>
+
           {sent ? (
             <div className="text-center space-y-4 py-8">
-              <div className="text-2xl text-regularblue font-googletitre font-bold">Merci !</div>
-              <div className="text-regularblue">Votre demande a bien été envoyée.</div>
+              <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8 text-green-400" />
+              </div>
+              <h2 className="text-2xl text-white font-googletitre font-bold">Merci !</h2>
+              <p className="text-white/60 font-googletexte">Votre demande a bien été envoyée.</p>
               <button
-                className="mt-4 px-6 py-2 bg-regularblue text-white rounded hover:bg-mediumblue"
+                className="mt-4 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition font-googletitre"
                 onClick={onClose}
               >
                 Fermer
@@ -114,54 +118,90 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <h2 className="text-xl font-bold text-regularblue mb-2">Demander le devis pour ce cahier des charges</h2>
               <div>
-                <label className="block text-sm text-mediumblue mb-1">Votre nom</label>
+                <h2 className="text-xl font-bold text-white font-googletitre mb-1">
+                  Demander un devis
+                </h2>
+                <p className="text-sm text-white/50 font-googletexte">
+                  Votre cahier des charges sera joint automatiquement
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm text-white/80 font-googletitre font-semibold">
+                  Votre nom
+                </label>
                 <Input
                   type="text"
                   name="nom"
                   value={fields.nom}
                   onChange={handleChange}
                   required
-                  className="w-full border rounded px-3 py-2"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
+                  placeholder="Jean Dupont"
                   disabled={sending}
                 />
               </div>
-              <div>
-                <label className="block text-sm text-mediumblue mb-1">Votre email</label>
+
+              <div className="space-y-2">
+                <label className="block text-sm text-white/80 font-googletitre font-semibold">
+                  Votre email
+                </label>
                 <Input
                   type="email"
                   name="email"
                   value={fields.email}
                   onChange={handleChange}
                   required
-                  className="w-full border rounded px-3 py-2"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
+                  placeholder="jean@exemple.com"
                   disabled={sending}
                 />
               </div>
-              <div>
-                <label className="block text-sm text-mediumblue mb-1">Message (optionnel)</label>
+
+              <div className="space-y-2">
+                <label className="block text-sm text-white/80 font-googletitre font-semibold">
+                  Message <span className="text-white/40 font-normal">(optionnel)</span>
+                </label>
                 <Textarea
                   name="message"
                   value={fields.message}
                   onChange={handleChange}
-                  className="w-full border rounded px-3 py-2"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 rounded-xl min-h-[80px]"
+                  placeholder="Des précisions sur votre projet..."
                   rows={3}
                   disabled={sending}
                 />
               </div>
-              {error && <div className="text-red-600 text-sm">{error}</div>}
+
+              {error && (
+                <div className="rounded-xl bg-coral/10 border border-coral/20 p-3 text-sm text-coral font-googletexte">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="bg-regularblue hover:bg-regularblue/80 text-white text-sm font-semibold px-4 py-2 rounded-full transition"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 shadow font-googletitre disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={sending}
               >
-                {sending ? "Envoi en cours..." : "Envoyer"}
+                {sending ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-darkblue/20 border-t-darkblue" />
+                    Envoi en cours...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Envoyer la demande
+                  </>
+                )}
               </button>
             </form>
           )}
         </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

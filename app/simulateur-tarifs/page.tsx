@@ -1,7 +1,7 @@
 import PricingCalculator from "@/components/pricing-calculator/pricing-calculator-wrapper"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, WebApplicationJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
@@ -31,6 +31,12 @@ export default function Home() {
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      <WebApplicationJsonLd
+        name="Simulateur de tarif de site web"
+        description="Estimez le coût de votre projet web selon le type de projet. Simulateur gratuit pour obtenir une fourchette de prix instantanée."
+        url="/simulateur-tarifs"
+        applicationCategory="BusinessApplication"
+      />
        <section className="w-full pt-4 md:pt-8 lg:pt-12 xl:pt-12">
         <div className="container px-4 md:px-6">
         <div className="flex flex-col justify-center space-y-4 py-8">

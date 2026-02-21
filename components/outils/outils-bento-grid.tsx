@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import {
   BarChart3,
@@ -10,8 +11,13 @@ import {
   TrendingUp,
   Zap,
   ArrowRight,
+  FileText,
+  Network,
+  BadgePercent,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useDocumentationMode } from "@/contexts/documentation-mode-context"
+import type { ProfileId } from "@/lib/documentation-profiles"
 
 interface BentoCard {
   id: string
@@ -19,56 +25,132 @@ interface BentoCard {
   description: string
   icon: React.ElementType
   href: string
-  colSpan: string
-  rowSpan: string
   gradient: string
   textColor: string
   accentColor: string
   tag?: string
+  hideOnMobile?: boolean
 }
 
-const cards: BentoCard[] = [
-  {
+const CARDS: Record<string, BentoCard> = {
+  "simulateur-roi": {
     id: "simulateur-roi",
     title: "Simulateur de ROI",
     description:
       "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires après migration Headless. Un outil concret pour chiffrer le coût de l'inaction.",
     icon: BarChart3,
     href: "/outils/simulateur-roi",
-    colSpan: "md:col-span-2",
-    rowSpan: "md:row-span-2",
     gradient: "bg-gradient-to-br from-green-500/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-green-400",
     tag: "Nouveau",
   },
-  {
+  "benchmarking": {
     id: "benchmarking",
     title: "Benchmarking Concurrentiel",
     description:
       "Comparez votre site aux leaders de votre secteur — Core Web Vitals, vitesse, performance.",
     icon: Trophy,
     href: "/outils/benchmarking",
-    colSpan: "md:col-span-1",
-    rowSpan: "",
     gradient: "bg-gradient-to-br from-coral/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-coral",
     tag: "Nouveau",
   },
-  {
+  "audit-ia": {
     id: "audit-ia",
     title: "Audit IA Headless",
     description:
       "Diagnostic WordPress propulsé par l'IA avec recommandations de migration personnalisées.",
     icon: BotMessageSquare,
     href: "/audit-site-ia",
-    colSpan: "md:col-span-1",
-    rowSpan: "",
     gradient: "bg-gradient-to-br from-orange/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-orange",
   },
+  "cahier-des-charges": {
+    id: "cahier-des-charges",
+    title: "Cahier des Charges",
+    description:
+      "Générez un cahier des charges complet et structuré pour votre projet web en répondant à quelques questions.",
+    icon: FileText,
+    href: "/cahier-des-charges",
+    gradient: "bg-gradient-to-br from-indigo-500/20 via-mediumblue to-darkblue",
+    textColor: "text-white",
+    accentColor: "text-indigo-400",
+  },
+  "mind-map": {
+    id: "mind-map",
+    title: "Mind Map Headless",
+    description:
+      "Explorez l'architecture WordPress Headless de façon interactive : avantages, défis et roadmap de migration.",
+    icon: Network,
+    href: "/documentation/mind-map",
+    gradient: "bg-gradient-to-br from-purple-500/20 via-mediumblue to-darkblue",
+    textColor: "text-white",
+    accentColor: "text-purple-400",
+    hideOnMobile: true,
+  },
+  "determiner-offre": {
+    id: "determiner-offre",
+    title: "Déterminer l'Offre",
+    description:
+      "Identifiez l'offre solidaire, équilibre ou soutien la plus adaptée à votre structure en quelques clics.",
+    icon: BadgePercent,
+    href: "/contact",
+    gradient: "bg-gradient-to-br from-amber-500/20 via-mediumblue to-darkblue",
+    textColor: "text-white",
+    accentColor: "text-amber-400",
+  },
+}
+
+// Ordre des cartes par profil — le zigzag (2-1 / 1-2 / 2-1) est géré par la position
+const CARD_ORDER: Record<ProfileId | "default", string[]> = {
+  // Décideur = défaut : ROI & business en priorité
+  decideur: [
+    "simulateur-roi",    // row 1 — 2 cols
+    "benchmarking",      // row 1 — 1 col
+    "determiner-offre",  // row 2 — 1 col
+    "cahier-des-charges",// row 2 — 2 cols
+    "audit-ia",          // row 3 — 2 cols
+    "mind-map",          // row 3 — 1 col
+  ],
+  default: [
+    "simulateur-roi",
+    "benchmarking",
+    "determiner-offre",
+    "cahier-des-charges",
+    "audit-ia",
+    "mind-map",
+  ],
+  // Utilisateur : outils pratiques et cadrage en priorité
+  utilisateur: [
+    "cahier-des-charges",// row 1 — 2 cols
+    "determiner-offre",  // row 1 — 1 col
+    "audit-ia",          // row 2 — 1 col
+    "mind-map",          // row 2 — 2 cols
+    "simulateur-roi",    // row 3 — 2 cols
+    "benchmarking",      // row 3 — 1 col
+  ],
+  // Développeur : architecture et technique en priorité
+  developpeur: [
+    "mind-map",          // row 1 — 2 cols
+    "audit-ia",          // row 1 — 1 col
+    "benchmarking",      // row 2 — 1 col
+    "simulateur-roi",    // row 2 — 2 cols
+    "cahier-des-charges",// row 3 — 2 cols
+    "determiner-offre",  // row 3 — 1 col
+  ],
+}
+
+// colSpan par position pour le pattern zigzag : 2-1 / 1-2 / 2-1
+const COL_SPAN_BY_POSITION = [
+  "md:col-span-2", // pos 0 — row 1 gauche
+  "md:col-span-1", // pos 1 — row 1 droite
+  "md:col-span-1", // pos 2 — row 2 gauche
+  "md:col-span-2", // pos 3 — row 2 droite
+  "md:col-span-2", // pos 4 — row 3 gauche
+  "md:col-span-1", // pos 5 — row 3 droite
 ]
 
 const stats = [
@@ -85,9 +167,28 @@ const stats = [
 ]
 
 export default function OutilsBentoGrid() {
+  const { profileId } = useDocumentationMode()
+
+  const orderedCards = useMemo(() => {
+    const order = profileId ? CARD_ORDER[profileId] : CARD_ORDER.default
+    return order.map((id, index) => ({
+      ...CARDS[id],
+      colSpan: COL_SPAN_BY_POSITION[index],
+    }))
+  }, [profileId])
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-      {cards.map((card, index) => {
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={profileId || "default"}
+          className="contents"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+      {orderedCards.map((card, index) => {
         const Icon = card.icon
         return (
           <motion.div
@@ -105,8 +206,8 @@ export default function OutilsBentoGrid() {
               "group relative overflow-hidden rounded-3xl border border-lightblue/10",
               "cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-regularblue/10 hover:border-lightblue/20",
               card.colSpan,
-              card.rowSpan,
-              card.gradient
+              card.gradient,
+              card.hideOnMobile && "hidden md:block"
             )}
           >
             <Link href={card.href} className="absolute inset-0 z-10">
@@ -187,6 +288,8 @@ export default function OutilsBentoGrid() {
           </motion.div>
         )
       })}
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

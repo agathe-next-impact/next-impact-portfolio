@@ -5,7 +5,7 @@ import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ServiceJsonLd, FAQJsonLd } from "@/components/json-ld";
 import {
   ArrowRight,
   CheckCircle2,
@@ -161,6 +161,26 @@ export default function SolutionsPage() {
         description="Solutions WordPress adaptées à tous vos projets : WordPress standard, WordPress + Astro pour la performance, ou WordPress Headless + Next.js pour les applications web avancées."
         serviceType="Développement Web"
         url="/solutions"
+      />
+      <FAQJsonLd
+        questions={[
+          {
+            question: "Est-ce que je pourrai toujours modifier mes textes ?",
+            answer: "Oui, pour les 3 solutions. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
+          },
+          {
+            question: "Le Headless est-il plus cher à maintenir ?",
+            answer: "Légèrement, car il y a deux systèmes à maintenir (WordPress + front-end). Cependant, la sécurité renforcée et les performances accrues réduisent souvent les coûts d'intervention d'urgence et de perte de trafic.",
+          },
+          {
+            question: "Combien de temps prend la mise en place ?",
+            answer: "Comptez 2-4 semaines pour un site WordPress classique, 4-6 semaines pour une solution Astro, et 6-10 semaines pour une architecture Next.js complète, selon la complexité du projet.",
+          },
+          {
+            question: "Mes plugins WordPress fonctionneront-ils encore ?",
+            answer: "Les plugins front-end (sliders, formulaires affichés) sont remplacés par des équivalents plus performants. Les plugins back-end (SEO, analytics, sécurité) continuent de fonctionner normalement.",
+          },
+        ]}
       />
       <SolutionsPageClient />
     </>

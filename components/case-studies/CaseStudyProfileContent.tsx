@@ -45,14 +45,14 @@ export default function CaseStudyProfileContent({
       >
         {/* Présentation du projet */}
         <section>
-          <h2 className="text-2xl md:mb-6 text-mediumblue">
+          <h2 className="text-2xl md:mb-6 text-white">
             Présentation du projet
           </h2>
           <div className="prose max-w-none">
             {detailedDescription.split("\n\n").map((paragraph, index) => (
               <p
                 key={index}
-                className="mb-4 text-mediumblue/80 md:leading-relaxed"
+                className="mb-4 text-white/80 md:leading-relaxed"
               >
                 {paragraph}
               </p>
@@ -63,7 +63,7 @@ export default function CaseStudyProfileContent({
         {/* Objectifs et résultats */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div>
-            <h2 className="text-2xl md:mb-6 text-mediumblue">Objectifs</h2>
+            <h2 className="text-2xl md:mb-6 text-white">Objectifs</h2>
             <ul className="space-y-3">
               {objectives.map((objective, index) => (
                 <li
@@ -73,13 +73,13 @@ export default function CaseStudyProfileContent({
                   <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
                     <ChevronRight className="h-4 w-4" />
                   </div>
-                  <span className="w-full text-mediumblue/80">{objective}</span>
+                  <span className="w-full text-white/80">{objective}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl md:mb-6 text-mediumblue">Résultats</h2>
+            <h2 className="text-2xl md:mb-6 text-white">Résultats</h2>
             <ul className="space-y-3">
               {results.map((result, index) => (
                 <li
@@ -89,7 +89,7 @@ export default function CaseStudyProfileContent({
                   <div className="h-6 w-6 rounded-full bg-transparent text-coral flex items-center justify-center mr-3 mt-0.5">
                     <ChevronRight className="h-4 w-4" />
                   </div>
-                  <span className="w-full text-mediumblue/80">{result}</span>
+                  <span className="w-full text-white/80">{result}</span>
                 </li>
               ))}
             </ul>

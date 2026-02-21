@@ -603,7 +603,7 @@ export function HeadlessDiagnostic() {
               </p>
               <button
                 onClick={goNext}
-                className="inline-flex items-center gap-2 rounded-2xl bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-white hover:bg-lightblue hover:text-darkblue transition-colors"
+                className="inline-flex items-center gap-2 rounded-2xl bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300"
               >
                 Commencer le diagnostic
                 <ArrowRight className="h-4 w-4" />
@@ -717,7 +717,7 @@ export function HeadlessDiagnostic() {
                         className={cn(
                           "inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-googletitre font-medium transition-all",
                           canProceed
-                            ? "bg-regularblue text-white hover:bg-lightblue hover:text-darkblue"
+                            ? "bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)]"
                             : "bg-white/10 text-white/30 cursor-not-allowed"
                         )}
                       >
@@ -855,7 +855,7 @@ export function HeadlessDiagnostic() {
                 </button>
                 <button
                   onClick={shareResults}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-white hover:bg-lightblue hover:text-darkblue transition-colors flex-1"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300 flex-1"
                 >
                   <Share2 className="h-4 w-4" />
                   {copied ? "Lien copié !" : "Partager le résultat"}

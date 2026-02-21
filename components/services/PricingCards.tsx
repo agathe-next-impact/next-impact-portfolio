@@ -87,7 +87,7 @@ export function PricingCards() {
             </div>
 
             <Link href="/contact" className="mt-8">
-              <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-coral hover:bg-coral/90 text-white">
+              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full shadow bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300">
                 Déterminer mon offre
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -249,7 +249,7 @@ export function PricingCards() {
             </div>
 
             <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" className="mt-8" target="_blank" rel="noopener noreferrer">
-              <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-regularblue hover:bg-regularblue/90 text-white">
+              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full shadow bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300">
                 Discuter de mon projet
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

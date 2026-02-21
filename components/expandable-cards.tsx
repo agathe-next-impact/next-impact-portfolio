@@ -340,7 +340,7 @@ const utilisateurContent: ContentFactory[] = [
         </div>
       </div>
       <div className="mt-4">
-        <Link href="/demo" className="inline-block px-5 py-2 rounded-2xl bg-regularblue text-white font-googletitre font-semibold shadow hover:bg-regularblue/90 transition">
+        <Link href="/demo" className="inline-block px-5 py-2 rounded-2xl bg-regularblue text-darkblue md:text-lg font-googletitre font-semibold shadow hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300">
           Voir la démo
         </Link>
       </div>

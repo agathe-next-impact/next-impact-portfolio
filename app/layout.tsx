@@ -69,8 +69,23 @@ export const metadata: Metadata = {
   description:
     'Solutions WordPress Headless avec Next.js et Astro. ' +
     'Création, refonte, audit et conseil par une développeuse freelance.',
+  keywords: [
+    'WordPress Headless',
+    'Next.js',
+    'Astro',
+    'développeuse freelance',
+    'création site web',
+    'refonte site web',
+    'CMS Headless',
+    'React',
+    'TypeScript',
+  ],
+  authors: [{ name: 'Agathe Karinthi-Martin', url: 'https://www.next-impact.digital' }],
+  creator: 'Agathe Karinthi-Martin',
+  publisher: 'Next Impact',
   icons: {
     icon: '/img/logo-small.webp',
+    apple: '/img/logo-small.webp',
   },
   openGraph: {
     type: 'website',
@@ -87,6 +102,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'Next Impact — WordPress Headless & Next.js',
+        type: 'image/png',
       },
     ],
   },
@@ -95,7 +111,23 @@ export const metadata: Metadata = {
     title: 'Next Impact — Experte WordPress Headless & Next.js',
     description:
       'Développeuse freelance spécialisée WordPress Headless + Next.js.',
-    images: ['/img/desktop-screen-next-impact.png'],
+    images: [
+      {
+        url: '/img/desktop-screen-next-impact.png',
+        alt: 'Next Impact — WordPress Headless & Next.js',
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   alternates: {
     canonical: '/',

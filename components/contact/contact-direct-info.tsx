@@ -9,7 +9,7 @@ export function ContactDirectInfo() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.5 }}
-      className="w-full max-w-lg mx-auto border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center space-y-4"
+      className="w-full max-w-lg mx-auto border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 bg-darkblue/40 backdrop-blur-sm text-center space-y-3 sm:space-y-4"
     >
       <p className="text-white/60 font-googletexte uppercase tracking-widest text-sm">
         Vous préférez un échange direct ?

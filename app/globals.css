@@ -219,36 +219,36 @@ body {
 
   /* ── Paragraphs ── */
   .article-text p {
-    @apply text-mediumblue/80 text-base mb-6;
+    @apply text-white/80 text-base mb-6;
     line-height: 1.8;
   }
   .article-text > p:first-child {
-    @apply text-lg text-mediumblue/90 font-medium;
+    @apply text-lg text-white/90 font-medium;
     line-height: 1.75;
   }
 
   /* ── List items base ── */
   .article-text li {
-    @apply text-mediumblue/80;
+    @apply text-white/80;
     line-height: 1.75;
   }
 
   /* ── Headings ── */
   .article-text h1, .article-text h2, .article-text h3, .article-text h4 {
-    @apply text-darkblue font-googletitre;
+    @apply text-white/80 font-googletitre;
   }
   .article-text h1 {
     @apply text-3xl font-medium mb-4 mt-8;
   }
   .article-text h2 {
-    @apply text-2xl font-medium mb-4 mt-6 pl-4 border-l-4 border-regularblue/60 py-1;
+    @apply text-2xl font-medium mb-4 mt-6 pl-4 border-l-4 border-coral/60 py-1;
   }
   .article-text h3 {
     @apply text-xl font-medium mb-3 mt-8 relative pl-5;
   }
   .article-text h3::before {
     content: "—";
-    @apply absolute left-0 text-regularblue/50 font-bold;
+    @apply absolute left-0 text-coral/50 font-bold;
   }
 
   /* ── Unordered lists ── */
@@ -263,7 +263,7 @@ body {
   }
   .article-text ul li::before {
     content: "›";
-    @apply absolute left-0 top-0 text-regularblue/70 text-lg font-bold;
+    @apply absolute left-0 top-0 text-coral/70 text-lg font-bold;
   }
 
   /* ── Ordered lists ── */
@@ -277,24 +277,24 @@ body {
   }
   .article-text ol li::before {
     content: counter(article-counter);
-    @apply absolute left-0 top-0.5 w-5 h-5 rounded-full bg-regularblue/15 text-regularblue text-xs font-bold flex items-center justify-center;
+    @apply absolute left-0 top-0.5 w-5 h-5 rounded-full bg-coral/15 text-coral text-xs font-bold flex items-center justify-center;
   }
 
   /* ── Blockquotes ── */
   .article-text blockquote {
-    @apply relative border-l-4 border-regularblue/40 bg-gradient-to-r from-regularblue/5 to-transparent rounded-r-2xl pl-10 pr-5 py-5 my-8 italic;
+    @apply relative border-l-4 border-lightyellow/40 bg-gradient-to-r from-lightyellow/5 to-transparent rounded-r-2xl pl-10 pr-5 py-5 my-8 italic;
   }
   .article-text blockquote::before {
     content: "\201C";
-    @apply absolute left-3 -top-2 text-4xl text-regularblue/25 font-serif;
+    @apply absolute left-3 -top-2 text-4xl text-lightyellow/25 font-serif;
   }
   .article-text blockquote p {
-    @apply text-mediumblue/70 mb-0 text-base;
+    @apply text-white/70 mb-0 text-base;
   }
 
   /* ── Inline code ── */
   .article-text code {
-    @apply text-regularblue bg-regularblue/10 rounded-md px-1.5 py-0.5 text-sm font-mono;
+    @apply text-lightyellow bg-lightyellow/10 rounded-md px-1.5 py-0.5 text-sm font-mono;
   }
 
   /* ── Code blocks ── */
@@ -311,13 +311,13 @@ body {
 
   /* ── Links ── */
   .article-text a {
-    @apply text-regularblue underline underline-offset-4 decoration-regularblue/30 hover:decoration-regularblue/80 transition-all duration-200;
+    @apply text-lightyellow underline underline-offset-4 decoration-lightyellow/30 hover:decoration-lightyellow/80 transition-all duration-200;
   }
 
   /* ── Strong / bold ── */
   .article-text strong {
-    @apply text-darkblue font-semibold;
-    box-shadow: inset 0 -0.35em 0 0 rgba(31, 84, 191, 0.08);
+    @apply text-white font-semibold;
+    box-shadow: inset 0 -0.35em 0 0 rgba(255, 107, 107, 0.15);
   }
 
   /* ── Images ── */
@@ -331,9 +331,9 @@ body {
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--lightblue) 20%,
-      var(--regularblue) 50%,
-      var(--lightblue) 80%,
+      var(--complementary1) 20%,
+      var(--complementary2) 50%,
+      var(--complementary1) 80%,
       transparent 100%
     );
     opacity: 0.3;
@@ -344,16 +344,16 @@ body {
     @apply w-full my-8 text-sm border-collapse rounded-xl overflow-hidden;
   }
   .article-text th {
-    @apply bg-regularblue/10 text-darkblue font-semibold text-left px-4 py-3 border-b-2 border-regularblue/20 text-xs uppercase tracking-wider;
+    @apply bg-orange/10 text-white font-semibold text-left px-4 py-3 border-b-2 border-orange/20 text-xs uppercase tracking-wider;
   }
   .article-text td {
-    @apply px-4 py-3 border-b border-extralightblue/80 text-mediumblue/70;
+    @apply px-4 py-3 border-b border-white/10 text-white/70;
   }
   .article-text tr:nth-child(even) td {
-    @apply bg-regularblue/[0.02];
+    @apply bg-white/[0.02];
   }
   .article-text tr:hover td {
-    @apply bg-regularblue/5;
+    @apply bg-white/5;
   }
 
   /* ── Override article-text styles inside diagnostic ── */

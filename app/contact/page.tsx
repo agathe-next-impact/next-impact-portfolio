@@ -41,7 +41,7 @@ export default function ContactPage() {
         titre="Trouvez votre offre"
         sousTitre="Répondez à quelques questions pour découvrir la solution adaptée à vos besoins."
       >
-        <div className="mt-8 mb-6 space-y-24">
+        <div className="mt-4 sm:mt-8 mb-6 space-y-12 md:space-y-24">
           <ContactFunnel />
         </div>
       </PageLayout>

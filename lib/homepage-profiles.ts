@@ -6,7 +6,7 @@ export interface HeroVariant {
   headline: string;
   subHeadline: string;
   description: string;
-  ctaQuestion: string;
+  valueProposition: string;
   ctaPrimary: { label: string; href: string };
   ctaSecondary: { label: string; href: string };
   auditTitle: string;
@@ -20,9 +20,9 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     subHeadline: "WordPress Headless",
     description:
       "Pour un WordPress ultra-rapide, moderne et flexible grâce au headless CMS.",
-    ctaQuestion: "Prêt à passer en headless ?",
-    ctaPrimary: { label: "Démo", href: "/demo" },
-    ctaSecondary: { label: "Tester votre site", href: "#audit" },
+    valueProposition: "Un site combinant performance maximale et le back-office le plus utilisé au monde.",
+    ctaPrimary: { label: "Audit gratuit personnalisé", href: "#audit" },
+    ctaSecondary: { label: "Prêt à passer en headless ?", href: "/contact" },
     auditTitle: "Faut-il migrer en headless ?",
     auditSubtitle: "Audit gratuit",
     auditDescription:
@@ -33,9 +33,9 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     subHeadline: "moteur de croissance",
     description:
       "Transformez votre WordPress en un avantage concurrentiel : plus rapide, plus sûr, plus performant. ROI mesurable.",
-    ctaQuestion: "Évaluez le potentiel de votre site",
-    ctaPrimary: { label: "Études de cas", href: "/etudes-de-cas" },
-    ctaSecondary: { label: "Audit gratuit", href: "#audit" },
+    valueProposition: "Performance, SEO et conversion : des résultats mesurables pour votre croissance.",
+    ctaPrimary: { label: "Audit stratégique gratuit", href: "#audit" },
+    ctaSecondary: { label: "Déterminer mon offre", href: "/contact" },
     auditTitle: "Quel retour sur investissement ?",
     auditSubtitle: "Diagnostic stratégique",
     auditDescription:
@@ -46,9 +46,9 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     subHeadline: "simple et puissant",
     description:
       "Gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien.",
-    ctaQuestion: "Découvrez la gestion simplifiée",
-    ctaPrimary: { label: "Démo", href: "/demo" },
-    ctaSecondary: { label: "Tester votre site", href: "#audit" },
+    valueProposition: "Gardez WordPress, gagnez en performance et en simplicité.",
+    ctaPrimary: { label: "Tester mon site gratuitement", href: "#audit" },
+    ctaSecondary: { label: "Trouver mon offre", href: "/contact" },
     auditTitle: "Votre quotidien simplifié",
     auditSubtitle: "Évaluation gratuite",
     auditDescription:
@@ -59,9 +59,9 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     subHeadline: "WordPress Headless",
     description:
       "Stack moderne : WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel.",
-    ctaQuestion: "Explorez l'architecture technique",
-    ctaPrimary: { label: "Documentation", href: "/documentation" },
-    ctaSecondary: { label: "Audit technique", href: "#audit" },
+    valueProposition: "WordPress API + Next.js/Astro : la stack moderne pour le CMS le plus utilisé.",
+    ctaPrimary: { label: "Audit technique gratuit", href: "#audit" },
+    ctaSecondary: { label: "Explorer les offres", href: "/contact" },
     auditTitle: "Analyse technique de votre stack",
     auditSubtitle: "Audit technique",
     auditDescription:
