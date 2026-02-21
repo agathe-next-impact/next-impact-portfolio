@@ -337,7 +337,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
             <h3 className="text-base font-semibold text-white font-googletitre">Apercu du document</h3>
           </div>
           <button
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 shadow font-googletitre"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-lg font-bold bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 shadow font-googletitre"
             onClick={() => setShowContactForm(true)}
           >
             <Send className="w-4 h-4" />
