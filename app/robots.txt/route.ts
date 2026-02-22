@@ -10,6 +10,8 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /_next/
+Disallow: /demo/metadata-test
+Disallow: /documentation/playground
 
 # Google — accès complet
 User-agent: Googlebot
@@ -25,9 +27,9 @@ Allow: /documentation/
 Allow: /etudes-de-cas/
 Allow: /services/
 Allow: /solutions/
-Allow: /vous-etes/
-Allow: /cms-headless
-Allow: /wp-headless
+Allow: /outils/
+Allow: /a-propos
+Allow: /cahier-des-charges
 Allow: /
 Disallow: /api/
 
