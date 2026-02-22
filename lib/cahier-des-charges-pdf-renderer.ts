@@ -1,5 +1,7 @@
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import { applyPlugin } from "jspdf-autotable";
+
+applyPlugin(jsPDF);
 import * as fs from "fs";
 import * as path from "path";
 

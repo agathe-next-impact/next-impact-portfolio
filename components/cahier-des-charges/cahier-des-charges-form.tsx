@@ -158,14 +158,6 @@ export function CahierDesChargesForm() {
                                       <div
                                         key={option.id}
                                         className="flex items-start space-x-2.5 p-2.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-                                        onClick={() =>
-                                          handleCheckboxGroupChange(
-                                            field.id,
-                                            option.id,
-                                            !(formData[field.id]?.[option.id]?.checked),
-                                            option.label
-                                          )
-                                        }
                                       >
                                         <Checkbox
                                           id={`${field.id}-${option.id}`}
@@ -181,7 +173,6 @@ export function CahierDesChargesForm() {
                                               option.label
                                             )
                                           }
-                                          onClick={(e) => e.stopPropagation()}
                                         />
                                         <Label
                                           htmlFor={`${field.id}-${option.id}`}

@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { FunnelProgress } from "./funnel-progress";
 import { FunnelOption } from "./funnel-option";
-import { StepResult, type ProfileType, type PainPoint, type BudgetRange } from "./step-result";
+import { StepResult, type ProfileType, type PainPoint, type BudgetRange, type SiteType } from "./step-result";
 import { ContactModal } from "./contact-modal";
 import { ContactDirectInfo } from "./contact-direct-info";
 
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3 | 4 | 5;
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -34,6 +34,7 @@ export function ContactFunnel() {
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [painPoint, setPainPoint] = useState<PainPoint | null>(null);
   const [budget, setBudget] = useState<BudgetRange | null>(null);
+  const [siteType, setSiteType] = useState<SiteType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const goToStep = useCallback((newStep: Step, dir: number = 1) => {
@@ -67,6 +68,14 @@ export function ContactFunnel() {
     (value: BudgetRange) => {
       setBudget(value);
       setTimeout(() => goToStep(4), 250);
+    },
+    [goToStep]
+  );
+
+  const handleSiteTypeSelect = useCallback(
+    (value: SiteType) => {
+      setSiteType(value);
+      setTimeout(() => goToStep(5), 250);
     },
     [goToStep]
   );
@@ -252,9 +261,72 @@ export function ContactFunnel() {
               </motion.div>
             )}
 
-            {step === 4 && profile && painPoint && budget && (
+            {step === 4 && (
               <motion.div
                 key="step-4"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="w-full space-y-8"
+              >
+                <div className="text-center space-y-3">
+                  <p className="text-white/60 font-googletexte uppercase tracking-widest text-sm">
+                    Votre projet
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white">
+                    Quel type de site recherchez-vous ?
+                  </h2>
+                  <p className="text-white/70 font-googletexte leading-relaxed max-w-lg mx-auto">
+                    Sélectionnez le format qui correspond le mieux à votre besoin :
+                  </p>
+                </div>
+
+                <div className="space-y-4 max-w-lg mx-auto">
+                  <FunnelOption
+                    icon="&#127760;"
+                    label="Site vitrine"
+                    description="Présenter votre activité et vos services"
+                    selected={siteType === "vitrine"}
+                    onClick={() => handleSiteTypeSelect("vitrine")}
+                  />
+                  <FunnelOption
+                    icon="&#127963;"
+                    label="Site institutionnel"
+                    description="Communication corporate, multi-pages structuré"
+                    selected={siteType === "institutionnel"}
+                    onClick={() => handleSiteTypeSelect("institutionnel")}
+                  />
+                  <FunnelOption
+                    icon="&#128240;"
+                    label="Blog / Média"
+                    description="Publication de contenu, articles, actualités"
+                    selected={siteType === "blog"}
+                    onClick={() => handleSiteTypeSelect("blog")}
+                  />
+                  <FunnelOption
+                    icon="&#128187;"
+                    label="Application web"
+                    description="Plateforme interactive, espace membres, dashboard"
+                    selected={siteType === "application"}
+                    onClick={() => handleSiteTypeSelect("application")}
+                  />
+                  <FunnelOption
+                    icon="&#127919;"
+                    label="Landing page"
+                    description="Page unique de conversion, campagne marketing"
+                    selected={siteType === "landing"}
+                    onClick={() => handleSiteTypeSelect("landing")}
+                  />
+                </div>
+              </motion.div>
+            )}
+
+            {step === 5 && profile && painPoint && budget && siteType && (
+              <motion.div
+                key="step-5"
                 custom={direction}
                 variants={slideVariants}
                 initial="enter"
@@ -267,6 +339,7 @@ export function ContactFunnel() {
                   profile={profile}
                   painPoint={painPoint}
                   budget={budget}
+                  siteType={siteType}
                   onCtaClick={handleCtaClick}
                 />
               </motion.div>
@@ -278,11 +351,11 @@ export function ContactFunnel() {
         <ContactDirectInfo />
 
         {/* Contact Modal */}
-        {profile && painPoint && budget && (
+        {profile && painPoint && budget && siteType && (
           <ContactModal
             open={modalOpen}
             onClose={() => setModalOpen(false)}
-            funnelData={{ profile, painPoint, budget }}
+            funnelData={{ profile, painPoint, budget, siteType }}
           />
         )}
       </div>

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import type { ProfileType, PainPoint, BudgetRange } from "./step-result";
+import type { ProfileType, PainPoint, BudgetRange, SiteType } from "./step-result";
 
 interface ContactModalProps {
   open: boolean;
@@ -14,6 +14,7 @@ interface ContactModalProps {
     profile: ProfileType;
     painPoint: PainPoint;
     budget: BudgetRange;
+    siteType: SiteType;
   };
 }
 
@@ -36,6 +37,14 @@ const budgetLabels: Record<BudgetRange, string> = {
   "more-5000": "Plus de 5 000 €",
 };
 
+const siteTypeLabels: Record<SiteType, string> = {
+  vitrine: "Site vitrine",
+  institutionnel: "Site institutionnel",
+  blog: "Blog / Média",
+  application: "Application web",
+  landing: "Landing page",
+};
+
 export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
@@ -50,6 +59,7 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
       email: formData.get("email") as string,
       message: [
         `Profil : ${profileLabels[funnelData.profile]}`,
+        `Type de site : ${siteTypeLabels[funnelData.siteType]}`,
         `Défi principal : ${painPointLabels[funnelData.painPoint]}`,
         `Budget : ${budgetLabels[funnelData.budget]}`,
         formData.get("siteUrl") ? `Site actuel : ${formData.get("siteUrl")}` : "",

@@ -10,11 +10,13 @@ const CALENDAR_LINK = "https://calendar.app.google/CiBQuqFLNu3vJwSc7";
 export type ProfileType = "association" | "pme" | "grand-compte";
 export type PainPoint = "lenteur" | "securite" | "refonte" | "carbone";
 export type BudgetRange = "less-3000" | "3000-5000" | "more-5000";
+export type SiteType = "vitrine" | "institutionnel" | "blog" | "application" | "landing";
 
 interface StepResultProps {
   profile: ProfileType;
   painPoint: PainPoint;
   budget: BudgetRange;
+  siteType: SiteType;
   onCtaClick: () => void;
 }
 
@@ -121,7 +123,15 @@ const painPointLabels: Record<PainPoint, string> = {
   carbone: "l'éco-conception",
 };
 
-export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResultProps) {
+const siteTypeLabels: Record<SiteType, string> = {
+  vitrine: "Site vitrine",
+  institutionnel: "Site institutionnel",
+  blog: "Blog / Média",
+  application: "Application web",
+  landing: "Landing page",
+};
+
+export function StepResult({ profile, painPoint, budget, siteType, onCtaClick }: StepResultProps) {
   const offer = getOffer(profile, budget);
 
   return (
@@ -169,7 +179,7 @@ export function StepResult({ profile, painPoint, budget, onCtaClick }: StepResul
           transition={{ delay: 0.45 }}
           className="text-sm text-white/60 font-googletexte uppercase tracking-widest"
         >
-          Focus prioritaire : {painPointLabels[painPoint]}
+          {siteTypeLabels[siteType]} · Focus : {painPointLabels[painPoint]}
         </motion.p>
 
         {/* Description */}
