@@ -36,7 +36,7 @@ function getCheckedItems(data: Record<string, any> | undefined): { label: string
 
 function loadLogo(): string | null {
   try {
-    const logoPath = path.join(process.cwd(), "public", "img", "logo-small.png");
+    const logoPath = path.join(process.cwd(), "public", "img", "logo-blanc-carre.png");
     const buffer = fs.readFileSync(logoPath);
     return `data:image/png;base64,${buffer.toString("base64")}`;
   } catch {
@@ -56,7 +56,7 @@ function ensureSpace(doc: jsPDF, needed: number, currentY: number): number {
 
 function renderSectionTitle(doc: jsPDF, title: string, y: number): number {
   y = ensureSpace(doc, 16, y);
-  doc.setFillColor(...C.darkblue);
+  doc.setFillColor(2, 15, 89);
   doc.roundedRect(MARGIN, y, CONTENT_W, 10, 2, 2, "F");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
@@ -81,7 +81,7 @@ function renderField(doc: jsPDF, label: string, value: string, y: number): numbe
   y = ensureSpace(doc, 10, y);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.setTextColor(...C.darkblue);
+  doc.setTextColor(2, 15, 89);
   doc.text(label, MARGIN + 4, y);
 
   doc.setFont("helvetica", "normal");
@@ -144,7 +144,7 @@ export async function generateCahierDesChargesPDF(formData: Record<string, any>)
   const logo = loadLogo();
 
   // ===== PAGE DE COUVERTURE =====
-  doc.setFillColor(...C.darkblue);
+  doc.setFillColor(2, 15, 89);
   doc.rect(0, 0, PAGE_W, PAGE_H, "F");
 
   if (logo) {

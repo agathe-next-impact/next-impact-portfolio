@@ -65,7 +65,7 @@ export async function POST(req: Request) {
                   <tr>
                     <td valign="middle" style="width:50%;">
                       <a href="https://next-impact.digital" style="text-decoration:none;">
-                        <img src="https://next-impact.digital/img/logo-small.png" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
+                        <img src="https://next-impact.digital/img/logo-blanc-carre.png" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
                       </a>
                     </td>
                     <td valign="middle" style="width:50%;text-align:right;">
