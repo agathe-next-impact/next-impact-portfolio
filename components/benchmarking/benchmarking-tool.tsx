@@ -55,7 +55,7 @@ const COMPETITOR_TEXT_COLORS = [
 const verdictConfig = {
   ahead: {
     label: "En avance sur vos concurrents",
-    description: "Votre site surpasse les 3 concurrents directs analysés.",
+    description: "Votre site surpasse les concurrents directs analysés.",
     color: "text-green-400",
     bg: "bg-green-500/10 border-green-500/20",
     icon: Trophy,

@@ -104,7 +104,7 @@ function CTALeadMagnet() {
             className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-2.5 px-6 rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300 font-googletitre text-sm md:text-lg font-semibold"
             asChild
           >
-            <Link href="/audit">
+            <Link href="/audit-site-ia">
               Lancer mon audit gratuit
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -490,7 +490,7 @@ const CARD_COMPONENTS: Record<CardId, React.FC> = {
 
 /** Pages où chaque carte est redondante — si on est dessus, on l'exclut */
 const CARD_PAGES: Record<CardId, string[]> = {
-  audit: ["/audit", "/cms-headless"],
+  audit: ["/audit-site-ia", "/cms-headless"],
   conversion: ["/contact"],
   roi: ["/outils/simulateur-roi", "/simulateur-tarifs"],
   benchmarking: ["/outils/benchmarking"],
@@ -511,7 +511,7 @@ const TOOL_CARDS: CardId[] = ["audit", "roi", "benchmarking"];
 /** Pages considérées comme « page outil » */
 const TOOL_PAGE_PREFIXES = [
   "/outils",
-  "/audit",
+  "/audit-site-ia",
   "/simulateur-tarifs",
   "/cms-headless",
 ];
