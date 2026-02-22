@@ -2,14 +2,14 @@ import { sendMail } from "@/lib/sendMail";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
 
 export async function POST(req: Request) {
-  const { name, email, message, formData } = await req.json();
+  const { name, email, message, formData, type } = await req.json();
 
   try {
-    // Générer le PDF si un cahier des charges est joint
+    // Générer le PDF si la requête vient du cahier des charges
     let attachments: any[] | undefined;
-    const hasFormData = formData && typeof formData === "object" && Object.keys(formData).length > 0;
+    const isCahierDesCharges = type === "cahier-des-charges";
 
-    if (hasFormData) {
+    if (isCahierDesCharges) {
       const pdfBuffer = await generateCahierDesChargesPDF(formData);
       const orgName = (formData.organisation_name || "projet").replace(/[^a-zA-Z0-9À-ÿ\s-]/g, "").trim().replace(/\s+/g, "-");
       attachments = [{
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     }
 
     // Email admin
-    const adminHtml = hasFormData
+    const adminHtml = isCahierDesCharges
       ? `
         <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;">
           <h2 style="font-family:'Nunito',Arial,sans-serif;color:#1e3a5f;">Nouveau cahier des charges reçu</h2>
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       `;
 
     // Email utilisateur
-    const userHtml = hasFormData
+    const userHtml = isCahierDesCharges
       ? `
         <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;">
           <h2 style="font-family:'Nunito',Arial,sans-serif;color:#1e3a5f;">Bonjour ${name},</h2>
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     await Promise.all([
       sendMail({
         to: ["agathe@next-impact.digital"],
-        subject: hasFormData
+        subject: isCahierDesCharges
           ? `Nouveau cahier des charges de ${name}`
           : `Nouveau message de ${name}`,
         html: adminHtml,
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
       }),
       sendMail({
         to: [email],
-        subject: hasFormData
+        subject: isCahierDesCharges
           ? "Votre cahier des charges — Next Impact Digital"
           : "Confirmation de réception de votre message — Next Impact Digital",
         html: userHtml,

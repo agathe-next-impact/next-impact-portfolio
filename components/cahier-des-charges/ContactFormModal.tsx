@@ -31,6 +31,7 @@ async function sendContactForm({
       email,
       message,
       formData,
+      type: "cahier-des-charges",
     }),
   });
 

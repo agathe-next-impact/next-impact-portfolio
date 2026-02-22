@@ -27,6 +27,8 @@ import {
   BarChart3,
   Zap,
   Smartphone,
+  Plus,
+  X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -285,11 +287,11 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
 
 export default function BenchmarkingTool() {
   const [url, setUrl] = useState("")
-  const [competitors, setCompetitors] = useState(["", "", ""])
+  const [competitors, setCompetitors] = useState([""])
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<BenchmarkResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [urlErrors, setUrlErrors] = useState<{ site?: string; competitors: (string | null)[] }>({ competitors: [null, null, null] })
+  const [urlErrors, setUrlErrors] = useState<{ site?: string; competitors: (string | null)[] }>({ competitors: [null] })
 
   const updateCompetitor = (index: number, value: string) => {
     const next = [...competitors]
@@ -297,12 +299,27 @@ export default function BenchmarkingTool() {
     setCompetitors(next)
   }
 
+  const addCompetitor = () => {
+    if (competitors.length >= 3) return
+    setCompetitors([...competitors, ""])
+    setUrlErrors((prev) => ({ ...prev, competitors: [...prev.competitors, null] }))
+  }
+
+  const removeCompetitor = (index: number) => {
+    if (competitors.length <= 1) return
+    setCompetitors(competitors.filter((_, i) => i !== index))
+    setUrlErrors((prev) => ({
+      ...prev,
+      competitors: prev.competitors.filter((_, i) => i !== index),
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!url.trim() || competitors.some((c) => !c.trim())) return
 
     const FORMAT_MSG = "Format attendu : https://domaine.xx"
-    const newErrors: typeof urlErrors = { competitors: [null, null, null] }
+    const newErrors: typeof urlErrors = { competitors: competitors.map(() => null) }
     let hasError = false
 
     if (!isValidUrl(url)) {
@@ -356,7 +373,7 @@ export default function BenchmarkingTool() {
             </span>
           </div>
           <p className="text-white/60 font-googletexte text-sm mb-6">
-            Entrez votre URL et celles de vos 3 concurrents — nous les
+            Entrez votre URL et celles de 1 à 3 concurrents — nous les
             analysons en temps réel via Google PageSpeed Insights (stratégie mobile).
             Le score mobile est décisif : Google indexe prioritairement la version mobile de votre site.
           </p>
@@ -396,10 +413,24 @@ export default function BenchmarkingTool() {
 
             {/* Competitor URLs */}
             <div className="space-y-3">
-              <Label className="text-white/80 font-googletitre text-sm font-semibold">
-                3 sites concurrents à comparer
-              </Label>
-              <div className="grid gap-3 md:grid-cols-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-white/80 font-googletitre text-sm font-semibold">
+                  {competitors.length === 1
+                    ? "1 site concurrent à comparer"
+                    : `${competitors.length} sites concurrents à comparer`}
+                </Label>
+                {competitors.length < 3 && (
+                  <button
+                    type="button"
+                    onClick={addCompetitor}
+                    className="inline-flex items-center gap-1 text-xs text-lightblue hover:text-lightblue/80 font-googletexte font-medium transition"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Ajouter un concurrent
+                  </button>
+                )}
+              </div>
+              <div className={cn("grid gap-3", competitors.length === 1 ? "md:grid-cols-1 max-w-md" : competitors.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")}>
                 {competitors.map((comp, i) => (
                   <div key={i} className="space-y-1">
                     <div className="relative">
@@ -429,10 +460,21 @@ export default function BenchmarkingTool() {
                         }}
                         className={cn(
                           "pl-7 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
-                          urlErrors.competitors[i] ? "border-coral" : "border-white/20"
+                          urlErrors.competitors[i] ? "border-coral" : "border-white/20",
+                          competitors.length > 1 ? "pr-9" : ""
                         )}
                         required
                       />
+                      {competitors.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeCompetitor(i)}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-white/30 hover:text-coral hover:bg-coral/10 transition"
+                          title="Retirer ce concurrent"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                     {urlErrors.competitors[i] && (
                       <p className="text-xs text-coral font-googletexte">{urlErrors.competitors[i]}</p>
