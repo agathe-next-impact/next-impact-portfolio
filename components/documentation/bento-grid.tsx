@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { CheckCircle, BookOpen, SearchCheck, Network, FileText } from "lucide-react";
+import { CheckCircle, BookOpen, SearchCheck, Network, FileText, Layers, Code, Globe, Smartphone } from "lucide-react";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { Progress } from "@/components/ui/progress";
@@ -30,7 +30,7 @@ const defaultCards: BentoCardConfig[] = [
     colSpan: "md:col-span-1",
     rowSpan: "",
     gradient: "bg-darkblue/60 backdrop-blur-xl border-lightblue/20",
-    textColor: "text-white",
+    textColor: "text-extralightblue",
   },
   {
     id: "audit-ia",
@@ -41,7 +41,7 @@ const defaultCards: BentoCardConfig[] = [
     colSpan: "md:col-span-1",
     rowSpan: "",
     gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
-    textColor: "text-white",
+    textColor: "text-extralightblue",
   },
   {
     id: "livre-blanc",
@@ -210,15 +210,58 @@ export function BentoGrid() {
               <span className="sr-only">{card.title}</span>
             </Link>
             <div className="relative z-0 flex flex-col justify-between h-full min-h-[160px]">
-              <div className="flex items-start justify-between">
-                <Icon
-                  className={cn("h-8 w-8", card.textColor, "opacity-80")}
-                />
+              <div>
+                <div className="flex items-start justify-between">
+                </div>
+                {/* Infographie "Pourquoi ça change tout" — profil par défaut uniquement */}
+                {!profileId && card.id === "headless-cms" && (
+                  <div className="mt-5 space-y-5">
+                    <div className="flex flex-col gap-3">
+                      {[
+                        { value: "2×", label: "plus rapide qu'un site classique" },
+                        { value: "100", label: "score Lighthouse accessible" },
+                        { value: "0", label: "plugin frontend à maintenir" },
+                      ].map((stat) => (
+                        <div key={stat.label} className="flex items-baseline gap-3">
+                          <span className="text-3xl font-googletitre font-medium text-lightyellow">
+                            {stat.value}
+                          </span>
+                          <span className="text-sm text-white/60">{stat.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-3 md:gap-4 pt-2">
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-regularblue/20 border border-regularblue/30">
+                          <Layers className="h-5 w-5 text-regularblue" />
+                        </div>
+                        <span className="text-xs text-white/50">WordPress</span>
+                      </div>
+                      <div className="h-px w-6 bg-lightblue/30" />
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange/20 border border-orange/30">
+                          <Code className="h-5 w-5 text-orange" />
+                        </div>
+                        <span className="text-xs text-white/50">Next.js</span>
+                      </div>
+                      <div className="h-px w-6 bg-lightblue/30" />
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lightblue/20 border border-lightblue/30">
+                          <div className="flex gap-1">
+                            <Globe className="h-4 w-4 text-lightblue" />
+                            <Smartphone className="h-4 w-4 text-lightblue" />
+                          </div>
+                        </div>
+                        <span className="text-xs text-white/50">Vos visiteurs</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="mt-4">
                 <h3
                   className={cn(
-                    "font-googletitre text-xl md:text-2xl font-medium mb-2",
+                    "font-googletitre text-2xl md:text-3xl font-medium mb-2",
                     card.textColor
                   )}
                 >

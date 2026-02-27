@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowRight,
@@ -9,7 +11,12 @@ import {
   Briefcase,
   FolderOpen,
   Wrench,
+  PlayCircle,
+  Network,
+  Code,
 } from "lucide-react";
+import { useDocumentationMode } from "@/contexts/documentation-mode-context";
+import type { ProfileId } from "@/lib/documentation-profiles";
 
 /* ─── Liens vers outils & services ─────────────────────────────────────────── */
 
@@ -76,65 +83,140 @@ const SERVICE_LINKS: ToolLink[] = [
   },
 ];
 
+/* ─── Outils par profil (jamais ceux du footer) ──────────────────────────── */
+// Footer contient : Audit IA, Simulateur ROI, Benchmarking, Services, Études de cas
+// → On ne les affiche jamais ici.
+
+const PROFILE_TOOLS: Record<ProfileId | "default", ToolLink[]> = {
+  default: [
+    {
+      href: "/cahier-des-charges",
+      title: "Cahier des charges",
+      description: "Générez un cahier des charges structuré pour votre projet.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/demo",
+      title: "Démo interactive",
+      description: "Découvrez un site WordPress Headless en action.",
+      icon: PlayCircle,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/contact",
+      title: "Démarrer un projet",
+      description: "Déterminez l'offre adaptée à votre structure.",
+      icon: ClipboardCheck,
+      color: "text-regularblue",
+    },
+  ],
+  decideur: [
+    {
+      href: "/cahier-des-charges",
+      title: "Cahier des charges",
+      description: "Cadrez votre projet avec un document structuré.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/simulateur-tarifs",
+      title: "Simulateur de tarifs",
+      description: "Estimez le budget adapté à votre projet.",
+      icon: Calculator,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/contact",
+      title: "Démarrer un projet",
+      description: "Échangeons sur vos objectifs business.",
+      icon: ClipboardCheck,
+      color: "text-orange",
+    },
+  ],
+  utilisateur: [
+    {
+      href: "/demo",
+      title: "Démo interactive",
+      description: "Testez la gestion de contenu en conditions réelles.",
+      icon: PlayCircle,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/cahier-des-charges",
+      title: "Cahier des charges",
+      description: "Formalisez vos besoins en un document clair.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/contact",
+      title: "Démarrer un projet",
+      description: "Trouvez l'offre adaptée à votre organisation.",
+      icon: ClipboardCheck,
+      color: "text-regularblue",
+    },
+  ],
+  developpeur: [
+    {
+      href: "/documentation/mind-map",
+      title: "Mind Map",
+      description: "Explorez l'architecture headless de façon interactive.",
+      icon: Network,
+      color: "text-extralightblue",
+    },
+    {
+      href: "/documentation/playground",
+      title: "Playground",
+      description: "Testez les composants et le rendu en direct.",
+      icon: Code,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/cahier-des-charges",
+      title: "Cahier des charges",
+      description: "Structurez les spécifications techniques du projet.",
+      icon: FileText,
+      color: "text-coral",
+    },
+  ],
+};
+
 /* ─── Composant : section outils (page hub) ───────────────────────────────── */
 
 export function DocumentationToolsSection() {
+  const { profileId } = useDocumentationMode();
+  const tools = PROFILE_TOOLS[profileId || "default"];
+
   return (
-    <section className="mt-12">
-      <h2 className="font-googletitre text-xl md:text-2xl font-medium text-white mb-2">
+    <section className="mt-12 py-12">
+      <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
         Outils et ressources
       </h2>
       <p className="text-sm text-white/60 font-googletexte mb-6">
         Des outils gratuits pour évaluer et planifier votre projet web.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {TOOL_LINKS.map((tool) => {
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {tools.map((tool) => {
           const Icon = tool.icon;
           return (
             <Link
               key={tool.href}
               href={tool.href}
-              className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/40 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 hover:shadow-lg hover:shadow-regularblue/5 transition-all duration-300"
+              className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/90 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 hover:shadow-lg hover:shadow-regularblue/5 transition-all duration-300"
             >
-              <Icon className={`h-6 w-6 ${tool.color} mb-3`} />
-              <h3 className="font-googletitre text-base font-medium text-white/90 group-hover:text-white transition-colors">
+              <Icon className={`h-12 w-12 ${tool.color} mb-3`} />
+              <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/90 group-hover:text-white transition-colors">
                 {tool.title}
               </h3>
               <p className="text-sm text-white/50 font-googletexte mt-1 line-clamp-2">
                 {tool.description}
               </p>
-              <span className="inline-flex items-center gap-1 text-sm text-regularblue/70 font-googletexte mt-3 group-hover:text-regularblue transition-colors">
+              <span className={`inline-flex items-center gap-1 text-sm ${tool.color} font-googletexte mt-3 group-hover:text-regularblue transition-colors`}>
                 Découvrir
                 <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
               </span>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Services */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-        {SERVICE_LINKS.map((service) => {
-          const Icon = service.icon;
-          return (
-            <Link
-              key={service.href}
-              href={service.href}
-              className="group flex items-center gap-4 rounded-2xl p-4 border border-lightblue/10 bg-mediumblue/40 backdrop-blur-sm hover:border-lightblue/20 hover:bg-mediumblue/60 transition-all duration-300"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
-                <Icon className={`h-5 w-5 ${service.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-googletitre text-base font-medium text-white/90 group-hover:text-white transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-sm text-white/50 font-googletexte mt-0.5 line-clamp-1">
-                  {service.description}
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-white/30 group-hover:text-white/60 shrink-0 group-hover:translate-x-0.5 transition-all" />
             </Link>
           );
         })}
@@ -193,8 +275,8 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
   return (
     <section className="mt-10 pt-8 border-t border-lightblue/10">
       <div className="flex items-center gap-2 mb-4">
-        <Wrench className="h-4 w-4 text-white/40" />
-        <h3 className="font-googletitre text-base font-medium text-white/80">
+        <Wrench className="h-6 w-6 text-extralightblue mt-2" />
+        <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/80">
           Outils utiles
         </h3>
       </div>
@@ -210,7 +292,7 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
             >
               <Icon className={`h-5 w-5 ${tool.color} shrink-0`} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white/80 group-hover:text-white font-googletexte transition-colors">
+                <p className="text-base font-medium text-white/80 group-hover:text-white font-googletexte transition-colors">
                   {tool.title}
                 </p>
                 <p className="text-xs text-white/40 font-googletexte mt-0.5 line-clamp-1">

@@ -159,13 +159,13 @@ function DemoCard({ icon, title, children, className }: DemoCardProps) {
   return (
     <div
       className={cn(
-        "rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-5 md:p-6",
+        "rounded-3xl border border-lightblue/10 bg-white/5 backdrop-blur-sm p-5 md:p-6",
         className
       )}
     >
       <div className="flex items-center gap-2.5 mb-4">
-        {icon}
-        <h3 className="font-googletitre text-base font-medium text-white">
+        
+        <h3 className="font-googletitre  text-2xl font-medium text-white">
           {title}
         </h3>
       </div>
@@ -181,8 +181,12 @@ export function DemoShowcase() {
   const profile = profileId ? PROFILES[profileId] : null;
 
   return (
-    <section className="mt-12">
+    <section className="relative mt-12">
+      {/* Full-width background + borders */}
+      <div className="absolute inset-0 -left-[calc((100vw-100%)/2)] w-screen bg-darkblue/90 border-y border-lightblue/10" />
+
       <motion.div
+        className="relative py-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 24, delay: 0.2 }}
@@ -190,7 +194,7 @@ export function DemoShowcase() {
         {/* Section header */}
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="font-googletitre text-xl md:text-2xl font-medium text-white mb-1">
+            <h2 className="font-googletitre text-2xl md:text-4xl font-medium text-lightyellow mb-1">
               {profileId ? "Démo interactive" : "Voir en action"}
             </h2>
             <p className="text-sm text-white/80 font-googletexte">

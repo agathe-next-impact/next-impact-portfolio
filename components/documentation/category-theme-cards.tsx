@@ -6,35 +6,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { isArticleRelevantToProfile } from "@/lib/documentation-profiles";
-import {
-  BookOpen,
-  Database,
-  Monitor,
-  Shield,
-  Rocket,
-  Palette,
-  FileText,
-  Eye,
-  Layout,
-  PenTool,
-  Search,
-  Target,
-  GitBranch,
-  BarChart,
-  Briefcase,
-  Share2,
-  Megaphone,
-  Users,
-  Plug,
-  Layers,
-  CheckCircle,
-  type LucideIcon,
-} from "lucide-react";
+import { FileText, FolderOpen } from "lucide-react";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 
 interface ThemeCard {
-  icon: LucideIcon;
+  icon: string;
   title: string;
   description: string;
   slugs: string[];
@@ -52,7 +29,7 @@ interface Article {
 const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   "headless-cms": [
     {
-      icon: BookOpen,
+      icon: "/icons/layers-icon.svg",
       title: "Fondations",
       description: "Comprendre l'architecture headless et décider",
       slugs: [
@@ -64,7 +41,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
     {
-      icon: Database,
+      icon: "/icons/api-icon.svg",
       title: "Backend & API",
       description: "WordPress comme backend, REST et GraphQL",
       slugs: [
@@ -75,7 +52,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
     {
-      icon: Monitor,
+      icon: "/icons/code-icon.svg",
       title: "Frontend Next.js",
       description: "Développer avec Next.js et React",
       slugs: [
@@ -86,7 +63,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
     {
-      icon: Shield,
+      icon: "/icons/shield-icon.svg",
       title: "Production",
       description: "Sécurité, performance et workflows éditoriaux",
       slugs: [
@@ -99,7 +76,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
     {
-      icon: Rocket,
+      icon: "/icons/rocket-icon.svg",
       title: "Déploiement",
       description: "Mise en ligne, migration et cas avancés",
       slugs: [
@@ -114,31 +91,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   "design-ui-ux": [
     {
-      icon: Palette,
+      icon: "/icons/brand-reach-icon.svg",
       title: "Identité visuelle",
       description: "Construire une identité de marque cohérente",
       slugs: ["identite-visuelle", "creer-son-identite-visuelle"],
     },
     {
-      icon: FileText,
+      icon: "/icons/content-icon.svg",
       title: "Charte graphique",
       description: "Formaliser les règles visuelles du projet",
       slugs: ["charte-graphique", "creer-une-charte-graphique"],
     },
     {
-      icon: Eye,
+      icon: "/icons/scan-icon.svg",
       title: "UX Design",
       description: "Concevoir l'expérience utilisateur",
       slugs: ["ux", "definir-son-ux"],
     },
     {
-      icon: Layout,
+      icon: "/icons/frontend-icon.svg",
       title: "UI Design",
       description: "Créer des interfaces efficaces",
       slugs: ["ui", "definir-son-ui"],
     },
     {
-      icon: PenTool,
+      icon: "/icons/dashboard-icon.svg",
       title: "Maquettage",
       description: "Wireframes et prototypes",
       slugs: ["pourquoi-des-maquettes", "comment-creer-des-maquettes"],
@@ -146,31 +123,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   seo: [
     {
-      icon: Search,
+      icon: "/icons/seo-icon.svg",
       title: "Vision stratégique",
       description: "Penser le référencement dès le départ",
       slugs: ["penser-seo-en-amont"],
     },
     {
-      icon: Target,
+      icon: "/icons/workflow-icon.svg",
       title: "Planification",
       description: "Planifier les actions SEO en amont",
       slugs: ["planifier-seo-en-amont"],
     },
     {
-      icon: GitBranch,
+      icon: "/icons/layers-icon.svg",
       title: "Architecture",
       description: "Structurer l'arborescence du site",
       slugs: ["definir-l-arborescence"],
     },
     {
-      icon: FileText,
+      icon: "/icons/scan-icon.svg",
       title: "Mots-clés",
       description: "Cocon sémantique et recherche de mots-clés",
       slugs: ["mots-cles-et-cocon-semantique"],
     },
     {
-      icon: BarChart,
+      icon: "/icons/analytics-icon.svg",
       title: "Outils",
       description: "Comparatif des outils d'analyse SEO",
       slugs: ["outils-seo"],
@@ -178,31 +155,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   "marketing-digital": [
     {
-      icon: Target,
+      icon: "/icons/growth-icon.svg",
       title: "Fondamentaux",
       description: "Les bases du marketing digital",
       slugs: ["strategie-marketing"],
     },
     {
-      icon: Briefcase,
+      icon: "/icons/workflow-icon.svg",
       title: "Plan d'action",
       description: "Définir et exécuter sa stratégie",
       slugs: ["definir-sa-strategie-marketing"],
     },
     {
-      icon: Palette,
+      icon: "/icons/brand-reach-icon.svg",
       title: "Image de marque",
       description: "Positionnement et stratégie de marque",
       slugs: ["strategie-de-marque", "mettre-en-oeuvre-strategie-de-marque"],
     },
     {
-      icon: Share2,
+      icon: "/icons/globe-network-icon.svg",
       title: "Réseaux sociaux",
       description: "Présence et visibilité sociale",
       slugs: ["presence-sur-les-reseaux-sociaux"],
     },
     {
-      icon: Megaphone,
+      icon: "/icons/notification-icon.svg",
       title: "Stratégie sociale",
       description: "Élaborer un plan de médias sociaux",
       slugs: ["definir-sa-strategie-de-medias-sociaux"],
@@ -210,31 +187,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   "projet-site-web": [
     {
-      icon: FileText,
+      icon: "/icons/content-icon.svg",
       title: "Cahier des charges",
       description: "Définir le périmètre et les exigences",
       slugs: ["cahier-des-charges"],
     },
     {
-      icon: Layers,
+      icon: "/icons/workflow-icon.svg",
       title: "Les 6 étapes",
       description: "Processus de création de A à Z",
       slugs: ["creer-site-web-6-etapes"],
     },
     {
-      icon: Users,
+      icon: "/icons/team-icon.svg",
       title: "Pilotage",
       description: "Pourquoi structurer son projet web",
       slugs: ["pourquoi-gerer-projet-web"],
     },
     {
-      icon: GitBranch,
+      icon: "/icons/settings-icon.svg",
       title: "Guide pratique",
       description: "Méthodes et outils de gestion",
       slugs: ["gestion-projet-web-guide-pratique"],
     },
     {
-      icon: CheckCircle,
+      icon: "/icons/dashboard-icon.svg",
       title: "Vue d'ensemble",
       description: "Tous les articles du thème",
       slugs: [
@@ -247,31 +224,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   wordpress: [
     {
-      icon: BookOpen,
+      icon: "/icons/wordpress-icon.svg",
       title: "Découvrir",
       description: "Pourquoi choisir WordPress",
       slugs: ["pourquoi-utiliser-wordpress"],
     },
     {
-      icon: Palette,
+      icon: "/icons/frontend-icon.svg",
       title: "Thèmes",
       description: "Choisir et configurer son thème",
       slugs: ["les-themes"],
     },
     {
-      icon: Plug,
+      icon: "/icons/plugin-icon.svg",
       title: "Plugins",
       description: "Étendre les fonctionnalités",
       slugs: ["les-plugins"],
     },
     {
-      icon: Shield,
+      icon: "/icons/shield-icon.svg",
       title: "Bonnes pratiques",
       description: "Sécurité, performance et maintenance",
       slugs: ["bonnes-pratiques-wordpress"],
     },
     {
-      icon: CheckCircle,
+      icon: "/icons/dashboard-icon.svg",
       title: "Vue d'ensemble",
       description: "Tous les articles WordPress",
       slugs: [
@@ -284,31 +261,31 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
   ],
   blog: [
     {
-      icon: Rocket,
+      icon: "/icons/migration-icon.svg",
       title: "Migration",
       description: "Passer au WordPress headless",
       slugs: ["passage-wp-headless"],
     },
     {
-      icon: BookOpen,
+      icon: "/icons/analytics-icon.svg",
       title: "Analyses",
       description: "Retours d'expérience et tendances",
       slugs: ["passage-wp-headless"],
     },
     {
-      icon: Monitor,
+      icon: "/icons/code-icon.svg",
       title: "Technique",
       description: "Aspects techniques du headless",
       slugs: ["passage-wp-headless"],
     },
     {
-      icon: Briefcase,
+      icon: "/icons/scale-icon.svg",
       title: "Décision",
       description: "Aide à la prise de décision",
       slugs: ["passage-wp-headless"],
     },
     {
-      icon: Target,
+      icon: "/icons/growth-icon.svg",
       title: "Stratégie",
       description: "Approche stratégique du web moderne",
       slugs: ["passage-wp-headless"],
@@ -340,9 +317,8 @@ export function CategoryPageContent({
       {/* Theme cards */}
       {themes && (
         <div className="mb-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {themes.map((theme, index) => {
-              const Icon = theme.icon;
               const isActive = activeTheme === index;
               const count = articles.filter((a) =>
                 theme.slugs.includes(a.slug)
@@ -370,26 +346,10 @@ export function CategoryPageContent({
                   )}
                 >
                   <div className="flex items-center gap-2.5 mb-2">
-                    <div
-                      className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-xl transition-colors",
-                        isActive
-                          ? "bg-regularblue/30"
-                          : "bg-lightblue/10 group-hover:bg-lightblue/20"
-                      )}
-                    >
-                      <Icon
-                        className={cn(
-                          "h-4 w-4 transition-colors",
-                          isActive
-                            ? "text-white"
-                            : "text-lightblue/80 group-hover:text-lightblue"
-                        )}
-                      />
-                    </div>
+                    <FolderOpen className="h-8 w-8 text-coral shrink-0" />
                     <span
                       className={cn(
-                        "text-xs font-mono tabular-nums rounded-full px-1.5 py-0.5",
+                        "font-mono tabular-nums rounded-full px-1.5 py-0.5",
                         isActive
                           ? "bg-regularblue/30 text-white/80"
                           : "bg-darkblue/60 text-white/80"
@@ -400,8 +360,8 @@ export function CategoryPageContent({
                   </div>
                   <p
                     className={cn(
-                      "font-googletitre text-sm font-medium leading-tight transition-colors",
-                      isActive ? "text-white" : "text-white/80"
+                      "text-lg font-googletitre font-medium leading-tight transition-colors",
+                      isActive ? "text-white" : "text-white/90"
                     )}
                   >
                     {theme.title}
@@ -465,9 +425,12 @@ export function CategoryPageContent({
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-googletitre text-xl font-medium text-white/90 group-hover:text-white transition-colors">
-                      {article.title}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-6 w-6 text-lightyellow shrink-0 mt-2" />
+                      <h3 className="font-googletitre text-xl font-medium text-white/90 group-hover:text-white transition-colors">
+                        {article.title}
+                      </h3>
+                    </div>
                     {profileId && relevant && (
                       <span className="shrink-0 rounded-full bg-orange/10 px-2.5 py-0.5 text-xs font-googletexte text-orange/80">
                         Recommandé

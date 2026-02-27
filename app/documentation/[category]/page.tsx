@@ -119,8 +119,6 @@ export default async function CategoryPage(props: CategoryPageProps) {
             {/* Catégories associées */}
             <CrossCategoryNav currentCategory={category} />
 
-            {/* Outils utiles */}
-            <CategoryToolsLinks category={category} />
           </div>
         </section>
       </main>
