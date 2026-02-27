@@ -165,7 +165,7 @@ function DemoCard({ icon, title, children, className }: DemoCardProps) {
     >
       <div className="flex items-center gap-2.5 mb-4">
         
-        <h3 className="font-googletitre  text-2xl font-medium text-white">
+        <h3 className="font-googletitre  text-2xl font-medium text-lightyellow">
           {title}
         </h3>
       </div>
@@ -194,7 +194,7 @@ export function DemoShowcase() {
         {/* Section header */}
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="font-googletitre text-2xl md:text-4xl font-medium text-lightyellow mb-1">
+            <h2 className="font-googletitre text-2xl md:text-4xl font-medium text-white mb-1">
               {profileId ? "Démo interactive" : "Voir en action"}
             </h2>
             <p className="text-sm text-white/80 font-googletexte">

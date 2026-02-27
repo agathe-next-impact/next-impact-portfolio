@@ -88,13 +88,13 @@ export function VideoGallery() {
             <h4 className="font-googletitre text-lg font-medium text-white">
               {active.title}
             </h4>
-            <p className="text-sm text-white/80 font-googletexte mt-1">
+            <p className="text-white/80 font-googletexte mt-1">
               {active.description}
             </p>
             {active.projectLink && (
               <a
                 href={active.projectLink}
-                className="inline-block mt-2 text-sm text-orange/70 hover:text-orange font-googletexte transition-colors"
+                className="inline-block mt-2 text-coral hover:text-coral/80 font-googletexte transition-colors"
               >
                 Voir l&apos;étude de cas →
               </a>
@@ -107,7 +107,7 @@ export function VideoGallery() {
           <p className="text-xs text-white/80 font-googletexte uppercase tracking-wider mb-2 sm:mb-3">
             {videos.length} projets
           </p>
-          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-hide">
+          <div className="flex flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-hide">
             {videos.map((video, index) => (
               <button
                 key={video.id}
@@ -124,17 +124,17 @@ export function VideoGallery() {
                   className={cn(
                     "flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-xl text-xs font-mono",
                     activeId === video.id
-                      ? "bg-orange/20 text-orange"
-                      : "bg-darkblue/40 text-white/80"
+                      ? "bg-darkblue/70 text-lightyellow"
+                      : "bg-darkblue/60 text-white/80"
                   )}
                 >
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-xs sm:text-sm font-medium font-googletexte truncate">
+                  <p className="text-sm sm:text-base font-googletexte text-white truncate">
                     {video.title}
                   </p>
-                  <p className="text-xs text-white/80 font-googletexte truncate hidden sm:block">
+                  <p className="text-sm text-white/60 font-googletexte truncate hidden sm:block">
                     {video.description}
                   </p>
                 </div>
