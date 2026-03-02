@@ -139,7 +139,7 @@ Modifier les valeurs par défaut dans `lib/metadata.ts` :
 
 ```typescript
 export const siteConfig = {
-  name: "Next Impact - Développeuse WordPress Freelance",
+  name: "Next Impact - Développeur WordPress Freelance",
   title: "Next Impact",
   description: "...",
   url: "https://next-impact.digital",

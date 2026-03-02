@@ -164,7 +164,7 @@ const PROJECTS = [
     title: "Connexion Plus",
     type: "ess",
     image: "/img/desktop-screen-gem-connexion.webp",
-    alt: "Connexion Plus - Développeuse WordPress Freelance",
+    alt: "Connexion Plus - Développeur WordPress Freelance",
     description: "Site vitrine Connexion Plus",
     link: "/etudes-de-cas/connexion-plus",
     tab: ["derniers", "ess"],

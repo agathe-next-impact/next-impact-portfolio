@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/contact",
     image: "/img/contact-facilitation.jpg",
     keywords: [
-      "contact développeuse WordPress Headless",
+      "contact développeur WordPress Headless",
       "devis site WordPress Headless",
       "demande de projet web",
       "rendez-vous visio freelance",

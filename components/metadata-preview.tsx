@@ -187,9 +187,9 @@ export function MetadataPreview({
  */
 export function MetadataPreviewTool() {
   const [formData, setFormData] = useState({
-    title: "Développeuse WordPress Freelance | Next Impact",
+    title: "Développeur WordPress Freelance | Next Impact",
     description:
-      "Développeuse WordPress freelance spécialisée en sites web corporate et applications web Headless. Création, refonte, audit et conseil pour des projets sur-mesure.",
+      "Développeur WordPress freelance spécialisé en sites web corporate et applications web Headless. Création, refonte, audit et conseil pour des projets sur-mesure.",
     url: "https://next-impact.digital",
     image: "/img/avatar.webp",
   });

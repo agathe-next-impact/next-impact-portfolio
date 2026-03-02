@@ -35,7 +35,7 @@ export function OrganizationJsonLd() {
     founder: {
       "@type": "Person",
       name: "Agathe Karinthi-Martin",
-      jobTitle: "Développeuse WordPress Headless",
+      jobTitle: "Développeur WordPress Headless",
       url: "https://www.linkedin.com/in/agat-dev/",
     },
     address: {
@@ -338,7 +338,7 @@ export function WebsiteJsonLd() {
  */
 export function PersonJsonLd({
   name = "Agathe",
-  jobTitle = "Développeuse WordPress Freelance",
+  jobTitle = "Développeur WordPress Freelance",
   description = siteConfig.description,
   url = siteConfig.url,
   image = `${siteConfig.url}${siteConfig.ogImage}`,

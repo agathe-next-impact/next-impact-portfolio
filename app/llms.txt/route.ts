@@ -52,11 +52,11 @@ export async function GET() {
 
   const content = `# Next Impact
 
-> Développeuse WordPress Freelance spécialisée dans la création de sites web performants, le WordPress Headless et les architectures modernes (Next.js, React).
+> Développeur WordPress Freelance spécialisé dans la création de sites web performants, le WordPress Headless et les architectures modernes (Next.js, React).
 
 ## A propos
 
-Next Impact est le studio freelance d'Agathe, développeuse WordPress et Next.js basée en France. Spécialisée dans la création de sites vitrines, e-commerce, et applications web modernes. Expertise en WordPress classique, WordPress Headless avec Next.js, et développement frontend React/TypeScript.
+Next Impact est le studio freelance d'Agathe, développeur WordPress et Next.js basé en France. Spécialisé dans la création de sites vitrines, e-commerce, et applications web modernes. Expertise en WordPress classique, WordPress Headless avec Next.js, et développement frontend React/TypeScript.
 
 ## Services principaux
 

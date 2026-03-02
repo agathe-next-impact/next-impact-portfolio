@@ -422,7 +422,7 @@ export function BlocReassurance() {
           </span>
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-googletexte">
             <Award className="w-3.5 h-3.5 text-coral" />
-            Développeuse WordPress Headless
+            Développeur WordPress Headless
           </span>
         </motion.div>
 

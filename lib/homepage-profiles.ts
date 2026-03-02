@@ -16,7 +16,7 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Développeuse",
+    headline: "Développeur",
     subHeadline: "WordPress Headless",
     description:
       "Pour un WordPress ultra-rapide, moderne et flexible grâce au headless CMS.",

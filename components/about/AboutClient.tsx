@@ -244,7 +244,7 @@ export default function AboutClient() {
             </motion.blockquote>
           </AnimatePresence>
           <p className="text-lg text-white/60 font-googletexte">
-            — Agathe Karinthi-Martin, Fondatrice de Next Impact
+            — Agathe Karinthi-Martin, Fondateur de Next Impact
           </p>
         </div>
       </section>

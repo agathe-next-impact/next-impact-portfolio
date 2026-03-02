@@ -7,7 +7,7 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Développeuse freelance spécialisée WordPress Headless + Next.js & Astro. " +
+    "Développeur freelance spécialisé WordPress Headless + Next.js & Astro. " +
     "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
@@ -22,7 +22,7 @@ export const siteConfig = {
     "WordPress",
     "WordPress Headless",
     "Freelance",
-    "Développeuse",
+    "Développeur",
     "Next.js",
     "Astro",
     "React",
@@ -156,15 +156,15 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 export const pageMetadata = {
   home: (): Metadata =>
     generatePageMetadata({
-      title: "Experte WordPress Headless & Next.js — Freelance",
+      title: "Expert WordPress Headless & Next.js — Freelance",
       description:
-        "Développeuse freelance spécialisée WordPress Headless + Next.js & Astro. " +
+        "Développeur freelance spécialisé WordPress Headless + Next.js & Astro. " +
         "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants. " +
         "Audit gratuit — réservez une consultation.",
       path: "/",
       keywords: [
         "WordPress Headless freelance",
-        "développeuse Next.js",
+        "développeur Next.js",
         "création site headless",
         "migration WordPress Headless",
       ],
@@ -209,7 +209,7 @@ export const pageMetadata = {
       path: "/contact",
       image: "/img/contact-facilitation.jpg",
       keywords: [
-        "contact développeuse WordPress Headless",
+        "contact développeur WordPress Headless",
         "devis site WordPress Headless",
         "demande de projet web",
         "rendez-vous visio freelance",

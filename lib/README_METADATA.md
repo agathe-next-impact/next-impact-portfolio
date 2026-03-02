@@ -167,7 +167,7 @@ Un bouton flottant apparaît en mode développement (coin inférieur droit) pour
 
 ```typescript
 export const siteConfig = {
-  name: "Next Impact - Développeuse WordPress Freelance",
+  name: "Next Impact - Développeur WordPress Freelance",
   title: "Next Impact",
   description: "...",
   url: "https://next-impact.digital",
@@ -241,7 +241,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Description",
       url: "https://next-impact.digital/ma-page",
       type: "website",
-      siteName: "Next Impact - Développeuse WordPress Freelance",
+      siteName: "Next Impact - Développeur WordPress Freelance",
       images: [
         {
           url: "/img/avatar.webp",

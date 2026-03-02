@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Next Impact — WordPress Headless & Next.js",
     short_name: "Next Impact",
     description:
-      "Développeuse freelance spécialisée WordPress Headless, Next.js & Astro.",
+      "Développeur freelance spécialisé WordPress Headless, Next.js & Astro.",
     start_url: "/",
     display: "standalone",
     background_color: "#1A1A2E",
