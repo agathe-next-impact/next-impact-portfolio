@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils"
 import {
   type BenchmarkResult,
   type BenchmarkGap,
+  type BenchmarkMetrics,
 } from "@/lib/audit/benchmarking-data"
 import { runBenchmark } from "@/lib/audit/benchmarking-service"
 
@@ -104,6 +105,54 @@ function impactColor(impact: BenchmarkGap["impact"]) {
 function barWidth(value: number, max: number) {
   if (max === 0) return "0%"
   return `${Math.min((value / max) * 100, 100)}%`
+}
+
+// ---------------------------------------------------------------------------
+// Solo audit helpers — Web Vitals thresholds (Google recommendations)
+// ---------------------------------------------------------------------------
+
+const SOLO_METRICS: {
+  key: keyof BenchmarkMetrics
+  label: string
+  unit: string
+  good: number
+  poor: number
+}[] = [
+  { key: "performanceScore", label: "Score Global", unit: "/100", good: 90, poor: 50 },
+  { key: "lcp", label: "LCP", unit: "s", good: 2.5, poor: 4 },
+  { key: "fcp", label: "FCP", unit: "s", good: 1.8, poor: 3 },
+  { key: "tbt", label: "TBT", unit: "ms", good: 200, poor: 600 },
+  { key: "cls", label: "CLS", unit: "", good: 0.1, poor: 0.25 },
+  { key: "si", label: "Speed Index", unit: "s", good: 3.4, poor: 5.8 },
+  { key: "ttfb", label: "TTFB", unit: "ms", good: 800, poor: 1800 },
+]
+
+function scoreColor(score: number): string {
+  if (score >= 90) return "text-green-400"
+  if (score >= 50) return "text-orange"
+  return "text-coral"
+}
+
+function metricStatus(key: keyof BenchmarkMetrics, value: number): "good" | "mid" | "poor" {
+  const def = SOLO_METRICS.find((m) => m.key === key)
+  if (!def) return "mid"
+  if (key === "performanceScore") {
+    return value >= def.good ? "good" : value >= def.poor ? "mid" : "poor"
+  }
+  // Lower is better for all other metrics
+  return value <= def.good ? "good" : value <= def.poor ? "mid" : "poor"
+}
+
+const STATUS_COLORS = {
+  good: "text-green-400",
+  mid: "text-orange",
+  poor: "text-coral",
+}
+
+const STATUS_LABELS = {
+  good: "Bon",
+  mid: "À améliorer",
+  poor: "Faible",
 }
 
 const URL_REGEX = /^https:\/\/[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+\/?.*$/
@@ -287,11 +336,11 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
 
 export default function BenchmarkingTool() {
   const [url, setUrl] = useState("")
-  const [competitors, setCompetitors] = useState([""])
+  const [competitors, setCompetitors] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<BenchmarkResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [urlErrors, setUrlErrors] = useState<{ site?: string; competitors: (string | null)[] }>({ competitors: [null] })
+  const [urlErrors, setUrlErrors] = useState<{ site?: string; competitors: (string | null)[] }>({ competitors: [] })
 
   const updateCompetitor = (index: number, value: string) => {
     const next = [...competitors]
@@ -306,7 +355,6 @@ export default function BenchmarkingTool() {
   }
 
   const removeCompetitor = (index: number) => {
-    if (competitors.length <= 1) return
     setCompetitors(competitors.filter((_, i) => i !== index))
     setUrlErrors((prev) => ({
       ...prev,
@@ -346,7 +394,11 @@ export default function BenchmarkingTool() {
         url: c.trim(),
       }))
       const data = await runBenchmark(url, entries)
-      setResult(data)
+      if (data.error) {
+        setError(data.error)
+      } else {
+        setResult(data)
+      }
     } catch {
       setError("Impossible d'analyser les sites. Vérifiez les URLs et réessayez.")
     } finally {
@@ -373,9 +425,10 @@ export default function BenchmarkingTool() {
             </span>
           </div>
           <p className="text-white/60 font-googletexte text-sm mb-6">
-            Entrez votre URL et celles de 1 à 3 concurrents — nous les
-            analysons en temps réel via Google PageSpeed Insights (stratégie mobile).
-            Le score mobile est décisif : Google indexe prioritairement la version mobile de votre site.
+            Entrez votre URL — ajoutez jusqu&apos;à 3 concurrents pour une
+            comparaison directe. Analyse en temps réel via Google PageSpeed
+            Insights (stratégie mobile). Le score mobile est décisif : Google
+            indexe prioritairement la version mobile de votre site.
           </p>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Your URL */}
@@ -415,9 +468,11 @@ export default function BenchmarkingTool() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-white/80 font-googletitre text-sm font-semibold">
-                  {competitors.length === 1
-                    ? "1 site concurrent à comparer"
-                    : `${competitors.length} sites concurrents à comparer`}
+                  {competitors.length === 0
+                    ? "Concurrents (optionnel)"
+                    : competitors.length === 1
+                      ? "1 site concurrent"
+                      : `${competitors.length} sites concurrents`}
                 </Label>
                 {competitors.length < 3 && (
                   <button
@@ -430,42 +485,42 @@ export default function BenchmarkingTool() {
                   </button>
                 )}
               </div>
-              <div className={cn("grid gap-3", competitors.length === 1 ? "md:grid-cols-1 max-w-md" : competitors.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")}>
-                {competitors.map((comp, i) => (
-                  <div key={i} className="space-y-1">
-                    <div className="relative">
-                      <div
-                        className={cn(
-                          "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white",
-                          i === 0 && "bg-blue-500",
-                          i === 1 && "bg-purple-500",
-                          i === 2 && "bg-cyan-500"
-                        )}
-                      >
-                        {i + 1}
-                      </div>
-                      <Input
-                        type="text"
-                        placeholder={`\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`}
-                        value={comp}
-                        onChange={(e) => {
-                          updateCompetitor(i, e.target.value)
-                          if (urlErrors.competitors[i]) {
-                            setUrlErrors((prev) => {
-                              const next = [...prev.competitors]
-                              next[i] = null
-                              return { ...prev, competitors: next }
-                            })
-                          }
-                        }}
-                        className={cn(
-                          "pl-7 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
-                          urlErrors.competitors[i] ? "border-coral" : "border-white/20",
-                          competitors.length > 1 ? "pr-9" : ""
-                        )}
-                        required
-                      />
-                      {competitors.length > 1 && (
+              {competitors.length > 0 && (
+                <div className={cn("grid gap-3", competitors.length === 1 ? "md:grid-cols-1 max-w-md" : competitors.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")}>
+                  {competitors.map((comp, i) => (
+                    <div key={i} className="space-y-1">
+                      <div className="relative">
+                        <div
+                          className={cn(
+                            "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white",
+                            i === 0 && "bg-blue-500",
+                            i === 1 && "bg-purple-500",
+                            i === 2 && "bg-cyan-500"
+                          )}
+                        >
+                          {i + 1}
+                        </div>
+                        <Input
+                          type="text"
+                          placeholder={`\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`}
+                          value={comp}
+                          onChange={(e) => {
+                            updateCompetitor(i, e.target.value)
+                            if (urlErrors.competitors[i]) {
+                              setUrlErrors((prev) => {
+                                const next = [...prev.competitors]
+                                next[i] = null
+                                return { ...prev, competitors: next }
+                              })
+                            }
+                          }}
+                          className={cn(
+                            "pl-7 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
+                            urlErrors.competitors[i] ? "border-coral" : "border-white/20",
+                            "pr-9"
+                          )}
+                          required
+                        />
                         <button
                           type="button"
                           onClick={() => removeCompetitor(i)}
@@ -474,14 +529,14 @@ export default function BenchmarkingTool() {
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
+                      </div>
+                      {urlErrors.competitors[i] && (
+                        <p className="text-xs text-coral font-googletexte">{urlErrors.competitors[i]}</p>
                       )}
                     </div>
-                    {urlErrors.competitors[i] && (
-                      <p className="text-xs text-coral font-googletexte">{urlErrors.competitors[i]}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Submit */}
@@ -494,6 +549,11 @@ export default function BenchmarkingTool() {
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Analyse en cours...
+                </>
+              ) : competitors.length === 0 ? (
+                <>
+                  <Zap className="w-4 h-4" />
+                  Lancer l&apos;audit
                 </>
               ) : (
                 <>
@@ -519,18 +579,29 @@ export default function BenchmarkingTool() {
               <div className="animate-spin rounded-full h-16 w-16 border-4 border-lightyellow/20 border-t-lightyellow" />
               <Zap className="absolute inset-0 m-auto w-6 h-6 text-lightyellow" />
             </div>
-            <p className="text-white/60 font-googletexte text-sm">
-              Analyse mobile de 4 sites en parallèle via Google PageSpeed...
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 text-xs">
-              <span className="px-2 py-1 rounded bg-white/10 text-white/70">{url}</span>
-              {competitors.filter((c) => c.trim()).map((c, i) => (
-                <span key={i} className="px-2 py-1 rounded bg-white/5 text-white/40">{extractName(c)}</span>
-              ))}
-            </div>
-            <p className="text-white/40 font-googletexte text-xs">
-              Cela peut prendre 30 à 60 secondes
-            </p>
+            {(() => {
+              const total = 1 + competitors.filter((c) => c.trim()).length
+              return (
+                <>
+                  <p className="text-white/60 font-googletexte text-sm">
+                    Analyse mobile {total === 1
+                      ? "de votre site"
+                      : `de ${total} sites`} via Google PageSpeed...
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2 text-xs">
+                    <span className="px-2 py-1 rounded bg-white/10 text-white/70">{url}</span>
+                    {competitors.filter((c) => c.trim()).map((c, i) => (
+                      <span key={i} className="px-2 py-1 rounded bg-white/5 text-white/40">{extractName(c)}</span>
+                    ))}
+                  </div>
+                  <p className="text-white/40 font-googletexte text-xs">
+                    {total === 1
+                      ? "Cela peut prendre 15 à 30 secondes"
+                      : "Cela peut prendre 30 à 60 secondes"}
+                  </p>
+                </>
+              )
+            })()}
           </motion.div>
         )}
       </AnimatePresence>
@@ -565,7 +636,11 @@ export default function BenchmarkingTool() {
               <div className="rounded-xl bg-orange/10 border border-orange/20 p-4 flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-orange shrink-0 mt-0.5" />
                 <div className="text-sm text-white/70">
-                  <p className="font-medium text-orange mb-1">Certains sites n&apos;ont pas pu être analysés</p>
+                  <p className="font-medium text-orange mb-1">
+                    {result.competitors.length === 0
+                      ? "Votre site n\u2019a pas pu être analysé"
+                      : "Certains sites n\u2019ont pas pu être analysés"}
+                  </p>
                   {result.siteMetrics.performanceScore === 0 && (
                     <p>Votre site n&apos;a pas retourné de données PageSpeed.</p>
                   )}
@@ -581,155 +656,252 @@ export default function BenchmarkingTool() {
               </div>
             )}
 
-            {/* Verdict + scores */}
-            <Card
-              className={cn(
-                "border backdrop-blur-sm shadow-lg overflow-hidden",
-                verdictConfig[result.overallVerdict].bg
-              )}
-            >
-              <CardContent className="p-6 md:p-8">
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  {/* Score gauges — your site + each competitor */}
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
-                      <Smartphone className="w-3 h-3" />
-                      Scores mobiles PageSpeed
-                    </span>
-                    <div className="flex items-end gap-4">
+            {/* ── Solo audit mode (no competitors) ── */}
+            {result.competitors.length === 0 ? (
+              <>
+                {/* Score card */}
+                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl overflow-hidden">
+                  <CardContent className="p-6 md:p-8">
+                    <div className="flex flex-col items-center gap-4">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
+                        <Smartphone className="w-3 h-3" />
+                        Score mobile PageSpeed
+                      </span>
                       <ScoreGauge
                         score={result.siteMetrics.performanceScore}
                         label="Votre site"
-                        color={verdictConfig[result.overallVerdict].color}
+                        color={scoreColor(result.siteMetrics.performanceScore)}
                       />
-                      {result.competitors.filter((c) => !c.error).map((c, i) => (
-                        <ScoreGauge
-                          key={c.name}
-                          score={c.metrics.performanceScore}
-                          label={c.name}
-                          color={COMPETITOR_TEXT_COLORS[i] || "text-white/40"}
-                          size="sm"
-                        />
-                      ))}
+                      <p className="text-white/60 text-sm font-googletexte text-center max-w-md">
+                        {result.siteMetrics.performanceScore >= 90
+                          ? "Excellent — votre site est très performant sur mobile."
+                          : result.siteMetrics.performanceScore >= 50
+                            ? "Correct — des optimisations ciblées peuvent améliorer l\u2019expérience utilisateur."
+                            : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
+                      </p>
                     </div>
-                  </div>
+                  </CardContent>
+                </Card>
 
-                  {/* Verdict text */}
-                  <div className="flex-1 text-center md:text-left">
-                    {(() => {
-                      const V = verdictConfig[result.overallVerdict]
-                      const Icon = V.icon
-                      return (
-                        <>
-                          <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                            <Icon className={cn("w-6 h-6", V.color)} />
-                            <h3 className={cn("text-2xl font-googletitre font-bold", V.color)}>
-                              {V.label}
-                            </h3>
-                          </div>
-                          <p className="text-white/70 font-googletexte mb-3">
-                            {V.description}
-                          </p>
-                          <p className="text-sm text-white/50 font-googletexte">
-                            Score mobile moyen concurrents : <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
-                            {result.competitors.some((c) => c.error) && (
-                              <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} analysés)</span>
-                            )}
-                          </p>
-                        </>
-                      )
-                    })()}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Metrics comparison */}
-            <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-white font-googletitre text-xl">
-                    Comparaison métrique par métrique
-                  </CardTitle>
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
-                    <Smartphone className="w-3 h-3" />
-                    Mobile
-                  </span>
-                </div>
-                <CardDescription className="text-white/50">
-                  Core Web Vitals (mobile) — votre site vs {result.competitors.map((c) => c.name).join(", ")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {result.gaps.map((gap, i) => (
-                  <div key={gap.metric}>
-                    <MetricBar gap={gap} />
-                    {i < result.gaps.length - 1 && (
-                      <Separator className="bg-white/5 mt-5" />
-                    )}
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Key takeaways */}
-            <div className="grid gap-4 md:grid-cols-3">
-              {(() => {
-                const criticals = result.gaps.filter((g) => g.impact === "critical" || g.impact === "warning")
-                if (criticals.length === 0) return null
-                return (
-                  <Card className="border-coral/20 bg-coral/5 backdrop-blur-sm md:col-span-2">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-coral font-googletitre text-lg flex items-center gap-2">
-                        <AlertTriangle className="w-5 h-5" />
-                        Vos concurrents vous devancent sur
+                {/* Core Web Vitals grid */}
+                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-white font-googletitre text-xl">
+                        Core Web Vitals
                       </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {criticals.map((gap) => (
-                          <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
-                            {impactIcon(gap.impact)}
-                            <span>
-                              <strong className="text-white">{gap.label}</strong> :{" "}
-                              {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit} (moy. concurrents)
-                              — <span className={impactColor(gap.impact)}>{gap.gapPercent}% d&apos;écart</span>
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
+                        <Smartphone className="w-3 h-3" />
+                        Mobile
+                      </span>
+                    </div>
+                    <CardDescription className="text-white/50">
+                      Détail des métriques de performance — seuils recommandés par Google
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                      {SOLO_METRICS.map((m) => {
+                        const value = result.siteMetrics[m.key]
+                        const status = metricStatus(m.key, value)
+                        return (
+                          <div key={m.key} className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1.5">
+                            <span className="text-[11px] text-white/40 font-googletexte">{m.label}</span>
+                            <p className={cn("text-xl font-bold font-googletitre", STATUS_COLORS[status])}>
+                              {value}{m.unit}
+                            </p>
+                            <span className={cn("text-[10px] font-medium", STATUS_COLORS[status])}>
+                              {STATUS_LABELS[status]}
                             </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                )
-              })()}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {(() => {
-                const positives = result.gaps.filter((g) => g.impact === "positive")
-                if (positives.length === 0) return null
-                return (
-                  <Card className="border-green-500/20 bg-green-500/5 backdrop-blur-sm">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-green-400 font-googletitre text-lg flex items-center gap-2">
-                        <CheckCircle2 className="w-5 h-5" />
-                        Vous les devancez sur
+                {/* CTA: add competitors */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="rounded-2xl bg-mediumblue/60 backdrop-blur-xl border border-lightblue/20 p-6 md:p-8 text-center"
+                >
+                  <h3 className="text-xl font-googletitre font-bold text-white mb-2">
+                    Comparez avec vos concurrents
+                  </h3>
+                  <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
+                    Ajoutez jusqu&apos;à 3 sites concurrents pour voir où vous vous situez
+                    et identifier vos axes d&apos;amélioration.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addCompetitor()
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-lightblue/20 text-lightblue border border-lightblue/30 hover:bg-lightblue/30 transition"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Ajouter des concurrents
+                  </button>
+                </motion.div>
+              </>
+            ) : (
+              <>
+                {/* ── Comparison mode (with competitors) ── */}
+
+                {/* Verdict + scores */}
+                <Card
+                  className={cn(
+                    "border backdrop-blur-sm shadow-lg overflow-hidden",
+                    verdictConfig[result.overallVerdict].bg
+                  )}
+                >
+                  <CardContent className="p-6 md:p-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                      {/* Score gauges — your site + each competitor */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
+                          <Smartphone className="w-3 h-3" />
+                          Scores mobiles PageSpeed
+                        </span>
+                        <div className="flex items-end gap-4">
+                          <ScoreGauge
+                            score={result.siteMetrics.performanceScore}
+                            label="Votre site"
+                            color={verdictConfig[result.overallVerdict].color}
+                          />
+                          {result.competitors.filter((c) => !c.error).map((c, i) => (
+                            <ScoreGauge
+                              key={c.name}
+                              score={c.metrics.performanceScore}
+                              label={c.name}
+                              color={COMPETITOR_TEXT_COLORS[i] || "text-white/40"}
+                              size="sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Verdict text */}
+                      <div className="flex-1 text-center md:text-left">
+                        {(() => {
+                          const V = verdictConfig[result.overallVerdict]
+                          const Icon = V.icon
+                          return (
+                            <>
+                              <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
+                                <Icon className={cn("w-6 h-6", V.color)} />
+                                <h3 className={cn("text-2xl font-googletitre font-bold", V.color)}>
+                                  {V.label}
+                                </h3>
+                              </div>
+                              <p className="text-white/70 font-googletexte mb-3">
+                                {V.description}
+                              </p>
+                              <p className="text-sm text-white/50 font-googletexte">
+                                Score mobile moyen concurrents : <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
+                                {result.competitors.some((c) => c.error) && (
+                                  <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} analysés)</span>
+                                )}
+                              </p>
+                            </>
+                          )
+                        })()}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Metrics comparison */}
+                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-white font-googletitre text-xl">
+                        Comparaison métrique par métrique
                       </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {positives.map((gap) => (
-                          <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
-                            <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                            <span className="text-white">{gap.label}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                )
-              })()}
-            </div>
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
+                        <Smartphone className="w-3 h-3" />
+                        Mobile
+                      </span>
+                    </div>
+                    <CardDescription className="text-white/50">
+                      Core Web Vitals (mobile) — votre site vs {result.competitors.map((c) => c.name).join(", ")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {result.gaps.map((gap, i) => (
+                      <div key={gap.metric}>
+                        <MetricBar gap={gap} />
+                        {i < result.gaps.length - 1 && (
+                          <Separator className="bg-white/5 mt-5" />
+                        )}
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
 
-            {/* CTA */}
+                {/* Key takeaways */}
+                <div className="grid gap-4 md:grid-cols-3">
+                  {(() => {
+                    const criticals = result.gaps.filter((g) => g.impact === "critical" || g.impact === "warning")
+                    if (criticals.length === 0) return null
+                    return (
+                      <Card className="border-coral/20 bg-coral/5 backdrop-blur-sm md:col-span-2">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-coral font-googletitre text-lg flex items-center gap-2">
+                            <AlertTriangle className="w-5 h-5" />
+                            Vos concurrents vous devancent sur
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="space-y-2">
+                            {criticals.map((gap) => (
+                              <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
+                                {impactIcon(gap.impact)}
+                                <span>
+                                  <strong className="text-white">{gap.label}</strong> :{" "}
+                                  {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit} (moy. concurrents)
+                                  — <span className={impactColor(gap.impact)}>{gap.gapPercent}% d&apos;écart</span>
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    )
+                  })()}
+
+                  {(() => {
+                    const positives = result.gaps.filter((g) => g.impact === "positive")
+                    if (positives.length === 0) return null
+                    return (
+                      <Card className="border-green-500/20 bg-green-500/5 backdrop-blur-sm">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-green-400 font-googletitre text-lg flex items-center gap-2">
+                            <CheckCircle2 className="w-5 h-5" />
+                            Vous les devancez sur
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="space-y-2">
+                            {positives.map((gap) => (
+                              <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
+                                <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
+                                <span className="text-white">{gap.label}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    )
+                  })()}
+                </div>
+              </>
+            )}
+
+            {/* CTA — shared between solo and comparison */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -737,11 +909,15 @@ export default function BenchmarkingTool() {
               className="rounded-2xl bg-mediumblue/60 backdrop-blur-xl border border-white/10 p-6 md:p-8 text-center"
             >
               <h3 className="text-xl font-googletitre font-bold text-white mb-2">
-                Envie de combler l&apos;écart ?
+                {result.competitors.length === 0
+                  ? "Envie d\u2019aller plus loin ?"
+                  : "Envie de combler l\u2019écart ?"}
               </h3>
               <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
-                Une architecture Headless (Next.js + WordPress) peut vous
-                rapprocher — voire dépasser — vos concurrents en quelques semaines.
+                Une architecture Headless (Next.js + WordPress) peut
+                {result.competitors.length === 0
+                  ? " booster les performances de votre site en quelques semaines."
+                  : " vous rapprocher — voire dépasser — vos concurrents en quelques semaines."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <a
@@ -767,11 +943,22 @@ export default function BenchmarkingTool() {
                 <Smartphone className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
                 <p className="text-xs text-white/40 leading-relaxed">
                   <strong className="text-white/50">Méthodologie — Score Mobile :</strong>{" "}
-                  Tous les scores sont basés sur la <strong className="text-white/50">stratégie mobile</strong> de
-                  Google PageSpeed Insights. C&apos;est le score qui compte le plus : depuis
-                  le <em>mobile-first indexing</em>, Google évalue et classe votre site
-                  sur sa version mobile. Les 4 sites sont analysés simultanément
-                  pour garantir des conditions comparables. Aucune donnée n&apos;est stockée.
+                  {result.competitors.length === 0 ? (
+                    <>
+                      Le score est basé sur la <strong className="text-white/50">stratégie mobile</strong> de
+                      Google PageSpeed Insights. C&apos;est le score qui compte le plus : depuis
+                      le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                      sur sa version mobile. Aucune donnée n&apos;est stockée.
+                    </>
+                  ) : (
+                    <>
+                      Tous les scores sont basés sur la <strong className="text-white/50">stratégie mobile</strong> de
+                      Google PageSpeed Insights. C&apos;est le score qui compte le plus : depuis
+                      le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                      sur sa version mobile. Les {1 + result.competitors.length} sites sont analysés simultanément
+                      pour garantir des conditions comparables. Aucune donnée n&apos;est stockée.
+                    </>
+                  )}
                 </p>
               </div>
             </div>

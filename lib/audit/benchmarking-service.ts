@@ -21,6 +21,35 @@ function delay(ms: number) {
 }
 
 // ---------------------------------------------------------------------------
+// In-memory cache — avoids burning API quota on repeated analyses
+// Cache entries expire after CACHE_TTL_MS (4 hours).
+// ---------------------------------------------------------------------------
+
+const CACHE_TTL_MS = 4 * 60 * 60 * 1000
+
+interface CacheEntry {
+  metrics: BenchmarkMetrics
+  timestamp: number
+}
+
+const metricsCache = new Map<string, CacheEntry>()
+
+function getCached(url: string): BenchmarkMetrics | null {
+  const entry = metricsCache.get(url)
+  if (!entry) return null
+  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
+    metricsCache.delete(url)
+    return null
+  }
+  console.log(`[Benchmark] ↩ Cache hit pour ${url} (score ${entry.metrics.performanceScore}/100)`)
+  return entry.metrics
+}
+
+function setCache(url: string, metrics: BenchmarkMetrics) {
+  metricsCache.set(url, { metrics, timestamp: Date.now() })
+}
+
+// ---------------------------------------------------------------------------
 // Main benchmarking function
 // ---------------------------------------------------------------------------
 
@@ -57,6 +86,34 @@ export async function runBenchmark(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error(`[Benchmark] ✗ Échec pour votre site: ${msg}`)
+    const isQuotaError = msg.includes("Quota") || msg.includes("429")
+    // Quota errors affect all subsequent calls too — bail out early.
+    if (isQuotaError) {
+      return {
+        url: normalizedUrl,
+        siteMetrics: ZERO_METRICS,
+        competitors: [],
+        competitorAvg: ZERO_METRICS,
+        timestamp: new Date().toISOString(),
+        gaps: [],
+        overallVerdict: "critical" as const,
+        error: msg,
+      }
+    }
+    // In solo mode (no competitors), return an error result so the UI can
+    // show a proper message instead of all-zero metrics.
+    if (normalizedCompetitors.length === 0) {
+      return {
+        url: normalizedUrl,
+        siteMetrics: ZERO_METRICS,
+        competitors: [],
+        competitorAvg: ZERO_METRICS,
+        timestamp: new Date().toISOString(),
+        gaps: [],
+        overallVerdict: "critical" as const,
+        error: `Impossible d'analyser ${normalizedUrl}. Vérifiez que l'URL est accessible publiquement et réessayez.`,
+      }
+    }
     siteMetrics = ZERO_METRICS
   }
 
@@ -107,6 +164,10 @@ export async function runBenchmark(
 // ---------------------------------------------------------------------------
 
 async function fetchPageSpeedMetrics(url: string): Promise<BenchmarkMetrics> {
+  // Check cache first
+  const cached = getCached(url)
+  if (cached) return cached
+
   const apiKey = process.env.PAGESPEED_API_KEY
   const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance${apiKey ? `&key=${apiKey}` : ""}`
 
@@ -117,6 +178,14 @@ async function fetchPageSpeedMetrics(url: string): Promise<BenchmarkMetrics> {
   if (!response.ok) {
     const body = await response.text().catch(() => "")
     console.error(`[Benchmark] HTTP ${response.status} pour ${url}: ${body.slice(0, 300)}`)
+    if (response.status === 429) {
+      throw new Error(
+        `Quota API PageSpeed dépassé. ` +
+        (apiKey
+          ? `Réessayez dans quelques minutes.`
+          : `Ajoutez une PAGESPEED_API_KEY dans .env.local pour augmenter le quota (gratuit).`)
+      )
+    }
     throw new Error(`PageSpeed API ${response.status} pour ${url}`)
   }
 
@@ -143,6 +212,9 @@ async function fetchPageSpeedMetrics(url: string): Promise<BenchmarkMetrics> {
     si: parseFloat(((audits["speed-index"]?.numericValue ?? 0) / 1000).toFixed(1)),
     ttfb: Math.round(audits["server-response-time"]?.numericValue ?? 0),
   }
+
+  // Store in cache
+  setCache(url, metrics)
 
   return metrics
 }

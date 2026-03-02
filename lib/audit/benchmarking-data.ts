@@ -28,6 +28,8 @@ export interface BenchmarkResult {
   timestamp: string
   gaps: BenchmarkGap[]
   overallVerdict: "ahead" | "average" | "behind" | "critical"
+  /** If set, the analysis failed and this contains the user-facing message */
+  error?: string
 }
 
 export interface BenchmarkGap {
