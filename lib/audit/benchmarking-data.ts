@@ -19,8 +19,11 @@ export interface CompetitorResult {
   error?: boolean
 }
 
+export type Strategy = "mobile" | "desktop"
+
 export interface BenchmarkResult {
   url: string
+  strategy: Strategy
   siteMetrics: BenchmarkMetrics
   competitors: CompetitorResult[]
   /** Average of the 3 competitors' real metrics */

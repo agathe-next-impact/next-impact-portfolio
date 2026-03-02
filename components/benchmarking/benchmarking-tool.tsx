@@ -27,6 +27,7 @@ import {
   BarChart3,
   Zap,
   Smartphone,
+  Monitor,
   Plus,
   X,
 } from "lucide-react"
@@ -35,6 +36,7 @@ import {
   type BenchmarkResult,
   type BenchmarkGap,
   type BenchmarkMetrics,
+  type Strategy,
 } from "@/lib/audit/benchmarking-data"
 import { runBenchmark } from "@/lib/audit/benchmarking-service"
 
@@ -337,6 +339,7 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
 export default function BenchmarkingTool() {
   const [url, setUrl] = useState("")
   const [competitors, setCompetitors] = useState<string[]>([])
+  const [strategy, setStrategy] = useState<Strategy>("mobile")
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<BenchmarkResult | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -393,7 +396,7 @@ export default function BenchmarkingTool() {
         name: extractName(c),
         url: c.trim(),
       }))
-      const data = await runBenchmark(url, entries)
+      const data = await runBenchmark(url, entries, strategy)
       if (data.error) {
         setError(data.error)
       } else {
@@ -419,17 +422,47 @@ export default function BenchmarkingTool() {
             <h2 className="text-white font-googletitre text-2xl font-medium">
               Analysez votre site
             </h2>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-lightyellow/10 border border-lightyellow/20 text-lightyellow text-xs font-medium font-googletexte">
-              <Smartphone className="w-3 h-3" />
-              Score Mobile
-            </span>
           </div>
-          <p className="text-white/60 font-googletexte text-sm mb-6">
+          <p className="text-white/60 font-googletexte text-sm mb-4">
             Entrez votre URL — ajoutez jusqu&apos;à 3 concurrents pour une
-            comparaison directe. Analyse en temps réel via Google PageSpeed
-            Insights (stratégie mobile). Le score mobile est décisif : Google
-            indexe prioritairement la version mobile de votre site.
+            comparaison directe. Analyse en temps réel via Google PageSpeed Insights.
           </p>
+
+          {/* Strategy toggle */}
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-xs text-white/50 font-googletexte mr-1">Stratégie :</span>
+            <button
+              type="button"
+              onClick={() => setStrategy("mobile")}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-googletexte transition-all border",
+                strategy === "mobile"
+                  ? "bg-lightyellow/15 border-lightyellow/30 text-lightyellow"
+                  : "bg-white/5 border-white/10 text-white/40 hover:text-white/60 hover:border-white/20"
+              )}
+            >
+              <Smartphone className="w-3 h-3" />
+              Mobile
+            </button>
+            <button
+              type="button"
+              onClick={() => setStrategy("desktop")}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-googletexte transition-all border",
+                strategy === "desktop"
+                  ? "bg-lightblue/15 border-lightblue/30 text-lightblue"
+                  : "bg-white/5 border-white/10 text-white/40 hover:text-white/60 hover:border-white/20"
+              )}
+            >
+              <Monitor className="w-3 h-3" />
+              Desktop
+            </button>
+            {strategy === "mobile" && (
+              <span className="text-[10px] text-white/30 font-googletexte ml-1">
+                Recommandé — Google indexe en priorité la version mobile
+              </span>
+            )}
+          </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Your URL */}
             <div className="space-y-2">
@@ -584,7 +617,7 @@ export default function BenchmarkingTool() {
               return (
                 <>
                   <p className="text-white/60 font-googletexte text-sm">
-                    Analyse mobile {total === 1
+                    Analyse {strategy === "mobile" ? "mobile" : "desktop"} {total === 1
                       ? "de votre site"
                       : `de ${total} sites`} via Google PageSpeed...
                   </p>
@@ -664,8 +697,8 @@ export default function BenchmarkingTool() {
                   <CardContent className="p-6 md:p-8">
                     <div className="flex flex-col items-center gap-4">
                       <span className="inline-flex items-center gap-1.5 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
-                        <Smartphone className="w-3 h-3" />
-                        Score mobile PageSpeed
+                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                        Score {result.strategy === "mobile" ? "mobile" : "desktop"} PageSpeed
                       </span>
                       <ScoreGauge
                         score={result.siteMetrics.performanceScore}
@@ -674,7 +707,7 @@ export default function BenchmarkingTool() {
                       />
                       <p className="text-white/60 text-sm font-googletexte text-center max-w-md">
                         {result.siteMetrics.performanceScore >= 90
-                          ? "Excellent — votre site est très performant sur mobile."
+                          ? `Excellent — votre site est très performant en ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
                           : result.siteMetrics.performanceScore >= 50
                             ? "Correct — des optimisations ciblées peuvent améliorer l\u2019expérience utilisateur."
                             : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
@@ -691,8 +724,8 @@ export default function BenchmarkingTool() {
                         Core Web Vitals
                       </CardTitle>
                       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
-                        <Smartphone className="w-3 h-3" />
-                        Mobile
+                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                        {result.strategy === "mobile" ? "Mobile" : "Desktop"}
                       </span>
                     </div>
                     <CardDescription className="text-white/50">
@@ -763,8 +796,8 @@ export default function BenchmarkingTool() {
                       {/* Score gauges — your site + each competitor */}
                       <div className="flex flex-col items-center gap-2">
                         <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
-                          <Smartphone className="w-3 h-3" />
-                          Scores mobiles PageSpeed
+                          {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                          Scores {result.strategy === "mobile" ? "mobiles" : "desktop"} PageSpeed
                         </span>
                         <div className="flex items-end gap-4">
                           <ScoreGauge
@@ -801,7 +834,7 @@ export default function BenchmarkingTool() {
                                 {V.description}
                               </p>
                               <p className="text-sm text-white/50 font-googletexte">
-                                Score mobile moyen concurrents : <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
+                                Score {result.strategy === "mobile" ? "mobile" : "desktop"} moyen concurrents : <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
                                 {result.competitors.some((c) => c.error) && (
                                   <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} analysés)</span>
                                 )}
@@ -822,12 +855,12 @@ export default function BenchmarkingTool() {
                         Comparaison métrique par métrique
                       </CardTitle>
                       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
-                        <Smartphone className="w-3 h-3" />
-                        Mobile
+                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                        {result.strategy === "mobile" ? "Mobile" : "Desktop"}
                       </span>
                     </div>
                     <CardDescription className="text-white/50">
-                      Core Web Vitals (mobile) — votre site vs {result.competitors.map((c) => c.name).join(", ")}
+                      Core Web Vitals ({result.strategy}) — votre site vs {result.competitors.map((c) => c.name).join(", ")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -940,22 +973,34 @@ export default function BenchmarkingTool() {
             {/* Methodology */}
             <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/5 p-4">
               <div className="flex items-start gap-3">
-                <Smartphone className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                {result.strategy === "mobile" ? (
+                  <Smartphone className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                ) : (
+                  <Monitor className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                )}
                 <p className="text-xs text-white/40 leading-relaxed">
-                  <strong className="text-white/50">Méthodologie — Score Mobile :</strong>{" "}
+                  <strong className="text-white/50">
+                    Méthodologie — Score {result.strategy === "mobile" ? "Mobile" : "Desktop"} :
+                  </strong>{" "}
                   {result.competitors.length === 0 ? (
                     <>
-                      Le score est basé sur la <strong className="text-white/50">stratégie mobile</strong> de
-                      Google PageSpeed Insights. C&apos;est le score qui compte le plus : depuis
-                      le <em>mobile-first indexing</em>, Google évalue et classe votre site
-                      sur sa version mobile. Aucune donnée n&apos;est stockée.
+                      Le score est basé sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                      Google PageSpeed Insights.
+                      {result.strategy === "mobile" && (
+                        <> C&apos;est le score qui compte le plus : depuis
+                        le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                        sur sa version mobile.</>
+                      )} Aucune donnée n&apos;est stockée.
                     </>
                   ) : (
                     <>
-                      Tous les scores sont basés sur la <strong className="text-white/50">stratégie mobile</strong> de
-                      Google PageSpeed Insights. C&apos;est le score qui compte le plus : depuis
-                      le <em>mobile-first indexing</em>, Google évalue et classe votre site
-                      sur sa version mobile. Les {1 + result.competitors.length} sites sont analysés simultanément
+                      Tous les scores sont basés sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                      Google PageSpeed Insights.
+                      {result.strategy === "mobile" && (
+                        <> C&apos;est le score qui compte le plus : depuis
+                        le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                        sur sa version mobile.</>
+                      )} Les {1 + result.competitors.length} sites sont analysés simultanément
                       pour garantir des conditions comparables. Aucune donnée n&apos;est stockée.
                     </>
                   )}

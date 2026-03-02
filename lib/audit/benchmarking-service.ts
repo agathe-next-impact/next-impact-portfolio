@@ -5,6 +5,7 @@ import {
   type BenchmarkResult,
   type BenchmarkGap,
   type CompetitorResult,
+  type Strategy,
 } from "./benchmarking-data"
 
 // ---------------------------------------------------------------------------
@@ -55,7 +56,8 @@ function setCache(url: string, metrics: BenchmarkMetrics) {
 
 export async function runBenchmark(
   url: string,
-  competitors: { name: string; url: string }[]
+  competitors: { name: string; url: string }[],
+  strategy: Strategy = "mobile"
 ): Promise<BenchmarkResult> {
   const apiKey = process.env.PAGESPEED_API_KEY
   if (!apiKey) {
@@ -81,7 +83,7 @@ export async function runBenchmark(
 
   let siteMetrics: BenchmarkMetrics
   try {
-    siteMetrics = await fetchPageSpeedMetrics(normalizedUrl)
+    siteMetrics = await fetchPageSpeedMetrics(normalizedUrl, strategy)
     console.log(`[Benchmark] ✓ Votre site (${normalizedUrl}) → score ${siteMetrics.performanceScore}/100`)
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
@@ -91,6 +93,7 @@ export async function runBenchmark(
     if (isQuotaError) {
       return {
         url: normalizedUrl,
+        strategy,
         siteMetrics: ZERO_METRICS,
         competitors: [],
         competitorAvg: ZERO_METRICS,
@@ -105,6 +108,7 @@ export async function runBenchmark(
     if (normalizedCompetitors.length === 0) {
       return {
         url: normalizedUrl,
+        strategy,
         siteMetrics: ZERO_METRICS,
         competitors: [],
         competitorAvg: ZERO_METRICS,
@@ -125,7 +129,7 @@ export async function runBenchmark(
   for (const comp of normalizedCompetitors) {
     await delay(staggerMs)
     try {
-      const metrics = await fetchPageSpeedMetrics(comp.url)
+      const metrics = await fetchPageSpeedMetrics(comp.url, strategy)
       console.log(`[Benchmark] ✓ ${comp.name} (${comp.url}) → score ${metrics.performanceScore}/100`)
       competitorResults.push({ name: comp.name, url: comp.url, metrics })
     } catch (err: unknown) {
@@ -150,6 +154,7 @@ export async function runBenchmark(
 
   return {
     url: normalizedUrl,
+    strategy,
     siteMetrics,
     competitors: competitorResults,
     competitorAvg,
@@ -163,13 +168,14 @@ export async function runBenchmark(
 // PageSpeed API fetch
 // ---------------------------------------------------------------------------
 
-async function fetchPageSpeedMetrics(url: string): Promise<BenchmarkMetrics> {
-  // Check cache first
-  const cached = getCached(url)
+async function fetchPageSpeedMetrics(url: string, strategy: Strategy = "mobile"): Promise<BenchmarkMetrics> {
+  // Check cache first (key includes strategy)
+  const cacheKey = `${strategy}:${url}`
+  const cached = getCached(cacheKey)
   if (cached) return cached
 
   const apiKey = process.env.PAGESPEED_API_KEY
-  const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance${apiKey ? `&key=${apiKey}` : ""}`
+  const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&category=performance${apiKey ? `&key=${apiKey}` : ""}`
 
   console.log(`[Benchmark] Requête PageSpeed pour ${url}...`)
 
@@ -214,7 +220,7 @@ async function fetchPageSpeedMetrics(url: string): Promise<BenchmarkMetrics> {
   }
 
   // Store in cache
-  setCache(url, metrics)
+  setCache(cacheKey, metrics)
 
   return metrics
 }
@@ -257,7 +263,7 @@ interface MetricDef {
 }
 
 const METRIC_DEFS: MetricDef[] = [
-  { key: "performanceScore", label: "Score Performance Mobile", unit: "/100", lowerIsBetter: false, negligibleThreshold: 5 },
+  { key: "performanceScore", label: "Score Performance", unit: "/100", lowerIsBetter: false, negligibleThreshold: 5 },
   { key: "lcp", label: "LCP (Largest Contentful Paint)", unit: "s", lowerIsBetter: true, negligibleThreshold: 0.3 },
   { key: "fcp", label: "FCP (First Contentful Paint)", unit: "s", lowerIsBetter: true, negligibleThreshold: 0.2 },
   { key: "tbt", label: "TBT (Total Blocking Time)", unit: "ms", lowerIsBetter: true, negligibleThreshold: 50 },
