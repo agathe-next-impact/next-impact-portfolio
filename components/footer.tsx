@@ -31,6 +31,9 @@ export default function Footer() {
             <Link href="/documentation" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               Documentation
             </Link>
+            <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Avantage OETH
+            </Link>
           </nav>
         </div>
 
@@ -52,6 +55,9 @@ export default function Footer() {
             <Link href="/outils/benchmarking" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               Benchmarking
             </Link>
+            <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Simulateur AGEFIPH (TIH)
+            </Link>
           </nav>
         </div>
 
@@ -69,9 +75,12 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="container border-t border-white/10 pt-4">
+      <div className="container border-t border-white/10 pt-4 space-y-1">
         <p className="text-center text-sm text-white/50 font-googletexte">
           © {new Date().getFullYear()} Next Impact Digital — Tous droits réservés
+        </p>
+        <p className="text-center text-xs text-white/35 font-googletexte">
+          EI Agathe Karinthi-Martin — Prestataire TIH (Travailleur Indépendant Handicapé) — Attestation OETH disponible
         </p>
       </div>
     </footer>

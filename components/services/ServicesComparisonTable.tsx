@@ -33,6 +33,12 @@ export function ServicesComparisonTable() {
       pack2: "3 mois",
       pack3: "12 mois",
     },
+    {
+      feature: "Attestation OETH (TIH)",
+      pack1: true,
+      pack2: true,
+      pack3: "Optimisé pour la déduction OETH",
+    },
   ];
 
   return (

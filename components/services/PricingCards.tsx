@@ -12,6 +12,7 @@ import {
   Zap,
   Headphones,
   Award,
+  BadgePercent,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -245,6 +246,22 @@ export function PricingCards() {
                     <strong className="text-lightblue">Financeur</strong> : cette offre subventionne directement 40% d&apos;un projet solidaire.
                   </p>
                 </div>
+              </div>
+
+              <div className="border border-lightblue/20 rounded-xl p-4 bg-lightblue/5">
+                <div className="flex items-center gap-2 mb-2">
+                  <BadgePercent className="h-4 w-4 text-lightblue shrink-0" />
+                  <span className="text-sm font-googletitre font-medium text-lightblue">
+                    Avantage OETH
+                  </span>
+                </div>
+                <p className="text-white/70 font-googletexte text-sm leading-relaxed mb-2">
+                  Prestataire TIH : 30% du coût de main-d&apos;œuvre déductible de votre contribution AGEFIPH.
+                </p>
+                <Link href="/avantage-oeth" className="inline-flex items-center gap-1 text-sm text-lightblue font-googletexte hover:underline">
+                  Simuler mon économie
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
               </div>
             </div>
 

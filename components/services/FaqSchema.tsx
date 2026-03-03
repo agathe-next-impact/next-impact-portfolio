@@ -51,7 +51,7 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
     <section id={sectionId}>
       <div className="container">
         <div className="text-center mb-8 md:mb-16">
-          <h2 className="text-3xl md:text-5xl text-white font-medium mb-6">{title}</h2>
+          <h2 className="text-3xl md:text-4xl text-white font-medium mb-6">{title}</h2>
           <p className="text-base md:text-xl max-w-3xl mx-auto text-white/70">{description}</p>
         </div>
         <div className="mx-auto max-w-3xl md:py-12">

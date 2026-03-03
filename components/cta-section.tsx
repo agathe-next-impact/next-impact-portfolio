@@ -22,6 +22,7 @@ import {
   CircleDot,
   Award,
   Clock,
+  BadgePercent,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import type { Variants } from "framer-motion";
@@ -423,6 +424,10 @@ export function BlocReassurance() {
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-googletexte">
             <Award className="w-3.5 h-3.5 text-coral" />
             Développeur WordPress Headless
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lightyellow/10 border border-lightyellow/20 text-lightyellow text-sm font-googletexte">
+            <BadgePercent className="w-3.5 h-3.5" />
+            Prestataire TIH
           </span>
         </motion.div>
 

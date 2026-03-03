@@ -203,6 +203,12 @@ export default function Hero() {
                   8+ ans d'expérience
                 </span>
               </div>
+
+              <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full shadow-lg animate-float hidden md:flex items-center gap-1.5">
+                <span className="text-xs font-medium text-darkblue">
+                  Prestataire TIH — Déduction AGEFIPH
+                </span>
+              </div>
             </div>
           </div>
         </div>
