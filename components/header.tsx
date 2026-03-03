@@ -55,7 +55,7 @@ export function NavBar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/outils" className="font-googletitre text-white/90 text-lg text-regular px-2">
-                Outils
+                Outils en ligne
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -128,7 +128,7 @@ export function NavBar() {
                   <MobileMenuLink href="/services" onClick={handleMenuClick}>Services & Tarifs</MobileMenuLink>
                   <MobileMenuLink href="/avantage-oeth" onClick={handleMenuClick}>Avantage OETH</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
-                  <MobileMenuLink href="/outils" onClick={handleMenuClick}>Outils</MobileMenuLink>
+                  <MobileMenuLink href="/outils" onClick={handleMenuClick}>Outils en ligne</MobileMenuLink>
                   <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
                   <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">Comprendre</MobileMenuLink>
                   <MobileMenuLink href="/contact" onClick={handleMenuClick} className="pb-4">Contact</MobileMenuLink>
