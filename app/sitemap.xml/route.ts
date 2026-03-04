@@ -99,6 +99,7 @@ export async function GET() {
       // Hub études de cas & documentation
       { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
+      { path: "documentation/mind-map", changefreq: "monthly", priority: 0.6, lastmod: today },
       // Avantage OETH — page de conversion
       { path: "avantage-oeth", changefreq: "weekly", priority: 0.8, lastmod: today },
       // Articles

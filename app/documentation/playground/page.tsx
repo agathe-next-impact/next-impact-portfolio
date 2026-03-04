@@ -10,7 +10,7 @@ import { ColorPaletteShowcase } from "@/components/documentation/color-palette-s
 import { VideoGallery } from "@/components/documentation/video-gallery";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, VideoObjectJsonLd } from "@/components/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -33,6 +33,46 @@ export default function PlaygroundPage() {
   return (
     <div className="relative min-h-screen">
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      <VideoObjectJsonLd
+        name="Billeterie événementielle — WordPress Headless Next.js"
+        description="Présentation complète d'une plateforme de billeterie propulsée par WordPress Headless et Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/I1qi5o31Lnk/maxresdefault.jpg"
+        uploadDate="2024-06-01"
+        contentUrl="https://youtu.be/I1qi5o31Lnk"
+        embedUrl="https://www.youtube.com/embed/I1qi5o31Lnk"
+      />
+      <VideoObjectJsonLd
+        name="Comme des Fous — Média participatif WordPress Headless"
+        description="Le média participatif Comme des Fous, propulsé par WordPress Headless et Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/6vUSbG6F50w/maxresdefault.jpg"
+        uploadDate="2024-06-01"
+        contentUrl="https://youtu.be/6vUSbG6F50w"
+        embedUrl="https://www.youtube.com/embed/6vUSbG6F50w"
+      />
+      <VideoObjectJsonLd
+        name="Les Doléances — Plateforme citoyenne WordPress Headless"
+        description="Un site de promotion des doléances citoyennes avec WordPress Headless et Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/_OjiGiOWJus/maxresdefault.jpg"
+        uploadDate="2024-06-01"
+        contentUrl="https://youtu.be/_OjiGiOWJus"
+        embedUrl="https://www.youtube.com/embed/_OjiGiOWJus"
+      />
+      <VideoObjectJsonLd
+        name="États Généraux Communaux — WordPress Headless Next.js"
+        description="Plateforme pour les États Généraux Communaux utilisant WordPress Headless et Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/dJIndpLBm7o/maxresdefault.jpg"
+        uploadDate="2024-06-01"
+        contentUrl="https://youtu.be/dJIndpLBm7o"
+        embedUrl="https://www.youtube.com/embed/dJIndpLBm7o"
+      />
+      <VideoObjectJsonLd
+        name="Comme des Fous — Jeux en ligne WordPress Headless"
+        description="Section de jeux en ligne intégrée au site Comme des Fous, développée en headless."
+        thumbnailUrl="https://img.youtube.com/vi/SIj61ECS1Mo/maxresdefault.jpg"
+        uploadDate="2024-06-01"
+        contentUrl="https://youtu.be/SIj61ECS1Mo"
+        embedUrl="https://www.youtube.com/embed/SIj61ECS1Mo"
+      />
       <main className="flex-1">
         <section className="w-full py-8 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6">
