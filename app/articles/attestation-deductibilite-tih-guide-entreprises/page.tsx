@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
+import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -23,6 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     type: "article",
     publishedTime: "2025-03-01",
+    modifiedTime: "2025-06-01",
   });
 }
 
@@ -38,6 +39,15 @@ export default function ArticleAttestationTIH() {
 
   return (
     <main>
+      <ArticleJsonLd
+        title="Attestation de déductibilité TIH : guide pratique pour les entreprises"
+        description="Tout savoir sur l'attestation de déductibilité TIH : qui la délivre, quelles informations elle contient, comment l'intégrer à votre déclaration OETH auprès de l'URSSAF."
+        image="/img/desktop-screen-next-impact.png"
+        datePublished="2025-03-01"
+        dateModified="2025-06-01"
+        author="Agathe Karinthi-Martin"
+        url="/articles/attestation-deductibilite-tih-guide-entreprises"
+      />
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <FAQJsonLd
         questions={[

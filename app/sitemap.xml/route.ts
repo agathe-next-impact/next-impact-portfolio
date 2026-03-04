@@ -99,6 +99,12 @@ export async function GET() {
       // Hub études de cas & documentation
       { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
+      // Avantage OETH — page de conversion
+      { path: "avantage-oeth", changefreq: "weekly", priority: 0.8, lastmod: today },
+      // Articles
+      { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "articles/attestation-deductibilite-tih-guide-entreprises", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "articles/wordpress-headless-impact-social-pme-engagees", changefreq: "monthly", priority: 0.7, lastmod: today },
       // Pages de conversion / outils
       { path: "audit-site-ia", changefreq: "monthly", priority: 0.8, lastmod: today },
       { path: "outils", changefreq: "monthly", priority: 0.7, lastmod: today },

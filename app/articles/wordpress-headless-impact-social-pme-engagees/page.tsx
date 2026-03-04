@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -24,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     type: "article",
     publishedTime: "2025-03-01",
+    modifiedTime: "2025-06-01",
   });
 }
 
@@ -39,7 +40,32 @@ export default function ArticleImpactSocial() {
 
   return (
     <main>
+      <ArticleJsonLd
+        title="WordPress Headless + impact social : pourquoi les PME engagées choisissent Next Impact"
+        description="Performance web de pointe, impact social concret et déduction AGEFIPH : découvrez pourquoi les PME et organisations RSE choisissent un prestataire TIH spécialisé WordPress Headless."
+        image="/img/desktop-screen-next-impact.png"
+        datePublished="2025-03-01"
+        dateModified="2025-06-01"
+        author="Agathe Karinthi-Martin"
+        url="/articles/wordpress-headless-impact-social-pme-engagees"
+      />
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      <FAQJsonLd
+        questions={[
+          {
+            question:
+              "Qu'est-ce que le WordPress Headless et pourquoi est-ce plus performant ?",
+            answer:
+              "Le WordPress Headless sépare le back-office WordPress du front-end, reconstruit avec Next.js ou Astro. Résultat : un site qui charge en moins d'une seconde, un SEO natif, une sécurité maximale et une autonomie totale sur les contenus.",
+          },
+          {
+            question:
+              "Comment un prestataire TIH contribue-t-il à la RSE de mon entreprise ?",
+            answer:
+              "En sous-traitant à un TIH (Travailleur Indépendant Handicapé), vous soutenez l'emploi inclusif, diversifiez vos fournisseurs (critère RSE valorisé) et pouvez déduire 30% du coût de main-d'œuvre de votre contribution AGEFIPH.",
+          },
+        ]}
+      />
 
       <PageLayout
         titre="WordPress Headless + impact social : Choisir Next Impact"

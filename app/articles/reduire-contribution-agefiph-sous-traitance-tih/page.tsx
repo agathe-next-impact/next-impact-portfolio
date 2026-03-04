@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
+import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -23,6 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     type: "article",
     publishedTime: "2025-03-01",
+    modifiedTime: "2025-06-01",
   });
 }
 
@@ -38,6 +39,15 @@ export default function ArticleReduireAgefiph() {
 
   return (
     <main>
+      <ArticleJsonLd
+        title="Comment réduire sa contribution AGEFIPH grâce à la sous-traitance TIH dans le numérique"
+        description="Guide complet pour les RH et DAF : réduisez votre contribution AGEFIPH en sous-traitant vos projets numériques à un prestataire TIH. Barème 2025, calcul et attestation."
+        image="/img/desktop-screen-next-impact.png"
+        datePublished="2025-03-01"
+        dateModified="2025-06-01"
+        author="Agathe Karinthi-Martin"
+        url="/articles/reduire-contribution-agefiph-sous-traitance-tih"
+      />
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <FAQJsonLd
         questions={[

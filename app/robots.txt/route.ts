@@ -8,6 +8,8 @@ export async function GET() {
 # Règles par défaut — autoriser l'indexation
 User-agent: *
 Allow: /
+Allow: /articles/
+Allow: /avantage-oeth
 Disallow: /api/
 Disallow: /_next/
 Disallow: /demo/metadata-test
@@ -28,6 +30,8 @@ Allow: /etudes-de-cas/
 Allow: /services/
 Allow: /solutions/
 Allow: /outils/
+Allow: /articles/
+Allow: /avantage-oeth
 Allow: /a-propos
 Allow: /cahier-des-charges
 Allow: /
