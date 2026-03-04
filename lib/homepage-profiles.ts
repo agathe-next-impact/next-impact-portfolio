@@ -585,7 +585,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
     {
       title: "Pourquoi choisir le Headless ?",
       description:
-        "Voir si le Headless est adapté à votre projet et comprendre les avantages concrets qu'il peut offrir à votre site web.",
+        "Comprendre les gains concrets : temps de chargement divisé, coût de maintenance réduit et ROI mesurable sur votre investissement web.",
       src: "/icons/scan-icon.svg",
       ctaText: "En savoir plus",
       ctaLink: "/documentation/headless-cms/pourquoi-le-headless",
@@ -593,7 +593,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
     {
       title: "Pour quels objectifs ?",
       description:
-        "Voir si le Headless est adapté à votre projet et comprendre les avantages concrets qu'il peut offrir à votre site web.",
+        "Découvrez si votre projet correspond : pic de trafic à absorber, éco-conception, multi-sites, portail client ou application métier.",
       src: "/icons/analytics-icon.svg",
       ctaText: "En savoir plus",
       ctaLink: "/documentation/headless-cms/quand-utiliser-wordpress-headless",

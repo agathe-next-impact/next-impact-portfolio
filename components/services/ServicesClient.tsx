@@ -1,18 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowRight,
-  ClipboardCheck,
-  Play,
-  Lightbulb,
-  FileText,
-  Building2,
-  Leaf,
-  Heart,
-  Award,
-  Rocket,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PricingCards } from "@/components/services/PricingCards";
@@ -62,6 +52,32 @@ export default function ServicesClient() {
         {/* Comparatif des offres */}
         <ServicesComparisonTable />
 
+        {/* CTA tertiaire — Simulateur ROI */}
+        <section className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto rounded-2xl border border-lightyellow/20 bg-gradient-to-r from-darkblue/60 to-mediumblue/40 backdrop-blur-sm p-6 md:p-8">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lightyellow/10 border border-lightyellow/20 shrink-0">
+                <Image src="/icons/analytics-icon.svg" alt="Calculer" width={24} height={24} />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="font-googletitre text-lg md:text-xl font-medium text-white mb-1">
+                  Calculez votre gain
+                </h3>
+                <p className="text-sm text-white/60 font-googletexte">
+                  Estimez le retour sur investissement d&apos;une migration Headless à partir de vos données réelles.
+                </p>
+              </div>
+              <Link
+                href="/outils/simulateur-roi"
+                className="inline-flex items-center gap-2 text-lightyellow text-sm font-googletitre font-semibold hover:text-white transition-colors shrink-0"
+              >
+                Simuler mon ROI
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Critères d'éligibilité & Transparence */}
         <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
           <div className="max-w-4xl mx-auto px-4">
@@ -74,7 +90,7 @@ export default function ServicesClient() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <FileText className="h-12 w-12 text-lightyellow mb-4" />
+                <Image src="/icons/content-icon.svg" alt="Justificatif" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                   Justificatif financier
                 </h3>
@@ -84,7 +100,7 @@ export default function ServicesClient() {
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Building2 className="h-12 w-12 text-lightyellow mb-4" />
+                <Image src="/icons/globe-network-icon.svg" alt="Structure" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                   Preuve d&apos;impact
                 </h3>
@@ -94,7 +110,7 @@ export default function ServicesClient() {
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Leaf className="h-12 w-12 text-lightyellow mb-4" />
+                <Image src="/icons/eco-design-icon.svg" alt="Engagement" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                   Engagement
                 </h3>
@@ -125,7 +141,7 @@ export default function ServicesClient() {
                 {/* Carte gauche */}
                 <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-4">
-                    <Heart className="h-8 w-8 text-coral shrink-0" />
+                    <Image src="/icons/brand-reach-icon.svg" alt="Impact" width={32} height={32} className="shrink-0" />
                     <h3 className="text-xl font-googletitre font-medium text-white">
                       {variant.budgetCards.left.title}
                     </h3>
@@ -143,7 +159,7 @@ export default function ServicesClient() {
                 {/* Carte droite */}
                 <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-4">
-                    <Award className="h-8 w-8 text-lightyellow shrink-0" />
+                    <Image src="/icons/rocket-icon.svg" alt="Résultat" width={32} height={32} className="shrink-0" />
                     <h3 className="text-xl font-googletitre font-medium text-white">
                       {variant.budgetCards.right.title}
                     </h3>
@@ -169,7 +185,7 @@ export default function ServicesClient() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <Link href="/outils" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-coral/40 transition-all duration-300">
-                <ClipboardCheck className="h-12 w-12 text-coral mb-4 group-hover:scale-110 transition-transform" />
+                <Image src="/icons/scan-icon.svg" alt="Outils" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
                 <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Outils</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
                   Simulateur ROI, audit de site et diagnostic IA pour évaluer votre présence digitale.
@@ -179,7 +195,7 @@ export default function ServicesClient() {
 
             <Link href="/demo" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightyellow/40 transition-all duration-300">
-                <Play className="h-12 w-12 text-lightyellow mb-4 group-hover:scale-110 transition-transform" />
+                <Image src="/icons/desktop-headless-icon.svg" alt="Démo" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
                 <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Démo</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
                   Découvrez en live la puissance du WordPress Headless sur votre projet.
@@ -189,7 +205,7 @@ export default function ServicesClient() {
 
             <Link href="/contact" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
-                <Lightbulb className="h-12 w-12 text-lightblue mb-4 group-hover:scale-110 transition-transform" />
+                <Image src="/icons/optimize-icon.svg" alt="Offre" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
                 <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Déterminez votre offre</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
                   Répondez à quelques questions pour découvrir l&apos;offre adaptée à votre structure.

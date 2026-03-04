@@ -62,7 +62,7 @@ function CTALeadMagnet() {
           variants={fadeUp}
           className="text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Faut-il migrer en headless ?
+          Évaluez votre site en 5 minutes
         </motion.h2>
 
         {/* Subtitle */}
@@ -71,11 +71,11 @@ function CTALeadMagnet() {
           variants={fadeUp}
           className="text-sm md:text-base text-white/70 font-googletexte text-center mx-auto mb-5 leading-relaxed"
         >
-          Testez votre site WordPress et recevez un{" "}
+          Recevez un{" "}
           <span className="text-lightyellow font-semibold">
             rapport complet avec des recommandations personnalisées
           </span>{" "}
-          pour une migration headless.
+          — gratuit, sans engagement.
         </motion.p>
 
         {/* Benefits pills */}
@@ -99,10 +99,10 @@ function CTALeadMagnet() {
           ))}
         </motion.div>
 
-        {/* CTA Button */}
-        <motion.div custom={4} variants={fadeUp} className="flex justify-center mt-auto">
+        {/* CTA Button — style outline secondaire */}
+        <motion.div custom={4} variants={fadeUp} className="flex flex-col items-center mt-auto gap-2">
           <Button
-            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-2.5 px-6 rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300 font-googletitre text-sm md:text-lg font-semibold"
+            className="inline-flex items-center gap-2 bg-transparent border-2 border-lightyellow/60 text-lightyellow py-2.5 px-6 rounded-full hover:bg-lightyellow/10 hover:border-lightyellow transition-all duration-300 font-googletitre text-sm md:text-base font-semibold"
             asChild
           >
             <Link href="/audit-site-ia">
@@ -110,6 +110,9 @@ function CTALeadMagnet() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
+          <span className="text-xs text-white/40 font-googletexte">
+            Gratuit · Rapport en 5 minutes · Sans engagement
+          </span>
         </motion.div>
       </div>
     </motion.div>
@@ -171,7 +174,7 @@ function CTAConversion() {
         </motion.p>
 
         {/* CTA Button — le plus voyant */}
-        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
+        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full shadow-lg shadow-coral/25 hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
@@ -181,6 +184,9 @@ function CTAConversion() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
+          <span className="text-xs text-white/40 font-googletexte">
+            Disponible · Réponse sous 24h · 8+ ans d&apos;expérience
+          </span>
         </motion.div>
       </div>
     </motion.div>
@@ -236,7 +242,7 @@ function CTASimulateurROI() {
           Résultats instantanés basés sur vos données réelles de trafic et de conversion.
         </motion.p>
 
-        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
+        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightyellow/15 hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
@@ -246,6 +252,9 @@ function CTASimulateurROI() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
+          <span className="text-xs text-white/40 font-googletexte">
+            Gratuit · Résultats instantanés · Sans engagement
+          </span>
         </motion.div>
       </div>
     </motion.div>
@@ -301,7 +310,7 @@ function CTABenchmarking() {
           Audit Core Web Vitals et analyse concurrentielle en quelques secondes.
         </motion.p>
 
-        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
+        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-lightblue text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightblue/15 hover:shadow-[0_0_20px_rgba(113,158,217,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
@@ -311,6 +320,9 @@ function CTABenchmarking() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
+          <span className="text-xs text-white/40 font-googletexte">
+            Gratuit · Analyse Core Web Vitals · Sans engagement
+          </span>
         </motion.div>
       </div>
     </motion.div>
@@ -366,7 +378,7 @@ function CTALivreBlanc() {
           Un guide complet pour comprendre, évaluer et adopter WordPress Headless.
         </motion.p>
 
-        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex justify-center mt-auto">
+        <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-orange text-darkblue py-3 px-8 rounded-full shadow-lg shadow-orange/15 hover:shadow-[0_0_20px_rgba(242,159,5,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
@@ -376,6 +388,9 @@ function CTALivreBlanc() {
               Télécharger le livre blanc
             </Link>
           </Button>
+          <span className="text-xs text-white/40 font-googletexte">
+            Gratuit · PDF complet · Sans inscription
+          </span>
         </motion.div>
       </div>
     </motion.div>
@@ -556,14 +571,20 @@ export function CTASection() {
   return (
     <section className="relative w-full py-12 md:py-20">
       <div className="container relative z-10 px-4 md:px-6 space-y-10 md:space-y-12">
-        {/* Grille 2 colonnes — cartes adaptées au contexte */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <CardA />
-          <CardB />
+        {/* Grille asymétrique — CTA principal dominant (~60/40) */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 items-start">
+          <div className="md:col-span-3">
+            <CardA />
+          </div>
+          <div className="md:col-span-2 flex flex-col items-center">
+            <p className="text-sm text-white/40 font-googletexte mb-3 text-center">
+              Pas encore prêt ? Commencez par un outil gratuit
+            </p>
+            <CardB />
+          </div>
         </div>
 
-        {/* Bloc Réassurance — Coordonnées directes (pleine largeur) */}
-        <BlocReassurance />
+        {/* Bloc Réassurance retiré — coordonnées déplacées dans le footer */}
       </div>
     </section>
   );

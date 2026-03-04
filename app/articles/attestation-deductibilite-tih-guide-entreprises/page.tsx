@@ -3,15 +3,8 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
-import {
-  ArrowRight,
-  FileCheck,
-  CheckCircle2,
-  ClipboardList,
-  FileText,
-  Shield,
-  Calendar,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -62,7 +55,7 @@ export default function ArticleAttestationTIH() {
       />
 
       <PageLayout
-        titre="Attestation de déductibilité TIH : guide pratique pour les entreprises"
+        titre="Attestation de déductibilité TIH"
         sousTitre="Comment obtenir, vérifier et intégrer l'attestation à votre déclaration OETH"
       >
         <article className="mt-8 mb-6 space-y-16 pt-20">
@@ -90,7 +83,7 @@ export default function ArticleAttestationTIH() {
           {/* Section 1 : Qu'est-ce que l'attestation */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <FileCheck className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/content-icon.svg" alt="Attestation" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Qu&apos;est-ce que l&apos;attestation de déductibilité ?
               </h2>
@@ -127,7 +120,7 @@ export default function ArticleAttestationTIH() {
           <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
             <div className="container mx-auto px-4 max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <ClipboardList className="h-8 w-8 text-lightblue shrink-0" />
+                <Image src="/icons/workflow-icon.svg" alt="Processus" width={32} height={32} className="shrink-0" />
                 <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                   Processus pas à pas
                 </h2>
@@ -190,7 +183,7 @@ export default function ArticleAttestationTIH() {
           {/* Section 3 : Ce que contient l'attestation */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <FileText className="h-8 w-8 text-coral shrink-0" />
+              <Image src="/icons/content-icon.svg" alt="Contenu" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Contenu de l&apos;attestation Next Impact
               </h2>
@@ -250,7 +243,7 @@ export default function ArticleAttestationTIH() {
           {/* Section 4 : Points de vigilance */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <Shield className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/shield-icon.svg" alt="Vigilance" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Points de vigilance pour la comptabilité
               </h2>
@@ -279,7 +272,7 @@ export default function ArticleAttestationTIH() {
           <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
             <div className="container mx-auto px-4 max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <Calendar className="h-8 w-8 text-lightblue shrink-0" />
+                <Image src="/icons/workflow-icon.svg" alt="Calendrier" width={32} height={32} className="shrink-0" />
                 <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                   Calendrier type
                 </h2>

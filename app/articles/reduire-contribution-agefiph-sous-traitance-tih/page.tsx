@@ -3,16 +3,8 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Calculator,
-  FileCheck,
-  AlertTriangle,
-  CheckCircle2,
-  Scale,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -64,35 +56,15 @@ export default function ArticleReduireAgefiph() {
       />
 
       <PageLayout
-        titre="Comment réduire sa contribution AGEFIPH grâce à la sous-traitance TIH dans le numérique"
-        sousTitre="Guide pratique pour les responsables RH et DAF des entreprises de 20+ salariés"
+        titre="Comment réduire sa contribution AGEFIPH ?"
+        sousTitre=""
       >
         <article className="mt-8 mb-6 space-y-16">
-          {/* Introduction */}
-          <section className="container mx-auto px-4 max-w-5xl">
-            <div className="prose prose-invert max-w-none">
-              <p className="pt-10 text-lg text-white/80 font-googletexte leading-relaxed">
-                Chaque année, les entreprises de 20 salariés et plus qui
-                n&apos;atteignent pas le taux d&apos;emploi de 6% de travailleurs
-                handicapés doivent s&apos;acquitter d&apos;une contribution AGEFIPH.
-                Depuis la fin des mesures transitoires d&apos;écrêtement au
-                1er janvier 2025, cette contribution atteint son montant
-                réel — et elle peut représenter des dizaines de milliers
-                d&apos;euros par an.
-              </p>
-              <p className="text-lg text-white/80 font-googletexte leading-relaxed mt-4">
-                Bonne nouvelle : la <strong className="text-lightyellow">sous-traitance auprès d&apos;un
-                prestataire TIH</strong> (Travailleur Indépendant Handicapé)
-                reste l&apos;un des rares leviers de déduction encore actifs
-                en 2025. Et votre projet de site web peut en bénéficier.
-              </p>
-            </div>
-          </section>
 
           {/* Section 1 : Comprendre l'OETH */}
           <section className="container mx-auto px-4 max-w-5xl pt-10">
             <div className="flex items-center gap-3 mb-6">
-              <Scale className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/scale-icon.svg" alt="OETH" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 L&apos;obligation d&apos;emploi des travailleurs handicapés (OETH) en 2025
               </h2>
@@ -145,7 +117,7 @@ export default function ArticleReduireAgefiph() {
 
               <div className="border border-coral/20 rounded-xl p-6 bg-coral/5">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-coral mt-0.5 shrink-0" />
+                  <Image src="/icons/notification-icon.svg" alt="Attention" width={20} height={20} className="mt-0.5 shrink-0" />
                   <div>
                     <p className="font-medium text-white mb-1">
                       Surcontribution en cas d&apos;inaction
@@ -214,7 +186,7 @@ export default function ArticleReduireAgefiph() {
           {/* Section 3 : Comment ça marche concrètement */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <Calculator className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/analytics-icon.svg" alt="Calcul" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Calcul de la déduction : exemple concret
               </h2>
@@ -265,7 +237,7 @@ export default function ArticleReduireAgefiph() {
           {/* Section 4 : Contexte 2025 */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="h-8 w-8 text-coral shrink-0" />
+              <Image src="/icons/growth-icon.svg" alt="Stratégie 2025" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Pourquoi c&apos;est stratégique en 2025
               </h2>
@@ -298,7 +270,7 @@ export default function ArticleReduireAgefiph() {
           <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
             <div className="container mx-auto px-4 max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <Users className="h-8 w-8 text-lightyellow shrink-0" />
+                <Image src="/icons/team-icon.svg" alt="Next Impact" width={32} height={32} className="shrink-0" />
                 <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                   Next Impact : expertise tech + avantage OETH
                 </h2>
@@ -331,7 +303,7 @@ export default function ArticleReduireAgefiph() {
                 <Link href="/avantage-oeth">
                   <button className="inline-flex items-center gap-2 h-12 px-8 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300">
                     Simuler mon économie
-                    <Calculator className="h-4 w-4" />
+                    <ArrowRight className="h-4 w-4" />
                   </button>
                 </Link>
                 <Link href="/contact">

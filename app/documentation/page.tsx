@@ -2,6 +2,7 @@ import { BentoGrid } from "@/components/documentation/bento-grid";
 import { DemoShowcase } from "@/components/documentation/demo-showcase";
 import { AllCategoriesGrid } from "@/components/documentation/cross-category-nav";
 import { DocumentationToolsSection } from "@/components/documentation/documentation-internal-links";
+import { AuditContextualBanner } from "@/components/documentation/audit-contextual-banner";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
@@ -57,6 +58,7 @@ export default function DocumentationPage() {
       >
         <div className="container mx-auto py-12">
           <BentoGrid />
+          <AuditContextualBanner />
           <AllCategoriesGrid />
           <DocumentationToolsSection />
           <DemoShowcase />

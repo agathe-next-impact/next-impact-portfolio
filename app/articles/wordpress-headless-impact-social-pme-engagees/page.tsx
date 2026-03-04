@@ -3,18 +3,8 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
 import PageLayout from "@/components/page-layout";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Heart,
-  Zap,
-  BadgePercent,
-  Globe,
-  Leaf,
-  TrendingUp,
-  Users,
-  Shield,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
@@ -52,7 +42,7 @@ export default function ArticleImpactSocial() {
       <BreadcrumbJsonLd items={breadcrumbItems} />
 
       <PageLayout
-        titre="WordPress Headless + impact social : pourquoi les PME engagées choisissent Next Impact"
+        titre="WordPress Headless + impact social : Choisir Next Impact"
         sousTitre="Performance technique, emploi inclusif et avantage fiscal : un investissement web à triple bénéfice"
       >
         <article className="mt-8 mb-6 space-y-16 pt-20">
@@ -84,7 +74,7 @@ export default function ArticleImpactSocial() {
           {/* Section 1 : Le défi des PME engagées */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <Globe className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/globe-network-icon.svg" alt="Défi numérique" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Le défi numérique des PME engagées
               </h2>
@@ -140,7 +130,7 @@ export default function ArticleImpactSocial() {
           <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
             <div className="container mx-auto px-4 max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <Zap className="h-8 w-8 text-lightyellow shrink-0" />
+                <Image src="/icons/speed-icon.svg" alt="Performance" width={32} height={32} className="shrink-0" />
                 <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                   WordPress Headless : la performance sans compromis
                 </h2>
@@ -157,28 +147,28 @@ export default function ArticleImpactSocial() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
                   {[
                     {
-                      icon: Zap,
+                      iconSrc: "/icons/speed-icon.svg",
                       title: "Vitesse < 1 seconde",
                       description:
                         "Pages générées statiquement, CDN mondial, score PageSpeed maximum. Votre site se charge instantanément.",
                       color: "text-lightyellow",
                     },
                     {
-                      icon: Shield,
+                      iconSrc: "/icons/shield-icon.svg",
                       title: "Sécurité maximale",
                       description:
                         "WordPress n'est pas exposé publiquement. Pas de plugins front-end vulnérables. Surface d'attaque réduite à zéro.",
                       color: "text-lightblue",
                     },
                     {
-                      icon: TrendingUp,
+                      iconSrc: "/icons/growth-icon.svg",
                       title: "SEO natif",
                       description:
                         "Métadonnées contrôlées, Server-Side Rendering, Core Web Vitals optimisés. Google vous récompense.",
                       color: "text-coral",
                     },
                     {
-                      icon: Users,
+                      iconSrc: "/icons/team-icon.svg",
                       title: "Autonomie totale",
                       description:
                         "Vous gardez l'interface WordPress que vous connaissez. Aucune compétence technique requise pour modifier vos contenus.",
@@ -189,9 +179,7 @@ export default function ArticleImpactSocial() {
                       key={i}
                       className="border border-white/10 rounded-xl p-6 bg-darkblue/40"
                     >
-                      <item.icon
-                        className={`h-8 w-8 ${item.color} mb-3`}
-                      />
+                      <Image src={item.iconSrc} alt={item.title} width={32} height={32} className="mb-3" />
                       <h3 className="font-googletitre font-medium text-white mb-2">
                         {item.title}
                       </h3>
@@ -208,7 +196,7 @@ export default function ArticleImpactSocial() {
           {/* Section 3 : L'impact social */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <Heart className="h-8 w-8 text-coral shrink-0" />
+              <Image src="/icons/brand-reach-icon.svg" alt="Impact social" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Un prestataire TIH : l&apos;impact social concret
               </h2>
@@ -252,7 +240,7 @@ export default function ArticleImpactSocial() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                  <Zap className="h-12 w-12 text-lightyellow mb-4" />
+                  <Image src="/icons/speed-icon.svg" alt="Performance" width={48} height={48} className="mb-4" />
                   <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                     Performance
                   </h3>
@@ -264,7 +252,7 @@ export default function ArticleImpactSocial() {
                 </div>
 
                 <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                  <Heart className="h-12 w-12 text-coral mb-4" />
+                  <Image src="/icons/brand-reach-icon.svg" alt="Impact social" width={48} height={48} className="mb-4" />
                   <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                     Impact social
                   </h3>
@@ -276,7 +264,7 @@ export default function ArticleImpactSocial() {
                 </div>
 
                 <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                  <BadgePercent className="h-12 w-12 text-lightblue mb-4" />
+                  <Image src="/icons/analytics-icon.svg" alt="Avantage fiscal" width={48} height={48} className="mb-4" />
                   <h3 className="text-xl font-googletitre font-medium text-white mb-3">
                     Avantage fiscal
                   </h3>
@@ -293,7 +281,7 @@ export default function ArticleImpactSocial() {
           {/* Section 5 : Profils cibles */}
           <section className="container mx-auto px-4 max-w-5xl">
             <div className="flex items-center gap-3 mb-6">
-              <Leaf className="h-8 w-8 text-lightyellow shrink-0" />
+              <Image src="/icons/eco-design-icon.svg" alt="Structures" width={32} height={32} className="shrink-0" />
               <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
                 Pour quelles structures ?
               </h2>

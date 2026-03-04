@@ -1,19 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  FileCheck,
-  Zap,
-  Heart,
-  BadgePercent,
-  ArrowRight,
-  ShieldCheck,
-  AlertTriangle,
-  TrendingUp,
-  Scale,
-  Users,
-  Calendar,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PageLayout from "@/components/page-layout";
@@ -32,17 +21,7 @@ const fadeUp = {
 const steps = [
   {
     number: "01",
-    icon: FileCheck,
-    title: "Confiez votre projet web",
-    description:
-      "Vous travaillez avec Next Impact, prestataire TIH spécialisé WordPress Headless. Aucune démarche administrative supplémentaire de votre côté.",
-    color: "text-coral",
-    borderColor: "border-coral/20",
-    bgColor: "bg-coral/5",
-  },
-  {
-    number: "02",
-    icon: BadgePercent,
+    iconSrc: "/icons/analytics-icon.svg",
     title: "30% déductibles automatiquement",
     description:
       "30% du coût de main-d'œuvre de la prestation est déductible de votre contribution annuelle AGEFIPH. Le calcul est intégré à la facture.",
@@ -51,8 +30,8 @@ const steps = [
     bgColor: "bg-lightyellow/5",
   },
   {
-    number: "03",
-    icon: ShieldCheck,
+    number: "02",
+    iconSrc: "/icons/shield-icon.svg",
     title: "Attestation officielle",
     description:
       "Vous recevez une attestation de déductibilité annuelle conforme à l'article D.5212-7 du Code du travail, à joindre à votre déclaration OETH.",
@@ -107,7 +86,7 @@ export default function AvantageOethClient() {
             Comment ça marche ?
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {steps.map((step, i) => (
               <motion.div
                 key={step.number}
@@ -118,13 +97,8 @@ export default function AvantageOethClient() {
                 viewport={{ once: true, amount: 0.3 }}
                 className={`flex flex-col items-center text-center border ${step.borderColor} rounded-2xl p-8 ${step.bgColor} backdrop-blur-sm`}
               >
-                <span
-                  className={`text-5xl font-googletitre font-medium ${step.color} mb-4`}
-                >
-                  {step.number}
-                </span>
-                <step.icon className={`h-10 w-10 ${step.color} mb-4`} />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
+                <Image src={step.iconSrc} alt={step.title} width={60} height={60} className="mb-4" />
+                <h3 className="text-2xl font-googletitre font-medium text-white mb-3">
                   {step.title}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed text-sm">
@@ -152,28 +126,6 @@ export default function AvantageOethClient() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <motion.div
-              custom={0}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              className="border border-coral/20 rounded-2xl p-8 bg-mediumblue/70 backdrop-blur-sm"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="h-8 w-8 text-coral shrink-0" />
-                <h3 className="text-xl font-googletitre font-medium text-white">
-                  Fin de l&apos;écrêtement
-                </h3>
-              </div>
-              <p className="text-white/70 font-googletexte leading-relaxed">
-                Depuis le 1er janvier 2025, les mesures transitoires
-                d&apos;écrêtement sont terminées. Certaines dépenses
-                autrefois déductibles ne le sont plus. La contribution
-                AGEFIPH atteint désormais son montant réel pour toutes les
-                entreprises.
-              </p>
-            </motion.div>
 
             <motion.div
               custom={1}
@@ -184,8 +136,8 @@ export default function AvantageOethClient() {
               className="border border-lightyellow/20 rounded-2xl p-8 bg-mediumblue/70 backdrop-blur-sm"
             >
               <div className="flex items-center gap-3 mb-4">
-                <Scale className="h-8 w-8 text-lightyellow shrink-0" />
-                <h3 className="text-xl font-googletitre font-medium text-white">
+                <Image src="/icons/scale-icon.svg" alt="Sous-traitance TIH" width={50} height={50} className="shrink-0 mt-2" />
+                <h3 className="text-2xl font-googletitre font-medium text-white">
                   La sous-traitance TIH reste un levier actif
                 </h3>
               </div>
@@ -206,8 +158,8 @@ export default function AvantageOethClient() {
               className="border border-coral/20 rounded-2xl p-8 bg-mediumblue/70 backdrop-blur-sm"
             >
               <div className="flex items-center gap-3 mb-4">
-                <TrendingUp className="h-8 w-8 text-coral shrink-0" />
-                <h3 className="text-xl font-googletitre font-medium text-white">
+                <Image src="/icons/growth-icon.svg" alt="Surcontribution" width={50} height={50} className="shrink-0 mt-2" />
+                <h3 className="text-2xl font-googletitre font-medium text-white">
                   Surcontribution
                 </h3>
               </div>
@@ -231,8 +183,8 @@ export default function AvantageOethClient() {
               className="border border-lightblue/20 rounded-2xl p-8 bg-mediumblue/70 backdrop-blur-sm"
             >
               <div className="flex items-center gap-3 mb-4">
-                <Calendar className="h-8 w-8 text-lightblue shrink-0" />
-                <h3 className="text-xl font-googletitre font-medium text-white">
+                <Image src="/icons/workflow-icon.svg" alt="Barème" width={50} height={50} className="shrink-0 mt-2" />
+                <h3 className="text-2xl font-googletitre font-medium text-white">
                   Barème 2025
                 </h3>
               </div>
@@ -250,7 +202,31 @@ export default function AvantageOethClient() {
                   : 600 × SMIC = 7 128 € / TH manquant
                 </li>
               </ul>
+            </motion.div>            
+            
+            <motion.div
+              custom={0}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="border border-coral/20 rounded-2xl p-8 bg-mediumblue/70 backdrop-blur-sm"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <Image src="/icons/notification-icon.svg" alt="Écrêtement" width={60} height={60} className="shrink-0 mt-2" />
+                <h3 className="text-2xl font-googletitre font-medium text-white">
+                  Fin de l&apos;écrêtement
+                </h3>
+              </div>
+              <p className="text-white/70 font-googletexte leading-relaxed">
+                Depuis le 1er janvier 2025, les mesures transitoires
+                d&apos;écrêtement sont terminées. Certaines dépenses
+                autrefois déductibles ne le sont plus. La contribution
+                AGEFIPH atteint désormais son montant réel pour toutes les
+                entreprises.
+              </p>
             </motion.div>
+
           </div>
         </section>
 
@@ -258,13 +234,13 @@ export default function AvantageOethClient() {
         <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
           <div className="max-w-5xl mx-auto px-4">
             <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-              Un investissement à triple bénéfice
+              Un investissement à double bénéfice
             </p>
             <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-12 text-center">
-              Double impact, triple avantage
+              Pourquoi choisir un prestataire TIH spécialisé WordPress Headless ?
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <motion.div
                 custom={0}
                 variants={fadeUp}
@@ -273,8 +249,8 @@ export default function AvantageOethClient() {
                 viewport={{ once: true, amount: 0.3 }}
                 className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm"
               >
-                <Zap className="h-12 w-12 text-lightyellow mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
+                <Image src="/icons/speed-icon.svg" alt="Performance" width={60} height={60} />
+                <h3 className="text-2xl font-googletitre font-medium text-white mb-3">
                   Performance technique
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
@@ -284,7 +260,7 @@ export default function AvantageOethClient() {
                 </p>
               </motion.div>
 
-              <motion.div
+              {/*<motion.div
                 custom={1}
                 variants={fadeUp}
                 initial="hidden"
@@ -293,7 +269,7 @@ export default function AvantageOethClient() {
                 className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm"
               >
                 <Heart className="h-12 w-12 text-coral mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
+                <h3 className="text-2xl font-googletitre font-medium text-white mb-3">
                   Impact social
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
@@ -301,7 +277,7 @@ export default function AvantageOethClient() {
                   à l&apos;emploi inclusif et à la transition numérique de
                   l&apos;ESS. Votre projet web a un impact concret.
                 </p>
-              </motion.div>
+              </motion.div>*/}
 
               <motion.div
                 custom={2}
@@ -311,8 +287,8 @@ export default function AvantageOethClient() {
                 viewport={{ once: true, amount: 0.3 }}
                 className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm"
               >
-                <BadgePercent className="h-12 w-12 text-lightblue mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
+                <Image src="/icons/analytics-icon.svg" alt="Avantage fiscal" width={60} height={60} />
+                <h3 className="text-2xl font-googletitre font-medium text-white mb-3">
                   Avantage fiscal
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
@@ -338,7 +314,7 @@ export default function AvantageOethClient() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button className="h-12 px-8 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300">
+                <Button className="h-12 px-8 font-bold font-googletitre text-lg rounded-full shadow bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300">
                   Discuter de mon projet
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -346,7 +322,7 @@ export default function AvantageOethClient() {
               <Link href="/services">
                 <Button
                   variant="outline"
-                  className="h-12 px-8 font-googletitre text-base rounded-full border-white/20 text-mediumblue hover:bg-white/10"
+                  className="h-12 px-8 font-googletitre text-lg rounded-full border-white/20 text-mediumblue hover:bg-white/10"
                 >
                   Voir les offres
                 </Button>
@@ -368,7 +344,7 @@ export default function AvantageOethClient() {
             {[
               {
                 href: "/articles/reduire-contribution-agefiph-sous-traitance-tih",
-                title: "Réduire sa contribution AGEFIPH grâce à la sous-traitance TIH",
+                title: "Réduire sa contribution AGEFIPH",
                 description:
                   "Guide complet pour les RH et DAF : barème 2025, calcul de la déduction et stratégie d'optimisation.",
                 tag: "RH / DAF",
@@ -377,7 +353,7 @@ export default function AvantageOethClient() {
               },
               {
                 href: "/articles/attestation-deductibilite-tih-guide-entreprises",
-                title: "Attestation de déductibilité TIH : guide pratique",
+                title: "Attestation de déductibilité TIH",
                 description:
                   "Processus pas à pas, contenu de l'attestation, points de vigilance comptables et calendrier type.",
                 tag: "Comptabilité",
@@ -386,7 +362,7 @@ export default function AvantageOethClient() {
               },
               {
                 href: "/articles/wordpress-headless-impact-social-pme-engagees",
-                title: "WordPress Headless + impact social : pourquoi les PME engagées choisissent Next Impact",
+                title: "WordPress Headless + impact social",
                 description:
                   "Performance technique, emploi inclusif et avantage fiscal : un investissement web à triple bénéfice.",
                 tag: "RSE / Dirigeants",
@@ -403,7 +379,7 @@ export default function AvantageOethClient() {
                   >
                     {article.tag}
                   </span>
-                  <h3 className="text-lg font-googletitre font-medium text-white mb-2 group-hover:text-lightyellow transition-colors">
+                  <h3 className="text-xl font-googletitre font-medium text-white mb-2 group-hover:text-lightyellow transition-colors">
                     {article.title}
                   </h3>
                   <p className="text-white/60 font-googletexte text-sm leading-relaxed flex-1">
@@ -418,15 +394,17 @@ export default function AvantageOethClient() {
             ))}
           </div>
         </section>
+      </div>
 
         {/* FAQ */}
+        <div className="bg-mediumblue/80 backdrop-blur-md mt-20 pt-20">
         <FaqSchema
           faqs={faqs}
           title="Questions fréquentes sur l'OETH et le statut TIH"
           description="Tout ce que vous devez savoir sur la déduction AGEFIPH via la sous-traitance à un prestataire TIH."
           sectionId="faq-oeth"
         />
-      </div>
+        </div>
     </PageLayout>
   );
 }

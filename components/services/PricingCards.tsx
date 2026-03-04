@@ -1,19 +1,5 @@
-import {
-  Heart,
-  Scale,
-  Rocket,
-  ArrowRight,
-  Palette,
-  Code,
-  BookOpen,
-  Shield,
-  Search,
-  Database,
-  Zap,
-  Headphones,
-  Award,
-  BadgePercent,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -27,7 +13,7 @@ export function PricingCards() {
           <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
-                <Heart className="h-8 w-8 text-coral shrink-0" />
+                <Image src="/icons/brand-reach-icon.svg" alt="Solidaire" width={32} height={32} className="shrink-0" />
                 <h3 className="text-2xl font-googletitre font-semibold text-coral">
                   OFFRE SOLIDAIRE
                 </h3>
@@ -68,19 +54,19 @@ export function PricingCards() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-3">
-                    <Palette className="h-4 w-4 text-coral mt-1 shrink-0" />
+                    <Image src="/icons/frontend-icon.svg" alt="Design" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Design éco-conçu (base)</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Code className="h-4 w-4 text-coral mt-1 shrink-0" />
+                    <Image src="/icons/code-icon.svg" alt="Code" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">5 pages clés</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <BookOpen className="h-4 w-4 text-coral mt-1 shrink-0" />
+                    <Image src="/icons/content-icon.svg" alt="Formation" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Formation autonomie</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Shield className="h-4 w-4 text-coral mt-1 shrink-0" />
+                    <Image src="/icons/shield-icon.svg" alt="Sécurité" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Sécurité maximale</span>
                   </li>
                 </ul>
@@ -105,7 +91,7 @@ export function PricingCards() {
 
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
-                <Scale className="h-8 w-8 text-lightyellow shrink-0" />
+                <Image src="/icons/scale-icon.svg" alt="Équilibre" width={32} height={32} className="shrink-0" />
                 <h3 className="text-2xl font-googletitre font-semibold text-lightyellow">
                   OFFRE ÉQUILIBRE
                 </h3>
@@ -146,19 +132,19 @@ export function PricingCards() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-3">
-                    <Palette className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                    <Image src="/icons/frontend-icon.svg" alt="Design" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Design personnalisé</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Search className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                    <Image src="/icons/seo-icon.svg" alt="SEO" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Stratégie SEO avancée</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Database className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                    <Image src="/icons/database-icon.svg" alt="Migration" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Migration de données</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Zap className="h-4 w-4 text-lightyellow mt-1 shrink-0" />
+                    <Image src="/icons/speed-icon.svg" alt="Accompagnement" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Accompagnement stratégique</span>
                   </li>
                 </ul>
@@ -177,7 +163,7 @@ export function PricingCards() {
           <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
-                <Rocket className="h-8 w-8 text-lightblue shrink-0" />
+                <Image src="/icons/rocket-icon.svg" alt="Soutien" width={32} height={32} className="shrink-0" />
                 <h3 className="text-2xl font-googletitre font-semibold text-extralightblue">
                   OFFRE SOUTIEN
                 </h3>
@@ -218,19 +204,19 @@ export function PricingCards() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-3">
-                    <Palette className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                    <Image src="/icons/frontend-icon.svg" alt="UI/UX" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">UI/UX sur-mesure totale</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Zap className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                    <Image src="/icons/speed-icon.svg" alt="Performances" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Performances critiques</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Shield className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                    <Image src="/icons/shield-icon.svg" alt="Sécurité" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Sécurité renforcée</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Headphones className="h-4 w-4 text-lightblue mt-1 shrink-0" />
+                    <Image src="/icons/settings-icon.svg" alt="Support" width={16} height={16} className="mt-1 shrink-0" />
                     <span className="text-white/80 font-googletexte text-sm">Support prioritaire</span>
                   </li>
                 </ul>
@@ -241,7 +227,7 @@ export function PricingCards() {
                   Impact social
                 </p>
                 <div className="flex items-start gap-3">
-                  <Award className="h-4 w-4 text-lightblue mt-0.5 shrink-0" />
+                  <Image src="/icons/rocket-icon.svg" alt="Impact" width={16} height={16} className="mt-0.5 shrink-0" />
                   <p className="text-white/70 font-googletexte text-sm leading-relaxed">
                     <strong className="text-lightblue">Financeur</strong> : cette offre subventionne directement 40% d&apos;un projet solidaire.
                   </p>
@@ -250,7 +236,7 @@ export function PricingCards() {
 
               <div className="border border-lightblue/20 rounded-xl p-4 bg-lightblue/5">
                 <div className="flex items-center gap-2 mb-2">
-                  <BadgePercent className="h-4 w-4 text-lightblue shrink-0" />
+                  <Image src="/icons/analytics-icon.svg" alt="OETH" width={16} height={16} className="shrink-0" />
                   <span className="text-sm font-googletitre font-medium text-lightblue">
                     Avantage OETH
                   </span>
