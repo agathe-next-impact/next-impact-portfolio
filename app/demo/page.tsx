@@ -39,6 +39,14 @@ export default function DemoPage() {
         embedUrl="https://www.youtube.com/embed/I1qi5o31Lnk"
       />
       <VideoObjectJsonLd
+        name="WordPress Headless pour Le Café citoyen — Site vitrine"
+        description="Découvrez le site vitrine du Café citoyen d'Auger-Saint-Vincent, propulsé par WordPress Headless et Next.js, avec les événemeents et l'histoire du café."
+        thumbnailUrl="/img/desktop-screen-cafe-citoyen.png"
+        uploadDate="2025-03-01"
+        contentUrl="https://youtu.be/8aVVoDFakCY"
+        embedUrl="https://www.youtube.com/embed/8aVVoDFakCY"
+      />
+      <VideoObjectJsonLd
         name="WordPress Headless pour Comme des Fous — Média participatif"
         description="Le site du média participatif Comme des Fous, propulsé par WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/6vUSbG6F50w/maxresdefault.jpg"

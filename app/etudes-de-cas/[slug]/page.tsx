@@ -86,6 +86,39 @@ interface CaseStudy {
 // Données d'exemple (à remplacer par vos vraies données)
 const CASE_STUDIES: CaseStudy[] = [
   {
+    id: "17",
+    slug: "cafe-citoyen",
+    title: "Café citoyen",
+    description: "Création du site vitrine du Café citoyen d'Auger-Saint-Vincent : un site WordPress Headless avec Next.js, pour promouvoir les événements et faciliter les réservations de cette association citoyenne.",
+    imageUrl: "/img/desktop-screen-cafe-citoyen.png",
+    clientType: "Association",
+    clientName: "Café citoyen d'Auger-Saint-Vincent",
+    date: {
+      month: 3,
+      year: 2026,
+    },
+    tags: ["Association", "WordPress", "Headless", "Next.js"],
+    objectives: [
+      "Créer un site vitrine pour le Café citoyen d'Auger-Saint-Vincent",
+      "Mettre en avant les événements et les actualités du café",
+      "Faciliter la prise de contact et les réservations",
+    ],
+    results: [
+      "Site vitrine moderne et épuré",
+      "Section d'actualités et d'événements à jour",
+      "Formulaire de contact fonctionnel",
+    ],
+    youtubeVideoId: "8aVVoDFakCY",
+    gallery: {
+      url: "/img/desktop-screen-cafe-citoyen.png",
+      alt: "Page d'accueil du site Café citoyen",
+    },
+    detailedDescription: `Le Café citoyen d'Auger-Saint-Vincent, un lieu de rencontre et d'échange pour les citoyens, souhaitait créer un site vitrine pour promouvoir ses activités et faciliter la prise de contact. L'objectif était de créer un site moderne et fonctionnel qui reflète l'esprit convivial du café.\n\nJ'ai développé un site WordPress en mode Headless avec Next.js, offrant une expérience utilisateur fluide et rapide. Le design est épuré, mettant en avant les événements et les actualités du café.\n\nLe site comprend une section d'actualités régulièrement mise à jour, une page dédiée aux événements à venir et un formulaire de contact pour faciliter les réservations et les demandes d'information.`,
+    technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
+    duration: "3 semaines",
+    website: "https://cafecitoyen.art",
+  },
+  {
     id: "16",
     slug: "comme-des-fous-jeux",
     title: "Comme des fous - Jeux en ligne",
@@ -754,6 +787,11 @@ function getSimilarCaseStudies(
 
 // Chiffres clés par étude de cas
 const RESULT_HIGHLIGHTS: Record<string, { value: string; label: string }[]> = {
+  "cafe-citoyen": [
+    { value: "+20%", label: "Visites du lieu" },
+    { value: "x3", label: "Abonnements à la newsletter" },
+    { value: "Headless", label: "Architecture Next.js" },
+  ],
   "comme-des-fous-jeux": [
     { value: "15 jours", label: "Délai de livraison" },
     { value: "100%", label: "Expérience interactive" },

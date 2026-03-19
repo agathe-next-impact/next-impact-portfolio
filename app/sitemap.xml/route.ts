@@ -50,6 +50,8 @@ async function getDocumentationCategories() {
 
 // Études de cas — tous les slugs existants
 const caseStudiesSlugs = [
+  "cafe-citoyen",
+  "comme-des-fous-jeux",
   "comme-des-fous",
   "proditec",
   "doleances",

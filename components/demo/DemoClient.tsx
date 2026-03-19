@@ -18,18 +18,26 @@ function toYoutubeEmbed(url: string) {
 
 const mainVideo = {
   title: "Présentation complète de la plateforme",
-  url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
-  websiteLink: "https://next-event.fr",
+  url: "https://youtu.be/6vUSbG6F50w",
+  websiteLink: "https://commedesfous.com",
 };
 
 const demoVideos = [
   {
     title: "Démo 3",
-    url: "https://youtu.be/6vUSbG6F50w",
-    projectLink: "/etudes-de-cas/comme-des-fous",
-    projectName: "WordPress Headless pour Comme des Fous",
+    url: "https://youtu.be/8aVVoDFakCY?si=kbqPlZgPDfHOF43f",
+    projectLink: "/etudes-de-cas/cafe-citoyen",
+    projectName: "WordPress Headless pour le Café citoyen",
     projectDescription:
-      "Le site du média participatif Comme des Fous, propulsé par WordPress Headless et Next.js",
+      "Le site vitrine du Café citoyen d'Auger-Saint-Vincent, propulsé par WordPress Headless et Next.js",
+  },
+  {
+    title: "Démo 1",
+    url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
+    projectLink: "/etudes-de-cas/next-event",
+    projectName: "WordPress Headless pour Next Event",
+    projectDescription:
+      "Une démonstration complète de la plateforme Next Event, propulsée par WordPress Headless et Next.js",
   },
   {
     title: "Démo 1",

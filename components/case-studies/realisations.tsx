@@ -10,6 +10,16 @@ import { title } from "node:process";
 // Définition des projets
 const PROJECTS = [
   {
+    id: 17,
+    title: "Café citoyen",
+    type: "headless",
+    image: "/img/desktop-screen-cafe-citoyen.png",
+    alt: "Site vitrine du Café citoyen",
+    description: "Site vitrine du Café citoyen",
+    link: "/etudes-de-cas/cafe-citoyen",
+    tab: ["derniers", "headless"],
+  },
+  {
     id: 16,
     title: "Comme des fous - Jeux en ligne",
     type: "headless",

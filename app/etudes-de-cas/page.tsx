@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const caseStudyItems = [
+  { name: "Café citoyen", url: "/etudes-de-cas/cafe-citoyen", description: "Site vitrine du Café citoyen" },
   { name: "Comme des fous - Jeux en ligne", url: "/etudes-de-cas/comme-des-fous-jeux", description: "Jeux en ligne du média participatif Comme des fous" },
   { name: "Comme des fous", url: "/etudes-de-cas/comme-des-fous", description: "Site du média participatif Comme des fous" },
   { name: "Next Event", url: "/etudes-de-cas/next-event", description: "Billetterie événementielle WordPress Headless" },
