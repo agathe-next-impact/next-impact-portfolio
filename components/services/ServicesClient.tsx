@@ -10,6 +10,7 @@ import { ServicesComparisonTable } from "@/components/services/ServicesCompariso
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import TarifsESSCarousel from "@/components/tarifs/TarifsESSCarousel";
+import { HeadlessExplainer } from "@/components/headless-explainer";
 import PageLayout from "@/components/page-layout";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { SERVICES_PAGE_VARIANTS } from "@/lib/homepage-profiles";
@@ -23,12 +24,12 @@ export default function ServicesClient() {
   return (
     <PageLayout
       titre={variant.titre}
-      sousTitre={variant.sousTitre}
+      sousTitre=""
     >
       <div className="mt-8 mb-6 space-y-24">
 
-        {/* Carousel ESS */}
-        <section className="container mx-auto px-4">
+        {/* TODO: remove after validation — ancien carousel ESS */}
+        {/* <section className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto mb-12">
             <AnimatePresence mode="wait">
               <motion.p
@@ -44,6 +45,11 @@ export default function ServicesClient() {
             </AnimatePresence>
           </div>
           <TarifsESSCarousel />
+        </section> */}
+
+        {/* Comprendre le WordPress Headless — parcours interactif */}
+        <section className="container mx-auto px-4 pb-12">
+          <HeadlessExplainer />
         </section>
 
         {/* 3 Offres tarifaires */}

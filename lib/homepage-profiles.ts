@@ -99,9 +99,9 @@ export interface ServicesPageVariant {
 
 export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Services & Tarifs",
+    titre: "WordPress en mode Headless",
     sousTitre:
-      "Notre tarification solidaire est basée sur la péréquation : la réussite des projets « Business » finance l'accessibilité numérique du secteur associatif.",
+      "Découvrez comment transformer votre site WordPress en un site ultra-rapide, moderne et sécurisé grâce à l'architecture headless.",
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel impact sur votre budget ?",
     budgetCards: {
@@ -148,9 +148,9 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   decideur: {
-    titre: "Investir dans votre site",
+    titre: "WordPress en mode Headless",
     sousTitre:
-      "Un investissement mesurable : performance, SEO et conversion. Notre modèle de péréquation garantit un tarif juste selon votre structure.",
+      "Transformez votre site WordPress en un moteur de croissance : plus rapide, plus sûr, plus performant. ROI mesurable en quelques mois.",
     carouselLabel: "Pourquoi investir dans le Headless ?",
     budgetTitle: "Quel retour sur investissement ?",
     budgetCards: {
@@ -197,9 +197,9 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   utilisateur: {
-    titre: "Votre site, simplement",
+    titre: "WordPress en mode Headless",
     sousTitre:
-      "Vous gardez WordPress pour gérer vos contenus. Nous nous occupons de la technique pour un site rapide, moderne et agréable à utiliser.",
+      "Gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien.",
     carouselLabel: "Pourquoi c'est plus simple ?",
     budgetTitle: "Qu'est-ce qui change pour vous ?",
     budgetCards: {
@@ -246,7 +246,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   developpeur: {
-    titre: "Stack & Architecture",
+    titre: "WordPress en mode Headless",
     sousTitre:
       "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel. Architecture découplée et maintenable.",
     carouselLabel: "Pourquoi cette stack ?",
