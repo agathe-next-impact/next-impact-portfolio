@@ -16,10 +16,10 @@ function TabPanel({ tab }: { tab: (typeof HEADLESS_TABS)[number] }) {
     case "timeline":
       return (
         <div>
-          <p className="text-white/70 font-googletexte text-sm md:text-base mb-6 max-w-2xl">
+          <p className="text-white/70 font-googletexte text-sm mb-6 max-w-2xl">
             {content.description}
           </p>
-          <div className="max-w-lg">
+          <div className="max-w-lg pt-6">
             {content.steps.map((step, i) => (
               <TimelineStep
                 key={step.label}
@@ -53,7 +53,7 @@ export default function HeadlessExplainer() {
         <nav
           role="tablist"
           aria-label="Parcours WordPress Headless"
-          className="flex overflow-x-auto scrollbar-none border-b border-white/10 mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center gap-1"
+          className="flex flex-col sm:flex-row sm:overflow-x-auto scrollbar-none border-b border-white/10 mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center gap-1"
         >
           {HEADLESS_TABS.map((tab) => (
             <button
@@ -64,7 +64,7 @@ export default function HeadlessExplainer() {
               aria-controls={`panel-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "shrink-0 px-4 py-3 text-lg font-googletitre font-medium transition-colors relative whitespace-nowrap",
+                "px-4 py-3 text-base sm:text-lg font-googletitre font-medium transition-colors relative sm:shrink-0 sm:whitespace-nowrap text-left",
                 activeTab === tab.id
                   ? "text-lightyellow"
                   : "text-white/50 hover:text-white/80"
@@ -72,10 +72,16 @@ export default function HeadlessExplainer() {
             >
               {tab.label}
               {activeTab === tab.id && (
-                <motion.div
-                  layoutId="headless-tab-indicator"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-lightyellow"
-                />
+                <>
+                  <motion.div
+                    layoutId="headless-tab-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-lightyellow hidden sm:block"
+                  />
+                  <motion.div
+                    layoutId="headless-tab-indicator-mobile"
+                    className="absolute top-0 bottom-0 left-0 w-0.5 bg-lightyellow sm:hidden"
+                  />
+                </>
               )}
             </button>
           ))}

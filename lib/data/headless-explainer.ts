@@ -71,16 +71,12 @@ export const HEADLESS_TABS: Tab[] = [
         "WordPress gere votre contenu en back-office, Next.js propulse l'interface utilisateur a la vitesse de l'eclair. Les deux communiquent via une API REST ou GraphQL, totalement decouplees.",
       steps: [
         {
-          label: "Vous editez dans WP",
+          label: "Une administration WordPress familiere",
           description: "Interface classique familiere, aucune formation necessaire",
         },
         {
-          label: "L'API transmet les donnees",
-          description: "JSON propre, securise, decouple du front-end",
-        },
-        {
-          label: "Next.js affiche en <1s",
-          description: "Pages generees statiquement, distribuees sur CDN mondial",
+          label: "Une interface Next.js rapide et moderne pour vos visiteurs",
+          description: "Experience utilisateur fluide, design personnalise, animations, etc.",
         },
       ],
       variant: "timeline",

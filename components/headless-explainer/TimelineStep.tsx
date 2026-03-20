@@ -9,10 +9,10 @@ interface TimelineStepProps {
 
 export default function TimelineStep({ step, label, description, isLast = false }: TimelineStepProps) {
   return (
-    <div className="relative flex gap-4">
+    <div className="relative flex gap-8">
       {/* Connector + circle */}
       <div className="flex flex-col items-center">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lightblue/20 border border-lightblue/40 text-lightblue font-googletitre font-medium text-sm">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lightblue/20 border border-lightblue/40 text-lightblue font-googletitre font-medium text-base">
           {step}
         </div>
         {!isLast && (
@@ -22,7 +22,7 @@ export default function TimelineStep({ step, label, description, isLast = false 
 
       {/* Content */}
       <div className={cn("pb-8", isLast && "pb-0")}>
-        <p className="font-googletitre font-medium text-white text-base">{label}</p>
+        <p className="font-googletitre font-medium text-white text-lg">{label}</p>
         <p className="text-white/60 font-googletexte text-sm mt-1">{description}</p>
       </div>
     </div>
