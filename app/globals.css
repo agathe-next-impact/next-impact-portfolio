@@ -518,3 +518,19 @@ body {
 /* --- li orphelin (ligne 376 base layer) --- */
 .light li { color: #021373; }
 
+/* === CTA coral/orange : texte blanc forcé (light + dark) === */
+button[class*="bg-coral"], button[class*="bg-orange"],
+a[class*="bg-coral"],      a[class*="bg-orange"] {
+  color: #FFFFFF !important;
+}
+button[class*="bg-coral"] *, button[class*="bg-orange"] *,
+a[class*="bg-coral"] *,      a[class*="bg-orange"] * {
+  color: #FFFFFF !important;
+}
+.light button[class*="bg-coral"], .light button[class*="bg-orange"],
+.light a[class*="bg-coral"],      .light a[class*="bg-orange"],
+.light button[class*="bg-coral"] *, .light button[class*="bg-orange"] *,
+.light a[class*="bg-coral"] *,      .light a[class*="bg-orange"] * {
+  color: #FFFFFF !important;
+}
+
