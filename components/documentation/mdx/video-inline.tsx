@@ -45,7 +45,7 @@ export function VideoInline({ url, title, caption }: VideoInlineProps) {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-darkblue/40 group-hover:bg-darkblue/20 transition-colors flex items-center justify-center">
-              <div className="h-16 w-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+              <div className="h-16 w-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Play className="h-7 w-7 text-darkblue ml-1" />
               </div>
             </div>

@@ -314,7 +314,7 @@ export default function AvantageOethClient() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button className="h-12 px-8 font-bold font-googletitre text-lg rounded-full shadow bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300">
+                <Button className="h-12 px-8 font-bold font-googletitre text-lg rounded-full bg-lightyellow text-darkblue transition-all duration-300">
                   Discuter de mon projet
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

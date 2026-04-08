@@ -21,7 +21,7 @@ export function ArticleSequentialNav({ prev, next }: ArticleSequentialNavProps) 
           className={cn(
             "group flex flex-col gap-2 rounded-3xl p-5 border transition-all duration-300",
             "bg-darkblue/50 backdrop-blur-sm border-lightblue/10",
-            "hover:border-lightblue/30 hover:shadow-xl hover:shadow-regularblue/10"
+            "hover:border-lightblue/30 "
           )}
         >
           <span className="flex items-center gap-1.5 text-xs text-white/80 font-googletexte">
@@ -42,7 +42,7 @@ export function ArticleSequentialNav({ prev, next }: ArticleSequentialNavProps) 
           className={cn(
             "group flex flex-col gap-2 rounded-3xl p-5 border transition-all duration-300 text-right",
             "bg-darkblue/50 backdrop-blur-sm border-lightblue/10",
-            "hover:border-lightblue/30 hover:shadow-xl hover:shadow-regularblue/10"
+            "hover:border-lightblue/30 "
           )}
         >
           <span className="flex items-center justify-end gap-1.5 text-xs text-white/80 font-googletexte">

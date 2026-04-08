@@ -103,7 +103,7 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="relative w-full max-w-md border border-white/10 rounded-2xl bg-mediumblue/90 backdrop-blur-xl shadow-2xl p-5 sm:p-6 md:p-8">
+            <div className="relative w-full max-w-md border border-white/10 rounded-2xl bg-mediumblue/90 backdrop-blur-xl p-5 sm:p-6 md:p-8">
               {/* Close button */}
               <button
                 type="button"
@@ -128,7 +128,7 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
                   </p>
                   <Button
                     onClick={onClose}
-                    className="h-12 px-8 font-bold font-googletitre rounded-full shadow bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 cursor-pointer"
+                    className="h-12 px-8 font-bold font-googletitre rounded-full bg-coral text-darkblue transition-all duration-300 cursor-pointer"
                   >
                     Fermer
                   </Button>
@@ -178,7 +178,7 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
                       disabled={status === "loading"}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full h-12 rounded-full bg-coral text-darkblue font-bold font-googletitre shadow hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 disabled:opacity-50 cursor-pointer"
+                      className="w-full h-12 rounded-full bg-coral text-darkblue font-bold font-googletitre transition-all duration-300 disabled:opacity-50 cursor-pointer"
                     >
                       {status === "loading" ? "Envoi en cours..." : "Envoyer ma demande"}
                     </motion.button>

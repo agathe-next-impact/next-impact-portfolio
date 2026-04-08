@@ -99,7 +99,7 @@ export default function Hero() {
                 <h1 className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
                   {variant.headline}
                 </h1>
-                <p className="mt-2 text-4xl lg:text-5xl text-lightyellow font-googletitre font-medium">
+                <p className="mt-2 text-4xl lg:text-5xl text-coral font-googletitre font-medium">
                   {variant.subHeadline}
                 </p>
               </motion.div>
@@ -150,7 +150,7 @@ export default function Hero() {
                   {variant.valueProposition}
                 </p>
                 <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
-                  <Button className="mx-0 inline-flex bg-orange py-2 px-8 rounded-2xl shadow-lg shadow-orange/25 hover:shadow-[0_0_20px_rgba(242,159,5,0.45)] hover:scale-[1.02] transition-all duration-300 ease-in">
+                  <Button className="mx-0 inline-flex bg-orange py-2 px-8 rounded-2xl hover:scale-[1.02] transition-all duration-300 ease-in">
                     <Link
                       href={variant.ctaPrimary.href}
                       className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
@@ -159,7 +159,7 @@ export default function Hero() {
                     </Link>
                     <LucideArrowUpRight className="w-8 h-8 text-darkblue" />
                   </Button>
-                  <Button className="mx-0 inline-flex border border-white/30 bg-transparent py-2 px-8 rounded-2xl hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300 ease-in">
+                  <Button className="mx-0 inline-flex border border-white/30 bg-transparent py-2 px-8 rounded-2xl hover:bg-white/10 transition-all duration-300 ease-in">
                     <Link
                       href={variant.ctaSecondary.href}
                       className="gap-2 text-white font-googletitre font-semibold text-lg"
@@ -192,20 +192,20 @@ export default function Hero() {
               </div>
 
               {/* Floating badges */}
-              <div className="absolute left-6 top-6 bg-extralightblue py-2 px-4 rounded-full shadow-lg flex items-center gap-2 animate-float">
+              <div className="absolute left-6 top-6 bg-extralightblue py-2 px-4 rounded-full flex items-center gap-2 animate-float">
                 <span className="h-3 w-3 bg-green-500 rounded-full"></span>
                 <span className="text-sm font-medium text-black">
                   Disponible
                 </span>
               </div>
 
-              <div className="absolute right-4 bottom-12 bg-extralightblue py-2 px-4 rounded-full shadow-lg animate-float-delayed">
+              <div className="absolute right-4 bottom-12 bg-extralightblue py-2 px-4 rounded-full animate-float-delayed">
                 <span className="text-sm font-medium text-black">
                   8+ ans d'expérience
                 </span>
               </div>
 
-              <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full shadow-lg animate-float hidden md:flex items-center gap-1.5">
+              <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full animate-float hidden md:flex items-center gap-1.5">
                 <span className="text-xs font-medium text-darkblue">
                   Prestataire TIH — Déduction AGEFIPH
                 </span>
@@ -224,7 +224,7 @@ export default function Hero() {
         <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative px-4 md:px-20 md:mt-8 xl:mt-0 xl:px-0">
           <div className="text-left mt-1 xxl:mt-24 lg:pt-6 z-10">
             <h3 className="font-googletexte text-2xl lg:text-3xl">
-              <span className="text-4xl md:text-5xl font-googletitre text-lightyellow font-medium">
+              <span className="text-3xl md:text-4xl font-googletitre text-coral dark:text-lightyellow font-medium">
                 {variant.auditSubtitle}
               </span>
               {" "}

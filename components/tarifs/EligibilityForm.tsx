@@ -155,7 +155,7 @@ export default function EligibilityForm() {
                   <ChevronDown className={`ml-2 h-4 w-4 shrink-0 text-white/50 transition-transform ${statusOpen ? "rotate-180" : ""}`} />
                 </button>
                 {statusOpen && (
-                  <ul className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/10 bg-darkblue/95 backdrop-blur-md shadow-lg">
+                  <ul className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/10 bg-darkblue/95 backdrop-blur-md ">
                     {statuses.map((option) => (
                       <li key={option}>
                         <button

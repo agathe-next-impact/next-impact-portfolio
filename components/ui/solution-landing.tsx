@@ -33,7 +33,7 @@ export default function SolutionLanding({
                 alt={title}
                 width={600}
                 height={400}
-                className="w-full h-auto rounded-lg shadow-lg mb-8"
+                className="w-full h-auto rounded-lg mb-8"
             />
         </div>
         <div className="max-w-2xl mx-auto">

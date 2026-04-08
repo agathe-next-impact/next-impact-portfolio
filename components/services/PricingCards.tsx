@@ -10,7 +10,7 @@ export function PricingCards() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {/* Offre Solidaire */}
-          <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
+          <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg duration-300">
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <Image src="/icons/brand-reach-icon.svg" alt="Solidaire" width={32} height={32} className="shrink-0" />
@@ -74,7 +74,7 @@ export function PricingCards() {
             </div>
 
             <Link href="/contact" className="mt-8">
-              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full shadow bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300">
+              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full bg-coral text-darkblue transition-all duration-300">
                 Déterminer mon offre
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -82,7 +82,7 @@ export function PricingCards() {
           </div>
 
           {/* Offre Équilibre */}
-          <div className="flex flex-col border-2 border-lightyellow/30 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300 relative">
+          <div className="flex flex-col border-2 border-lightyellow/30 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg duration-300 relative">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
               <span className="bg-lightyellow text-darkblue text-sm font-googletitre font-semibold px-4 py-1 rounded-full">
                 Recommandé ESS
@@ -152,7 +152,7 @@ export function PricingCards() {
             </div>
 
             <Link href="/contact" className="mt-8">
-              <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow hover:bg-lightyellow/90 text-darkblue">
+              <Button className="w-full h-12 font-bold font-googletitre text-base rounded-full bg-lightyellow hover:bg-lightyellow/90 text-darkblue">
                 Déterminer mon offre
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -160,7 +160,7 @@ export function PricingCards() {
           </div>
 
           {/* Offre Soutien */}
-          <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-lg hover:shadow-lg transition-shadow duration-300">
+          <div className="flex flex-col border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-lg duration-300">
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <Image src="/icons/rocket-icon.svg" alt="Soutien" width={32} height={32} className="shrink-0" />
@@ -252,7 +252,7 @@ export function PricingCards() {
             </div>
 
             <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" className="mt-8" target="_blank" rel="noopener noreferrer">
-              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full shadow bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300">
+              <Button className="w-full h-12 font-bold font-googletitre text-base md:text-lg rounded-full bg-regularblue text-darkblue transition-all duration-300">
                 Discuter de mon projet
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

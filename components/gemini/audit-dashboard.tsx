@@ -60,7 +60,7 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
       </div>
 
       {/* Carte 2: Verdict */}
-      <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
+      <div className="p-6 rounded-2xl bg-white/60 border border-white/50 flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
         <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
             <Activity className="size-4"/> Verdict Stratégique
         </h3>

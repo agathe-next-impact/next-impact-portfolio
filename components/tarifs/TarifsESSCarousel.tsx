@@ -207,7 +207,7 @@ const slides = [
     content: (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-mediumblue/80 p-4 sm:p-6 rounded-2xl text-white shadow-lg transition-transform border border-white/10">
+          <div className="bg-mediumblue/80 p-4 sm:p-6 rounded-2xl text-white transition-transform border border-white/10">
             <Image 
               src="/img/desktop-screen-lesdoleances.png"
               alt="Les Doléances"
@@ -227,7 +227,7 @@ const slides = [
               Gain en légitimité et reconnaissance comme acteur principal de la démarche de publicisation nationale des cahiers de doléances de 2018.
             </p>
           </div>
-          <div className="bg-mediumblue/80 p-4 sm:p-6 rounded-2xl text-white shadow-lg hover:scale-105 transition-transform border border-white/10">
+          <div className="bg-mediumblue/80 p-4 sm:p-6 rounded-2xl text-white hover:scale-105 transition-transform border border-white/10">
             <Image 
               src="/img/desktop-screen-cdf.jpg"
               alt="Comme des fous"

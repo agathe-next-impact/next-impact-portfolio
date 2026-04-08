@@ -32,7 +32,7 @@ export function MetadataPreview({
   const domain = displayUrl.split("/")[0];
 
   return (
-    <div className="border rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-lg">
+    <div className="border rounded-lg overflow-hidden bg-white dark:bg-gray-800 ">
       {/* Tabs */}
       <div className="flex border-b bg-gray-50 dark:bg-gray-900">
         <button

@@ -1181,7 +1181,7 @@ export default async function CaseStudyPage({
                 href={`/etudes-de-cas/${study.slug}`}
                 className="block rounded-lg"
               >
-                <Card className="h-full overflow-hidden bg-mediumblue/40 backdrop-blur-lg border-1 border-white/10 rounded-2xl shadow-lg">
+                <Card className="h-full overflow-hidden bg-mediumblue/40 backdrop-blur-lg border-1 border-white/10 rounded-2xl ">
                   <div className="relative aspect-video overflow-hidden">
                     <Image
                       src={study.gallery.url || "/placeholder.svg"}

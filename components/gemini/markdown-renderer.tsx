@@ -27,7 +27,7 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
   const renderer = new marked.Renderer();
   renderer.table = (table) => {
     return `
-      <div class="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 shadow-sm bg-white/50 backdrop-blur-sm">
+      <div class="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 bg-white/50 backdrop-blur-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead class="bg-mediumblue/5 text-mediumblue font-googletitre border-b border-mediumblue/10">
@@ -88,7 +88,7 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
         prose-strong:text-mediumblue prose-strong:font-semibold
         prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
         prose:code:text-regularblue prose:code:text-googletitre prose-code:font-medium
-        prose-img:rounded-xl prose-img:shadow-lg
+        prose-img:rounded-xl 
         ${className}`}
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />

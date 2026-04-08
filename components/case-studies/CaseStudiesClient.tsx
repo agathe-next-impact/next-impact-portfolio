@@ -39,7 +39,7 @@ export default function CaseStudiesClient() {
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
             >
-              <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full shadow bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300">
+              <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full bg-coral text-darkblue transition-all duration-300">
                 {variant.ctaLabel}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>

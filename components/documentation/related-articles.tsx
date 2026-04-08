@@ -46,7 +46,7 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
             <Link
               key={article.slug}
               href={`/documentation/${article.category}/${article.slug}`}
-              className="group relative rounded-3xl border border-lightblue/10 p-5 hover:border-lightblue/30 hover:shadow-xl hover:shadow-regularblue/10 transition-all duration-300 bg-darkblue/50 backdrop-blur-sm overflow-hidden"
+              className="group relative rounded-3xl border border-lightblue/10 p-5 hover:border-lightblue/30 transition-all duration-300 bg-darkblue/50 backdrop-blur-sm overflow-hidden"
             >
               <span className="absolute top-4 right-4 text-5xl font-googletitre font-bold text-white/[0.03]">
                 {i + 1}

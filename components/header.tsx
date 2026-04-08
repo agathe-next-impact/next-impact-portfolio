@@ -105,7 +105,7 @@ export function NavBar() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -300, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="fixed top-0 left-0 z-50 h-full w-full shadow-lg"
+                className="fixed top-0 left-0 z-50 h-full w-full "
               >
                 <div className="flex items-center justify-between px-6 py-2 bg-darkblue border-b">
                   <BrandLogo
@@ -239,7 +239,7 @@ ListItem.displayName = "ListItem";
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between border-b top-0 z-50 px-4 shadow-sm sticky bg-mediumblue/60 backdrop-blur-md h-16">
+    <header className="flex items-center justify-between border-b top-0 z-50 px-4 sticky bg-mediumblue/60 backdrop-blur-md h-16">
       {/* Logo */}
       <div className="shrink-0 pt-1">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">

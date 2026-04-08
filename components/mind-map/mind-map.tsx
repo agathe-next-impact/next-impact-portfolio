@@ -403,9 +403,6 @@ function MindMapNodeCard({
             : `rgba(113, 158, 217, 0.1)`,
           borderLeftWidth: isRoot ? 1 : 3,
           borderLeftColor: node.color,
-          boxShadow: isExpanded
-            ? `0 0 24px ${node.color}10, 0 8px 24px rgba(2,15,89,0.4)`
-            : `0 2px 12px rgba(2,15,89,0.3)`,
         }}
       >
         {/* Hover glow */}

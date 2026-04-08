@@ -242,7 +242,7 @@ export default function ROISimulator() {
                   <SelectTrigger className="bg-white/10 border-white/20 text-white hover:bg-white/15 transition-colors h-11 rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-darkblue/95 backdrop-blur-xl border-white/10 rounded-xl shadow-2xl shadow-black/40">
+                  <SelectContent className="bg-darkblue/95 backdrop-blur-xl border-white/10 rounded-xl ">
                     {Object.entries(sectors).map(([key, data]) => (
                       <SelectItem
                         key={key}

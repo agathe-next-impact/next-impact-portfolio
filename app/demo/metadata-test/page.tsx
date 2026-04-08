@@ -34,7 +34,7 @@ export default function MetadataTestPage() {
           <div className="flex justify-center gap-4">
             <Link
               href="/demo/metadata-test"
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              className="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700"
             >
               Tester les métadonnées
             </Link>

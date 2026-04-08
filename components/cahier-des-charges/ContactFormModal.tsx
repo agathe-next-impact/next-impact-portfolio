@@ -91,7 +91,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="rounded-2xl border border-white/10 bg-darkblue/80 backdrop-blur-xl shadow-2xl shadow-black/40 max-w-md w-full p-6 md:p-8 relative"
+          className="rounded-2xl border border-white/10 bg-darkblue/80 backdrop-blur-xl max-w-md w-full p-6 md:p-8 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
@@ -183,7 +183,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 shadow font-googletitre disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold bg-coral text-darkblue transition-all duration-300 font-googletitre disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={sending}
               >
                 {sending ? (

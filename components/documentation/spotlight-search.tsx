@@ -112,7 +112,7 @@ export function SpotlightSearch() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed left-4 right-4 top-[15%] sm:left-1/2 sm:right-auto sm:top-[20%] sm:w-[calc(100%-2rem)] z-[70] max-w-lg sm:-translate-x-1/2 rounded-3xl border border-lightblue/20 bg-darkblue/90 backdrop-blur-xl shadow-2xl shadow-darkblue/50 overflow-hidden"
+            className="fixed left-4 right-4 top-[15%] sm:left-1/2 sm:right-auto sm:top-[20%] sm:w-[calc(100%-2rem)] z-[70] max-w-lg sm:-translate-x-1/2 rounded-3xl border border-lightblue/20 bg-darkblue/90 backdrop-blur-xl overflow-hidden"
           >
             {/* Search input */}
             <div className="flex items-center gap-2 sm:gap-3 border-b border-lightblue/10 px-3 sm:px-5 py-3 sm:py-4">

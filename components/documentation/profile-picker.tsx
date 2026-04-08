@@ -39,7 +39,7 @@ export function ProfilePicker() {
               onClick={() => setProfile(id)}
               className={cn(
                 "group relative overflow-hidden rounded-3xl p-6 md:p-8 border border-lightblue/90",
-                "cursor-pointer text-left transition-all duration-300 hover:shadow-2xl hover:shadow-regularblue/10 hover:border-lightblue/20",
+                "cursor-pointer text-left transition-all duration-300 hover:border-lightblue/20",
                 "bg-mediumblue/80 backdrop-blur-sm",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lightblue/60 focus-visible:ring-offset-2 focus-visible:ring-offset-darkblue"
               )}

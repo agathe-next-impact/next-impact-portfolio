@@ -50,7 +50,7 @@ export function ServicesComparisonTable() {
 
         {/* Table desktop */}
         <div className="hidden md:block">
-          <Card className="overflow-hidden bg-mediumblue/60 backdrop-blur-xl border-[#719ED9]/30 shadow-lg">
+          <Card className="overflow-hidden bg-mediumblue/60 backdrop-blur-xl border-[#719ED9]/30 ">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -124,7 +124,7 @@ export function ServicesComparisonTable() {
         {/* Mobile version: cartes empilées */}
         <div className="md:hidden space-y-8">
           {comparison.map((row, idx) => (
-            <Card key={idx} className="p-6 bg-mediumblue/60 border-[#719ED9]/30 shadow-md">
+            <Card key={idx} className="p-6 bg-mediumblue/60 border-[#719ED9]/30 ">
               <div className="md:font-semibold text-white mb-2 text-2xl md:text-lg">{row.feature}</div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">

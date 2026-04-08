@@ -98,7 +98,7 @@ body {
     --extralightblue: #D0DCF2;
     --white: #FFFFFF;
     --complementary1: #F29F05;
-    --complementary2: #FF6B6B;
+    --complementary2: #021373;
     --complementary3: #F2E57E;
   }
   .dark {
@@ -348,12 +348,11 @@ body {
   /* ── Strong / bold ── */
   .article-text strong {
     @apply text-white font-semibold;
-    box-shadow: inset 0 -0.35em 0 0 rgba(255, 107, 107, 0.15);
   }
 
   /* ── Images ── */
   .article-text img {
-    @apply rounded-2xl my-8 shadow-lg;
+    @apply rounded-2xl my-8 
   }
 
   /* ── Horizontal rules (section separators) ── */
@@ -422,20 +421,21 @@ body {
 .light [class*="bg-regularblue"],
 .light [class*="bg-lightblue"],
 .light [class*="bg-extralightblue"] {
-  background-color: rgba(208, 220, 242, 0.35) !important;
+  background-color: rgba(208, 220, 242, 0.8) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
 }
 .light [class*="bg-white"]  { background-color: #FFFFFF !important; }
 .light [class*="bg-black"]  { background-color: rgba(2, 15, 89, 0.4) !important; }
 
-/* --- Textes : blanc/bleu clair → darkblue/mediumblue --- */
-.light [class*="text-white"],
-.light [class*="text-extralightblue"],
-.light [class*="text-lightblue"]   { color: #020F59 !important; }
-.light [class*="text-darkblue"]    { color: #020F59 !important; }
-.light [class*="text-mediumblue"]  { color: #021373 !important; }
-.light [class*="text-regularblue"] { color: #021373 !important; }
+/* --- Textes : blanc/bleu clair → darkblue/mediumblue ---
+   Sélecteurs avec ^= ou " " pour exclure les variantes préfixées (dark:text-…) */
+.light [class^="text-white"],      .light [class*=" text-white"],
+.light [class^="text-extralightblue"], .light [class*=" text-extralightblue"],
+.light [class^="text-lightblue"],  .light [class*=" text-lightblue"]   { color: #020F59 !important; }
+.light [class^="text-darkblue"],   .light [class*=" text-darkblue"]    { color: #020F59 !important; }
+.light [class^="text-mediumblue"], .light [class*=" text-mediumblue"]  { color: #021373 !important; }
+.light [class^="text-regularblue"],.light [class*=" text-regularblue"] { color: #021373 !important; }
 
 /* --- Bordures : discrètes en bleu très clair --- */
 .light [class*="border-white"],
@@ -484,9 +484,8 @@ body {
 .light .stroke-white { stroke: #020F59 !important; }
 
 /* --- Accents (orange/coral/yellow) : assombris en TEXTE pour contraste AA --- */
-.light [class*="text-orange"]      { color: #FF6B6B !important; }
-.light [class*="text-coral"]       { color: #B22020 !important; }
-.light [class*="text-lightyellow"] { color: #FF6B6B !important; }
+.light [class^="text-orange"],     .light [class*=" text-orange"]      { color: #021373 !important; }
+.light [class^="text-lightyellow"],.light [class*=" text-lightyellow"] { color: #021373 !important; }
 
 /* --- .article-text (MDX) : texte blanc → bleu foncé --- */
 .light .article-text,
@@ -497,14 +496,14 @@ body {
 .light .article-text h3,
 .light .article-text h4 { color: #021373 !important; }
 .light .article-text > p:first-child { color: #020F59 !important; }
-.light .article-text strong { color: #020F59 !important; box-shadow: inset 0 -0.35em 0 0 rgba(255, 107, 107, 0.18); }
+.light .article-text strong { color: #020F59 !important; }
 .light .article-text blockquote p { color: #021373 !important; }
 .light .article-text pre {
   background-color: rgba(208, 220, 242, 0.4) !important;
   color: #020F59 !important;
 }
-.light .article-text code { color: #FF6B6B !important; background-color: rgba(242, 159, 5, 0.1) !important; }
-.light .article-text a    { color: #FF6B6B !important; text-decoration-color: rgba(184, 92, 9, 0.5) !important; }
+.light .article-text code { color: #021373 !important; background-color: rgba(242, 159, 5, 0.1) !important; }
+.light .article-text a    { color: #021373 !important; text-decoration-color: rgba(184, 92, 9, 0.5) !important; }
 .light .article-text th   { color: #020F59 !important; background-color: rgba(242, 159, 5, 0.1) !important; }
 .light .article-text td   { color: #021373 !important; border-color: rgba(208, 220, 242, 0.6) !important; }
 .light .article-text tr:nth-child(even) td { background-color: rgba(208, 220, 242, 0.15) !important; }

@@ -23,7 +23,7 @@ export function ScrollToTop() {
         "flex h-10 w-10 items-center justify-center rounded-full",
         "bg-darkblue/80 backdrop-blur-sm border border-lightblue/10",
         "text-white/80 hover:text-white hover:border-lightblue/30 hover:bg-darkblue",
-        "shadow-lg shadow-darkblue/40",
+        "",
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none"

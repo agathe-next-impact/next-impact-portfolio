@@ -23,7 +23,7 @@ export function CategoryArticleGrid({ articles }: { articles: Article[] }) {
           <div
             key={article.slug}
             className={cn(
-              "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 hover:shadow-2xl hover:shadow-regularblue/10 transition-all duration-300",
+              "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 transition-all duration-300",
               profileId && !relevant && "opacity-40 hover:opacity-70"
             )}
           >

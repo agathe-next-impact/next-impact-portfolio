@@ -18,7 +18,7 @@ function getStars(text: string): number {
 export default function ComparisonTable({ headers, rows }: ComparisonTableProps) {
   return (
     <div className="overflow-x-auto my-8">
-      <table className="min-w-full border rounded-xl shadow bg-mediumblue">
+      <table className="min-w-full border rounded-xl bg-mediumblue">
         <thead>
           <tr>
             {headers.map((h, i) => (

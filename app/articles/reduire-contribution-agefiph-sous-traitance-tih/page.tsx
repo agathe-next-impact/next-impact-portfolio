@@ -311,7 +311,7 @@ export default function ArticleReduireAgefiph() {
               {/* CTA */}
               <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <Link href="/avantage-oeth">
-                  <button className="inline-flex items-center gap-2 h-12 px-8 font-bold font-googletitre text-base rounded-full shadow bg-lightyellow text-darkblue hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] transition-all duration-300">
+                  <button className="inline-flex items-center gap-2 h-12 px-8 font-bold font-googletitre text-base rounded-full bg-lightyellow text-darkblue transition-all duration-300">
                     Simuler mon économie
                     <ArrowRight className="h-4 w-4" />
                   </button>

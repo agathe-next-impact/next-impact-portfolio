@@ -11,8 +11,8 @@ interface CardProps {
 
 const LandingCard: React.FC<CardProps> = ({ imageUrl, title, text }) => {
     return (
-        <div className="relative flex basis-2/5 flex-col rounded-2xl bg-white bg-clip-border border border-from-lightblue border-to-pink-400 shadow-lg shadow-blue-gray-500/40 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="relative mx-4 -mt-6 h-60 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+        <div className="relative flex basis-2/5 flex-col rounded-2xl bg-white bg-clip-border border border-from-lightblue border-to-pink-400 transition-all duration-300 ease-in-out hover:scale-105 ">
+            <div className="relative mx-4 -mt-6 h-60 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white ">
                 <Image
                     src={imageUrl}
                     alt="Card Image"

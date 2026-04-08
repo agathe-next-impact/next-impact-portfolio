@@ -244,7 +244,7 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="h-full"
                     >
-                      <div className="group relative overflow-hidden rounded-2xl bg-mediumblue/30 backdrop-blur-md transition-all duration-500 border border-1 border-white/10 hover:shadow h-full flex flex-col">
+                      <div className="group relative overflow-hidden rounded-2xl bg-mediumblue/30 backdrop-blur-md transition-all duration-500 border border-1 border-white/10 h-full flex flex-col">
                         <div className="relative aspect-video overflow-hidden">
                           <Image
                             src={project.image}

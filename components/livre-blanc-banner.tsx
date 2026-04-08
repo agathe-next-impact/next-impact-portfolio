@@ -7,7 +7,7 @@ export function LivreBlancBanner() {
       href="/ressources/livre_blanc_wp_headless.pdf"
       target="_blank"
       rel="noopener noreferrer"
-      className="group block rounded-2xl border border-orange/20 bg-gradient-to-r from-orange/10 via-mediumblue/40 to-darkblue/60 backdrop-blur-sm p-5 md:p-6 hover:border-orange/40 hover:shadow-[0_0_20px_rgba(242,159,5,0.3)] transition-all duration-300"
+      className="group block rounded-2xl border border-orange/20 bg-gradient-to-r from-orange/10 via-mediumblue/40 to-darkblue/60 backdrop-blur-sm p-5 md:p-6 hover:border-orange/40 transition-all duration-300"
     >
       <div className="flex items-center gap-4">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange/10 group-hover:bg-orange/20 transition-colors">

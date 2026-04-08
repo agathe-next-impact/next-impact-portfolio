@@ -91,7 +91,7 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
           ref={inputRef}
           type="search"
           placeholder="Rechercher dans la documentation..."
-          className="w-full rounded-full appearance-none pl-8 pr-10 shadow-none ring-0 focus:ring-0 bg-extralightblue"
+          className="w-full rounded-full appearance-none pl-8 pr-10 ring-0 focus:ring-0 bg-extralightblue"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsSearching(true)}

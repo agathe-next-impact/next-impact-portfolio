@@ -73,7 +73,7 @@ export function MetadataDebugger() {
       {/* Bouton pour ouvrir/fermer */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg font-medium text-sm"
+        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium text-sm"
         title="Afficher les métadonnées de la page"
       >
         🏷️ Metadata {isOpen ? "▼" : "▲"}
@@ -81,7 +81,7 @@ export function MetadataDebugger() {
 
       {/* Panel de métadonnées */}
       {isOpen && (
-        <div className="absolute bottom-12 right-0 w-[600px] max-h-[600px] overflow-auto bg-gray-900 text-white rounded-lg shadow-2xl border border-gray-700">
+        <div className="absolute bottom-12 right-0 w-[600px] max-h-[600px] overflow-auto bg-gray-900 text-white rounded-lg border border-gray-700">
           <div className="sticky top-0 bg-purple-600 px-4 py-3 flex justify-between items-center">
             <h3 className="font-bold text-sm">
               Métadonnées de la page - {pathname}

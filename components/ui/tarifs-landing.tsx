@@ -55,7 +55,7 @@ export function TarifsLanding({
                     return (
                         <Card
                             key={offer.title}
-                            className={offer.highlighted ? "border-lightblue/30 shadow-lg" : ""}
+                            className={offer.highlighted ? "border-lightblue/30 " : ""}
                         >
                             <CardHeader>
                                 <Badge className="w-fit mb-4 font-medium uppercase bg-lightblue/10 text-mediumblue">

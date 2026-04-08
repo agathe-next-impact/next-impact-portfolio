@@ -40,7 +40,7 @@ export function ArticleNavigation({ category, slug }: ArticleNavigationProps) {
         className={cn(
           "group flex items-center gap-4 rounded-3xl p-5 border transition-all duration-300",
           "bg-gradient-to-r from-mediumblue/80 to-darkblue/60 backdrop-blur-sm",
-          "border-lightblue/10 hover:border-lightblue/30 hover:shadow-xl hover:shadow-regularblue/10"
+          "border-lightblue/10 hover:border-lightblue/30 "
         )}
       >
         <div

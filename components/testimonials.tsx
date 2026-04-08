@@ -52,7 +52,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <MagicCard key={index} className="h-max rounded-2xl">
               <Card 
-                className="bg-white border border-pink-200/40 rounded-2xl transition-all overflow-hidden shadow-none"
+                className="bg-white border border-pink-200/40 rounded-2xl transition-all overflow-hidden "
               >
                 <CardContent className="pt-8 flex-grow">     
                   <div className="flex items-center mb-4">

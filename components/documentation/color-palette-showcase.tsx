@@ -80,7 +80,7 @@ export function ColorPaletteShowcase() {
             <div
               className={cn(
                 color.bg,
-                "h-16 rounded-2xl border border-lightblue/10 transition-all duration-200 group-hover:scale-105 group-hover:shadow-lg relative overflow-hidden"
+                "h-16 rounded-2xl border border-lightblue/10 transition-all duration-200 group-hover:scale-105 relative overflow-hidden"
               )}
             >
               {copied === color.hex && (

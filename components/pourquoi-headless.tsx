@@ -11,7 +11,7 @@ export default function PourquoiSection() {
         <p className="font-normal text-lg text-center text-foreground/80">Un site alliant performance et le back-office le plus utilisé</p>
         </div>
         <div className="w-4/5 grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 mx-auto relative z-10">
-        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl shadow-lg">
+        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl ">
             <div className="w-3/4 -mt-4 mx-auto bg-regularblue rounded-2xl">
                 <h3 className="text-2xl font-medium text-white py-3">Rapidité</h3>
             </div>
@@ -19,7 +19,7 @@ export default function PourquoiSection() {
                 <p className="text-mediumblue/70 text-lg">Des temps de chargement ultra-rapides pour une expérience optimale.</p>
             </div>
         </div>
-        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl shadow-lg">
+        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl ">
             <div className="w-3/4 -mt-4 mx-auto bg-regularblue rounded-2xl">
                 <h3 className="text-2xl font-medium text-white py-3">Modernité</h3>
             </div>
@@ -27,7 +27,7 @@ export default function PourquoiSection() {
                 <p className="text-mediumblue/70 text-lg">Une flexibilité visuelle illimitée sans les contraintes d'un CMS traditionnel.</p>
             </div>
         </div>
-        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl shadow-lg">
+        <div className="flex flex-col items-center text-center w-full mx-auto mb-8 bg-white/30 backdrop-blur-xl rounded-2xl ">
             <div className="w-3/4 -mt-4 mx-auto bg-regularblue rounded-2xl">
                 <h3 className="text-2xl font-medium text-white py-3">Simplicité</h3>
             </div>

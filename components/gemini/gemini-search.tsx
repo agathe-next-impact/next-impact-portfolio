@@ -189,7 +189,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           <Button
             type="submit"
             variant="default"
-            className="bg-coral text-darkblue px-6 py-2 text-xl font-googletitre font-semibold flex items-center justify-center hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300"
+            className="bg-coral text-darkblue px-6 py-2 text-xl font-googletitre font-semibold flex items-center justify-center transition-all duration-300"
             disabled={loading || cmsDetecting || !url.trim()}
           >
             Lancer l&apos;analyse
@@ -204,7 +204,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               <button
                 type="button"
                 onClick={() => { setOptinRefused(false); setShowOptin(true); }}
-                className="shrink-0 bg-coral text-darkblue font-semibold px-4 py-1.5 rounded-full text-sm hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300"
+                className="shrink-0 bg-coral text-darkblue font-semibold px-4 py-1.5 rounded-full text-sm transition-all duration-300"
               >
                 Remplir mes coordonnées
               </button>
@@ -277,7 +277,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             </div>
             <Button
               type="submit"
-              className="bg-coral text-darkblue font-googletitre font-semibold mt-2 hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300"
+              className="bg-coral text-darkblue font-googletitre font-semibold mt-2 transition-all duration-300"
             >
               Lancer l&apos;analyse
               <ArrowRight className="ml-2 size-4" />
@@ -315,7 +315,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             </p>
             <Button
               onClick={() => setShowNotWordPress(false)}
-              className="bg-coral text-darkblue font-googletitre font-semibold hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300"
+              className="bg-coral text-darkblue font-googletitre font-semibold transition-all duration-300"
             >
               Compris
             </Button>

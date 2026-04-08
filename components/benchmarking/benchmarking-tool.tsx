@@ -576,7 +576,7 @@ export default function BenchmarkingTool() {
             <Button
               type="submit"
               disabled={isLoading || !url.trim() || competitors.some((c) => !c.trim())}
-              className="w-full md:w-auto gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold shadow"
+              className="w-full md:w-auto gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold "
             >
               {isLoading ? (
                 <>
@@ -787,7 +787,7 @@ export default function BenchmarkingTool() {
                 {/* Verdict + scores */}
                 <Card
                   className={cn(
-                    "border backdrop-blur-sm shadow-lg overflow-hidden",
+                    "border backdrop-blur-sm overflow-hidden",
                     verdictConfig[result.overallVerdict].bg
                   )}
                 >
@@ -962,7 +962,7 @@ export default function BenchmarkingTool() {
                 </a>
                 <a
                   href="/audit-site-ia"
-                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-coral text-darkblue hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] transition-all duration-300 shadow"
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-coral text-darkblue transition-all duration-300 "
                 >
                   Audit IA complet
                   <ArrowRight className="w-3.5 h-3.5" />

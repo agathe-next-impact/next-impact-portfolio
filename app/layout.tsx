@@ -177,7 +177,7 @@ export default function RootLayout({
             />
           </div>
           {/* theme-system: Background SVG light */}
-          <div className="fixed inset-0 z-0 will-change-transform block dark:hidden" style={{ WebkitBackfaceVisibility: 'hidden' }}>
+          <div className="fixed inset-0 z-0 will-change-transform block dark:hidden" style={{ WebkitBackfaceVisibility: 'hidden', opacity: 0.5 }}>
             <Image
               src="/img/chipset-background-light.svg"
               alt=""

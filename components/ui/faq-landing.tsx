@@ -30,7 +30,7 @@ import Image from "next/image";
                         alt={imageAlt || "FAQ Image"}
                         width={300}
                         height={300}
-                        className="w-3/4 mx-auto rounded-2xl shadow-md overflow-hidden"
+                        className="w-3/4 mx-auto rounded-2xl overflow-hidden"
                     />
                 </div>
 

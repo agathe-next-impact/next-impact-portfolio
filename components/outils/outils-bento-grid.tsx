@@ -204,7 +204,7 @@ export default function OutilsBentoGrid() {
             whileHover={{ scale: 1.03 }}
             className={cn(
               "group relative overflow-hidden rounded-3xl border border-lightblue/10",
-              "cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-regularblue/10 hover:border-lightblue/20",
+              "cursor-pointer transition-all duration-300 hover:border-lightblue/20",
               card.colSpan,
               card.gradient,
               card.hideOnMobile && "hidden md:block"

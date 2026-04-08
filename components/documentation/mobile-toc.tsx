@@ -62,7 +62,7 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
     >
       <Sheet>
         <SheetTrigger asChild>
-          <button className="flex items-center gap-2 rounded-2xl bg-mediumblue/90 backdrop-blur-sm border border-lightblue/20 px-4 py-3 text-sm text-white shadow-xl shadow-darkblue/40 hover:bg-mediumblue transition-colors">
+          <button className="flex items-center gap-2 rounded-2xl bg-mediumblue/90 backdrop-blur-sm border border-lightblue/20 px-4 py-3 text-sm text-white hover:bg-mediumblue transition-colors">
             <List className="h-4 w-4 text-lightblue" />
             <span className="font-googletexte">Sommaire</span>
           </button>

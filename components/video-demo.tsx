@@ -52,7 +52,7 @@ export function VideoDemo() {
                     className={`
                       relative h-20 w-20 rounded-full bg-background/90 backdrop-blur-sm 
                       hover:bg-background hover:scale-110 
-                      shadow-2xl
+                      
                       transition-all duration-300
                       ${isHovered ? "scale-100 opacity-100" : "scale-90 opacity-80"}
                     `}

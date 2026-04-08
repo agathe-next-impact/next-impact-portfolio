@@ -176,7 +176,7 @@ function CTAConversion() {
         {/* CTA Button — le plus voyant */}
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
-            className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full shadow-lg shadow-coral/25 hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
+            className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/contact">
@@ -244,7 +244,7 @@ function CTASimulateurROI() {
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
-            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightyellow/15 hover:shadow-[0_0_20px_rgba(242,229,126,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
+            className="inline-flex items-center gap-2 bg-lightyellow text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/outils/simulateur-roi">
@@ -312,7 +312,7 @@ function CTABenchmarking() {
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
-            className="inline-flex items-center gap-2 bg-lightblue text-darkblue py-3 px-8 rounded-full shadow-lg shadow-lightblue/15 hover:shadow-[0_0_20px_rgba(113,158,217,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
+            className="inline-flex items-center gap-2 bg-lightblue text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/outils/benchmarking">
@@ -380,7 +380,7 @@ function CTALivreBlanc() {
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
-            className="inline-flex items-center gap-2 bg-orange text-darkblue py-3 px-8 rounded-full shadow-lg shadow-orange/15 hover:shadow-[0_0_20px_rgba(242,159,5,0.45)] hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
+            className="inline-flex items-center gap-2 bg-orange text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer">

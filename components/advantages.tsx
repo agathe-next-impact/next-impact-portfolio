@@ -95,7 +95,7 @@ const features = [
 
         {/* Feature Image */}
         <div className="lg:sticky lg:top-8">
-          <div className="relative aspect-[3/2] rounded-xl overflow-hidden bg-muted border shadow-lg">
+          <div className="relative aspect-[3/2] rounded-xl overflow-hidden bg-muted border ">
             <Image
               src={currentFeature.image || "/placeholder.svg"}
               alt={currentFeature.title}

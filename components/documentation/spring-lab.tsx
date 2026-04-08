@@ -158,7 +158,7 @@ export function SpringLab() {
               </div>
               <motion.div
                 style={{ x: springX }}
-                className="relative h-10 w-10 rounded-full bg-gradient-to-br from-orange to-coral shadow-lg shadow-orange/30"
+                className="relative h-10 w-10 rounded-full bg-gradient-to-br from-orange to-coral "
               />
             </div>
           </div>

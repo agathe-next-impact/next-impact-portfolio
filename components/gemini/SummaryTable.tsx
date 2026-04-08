@@ -5,7 +5,7 @@ interface SummaryTableProps {
 export default function SummaryTable({ rows }: SummaryTableProps) {
   if (!rows || rows.length === 0) return null;
   return (
-    <div className="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 shadow-sm bg-white/50 backdrop-blur-sm">
+    <div className="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 bg-white/50 backdrop-blur-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead className="bg-mediumblue/5 text-mediumblue font-googletitre border-b border-mediumblue/10">

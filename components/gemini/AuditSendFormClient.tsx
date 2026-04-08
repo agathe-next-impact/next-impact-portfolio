@@ -50,7 +50,7 @@ export default function AuditSendFormClient({
   }, [userInfo, url, markdownFull]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-2 md:p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow mt-8">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-2 md:p-6 bg-white/80 backdrop-blur-lg rounded-2xl mt-8">
       {/* Bandeau statut d'envoi */}
       {userInfo && (
         <div className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-googletexte ${
@@ -102,7 +102,7 @@ export default function AuditSendFormClient({
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-          className="bg-coral backdrop-blur-sm text-mediumblue font-googletitre font-semibold text-lg px-6 py-3 rounded-full shadow hover:bg-coral/80 transition text-center"
+          className="bg-coral backdrop-blur-sm text-mediumblue font-googletitre font-semibold text-lg px-6 py-3 rounded-full hover:bg-coral/80 transition text-center"
         >
           <ScreenShareIcon className="inline-block mr-2 size-7 font-medium" />
           En discuter en visio

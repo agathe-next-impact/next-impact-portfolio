@@ -35,7 +35,7 @@ export default function CaseStudyCTA() {
   return (
     <div className="flex flex-col sm:flex-row items-center gap-3">
       <Button
-        className="md:flex gap-1 rounded-full px-6 bg-regularblue text-darkblue md:text-lg hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300 ease-in-out"
+        className="md:flex gap-1 rounded-full px-6 bg-regularblue text-darkblue md:text-lg transition-all duration-300 ease-in-out"
         asChild
       >
         <Link

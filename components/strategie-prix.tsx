@@ -81,7 +81,7 @@ export default function StrategiePrix() {
           {featuredAddons.map((addon, index) => (
             <Card
               key={index}
-              className={`relative ${addon.popular ? "border-extralightblue/30 rounded-2xl" : "border-extralightblue/30 rounded-2xl shadow-none"}`}
+              className={`relative ${addon.popular ? "border-extralightblue/30 rounded-2xl" : "border-extralightblue/30 rounded-2xl "}`}
             >
               <CardHeader>
                 <div className="flex flex-col items-end mb-6">

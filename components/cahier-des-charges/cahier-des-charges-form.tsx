@@ -253,7 +253,7 @@ export function CahierDesChargesForm() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     type="submit"
-                    className="gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold shadow px-8"
+                    className="gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold px-8"
                   >
                     <Eye className="w-4 h-4" />
                     Voir l&apos;apercu du document

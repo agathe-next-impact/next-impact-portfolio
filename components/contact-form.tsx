@@ -69,7 +69,7 @@ export default function ContactForm() {
             type="submit"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.95 }}
-            className="w-max gap-1 rounded-full px-6 py-2 text-darkblue md:text-lg bg-regularblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300 ease-in-out"
+            className="w-max gap-1 rounded-full px-6 py-2 text-darkblue md:text-lg bg-regularblue transition-all duration-300 ease-in-out"
             disabled={status === "loading"}
           >
             {status === "loading" ? "Envoi en cours..." : "Envoyer"}

@@ -48,7 +48,7 @@ const config: Config = {
 			lightblue: '#719ED9',
 			extralightblue: '#D0DCF2',
 			white: '#FFFFFF',
-			orange: '#F29F05',
+			orange: '#FF6B6B',
 			coral: '#FF6B6B',
 			lightyellow: '#F2E57E',
   			background: 'hsl(var(--background))',

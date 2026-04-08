@@ -240,7 +240,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
               </aside>
               <div id="article-body" className="col-span-1 lg:col-span-3 flex flex-col gap-8">
                 {/* Reading area */}
-                <div className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl shadow-sm">
+                <div className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl ">
                   {article.isMdx ? (
                     <MdxContent source={article.content} />
                   ) : (

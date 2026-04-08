@@ -11,7 +11,7 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8">
           {offers.map((offer, index) => (
-            <Card key={index} className="flex flex-col h-full bg-mediumblue/60 backdrop-blur-lg rounded-3xl hover:shadow-lg transition-shadow duration-300 border-white/10 p-4">
+            <Card key={index} className="flex flex-col h-full bg-mediumblue/60 backdrop-blur-lg rounded-3xl duration-300 border-white/10 p-4">
               <div className="mb-4 grid grid-cols-[auto_1fr]">
               <CardHeader className="items-center gap-4">
                 <div className="w-14 h-14 flex-shrink-0">
@@ -51,7 +51,7 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
               </CardContent>
               <Link href="https://calendar.app.google/ZagmCTp8PBTczTnJA" className="w-full mt-auto" target="_blank" rel="noopener noreferrer">
                 <Button
-                  className={`w-full h-12 font-medium font-googletitre text-base rounded-full shadow ${
+                  className={`w-full h-12 font-medium font-googletitre text-base rounded-full ${
                     offer.recommended
                       ? "bg-lightyellow hover:bg-lightyellow/90 text-darkblue"
                       : "bg-orange hover:bg-orange/90 text-darkblue"

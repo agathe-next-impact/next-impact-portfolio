@@ -204,7 +204,7 @@ export function DocumentationToolsSection() {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/90 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 hover:shadow-lg hover:shadow-regularblue/5 transition-all duration-300"
+              className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/90 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 transition-all duration-300"
             >
               <Icon className={`h-12 w-12 ${tool.color} mb-3`} />
               <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/90 group-hover:text-white transition-colors">

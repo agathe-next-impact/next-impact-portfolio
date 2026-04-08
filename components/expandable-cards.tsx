@@ -47,13 +47,13 @@ const defaultContent: ContentFactory[] = [
         étaient soudés ensemble :
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 ">
           <Image src="/icons/dashboard-icon.svg" alt="Backoffice" width={40} height={40} className="mb-2" />
           <span className="font-medium text-white font-googletitre text-2xl mb-1">Admin WordPress</span>
           <span className="text-base text-white/80 text-center">Gestion des contenus, médias, utilisateurs...</span>
         </div>
         <Image src="/icons/plugin-icon.svg" alt="Plugin" width={40} height={40} />
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 ">
           <Image src="/icons/desktop-headless-icon.svg" alt="Interface web" width={40} height={40} className="mb-2" />
           <span className="font-medium text-white font-googletitre text-2xl mb-1">Interface web</span>
           <span className="text-base text-white/80 text-center">Site, application, affichage public...</span>
@@ -78,35 +78,35 @@ const defaultContent: ContentFactory[] = [
         flexibilité maximale pour l&apos;interface client, des performances, des
         normes SEO et un sécurité optimisées.
       </div>
-      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 h-full">
         <Image src="/icons/dashboard-icon.svg" alt="Admin WordPress" width={144} height={144} className="object-contain mb-2 w-20 md:w-36" />
         <div className="md:ml-6 flex flex-col">
           <span className="font-medium text-white font-googletitre text-2xl mb-4">Admin WordPress</span>
           <span className="text-sm text-white/80">Une interface familière garantissant une adoption immédiate et sans coût de formation supplémentaire.</span>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 h-full">
         <Image src="/icons/desktop-headless-icon.svg" alt="Liberté de design" width={144} height={144} className="object-contain mb-2 w-20 md:w-36" />
         <div className="md:ml-6 flex flex-col">
           <span className="font-medium text-white font-googletitre text-2xl mb-4">Liberté de design</span>
           <span className="text-sm text-white/80">Interface développée sur mesure, totalement libre, sans les limites ni la lourdeur des &quot;page builders&quot;.</span>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 h-full">
         <Image src="/icons/shield-icon.svg" alt="Sécurité totale" width={144} height={144} className="mb-4 w-20 md:w-36" />
         <div className="md:ml-6 flex flex-col">
           <span className="font-medium text-white font-googletitre text-2xl mb-1">Sécurité totale</span>
           <span className="text-sm text-white/80">Votre base de données devient invisible et inaccessible rendant les attaques traditionnelles impossibles.</span>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 h-full">
         <Image src="/icons/speed-icon.svg" alt="Vitesse fulgurante" width={144} height={144} className="mb-4 w-20 md:w-36" />
         <div className="md:ml-6 flex flex-col">
           <span className="font-medium text-white font-googletitre text-2xl mb-1">Vitesse fulgurante</span>
           <span className="text-sm text-white/80">Chargement des pages instantané, garantissant des indicateurs de performance (Core Web Vitals) au vert.</span>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 shadow-md h-full">
+      <div className="flex flex-col md:flex-row items-center bg-darkblue/70 rounded-xl p-6 h-full">
         <Image src="/icons/globe-network-icon.svg" alt="SEO de haut niveau" width={144} height={144} className="mb-2 w-20 md:w-36" />
         <div className="md:ml-6 flex flex-col">
           <span className="font-medium text-white font-googletitre text-2xl mb-1">SEO de haut niveau</span>
@@ -125,7 +125,7 @@ const defaultContent: ContentFactory[] = [
       </div>
       <div className="grid md:grid-cols-2 gap-6 place-items-center items-start">
         <div className="col-span-1 space-y-12">
-          <div className="flex flex-col gap-2 bg-mediumblue/10 rounded-xl w-full max-w-96 h-max shadow-md border border-lightyellow/20">
+          <div className="flex flex-col gap-2 bg-mediumblue/10 rounded-xl w-full max-w-96 h-max border border-lightyellow/20">
             <div className="w-full mb-2 px-2 py-1 rounded-t-xl bg-lightyellow text-darkblue font-googletitre font-semibold text-xl">PME</div>
             <div className="flex flex-col gap-2 px-4 pb-6">
               <div className="flex justify-end"><Image src="/icons/growth-icon.svg" alt="Passer à l'échelle" width={60} height={60} /></div>
@@ -133,7 +133,7 @@ const defaultContent: ContentFactory[] = [
               <span className="text-base text-white/80 border-t-2 border-lightyellow pt-2">Pour répondre ou provoquer une croissance de l&apos;activité en alignant le site web avec les objectifs commerciaux.</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 bg-mediumblue/10 rounded-xl w-full max-w-96 h-max shadow-md border border-lightyellow/20">
+          <div className="flex flex-col gap-2 bg-mediumblue/10 rounded-xl w-full max-w-96 h-max border border-lightyellow/20">
             <div className="w-full mb-2 px-2 py-1 rounded-t-xl bg-lightyellow text-darkblue font-googletitre font-semibold text-xl">PME</div>
             <div className="flex flex-col gap-2 px-4 pb-6">
               <div className="flex justify-end"><Image src="/icons/saas-features-icon.svg" alt="Proposer des services en ligne" width={60} height={60} /></div>
@@ -143,7 +143,7 @@ const defaultContent: ContentFactory[] = [
           </div>
         </div>
         <div className="col-span-1 space-y-12">
-          <div className="flex flex-col bg-mediumblue rounded-xl w-full max-w-96 shadow-md border border-lightyellow/20">
+          <div className="flex flex-col bg-mediumblue rounded-xl w-full max-w-96 border border-lightyellow/20">
             <div className="w-full mb-2 px-2 py-1 rounded-t-xl bg-coral text-darkblue font-googletitre font-semibold text-xl">ESS</div>
             <div className="flex flex-col gap-2 px-4 pb-6">
               <div className="flex justify-end"><Image src="/icons/brand-reach-icon.svg" alt="Gagner en autorité" width={60} height={60} /></div>
@@ -151,7 +151,7 @@ const defaultContent: ContentFactory[] = [
               <span className="text-base text-white/80 border-t-2 border-coral pt-2">Développer une image forte et crédible pour attirer des soutiens, partenaires et financements.</span>
             </div>
           </div>
-          <div className="flex flex-col bg-mediumblue rounded-xl w-full max-w-96 shadow-md border border-lightyellow/20">
+          <div className="flex flex-col bg-mediumblue rounded-xl w-full max-w-96 border border-lightyellow/20">
             <div className="w-full mb-2 px-2 py-1 rounded-t-xl bg-coral text-darkblue font-googletitre font-semibold text-xl">ESS</div>
             <div className="flex flex-col gap-2 px-4 pb-6">
               <div className="flex justify-end"><Image src="/icons/eco-design-icon.svg" alt="Montrer son engagement écologique" width={60} height={60} /></div>
@@ -182,19 +182,19 @@ const decideurContent: ContentFactory[] = [
         Dans un marché où la présence digitale est un facteur de différenciation, l&apos;architecture headless positionne votre site web comme un véritable outil de compétitivité.
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-orange/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-orange/20">
           <span className="font-medium text-orange font-googletitre text-2xl mb-3">Agilité</span>
           <span className="text-sm text-white/80">Lancez de nouvelles pages, campagnes ou fonctionnalités sans attendre une refonte. Votre équipe marketing gagne en autonomie.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-orange/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-orange/20">
           <span className="font-medium text-orange font-googletitre text-2xl mb-3">Pérennité</span>
           <span className="text-sm text-white/80">Votre contenu et votre interface évoluent indépendamment. Pas de refonte totale : vous modernisez par itérations.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-orange/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-orange/20">
           <span className="font-medium text-orange font-googletitre text-2xl mb-3">Sécurité renforcée</span>
           <span className="text-sm text-white/80">Votre base de données est invisible pour les attaquants. Le risque de piratage est drastiquement réduit.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-orange/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-orange/20">
           <span className="font-medium text-orange font-googletitre text-2xl mb-3">Image premium</span>
           <span className="text-sm text-white/80">Un site instantané et fluide inspire confiance et professionnalisme auprès de vos clients et partenaires.</span>
         </div>
@@ -209,15 +209,15 @@ const decideurContent: ContentFactory[] = [
         Le passage au headless a un impact direct et quantifiable sur vos indicateurs business.
       </div>
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 shadow-md text-center">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 text-center">
           <span className="font-googletitre text-4xl font-bold text-lightyellow mb-2">+40%</span>
           <span className="text-sm text-white/80">de vitesse de chargement en moyenne</span>
         </div>
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 shadow-md text-center">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 text-center">
           <span className="font-googletitre text-4xl font-bold text-lightyellow mb-2">-25%</span>
           <span className="text-sm text-white/80">de taux de rebond grâce à la fluidité</span>
         </div>
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 shadow-md text-center">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 text-center">
           <span className="font-googletitre text-4xl font-bold text-lightyellow mb-2">Top 3</span>
           <span className="text-sm text-white/80">positionnement SEO favorisé par Google</span>
         </div>
@@ -235,25 +235,25 @@ const decideurContent: ContentFactory[] = [
         Le headless répond à des objectifs stratégiques concrets. Voici les cas les plus fréquents :
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border-l-4 border-orange">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border-l-4 border-orange">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Accélérer la croissance</span>
           <span className="text-sm text-white/80">Votre site doit suivre le rythme de votre activité : nouvelles offres, nouveaux marchés, nouvelles audiences.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border-l-4 border-orange">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border-l-4 border-orange">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Réduire les coûts de maintenance</span>
           <span className="text-sm text-white/80">Moins de plugins, moins de failles, moins de mises à jour critiques. Le coût de possession diminue sur le long terme.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border-l-4 border-coral">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border-l-4 border-coral">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Gagner en crédibilité (ESS)</span>
           <span className="text-sm text-white/80">Un site performant et éco-conçu démontre votre engagement numérique responsable auprès de vos financeurs.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border-l-4 border-coral">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border-l-4 border-coral">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Digitaliser vos services</span>
           <span className="text-sm text-white/80">Proposez des espaces connectés, des formulaires dynamiques ou des outils en ligne intégrés à votre site.</span>
         </div>
       </div>
       <div className="mt-4">
-        <Link href="/etudes-de-cas" className="inline-block px-5 py-2 rounded-2xl bg-orange text-darkblue font-googletitre font-semibold shadow hover:bg-orange/90 transition">
+        <Link href="/etudes-de-cas" className="inline-block px-5 py-2 rounded-full bg-orange text-darkblue font-googletitre font-semibold hover:bg-orange/90 transition">
           Voir les études de cas
         </Link>
       </div>
@@ -271,12 +271,12 @@ const utilisateurContent: ContentFactory[] = [
         La bonne nouvelle : vous continuez à utiliser WordPress exactement comme vous le faites déjà. L&apos;interface d&apos;administration ne change pas.
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 w-72 shadow-md">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 w-72 ">
           <Image src="/icons/dashboard-icon.svg" alt="Admin WordPress" width={60} height={60} className="mb-3" />
           <span className="font-medium text-white font-googletitre text-2xl mb-2">Même interface</span>
           <span className="text-base text-white/80 text-center">Articles, pages, médias, menus... Tout est au même endroit.</span>
         </div>
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 w-72 shadow-md">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-6 w-72 ">
           <Image src="/icons/desktop-headless-icon.svg" alt="Résultat amélioré" width={60} height={60} className="mb-3" />
           <span className="font-medium text-white font-googletitre text-2xl mb-2">Meilleur résultat</span>
           <span className="text-base text-white/80 text-center">Votre contenu s&apos;affiche plus vite et plus joliment côté visiteur.</span>
@@ -296,19 +296,19 @@ const utilisateurContent: ContentFactory[] = [
         Ce que vos visiteurs remarquent en premier : la rapidité. Un site headless charge en moins d&apos;une seconde.
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-regularblue/30">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-regularblue/30">
           <span className="font-medium text-extralightblue font-googletitre text-2xl mb-3">Navigation fluide</span>
           <span className="text-sm text-white/80">Les pages se chargent instantanément, sans écran blanc. Vos visiteurs naviguent comme dans une application.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-regularblue/30">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-regularblue/30">
           <span className="font-medium text-extralightblue font-googletitre text-2xl mb-3">Meilleur référencement</span>
           <span className="text-sm text-white/80">Google favorise les sites rapides. Vos contenus remontent naturellement dans les résultats de recherche.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-regularblue/30">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-regularblue/30">
           <span className="font-medium text-extralightblue font-googletitre text-2xl mb-3">Mobile optimal</span>
           <span className="text-sm text-white/80">Même sur un réseau lent, votre site reste rapide et accessible pour tous vos visiteurs mobiles.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-regularblue/30">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-regularblue/30">
           <span className="font-medium text-extralightblue font-googletitre text-2xl mb-3">Plus d&apos;engagement</span>
           <span className="text-sm text-white/80">Les visiteurs restent plus longtemps, consultent plus de pages et reviennent plus souvent.</span>
         </div>
@@ -322,25 +322,25 @@ const utilisateurContent: ContentFactory[] = [
         Votre quotidien de gestionnaire de contenu devient plus agréable avec le headless :
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 ">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Prévisualisation en temps réel</span>
           <span className="text-sm text-white/80">Voyez exactement le rendu final de votre contenu avant de le publier, directement depuis WordPress.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 ">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Gestion des médias simplifiée</span>
           <span className="text-sm text-white/80">Vos images sont automatiquement optimisées et redimensionnées. Plus besoin de vous soucier du poids des fichiers.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 ">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Workflow éditorial</span>
           <span className="text-sm text-white/80">Brouillon, relecture, publication : votre processus éditorial reste identique, avec la fiabilité en plus.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 ">
           <span className="font-medium text-white font-googletitre text-xl mb-2">Publication sécurisée</span>
           <span className="text-sm text-white/80">Vos modifications sont publiées automatiquement et de manière fiable, sans risque de casser le site.</span>
         </div>
       </div>
       <div className="mt-4">
-        <Link href="/demo" className="inline-block px-5 py-2 rounded-2xl bg-regularblue text-darkblue md:text-lg font-googletitre font-semibold shadow hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300">
+        <Link href="/demo" className="inline-block px-5 py-2 rounded-full bg-regularblue text-darkblue md:text-lg font-googletitre font-semibold transition-all duration-300">
           Voir la démo
         </Link>
       </div>
@@ -358,12 +358,12 @@ const developpeurContent: ContentFactory[] = [
         L&apos;architecture headless sépare le backend (WordPress) du frontend (Next.js/Astro) en communiquant via API.
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md border border-lightblue/30">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 border border-lightblue/30">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-2">WordPress Backend</span>
           <span className="text-sm text-white/80 text-center font-mono">REST API / WPGraphQL<br/>CPT + ACF<br/>Auth JWT</span>
         </div>
         <div className="text-lightblue font-mono text-2xl">{`<->`}</div>
-        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 shadow-md border border-lightblue/30">
+        <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 border border-lightblue/30">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-2">Frontend React</span>
           <span className="text-sm text-white/80 text-center font-mono">Next.js / Astro<br/>SSG + ISR + SSR<br/>Vercel Deploy</span>
         </div>
@@ -386,19 +386,19 @@ const developpeurContent: ContentFactory[] = [
         <div className="font-googletitre text-3xl font-medium text-white mb-4">Stack recommandée</div>
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-lightblue/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-lightblue/20">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-3">Next.js App Router</span>
           <span className="text-sm text-white/80">Server Components, streaming SSR, layout system. Le framework React de référence pour le headless WordPress.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-lightblue/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-lightblue/20">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-3">Stratégies de rendu</span>
           <span className="text-sm text-white/80">SSG pour les pages statiques, ISR pour le contenu qui change, SSR pour le temps réel. Choisissez par page.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-lightblue/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-lightblue/20">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-3">Core Web Vitals</span>
           <span className="text-sm text-white/80">LCP &lt; 2.5s, FID &lt; 100ms, CLS &lt; 0.1. Le headless vous donne le contrôle total sur ces métriques.</span>
         </div>
-        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 shadow-md border border-lightblue/20">
+        <div className="flex flex-col bg-darkblue/70 rounded-xl p-6 border border-lightblue/20">
           <span className="font-medium text-lightblue font-googletitre text-xl mb-3">Tailwind + TypeScript</span>
           <span className="text-sm text-white/80">Styling utilitaire avec Tailwind CSS, typage strict avec TypeScript. Une DX moderne et productive.</span>
         </div>
@@ -419,7 +419,7 @@ const developpeurContent: ContentFactory[] = [
           { step: "04", title: "Authentification et preview", desc: "JWT pour les requêtes authentifiées, preview mode pour la prévisualisation éditoriale." },
           { step: "05", title: "Déploiement Vercel", desc: "CI/CD automatique, variables d'environnement, webhooks de revalidation depuis WordPress." },
         ].map((item) => (
-          <div key={item.step} className="flex items-start gap-4 bg-darkblue/70 rounded-xl p-4 shadow-md border border-lightblue/10">
+          <div key={item.step} className="flex items-start gap-4 bg-darkblue/70 rounded-xl p-4 border border-lightblue/10">
             <span className="font-mono text-lightblue text-2xl font-bold min-w-[3rem]">{item.step}</span>
             <div>
               <span className="font-medium text-white font-googletitre text-lg">{item.title}</span>
@@ -429,7 +429,7 @@ const developpeurContent: ContentFactory[] = [
         ))}
       </div>
       <div className="mt-4">
-        <Link href="/documentation" className="inline-block px-5 py-2 rounded-2xl bg-lightblue text-darkblue font-googletitre font-semibold shadow hover:bg-lightblue/90 transition">
+        <Link href="/documentation" className="inline-block px-5 py-2 rounded-full bg-lightblue text-darkblue font-googletitre font-semibold hover:bg-lightblue/90 transition">
           Voir la documentation complète
         </Link>
       </div>
@@ -537,7 +537,7 @@ export function ExpandableCardDemo() {
                       scale: { duration: 0.25 },
                     }}
                     style={{ originY: 0.1 }}
-                    className="overflow-hidden bg-darkblue/50 rounded-xl shadow-inner mt-4"
+                    className="overflow-hidden bg-darkblue/50 rounded-xl mt-4"
                   >
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}

@@ -351,7 +351,7 @@ function ScoreGauge({ score }: { score: number }) {
         <div className="relative flex flex-col items-center -mt-1">
           <div
             className={cn(
-              "h-5 w-5 rounded-full border-[3px] border-darkblue shadow-md shadow-black/30",
+              "h-5 w-5 rounded-full border-[3px] border-darkblue ",
               score < 5
                 ? "bg-coral"
                 : score <= 10
@@ -557,7 +557,7 @@ export function HeadlessDiagnostic() {
   };
 
   return (
-    <div className="diagnostic-dark my-10 rounded-3xl border border-lightblue/20 bg-gradient-to-br from-darkblue to-mediumblue overflow-hidden shadow-lg">
+    <div className="diagnostic-dark my-10 rounded-3xl border border-lightblue/20 bg-gradient-to-br from-darkblue to-mediumblue overflow-hidden ">
       {/* Barre de progression */}
       {currentStep >= 0 && (
         <div className="px-6 pt-5 pb-0">
@@ -603,7 +603,7 @@ export function HeadlessDiagnostic() {
               </p>
               <button
                 onClick={goNext}
-                className="inline-flex items-center gap-2 rounded-2xl bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300"
+                className="inline-flex items-center gap-2 rounded-full bg-regularblue px-6 py-3 text-sm font-googletitre font-medium text-darkblue transition-all duration-300"
               >
                 Commencer le diagnostic
                 <ArrowRight className="h-4 w-4" />
@@ -706,7 +706,7 @@ export function HeadlessDiagnostic() {
                     <div className="flex items-center justify-between mt-8">
                       <button
                         onClick={goPrev}
-                        className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors"
                       >
                         <ArrowLeft className="h-4 w-4" />
                         {currentStep === 0 ? "Accueil" : "Précédent"}
@@ -717,7 +717,7 @@ export function HeadlessDiagnostic() {
                         className={cn(
                           "inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-googletitre font-medium transition-all",
                           canProceed
-                            ? "bg-regularblue text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)]"
+                            ? "bg-regularblue text-darkblue "
                             : "bg-white/10 text-white/30 cursor-not-allowed"
                         )}
                       >
@@ -835,7 +835,7 @@ export function HeadlessDiagnostic() {
                     <Link
                       key={article.href}
                       href={article.href}
-                      className="flex items-center gap-2 rounded-xl border border-lightblue/15 px-4 py-2.5 text-sm font-googletexte text-white/70 hover:text-white hover:bg-white/10 hover:border-lightblue/30 transition-all"
+                      className="flex items-center gap-2 rounded-full border border-lightblue/15 px-4 py-2.5 text-sm font-googletexte text-white/70 hover:text-white hover:bg-white/10 hover:border-lightblue/30 transition-all"
                     >
                       <ChevronRight className="h-3.5 w-3.5 shrink-0" />
                       {article.title}
@@ -848,14 +848,14 @@ export function HeadlessDiagnostic() {
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
                 <button
                   onClick={reset}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-lightblue/20 px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors flex-1"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-lightblue/20 px-4 py-2.5 text-sm font-googletexte text-white/60 hover:text-white hover:bg-white/10 transition-colors flex-1"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Refaire le diagnostic
                 </button>
                 <button
                   onClick={shareResults}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-darkblue hover:shadow-[0_0_20px_rgba(31,84,191,0.45)] transition-all duration-300 flex-1"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-regularblue px-4 py-2.5 text-sm font-googletitre font-medium text-darkblue transition-all duration-300 flex-1"
                 >
                   <Share2 className="h-4 w-4" />
                   {copied ? "Lien copié !" : "Partager le résultat"}

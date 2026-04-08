@@ -195,7 +195,7 @@ export function BentoGrid() {
             whileHover={{ scale: 1.05 }}
             className={cn(
               "group relative overflow-hidden rounded-3xl p-6 md:p-8 border border-lightblue/10",
-              "cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-regularblue/10 hover:border-lightblue/20",
+              "cursor-pointer transition-all duration-300 hover:border-lightblue/20",
               card.colSpan,
               card.rowSpan,
               card.gradient,

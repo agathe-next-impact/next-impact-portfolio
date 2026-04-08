@@ -89,7 +89,7 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
             <Link
               key={cat.slug}
               href={`/documentation/${cat.slug}`}
-              className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-darkblue/40 backdrop-blur-sm hover:border-lightblue/30 hover:bg-darkblue/60 hover:shadow-xl hover:shadow-regularblue/10 transition-all duration-300"
+              className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-darkblue/40 backdrop-blur-sm hover:border-lightblue/30 hover:bg-darkblue/60 transition-all duration-300"
             >
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
@@ -135,7 +135,7 @@ export function AllCategoriesGrid() {
               <Link
                 key={cat.slug}
                 href={`/documentation/${cat.slug}`}
-                className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-white/5 backdrop-blur-sm hover:border-lightblue/30 hover:bg-mediumblue/80 hover:shadow-xl hover:shadow-regularblue/10 transition-all duration-300"
+                className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-white/5 backdrop-blur-sm hover:border-lightblue/30 hover:bg-mediumblue/80 transition-all duration-300"
               >
                 <div>
                   <FolderOpen className="h-6 w-6 text-coral mb-2" />

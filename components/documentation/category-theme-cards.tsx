@@ -341,7 +341,7 @@ export function CategoryPageContent({
                   className={cn(
                     "group relative rounded-2xl p-4 border text-left transition-all duration-200",
                     isActive
-                      ? "bg-regularblue/20 border-regularblue/40 shadow-lg shadow-regularblue/10"
+                      ? "bg-regularblue/20 border-regularblue/40 "
                       : "bg-darkblue/40 border-lightblue/10 hover:bg-darkblue/60 hover:border-lightblue/20"
                   )}
                 >
@@ -419,7 +419,7 @@ export function CategoryPageContent({
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
                 className={cn(
-                  "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 hover:shadow-2xl hover:shadow-regularblue/10 transition-all duration-300",
+                  "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 transition-all duration-300",
                   profileId && !relevant && "opacity-40 hover:opacity-70"
                 )}
               >

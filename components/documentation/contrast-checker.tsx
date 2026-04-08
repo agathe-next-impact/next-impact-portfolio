@@ -83,7 +83,7 @@ export function ContrastChecker() {
                   className={cn(
                     "h-8 w-8 rounded-lg border-2 transition-all duration-200 hover:scale-110",
                     c.bg,
-                    fgIndex === i ? "border-white scale-110 shadow-lg" : "border-lightblue/20"
+                    fgIndex === i ? "border-white scale-110 " : "border-lightblue/20"
                   )}
                   title={c.name}
                 />
@@ -104,7 +104,7 @@ export function ContrastChecker() {
                   className={cn(
                     "h-8 w-8 rounded-lg border-2 transition-all duration-200 hover:scale-110",
                     c.bg,
-                    bgIndex === i ? "border-white scale-110 shadow-lg" : "border-lightblue/20"
+                    bgIndex === i ? "border-white scale-110 " : "border-lightblue/20"
                   )}
                   title={c.name}
                 />
