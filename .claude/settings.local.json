@@ -8,7 +8,13 @@
       "WebFetch(domain:whatcms.org)",
       "Bash(test:*)",
       "Bash(npm run build:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(grep -E \"bg-\\(darkblue|mediumblue|regularblue|extralightblue\\)\" /c/dev/next-impact-portfolio/components/*.tsx)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -l \"ThemeProvider\" /c/dev/next-impact-portfolio/app/*.tsx /c/dev/next-impact-portfolio/app/**/*.tsx)",
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(ls:*)"
     ]
   }
 }

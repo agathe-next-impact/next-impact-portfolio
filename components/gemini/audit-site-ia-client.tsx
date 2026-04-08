@@ -2,6 +2,7 @@
 import PageLayout from "@/components/page-layout";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -96,21 +97,21 @@ export default function AuditSiteIaClient() {
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
+                <BrandLogo src="/img/logo-wordpress-blanc.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
               </div>
             </div>
             <div
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
+                <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
               </div>
             </div>
             <div
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
+                <BrandLogo src="/img/logo-astro-blanc.webp" srcLight="/img/logo-astro.webp" alt="Logo Astro" width={120} height={120} />
               </div>
             </div>
         </div>

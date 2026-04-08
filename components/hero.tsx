@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -104,33 +105,33 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
             <div className="mt-5 flex flex-wrap items-center justify-start gap-4">
-              <Image
+              <BrandLogo
                 src="/img/logo-wordpress-blanc.webp"
+                srcLight="/img/logo-wordpress-small.webp"
                 alt="Logo WordPress"
                 width={45}
                 height={60}
                 priority
                 fetchPriority="high"
-                style={{ width: 'auto', height: 'auto' }}
               />
-              <Image
+              <BrandLogo
                 src="/img/logo-nextjs-blanc.webp"
+                srcLight="/img/logo-nextjs.webp"
                 alt="Logo Next.js"
                 width={80}
                 height={80}
                 priority
                 fetchPriority="high"
-                style={{ width: 'auto', height: 'auto' }}
               />
-              <Image
+              <BrandLogo
                 src="/img/logo-astro-blanc.webp"
+                srcLight="/img/logo-astro.webp"
                 alt="Logo Astro"
                 width={90}
                 height={80}
                 className="mt-1.5"
                 priority
                 fetchPriority="high"
-                style={{ width: 'auto', height: 'auto' }}
               />
             </div>
             <AnimatePresence mode="wait">
@@ -262,21 +263,21 @@ export default function Hero() {
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-wordpress-blanc.webp" alt="Logo WordPress" width={120} height={120} />
+                <BrandLogo src="/img/logo-wordpress-blanc.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
               </div>
             </div>
             <div
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-nextjs-blanc.webp" alt="Logo Next.js" width={120} height={120} />
+                <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
               </div>
             </div>
             <div
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <Image src="/img/logo-astro-blanc.webp" alt="Logo Astro" width={120} height={120} />
+                <BrandLogo src="/img/logo-astro-blanc.webp" srcLight="/img/logo-astro.webp" alt="Logo Astro" width={120} height={120} />
               </div>
             </div>
         </div>

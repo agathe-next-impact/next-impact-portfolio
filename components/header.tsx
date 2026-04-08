@@ -16,6 +16,8 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { GlobalProfileSwitcher } from "@/components/global-profile-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function NavBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -106,7 +108,7 @@ export function NavBar() {
                 className="fixed top-0 left-0 z-50 h-full w-full shadow-lg"
               >
                 <div className="flex items-center justify-between px-6 py-2 bg-darkblue border-b">
-                  <Image
+                  <BrandLogo
                     src="/img/logo-blanc-carre.webp"
                     alt="Next Impact Digital"
                     width={40}
@@ -114,7 +116,6 @@ export function NavBar() {
                     className="mr-2"
                     priority
                     fetchPriority="high"
-                    style={{ width: 'auto', height: 'auto' }}
                   />
                   <button
                     className="p-2 rounded-md focus:outline-none"
@@ -140,7 +141,7 @@ export function NavBar() {
                     <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
                       <File className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
-
+                    <ThemeToggle />
                   </div>
                   {/* <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink> */}
                   {/* Sous-menu "Vous êtes"
@@ -242,14 +243,13 @@ export default function Header() {
       {/* Logo */}
       <div className="shrink-0 pt-1">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <Image
+          <BrandLogo
             src="/img/logo-blanc-carre.png"
             alt="Next Impact Digital"
             width={30}
             height={30}
             priority
             fetchPriority="high"
-            style={{ width: 'auto', height: 'auto' }}
           />
         </Link>
       </div>
@@ -288,6 +288,7 @@ export default function Header() {
         <Link href="/a-propos">
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
         </Link>
+        <ThemeToggle />
       </div>
     </header>
   );

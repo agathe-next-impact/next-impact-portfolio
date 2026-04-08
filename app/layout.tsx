@@ -10,6 +10,7 @@ import { OrganizationJsonLd } from '@/components/json-ld'
 import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { HomepageProfileBanner } from '@/components/homepage-profile-banner'
+import { ThemeProvider } from '@/components/theme-provider'
 
 const inter = localFont({
   src: [
@@ -143,8 +144,8 @@ export default function RootLayout({
   children: React.ReactNode 
 }>) {
   return (
-    <html lang="fr" className={`scroll-smooth ${inter.variable} ${nunito.variable}`}>
-      <body>
+    <html lang="fr" suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${nunito.variable}`}>
+      <body className="bg-background">
         <OrganizationJsonLd />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-3D5PKXEN72"
@@ -163,24 +164,36 @@ export default function RootLayout({
           }}
         />
         <ClarityScript />
-        {/* Background SVG – fixed on all devices */}
-        <div className="fixed inset-0 z-0 will-change-transform" style={{ WebkitBackfaceVisibility: 'hidden' }}>
-          <Image
-            src="/img/chipset-tech-background.svg"
-            alt=""
-            fill
-            className="object-cover"
-            priority
-            quality={90}
-          />
-        </div>
-        <DocumentationModeProvider>
-          <Header />
-          <HomepageProfileBanner />
-          {children}
-          <Footer />
-          <MetadataDebugger />
-        </DocumentationModeProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} themes={['light', 'dark']} disableTransitionOnChange>
+          {/* theme-system: Background SVG dark */}
+          <div className="fixed inset-0 z-0 will-change-transform hidden dark:block" style={{ WebkitBackfaceVisibility: 'hidden' }}>
+            <Image
+              src="/img/chipset-tech-background.svg"
+              alt=""
+              fill
+              className="object-cover"
+              priority
+              quality={90}
+            />
+          </div>
+          {/* theme-system: Background SVG light */}
+          <div className="fixed inset-0 z-0 will-change-transform block dark:hidden" style={{ WebkitBackfaceVisibility: 'hidden' }}>
+            <Image
+              src="/img/chipset-background-light.svg"
+              alt=""
+              fill
+              className="object-cover"
+              quality={90}
+            />
+          </div>
+          <DocumentationModeProvider>
+            <Header />
+            <HomepageProfileBanner />
+            {children}
+            <Footer />
+            <MetadataDebugger />
+          </DocumentationModeProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

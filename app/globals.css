@@ -135,6 +135,37 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* theme-system: light mode tokens (shadcn) */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 232 96% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 232 96% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 232 96% 18%;
+    --primary: 234 96% 23%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 219 60% 97%;
+    --secondary-foreground: 232 96% 18%;
+    --muted: 219 60% 97%;
+    --muted-foreground: 234 96% 23%;
+    --accent: 219 60% 97%;
+    --accent-foreground: 232 96% 18%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 219 60% 90%;
+    --input: 219 60% 90%;
+    --ring: 234 96% 23%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 232 96% 18%;
+    --sidebar-primary: 234 96% 23%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 219 60% 97%;
+    --sidebar-accent-foreground: 232 96% 18%;
+    --sidebar-border: 219 60% 90%;
+    --sidebar-ring: 234 96% 23%;
+  }
 }
 
 @layer base {
@@ -376,4 +407,115 @@ body {
     @apply text-white/80;
   }
 }
+
+/* ===========================================================================
+   theme-system: LIGHT MODE OVERRIDES
+   Surcharge des classes hard-codées sans toucher au dark mode.
+   Sélecteurs d'attribut pour capter les variantes d'opacité (bg-darkblue/40).
+   =========================================================================== */
+
+.light body { color: #020F59; background-color: #FFFFFF; }
+
+/* --- Surfaces : tous les bleus → bleu très clair translucide + blur --- */
+.light [class*="bg-darkblue"],
+.light [class*="bg-mediumblue"],
+.light [class*="bg-regularblue"],
+.light [class*="bg-lightblue"],
+.light [class*="bg-extralightblue"] {
+  background-color: rgba(208, 220, 242, 0.35) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.light [class*="bg-white"]  { background-color: #FFFFFF !important; }
+.light [class*="bg-black"]  { background-color: rgba(2, 15, 89, 0.4) !important; }
+
+/* --- Textes : blanc/bleu clair → darkblue/mediumblue --- */
+.light [class*="text-white"],
+.light [class*="text-extralightblue"],
+.light [class*="text-lightblue"]   { color: #020F59 !important; }
+.light [class*="text-darkblue"]    { color: #020F59 !important; }
+.light [class*="text-mediumblue"]  { color: #021373 !important; }
+.light [class*="text-regularblue"] { color: #021373 !important; }
+
+/* --- Bordures : discrètes en bleu très clair --- */
+.light [class*="border-white"],
+.light [class*="border-darkblue"],
+.light [class*="border-mediumblue"],
+.light [class*="border-regularblue"],
+.light [class*="border-lightblue"],
+.light [class*="border-extralightblue"] {
+  border-color: rgba(208, 220, 242, 0.6) !important;
+}
+
+/* --- Gradients brand : annulés et remplacés par fond bleu très clair --- */
+.light [class*="from-darkblue"],
+.light [class*="from-mediumblue"],
+.light [class*="from-regularblue"],
+.light [class*="from-lightblue"],
+.light [class*="from-extralightblue"],
+.light [class*="to-darkblue"],
+.light [class*="to-mediumblue"],
+.light [class*="to-regularblue"],
+.light [class*="to-lightblue"],
+.light [class*="to-extralightblue"],
+.light [class*="via-darkblue"],
+.light [class*="via-mediumblue"],
+.light [class*="via-regularblue"],
+.light [class*="via-lightblue"],
+.light [class*="via-extralightblue"] {
+  --tw-gradient-from: rgba(208, 220, 242, 0.35) !important;
+  --tw-gradient-to: rgba(208, 220, 242, 0.35) !important;
+  --tw-gradient-via: rgba(208, 220, 242, 0.35) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  background-image: none !important;
+  background-color: rgba(208, 220, 242, 0.35) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* --- SVG inline : fill/stroke blanc → darkblue --- */
+.light [fill="white"],  .light [fill="#fff"],
+.light [fill="#FFF"],   .light [fill="#ffffff"],
+.light [fill="#FFFFFF"] { fill: #020F59 !important; }
+.light [stroke="white"],.light [stroke="#fff"],
+.light [stroke="#FFF"], .light [stroke="#ffffff"],
+.light [stroke="#FFFFFF"] { stroke: #020F59 !important; }
+.light .fill-white   { fill: #020F59 !important; }
+.light .stroke-white { stroke: #020F59 !important; }
+
+/* --- Accents (orange/coral/yellow) : assombris en TEXTE pour contraste AA --- */
+.light [class*="text-orange"]      { color: #FF6B6B !important; }
+.light [class*="text-coral"]       { color: #B22020 !important; }
+.light [class*="text-lightyellow"] { color: #FF6B6B !important; }
+
+/* --- .article-text (MDX) : texte blanc → bleu foncé --- */
+.light .article-text,
+.light .article-text p,
+.light .article-text li,
+.light .article-text h1,
+.light .article-text h2,
+.light .article-text h3,
+.light .article-text h4 { color: #021373 !important; }
+.light .article-text > p:first-child { color: #020F59 !important; }
+.light .article-text strong { color: #020F59 !important; box-shadow: inset 0 -0.35em 0 0 rgba(255, 107, 107, 0.18); }
+.light .article-text blockquote p { color: #021373 !important; }
+.light .article-text pre {
+  background-color: rgba(208, 220, 242, 0.4) !important;
+  color: #020F59 !important;
+}
+.light .article-text code { color: #FF6B6B !important; background-color: rgba(242, 159, 5, 0.1) !important; }
+.light .article-text a    { color: #FF6B6B !important; text-decoration-color: rgba(184, 92, 9, 0.5) !important; }
+.light .article-text th   { color: #020F59 !important; background-color: rgba(242, 159, 5, 0.1) !important; }
+.light .article-text td   { color: #021373 !important; border-color: rgba(208, 220, 242, 0.6) !important; }
+.light .article-text tr:nth-child(even) td { background-color: rgba(208, 220, 242, 0.15) !important; }
+.light .article-text tr:hover td { background-color: rgba(208, 220, 242, 0.3) !important; }
+.light .article-text .diagnostic-dark h3,
+.light .article-text .diagnostic-dark h4,
+.light .article-text .diagnostic-dark p,
+.light .article-text .diagnostic-dark span,
+.light .article-text .diagnostic-dark li,
+.light .article-text .diagnostic-dark a { color: #020F59 !important; }
+
+/* --- li orphelin (ligne 376 base layer) --- */
+.light li { color: #021373; }
 
