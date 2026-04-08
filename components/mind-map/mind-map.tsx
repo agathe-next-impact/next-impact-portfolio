@@ -39,6 +39,7 @@ import {
   ExternalLink,
 } from "lucide-react"
 import Link from "next/link"
+import { useTheme } from "next-themes"
 
 // ══════════════════════════════════════════
 // Types
@@ -354,10 +355,12 @@ function MindMapNodeCard({
   node,
   isExpanded,
   onToggle,
+  isLight,
 }: {
   node: PositionedNode
   isExpanded: boolean
   onToggle: (id: string) => void
+  isLight: boolean
 }) {
   const isRoot = node.depth === 0
   const fontSize = isRoot ? 16 : node.depth === 1 ? 15 : 14
@@ -395,12 +398,16 @@ function MindMapNodeCard({
           group
         `}
         style={{
-          background: isRoot
-            ? `linear-gradient(135deg, rgba(31, 84, 191, 0.4) 0%, rgba(2, 19, 89, 0.6) 50%, rgba(2, 15, 89, 0.8) 100%)`
-            : `rgba(2, 19, 115, 0.8)`,
+          background: isLight
+            ? (isRoot
+                ? `linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(208, 220, 242, 0.85) 50%, rgba(208, 220, 242, 0.95) 100%)`
+                : `rgba(255, 255, 255, 0.85)`)
+            : (isRoot
+                ? `linear-gradient(135deg, rgba(31, 84, 191, 0.4) 0%, rgba(2, 19, 89, 0.6) 50%, rgba(2, 15, 89, 0.8) 100%)`
+                : `rgba(2, 19, 115, 0.8)`),
           borderColor: isExpanded
             ? `${node.color}50`
-            : `rgba(113, 158, 217, 0.1)`,
+            : (isLight ? `rgba(2, 15, 89, 0.15)` : `rgba(113, 158, 217, 0.1)`),
           borderLeftWidth: isRoot ? 1 : 3,
           borderLeftColor: node.color,
         }}
@@ -429,8 +436,8 @@ function MindMapNodeCard({
 
         {/* Label */}
         <span
-          className="flex-1 leading-snug text-white/90 line-clamp-2 font-googletitre"
-          style={{ fontSize, fontWeight }}
+          className="flex-1 leading-snug line-clamp-2 font-googletitre"
+          style={{ fontSize, fontWeight, color: isLight ? '#020F59' : 'rgba(255,255,255,0.9)' }}
           title={node.label}
         >
           {node.label}
@@ -533,6 +540,11 @@ function getSubtreeIds(root: NodeData, targetId: string): Set<string> | null {
 // ══════════════════════════════════════════
 
 export default function MindMap() {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  const isLight = mounted && resolvedTheme === 'light'
+
   const [expanded, setExpanded] = useState<Set<string>>(new Set(["root"]))
   const [zoom, setZoom] = useState(1.15)
   const [pan, setPan] = useState({ x: 60, y: 40 })
@@ -794,8 +806,9 @@ export default function MindMap() {
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(113,158,217,0.12) 1px, transparent 1px)",
+          backgroundImage: isLight
+            ? "radial-gradient(circle, rgba(2, 15, 89, 0.18) 1px, transparent 1px)"
+            : "radial-gradient(circle, rgba(113,158,217,0.12) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -804,8 +817,9 @@ export default function MindMap() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(31, 84, 191, 0.08) 0%, transparent 100%)",
+          background: isLight
+            ? "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(31, 84, 191, 0.05) 0%, transparent 100%)"
+            : "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(31, 84, 191, 0.08) 0%, transparent 100%)",
         }}
       />
 
@@ -921,6 +935,7 @@ export default function MindMap() {
                 node={node}
                 isExpanded={expanded.has(node.id)}
                 onToggle={toggleNode}
+                isLight={isLight}
               />
             ))}
           </AnimatePresence>

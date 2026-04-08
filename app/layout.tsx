@@ -164,7 +164,7 @@ export default function RootLayout({
           }}
         />
         <ClarityScript />
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} themes={['light', 'dark']} disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem themes={['light', 'dark']} disableTransitionOnChange>
           {/* theme-system: Background SVG dark */}
           <div className="fixed inset-0 z-0 will-change-transform hidden dark:block" style={{ WebkitBackfaceVisibility: 'hidden' }}>
             <Image

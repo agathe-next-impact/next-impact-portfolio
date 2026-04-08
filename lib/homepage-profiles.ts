@@ -470,7 +470,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       "Discutons de vos objectifs business et du ROI que vous pouvez attendre.",
   },
   utilisateur: {
-    titre: "Qui sommes-nous",
+    titre: "Qui je suis",
     sousTitre:
       "Des sites simples à gérer, rapides pour vos visiteurs — avec le WordPress que vous connaissez déjà.",
     manifesteIntro:

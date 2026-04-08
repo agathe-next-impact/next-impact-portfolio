@@ -421,7 +421,7 @@ body {
 .light [class*="bg-regularblue"],
 .light [class*="bg-lightblue"],
 .light [class*="bg-extralightblue"] {
-  background-color: rgba(208, 220, 242, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
 }
@@ -463,12 +463,12 @@ body {
 .light [class*="via-regularblue"],
 .light [class*="via-lightblue"],
 .light [class*="via-extralightblue"] {
-  --tw-gradient-from: rgba(208, 220, 242, 0.35) !important;
-  --tw-gradient-to: rgba(208, 220, 242, 0.35) !important;
-  --tw-gradient-via: rgba(208, 220, 242, 0.35) !important;
+  --tw-gradient-from: rgba(255, 255, 255, 0.35) !important;
+  --tw-gradient-to: rgba(255, 255, 255, 0.35) !important;
+  --tw-gradient-via: rgba(255, 255, 255, 0.35) !important;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
   background-image: none !important;
-  background-color: rgba(208, 220, 242, 0.35) !important;
+  background-color: rgba(255, 255, 255, 0.35) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
 }

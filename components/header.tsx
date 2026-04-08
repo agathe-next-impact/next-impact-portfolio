@@ -107,9 +107,10 @@ export function NavBar() {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="fixed top-0 left-0 z-50 h-full w-full "
               >
-                <div className="flex items-center justify-between px-6 py-2 bg-darkblue border-b">
+                <div className="flex items-center justify-between px-6 py-2 bg-white dark:bg-darkblue border-b">
                   <BrandLogo
                     src="/img/logo-blanc-carre.webp"
+                    srcLight="/img/logo-small-next-impact.jpg"
                     alt="Next Impact Digital"
                     width={40}
                     height={40}
@@ -125,7 +126,7 @@ export function NavBar() {
                     <CloseIcon className="w-10 h-10 text-white" />
                   </button>
                 </div>
-                <div className="h-screen p-4 space-y-0 bg-darkblue backdrop-blur-md">
+                <div className="h-screen p-4 space-y-0 bg-white dark:bg-darkblue dark:backdrop-blur-md">
                   <MobileMenuLink href="/services" onClick={handleMenuClick}>Services & Tarifs</MobileMenuLink>
                   <MobileMenuLink href="/avantage-oeth" onClick={handleMenuClick}>Avantage OETH</MobileMenuLink>
                   <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
@@ -245,6 +246,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
           <BrandLogo
             src="/img/logo-blanc-carre.png"
+            srcLight="/img/logo-small-next-impact.jpg"
             alt="Next Impact Digital"
             width={30}
             height={30}
