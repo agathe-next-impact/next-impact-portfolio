@@ -110,7 +110,7 @@ export function NavBar() {
                 <div className="flex items-center justify-between px-6 py-2 bg-white dark:bg-darkblue border-b">
                   <BrandLogo
                     src="/img/logo-blanc-carre.webp"
-                    srcLight="/img/logo-small-next-impact.jpg"
+                    srcLight="/img/logo-small.webp"
                     alt="Next Impact Digital"
                     width={40}
                     height={40}
@@ -246,7 +246,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
           <BrandLogo
             src="/img/logo-blanc-carre.png"
-            srcLight="/img/logo-small-next-impact.jpg"
+            srcLight="/img/logo-small.png"
             alt="Next Impact Digital"
             width={30}
             height={30}

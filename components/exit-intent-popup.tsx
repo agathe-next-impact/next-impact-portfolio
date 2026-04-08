@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 
 interface ExitIntentPopupProps {
   title?: string;
@@ -151,9 +151,10 @@ export function ExitIntentPopup({
       <DialogContent className="flex flex-col md:flex-row sm:max-w-md border-none overflow-hidden p-0">
         <div className="p-6 bg-mediumblue backdrop-blur-lg">
           <div className="mx-auto flex items-center justify-center rounded-full">
-            <Image
+            <BrandLogo
               alt="Logo Next Impact"
               src="/img/logo-blanc-carre.png"
+              srcLight="/img/logo-small.png"
               width={100}
               height={100}
               fetchPriority="high"

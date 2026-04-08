@@ -23,7 +23,7 @@ interface BrandLogoProps {
  */
 export function BrandLogo({
   src = '/img/logo-blanc-carre.png',
-  srcLight,
+  srcLight = '/img/logo-small.png',
   alt,
   width,
   height,
