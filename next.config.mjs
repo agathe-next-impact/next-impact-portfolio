@@ -55,6 +55,11 @@ const nextConfig = {
         destination: '/outils',
         permanent: true,
       },
+      {
+        source: '/articles/wordpress-headless-impact-social-pme-engagees',
+        destination: '/services',
+        permanent: true,
+      },
     ]
   },
 }

@@ -45,7 +45,7 @@ export function ServicesComparisonTable() {
     <section className="py-0 md:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-semibold text-white/80 text-center mb-10">
-          Comparatif des offres
+          Comparatif des stacks
         </h2>
 
         {/* Table desktop */}
@@ -59,13 +59,13 @@ export function ServicesComparisonTable() {
                       Fonctionnalité
                     </th>
                     <th className="text-center p-6 text-coral font-semibold font-googletitre text-xl">
-                      Solidaire
+                      Présence Essentielle
                     </th>
                     <th className="text-center p-6 text-lightyellow font-semibold font-googletitre text-xl">
-                      Équilibre
+                      Croissance Accélérée
                     </th>
                     <th className="text-center p-6 text-extralightblue font-semibold font-googletitre text-xl">
-                      Soutien
+                      Plateforme Sur-Mesure
                     </th>
                   </tr>
                 </thead>
@@ -128,7 +128,7 @@ export function ServicesComparisonTable() {
               <div className="md:font-semibold text-white mb-2 text-2xl md:text-lg">{row.feature}</div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-coral text-xl">Solidaire</span>
+                  <span className="font-googletitre text-coral text-xl">Présence Essentielle</span>
                   {typeof row.pack1 === "boolean" ? (
                     row.pack1 ? (
                       <CheckCircle2 className="h-5 w-5 text-coral" />
@@ -140,7 +140,7 @@ export function ServicesComparisonTable() {
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-lightyellow text-xl">Équilibre</span>
+                  <span className="font-googletitre text-lightyellow text-xl">Croissance Accélérée</span>
                   {typeof row.pack2 === "boolean" ? (
                     row.pack2 ? (
                       <CheckCircle2 className="h-5 w-5 text-lightyellow" />
@@ -152,7 +152,7 @@ export function ServicesComparisonTable() {
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-extralightblue text-xl">Soutien</span>
+                  <span className="font-googletitre text-extralightblue text-xl">Plateforme Sur-Mesure</span>
                   {typeof row.pack3 === "boolean" ? (
                     row.pack3 ? (
                       <CheckCircle2 className="h-5 w-5 text-extralightblue" />

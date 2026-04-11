@@ -260,25 +260,6 @@ export default function AvantageOethClient() {
                 </p>
               </motion.div>
 
-              {/*<motion.div
-                custom={1}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm"
-              >
-                <Heart className="h-12 w-12 text-coral mb-4" />
-                <h3 className="text-2xl font-googletitre font-medium text-white mb-3">
-                  Impact social
-                </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  En travaillant avec une prestataire TIH, vous contribuez
-                  à l&apos;emploi inclusif et à la transition numérique de
-                  l&apos;ESS. Votre projet web a un impact concret.
-                </p>
-              </motion.div>*/}
-
               <motion.div
                 custom={2}
                 variants={fadeUp}
@@ -322,7 +303,7 @@ export default function AvantageOethClient() {
               <Link href="/services">
                 <Button
                   variant="outline"
-                  className="h-12 px-8 font-googletitre text-lg rounded-full border-white/20 text-mediumblue hover:bg-white/10"
+                  className="h-12 px-8 font-googletitre text-lg text-white hover:text-white/80 rounded-full border-white/20 bg-mediumblue hover:bg-mediumblue/80 transition-all duration-300"
                 >
                   Voir les offres
                 </Button>
@@ -340,7 +321,7 @@ export default function AvantageOethClient() {
             Guides et ressources OETH
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {[
               {
                 href: "/articles/reduire-contribution-agefiph-sous-traitance-tih",
@@ -359,15 +340,6 @@ export default function AvantageOethClient() {
                 tag: "Comptabilité",
                 color: "text-lightyellow",
                 borderColor: "border-lightyellow/20",
-              },
-              {
-                href: "/articles/wordpress-headless-impact-social-pme-engagees",
-                title: "WordPress Headless + impact social",
-                description:
-                  "Performance technique, emploi inclusif et avantage fiscal : un investissement web à triple bénéfice.",
-                tag: "RSE / Dirigeants",
-                color: "text-lightblue",
-                borderColor: "border-lightblue/20",
               },
             ].map((article) => (
               <Link key={article.href} href={article.href} className="group">

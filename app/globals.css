@@ -102,25 +102,26 @@ body {
     --complementary3: #F2E57E;
   }
   .dark {
-    --background: 0 0% 3.9%;
+    /* Surfaces alignées sur la palette brand (darkblue / mediumblue / regularblue / lightblue) */
+    --background: 231 95% 18%;            /* darkblue #020F59 */
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 231 97% 23%;                  /* mediumblue #021373 */
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
+    --popover: 231 97% 23%;               /* mediumblue */
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
+    --primary-foreground: 231 95% 18%;    /* darkblue */
+    --secondary: 231 97% 23%;             /* mediumblue */
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --muted: 231 97% 23%;                 /* mediumblue */
+    --muted-foreground: 214 58% 65%;      /* lightblue #719ED9 */
+    --accent: 231 97% 23%;                /* mediumblue */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 220 72% 43%;                /* regularblue #1F54BF — visible sur darkblue */
+    --input: 220 72% 43%;                 /* regularblue */
+    --ring: 214 58% 65%;                  /* lightblue */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;

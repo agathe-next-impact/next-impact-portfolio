@@ -9,7 +9,6 @@ import { PricingCards } from "@/components/services/PricingCards";
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
-import TarifsESSCarousel from "@/components/tarifs/TarifsESSCarousel";
 import { HeadlessExplainer } from "@/components/headless-explainer";
 import PageLayout from "@/components/page-layout";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
@@ -27,25 +26,6 @@ export default function ServicesClient() {
       sousTitre=""
     >
       <div className="mt-8 mb-6 space-y-24">
-
-        {/* TODO: remove after validation — ancien carousel ESS */}
-        {/* <section className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto mb-12">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={`carousel-label-${profileId || "default"}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center"
-              >
-                {variant.carouselLabel}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-          <TarifsESSCarousel />
-        </section> */}
 
         {/* Comprendre le WordPress Headless — parcours interactif */}
         <section className="container mx-auto px-4 pb-12">
@@ -84,44 +64,44 @@ export default function ServicesClient() {
           </div>
         </section>
 
-        {/* Critères d'éligibilité & Transparence */}
+        {/* Comment choisir sa stack */}
         <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
           <div className="max-w-4xl mx-auto px-4">
             <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-              Critères de sélection &amp; Transparence
+              Méthode &amp; Transparence
             </p>
             <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
-              Critères d&apos;éligibilité
+              Comment je choisis votre stack
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/content-icon.svg" alt="Justificatif" width={48} height={48} className="mb-4" />
+                <Image src="/icons/content-icon.svg" alt="Périmètre" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Justificatif financier
+                  Périmètre fonctionnel
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Dernier compte de résultat ou budget prévisionnel certifié.
+                  Site vitrine, blog, e-commerce, application métier : chaque type de projet a sa stack idéale.
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/globe-network-icon.svg" alt="Structure" width={48} height={48} className="mb-4" />
+                <Image src="/icons/globe-network-icon.svg" alt="Volumétrie" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Preuve d&apos;impact
+                  Volumétrie &amp; trafic
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Statuts de la structure (Loi 1901, agrément ESUS, Coopérative).
+                  Sous 10k visites/mois, le monolithique optimisé suffit. Au-delà, le headless rentabilise vite.
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/eco-design-icon.svg" alt="Engagement" width={48} height={48} className="mb-4" />
+                <Image src="/icons/eco-design-icon.svg" alt="Évolutivité" width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Engagement
+                  Évolutivité visée
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Signature de la charte de sobriété numérique de Next Impact.
+                  Intégrations API, multisites, applications métier : Next.js est le bon palier.
                 </p>
               </div>
             </div>
@@ -211,10 +191,10 @@ export default function ServicesClient() {
 
             <Link href="/contact" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
-                <Image src="/icons/optimize-icon.svg" alt="Offre" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Déterminez votre offre</h3>
+                <Image src="/icons/optimize-icon.svg" alt="Stack" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Choisissez votre stack</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Répondez à quelques questions pour découvrir l&apos;offre adaptée à votre structure.
+                  Répondez à quelques questions pour identifier la stack adaptée à votre projet.
                 </p>
               </div>
             </Link>

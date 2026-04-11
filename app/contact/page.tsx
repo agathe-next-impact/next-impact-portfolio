@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/json-ld";
-import { ContactFunnel } from "@/components/contact/contact-funnel";
+import EligibilityForm from "@/components/tarifs/EligibilityForm";
+import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
 import PageLayout from "@/components/page-layout";
 
 export const revalidate = 21600;
@@ -10,8 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
     title: "Contact — Devis WordPress Headless & Appel Découverte Gratuit",
     description:
-      "Trouvez l'offre adaptée à votre structure en 4 étapes. " +
-      "Association, PME ou Grand Compte : audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
+      "Identifiez la stack adaptée à votre projet en 4 étapes : WordPress monolithique optimisé, hybride Astro ou Next.js complet. " +
+      "Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
     path: "/contact",
     image: "/img/contact-facilitation.jpg",
     keywords: [
@@ -19,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "devis site WordPress Headless",
       "demande de projet web",
       "rendez-vous visio freelance",
-      "péréquation solidaire",
+      "diagnostic stack WordPress",
       "audit site gratuit",
       "appel découverte",
       "tarif site Next.js",
@@ -38,12 +39,15 @@ export default function ContactPage() {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ContactPageJsonLd />
       <PageLayout
-        titre="Trouvez votre offre"
-        sousTitre="Répondez à quelques questions pour découvrir la solution adaptée à vos besoins."
+        titre="Choisissez votre stack"
+        sousTitre="Répondez à quelques questions pour identifier la stack WordPress adaptée à votre projet."
       >
-        <div className="mt-4 sm:mt-8 mb-6 space-y-12 md:space-y-24">
-          <ContactFunnel />
-        </div>
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <EligibilityForm />
+            <ContactDirectInfo />
+          </div>
+        </section>
       </PageLayout>
     </main>
   );

@@ -93,10 +93,10 @@ export default function AboutClient() {
             Le parcours
           </p>
           <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
-            De l&apos;engagement de terrain à l&apos;architecture web
+            De l&apos;utilisateur WordPress à l&apos;architecte de stacks modernes
           </h2>
           <p className="text-lg text-white/70 text-center mb-16 font-googletexte">
-            Une boucle bouclée, entre conviction et code.
+            Vingt ans à manipuler, personnaliser puis reconstruire WordPress — du back-office à l&apos;architecture headless.
           </p>
 
           {/* Timeline */}
@@ -116,19 +116,19 @@ export default function AboutClient() {
             <div className="relative flex flex-col md:flex-row md:items-start mb-16">
               <div className="md:w-1/2 md:pr-12 bg-mediumblue/20 backdrop-blur-md md:text-right p-4 md:pl-12 md:pl-0 border md:ml-8 border-white/10 rounded-2xl">
                 <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  2005 — L&apos;engagement
+                  2005 — Le terrain
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Le choix du terrain
+                  Quinze ans à utiliser WordPress avant de le coder
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
                   Mettre de côté une passion pour le développement informatique
-                  pour plonger au cœur de l&apos;action. Pendant 15 ans, œuvrer
-                  dans la communication pour le secteur associatif. Apprendre ce
-                  que signifie réellement &ldquo;l&apos;impact&rdquo; : gestion
-                  des bénévoles, urgence des collectes de fonds, lutte permanente
-                  pour la visibilité.
+                  pour plonger dans la communication digitale. Pendant 15 ans,
+                  utiliser WordPress au quotidien : créer des pages, gérer des
+                  contenus, configurer des thèmes, débugger des plugins. Vivre de
+                  l&apos;intérieur ce qui marche — et surtout ce qui frustre les
+                  équipes éditoriales sur cet outil.
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function AboutClient() {
               <div className="absolute left-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
                 <Image
                   src="/img/about-code.jpg"
-                  alt="Engagement associatif de Next Impact"
+                  alt="Retour au code de Next Impact"
                   width={200}
                   height={200}
                   className="h-full w-full object-cover rounded-2xl border border-white/10"
@@ -152,19 +152,18 @@ export default function AboutClient() {
               </div>
               <div className="md:w-1/2 md:pl-12 border md:mr-8 border-white/10 rounded-2xl bg-mediumblue/20 backdrop-blur-md p-4">
                 <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  2020 — Le code comme contribution
+                  2020 — Le retour au code
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  De WordPress au développement sur-mesure
+                  De la personnalisation WordPress au développement sur-mesure
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  C&apos;est le terrain qui a ramené au réel de mes compétences.
-                  Face aux besoins croissants des associations pour des outils web
-                  performants, bâtir des solutions sur mesure. D&apos;abord au
-                  coup par coup, puis de façon structurelle. De la
-                  personnalisation WordPress au développement complexe de thèmes
-                  et plugins.
+                  Face aux limites des thèmes et plugins du marché, repasser au
+                  code. D&apos;abord au coup par coup pour résoudre des frictions
+                  précises, puis de façon structurelle : thèmes custom, plugins
+                  WordPress sur-mesure, intégrations API. Une expertise WordPress
+                  full-stack, construite par la nécessité.
                 </p>
               </div>
             </div>
@@ -173,7 +172,7 @@ export default function AboutClient() {
             <div className="relative flex flex-col md:flex-row md:items-start">
               <div className="absolute right-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
                 <Image
-                  src="/img/about-agathe.jpg"
+                  src="/img/contact-agathe-km.png"
                   alt="Engagement associatif de Next Impact"
                   width={200}
                   height={200}
@@ -186,25 +185,26 @@ export default function AboutClient() {
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  La fusion de trois piliers
+                  Trois stacks WordPress, une conviction
                 </h3>
                 <ul className="space-y-4 text-white/70 font-googletexte">
                   <li className="flex items-start gap-3 md:flex-row-reverse">
                     <span className="text-white/70">
                       <strong className="text-white">
-                        L&apos;expertise métier :
+                        L&apos;expertise utilisateur :
                       </strong>{" "}
-                      15 ans de com&apos; asso pour comprendre vos enjeux
-                      nativement
+                      15 ans à manipuler WordPress côté édition pour comprendre
+                      ce qu&apos;il faut absolument préserver de son admin.
                     </span>
                   </li>
                   <li className="flex items-start gap-3 md:flex-row-reverse">
                     <span className="text-white/70">
                       <strong className="text-white">
-                        La pointe technologique :
+                        La maîtrise technique :
                       </strong>{" "}
-                      Architecture Headless pour offrir les performances du privé
-                      au secteur de l&apos;impact
+                      Trois stacks au choix — WordPress monolithique optimisé,
+                      headless + Astro, headless + Next.js — pour révolutionner
+                      le front sans toucher à l&apos;admin.
                     </span>
                   </li>
                   <li className="flex items-start gap-3 md:flex-row-reverse">
@@ -212,8 +212,8 @@ export default function AboutClient() {
                       <strong className="text-white">
                         L&apos;accélération par l&apos;IA :
                       </strong>{" "}
-                      Solutions haut de gamme plus rapides et accessibles à ceux
-                      qui en ont un besoin vital
+                      Outils d&apos;audit et workflows IA pour livrer plus vite
+                      des sites WordPress aux standards de la Tech.
                     </span>
                   </li>
                 </ul>

@@ -14,7 +14,9 @@
       "Bash(grep -l \"ThemeProvider\" /c/dev/next-impact-portfolio/app/*.tsx /c/dev/next-impact-portfolio/app/**/*.tsx)",
       "Bash(grep:*)",
       "Bash(git checkout:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cat .eslintrc*)",
+      "Bash(cat eslint.config.*)"
     ]
   }
 }

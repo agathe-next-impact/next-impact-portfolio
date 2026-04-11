@@ -298,7 +298,7 @@ export default function ArticleReduireAgefiph() {
                     "Un site web ultra-performant aux standards de la Tech (< 1s de chargement, SEO natif, sécurité maximale)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
-                    "Trois offres adaptées à tous les budgets : Solidaire (2 250 €), Équilibre (4 000 €), Soutien (5 000 €+)",
+                    "Trois stacks WordPress adaptées à tous les projets : Présence Essentielle (2 250 €), Croissance Accélérée (4 000 €), Plateforme Sur-Mesure (5 000 €+)",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-lightyellow mt-0.5 shrink-0" />

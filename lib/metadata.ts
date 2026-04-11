@@ -204,8 +204,8 @@ export const pageMetadata = {
     generatePageMetadata({
       title: "Contact — Devis WordPress Headless & Appel Découverte Gratuit",
       description:
-        "Trouvez l'offre adaptée à votre structure en 4 étapes. " +
-        "Association, PME ou Grand Compte : audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
+        "Identifiez la stack adaptée à votre projet en 4 étapes : WordPress monolithique optimisé, hybride Astro ou Next.js complet. " +
+        "Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
       path: "/contact",
       image: "/img/contact-facilitation.jpg",
       keywords: [
@@ -213,7 +213,7 @@ export const pageMetadata = {
         "devis site WordPress Headless",
         "demande de projet web",
         "rendez-vous visio freelance",
-        "péréquation solidaire",
+        "diagnostic stack WordPress",
         "audit site gratuit",
         "appel découverte",
         "tarif site Next.js",
@@ -224,8 +224,8 @@ export const pageMetadata = {
     generatePageMetadata({
       title: "Études de cas WordPress Headless — Réalisations",
       description:
-        "Découvrez les projets réalisés : sites corporate, institutionnels, ESS, " +
-        "headless. Résultats concrets en performance, design et conversion.",
+        "Découvrez les projets réalisés : sites corporate, institutionnels, plateformes headless. " +
+        "Résultats concrets en performance, design et conversion.",
       path: "/etudes-de-cas",
       keywords: [
         "portfolio WordPress Headless",

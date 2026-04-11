@@ -4,19 +4,19 @@ import { FormEvent, useMemo, useRef, useState, useEffect } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown, Info, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const statuses = [
-  "Association Loi 1901",
-  "Coopérative (SCOP, SCIC) / Entreprise ESUS",
-  "Auto-entrepreneur / Freelance",
-  "Entreprise (SAS, SARL, etc.)",
-  "Secteur Public / Fondation",
+const projectTypes = [
+  "Site vitrine ou institutionnel",
+  "Blog ou site éditorial",
+  "Site e-commerce",
+  "Application web ou portail métier",
+  "Multisite ou plateforme à fort volume",
 ];
 
-const domains = [
-  "Écologie / Environnement",
-  "Social / Insertion / Santé",
-  "Éducation / Culture",
-  "Autre",
+const integrations = [
+  "Aucune intégration spécifique",
+  "CRM ou outil marketing",
+  "API métier interne",
+  "Plusieurs sources de contenu",
 ];
 
 const headlessReasons = [
@@ -26,7 +26,7 @@ const headlessReasons = [
   "Besoin de sur-mesure total",
 ];
 
-type BudgetBand = "lt100" | "100-500" | "gt500";
+type TrafficBand = "low" | "medium" | "high";
 
 type Result = {
   title: string;
@@ -37,68 +37,70 @@ type Result = {
 
 export default function EligibilityForm() {
   const [name, setName] = useState("");
-  const [status, setStatus] = useState(statuses[0]);
-  const [statusOpen, setStatusOpen] = useState(false);
-  const statusRef = useRef<HTMLDivElement>(null);
+  const [projectType, setProjectType] = useState(projectTypes[0]);
+  const [projectOpen, setProjectOpen] = useState(false);
+  const projectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (statusRef.current && !statusRef.current.contains(e.target as Node)) {
-        setStatusOpen(false);
+      if (projectRef.current && !projectRef.current.contains(e.target as Node)) {
+        setProjectOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
-  const [budget, setBudget] = useState<BudgetBand>("lt100");
-  const [impactYes, setImpactYes] = useState(true);
-  const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
+  const [traffic, setTraffic] = useState<TrafficBand>("low");
+  const [needsCustomApi, setNeedsCustomApi] = useState(false);
+  const [selectedIntegrations, setSelectedIntegrations] = useState<string[]>([]);
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [result, setResult] = useState<Result | null>(null);
 
-  const isSolidarityStructure = useMemo(
+  const isComplexProject = useMemo(
     () =>
-      status === "Association Loi 1901" ||
-      status === "Coopérative (SCOP, SCIC) / Entreprise ESUS",
-    [status]
+      projectType === "Application web ou portail métier" ||
+      projectType === "Multisite ou plateforme à fort volume",
+    [projectType]
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const optionA = budget === "lt100" && isSolidarityStructure && impactYes;
-    const optionB = budget === "100-500";
-
-    if (optionA) {
+    // Plateforme Sur-Mesure : projet complexe, fort trafic, ou besoin d'API custom
+    if (isComplexProject || traffic === "high" || needsCustomApi) {
       setResult({
-        title: "Tarif Solidaire",
-        amount: "≈ 2 450 €",
+        title: "Plateforme Sur-Mesure",
+        amount: "À partir de 5 000 €",
         message:
-          "Félicitations ! Vous êtes éligible au Tarif Solidaire. Votre projet peut être réalisé pour environ 2 450 €.",
-        highlight:
-          "Préparez votre dernier compte de résultat pour valider l'éligibilité.",
+          "Votre projet appelle une stack WordPress headless + Next.js : architecture évolutive, ISR/SSR et CI/CD complet pour absorber votre volumétrie et vos intégrations.",
+        highlight: "Conservation de l'admin WordPress, révolution complète du front.",
       });
       return;
     }
 
-    if (optionB) {
+    // Croissance Accélérée : trafic moyen, enjeu SEO, site éditorial
+    if (
+      traffic === "medium" ||
+      projectType === "Blog ou site éditorial" ||
+      projectType === "Site e-commerce"
+    ) {
       setResult({
-        title: "Tarif Équilibre",
-        amount: "≈ 4 500 €",
+        title: "Croissance Accélérée",
+        amount: "À partir de 4 000 €",
         message:
-          "Vous êtes éligible au Tarif Équilibre. C'est le tarif juste pour une structure en croissance.",
-        highlight:
-          "J'ajuste le périmètre selon vos besoins (Astro ou Next.js).",
+          "Votre projet a tout intérêt à passer en WordPress headless + Astro : performance front maximale, hydratation partielle, Core Web Vitals au vert.",
+        highlight: "Le bon compromis entre performance et coût pour un site à fort enjeu SEO.",
       });
       return;
     }
 
+    // Présence Essentielle : site vitrine, faible trafic
     setResult({
-      title: "Tarif Soutien",
-      amount: "À partir de 6 500 €",
+      title: "Présence Essentielle",
+      amount: "À partir de 2 250 €",
       message:
-        "Votre projet relève du Tarif Soutien. En choisissant ce tarif, vous permettez à Next Impact de libérer du temps pour accompagner une petite association cette année.",
-      highlight: "Un accompagnement prioritaire et un impact direct pour l'ESS.",
+        "Un WordPress monolithique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide.",
+      highlight: "Vous gardez l'admin que vous connaissez, je révolutionne le front.",
     });
   };
 
@@ -118,10 +120,10 @@ export default function EligibilityForm() {
           <Sparkles className="h-6 w-6 text-lightyellow" />
           <div>
             <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              Test d'éligibilité
+              Diagnostic de stack
             </p>
             <p className="text-white font-googletexte mt-2">
-              Qualifiez votre structure en moins de 2 minutes. Résultat immédiat selon vos réponses.
+              Identifiez en 2 minutes la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.
             </p>
           </div>
         </div>
@@ -137,32 +139,32 @@ export default function EligibilityForm() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ex : Les Jardins Solidaires"
+                placeholder="Ex : Atelier Martin & Co"
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-lightyellow focus:outline-none"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm text-white/70 font-googletexte">
-                Statut juridique
+                Type de projet
               </label>
-              <div ref={statusRef} className="relative">
+              <div ref={projectRef} className="relative">
                 <button
                   type="button"
-                  onClick={() => setStatusOpen((prev) => !prev)}
+                  onClick={() => setProjectOpen((prev) => !prev)}
                   className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white transition focus:border-lightyellow focus:outline-none"
                 >
-                  <span className="truncate text-white/60">{status}</span>
-                  <ChevronDown className={`ml-2 h-4 w-4 shrink-0 text-white/50 transition-transform ${statusOpen ? "rotate-180" : ""}`} />
+                  <span className="truncate text-white/60">{projectType}</span>
+                  <ChevronDown className={`ml-2 h-4 w-4 shrink-0 text-white/50 transition-transform ${projectOpen ? "rotate-180" : ""}`} />
                 </button>
-                {statusOpen && (
+                {projectOpen && (
                   <ul className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/10 bg-darkblue/95 backdrop-blur-md ">
-                    {statuses.map((option) => (
+                    {projectTypes.map((option) => (
                       <li key={option}>
                         <button
                           type="button"
-                          onClick={() => { setStatus(option); setStatusOpen(false); }}
+                          onClick={() => { setProjectType(option); setProjectOpen(false); }}
                           className={`w-full px-4 py-3 text-left text-sm font-googletexte transition hover:bg-lightyellow/10 hover:text-white ${
-                            status === option ? "bg-lightyellow/10 text-lightyellow" : "text-white/80"
+                            projectType === option ? "bg-lightyellow/10 text-lightyellow" : "text-white/80"
                           }`}
                         >
                           {option}
@@ -177,54 +179,54 @@ export default function EligibilityForm() {
 
           {/* Étape 2 */}
           <div className="space-y-3">
-            <p className="text-sm text-white/70 font-googletexte">Budget annuel de fonctionnement</p>
+            <p className="text-sm text-white/70 font-googletexte">Volumétrie de trafic attendue</p>
             <div className="grid gap-3 md:grid-cols-3">
               <label className={`flex items-start gap-3 rounded-xl border px-4 py-3 cursor-pointer transition ${
-                budget === "lt100" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
+                traffic === "low" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
               }`}>
                 <input
                   type="radio"
-                  name="budget"
-                  value="lt100"
-                  checked={budget === "lt100"}
-                  onChange={() => setBudget("lt100")}
-                  className="mt-1"
+                  name="traffic"
+                  value="low"
+                  checked={traffic === "low"}
+                  onChange={() => setTraffic("low")}
+                  className="mt-1 accent-lightyellow"
                 />
                 <div>
-                  <p className="text-white font-googletitre text-base">Moins de 100 000 €</p>
-                  <p className="text-sm text-white/60 font-googletexte">Eligible Tarif Solidaire</p>
+                  <p className="text-white font-googletitre text-base">Moins de 10k visites / mois</p>
+                  <p className="text-sm text-white/60 font-googletexte">Plutôt Présence Essentielle</p>
                 </div>
               </label>
               <label className={`flex items-start gap-3 rounded-xl border px-4 py-3 cursor-pointer transition ${
-                budget === "100-500" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
+                traffic === "medium" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
               }`}>
                 <input
                   type="radio"
-                  name="budget"
-                  value="100-500"
-                  checked={budget === "100-500"}
-                  onChange={() => setBudget("100-500")}
-                  className="mt-1"
+                  name="traffic"
+                  value="medium"
+                  checked={traffic === "medium"}
+                  onChange={() => setTraffic("medium")}
+                  className="mt-1 accent-lightyellow"
                 />
                 <div>
-                  <p className="text-white font-googletitre text-base">Entre 100 000 € et 500 000 €</p>
-                  <p className="text-sm text-white/60 font-googletexte">Eligible Tarif Équilibre</p>
+                  <p className="text-white font-googletitre text-base">10k à 100k / mois</p>
+                  <p className="text-sm text-white/60 font-googletexte">Plutôt Croissance Accélérée</p>
                 </div>
               </label>
               <label className={`flex items-start gap-3 rounded-xl border px-4 py-3 cursor-pointer transition ${
-                budget === "gt500" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
+                traffic === "high" ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
               }`}>
                 <input
                   type="radio"
-                  name="budget"
-                  value="gt500"
-                  checked={budget === "gt500"}
-                  onChange={() => setBudget("gt500")}
-                  className="mt-1"
+                  name="traffic"
+                  value="high"
+                  checked={traffic === "high"}
+                  onChange={() => setTraffic("high")}
+                  className="mt-1 accent-lightyellow"
                 />
                 <div>
-                  <p className="text-white font-googletitre text-base">Plus de 500 000 €</p>
-                  <p className="text-sm text-white/60 font-googletexte">Tarif Soutien</p>
+                  <p className="text-white font-googletitre text-base">Plus de 100k / mois</p>
+                  <p className="text-sm text-white/60 font-googletexte">Plutôt Plateforme Sur-Mesure</p>
                 </div>
               </label>
             </div>
@@ -234,23 +236,23 @@ export default function EligibilityForm() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <p className="text-sm text-white/70 font-googletexte">
-                Votre activité relève-t-elle de l'intérêt général ou de l'utilité sociale ?
+                Avez-vous besoin d&apos;API ou d&apos;intégrations sur-mesure ?
               </p>
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setImpactYes(true)}
+                  onClick={() => setNeedsCustomApi(true)}
                   className={`flex-1 rounded-full border px-4 py-2 font-googletexte transition ${
-                    impactYes ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
+                    needsCustomApi ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
                   }`}
                 >
                   Oui
                 </button>
                 <button
                   type="button"
-                  onClick={() => setImpactYes(false)}
+                  onClick={() => setNeedsCustomApi(false)}
                   className={`flex-1 rounded-full border px-4 py-2 font-googletexte transition ${
-                    !impactYes ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
+                    !needsCustomApi ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
                   }`}
                 >
                   Non
@@ -259,23 +261,24 @@ export default function EligibilityForm() {
             </div>
 
             <div className="space-y-2">
-              <p className="text-sm text-white/70 font-googletexte">Domaine d'intervention</p>
+              <p className="text-sm text-white/70 font-googletexte">Intégrations existantes</p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {domains.map((domain) => (
+                {integrations.map((integration) => (
                   <label
-                    key={domain}
+                    key={integration}
                     className={`flex items-center gap-2 rounded-xl border px-3 py-2 cursor-pointer transition ${
-                      selectedDomains.includes(domain)
+                      selectedIntegrations.includes(integration)
                         ? "border-lightyellow bg-lightyellow/10"
                         : "border-white/10 bg-white/5"
                     }`}
                   >
                     <input
                       type="checkbox"
-                      checked={selectedDomains.includes(domain)}
-                      onChange={() => toggleSelection(domain, setSelectedDomains)}
+                      checked={selectedIntegrations.includes(integration)}
+                      onChange={() => toggleSelection(integration, setSelectedIntegrations)}
+                      className="accent-lightyellow"
                     />
-                    <span className="text-white/80 font-googletexte text-sm">{domain}</span>
+                    <span className="text-white/80 font-googletexte text-sm">{integration}</span>
                   </label>
                 ))}
               </div>
@@ -284,7 +287,7 @@ export default function EligibilityForm() {
 
           {/* Étape 4 */}
           <div className="space-y-2">
-            <p className="text-sm text-white/70 font-googletexte">Pourquoi choisissez-vous le Headless ?</p>
+            <p className="text-sm text-white/70 font-googletexte">Pourquoi envisagez-vous une modernisation ?</p>
             <div className="grid gap-2 md:grid-cols-2">
               {headlessReasons.map((reason) => (
                 <label
@@ -299,6 +302,7 @@ export default function EligibilityForm() {
                     type="checkbox"
                     checked={selectedReasons.includes(reason)}
                     onChange={() => toggleSelection(reason, setSelectedReasons)}
+                    className="accent-lightyellow"
                   />
                   <span className="text-white/80 font-googletexte text-sm">{reason}</span>
                 </label>
@@ -308,12 +312,12 @@ export default function EligibilityForm() {
 
           <div className="flex items-center gap-3">
             <Button type="submit" className="rounded-full bg-lightyellow text-darkblue hover:bg-lightyellow/90 font-googletitre font-semibold">
-              Voir mon tarif
+              Voir ma stack
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <div className="flex items-center gap-2 text-white/60 font-googletexte text-sm">
               <Info className="h-4 w-4" />
-              <span className="text-white/60">Calcul basé sur votre statut et votre budget.</span>
+              <span className="text-white/60">Diagnostic basé sur le type de projet et la volumétrie.</span>
             </div>
           </div>
         </form>
@@ -322,7 +326,7 @@ export default function EligibilityForm() {
           <div className="mt-8 rounded-2xl border border-lightyellow/30 bg-lightyellow/10 p-6 flex flex-col gap-3">
             <div className="flex items-center gap-2 text-lightyellow">
               <CheckCircle2 className="h-5 w-5" />
-              <p className="text-sm uppercase tracking-widest font-googletexte text-extralightblue">Résultat</p>
+              <p className="text-sm uppercase tracking-widest font-googletexte text-extralightblue">Stack recommandée</p>
             </div>
             <h4 className="text-2xl font-googletitre text-white">{result.title}</h4>
             <p className="text-lg font-googletexte text-white/90">{result.message}</p>

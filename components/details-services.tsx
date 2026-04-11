@@ -12,9 +12,8 @@ const DetailsServices = () => {
         <div>
           <div className="text-center mb-16">
             <p className="text-xl text-regularblue/80 text-center max-w-2xl mx-auto">
-              Que vous soyez une petite ou moyenne entreprise (PME) ou une
-              organisation de l'économie sociale et solidaire (ESS), les
-              solutions sont à adapter à vos besoins spécifiques.
+              Trois stacks WordPress, du monolithique optimisé au headless
+              Next.js : la solution s&apos;adapte au projet, pas l&apos;inverse.
             </p>
           </div>
         </div>

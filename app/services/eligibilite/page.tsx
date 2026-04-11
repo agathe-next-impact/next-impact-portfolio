@@ -5,19 +5,19 @@ import EligibilityForm from "@/components/tarifs/EligibilityForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Test d'éligibilité tarif solidaire",
+    title: "Diagnostic de stack WordPress — Présence Essentielle, Croissance Accélérée ou Plateforme Sur-Mesure",
     description:
-      "Calculez votre tarif solidaire, équilibre ou soutien en 2 minutes selon votre budget et votre statut.",
+      "Identifiez en 2 minutes la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
     path: "/services/eligibilite",
-    keywords: ["tarifs", "éligibilité", "tarif solidaire", "calculateur", "Next Impact"],
+    keywords: ["diagnostic stack", "WordPress monolithique", "WordPress Astro", "WordPress Next.js", "modernisation WordPress"],
   });
 }
 
 export default function EligibilityPage() {
   return (
     <PageLayout
-      titre="Calculez votre tarif et testez votre éligibilité"
-      sousTitre="Un calculateur immédiat pour identifier l'offre solidaire, équilibre ou soutien la plus adaptée à votre structure."
+      titre="Diagnostic de stack WordPress"
+      sousTitre="Un diagnostic immédiat pour identifier la stack — Présence Essentielle, Croissance Accélérée ou Plateforme Sur-Mesure — la plus adaptée à votre projet."
     >
       <section className="container mx-auto px-4 py-16 md:py-20">
         <div className="max-w-5xl mx-auto">

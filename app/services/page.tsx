@@ -5,20 +5,20 @@ import ServicesClient from "@/components/services/ServicesClient"
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "Services & Tarifs WordPress Headless — Forfaits transparents",
+    title: "Services & Tarifs WordPress Headless — Trois stacks, trois résultats",
     description:
-      "Services de création de site WordPress Headless avec tarification solidaire basée sur la péréquation. " +
-      "Offre Solidaire dès 2 250 €, Équilibre à 4 000 €, Soutien à partir de 5 000 €.",
+      "Trois niveaux de modernisation WordPress : Présence Essentielle (monolithique optimisé) dès 2 250 €, " +
+      "Croissance Accélérée (Astro headless) dès 4 000 €, Plateforme Sur-Mesure (Next.js) dès 5 000 €.",
     path: "/services",
     keywords: [
       "services WordPress Headless",
       "tarifs WordPress Headless",
       "prix site web",
-      "tarification solidaire",
-      "péréquation",
-      "ESS",
-      "Next.js",
-      "association",
+      "WordPress monolithique optimisé",
+      "WordPress Astro",
+      "WordPress Next.js",
+      "modernisation WordPress",
+      "stack WordPress",
     ],
   })
 }
@@ -60,7 +60,7 @@ export default function ServicesPage() {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ServiceJsonLd
         name="Services de création de site web WordPress Headless"
-        description="Services de création de site WordPress, Astro et Next.js avec tarification solidaire. Solutions adaptées aux PME, entreprises, associations et startups."
+        description="Trois stacks WordPress : monolithique optimisé, hybride Astro et Next.js complet. Solutions adaptées aux PME, entreprises et organisations à fort enjeu web."
         serviceType="Développement web"
         url="/services"
       />

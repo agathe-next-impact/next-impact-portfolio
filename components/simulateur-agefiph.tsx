@@ -30,9 +30,9 @@ function formatEuro(value: number): string {
 }
 
 const presets = [
-  { label: "Solidaire", value: 2250 },
-  { label: "Équilibre", value: 4000 },
-  { label: "Soutien", value: 5000 },
+  { label: "Présence Essentielle", value: 2250 },
+  { label: "Croissance Accélérée", value: 4000 },
+  { label: "Plateforme Sur-Mesure", value: 5000 },
 ];
 
 export default function SimulateurAgefiph() {

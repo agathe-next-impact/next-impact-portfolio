@@ -93,9 +93,9 @@ const CARDS: Record<string, BentoCard> = {
   },
   "determiner-offre": {
     id: "determiner-offre",
-    title: "Déterminer l'Offre",
+    title: "Choisir ma stack",
     description:
-      "Identifiez l'offre solidaire, équilibre ou soutien la plus adaptée à votre structure en quelques clics.",
+      "Identifiez en quelques clics la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
     icon: BadgePercent,
     href: "/contact",
     gradient: "bg-gradient-to-br from-amber-500/20 via-mediumblue to-darkblue",

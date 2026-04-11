@@ -32,86 +32,66 @@ interface OfferConfig {
   highlightColor: string;
 }
 
-function getOffer(profile: ProfileType, budget: BudgetRange): OfferConfig {
-  // Scénario A : Profil "Bénéficiaire" (Asso + < 3000€)
-  if (profile === "association" && budget === "less-3000") {
+function getOffer(_profile: ProfileType, budget: BudgetRange, siteType: SiteType): OfferConfig {
+  // Une application web a quasi systématiquement besoin d'une stack Next.js,
+  // quel que soit le budget annoncé.
+  if (siteType === "application") {
     return {
-      badge: "Offre Solidaire",
+      badge: "Plateforme Sur-Mesure",
+      badgeColor: "bg-lightblue/10 text-extralightblue border-lightblue/20",
+      title: "Votre projet appelle une Plateforme Sur-Mesure",
+      highlight: "WordPress headless + Next.js",
+      highlightColor: "text-extralightblue",
+      description:
+        "Une application web à base de WordPress demande une architecture découplée : Next.js App Router, ISR/SSR, intégrations API et CI/CD complet. C'est exactement le périmètre de la stack Plateforme Sur-Mesure.",
+      ctaLabel: "Planifier un appel de découverte",
+      ctaLink: CALENDAR_LINK,
+      ctaColor: "bg-regularblue text-darkblue ",
+    };
+  }
+
+  // Petit budget — site vitrine ou institutionnel : WordPress monolithique optimisé
+  if (budget === "less-3000") {
+    return {
+      badge: "Présence Essentielle",
       badgeColor: "bg-coral/10 text-coral border-coral/20",
-      title: "L'Offre \"Solidaire\" est faite pour vous",
+      title: "La stack Présence Essentielle est faite pour vous",
       highlight: "À partir de 2 250 €",
       highlightColor: "text-coral",
       description:
-        "Grâce à notre modèle de péréquation, bénéficiez d'un site ultra-rapide, sécurisé et éco-conçu qui soutiendra vos campagnes de dons sans jamais ralentir.",
+        "Un WordPress monolithique optimisé suffit largement pour votre projet : thème custom moderne, build rapide, sécurité durcie. Vous gardez l'admin que vous connaissez, je révolutionne le front — pour un coût maîtrisé.",
       ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
       ctaColor: "bg-coral text-darkblue ",
     };
   }
 
-  // Scénario A bis : Asso avec budget intermédiaire
-  if (profile === "association" && budget === "3000-5000") {
+  // Budget intermédiaire — site à fort enjeu SEO ou éditorial : WordPress + Astro
+  if (budget === "3000-5000") {
     return {
-      badge: "Offre Équilibre",
+      badge: "Croissance Accélérée",
       badgeColor: "bg-lightyellow/10 text-lightyellow border-lightyellow/20",
-      title: "L'Offre \"Équilibre\" correspond à vos ambitions",
-      highlight: "Un accompagnement sur mesure",
+      title: "La stack Croissance Accélérée correspond à vos enjeux",
+      highlight: "WordPress headless + Astro",
       highlightColor: "text-lightyellow",
       description:
-        "Votre association mérite un site performant qui porte votre mission. Bénéficiez de notre expertise technique à un tarif adapté au secteur associatif.",
+        "Pour un site à fort enjeu SEO ou éditorial, l'architecture WordPress headless + Astro offre le meilleur compromis : conservation de l'admin WordPress, performance front maximale, hydratation partielle pour des Core Web Vitals au vert.",
       ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
       ctaColor: "bg-lightyellow text-darkblue ",
     };
   }
 
-  // Scénario B : Profil "Performance" (PME/Grand Compte + budget > 3000€)
-  if ((profile === "pme" || profile === "grand-compte") && (budget === "3000-5000" || budget === "more-5000")) {
-    const offerName = budget === "more-5000" ? "Soutien" : "Équilibre";
-    const isSoutien = budget === "more-5000";
-    return {
-      badge: `Offre ${offerName}`,
-      badgeColor: isSoutien
-        ? "bg-lightblue/10 text-extralightblue border-lightblue/20"
-        : "bg-lightyellow/10 text-lightyellow border-lightyellow/20",
-      title: `L'Offre "${offerName}" correspond à vos enjeux`,
-      highlight: "Devenez Mécène",
-      highlightColor: isSoutien ? "text-extralightblue" : "text-lightyellow",
-      description:
-        "Boostez vos conversions en passant au WordPress Headless. En prime, en choisissant Next Impact, vous devenez Mécène et financez la transition numérique d'une association locale !",
-      ctaLabel: "Demander mon Audit IA Gratuit",
-      ctaColor: isSoutien
-        ? "bg-regularblue text-darkblue "
-        : "bg-lightyellow text-darkblue ",
-    };
-  }
-
-  // Scénario C : PME/Grand Compte avec petit budget
-  if ((profile === "pme" || profile === "grand-compte") && budget === "less-3000") {
-    return {
-      badge: "Premiers pas",
-      badgeColor: "bg-coral/10 text-coral border-coral/20",
-      title: "Commençons par un diagnostic",
-      highlight: "Audit offert",
-      highlightColor: "text-coral",
-      description:
-        "Même avec un budget limité, des optimisations rapides peuvent faire une vraie différence. Commençons par identifier les leviers les plus impactants pour votre activité.",
-      ctaLabel: "Demander mon Audit IA Gratuit",
-      ctaColor: "bg-coral text-darkblue ",
-    };
-  }
-
-  // Asso + gros budget (rare mais possible)
+  // Gros budget : Plateforme Sur-Mesure (Next.js)
   return {
-    badge: "Offre Premium Solidaire",
+    badge: "Plateforme Sur-Mesure",
     badgeColor: "bg-lightblue/10 text-extralightblue border-lightblue/20",
-    title: "Un projet ambitieux pour votre association",
-    highlight: "Accompagnement complet",
+    title: "La stack Plateforme Sur-Mesure correspond à votre ambition",
+    highlight: "WordPress headless + Next.js",
     highlightColor: "text-extralightblue",
     description:
-      "Votre budget permet un site sur mesure, ultra-performant et éco-conçu. Nous construirons ensemble une plateforme qui maximise votre impact.",
-    ctaLabel: "Planifier un appel de découverte",
-    ctaLink: CALENDAR_LINK,
+      "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes, WordPress headless + Next.js offre une architecture évolutive, ISR/SSR à la demande et un CI/CD complet. Une plateforme prête à grandir avec votre activité.",
+    ctaLabel: "Demander mon Audit IA Gratuit",
     ctaColor: "bg-regularblue text-darkblue ",
   };
 }
@@ -132,7 +112,7 @@ const siteTypeLabels: Record<SiteType, string> = {
 };
 
 export function StepResult({ profile, painPoint, budget, siteType, onCtaClick }: StepResultProps) {
-  const offer = getOffer(profile, budget);
+  const offer = getOffer(profile, budget, siteType);
 
   return (
     <motion.div

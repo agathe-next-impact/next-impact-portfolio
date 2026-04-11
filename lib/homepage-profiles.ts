@@ -19,53 +19,57 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     headline: "Développeuse",
     subHeadline: "WordPress Headless",
     description:
-      "Pour un WordPress ultra-rapide, moderne et flexible grâce au headless CMS.",
-    valueProposition: "Un site combinant performance maximale et le back-office le plus utilisé au monde.",
-    ctaPrimary: { label: "Audit gratuit personnalisé", href: "#audit" },
-    ctaSecondary: { label: "Prêt à passer en headless ?", href: "/contact" },
-    auditTitle: "Faut-il migrer en headless ?",
-    auditSubtitle: "Audit gratuit",
+      "Vous gardez l'admin WordPress que vos équipes connaissent. Je révolutionne tout ce qu'il y a en dessous.",
+    valueProposition:
+      "Trois niveaux de modernisation — du WordPress monolithique optimisé au headless Next.js — pour le CMS le plus utilisé au monde.",
+    ctaPrimary: { label: "Diagnostic de stack gratuit", href: "#audit" },
+    ctaSecondary: { label: "Choisir ma stack", href: "/contact" },
+    auditTitle: "Quelle stack pour votre site web ?",
+    auditSubtitle: "Diagnostic de stack",
     auditDescription:
-      "Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless.",
+      "Décrivez votre projet en quelques clics et obtenez la stack WordPress la plus adaptée : Présence Essentielle (monolithique optimisée), Croissance Accélérée (Astro headless) ou Plateforme Sur-Mesure (Next.js).",
   },
   decideur: {
     headline: "Votre site web",
     subHeadline: "moteur de croissance",
     description:
-      "Transformez votre WordPress en un avantage concurrentiel : plus rapide, plus sûr, plus performant. ROI mesurable.",
-    valueProposition: "Performance, SEO et conversion : des résultats mesurables pour votre croissance.",
-    ctaPrimary: { label: "Audit stratégique gratuit", href: "#audit" },
-    ctaSecondary: { label: "Déterminer mon offre", href: "/contact" },
-    auditTitle: "Quel retour sur investissement ?",
-    auditSubtitle: "Diagnostic stratégique",
+      "Un WordPress moderne devient un avantage concurrentiel : plus rapide, plus sûr, plus performant. Trois paliers techniques, un ROI mesurable.",
+    valueProposition:
+      "Performance, SEO et conversion : des résultats mesurables, quelle que soit la stack choisie.",
+    ctaPrimary: { label: "Diagnostic de stack gratuit", href: "#audit" },
+    ctaSecondary: { label: "Choisir ma stack", href: "/contact" },
+    auditTitle: "Quelle stack pour votre site web ?",
+    auditSubtitle: "Diagnostic de stack",
     auditDescription:
-      "Obtenez une analyse complète de votre site avec des recommandations chiffrées sur les gains de performance, SEO et conversion.",
+      "Identifiez en 2 minutes le bon niveau de modernisation pour votre projet — monolithique optimisée, hybride Astro ou Next.js — et estimez les gains de performance attendus.",
   },
   utilisateur: {
     headline: "Votre WordPress",
     subHeadline: "simple et puissant",
     description:
-      "Gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien.",
-    valueProposition: "Gardez WordPress, gagnez en performance et en simplicité.",
-    ctaPrimary: { label: "Tester mon site gratuitement", href: "#audit" },
-    ctaSecondary: { label: "Trouver mon offre", href: "/contact" },
-    auditTitle: "Votre quotidien simplifié",
-    auditSubtitle: "Évaluation gratuite",
+      "Vous gardez l'interface WordPress que vous connaissez au quotidien. Je modernise le front pour que votre site soit rapide, sûr et agréable — pour vos visiteurs comme pour vous.",
+    valueProposition:
+      "Conservation de l'admin WordPress, révolution du front : zéro nouvelle interface à apprendre.",
+    ctaPrimary: { label: "Diagnostic de stack gratuit", href: "#audit" },
+    ctaSecondary: { label: "Trouver ma stack", href: "/contact" },
+    auditTitle: "Quelle stack pour votre site web ?",
+    auditSubtitle: "Diagnostic de stack",
     auditDescription:
-      "Découvrez comment une migration headless peut rendre votre gestion de contenu plus fluide tout en améliorant l'expérience de vos visiteurs.",
+      "En 2 minutes, identifiez la stack WordPress adaptée à votre projet — sans jamais quitter l'admin que vous maîtrisez déjà.",
   },
   developpeur: {
     headline: "Architecture",
     subHeadline: "WordPress Headless",
     description:
-      "Stack moderne : WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel.",
-    valueProposition: "WordPress API + Next.js/Astro : la stack moderne pour le CMS le plus utilisé.",
-    ctaPrimary: { label: "Audit technique gratuit", href: "#audit" },
-    ctaSecondary: { label: "Explorer les offres", href: "/contact" },
-    auditTitle: "Analyse technique de votre stack",
-    auditSubtitle: "Audit technique",
+      "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel. Trois niveaux de découplage selon le besoin.",
+    valueProposition:
+      "Le CMS le plus utilisé au monde, couplé à une stack frontend moderne. Monolithique optimisé, hybride Astro ou Next.js complet.",
+    ctaPrimary: { label: "Diagnostic de stack gratuit", href: "#audit" },
+    ctaSecondary: { label: "Explorer les stacks", href: "/contact" },
+    auditTitle: "Quelle stack pour votre site web ?",
+    auditSubtitle: "Diagnostic de stack",
     auditDescription:
-      "Évaluez votre architecture actuelle et découvrez les gains de performance, sécurité et DX avec WordPress headless + Next.js.",
+      "Diagnostic technique en 2 minutes : thème WordPress optimisé, Astro headless en SSG ou Next.js App Router avec ISR/SSR — selon votre volumétrie, vos intégrations et votre besoin d'évolutivité.",
   },
 };
 
@@ -99,36 +103,36 @@ export interface ServicesPageVariant {
 
 export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "WordPress en mode Headless",
+    titre: "WordPress modernisé, à votre rythme",
     sousTitre:
-      "Découvrez comment transformer votre site WordPress en un site ultra-rapide, moderne et sécurisé grâce à l'architecture headless.",
+      "Trois niveaux de transformation pour votre WordPress. Du thème monolithique optimisé au headless Next.js — vous gardez l'admin, je révolutionne le front.",
     carouselLabel: "Pourquoi Next Impact ?",
-    budgetTitle: "Quel impact sur votre budget ?",
+    budgetTitle: "Quel niveau de modernisation pour votre projet ?",
     budgetCards: {
       left: {
-        title: "Si vous êtes une petite association",
+        title: "Site vitrine ou institutionnel",
         description:
-          "Vous bénéficiez d'un site performant et sécurisé à un tarif solidaire vous permettant de rivaliser avec les grands acteurs.",
+          "Un WordPress monolithique optimisé suffit largement : design moderne, code propre, performances solides et sécurité maximale, pour un coût maîtrisé.",
         price: "2 250",
       },
       right: {
-        title: "Si vous êtes une entreprise « Soutien »",
+        title: "Plateforme à fort enjeu",
         description:
-          "En choisissant Next Impact, vous n'achetez pas seulement un site WordPress Headless de haute volée ; vous financez directement la transition numérique d'un acteur de l'intérêt général.",
+          "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes : architecture WordPress headless + Next.js, ISR/SSR et CI/CD complet.",
         highlight:
-          "Mention « Mécène de la transition numérique » ajoutée à votre communication.",
+          "Une architecture évolutive, pensée pour grandir avec votre activité.",
       },
     },
-    ctaTitle: "Déterminez votre offre",
+    ctaTitle: "Choisissez votre stack",
     ctaDescription:
-      "Répondez à quelques questions pour découvrir l'offre adaptée à votre structure et votre budget.",
-    ctaLabel: "Déterminer mon offre",
+      "Répondez à quelques questions pour identifier la stack adaptée à votre projet — monolithique optimisée, hybride Astro ou Next.js complète.",
+    ctaLabel: "Choisir ma stack",
     ctaHref: "/contact",
     faqs: [
       {
         question: "Est-ce que je pourrai toujours modifier mes textes ?",
         answer:
-          "Oui, pour les 3 solutions. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
+          "Oui, pour les 3 stacks. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
       },
       {
         question: "Le Headless est-il plus cher à maintenir ?",
@@ -138,7 +142,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Combien de temps prend la mise en place ?",
         answer:
-          "Comptez 2-4 semaines pour un site WordPress classique, 4-6 semaines pour une solution Astro, et 6-10 semaines pour une architecture Next.js complète, selon la complexité du projet.",
+          "Comptez 2-4 semaines pour un site WordPress monolithique optimisé, 4-6 semaines pour une solution hybride Astro, et 6-10 semaines pour une architecture Next.js complète, selon la complexité du projet.",
       },
       {
         question: "Mes plugins WordPress fonctionneront-ils encore ?",
@@ -148,36 +152,36 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   decideur: {
-    titre: "WordPress en mode Headless",
+    titre: "Modernisez votre WordPress, mesurez vos résultats",
     sousTitre:
-      "Transformez votre site WordPress en un moteur de croissance : plus rapide, plus sûr, plus performant. ROI mesurable en quelques mois.",
-    carouselLabel: "Pourquoi investir dans le Headless ?",
+      "Trois paliers techniques au service de votre croissance : ROI mesurable, sécurité renforcée, conversion optimisée. Vous gardez l'admin que vos équipes connaissent.",
+    carouselLabel: "Pourquoi investir dans la modernisation ?",
     budgetTitle: "Quel retour sur investissement ?",
     budgetCards: {
       left: {
         title: "PME en croissance",
         description:
-          "Un site ultra-rapide booste votre SEO, réduit le taux de rebond et augmente vos conversions. L'investissement se rentabilise en quelques mois.",
+          "Un WordPress monolithique optimisé ou un hybride Astro suffisent à booster votre SEO, réduire le taux de rebond et augmenter vos conversions. L'investissement se rentabilise en quelques mois.",
         price: "4 000",
       },
       right: {
         title: "Entreprise à fort CA",
         description:
-          "Architecture robuste, sécurité maximale, performances critiques. Votre site devient un avantage concurrentiel durable.",
+          "Architecture Next.js complète : sécurité maximale, performances critiques, ISR pour les pics de trafic. Votre site devient un avantage concurrentiel durable.",
         highlight:
-          "40% de votre investissement finance directement un projet solidaire — valorisable en RSE.",
+          "Une plateforme évolutive, prête à absorber votre croissance et vos intégrations.",
       },
     },
-    ctaTitle: "Déterminez votre offre",
+    ctaTitle: "Choisissez votre stack",
     ctaDescription:
-      "En 2 minutes, découvrez l'offre adaptée à votre structure et estimez les gains de performance attendus.",
-    ctaLabel: "Déterminer mon offre",
+      "En 2 minutes, identifiez le bon niveau de modernisation pour votre projet et estimez les gains de performance attendus.",
+    ctaLabel: "Choisir ma stack",
     ctaHref: "/contact",
     faqs: [
       {
         question: "Quel est le retour sur investissement concret ?",
         answer:
-          "Un site headless améliore les Core Web Vitals (temps de chargement < 1s), ce qui impacte directement le SEO (+30% de trafic organique en moyenne) et le taux de conversion. Le ROI se mesure en quelques mois.",
+          "Une modernisation WordPress (même monolithique optimisée) améliore les Core Web Vitals, ce qui impacte directement le SEO (+30% de trafic organique en moyenne sur les passes headless) et le taux de conversion. Le ROI se mesure en quelques mois.",
       },
       {
         question: "En quoi le Headless est-il plus sécurisé ?",
@@ -187,26 +191,26 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Combien de temps pour voir les résultats ?",
         answer:
-          "Le site est livré en 4 à 10 semaines selon la complexité. Les gains de performance sont immédiats dès la mise en ligne. L'impact SEO se mesure sous 2-3 mois.",
+          "Le site est livré en 2 à 10 semaines selon la stack choisie. Les gains de performance sont immédiats dès la mise en ligne. L'impact SEO se mesure sous 2-3 mois.",
       },
       {
-        question: "Comment fonctionne votre modèle de péréquation ?",
+        question: "Pourquoi trois paliers techniques ?",
         answer:
-          "Les entreprises à fort CA financent indirectement l'accès au numérique des petites associations. C'est un levier RSE concret : vous obtenez un site premium tout en soutenant l'ESS.",
+          "Tous les projets n'ont pas besoin de Next.js. Un site vitrine convertit aussi bien avec un WordPress monolithique optimisé qu'avec une stack headless complète. Je vous oriente vers le bon palier — celui qui rentabilise réellement votre investissement.",
       },
     ],
   },
   utilisateur: {
-    titre: "WordPress en mode Headless",
+    titre: "Votre WordPress, en mieux",
     sousTitre:
-      "Gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien.",
+      "Vous gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien. Trois niveaux de modernisation, selon votre projet.",
     carouselLabel: "Pourquoi c'est plus simple ?",
     budgetTitle: "Qu'est-ce qui change pour vous ?",
     budgetCards: {
       left: {
         title: "Au quotidien",
         description:
-          "Vous continuez à créer vos pages, ajouter vos images et publier vos articles exactement comme avant — mais votre site est 10x plus rapide pour vos visiteurs.",
+          "Vous continuez à créer vos pages, ajouter vos images et publier vos articles exactement comme avant — mais votre site est jusqu'à 10x plus rapide pour vos visiteurs.",
         price: "2 250",
       },
       right: {
@@ -217,10 +221,10 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Vous n'avez rien de nouveau à apprendre : c'est toujours WordPress.",
       },
     },
-    ctaTitle: "Déterminez votre offre",
+    ctaTitle: "Choisissez votre stack",
     ctaDescription:
-      "Répondez à quelques questions simples pour identifier la formule qui correspond le mieux à votre organisation.",
-    ctaLabel: "Déterminer mon offre",
+      "Répondez à quelques questions simples pour identifier la formule qui correspond le mieux à votre projet.",
+    ctaLabel: "Choisir ma stack",
     ctaHref: "/contact",
     faqs: [
       {
@@ -236,32 +240,32 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Et si j'ai besoin d'aide après le lancement ?",
         answer:
-          "Une formation personnalisée est incluse dans toutes les offres. Vous recevez aussi une documentation d'utilisation adaptée à votre site. Un support est disponible selon votre formule.",
+          "Une formation personnalisée est incluse dans toutes les stacks. Vous recevez aussi une documentation d'utilisation adaptée à votre site. Un support est disponible selon votre formule.",
       },
       {
         question: "Mes contenus actuels seront-ils conservés ?",
         answer:
-          "Oui, tous vos contenus (textes, images, médias) sont migrés automatiquement. Rien n'est perdu. La migration est incluse dans les offres Équilibre et Soutien.",
+          "Oui, tous vos contenus (textes, images, médias) sont migrés automatiquement. Rien n'est perdu. La migration est incluse dans les stacks Croissance Accélérée et Plateforme Sur-Mesure.",
       },
     ],
   },
   developpeur: {
-    titre: "WordPress en mode Headless",
+    titre: "Trois stacks WordPress, du monolithique au headless Next.js",
     sousTitre:
-      "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel. Architecture découplée et maintenable.",
+      "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, déploiement Vercel. Architecture découplée, modulaire, maintenable.",
     carouselLabel: "Pourquoi cette stack ?",
-    budgetTitle: "Que comprend chaque offre techniquement ?",
+    budgetTitle: "Que comprend chaque stack techniquement ?",
     budgetCards: {
       left: {
-        title: "Starter Kit (Solidaire)",
+        title: "Présence Essentielle (monolithique)",
         description:
-          "Template Next.js pré-configuré, WordPress headless, déploiement Vercel, SSG par défaut. Idéal pour un site vitrine performant.",
+          "Thème WordPress custom, build moderne (Vite), optimisations Core Web Vitals, sécurité durcie. Idéal pour un site vitrine performant à coût maîtrisé.",
         price: "2 250",
       },
       right: {
-        title: "Architecture sur-mesure (Soutien)",
+        title: "Plateforme Sur-Mesure (Next.js)",
         description:
-          "ISR / SSR hybride, multisites, API custom, intégrations tierces, CI/CD complet. Architecture pensée pour l'évolutivité.",
+          "WordPress headless + Next.js App Router, ISR/SSR hybride, multisites, API custom, intégrations tierces, CI/CD complet. Architecture pensée pour l'évolutivité.",
         highlight:
           "Accès au repo Git, documentation technique complète, et support prioritaire 12 mois.",
       },
@@ -275,10 +279,10 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Quelle stack technique est utilisée ?",
         answer:
-          "WordPress en back-end (API REST ou WPGraphQL), Next.js ou Astro en front-end, TypeScript, Tailwind CSS, déploiement sur Vercel. SSG par défaut, ISR/SSR selon les besoins.",
+          "Trois paliers : (1) WordPress monolithique avec thème custom moderne, (2) WordPress headless + Astro (SSG, contenu majoritairement statique), (3) WordPress headless + Next.js App Router (SSG/ISR/SSR, TypeScript strict, Tailwind, déploiement Vercel).",
       },
       {
-        question: "Comment fonctionne le data fetching ?",
+        question: "Comment fonctionne le data fetching en headless ?",
         answer:
           "Les données sont récupérées via l'API REST de WordPress ou WPGraphQL. Next.js gère le rendu (SSG/SSR/ISR) avec revalidation configurable. Les images passent par le composant next/image pour l'optimisation automatique.",
       },
@@ -290,7 +294,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Comment se passe le déploiement ?",
         answer:
-          "Déploiement automatique sur Vercel via Git (push → build → deploy). Preview deployments sur chaque PR. Rollback instantané. Le WordPress reste sur un hébergement classique sécurisé.",
+          "Déploiement automatique sur Vercel via Git (push → build → deploy) pour les stacks headless. Preview deployments sur chaque PR. Rollback instantané. Le WordPress reste sur un hébergement classique sécurisé.",
       },
     ],
   },
@@ -313,7 +317,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
   default: {
     titre: "Études de cas",
     sousTitre:
-      "Découvrez nos réalisations de sites web WordPress pour divers secteurs d'activité.",
+      "Découvrez nos réalisations WordPress — du monolithique optimisé au headless Next.js — pour divers secteurs d'activité.",
     defaultTab: "headless",
     tabsLabel: "Filtrer par secteur",
     ctaLabel: "Discuter de votre projet",
@@ -347,7 +351,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
   developpeur: {
     titre: "Réalisations techniques",
     sousTitre:
-      "Architecture WordPress Headless, Next.js, Astro, API REST, WPGraphQL. Détails techniques de chaque projet.",
+      "WordPress monolithique optimisé, headless + Astro, headless + Next.js. API REST, WPGraphQL. Détails techniques de chaque projet.",
     defaultTab: "headless",
     tabsLabel: "Filtrer par architecture",
     ctaLabel: "Explorer la documentation",
@@ -379,43 +383,45 @@ export interface AboutPageVariant {
 export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant> = {
   default: {
     titre: "A propos",
-    sousTitre: "L'architecture Headless au service de l'ESS et de l'impact social.",
+    sousTitre:
+      "L'expertise WordPress, du monolithique optimisé au headless Next.js — au service de votre projet.",
     manifesteIntro:
-      "Nous vivons une époque où l'urgence n'est plus une figure de style, mais une réalité quotidienne pour les acteurs de l'environnement et de l'humain. Pourtant, un fossé technologique absurde persiste : d'un côté, des entreprises privées sur-équipées ; de l'autre, des associations et des structures de l'ESS qui luttent avec des outils web lents, vulnérables ou obsolètes.",
+      "WordPress propulse plus de 40% du web. C'est le CMS le plus utilisé au monde, et probablement le plus mal exploité. Trop de sites WordPress tournent sur des thèmes obèses, des piles de plugins redondants et un front d'un autre âge — alors que la technologie permet aujourd'hui de construire des expériences web aussi rapides et robustes que les plus grandes plateformes.",
     manifesteAccroche:
-      "Next Impact est né pour donner à l'ESS son indispensable impact.",
+      "Next Impact existe pour réconcilier WordPress avec les standards techniques d'aujourd'hui : on garde l'admin, on révolutionne le front.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
-        title: "La crédibilité, arme de survie de l'ESS",
+        title: "Conservation de l'admin WordPress",
         description:
-          "Pour convaincre un mécène, sécuriser un partenariat ou lever des fonds, la robustesse technique n'est pas une option. Un site qui crash est un don perdu.",
+          "Vos équipes éditoriales gardent l'interface qu'elles maîtrisent. Aucun nouveau back-office à apprendre, aucune friction au quotidien. WordPress reste WordPress côté édition.",
         items: [
-          "Vitesse de chargement instantanée",
-          "Sécurité inviolable pour les données des donateurs",
-          "Crédibilité immédiate auprès des interlocuteurs exigeants",
+          "Interface d'administration WordPress identique",
+          "Plugins back-end (SEO, analytics) conservés",
+          "Workflow éditorial inchangé",
         ],
       },
       {
         icon: "/icons/globe-network-icon.svg",
-        title: "Offrir l'expérience utilisateur du web actuel à l'ESS",
+        title: "Révolution du front",
         description:
-          "En automatisant le code répétitif et les micro-tâches, nous réduisons drastiquement les temps de production.",
+          "Trois paliers techniques pour moderniser le front : thème monolithique optimisé, hybride Astro pour les sites majoritairement statiques, ou Next.js complet pour les plateformes évolutives.",
         items: [
-          "Technologies \"Premium\" financièrement accessibles au secteur associatif",
-          "Un site digne des plus grands groupes, livré dans un calendrier compatible avec l'urgence de vos missions",
+          "Core Web Vitals au vert",
+          "SEO technique de niveau industriel",
+          "Stack moderne, maintenable et documentée",
         ],
       },
       {
         icon: "/icons/eco-design-icon.svg",
         title: "Numérique responsable by design",
         description:
-          "La performance business doit servir la performance écologique. Chaque ligne de code et chaque choix d'hébergement est pensé pour réduire l'empreinte carbone numérique.",
+          "La performance technique sert aussi la performance écologique. Chaque ligne de code et chaque choix d'hébergement est pensé pour réduire l'empreinte carbone numérique.",
         items: ["Code optimisé et léger", "Hébergement éco-responsable"],
       },
     ],
     citation:
-      "Je ne construis pas seulement des sites web. Je forge les outils de survie et de développement des acteurs qui réparent le monde.",
+      "WordPress n'est pas le problème. C'est ce qu'on en fait qui peut l'être — et c'est exactement ce que je modernise.",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:
@@ -424,11 +430,11 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
   decideur: {
     titre: "Pourquoi Next Impact",
     sousTitre:
-      "La performance web comme levier de croissance : ROI mesurable, sécurité et avantage concurrentiel.",
+      "La modernisation WordPress comme levier de croissance : ROI mesurable, sécurité renforcée, avantage concurrentiel.",
     manifesteIntro:
-      "Un site lent coûte cher. Chaque seconde de chargement supplémentaire fait perdre 7% de conversions. Un site vulnérable peut détruire des années de confiance en un incident. Les organisations qui investissent dans la performance web constatent un retour sur investissement mesurable en quelques mois.",
+      "Un site lent coûte cher. Chaque seconde de chargement supplémentaire fait perdre 7% de conversions. Un site vulnérable peut détruire des années de confiance en un incident. Moderniser son WordPress — du thème optimisé au headless complet — est l'un des investissements web au meilleur ratio coût/impact aujourd'hui.",
     manifesteAccroche:
-      "Next Impact transforme votre présence web en avantage concurrentiel durable.",
+      "Next Impact transforme votre WordPress en avantage concurrentiel durable, sans casser ce qui fonctionne déjà côté édition.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
@@ -436,7 +442,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
         description:
           "Un site rapide convertit mieux. Le score PageSpeed impacte directement le SEO, le taux de rebond et le taux de conversion — des métriques business mesurables.",
         items: [
-          "Score PageSpeed 95+ garanti",
+          "Score PageSpeed 95+ visé",
           "Impact SEO direct sur votre trafic organique",
           "Taux de conversion optimisé par la vitesse",
         ],
@@ -447,23 +453,24 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
         description:
           "L'architecture Headless découple votre back-office du site public. Votre WordPress n'est plus exposé aux attaques, vos données sont protégées.",
         items: [
-          "Surface d'attaque réduite de 90% par le découplage",
+          "Surface d'attaque réduite par le découplage",
           "Infrastructure moderne et maintenable sur le long terme",
         ],
       },
       {
         icon: "/icons/eco-design-icon.svg",
-        title: "RSE et engagement durable",
+        title: "Trois paliers, un investissement maîtrisé",
         description:
-          "Un site éco-conçu renforce votre démarche RSE. Le numérique responsable est un différenciateur crédible auprès de vos parties prenantes.",
+          "Tous les projets n'ont pas besoin de Next.js. Le bon palier technique, c'est celui qui rentabilise votre investissement — pas le plus sophistiqué.",
         items: [
-          "Empreinte carbone numérique réduite",
-          "Valeur RSE valorisable dans vos rapports",
+          "Présence Essentielle pour les sites vitrine",
+          "Croissance Accélérée pour les sites à fort enjeu SEO",
+          "Plateforme Sur-Mesure pour les architectures évolutives",
         ],
       },
     ],
     citation:
-      "Chaque projet est un investissement stratégique. Mon rôle est de garantir qu'il génère des résultats mesurables.",
+      "Chaque projet est un investissement stratégique. Mon rôle est de garantir qu'il génère des résultats mesurables — au bon palier technique.",
     ctaLabel: "Évaluer mon projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:
@@ -474,7 +481,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
     sousTitre:
       "Des sites simples à gérer, rapides pour vos visiteurs — avec le WordPress que vous connaissez déjà.",
     manifesteIntro:
-      "Vous gérez un site web au quotidien et vous méritez un outil qui fonctionne. Pas de bugs, pas de lenteurs, pas de prise de tête. Avec Next Impact, vous gardez WordPress pour gérer vos contenus, et nous nous occupons de la technique pour que votre site soit rapide, sécurisé et agréable — pour vous comme pour vos visiteurs.",
+      "Vous gérez un site web au quotidien et vous méritez un outil qui fonctionne. Pas de bugs, pas de lenteurs, pas de prise de tête. Avec Next Impact, vous gardez WordPress pour gérer vos contenus, et je m'occupe de la technique pour que votre site soit rapide, sécurisé et agréable — pour vous comme pour vos visiteurs.",
     manifesteAccroche:
       "Next Impact vous libère de la technique pour vous concentrer sur vos contenus.",
     piliers: [
@@ -520,17 +527,17 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
   developpeur: {
     titre: "La stack Next Impact",
     sousTitre:
-      "WordPress Headless + Next.js/Astro. Architecture découplée, SSG/SSR/ISR, TypeScript, déploiement Vercel.",
+      "WordPress monolithique optimisé, WordPress + Astro, WordPress + Next.js. Architecture découplée, SSG/SSR/ISR, TypeScript, déploiement Vercel.",
     manifesteIntro:
-      "Next Impact est né de la conviction que WordPress mérite une architecture frontend moderne. Le CMS le plus utilisé au monde, couplé à un framework React performant, offre le meilleur des deux mondes : la puissance éditoriale de WordPress et la performance d'un site statique.",
+      "Next Impact est né de la conviction que WordPress mérite une architecture frontend moderne. Le CMS le plus utilisé au monde, couplé au bon framework — Astro pour les sites majoritairement statiques, Next.js pour les plateformes évolutives — offre le meilleur des deux mondes : la puissance éditoriale de WordPress et la performance d'une stack moderne.",
     manifesteAccroche:
-      "Architecture découplée, DX moderne, performances maximales.",
+      "Trois paliers techniques, une même conviction : conservation de l'admin, révolution du front.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
-        title: "Architecture WordPress Headless",
+        title: "WordPress comme socle éditorial",
         description:
-          "WordPress comme CMS backend, API REST ou WPGraphQL pour le data fetching, Next.js ou Astro pour le rendu frontend.",
+          "WordPress en backend, API REST ou WPGraphQL pour le data fetching. Custom Post Types et ACF Pro pour la modélisation. Preview mode et draft handling natifs.",
         items: [
           "API REST WordPress + WPGraphQL",
           "Custom Post Types et ACF Pro pour la modélisation",
@@ -539,19 +546,20 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       },
       {
         icon: "/icons/globe-network-icon.svg",
-        title: "Stack frontend moderne",
+        title: "Trois paliers de modernisation front",
         description:
-          "Next.js App Router avec SSG/SSR/ISR selon les besoins. TypeScript strict, Tailwind CSS, composants React réutilisables.",
+          "Thème WordPress moderne (build Vite, Core Web Vitals au vert), Astro pour l'hybride statique, ou Next.js App Router avec SSG/SSR/ISR pour les plateformes complexes.",
         items: [
-          "SSG par défaut, ISR/SSR configurable par route",
-          "next/image pour l'optimisation automatique des images",
+          "Présence Essentielle : thème custom moderne",
+          "Croissance Accélérée : WordPress + Astro (SSG)",
+          "Plateforme Sur-Mesure : WordPress + Next.js (ISR/SSR)",
         ],
       },
       {
         icon: "/icons/eco-design-icon.svg",
         title: "DevOps et déploiement",
         description:
-          "CI/CD via Vercel avec preview deployments sur chaque PR. Rollback instantané, monitoring et logs centralisés.",
+          "CI/CD via Vercel avec preview deployments sur chaque PR. Rollback instantané, monitoring et logs centralisés. Pour la stack monolithique, build et déploiement automatisés sur l'hébergement WordPress.",
         items: [
           "Déploiement Vercel avec preview per-branch",
           "Pipeline CI/CD automatisé (lint, type-check, build)",
@@ -619,7 +627,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
     {
       title: "Cas d'usage : croissance et investissement",
       description:
-        "Des exemples concrets de PME et d'organisations ESS ayant transformé leur présence en ligne grâce au headless.",
+        "Des exemples concrets de PME et d'organisations ayant transformé leur présence en ligne grâce à une modernisation WordPress ciblée.",
       src: "/icons/analytics-icon.svg",
       ctaText: "Voir les études de cas",
       ctaLink: "/etudes-de-cas",
