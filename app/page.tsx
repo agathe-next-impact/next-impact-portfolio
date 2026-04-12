@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import HomeClient from "@/components/home-client";
 import { pageMetadata } from "@/lib/metadata";
-import { WebsiteJsonLd, PersonJsonLd } from "@/components/json-ld";
+import { WebsiteJsonLd, HomepageJsonLd } from "@/components/json-ld";
 
 // Revalidate toutes les heures
 export const revalidate = 3600;
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <WebsiteJsonLd />
-      <PersonJsonLd />
+      <HomepageJsonLd />
       <HomeClient />
     </>
   );

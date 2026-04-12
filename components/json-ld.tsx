@@ -376,6 +376,193 @@ export function PersonJsonLd({
 }
 
 /**
+ * Données structurées enrichies pour la homepage
+ * @graph avec Person, Organization et LocalBusiness interconnectés
+ */
+export function HomepageJsonLd() {
+  const baseUrl = siteConfig.url;
+
+  const data = {
+    "@context": "https://schema.org",
+    "@graph": [
+      // — Person —
+      {
+        "@type": "Person",
+        "@id": `${baseUrl}/#person`,
+        name: "Agathe Karinthi-Martin",
+        jobTitle: "Développeur WordPress Headless & Next.js",
+        description: siteConfig.description,
+        url: baseUrl,
+        image: `${baseUrl}${siteConfig.ogImage}`,
+        email: "agathe@next-impact.digital",
+        telephone: "+33673981638",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "4 rue du centre",
+          addressLocality: "Trizac",
+          postalCode: "15400",
+          addressRegion: "Auvergne-Rhône-Alpes",
+          addressCountry: "FR",
+        },
+        worksFor: { "@id": `${baseUrl}/#organization` },
+        knowsAbout: [
+          "WordPress",
+          "WordPress Headless",
+          "Next.js",
+          "Astro",
+          "React",
+          "TypeScript",
+          "WPGraphQL",
+          "Headless CMS",
+          "SEO",
+          "API REST",
+        ],
+        sameAs: [
+          "https://www.linkedin.com/in/agat-dev/",
+          "https://github.com/agat-dev",
+        ],
+      },
+
+      // — Organization —
+      {
+        "@type": "Organization",
+        "@id": `${baseUrl}/#organization`,
+        name: siteConfig.name,
+        url: baseUrl,
+        logo: {
+          "@type": "ImageObject",
+          url: `${baseUrl}/img/logo-blanc-carre.png`,
+        },
+        description: siteConfig.description,
+        founder: { "@id": `${baseUrl}/#person` },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "4 rue du centre",
+          addressLocality: "Trizac",
+          postalCode: "15400",
+          addressRegion: "Auvergne-Rhône-Alpes",
+          addressCountry: "FR",
+        },
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: "+33673981638",
+          email: "agathe@next-impact.digital",
+          availableLanguage: ["French", "English"],
+        },
+        sameAs: [
+          "https://www.linkedin.com/in/agat-dev/",
+          "https://github.com/agat-dev",
+        ],
+      },
+
+      // — LocalBusiness —
+      {
+        "@type": ["LocalBusiness", "ProfessionalService"],
+        "@id": `${baseUrl}/#localbusiness`,
+        name: siteConfig.name,
+        url: baseUrl,
+        logo: `${baseUrl}/img/logo-blanc-carre.png`,
+        image: `${baseUrl}${siteConfig.ogImage}`,
+        description: siteConfig.description,
+        telephone: "+33673981638",
+        email: "agathe@next-impact.digital",
+        founder: { "@id": `${baseUrl}/#person` },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "4 rue du centre",
+          addressLocality: "Trizac",
+          postalCode: "15400",
+          addressRegion: "Auvergne-Rhône-Alpes",
+          addressCountry: "FR",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 45.2547,
+          longitude: 2.5264,
+        },
+        areaServed: {
+          "@type": "Country",
+          name: "France",
+        },
+        priceRange: "€€",
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+        serviceType: [
+          "Création de sites WordPress Headless",
+          "Migration WordPress vers Headless",
+          "Audit de site WordPress",
+          "Développement Next.js",
+          "Développement Astro",
+        ],
+        knowsAbout: [
+          "WordPress",
+          "WordPress Headless",
+          "Next.js",
+          "Astro",
+          "WPGraphQL",
+          "React",
+          "TypeScript",
+        ],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Stacks WordPress modernisées",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              name: "Présence Essentielle — WordPress monolithique optimisé",
+              description:
+                "Site vitrine WordPress avec thème custom moderne, build optimisé et sécurité durcie.",
+              price: "2250",
+              priceCurrency: "EUR",
+              url: `${baseUrl}/services`,
+            },
+            {
+              "@type": "Offer",
+              name: "Croissance Accélérée — WordPress + Astro",
+              description:
+                "WordPress headless en backend, Astro en frontend. Performance et SEO de niveau industriel.",
+              price: "4000",
+              priceCurrency: "EUR",
+              url: `${baseUrl}/services`,
+            },
+            {
+              "@type": "Offer",
+              name: "Plateforme Sur-Mesure — WordPress + Next.js",
+              description:
+                "Architecture WordPress headless + Next.js App Router, TypeScript, multisites et CI/CD complet.",
+              price: "5000",
+              priceCurrency: "EUR",
+              url: `${baseUrl}/services`,
+            },
+          ],
+        },
+        potentialAction: [
+          {
+            "@type": "ReserveAction",
+            name: "Planifier un appel visio de découverte",
+            target: "https://calendar.app.google/CiBQuqFLNu3vJwSc7",
+            description: "Appel de découverte gratuit de 15 minutes",
+          },
+          {
+            "@type": "CommunicateAction",
+            name: "Demander un devis",
+            target: `${baseUrl}/contact`,
+            description: "Devis personnalisé sous 48h",
+          },
+        ],
+      },
+    ],
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
  * Données structurées pour les avis clients
  */
 export function ReviewJsonLd({
