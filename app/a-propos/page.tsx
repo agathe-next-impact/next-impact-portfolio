@@ -5,17 +5,20 @@ import { BreadcrumbJsonLd, PersonJsonLd } from "@/components/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
-    title: "À propos - L'alliance performance technologique & engagement durable",
+    title: "À propos de Next Impact — Agathe Karinthi-Martin, développeur WordPress Headless",
     description:
-      "Découvrez Next Impact : 15 ans d'engagement associatif, 8 ans de développement web. L'architecture Headless au service de l'ESS et de l'impact social.",
+      "Agathe Karinthi-Martin est développeur freelance WordPress Headless chez Next Impact. " +
+      "8 ans de développement web, 15 ans d'engagement associatif. " +
+      "Spécialiste Next.js, Astro et WPGraphQL au service de l'ESS et des TPE-PME.",
     path: "/a-propos",
     keywords: [
-      "à propos",
-      "Next Impact",
+      "à propos Next Impact",
+      "Agathe Karinthi-Martin",
+      "développeur WordPress Headless freelance",
       "ESS",
       "engagement durable",
       "headless",
-      "Agathe Karinthi-Martin",
+      "parcours freelance",
     ],
   });
 }

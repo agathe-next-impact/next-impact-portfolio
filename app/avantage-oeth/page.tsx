@@ -10,9 +10,11 @@ import AvantageOethClient from "@/components/avantage-oeth/AvantageOethClient";
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata({
     title:
-      "Réduisez votre contribution AGEFIPH avec un site web performant",
+      "Avantage OETH — Déduisez 30 % de votre contribution AGEFIPH avec un prestataire TIH",
     description:
-      "Prestataire TIH WordPress Headless : 30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH. Simulateur de déduction inclus.",
+      "Next Impact est un prestataire TIH (Travailleur Indépendant Handicapé). " +
+      "Chaque prestation web permet de déduire 30 % du coût de main-d'œuvre de votre contribution AGEFIPH. " +
+      "Simulateur de déduction et attestation inclus.",
     path: "/avantage-oeth",
     modifiedTime: "2025-06-01",
     type: "website",
@@ -25,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "obligation emploi travailleurs handicapés",
       "attestation déductibilité TIH",
       "AGEFIPH déduction",
+      "travailleur indépendant handicapé",
     ],
   });
 }

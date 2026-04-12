@@ -156,33 +156,37 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 export const pageMetadata = {
   home: (): Metadata =>
     generatePageMetadata({
-      title: "Expert WordPress Headless & Next.js — Freelance",
+      title: "Next Impact — Développeur WordPress Headless, Next.js & Astro en France",
       description:
-        "Développeur freelance spécialisé WordPress Headless + Next.js & Astro. " +
-        "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants. " +
-        "Audit gratuit — réservez une consultation.",
+        "Next Impact est une agence freelance spécialisée en WordPress Headless, Next.js et Astro. " +
+        "Création, refonte et migration de sites performants pour TPE, PME et ESS. " +
+        "Basée en Auvergne, intervention dans toute la France. Audit gratuit.",
       path: "/",
       keywords: [
         "WordPress Headless freelance",
-        "développeur Next.js",
+        "développeur Next.js France",
         "création site headless",
         "migration WordPress Headless",
+        "agence WordPress Headless",
+        "Next Impact",
       ],
     }),
 
   services: (): Metadata =>
     generatePageMetadata({
-      title: "Services WordPress Headless, Next.js & Astro — Création, Refonte, Audit",
+      title: "Création de site WordPress Headless, Next.js & Astro — Services et tarifs",
       description:
-        "WordPress classique, WordPress custom ou WordPress Headless : " +
-        "des solutions adaptées à votre projet. TPE, PME, services marketing. " +
-        "Devis gratuit.",
+        "3 offres adaptées à chaque budget : WordPress optimisé dès 2 250 €, " +
+        "WordPress + Astro dès 4 000 €, WordPress + Next.js dès 5 000 €. " +
+        "Création, refonte, migration et audit. Devis personnalisé sous 48 h.",
       path: "/services",
       keywords: [
         "services WordPress Headless",
         "création site Next.js",
         "développement Astro",
         "refonte WordPress",
+        "tarif site WordPress Headless",
+        "prix site Next.js",
       ],
     }),
 
