@@ -37,7 +37,7 @@ export function NavBar() {
   return (
     <>
       {/* Desktop */}
-      <nav className="hidden xl:flex px-4 py-2">
+      <nav className="hidden lg:flex px-4 py-2">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -75,7 +75,7 @@ export function NavBar() {
       </nav>
 
       {/* Mobile */}
-      <nav className="flex xl:hidden items-center sticky">
+      <nav className="flex lg:hidden items-center sticky">
         <button
           className="p-2 rounded-md shrink-0"
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
@@ -257,18 +257,18 @@ export default function Header() {
       </div>
 
       {/* Desktop nav (centre) */}
-      <div className="w-full hidden xl:flex justify-start pl-4">
+      <div className="w-full hidden lg:flex justify-start pl-4">
         <NavBar />
       </div>
 
       {/* Mobile : switcher centré + hamburger */}
-      <div className="flex xl:hidden flex-1 items-center justify-end gap-2">
+      <div className="flex lg:hidden flex-1 items-center justify-end gap-2">
         <GlobalProfileSwitcher />
         <NavBar />
       </div>
 
       {/* Desktop : icônes de droite */}
-      <div className="hidden xl:flex items-center gap-4">
+      <div className="hidden lg:flex items-center gap-4">
         <GlobalProfileSwitcher />
         <NavigationMenu>
           <NavigationMenuList>

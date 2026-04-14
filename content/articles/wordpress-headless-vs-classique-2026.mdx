@@ -1,0 +1,224 @@
+---
+title: "WordPress Headless vs classique : comparatif complet 2026"
+slug: "wordpress-headless-vs-classique-2026"
+date: "2026-04-14"
+author: "Agathe Karinthi-Martin"
+authorRole: "Architecte WordPress Headless · Prestataire TIH"
+category: "WP Headless"
+cluster: "A"
+readingTime: 8
+kpis:
+  - value: "0,9s"
+    label: "chargement (vs 6,4s)"
+  - value: "96"
+    label: "Lighthouse"
+  - value: "+38%"
+    label: "trafic J+90"
+tags: ["WordPress Headless", "Performance", "TCO", "Décision"]
+relatedArticles:
+  - slug: "cout-migration-wordpress-headless"
+    title: "Coût d'une migration WordPress Headless"
+    category: "ROI"
+  - slug: "prestataire-tih-developpement-web-agefiph"
+    title: "Prestataire TIH : réduire sa contribution AGEFIPH"
+    category: "TIH / AGEFIPH"
+  - slug: "roi-refonte-site-web-calcul"
+    title: "Calculer le ROI d'une refonte web"
+    category: "ROI"
+relatedDocs:
+  - path: "/documentation/headless-cms/comprendre-le-headless"
+    title: "Comprendre le headless (technique)"
+  - path: "/documentation/headless-cms/migration-monolithique-vers-headless"
+    title: "Guide migration monolithique → headless"
+---
+
+## Introduction
+
+Votre site WordPress existe depuis 5 ans. Il fonctionne. Vos équipes savent l'utiliser. Et pourtant, un prestataire vous parle de "WordPress Headless", un autre de "refonte complète", un troisième de Webflow.
+
+Les devis varient du simple au triple. Vous ne comprenez pas vraiment pourquoi.
+
+<Callout type="info">
+Si vous cherchez d'abord à comprendre ce qu'est techniquement le headless, commencez par notre [guide "Comprendre le headless"](/documentation/headless-cms/comprendre-le-headless). Cet article se concentre sur la **décision** : quand choisir l'un plutôt que l'autre, ce que ça coûte vraiment, et comment trancher.
+</Callout>
+
+Pas de jargon inutile. Des chiffres réels. Et si WordPress Headless n'est pas la bonne réponse pour vous, je vous le dirai aussi.
+
+## Ce qu'est WordPress classique (et pourquoi il fonctionne encore très bien)
+
+Dans une architecture WordPress classique, tout est au même endroit : le contenu que vous gérez dans l'admin, et le site que vos visiteurs voient. WordPress génère les pages à la demande, les thèmes contrôlent l'apparence, les plugins ajoutent des fonctionnalités.
+
+**Ce que ça donne concrètement :**
+- Vos équipes rédigent dans l'éditeur Gutenberg
+- WordPress assemble la page et l'envoie au navigateur
+- Un plugin de cache peut améliorer les performances
+- Un thème premium peut rendre le site visuellement attrayant
+
+**Quand WordPress classique est le bon choix :**
+- Budget inférieur à 3 000 €
+- Trafic sous les 5 000 visites/mois
+- Équipe non-technique qui gère tout en autonomie
+- Pas de contrainte de performance critique
+
+<Callout type="example">
+**Exemple réel : Café Citoyen**, association avec 5 mises à jour/mois et un budget de 2 500 €. WordPress optimisé, livré en 3 semaines, zéro appel support en 6 mois. L'équipe est 100 % autonome. Le headless aurait été surdimensionné.
+</Callout>
+
+## Ce qu'est WordPress Headless — sans le jargon
+
+"Headless" signifie littéralement "sans tête". Dans une architecture headless, on sépare deux choses qui étaient collées ensemble :
+
+- **Le back-end** (la "tête" qu'on retire) : WordPress continue de gérer vos contenus, vos articles, vos médias. Vos équipes ne changent rien à leurs habitudes.
+- **Le front-end** (ce que vos visiteurs voient) : une technologie moderne (Next.js ou Astro) récupère le contenu via une API et construit les pages de façon ultra-optimisée.
+
+**Ce que ça donne concrètement :**
+- Vos rédacteurs écrivent toujours dans WordPress — identique à avant
+- Le front-end Next.js ou Astro pré-génère les pages
+- Le visiteur reçoit une page déjà construite en quelques millisecondes
+- Le serveur WordPress n'est plus exposé directement au public
+
+## Le comparatif complet : 8 critères clés
+
+### 1. Performance (Lighthouse / Core Web Vitals)
+
+| Architecture | Score Lighthouse typique | Chargement moyen |
+|---|---|---|
+| WordPress classique non optimisé | 30–55 | 4–8 secondes |
+| WordPress classique bien optimisé | 55–75 | 2–4 secondes |
+| WordPress Headless + Astro | 85–95 | 0,8–1,5 secondes |
+| WordPress Headless + Next.js | 90–98 | 0,5–1,2 secondes |
+
+<Callout type="success">
+**Données réelles : Comme des Fous**, média avec 30+ articles/mois. Avant migration : 6,4 secondes, Lighthouse 42. Après migration WP Headless + Next.js : 0,9 seconde, Lighthouse 96. Résultat à 3 mois : trafic organique +38 %.
+</Callout>
+
+### 2. Gestion du contenu (côté équipe éditoriale)
+
+C'est la question que personne ne pose assez : **est-ce que vos équipes devront changer leurs habitudes ?**
+
+| Architecture | Impact sur les équipes |
+|---|---|
+| WordPress classique | Aucun changement |
+| WordPress Headless | **Aucun changement** — l'admin reste identique |
+| Webflow | Migration complète, nouvelle interface |
+| Wix Pro | Migration complète, nouvelle interface |
+
+C'est l'avantage décisif du headless bien fait : vous modernisez l'infrastructure sans toucher au quotidien de vos rédacteurs.
+
+### 3. Sécurité
+
+Un WordPress classique expose son interface d'administration sur une URL publique (`/wp-admin`). C'est la cible de 90 % des attaques automatisées sur WordPress.
+
+Avec une architecture headless :
+- WordPress est déplacé sur un sous-domaine non-public (`cms.votresite.fr`)
+- Le front-end n'exécute pas de PHP
+- La surface d'attaque est réduite à quasi-zéro
+
+<Callout type="example">
+**Exemple réel : États Généraux Communaux** (données sensibles, sécurité critique). Architecture WP Headless + Astro. Audit sécurité A+.
+</Callout>
+
+### 4. Coût de maintenance sur 3 ans
+
+C'est ici que la réalité financière change le plus les décisions.
+
+| Composante | WP Classique | WP Headless (Croissance Accélérée) | Webflow Premium |
+|---|---|---|---|
+| Investissement départ | 3 000 € | 5 000 € | 6 000 € |
+| Déduction AGEFIPH (TIH) | — | −1 200 € | — |
+| Maintenance × 3 ans | 3 600 € | 900 € | 1 800 € |
+| Abonnement × 3 ans | — | — | 1 800 € |
+| **Total TCO 3 ans** | **6 600 €** | **4 700 € net** | **9 600 €** |
+
+<Callout type="info">
+Applicable si votre prestataire est Travailleur Indépendant Handicapé (TIH). Sur un projet à 5 000 €, jusqu'à 1 500 € de déduction directe sur la contribution AGEFIPH.
+</Callout>
+
+La maintenance est moins élevée en headless parce que le front-end Next.js ou Astro ne dépend pas d'un écosystème de plugins aussi instable que WordPress traditionnel.
+
+### 5. SEO et visibilité IA (GEO)
+
+Les moteurs de recherche et les IA (ChatGPT, Perplexity, Gemini) favorisent les pages qui se chargent vite et qui sont structurées avec des données schema.org.
+
+| Critère SEO | WP Classique | WP Headless |
+|---|---|---|
+| Core Web Vitals (LCP, CLS, INP) | Difficiles à maîtriser | Excellents nativement |
+| Schema.org structuré | Via plugin (limité) | Contrôle total dans le code |
+| Rendu côté serveur (SSR/ISR) | Non | Oui — pages pré-générées |
+| Visibilité IA (GEO) | Limitée | Optimisable nativement |
+
+### 6. Intégrations API et évolutivité
+
+Connecter un CRM, un outil de personnalisation, une plateforme e-commerce externe — ces intégrations sont bien plus simples avec une architecture headless.
+
+| Besoin | WP Classique | WP Headless |
+|---|---|---|
+| API REST externe | Possible mais complexe | Natif |
+| Multisite complexe | Limité | Architectures avancées possibles |
+| Internationalisation | Via plugin | Contrôle total |
+| Migration vers un autre CMS futur | Difficile | Simple (le front-end est indépendant) |
+
+### 7. Délai et complexité de mise en œuvre
+
+| Architecture | Délai typique | Complexité |
+|---|---|---|
+| WP optimisé (Présence Essentielle) | 3–5 semaines | Faible |
+| WP Headless + Astro (Croissance Accélérée) | 6–8 semaines | Moyenne |
+| WP Headless + Next.js (Plateforme Sur-Mesure) | 8–14 semaines | Élevée |
+
+### 8. Risque et dette technique
+
+WordPress classique accumule de la dette technique : plugins qui ne se mettent plus à jour, thèmes abandonnés, compatibilité PHP à gérer. Le risque augmente avec le temps.
+
+Une architecture headless isole le front-end de cet écosystème. Si WordPress évolue (ou si vous décidez un jour de changer de CMS), le front-end n'est pas impacté.
+
+## La règle de décision : 4 questions pour trancher
+
+Posez-vous ces 4 questions dans l'ordre :
+
+**1. Votre Lighthouse est-il sous 70 ?**
+Si oui, les performances actuelles vous coûtent du trafic et des conversions.
+
+**2. Votre trafic dépasse-t-il 10 000 visites/mois ?**
+En dessous, l'impact d'une migration headless sera moins visible à court terme.
+
+**3. Avez-vous des intégrations API ou des besoins de personnalisation avancée ?**
+Si oui, le headless est souvent la seule architecture qui tient sur le long terme.
+
+**4. Votre équipe éditoriale est-elle non-technique ?**
+Le headless préserve intégralement ses habitudes. C'est un argument, pas un frein.
+
+<Callout type="warning">
+**Si vous répondez oui à 2 questions ou plus** : une migration WordPress Headless mérite d'être chiffrée sérieusement. **Si vous répondez oui à moins de 2** : commencez par optimiser votre WordPress actuel. C'est souvent suffisant.
+</Callout>
+
+## Next.js ou Astro : lequel choisir pour votre headless ?
+
+Ce n'est pas le sujet principal de cet article, mais voici la règle rapide :
+
+- **Astro** : sites à contenu majoritairement statique, forte priorité sécurité, peu de dynamisme côté client. Score Lighthouse maximal. *Exemple : États Généraux Communaux.*
+- **Next.js** : sites avec du contenu dynamique (actualités, e-commerce, personnalisation), intégrations API complexes, trafic élevé avec pics. *Exemple : Comme des Fous, Comme des Fous Jeux.*
+
+## Ce que cette migration ne résout pas
+
+Honnêteté éditoriale oblige :
+
+- **Le WordPress Headless ne remplace pas une stratégie de contenu.** Un site rapide sans contenu de qualité reste invisible.
+- **Il ne résout pas un problème de conception UX.** La performance est une condition nécessaire, pas suffisante.
+- **Il n'est pas adapté à tous les budgets.** En dessous de 3 500 €, un WordPress optimisé donnera de meilleurs résultats.
+- **Il complexifie le déploiement.** Votre équipe technique (interne ou externe) doit être à l'aise avec les environnements Node.js et les pipelines CI/CD.
+
+## Conclusion : la décision en une phrase
+
+Si votre site WordPress est votre principal outil d'acquisition et que vos performances actuelles vous pénalisent, la migration vers une architecture headless est un investissement qui s'autofinance — souvent en moins d'un an sur le trafic et les conversions.
+
+Si vous êtes une TPE ou une association avec un budget serré et un trafic modéré, optimisez d'abord ce que vous avez.
+
+**Le bon choix n'est pas celui qui est le plus moderne. C'est celui qui correspond à votre situation réelle.**
+
+## Pour aller plus loin
+
+- [Coût d'une migration WordPress Headless : grille tarifaire et ROI calculé](/articles/cout-migration-wordpress-headless)
+- [Prestataire TIH développement web : réduire sa contribution AGEFIPH](/articles/prestataire-tih-developpement-web-agefiph)
+- [Guide complet : migrer d'un WordPress classique vers le headless](/documentation/headless-cms/migration-monolithique-vers-headless)
+- [Comprendre le headless — définition et principes](/documentation/headless-cms/comprendre-le-headless)

@@ -71,6 +71,7 @@
     "react-use-measure": "^2.1.7",
     "react-wrap-balancer": "^1.1.1",
     "recharts": "2.15.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^4.5.2",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
