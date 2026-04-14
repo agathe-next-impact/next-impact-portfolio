@@ -37,36 +37,36 @@ export function NavBar() {
   return (
     <>
       {/* Desktop */}
-      <nav className="hidden md:flex px-4 py-2">
+      <nav className="hidden xl:flex px-4 py-2">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/services" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/services" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Services & Tarifs
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/avantage-oeth" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/avantage-oeth" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Avantage OETH
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/demo" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/demo" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Démo
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/outils" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/outils" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Outils en ligne
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/documentation" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/documentation" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Comprendre
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-lg text-regular px-2">
+              <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-base text-regular px-1.5">
                 Etudes de cas
               </Link>
             </NavigationMenuItem>
@@ -75,7 +75,7 @@ export function NavBar() {
       </nav>
 
       {/* Mobile */}
-      <nav className="flex md:hidden items-center sticky">
+      <nav className="flex xl:hidden items-center sticky">
         <button
           className="p-2 rounded-md shrink-0"
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
@@ -257,18 +257,18 @@ export default function Header() {
       </div>
 
       {/* Desktop nav (centre) */}
-      <div className="w-full hidden md:flex justify-start pl-4">
+      <div className="w-full hidden xl:flex justify-start pl-4">
         <NavBar />
       </div>
 
       {/* Mobile : switcher centré + hamburger */}
-      <div className="flex md:hidden flex-1 items-center justify-end gap-2">
+      <div className="flex xl:hidden flex-1 items-center justify-end gap-2">
         <GlobalProfileSwitcher />
         <NavBar />
       </div>
 
       {/* Desktop : icônes de droite */}
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden xl:flex items-center gap-4">
         <GlobalProfileSwitcher />
         <NavigationMenu>
           <NavigationMenuList>
