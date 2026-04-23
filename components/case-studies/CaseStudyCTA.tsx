@@ -17,9 +17,9 @@ const CTA_BY_PROFILE = {
     external: true,
   },
   utilisateur: {
-    label: "Voir une démo",
-    href: "/demo",
-    external: false,
+    label: "Discuter de votre projet",
+    href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
+    external: true,
   },
   developpeur: {
     label: "Voir la documentation",
@@ -40,6 +40,7 @@ export default function CaseStudyCTA() {
       >
         <Link
           href={cta.href}
+          className="text-white"
           {...(cta.external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
@@ -47,15 +48,6 @@ export default function CaseStudyCTA() {
           {cta.label}
         </Link>
       </Button>
-      <Link
-        href="/ressources/livre_blanc_wp_headless.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors font-googletexte"
-      >
-        <FileText className="w-3.5 h-3.5" />
-        Comprendre WordPress Headless
-      </Link>
     </div>
   );
 }

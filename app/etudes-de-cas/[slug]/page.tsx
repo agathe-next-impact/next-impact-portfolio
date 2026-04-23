@@ -77,6 +77,7 @@ interface CaseStudy {
     alt: string;
   }[];
   youtubeVideoId?: string;
+  youtubeIsShort?: boolean;
   detailedDescription: string;
   technologies: string[];
   duration: string;
@@ -117,6 +118,40 @@ const CASE_STUDIES: CaseStudy[] = [
     technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
     duration: "3 semaines",
     website: "https://cafecitoyen.art",
+  },
+  {
+    id: "18",
+    slug: "hermitage-jeu-de-piste",
+    title: "L'hermitage - Jeu de piste",
+    description: "Création d'un jeu de piste en ligne pour le domaine forestier du Tiers Lieu L'Hermitage, utilisant une architecture WordPress Headless avec Next.js pour offrir une expérience ludique et interactive aux visiteurs.",
+    imageUrl: "/img/logo-hermitage.webp",
+    clientType: "ESS",
+    clientName: "Tiers Lieu L'Hermitage",
+    date: {
+      month: 4,
+      year: 2026,
+    },
+    tags: ["ESS", "WordPress", "Headless", "Next.js", "Jeu en ligne"],
+    objectives: [
+      "Créer un jeu de piste en ligne pour le domaine forestier du Tiers Lieu L'Hermitage",
+      "Offrir une expérience ludique et interactive aux visiteurs",
+      "Utiliser une architecture WordPress Headless pour garantir des performances optimales",
+    ],
+    results: [
+      "Jeu de piste en ligne développé avec succès",
+      "Visiteurs des séjours engagés dans la découverte active du domaine",
+      "Expérience utilisateur fluide et réactive",
+    ],
+    youtubeVideoId: "_kt_wA4zT68",
+    youtubeIsShort: true,
+    gallery: {
+      url: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
+      alt: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
+    },
+    detailedDescription: `Le Tiers Lieu L'Hermitage, un lieu de séjours sur-mesure pour entreprises et de rencontres situé dans un domaine forestier, souhaitait créer un jeu de piste en ligne pour offrir une expérience ludique et interactive aux équipes en séjour d'entreprise. L'objectif était de développer un jeu qui encourage les visiteurs à explorer le domaine tout en utilisant une architecture WordPress Headless pour garantir des performances optimales.\n\nJ'ai développé un jeu de piste en ligne intégré au site WordPress en mode Headless avec Next.js. Le jeu est conçu pour être engageant et interactif, encourageant les visiteurs à découvrir les différentes zones du domaine à travers des énigmes et des défis avec un score final de rapidité et de précision.\n\nLe jeu a été un succès, avec un engagement accru des visiteurs et une expérience utilisateur fluide et réactive.`,
+    technologies: [ "WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel" ],
+    duration: "4 semaines",
+    website: "https://jeu-de-piste.hermitagelelab.com/",
   },
   {
     id: "16",
@@ -747,6 +782,23 @@ const CASE_STUDIES: CaseStudy[] = [
   },
 ];
 
+// Parse une URL YouTube (short, watch, youtu.be, embed) ou un ID brut
+function parseYoutubeVideo(input: string): { id: string; isShort: boolean } {
+  const shortsMatch = input.match(/youtube\.com\/shorts\/([\w-]+)/);
+  if (shortsMatch) return { id: shortsMatch[1], isShort: true };
+
+  const watchMatch = input.match(/[?&]v=([\w-]+)/);
+  if (watchMatch) return { id: watchMatch[1], isShort: false };
+
+  const youtuBeMatch = input.match(/youtu\.be\/([\w-]+)/);
+  if (youtuBeMatch) return { id: youtuBeMatch[1], isShort: false };
+
+  const embedMatch = input.match(/youtube\.com\/embed\/([\w-]+)/);
+  if (embedMatch) return { id: embedMatch[1], isShort: false };
+
+  return { id: input, isShort: false };
+}
+
 // Noms des mois en français
 const monthNames = [
   "Janvier",
@@ -796,6 +848,11 @@ const RESULT_HIGHLIGHTS: Record<string, { value: string; label: string }[]> = {
     { value: "15 jours", label: "Délai de livraison" },
     { value: "100%", label: "Expérience interactive" },
     { value: "Headless", label: "Architecture Next.js" },
+  ],
+  "hermitage-jeu-de-piste": [
+    { value: "4 semaines", label: "Délai de réalisation" },
+    { value: "Gamification", label: "Découverte active du domaine" },
+    { value: "Appli mobile", label: "PWA native" },
   ],
   "comme-des-fous": [
     { value: "98/100", label: "Score PageSpeed" },
@@ -969,18 +1026,28 @@ export default async function CaseStudyPage({
               </h2>
               <div className="rounded-lg border overflow-hidden">
                 {caseStudy.youtubeVideoId ? (
-                  <div
-                    className="relative w-full"
-                    style={{ paddingBottom: "56.25%" }}
-                  >
-                    <iframe
-                      className="absolute top-0 left-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
-                      title={caseStudy.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
+                  caseStudy.youtubeIsShort ? (
+                    <div className="flex justify-center bg-black">
+                      <iframe
+                        width="315"
+                        height="560"
+                        src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
+                        title={caseStudy.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                      <iframe
+                        className="absolute top-0 left-0 w-full h-full"
+                        src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
+                        title={caseStudy.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  )
                 ) : (
                   <Image
                     src={caseStudy.gallery.url || "/placeholder.svg"}

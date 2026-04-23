@@ -20,6 +20,16 @@ const PROJECTS = [
     tab: ["derniers", "headless"],
   },
   {
+    id: 18,
+    title: "L'hermitage - Jeu de piste",
+    type: "headless",
+    image: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
+    alt: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
+    description: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
+    link: "/etudes-de-cas/hermitage-jeu-de-piste",
+    tab: ["derniers", "headless"],
+  },
+  {
     id: 16,
     title: "Comme des fous - Jeux en ligne",
     type: "headless",
