@@ -17,19 +17,19 @@ function toYoutubeEmbed(url: string) {
 }
 
 const mainVideo = {
-  title: "Présentation complète de la plateforme",
-  url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
-  websiteLink: "https://next-event.fr",
+  title: "WordPress Headless pour un vitrine de 2026",
+  url: "https://youtu.be/8aVVoDFakCY?si=kbqPlZgPDfHOF43f",
+  websiteLink: "https://cafecitoyen.art",
 };
 
 const demoVideos = [
   {
-    title: "Démo 3",
-    url: "https://youtu.be/8aVVoDFakCY?si=kbqPlZgPDfHOF43f",
-    projectLink: "/etudes-de-cas/cafe-citoyen",
-    projectName: "WordPress Headless pour le Café citoyen",
+    title: "Démo 1",
+    url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
+    projectLink: "/etudes-de-cas/next-event",
+    projectName: "WordPress Headless pour Next Event",
     projectDescription:
-      "Le site vitrine du Café citoyen d'Auger-Saint-Vincent, propulsé par WordPress Headless et Next.js",
+      "Démonstration complète d'un site WordPress Headless avec Next.js : billetterie événementielle, performance et expérience utilisateur",
   },
   {
     title: "Démo 1",
@@ -62,7 +62,7 @@ const demoVideos = [
     projectName: "Section de jeux en ligne pour Comme des Fous",
     projectDescription:
       "Une section de jeux en ligne intégrée au site de Comme des Fous, développée en WordPress Headless avec Next.js",
-  }
+  },
 ];
 
 export default function DemoClient() {
@@ -108,7 +108,7 @@ export default function DemoClient() {
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="space-y-1">
                     <h2 className="font-medium text-3xl text-white/90">
-                      Billeterie événementielle
+                      Vitrine du Café citoyen d'Auger-Saint-Vincent
                     </h2>
                     <p className="text-lg text-white/80">
                       WordPress Headless Next.js
@@ -184,8 +184,6 @@ export default function DemoClient() {
                 </div>
               ))}
             </div>
-
-
           </section>
         </div>
       </PageLayout>
