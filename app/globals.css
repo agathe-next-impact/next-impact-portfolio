@@ -438,6 +438,17 @@ body {
 .light [class^="text-mediumblue"], .light [class*=" text-mediumblue"]  { color: #021373 !important; }
 .light [class^="text-regularblue"],.light [class*=" text-regularblue"] { color: #021373 !important; }
 
+/* --- Variantes hover/focus/group-hover sur text-white/light : éviter clair-sur-clair --- */
+.light [class*="hover:text-white"]:hover,
+.light [class*="hover:text-extralightblue"]:hover,
+.light [class*="hover:text-lightblue"]:hover,
+.light [class*="focus:text-white"]:focus,
+.light [class*="focus:text-extralightblue"]:focus,
+.light [class*="focus:text-lightblue"]:focus { color: #020F59 !important; }
+.light .group:hover [class*="group-hover:text-white"],
+.light .group:hover [class*="group-hover:text-extralightblue"],
+.light .group:hover [class*="group-hover:text-lightblue"] { color: #020F59 !important; }
+
 /* --- Bordures : discrètes en bleu très clair --- */
 .light [class*="border-white"],
 .light [class*="border-darkblue"],
@@ -486,6 +497,7 @@ body {
 
 /* --- Accents (orange/coral/yellow) : assombris en TEXTE pour contraste AA --- */
 .light [class^="text-orange"],     .light [class*=" text-orange"]      { color: #021373 !important; }
+.light [class^="text-coral"],      .light [class*=" text-coral"]       { color: #021373 !important; }
 .light [class^="text-lightyellow"],.light [class*=" text-lightyellow"] { color: #021373 !important; }
 
 /* --- .article-text (MDX) : texte blanc → bleu foncé --- */
@@ -519,19 +531,41 @@ body {
 /* --- li orphelin (ligne 376 base layer) --- */
 .light li { color: #021373; }
 
-/* === CTA coral/orange : texte blanc forcé (light + dark) === */
-button[class*="bg-coral"], button[class*="bg-orange"],
-a[class*="bg-coral"],      a[class*="bg-orange"] {
+/* --- .mentions-legales : les variants [&_p]:text-white/80 ciblent les enfants p/li/a directement,
+   donc l'override global [class*="text-white"] ne les attrape pas. On force ici. --- */
+.light .mentions-legales,
+.light .mentions-legales h2,
+.light .mentions-legales h3,
+.light .mentions-legales h4,
+.light .mentions-legales strong,
+.light .mentions-legales b { color: #020F59 !important; }
+.light .mentions-legales p,
+.light .mentions-legales li { color: rgba(2, 19, 115, 0.85) !important; }
+.light .mentions-legales a { color: #021373 !important; text-decoration-color: rgba(31, 84, 191, 0.5) !important; }
+
+/* === CTA coral/orange : texte blanc forcé (light + dark) ===
+   Sélecteurs ^= / " " pour ne matcher que bg-coral standalone, pas hover:bg-coral/10 etc.
+   (sinon on capture des CTA "outline" type bg-transparent + hover:bg-coral). */
+button[class^="bg-coral"], button[class*=" bg-coral"],
+button[class^="bg-orange"], button[class*=" bg-orange"],
+a[class^="bg-coral"],      a[class*=" bg-coral"],
+a[class^="bg-orange"],     a[class*=" bg-orange"] {
   color: #FFFFFF !important;
 }
-button[class*="bg-coral"] *, button[class*="bg-orange"] *,
-a[class*="bg-coral"] *,      a[class*="bg-orange"] * {
+button[class^="bg-coral"] *, button[class*=" bg-coral"] *,
+button[class^="bg-orange"] *, button[class*=" bg-orange"] *,
+a[class^="bg-coral"] *,      a[class*=" bg-coral"] *,
+a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
   color: #FFFFFF !important;
 }
-.light button[class*="bg-coral"], .light button[class*="bg-orange"],
-.light a[class*="bg-coral"],      .light a[class*="bg-orange"],
-.light button[class*="bg-coral"] *, .light button[class*="bg-orange"] *,
-.light a[class*="bg-coral"] *,      .light a[class*="bg-orange"] * {
+.light button[class^="bg-coral"], .light button[class*=" bg-coral"],
+.light button[class^="bg-orange"], .light button[class*=" bg-orange"],
+.light a[class^="bg-coral"],      .light a[class*=" bg-coral"],
+.light a[class^="bg-orange"],     .light a[class*=" bg-orange"],
+.light button[class^="bg-coral"] *, .light button[class*=" bg-coral"] *,
+.light button[class^="bg-orange"] *, .light button[class*=" bg-orange"] *,
+.light a[class^="bg-coral"] *,      .light a[class*=" bg-coral"] *,
+.light a[class^="bg-orange"] *,     .light a[class*=" bg-orange"] * {
   color: #FFFFFF !important;
 }
 

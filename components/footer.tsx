@@ -72,6 +72,9 @@ export default function Footer() {
             <Link href="/documentation" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               Documentation
             </Link>
+            <Link href="/blog" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              Blog
+            </Link>
             <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               Avantage OETH
             </Link>

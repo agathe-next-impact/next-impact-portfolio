@@ -2,11 +2,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { MdxGallery } from "@/components/documentation/mdx-gallery";
 import { SpringLab } from "@/components/documentation/spring-lab";
-import { ContrastChecker } from "@/components/documentation/contrast-checker";
 import { LiveButtonPlayground } from "@/components/documentation/live-button-playground";
 import { ConditionalContent } from "@/components/documentation/conditional-content";
 import { TypographyShowcase } from "@/components/documentation/typography-showcase";
-import { ColorPaletteShowcase } from "@/components/documentation/color-palette-showcase";
 import { VideoGallery } from "@/components/documentation/video-gallery";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
@@ -101,19 +99,13 @@ export default function PlaygroundPage() {
               {/* 2. Spring Animation Lab */}
               <SpringLab />
 
-              {/* 3. Contrast Checker */}
-              <ContrastChecker />
-
-              {/* 4. Button playground */}
+              {/* 3. Button playground */}
               <LiveButtonPlayground />
 
               {/* 5. Typography */}
               <TypographyShowcase />
 
-              {/* 6. Color palette */}
-              <ColorPaletteShowcase />
-
-              {/* 7. Profile-aware content demo */}
+              {/* 6. Profile-aware content demo */}
               <ConditionalContent
                 simple={
                   <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-6 md:p-8">

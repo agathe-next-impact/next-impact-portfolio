@@ -17,7 +17,9 @@
       "Bash(ls:*)",
       "Bash(cat .eslintrc*)",
       "Bash(cat eslint.config.*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Read(//tmp/**)",
+      "Bash(taskkill //F //IM node.exe //T)"
     ]
   }
 }
