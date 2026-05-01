@@ -11,6 +11,7 @@ import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { HomepageProfileBanner } from '@/components/homepage-profile-banner'
 import { ThemeProvider } from '@/components/theme-provider'
+import { FloatingContact } from '@/components/floating-contact'
 
 const inter = localFont({
   src: [
@@ -191,6 +192,7 @@ export default function RootLayout({
             <HomepageProfileBanner />
             {children}
             <Footer />
+            <FloatingContact />
             <MetadataDebugger />
           </DocumentationModeProvider>
         </ThemeProvider>
