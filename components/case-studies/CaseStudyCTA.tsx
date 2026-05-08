@@ -1,36 +1,37 @@
 "use client";
 
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
 import Link from "next/link";
 
-const CTA_BY_PROFILE = {
+const CTA_TARGETS = {
   default: {
-    label: "Discuter de votre projet",
     href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     external: true,
+    labelKey: "default" as const,
   },
   decideur: {
-    label: "Évaluer mon projet",
     href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     external: true,
+    labelKey: "decideur" as const,
   },
   utilisateur: {
-    label: "Discuter de votre projet",
     href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     external: true,
+    labelKey: "utilisateur" as const,
   },
   developpeur: {
-    label: "Voir la documentation",
     href: "/documentation",
     external: false,
+    labelKey: "developpeur" as const,
   },
 } as const;
 
 export default function CaseStudyCTA() {
   const { profileId } = useDocumentationMode();
-  const cta = profileId ? CTA_BY_PROFILE[profileId] : CTA_BY_PROFILE.default;
+  const t = useTranslations("caseStudyDetail.cta");
+  const cta = profileId ? CTA_TARGETS[profileId] : CTA_TARGETS.default;
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -45,7 +46,7 @@ export default function CaseStudyCTA() {
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
         >
-          {cta.label}
+          {t(cta.labelKey)}
         </Link>
       </Button>
     </div>

@@ -259,6 +259,57 @@
     "collectionName": "Études de cas WordPress Headless — Réalisations",
     "collectionDescription": "Découvrez les projets réalisés : sites corporate, institutionnels, ESS, headless. Résultats concrets en performance, design et conversion."
   },
+  "caseStudyDetail": {
+    "metaNotFoundTitle": "Étude de cas introuvable",
+    "metaNotFoundDescription": "L'étude de cas demandée n'existe pas.",
+    "backToCaseStudies": "Retour aux réalisations",
+    "projectOverview": "Aperçu du projet",
+    "projectPresentation": "Présentation du projet",
+    "objectives": "Objectifs",
+    "results": "Résultats",
+    "testimonial": "Témoignage client",
+    "projectInfo": "Informations du projet",
+    "client": "Client",
+    "deliveryDate": "Date de réalisation",
+    "duration": "Durée du projet",
+    "technologies": "Technologies utilisées",
+    "tags": "Tags",
+    "website": "Site web",
+    "similarProjects": "Projets similaires",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbCaseStudies": "Études de cas",
+    "articleTitlePrefix": "Etude de cas",
+    "articleTitleSuffix": "Next Impact",
+    "months": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ],
+    "clientTypes": {
+      "grande-entreprise": "Grande entreprise",
+      "pme": "PME",
+      "association": "Association",
+      "ess": "ESS",
+      "institutionnel": "Institutionnel",
+      "groupement": "Groupement",
+      "independant": "Indépendant"
+    },
+    "cta": {
+      "default": "Discuter de votre projet",
+      "decideur": "Évaluer mon projet",
+      "utilisateur": "Discuter de votre projet",
+      "developpeur": "Voir la documentation"
+    }
+  },
   "servicesPage": {
     "metaTitle": "Services & Tarifs WordPress Headless — Trois stacks, trois résultats",
     "metaDescription": "Trois niveaux de modernisation WordPress : Présence Essentielle (monolithique optimisé) dès 2 250 €, Croissance Accélérée (Astro headless) dès 4 000 €, Plateforme Sur-Mesure (Next.js) dès 5 000 €.",

@@ -259,6 +259,57 @@
     "collectionName": "Headless WordPress case studies — Selected work",
     "collectionDescription": "Selected projects: corporate, institutional, social-economy and headless platforms. Concrete results in performance, design and conversion."
   },
+  "caseStudyDetail": {
+    "metaNotFoundTitle": "Case study not found",
+    "metaNotFoundDescription": "The requested case study does not exist.",
+    "backToCaseStudies": "Back to case studies",
+    "projectOverview": "Project overview",
+    "projectPresentation": "Project presentation",
+    "objectives": "Objectives",
+    "results": "Results",
+    "testimonial": "Client testimonial",
+    "projectInfo": "Project information",
+    "client": "Client",
+    "deliveryDate": "Delivery date",
+    "duration": "Project duration",
+    "technologies": "Technologies used",
+    "tags": "Tags",
+    "website": "Website",
+    "similarProjects": "Similar projects",
+    "breadcrumbHome": "Home",
+    "breadcrumbCaseStudies": "Case studies",
+    "articleTitlePrefix": "Case study",
+    "articleTitleSuffix": "Next Impact",
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "clientTypes": {
+      "grande-entreprise": "Large enterprise",
+      "pme": "SMB",
+      "association": "Non-profit",
+      "ess": "Social economy",
+      "institutionnel": "Public sector",
+      "groupement": "Industry group",
+      "independant": "Freelancer"
+    },
+    "cta": {
+      "default": "Discuss your project",
+      "decideur": "Evaluate my project",
+      "utilisateur": "Discuss your project",
+      "developpeur": "See documentation"
+    }
+  },
   "servicesPage": {
     "metaTitle": "Services & Pricing — Three Headless WordPress stacks, three outcomes",
     "metaDescription": "Three levels of WordPress modernization: Essential Presence (optimized monolithic) from €2,250, Accelerated Growth (Astro headless) from €4,000, Custom Platform (Next.js) from €5,000.",
