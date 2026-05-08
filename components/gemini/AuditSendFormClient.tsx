@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, AlertCircle, Loader2, ScreenShareIcon } from "lucide-react";
 import MarkdownRenderer from "./markdown-renderer";
 import AuditDashboard from "./audit-dashboard";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 interface AuditSendFormProps {
   markdownFull: string;
@@ -15,6 +17,8 @@ export default function AuditSendFormClient({
   url,
   userInfo,
 }: AuditSendFormProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   const [sendStatus, setSendStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [sendError, setSendError] = useState<string | null>(null);
   const hasSent = useRef(false);
@@ -36,12 +40,13 @@ export default function AuditSendFormClient({
             email: userInfo.email,
             url,
             markdown: markdownFull,
+            locale,
           }),
         });
-        if (!res.ok) throw new Error("Erreur lors de l'envoi");
+        if (!res.ok) throw new Error(isEn ? "Send failed" : "Erreur lors de l'envoi");
         setSendStatus("sent");
       } catch (err: any) {
-        setSendError(err.message || "Erreur inconnue");
+        setSendError(err.message || (isEn ? "Unknown error" : "Erreur inconnue"));
         setSendStatus("error");
       }
     };
@@ -62,19 +67,23 @@ export default function AuditSendFormClient({
           {sendStatus === "sending" && (
             <>
               <Loader2 className="size-4 animate-spin" />
-              Envoi du rapport en cours vers {userInfo.email}...
+              {isEn
+                ? `Sending report to ${userInfo.email}…`
+                : `Envoi du rapport en cours vers ${userInfo.email}...`}
             </>
           )}
           {sendStatus === "sent" && (
             <>
               <CheckCircle2 className="size-4" />
-              Rapport envoyé avec succès à {userInfo.email}
+              {isEn
+                ? `Report sent to ${userInfo.email}`
+                : `Rapport envoyé avec succès à ${userInfo.email}`}
             </>
           )}
           {sendStatus === "error" && (
             <>
               <AlertCircle className="size-4" />
-              Erreur lors de l&apos;envoi : {sendError}
+              {isEn ? `Send error: ${sendError}` : `Erreur lors de l'envoi : ${sendError}`}
             </>
           )}
         </div>
@@ -105,7 +114,7 @@ export default function AuditSendFormClient({
           className="bg-coral backdrop-blur-sm text-mediumblue font-googletitre font-semibold text-lg px-6 py-3 rounded-full hover:bg-coral/80 transition text-center"
         >
           <ScreenShareIcon className="inline-block mr-2 size-7 font-medium" />
-          En discuter en visio
+          {isEn ? "Discuss on video" : "En discuter en visio"}
         </a>
       </div>
     </div>

@@ -1,0 +1,339 @@
+---
+title: "Performance and Core Web Vitals in headless"
+description: "Optimizing Core Web Vitals (LCP, CLS, INP) of a Next.js headless WordPress site for SEO and UX."
+category: headless-cms
+author: Next Impact
+date: "2025-05-15"
+order: 18
+---
+
+## What are Core Web Vitals?
+
+Core Web Vitals are a set of three metrics defined by Google to measure the quality of the user experience on a web page. Since 2021, these metrics have been a ranking factor in Google search results.
+
+<StatGrid>
+  <StatCard value="LCP" label="Largest Contentful Paint" description="Measures the time to display the largest visible element in the viewport. Target: under 2.5 seconds." accent="blue" />
+  <StatCard value="CLS" label="Cumulative Layout Shift" description="Measures the visual stability of the page — unexpected layout shifts. Target: score below 0.1." accent="orange" />
+  <StatCard value="INP" label="Interaction to Next Paint" description="Measures the delay between a user interaction (click, keypress) and the visual update. Target: under 200 milliseconds." accent="coral" />
+</StatGrid>
+
+### Why these metrics matter
+
+Google has used Core Web Vitals as a ranking signal since June 2021. With equivalent content, a site with better Core Web Vitals will be favored in search results. Beyond SEO, these metrics directly measure the experience perceived by the user: wait time, visual stability, and interface responsiveness.
+
+## The structural advantage of headless
+
+The headless architecture offers a structural advantage for Core Web Vitals over traditional WordPress. The backend/frontend separation lets you optimize each layer independently.
+
+<ComparisonTable
+  headers={["Traditional WordPress", "Headless WordPress + Next.js"]}
+  rows={[
+    { label: "HTML generation", left: "PHP generates HTML on each request (200-800ms)", right: "SSG/ISR: pre-generated HTML served from the CDN (< 50ms)" },
+    { label: "Loaded resources", left: "CSS/JS from every plugin loaded on every page", right: "Automatic code-splitting: only the necessary JS is loaded" },
+    { label: "Images", left: "Original size unless an optimization plugin is used", right: "next/image: resizing, WebP/AVIF, native lazy loading" },
+    { label: "Fonts", left: "Standard loading with potential FOUT", right: "next/font: optimized loading, no layout shift" },
+    { label: "Navigation", left: "Full page reload", right: "Client-side routing: instant transitions" }
+  ]}
+  highlight="right"
+/>
+
+## Measuring Core Web Vitals
+
+Before optimizing, you need to measure. Several tools can evaluate Core Web Vitals:
+
+**Lab data** (controlled environment):
+- **Lighthouse** (built into Chrome DevTools): performance audit with detailed scores
+- **PageSpeed Insights**: URL-accessible analysis combining lab and field data
+- **WebPageTest**: detailed tests with filmstrip and waterfall
+
+**Field data** (real users):
+- **Chrome User Experience Report (CrUX)**: real data collected from Chrome users
+- **web-vitals** (JavaScript library): collect metrics in your own analytics tool
+
+To integrate Core Web Vitals collection into a Next.js project:
+
+```tsx
+// app/layout.tsx — Web Vitals collection
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
+  );
+}
+```
+
+## Optimizing LCP (Largest Contentful Paint)
+
+LCP measures the time to display the largest visible element: typically the hero image or page title. The target is an LCP under 2.5 seconds.
+
+### Image optimization with next/image
+
+The `next/image` component automatically applies several optimizations:
+
+```tsx
+import Image from 'next/image';
+
+// Above-the-fold image: load with priority
+<Image
+  src={post._embedded['wp:featuredmedia'][0].source_url}
+  alt={post._embedded['wp:featuredmedia'][0].alt_text}
+  width={1200}
+  height={630}
+  priority // Disables lazy loading and loads the image with priority
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1200px"
+/>
+```
+
+`priority` attribute: use only for the main above-the-fold image. This option disables lazy loading and adds a `<link rel="preload">` to the `<head>`.
+
+`sizes` attribute: tells the browser which image size to load based on the screen width. Without this attribute, the browser loads the maximum size.
+
+### Font optimization with next/font
+
+Font loading can delay LCP if the main text waits for the font before displaying. `next/font` loads fonts optimally:
+
+```tsx
+// app/layout.tsx
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap', // Display text immediately with a fallback font
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={inter.className}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+`next/font` downloads the font at build time and serves it from the same domain as the site (self-hosting). There is no request to Google Fonts servers, which removes a network round trip.
+
+### Reducing server response time
+
+<StepByStep>
+  <Step number={1} title="Use ISR instead of SSR">
+    SSR generates HTML on every request, which includes the time of the WordPress API call. ISR serves a pre-generated page from the CDN, with TTFB under 50ms.
+  </Step>
+  <Step number={2} title="Deploy on a global CDN">
+    Platforms like Vercel, Netlify, or Cloudflare Pages deploy static pages on a global server network. The visitor receives the page from the geographically closest server.
+  </Step>
+  <Step number={3} title="Optimize WordPress API responses">
+    Limit the fields returned by the API to reduce response size and processing time.
+
+    ```typescript
+    // Fetch only the necessary fields
+    const res = await fetch(
+      `${API_URL}/posts?_fields=id,slug,title,excerpt,date&per_page=10`
+    );
+    ```
+  </Step>
+</StepByStep>
+
+## Optimizing CLS (Cumulative Layout Shift)
+
+CLS measures unexpected layout shifts. A score above 0.1 indicates that elements on the page change position after initial load, which degrades user experience.
+
+### Common CLS causes and solutions
+
+**Images without explicit dimensions**: the browser doesn't know the image size before it loads, which causes a shift when it appears.
+
+```tsx
+// Problem: no dimensions → the browser reserves 0px then recalculates
+<img src="/image.jpg" alt="Photo" />
+
+// Solution: next/image enforces dimensions and reserves space
+<Image src="/image.jpg" alt="Photo" width={800} height={450} />
+```
+
+**Web fonts with flash of invisible text (FOIT)**: the default font has a different line-height than the web font, which causes a shift when the final font is displayed.
+
+```css
+/* Solution: font-display swap + metrics override */
+/* next/font handles this automatically */
+```
+
+**Dynamically injected content**: ads, embeds, and client-side loaded components can shift existing content.
+
+```tsx
+// Solution: reserve space with a minimum height
+<div style={{ minHeight: '250px' }}>
+  <DynamicComponent />
+</div>
+```
+
+## Optimizing INP (Interaction to Next Paint)
+
+INP measures the delay between a user interaction (click, key, tap) and the resulting visual update. The target is an INP under 200 milliseconds.
+
+### Reducing the cost of hydration
+
+In a Next.js architecture, SSG and ISR pages are first served as static HTML, then React "hydrates" the page to make it interactive. This hydration runs JavaScript and can block interactions.
+
+```tsx
+// Use Server Components by default (no hydration)
+// app/blog/[slug]/page.tsx — Server Component
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const post = await getPostBySlug(params.slug);
+  return (
+    <article>
+      <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+      <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+      {/* Only this component is hydrated on the client */}
+      <LikeButton postId={post.id} />
+    </article>
+  );
+}
+```
+
+App Router Server Components don't ship JavaScript to the browser. Only components marked `'use client'` are hydrated. Limit the number of Client Components to reduce hydration cost.
+
+### Code-splitting and lazy loading
+
+Next.js automatically splits JavaScript by route (code-splitting). For heavy components that aren't visible immediately, use dynamic loading:
+
+```tsx
+import dynamic from 'next/dynamic';
+
+// The component is only loaded when needed
+const HeavyChart = dynamic(() => import('@/components/HeavyChart'), {
+  loading: () => <div style={{ height: '400px' }}>Loading chart...</div>,
+  ssr: false, // Don't render on the server if the component is purely interactive
+});
+```
+
+## Cache strategies
+
+Caching is the most effective performance lever. Several cache levels apply in a headless Next.js architecture:
+
+<ArchitectureDiagram
+  title="Cache levels in a headless architecture"
+  layers={[
+    { name: "Browser cache", components: ["HTTP cache (Cache-Control)", "Service Worker", "Locally cached images"], color: "blue" },
+    { name: "CDN cache", components: ["Pre-generated SSG/ISR pages", "Static assets (JS, CSS, images)", "Cache-Control headers"], color: "orange" },
+    { name: "Application cache", components: ["Next.js fetch() cache", "Data Cache (revalidate)", "Full Route Cache"], color: "coral" }
+  ]}
+/>
+
+### Configuring cache headers
+
+```typescript
+// next.config.js — Cache headers for static assets
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+    ];
+  },
+};
+```
+
+## Optimizing WordPress API responses
+
+The size and response time of the WordPress API directly impact build time (SSG) and regeneration time (ISR).
+
+**Reducing response size**:
+
+```typescript
+// Select only the necessary fields with _fields
+const res = await fetch(`${API_URL}/posts?_fields=id,slug,title,excerpt,featured_media,date`);
+
+// Limit the number of results with per_page
+const res = await fetch(`${API_URL}/posts?per_page=10&page=1`);
+```
+
+**On the WordPress side**: install an object cache plugin (Redis Object Cache or Memcached) to speed up database queries. The WP Super Cache plugin is not useful in headless (it caches the PHP HTML, not API responses).
+
+## JavaScript bundle analysis
+
+A JavaScript bundle that's too large slows down loading and hydration. Analyze the bundle composition with `@next/bundle-analyzer`:
+
+```bash
+npm install @next/bundle-analyzer
+```
+
+```javascript
+// next.config.js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer(nextConfig);
+```
+
+```bash
+# Generate the analysis report
+ANALYZE=true npm run build
+```
+
+<Callout variant="developpeur" title="Practical rules for bundle size">
+For a standard headless WordPress site, the JavaScript bundle per route should not exceed 100 KB (gzip-compressed). If a route exceeds this threshold, check that heavy libraries (editors, charts, maps) are loaded dynamically rather than bundled in the main chunk. Use tree-shaking by importing only the functions you need (specific imports rather than global imports).
+</Callout>
+
+## Performance checklist
+
+<HighlightBox title="Core Web Vitals checklist for headless WordPress + Next.js" accent="blue">
+
+**LCP (< 2.5s)**:
+- Use `next/image` with the `priority` attribute for the main image
+- Use `next/font` for optimized font loading
+- Deploy with ISR on a global CDN
+- Limit WordPress API fields with `_fields`
+
+**CLS (< 0.1)**:
+- Define dimensions (`width`, `height`) on every image
+- Use `next/font` with `display: swap` to avoid FOIT
+- Reserve space for dynamically loaded components with `minHeight`
+
+**INP (< 200ms)**:
+- Use Server Components by default (no hydration)
+- Limit Client Components to interactive elements
+- Dynamically load heavy components with `dynamic()`
+- Keep the JavaScript bundle per route under 100 KB (gzip)
+
+**Cache**:
+- Configure `Cache-Control` headers for static assets
+- Use ISR with on-demand revalidation for content pages
+- Install an object cache (Redis) on the WordPress server
+
+</HighlightBox>
+
+<Quiz
+  question="Which next/image attribute should you use for the main above-the-fold image?"
+  options={[
+    "loading='lazy' — to load the image lazily",
+    "priority — to disable lazy loading and preload the image",
+    "quality={100} — to display the image at maximum quality",
+    "placeholder='blur' — to show a blurry preview while loading"
+  ]}
+  answer={1}
+  explanation="The priority attribute disables lazy loading and adds a <link rel='preload'> to the <head> of the HTML document. The image is thus loaded with priority, which reduces LCP (Largest Contentful Paint). This attribute should only be used for the main above-the-fold image. Below-the-fold images should keep the default lazy loading."
+/>

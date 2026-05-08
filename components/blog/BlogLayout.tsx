@@ -1,6 +1,7 @@
 import { ArrowLeft, Clock } from "lucide-react"
 import Link from "next/link"
 import type { BlogPost } from "@/lib/blog"
+import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
 
 interface BlogLayoutProps {
   post: BlogPost
@@ -18,6 +19,7 @@ export function BlogLayout({ post, children }: BlogLayoutProps) {
 
   return (
     <div className="relative z-10 min-h-screen">
+      <TranslationFallbackBanner show={post.isFallback} />
       <main className="flex-1">
         <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16">
           <div className="flex items-center gap-3 mb-8 flex-wrap">

@@ -1,11 +1,16 @@
+"use client";
+
 import React from 'react'
 import Image from 'next/image'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
-import Link from "next/link"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 export default function ServicesOffers({ offers }: { offers: any[] }) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   return (
     <section id="offres">
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">
@@ -49,7 +54,7 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
                   ))}
                 </ul>
               </CardContent>
-              <Link href="https://calendar.app.google/ZagmCTp8PBTczTnJA" className="w-full mt-auto" target="_blank" rel="noopener noreferrer">
+              <a href="https://calendar.app.google/ZagmCTp8PBTczTnJA" className="w-full mt-auto" target="_blank" rel="noopener noreferrer">
                 <Button
                   className={`w-full h-12 font-medium font-googletitre text-base rounded-full ${
                     offer.recommended
@@ -57,10 +62,10 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
                       : "bg-orange hover:bg-orange/90 text-darkblue"
                   }`}
                 >
-                  En savoir plus
+                  {isEn ? "Learn more" : "En savoir plus"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </a>
             </Card>
           ))}
         </div>

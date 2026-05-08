@@ -3,20 +3,22 @@ import PageLayout from "@/components/page-layout";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { BrandLogo } from "@/components/brand-logo";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 const GeminiSearch = dynamic(() => import("@/components/gemini/gemini-search"), { ssr: false });
 
 // Prompt et instruction identiques à ClientGeminiBlock
-const system_instruction = `Tu es un expert en stratégie digitale et UX avec une forte compétence en audit technique.
+const system_instruction_fr = `Tu es un expert en stratégie digitale et UX avec une forte compétence en audit technique.
 Ta méthode est rigoureuse :
 1. OBSERVATION : Tu extrais d'abord les données factuelles (métadonnées, structure légale, vocabulaire utilisé).
 2. ANALYSE : Tu croises ces données pour établir un diagnostic précis de l'identité de l'organisation.
 3. RECOMMANDATION : Tu fournis des conseils stratégiques basés sur ces preuves.
 Ton ton est direct, professionnel et factuel.`;
-const prompt = `
+const prompt_fr = `
 **Mission :** Audit stratégique de l'URL {$url} pour évaluer la pertinence d'une migration vers une architecture Headless.
 
 **Synthèse globale des résultats
@@ -66,15 +68,79 @@ Recommandation de stack
 **Instruction de sortie :** Réponds exclusivement en Markdown. La structure doit suivre les titres et les points de l'étape 2. Assure la capitalisation française du texte. Et n'introduit pas trop d'icones
 `;
 
+
+const system_instruction_en = `You are an expert in digital strategy and UX with strong technical-audit skills.
+Your method is rigorous:
+1. OBSERVATION: First extract factual data (metadata, legal structure, vocabulary used).
+2. ANALYSIS: Cross-reference this data to establish a precise diagnosis of the organization's identity.
+3. RECOMMENDATION: Provide strategic advice based on this evidence.
+Your tone is direct, professional and factual.`;
+
+const prompt_en = `
+**Mission:** Strategic audit of the URL {$url} to evaluate the relevance of migrating to a Headless architecture.
+
+**Overall summary of results
+*Insert a summary of the findings and recommendation without revealing the identity from the diagnosis*
+---
+
+**Step 1: Identity Diagnosis (Precise Scan)**
+*Perform a cross-analysis of metadata and then of visible content (Header, Footer, "About" page).*
+
+1.  **Nature of the organization:** (e.g. Private company, Association, Public authority, Public institution, Startup, Independent/Freelance, NGO, etc.)
+2.  **Industry:** (e.g. B2C E-commerce, B2B SaaS, Media, etc.)
+3.  **Value proposition:** What is the main promise made to the customer?
+3.  **Mission:** Quote a short excerpt from the site that validates this proposition.
+4.  **Priority targets:** Identify the 2 most obvious user profiles.
+*If the site is inaccessible or the content is protected, reply only: "Access blocked: Diagnosis impossible." and stop the analysis.*
+
+---
+
+**Step 2: Strategic Analysis (Markdown Format)**
+
+### 1. Current Positioning
+*   **Brand perception:** Do the design and navigation inspire confidence and modernity, or show signs of technological lag (slowness, dated design)?
+*   **Major UX friction:** What is the main visible obstacle in the user journey (e.g. complex form, unclear navigation, load time)?
+*   **Modernity index:** [Score out of 10] evaluating overall performance and experience versus current standards.
+
+### 2. Relevance of a Headless WordPress Migration
+*   **Strategic verdict:** [Migrate quickly / Maintain monolithic WordPress / Migrate progressively]. Justify in one sentence.
+*   **Differentiation lever:** How can Headless transform the experience (e.g. ultra-fast, personalized) to create a competitive edge?
+*   **Business justification:** What are the key arguments (potential ROI) justifying the investment vs. the expected gains in performance, SEO and marketing agility?
+
+### 3. Business Impact Indicators
+*   **Performance & SEO:** What would be the impact of near-instant load times (optimal Core Web Vitals) on Google ranking and bounce rate?
+*   **Marketing agility:** Explain how Headless would let teams launch campaigns or new content faster without depending on the back end.
+
+### 4. Growth Levers via Headless
+*Identify 3 features at 3 complexity levels that Headless would make possible.*
+1. Quick
+2. Moderately complex
+3. Highly complex
+
+### 5. Recommended stack (only if migration is recommended and on Headless WordPress)
+
+Stack comparison: monolithic WordPress, WP Astro, WP Next.js
+Stack recommendation
+---
+
+**Output instruction:** Reply exclusively in Markdown. The structure must follow the headings and bullets from Step 2. Use proper English capitalization. Do not introduce too many icons.
+`;
+
 export default function AuditSiteIaClient() {
   const searchParams = useSearchParams();
   const url = searchParams.get("url") || undefined;
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
 
   return (
     <main>
-      <PageLayout 
-        titre="Faut-il migrer en Headless ?"
-        sousTitre="Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless."
+      <PageLayout
+        titre={isEn ? "Should you migrate to Headless?" : "Faut-il migrer en Headless ?"}
+        sousTitre={
+          isEn
+            ? "Test your WordPress site to get a complete report with personalized recommendations for a Headless WordPress migration."
+            : "Testez votre site WordPress pour un rapport complet avec des recommandations personnalisées pour une migration en WordPress headless."
+        }
       >
         <div className="container px-4 md:px-6">
           <Link
@@ -82,14 +148,14 @@ export default function AuditSiteIaClient() {
             className="inline-flex items-center gap-1.5 text-sm text-extralightblue/60 hover:text-white transition mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux outils
+            {isEn ? "Back to tools" : "Retour aux outils"}
           </Link>
         </div>
         <div className="relative md:max-w-5xl my-8 md:my-16 mx-4 md:mx-auto bg-mediumblue/60 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
         <GeminiSearch
           onResult={() => {}}
-          prompt={prompt}
-          systemInstruction={system_instruction}
+          prompt={isEn ? prompt_en : prompt_fr}
+          systemInstruction={isEn ? system_instruction_en : system_instruction_fr}
           defaultUrl={url}
         />
         <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">

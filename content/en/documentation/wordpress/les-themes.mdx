@@ -1,0 +1,179 @@
+---
+title: WordPress themes
+description: What are WordPress themes and what types exist?
+category: wordpress
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+A WordPress theme determines the visual appearance and the HTML/CSS structure of a site. It defines the templates (page models) used to display posts, pages, archives and Custom Post Types. WordPress offers several theme categories, each with a different level of flexibility and technical complexity: classic themes, hybrid themes, block themes, custom themes and third-party themes. The choice of theme directly affects site performance, plugin compatibility and the project's ability to evolve.
+
+<ComparisonTable
+  headers={["Free themes", "Premium themes"]}
+  rows={[
+    { label: "Cost", left: "Free (€0)", right: "€30 to €200+ (annual or lifetime license)" },
+    { label: "Customization", left: "Limited options through the Customizer", right: "Advanced options, Theme Builder, conditional modules" },
+    { label: "Technical support", left: "WordPress.org community forums", right: "Dedicated support by ticket or chat" },
+    { label: "Updates", left: "Variable depending on the developer", right: "Regular, with documented changelog" },
+    { label: "Design", left: "Basic templates, fewer variations", right: "Numerous starter templates, professional design" },
+    { label: "Security", left: "Reviewed by the WordPress.org team", right: "Audited by the publisher, sometimes by third parties" },
+    { label: "Documentation", left: "Often minimal", right: "Complete with code examples" }
+  ]}
+  highlight="right"
+/>
+
+<StepByStep>
+<Step number={1} title="Define project needs">Identify the type of site (blog, e-commerce, portfolio, application) and the required features (WooCommerce, multilingual, member area) before selecting a theme.</Step>
+<Step number={2} title="Verify technical compatibility">Make sure the theme is tested with your version of WordPress and with the plugins you use (WooCommerce, Elementor, WPML, etc.).</Step>
+<Step number={3} title="Evaluate performance">Test the theme demo with Lighthouse or GTmetrix. Measure total page weight, the number of HTTP requests and the LCP (Largest Contentful Paint) score.</Step>
+<Step number={4} title="Verify responsive design">View the theme demo at different screen widths (mobile, tablet, desktop) to verify layout adaptation and text readability.</Step>
+<Step number={5} title="Evaluate maintenance and support">Check the date of last update, the changelog, the frequency of releases and the quality of responses on the support forum or ticket system.</Step>
+</StepByStep>
+
+## Classic Themes
+
+### Advantages of classic themes
+
+- **Fast deployment**: classic themes work as soon as they are activated, without prior configuration. Their structure relies on the standard WordPress PHP template files (`index.php`, `single.php`, `page.php`, `archive.php`), documented in the Codex Template Hierarchy.
+- **Native performance**: their code is generally lean, with few JavaScript dependencies. The page weight is low, which translates into short loading times and good Lighthouse scores.
+- **Maintenance by the WordPress team**: the default themes (Twenty * series) are developed and maintained by the WordPress core team. They receive updates with each major CMS release, which guarantees compatibility and security fixes.
+
+### Limitations of classic themes
+
+- **Restricted customization without code**: modifying the layout, colors or typography beyond the Customizer's options (WordPress's live customization interface) requires writing custom CSS or creating a child theme -- a derived copy of the parent theme that allows overriding templates and styles without modifying the original files.
+- **No Full Site Editing**: classic themes do not support the Full Site Editing (FSE) editor introduced in WordPress 5.9, which allows editing the header, footer and templates directly from the block editor.
+
+### Examples and use cases
+
+The themes _Twenty Nineteen_, _Twenty Twenty_ and _Twenty Twenty-One_ are reference classic themes. They are suitable for:
+
+- **Blogs**: publishing articles with Article and Archive templates optimized for reading.
+- **Simple showcase sites**: presenting an activity with a few static pages (Home, About, Contact).
+- **Lightweight portfolios**: displaying work through an archive page with thumbnails.
+- **Temporary sites or landing pages**: quickly going live with a minimalist design, with no configuration time.
+
+For projects that do not require advanced visual customization and whose priority is stability and performance, classic themes remain a relevant choice.
+
+## Hybrid Themes
+
+### Characteristics of hybrid themes
+
+- They keep the PHP template structure of classic themes, with traditional widget areas (sidebar, footer) and navigation menus declared via `register_nav_menus()`.
+- They add compatibility with the Gutenberg block editor for page and post content, which allows using native blocks (columns, galleries, buttons, groups) and custom blocks in editorial content.
+- Some hybrid themes integrate an options panel in the Customizer or in a dedicated settings page, with controls for colors, typography, header and footer layout -- without requiring CSS or PHP code.
+
+### Advantages of hybrid themes
+
+- **Progressive transition to Gutenberg**: hybrid themes allow using Gutenberg blocks for content while keeping the classic architecture for the rest of the site (header, footer, sidebar). This is an approach suited to teams getting familiar with the block editor.
+- **Increased flexibility compared to classic themes**: customization options (colors, typography, layout) are more numerous, without requiring a child theme or custom CSS for common modifications.
+- **Extended compatibility**: their classic architecture ensures compatibility with most plugins, including those that do not yet support Full Site Editing.
+
+### Limitations of hybrid themes
+
+- **Partial customization through blocks**: the Gutenberg block editor applies to page and post content, but not to the overall site structure (header, footer, archive templates). To modify these elements, you have to go through the Customizer, PHP code or a page builder.
+- **Intermediate position**: hybrid themes do not fully take advantage of the Full Site Editing (FSE) of block themes, while being more complex to configure than pure classic themes.
+- **Dependence on the Customizer**: customization options rely on the WordPress Customizer, whose development is frozen in favor of FSE. This may limit the theme's evolution in the long term.
+
+### Examples and use cases
+
+The themes _Neve_ and _Hestia_ (developed by ThemeIsle) are representative examples of hybrid themes. They have starter sites (demo sites importable in one click) for different sectors. They are suitable for sites of freelancers, small businesses or service providers who need a functional professional site quickly, without investing in custom development or in learning Full Site Editing.
+
+<Callout variant="tip" title="A suitable choice for progressive Gutenberg adoption">
+Hybrid themes like Neve or Hestia allow using Gutenberg blocks for editorial content while keeping a classic architecture (widgets, Customizer) for site structure. This is a configuration suited to teams who want to adopt the block editor progressively.
+</Callout>
+
+## Block Themes
+
+### Advantages of block themes
+
+- **Full Site Editing (FSE)**: block themes allow editing the entire site from the block editor -- header, footer, page templates, archive templates, 404 page. Each structural element is an editable block, which eliminates the need to modify PHP template files.
+- **JSON configuration files**: block themes use a `theme.json` file that centralizes design settings (color palette, typographies, spacing, font sizes). This file replaces the options scattered in the Customizer and allows granular control of the site's design system.
+- **Reusable patterns and templates**: block patterns (predefined block compositions) and custom templates are stored in HTML files in the theme directory. They are editable from the admin interface without touching the code.
+- **Compatibility with Global Styles**: users can customize colors, typographies and spacing globally or per block type, directly from the editor.
+
+### Limitations of block themes
+
+- **Learning FSE**: the Site Editor is a different interface from the classic Customizer. Mastering the concepts of templates, template parts, block patterns and `theme.json` requires learning time, particularly for users used to classic themes.
+- **Plugin compatibility**: some plugins designed for classic themes (which rely on classic template hooks like `wp_head`, `wp_footer`, or widget areas) may not work correctly with block themes. Verify compatibility before installation.
+- **Dependence on Gutenberg evolutions**: block themes evolve at the pace of Gutenberg (plugin) and WordPress core releases. Changes in the block API may require theme adjustments.
+
+### Examples and use cases
+
+_Twenty Twenty-Three_ and _Twenty Twenty-Four_ are the official block themes of WordPress. On the third-party side, _Astra_ and _OceanWP_ have added FSE support to their existing architecture. _Flavor_ and _Flavor Developer_ are block themes natively designed for FSE.
+
+Block themes are suitable for WooCommerce e-commerce sites (fine customization of product and shop templates), blogs with a specific visual identity (full control of typography and layout), and creative portfolios requiring complex visual compositions. They are also suitable for agencies and freelancers who deliver sites to non-developer clients, thanks to full visual editing.
+
+## Custom Themes
+
+### Creation process
+
+A custom theme is developed specifically for a project. The process involves:
+
+- **Specification phase**: definition of content types (Custom Post Types and custom taxonomies), custom fields (through ACF Pro or the native Meta Box API), required templates and specific features.
+- **Mockups**: creation of UI/UX mockups in a tool like Figma, which serve as a reference for development.
+- **Development**: writing PHP template files, CSS styles (often with a preprocessor like Sass), JavaScript, and the `functions.php` file that registers Custom Post Types, taxonomies, menus, widget areas and custom hooks. Some developers rely on starter themes like _Underscores (\_s)_ or _Sage_ (Roots) which provide a standardized code base.
+
+### Advantages of custom themes
+
+- **Optimized code**: the theme contains only the code necessary for the project, without the unused modules and options found in versatile themes. Page weight and the number of SQL queries are reduced.
+- **Tailored architecture**: Custom Post Types, taxonomies and custom fields are defined according to the project's data structure, which makes content management more ergonomic for editors.
+- **Specific integrations**: the theme can integrate third-party APIs (CRM, ERP, booking systems, payment gateways) directly into its templates, without depending on a generic plugin.
+
+### Limitations of custom themes
+
+- **Development cost**: a custom theme requires the involvement of one or more WordPress developers. The budget varies according to project complexity (from a few thousand euros for a simple theme to several tens of thousands for a complex project).
+- **Specific maintenance**: theme updates are the responsibility of the development team. There are no automatic updates as for themes from the official repository. Any changes to the WordPress API or plugins used may require theme adaptation.
+- **Time to delivery**: the complete cycle (specification, mockups, development, testing, production) takes between 4 and 16 weeks depending on complexity, compared to a few hours or days for a pre-existing theme.
+
+### Examples and use cases
+
+Custom themes are suitable for projects that present specific constraints impossible to cover with an existing theme:
+
+- **Corporate sites of large organizations**: strict visual identity, specific templates per department, integration with the intranet or HRIS.
+- **Associations and NGOs**: custom donation forms (integration with gateways like Stripe or PayPal), campaign tracking dashboards, volunteer management.
+- **Marketplaces**: multi-vendor management, commissions, vendor signup flow, custom product templates.
+- **Creative portfolios**: unconventional layouts, specific CSS/JS animations, galleries with dynamic filtering.
+
+## Third-Party Themes
+
+### Advantages of third-party themes
+
+- **Wide industry catalog**: marketplaces like ThemeForest offer themes designed for specific industries (real estate, restaurants, healthcare, education, photography), with integrated features matching the needs of each industry.
+- **Built-in features**: many third-party themes include features that would otherwise require a separate plugin -- sliders, mega menus, filtering systems, integrations with Google Maps or event calendars.
+- **Support and updates**: premium themes sold on marketplaces generally include 6 to 12 months of technical support and regular updates for compatibility with WordPress and major plugins.
+- **Cost/feature ratio**: a premium theme at €50-€80 offers a level of features and design that would require several thousand euros in custom development.
+
+### Limitations of third-party themes
+
+- **Code overhead**: versatile ("multipurpose") themes embed many modules, options and integrations of which only a fraction is used on a given project. This unused code weighs down pages and increases PHP execution time.
+- **Heterogeneous quality**: code quality, compliance with WordPress standards and security practices vary strongly from one developer to another. Some themes use non-standard script loading methods or modify WordPress core behavior in problematic ways.
+- **Dependence on the publisher**: if the theme developer ceases activity or stops updates, the theme becomes progressively incompatible with new versions of WordPress and PHP. Migrating to another theme can be costly.
+
+### Examples and use cases
+
+_Flatsome_ is a theme optimized for WooCommerce with an integrated page builder (UX Builder). _Avada_ is a versatile theme with more than 600,000 sales, used for corporate sites, portfolios and stores. _Flavor Developer_ is a developer-oriented theme with a modular architecture.
+
+Third-party themes are suitable for projects that require a professional design and industry features without the budget of custom development. They are suitable for freelancers, SMEs and startups who want an operational site quickly with a limited investment. The choice should be on themes that are regularly updated, with a significant number of installations and documented positive reviews.
+
+## In summary
+
+- **Classic themes** use the standard PHP template architecture and are suitable for simple sites with limited customization needs.
+- **Hybrid themes** combine classic templates with Gutenberg compatibility and are suitable for progressive adoption of the block editor.
+- **Block themes** leverage Full Site Editing and the `theme.json` file for full control of structure and design through the visual editor.
+- **Custom themes** are developed bespoke for projects with specific constraints (Custom Post Types, API integrations, non-standard design).
+- **Third-party themes** offer an extensive industry catalog with a good cost/feature ratio, provided that code quality and the durability of support are verified.
+
+The choice of theme type depends on three factors: the level of customization required, the available budget and the technical skills of the team. In all cases, test the theme's performance (Lighthouse, GTmetrix) before committing, and verify its compatibility with your project's critical plugins.
+
+<Quiz
+  question="Which type of WordPress theme is most suitable for a freelancer who wants a professional site without deep technical expertise?"
+  options={[
+    "A classic theme like Twenty Twenty-One",
+    "A hybrid theme like Neve or Hestia",
+    "A fully custom theme",
+    "A block theme with Full Site Editing"
+  ]}
+  answer={1}
+  explanation="Hybrid themes combine the classic architecture (PHP templates, Customizer, widgets) with Gutenberg compatibility for editorial content. They offer one-click importable starter sites and customization options accessible without code, which makes them a suitable choice for freelancers and small structures."
+/>

@@ -1,0 +1,158 @@
+---
+title: Web project management - How
+description: Practical guide
+category: projet-site-web
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+This guide details the operational methodology for running a WordPress website project, from framing to post-launch maintenance. It covers the four main phases of the project life cycle: planning, design and development, content creation and SEO optimization, and testing and go-live. Each phase produces specific deliverables that feed the next.
+
+## Managing a WordPress project: a structured process
+
+Mastering a web project rests on a structured, phased process with identified deliverables and validation criteria at each step. WordPress, as a modular and extensible CMS, offers great technical flexibility, but that flexibility requires rigorous framing to avoid scope creep and ensure consistency in the final product.
+
+<FlowDiagram
+  nodes={[
+    { label: "Planning", description: "Objectives, scope, resources", icon: "📋" },
+    { label: "Design", description: "Theme, plugins, structure", icon: "🎨" },
+    { label: "Content & SEO", description: "Writing and optimization", icon: "✍️" },
+    { label: "Testing & Launch", description: "Acceptance and go-live", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+<StepByStep>
+<Step number={1} title="Phase 1: Planning">
+
+Planning is the project's framing phase. It produces the reference documents that govern the entire delivery.
+
+### Define objectives
+
+Formalize the site's purpose (showcase site, blog, e-commerce, application platform) and the associated KPIs. KPIs (Key Performance Indicators) are the quantifiable metrics that will evaluate the project's success: traffic volume, conversion rate, leads generated, online revenue.
+
+**Example:** For a photographer's showcase site, the key KPIs would be the number of quote requests received via the contact form and the visitor-to-contact conversion rate.
+
+### Define the scope
+
+Scope defines what is included and excluded from the project. Document it in the project brief:
+
+- Pages to deliver (home, about, services, portfolio, contact, etc.)
+- Specific features (contact form, booking system, social network integration, member area)
+
+### Identify resources
+
+Build the resource plan by listing required resources:
+
+- Human resources: project manager, developer, designer, copywriter, sysadmin
+- Technical infrastructure: web hosting (SiteGround, OVH, AWS), domain name, SSL certificate
+- Budget: breakdown by item with a contingency margin (10 to 15% of the total budget) covering premium themes, plugins, third-party tools
+
+</Step>
+<Step number={2} title="Phase 2: Design and development">
+
+This phase turns the project brief specifications into a functional product.
+
+### Choose a suitable theme
+
+Select a WordPress theme that meets the project brief's design and performance requirements. Favor a theme optimized for responsive design and Core Web Vitals (such as Astra, GeneratePress, or Flavor) to ensure optimal load time and proper rendering on all target devices.
+
+### Integrate the necessary plugins
+
+Plugins extend WordPress's native features. Select them based on the needs documented in the project brief:
+
+- **Yoast SEO** or **Rank Math** for on-page SEO management
+- **WooCommerce** for e-commerce features
+- **WPForms** or **Gravity Forms** for advanced forms
+
+<Callout variant="warning" title="Plugin dependency management">
+Every added plugin is an additional dependency that impacts site performance and increases the security attack surface. Limit plugins to strictly necessary features. Verify their compatibility with your WordPress version and their update frequency before installation.
+</Callout>
+
+### Define the site structure
+
+Produce a sitemap that formalizes the hierarchical tree structure of content. The navigation structure must reflect the information hierarchy and make both the user journey and search engine indexing easier.
+
+<Callout variant="tip" title="Page builders">
+Page builders (Elementor, Beaver Builder) let you create custom layouts through a visual drag-and-drop interface, with no source code intervention. They suit projects where the client must be able to edit content independently.
+</Callout>
+
+</Step>
+<Step number={3} title="Phase 3: Content creation and SEO optimization">
+
+Content is the primary value carrier of a website. Its SEO optimization drives its visibility in search results.
+
+### Write structured, targeted content
+
+Produce content based on the personas defined during framing. Each page must address a specific search intent and meet the following criteria:
+
+- Clear semantic structure (use of hierarchical Hn tags)
+- Natural integration of the target keywords identified during keyword research
+- Factual, relevant, value-added content for the user
+
+**Example:** For a culinary site, each recipe page must include Schema.org structured data of type Recipe, detailed descriptions, optimized visuals, and an estimated reading time.
+
+### Optimize SEO markup
+
+Each page must have complete SEO markup:
+
+- **Title tag**: unique, descriptive, including the main keyword (60 characters max)
+- **Meta description**: summarizing the page content and encouraging clicks (155 characters max)
+- **Hn headings**: coherent hierarchical structure (a single H1 per page, H2 for main sections, H3 for subsections)
+- **Image alt attribute**: textual description of the visual content for accessibility and SEO
+
+<Callout variant="tip" title="Technical SEO tip">
+Structure your headings hierarchically (H1, H2, H3) and integrate your main keywords in the first 100 words of each page. This makes crawling easier and improves the relevance perceived by search engine ranking algorithms.
+</Callout>
+
+</Step>
+<Step number={4} title="Phase 4: Testing, launch, and maintenance">
+
+The acceptance and go-live phase determines the quality of the final deliverable.
+
+### Run the acceptance plan
+
+The acceptance plan (testing plan) covers the following checks:
+
+- **Mobile compatibility**: verify responsive rendering on the main devices (iOS, Android) and screen resolutions
+- **Performance**: measure load times and Core Web Vitals scores using tools like GTmetrix, Lighthouse, or PageSpeed Insights. The target is an LCP (Largest Contentful Paint) score below 2.5 seconds.
+- **Functional tests**: verify all links, forms, purchase flows, and third-party integrations
+
+### Carry out the go-live
+
+Once acceptance is validated, run the deployment procedure (deploy checklist). Prepare a launch communication plan: announcement on social networks, newsletter, acquisition campaign.
+
+### Set up maintenance
+
+Maintenance is a recurring, ongoing activity:
+
+- WordPress, theme, and plugin updates on a defined calendar (weekly or monthly)
+- Security monitoring through dedicated plugins (Wordfence, Sucuri) and server log monitoring
+- KPI tracking with an analytics tool (Google Analytics 4, Matomo) and periodic performance reports
+
+<Callout variant="tip" title="Maintenance calendar">
+Formalize a monthly maintenance calendar covering updates, backups, security audits, and performance metric reviews. A planned maintenance process prevents security incidents and ensures site stability in production.
+</Callout>
+
+</Step>
+</StepByStep>
+
+## Toward autonomy in your WordPress projects
+
+Managing a WordPress project requires both methodological rigor and technical mastery of the CMS. By following this structured process — framing, design, content production, acceptance, and maintenance — you cover the entire project life cycle and maximize the chances of delivering a product that meets the initial requirements.
+
+To go deeper into each phase, consult the other articles in this documentation that detail specific aspects: project brief, information architecture, SEO optimization, and maintenance strategies.
+
+<Quiz
+  question="Why is it inadvisable to multiply WordPress plugins?"
+  options={[
+    "All plugins are paid and increase the project cost",
+    "WordPress limits the number of plugins to 5 per site",
+    "Each additional plugin degrades performance, increases the security attack surface, and creates risks of conflicts between extensions",
+    "Plugins do not work on mobile devices"
+  ]}
+  answer={2}
+  explanation="Each added plugin impacts site performance (load time, memory consumption) and increases the security attack surface. In addition, plugin incompatibilities are a frequent source of bugs. It is recommended to limit plugins to strictly necessary features and to verify their compatibility and active maintenance before installation."
+/>

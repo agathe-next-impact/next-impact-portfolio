@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleSidebar } from "./ArticleSidebar"
 import type { Article } from "@/lib/articles"
+import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
 
 interface ArticleLayoutProps {
   article: Article
@@ -13,6 +14,7 @@ interface ArticleLayoutProps {
 export function ArticleLayout({ article, sectionCount, children }: ArticleLayoutProps) {
   return (
     <div className="relative z-10 min-h-screen">
+      <TranslationFallbackBanner show={article.isFallback} />
       <main className="flex-1">
         <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16">
           {/* Breadcrumb */}

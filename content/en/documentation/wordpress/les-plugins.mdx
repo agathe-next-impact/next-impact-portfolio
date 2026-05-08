@@ -1,0 +1,164 @@
+---
+title: WordPress plugins
+description: What are plugins and which WordPress plugins exist?
+category: wordpress
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+A WordPress plugin is a software module that extends the CMS's features without modifying its source code (the "core"). Plugins act on every aspect of a site: contact forms, SEO optimization, server caching, security, e-commerce, backups or third-party tool integrations. The official WordPress.org repository lists more than 55,000 free plugins, on top of which premium plugins are distributed on marketplaces such as CodeCanyon or directly by their authors.
+
+## How plugins work
+
+Plugins integrate with WordPress through its internal API and its hook system. They add, modify or extend the CMS's features while remaining independent of the core code, which makes it possible to activate, deactivate or remove them without altering the base installation.
+
+### What is a plugin?
+
+A plugin is a set of PHP files (optionally accompanied by CSS files, JavaScript files and templates) placed in the `wp-content/plugins/` directory. Each plugin contains a main file with a standardized header (Plugin Name, Version, Author, etc.) that WordPress reads to display it in the admin interface. Plugins cover varied use cases: creating forms (Contact Form 7, Gravity Forms), managing an online store (WooCommerce), optimizing search rankings (Yoast SEO), caching pages (WP Rocket), securing access (Wordfence) or connecting third-party services through APIs (Mailchimp, Stripe, Google Analytics).
+
+### Data storage and management
+
+Plugins store their data in the WordPress database, mainly in the `wp_options` table for global settings, and in custom tables for bulky data (logs, WooCommerce orders, form entries). Some plugins also use the `wp_postmeta` table to attach metadata to posts and pages. All this data is accessible from the WordPress dashboard, which centralizes site management in a single administration point.
+
+### Installation and management from the admin
+
+Installing a plugin is done from the Plugins > Add New menu of the WordPress dashboard. A search bar queries the WordPress.org repository. Installation, activation, deactivation and deletion are managed in a few clicks. When a plugin is deactivated, its code is no longer executed but its files remain on the server. When it is deleted, WordPress executes the plugin's `uninstall.php` file (if it exists), which cleans the data in the database. Well-designed plugins include this cleanup mechanism.
+
+### Technical architecture: WordPress hooks
+
+Plugins rely on the WordPress hook system, which includes two types of hooks:
+- **Actions** (`add_action`): they allow executing code at a specific moment in the WordPress lifecycle. For example, `wp_enqueue_scripts` allows loading CSS/JS files in the front-end, and `init` allows registering Custom Post Types at startup.
+- **Filters** (`add_filter`): they intercept and modify data before it is displayed or saved. For example, `the_content` allows modifying an article's content before display, and `wp_mail` allows modifying email sending parameters.
+
+This system ensures that plugins interact with WordPress in a controlled way, without directly modifying core files.
+
+<Callout variant="developpeur" title="For developers: the hook system">
+Hooks (actions and filters) constitute the central extensibility mechanism of WordPress. Actions execute code at specific points in the lifecycle (init, wp_head, save_post, etc.). Filters modify data in transit (the_title, the_content, wp_mail, etc.). The WordPress Plugin API documents all available hooks at developer.wordpress.org/plugins/hooks/.
+</Callout>
+
+### Modularity and ecosystem
+
+WordPress's modular architecture through plugins makes it possible to assemble the features needed for each project without including superfluous code. The ecosystem is maintained by a community of developers who regularly publish updates to fix bugs, close security gaps and ensure compatibility with new versions of WordPress.
+
+## Advantages of plugins
+
+### Adding features without custom development
+
+Plugins make it possible to add complex features (e-commerce, forums, LMS, CRM) without writing PHP code. This reduces setup time and cost compared to custom development. For common features (forms, SEO, caching, security), a well-maintained plugin will be more reliable than internal development, because it benefits from feedback from thousands of users.
+
+### Accessible configuration
+
+The majority of plugins offer a configuration interface in the WordPress dashboard, with settings organized into tabs or sections. Some plugins integrate setup wizards that guide the user step by step on first activation. Premium plugins generally include detailed documentation and technical support by ticket or chat.
+
+### Flexibility and customization
+
+With more than 55,000 plugins available on the official repository and several thousand on premium marketplaces, there is a plugin for almost every functional need. Well-architected plugins themselves expose hooks (actions and filters) that developers can use to customize their behavior without modifying the plugin's source code -- ensuring that customizations survive updates.
+
+### Controlled activation and deactivation
+
+Each plugin can be activated or deactivated individually from the admin. This granularity makes it possible to test a feature in production, temporarily deactivate a plugin to diagnose a conflict, or remove a feature that is no longer useful. The impact on the site is immediate and reversible.
+
+### Continuously maintained ecosystem
+
+The WordPress.org repository imposes quality and security standards. Plugins that do not meet these standards or that contain known vulnerabilities are removed from the repository. Active developers publish regular updates that include security fixes, performance improvements and compatibility with the latest versions of WordPress and PHP.
+
+## Plugin examples
+
+Here are the main plugin categories and the reference solutions in each:
+
+<ComparisonTable
+  headers={["Plugin", "Category"]}
+  rows={[
+    { label: "Yoast SEO / Rank Math", left: "Meta tags, XML sitemap, structured data, on-page analysis", right: "SEO" },
+    { label: "WooCommerce", left: "Product catalog, cart, payment, inventory management", right: "E-commerce" },
+    { label: "Contact Form 7 / WPForms", left: "Form creation with validation and email notifications", right: "Forms" },
+    { label: "Wordfence / iThemes Security", left: "WAF, malware scanner, brute force protection", right: "Security" },
+    { label: "UpdraftPlus", left: "Automated backup of database and files to the cloud", right: "Backup" },
+    { label: "WP Rocket", left: "Page caching, CSS/JS minification, lazy loading", right: "Performance" },
+    { label: "Akismet", left: "Anti-spam filtering on comments and forms", right: "Core" }
+  ]}
+  highlight="left"
+/>
+
+Core plugins
+
+Core plugins handle essential cross-cutting functions. Akismet, included by default in every WordPress installation, filters spam comments by comparing them to a collaborative database. UpdraftPlus automates backups of the database and the `wp-content` directory to remote storage (Google Drive, Amazon S3, Dropbox). These two plugins cover needs that any active WordPress site must address.
+
+Form plugins
+
+Contact Form 7 generates forms through shortcodes with a clean markup syntax. It loads no superfluous JavaScript and remains compatible with almost all themes. WPForms uses a drag-and-drop builder interface and offers ready-to-use templates. Its Pro version adds conditional logic (dynamic display of fields based on answers), integration with payment gateways (Stripe, PayPal) and connection to CRMs or email tools through Zapier or native add-ons.
+
+SEO plugins
+
+Yoast SEO and Rank Math are the two most-used SEO plugins. They generate the XML sitemap submitted to Google Search Console, manage `<title>` and `<meta description>` tags per page, inject schema.org structured data (Article, Product, FAQ, BreadcrumbList) and analyze content against a target keyword. Rank Math stands out with its integrated rank tracking module and its native management of 301/302 redirects.
+
+E-commerce plugins
+
+WooCommerce is the dominant e-commerce plugin on WordPress, with more than 5 million active installations. It turns a WordPress site into an online store with management of the catalog, product variations, cart, checkout flow and payment gateways (Stripe, PayPal, bank transfer). Its extension system (WooCommerce Subscriptions, WooCommerce Bookings, WooCommerce Memberships) covers subscription, booking and membership business models. Developers can customize each step of the purchase journey through WooCommerce hooks.
+
+## Where to find plugins?
+
+### The official WordPress.org repository
+
+The WordPress.org repository (`wordpress.org/plugins/`) is the main source of free plugins. Each submitted plugin is reviewed by the WordPress review team to detect security flaws, malicious code and guideline violations. Plugin pages display the number of active installations, average rating, date of last update, the WordPress version tested and a support forum where the developer can respond to bug reports.
+
+### The WordPress admin interface
+
+From the WordPress dashboard, the Plugins > Add New menu gives direct access to the WordPress.org repository through an integrated search bar. You can filter the results by keyword, popularity or recommended plugins. Installation and activation take place without leaving the admin interface.
+
+### Premium marketplaces
+
+CodeCanyon (Envato Market) is the best-known premium marketplace. It offers paid plugins with advanced features, often accompanied by 6 months of technical support and updates. Other authors sell directly on their site (Gravity Forms, WP Rocket, ACF Pro). Before buying a premium plugin, verify: the update frequency, compatibility with your WordPress version, user reviews and the quality of technical support.
+
+<Callout variant="warning" title="Plugins from unverified sources">
+Plugins distributed outside the official repository and recognized marketplaces may contain malicious code (backdoors, mining scripts, redirects to fraudulent sites). "Nulled" (pirated) versions of premium plugins are a frequent infection vector. Download only from wordpress.org, established marketplaces or the author's official site.
+</Callout>
+
+## How to install a plugin?
+
+Directly from the WordPress dashboard
+
+Go to Plugins > Add New, search for the desired plugin, click "Install Now" then "Activate". WordPress downloads the archive from the official repository, extracts it into `wp-content/plugins/` and records the activation in the database. The plugin is immediately operational.
+
+Manual upload of a .zip file
+
+For premium plugins purchased on a marketplace or author's site, go to Plugins > Add New > Upload Plugin. Select the `.zip` file, click "Install Now" then activate the plugin. This method can also be used through WP-CLI (the WordPress command-line interface) with the command `wp plugin install /path/to/plugin.zip --activate`.
+
+### Best practices for using plugins
+
+Choose regularly updated plugins
+
+A plugin whose last update goes back more than 12 months risks being incompatible with recent versions of WordPress or PHP, and may contain unfixed vulnerabilities. Check the date of last update and the changelog (record of changes) on the plugin page.
+
+Verify compatibility
+
+Before installing a plugin, consult the "Compatibility" section of its WordPress.org page. Test the plugin in a staging environment (pre-production) before activating it in production, especially if it interacts with critical plugins like WooCommerce or a page builder.
+
+Back up before each installation or update
+
+Perform a complete backup (database + files) before installing or updating a plugin. In case of conflict or bug, you can restore the site to its previous state in a few minutes.
+
+Delete unused plugins
+
+A plugin that is deactivated but not deleted remains present on the server. Its PHP files are accessible through their URL path and may contain exploitable vulnerabilities. Delete any plugin you no longer use.
+
+<Callout variant="warning" title="Optimal number of plugins">
+A standard WordPress site runs efficiently with 10 to 20 plugins. Beyond that, PHP execution time increases (each plugin adds hooks and SQL queries), the risks of conflicts between plugins multiply and the attack surface widens. Before installing a new plugin, verify that an already installed plugin does not already cover the need.
+</Callout>
+
+## In summary
+
+Plugins are the main extensibility mechanism of WordPress. They rely on the hook system (actions and filters) to add features without modifying the CMS core. The official WordPress.org repository, premium marketplaces and independent authors form an ecosystem of more than 55,000 extensions covering SEO, security, caching, e-commerce, forms and advanced content management. Rigorous plugin selection (update frequency, number of installations, support quality) and limiting their number are determining factors for the performance and security of a WordPress site.
+
+<Quiz
+  question="What is the main risk of installing too many plugins on a WordPress site?"
+  options={[
+    "The site automatically changes theme",
+    "Plugins update on their own",
+    "Conflicts between plugins, higher PHP execution time and a wider attack surface",
+    "WordPress deletes excess plugins"
+  ]}
+  answer={2}
+  explanation="Each plugin loads additional PHP code on each server request, which increases the TTFB (Time To First Byte). Hooks registered by many plugins can conflict, and each plugin adds potentially vulnerable files to the server. It is recommended to limit the number of plugins to those strictly necessary."
+/>

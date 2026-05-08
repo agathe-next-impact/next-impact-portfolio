@@ -3,9 +3,9 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { title } from "node:process";
+import { useTranslations } from "next-intl";
 
 // Définition des projets
 const PROJECTS = [
@@ -201,6 +201,7 @@ interface RealisationsProps {
 }
 
 export default function Realisations({ count, defaultTab = "derniers" }: RealisationsProps) {
+  const t = useTranslations("realisations");
   // Limiter le nombre de réalisations affichées par tab
   return (
     <section id="realisations" className="relative overflow-hidden">
@@ -212,31 +213,31 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
                 value="derniers"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                Réalisations marquantes
+                {t("tabs.derniers")}
               </TabsTrigger>
               <TabsTrigger
                 value="corporate"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                Corporate
+                {t("tabs.corporate")}
               </TabsTrigger>
               <TabsTrigger
                 value="institutional"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                Institutionnel
+                {t("tabs.institutional")}
               </TabsTrigger>
               <TabsTrigger
                 value="ess"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                ESS
+                {t("tabs.ess")}
               </TabsTrigger>
               <TabsTrigger
                 value="headless"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                Headless
+                {t("tabs.headless")}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -264,7 +265,10 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
                           />
                         </div>
                         <div className="p-6 flex flex-col flex-1">
-                          <Link href={project.link}>
+                          <Link
+                            // @ts-expect-error – href comes from project data
+                            href={project.link}
+                          >
                             <h3 className="text-2xl font-medium transition-colors duration-300 text-white group-hover:text-white/70">
                               {project.title}
                             </h3>
@@ -274,10 +278,11 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
                           </Link>
                           <div className="mt-4 mt-auto">
                             <Link
+                              // @ts-expect-error – href comes from project data
                               href={project.link}
                               className="inline-flex items-center text-sm font-medium  text-white group-hover:text-white/70 transition-all duration-300 hover:translate-x-1"
                             >
-                              Voir le projet
+                              {t("viewProject")}
                               <ArrowRight className="ml-1 h-4 w-4" />
                             </Link>
                           </div>

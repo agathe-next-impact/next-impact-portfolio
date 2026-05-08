@@ -1,0 +1,184 @@
+---
+title: Plan SEO from the start
+description: Why plan your SEO actions at the start of the project?
+category: seo
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+SEO planning before WordPress site development determines the speed at which the site acquires organic traffic after launch. A site whose architecture, keywords and technical configuration are defined upfront is indexed faster and ranks for its target queries from the first weeks. Conversely, a site launched without SEO planning accumulates technical debt whose correction delays traffic acquisition by 6 to 12 months.
+
+This article describes the seven steps of structured SEO planning, from defining the audience to setting up post-launch monitoring.
+
+## Why SEO is essential for your WordPress site
+
+Organic search performs three functions for a WordPress site.
+
+Good SEO allows your site to:
+
+-  Gain visibility in the SERPs : 75% of users do not go beyond the first page of Google results. A site ranked on page 2 or beyond receives a negligible volume of clicks.
+-  Acquire qualified traffic : organic traffic comes from users who have formulated an explicit query. This search-intent traffic converts better than traffic from display or social media.
+-  Reduce long-term acquisition cost : unlike SEA (Google Ads) whose cost is proportional to click volume, SEO is based on an initial investment whose return grows over time.
+
+WordPress, thanks to its pages/posts/categories architecture and its ecosystem of SEO plugins (Yoast, Rank Math), is natively compatible with SEO best practices. But this compatibility only produces results if optimizations are planned before development.
+
+<ComparisonTable
+  headers={["Without SEO planning", "With SEO planning"]}
+  rows={[
+    { label: "Visibility", left: "Poorly indexed pages, little organic traffic", right: "Fast indexing via XML sitemap submitted to Google Search Console" },
+    { label: "Site structure", left: "Inconsistent navigation, URLs with dynamic parameters", right: "Architecture in thematic silos, URLs with target keywords" },
+    { label: "Content", left: "Content written without keyword targeting", right: "Each page targets a main keyword with covered lexical field" },
+    { label: "Costs", left: "Post-launch structural overhaul (301 redirects, rewriting)", right: "Initial investment integrated into the development budget" },
+    { label: "Results", left: "6 to 12 months before first rankings", right: "First rankings from the weeks following indexing" }
+  ]}
+  highlight="right"
+/>
+
+## Step 1: Define your niche and understand your audience
+
+The first step is to identify the site's thematic positioning and the profile of the target audience.
+
+### Identify your niche
+
+The niche determines the site's semantic perimeter: the set of topics and queries it will rank for. A perimeter that is too broad (e.g. "cooking") implies high competition on generic keywords. A targeted perimeter (e.g. "gluten-free recipes for families") reduces competition and increases the thematic relevance (topical authority) perceived by Google.
+
+### Understand your audience
+
+Build personas based on data: queries formulated (visible in Google Search Console for an existing site, or via keyword research for a new site), recurring problems identified in industry forums and communities, and browsing behavior (pages visited, session duration, bounce rate) measurable through Google Analytics.
+
+The three questions to document for each persona:
+- What queries does this person type into Google?
+- What problem are they trying to solve?
+- What action should they take on the site (purchase, contact, signup)?
+
+<Callout variant="tip" title="Method to define your niche">
+Cross-reference three dimensions: your areas of expertise (subjects you master and can cover in depth), the competitive landscape (analyze sites already ranking with a tool like Semrush or Ahrefs to identify low-competition areas) and audience demand (search volumes measured via Google Keyword Planner). The optimal niche lies at the intersection of these three dimensions: real expertise, accessible competition and measurable demand.
+</Callout>
+
+## Step 2: Carry out keyword research
+
+Keyword research identifies the queries the site must rank for and determines the content structure to produce.
+
+### How to select your keywords
+
+Use a keyword research tool (Google Keyword Planner, Ubersuggest, Semrush, Ahrefs) to extract, for each candidate query:
+
+- Monthly search volume (number of times the query is typed per month)
+- Keyword Difficulty (KD), a score from 0 to 100 indicating ranking difficulty
+- Search intent (informational, transactional, navigational)
+
+Prioritize long-tail keywords: phrases of 3+ words with moderate volume but low KD and a precise search intent.
+
+ Concrete example : For a gardening site, the generic keyword "garden maintenance" (high volume, high KD) is less of a priority than "how to trim a laurel hedge in winter" (moderate volume, low KD, clear informational intent).
+
+### Analyze competitive positions
+
+Identify keywords your competitors rank for via the "Keyword Gap" feature (Semrush) or "Content Gap" (Ahrefs). Queries where your competitors are present and you are absent represent priority content opportunities.
+
+## Step 3: On-Page Optimization
+
+On-page optimization consists of configuring the HTML elements and content of each page to maximize its relevance for the targeted keyword.
+
+### Elements to optimize:
+
+1.  `<title>` tag and meta description : the title tag is the most heavily weighted on-page signal by Google. It must contain the main keyword, ideally at the beginning of the tag, and not exceed 60 characters. The meta description (155 characters max) is not a direct ranking factor, but it influences CTR (click-through rate) in the SERPs.
+2.  Heading structure (H1 to H3) : a single H1 per page containing the main keyword. The H2s structure the main sections (secondary keywords). The H3s detail subsections (semantic variations, related questions).
+3.  URLs : short format, lowercase, with the main keyword separated by hyphens (e.g. `/trim-laurel-hedge-winter`). Enable the "Post name" permalink structure in WordPress.
+4.  Image `alt` attributes : textual description of the image including the keyword when relevant. This attribute is used by Google Images and contributes to accessibility.
+
+### WordPress configuration:
+
+Install **Yoast SEO** or **Rank Math** to have an interface for entering meta tags (title, description) on each page and a real-time on-page analysis (keyword presence, readability, internal linking).
+
+## Step 4: Verify your technical SEO
+
+Technical SEO ensures that Googlebot can crawl, interpret and index all pages of the site without obstacle.
+
+### Technical elements to configure:
+
+-  Core Web Vitals : the three web performance metrics that Google uses as a ranking factor since the Page Experience update. LCP (Largest Contentful Paint) < 2.5s, FID (First Input Delay) < 100ms, CLS (Cumulative Layout Shift) < 0.1. Measure them through Google PageSpeed Insights or the "Core Web Vitals" tab of Google Search Console.
+-  Internal linking and navigation : each page must be accessible within 3 clicks maximum from the homepage. Contextual internal links (in the body text) pass PageRank and signal semantic relationships between pages.
+-  Mobile compatibility : verify mobile rendering through Google's Mobile-Friendly test. The WordPress theme must be responsive and clickable areas sized at 48x48 px minimum.
+-  `robots.txt` and `sitemap.xml` files : the `robots.txt` file tells Googlebot which areas of the site not to crawl (e.g. `/wp-admin/`). The `sitemap.xml` lists all URLs to be indexed and must be submitted via Google Search Console to accelerate page discovery.
+
+## Step 5: Create quality content
+
+Google evaluates content quality according to E-E-A-T criteria (Experience, Expertise, Authoritativeness, Trustworthiness). Quality content meets the following criteria:
+
+-  Answer the search intent : the content must provide the answer the user expects for the targeted query. Analyze the pages currently ranking in the top 10 to understand the expected format and depth.
+-  Vary formats : long articles (1,500+ words) for informational queries, structured pages for transactional queries, visual content (infographics, videos) to increase time spent on the page.
+-  Maintain an editorial calendar : regular publication of fresh content (freshness) signals to Google that the site is active, which can increase Googlebot's crawl frequency.
+
+## Step 6: Build backlinks
+
+Backlinks (incoming links from other sites) are one of Google's three main ranking factors. Each backlink from a quality site transfers PageRank to your page, increasing its authority.
+
+### Acquisition methods:
+
+1.  Guest blogging : publishing guest articles on sites with high domain authority (Domain Authority / Domain Rating) in your industry, with a return link to your site.
+2.  Internal linking : internal links are not backlinks, but they distribute the PageRank acquired through external backlinks to the strategic pages of the site.
+3.  Digital PR : production of high-value content (studies, original data, free tools) likely to be picked up and cited by industry media or blogs.
+
+## Step 7: Continuous monitoring and optimization
+
+SEO is an iterative process. Rankings fluctuate based on algorithm updates (Google rolls out several core updates per year), competitor actions and changes in search volumes.
+
+### Performance measurement:
+
+Set up a dashboard combining data from Google Search Console (impressions, clicks, average position, click-through rate per query) and Google Analytics (organic sessions, landing pages, conversion rate). Track the following indicators:
+
+- Number of indexed pages (Search Console > Coverage)
+- Average position per target query (Search Console > Performance)
+- Monthly organic traffic (Analytics > Acquisition > Organic)
+- Conversion rate of organic traffic (Analytics > Conversions)
+
+### Adjust your strategy:
+
+Identify pages declining in rank and refresh their content (adding sections, updating data, improving internal linking). Identify new queries generating impressions (Search Console > Queries) to create additional content.
+
+<StepByStep>
+<Step number={1} title="Define your niche and audience">
+Identify your thematic positioning and build personas based on the queries, problems and goals of your target audience.
+</Step>
+
+<Step number={2} title="Research your keywords">
+Extract search volumes and Keyword Difficulty using a dedicated tool. Prioritize long-tail queries with qualified search intent and identify competitive gaps.
+</Step>
+
+<Step number={3} title="Optimize on-page">
+Configure title tags, meta descriptions, H1-H3 heading structure, clean URLs and alt attributes. Install Yoast SEO or Rank Math to automate checks.
+</Step>
+
+<Step number={4} title="Configure technical SEO">
+Optimize Core Web Vitals (LCP, FID, CLS), verify mobile compatibility, configure the robots.txt file and submit the sitemap.xml to Google Search Console.
+</Step>
+
+<Step number={5} title="Produce E-E-A-T compliant content">
+Write content that answers the search intent of each targeted query. Vary formats and maintain a regular editorial calendar.
+</Step>
+
+<Step number={6} title="Acquire backlinks">
+Develop the inbound link profile through guest blogging, digital PR and the production of high-value content likely to be cited naturally.
+</Step>
+
+<Step number={7} title="Monitor and iterate">
+Measure performance through Google Search Console and Analytics. Refresh declining content and create new pages to cover emerging queries.
+</Step>
+</StepByStep>
+
+## Summary
+
+SEO planning for a WordPress site follows a logical sequence: audience definition, keyword research, on-page optimization, technical configuration, content production, backlink acquisition and continuous monitoring. Each step conditions the next. Addressing these steps before site launch rather than after reduces the overall project cost and accelerates the acquisition of first organic rankings.
+
+<Quiz
+  question="What is the first step of an effective SEO strategy for a WordPress site?"
+  options={[
+    "Install an SEO plugin like Yoast",
+    "Buy backlinks from authority sites",
+    "Define your niche and understand your audience",
+    "Optimize the site's loading speed"
+  ]}
+  answer={2}
+  explanation="Defining the niche and target audience is the prerequisite for all subsequent steps. Without this analysis, keyword research lacks direction, content does not target the right search intents, and the architecture does not reflect the real needs of the audience. Plugin installation, backlink acquisition and technical optimization come after this strategic framing phase."
+/>

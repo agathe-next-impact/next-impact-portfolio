@@ -1,4 +1,8 @@
+"use client";
+
 import { ArrowRight, LucideIcon } from "lucide-react"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 interface GuideItem {
   icon: LucideIcon
@@ -7,14 +11,20 @@ interface GuideItem {
 }
 
 export default function ServicesGuide({ needsGuide }: { needsGuide: GuideItem[] }) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   return (
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
         <div className="text-center mb-16 animate-fadeInUp">
           <h2 className="text-3xl md:text-4xl font-googletitre font-medium mb-6 text-white">
-            Quelle stack pour quel projet
+            {isEn ? "Which stack for which project" : "Quelle stack pour quel projet"}
           </h2>
-          <p className="text-lg text-white/80">Identifiez la solution adaptée à votre besoin principal</p>
+          <p className="text-lg text-white/80">
+            {isEn
+              ? "Identify the solution that matches your main need"
+              : "Identifiez la solution adaptée à votre besoin principal"}
+          </p>
         </div>
         <div className="space-y-4">
           {needsGuide.map((item, idx) => (

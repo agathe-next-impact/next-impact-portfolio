@@ -69,14 +69,50 @@ const caseStudiesSlugs = [
   "connexion-plus",
 ];
 
-// Génère une entrée <url> XML
-function urlEntry(
-  loc: string,
+// Pour chaque page localisée, on émet une <url> par locale avec
+// xhtml:link rel="alternate" hreflang vers chaque locale + x-default.
+function localizedUrlEntry(
+  pathSegment: string,
   opts: { changefreq: string; priority: number; lastmod?: string }
 ) {
+  const cleaned = pathSegment.replace(/^\/+|\/+$/g, "");
+  const frUrl = cleaned ? `${baseUrl}/${cleaned}` : `${baseUrl}/`;
+  const enUrl = cleaned ? `${baseUrl}/en/${cleaned}` : `${baseUrl}/en`;
+
+  const alternates = `
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="${frUrl}" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${enUrl}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${frUrl}" />`;
+
+  const lastmodTag = opts.lastmod ? `\n    <lastmod>${opts.lastmod}</lastmod>` : "";
+
+  return [
+    `
+  <url>
+    <loc>${frUrl}</loc>${lastmodTag}
+    <changefreq>${opts.changefreq}</changefreq>
+    <priority>${opts.priority}</priority>${alternates}
+  </url>`,
+    `
+  <url>
+    <loc>${enUrl}</loc>${lastmodTag}
+    <changefreq>${opts.changefreq}</changefreq>
+    <priority>${(opts.priority - 0.1).toFixed(1)}</priority>${alternates}
+  </url>`,
+  ].join("");
+}
+
+// FR-only URL (legal pages, French-specific articles)
+function frOnlyUrlEntry(
+  pathSegment: string,
+  opts: { changefreq: string; priority: number; lastmod?: string }
+) {
+  const cleaned = pathSegment.replace(/^\/+|\/+$/g, "");
+  const url = cleaned ? `${baseUrl}/${cleaned}` : `${baseUrl}/`;
+  const lastmodTag = opts.lastmod ? `\n    <lastmod>${opts.lastmod}</lastmod>` : "";
   return `
   <url>
-    <loc>${loc}</loc>${opts.lastmod ? `\n    <lastmod>${opts.lastmod}</lastmod>` : ""}
+    <loc>${url}</loc>${lastmodTag}
     <changefreq>${opts.changefreq}</changefreq>
     <priority>${opts.priority}</priority>
   </url>`;
@@ -86,46 +122,46 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split("T")[0];
 
-    // Pages statiques avec priorités hiérarchisées
-    const staticPages: {
+    // Pages statiques avec priorités hiérarchisées (publiées en FR et EN)
+    const localizedPages: {
       path: string;
       changefreq: string;
       priority: number;
       lastmod: string;
     }[] = [
-      // Homepage — priorité max
       { path: "", changefreq: "weekly", priority: 1.0, lastmod: today },
-      // Pages de services — haute priorité (pages de conversion)
       { path: "services", changefreq: "weekly", priority: 0.9, lastmod: today },
       { path: "services/eligibilite", changefreq: "monthly", priority: 0.7, lastmod: today },
-      // Hub études de cas & documentation
       { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation/mind-map", changefreq: "monthly", priority: 0.6, lastmod: today },
-      // Avantage OETH — page de conversion
-      { path: "avantage-oeth", changefreq: "weekly", priority: 0.8, lastmod: today },
-      // Articles
-      { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", changefreq: "monthly", priority: 0.7, lastmod: today },
-      { path: "articles/attestation-deductibilite-tih-guide-entreprises", changefreq: "monthly", priority: 0.7, lastmod: today },
-      // Pages de conversion / outils
       { path: "audit-site-ia", changefreq: "monthly", priority: 0.8, lastmod: today },
       { path: "outils", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "outils/benchmarking", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "outils/simulateur-roi", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "demo", changefreq: "monthly", priority: 0.7, lastmod: today },
-      // Pages thématiques
       { path: "solutions", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "cahier-des-charges", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "a-propos", changefreq: "monthly", priority: 0.6, lastmod: today },
-      // Contact
       { path: "contact", changefreq: "monthly", priority: 0.6, lastmod: today },
-      // Pages légales
-      { path: "mentions-legales", changefreq: "yearly", priority: 0.3, lastmod: today },
+      { path: "avantage-oeth", changefreq: "weekly", priority: 0.8, lastmod: today },
     ];
 
-    // Études de cas dynamiques
+    // Pages FR uniquement (mentions légales = obligation FR; articles spécifiques au droit français)
+    const frOnlyPages: {
+      path: string;
+      changefreq: string;
+      priority: number;
+      lastmod: string;
+    }[] = [
+      { path: "mentions-legales", changefreq: "yearly", priority: 0.3, lastmod: today },
+      { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "articles/attestation-deductibilite-tih-guide-entreprises", changefreq: "monthly", priority: 0.7, lastmod: today },
+    ];
+
+    // Études de cas (publiées en FR et EN)
     const caseStudiesUrls = caseStudiesSlugs.map((slug) =>
-      urlEntry(`${baseUrl}/etudes-de-cas/${slug}`, {
+      localizedUrlEntry(`etudes-de-cas/${slug}`, {
         changefreq: "monthly",
         priority: 0.7,
         lastmod: today,
@@ -135,7 +171,7 @@ export async function GET() {
     // Catégories de documentation
     const docCategories = await getDocumentationCategories();
     const docCategoryUrls = docCategories.map((cat) =>
-      urlEntry(`${baseUrl}/documentation/${cat.slug}`, {
+      localizedUrlEntry(`documentation/${cat.slug}`, {
         changefreq: "weekly",
         priority: 0.7,
         lastmod: cat.lastmod,
@@ -145,7 +181,7 @@ export async function GET() {
     // Articles de documentation dynamiques (avec lastmod réel)
     const documentationSlugs = await getDocumentationSlugs();
     const documentationUrls = documentationSlugs.map((doc) =>
-      urlEntry(`${baseUrl}/documentation/${doc.slug}`, {
+      localizedUrlEntry(`documentation/${doc.slug}`, {
         changefreq: "monthly",
         priority: 0.6,
         lastmod: doc.lastmod,
@@ -154,20 +190,16 @@ export async function GET() {
 
     // Assemblage final
     const allUrls = [
-      ...staticPages.map((page) =>
-        urlEntry(`${baseUrl}/${page.path}`, {
-          changefreq: page.changefreq,
-          priority: page.priority,
-          lastmod: page.lastmod,
-        })
-      ),
+      ...localizedPages.map((page) => localizedUrlEntry(page.path, page)),
+      ...frOnlyPages.map((page) => frOnlyUrlEntry(page.path, page)),
       ...caseStudiesUrls,
       ...docCategoryUrls,
       ...documentationUrls,
     ].join("");
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${allUrls}
 </urlset>`;
 

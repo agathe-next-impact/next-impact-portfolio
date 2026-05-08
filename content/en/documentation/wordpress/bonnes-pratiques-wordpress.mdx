@@ -1,0 +1,273 @@
+---
+title: WordPress best practices
+description: What are the best practices for WordPress?
+category: wordpress
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+<Callout variant="tip" title="Best practices checklist">
+Here are the 10 points to verify for a high-performing and secure WordPress site. Each section below details a step and the associated tools.
+</Callout>
+
+<StepByStep>
+<Step number={1} title="Suitable hosting">Select a WordPress-compatible hosting provider with PHP 8+ support, HTTP/2 and automated backups</Step>
+<Step number={2} title="Local installation then production">Set up a local development environment before deploying to production</Step>
+<Step number={3} title="SSL/TLS certificate">Activate a Let's Encrypt certificate to force HTTPS connections</Step>
+<Step number={4} title="Automated backups">Schedule regular backups of the database and files with UpdraftPlus</Step>
+<Step number={5} title="High-performance theme">Choose a responsive theme, light on HTTP requests and compatible with accessibility standards</Step>
+<Step number={6} title="Reliable extensions">Limit the number of plugins and only keep those regularly maintained</Step>
+<Step number={7} title="Performance optimization">Configure caching, compress images and minify CSS/JS</Step>
+<Step number={8} title="SEO configuration">Set up Yoast SEO or SEOPress to manage meta tags and the XML sitemap</Step>
+<Step number={9} title="Security">Install a security plugin (Wordfence or iThemes Security) and keep up with updates</Step>
+<Step number={10} title="Email deliverability">Configure an authenticated SMTP plugin and test deliverability</Step>
+</StepByStep>
+
+## 1. Choose suitable hosting
+
+### Understand the distinction between WordPress.org and WordPress.com
+
+WordPress.org refers to the open-source self-hosted software: you download the CMS, install it on the server of your choice and have full access to the source code, configuration files and MySQL/MariaDB database. You can install any theme, any plugin and modify the `functions.php`, `wp-config.php` files or PHP templates at will.
+
+WordPress.com, on the other hand, is a service hosted by Automattic. On free and entry-level plans, code access is restricted: no third-party plugins, no manually uploaded themes, no FTP or database access. The Business and e-Commerce plans lift some of these restrictions, but at a higher monthly cost than a classic shared hosting plan.
+
+For a professional project requiring specific plugins, a custom theme or Custom Post Types, self-hosted WordPress.org is the configuration to choose.
+
+### Favor hosting optimized for WordPress
+
+If you opt for self-hosting, choose a hosting provider whose infrastructure is configured for WordPress. Providers like Hostinger, WPServeur or Kinsta offer optimized server stacks: Redis or Memcached object cache, PHP-FPM with OPcache enabled, integrated CDN and staging environments to test updates before deployment. These hosting providers generally include automated daily backups, a free SSL/TLS certificate and technical support familiar with the WordPress ecosystem.
+
+<Callout variant="warning" title="WordPress.org vs WordPress.com">
+WordPress.org (self-hosted) gives full control over code, plugins and the database. WordPress.com (hosted by Automattic) restricts these accesses on entry-level plans. For a professional site with advanced customization, WordPress.org is the recommended configuration.
+</Callout>
+
+## 2. Install WordPress correctly
+
+### Work locally first
+
+Before any production deployment, set up a local development environment. This allows you to test the theme, plugins and Custom Post Types without risking breaking a publicly accessible site. Locally, you can enable WordPress debug mode (`WP_DEBUG` and `WP_DEBUG_LOG` in `wp-config.php`) to identify PHP errors, slow SQL queries or deprecation notices.
+
+<Callout variant="tip" title="Local development tools">
+Local (formerly Local by Flywheel) is the simplest tool to create a local WordPress environment: it automatically installs Apache or Nginx, PHP and MySQL. DDEV and Lando are Docker-based alternatives, suitable for teams working with reproducible server configurations.
+</Callout>
+
+### Use an automated installation script
+
+Most hosting providers offer one-click WordPress installation through tools like Softaculous or Plesk's WordPress Toolkit. These scripts automatically configure the database, the `wp-config.php` file and file permissions. For manual installations, the procedure is documented on the WordPress Codex: download the archive from wordpress.org, upload the files via FTP/SFTP, create a database and launch the installation wizard through the browser.
+
+## 3. Activate an SSL/TLS certificate
+
+Install an SSL/TLS certificate via Let's Encrypt, available free of charge from most hosting providers. This certificate encrypts exchanges between the visitor's browser and the server through the HTTPS protocol (HTTP over TLS). Encryption protects sensitive data transiting on the network: login credentials, form data, payment information.
+
+Since 2018, Google Chrome displays a "Not secure" warning on pages served over HTTP. In addition, the HTTPS protocol is a ranking signal taken into account by the Google algorithm. After activating the certificate, force the redirection from HTTP to HTTPS in the `.htaccess` file (Apache) or in the Nginx configuration, and update the site URLs in `wp-config.php` or through WordPress general settings.
+
+<Callout variant="warning" title="A site without SSL is penalized by Google">
+Since 2018, Google Chrome displays a "Not secure" warning on sites without HTTPS. This signal impacts the click-through rate in search results and the ranking in Google's algorithm.
+</Callout>
+
+## 4. Create regular backups
+
+### Configure a backup plugin
+
+UpdraftPlus is the most-used backup plugin on WordPress. It allows scheduling automated backups of the database and files (themes, plugins, `wp-content/uploads` folder) to remote storage: Google Drive, Dropbox, Amazon S3 or an FTP server. Restoration is done from the admin interface in a few clicks. Configure email notifications in case of backup failure to quickly detect issues.
+
+### Adapt backup frequency to site activity
+
+For a site with daily publication or e-commerce transactions (WooCommerce orders, registrations), schedule a daily database backup. For site files (themes, plugins, media), a weekly frequency is sufficient if changes are infrequent. For a static site updated monthly, weekly database backups and monthly file backups cover the need.
+
+<Callout variant="tip" title="3-2-1 backup strategy">
+Keep 3 copies of your data, on 2 different supports, including 1 off-site copy (cloud storage or remote server). This strategy covers scenarios of server failure, file corruption and cyberattack.
+</Callout>
+
+## 5. Choose a suitable theme
+
+### Technical criteria for a quality theme
+
+A WordPress theme must meet several technical criteria before any aesthetic consideration. Responsive design (adaptation of display to different screen sizes) is a prerequisite: Google uses mobile-first indexing, which means the mobile version of the site serves as the reference for ranking. The theme must be light on HTTP requests and total weight (CSS, JavaScript, fonts), which can be verified with tools like GTmetrix or Lighthouse. Compatibility with WCAG 2.1 (Web Content Accessibility Guidelines) accessibility standards is also a criterion to verify: HTML5 semantic tags, sufficient color contrasts, functional keyboard navigation.
+
+### For a blog or content site
+
+Themes like Astra or OceanWP are common choices for content-oriented sites. Their modular architecture loads only the activated components, which limits page weight. They are compatible with major page builders (Elementor, Beaver Builder) and with the Gutenberg block editor. Both have a large number of starter templates (ready-to-use starter models) and complete technical documentation.
+
+### For a professional or e-commerce site
+
+For a WooCommerce e-commerce site, choose a theme explicitly declaring its WooCommerce compatibility: integration of shop, product, cart and checkout templates. Astra Pro and GeneratePress Premium offer these native integrations. Verify that the theme supports schema markup (structured data) for products, reviews and prices, which improves display in Google search results (rich snippets).
+
+### For a mobile-focused site
+
+GeneratePress and Neve are two particularly lightweight themes. GeneratePress, in its default version, generates less than 10 KB of CSS and no JavaScript on the front-end, which gives Lighthouse scores close to 100 on mobile. Neve uses a similar architecture with conditional resource loading. These features reduce Time to Interactive (TTI) -- the delay before the page is fully usable -- on slow mobile connections.
+
+## 6. Install quality extensions
+
+### Plugin selection criteria
+
+Before installing a plugin, verify the following points on the WordPress.org repository:
+- **Date of last update**: a plugin not updated for more than 12 months presents a compatibility and security risk.
+- **Declared compatibility**: the plugin must be tested with your version of WordPress.
+- **Number of active installations** and average rating: these indicators reflect the plugin's reliability in real conditions.
+- **Active support**: check the plugin's support forum to verify that the developer responds to bug reports.
+
+Each added plugin loads additional PHP code on each server request. Limit the number of plugins to what is strictly necessary to reduce PHP execution time (TTFB, Time To First Byte) and the attack surface.
+
+<Callout variant="warning" title="Impact of plugins on performance">
+Each plugin adds PHP code executed on each page load. A site with 30+ active plugins will have a significantly higher TTFB (Time To First Byte) than a site with 15 plugins. Evaluate each plugin against the functional benefit it brings.
+</Callout>
+
+### Recommended plugins by category
+
+### SEO
+
+SEO plugins manage meta title and description tags, the XML sitemap, schema.org markup (structured data) and on-page content analysis.
+
+- **Yoast SEO**: the most installed SEO plugin on WordPress. It automatically generates the XML sitemap, offers a readability analysis and verifies the use of the target keyword on each page.
+- **Rank Math**: alternative to Yoast with an integrated rank tracking module, 301/302 redirect management and native support for advanced structured data (FAQ, How-To, Product).
+
+### Security
+
+- **Wordfence Security**: includes a WAF (Web Application Firewall) at the application level, a malware scanner that compares core, theme and plugin files against official versions, and an IP/country blocking system.
+- **iThemes Security**: hardens server configuration (XML-RPC disabling, modification of the `wp_` table prefix, protection against brute-force attacks on `wp-login.php`).
+
+### E-commerce
+
+- **WooCommerce**: the reference e-commerce plugin on WordPress. It manages the product catalog, cart, checkout, payment gateways (Stripe, PayPal), inventory management and shipping cost calculations. Its architecture, extensible through WordPress hooks (`woocommerce_before_cart`, `woocommerce_checkout_fields`, etc.), allows customizing each step of the purchase journey.
+
+### Performance
+
+- **WP Rocket**: premium cache plugin that generates static HTML pages, minifies and concatenates CSS/JS files, enables lazy loading of images and preloads the cache.
+- **Perfmatters**: complementary plugin that disables unused WordPress features (emojis, oEmbed, Heartbeat API) and allows conditional script loading per page.
+
+### Tracking and analysis
+
+- **Google Site Kit**: official Google plugin that centralizes Google Analytics, Search Console, PageSpeed Insights and AdSense data in the WordPress dashboard.
+- **MonsterInsights**: simplified interface for Google Analytics with e-commerce event tracking, outbound link clicks and file downloads.
+
+### Backups
+
+- **UpdraftPlus**: automated backup of the database and files to remote storage, with one-click restore from admin.
+
+### Complementary plugins by use case
+
+### Forms
+
+- **Contact Form 7**: lightweight plugin to create forms in HTML/CSS. Configuration is done through shortcodes (short codes embeddable in pages). The plugin loads no superfluous JavaScript.
+- **WPForms**: drag-and-drop form creation interface with predefined templates. The Pro version includes conditional logic (display of fields based on previous answers).
+- **Gravity Forms**: developer-oriented premium plugin, with an extensive hook system (`gform_after_submission`, `gform_field_value`), add-ons for payments (Stripe, PayPal) and CRM integration.
+
+### E-commerce
+
+- **WooCommerce**: complete management of an online store (see above).
+- **Easy Digital Downloads**: plugin specialized in selling digital products (PDF files, software, licenses). Lighter than WooCommerce for this specific use case.
+- **Ecwid Ecommerce**: SaaS (Software as a Service) e-commerce solution that integrates with WordPress through a widget. Product data is hosted on Ecwid servers, which reduces the load on your hosting.
+
+### Affiliation and marketing
+
+- **AffiliateWP**: native WordPress affiliate management system with conversion tracking, commission management and dashboard for affiliates.
+- **ThirstyAffiliates**: affiliate link manager that allows cloaking (hiding the affiliate URL behind an internal URL) and click tracking.
+- **Pretty Links**: creation of shortened URLs and statistical click tracking, useful for marketing campaign tracking.
+
+### Content management
+
+- **Advanced Custom Fields (ACF)**: plugin that allows creating custom fields attached to posts, pages, Custom Post Types or taxonomies. ACF is used by developers to structure complex content without writing metadata management code.
+- **Elementor**: visual page builder with real-time editing. Elementor generates its own HTML/CSS, which can weigh down the DOM (Document Object Model) if pages contain many widgets.
+
+### Social media sharing
+
+- **Social Snap**: share buttons with counter, positionable as a floating bar or inline. Includes per-network share tracking.
+- **AddToAny**: lightweight free plugin compatible with more than 100 social networks. Loads no external script by default.
+- **Monarch**: premium plugin from the Elegant Themes suite with advanced display options (pop-up, fly-in, sidebar).
+
+### Design and customization
+
+- **Elementor Pro**: premium version of Elementor with Theme Builder (building header, footer and archive templates without touching PHP code), a pop-up generator and additional widgets.
+- **GeneratePress**: ultra-lightweight theme and customization framework. Its Hooks module allows injecting content at precise locations in the template without modifying theme files.
+
+## 7. Optimize performance
+
+Loading speed directly affects bounce rate, conversion rate and Google ranking. Core Web Vitals (LCP, FID, CLS) -- a set of user performance metrics measured by Google -- have been ranking signals since 2021.
+
+### Measure current performance
+
+Before optimizing, establish a baseline (reference measurement) with diagnostic tools:
+- **Google PageSpeed Insights**: analyzes Core Web Vitals based on real data (CrUX) and lab tests (Lighthouse).
+- **GTmetrix**: provides a waterfall chart detailing the loading time of each resource.
+- **WebPageTest**: allows testing from different geographic locations and with different network conditions.
+
+<Callout variant="tip" title="Performance objectives">
+Aim for a Lighthouse score above 90 on mobile, an LCP (Largest Contentful Paint) below 2.5 seconds and a CLS (Cumulative Layout Shift) below 0.1. These thresholds correspond to Google's recommendations for a good user experience.
+</Callout>
+
+### Configure caching
+
+The cache stores static copies of pages generated by PHP, avoiding recomputing each page on each request. WP Rocket, W3 Total Cache or LiteSpeed Cache (if your host uses a LiteSpeed server) generate these static HTML pages. Also configure object caching (Redis or Memcached) if your host supports it: it caches the results of frequent SQL queries and reduces the load on the database.
+
+### Compress and convert images
+
+Images often represent 50% or more of the total page weight. Use plugins like Smush or Imagify to automatically compress images on upload. Enable WebP format conversion, which offers 25 to 35% better compression than JPEG at equivalent visual quality. Also enable WordPress native lazy loading (`loading="lazy"` attribute on `<img>` tags) to defer the loading of images outside the viewport (visible area of the screen).
+
+### Minify and concatenate CSS, JavaScript and HTML
+
+Minification removes spaces, comments and line breaks from source code to reduce file weight. Concatenation groups multiple files into one to reduce the number of HTTP requests. Plugins like Autoptimize or Asset CleanUp manage these optimizations. Asset CleanUp also allows disabling the loading of unused scripts and stylesheets on specific pages (script unloading).
+
+### Use a CDN
+
+A CDN (Content Delivery Network) distributes static files (images, CSS, JS, fonts) from geographically distributed servers. The visitor receives the files from the closest node, which reduces network latency. Cloudflare offers a free CDN with built-in DDoS protection. BunnyCDN and KeyCDN are high-performing alternatives with per-GB-consumed pricing.
+
+## 8. Configure SEO
+
+SEO (Search Engine Optimization) brings together optimization techniques that improve a site's visibility in organic search engine results. On WordPress, the SEO configuration relies on three main pillars.
+
+First, install an SEO plugin (Yoast SEO or SEOPress). These plugins allow customizing the `<title>` and `<meta description>` tags of each page, automatically generating the XML sitemap (file that lists all the site's URLs for indexing robots), and adding schema.org structured data that enriches display in Google results (rich snippets).
+
+Second, configure the permalinks (URL structure) in Settings > Permalinks. Use a structure based on the post name (`/%postname%/`) to obtain readable URLs containing the page's keywords. Avoid structures with numeric parameters (`?p=123`) that bring no semantic information to search engines.
+
+Third, work on internal linking: each article must contain links to other relevant content on the site. This linking helps Google's robots discover and index your pages, and distributes "link equity" between the pages of the site.
+
+## 9. Secure your site
+
+### Install a security plugin
+
+Wordfence or iThemes Security cover the main attack vectors on WordPress. Wordfence integrates a WAF (Web Application Firewall) that filters malicious requests before they reach WordPress, a scanner that detects modified or infected files, and an IP blocking system. iThemes Security adds complementary protections: disabling XML-RPC (a protocol often exploited for brute force and DDoS attacks), changing the default `wp_` table prefix, limiting login attempts on `wp-login.php` and `xmlrpc.php`.
+
+<Callout variant="warning" title="Common security mistakes to fix in priority">
+Three frequent mistakes: using "admin" as the administrator username, keeping the default table prefix (wp_), and leaving deactivated but not deleted plugins on the server. Deactivated plugins remain accessible via their file path and may contain exploitable vulnerabilities.
+</Callout>
+
+### Maintain updates
+
+Each WordPress, theme and plugin update includes security fixes (patches). Known vulnerabilities are published in databases like WPScan Vulnerability Database. A site whose components are not up to date is exposed to exploits targeting these referenced flaws. Enable automatic updates for WordPress minor releases (security patches) in `wp-config.php` with the constant `define('WP_AUTO_UPDATE_CORE', 'minor')`. For plugins and themes, test updates in a staging environment before applying them to production.
+
+## 10. Configure email deliverability
+
+### Use an SMTP plugin
+
+By default, WordPress sends emails through the PHP `wp_mail()` function, which uses PHP's `mail()`. This sending mode has no authentication and emails frequently end up in spam. The WP Mail SMTP plugin configures sending through an authenticated SMTP server (Simple Mail Transfer Protocol), with credentials and TLS encryption. You can use a transactional service like SendGrid, Mailgun, Amazon SES or your host's SMTP.
+
+### Configure DNS records
+
+To maximize deliverability, configure three DNS records on your domain:
+- **SPF** (Sender Policy Framework): declares which servers are authorized to send emails on behalf of your domain.
+- **DKIM** (DomainKeys Identified Mail): adds a cryptographic signature to each email, allowing the recipient server to verify the authenticity of the message.
+- **DMARC** (Domain-based Message Authentication, Reporting and Conformance): defines the policy to apply to emails that fail SPF and DKIM verifications.
+
+Test your configuration with [mail-tester.com](https://mail-tester.com/): this tool analyzes the authentication, content and reputation of your sending domain, and assigns a score out of 10.
+
+<Callout variant="tip" title="Recommended SMTP plugin">
+WP Mail SMTP configures email sending through an authenticated SMTP server (SendGrid, Mailgun, Amazon SES or your host's SMTP). It replaces the default PHP mail() function, which offers no authentication and frequently causes emails to land in spam.
+</Callout>
+
+## In summary
+
+These ten best practices cover the fundamentals of a reliable WordPress site: suitable hosting, controlled installation, SSL/TLS encryption, automated backups, performant theme, selected plugins, caching and asset optimization, configured SEO, hardened security and verified email deliverability. Each point contributes to the long-term stability, performance and security of the site. The official WordPress documentation (developer.wordpress.org) and support forums remain the reference resources for going deeper on each topic.
+
+<Quiz
+  question="What is the first action to take before putting your WordPress site online?"
+  options={[
+    "Install all available plugins",
+    "Set up a local development environment to test",
+    "Buy a premium theme",
+    "Configure social media"
+  ]}
+  answer={1}
+  explanation="A local environment (Local, DDEV or Lando) allows you to safely test the theme, plugins and WordPress configuration. You can enable debug mode (WP_DEBUG) to identify PHP errors before deployment to production."
+/>

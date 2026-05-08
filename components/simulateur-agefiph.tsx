@@ -12,6 +12,8 @@ import {
   Info,
 } from "lucide-react";
 import Link from "next/link";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 const SMIC_HORAIRE = 11.88;
 
@@ -21,21 +23,29 @@ function bareme(effectif: number): number {
   return 600 * SMIC_HORAIRE;
 }
 
-function formatEuro(value: number): string {
-  return new Intl.NumberFormat("fr-FR", {
+function formatEuro(value: number, locale: Locale): string {
+  return new Intl.NumberFormat(locale === "en" ? "en-US" : "fr-FR", {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(value);
 }
 
-const presets = [
+const presetsFr = [
   { label: "Présence Essentielle", value: 2250 },
   { label: "Croissance Accélérée", value: 4000 },
   { label: "Plateforme Sur-Mesure", value: 5000 },
 ];
+const presetsEn = [
+  { label: "Essential Presence", value: 2250 },
+  { label: "Accelerated Growth", value: 4000 },
+  { label: "Custom Platform", value: 5000 },
+];
 
 export default function SimulateurAgefiph() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const presets = isEn ? presetsEn : presetsFr;
   const [effectif, setEffectif] = useState(50);
   const [thEmployes, setThEmployes] = useState(0);
   const [montantProjet, setMontantProjet] = useState(4000);
@@ -97,7 +107,7 @@ export default function SimulateurAgefiph() {
         <div className="flex items-center gap-3 mb-8 justify-center">
           <Calculator className="h-8 w-8 text-lightyellow" />
           <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white">
-            Simulateur de déduction AGEFIPH
+            {isEn ? "AGEFIPH deduction simulator" : "Simulateur de déduction AGEFIPH"}
           </h2>
         </div>
 
@@ -107,14 +117,16 @@ export default function SimulateurAgefiph() {
             {/* Effectif */}
             <div>
               <label className="block text-sm text-white/50 font-googletexte uppercase tracking-widest mb-3">
-                Nombre de salariés
+                {isEn ? "Number of employees" : "Nombre de salariés"}
               </label>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-3xl font-googletitre font-medium text-white">
                   {effectif}
                 </span>
                 <span className="text-sm text-white/60 font-googletexte">
-                  Obligation OETH : {objectifTH} TH
+                  {isEn
+                    ? `OETH obligation: ${objectifTH} disabled workers`
+                    : `Obligation OETH : ${objectifTH} TH`}
                 </span>
               </div>
               <Slider
@@ -127,14 +139,14 @@ export default function SimulateurAgefiph() {
               />
               <div className="flex justify-between mt-1">
                 <span className="text-xs text-white/60">20</span>
-                <span className="text-xs text-white/60">1 000</span>
+                <span className="text-xs text-white/60">{isEn ? "1,000" : "1 000"}</span>
               </div>
             </div>
 
             {/* TH employés */}
             <div>
               <label className="block text-sm text-white/50 font-googletexte uppercase tracking-widest mb-3">
-                Travailleurs handicapés employés
+                {isEn ? "Disabled workers employed" : "Travailleurs handicapés employés"}
               </label>
               <div className="flex items-center gap-4">
                 <input
@@ -151,10 +163,16 @@ export default function SimulateurAgefiph() {
                     )
                   }
                   className="w-24 bg-darkblue/60 border border-white/20 rounded-xl px-4 py-3 text-white text-xl font-googletitre text-center focus:outline-none focus:border-lightyellow/50 transition"
-                  aria-label="Nombre de travailleurs handicapés employés"
+                  aria-label={
+                    isEn
+                      ? "Number of disabled workers employed"
+                      : "Nombre de travailleurs handicapés employés"
+                  }
                 />
                 <span className="text-white/50 font-googletexte text-sm">
-                  sur {objectifTH} requis (6% de l&apos;effectif)
+                  {isEn
+                    ? `out of ${objectifTH} required (6% of headcount)`
+                    : `sur ${objectifTH} requis (6% de l'effectif)`}
                 </span>
               </div>
             </div>
@@ -162,7 +180,7 @@ export default function SimulateurAgefiph() {
             {/* Montant projet */}
             <div>
               <label className="block text-sm text-white/50 font-googletexte uppercase tracking-widest mb-3">
-                Montant HT du projet
+                {isEn ? "Project amount (excl. tax)" : "Montant HT du projet"}
               </label>
               <div className="flex flex-wrap gap-2 mb-3">
                 {presets.map((p) => (
@@ -175,7 +193,7 @@ export default function SimulateurAgefiph() {
                         : "bg-white/5 border border-white/10 text-white/70 hover:bg-white/10"
                     }`}
                   >
-                    {p.label} — {formatEuro(p.value)}
+                    {p.label} — {formatEuro(p.value, locale)}
                   </button>
                 ))}
               </div>
@@ -183,7 +201,7 @@ export default function SimulateurAgefiph() {
                 <input
                   type="text"
                   inputMode="numeric"
-                  placeholder="Montant personnalisé"
+                  placeholder={isEn ? "Custom amount" : "Montant personnalisé"}
                   value={isCustom ? customMontant : ""}
                   onChange={handleCustomChange}
                   onFocus={() => setIsCustom(true)}
@@ -192,9 +210,13 @@ export default function SimulateurAgefiph() {
                       ? "border-lightyellow/50"
                       : "border-white/20 focus:border-lightyellow/50"
                   }`}
-                  aria-label="Montant personnalisé du projet en euros HT"
+                  aria-label={
+                    isEn
+                      ? "Custom project amount in euros (excl. tax)"
+                      : "Montant personnalisé du projet en euros HT"
+                  }
                 />
-                <span className="text-white/50 font-googletexte">€ HT</span>
+                <span className="text-white/50 font-googletexte">{isEn ? "€ excl. tax" : "€ HT"}</span>
               </div>
             </div>
           </div>
@@ -211,14 +233,16 @@ export default function SimulateurAgefiph() {
               <div className="flex items-center gap-3 mb-2">
                 <Receipt className="h-5 w-5 text-coral shrink-0" />
                 <span className="text-sm text-white/50 font-googletexte uppercase tracking-widest">
-                  Contribution AGEFIPH avant
+                  {isEn ? "AGEFIPH contribution before" : "Contribution AGEFIPH avant"}
                 </span>
               </div>
               <p className="text-3xl font-googletitre font-medium text-coral">
-                {formatEuro(resultats.contributionBrute)}
+                {formatEuro(resultats.contributionBrute, locale)}
               </p>
               <p className="text-xs text-white/60 font-googletexte mt-1">
-                {resultats.manquants} TH manquant{resultats.manquants > 1 ? "s" : ""} × {formatEuro(bareme(effectif))}
+                {isEn
+                  ? `${resultats.manquants} missing disabled worker${resultats.manquants > 1 ? "s" : ""} × ${formatEuro(bareme(effectif), locale)}`
+                  : `${resultats.manquants} TH manquant${resultats.manquants > 1 ? "s" : ""} × ${formatEuro(bareme(effectif), locale)}`}
               </p>
             </motion.div>
 
@@ -232,14 +256,16 @@ export default function SimulateurAgefiph() {
               <div className="flex items-center gap-3 mb-2">
                 <TrendingDown className="h-5 w-5 text-lightyellow shrink-0" />
                 <span className="text-sm text-white/50 font-googletexte uppercase tracking-widest">
-                  Déduction Next Impact
+                  {isEn ? "Next Impact deduction" : "Déduction Next Impact"}
                 </span>
               </div>
               <p className="text-3xl font-googletitre font-medium text-lightyellow">
-                - {formatEuro(resultats.economie)}
+                - {formatEuro(resultats.economie, locale)}
               </p>
               <p className="text-xs text-white/60 font-googletexte mt-1">
-                30% du coût de main-d&apos;œuvre plafonné
+                {isEn
+                  ? "30% of labor cost (capped)"
+                  : "30% du coût de main-d'œuvre plafonné"}
               </p>
             </motion.div>
 
@@ -253,11 +279,11 @@ export default function SimulateurAgefiph() {
               <div className="flex items-center gap-3 mb-2">
                 <PiggyBank className="h-5 w-5 text-lightblue shrink-0" />
                 <span className="text-sm text-white/50 font-googletexte uppercase tracking-widest">
-                  Contribution après déduction
+                  {isEn ? "Contribution after deduction" : "Contribution après déduction"}
                 </span>
               </div>
               <p className="text-3xl font-googletitre font-medium text-lightblue">
-                {formatEuro(resultats.contributionApres)}
+                {formatEuro(resultats.contributionApres, locale)}
               </p>
             </motion.div>
 
@@ -271,12 +297,12 @@ export default function SimulateurAgefiph() {
               <div className="flex items-center gap-3 mb-2">
                 <PercentIcon className="h-5 w-5 text-lightyellow shrink-0" />
                 <span className="text-sm text-white/50 font-googletexte uppercase tracking-widest">
-                  Coût réel du site
+                  {isEn ? "Real cost of the site" : "Coût réel du site"}
                 </span>
               </div>
               <div className="flex items-end gap-4">
                 <p className="text-4xl font-googletitre font-medium text-white">
-                  {formatEuro(resultats.coutReelProjet)}
+                  {formatEuro(resultats.coutReelProjet, locale)}
                 </p>
                 {resultats.pourcentageEconomie > 0 && (
                   <span className="text-lg text-lightyellow font-googletexte mb-1">
@@ -285,7 +311,8 @@ export default function SimulateurAgefiph() {
                 )}
               </div>
               <p className="text-xs text-white/60 font-googletexte mt-1">
-                {formatEuro(montantProjet)} - {formatEuro(resultats.economie)} de déduction AGEFIPH
+                {formatEuro(montantProjet, locale)} - {formatEuro(resultats.economie, locale)}{" "}
+                {isEn ? "AGEFIPH deduction" : "de déduction AGEFIPH"}
               </p>
             </motion.div>
           </div>
@@ -295,18 +322,38 @@ export default function SimulateurAgefiph() {
         <div className="mt-8 flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
           <Info className="h-4 w-4 text-white/60 mt-0.5 shrink-0" />
           <p className="text-xs text-white/60 font-googletexte leading-relaxed">
-            Estimation indicative basée sur le barème AGEFIPH 2025 (SMIC horaire : 11,88 €).
-            Le calcul réel dépend de facteurs complémentaires (ECAP, minorations, majorations).
-            Consultez le{" "}
-            <Link
-              href="https://www.agefiph.fr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lightblue underline"
-            >
-              simulateur officiel AGEFIPH
-            </Link>
-            . Attestation conforme aux articles L.5212-10-1 et D.5212-7 du Code du travail.
+            {isEn ? (
+              <>
+                Indicative estimate based on the 2025 AGEFIPH rate schedule
+                (hourly minimum wage: €11.88). The actual calculation depends on
+                additional factors (ECAP, reductions, surcharges). Consult the{" "}
+                <Link
+                  href="https://www.agefiph.fr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lightblue underline"
+                >
+                  official AGEFIPH simulator
+                </Link>
+                . Attestation compliant with articles L.5212-10-1 and D.5212-7
+                of the French Labor Code.
+              </>
+            ) : (
+              <>
+                Estimation indicative basée sur le barème AGEFIPH 2025 (SMIC horaire : 11,88 €).
+                Le calcul réel dépend de facteurs complémentaires (ECAP, minorations, majorations).
+                Consultez le{" "}
+                <Link
+                  href="https://www.agefiph.fr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lightblue underline"
+                >
+                  simulateur officiel AGEFIPH
+                </Link>
+                . Attestation conforme aux articles L.5212-10-1 et D.5212-7 du Code du travail.
+              </>
+            )}
           </p>
         </div>
       </div>

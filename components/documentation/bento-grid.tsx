@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CheckCircle, BookOpen, SearchCheck, Network, FileText, Layers, Code, Globe, Smartphone } from "lucide-react";
+import { useLocale } from "next-intl";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import type { Locale } from "@/i18n/routing";
 
-const defaultCards: BentoCardConfig[] = [
+const defaultCardsFr: BentoCardConfig[] = [
   {
     id: "headless-cms",
     title: "Comprendre le headless",
@@ -57,8 +59,58 @@ const defaultCards: BentoCardConfig[] = [
   },
 ];
 
-function InlineLearningPath() {
+const defaultCardsEn: BentoCardConfig[] = [
+  {
+    id: "headless-cms",
+    title: "Understanding headless",
+    description:
+      "Decoupled architecture, WordPress API, Next.js and deployment.",
+    icon: BookOpen,
+    href: "/documentation/headless-cms",
+    colSpan: "md:col-span-2",
+    rowSpan: "md:row-span-2",
+    gradient: "bg-mediumblue/40 backdrop-blur-xl border-lightblue/20",
+    textColor: "text-white",
+  },
+  {
+    id: "mind-map",
+    title: "Mind Map",
+    description: "Explore the headless architecture interactively.",
+    icon: Network,
+    href: "/documentation/mind-map",
+    colSpan: "md:col-span-1",
+    rowSpan: "",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-lightblue/20",
+    textColor: "text-extralightblue",
+  },
+  {
+    id: "audit-ia",
+    title: "AI migration audit",
+    description: "Analyze your site: performance, SEO and conversion.",
+    icon: SearchCheck,
+    href: "/audit-site-ia",
+    colSpan: "md:col-span-1",
+    rowSpan: "",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
+    textColor: "text-extralightblue",
+  },
+  {
+    id: "livre-blanc",
+    title: "White paper",
+    description: "Download the complete guide: what is Headless WordPress?",
+    icon: FileText,
+    href: "/ressources/livre_blanc_wp_headless.pdf",
+    colSpan: "md:col-span-3",
+    rowSpan: "",
+    gradient: "bg-darkblue/60 backdrop-blur-xl border-orange/20",
+    textColor: "text-white",
+    external: true,
+  },
+];
+
+function InlineLearningPath({ locale }: { locale: Locale }) {
   const { profileId, readArticles } = useDocumentationMode();
+  const isEn = locale === "en";
 
   if (!profileId) return null;
 
@@ -95,7 +147,7 @@ function InlineLearningPath() {
           <Icon className={cn("h-5 w-5", profile.accentColor)} />
         </div>
         <h2 className="font-googletitre text-xl md:text-2xl font-medium text-white">
-          Votre parcours {profile.label}
+          {isEn ? `Your ${profile.label} path` : `Votre parcours ${profile.label}`}
         </h2>
       </div>
 
@@ -184,15 +236,19 @@ function InlineLearningPath() {
 
 export function BentoGrid() {
   const { profileId } = useDocumentationMode();
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
 
   // When profile is active, skip the "Mon parcours" card (first one) — it's replaced by InlineLearningPath
   const cards = profileId
     ? BENTO_CONFIGS[profileId].filter((c) => !c.id.startsWith("parcours-"))
-    : defaultCards;
+    : isEn
+      ? defaultCardsEn
+      : defaultCardsFr;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-      {profileId && <InlineLearningPath />}
+      {profileId && <InlineLearningPath locale={locale} />}
       {cards.map((card, index) => {
         const Icon = card.icon;
         return (
@@ -231,11 +287,18 @@ export function BentoGrid() {
                 {!profileId && card.id === "headless-cms" && (
                   <div className="mt-5 space-y-5">
                     <div className="flex flex-col gap-3">
-                      {[
-                        { value: "2×", label: "plus rapide qu'un site classique" },
-                        { value: "100", label: "score Lighthouse accessible" },
-                        { value: "0", label: "plugin frontend à maintenir" },
-                      ].map((stat) => (
+                      {(isEn
+                        ? [
+                            { value: "2×", label: "faster than a standard site" },
+                            { value: "100", label: "achievable Lighthouse score" },
+                            { value: "0", label: "frontend plugins to maintain" },
+                          ]
+                        : [
+                            { value: "2×", label: "plus rapide qu'un site classique" },
+                            { value: "100", label: "score Lighthouse accessible" },
+                            { value: "0", label: "plugin frontend à maintenir" },
+                          ]
+                      ).map((stat) => (
                         <div key={stat.label} className="flex items-baseline gap-3">
                           <span className="text-3xl font-googletitre font-medium text-lightyellow">
                             {stat.value}
@@ -266,7 +329,7 @@ export function BentoGrid() {
                             <Smartphone className="h-4 w-4 text-lightblue" />
                           </div>
                         </div>
-                        <span className="text-xs text-white/50">Vos visiteurs</span>
+                        <span className="text-xs text-white/50">{isEn ? "Your visitors" : "Vos visiteurs"}</span>
                       </div>
                     </div>
                   </div>

@@ -1,0 +1,234 @@
+---
+title: Why use WordPress?
+description: When to use WordPress to create your website?
+category: wordpress
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+# The challenges WordPress addresses
+
+<StatGrid>
+  <StatCard value="43%" label="of the global web" description="WordPress powers nearly half of all websites in the world (source: W3Techs)" accent="blue" />
+  <StatCard value="55,000+" label="available plugins" description="The official wordpress.org repository lists more than 55,000 free extensions" accent="orange" />
+  <StatCard value="65%" label="of the CMS market" description="WordPress holds approximately 65% of the content management system market" accent="coral" />
+  <StatCard value="€0" label="platform cost" description="WordPress is open source software under GPL license, downloadable for free from wordpress.org" accent="blue" />
+</StatGrid>
+
+## Limit creation and maintenance costs
+
+WordPress stands out for its open-source business model: the software is free, and costs are limited to hosting (€3 to €30/month depending on the provider) and the domain name (around €10 to €15/year). The official repository offers thousands of free themes and plugins that cover common needs: contact forms (Contact Form 7), SEO optimization (Yoast SEO), security (Wordfence), caching (WP Super Cache). Premium versions of these tools, when necessary, remain at prices significantly lower than the cost of equivalent custom development.
+
+In addition, the WordPress admin interface allows site managers to perform routine tasks themselves (publishing content, adding pages, updating images), which reduces dependence on a technical service provider for editorial maintenance operations.
+
+## Management autonomy
+
+One of WordPress's strengths is the autonomy it gives site managers. The dashboard centralizes the management of content (articles, pages, media), users (with a role system: Administrator, Editor, Author, Contributor, Subscriber), extensions and site settings. The Gutenberg block editor allows composing layouts with native blocks (text, image, gallery, columns, buttons) without writing HTML.
+
+This autonomy reduces recurring editorial maintenance costs and speeds up the publishing cycle: a writer can create, proofread and publish an article without technical intervention.
+
+## Native search engine optimization (SEO)
+
+WordPress natively generates structured HTML compatible with search engine requirements: semantic tags (`<article>`, `<header>`, `<nav>`), hierarchical heading structure (H1 > H2 > H3), and customizable permalinks based on the article title (`/%postname%/`). The CMS automatically generates RSS feeds and supports pingbacks/trackbacks for netlinking.
+
+SEO plugins like Yoast SEO or Rank Math add advanced features: customization of `<title>` and `<meta description>` tags per page, XML sitemap generation, injection of schema.org structured data (Article, BreadcrumbList, FAQ, Product), readability analysis and verification of target keyword usage. These plugins allow submitting the sitemap directly to Google Search Console from the WordPress admin.
+
+## Autonomous site management
+
+WordPress clearly separates content from presentation thanks to its theme + plugins architecture. Site managers can modify content, add new pages, update navigation menus and manage media (images, PDF files, videos) from the dashboard, without accessing the source code or server files.
+
+The Roles and Capabilities system makes it possible to define precisely who can publish, modify or delete content. A plugin like Members or User Role Editor allows creating custom roles with granular permissions, which is useful for sites managed by multiple contributors.
+
+## Scalability and modular architecture
+
+WordPress's architecture is based on a lean core to which features are added through plugins and themes. This modularity allows growing a site progressively: a blog can integrate an online store via WooCommerce, a member area via MemberPress, a forum via bbPress, or an LMS (Learning Management System) via LearnDash -- all without overhauling what already exists.
+
+WordPress's MySQL/MariaDB database supports significant content volumes (several tens of thousands of articles and pages). For high-traffic sites, adding an object cache (Redis or Memcached), a CDN and hosting with adapted server resources allows maintaining short response times.
+
+<HighlightBox title="Summary of WordPress's technical strengths" accent="blue">
+**Open source and free**: GPL license, accessible source code, no licensing fees.
+**Editorial autonomy**: centralized dashboard, Gutenberg block editor, role system.
+**Native SEO**: semantic HTML, customizable permalinks, compatibility with advanced SEO plugins.
+**Modular architecture**: 55,000+ plugins to add features without modifying the core.
+**Scalability**: from blog to e-commerce site, the architecture supports growth through caching, CDN and server optimization.
+</HighlightBox>
+
+# Technical characteristics
+
+WordPress is a CMS (Content Management System) written in PHP, which stores its data in a MySQL or MariaDB database. Its architecture is based on four main components: the core (software kernel), themes (presentation layer), plugins (functional extensions) and the database. This architecture makes it possible to separate application logic, presentation and content.
+
+WordPress's internal API (Plugin API, Theme API, REST API, Settings API, Options API) provides standardized entry points to extend the CMS. The REST API in particular exposes content through JSON endpoints, which makes it possible to use WordPress as a backend (back-office) for JavaScript front-end applications (headless architecture).
+
+## Features
+
+The WordPress core includes the following features, which form the basis of any WordPress site.
+
+### Structured content management
+
+The Gutenberg block editor allows composing pages and articles from typed blocks: paragraph, heading, image, gallery, list, quote, table, columns, group, buttons, custom HTML. Each block is configurable individually (alignment, colors, spacing). The content is stored in HTML in the `wp_posts` table of the database.
+
+WordPress natively supports two content types: posts and pages. Developers can register Custom Post Types and custom taxonomies through the `register_post_type()` and `register_taxonomy()` functions, which makes it possible to structure specific content (products, events, testimonials, projects).
+
+### Customization through themes
+
+Themes define the site's presentation layer: PHP templates, CSS stylesheets, JavaScript files and, for block themes, the `theme.json` file that centralizes design settings (colors, typographies, spacing). The WordPress.org repository offers thousands of free themes. Premium themes available on marketplaces (ThemeForest, independent publishers) offer advanced customization options and dedicated technical support.
+
+### Extensibility through plugins
+
+The plugin system relies on WordPress hooks (actions and filters). Actions allow executing code at specific points in the CMS lifecycle (`init`, `wp_enqueue_scripts`, `save_post`). Filters allow modifying data before display or saving (`the_content`, `the_title`, `wp_mail`). With more than 55,000 plugins on the official repository, the use cases covered range from SEO to e-commerce, including security, caching, forms, multilingual support and integration of third-party services.
+
+### Security and user management
+
+WordPress includes a role system with five default roles (Administrator, Editor, Author, Contributor, Subscriber), each associated with a set of capabilities (permissions). Core security updates are released regularly and can be applied automatically through the `WP_AUTO_UPDATE_CORE` constant. Security plugins (Wordfence, iThemes Security) add a WAF (Web Application Firewall), a malware scanner and protection against brute-force attacks.
+
+### Adaptability to different types of projects
+
+WordPress is used for blogs, corporate sites, online stores (via WooCommerce), portfolios, membership sites (via MemberPress), forums (via bbPress), e-learning platforms (via LearnDash) and multilingual sites (via WPML or Polylang). This versatility is based on the combination of the core, themes and plugins.
+
+## Main advantages of WordPress
+
+### Accessible admin interface
+
+The WordPress dashboard organizes features by sections: Posts, Pages, Media, Comments, Appearance, Plugins, Users, Settings. Each section has a consistent interface with standardized forms. The Gutenberg block editor offers real-time visual editing, with a preview of the final layout without leaving the editor.
+
+### Flexibility of use
+
+A single WordPress site can simultaneously serve as a blog, a showcase site, an online store and a member area. The declaration of Custom Post Types and custom taxonomies makes it possible to structure any type of content. Page builders (Elementor, Beaver Builder) and the block editor make it possible to create varied layouts without writing front-end code.
+
+### Catalog of themes and plugins
+
+The WordPress.org repository is the largest catalog of extensions for a CMS. Each submitted plugin and theme goes through a review process that verifies compliance with WordPress guidelines (security, GPL license, code quality). Premium plugins and themes, distributed by independent publishers, complete the offer with advanced features and dedicated support.
+
+### Open-source license (GPL)
+
+WordPress is distributed under the GPLv2 license (GNU General Public License). This license guarantees four freedoms: use the software, study its source code, modify it and distribute the modifications. In practice, this means there are no licensing fees, the code is auditable by anyone, and the durability of the project does not depend on a single publisher.
+
+### Native and extensible SEO
+
+WordPress's HTML structure complies with Google's recommendations: semantic tags, consistent heading structure, readable permalinks. SEO plugins add control of meta tags, the XML sitemap, structured data and content analysis. WordPress also supports WebP image format and native lazy loading, two factors that contribute to Core Web Vitals (user performance metrics measured by Google).
+
+### Community and resources
+
+The WordPress community is one of the largest in the open-source ecosystem. It maintains official documentation on developer.wordpress.org, organizes regular events (WordCamps, local meetups) and contributes to core development through collaborative sprints. The WordPress.org support forums, Stack Overflow (`wordpress` tag) and specialized groups form a permanent technical mutual-assistance network.
+
+### Role and access management
+
+WordPress's role and capabilities system allows granular permission control. The Administrator has access to all features; the Editor can manage all content; the Author can only manage their own posts; the Contributor can write but not publish; the Subscriber can only manage their profile. Plugins like Members allow creating custom roles with personalized permissions.
+
+### Responsive design by default
+
+All themes in the official WordPress.org repository must be responsive (adaptive to different screen sizes) to be accepted. Premium themes follow the same requirement. Google uses mobile-first indexing, which means the mobile version of the site serves as the reference for ranking. A responsive theme is therefore a prerequisite for SEO.
+
+### Scalability and security
+
+WordPress supports sites ranging from a few pages to several hundred thousand contents. Adding an object cache (Redis), a CDN (Cloudflare) and hosting with adapted resources allows handling significant traffic peaks. Regular core security updates, combined with security plugins and best server practices (SSL certificate, security headers, restricted access to `wp-admin`), cover the main attack vectors.
+
+## Main disadvantages of WordPress
+
+### Frequent updates to manage
+
+WordPress, themes and plugins regularly publish updates (security fixes, new features, PHP compatibility). These updates are necessary but can introduce regressions if they are not tested in a staging environment (pre-production) before being applied in production. A systematic testing process is recommended, especially for e-commerce sites or sites with many plugins.
+
+### Attack surface tied to popularity
+
+WordPress powers 43% of the web, which makes it the main target of automated attacks (brute-force bots on `wp-login.php`, exploitation of vulnerabilities in obsolete plugins, SQL injection). Essential security measures include: systematic updates, security plugin with WAF, two-factor authentication (2FA), strong passwords, IP-restricted access to `wp-admin`, and regular backups.
+
+### Regular technical maintenance
+
+A WordPress site in production requires regular maintenance: core, theme and plugin updates, database optimization (deletion of revisions, expired transients, spam comments), monitoring of response times and 500 errors, verification of backups. This maintenance can be done manually or delegated to a WordPress maintenance service (WP Maintainer, Jetalogy, MainWP).
+
+### Plugin-related risks
+
+Each plugin adds PHP code executed on each server request. A poorly coded plugin can introduce security flaws, slow SQL queries or conflicts with other plugins. Unmaintained plugins (no update for more than 12 months) become vectors of vulnerability. Rigorous plugin selection and limiting their number are essential practices.
+
+### Advanced customization requiring code
+
+Modifications that go beyond theme and plugin options (custom templates, Custom Post Types, API integrations, specific business logic) require skills in PHP, HTML, CSS and JavaScript. Creating a child theme is the recommended method to override parent theme templates and styles without losing changes during updates.
+
+### Learning curve for advanced features
+
+Getting started with WordPress for content publishing is fast. On the other hand, mastering theme development, plugins, the REST API, Full Site Editing and WP-CLI (the WordPress command-line interface) requires an investment in training. The official documentation on developer.wordpress.org and specialized online courses are the reference resources for this skill development.
+
+## Prerequisites for a quality WordPress site
+
+### Suitable hosting
+
+Hosting optimized for WordPress (PHP 8+, MySQL 8 or MariaDB 10.4+, OPcache, HTTP/2, GZIP/Brotli) is the technical foundation of the site. Specialized hosts (Kinsta, WPServeur, Cloudways) offer as standard: SSL/TLS certificate, daily backups, staging environment, server cache and WordPress-specific technical support.
+
+### Rigorous selection of themes and plugins
+
+Each installed theme and plugin must be evaluated on: date of last update, number of active installations, average rating, declared compatibility with your version of WordPress, and quality of support. Themes and plugins from unverified sources (nulled versions, unofficial download sites) present a major security risk.
+
+### SEO configuration
+
+The initial SEO configuration includes: the permalink structure (`/%postname%/`), the installation of an SEO plugin (Yoast SEO or Rank Math), submission of the XML sitemap to Google Search Console, configuration of default meta tags, and setting up internal linking. This basic configuration is a prerequisite for proper site indexing.
+
+### Maintenance plan
+
+A maintenance plan includes: updates (weekly or biweekly, in staging then in production), automated backups (daily for the database, weekly for files), uptime monitoring, periodic database optimization and review of PHP error logs.
+
+### Performance optimization
+
+Performance optimization is based on: a cache plugin (WP Rocket, LiteSpeed Cache), image compression and conversion to WebP (Imagify, ShortPixel), minification and concatenation of CSS/JS files (Autoptimize), deferred image loading (native lazy loading), and a CDN (Cloudflare, BunnyCDN) to distribute static files.
+
+### Training or technical support
+
+For complex projects (e-commerce with WooCommerce, multilingual site, API integrations), support from a WordPress developer or a specialized agency makes it possible to avoid initial architectural mistakes and accelerate go-live. Certified WordPress training covers administration, theme and plugin development, and performance optimization.
+
+<ComparisonTable
+  headers={["WordPress", "Hosted CMS (Wix, Squarespace...)"]}
+  rows={[
+    { label: "Platform cost", left: "Free (open source, GPL license)", right: "Monthly subscriptions (€12-€40/month)" },
+    { label: "Customization", left: "Unlimited (access to PHP, CSS, JS code + 55,000 plugins)", right: "Limited to editor options" },
+    { label: "SEO", left: "Native semantic HTML + advanced SEO plugins (Yoast, Rank Math)", right: "Basic built-in SEO options" },
+    { label: "Plugins / Extensions", left: "55,000+ plugins on the official repository", right: "Limited proprietary marketplace" },
+    { label: "Data ownership", left: "100% owned (database and files on your server)", right: "Data hosted on the platform's servers" },
+    { label: "Learning curve", left: "Moderate (more technical for advanced features)", right: "Low (drag-and-drop editor)" },
+    { label: "Scalability", left: "High (from blog to e-commerce, modular architecture)", right: "Limited by the subscribed plan" },
+    { label: "Community", left: "Global open-source community, official documentation, WordCamps", right: "Publisher support only" }
+  ]}
+  highlight="left"
+/>
+
+# Examples of WordPress use
+
+## Blogging and content publishing
+
+WordPress was initially designed as an article publishing platform (blog). Its system of posts, categories, tags and RSS feeds is optimized for this use case. The Yoast SEO and Jetpack plugins respectively add on-page SEO optimization and automated sharing on social media. Content-oriented themes like Astra, Neve and GeneratePress offer Article and Archive templates designed for readability and performance.
+
+## Showcase sites for SMEs and freelancers
+
+WordPress allows creating a professional showcase site with static pages (Home, Services, About, Contact), a contact form (WPForms or Contact Form 7) and possibly a blog for content marketing. Page builders (Elementor, Beaver Builder) make it possible to create custom layouts without writing HTML/CSS code. The Events Calendar plugin adds event management with an integrated calendar.
+
+## E-commerce with WooCommerce
+
+WooCommerce, with more than 5 million active installations, is the most-used e-commerce plugin in the world. It manages the product catalog (simple, variable, grouped, virtual products), the cart, the checkout flow, payment gateways (Stripe, PayPal, bank transfer), shipping cost calculation and inventory management. The WooCommerce Subscriptions, WooCommerce Bookings and WooCommerce Memberships extensions cover subscription, booking and membership models.
+
+## Portfolios and creative sites
+
+Custom Post Types make it possible to create a "Project" or "Work" content type with custom fields (client, date, technologies used, link to the site). Portfolio-oriented themes (Flavor, Flavor Developer) and gallery plugins (Envira Gallery, FooGallery) allow displaying work with filterable grids, lightboxes and CSS animations.
+
+## Associations and NGOs
+
+The GiveWP and Charitable plugins add online donation forms with campaign and donor tracking. The Modern Events Calendar plugin allows managing and promoting events with online registration. WordPress Multisite makes it possible to manage multiple sites (regional sections, separate projects) from a single WordPress installation.
+
+These examples illustrate WordPress's versatility as a CMS. The plugin and theme ecosystem makes it possible to adapt the CMS to varied use cases, from personal blog to e-commerce site through associative platforms.
+
+# In summary
+
+WordPress remains a relevant platform for the majority of web projects, provided you invest in rigorous configuration, regular maintenance and performance optimization. Its open-source model, its ecosystem of more than 55,000 plugins, its international community and its modular architecture make it the most-used CMS in the world. The main points of attention remain security (updates, quality plugins, best server practices), performance (caching, CDN, image optimization) and rigorous selection of themes and plugins.
+
+For simple projects (blog, showcase site), WordPress is operational in a few hours with a free theme and a handful of plugins. For complex projects (e-commerce, multilingual, API integrations), technical support and a maintenance plan are recommended to ensure long-term site stability and performance.
+
+<Quiz
+  question="What is WordPress's market share among CMS (content management systems)?"
+  options={[
+    "Around 25%",
+    "Around 43%",
+    "Around 65%",
+    "Around 80%"
+  ]}
+  answer={2}
+  explanation="WordPress holds approximately 65% of the CMS (content management systems) market. It powers nearly 43% of all websites in the world. These figures come from W3Techs, which analyzes the technologies used by the most-visited websites."
+/>

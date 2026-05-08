@@ -6,6 +6,8 @@ import { X, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { ProfileType, PainPoint, BudgetRange, SiteType } from "./step-result";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 interface ContactModalProps {
   open: boolean;
@@ -46,6 +48,7 @@ const siteTypeLabels: Record<SiteType, string> = {
 };
 
 export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
+  const locale = useLocale() as Locale;
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,6 +69,7 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
       ]
         .filter(Boolean)
         .join("\n"),
+      locale,
     };
 
     try {

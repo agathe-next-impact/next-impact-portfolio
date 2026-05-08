@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,6 +19,7 @@ export function GlobalProfileSwitcher() {
   const { profileId, setProfile, clearProfile } = useDocumentationMode();
   const currentProfile = profileId ? PROFILES[profileId] : null;
   const CurrentIcon = currentProfile?.icon;
+  const t = useTranslations("profileSwitcher");
 
   return (
     <DropdownMenu>
@@ -34,7 +36,7 @@ export function GlobalProfileSwitcher() {
             <CurrentIcon className={cn("h-4 w-4", currentProfile?.accentColor)} />
           )}
           <span className="text-inherit">
-            {currentProfile?.label || "Votre profil"}
+            {currentProfile ? t(`${currentProfile.id}.label`) : t("defaultLabel")}
           </span>
           <ChevronDown className="h-3.5 w-3.5 opacity-50" />
         </button>
@@ -60,10 +62,10 @@ export function GlobalProfileSwitcher() {
               <Icon className={cn("h-4 w-4", profile.accentColor)} />
               <div>
                 <div className="text-sm font-medium font-googletexte text-inherit">
-                  {profile.label}
+                  {t(`${id}.label`)}
                 </div>
                 <div className="text-xs text-white/80 font-googletexte line-clamp-1">
-                  {profile.description}
+                  {t(`${id}.description`)}
                 </div>
               </div>
             </DropdownMenuItem>
@@ -78,7 +80,7 @@ export function GlobalProfileSwitcher() {
             >
               <X className="h-4 w-4" />
               <span className="text-sm font-googletexte text-inherit">
-                Reinitialiser le profil
+                {t("resetProfile")}
               </span>
             </DropdownMenuItem>
           </>

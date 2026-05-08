@@ -12,6 +12,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../ui/dialog";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 
 interface GeminiSearchProps {
@@ -22,6 +24,8 @@ interface GeminiSearchProps {
 }
 
 export default function GeminiSearch({ onResult, prompt, systemInstruction, defaultUrl }: GeminiSearchProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   const [url, setUrl] = useState(defaultUrl || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,11 +64,15 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
   const validateUrl = (): boolean => {
     const trimmedUrl = url.trim();
     if (!trimmedUrl) {
-      setError("Veuillez saisir une URL");
+      setError(isEn ? "Please enter a URL" : "Veuillez saisir une URL");
       return false;
     }
     if (!trimmedUrl.match(/^https?:\/\/.+/)) {
-      setError("L'URL doit commencer par http:// ou https://");
+      setError(
+        isEn
+          ? "The URL must start with http:// or https://"
+          : "L'URL doit commencer par http:// ou https://",
+      );
       return false;
     }
     setError(null);
@@ -85,13 +93,21 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
       if (res.status === 429) {
         const data = await res.json();
-        setError(data.error || "Service temporairement indisponible, veuillez réessayer.");
+        setError(
+          data.error ||
+            (isEn
+              ? "Service temporarily unavailable, please try again."
+              : "Service temporairement indisponible, veuillez réessayer."),
+        );
         return;
       }
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Erreur lors de la détection du CMS");
+        setError(
+          data.error ||
+            (isEn ? "CMS detection error" : "Erreur lors de la détection du CMS"),
+        );
         return;
       }
 
@@ -107,7 +123,9 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
         setShowNotWordPress(true);
       }
     } catch (err: any) {
-      setError(err.message || "Erreur lors de la détection du CMS");
+      setError(
+        err.message || (isEn ? "CMS detection error" : "Erreur lors de la détection du CMS"),
+      );
     } finally {
       setCmsDetecting(false);
     }
@@ -147,14 +165,17 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       });
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || "Erreur lors de l'appel à Gemini");
+        throw new Error(
+          errorData.error ||
+            (isEn ? "Error calling Gemini" : "Erreur lors de l'appel à Gemini"),
+        );
       }
       const data = await res.json();
       setResult(data);
       onResult(data);
       setShowResultPage(true);
     } catch (err: any) {
-      setError(err.message || "Erreur inconnue");
+      setError(err.message || (isEn ? "Unknown error" : "Erreur inconnue"));
     } finally {
       setLoading(false);
     }
@@ -172,7 +193,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               htmlFor="gemini_url"
               className="font-googletexte text-white/80 "
             >
-              URL WordPress à analyser
+              {isEn ? "WordPress URL to analyze" : "URL WordPress à analyser"}
             </label>
           </div>
           <input
@@ -192,7 +213,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             className="bg-coral text-darkblue px-6 py-2 text-xl font-googletitre font-semibold flex items-center justify-center transition-all duration-300"
             disabled={loading || cmsDetecting || !url.trim()}
           >
-            Lancer l&apos;analyse
+            {isEn ? "Run analysis" : "Lancer l'analyse"}
             <span className="ml-2 flex items-center text-darkblue">
               <ArrowRight className="size-5"/>
             </span>
@@ -200,13 +221,17 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           {error && <div className="text-red-500">{error}</div>}
           {optinRefused && (
             <div className="bg-amber-50 border border-amber-300 text-amber-800 rounded-xl px-4 py-3 text-sm font-googletexte flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <span>Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé.</span>
+              <span>
+                {isEn
+                  ? "Your contact details are required to receive your personalized audit."
+                  : "Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé."}
+              </span>
               <button
                 type="button"
                 onClick={() => { setOptinRefused(false); setShowOptin(true); }}
                 className="shrink-0 bg-coral text-darkblue font-semibold px-4 py-1.5 rounded-full text-sm transition-all duration-300"
               >
-                Remplir mes coordonnées
+                {isEn ? "Enter my details" : "Remplir mes coordonnées"}
               </button>
             </div>
           )}
@@ -217,7 +242,9 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       {cmsDetecting && (
         <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6">
           <Loader2 className="size-8 animate-spin text-coral mb-4" />
-          <p className="text-white/80 font-googletexte text-lg">Vérification du CMS en cours...</p>
+          <p className="text-white/80 font-googletexte text-lg">
+            {isEn ? "Detecting CMS…" : "Vérification du CMS en cours..."}
+          </p>
         </div>
       )}
 
@@ -227,16 +254,18 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           <DialogHeader>
             <DialogTitle className="text-white font-googletitre text-xl flex items-center gap-2">
               <ShieldCheck className="size-5 text-coral" />
-              Avant de lancer l&apos;audit
+              {isEn ? "Before running the audit" : "Avant de lancer l'audit"}
             </DialogTitle>
             <DialogDescription className="text-white/70 font-googletexte">
-              WordPress monolithique détecté. Renseignez vos coordonnées pour recevoir votre rapport d&apos;audit complet.
+              {isEn
+                ? "Monolithic WordPress detected. Enter your contact details to receive your full audit report."
+                : "WordPress monolithique détecté. Renseignez vos coordonnées pour recevoir votre rapport d'audit complet."}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleOptinSubmit} className="flex flex-col gap-4 mt-2">
             <div className="flex flex-col gap-1">
               <label htmlFor="optin_name" className="text-white/80 text-sm font-googletexte">
-                Nom <span className="text-coral">*</span>
+                {isEn ? "Name" : "Nom"} <span className="text-coral">*</span>
               </label>
               <input
                 id="optin_name"
@@ -244,26 +273,27 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
                 value={optinName}
                 onChange={(e) => setOptinName(e.target.value)}
                 required
-                placeholder="Votre nom"
+                placeholder={isEn ? "Your name" : "Votre nom"}
                 className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-coral"
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="optin_company" className="text-white/80 text-sm font-googletexte">
-                Entreprise <span className="text-white/40 text-xs">(optionnel)</span>
+                {isEn ? "Company" : "Entreprise"}{" "}
+                <span className="text-white/40 text-xs">{isEn ? "(optional)" : "(optionnel)"}</span>
               </label>
               <input
                 id="optin_company"
                 type="text"
                 value={optinCompany}
                 onChange={(e) => setOptinCompany(e.target.value)}
-                placeholder="Votre entreprise"
+                placeholder={isEn ? "Your company" : "Votre entreprise"}
                 className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-coral"
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="optin_email" className="text-white/80 text-sm font-googletexte">
-                Email <span className="text-coral">*</span>
+                {isEn ? "Email" : "Email"} <span className="text-coral">*</span>
               </label>
               <input
                 id="optin_email"
@@ -271,7 +301,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
                 value={optinEmail}
                 onChange={(e) => setOptinEmail(e.target.value)}
                 required
-                placeholder="votre@email.com"
+                placeholder={isEn ? "you@email.com" : "votre@email.com"}
                 className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-coral"
               />
             </div>
@@ -279,11 +309,13 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               type="submit"
               className="bg-coral text-darkblue font-googletitre font-semibold mt-2 transition-all duration-300"
             >
-              Lancer l&apos;analyse
+              {isEn ? "Run analysis" : "Lancer l'analyse"}
               <ArrowRight className="ml-2 size-4" />
             </Button>
             <p className="text-white/40 text-xs text-center font-googletexte">
-              Vos données sont utilisées uniquement pour vous envoyer votre rapport.
+              {isEn
+                ? "Your data is used only to send you your report."
+                : "Vos données sont utilisées uniquement pour vous envoyer votre rapport."}
             </p>
           </form>
         </DialogContent>
@@ -295,29 +327,43 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           <DialogHeader>
             <DialogTitle className="text-white font-googletitre text-xl flex items-center gap-2">
               <AlertTriangle className="size-5 text-orange" />
-              Site non WordPress monolithique
+              {isEn ? "Not a monolithic WordPress site" : "Site non WordPress monolithique"}
             </DialogTitle>
             <DialogDescription className="text-white/70 font-googletexte">
               {detectedCms
-                ? `Le site analysé utilise ${detectedCms} et non WordPress monolithique.`
-                : "Aucun CMS WordPress monolithique n'a été détecté sur ce site."}
+                ? isEn
+                  ? `The analyzed site uses ${detectedCms} rather than monolithic WordPress.`
+                  : `Le site analysé utilise ${detectedCms} et non WordPress monolithique.`
+                : isEn
+                  ? "No monolithic WordPress CMS was detected on this site."
+                  : "Aucun CMS WordPress monolithique n'a été détecté sur ce site."}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 mt-2">
             <p className="text-white/60 text-sm font-googletexte">
-              Notre audit de migration headless est spécifiquement conçu pour les sites WordPress monolithiques.
+              {isEn
+                ? "Our headless migration audit is specifically designed for monolithic WordPress sites."
+                : "Notre audit de migration headless est spécifiquement conçu pour les sites WordPress monolithiques."}
               {detectedCms && detectedCms !== "WordPress" && (
-                <> Votre site semble utiliser <strong className="text-white/80">{detectedCms}</strong>.</>
+                <>
+                  {isEn ? " Your site appears to use " : " Votre site semble utiliser "}
+                  <strong className="text-white/80">{detectedCms}</strong>.
+                </>
               )}
               {!detectedCms && (
-                <> Le CMS utilisé par ce site n&apos;a pas pu être identifié, ou il ne s&apos;agit pas d&apos;un CMS standard.</>
+                <>
+                  {" "}
+                  {isEn
+                    ? "The CMS used by this site could not be identified, or it isn't a standard CMS."
+                    : "Le CMS utilisé par ce site n'a pas pu être identifié, ou il ne s'agit pas d'un CMS standard."}
+                </>
               )}
             </p>
             <Button
               onClick={() => setShowNotWordPress(false)}
               className="bg-coral text-darkblue font-googletitre font-semibold transition-all duration-300"
             >
-              Compris
+              {isEn ? "Got it" : "Compris"}
             </Button>
           </div>
         </DialogContent>
@@ -326,13 +372,23 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       {loading && (
         <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6">
           <TypewriterLoading
-            messages={[
-              "Analyse en cours...",
-              "C'est un peu long...",
-              "C'est détaillé...",
-              "C'est personnalisé...",
-              "Presque fini...",
-            ]}
+            messages={
+              isEn
+                ? [
+                    "Running analysis…",
+                    "It takes a moment…",
+                    "It's detailed…",
+                    "It's personalized…",
+                    "Almost done…",
+                  ]
+                : [
+                    "Analyse en cours...",
+                    "C'est un peu long...",
+                    "C'est détaillé...",
+                    "C'est personnalisé...",
+                    "Presque fini...",
+                  ]
+            }
             speed={40}
             className="h-6 mt-12 text-2xl"
           />

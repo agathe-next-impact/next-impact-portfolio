@@ -7,6 +7,8 @@ import { VideoEmbed } from "@/components/documentation/video-embed";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 import {
   MousePointerClick,
   Layers,
@@ -16,11 +18,11 @@ import {
   Smartphone,
   PlayCircle,
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 // ─── Video data ────────────────────────────────────────────────────────────
 
-const VIDEOS = {
+const VIDEOS_FR = {
   plateforme: {
     url: "https://youtu.be/I1qi5o31Lnk",
     title: "Billeterie événementielle — WordPress Headless Next.js",
@@ -39,19 +41,48 @@ const VIDEOS = {
   },
 };
 
+const VIDEOS_EN = {
+  plateforme: {
+    url: "https://youtu.be/I1qi5o31Lnk",
+    title: "Event ticketing — Headless WordPress + Next.js",
+  },
+  cdf: {
+    url: "https://youtu.be/6vUSbG6F50w",
+    title: "Comme des Fous — Headless participatory media",
+  },
+  doleances: {
+    url: "https://youtu.be/_OjiGiOWJus",
+    title: "Doléances — Headless citizen platform",
+  },
+  egc: {
+    url: "https://youtu.be/dJIndpLBm7o",
+    title: "États Généraux Communaux — Headless platform",
+  },
+};
+
 // ─── Mini button playground (compact) ──────────────────────────────────────
 
 type ButtonVariant = "default" | "outline" | "secondary" | "ghost";
 
-const variants: { label: string; value: ButtonVariant }[] = [
+const variantsFr: { label: string; value: ButtonVariant }[] = [
   { label: "Primaire", value: "default" },
   { label: "Secondaire", value: "secondary" },
   { label: "Contour", value: "outline" },
   { label: "Fantôme", value: "ghost" },
 ];
 
+const variantsEn: { label: string; value: ButtonVariant }[] = [
+  { label: "Primary", value: "default" },
+  { label: "Secondary", value: "secondary" },
+  { label: "Outline", value: "outline" },
+  { label: "Ghost", value: "ghost" },
+];
+
 function MiniButtonPlayground() {
   const [variant, setVariant] = useState<ButtonVariant>("default");
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const variants = isEn ? variantsEn : variantsFr;
 
   return (
     <div className="space-y-4">
@@ -63,7 +94,7 @@ function MiniButtonPlayground() {
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
           <Button variant={variant} size="lg">
-            Cliquez-moi
+            {isEn ? "Click me" : "Cliquez-moi"}
           </Button>
         </motion.div>
       </div>
@@ -90,6 +121,8 @@ function MiniButtonPlayground() {
 // ─── Architecture visuelle headless ────────────────────────────────────────
 
 function HeadlessArchitectureVisual() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   return (
     <div className="flex items-center justify-center gap-3 md:gap-4 py-4">
       <div className="flex flex-col items-center gap-2">
@@ -122,7 +155,7 @@ function HeadlessArchitectureVisual() {
           </div>
         </div>
         <span className="text-xs text-white/80 font-googletexte">
-          Vos visiteurs
+          {isEn ? "Your visitors" : "Vos visiteurs"}
         </span>
       </div>
     </div>
@@ -132,16 +165,28 @@ function HeadlessArchitectureVisual() {
 // ─── Code snippet ──────────────────────────────────────────────────────────
 
 function CodeSnippet() {
-  return (
-    <pre className="rounded-2xl bg-darkblue/60 border border-lightblue/10 p-4 text-xs text-extralightblue/80 font-mono overflow-x-auto leading-relaxed">
-      <code>{`// Fetch WordPress via API REST
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const code = isEn
+    ? `// Fetch WordPress via REST API
+const res = await fetch(
+  'https://cms.example.com/wp-json/wp/v2/posts'
+);
+const posts = await res.json();
+
+// Next.js rendering with ISR
+export const revalidate = 3600;`
+    : `// Fetch WordPress via API REST
 const res = await fetch(
   'https://cms.example.com/wp-json/wp/v2/posts'
 );
 const posts = await res.json();
 
 // Rendu Next.js avec ISR
-export const revalidate = 3600;`}</code>
+export const revalidate = 3600;`;
+  return (
+    <pre className="rounded-2xl bg-darkblue/60 border border-lightblue/10 p-4 text-xs text-extralightblue/80 font-mono overflow-x-auto leading-relaxed">
+      <code>{code}</code>
     </pre>
   );
 }
@@ -179,6 +224,8 @@ function DemoCard({ icon, title, children, className }: DemoCardProps) {
 export function DemoShowcase() {
   const { profileId } = useDocumentationMode();
   const profile = profileId ? PROFILES[profileId] : null;
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
 
   return (
     <section className="relative mt-12">
@@ -195,19 +242,29 @@ export function DemoShowcase() {
         <div className="flex items-end justify-between mb-6">
           <div>
             <h2 className="font-googletitre text-2xl md:text-4xl font-medium text-white mb-1">
-              {profileId ? "Démo interactive" : "Voir en action"}
+              {profileId
+                ? isEn
+                  ? "Interactive demo"
+                  : "Démo interactive"
+                : isEn
+                  ? "See it in action"
+                  : "Voir en action"}
             </h2>
             <p className="text-sm text-white/80 font-googletexte">
               {profileId
-                ? `Vidéos et composants adaptés à votre profil ${profile?.label}.`
-                : "Vidéos de projets réels et composants interactifs."}
+                ? isEn
+                  ? `Videos and components for your ${profile?.label} profile.`
+                  : `Vidéos et composants adaptés à votre profil ${profile?.label}.`
+                : isEn
+                  ? "Real project videos and interactive components."
+                  : "Vidéos de projets réels et composants interactifs."}
             </p>
           </div>
           <Link
             href="/documentation/playground"
             className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-darkblue/50 border border-lightblue/10 px-3 py-1.5 text-xs text-white/80 hover:text-white/80 hover:border-lightblue/20 transition-all duration-300 font-googletexte shrink-0"
           >
-            Tous les playground
+            {isEn ? "All playgrounds" : "Tous les playground"}
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -235,13 +292,16 @@ export function DemoShowcase() {
 // ─── Demo layouts per profile ──────────────────────────────────────────────
 
 function DefaultDemos() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
     <div className="space-y-4">
       {/* Row 1: Video + Architecture */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DemoCard
           icon={<PlayCircle className="h-5 w-5 text-regularblue" />}
-          title="WordPress Headless en action"
+          title={isEn ? "Headless WordPress in action" : "WordPress Headless en action"}
         >
           <VideoEmbed
             url={VIDEOS.plateforme.url}
@@ -251,12 +311,13 @@ function DefaultDemos() {
 
         <DemoCard
           icon={<Layers className="h-5 w-5 text-orange" />}
-          title="Architecture headless"
+          title={isEn ? "Headless architecture" : "Architecture headless"}
         >
           <HeadlessArchitectureVisual />
           <p className="text-xs text-white/80 font-googletexte mt-3">
-            WordPress gère le contenu, Next.js gère l&apos;affichage. Résultat :
-            un site rapide, sécurisé et flexible.
+            {isEn
+              ? "WordPress handles content, Next.js handles rendering. Result: a fast, secure and flexible site."
+              : "WordPress gère le contenu, Next.js gère l'affichage. Résultat : un site rapide, sécurisé et flexible."}
           </p>
         </DemoCard>
       </div>
@@ -278,13 +339,16 @@ function DefaultDemos() {
 }
 
 function DecideurDemos() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
     <div className="space-y-4">
       {/* Row 1: Featured video + key numbers */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <DemoCard
           icon={<PlayCircle className="h-5 w-5 text-orange" />}
-          title="Plateforme en production"
+          title={isEn ? "Production platform" : "Plateforme en production"}
           className="md:col-span-3"
         >
           <VideoEmbed
@@ -292,21 +356,30 @@ function DecideurDemos() {
             title={VIDEOS.plateforme.title}
           />
           <p className="text-xs text-white/80 font-googletexte mt-3">
-            Billeterie événementielle propulsée par WordPress Headless + Next.js.
+            {isEn
+              ? "Event ticketing platform powered by Headless WordPress + Next.js."
+              : "Billeterie événementielle propulsée par WordPress Headless + Next.js."}
           </p>
         </DemoCard>
 
         <DemoCard
           icon={<Globe className="h-5 w-5 text-orange" />}
-          title="Pourquoi ça change tout"
+          title={isEn ? "Why it changes everything" : "Pourquoi ça change tout"}
           className="md:col-span-2"
         >
           <div className="space-y-4 mt-2">
-            {[
-              { value: "2×", label: "plus rapide qu'un site classique" },
-              { value: "100", label: "score Lighthouse accessible" },
-              { value: "0", label: "plugin frontend à maintenir" },
-            ].map((stat) => (
+            {(isEn
+              ? [
+                  { value: "2×", label: "faster than a standard site" },
+                  { value: "100", label: "achievable Lighthouse score" },
+                  { value: "0", label: "frontend plugins to maintain" },
+                ]
+              : [
+                  { value: "2×", label: "plus rapide qu'un site classique" },
+                  { value: "100", label: "score Lighthouse accessible" },
+                  { value: "0", label: "plugin frontend à maintenir" },
+                ]
+            ).map((stat) => (
               <div key={stat.label} className="flex items-baseline gap-3">
                 <span className="text-2xl font-googletitre font-medium text-orange">
                   {stat.value}
@@ -343,24 +416,28 @@ function DecideurDemos() {
 }
 
 function UtilisateurDemos() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
     <div className="space-y-4">
       {/* Row 1: Video + Button playground */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DemoCard
           icon={<PlayCircle className="h-5 w-5 text-regularblue" />}
-          title="Gérer du contenu en headless"
+          title={isEn ? "Managing content in headless" : "Gérer du contenu en headless"}
         >
           <VideoEmbed url={VIDEOS.cdf.url} title={VIDEOS.cdf.title} />
           <p className="text-xs text-white/80 font-googletexte mt-3">
-            Vous publiez sur WordPress comme d&apos;habitude. Le site se met à
-            jour automatiquement.
+            {isEn
+              ? "You publish in WordPress as usual. The site updates automatically."
+              : "Vous publiez sur WordPress comme d'habitude. Le site se met à jour automatiquement."}
           </p>
         </DemoCard>
 
         <DemoCard
           icon={<MousePointerClick className="h-5 w-5 text-regularblue" />}
-          title="Testez les composants"
+          title={isEn ? "Test the components" : "Testez les composants"}
         >
           <MiniButtonPlayground />
           <div className="mt-4">
@@ -397,13 +474,16 @@ function UtilisateurDemos() {
 }
 
 function DeveloppeurDemos() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
     <div className="space-y-4">
       {/* Row 1: Video + Code */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <DemoCard
           icon={<PlayCircle className="h-5 w-5 text-lightblue" />}
-          title="Architecture en production"
+          title={isEn ? "Production architecture" : "Architecture en production"}
           className="md:col-span-3"
         >
           <VideoEmbed
@@ -411,20 +491,32 @@ function DeveloppeurDemos() {
             title={VIDEOS.plateforme.title}
           />
           <p className="text-xs text-white/80 font-googletexte mt-3">
-            Next.js App Router, ISR, API REST WordPress — stack complet en prod.
+            {isEn
+              ? "Next.js App Router, ISR, WordPress REST API — full stack in production."
+              : "Next.js App Router, ISR, API REST WordPress — stack complet en prod."}
           </p>
         </DemoCard>
 
         <DemoCard
           icon={<Code className="h-5 w-5 text-lightblue" />}
-          title="API REST & ISR"
+          title="REST API & ISR"
           className="md:col-span-2"
         >
           <CodeSnippet />
           <p className="text-xs text-white/80 font-googletexte mt-3">
-            WordPress expose les données via{" "}
-            <code className="text-lightblue/80">wp-json/wp/v2</code>. Next.js
-            régénère les pages en arrière-plan.
+            {isEn ? (
+              <>
+                WordPress exposes data via{" "}
+                <code className="text-lightblue/80">wp-json/wp/v2</code>. Next.js
+                regenerates pages in the background.
+              </>
+            ) : (
+              <>
+                WordPress expose les données via{" "}
+                <code className="text-lightblue/80">wp-json/wp/v2</code>. Next.js
+                régénère les pages en arrière-plan.
+              </>
+            )}
           </p>
           <div className="mt-3">
             <MiniButtonPlayground />

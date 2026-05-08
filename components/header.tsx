@@ -1,12 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu as MenuIcon, X as CloseIcon, ScreenShareIcon, File, BookOpenText, BadgeEuro, Euro, DatabaseIcon, Presentation, UserCheck } from "lucide-react";
-import { ChevronDown, PhoneCallIcon, MailIcon } from "lucide-react";
+import {
+  Menu as MenuIcon,
+  X as CloseIcon,
+  File,
+  BookOpenText,
+  ChevronDown,
+  UserCheck,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,19 +24,19 @@ import {
 } from "@/components/ui/navigation-menu";
 import { GlobalProfileSwitcher } from "@/components/global-profile-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { BrandLogo } from "@/components/brand-logo";
 
 export function NavBar() {
+  const t = useTranslations("nav");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
 
-  // Ferme le menu mobile lors d'un clic sur un lien
   const handleMenuClick = () => {
     setMobileOpen(false);
     setOpenSubMenu(null);
   };
 
-  // Gestion ouverture/fermeture des sous-menus
   const handleToggleSubMenu = (key: string) => {
     setOpenSubMenu((prev) => (prev === key ? null : key));
   };
@@ -42,32 +49,32 @@ export function NavBar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/services" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Services & Tarifs
+                {t("services")}
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/avantage-oeth" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Avantage OETH
+                {t("oethAdvantage")}
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/demo" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Démo
+                {t("demo")}
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/outils" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Outils en ligne
+                {t("tools")}
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/documentation" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Comprendre
+                {t("documentation")}
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/etudes-de-cas" className="font-googletitre text-white/90 text-base text-regular px-1.5">
-                Etudes de cas
+                {t("caseStudies")}
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -78,7 +85,7 @@ export function NavBar() {
       <nav className="flex lg:hidden items-center sticky">
         <button
           className="p-2 rounded-md shrink-0"
-          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={mobileOpen ? t("closeMenu") : t("openMenu")}
           onClick={() => setMobileOpen((open) => !open)}
         >
           {mobileOpen ? (
@@ -120,64 +127,37 @@ export function NavBar() {
                   />
                   <button
                     className="p-2 rounded-md focus:outline-none"
-                    aria-label="Fermer le menu"
+                    aria-label={t("closeMenu")}
                     onClick={handleMenuClick}
                   >
                     <CloseIcon className="w-10 h-10 text-white" />
                   </button>
                 </div>
                 <div className="h-screen p-4 space-y-0 bg-white dark:bg-darkblue dark:backdrop-blur-md">
-                  <MobileMenuLink href="/services" onClick={handleMenuClick}>Services & Tarifs</MobileMenuLink>
-                  <MobileMenuLink href="/avantage-oeth" onClick={handleMenuClick}>Avantage OETH</MobileMenuLink>
-                  <MobileMenuLink href="/demo" onClick={handleMenuClick}>Démo</MobileMenuLink>
-                  <MobileMenuLink href="/outils" onClick={handleMenuClick}>Outils en ligne</MobileMenuLink>
-                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Etudes de cas</MobileMenuLink>
-                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">Comprendre</MobileMenuLink>
-                  <MobileMenuLink href="/contact" onClick={handleMenuClick} className="pb-4">Contact</MobileMenuLink>
+                  <MobileMenuLink href="/services" onClick={handleMenuClick}>{t("services")}</MobileMenuLink>
+                  <MobileMenuLink href="/avantage-oeth" onClick={handleMenuClick}>{t("oethAdvantage")}</MobileMenuLink>
+                  <MobileMenuLink href="/demo" onClick={handleMenuClick}>{t("demo")}</MobileMenuLink>
+                  <MobileMenuLink href="/outils" onClick={handleMenuClick}>{t("tools")}</MobileMenuLink>
+                  <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>{t("caseStudies")}</MobileMenuLink>
+                  <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pb-4">{t("documentation")}</MobileMenuLink>
+                  <MobileMenuLink href="/contact" onClick={handleMenuClick} className="pb-4">{t("contact")}</MobileMenuLink>
 
                   <div className="pl-4 pt-4 flex items-center gap-8 border-t border-white/10">
-                    <Link href="/a-propos" onClick={handleMenuClick}>
-                    <UserCheck className="w-8 h-8 text-white/90 hover:text-white transition" />
+                    <Link href="/a-propos" onClick={handleMenuClick} aria-label={t("about")}>
+                      <UserCheck className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
-                    <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank">
+                    <a
+                      href="/ressources/livre_blanc_wp_headless.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={t("whitepaperTitle")}
+                    >
                       <File className="w-8 h-8 text-white/90 hover:text-white transition" />
-                    </Link>
+                    </a>
                     <ThemeToggle />
+                    <LocaleSwitcher />
                   </div>
-                  {/* <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick}>Tarifs</MobileMenuLink> */}
-                  {/* Sous-menu "Vous êtes"
-                  <button
-                    className={cn(
-                      "w-full text-left py-3 px-4 rounded-md text-white font-medium text-2xl hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
-                      openSubMenu === "vous-etes" && "bg-lightblue/10"
-                    )}
-                    onClick={() => handleToggleSubMenu("vous-etes")}
-                    aria-expanded={openSubMenu === "vous-etes"}
-                  >
-                    Vous êtes
-                    <span className={cn("transition-transform", openSubMenu === "vous-etes" ? "rotate-180" : "")}> <ChevronDown className="inline w-5 h-5 ml-2" /> </span>
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {openSubMenu === "vous-etes" && (
-                      <motion.div
-                        key="vous-etes-sub"
-                        initial={{ y: -20, opacity: 0, height: 0 }}
-                        animate={{ y: 0, opacity: 1, height: "auto" }}
-                        exit={{ y: -20, opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="pl-4 overflow-hidden"
-                      >
-                        <MobileMenuLink href="/vous-etes/pme" onClick={handleMenuClick} className="pl-4">PME</MobileMenuLink>
-                        <MobileMenuLink href="/vous-etes/ess" onClick={handleMenuClick} className="pl-4">ESS</MobileMenuLink>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                 Liens directs 
-                  <MobileMenuLink href="/a-propos" onClick={handleMenuClick}>A propos</MobileMenuLink>
-                  */}
-                  {/*<MobileMenuLink href="/contact" onClick={handleMenuClick}>Contact</MobileMenuLink>
-                */}
-                  </div>
+                </div>
               </motion.div>
             </>
           )}
@@ -198,6 +178,7 @@ const MobileMenuLink = ({
   onClick?: () => void;
   className?: string;
 }) => (
+  // @ts-expect-error – href is a localized pathname string
   <Link
     href={href}
     onClick={onClick}
@@ -239,6 +220,7 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem";
 
 export default function Header() {
+  const t = useTranslations("nav");
   return (
     <header className="flex items-center justify-between border-b top-0 z-50 px-4 sticky bg-mediumblue/60 backdrop-blur-md h-16">
       {/* Logo */}
@@ -264,6 +246,7 @@ export default function Header() {
       {/* Mobile : switcher centré + hamburger */}
       <div className="flex lg:hidden flex-1 items-center justify-end gap-2">
         <GlobalProfileSwitcher />
+        <LocaleSwitcher />
         <NavBar />
       </div>
 
@@ -272,25 +255,26 @@ export default function Header() {
         <GlobalProfileSwitcher />
         <NavigationMenu>
           <NavigationMenuList>
-        <NavigationMenuItem>
-          <Link href="/contact" className="font-googletitre text-white/90 text-lg text-regular px-2">
-            Contact
-          </Link>
-        </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/contact" className="font-googletitre text-white/90 text-lg text-regular px-2">
+                {t("contact")}
+              </Link>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <Link
+        <a
           href="/ressources/livre_blanc_wp_headless.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          title="Livre blanc : Qu'est-ce que WordPress Headless ?"
+          title={t("whitepaperTitle")}
         >
           <BookOpenText className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </Link>
-        <Link href="/a-propos">
+        </a>
+        <Link href="/a-propos" aria-label={t("about")}>
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
         </Link>
         <ThemeToggle />
+        <LocaleSwitcher />
       </div>
     </header>
   );

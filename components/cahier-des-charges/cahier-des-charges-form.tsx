@@ -19,6 +19,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentPreview } from "@/components/cahier-des-charges/document-preview";
 import { FileText, Eye, ArrowRight } from "lucide-react";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 type FormSection = {
   id: string;
@@ -35,6 +37,9 @@ type FormField = {
 };
 
 export function CahierDesChargesForm() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const formSections = isEn ? formSectionsEn : formSectionsFr;
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [activeTab, setActiveTab] = useState<string>("form");
 
@@ -95,11 +100,11 @@ export function CahierDesChargesForm() {
           <TabsList className="flex bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1">
             <TabsTrigger value="form" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
               <FileText className="h-4 w-4 mr-4"  />
-              Formulaire
+              {isEn ? "Form" : "Formulaire"}
             </TabsTrigger>
             <TabsTrigger value="preview" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
               <Eye className="h-4 w-4 mr-4" />
-              Apercu
+              {isEn ? "Preview" : "Apercu"}
             </TabsTrigger>
           </TabsList>
         </motion.div>
@@ -113,14 +118,17 @@ export function CahierDesChargesForm() {
             {/* Progress indicator */}
             <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-6 flex items-center justify-between">
               <p className="text-sm text-white/60 font-googletexte">
-                <span className="text-lightyellow font-bold">{filledCount}</span> champ{filledCount > 1 ? "s" : ""} rempli{filledCount > 1 ? "s" : ""}
+                <span className="text-lightyellow font-bold">{filledCount}</span>{" "}
+                {isEn
+                  ? `field${filledCount > 1 ? "s" : ""} filled`
+                  : `champ${filledCount > 1 ? "s" : ""} rempli${filledCount > 1 ? "s" : ""}`}
               </p>
               <Button
                 onClick={() => handleTabChange("preview")}
                 variant="ghost"
                 className="gap-2 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded-full"
               >
-                Voir l&apos;apercu
+                {isEn ? "View preview" : "Voir l'apercu"}
                 <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             </div>
@@ -128,10 +136,12 @@ export function CahierDesChargesForm() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-4 md:p-8">
                 <h2 className="text-white font-googletitre text-2xl font-medium mb-1">
-                  Votre projet
+                  {isEn ? "Your project" : "Votre projet"}
                 </h2>
                 <p className="text-white/60 font-googletexte text-sm mb-6">
-                  Remplissez les sections ci-dessous pour générer votre cahier des charges
+                  {isEn
+                    ? "Fill out the sections below to generate your specifications document"
+                    : "Remplissez les sections ci-dessous pour générer votre cahier des charges"}
                 </p>
 
                 <Accordion
@@ -256,7 +266,7 @@ export function CahierDesChargesForm() {
                     className="gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold px-8"
                   >
                     <Eye className="w-4 h-4" />
-                    Voir l&apos;apercu du document
+                    {isEn ? "Preview the document" : "Voir l'apercu du document"}
                   </Button>
                 </div>
               </div>
@@ -280,7 +290,7 @@ export function CahierDesChargesForm() {
                 className="gap-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 border border-white/20 font-googletitre"
               >
                 <FileText className="w-4 h-4" />
-                Retour au formulaire
+                {isEn ? "Back to form" : "Retour au formulaire"}
               </Button>
             </div>
           </motion.div>
@@ -290,7 +300,7 @@ export function CahierDesChargesForm() {
   );
 }
 
-const formSections: FormSection[] = [
+const formSectionsFr: FormSection[] = [
   {
     id: "section-1",
     title: "1. Présentation Générale du Projet",
@@ -715,6 +725,182 @@ const formSections: FormSection[] = [
         type: "text",
         placeholder: "Ex: Marie Martin, Directrice Marketing",
       },
+    ],
+  },
+];
+
+const formSectionsEn: FormSection[] = [
+  {
+    id: "section-1",
+    title: "1. Project Overview",
+    fields: [
+      { id: "organisation_name", label: "Organization name", type: "text", placeholder: "e.g. XYZ Company" },
+      { id: "secteur_activite", label: "Industry", type: "text", placeholder: "e.g. Retail, Healthcare, Education…" },
+      { id: "public_cible", label: "Target audience", type: "textarea", placeholder: "Describe your primary audience" },
+      { id: "problematiques", label: "Issues identified with the current site", type: "textarea", placeholder: "e.g. Slowness, dated design, not responsive…" },
+      { id: "objectifs_refonte", label: "Main redesign objectives", type: "textarea", placeholder: "e.g. Improve UX, increase conversions…" },
+      { id: "site_url", label: "Current site URL", type: "text", placeholder: "https://www.example.com" },
+      { id: "site_creation_date", label: "Current site creation date", type: "text", placeholder: "e.g. January 2018" },
+      { id: "technologies_actuelles", label: "Current technologies", type: "text", placeholder: "e.g. WordPress, PHP, MySQL…" },
+    ],
+  },
+  {
+    id: "section-2",
+    title: "2. Functional Specifications",
+    fields: [
+      { id: "arborescence", label: "Proposed sitemap (main pages and sub-pages)", type: "textarea", placeholder: "Describe the structure of your site" },
+      { id: "types_contenus", label: "Content types to plan for", type: "textarea", placeholder: "e.g. Articles, products, testimonials…" },
+      {
+        id: "fonctionnalites_standards",
+        label: "Standard features",
+        type: "checkboxGroup",
+        options: [
+          { id: "accueil", label: "Custom home page" },
+          { id: "pages_contenu", label: "Standard content pages (who/what/why)" },
+          { id: "blog", label: "News / blog" },
+          { id: "contact", label: "Contact form(s)" },
+          { id: "galerie", label: "Photo / video gallery" },
+          { id: "faq", label: "FAQ" },
+          { id: "plan_site", label: "Sitemap page" },
+          { id: "mentions", label: "Legal notice and privacy policy" },
+          { id: "recherche", label: "Internal search engine" },
+          { id: "partage", label: "Social media sharing" },
+          { id: "newsletter", label: "Newsletter signup" },
+          { id: "carte", label: "Interactive map" },
+          { id: "telechargement", label: "Document downloads" },
+        ],
+      },
+      {
+        id: "fonctionnalites_avancees",
+        label: "Advanced features",
+        type: "checkboxGroup",
+        options: [
+          { id: "espace_membres", label: "Member area / extranet" },
+          { id: "reservation", label: "Booking / appointment system" },
+          { id: "ecommerce", label: "E-commerce / online payment" },
+          { id: "bdd", label: "Searchable database" },
+          { id: "multilangues", label: "Multisite / multilingual" },
+          { id: "applications", label: "Custom interactive applications" },
+          { id: "chatbot", label: "Chatbot / virtual assistant" },
+          { id: "personnalisation", label: "User personalization" },
+          { id: "crm", label: "CRM / ERP integration" },
+          { id: "dashboard", label: "Advanced dashboard / analytics" },
+        ],
+      },
+      { id: "contraintes_techniques", label: "Specific technical constraints", type: "textarea", placeholder: "e.g. Compatibility with existing systems, specific security…" },
+    ],
+  },
+  {
+    id: "section-3",
+    title: "3. Visual & Ergonomic Specifications",
+    fields: [
+      {
+        id: "charte_graphique",
+        label: "Brand guidelines",
+        type: "checkboxGroup",
+        options: [
+          { id: "charte_existante", label: "Existing brand guidelines to follow" },
+          { id: "nouvelle_charte", label: "New brand guidelines to create" },
+        ],
+      },
+      { id: "inspirations", label: "Inspirations / references", type: "textarea", placeholder: "e.g. URLs of sites you like" },
+      { id: "couleurs", label: "Primary colors", type: "text", placeholder: "e.g. Blue #0000FF, Red #FF0000" },
+      { id: "typographies", label: "Typography", type: "text", placeholder: "e.g. Roboto, Open Sans, Montserrat" },
+      { id: "ambiance", label: "Visual mood", type: "textarea", placeholder: "e.g. Modern, minimal, colorful, corporate…" },
+      { id: "ux_priorites", label: "User experience priorities", type: "textarea", placeholder: "e.g. Simplicity, speed, accessibility…" },
+      { id: "responsive", label: "Priority formats (desktop, tablet, mobile)", type: "text", placeholder: "e.g. Mobile-first, all formats equal…" },
+      { id: "accessibilite", label: "Accessibility (RGAA, WCAG)", type: "text", placeholder: "e.g. RGAA 3, WCAG 2.1 AA" },
+      { id: "navigation", label: "Desired navigation", type: "textarea", placeholder: "e.g. Dropdown menu, sidebar, breadcrumbs…" },
+    ],
+  },
+  {
+    id: "section-4",
+    title: "4. Technical Specifications",
+    fields: [
+      { id: "cms_framework", label: "Preferred CMS / framework", type: "text", placeholder: "e.g. WordPress, Drupal, Next.js, Laravel…" },
+      { id: "langages", label: "Programming languages", type: "text", placeholder: "e.g. PHP, JavaScript, Python…" },
+      { id: "base_donnees", label: "Database", type: "text", placeholder: "e.g. MySQL, PostgreSQL, MongoDB…" },
+      { id: "hebergement", label: "Hosting type considered", type: "text", placeholder: "e.g. Shared, VPS, Cloud…" },
+      { id: "securite", label: "Expected security level", type: "textarea", placeholder: "e.g. HTTPS, two-factor authentication…" },
+      { id: "performance", label: "Target load time", type: "text", placeholder: "e.g. < 2 seconds" },
+      { id: "seo", label: "Specific SEO requirements", type: "textarea", placeholder: "e.g. Optimization for specific keywords, schema.org markup…" },
+    ],
+  },
+  {
+    id: "section-5",
+    title: "5. Content Management",
+    fields: [
+      { id: "migration_volume", label: "Content volume to migrate", type: "text", placeholder: "e.g. 50 pages, 200 articles, 500 products…" },
+      { id: "migration_types", label: "Content types to migrate", type: "textarea", placeholder: "e.g. Pages, articles, products, media…" },
+      { id: "contenus_creer", label: "Content to create", type: "textarea", placeholder: "e.g. Presentation copy, product descriptions…" },
+      { id: "profils_admin", label: "Required admin profiles", type: "textarea", placeholder: "e.g. Super admin, editor, contributor…" },
+      { id: "formation_proposee", label: "Training offered for site management", type: "textarea", placeholder: "e.g. Video-call training, video tutorials…" },
+      { id: "support_technique", label: "Technical support offered", type: "textarea", placeholder: "e.g. Hotline, online chat, email…" },
+    ],
+  },
+  {
+    id: "section-6",
+    title: "6. Expected Deliverables",
+    fields: [
+      {
+        id: "phases_projet",
+        label: "Project phases",
+        type: "checkboxGroup",
+        options: [
+          { id: "cadrage", label: "Scoping and detailed specifications" },
+          { id: "conception", label: "UX/UI design" },
+          { id: "developpement", label: "Development" },
+          { id: "tests", label: "Testing and acceptance" },
+          { id: "production", label: "Going live" },
+          { id: "formation", label: "Training and documentation" },
+          { id: "maintenance", label: "Maintenance and follow-up" },
+        ],
+      },
+      { id: "methodologie", label: "Preferred methodology (agile, V-cycle, etc.)", type: "text", placeholder: "e.g. Agile Scrum, V-cycle, Kanban…" },
+      { id: "garantie", label: "Expected warranty period", type: "text", placeholder: "e.g. 3 months, 6 months, 1 year…" },
+    ],
+  },
+  {
+    id: "section-7",
+    title: "7. Schedule & Budget",
+    fields: [
+      { id: "date_demarrage", label: "Desired start date", type: "text", placeholder: "e.g. 2024-01-01" },
+      { id: "date_mise_en_ligne", label: "Hard go-live date", type: "text", placeholder: "e.g. 2024-06-30" },
+      { id: "budget_global", label: "Overall budget envelope", type: "text", placeholder: "e.g. €20,000" },
+      { id: "budget_maintenance", label: "Annual maintenance budget", type: "text", placeholder: "e.g. €2,000/year" },
+    ],
+  },
+  {
+    id: "section-8",
+    title: "8. Response Terms",
+    fields: [
+      { id: "criteres_techniques", label: "Technical selection criteria", type: "textarea", placeholder: "e.g. Technical expertise, methodology, references…" },
+      { id: "criteres_financiers", label: "Financial selection criteria", type: "textarea", placeholder: "e.g. Price, payment terms…" },
+      { id: "mode_reponse", label: "Preferred response format", type: "textarea", placeholder: "e.g. PDF, oral presentation, demo…" },
+      { id: "date_limite", label: "Proposal submission deadline", type: "text", placeholder: "e.g. 2024-01-15" },
+      { id: "contact_nom", label: "Contact for questions", type: "text", placeholder: "e.g. Jane Doe, Project Lead" },
+      { id: "contact_email", label: "Contact email", type: "text", placeholder: "e.g. contact@example.com" },
+    ],
+  },
+  {
+    id: "section-9",
+    title: "9. Appendices",
+    fields: [
+      {
+        id: "documents_fournis",
+        label: "Documents provided with this brief",
+        type: "checkboxGroup",
+        options: [
+          { id: "charte", label: "Brand guidelines" },
+          { id: "arborescence", label: "Detailed sitemap" },
+          { id: "references", label: "Reference site examples" },
+          { id: "statistiques", label: "Current site analytics" },
+          { id: "exports", label: "Existing content exports" },
+        ],
+      },
+      { id: "date_redaction", label: "Drafting date", type: "text", placeholder: "e.g. 2023-12-01" },
+      { id: "version", label: "Version", type: "text", placeholder: "e.g. 1.0" },
+      { id: "redacteur", label: "Author(s)", type: "text", placeholder: "e.g. Marie Martin, Marketing Director" },
     ],
   },
 ];

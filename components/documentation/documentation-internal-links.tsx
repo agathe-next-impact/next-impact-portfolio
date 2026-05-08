@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   SearchCheck,
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import type { ProfileId } from "@/lib/documentation-profiles";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 /* ─── Liens vers outils & services ─────────────────────────────────────────── */
 
@@ -28,7 +30,7 @@ interface ToolLink {
   color: string;
 }
 
-const TOOL_LINKS: ToolLink[] = [
+const TOOL_LINKS_FR: ToolLink[] = [
   {
     href: "/audit-site-ia",
     title: "Audit IA gratuit",
@@ -59,7 +61,38 @@ const TOOL_LINKS: ToolLink[] = [
   },
 ];
 
-const SERVICE_LINKS: ToolLink[] = [
+const TOOL_LINKS_EN: ToolLink[] = [
+  {
+    href: "/audit-site-ia",
+    title: "Free AI audit",
+    description: "Analyze your site's performance, SEO and conversion.",
+    icon: SearchCheck,
+    color: "text-lightyellow",
+  },
+  {
+    href: "/outils/simulateur-roi",
+    title: "ROI simulator",
+    description: "Calculate the revenue lost to a slow site.",
+    icon: Calculator,
+    color: "text-lightblue",
+  },
+  {
+    href: "/outils/benchmarking",
+    title: "Benchmarking",
+    description: "Compare your performance against competitors.",
+    icon: BarChart3,
+    color: "text-regularblue",
+  },
+  {
+    href: "/cahier-des-charges",
+    title: "Specifications",
+    description: "Generate a structured specifications document for your project.",
+    icon: FileText,
+    color: "text-coral",
+  },
+];
+
+const SERVICE_LINKS_FR: ToolLink[] = [
   {
     href: "/services",
     title: "Nos offres",
@@ -83,11 +116,35 @@ const SERVICE_LINKS: ToolLink[] = [
   },
 ];
 
+const SERVICE_LINKS_EN: ToolLink[] = [
+  {
+    href: "/services",
+    title: "Our offerings",
+    description: "Headless WordPress & Next.js solutions tailored to your needs.",
+    icon: Briefcase,
+    color: "text-orange",
+  },
+  {
+    href: "/etudes-de-cas",
+    title: "Case studies",
+    description: "Discover our real-world projects in production.",
+    icon: FolderOpen,
+    color: "text-regularblue",
+  },
+  {
+    href: "/contact",
+    title: "Start a project",
+    description: "Find the right offering with our interactive questionnaire.",
+    icon: ClipboardCheck,
+    color: "text-coral",
+  },
+];
+
 /* ─── Outils par profil (jamais ceux du footer) ──────────────────────────── */
 // Footer contient : Audit IA, Simulateur ROI, Benchmarking, Services, Études de cas
 // → On ne les affiche jamais ici.
 
-const PROFILE_TOOLS: Record<ProfileId | "default", ToolLink[]> = {
+const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
   default: [
     {
       href: "/cahier-des-charges",
@@ -182,19 +239,118 @@ const PROFILE_TOOLS: Record<ProfileId | "default", ToolLink[]> = {
   ],
 };
 
+const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
+  default: [
+    {
+      href: "/cahier-des-charges",
+      title: "Specifications",
+      description: "Generate a structured specifications document for your project.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/demo",
+      title: "Interactive demo",
+      description: "Discover a Headless WordPress site in action.",
+      icon: PlayCircle,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/contact",
+      title: "Start a project",
+      description: "Find the offering that fits your organization.",
+      icon: ClipboardCheck,
+      color: "text-regularblue",
+    },
+  ],
+  decideur: [
+    {
+      href: "/cahier-des-charges",
+      title: "Specifications",
+      description: "Frame your project with a structured document.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/simulateur-tarifs",
+      title: "Pricing simulator",
+      description: "Estimate the budget that fits your project.",
+      icon: Calculator,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/contact",
+      title: "Start a project",
+      description: "Let's discuss your business goals.",
+      icon: ClipboardCheck,
+      color: "text-orange",
+    },
+  ],
+  utilisateur: [
+    {
+      href: "/demo",
+      title: "Interactive demo",
+      description: "Test content management in real conditions.",
+      icon: PlayCircle,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/cahier-des-charges",
+      title: "Specifications",
+      description: "Formalize your needs in a clear document.",
+      icon: FileText,
+      color: "text-coral",
+    },
+    {
+      href: "/contact",
+      title: "Start a project",
+      description: "Find the offering that fits your organization.",
+      icon: ClipboardCheck,
+      color: "text-regularblue",
+    },
+  ],
+  developpeur: [
+    {
+      href: "/documentation/mind-map",
+      title: "Mind Map",
+      description: "Explore the headless architecture interactively.",
+      icon: Network,
+      color: "text-extralightblue",
+    },
+    {
+      href: "/documentation/playground",
+      title: "Playground",
+      description: "Test components and rendering live.",
+      icon: Code,
+      color: "text-lightyellow",
+    },
+    {
+      href: "/cahier-des-charges",
+      title: "Specifications",
+      description: "Structure the technical specifications of your project.",
+      icon: FileText,
+      color: "text-coral",
+    },
+  ],
+};
+
 /* ─── Composant : section outils (page hub) ───────────────────────────────── */
 
 export function DocumentationToolsSection() {
   const { profileId } = useDocumentationMode();
-  const tools = PROFILE_TOOLS[profileId || "default"];
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const tools = (isEn ? PROFILE_TOOLS_EN : PROFILE_TOOLS_FR)[profileId || "default"];
 
   return (
     <section className="mt-12 py-12">
       <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
-        Outils et ressources
+        {isEn ? "Tools and resources" : "Outils et ressources"}
       </h2>
       <p className="text-sm text-white/60 font-googletexte mb-6">
-        Des outils gratuits pour évaluer et planifier votre projet web.
+        {isEn
+          ? "Free tools to evaluate and plan your web project."
+          : "Des outils gratuits pour évaluer et planifier votre projet web."}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -203,6 +359,7 @@ export function DocumentationToolsSection() {
           return (
             <Link
               key={tool.href}
+              // @ts-expect-error – href comes from internal data
               href={tool.href}
               className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/90 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 transition-all duration-300"
             >
@@ -214,7 +371,7 @@ export function DocumentationToolsSection() {
                 {tool.description}
               </p>
               <span className={`inline-flex items-center gap-1 text-sm ${tool.color} font-googletexte mt-3 group-hover:text-regularblue transition-colors`}>
-                Découvrir
+                {isEn ? "Discover" : "Découvrir"}
                 <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </Link>
@@ -227,57 +384,65 @@ export function DocumentationToolsSection() {
 
 /* ─── Composant : liens outils compacts (pages catégorie + article) ───────── */
 
-const CATEGORY_TOOLS: Record<string, ToolLink[]> = {
-  "headless-cms": [
-    TOOL_LINKS[0], // Audit IA
-    TOOL_LINKS[1], // Simulateur ROI
-    { ...SERVICE_LINKS[1], description: "Projets headless en production." }, // Études de cas
-  ],
-  wordpress: [
-    TOOL_LINKS[0], // Audit IA
-    TOOL_LINKS[2], // Benchmarking
-    { ...SERVICE_LINKS[1], description: "Migrations WordPress réussies." },
-  ],
-  seo: [
-    TOOL_LINKS[2], // Benchmarking
-    TOOL_LINKS[0], // Audit IA
-    { ...SERVICE_LINKS[0], description: "SEO intégré dans nos offres." },
-  ],
-  "design-ui-ux": [
-    TOOL_LINKS[3], // Cahier des charges
-    { ...SERVICE_LINKS[0], description: "Design UI/UX dans nos offres." },
-    { ...SERVICE_LINKS[1], description: "Nos réalisations design." },
-  ],
-  "marketing-digital": [
-    TOOL_LINKS[1], // Simulateur ROI
-    TOOL_LINKS[2], // Benchmarking
-    { ...SERVICE_LINKS[2], description: "Planifions votre stratégie." },
-  ],
-  "projet-site-web": [
-    TOOL_LINKS[3], // Cahier des charges
-    TOOL_LINKS[0], // Audit IA
-    { ...SERVICE_LINKS[2], description: "Lancez votre projet." },
-  ],
-  blog: [
-    TOOL_LINKS[0], // Audit IA
-    { ...SERVICE_LINKS[1], description: "Nos projets en détail." },
-    { ...SERVICE_LINKS[2], description: "Discutons de votre projet." },
-  ],
-};
+function buildCategoryTools(isEn: boolean): Record<string, ToolLink[]> {
+  const TOOL_LINKS = isEn ? TOOL_LINKS_EN : TOOL_LINKS_FR;
+  const SERVICE_LINKS = isEn ? SERVICE_LINKS_EN : SERVICE_LINKS_FR;
+  const t = (en: string, fr: string) => (isEn ? en : fr);
+  return {
+    "headless-cms": [
+      TOOL_LINKS[0],
+      TOOL_LINKS[1],
+      { ...SERVICE_LINKS[1], description: t("Headless projects in production.", "Projets headless en production.") },
+    ],
+    wordpress: [
+      TOOL_LINKS[0],
+      TOOL_LINKS[2],
+      { ...SERVICE_LINKS[1], description: t("Successful WordPress migrations.", "Migrations WordPress réussies.") },
+    ],
+    seo: [
+      TOOL_LINKS[2],
+      TOOL_LINKS[0],
+      { ...SERVICE_LINKS[0], description: t("SEO built into our offerings.", "SEO intégré dans nos offres.") },
+    ],
+    "design-ui-ux": [
+      TOOL_LINKS[3],
+      { ...SERVICE_LINKS[0], description: t("UI/UX design in our offerings.", "Design UI/UX dans nos offres.") },
+      { ...SERVICE_LINKS[1], description: t("Our design work.", "Nos réalisations design.") },
+    ],
+    "marketing-digital": [
+      TOOL_LINKS[1],
+      TOOL_LINKS[2],
+      { ...SERVICE_LINKS[2], description: t("Let's plan your strategy.", "Planifions votre stratégie.") },
+    ],
+    "projet-site-web": [
+      TOOL_LINKS[3],
+      TOOL_LINKS[0],
+      { ...SERVICE_LINKS[2], description: t("Launch your project.", "Lancez votre projet.") },
+    ],
+    blog: [
+      TOOL_LINKS[0],
+      { ...SERVICE_LINKS[1], description: t("Our projects in detail.", "Nos projets en détail.") },
+      { ...SERVICE_LINKS[2], description: t("Let's discuss your project.", "Discutons de votre projet.") },
+    ],
+  };
+}
 
 interface CategoryToolsLinksProps {
   category: string;
 }
 
 export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
-  const tools = CATEGORY_TOOLS[category] || TOOL_LINKS.slice(0, 3);
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const TOOL_LINKS = isEn ? TOOL_LINKS_EN : TOOL_LINKS_FR;
+  const tools = buildCategoryTools(isEn)[category] || TOOL_LINKS.slice(0, 3);
 
   return (
     <section className="mt-10 pt-8 border-t border-lightblue/10">
       <div className="flex items-center gap-2 mb-4">
         <Wrench className="h-6 w-6 text-extralightblue mt-2" />
         <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/80">
-          Outils utiles
+          {isEn ? "Useful tools" : "Outils utiles"}
         </h3>
       </div>
 
@@ -287,6 +452,7 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
           return (
             <Link
               key={tool.href}
+              // @ts-expect-error – href comes from internal data
               href={tool.href}
               className="group flex items-center gap-3 rounded-2xl p-4 border border-lightblue/10 bg-darkblue/30 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/50 transition-all duration-300"
             >
@@ -311,17 +477,20 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
 /* ─── Composant : mini CTA pour les pages article ─────────────────────────── */
 
 export function ArticleInternalLinks({ category }: { category: string }) {
-  const links = getCategoryRelevantLinks(category);
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const links = getCategoryRelevantLinks(category, isEn);
 
   return (
     <div className="mt-6 rounded-2xl border border-lightblue/10 bg-darkblue/30 backdrop-blur-sm p-5">
       <p className="text-xs text-white/40 font-googletexte uppercase tracking-wider mb-3">
-        Pour aller plus loin
+        {isEn ? "Going further" : "Pour aller plus loin"}
       </p>
       <div className="flex flex-wrap gap-2">
         {links.map((link) => (
           <Link
             key={link.href}
+            // @ts-expect-error – href comes from internal data
             href={link.href}
             className="inline-flex items-center gap-1.5 rounded-full bg-mediumblue/60 border border-lightblue/10 px-3 py-1.5 text-xs text-white/70 hover:text-white hover:border-lightblue/20 hover:bg-mediumblue/80 transition-all duration-200 font-googletexte"
           >
@@ -334,67 +503,69 @@ export function ArticleInternalLinks({ category }: { category: string }) {
   );
 }
 
-function getCategoryRelevantLinks(category: string): { href: string; title: string }[] {
-  const base = [
-    { href: "/documentation", title: "Tous les guides" },
-  ];
+function getCategoryRelevantLinks(
+  category: string,
+  isEn: boolean,
+): { href: string; title: string }[] {
+  const t = (en: string, fr: string) => (isEn ? en : fr);
+  const base = [{ href: "/documentation", title: t("All guides", "Tous les guides") }];
 
   switch (category) {
     case "headless-cms":
       return [
         ...base,
-        { href: "/audit-site-ia", title: "Audit IA" },
-        { href: "/outils/simulateur-roi", title: "Simulateur ROI" },
-        { href: "/etudes-de-cas", title: "Études de cas" },
-        { href: "/services", title: "Nos offres" },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/outils/simulateur-roi", title: t("ROI simulator", "Simulateur ROI") },
+        { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
+        { href: "/services", title: t("Our offerings", "Nos offres") },
       ];
     case "wordpress":
       return [
         ...base,
-        { href: "/audit-site-ia", title: "Audit IA" },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/documentation/headless-cms", title: "Headless CMS" },
-        { href: "/etudes-de-cas", title: "Études de cas" },
+        { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/outils/benchmarking", title: "Benchmarking" },
       ];
     case "seo":
       return [
         ...base,
         { href: "/outils/benchmarking", title: "Benchmarking" },
-        { href: "/audit-site-ia", title: "Audit IA" },
-        { href: "/documentation/marketing-digital", title: "Marketing Digital" },
-        { href: "/services", title: "Nos offres SEO" },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
+        { href: "/services", title: t("Our SEO offerings", "Nos offres SEO") },
       ];
     case "design-ui-ux":
       return [
         ...base,
-        { href: "/cahier-des-charges", title: "Cahier des charges" },
-        { href: "/documentation/projet-site-web", title: "Projet site web" },
-        { href: "/etudes-de-cas", title: "Études de cas" },
-        { href: "/contact", title: "Démarrer un projet" },
+        { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
+        { href: "/documentation/projet-site-web", title: t("Web project", "Projet site web") },
+        { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
+        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     case "marketing-digital":
       return [
         ...base,
-        { href: "/outils/simulateur-roi", title: "Simulateur ROI" },
-        { href: "/documentation/seo", title: "Guide SEO" },
+        { href: "/outils/simulateur-roi", title: t("ROI simulator", "Simulateur ROI") },
+        { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
         { href: "/outils/benchmarking", title: "Benchmarking" },
-        { href: "/contact", title: "Démarrer un projet" },
+        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     case "projet-site-web":
       return [
         ...base,
-        { href: "/cahier-des-charges", title: "Cahier des charges" },
-        { href: "/audit-site-ia", title: "Audit IA" },
+        { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/documentation/headless-cms", title: "Headless CMS" },
-        { href: "/contact", title: "Démarrer un projet" },
+        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     default:
       return [
         ...base,
-        { href: "/audit-site-ia", title: "Audit IA" },
-        { href: "/etudes-de-cas", title: "Études de cas" },
-        { href: "/services", title: "Nos offres" },
-        { href: "/contact", title: "Démarrer un projet" },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
+        { href: "/services", title: t("Our offerings", "Nos offres") },
+        { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
   }
 }

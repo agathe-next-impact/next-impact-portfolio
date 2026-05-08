@@ -11,6 +11,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
@@ -33,6 +34,7 @@ export function FloatingContact() {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const t = useTranslations("floatingContact");
 
   const closePanel = () => {
     setOpen(false);
@@ -68,7 +70,7 @@ export function FloatingContact() {
     {
       key: "phone",
       icon: Phone,
-      label: "Téléphone",
+      label: t("phone"),
       description: PHONE_DISPLAY,
       href: `tel:${PHONE}`,
       iconColor: "text-lightyellow",
@@ -77,8 +79,8 @@ export function FloatingContact() {
     {
       key: "visio",
       icon: Video,
-      label: "Visio",
-      description: "Réserver un appel de 15 min",
+      label: t("video"),
+      description: t("videoDescription"),
       href: VISIO_URL,
       external: true,
       iconColor: "text-coral",
@@ -87,7 +89,7 @@ export function FloatingContact() {
     {
       key: "mail",
       icon: Mail,
-      label: "E-mail",
+      label: t("email"),
       description: EMAIL,
       href: `mailto:${EMAIL}`,
       iconColor: "text-lightblue",
@@ -96,8 +98,8 @@ export function FloatingContact() {
     {
       key: "newsletter",
       icon: Newspaper,
-      label: "Newsletter",
-      description: "S'abonner sur Substack",
+      label: t("newsletter"),
+      description: t("newsletterDescription"),
       href: NEWSLETTER_URL,
       external: true,
       iconColor: "text-orange",
@@ -111,7 +113,7 @@ export function FloatingContact() {
         ref={triggerRef}
         type="button"
         onClick={() => (open ? closePanel() : setOpen(true))}
-        aria-label={open ? "Fermer les moyens de contact" : "Ouvrir les moyens de contact"}
+        aria-label={open ? t("closeLabel") : t("openLabel")}
         aria-expanded={open}
         className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-coral text-darkblue shadow-lg shadow-coral/30 hover:scale-105 hover:bg-coral/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-coral focus:ring-offset-2 focus:ring-offset-darkblue"
       >
@@ -138,7 +140,7 @@ export function FloatingContact() {
             </motion.span>
           )}
         </AnimatePresence>
-        <span className="sr-only">Contact</span>
+        <span className="sr-only">{t("srLabel")}</span>
       </button>
 
       <AnimatePresence>
@@ -153,16 +155,16 @@ export function FloatingContact() {
             style={{ transformOrigin: "bottom right" }}
             role="dialog"
             aria-modal="false"
-            aria-label="Moyens de contact"
+            aria-label={t("ariaLabel")}
             className="fixed bottom-24 right-5 md:right-6 z-50 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 bg-mediumblue/95 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden"
           >
             <div className="p-5 md:p-6">
               <div className="space-y-2 mb-5">
                 <h2 className="text-2xl md:text-3xl font-googletitre text-white">
-                  Comment me contacter ?
+                  {t("title")}
                 </h2>
                 <p className="text-base text-white/70 font-googletexte">
-                  Choisissez le canal qui vous convient — réponse sous 24h.
+                  {t("subtitle")}
                 </p>
               </div>
 

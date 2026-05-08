@@ -1,17 +1,29 @@
+"use client"
+
 import { cn } from "@/lib/utils"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 import type { ProjectItem } from "@/lib/data/headless-explainer"
 
 interface ProjectGridProps {
   items: ProjectItem[]
 }
 
-const statusConfig = {
+const statusConfigFr = {
   ideal: { label: "Ideal", className: "bg-green-500/20 text-green-400 border-green-500/30" },
   evaluate: { label: "A evaluer", className: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
   avoid: { label: "A eviter", className: "bg-red-500/20 text-red-400 border-red-500/30" },
 } as const
 
+const statusConfigEn = {
+  ideal: { label: "Ideal", className: "bg-green-500/20 text-green-400 border-green-500/30" },
+  evaluate: { label: "Evaluate", className: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
+  avoid: { label: "Avoid", className: "bg-red-500/20 text-red-400 border-red-500/30" },
+} as const
+
 export default function ProjectGrid({ items }: ProjectGridProps) {
+  const locale = useLocale() as Locale
+  const statusConfig = locale === "en" ? statusConfigEn : statusConfigFr
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {items.map((item) => {

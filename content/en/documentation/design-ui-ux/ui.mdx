@@ -1,0 +1,122 @@
+---
+title: What is UI?
+description: What is the user interface - UI?
+category: design-ui-ux
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+The user interface (UI) refers to all the visual and interactive elements through which a user interacts with a digital product. UI design determines the form, layout and behavior of every component on screen. This document presents the fundamentals of UI, its design principles, its tools and its impact on a website's performance.
+
+## UI vs. UX: a necessary distinction
+
+The terms UI and UX are often confused. They actually refer to two complementary but distinct disciplines.
+
+**UI (User Interface)** refers to the visual and interactive elements of a digital product: buttons, form fields, icons, navigation menus, layout and typographic style. UI deals with form and presentation.
+
+**UX (User Experience)** refers to the overall quality of the interaction between user and product. It encompasses usability (ease of use), information architecture, journey fluidity and felt satisfaction.
+
+In short: UI is the visual and interactive layer of the product; UX is the quality of the overall experience. A well-designed UI contributes directly to UX quality, and conversely good UX guides UI design choices.
+
+## The key elements of UI
+
+Designing an effective user interface rests on four fundamental components.
+
+<HighlightBox title="The 4 fundamental components of UI" accent="blue">
+An effective user interface rests on four interdependent components: **typography** which structures the information hierarchy, the **color palette** which directs attention and emotions, **layout** which organizes the spatial distribution of elements, and **visual elements** (images, icons, illustrations) which reinforce comprehension and brand identity.
+</HighlightBox>
+
+### 1. Typography
+
+Typography determines the legibility and visual hierarchy of content. The choice of fonts, sizes, weights (regular, medium, bold) and line-heights structures information and guides reading. Accessible typography respects a minimum size of 16px for body text and a line-height of at least 1.5 to ease reading, in line with WCAG (Web Content Accessibility Guidelines, the international web accessibility standard) recommendations.
+
+### 2. The color palette
+
+Colors fulfill several functions in an interface: hierarchizing information (primary color for main actions, secondary colors for support elements), signaling states (success, error, warning) and reinforcing brand identity. Color choices must respect the contrast ratios defined by WCAG standards: minimum 4.5:1 for body text, 3:1 for large text.
+
+### 3. Layout
+
+Layout is the spatial structure that organizes elements on the screen. It generally rests on a grid system, a set of columns and gutters that align elements consistently. A well-designed layout directs the user's gaze along a natural reading flow (F or Z pattern) and facilitates effortless navigation.
+
+### 4. Visual elements
+
+Images, illustrations, icons and graphics serve both content comprehension and brand identity reinforcement. Each visual element must have a precise function: illustrate a concept, guide an action or reinforce a hierarchy. Purely decorative elements should be used sparingly to avoid overloading the interface.
+
+## UI design principles
+
+UI professionals rely on proven design principles to produce effective interfaces.
+
+### 1. Consistency
+
+A uniform design across the entire interface strengthens user familiarity and reduces cognitive load (the mental effort needed to understand and use the interface). Consistency applies to components (buttons, forms), colors, typography and interaction patterns. Design systems formalize this consistency through libraries of reusable components.
+
+### 2. Clarity
+
+Each interface element must communicate its function unambiguously. Button labels must describe the action ("Submit form" rather than "Send"), icons must be accompanied by text when their meaning isn't universal, and interactive states (hover, focus, active, disabled) must be visually distinct.
+
+### 3. Simplicity
+
+A clean and uncluttered interface reduces cognitive load and lets the user focus on their task. The principle of parsimony (or Hick-Hyman law: decision time grows with the number of options) recommends limiting the number of choices visible on screen to speed up decision-making.
+
+### 4. Visual feedback
+
+Each user action must produce an immediate visual response: button state change on click, loading indicator during processing, confirmation message after a form submission. This feedback confirms to the user that their action has been registered and keeps them informed of system status.
+
+## Recommended tools for designing an effective UI
+
+UI design tools allow you to create, prototype and test interfaces while facilitating collaboration between designers and developers.
+
+<ComparisonTable
+  headers={["Tool", "Specialty"]}
+  rows={[
+    { label: "Figma", left: "Real-time collaborative design, free for individual projects", right: "Reference for teamwork and handoff (transferring specifications to developers)" },
+    { label: "Adobe XD", left: "Interactive prototyping, integration with Adobe Creative Cloud", right: "Suited to teams already using the Adobe suite" },
+    { label: "Sketch", left: "macOS tool, vast plugin ecosystem", right: "Used by professional designers on Mac" },
+    { label: "Axure RP", left: "Detailed prototypes with conditional logic", right: "Suited to projects with complex interactions" },
+    { label: "Zeplin", left: "Design-development handoff, automatic specifications", right: "Automatically generates CSS specifications and assets for developers" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="developpeur" title="Technical UI integration">
+When integrating a UI, use a design system and component libraries (Material UI, Chakra UI, Radix UI) to ensure visual consistency and accelerate development. Design tokens — variables that centralize values for colors, spacing, typographic sizes and border radii — make it possible to propagate design changes throughout the application from a single point.
+</Callout>
+
+## UI and SEO: interaction between interface and ranking
+
+UI design has a direct impact on the quality signals Google integrates into its ranking algorithm.
+
+- **Mobile-first indexing**: Google indexes the mobile version of sites in priority. A responsive UI, suited to all screen sizes, is a precondition for good ranking.
+- **Loading performance**: an interface that's too heavy (uncompressed images, unoptimized CSS, excessive web fonts) degrades Core Web Vitals, which penalizes positioning in search results.
+- **User engagement**: clear navigation and a legible interface increase session duration and reduce bounce rate, two behavioral signals taken into account by search engines.
+
+## Reference interface examples
+
+### 1. Apple
+
+Apple's site illustrates the principle of simplicity: airy layout, high-resolution visuals, marked typographic hierarchy and a linear navigation path that guides the user toward product pages.
+
+### 2. Airbnb
+
+Airbnb's interface combines a well-positioned search engine, accessible filters and visual presentation of results (cards, photos, reviews) that accelerates user decision-making.
+
+### 3. Dropbox
+
+Dropbox uses a minimalist interface with illustrations in a uniform graphic style, a restricted color palette and standardized UI components that ensure immediate product comprehension.
+
+## Going further on UI
+
+The user interface is a determining factor in a digital product's performance. It influences brand perception, user behavior (conversion rate, session duration, bounce rate) and search engine ranking. A structured UI approach — based on proven design principles, consistency formalized in a design system and validation through user testing — produces measurable results across all these indicators.
+
+<Quiz
+  question="What is the fundamental difference between UI and UX?"
+  options={[
+    "UI is for mobile, UX is for desktop",
+    "UI is the visual and interactive layer (buttons, menus, colors), UX is the overall quality of the user experience",
+    "UI is more important than UX",
+    "There is no difference, they are synonyms"
+  ]}
+  answer={1}
+  explanation="UI (User Interface) refers to the visual and interactive elements of the product: buttons, form fields, icons, menus, typography and layout. UX (User Experience) refers to the overall quality of the interaction: usability, information architecture, journey fluidity and user satisfaction. UI is the presentation layer, UX is the quality of the experience. The two disciplines are complementary and interdependent."
+/>

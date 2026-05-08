@@ -5,6 +5,8 @@ import { parseMarkdownTable, parseAllMarkdownTables } from "./parseMarkdownTable
 import ComparisonTable from "./ComparisonTable";
 import RecommendedStackCard from "./RecommendedStackCard";
 import { parseRecommendedStack } from "./parseRecommendedStack";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 //
 
 interface MarkdownRendererProps {
@@ -13,14 +15,22 @@ interface MarkdownRendererProps {
 }
 
 export default function MarkdownRenderer({ content, className = "", analyzedUrl }: MarkdownRendererProps & { analyzedUrl?: string }) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   // --- 1. Nettoyage du contenu (Identique à avant) ---
   let cleanContent = content;
   const identityRegex = /(\*\*Étape 1\s?:[\s\S]*?)(?=\*\*Étape 2)/i;
   if (identityRegex.test(cleanContent)) {
     cleanContent = cleanContent.replace(identityRegex, "");
   }
+  const stepEnRegex = /(\*\*Step 1\s?:[\s\S]*?)(?=\*\*Step 2)/i;
+  if (stepEnRegex.test(cleanContent)) {
+    cleanContent = cleanContent.replace(stepEnRegex, "");
+  }
   const step2TitleRegex = /\*\*Étape 2\s?:\s?Analyse Stratégique\s?\(Format Markdown\)\*\*/i;
   cleanContent = cleanContent.replace(step2TitleRegex, "");
+  const step2EnTitleRegex = /\*\*Step 2\s?:\s?Strategic Analysis\s?\(Markdown Format\)\*\*/i;
+  cleanContent = cleanContent.replace(step2EnTitleRegex, "");
   cleanContent = cleanContent.trim();
 
   // --- 2. Configuration du Renderer Custom pour les Tableaux ---
@@ -52,7 +62,7 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
   marked.use({ renderer });
 
   // --- 3. Ajout du Titre H1 dynamiquement ---
-  const finalContent = `# Audit stratégique de votre site ${analyzedUrl ? analyzedUrl : ''}\n\n` + cleanContent;
+  const finalContent = `# ${isEn ? "Strategic audit of your site" : "Audit stratégique de votre site"} ${analyzedUrl ? analyzedUrl : ''}\n\n` + cleanContent;
 
   // Extraction de tous les tableaux
   const allTables = parseAllMarkdownTables(cleanContent);
@@ -97,7 +107,7 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
         ))}
         {stackData && stackData.stack && (
           <RecommendedStackCard
-            title="Stack recommandée"
+            title={isEn ? "Recommended stack" : "Stack recommandée"}
             stack={stackData.stack}
             highlights={stackData.highlights}
           />

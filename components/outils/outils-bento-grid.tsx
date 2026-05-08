@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import {
   BarChart3,
   Search,
@@ -18,6 +18,8 @@ import {
 import { cn } from "@/lib/utils"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
 import type { ProfileId } from "@/lib/documentation-profiles"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 interface BentoCard {
   id: string
@@ -32,36 +34,39 @@ interface BentoCard {
   hideOnMobile?: boolean
 }
 
-const CARDS: Record<string, BentoCard> = {
+const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
   "simulateur-roi": {
     id: "simulateur-roi",
-    title: "Simulateur de ROI",
-    description:
-      "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires après migration Headless. Un outil concret pour chiffrer le coût de l'inaction.",
+    title: isEn ? "ROI simulator" : "Simulateur de ROI",
+    description: isEn
+      ? "Calculate the revenue lost to a slow site and project additional revenue after a Headless migration. A concrete tool to quantify the cost of inaction."
+      : "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires après migration Headless. Un outil concret pour chiffrer le coût de l'inaction.",
     icon: BarChart3,
     href: "/outils/simulateur-roi",
     gradient: "bg-gradient-to-br from-green-500/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-green-400",
-    tag: "Nouveau",
+    tag: isEn ? "New" : "Nouveau",
   },
   "benchmarking": {
     id: "benchmarking",
-    title: "Benchmarking Concurrentiel",
-    description:
-      "Comparez votre site aux leaders de votre secteur — Core Web Vitals, vitesse, performance.",
+    title: isEn ? "Competitive benchmarking" : "Benchmarking Concurrentiel",
+    description: isEn
+      ? "Compare your site to the leaders in your sector — Core Web Vitals, speed, performance."
+      : "Comparez votre site aux leaders de votre secteur — Core Web Vitals, vitesse, performance.",
     icon: Trophy,
     href: "/outils/benchmarking",
     gradient: "bg-gradient-to-br from-coral/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-coral",
-    tag: "Nouveau",
+    tag: isEn ? "New" : "Nouveau",
   },
   "audit-ia": {
     id: "audit-ia",
-    title: "Audit IA Headless",
-    description:
-      "Diagnostic WordPress propulsé par l'IA avec recommandations de migration personnalisées.",
+    title: isEn ? "Headless AI audit" : "Audit IA Headless",
+    description: isEn
+      ? "AI-powered WordPress diagnostic with personalized migration recommendations."
+      : "Diagnostic WordPress propulsé par l'IA avec recommandations de migration personnalisées.",
     icon: BotMessageSquare,
     href: "/audit-site-ia",
     gradient: "bg-gradient-to-br from-orange/20 via-mediumblue to-darkblue",
@@ -70,9 +75,10 @@ const CARDS: Record<string, BentoCard> = {
   },
   "cahier-des-charges": {
     id: "cahier-des-charges",
-    title: "Cahier des Charges",
-    description:
-      "Générez un cahier des charges complet et structuré pour votre projet web en répondant à quelques questions.",
+    title: isEn ? "Specifications" : "Cahier des Charges",
+    description: isEn
+      ? "Generate a complete, structured specifications document for your web project by answering a few questions."
+      : "Générez un cahier des charges complet et structuré pour votre projet web en répondant à quelques questions.",
     icon: FileText,
     href: "/cahier-des-charges",
     gradient: "bg-gradient-to-br from-indigo-500/20 via-mediumblue to-darkblue",
@@ -81,9 +87,10 @@ const CARDS: Record<string, BentoCard> = {
   },
   "mind-map": {
     id: "mind-map",
-    title: "Mind Map Headless",
-    description:
-      "Explorez l'architecture WordPress Headless de façon interactive : avantages, défis et roadmap de migration.",
+    title: isEn ? "Headless Mind Map" : "Mind Map Headless",
+    description: isEn
+      ? "Explore the Headless WordPress architecture interactively: benefits, challenges and migration roadmap."
+      : "Explorez l'architecture WordPress Headless de façon interactive : avantages, défis et roadmap de migration.",
     icon: Network,
     href: "/documentation/mind-map",
     gradient: "bg-gradient-to-br from-purple-500/20 via-mediumblue to-darkblue",
@@ -93,16 +100,17 @@ const CARDS: Record<string, BentoCard> = {
   },
   "determiner-offre": {
     id: "determiner-offre",
-    title: "Choisir ma stack",
-    description:
-      "Identifiez en quelques clics la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
+    title: isEn ? "Pick my stack" : "Choisir ma stack",
+    description: isEn
+      ? "In a few clicks, identify the WordPress stack that fits your project: optimized monolithic, hybrid Astro or full Next.js."
+      : "Identifiez en quelques clics la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
     icon: BadgePercent,
     href: "/contact",
     gradient: "bg-gradient-to-br from-amber-500/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-amber-400",
   },
-}
+})
 
 // Ordre des cartes par profil — le zigzag (2-1 / 1-2 / 2-1) est géré par la position
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
@@ -153,29 +161,29 @@ const COL_SPAN_BY_POSITION = [
   "md:col-span-1", // pos 5 — row 3 droite
 ]
 
-const stats = [
-  {
-    icon: Zap,
-    value: "-3.4s",
-    label: "Temps de chargement moyen gagné",
-  },
-  {
-    icon: TrendingUp,
-    value: "+23%",
-    label: "Conversions récupérées en moyenne",
-  },
-]
-
 export default function OutilsBentoGrid() {
   const { profileId } = useDocumentationMode()
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
+
+  const stats = isEn
+    ? [
+        { icon: Zap, value: "-3.4s", label: "Average load-time gained" },
+        { icon: TrendingUp, value: "+23%", label: "Conversions recovered on average" },
+      ]
+    : [
+        { icon: Zap, value: "-3.4s", label: "Temps de chargement moyen gagné" },
+        { icon: TrendingUp, value: "+23%", label: "Conversions récupérées en moyenne" },
+      ]
 
   const orderedCards = useMemo(() => {
+    const cards = buildCards(isEn)
     const order = profileId ? CARD_ORDER[profileId] : CARD_ORDER.default
     return order.map((id, index) => ({
-      ...CARDS[id],
+      ...cards[id],
       colSpan: COL_SPAN_BY_POSITION[index],
     }))
-  }, [profileId])
+  }, [profileId, isEn])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
@@ -210,7 +218,11 @@ export default function OutilsBentoGrid() {
               card.hideOnMobile && "hidden md:block"
             )}
           >
-            <Link href={card.href} className="absolute inset-0 z-10">
+            <Link
+              // @ts-expect-error – href comes from internal data
+              href={card.href}
+              className="absolute inset-0 z-10"
+            >
               <span className="sr-only">{card.title}</span>
             </Link>
 
@@ -253,7 +265,7 @@ export default function OutilsBentoGrid() {
 
                 {/* CTA arrow */}
                 <div className="mt-4 flex items-center gap-1.5 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className={card.accentColor}>Ouvrir l&apos;outil</span>
+                  <span className={card.accentColor}>{isEn ? "Open the tool" : "Ouvrir l'outil"}</span>
                   <ArrowRight
                     className={cn(
                       "w-4 h-4 transition-transform group-hover:translate-x-1",

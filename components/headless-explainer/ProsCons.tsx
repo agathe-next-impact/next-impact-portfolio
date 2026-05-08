@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 import type { ProItem, ConItem } from "@/lib/data/headless-explainer"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 interface ProsConsProps {
   pros: ProItem[]
@@ -41,11 +43,15 @@ function ScoreBar({ label, score }: ProItem) {
 }
 
 export default function ProsCons({ pros, cons }: ProsConsProps) {
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Pros */}
       <div className="rounded-xl border border-white/10 bg-darkblue/40 backdrop-blur-sm p-6">
-        <h4 className="font-googletitre font-medium text-green-400 text-base mb-5">Avantages</h4>
+        <h4 className="font-googletitre font-medium text-green-400 text-base mb-5">
+          {isEn ? "Benefits" : "Avantages"}
+        </h4>
         <div className="space-y-4">
           {pros.map((pro) => (
             <ScoreBar key={pro.label} {...pro} />
@@ -55,7 +61,9 @@ export default function ProsCons({ pros, cons }: ProsConsProps) {
 
       {/* Cons */}
       <div className="rounded-xl border border-white/10 bg-red-500/5 backdrop-blur-sm p-6">
-        <h4 className="font-googletitre font-medium text-red-400 text-base mb-5">Limites</h4>
+        <h4 className="font-googletitre font-medium text-red-400 text-base mb-5">
+          {isEn ? "Limits" : "Limites"}
+        </h4>
         <div className="space-y-4">
           {cons.map((con) => (
             <div key={con.label} className="rounded-lg bg-red-500/10 border border-red-500/20 p-4">

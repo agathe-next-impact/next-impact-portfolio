@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { BrandLogo } from "@/components/brand-logo";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDownLeft,
@@ -13,14 +12,20 @@ import {
   LucideArrowUpRight,
   PresentationIcon,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import AiAuditBannerSVG from "./AiAuditBannerSVG";
 import EligibilityForm from "@/components/tarifs/EligibilityForm";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { HERO_VARIANTS } from "@/lib/homepage-profiles";
+import { getHeroVariants } from "@/lib/homepage-profiles";
+import { Link } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 
 export default function Hero() {
   const { profileId } = useDocumentationMode();
-  const variant = profileId ? HERO_VARIANTS[profileId] : HERO_VARIANTS.default;
+  const locale = useLocale() as Locale;
+  const t = useTranslations("hero");
+  const heroVariants = getHeroVariants(locale);
+  const variant = profileId ? heroVariants[profileId] : heroVariants.default;
 
   return (
     <>
@@ -49,7 +54,7 @@ export default function Hero() {
               <BrandLogo
                 src="/img/logo-wordpress-blanc.webp"
                 srcLight="/img/logo-wordpress-small.webp"
-                alt="Logo WordPress"
+                alt={t("wordpressLogoAlt")}
                 width={45}
                 height={60}
                 priority
@@ -58,7 +63,7 @@ export default function Hero() {
               <BrandLogo
                 src="/img/logo-nextjs-blanc.webp"
                 srcLight="/img/logo-nextjs.webp"
-                alt="Logo Next.js"
+                alt={t("nextjsLogoAlt")}
                 width={80}
                 height={80}
                 priority
@@ -67,7 +72,7 @@ export default function Hero() {
               <BrandLogo
                 src="/img/logo-astro-blanc.webp"
                 srcLight="/img/logo-astro.webp"
-                alt="Logo Astro"
+                alt={t("astroLogoAlt")}
                 width={90}
                 height={80}
                 className="mt-1.5"
@@ -121,11 +126,11 @@ export default function Hero() {
               {/* Placeholder for profile image - replace with actual image */}
               <div className="bg-gradient-to-br from-brand-400/80 to-brand-600/80 w-full h-full flex items-center justify-center">
                 <Image
-                  src="/img/avatar.jpg" // Replace with your image path
-                  alt="Profile"
+                  src="/img/avatar.jpg"
+                  alt={t("profileImageAlt")}
                   className="bg-white object-cover w-full h-full rounded-xl"
-                  width={500} // Adjust width as needed
-                  height={500} // Adjust height as needed
+                  width={500}
+                  height={500}
                   priority
                   fetchPriority="high"
                   style={{ width: 'auto', height: 'auto' }}
@@ -136,19 +141,19 @@ export default function Hero() {
               <div className="absolute left-6 top-6 bg-extralightblue py-2 px-4 rounded-full flex items-center gap-2 animate-float">
                 <span className="h-3 w-3 bg-green-500 rounded-full"></span>
                 <span className="text-sm font-medium text-black">
-                  Disponible
+                  {t("available")}
                 </span>
               </div>
 
               <div className="absolute right-4 bottom-12 bg-extralightblue py-2 px-4 rounded-full animate-float-delayed">
                 <span className="text-sm font-medium text-black">
-                  8+ ans d'expérience
+                  {t("experience")}
                 </span>
               </div>
 
               <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full animate-float hidden md:flex items-center gap-1.5">
                 <span className="text-xs font-medium text-darkblue">
-                  Prestataire TIH — Déduction AGEFIPH
+                  {t("tihMention")}
                 </span>
               </div>
             </div>
@@ -170,7 +175,7 @@ export default function Hero() {
               </span>
               {" "}
               <span className="text-white/70">
-               en 2 minutes
+               {t("auditTimer")}
               </span>
             </h3>
             <p className="text-white/70 text-lg md:text-xl mt-2 md:mb-8">

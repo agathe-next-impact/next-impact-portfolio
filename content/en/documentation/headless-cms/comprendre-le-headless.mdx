@@ -1,0 +1,119 @@
+---
+title: Understanding headless
+description: What is headless and what is WordPress used in headless mode?
+category: headless-cms
+author: Next Impact
+date: "2025-03-20"
+order: 1
+---
+
+# What is a traditional website?
+
+In a traditional WordPress architecture, the CMS handles data storage, business logic and HTML rendering all at once. Concretely:
+
+- Content (posts, pages, media) is stored in a MySQL database
+- The PHP theme generates the HTML and CSS and controls the layout
+- The visitor receives the rendering produced directly by the WordPress server
+- Modifying the design means working on the theme, which is coupled to the content display logic
+
+This tight coupling between content and presentation means that any visual change requires working in the same environment as content management.
+
+## The "headless" concept: backend / frontend separation
+
+Headless architecture is built on a decoupling principle: the CMS (backend) only handles content storage and structuring, while one or more independent frontends take care of presentation.
+
+<FlowDiagram
+  nodes={[
+    { label: "WordPress backend", description: "Storage and content management via the database", icon: "📦" },
+    { label: "API", description: "Communication interface (REST or GraphQL)", icon: "🔗" },
+    { label: "Frontend", description: "Web, mobile or any other display channel", icon: "🖥️" },
+  ]}
+  accent="blue"
+/>
+
+Content stays in WordPress and its database. Multiple frontends can consume that content via an API. Each frontend has its own technology stack and its own design. Modifying one frontend has no impact on the others or on the backend.
+
+## Why is it called "headless"?
+
+The term "head" refers to the presentation layer of a CMS, that is, the theme that produces the HTML pages a user sees. "Headless" means this presentation layer has been removed from the CMS. The WordPress backend no longer outputs HTML for visitors: it exposes its data through an API, and a separate frontend application takes care of rendering.
+
+<Callout variant="tip" title="Decoupling principle">
+The backend (WordPress) delivers content as structured data (JSON). One or more frontends consume that data through the API and render it with their own interface. This decoupling allows each layer to evolve independently.
+</Callout>
+
+## The headless architecture in detail
+
+<ArchitectureDiagram
+  title="Headless WordPress architecture"
+  layers={[
+    { label: "Backend (CMS)", items: ["WordPress", "Database", "REST / GraphQL API"], color: "dark" },
+    { label: "API layer", items: ["WPGraphQL", "REST API", "Authentication"], color: "blue" },
+    { label: "Frontend", items: ["Next.js", "React", "Tailwind CSS"], color: "orange" },
+  ]}
+/>
+
+## WordPress's evolution toward headless
+
+WordPress has been around since 2003 and powers about 40% of websites worldwide. Adoption of the headless architecture is driven by growing needs for performance, design flexibility and multi-channel distribution.
+
+<ComparisonTable
+  headers={["Traditional WordPress", "Headless WordPress"]}
+  highlight="right"
+  rows={[
+    { label: "Display", left: "A single frontend, coupled to the PHP theme", right: "Multiple independent frontends are possible" },
+    { label: "Creation", left: "Constrained by what the theme can do", right: "Total freedom on the frontend stack" },
+    { label: "Performance", left: "PHP server-side rendering on every request", right: "SSG/SSR with Next.js, pre-generated and cached pages" },
+    { label: "Security", left: "WordPress publicly exposed", right: "WordPress isolated, reduced attack surface" },
+    { label: "SEO", left: "Dependent on plugins (Yoast, Rank Math)", right: "Native control of meta tags, SSR and optimized Core Web Vitals" },
+    { label: "Multi-channel", left: false, right: true },
+  ]}
+/>
+
+<StatGrid>
+  <StatCard value="40%" label="of the global web" description="WordPress market share (W3Techs)" accent="blue" />
+  <StatCard value="×3" label="faster" description="Average performance gain in headless architecture with SSG" accent="orange" />
+  <StatCard value="100%" label="technology choice" description="No constraint on the frontend framework used" accent="coral" />
+</StatGrid>
+
+## What does it actually mean for you?
+
+<Callout variant="utilisateur" title="If you manage content">
+The WordPress admin interface remains the same. Writing, publishing and organizing content do not change. Only the display layer is replaced by a modern frontend.
+</Callout>
+
+<Callout variant="decideur" title="If you visit the site">
+Load times drop below one second thanks to pre-rendering and CDN distribution. The interface is smoother and the design is no longer constrained by a WordPress theme.
+</Callout>
+
+<Callout variant="developpeur" title="If you build the site">
+You work with a modern frontend stack (React, Next.js, TypeScript). The code is decoupled, testable and versioned independently from the WordPress backend.
+</Callout>
+
+## Steps to go headless
+
+<StepByStep>
+  <Step number={1} title="Keep WordPress as the CMS">
+    Content and the admin interface stay in place. The database is preserved — no content migration is required.
+  </Step>
+  <Step number={2} title="Enable the API">
+    WordPress natively exposes a REST API. The WPGraphQL plugin can be added to provide a GraphQL endpoint, which allows more targeted, performant queries.
+  </Step>
+  <Step number={3} title="Build the frontend">
+    A frontend application is built with a framework like Next.js. It consumes data from the WordPress API and handles page rendering.
+  </Step>
+  <Step number={4} title="Connect the two layers">
+    The frontend sends requests to the WordPress API to fetch content, then renders pages with a custom design, using SSG (Static Site Generation) or SSR (Server-Side Rendering).
+  </Step>
+</StepByStep>
+
+<Quiz
+  question="In a headless architecture, where is the content stored?"
+  options={[
+    "In the frontend (Next.js)",
+    "In the backend (WordPress)",
+    "In the visitor's browser",
+    "In a static HTML file"
+  ]}
+  answer={1}
+  explanation="The content stays in WordPress (the backend) and its MySQL database. The frontend retrieves that content via the API (REST or GraphQL) and handles the rendering. That's the decoupling principle: the CMS manages the data, the frontend handles the presentation."
+/>
