@@ -1,36 +1,56 @@
+"use client";
+
 import React from "react";
 import { CheckCircle, AlertTriangle, TrendingUp, Activity, Gauge } from "lucide-react";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 interface AuditDashboardProps {
   markdown: string;
 }
 
-// Fonction utilitaire pour extraire les données via Regex
-const extractData = (md: string) => {
-  // 1. Indice de modernité : on cherche "Indice de modernité", le signe ":", 
-  // puis on prend le premier chiffre qui suit, peu importe les caractères intermédiaires (*, [, espace...)
-  const scoreMatch = md.match(/Indice de modernité.*?:[^\d]*(\d+)/i);
-  // On s'assure que le score est réaliste (<= 10) sinon 0
+// Fonction utilitaire pour extraire les données via Regex (FR + EN AI output)
+const extractData = (md: string, isEn: boolean) => {
+  // 1. Modernity index / Indice de modernité
+  const scoreMatch =
+    md.match(/Indice de modernité.*?:[^\d]*(\d+)/i) ||
+    md.match(/Modernity index.*?:[^\d]*(\d+)/i);
   let score = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
-  if (score > 10) score = 0; // Sécurité si ça capture une année ou autre
+  if (score > 10) score = 0;
 
-  // 2. Verdict Stratégique
-  const verdictMatch = md.match(/\*\*Verdict Stratégique.*?:.*?\*?\[?(.*?)(?:\]|\.| \n)/i); 
-  // Version simplifiée : capture tout après le titre jusqu'à un point ou crochet fermant
-  const verdict = verdictMatch ? verdictMatch[1].replace(/[*\[\]]/g, "").trim() : "Non défini";
+  // 2. Strategic verdict / Verdict Stratégique
+  const verdictMatch =
+    md.match(/\*\*Verdict Stratégique.*?:.*?\*?\[?(.*?)(?:\]|\.| \n)/i) ||
+    md.match(/\*\*Strategic verdict.*?:.*?\*?\[?(.*?)(?:\]|\.| \n)/i);
+  const verdict = verdictMatch
+    ? verdictMatch[1].replace(/[*\[\]]/g, "").trim()
+    : isEn
+      ? "Undefined"
+      : "Non défini";
 
-  // 3. Nature de l'organisation
-  const natureMatch = md.match(/1\.\s*\*\*Nature de l'organisation.*?:.*?\*\*(.*?)(?:\n|$)/i);
-  const natureMatchBF = md.match(/1\.\s*\*\*Nature de l'organisation.*?:(.*?)(?:\n|$)/i);
-  let nature = natureMatch ? natureMatch[1].trim() : (natureMatchBF ? natureMatchBF[1].trim() : "Non détecté");
-  // Nettoyage final pour enlever d'éventuels astérisques restants
+  // 3. Nature of the organization / Nature de l'organisation
+  const natureMatch =
+    md.match(/1\.\s*\*\*Nature de l'organisation.*?:.*?\*\*(.*?)(?:\n|$)/i) ||
+    md.match(/1\.\s*\*\*Nature of the organization.*?:.*?\*\*(.*?)(?:\n|$)/i);
+  const natureMatchBF =
+    md.match(/1\.\s*\*\*Nature de l'organisation.*?:(.*?)(?:\n|$)/i) ||
+    md.match(/1\.\s*\*\*Nature of the organization.*?:(.*?)(?:\n|$)/i);
+  let nature = natureMatch
+    ? natureMatch[1].trim()
+    : natureMatchBF
+      ? natureMatchBF[1].trim()
+      : isEn
+        ? "Not detected"
+        : "Non détecté";
   nature = nature.replace(/\*\*/g, "").trim();
 
   return { score, verdict, nature };
 };
 
 export default function AuditDashboard({ markdown }: AuditDashboardProps) {
-  const { score, verdict, nature } = extractData(markdown);
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const { score, verdict, nature } = extractData(markdown, isEn);
 
   // Définition des couleurs selon le score
   let scoreColor = "text-red-500 border-red-500";
@@ -41,13 +61,15 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
   return (
     <>
     <h1 className="text-2xl md:text-3xl font-googletitre font-semibold text-center text-mediumblue mb-6">
-      Audit d'opportunité pour une migration WordPress Headless
+      {isEn
+        ? "Headless WordPress migration opportunity audit"
+        : "Audit d'opportunité pour une migration WordPress Headless"}
      </h1>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
       {/* Carte 1: Score Global */}
       <div className={`p-6 rounded-2xl border flex flex-col items-center justify-center gap-2 ${scoreBg} ${scoreColor.replace('text-', 'border-opacity-20 border-')}`}>
         <h3 className="text-xs font-bold uppercase tracking-widest opacity-70 flex items-center gap-2">
-            <Gauge className="size-4"/> Indice de Modernité
+            <Gauge className="size-4"/> {isEn ? "Modernity index" : "Indice de Modernité"}
         </h3>
         <div className="relative size-20 flex items-center justify-center mt-1">
             <div className={`size-full rounded-full border-4 opacity-20 absolute ${scoreColor}`}></div>
@@ -62,17 +84,17 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
       {/* Carte 2: Verdict */}
       <div className="p-6 rounded-2xl bg-white/60 border border-white/50 flex flex-col items-center justify-center gap-3 text-center backdrop-blur-sm">
         <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
-            <Activity className="size-4"/> Verdict Stratégique
+            <Activity className="size-4"/> {isEn ? "Strategic verdict" : "Verdict Stratégique"}
         </h3>
         <div className={`px-4 py-1.5 rounded-full font-bold text-base uppercase ${
-            verdict.includes("Accélérer") ? "text-emerald-800" :
-            verdict.includes("Pivoter") ? "text-orange-800" :
+            (verdict.includes("Accélérer") || /migrate quickly/i.test(verdict)) ? "text-emerald-800" :
+            (verdict.includes("Pivoter") || /migrate progressively/i.test(verdict)) ? "text-orange-800" :
             "text-blue-800"
         }`}>
             {verdict}
         </div>
         <p className="text-[10px] uppercase tracking-wide text-slate-400">
-            Recommandation IA
+            {isEn ? "AI recommendation" : "Recommandation IA"}
         </p>
       </div>
 

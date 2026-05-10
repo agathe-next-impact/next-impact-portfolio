@@ -61,7 +61,9 @@ export interface Tab {
   content: TabContent
 }
 
-export const HEADLESS_TABS: Tab[] = [
+import type { Locale } from "@/i18n/routing"
+
+const HEADLESS_TABS_FR: Tab[] = [
   {
     id: "quoi",
     label: "C'est quoi ?",
@@ -179,3 +181,128 @@ export const HEADLESS_TABS: Tab[] = [
     },
   },
 ]
+
+const HEADLESS_TABS_EN: Tab[] = [
+  {
+    id: "quoi",
+    label: "What is it?",
+    content: {
+      title: "WordPress without the constraints",
+      description:
+        "WordPress manages your content in the back office, Next.js powers the user interface at lightning speed. The two communicate via a REST or GraphQL API — fully decoupled.",
+      steps: [
+        {
+          label: "A familiar WordPress admin",
+          description: "Classic familiar interface, no training required",
+        },
+        {
+          label: "A fast, modern Next.js front end for your visitors",
+          description: "Smooth user experience, custom design, animations and more",
+        },
+      ],
+      variant: "timeline",
+    },
+  },
+  {
+    id: "projet",
+    label: "Which project?",
+    content: {
+      title: "Projects suited to Headless",
+      items: [
+        {
+          label: "Ambitious redesign",
+          status: "ideal",
+          description: "Migration from a slow WP or aging site",
+        },
+        {
+          label: "High-traffic platform",
+          status: "ideal",
+          description: "Media, portals, social-economy marketplaces",
+        },
+        {
+          label: "Business web app",
+          status: "ideal",
+          description: "Member area, online services, complex forms",
+        },
+        {
+          label: "Simple 1-3 page brochure",
+          status: "evaluate",
+          description: "If the budget is tight, weigh the ROI",
+        },
+        {
+          label: "Complex e-commerce",
+          status: "evaluate",
+          description: "Doable with WooCommerce + API, needs careful scoping",
+        },
+        {
+          label: "Blog managed fully in-house",
+          status: "avoid",
+          description: "If the team wants to handle everything alone without dev skills",
+        },
+      ],
+      variant: "grid",
+    },
+  },
+  {
+    id: "entreprise",
+    label: "Which organization?",
+    content: {
+      title: "Tailored to your organization",
+      groups: [
+        {
+          label: "Social economy & nonprofits",
+          color: "teal",
+          items: [
+            "Nonprofits — credibility & autonomy",
+            "Co-ops — sustainable performance",
+            "Foundations — polished brand image",
+          ],
+        },
+        {
+          label: "Companies",
+          color: "blue",
+          items: [
+            "SMEs (50-500 employees) — SEO & acquisition",
+            "Scale-ups — scalable architecture & APIs",
+            "Media / Portals — critical volume & speed",
+          ],
+        },
+      ],
+      variant: "two-columns",
+    },
+  },
+  {
+    id: "bilan",
+    label: "Benefits & limits",
+    content: {
+      title: "An honest verdict",
+      pros: [
+        { label: "Performance (Core Web Vitals)", score: 99 },
+        { label: "Security", score: 95 },
+        { label: "Scalability", score: 90 },
+        { label: "Technical SEO", score: 93 },
+      ],
+      cons: [
+        {
+          label: "Initial investment",
+          description: "More expensive than a theme, paid back over 2-3 years",
+        },
+        {
+          label: "Visual page builders incompatible",
+          description: "Elementor, Divi → replaced by custom components",
+        },
+        {
+          label: "Specialized skills required",
+          description: "Freelance or agency specialized in Next.js",
+        },
+      ],
+      variant: "pros-cons",
+    },
+  },
+]
+
+export const HEADLESS_TABS = HEADLESS_TABS_FR
+
+export function getHeadlessTabs(locale: Locale): Tab[] {
+  return locale === "en" ? HEADLESS_TABS_EN : HEADLESS_TABS_FR
+}

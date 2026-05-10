@@ -2,19 +2,88 @@
 
 import React, { useRef } from "react";
 import { CDCCard } from "@/components/tools";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 export default function Process() {
-
   const timelineRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+
+  const phases = isEn
+    ? [
+        {
+          step: "1",
+          title: "Analysis & scoping",
+          duration: "1 week",
+          description: "Audit of the existing site and definition of needs",
+        },
+        {
+          step: "2",
+          title: "Design & validation",
+          duration: "2 weeks",
+          description: "Wireframes, mockups and sign-off",
+        },
+        {
+          step: "3",
+          title: "Development",
+          duration: "3-4 weeks",
+          description: "Development and integration",
+        },
+        {
+          step: "4",
+          title: "Optimization & testing",
+          duration: "1 week",
+          description: "Performance, SEO and team training",
+        },
+        {
+          step: "5",
+          title: "Going live",
+          duration: "1 week",
+          description: "Migration, testing and support",
+        },
+      ]
+    : [
+        {
+          step: "1",
+          title: "Analyse & Cadrage",
+          duration: "1 semaine",
+          description: "Audit de l'existant et définition des besoins",
+        },
+        {
+          step: "2",
+          title: "Conception & Validation",
+          duration: "2 semaines",
+          description: "Wireframes, maquettes et validation",
+        },
+        {
+          step: "3",
+          title: "Développement",
+          duration: "3-4 semaines",
+          description: "Développement et intégration",
+        },
+        {
+          step: "4",
+          title: "Optimisation & Tests",
+          duration: "1 semaine",
+          description: "Performance, SEO et formation équipes",
+        },
+        {
+          step: "5",
+          title: "Mise en Ligne",
+          duration: "1 semaine",
+          description: "Migration, tests et support",
+        },
+      ];
 
     return (
         <section className="container mx-auto px-4 md:py-24">
           <div className="w-max mx-auto text-center mb-12 bg-mediumblue/70 backdrop-blur-xl p-6 rounded-2xl border border-lightblue/20">
             <h2 className="text-3xl md:text-4xl font-medium text-white mb-4">
-              Projet en 5 étapes
+              {isEn ? "Project in 5 steps" : "Projet en 5 étapes"}
             </h2>
             <p className="text-lg text-white/80">
-              Un processus rodé pour votre réussite
+              {isEn ? "A proven process for your success" : "Un processus rodé pour votre réussite"}
             </p>
           </div>
           <div className="relative max-w-4xl mx-auto" ref={timelineRef}>
@@ -23,38 +92,7 @@ export default function Process() {
               className="h-full bg-white/20 absolute left-1/2 top-0 w-[1px] -translate-x-1/2 rounded-full pointer-events-none"
             />
             <ol className="relative z-10 grid md:grid-cols-1 gap-0">
-              {[
-                {
-                  step: "1",
-                  title: "Analyse & Cadrage",
-                  duration: "1 semaine",
-                  description: "Audit de l'existant et définition des besoins",
-                },
-                {
-                  step: "2",
-                  title: "Conception & Validation",
-                  duration: "2 semaines",
-                  description: "Wireframes, maquettes et validation",
-                },
-                {
-                  step: "3",
-                  title: "Développement",
-                  duration: "3-4 semaines",
-                  description: "Développement et intégration",
-                },
-                {
-                  step: "4",
-                  title: "Optimisation & Tests",
-                  duration: "1 semaine",
-                  description: "Performance, SEO et formation équipes",
-                },
-                {
-                  step: "5",
-                  title: "Mise en Ligne",
-                  duration: "1 semaine",
-                  description: "Migration, tests et support",
-                },
-              ].map((phase, index, arr) => (
+              {phases.map((phase, index, arr) => (
                 <li
                   key={index}
                   className="relative flex md:items-center py-8 group"

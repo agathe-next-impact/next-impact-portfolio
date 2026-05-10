@@ -4,7 +4,8 @@ import { renderAuditEmailHtml } from "@/lib/audit-email-renderer";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, company, email, url, markdown } = await req.json();
+    const { name, company, email, url, markdown, locale } = await req.json();
+    const isEn = locale === "en";
 
     if (!name || !email || !url || !markdown) {
       return NextResponse.json(
@@ -58,11 +59,41 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    // 2. Email utilisateur : message d'accompagnement + audit rendu
-    await sendMail({
-      to: email,
-      subject: `Votre audit IA est prêt — ${url}`,
-      html: `
+    // 2. Email utilisateur : message d'accompagnement + audit rendu (locale-aware)
+    const userSubject = isEn
+      ? `Your AI audit is ready — ${url}`
+      : `Votre audit IA est prêt — ${url}`;
+
+    const userHtml = isEn
+      ? `
+        <div style="font-family:${fontTexte};max-width:700px;margin:0 auto;">
+          <h2 style="font-family:${fontTitre};color:#1e3a5f;">Hi ${name},</h2>
+          <p style="font-family:${fontTexte};font-size:16px;line-height:1.6;color:#333;">
+            Thank you for your interest! Here is the full audit report for your site
+            <a href="${url}" style="color:#4f46e5;">${url}</a>.
+          </p>
+          <p style="font-family:${fontTexte};font-size:16px;line-height:1.6;color:#333;">
+            This report analyzes the performance, security, SEO and technical architecture of your site
+            to identify modernization opportunities.
+          </p>
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
+          ${auditHtml}
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
+          <p style="font-family:${fontTexte};font-size:16px;line-height:1.6;color:#333;">
+            Want to discuss it? Feel free to book a slot:
+          </p>
+          <p style="text-align:center;margin:24px 0;">
+            <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
+               style="font-family:${fontTitre};background:#ff6b6b;color:#1e3a5f;padding:12px 28px;border-radius:24px;text-decoration:none;font-weight:bold;font-size:16px;">
+              Book a video call
+            </a>
+          </p>
+          <p style="font-family:${fontTexte};font-size:14px;color:#666;text-align:center;">
+            Next Impact Digital — <a href="mailto:agathe@next-impact.digital" style="color:#4f46e5;">agathe@next-impact.digital</a> — +33 6 73 98 16 38
+          </p>
+        </div>
+      `
+      : `
         <div style="font-family:${fontTexte};max-width:700px;margin:0 auto;">
           <h2 style="font-family:${fontTitre};color:#1e3a5f;">Bonjour ${name},</h2>
           <p style="font-family:${fontTexte};font-size:16px;line-height:1.6;color:#333;">
@@ -89,7 +120,12 @@ export async function POST(req: NextRequest) {
             Next Impact Digital — <a href="mailto:agathe@next-impact.digital" style="color:#4f46e5;">agathe@next-impact.digital</a> — 06 73 98 16 38
           </p>
         </div>
-      `,
+      `;
+
+    await sendMail({
+      to: email,
+      subject: userSubject,
+      html: userHtml,
     });
 
     return NextResponse.json({ success: true });

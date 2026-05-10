@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X, Send, CheckCircle2 } from "lucide-react";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 type ContactFormModalProps = {
   formData: Record<string, any>;
@@ -17,11 +19,13 @@ async function sendContactForm({
   email,
   message,
   formData,
+  locale,
 }: {
   nom: string;
   email: string;
   message: string;
   formData: Record<string, any>;
+  locale: string;
 }) {
   const res = await fetch("/api/contact", {
     method: "POST",
@@ -32,6 +36,7 @@ async function sendContactForm({
       message,
       formData,
       type: "cahier-des-charges",
+      locale,
     }),
   });
 
@@ -42,6 +47,8 @@ async function sendContactForm({
 }
 
 export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,10 +73,15 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
         email: fields.email,
         message: fields.message,
         formData,
+        locale,
       });
       setSent(true);
     } catch {
-      setError("Erreur lors de l'envoi. Merci de réessayer.");
+      setError(
+        isEn
+          ? "Sending failed. Please try again."
+          : "Erreur lors de l'envoi. Merci de réessayer.",
+      );
     } finally {
       setSending(false);
     }
@@ -97,7 +109,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
           <button
             className="absolute top-4 right-4 text-white/40 hover:text-white transition p-1 rounded-full hover:bg-white/10"
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label={isEn ? "Close" : "Fermer"}
             type="button"
           >
             <X className="w-5 h-5" />
@@ -108,29 +120,35 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-8 h-8 text-green-400" />
               </div>
-              <h2 className="text-2xl text-white font-googletitre font-bold">Merci !</h2>
-              <p className="text-white/60 font-googletexte">Votre demande a bien été envoyée.</p>
+              <h2 className="text-2xl text-white font-googletitre font-bold">
+                {isEn ? "Thank you!" : "Merci !"}
+              </h2>
+              <p className="text-white/60 font-googletexte">
+                {isEn ? "Your request has been sent." : "Votre demande a bien été envoyée."}
+              </p>
               <button
                 className="mt-4 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition font-googletitre"
                 onClick={onClose}
               >
-                Fermer
+                {isEn ? "Close" : "Fermer"}
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <h2 className="text-xl font-bold text-white font-googletitre mb-1">
-                  Demander un devis
+                  {isEn ? "Request a quote" : "Demander un devis"}
                 </h2>
                 <p className="text-sm text-white/50 font-googletexte">
-                  Votre cahier des charges sera joint automatiquement
+                  {isEn
+                    ? "Your specifications document will be attached automatically"
+                    : "Votre cahier des charges sera joint automatiquement"}
                 </p>
               </div>
 
               <div className="space-y-2">
                 <label className="block text-sm text-white/80 font-googletitre font-semibold">
-                  Votre nom
+                  {isEn ? "Your name" : "Votre nom"}
                 </label>
                 <Input
                   type="text"
@@ -139,14 +157,14 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
                   onChange={handleChange}
                   required
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
-                  placeholder="Jean Dupont"
+                  placeholder={isEn ? "Jane Doe" : "Jean Dupont"}
                   disabled={sending}
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="block text-sm text-white/80 font-googletitre font-semibold">
-                  Votre email
+                  {isEn ? "Your email" : "Votre email"}
                 </label>
                 <Input
                   type="email"
@@ -155,21 +173,23 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
                   onChange={handleChange}
                   required
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
-                  placeholder="jean@exemple.com"
+                  placeholder={isEn ? "jane@example.com" : "jean@exemple.com"}
                   disabled={sending}
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="block text-sm text-white/80 font-googletitre font-semibold">
-                  Message <span className="text-white/40 font-normal">(optionnel)</span>
+                  {isEn ? "Message" : "Message"} <span className="text-white/40 font-normal">{isEn ? "(optional)" : "(optionnel)"}</span>
                 </label>
                 <Textarea
                   name="message"
                   value={fields.message}
                   onChange={handleChange}
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 rounded-xl min-h-[80px]"
-                  placeholder="Des précisions sur votre projet..."
+                  placeholder={
+                    isEn ? "Project details..." : "Des précisions sur votre projet..."
+                  }
                   rows={3}
                   disabled={sending}
                 />
@@ -189,12 +209,12 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
                 {sending ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-darkblue/20 border-t-darkblue" />
-                    Envoi en cours...
+                    {isEn ? "Sending…" : "Envoi en cours..."}
                   </>
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    Envoyer la demande
+                    {isEn ? "Send request" : "Envoyer la demande"}
                   </>
                 )}
               </button>

@@ -1,4 +1,12 @@
 import type { ProfileId } from "@/lib/documentation-profiles";
+import type { Locale } from "@/i18n/routing";
+import {
+  HERO_VARIANTS_EN,
+  SERVICES_PAGE_VARIANTS_EN,
+  CASE_STUDIES_PAGE_VARIANTS_EN,
+  ABOUT_PAGE_VARIANTS_EN,
+  EXPANDABLE_CARDS_VARIANTS_EN,
+} from "@/lib/homepage-profiles-en";
 
 // ─── Variantes Hero ─────────────────────────────────────────────────────────
 
@@ -686,3 +694,33 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
     },
   ],
 };
+
+// ─── Locale-aware accessors ──────────────────────────────────────────────────
+
+export function getHeroVariants(locale: Locale): Record<ProfileId | "default", HeroVariant> {
+  return locale === "en" ? HERO_VARIANTS_EN : HERO_VARIANTS;
+}
+
+export function getServicesPageVariants(
+  locale: Locale
+): Record<ProfileId | "default", ServicesPageVariant> {
+  return locale === "en" ? SERVICES_PAGE_VARIANTS_EN : SERVICES_PAGE_VARIANTS;
+}
+
+export function getCaseStudiesPageVariants(
+  locale: Locale
+): Record<ProfileId | "default", CaseStudiesPageVariant> {
+  return locale === "en" ? CASE_STUDIES_PAGE_VARIANTS_EN : CASE_STUDIES_PAGE_VARIANTS;
+}
+
+export function getAboutPageVariants(
+  locale: Locale
+): Record<ProfileId | "default", AboutPageVariant> {
+  return locale === "en" ? ABOUT_PAGE_VARIANTS_EN : ABOUT_PAGE_VARIANTS;
+}
+
+export function getExpandableCardsVariants(
+  locale: Locale
+): Record<ProfileId | "default", ExpandableCardVariant[]> {
+  return locale === "en" ? EXPANDABLE_CARDS_VARIANTS_EN : EXPANDABLE_CARDS_VARIANTS;
+}

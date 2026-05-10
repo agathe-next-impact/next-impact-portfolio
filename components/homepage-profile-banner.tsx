@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { PROFILES, type ProfileId } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,7 @@ const profileOrder: ProfileId[] = ["decideur", "utilisateur", "developpeur"];
 
 export function HomepageProfileBanner() {
   const { profileId, setProfile } = useDocumentationMode();
+  const t = useTranslations("profileSwitcher");
 
   return (
     <AnimatePresence>
@@ -22,7 +24,7 @@ export function HomepageProfileBanner() {
         >
           <div className="container flex flex-col sm:flex-row items-center justify-center gap-4 py-4 px-4">
             <span className="text-white/80 font-googletexte text-sm">
-              Personnalisez votre expérience :
+              {t("customizeExperience")}
             </span>
             <div className="flex gap-2 flex-wrap justify-center">
               {profileOrder.map((id) => {
@@ -38,7 +40,7 @@ export function HomepageProfileBanner() {
                     )}
                   >
                     <Icon className={cn("h-4 w-4", profile.accentColor)} />
-                    <span className="font-googletexte text-white">{profile.label}</span>
+                    <span className="font-googletexte text-white">{t(`${id}.label`)}</span>
                   </button>
                 );
               })}

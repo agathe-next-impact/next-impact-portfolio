@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import type { ProfileId } from "@/lib/documentation-profiles";
 import { motion } from "framer-motion";
@@ -37,9 +37,10 @@ const fadeUp: Variants = {
 };
 
 /* ─────────────────────────────────────────────
-   1. CTA Secondaire — Lead Magnet (Audit IA)
+   1. CTA Lead Magnet — AI Audit
    ───────────────────────────────────────────── */
 function CTALeadMagnet() {
+  const t = useTranslations("ctaSection.audit");
   return (
     <motion.div
       initial="hidden"
@@ -48,46 +49,42 @@ function CTALeadMagnet() {
       className="relative w-full"
     >
       <div className="border border-lightblue/20 rounded-3xl p-6 md:p-8 bg-gradient-to-br from-darkblue/60 to-mediumblue/40 backdrop-blur-xl h-full flex flex-col">
-        {/* Badge */}
         <motion.div custom={0} variants={fadeUp} className="flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lightyellow/10 border border-lightyellow/20 text-lightyellow text-xs font-googletexte">
             <Search className="w-3.5 h-3.5" />
-            Audit gratuit
+            {t("badge")}
           </span>
         </motion.div>
 
-        {/* Title */}
         <motion.h2
           custom={1}
           variants={fadeUp}
           className="text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Évaluez votre site en 5 minutes
+          {t("title")}
         </motion.h2>
 
-        {/* Subtitle */}
         <motion.p
           custom={2}
           variants={fadeUp}
           className="text-sm md:text-base text-white/70 font-googletexte text-center mx-auto mb-5 leading-relaxed"
         >
-          Recevez un{" "}
+          {t("subtitleStart")}{" "}
           <span className="text-lightyellow font-semibold">
-            rapport complet avec des recommandations personnalisées
+            {t("subtitleHighlight")}
           </span>{" "}
-          — gratuit, sans engagement.
+          {t("subtitleEnd")}
         </motion.p>
 
-        {/* Benefits pills */}
         <motion.div
           custom={3}
           variants={fadeUp}
           className="flex flex-wrap justify-center gap-2 mb-6"
         >
           {[
-            { icon: Zap, label: "Performance ↑", color: "text-coral" },
-            { icon: TrendingUp, label: "ROI Projection", color: "text-lightyellow" },
-            { icon: PiggyBank, label: "Cost Efficiency", color: "text-lightblue" },
+            { icon: Zap, label: t("pillPerformance"), color: "text-coral" },
+            { icon: TrendingUp, label: t("pillRoi"), color: "text-lightyellow" },
+            { icon: PiggyBank, label: t("pillCost"), color: "text-lightblue" },
           ].map(({ icon: Icon, label, color }) => (
             <span
               key={label}
@@ -99,19 +96,18 @@ function CTALeadMagnet() {
           ))}
         </motion.div>
 
-        {/* CTA Button — style outline secondaire */}
         <motion.div custom={4} variants={fadeUp} className="flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-transparent border-2 border-lightyellow/60 text-lightyellow py-2.5 px-6 rounded-full hover:bg-lightyellow/10 hover:border-lightyellow transition-all duration-300 font-googletitre text-sm md:text-base font-semibold"
             asChild
           >
             <Link href="/audit-site-ia">
-              Lancer mon audit gratuit
+              {t("ctaLabel")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
           <span className="text-xs text-white/40 font-googletexte">
-            Gratuit · Rapport en 5 minutes · Sans engagement
+            {t("footer")}
           </span>
         </motion.div>
       </div>
@@ -120,9 +116,10 @@ function CTALeadMagnet() {
 }
 
 /* ─────────────────────────────────────────────
-   2. CTA Principal — Entonnoir de Conversion
+   2. CTA Conversion
    ───────────────────────────────────────────── */
 function CTAConversion() {
+  const t = useTranslations("ctaSection.conversion");
   return (
     <motion.div
       initial="hidden"
@@ -131,38 +128,34 @@ function CTAConversion() {
       className="relative w-full"
     >
       <div className="relative overflow-hidden border-2 border-coral/30 rounded-3xl p-6 md:p-8 bg-gradient-to-br from-mediumblue to-regularblue/40 h-full flex flex-col">
-        {/* Glow effect */}
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-coral/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-lightyellow/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Badge */}
         <motion.div custom={0} variants={fadeUp} className="relative z-10 flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-coral/10 border border-coral/20 text-coral text-xs font-googletexte">
             <ClipboardCheck className="w-3.5 h-3.5" />
-            Questionnaire interactif
+            {t("badge")}
           </span>
         </motion.div>
 
-        {/* Title */}
         <motion.h2
           custom={1}
           variants={fadeUp}
           className="relative z-10 text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Déterminez l&apos;offre adaptée
+          {t("title")}
         </motion.h2>
 
-        {/* Promise */}
         <motion.p
           custom={2}
           variants={fadeUp}
           className="relative z-10 text-sm md:text-base text-white/80 font-googletexte text-center mx-auto mb-3 leading-relaxed"
         >
-          Obtenez une estimation personnalisée pour{" "}
+          {t("promiseStart")}{" "}
           <span className="text-white font-semibold">
-            un site combinant performance et le back-office le plus utilisé au monde
+            {t("promiseHighlight")}
           </span>
-          .
+          {t("promiseEnd")}
         </motion.p>
 
         <motion.p
@@ -170,22 +163,21 @@ function CTAConversion() {
           variants={fadeUp}
           className="relative z-10 text-xs md:text-sm text-white/60 font-googletexte text-center mx-auto mb-6"
         >
-          Répondez à quelques questions pour recevoir une offre adaptée à votre profil et votre budget.
+          {t("secondary")}
         </motion.p>
 
-        {/* CTA Button — le plus voyant */}
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
           <Button
             className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
             <Link href="/contact">
-              Démarrer mon projet
+              {t("ctaLabel")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
           <span className="text-xs text-white/40 font-googletexte">
-            Disponible · Réponse sous 24h · 8+ ans d&apos;expérience
+            {t("footer")}
           </span>
         </motion.div>
       </div>
@@ -194,9 +186,10 @@ function CTAConversion() {
 }
 
 /* ─────────────────────────────────────────────
-   2b. CTA Simulateur ROI (affiché sur /contact)
+   2b. CTA ROI Simulator
    ───────────────────────────────────────────── */
 function CTASimulateurROI() {
+  const t = useTranslations("ctaSection.roi");
   return (
     <motion.div
       initial="hidden"
@@ -210,7 +203,7 @@ function CTASimulateurROI() {
         <motion.div custom={0} variants={fadeUp} className="relative z-10 flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lightyellow/10 border border-lightyellow/20 text-lightyellow text-xs font-googletexte">
             <Calculator className="w-3.5 h-3.5" />
-            Simulateur gratuit
+            {t("badge")}
           </span>
         </motion.div>
 
@@ -219,7 +212,7 @@ function CTASimulateurROI() {
           variants={fadeUp}
           className="relative z-10 text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Calculez votre ROI
+          {t("title")}
         </motion.h2>
 
         <motion.p
@@ -227,11 +220,11 @@ function CTASimulateurROI() {
           variants={fadeUp}
           className="relative z-10 text-sm md:text-base text-white/80 font-googletexte text-center mx-auto mb-3 leading-relaxed"
         >
-          Mesurez le{" "}
+          {t("promiseStart")}{" "}
           <span className="text-lightyellow font-semibold">
-            manque à gagner dû à un site lent
+            {t("promiseHighlight")}
           </span>{" "}
-          et projetez vos revenus après migration headless.
+          {t("promiseEnd")}
         </motion.p>
 
         <motion.p
@@ -239,7 +232,7 @@ function CTASimulateurROI() {
           variants={fadeUp}
           className="relative z-10 text-xs md:text-sm text-white/60 font-googletexte text-center mx-auto mb-6"
         >
-          Résultats instantanés basés sur vos données réelles de trafic et de conversion.
+          {t("secondary")}
         </motion.p>
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
@@ -248,12 +241,12 @@ function CTASimulateurROI() {
             asChild
           >
             <Link href="/outils/simulateur-roi">
-              Simuler mon ROI
+              {t("ctaLabel")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
           <span className="text-xs text-white/40 font-googletexte">
-            Gratuit · Résultats instantanés · Sans engagement
+            {t("footer")}
           </span>
         </motion.div>
       </div>
@@ -265,6 +258,7 @@ function CTASimulateurROI() {
    2c. CTA Benchmarking
    ───────────────────────────────────────────── */
 function CTABenchmarking() {
+  const t = useTranslations("ctaSection.benchmarking");
   return (
     <motion.div
       initial="hidden"
@@ -278,7 +272,7 @@ function CTABenchmarking() {
         <motion.div custom={0} variants={fadeUp} className="relative z-10 flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lightblue/10 border border-lightblue/20 text-lightblue text-xs font-googletexte">
             <BarChart3 className="w-3.5 h-3.5" />
-            Outil gratuit
+            {t("badge")}
           </span>
         </motion.div>
 
@@ -287,7 +281,7 @@ function CTABenchmarking() {
           variants={fadeUp}
           className="relative z-10 text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Comparez vos performances
+          {t("title")}
         </motion.h2>
 
         <motion.p
@@ -295,11 +289,11 @@ function CTABenchmarking() {
           variants={fadeUp}
           className="relative z-10 text-sm md:text-base text-white/80 font-googletexte text-center mx-auto mb-3 leading-relaxed"
         >
-          Mesurez les{" "}
+          {t("promiseStart")}{" "}
           <span className="text-lightblue font-semibold">
-            performances réelles de votre site face à vos concurrents
+            {t("promiseHighlight")}
           </span>{" "}
-          via Google PageSpeed.
+          {t("promiseEnd")}
         </motion.p>
 
         <motion.p
@@ -307,7 +301,7 @@ function CTABenchmarking() {
           variants={fadeUp}
           className="relative z-10 text-xs md:text-sm text-white/60 font-googletexte text-center mx-auto mb-6"
         >
-          Audit Core Web Vitals et analyse concurrentielle en quelques secondes.
+          {t("secondary")}
         </motion.p>
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
@@ -316,12 +310,12 @@ function CTABenchmarking() {
             asChild
           >
             <Link href="/outils/benchmarking">
-              Lancer le benchmarking
+              {t("ctaLabel")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
           <span className="text-xs text-white/40 font-googletexte">
-            Gratuit · Analyse Core Web Vitals · Sans engagement
+            {t("footer")}
           </span>
         </motion.div>
       </div>
@@ -330,9 +324,10 @@ function CTABenchmarking() {
 }
 
 /* ─────────────────────────────────────────────
-   2d. CTA Livre Blanc
+   2d. CTA White Paper
    ───────────────────────────────────────────── */
 function CTALivreBlanc() {
+  const t = useTranslations("ctaSection.livreBlanc");
   return (
     <motion.div
       initial="hidden"
@@ -346,7 +341,7 @@ function CTALivreBlanc() {
         <motion.div custom={0} variants={fadeUp} className="relative z-10 flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange/10 border border-orange/20 text-orange text-xs font-googletexte">
             <FileText className="w-3.5 h-3.5" />
-            Guide gratuit
+            {t("badge")}
           </span>
         </motion.div>
 
@@ -355,7 +350,7 @@ function CTALivreBlanc() {
           variants={fadeUp}
           className="relative z-10 text-2xl md:text-3xl font-googletitre font-medium text-white text-center tracking-tight mb-3"
         >
-          Qu&apos;est-ce que WordPress Headless ?
+          {t("title")}
         </motion.h2>
 
         <motion.p
@@ -363,11 +358,11 @@ function CTALivreBlanc() {
           variants={fadeUp}
           className="relative z-10 text-sm md:text-base text-white/80 font-googletexte text-center mx-auto mb-3 leading-relaxed"
         >
-          Découvrez dans notre livre blanc{" "}
+          {t("promiseStart")}{" "}
           <span className="text-orange font-semibold">
-            tout ce qu&apos;il faut savoir sur l&apos;architecture headless
+            {t("promiseHighlight")}
           </span>{" "}
-          : avantages, cas d&apos;usage et mise en œuvre.
+          {t("promiseEnd")}
         </motion.p>
 
         <motion.p
@@ -375,7 +370,7 @@ function CTALivreBlanc() {
           variants={fadeUp}
           className="relative z-10 text-xs md:text-sm text-white/60 font-googletexte text-center mx-auto mb-6"
         >
-          Un guide complet pour comprendre, évaluer et adopter WordPress Headless.
+          {t("secondary")}
         </motion.p>
 
         <motion.div custom={4} variants={fadeUp} className="relative z-10 flex flex-col items-center mt-auto gap-2">
@@ -383,13 +378,13 @@ function CTALivreBlanc() {
             className="inline-flex items-center gap-2 bg-orange text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
-            <Link href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer">
               <Download className="w-4 h-4" />
-              Télécharger le livre blanc
-            </Link>
+              {t("ctaLabel")}
+            </a>
           </Button>
           <span className="text-xs text-white/40 font-googletexte">
-            Gratuit · PDF complet · Sans inscription
+            {t("footer")}
           </span>
         </motion.div>
       </div>
@@ -398,9 +393,10 @@ function CTALivreBlanc() {
 }
 
 /* ─────────────────────────────────────────────
-   3. Bloc Réassurance — Coordonnées directes
+   3. Reassurance block — direct contact
    ───────────────────────────────────────────── */
 export function BlocReassurance() {
+  const t = useTranslations("ctaSection.reassurance");
   return (
     <motion.div
       initial="hidden"
@@ -409,20 +405,18 @@ export function BlocReassurance() {
       className="relative w-full"
     >
       <div className="w-full rounded-3xl p-8 md:p-12 bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 backdrop-blur-sm">
-        {/* Header */}
         <motion.div custom={0} variants={fadeUp} className="text-center mb-8">
           <p className="text-white/50 font-googletexte uppercase tracking-widest text-sm mb-3">
-            Contact direct
+            {t("directContact")}
           </p>
           <h3 className="text-2xl md:text-3xl font-googletitre font-medium text-white mb-2">
-            Parlons de votre projet
+            {t("title")}
           </h3>
           <p className="text-white/60 font-googletexte max-w-md mx-auto">
-            Pas besoin de tester ? Contactez-moi directement.
+            {t("subtitle")}
           </p>
         </motion.div>
 
-        {/* Credibility badges */}
         <motion.div
           custom={1}
           variants={fadeUp}
@@ -430,44 +424,41 @@ export function BlocReassurance() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-googletexte">
             <CircleDot className="w-3.5 h-3.5" />
-            Disponible
+            {t("available")}
           </span>
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-googletexte">
             <Clock className="w-3.5 h-3.5 text-lightyellow" />
-            8+ ans d&apos;expérience
+            {t("experience")}
           </span>
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-googletexte">
             <Award className="w-3.5 h-3.5 text-coral" />
-            Développeur WordPress Headless
+            {t("wpHeadlessDev")}
           </span>
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lightyellow/10 border border-lightyellow/20 text-lightyellow text-sm font-googletexte">
             <BadgePercent className="w-3.5 h-3.5" />
-            Prestataire TIH
+            {t("tih")}
           </span>
         </motion.div>
 
-        {/* Contact card */}
         <motion.div
           custom={2}
           variants={fadeUp}
           className="bg-darkblue/40 rounded-2xl p-6 md:p-8 border border-white/5"
         >
           <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
-            {/* Identity */}
             <div className="flex-1 space-y-1">
               <p className="font-googletitre font-semibold text-white text-lg">
-                Next Impact Digital
+                {t("company")}
               </p>
               <p className="text-white/70 font-googletexte text-sm">
-                EI Agathe Karinthi-Martin
+                {t("owner")}
               </p>
               <div className="flex items-start gap-2 text-white/50 font-googletexte text-sm pt-1">
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-                <span className="text-white/80">4 rue du centre, 15400 Trizac</span>
+                <span className="text-white/80">{t("address")}</span>
               </div>
             </div>
 
-            {/* Contact links */}
             <div className="flex flex-col gap-3">
               <a
                 href="mailto:agathe@next-impact.digital"
@@ -496,7 +487,7 @@ export function BlocReassurance() {
 }
 
 /* ─────────────────────────────────────────────
-   Sélection des cartes par profil / contexte
+   Card selection per profile / context
    ───────────────────────────────────────────── */
 type CardId = "audit" | "conversion" | "roi" | "benchmarking" | "livre-blanc";
 
@@ -508,7 +499,6 @@ const CARD_COMPONENTS: Record<CardId, React.FC> = {
   "livre-blanc": CTALivreBlanc,
 };
 
-/** Pages où chaque carte est redondante — si on est dessus, on l'exclut */
 const CARD_PAGES: Record<CardId, string[]> = {
   audit: ["/audit-site-ia", "/cms-headless"],
   conversion: ["/contact"],
@@ -517,7 +507,6 @@ const CARD_PAGES: Record<CardId, string[]> = {
   "livre-blanc": ["/documentation"],
 };
 
-/** Ordre de priorité des cartes par profil (pages classiques) */
 const PROFILE_CARDS: Record<ProfileId | "default", CardId[]> = {
   decideur:     ["livre-blanc", "roi", "conversion", "benchmarking", "audit"],
   utilisateur:  ["benchmarking", "conversion", "livre-blanc", "roi", "audit"],
@@ -525,10 +514,8 @@ const PROFILE_CARDS: Record<ProfileId | "default", CardId[]> = {
   default:      ["conversion", "livre-blanc", "roi", "benchmarking", "audit"],
 };
 
-/** Ordre des cartes outils (pages outils) */
 const TOOL_CARDS: CardId[] = ["audit", "roi", "benchmarking"];
 
-/** Pages considérées comme « page outil » */
 const TOOL_PAGE_PREFIXES = [
   "/outils",
   "/audit-site-ia",
@@ -559,32 +546,29 @@ function useSelectedCards(): [React.FC, React.FC] {
 }
 
 /* ─────────────────────────────────────────────
-   Export : Structure complète 3 niveaux
+   Export — full 3-tier structure
    ───────────────────────────────────────────── */
 export function CTASection() {
   const pathname = usePathname();
   const [CardA, CardB] = useSelectedCards();
+  const t = useTranslations("ctaSection");
 
-  // Pas de boîtes CTA sur la page Boîte à outils
   if (pathname === "/outils") return null;
 
   return (
     <section className="relative w-full py-12 md:py-20">
       <div className="container relative z-10 px-4 md:px-6 space-y-10 md:space-y-12">
-        {/* Grille asymétrique — CTA principal dominant (~60/40) */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 items-start">
           <div className="md:col-span-3">
             <CardA />
           </div>
           <div className="md:col-span-2 flex flex-col items-center">
             <p className="text-sm text-white/40 font-googletexte mb-3 text-center">
-              Pas encore prêt ? Commencez par un outil gratuit
+              {t("secondaryCTAHelper")}
             </p>
             <CardB />
           </div>
         </div>
-
-        {/* Bloc Réassurance retiré — coordonnées déplacées dans le footer */}
       </div>
     </section>
   );

@@ -4,21 +4,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { PricingCards } from "@/components/services/PricingCards";
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import { HeadlessExplainer } from "@/components/headless-explainer";
 import PageLayout from "@/components/page-layout";
+import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { SERVICES_PAGE_VARIANTS } from "@/lib/homepage-profiles";
+import { getServicesPageVariants } from "@/lib/homepage-profiles";
+import type { Locale } from "@/i18n/routing";
 
 export default function ServicesClient() {
   const { profileId } = useDocumentationMode();
-  const variant = profileId
-    ? SERVICES_PAGE_VARIANTS[profileId]
-    : SERVICES_PAGE_VARIANTS.default;
+  const locale = useLocale() as Locale;
+  const servicesVariants = getServicesPageVariants(locale);
+  const variant = profileId ? servicesVariants[profileId] : servicesVariants.default;
+  const t = useTranslations("servicesPage");
 
   return (
     <PageLayout
@@ -43,21 +46,21 @@ export default function ServicesClient() {
           <div className="max-w-3xl mx-auto rounded-2xl border border-lightyellow/20 bg-gradient-to-r from-darkblue/60 to-mediumblue/40 backdrop-blur-sm p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lightyellow/10 border border-lightyellow/20 shrink-0">
-                <Image src="/icons/analytics-icon.svg" alt="Calculer" width={24} height={24} />
+                <Image src="/icons/analytics-icon.svg" alt={t("calculateGain.iconAlt")} width={24} height={24} />
               </div>
               <div className="flex-1 text-center md:text-left">
                 <h3 className="font-googletitre text-lg md:text-xl font-medium text-white mb-1">
-                  Calculez votre gain
+                  {t("calculateGain.title")}
                 </h3>
                 <p className="text-sm text-white/60 font-googletexte">
-                  Estimez le retour sur investissement d&apos;une migration Headless à partir de vos données réelles.
+                  {t("calculateGain.description")}
                 </p>
               </div>
               <Link
                 href="/outils/simulateur-roi"
                 className="inline-flex items-center gap-2 text-lightyellow text-sm font-googletitre font-semibold hover:text-white transition-colors shrink-0"
               >
-                Simuler mon ROI
+                {t("calculateGain.ctaLabel")}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -68,40 +71,40 @@ export default function ServicesClient() {
         <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
           <div className="max-w-4xl mx-auto px-4">
             <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-              Méthode &amp; Transparence
+              {t("stackMethod.label")}
             </p>
             <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
-              Comment je choisis votre stack
+              {t("stackMethod.title")}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/content-icon.svg" alt="Périmètre" width={48} height={48} className="mb-4" />
+                <Image src="/icons/content-icon.svg" alt={t("stackMethod.scope.iconAlt")} width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Périmètre fonctionnel
+                  {t("stackMethod.scope.title")}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Site vitrine, blog, e-commerce, application métier : chaque type de projet a sa stack idéale.
+                  {t("stackMethod.scope.description")}
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/globe-network-icon.svg" alt="Volumétrie" width={48} height={48} className="mb-4" />
+                <Image src="/icons/globe-network-icon.svg" alt={t("stackMethod.volume.iconAlt")} width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Volumétrie &amp; trafic
+                  {t("stackMethod.volume.title")}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Sous 10k visites/mois, le monolithique optimisé suffit. Au-delà, le headless rentabilise vite.
+                  {t("stackMethod.volume.description")}
                 </p>
               </div>
 
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/eco-design-icon.svg" alt="Évolutivité" width={48} height={48} className="mb-4" />
+                <Image src="/icons/eco-design-icon.svg" alt={t("stackMethod.scalability.iconAlt")} width={48} height={48} className="mb-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Évolutivité visée
+                  {t("stackMethod.scalability.title")}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Intégrations API, multisites, applications métier : Next.js est le bon palier.
+                  {t("stackMethod.scalability.description")}
                 </p>
               </div>
             </div>
@@ -127,7 +130,7 @@ export default function ServicesClient() {
                 {/* Carte gauche */}
                 <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-4">
-                    <Image src="/icons/brand-reach-icon.svg" alt="Impact" width={32} height={32} className="shrink-0" />
+                    <Image src="/icons/brand-reach-icon.svg" alt={t("budgetCardsAlt.left")} width={32} height={32} className="shrink-0" />
                     <h3 className="text-xl font-googletitre font-medium text-white">
                       {variant.budgetCards.left.title}
                     </h3>
@@ -145,7 +148,7 @@ export default function ServicesClient() {
                 {/* Carte droite */}
                 <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-4">
-                    <Image src="/icons/rocket-icon.svg" alt="Résultat" width={32} height={32} className="shrink-0" />
+                    <Image src="/icons/rocket-icon.svg" alt={t("budgetCardsAlt.right")} width={32} height={32} className="shrink-0" />
                     <h3 className="text-xl font-googletitre font-medium text-white">
                       {variant.budgetCards.right.title}
                     </h3>
@@ -171,30 +174,30 @@ export default function ServicesClient() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <Link href="/outils" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-coral/40 transition-all duration-300">
-                <Image src="/icons/scan-icon.svg" alt="Outils" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Outils</h3>
+                <Image src="/icons/scan-icon.svg" alt={t("shortcuts.tools.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.tools.title")}</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Simulateur ROI, audit de site et diagnostic IA pour évaluer votre présence digitale.
+                  {t("shortcuts.tools.description")}
                 </p>
               </div>
             </Link>
 
             <Link href="/demo" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightyellow/40 transition-all duration-300">
-                <Image src="/icons/desktop-headless-icon.svg" alt="Démo" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Démo</h3>
+                <Image src="/icons/desktop-headless-icon.svg" alt={t("shortcuts.demo.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.demo.title")}</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Découvrez en live la puissance du WordPress Headless sur votre projet.
+                  {t("shortcuts.demo.description")}
                 </p>
               </div>
             </Link>
 
             <Link href="/contact" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
-                <Image src="/icons/optimize-icon.svg" alt="Stack" width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">Choisissez votre stack</h3>
+                <Image src="/icons/optimize-icon.svg" alt={t("shortcuts.stack.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.stack.title")}</h3>
                 <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  Répondez à quelques questions pour identifier la stack adaptée à votre projet.
+                  {t("shortcuts.stack.description")}
                 </p>
               </div>
             </Link>

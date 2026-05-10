@@ -20,6 +20,8 @@ import {
   AlertTriangle,
   ChevronRight,
 } from "lucide-react"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 // ---------------------------------------------------------------------------
 // Types & data
@@ -45,7 +47,7 @@ interface SectorData {
   bounceRatePerSecond: number
 }
 
-const sectors: Record<Sector, SectorData> = {
+const sectorsFr: Record<Sector, SectorData> = {
   ecommerce: {
     name: "E-commerce",
     description: "Boutique en ligne, marketplace",
@@ -88,22 +90,67 @@ const sectors: Record<Sector, SectorData> = {
   },
 }
 
+const sectorsEn: Record<Sector, SectorData> = {
+  ecommerce: {
+    name: "E-commerce",
+    description: "Online store, marketplace",
+    conversionLossPerSecond: 7,
+    avgLoadTimeLegacy: 5.2,
+    avgLoadTimeHeadless: 1.8,
+    bounceRatePerSecond: 8.3,
+  },
+  saas: {
+    name: "SaaS / App",
+    description: "Software, online platform",
+    conversionLossPerSecond: 5,
+    avgLoadTimeLegacy: 4.5,
+    avgLoadTimeHeadless: 1.5,
+    bounceRatePerSecond: 6,
+  },
+  media: {
+    name: "Media / Content",
+    description: "Blog, news portal",
+    conversionLossPerSecond: 4.5,
+    avgLoadTimeLegacy: 6.0,
+    avgLoadTimeHeadless: 2.0,
+    bounceRatePerSecond: 9.5,
+  },
+  services: {
+    name: "Services / Brochure",
+    description: "Company presentation, lead generation",
+    conversionLossPerSecond: 6,
+    avgLoadTimeLegacy: 4.8,
+    avgLoadTimeHeadless: 1.6,
+    bounceRatePerSecond: 7.0,
+  },
+  b2b: {
+    name: "B2B / Industry",
+    description: "Institutional site, industrial catalog",
+    conversionLossPerSecond: 5.5,
+    avgLoadTimeLegacy: 5.5,
+    avgLoadTimeHeadless: 1.9,
+    bounceRatePerSecond: 6.5,
+  },
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("fr-FR", {
+const intlLocale = (locale: Locale) => (locale === "en" ? "en-US" : "fr-FR")
+
+const formatCurrency = (value: number, locale: Locale) =>
+  new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(value)
 
-const formatNumber = (value: number) =>
-  new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(value)
+const formatNumber = (value: number, locale: Locale) =>
+  new Intl.NumberFormat(intlLocale(locale), { maximumFractionDigits: 0 }).format(value)
 
-const formatPercent = (value: number) =>
-  new Intl.NumberFormat("fr-FR", {
+const formatPercent = (value: number, locale: Locale) =>
+  new Intl.NumberFormat(intlLocale(locale), {
     style: "percent",
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -152,6 +199,10 @@ function AnimatedValue({
 // ---------------------------------------------------------------------------
 
 export default function ROISimulator() {
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
+  const sectors = isEn ? sectorsEn : sectorsFr
+
   // --- User inputs ---
   const [sector, setSector] = useState<Sector>("ecommerce")
   const [monthlyTraffic, setMonthlyTraffic] = useState(50000)
@@ -224,16 +275,18 @@ export default function ROISimulator() {
         >
           <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-6 md:p-8">
             <h2 className="text-white font-googletitre text-2xl font-medium mb-1">
-              Vos données actuelles
+              {isEn ? "Your current data" : "Vos données actuelles"}
             </h2>
             <p className="text-white/60 font-googletexte text-sm mb-6">
-              Renseignez vos métriques pour une projection personnalisée
+              {isEn
+                ? "Enter your metrics for a personalized projection"
+                : "Renseignez vos métriques pour une projection personnalisée"}
             </p>
             <div className="space-y-8">
               {/* Sector */}
               <div className="space-y-2">
                 <Label className="text-white/80 font-googletitre text-base font-semibold">
-                  Secteur d&apos;activité
+                  {isEn ? "Sector" : "Secteur d'activité"}
                 </Label>
                 <Select
                   value={sector}
@@ -263,10 +316,10 @@ export default function ROISimulator() {
               <div className="space-y-3">
                 <div className="flex justify-between items-baseline">
                   <Label className="text-white/80 font-googletitre text-base font-semibold">
-                    Trafic mensuel
+                    {isEn ? "Monthly traffic" : "Trafic mensuel"}
                   </Label>
                   <span className="text-lg font-bold text-lightyellow">
-                    {formatNumber(monthlyTraffic)} visites
+                    {formatNumber(monthlyTraffic, locale)} {isEn ? "visits" : "visites"}
                   </span>
                 </div>
                 <Slider
@@ -278,8 +331,8 @@ export default function ROISimulator() {
                   className="[&_[role=slider]]:bg-lightyellow [&_[role=slider]]:border-lightyellow [&_span:first-child>span]:bg-lightyellow"
                 />
                 <div className="flex justify-between text-xs text-white/40">
-                  <span>1 000</span>
-                  <span>500 000</span>
+                  <span>{formatNumber(1000, locale)}</span>
+                  <span>{formatNumber(500000, locale)}</span>
                 </div>
               </div>
 
@@ -287,7 +340,7 @@ export default function ROISimulator() {
               <div className="space-y-3">
                 <div className="flex justify-between items-baseline">
                   <Label className="text-white/80 font-googletitre text-base font-semibold">
-                    Taux de conversion
+                    {isEn ? "Conversion rate" : "Taux de conversion"}
                   </Label>
                   <span className="text-lg font-bold text-lightyellow">
                     {conversionRate.toFixed(1)} %
@@ -302,7 +355,7 @@ export default function ROISimulator() {
                   className="[&_[role=slider]]:bg-lightyellow [&_[role=slider]]:border-lightyellow [&_span:first-child>span]:bg-lightyellow"
                 />
                 <div className="flex justify-between text-xs text-white/40">
-                  <span>0,1 %</span>
+                  <span>{isEn ? "0.1 %" : "0,1 %"}</span>
                   <span>15 %</span>
                 </div>
               </div>
@@ -311,10 +364,10 @@ export default function ROISimulator() {
               <div className="space-y-3">
                 <div className="flex justify-between items-baseline">
                   <Label className="text-white/80 font-googletitre text-base font-semibold">
-                    Panier moyen
+                    {isEn ? "Average cart value" : "Panier moyen"}
                   </Label>
                   <span className="text-lg font-bold text-lightyellow">
-                    {formatCurrency(avgCartValue)}
+                    {formatCurrency(avgCartValue, locale)}
                   </span>
                 </div>
                 <Slider
@@ -327,7 +380,7 @@ export default function ROISimulator() {
                 />
                 <div className="flex justify-between text-xs text-white/40">
                   <span>5 &euro;</span>
-                  <span>1 000 &euro;</span>
+                  <span>{isEn ? "1,000 €" : "1 000 €"}</span>
                 </div>
               </div>
 
@@ -335,12 +388,12 @@ export default function ROISimulator() {
               <div className="rounded-xl bg-darkblue/40 border border-white/10 p-4 space-y-2">
                 <p className="text-sm font-semibold text-white/80 font-googletitre flex items-center gap-2">
                   <Clock className="w-4 h-4 text-lightyellow" />
-                  Temps de chargement moyen ({sectorData.name})
+                  {isEn ? `Average load time (${sectorData.name})` : `Temps de chargement moyen (${sectorData.name})`}
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex-1">
                     <span className="block text-xs text-white/40 uppercase tracking-wide">
-                      Site classique
+                      {isEn ? "Legacy site" : "Site classique"}
                     </span>
                     <span className="text-xl font-bold text-coral">
                       {sectorData.avgLoadTimeLegacy.toFixed(1)}s
@@ -349,7 +402,7 @@ export default function ROISimulator() {
                   <ChevronRight className="w-5 h-5 text-white/20" />
                   <div className="flex-1">
                     <span className="block text-xs text-white/40 uppercase tracking-wide">
-                      Site Headless
+                      {isEn ? "Headless site" : "Site Headless"}
                     </span>
                     <span className="text-xl font-bold text-green-400">
                       {sectorData.avgLoadTimeHeadless.toFixed(1)}s
@@ -373,47 +426,50 @@ export default function ROISimulator() {
             <div>
               <h3 className="text-coral font-googletitre text-xl font-medium flex items-center gap-2 mb-1">
                 <AlertTriangle className="w-5 h-5" />
-                Le coût de l&apos;inaction
+                {isEn ? "The cost of inaction" : "Le coût de l'inaction"}
               </h3>
               <p className="text-white/60 font-googletexte text-sm">
-                Revenus perdus chaque mois à cause de la lenteur de votre site
+                {isEn
+                  ? "Revenue lost each month because of your site's slowness"
+                  : "Revenus perdus chaque mois à cause de la lenteur de votre site"}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Monthly loss */}
               <div className="rounded-xl bg-darkblue/40 border border-coral/20 p-4">
                 <p className="text-xs uppercase tracking-wide text-white/40 mb-1">
-                  Perte mensuelle
+                  {isEn ? "Monthly loss" : "Perte mensuelle"}
                 </p>
                 <p className="text-3xl font-bold text-coral">
                   <AnimatedValue
                     value={results.monthlyLoss}
-                    formatter={formatCurrency}
+                    formatter={(v) => formatCurrency(v, locale)}
                   />
                 </p>
                 <p className="text-xs text-white/40 mt-1">
-                  {formatPercent(results.lostConversionRate)} de conversion
-                  perdue
+                  {isEn
+                    ? `${formatPercent(results.lostConversionRate, locale)} conversion lost`
+                    : `${formatPercent(results.lostConversionRate, locale)} de conversion perdue`}
                 </p>
               </div>
               {/* Yearly loss */}
               <div className="rounded-xl bg-darkblue/40 border border-coral/20 p-4">
                 <p className="text-xs uppercase tracking-wide text-white/40 mb-1">
-                  Perte annuelle
+                  {isEn ? "Yearly loss" : "Perte annuelle"}
                 </p>
                 <p className="text-3xl font-bold text-coral">
                   <AnimatedValue
                     value={results.yearlyLoss}
-                    formatter={formatCurrency}
+                    formatter={(v) => formatCurrency(v, locale)}
                   />
                 </p>
                 <p className="text-xs text-white/40 mt-1">
-                  soit{" "}
+                  {isEn ? "i.e. " : "soit "}
                   <AnimatedValue
                     value={results.additionalMonthlyConversions * 12}
-                    formatter={formatNumber}
+                    formatter={(v) => formatNumber(v, locale)}
                   />{" "}
-                  ventes perdues / an
+                  {isEn ? "lost sales / year" : "ventes perdues / an"}
                 </p>
               </div>
             </div>
@@ -425,12 +481,12 @@ export default function ROISimulator() {
                 <strong className="text-coral">
                   <AnimatedValue
                     value={results.visitorsLostToBounce}
-                    formatter={formatNumber}
+                    formatter={(v) => formatNumber(v, locale)}
                   />
                 </strong>{" "}
-                visiteurs / mois quittent votre site avant qu&apos;il ne
-                charge (+
-                {results.extraBounce.toFixed(1)}% de taux de rebond)
+                {isEn
+                  ? `visitors / month leave your site before it loads (+${results.extraBounce.toFixed(1)}% bounce rate)`
+                  : `visiteurs / mois quittent votre site avant qu'il ne charge (+${results.extraBounce.toFixed(1)}% de taux de rebond)`}
               </p>
             </div>
           </div>
@@ -440,38 +496,40 @@ export default function ROISimulator() {
             <div>
               <h3 className="text-green-400 font-googletitre text-xl font-medium flex items-center gap-2 mb-1">
                 <Zap className="w-5 h-5" />
-                L&apos;opportunité Headless
+                {isEn ? "The Headless opportunity" : "L'opportunité Headless"}
               </h3>
               <p className="text-white/60 font-googletexte text-sm">
-                Projection après migration vers une architecture Headless
+                {isEn
+                  ? "Projection after migrating to a Headless architecture"
+                  : "Projection après migration vers une architecture Headless"}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Additional monthly revenue */}
               <div className="rounded-xl bg-darkblue/40 border border-green-500/20 p-4">
                 <p className="text-xs uppercase tracking-wide text-white/40 mb-1">
-                  Revenus supplémentaires / mois
+                  {isEn ? "Additional monthly revenue" : "Revenus supplémentaires / mois"}
                 </p>
                 <p className="text-3xl font-bold text-green-400">
                   +
                   <AnimatedValue
                     value={results.monthlyLoss}
-                    formatter={formatCurrency}
+                    formatter={(v) => formatCurrency(v, locale)}
                   />
                 </p>
                 <p className="text-xs text-white/40 mt-1">
                   +
                   <AnimatedValue
                     value={results.additionalMonthlyConversions}
-                    formatter={formatNumber}
+                    formatter={(v) => formatNumber(v, locale)}
                   />{" "}
-                  conversions / mois
+                  {isEn ? "conversions / month" : "conversions / mois"}
                 </p>
               </div>
               {/* Time saved */}
               <div className="rounded-xl bg-darkblue/40 border border-green-500/20 p-4">
                 <p className="text-xs uppercase tracking-wide text-white/40 mb-1">
-                  Temps de chargement gagné
+                  {isEn ? "Load time saved" : "Temps de chargement gagné"}
                 </p>
                 <p className="text-3xl font-bold text-green-400">
                   -{results.timeSaved.toFixed(1)}s
@@ -490,11 +548,12 @@ export default function ROISimulator() {
                 <strong className="text-green-400">
                   <AnimatedValue
                     value={results.visitorsLostToBounce}
-                    formatter={formatNumber}
+                    formatter={(v) => formatNumber(v, locale)}
                   />
                 </strong>{" "}
-                visiteurs récupérés / mois grâce à un chargement{" "}
-                {results.timeSaved.toFixed(1)}s plus rapide
+                {isEn
+                  ? `visitors recovered / month thanks to a ${results.timeSaved.toFixed(1)}s faster load`
+                  : `visiteurs récupérés / mois grâce à un chargement ${results.timeSaved.toFixed(1)}s plus rapide`}
               </p>
             </div>
 
@@ -502,17 +561,17 @@ export default function ROISimulator() {
             <Separator className="bg-green-500/10" />
             <div className="text-center py-2">
               <p className="text-sm text-white/50 mb-1">
-                Projection sur 12 mois
+                {isEn ? "12-month projection" : "Projection sur 12 mois"}
               </p>
               <p className="text-4xl font-bold text-green-400 font-googletitre">
                 +
                 <AnimatedValue
                   value={results.yearlyLoss}
-                  formatter={formatCurrency}
+                  formatter={(v) => formatCurrency(v, locale)}
                 />
               </p>
               <p className="text-sm text-white/50 mt-1">
-                de chiffre d&apos;affaires récupéré
+                {isEn ? "of revenue recovered" : "de chiffre d'affaires récupéré"}
               </p>
             </div>
           </div>
@@ -520,15 +579,10 @@ export default function ROISimulator() {
           {/* Methodology note */}
           <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/5 p-4">
             <p className="text-xs text-white/40 leading-relaxed">
-              <strong className="text-white/50">Méthodologie :</strong>{" "}
-              Les calculs reposent sur les études Google/Deloitte mesurant
-              l&apos;impact de la vitesse de chargement sur les taux de
-              conversion e-commerce. Chaque seconde supplémentaire de latence
-              entraîne une perte moyenne de{" "}
-              {sectorData.conversionLossPerSecond}% des conversions dans le
-              secteur {sectorData.name.toLowerCase()}. Les temps de chargement
-              sont basés sur des moyennes sectorielles (sites monolithiques vs
-              architecture Headless/Jamstack).
+              <strong className="text-white/50">{isEn ? "Methodology:" : "Méthodologie :"}</strong>{" "}
+              {isEn
+                ? `Calculations are based on Google/Deloitte studies measuring the impact of load time on e-commerce conversion rates. Each extra second of latency causes an average ${sectorData.conversionLossPerSecond}% drop in conversions in the ${sectorData.name.toLowerCase()} sector. Load times are based on sector averages (monolithic sites vs Headless/Jamstack architecture).`
+                : `Les calculs reposent sur les études Google/Deloitte mesurant l'impact de la vitesse de chargement sur les taux de conversion e-commerce. Chaque seconde supplémentaire de latence entraîne une perte moyenne de ${sectorData.conversionLossPerSecond}% des conversions dans le secteur ${sectorData.name.toLowerCase()}. Les temps de chargement sont basés sur des moyennes sectorielles (sites monolithiques vs architecture Headless/Jamstack).`}
             </p>
           </div>
         </motion.div>

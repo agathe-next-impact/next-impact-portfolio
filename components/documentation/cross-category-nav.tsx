@@ -1,5 +1,9 @@
-import Link from "next/link";
+"use client";
+
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, FolderOpen } from "lucide-react";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 /* ─── Données catégories ──────────────────────────────────────────────────── */
 
@@ -10,7 +14,7 @@ interface CategoryMeta {
   articleCount: string;
 }
 
-const ALL_CATEGORIES: CategoryMeta[] = [
+const ALL_CATEGORIES_FR: CategoryMeta[] = [
   {
     slug: "headless-cms",
     title: "Headless CMS",
@@ -49,6 +53,45 @@ const ALL_CATEGORIES: CategoryMeta[] = [
   },
 ];
 
+const ALL_CATEGORIES_EN: CategoryMeta[] = [
+  {
+    slug: "headless-cms",
+    title: "Headless CMS",
+    description: "Decoupled architecture, WordPress API and Next.js.",
+    articleCount: "35 articles",
+  },
+  {
+    slug: "design-ui-ux",
+    title: "Design & UI/UX",
+    description: "Brand identity, design system and mockups.",
+    articleCount: "20 articles",
+  },
+  {
+    slug: "marketing-digital",
+    title: "Digital marketing",
+    description: "Strategy, brand and online visibility.",
+    articleCount: "12 articles",
+  },
+  {
+    slug: "seo",
+    title: "SEO",
+    description: "Search ranking, keywords and information architecture.",
+    articleCount: "10 articles",
+  },
+  {
+    slug: "projet-site-web",
+    title: "Web project",
+    description: "Specifications, project management and best practices.",
+    articleCount: "8 articles",
+  },
+  {
+    slug: "wordpress",
+    title: "WordPress",
+    description: "Themes, plugins and best practices.",
+    articleCount: "8 articles",
+  },
+];
+
 /* ─── Relations entre catégories ──────────────────────────────────────────── */
 
 const RELATED_CATEGORIES: Record<string, string[]> = {
@@ -68,9 +111,12 @@ interface CrossCategoryNavProps {
 }
 
 export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const allCategories = isEn ? ALL_CATEGORIES_EN : ALL_CATEGORIES_FR;
   const relatedSlugs = RELATED_CATEGORIES[currentCategory] || [];
   const relatedCategories = relatedSlugs
-    .map((slug) => ALL_CATEGORIES.find((c) => c.slug === slug))
+    .map((slug) => allCategories.find((c) => c.slug === slug))
     .filter(Boolean) as CategoryMeta[];
 
   if (relatedCategories.length === 0) return null;
@@ -78,16 +124,19 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
   return (
     <section className="mt-12 pt-20 border-t border-lightblue/10">
       <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
-        Catégories associées
+        {isEn ? "Related categories" : "Catégories associées"}
       </h2>
       <p className="text-sm text-white/60 font-googletexte mb-6">
-        Continuez votre exploration avec des thématiques complémentaires.
+        {isEn
+          ? "Continue exploring with complementary topics."
+          : "Continuez votre exploration avec des thématiques complémentaires."}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {relatedCategories.map((cat) => (
             <Link
               key={cat.slug}
+              // @ts-expect-error – href built from category slug at runtime
               href={`/documentation/${cat.slug}`}
               className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-darkblue/40 backdrop-blur-sm hover:border-lightblue/30 hover:bg-darkblue/60 transition-all duration-300"
             >
@@ -117,6 +166,9 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
 /* ─── Composant : grille complète pour la page hub ────────────────────────── */
 
 export function AllCategoriesGrid() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const allCategories = isEn ? ALL_CATEGORIES_EN : ALL_CATEGORIES_FR;
   return (
     <section className="relative mt-12">
       {/* Full-width background + borders */}
@@ -124,16 +176,19 @@ export function AllCategoriesGrid() {
 
       <div className="relative py-20">
         <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
-          Explorer la documentation
+          {isEn ? "Explore the documentation" : "Explorer la documentation"}
         </h2>
         <p className="text-sm text-white/60 font-googletexte mb-6">
-          Tous nos guides et ressources, organisés par thématique.
+          {isEn
+            ? "All guides and resources, organized by topic."
+            : "Tous nos guides et ressources, organisés par thématique."}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ALL_CATEGORIES.map((cat) => (
+          {allCategories.map((cat) => (
               <Link
                 key={cat.slug}
+                // @ts-expect-error – href built from category slug at runtime
                 href={`/documentation/${cat.slug}`}
                 className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-white/5 backdrop-blur-sm hover:border-lightblue/30 hover:bg-mediumblue/80 transition-all duration-300"
               >

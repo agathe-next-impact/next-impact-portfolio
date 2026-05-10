@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { LivreBlancBanner } from "@/components/livre-blanc-banner";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 function toYoutubeEmbed(url: string) {
   if (!url) return url;
@@ -16,13 +18,18 @@ function toYoutubeEmbed(url: string) {
   return url;
 }
 
-const mainVideo = {
-  title: "WordPress Headless pour un vitrine de 2026",
+const mainVideoFr = {
+  title: "WordPress Headless pour une vitrine de 2026",
+  url: "https://youtu.be/8aVVoDFakCY?si=kbqPlZgPDfHOF43f",
+  websiteLink: "https://cafecitoyen.art",
+};
+const mainVideoEn = {
+  title: "Headless WordPress for a 2026 brochure site",
   url: "https://youtu.be/8aVVoDFakCY?si=kbqPlZgPDfHOF43f",
   websiteLink: "https://cafecitoyen.art",
 };
 
-const demoVideos = [
+const demoVideosFr = [
   {
     title: "Démo 1",
     url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
@@ -65,14 +72,65 @@ const demoVideos = [
   },
 ];
 
+const demoVideosEn = [
+  {
+    title: "Demo 1",
+    url: "https://youtu.be/I1qi5o31Lnk?si=3wismwIKR4UXIy7o",
+    projectLink: "/etudes-de-cas/next-event",
+    projectName: "Headless WordPress for Next Event",
+    projectDescription:
+      "Full demo of a Headless WordPress site with Next.js: event ticketing, performance and user experience",
+  },
+  {
+    title: "Demo 1",
+    url: "https://youtu.be/_OjiGiOWJus?si=wQigij89yIdLfpfc",
+    projectLink: "/etudes-de-cas/doleances",
+    projectName: "Headless WordPress for Les Doléances",
+    projectDescription:
+      "A platform promoting citizen petitions, built on Headless WordPress and Next.js",
+  },
+  {
+    title: "Demo 2",
+    url: "https://youtu.be/dJIndpLBm7o",
+    projectLink: "/etudes-de-cas/les-etats-generaux-communaux",
+    projectName: "Headless WordPress for États Généraux Communaux",
+    projectDescription:
+      "A platform for the États Généraux Communaux, using Headless WordPress with Next.js",
+  },
+  {
+    title: "Demo 3",
+    url: "https://youtu.be/6vUSbG6F50w",
+    projectLink: "/etudes-de-cas/comme-des-fous",
+    projectName: "Headless WordPress for Comme des Fous",
+    projectDescription:
+      "The Comme des Fous online media outlet, powered by Headless WordPress and Next.js",
+  },
+  {
+    title: "Demo 4",
+    url: "https://youtu.be/SIj61ECS1Mo",
+    projectLink: "/etudes-de-cas/comme-des-fous-jeux",
+    projectName: "Online games section for Comme des Fous",
+    projectDescription:
+      "An online games section embedded in the Comme des Fous site, built with Headless WordPress and Next.js",
+  },
+];
+
 export default function DemoClient() {
   const [isHovered, setIsHovered] = useState(false);
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const mainVideo = isEn ? mainVideoEn : mainVideoFr;
+  const demoVideos = isEn ? demoVideosEn : demoVideosFr;
 
   return (
     <main>
       <PageLayout
-        titre="WordPress Headless en action"
-        sousTitre="Découvrez en vidéo le fonctionnement d'un WordPress Headless Next.js."
+        titre={isEn ? "Headless WordPress in action" : "WordPress Headless en action"}
+        sousTitre={
+          isEn
+            ? "See in video how a Headless WordPress site works with Next.js."
+            : "Découvrez en vidéo le fonctionnement d'un WordPress Headless Next.js."
+        }
       >
         <div id="demo-main-video" className="mt-8 mb-16">
           <section className="max-w-5xl mx-auto px-4 py-12">
@@ -108,10 +166,12 @@ export default function DemoClient() {
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="space-y-1">
                     <h2 className="font-medium text-3xl text-white/90">
-                      Vitrine du Café citoyen d'Auger-Saint-Vincent
+                      {isEn
+                        ? "Café citoyen d'Auger-Saint-Vincent brochure site"
+                        : "Vitrine du Café citoyen d'Auger-Saint-Vincent"}
                     </h2>
                     <p className="text-lg text-white/80">
-                      WordPress Headless Next.js
+                      {isEn ? "Headless WordPress + Next.js" : "WordPress Headless Next.js"}
                     </p>
                   </div>
                 </div>
@@ -119,15 +179,15 @@ export default function DemoClient() {
 
               {/* CTA Section */}
               <div className="p-6 bg-darkblue/20 backdrop-blur-sm text-center rounded-b-3xl border border-white/20">
-                <Link
+                <a
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Button className="bg-lightyellow hover:bg-lightyellow/90 text-darkblue px-6 py-3 text-xl font-googletitre font-medium">
-                    Réserver une visio
+                    {isEn ? "Book a video call" : "Réserver une visio"}
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
             {/* Demo videos grid */}
@@ -174,10 +234,11 @@ export default function DemoClient() {
                     </div>
                     {video.projectLink && (
                       <Link
+                        // @ts-expect-error – href comes from internal data
                         href={video.projectLink}
                         className="text-coral font-medium underline hover:text-coral/80 transition"
                       >
-                        Voir le projet
+                        {isEn ? "View project" : "Voir le projet"}
                       </Link>
                     )}
                   </div>

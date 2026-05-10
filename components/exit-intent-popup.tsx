@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BrandLogo } from "@/components/brand-logo";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 interface ExitIntentPopupProps {
   title?: string;
@@ -24,12 +26,21 @@ interface ExitIntentPopupProps {
 }
 
 export function ExitIntentPopup({
-  title = "Recevez notre livre blanc",
-  description = "Tout savoir sur WordPress Headless gratuitement. Pour quels types de projets est-il adapté et quels en sont les avantages ?",
-  buttonText = "Recevoir le livre blanc",
+  title,
+  description,
+  buttonText,
   sensitivity = 20,
   showOnce = true,
 }: ExitIntentPopupProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const effectiveTitle = title ?? (isEn ? "Get our white paper" : "Recevez notre livre blanc");
+  const effectiveDescription =
+    description ??
+    (isEn
+      ? "Everything about Headless WordPress, free. Which projects fit, and what are the benefits?"
+      : "Tout savoir sur WordPress Headless gratuitement. Pour quels types de projets est-il adapté et quels en sont les avantages ?");
+  const effectiveButtonText = buttonText ?? (isEn ? "Get the white paper" : "Recevoir le livre blanc");
   const [isOpen, setIsOpen] = useState(false);
   const [hasShown, setHasShown] = useState(false);
   const [formData, setFormData] = useState({
@@ -92,14 +103,18 @@ export function ExitIntentPopup({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       setSubmitStatus("error");
-      setErrorMessage("Veuillez entrer une adresse email valide.");
+      setErrorMessage(
+        isEn ? "Please enter a valid email address." : "Veuillez entrer une adresse email valide.",
+      );
       return;
     }
 
     if (!formData.accepteConditions) {
       setSubmitStatus("error");
       setErrorMessage(
-        "Vous devez accepter de donner vos informations personnelles pour continuer.",
+        isEn
+          ? "You must agree to provide your personal information to continue."
+          : "Vous devez accepter de donner vos informations personnelles pour continuer.",
       );
       return;
     }
@@ -114,12 +129,14 @@ export function ExitIntentPopup({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, locale }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Erreur lors de l'enregistrement");
+        throw new Error(
+          error.message || (isEn ? "Registration error" : "Erreur lors de l'enregistrement"),
+        );
       }
 
       setSubmitStatus("success");
@@ -139,7 +156,9 @@ export function ExitIntentPopup({
       console.error("Error submitting form:", error);
       setSubmitStatus("error");
       setErrorMessage(
-        error instanceof Error ? error.message : "Une erreur est survenue",
+        error instanceof Error
+          ? error.message
+          : isEn ? "Something went wrong" : "Une erreur est survenue",
       );
     } finally {
       setIsSubmitting(false);
@@ -164,10 +183,10 @@ export function ExitIntentPopup({
         <div className="p-6 pt-4 bg-mediumblue/80 backdrop-blur-lg">
           <DialogHeader className="space-y-3 mb-6">
             <DialogTitle className="text-center text-2xl uppercase font-googletitre text-white">
-              {title}
+              {effectiveTitle}
             </DialogTitle>
             <DialogDescription className="text-center text-white/90 leading-relaxed">
-              {description}
+              {effectiveDescription}
             </DialogDescription>
           </DialogHeader>
 
@@ -176,7 +195,9 @@ export function ExitIntentPopup({
               <div className="flex items-center gap-3 p-4 rounded-lg bg-mediumblue/80">
                 <CheckCircle2 className="h-6 w-6 text-white/80 flex-shrink-0" />
                 <p className="text-sm text-white/80 font-medium">
-                  Enregistrement réussi ! Vous recevrez bientôt notre livre blanc.
+                  {isEn
+                    ? "Registration successful! You'll receive our white paper soon."
+                    : "Enregistrement réussi ! Vous recevrez bientôt notre livre blanc."}
                 </p>
               </div>
             </div>
@@ -185,7 +206,7 @@ export function ExitIntentPopup({
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="prenom" className="text-sm text-white/80">
-                    Prénom *
+                    {isEn ? "First name *" : "Prénom *"}
                   </Label>
                   <Input
                     id="prenom"
@@ -194,13 +215,13 @@ export function ExitIntentPopup({
                     required
                     value={formData.prenom}
                     onChange={handleChange}
-                    placeholder="Prénom"
+                    placeholder={isEn ? "First name" : "Prénom"}
                     className="h-10 bg-extralightblue"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="nom" className="text-sm text-white/80">
-                    Nom *
+                    {isEn ? "Last name *" : "Nom *"}
                   </Label>
                   <Input
                     id="nom"
@@ -209,7 +230,7 @@ export function ExitIntentPopup({
                     required
                     value={formData.nom}
                     onChange={handleChange}
-                    placeholder="Nom"
+                    placeholder={isEn ? "Last name" : "Nom"}
                     className="h-10 bg-extralightblue placeholder:text-mediumblue"
                   />
                 </div>
@@ -226,7 +247,7 @@ export function ExitIntentPopup({
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="votre.email@exemple.com"
+                  placeholder={isEn ? "your.email@example.com" : "votre.email@exemple.com"}
                   className="h-10 bg-extralightblue"
                 />
               </div>
@@ -236,7 +257,7 @@ export function ExitIntentPopup({
                   htmlFor="phone"
                   className="text-sm text-white/80"
                 >
-                  Téléphone (optionnel)
+                  {isEn ? "Phone (optional)" : "Téléphone (optionnel)"}
                 </Label>
                 <Input
                   id="phone"
@@ -244,7 +265,7 @@ export function ExitIntentPopup({
                   type="tel"
                   value={formData.phone || ""}
                   onChange={handleChange}
-                  placeholder="Téléphone (optionnel)"
+                  placeholder={isEn ? "Phone (optional)" : "Téléphone (optionnel)"}
                   className="h-10 bg-extralightblue"
                 />
               </div>
@@ -260,8 +281,9 @@ export function ExitIntentPopup({
                   htmlFor="accepteConditions"
                   className="text-xs leading-relaxed cursor-pointer font-normal text-white/70"
                 >
-                  J'accepte de donner mes informations personnelles pour
-                  recevoir le livre blanc de Next Impact *
+                  {isEn
+                    ? "I agree to share my personal details to receive the Next Impact white paper *"
+                    : "J'accepte de donner mes informations personnelles pour recevoir le livre blanc de Next Impact *"}
                 </Label>
               </div>
 
@@ -284,12 +306,12 @@ export function ExitIntentPopup({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="size-4 animate-spin" />
-                      Enregistrement en cours...
+                      {isEn ? "Saving…" : "Enregistrement en cours..."}
                     </>
                   ) : (
                     <>
                       <Mail className="size-5" />
-                      {buttonText}
+                      {effectiveButtonText}
                     </>
                   )}
                 </Button>
@@ -300,7 +322,7 @@ export function ExitIntentPopup({
                   className="w-full text-muted-foreground text-sm bg-transparent hover:bg-transparent"
                   disabled={isSubmitting}
                 >
-                  Non merci, je continue ma visite
+                  {isEn ? "No thanks, I'll keep browsing" : "Non merci, je continue ma visite"}
                 </Button>
               </div>
             </form>

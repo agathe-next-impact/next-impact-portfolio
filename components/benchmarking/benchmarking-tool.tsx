@@ -39,6 +39,8 @@ import {
   type Strategy,
 } from "@/lib/audit/benchmarking-data"
 import { runBenchmark } from "@/lib/audit/benchmarking-service"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -55,7 +57,7 @@ const COMPETITOR_TEXT_COLORS = [
   "text-cyan-400",
 ]
 
-const verdictConfig = {
+const verdictConfigFr = {
   ahead: {
     label: "En avance sur vos concurrents",
     description: "Votre site surpasse les concurrents directs analysés.",
@@ -80,6 +82,37 @@ const verdictConfig = {
   critical: {
     label: "Nettement distancé",
     description: "L'écart avec vos concurrents est significatif. Chaque seconde de retard se traduit par des clients perdus.",
+    color: "text-coral",
+    bg: "bg-coral/10 border-coral/20",
+    icon: AlertTriangle,
+  },
+}
+
+const verdictConfigEn = {
+  ahead: {
+    label: "Ahead of your competitors",
+    description: "Your site outperforms the direct competitors analyzed.",
+    color: "text-green-400",
+    bg: "bg-green-500/10 border-green-500/20",
+    icon: Trophy,
+  },
+  average: {
+    label: "Neck and neck",
+    description: "Your site is in the same range as your competitors, but a few optimizations would give you the edge.",
+    color: "text-lightblue",
+    bg: "bg-lightblue/10 border-lightblue/20",
+    icon: TrendingUp,
+  },
+  behind: {
+    label: "Behind your competitors",
+    description: "Your direct competitors offer a better loading experience. Prospects may prefer them.",
+    color: "text-orange",
+    bg: "bg-orange/10 border-orange/20",
+    icon: TrendingDown,
+  },
+  critical: {
+    label: "Significantly behind",
+    description: "The gap with your competitors is significant. Every second of delay means lost customers.",
     color: "text-coral",
     bg: "bg-coral/10 border-coral/20",
     icon: AlertTriangle,
@@ -113,14 +146,16 @@ function barWidth(value: number, max: number) {
 // Solo audit helpers — Web Vitals thresholds (Google recommendations)
 // ---------------------------------------------------------------------------
 
-const SOLO_METRICS: {
+const buildSoloMetrics = (
+  isEn: boolean,
+): {
   key: keyof BenchmarkMetrics
   label: string
   unit: string
   good: number
   poor: number
-}[] = [
-  { key: "performanceScore", label: "Score Global", unit: "/100", good: 90, poor: 50 },
+}[] => [
+  { key: "performanceScore", label: isEn ? "Overall score" : "Score Global", unit: "/100", good: 90, poor: 50 },
   { key: "lcp", label: "LCP", unit: "s", good: 2.5, poor: 4 },
   { key: "fcp", label: "FCP", unit: "s", good: 1.8, poor: 3 },
   { key: "tbt", label: "TBT", unit: "ms", good: 200, poor: 600 },
@@ -128,6 +163,8 @@ const SOLO_METRICS: {
   { key: "si", label: "Speed Index", unit: "s", good: 3.4, poor: 5.8 },
   { key: "ttfb", label: "TTFB", unit: "ms", good: 800, poor: 1800 },
 ]
+
+const SOLO_METRICS = buildSoloMetrics(false)
 
 function scoreColor(score: number): string {
   if (score >= 90) return "text-green-400"
@@ -151,10 +188,16 @@ const STATUS_COLORS = {
   poor: "text-coral",
 }
 
-const STATUS_LABELS = {
+const STATUS_LABELS_FR = {
   good: "Bon",
   mid: "À améliorer",
   poor: "Faible",
+}
+
+const STATUS_LABELS_EN = {
+  good: "Good",
+  mid: "Needs improvement",
+  poor: "Poor",
 }
 
 const URL_REGEX = /^https:\/\/[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+\/?.*$/
@@ -240,6 +283,8 @@ function ScoreGauge({
 // ---------------------------------------------------------------------------
 
 function MetricBar({ gap }: { gap: BenchmarkGap }) {
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
   const isScoreMetric = gap.metric === "performanceScore"
   const allValues = [gap.siteValue, ...gap.competitorValues.map((c) => c.value)]
   const maxVal = Math.max(...allValues) * 1.15 || 1
@@ -259,13 +304,25 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
         </div>
         <span className={cn("text-xs font-medium", impactColor(gap.impact))}>
           {gap.competitorValues.length === 0 ? (
-            "Données insuffisantes"
+            isEn ? "Insufficient data" : "Données insuffisantes"
           ) : gap.gapPercent === 0 ? (
-            "Équivalent"
+            isEn ? "Equivalent" : "Équivalent"
           ) : gap.impact === "positive" ? (
-            isScoreMetric ? `+${Math.abs(gap.gapPercent)}% vs concurrents` : `${Math.abs(gap.gapPercent)}% plus rapide`
+            isScoreMetric
+              ? isEn
+                ? `+${Math.abs(gap.gapPercent)}% vs competitors`
+                : `+${Math.abs(gap.gapPercent)}% vs concurrents`
+              : isEn
+                ? `${Math.abs(gap.gapPercent)}% faster`
+                : `${Math.abs(gap.gapPercent)}% plus rapide`
           ) : (
-            isScoreMetric ? `${gap.gapPercent}% en dessous` : `${gap.gapPercent}% plus lent`
+            isScoreMetric
+              ? isEn
+                ? `${gap.gapPercent}% below`
+                : `${gap.gapPercent}% en dessous`
+              : isEn
+                ? `${gap.gapPercent}% slower`
+                : `${gap.gapPercent}% plus lent`
           )}
         </span>
       </div>
@@ -273,7 +330,9 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
       <div className="space-y-1.5">
         {/* Your site */}
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-white/60 w-24 shrink-0 text-right font-medium">Votre site</span>
+          <span className="text-[10px] text-white/60 w-24 shrink-0 text-right font-medium">
+            {isEn ? "Your site" : "Votre site"}
+          </span>
           <div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
@@ -314,7 +373,9 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
 
         {/* Average */}
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-white/30 w-24 shrink-0 text-right italic">Moy. concurrents</span>
+          <span className="text-[10px] text-white/30 w-24 shrink-0 text-right italic">
+            {isEn ? "Avg. competitors" : "Moy. concurrents"}
+          </span>
           <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
@@ -337,6 +398,11 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
 // ---------------------------------------------------------------------------
 
 export default function BenchmarkingTool() {
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
+  const verdictConfig = isEn ? verdictConfigEn : verdictConfigFr
+  const SOLO_METRICS_LOCALIZED = buildSoloMetrics(isEn)
+  const STATUS_LABELS = isEn ? STATUS_LABELS_EN : STATUS_LABELS_FR
   const [url, setUrl] = useState("")
   const [competitors, setCompetitors] = useState<string[]>([])
   const [strategy, setStrategy] = useState<Strategy>("mobile")
@@ -369,7 +435,9 @@ export default function BenchmarkingTool() {
     e.preventDefault()
     if (!url.trim() || competitors.some((c) => !c.trim())) return
 
-    const FORMAT_MSG = "Format attendu : https://domaine.xx"
+    const FORMAT_MSG = isEn
+      ? "Expected format: https://domain.xx"
+      : "Format attendu : https://domaine.xx"
     const newErrors: typeof urlErrors = { competitors: competitors.map(() => null) }
     let hasError = false
 
@@ -403,7 +471,11 @@ export default function BenchmarkingTool() {
         setResult(data)
       }
     } catch {
-      setError("Impossible d'analyser les sites. Vérifiez les URLs et réessayez.")
+      setError(
+        isEn
+          ? "Unable to analyze the sites. Check the URLs and try again."
+          : "Impossible d'analyser les sites. Vérifiez les URLs et réessayez.",
+      )
     } finally {
       setIsLoading(false)
     }
@@ -420,17 +492,20 @@ export default function BenchmarkingTool() {
         <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-6 md:p-8 mb-8">
           <div className="flex items-center gap-3 mb-1">
             <h2 className="text-white font-googletitre text-2xl font-medium">
-              Analysez votre site
+              {isEn ? "Analyze your site" : "Analysez votre site"}
             </h2>
           </div>
           <p className="text-white/60 font-googletexte text-sm mb-4">
-            Entrez votre URL — ajoutez jusqu&apos;à 3 concurrents pour une
-            comparaison directe. Analyse en temps réel via Google PageSpeed Insights.
+            {isEn
+              ? "Enter your URL — add up to 3 competitors for a direct comparison. Real-time analysis via Google PageSpeed Insights."
+              : "Entrez votre URL — ajoutez jusqu'à 3 concurrents pour une comparaison directe. Analyse en temps réel via Google PageSpeed Insights."}
           </p>
 
           {/* Strategy toggle */}
           <div className="flex items-center gap-2 mb-6">
-            <span className="text-xs text-white/50 font-googletexte mr-1">Stratégie :</span>
+            <span className="text-xs text-white/50 font-googletexte mr-1">
+              {isEn ? "Strategy:" : "Stratégie :"}
+            </span>
             <button
               type="button"
               onClick={() => setStrategy("mobile")}
@@ -459,7 +534,9 @@ export default function BenchmarkingTool() {
             </button>
             {strategy === "mobile" && (
               <span className="text-[10px] text-white/30 font-googletexte ml-1">
-                Recommandé — Google indexe en priorité la version mobile
+                {isEn
+                  ? "Recommended — Google indexes the mobile version first"
+                  : "Recommandé — Google indexe en priorité la version mobile"}
               </span>
             )}
           </div>
@@ -470,14 +547,14 @@ export default function BenchmarkingTool() {
                 htmlFor="bench-url"
                 className="text-white/80 font-googletitre text-sm font-semibold"
               >
-                URL de votre site
+                {isEn ? "Your site URL" : "URL de votre site"}
               </Label>
               <div className="relative">
                 <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
                 <Input
                   id="bench-url"
                   type="text"
-                  placeholder="https://www.votre-site.fr"
+                  placeholder={isEn ? "https://www.your-site.com" : "https://www.votre-site.fr"}
                   value={url}
                   onChange={(e) => {
                     setUrl(e.target.value)
@@ -502,10 +579,16 @@ export default function BenchmarkingTool() {
               <div className="flex items-center justify-between">
                 <Label className="text-white/80 font-googletitre text-sm font-semibold">
                   {competitors.length === 0
-                    ? "Concurrents (optionnel)"
+                    ? isEn
+                      ? "Competitors (optional)"
+                      : "Concurrents (optionnel)"
                     : competitors.length === 1
-                      ? "1 site concurrent"
-                      : `${competitors.length} sites concurrents`}
+                      ? isEn
+                        ? "1 competitor site"
+                        : "1 site concurrent"
+                      : isEn
+                        ? `${competitors.length} competitor sites`
+                        : `${competitors.length} sites concurrents`}
                 </Label>
                 {competitors.length < 3 && (
                   <button
@@ -514,7 +597,7 @@ export default function BenchmarkingTool() {
                     className="inline-flex items-center gap-1 text-xs text-lightblue hover:text-lightblue/80 font-googletexte font-medium transition"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    Ajouter un concurrent
+                    {isEn ? "Add a competitor" : "Ajouter un concurrent"}
                   </button>
                 )}
               </div>
@@ -535,7 +618,11 @@ export default function BenchmarkingTool() {
                         </div>
                         <Input
                           type="text"
-                          placeholder={`\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`}
+                          placeholder={
+                            isEn
+                              ? `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://competitor-${i + 1}.com`
+                              : `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`
+                          }
                           value={comp}
                           onChange={(e) => {
                             updateCompetitor(i, e.target.value)
@@ -558,7 +645,7 @@ export default function BenchmarkingTool() {
                           type="button"
                           onClick={() => removeCompetitor(i)}
                           className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-white/30 hover:text-coral hover:bg-coral/10 transition"
-                          title="Retirer ce concurrent"
+                          title={isEn ? "Remove this competitor" : "Retirer ce concurrent"}
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
@@ -581,17 +668,17 @@ export default function BenchmarkingTool() {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Analyse en cours...
+                  {isEn ? "Running analysis…" : "Analyse en cours..."}
                 </>
               ) : competitors.length === 0 ? (
                 <>
                   <Zap className="w-4 h-4" />
-                  Lancer l&apos;audit
+                  {isEn ? "Run audit" : "Lancer l'audit"}
                 </>
               ) : (
                 <>
                   <BarChart3 className="w-4 h-4" />
-                  Lancer le benchmark
+                  {isEn ? "Run benchmark" : "Lancer le benchmark"}
                 </>
               )}
             </Button>
@@ -617,9 +704,13 @@ export default function BenchmarkingTool() {
               return (
                 <>
                   <p className="text-white/60 font-googletexte text-sm">
-                    Analyse {strategy === "mobile" ? "mobile" : "desktop"} {total === 1
-                      ? "de votre site"
-                      : `de ${total} sites`} via Google PageSpeed...
+                    {isEn
+                      ? `${strategy === "mobile" ? "Mobile" : "Desktop"} analysis ${
+                          total === 1 ? "of your site" : `of ${total} sites`
+                        } via Google PageSpeed…`
+                      : `Analyse ${strategy === "mobile" ? "mobile" : "desktop"} ${
+                          total === 1 ? "de votre site" : `de ${total} sites`
+                        } via Google PageSpeed...`}
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 text-xs">
                     <span className="px-2 py-1 rounded bg-white/10 text-white/70">{url}</span>
@@ -628,9 +719,13 @@ export default function BenchmarkingTool() {
                     ))}
                   </div>
                   <p className="text-white/40 font-googletexte text-xs">
-                    {total === 1
-                      ? "Cela peut prendre 15 à 30 secondes"
-                      : "Cela peut prendre 30 à 60 secondes"}
+                    {isEn
+                      ? total === 1
+                        ? "This may take 15 to 30 seconds"
+                        : "This may take 30 to 60 seconds"
+                      : total === 1
+                        ? "Cela peut prendre 15 à 30 secondes"
+                        : "Cela peut prendre 30 à 60 secondes"}
                   </p>
                 </>
               )
@@ -671,19 +766,19 @@ export default function BenchmarkingTool() {
                 <div className="text-sm text-white/70">
                   <p className="font-medium text-orange mb-1">
                     {result.competitors.length === 0
-                      ? "Votre site n\u2019a pas pu être analysé"
-                      : "Certains sites n\u2019ont pas pu être analysés"}
+                      ? isEn ? "Your site could not be analyzed" : "Votre site n\u2019a pas pu être analysé"
+                      : isEn ? "Some sites could not be analyzed" : "Certains sites n\u2019ont pas pu être analysés"}
                   </p>
                   {result.siteMetrics.performanceScore === 0 && (
-                    <p>Votre site n&apos;a pas retourné de données PageSpeed.</p>
+                    <p>{isEn ? "Your site did not return PageSpeed data." : "Votre site n&apos;a pas retourné de données PageSpeed."}</p>
                   )}
                   {result.competitors
                     .filter((c) => c.error)
                     .map((c) => (
-                      <p key={c.name}>{c.name} — échec de l&apos;analyse.</p>
+                      <p key={c.name}>{c.name} — {isEn ? "analysis failed." : "échec de l&apos;analyse."}</p>
                     ))}
                   <p className="mt-1 text-white/50">
-                    Vérifiez que les URLs sont accessibles publiquement. Sans clé API PageSpeed, les quotas sont limités.
+                    {isEn ? "Make sure the URLs are publicly accessible. Without a PageSpeed API key, quotas are limited." : "Vérifiez que les URLs sont accessibles publiquement. Sans clé API PageSpeed, les quotas sont limités."}
                   </p>
                 </div>
               </div>
@@ -698,19 +793,25 @@ export default function BenchmarkingTool() {
                     <div className="flex flex-col items-center gap-4">
                       <span className="inline-flex items-center gap-1.5 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
                         {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                        Score {result.strategy === "mobile" ? "mobile" : "desktop"} PageSpeed
+                        {isEn ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} score` : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} PageSpeed`}
                       </span>
                       <ScoreGauge
                         score={result.siteMetrics.performanceScore}
-                        label="Votre site"
+                        label={isEn ? "Your site" : "Votre site"}
                         color={scoreColor(result.siteMetrics.performanceScore)}
                       />
                       <p className="text-white/60 text-sm font-googletexte text-center max-w-md">
                         {result.siteMetrics.performanceScore >= 90
-                          ? `Excellent — votre site est très performant en ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
+                          ? isEn
+                            ? `Excellent — your site performs very well on ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
+                            : `Excellent — votre site est très performant en ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
                           : result.siteMetrics.performanceScore >= 50
-                            ? "Correct — des optimisations ciblées peuvent améliorer l\u2019expérience utilisateur."
-                            : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
+                            ? isEn
+                              ? "Decent — targeted optimizations can improve the user experience."
+                              : "Correct — des optimisations ciblées peuvent améliorer l\u2019expérience utilisateur."
+                            : isEn
+                              ? "Poor — significant improvements are needed to stay competitive."
+                              : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
                       </p>
                     </div>
                   </CardContent>
@@ -729,12 +830,12 @@ export default function BenchmarkingTool() {
                       </span>
                     </div>
                     <CardDescription className="text-white/50">
-                      Détail des métriques de performance — seuils recommandés par Google
+                      {isEn ? "Performance metrics breakdown — Google recommended thresholds" : "Détail des métriques de performance — seuils recommandés par Google"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {SOLO_METRICS.map((m) => {
+                      {SOLO_METRICS_LOCALIZED.map((m) => {
                         const value = result.siteMetrics[m.key]
                         const status = metricStatus(m.key, value)
                         return (
@@ -761,11 +862,12 @@ export default function BenchmarkingTool() {
                   className="rounded-2xl bg-mediumblue/60 backdrop-blur-xl border border-lightblue/20 p-6 md:p-8 text-center"
                 >
                   <h3 className="text-xl font-googletitre font-bold text-white mb-2">
-                    Comparez avec vos concurrents
+                    {isEn ? "Compare with your competitors" : "Comparez avec vos concurrents"}
                   </h3>
                   <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
-                    Ajoutez jusqu&apos;à 3 sites concurrents pour voir où vous vous situez
-                    et identifier vos axes d&apos;amélioration.
+                    {isEn
+                      ? "Add up to 3 competitor sites to see where you stand and identify areas for improvement."
+                      : "Ajoutez jusqu&apos;à 3 sites concurrents pour voir où vous vous situez et identifier vos axes d&apos;amélioration."}
                   </p>
                   <button
                     type="button"
@@ -776,7 +878,7 @@ export default function BenchmarkingTool() {
                     className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-lightblue/20 text-lightblue border border-lightblue/30 hover:bg-lightblue/30 transition"
                   >
                     <Plus className="w-4 h-4" />
-                    Ajouter des concurrents
+                    {isEn ? "Add competitors" : "Ajouter des concurrents"}
                   </button>
                 </motion.div>
               </>
@@ -797,12 +899,12 @@ export default function BenchmarkingTool() {
                       <div className="flex flex-col items-center gap-2">
                         <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
                           {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                          Scores {result.strategy === "mobile" ? "mobiles" : "desktop"} PageSpeed
+                          {isEn ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} scores` : `Scores ${result.strategy === "mobile" ? "mobiles" : "desktop"} PageSpeed`}
                         </span>
                         <div className="flex items-end gap-4">
                           <ScoreGauge
                             score={result.siteMetrics.performanceScore}
-                            label="Votre site"
+                            label={isEn ? "Your site" : "Votre site"}
                             color={verdictConfig[result.overallVerdict].color}
                           />
                           {result.competitors.filter((c) => !c.error).map((c, i) => (
@@ -834,9 +936,9 @@ export default function BenchmarkingTool() {
                                 {V.description}
                               </p>
                               <p className="text-sm text-white/50 font-googletexte">
-                                Score {result.strategy === "mobile" ? "mobile" : "desktop"} moyen concurrents : <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
+                                {isEn ? `Average competitor ${result.strategy === "mobile" ? "mobile" : "desktop"} score:` : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} moyen concurrents :`} <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
                                 {result.competitors.some((c) => c.error) && (
-                                  <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} analysés)</span>
+                                  <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} {isEn ? "analyzed" : "analysés"})</span>
                                 )}
                               </p>
                             </>
@@ -852,7 +954,7 @@ export default function BenchmarkingTool() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-white font-googletitre text-xl">
-                        Comparaison métrique par métrique
+                        {isEn ? "Metric-by-metric comparison" : "Comparaison métrique par métrique"}
                       </CardTitle>
                       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
                         {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
@@ -860,7 +962,9 @@ export default function BenchmarkingTool() {
                       </span>
                     </div>
                     <CardDescription className="text-white/50">
-                      Core Web Vitals ({result.strategy}) — votre site vs {result.competitors.map((c) => c.name).join(", ")}
+                      {isEn
+                        ? `Core Web Vitals (${result.strategy}) — your site vs ${result.competitors.map((c) => c.name).join(", ")}`
+                        : `Core Web Vitals (${result.strategy}) — votre site vs ${result.competitors.map((c) => c.name).join(", ")}`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -885,7 +989,7 @@ export default function BenchmarkingTool() {
                         <CardHeader className="pb-3">
                           <CardTitle className="text-coral font-googletitre text-lg flex items-center gap-2">
                             <AlertTriangle className="w-5 h-5" />
-                            Vos concurrents vous devancent sur
+                            {isEn ? "Competitors are ahead on" : "Vos concurrents vous devancent sur"}
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -895,8 +999,8 @@ export default function BenchmarkingTool() {
                                 {impactIcon(gap.impact)}
                                 <span>
                                   <strong className="text-white">{gap.label}</strong> :{" "}
-                                  {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit} (moy. concurrents)
-                                  — <span className={impactColor(gap.impact)}>{gap.gapPercent}% d&apos;écart</span>
+                                  {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit} {isEn ? "(avg. competitors)" : "(moy. concurrents)"}
+                                  — <span className={impactColor(gap.impact)}>{gap.gapPercent}% {isEn ? "gap" : "d&apos;écart"}</span>
                                 </span>
                               </li>
                             ))}
@@ -914,7 +1018,7 @@ export default function BenchmarkingTool() {
                         <CardHeader className="pb-3">
                           <CardTitle className="text-green-400 font-googletitre text-lg flex items-center gap-2">
                             <CheckCircle2 className="w-5 h-5" />
-                            Vous les devancez sur
+                            {isEn ? "You are ahead on" : "Vous les devancez sur"}
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -943,28 +1047,32 @@ export default function BenchmarkingTool() {
             >
               <h3 className="text-xl font-googletitre font-bold text-white mb-2">
                 {result.competitors.length === 0
-                  ? "Envie d\u2019aller plus loin ?"
-                  : "Envie de combler l\u2019écart ?"}
+                  ? isEn ? "Want to go further?" : "Envie d\u2019aller plus loin ?"
+                  : isEn ? "Want to close the gap?" : "Envie de combler l\u2019écart ?"}
               </h3>
               <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
-                Une architecture Headless (Next.js + WordPress) peut
+                {isEn ? "A Headless architecture (Next.js + WordPress) can" : "Une architecture Headless (Next.js + WordPress) peut"}
                 {result.competitors.length === 0
-                  ? " booster les performances de votre site en quelques semaines."
-                  : " vous rapprocher — voire dépasser — vos concurrents en quelques semaines."}
+                  ? isEn
+                    ? " boost your site's performance in a few weeks."
+                    : " booster les performances de votre site en quelques semaines."
+                  : isEn
+                    ? " bring you closer — or even ahead — of your competitors in a few weeks."
+                    : " vous rapprocher — voire dépasser — vos concurrents en quelques semaines."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <a
                   href="/outils/simulateur-roi"
                   className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition"
                 >
-                  Calculer mon ROI
+                  {isEn ? "Calculate my ROI" : "Calculer mon ROI"}
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
                 <a
                   href="/audit-site-ia"
                   className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-coral text-darkblue transition-all duration-300 "
                 >
-                  Audit IA complet
+                  {isEn ? "Full AI audit" : "Audit IA complet"}
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -980,29 +1088,54 @@ export default function BenchmarkingTool() {
                 )}
                 <p className="text-xs text-white/40 leading-relaxed">
                   <strong className="text-white/50">
-                    Méthodologie — Score {result.strategy === "mobile" ? "Mobile" : "Desktop"} :
+                    {isEn ? `Methodology — ${result.strategy === "mobile" ? "Mobile" : "Desktop"} score:` : `Méthodologie — Score ${result.strategy === "mobile" ? "Mobile" : "Desktop"} :`}
                   </strong>{" "}
                   {result.competitors.length === 0 ? (
-                    <>
-                      Le score est basé sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
-                      Google PageSpeed Insights.
-                      {result.strategy === "mobile" && (
-                        <> C&apos;est le score qui compte le plus : depuis
-                        le <em>mobile-first indexing</em>, Google évalue et classe votre site
-                        sur sa version mobile.</>
-                      )} Aucune donnée n&apos;est stockée.
-                    </>
+                    isEn ? (
+                      <>
+                        The score is based on the <strong className="text-white/50">{result.strategy} strategy</strong> from
+                        Google PageSpeed Insights.
+                        {result.strategy === "mobile" && (
+                          <> It&apos;s the score that matters most: since
+                          <em> mobile-first indexing</em>, Google evaluates and ranks your site
+                          on its mobile version.</>
+                        )} No data is stored.
+                      </>
+                    ) : (
+                      <>
+                        Le score est basé sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                        Google PageSpeed Insights.
+                        {result.strategy === "mobile" && (
+                          <> C&apos;est le score qui compte le plus : depuis
+                          le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                          sur sa version mobile.</>
+                        )} Aucune donnée n&apos;est stockée.
+                      </>
+                    )
                   ) : (
-                    <>
-                      Tous les scores sont basés sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
-                      Google PageSpeed Insights.
-                      {result.strategy === "mobile" && (
-                        <> C&apos;est le score qui compte le plus : depuis
-                        le <em>mobile-first indexing</em>, Google évalue et classe votre site
-                        sur sa version mobile.</>
-                      )} Les {1 + result.competitors.length} sites sont analysés simultanément
-                      pour garantir des conditions comparables. Aucune donnée n&apos;est stockée.
-                    </>
+                    isEn ? (
+                      <>
+                        All scores are based on the <strong className="text-white/50">{result.strategy} strategy</strong> from
+                        Google PageSpeed Insights.
+                        {result.strategy === "mobile" && (
+                          <> It&apos;s the score that matters most: since
+                          <em> mobile-first indexing</em>, Google evaluates and ranks your site
+                          on its mobile version.</>
+                        )} The {1 + result.competitors.length} sites are analyzed simultaneously
+                        to ensure comparable conditions. No data is stored.
+                      </>
+                    ) : (
+                      <>
+                        Tous les scores sont basés sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                        Google PageSpeed Insights.
+                        {result.strategy === "mobile" && (
+                          <> C&apos;est le score qui compte le plus : depuis
+                          le <em>mobile-first indexing</em>, Google évalue et classe votre site
+                          sur sa version mobile.</>
+                        )} Les {1 + result.competitors.length} sites sont analysés simultanément
+                        pour garantir des conditions comparables. Aucune donnée n&apos;est stockée.
+                      </>
+                    )
                   )}
                 </p>
               </div>

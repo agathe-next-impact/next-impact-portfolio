@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 
 interface ThemeToggleProps {
   className?: string
@@ -11,6 +12,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
+  const t = useTranslations('themeToggle')
 
   React.useEffect(() => {
     setMounted(true)
@@ -18,7 +20,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
 
   const isDark = mounted ? resolvedTheme === 'dark' : true
   const next = isDark ? 'light' : 'dark'
-  const label = isDark ? 'Activer le mode clair' : 'Activer le mode sombre'
+  const label = isDark ? t('toLight') : t('toDark')
 
   return (
     <button

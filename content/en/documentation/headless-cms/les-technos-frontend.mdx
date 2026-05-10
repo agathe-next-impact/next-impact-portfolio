@@ -1,0 +1,209 @@
+---
+title: What is the frontend?
+description: Frontend technologies explained simply
+category: headless-cms
+author: Next Impact
+date: "2025-03-15"
+order: 10
+---
+
+## What is a "frontend technology"?
+
+In a headless architecture, the frontend is the presentation layer — the code that runs in the visitor's browser and displays the content. WordPress, on its side, plays the role of backend: it stores and exposes data through an API.
+
+<FlowDiagram
+  nodes={[
+    { label: "WordPress", description: "Backend — stores and exposes content via API", icon: "🍳" },
+    { label: "API", description: "Communication interface (REST or GraphQL)", icon: "🔗" },
+    { label: "Frontend", description: "Presentation layer shown to the visitor", icon: "🍽️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+Frontend technologies refer to the JavaScript frameworks and libraries used to build this presentation layer. Each technology offers different trade-offs between learning curve, performance, and flexibility.
+
+## React: the reference library
+
+React is a JavaScript library for rendering user interfaces (UI), created by Meta (Facebook) in 2013. It powers production applications at Netflix, Airbnb, Instagram, and thousands of others.
+
+Why React dominates the market:
+
+- The largest active developer community (according to Stack Overflow and State of JS surveys)
+- An extremely rich npm package ecosystem
+- An active community producing documentation, tutorials, and open source tooling
+- A stable release cycle with backward compatibility
+
+With WordPress headless:
+
+- WordPress REST API and WPGraphQL integrate natively with React HTTP clients
+- Libraries like `@wordpress/api-fetch` simplify the calls
+- Many open source starters and examples are available
+
+React is suitable if:
+
+- Your team already knows JavaScript and the component paradigm
+- The project requires strong client-side interactivity
+- You want to maximize the pool of potentially recruitable developers
+
+## Next.js: the fullstack framework built on React
+
+Next.js is a framework developed by Vercel that builds on top of React and adds a set of essential features for the web: routing, server-side rendering, and static generation.
+
+Key Next.js features:
+
+- **SSR (Server-Side Rendering)**: HTML is generated on the server for each request, ensuring search engines can index the content
+- **SSG (Static Site Generation)**: pages are pre-generated as HTML at build time, for minimal response times
+- **ISR (Incremental Static Regeneration)**: static pages are regenerated in the background after a configured interval, combining static performance with content freshness
+- **Automatic optimization**: image compression (`next/image` component), font loading, route-based code-splitting
+
+Next.js is suitable for:
+
+- Marketing sites where performance and SEO are priorities
+- E-commerce that needs product pages indexed by search engines
+- Blogs with high content volume
+- Projects requiring both static and dynamic rendering
+
+## Vue.js: a progressive alternative
+
+Vue.js is a JavaScript framework created by Evan You in 2014. It's designed for progressive adoption: you can use it for an isolated component or for a full application (SPA, Single Page Application).
+
+Why Vue.js is popular:
+
+- **Reduced learning curve**: template syntax is close to HTML, which makes it easier to pick up
+- **Reference documentation**: recognized as one of the best in the JavaScript world, available in multiple languages
+- **Declarative syntax**: Single File Components (`.vue`) bundle template, logic, and styles in a single file
+- **Equivalent performance**: benchmarks show results comparable to React
+
+Nuxt.js = the fullstack framework for Vue.js
+
+- The Vue ecosystem equivalent of Next.js
+- Supports SSR, SSG, and hybrid rendering
+- More conventional configuration, less boilerplate
+
+Vue.js/Nuxt is suitable if:
+
+- The team is just starting with modern JavaScript frameworks
+- Code readability and syntax simplicity are priorities
+- You appreciate comprehensive multilingual documentation
+
+## Gatsby: the specialized static generator
+
+Gatsby is a React-based framework that generates the entire site as static HTML files at build time. This process is called Static Site Generation (SSG).
+
+How it works:
+
+1. At build time, Gatsby queries the WordPress API (via GraphQL) and retrieves all the content
+2. It generates an HTML file for each page, with the necessary CSS and JavaScript
+3. Static files are deployed to a CDN (Content Delivery Network): the server performs no processing per request
+
+Advantages:
+
+- **Minimal response time**: a static HTML file is served directly, with no server execution
+- **Reduced attack surface**: there is no exposed application server, so SQL injection or remote code execution are not possible
+- **Optimal SEO**: the full HTML is available from the first byte received by the crawler
+
+Limitations:
+
+- Content is only updated after a new build (build time scales with the number of pages)
+- Real-time features (comments, dynamic carts) require third-party services or client-side calls
+
+Gatsby is suitable for:
+
+- Sites where load time is a critical business factor
+- Content with low update frequency (documentation, portfolio, marketing site)
+- Projects with strong security constraints
+
+## Which tool should you choose? Decision guide
+
+<Callout variant="developpeur" title="Technical advice">
+The choice of frontend technology should primarily rest on your team's existing skills. A well-mastered framework will produce more reliable and maintainable code than a trendy framework poorly implemented. Also evaluate the size of the ecosystem (number of packages, update frequency, developer availability on the market).
+</Callout>
+
+<ComparisonTable
+  headers={["React / Next.js", "Vue.js / Nuxt.js"]}
+  rows={[
+    { label: "Learning curve", left: "Medium — JSX and hooks to master", right: "Progressive — syntax close to HTML" },
+    { label: "Ecosystem", left: "The richest (npm, GitHub, Stack Overflow)", right: "Rich, official multilingual documentation" },
+    { label: "Performance", left: "Excellent (SSR, SSG, ISR with Next.js)", right: "Excellent (SSR, SSG with Nuxt.js)" },
+    { label: "Community", left: "The largest, strong developer availability", right: "Active, notable French-speaking community" },
+    { label: "WordPress integration", left: "Dedicated libraries, many starters", right: "Good, some adaptations required" },
+    { label: "Ideal for", left: "Experienced JS teams, highly interactive projects", right: "Teams ramping up, mid-size projects" }
+  ]}
+  highlight="left"
+/>
+
+<ComparisonTable
+  headers={["Next.js", "Gatsby"]}
+  rows={[
+    { label: "Rendering type", left: "SSR + SSG + ISR (hybrid)", right: "SSG only (pure static)" },
+    { label: "Loading speed", left: "Very fast (static or server)", right: "Minimal response time (pure static)" },
+    { label: "Dynamic content", left: "Native — ISR and SSR available", right: "Limited — requires a rebuild or client-side calls" },
+    { label: "SEO", left: "Optimal (full HTML server-side)", right: "Optimal (pre-generated HTML)" },
+    { label: "Security", left: "Good (server to be secured)", right: "Maximum (no application server)" },
+    { label: "Ideal for", left: "Dynamic sites, e-commerce, frequently updated content", right: "Marketing sites, blogs, documentation with stable content" }
+  ]}
+  highlight="left"
+/>
+
+### For progressive skill development: Vue.js or Nuxt.js
+
+- Accessible syntax for junior front-end developers
+- High-quality multilingual documentation
+- A good balance between simplicity and power
+
+### For performance and flexibility: Next.js
+
+- Hybrid rendering (SSR, SSG, ISR) adaptable per page
+- Built-in optimizations (images, fonts, code-splitting)
+- Vercel ecosystem for deployment
+
+### To maximize the talent pool: React or Next.js
+
+- The largest number of developers on the market
+- The most resources available (tutorials, packages, Stack Overflow answers)
+- De facto standard at many companies
+
+### For experimental projects: Svelte / SvelteKit
+
+- Build-time compilation: less JavaScript sent to the browser
+- High native performance thanks to the absence of a virtual DOM
+- Concise syntax that reduces boilerplate
+
+## Key takeaways
+
+<HighlightBox title="Key takeaways" accent="blue">
+
+1. **All these technologies fulfill the same role**: building the presentation layer of a site connected to WordPress via API
+
+2. **The choice depends on three factors**: the team's skills, the project's performance requirements, and the development budget
+
+3. **Each option outperforms traditional WordPress** in terms of load time, design flexibility, and separation of concerns
+
+4. **Default recommendation**: Next.js for its versatility (SSR + SSG + ISR), or Nuxt.js if the team prefers Vue.js
+
+**The most reliable selection criterion remains your team's technical mastery.** A well-mastered framework will always produce better results than a popular framework poorly implemented.
+
+</HighlightBox>
+
+1. All these technologies fulfill the same role: building the presentation layer of a site connected to WordPress via API
+
+2. The choice depends on three factors: the team's skills, the project's performance requirements, and the development budget
+
+3. Each option outperforms traditional WordPress in terms of load time, design flexibility, and separation of concerns
+
+4. Default recommendation: Next.js for its versatility (SSR + SSG + ISR), or Nuxt.js if the team prefers Vue.js
+
+The most reliable selection criterion remains your team's technical mastery. A well-mastered framework will always produce better results than a popular framework poorly implemented.
+
+<Quiz
+  question="Which frontend technology is recommended for a team starting out with modern JavaScript frameworks and looking for accessible documentation?"
+  options={[
+    "React, since it's the most widely used library on the market",
+    "Gatsby, since it generates ultra-fast static files",
+    "Vue.js / Nuxt.js, since the learning curve is progressive and the official documentation is widely accessible",
+    "Svelte, since it compiles code at build time"
+  ]}
+  answer={2}
+  explanation="Vue.js and Nuxt.js are particularly well suited to teams ramping up. The template syntax is close to standard HTML, which reduces the learning curve. The official documentation, recognized as one of the best in the JavaScript ecosystem, is available in multiple languages. Nuxt.js adds SSR and SSG without complex configuration."
+/>

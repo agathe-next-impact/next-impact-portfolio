@@ -40,6 +40,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 // ══════════════════════════════════════════
 // Types
@@ -104,7 +106,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 // Mind Map Data — WordPress Headless
 // ══════════════════════════════════════════
 
-const MIND_MAP_DATA: NodeData = {
+const MIND_MAP_DATA_FR: NodeData = {
   id: "root",
   label: "WordPress Headless",
   color: "#F29F05",
@@ -205,6 +207,114 @@ const MIND_MAP_DATA: NodeData = {
     },
   ],
 }
+
+const MIND_MAP_DATA_EN: NodeData = {
+  id: "root",
+  label: "Headless WordPress",
+  color: "#F29F05",
+  iconKey: "globe",
+  children: [
+    {
+      id: "avantages",
+      label: "Why decouple?",
+      color: "#1F54BF",
+      iconKey: "zap",
+      children: [
+        {
+          id: "architecture",
+          label: "Backend and frontend separated",
+          color: "#3B82F6",
+          iconKey: "layers",
+          children: [
+            { id: "content-hub", label: "WordPress handles content", color: "#60A5FA", iconKey: "server", href: "/documentation/headless-cms/wordpress-headless-en-pratique" },
+            { id: "api", label: "The API exposes the data", color: "#60A5FA", iconKey: "code2", href: "/documentation/headless-cms/wpgraphql" },
+            { id: "frontend-indep", label: "Next.js renders the site", color: "#60A5FA", iconKey: "monitor", href: "/documentation/headless-cms/nextjs-pour-wordpress-headless" },
+          ],
+        },
+        {
+          id: "performance",
+          label: "Optimal speed and SEO",
+          color: "#10B981",
+          iconKey: "gauge",
+          children: [
+            { id: "ssg-isr", label: "Pre-rendered pages, instant load", color: "#34D399", iconKey: "sparkles", href: "/documentation/headless-cms/rendu-nextjs-ssg-ssr-isr" },
+            { id: "cwv", label: "Lighthouse scores near 100", color: "#34D399", iconKey: "gauge", href: "/documentation/headless-cms/performance-et-core-web-vitals" },
+            { id: "edge-cdn", label: "Content served via global CDN", color: "#34D399", iconKey: "globe", href: "/documentation/headless-cms/deploiement-vercel-nextjs" },
+          ],
+        },
+        {
+          id: "ux",
+          label: "Smooth navigation",
+          color: "#8B5CF6",
+          iconKey: "eye",
+          children: [
+            { id: "spa", label: "Page transitions without reloads", color: "#A78BFA", iconKey: "zap", href: "/documentation/headless-cms/les-technos-frontend" },
+            { id: "skeleton", label: "Interfaces that feel instant", color: "#A78BFA", iconKey: "layers", href: "/documentation/design-ui-ux/ux" },
+            { id: "micro-interactions", label: "Smooth native React animations", color: "#A78BFA", iconKey: "sparkles", href: "/documentation/design-ui-ux/definir-son-ux" },
+          ],
+        },
+        {
+          id: "securite",
+          label: "Reduced attack surface",
+          color: "#EF4444",
+          iconKey: "shield",
+          children: [
+            { id: "isolation", label: "WordPress hidden, not publicly accessible", color: "#F87171", iconKey: "lock", href: "/documentation/headless-cms/securite-wordpress-headless" },
+            { id: "injections", label: "No PHP exploit on the visitor side", color: "#F87171", iconKey: "shield", href: "/documentation/headless-cms/securite-wordpress-headless" },
+            { id: "ddos", label: "Static frontend, resilient to DDoS", color: "#F87171", iconKey: "lock", href: "/documentation/headless-cms/securite-wordpress-headless" },
+          ],
+        },
+        {
+          id: "dev-experience",
+          label: "Modern, productive stack",
+          color: "#F59E0B",
+          iconKey: "code2",
+          children: [
+            { id: "frameworks", label: "React and TypeScript by default", color: "#FBBF24", iconKey: "code2", href: "/documentation/headless-cms/nextjs-pour-wordpress-headless" },
+            { id: "git-ci", label: "Automated CI/CD deployment", color: "#FBBF24", iconKey: "gitbranch", href: "/documentation/headless-cms/deploiement-vercel-nextjs" },
+            { id: "talents", label: "Stack that attracts top talent", color: "#FBBF24", iconKey: "users", href: "/documentation/headless-cms/pourquoi-le-headless" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "editeur",
+      label: "Editors keep their bearings",
+      color: "#8B5CF6",
+      iconKey: "pencil",
+      children: [
+        { id: "gutenberg-acf", label: "ACF structures, Gutenberg edits", color: "#A78BFA", iconKey: "folderCog", href: "/documentation/headless-cms/custom-post-types-et-acf" },
+        { id: "live-preview", label: "Instant rendering preview", color: "#A78BFA", iconKey: "scanEye", href: "/documentation/headless-cms/preview-et-workflow-editorial" },
+        { id: "multi-canal", label: "One content, multiple delivery channels", color: "#A78BFA", iconKey: "refresh", href: "/documentation/headless-cms/comprendre-le-headless" },
+      ],
+    },
+    {
+      id: "defis",
+      label: "Trade-offs to plan for",
+      color: "#EF4444",
+      iconKey: "alert",
+      children: [
+        { id: "complexite", label: "Front-end expertise required", color: "#F87171", iconKey: "alert", href: "/documentation/headless-cms/comment-creer-un-headless" },
+        { id: "investissement", label: "Initial budget 2 to 3× higher", color: "#F87171", iconKey: "dollar", href: "/documentation/headless-cms/dois-je-passer-au-headless" },
+        { id: "maintenance", label: "Two environments to maintain", color: "#F87171", iconKey: "refresh", href: "/documentation/headless-cms/herbergement-et-mise-en-ligne" },
+        { id: "plugins", label: "Some WP plugins are incompatible", color: "#F87171", iconKey: "puzzle", href: "/documentation/wordpress/les-plugins" },
+      ],
+    },
+    {
+      id: "roadmap",
+      label: "Migrate progressively, no disruption",
+      color: "#10B981",
+      iconKey: "route",
+      href: "/documentation/headless-cms/migration-monolithique-vers-headless",
+    },
+  ],
+}
+
+function getMindMapData(locale: Locale): NodeData {
+  return locale === "en" ? MIND_MAP_DATA_EN : MIND_MAP_DATA_FR;
+}
+
+const MIND_MAP_DATA = MIND_MAP_DATA_FR;
 
 // ══════════════════════════════════════════
 // Layout constants
@@ -541,9 +651,13 @@ function getSubtreeIds(root: NodeData, targetId: string): Set<string> | null {
 
 export default function MindMap() {
   const { resolvedTheme } = useTheme()
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   const isLight = mounted && resolvedTheme === 'light'
+
+  const mindMapData = useMemo(() => getMindMapData(locale), [locale])
 
   const [expanded, setExpanded] = useState<Set<string>>(new Set(["root"]))
   const [zoom, setZoom] = useState(1.15)
@@ -558,13 +672,13 @@ export default function MindMap() {
   const nodes = useMemo(
     () =>
       layoutTree(
-        MIND_MAP_DATA,
+        mindMapData,
         CANVAS_PADDING,
         CANVAS_PADDING,
         0,
         expanded
       ),
-    [expanded]
+    [expanded, mindMapData]
   )
 
   // Canvas bounds
@@ -633,7 +747,7 @@ export default function MindMap() {
           nodeData.children?.forEach(collapseAllNodes)
         }
         next.delete(id)
-        removeDescendants(MIND_MAP_DATA)
+        removeDescendants(mindMapData)
         focusTargetRef.current = null
       } else {
         next.add(id)
@@ -683,7 +797,7 @@ export default function MindMap() {
 
       // Center on expanded subtree
       if (focusId) {
-        const ids = getSubtreeIds(MIND_MAP_DATA, focusId)
+        const ids = getSubtreeIds(mindMapData, focusId)
         const subtreeNodes = ids
           ? nodes.filter((n) => ids.has(n.id))
           : []
@@ -825,23 +939,27 @@ export default function MindMap() {
 
       {/* Toolbar */}
       <div className="absolute top-4 right-4 z-30 flex items-center gap-1.5 bg-darkblue/60 backdrop-blur-md rounded-2xl border border-lightblue/10 px-1.5 py-1.5">
-        <ToolbarButton onClick={zoomOut} title="Zoom arrière">
+        <ToolbarButton onClick={zoomOut} title={isEn ? "Zoom out" : "Zoom arrière"}>
           <ZoomOut size={16} />
         </ToolbarButton>
         <div className="px-2 py-1 text-xs text-white/50 font-googletexte tabular-nums min-w-[48px] text-center">
           {Math.round(zoom * 100)}%
         </div>
-        <ToolbarButton onClick={zoomIn} title="Zoom avant">
+        <ToolbarButton onClick={zoomIn} title={isEn ? "Zoom in" : "Zoom avant"}>
           <ZoomIn size={16} />
         </ToolbarButton>
         <div className="w-px h-5 bg-lightblue/10 mx-0.5" />
-        <ToolbarButton onClick={fitToView} title="Ajuster à la vue">
+        <ToolbarButton onClick={fitToView} title={isEn ? "Fit to view" : "Ajuster à la vue"}>
           <Maximize2 size={16} />
         </ToolbarButton>
         <div className="w-px h-5 bg-lightblue/10 mx-0.5" />
         <ToolbarButton
           onClick={isAllExpanded ? collapseAll : expandAll}
-          title={isAllExpanded ? "Tout replier" : "Tout déplier"}
+          title={
+            isAllExpanded
+              ? isEn ? "Collapse all" : "Tout replier"
+              : isEn ? "Expand all" : "Tout déplier"
+          }
         >
           {isAllExpanded ? <Shrink size={16} /> : <Expand size={16} />}
         </ToolbarButton>
@@ -849,12 +967,20 @@ export default function MindMap() {
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-30 flex flex-wrap gap-2">
-        {[
-          { label: "Avantages", color: "#1F54BF" },
-          { label: "Éditeur", color: "#8B5CF6" },
-          { label: "Défis", color: "#EF4444" },
-          { label: "Roadmap", color: "#10B981" },
-        ].map((item) => (
+        {(isEn
+          ? [
+              { label: "Benefits", color: "#1F54BF" },
+              { label: "Editor", color: "#8B5CF6" },
+              { label: "Challenges", color: "#EF4444" },
+              { label: "Roadmap", color: "#10B981" },
+            ]
+          : [
+              { label: "Avantages", color: "#1F54BF" },
+              { label: "Éditeur", color: "#8B5CF6" },
+              { label: "Défis", color: "#EF4444" },
+              { label: "Roadmap", color: "#10B981" },
+            ]
+        ).map((item) => (
           <div
             key={item.label}
             className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] text-white/70 backdrop-blur-sm font-googletexte bg-darkblue/40 border border-lightblue/10"
@@ -875,7 +1001,9 @@ export default function MindMap() {
         transition={{ delay: 1, duration: 0.6 }}
         className="absolute bottom-4 right-4 z-30 text-[11px] text-white/25 select-none font-googletexte"
       >
-        Cliquez pour explorer · Scroll pour zoomer · Glisser pour déplacer · Double-clic pour recentrer
+        {isEn
+          ? "Click to explore · Scroll to zoom · Drag to pan · Double-click to recenter"
+          : "Cliquez pour explorer · Scroll pour zoomer · Glisser pour déplacer · Double-clic pour recentrer"}
       </motion.div>
 
       {/* Canvas container — pan & zoom */}

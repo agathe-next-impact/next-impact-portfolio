@@ -1,0 +1,437 @@
+{
+  "common": {
+    "siteName": "Next Impact"
+  },
+  "nav": {
+    "services": "Services & Pricing",
+    "oethAdvantage": "OETH Advantage",
+    "demo": "Demo",
+    "tools": "Online Tools",
+    "documentation": "Learn",
+    "caseStudies": "Case Studies",
+    "contact": "Contact",
+    "about": "About",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "whitepaperTitle": "White paper: What is Headless WordPress?"
+  },
+  "footer": {
+    "contactQuestion": "Have a question? Reach me directly.",
+    "availability": "Available · Reply within 24h",
+    "company": "Next Impact Digital",
+    "owner": "EI Agathe Karinthi-Martin",
+    "address": "4 rue du centre, 15400 Trizac, France",
+    "usefulLinks": "Useful links",
+    "legalNotice": "Legal notice",
+    "about": "About",
+    "services": "Services",
+    "caseStudies": "Case studies",
+    "documentation": "Documentation",
+    "blog": "Blog",
+    "oethAdvantage": "OETH Advantage",
+    "resources": "Resources",
+    "whitepaper": "Headless WordPress white paper",
+    "freeAiAudit": "Free AI audit",
+    "roiSimulator": "ROI simulator",
+    "benchmarking": "Benchmarking",
+    "agefiphSimulator": "AGEFIPH simulator (TIH)",
+    "copyright": "© {year} Next Impact Digital — All rights reserved",
+    "tihMention": "EI Agathe Karinthi-Martin — TIH provider (Independent Worker with Disability, French scheme) — OETH attestation available",
+    "certificationAlt": "Certification"
+  },
+  "floatingContact": {
+    "openLabel": "Open contact options",
+    "closeLabel": "Close contact options",
+    "title": "How can I help?",
+    "subtitle": "Pick the channel that suits you — reply within 24h.",
+    "phone": "Phone",
+    "video": "Video call",
+    "videoDescription": "Book a 15-min call",
+    "email": "Email",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "Subscribe on Substack",
+    "ariaLabel": "Contact options",
+    "srLabel": "Contact"
+  },
+  "localeSwitcher": {
+    "label": "Change language",
+    "switchTo": "Switch to {target}",
+    "fr": "Français",
+    "en": "English"
+  },
+  "themeToggle": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "profileSwitcher": {
+    "defaultLabel": "Your profile",
+    "resetProfile": "Reset profile",
+    "customizeExperience": "Personalize your experience:",
+    "decideur": {
+      "label": "Decision-maker",
+      "description": "Founders, project leads, social-economy orgs — understand the 'why' to decide."
+    },
+    "utilisateur": {
+      "label": "User",
+      "description": "Content managers, marketing — master the 'how' day to day."
+    },
+    "developpeur": {
+      "label": "Developer",
+      "description": "Devs, freelancers, technical — implement with the right stack."
+    }
+  },
+  "hero": {
+    "available": "Available",
+    "experience": "8+ years of experience",
+    "tihMention": "TIH provider — AGEFIPH deduction",
+    "auditTimer": "in 2 minutes",
+    "wordpressLogoAlt": "WordPress logo",
+    "nextjsLogoAlt": "Next.js logo",
+    "astroLogoAlt": "Astro logo",
+    "profileImageAlt": "Profile photo"
+  },
+  "contactPage": {
+    "metaTitle": "Contact — Headless WordPress Quotes & Free Discovery Call",
+    "metaDescription": "Identify the right stack for your project in 4 steps: optimized monolithic WordPress, hybrid Astro or full Next.js. Free AI audit, 15-min video call and personalized quote within 48 hours.",
+    "title": "Pick your stack",
+    "subtitle": "Answer a few questions to identify the WordPress stack tailored to your project.",
+    "breadcrumbHome": "Home",
+    "breadcrumbContact": "Contact"
+  },
+  "legalNoticePage": {
+    "metaTitle": "Legal notice & GDPR",
+    "metaDescription": "Legal notice, terms of use and GDPR data-protection policy for the Next Impact website.",
+    "title": "Legal notice & GDPR",
+    "breadcrumbHome": "Home",
+    "breadcrumbLegal": "Legal notice",
+    "intro": "This legal notice is the binding legal document of the Next Impact website under French law (Loi pour la confiance dans l'économie numérique, RGPD/GDPR). It is therefore provided in its original French version below."
+  },
+  "ctaSection": {
+    "audit": {
+      "badge": "Free audit",
+      "title": "Evaluate your site in 5 minutes",
+      "subtitleStart": "Get a",
+      "subtitleHighlight": "complete report with personalized recommendations",
+      "subtitleEnd": "— free, no strings attached.",
+      "pillPerformance": "Performance ↑",
+      "pillRoi": "ROI projection",
+      "pillCost": "Cost efficiency",
+      "ctaLabel": "Start my free audit",
+      "footer": "Free · 5-minute report · No strings attached"
+    },
+    "conversion": {
+      "badge": "Interactive questionnaire",
+      "title": "Find the right package",
+      "promiseStart": "Get a personalized estimate for",
+      "promiseHighlight": "a site that combines performance with the most-used back office in the world",
+      "promiseEnd": ".",
+      "secondary": "Answer a few questions to receive an offer tailored to your profile and budget.",
+      "ctaLabel": "Start my project",
+      "footer": "Available · Reply within 24h · 8+ years of experience"
+    },
+    "roi": {
+      "badge": "Free simulator",
+      "title": "Calculate your ROI",
+      "promiseStart": "Measure the",
+      "promiseHighlight": "revenue lost to a slow site",
+      "promiseEnd": "and project your earnings after a headless migration.",
+      "secondary": "Instant results based on your real traffic and conversion data.",
+      "ctaLabel": "Run my ROI simulation",
+      "footer": "Free · Instant results · No strings attached"
+    },
+    "benchmarking": {
+      "badge": "Free tool",
+      "title": "Compare your performance",
+      "promiseStart": "Measure your",
+      "promiseHighlight": "real site performance against competitors",
+      "promiseEnd": "via Google PageSpeed.",
+      "secondary": "Core Web Vitals audit and competitive analysis in seconds.",
+      "ctaLabel": "Start benchmarking",
+      "footer": "Free · Core Web Vitals analysis · No strings attached"
+    },
+    "livreBlanc": {
+      "badge": "Free guide",
+      "title": "What is Headless WordPress?",
+      "promiseStart": "Find out in our white paper",
+      "promiseHighlight": "everything you need to know about headless architecture",
+      "promiseEnd": ": benefits, use cases and implementation.",
+      "secondary": "A complete guide to understand, evaluate and adopt Headless WordPress.",
+      "ctaLabel": "Download the white paper",
+      "footer": "Free · Complete PDF · No signup"
+    },
+    "reassurance": {
+      "directContact": "Direct contact",
+      "title": "Let's talk about your project",
+      "subtitle": "No need to test things first? Reach out directly.",
+      "available": "Available",
+      "experience": "8+ years of experience",
+      "wpHeadlessDev": "Headless WordPress developer",
+      "tih": "TIH provider",
+      "company": "Next Impact Digital",
+      "owner": "EI Agathe Karinthi-Martin",
+      "address": "4 rue du centre, 15400 Trizac, France"
+    },
+    "secondaryCTAHelper": "Not ready yet? Start with a free tool"
+  },
+  "specsPage": {
+    "metaTitle": "Project specifications generator",
+    "metaDescription": "Fill out the form to get a complete, personalized specifications document. Free tool to structure your web project.",
+    "title": "Project specifications generator",
+    "subtitle": "Fill out the form to get a complete, personalized specifications document.",
+    "breadcrumbHome": "Home",
+    "breadcrumbTools": "Tools",
+    "breadcrumbSpecs": "Specifications"
+  },
+  "toolsPage": {
+    "metaTitle": "Toolbox — ROI simulator, Benchmarking & Audit",
+    "metaDescription": "Free tools to evaluate, measure and project the performance of your digital presence. ROI simulator, competitive benchmarking and website audit.",
+    "title": "Toolbox",
+    "subtitle": "Free tools to evaluate, measure and project the performance of your digital presence.",
+    "breadcrumbHome": "Home",
+    "breadcrumbTools": "Tools",
+    "backToTools": "Back to tools",
+    "collectionName": "Toolbox — ROI simulator, Benchmarking & Audit",
+    "collectionDescription": "Free tools to evaluate, measure and project the performance of your digital presence."
+  },
+  "benchmarkingPage": {
+    "metaTitle": "Competitive benchmarking — Compare your site to leaders",
+    "metaDescription": "Measure your site's real performance against direct competitors via Google PageSpeed. Free Core Web Vitals audit and competitive analysis.",
+    "title": "Competitive benchmarking",
+    "subtitle": "Measure your site's real performance against direct competitors via Google PageSpeed.",
+    "breadcrumbBenchmarking": "Benchmarking"
+  },
+  "roiSimulatorPage": {
+    "metaTitle": "ROI simulator — Web performance & headless migration",
+    "metaDescription": "Calculate the revenue lost to a slow site and project the additional revenue generated by a headless migration.",
+    "title": "ROI simulator — Web performance",
+    "subtitle": "Calculate the revenue lost to a slow site and project the additional revenue generated by a headless migration.",
+    "breadcrumbRoi": "ROI simulator"
+  },
+  "auditPage": {
+    "metaTitle": "Free audit: should you migrate to Headless WordPress?",
+    "metaDescription": "Test your WordPress site for free. Personalized report with headless migration recommendations, projected ROI and performance gains.",
+    "breadcrumbHome": "Home",
+    "breadcrumbAudit": "AI website audit"
+  },
+  "demoPage": {
+    "metaTitle": "Headless WordPress demo — Next.js project videos",
+    "metaDescription": "See in video how a Headless WordPress site works with Next.js. Demos of real projects: ticketing, participatory media, citizen platform.",
+    "breadcrumbHome": "Home",
+    "breadcrumbDemo": "Demo"
+  },
+  "solutionsPage": {
+    "metaTitle": "Headless WordPress, Next.js and Astro solutions - Next Impact",
+    "metaDescription": "Discover our WordPress solutions tailored to your needs: Essential (standard WordPress), Premium (WordPress + Astro) and Ultimate (Headless WordPress + Next.js). From small businesses to enterprises with advanced needs.",
+    "title": "Our Headless WordPress services",
+    "subtitle": "Pick the solution that fits your needs and your budget.",
+    "breadcrumbHome": "Home",
+    "breadcrumbSolutions": "Solutions"
+  },
+  "documentationPage": {
+    "metaTitle": "Learn — Headless WordPress & Next.js",
+    "metaDescription": "The resource center to understand Headless WordPress and Next.js. Technical guides, tutorials and best practices for developers and project leads.",
+    "title": "Learn",
+    "subtitle": "The resource center to understand Headless WordPress and Next.js.",
+    "breadcrumbHome": "Home",
+    "breadcrumbDocs": "Learn"
+  },
+  "blogPage": {
+    "metaTitle": "Blog | Next Impact Digital",
+    "metaDescription": "Notes, lessons learned and behind-the-scenes from Next Impact Digital's web projects."
+  },
+  "articlesPage": {
+    "metaTitle": "Articles & comparisons | Next Impact Digital",
+    "metaDescription": "Analyses, comparisons and lessons learned on Headless WordPress, web ROI and TIH/AGEFIPH solutions."
+  },
+  "realisations": {
+    "tabs": {
+      "derniers": "Featured work",
+      "corporate": "Corporate",
+      "institutional": "Institutional",
+      "ess": "Social economy",
+      "headless": "Headless"
+    },
+    "viewProject": "View project"
+  },
+  "caseStudiesPage": {
+    "breadcrumbHome": "Home",
+    "breadcrumbCaseStudies": "Case studies",
+    "collectionName": "Headless WordPress case studies — Selected work",
+    "collectionDescription": "Selected projects: corporate, institutional, social-economy and headless platforms. Concrete results in performance, design and conversion."
+  },
+  "caseStudyDetail": {
+    "metaNotFoundTitle": "Case study not found",
+    "metaNotFoundDescription": "The requested case study does not exist.",
+    "backToCaseStudies": "Back to case studies",
+    "projectOverview": "Project overview",
+    "projectPresentation": "Project presentation",
+    "objectives": "Objectives",
+    "results": "Results",
+    "testimonial": "Client testimonial",
+    "projectInfo": "Project information",
+    "client": "Client",
+    "deliveryDate": "Delivery date",
+    "duration": "Project duration",
+    "technologies": "Technologies used",
+    "tags": "Tags",
+    "website": "Website",
+    "similarProjects": "Similar projects",
+    "breadcrumbHome": "Home",
+    "breadcrumbCaseStudies": "Case studies",
+    "articleTitlePrefix": "Case study",
+    "articleTitleSuffix": "Next Impact",
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "clientTypes": {
+      "grande-entreprise": "Large enterprise",
+      "pme": "SMB",
+      "association": "Non-profit",
+      "ess": "Social economy",
+      "institutionnel": "Public sector",
+      "groupement": "Industry group",
+      "independant": "Freelancer"
+    },
+    "cta": {
+      "default": "Discuss your project",
+      "decideur": "Evaluate my project",
+      "utilisateur": "Discuss your project",
+      "developpeur": "See documentation"
+    }
+  },
+  "servicesPage": {
+    "metaTitle": "Services & Pricing — Three Headless WordPress stacks, three outcomes",
+    "metaDescription": "Three levels of WordPress modernization: Essential Presence (optimized monolithic) from €2,250, Accelerated Growth (Astro headless) from €4,000, Custom Platform (Next.js) from €5,000.",
+    "breadcrumbHome": "Home",
+    "breadcrumbServices": "Services & Pricing",
+    "calculateGain": {
+      "title": "Calculate your gain",
+      "description": "Estimate the return on investment of a Headless migration based on your real data.",
+      "ctaLabel": "Run my ROI simulation",
+      "iconAlt": "Calculate"
+    },
+    "stackMethod": {
+      "label": "Method & Transparency",
+      "title": "How I pick your stack",
+      "scope": {
+        "title": "Functional scope",
+        "description": "Brochure site, blog, e-commerce, business app: each project type has its ideal stack.",
+        "iconAlt": "Scope"
+      },
+      "volume": {
+        "title": "Volume & traffic",
+        "description": "Under 10k visits/month, optimized monolithic is enough. Above that, headless quickly pays off.",
+        "iconAlt": "Volume"
+      },
+      "scalability": {
+        "title": "Target scalability",
+        "description": "API integrations, multisite, business applications: Next.js is the right tier.",
+        "iconAlt": "Scalability"
+      }
+    },
+    "budgetCardsAlt": {
+      "left": "Impact",
+      "right": "Outcome"
+    },
+    "shortcuts": {
+      "tools": {
+        "title": "Tools",
+        "description": "ROI simulator, site audit and AI diagnostic to evaluate your digital presence.",
+        "iconAlt": "Tools"
+      },
+      "demo": {
+        "title": "Demo",
+        "description": "See live the power of Headless WordPress on your project.",
+        "iconAlt": "Demo"
+      },
+      "stack": {
+        "title": "Pick your stack",
+        "description": "Answer a few questions to identify the stack that fits your project.",
+        "iconAlt": "Stack"
+      }
+    }
+  },
+  "aboutPage": {
+    "metaTitle": "About Next Impact — Agathe Karinthi-Martin, Headless WordPress developer",
+    "metaDescription": "Agathe Karinthi-Martin is a freelance Headless WordPress developer at Next Impact. 8 years of web development, 15 years of community engagement. Next.js, Astro and WPGraphQL specialist serving social-economy organizations and SMEs.",
+    "breadcrumbHome": "Home",
+    "breadcrumbAbout": "About",
+    "journey": {
+      "label": "The journey",
+      "title": "From WordPress user to modern stack architect",
+      "subtitle": "Twenty years using, customizing and rebuilding WordPress — from the back office to headless architecture.",
+      "step1": {
+        "year": "2005 — On the ground",
+        "title": "Fifteen years using WordPress before coding for it",
+        "description": "Set aside a passion for software development to dive into digital communications. For fifteen years, used WordPress daily: building pages, managing content, configuring themes, debugging plugins. Lived from the inside what works — and especially what frustrates editorial teams using this tool.",
+        "imageAlt": "Next Impact community engagement"
+      },
+      "step2": {
+        "year": "2020 — Back to code",
+        "title": "From WordPress customization to bespoke development",
+        "description": "Up against the limits of off-the-shelf themes and plugins, returned to coding. First case by case to fix specific friction, then structurally: custom themes, bespoke WordPress plugins, API integrations. A full-stack WordPress expertise, built out of necessity.",
+        "imageAlt": "Next Impact back to code"
+      },
+      "step3": {
+        "year": "Today — Next Impact",
+        "title": "Three WordPress stacks, one conviction",
+        "imageAlt": "Today at Next Impact",
+        "items": {
+          "user": {
+            "label": "User expertise:",
+            "text": "15 years using WordPress as an editor — to understand what absolutely has to be preserved in its admin."
+          },
+          "tech": {
+            "label": "Technical mastery:",
+            "text": "Three stacks to choose from — optimized monolithic WordPress, headless + Astro, headless + Next.js — to revolutionize the front end without touching the admin."
+          },
+          "ai": {
+            "label": "AI acceleration:",
+            "text": "Audit tools and AI workflows to deliver WordPress sites at modern tech standards, faster."
+          }
+        }
+      }
+    },
+    "citationByline": "— Agathe Karinthi-Martin, Founder of Next Impact",
+    "metrics": {
+      "label": "In numbers",
+      "title": "Proof through commitment",
+      "yearsCommitment": "years of community engagement",
+      "yearsDevelopment": "years of development",
+      "projectsDelivered": "web projects delivered"
+    }
+  },
+  "expandableCards": {
+    "default": {
+      "title": "Headless WordPress:",
+      "subtitle": "a quick explanation?",
+      "tagline": "A site that combines performance with the most-used back office."
+    },
+    "decideur": {
+      "title": "Headless WordPress:",
+      "subtitle": "what's the business impact?",
+      "tagline": "Understand the concrete strategic gains for your organization."
+    },
+    "utilisateur": {
+      "title": "Headless WordPress:",
+      "subtitle": "what changes for you?",
+      "tagline": "Everything you need to know to manage your content with confidence."
+    },
+    "developpeur": {
+      "title": "Headless WordPress:",
+      "subtitle": "under the hood",
+      "tagline": "Architecture, technical stack and implementation best practices."
+    }
+  }
+}

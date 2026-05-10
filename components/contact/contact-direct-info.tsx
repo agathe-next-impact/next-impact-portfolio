@@ -2,8 +2,12 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 export function ContactDirectInfo() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -12,7 +16,7 @@ export function ContactDirectInfo() {
       className="w-full max-w-lg mx-auto border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 bg-darkblue/40 backdrop-blur-sm text-center space-y-3 sm:space-y-4"
     >
       <p className="text-white/60 font-googletexte uppercase tracking-widest text-sm">
-        Vous préférez un échange direct ?
+        {isEn ? "Prefer a direct conversation?" : "Vous préférez un échange direct ?"}
       </p>
 
       <div className="space-y-3">
@@ -40,7 +44,7 @@ export function ContactDirectInfo() {
 
           <span className="flex items-center gap-2 text-white/60">
             <MapPin className="w-4 h-4 text-white/40 shrink-0" />
-            4 rue du centre, 15400 Trizac
+            {isEn ? "4 rue du centre, 15400 Trizac, France" : "4 rue du centre, 15400 Trizac"}
           </span>
         </div>
       </div>

@@ -1,0 +1,152 @@
+---
+title: How do you create mockups?
+description: How do you create mockups for your website?
+category: design-ui-ux
+author: Next Impact
+date: "2025-03-15"
+order: 2
+---
+
+Designing a website isn't limited to choosing colors and fonts. Before visual design, a structuring step shapes the quality of the final product: creating mockups. Mockups make it possible to formalize the layout of elements, validate interface choices with stakeholders and lay the foundation for a controlled user experience (UX, i.e. the overall quality of the interaction between the user and the product). This article details what a mockup is, its role in the design process, the available tools and the steps to produce mockups effectively.
+
+## What is a website mockup?
+
+A website mockup is a static visual representation of a page or screen. Unlike a prototype, which includes simulated interactions (clicks, transitions, navigation), a mockup focuses on the layout of elements, visual hierarchy and graphic choices. In the design process, it sits between the wireframe (a simplified structural diagram) and the interactive prototype.
+
+Mockups can vary in fidelity: from a quick paper sketch (low fidelity) to a pixel-perfect representation produced in a digital design tool (high fidelity). They allow you to visualize precisely the final rendering before the development phase, which reduces the risk of errors and the cost of corrections.
+
+## Why create website mockups? The key benefits
+
+### 1.  Better communication between stakeholders
+
+Web design involves collaboration between clients, designers and developers. The mockup serves as a shared visual communication medium, reducing ambiguity tied to text or verbal descriptions.
+
+### 2.  Time savings and cost reduction
+
+The mockup helps detect ergonomic, visual hierarchy or legibility issues before the development phase. Fixing a problem in a mockup takes a few minutes; fixing it in code can take several hours.
+
+### 3.  Optimizing user experience
+
+Working from a mockup allows you to adopt a user-centered design approach from the start of the project: clear content structure, logical navigation and consistent interface.
+
+### 4.  Establishing a clear vision
+
+A concrete visual representation aligns all stakeholders on a common goal and maintains project consistency throughout development.
+
+## Tools for creating website mockups
+
+Each mockup tool has specific characteristics suited to different work contexts:
+
+### 1.  Adobe XD
+
+A versatile design tool for producing high-fidelity mockups and interactive prototypes, integrated with the Adobe ecosystem.
+
+### 2.  Figma
+
+A collaborative design tool that runs in the browser. It enables several contributors to work simultaneously on the same file, with a system of reusable components and design variables (design tokens).
+
+### 3.  Sketch
+
+A vector design tool valued for the precision of its renderings and the breadth of its plugin ecosystem, limited to macOS.
+
+### 4.  Balsamiq
+
+A tool specialized in low-fidelity wireframes, allowing structural diagrams to be produced quickly without worrying about graphic rendering.
+
+### 5.  Canva
+
+An accessible tool aimed at non-designers, suited to simple mockups but limited in prototyping and component-management features.
+
+<ComparisonTable
+  headers={["Figma", "Adobe XD"]}
+  rows={[
+    { label: "Collaboration", left: "Real-time, multi-user", right: "Limited, file sharing" },
+    { label: "Fidelity", left: "High and low fidelity", right: "Mainly high fidelity" },
+    { label: "Price", left: "Free (starter plan)", right: "Paid (Adobe subscription)" },
+    { label: "Prototyping", left: "Built-in and advanced", right: "Built-in and powerful" },
+    { label: "Platform", left: "Web (all platforms)", right: "Desktop (Windows/Mac)" },
+    { label: "Best for", left: "Collaborative teams", right: "Designers integrated with the Adobe ecosystem" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="developpeur" title="Extracting CSS properties from the mockup">
+During front-end integration, use the Inspect mode in Figma or Adobe XD to extract CSS properties directly: colors, padding/margin, font-size, line-height and font-weight. This method ensures fidelity between the mockup and the produced code.
+</Callout>
+
+## Step-by-step guide to creating a website mockup
+
+<StepByStep>
+<Step number={1} title="Identify needs and objectives">
+
+Define the site's objective and identify the target audience (personas). List expected features and validate design directions with stakeholders before starting design.
+
+</Step>
+<Step number={2} title="Sketch a wireframe">
+
+Produce a structural diagram that defines the layout of the main blocks: header, navigation, content areas, optional sidebar and footer. The wireframe focuses on information architecture, not aesthetics.
+
+</Step>
+<Step number={3} title="Define color palette and typography">
+
+Select colors aligned with the brand identity and choose a typographic combination (heading + body) that ensures legibility and visual consistency across all screens.
+
+</Step>
+<Step number={4} title="Create a low-fidelity mockup">
+
+Use a tool like Balsamiq or Figma's wireframing features to produce a schematic version of the interface, focused on content structure and hierarchy.
+
+</Step>
+<Step number={5} title="Develop a high-fidelity mockup">
+
+Integrate visuals, apply the color palette, adjust typography and spacing to produce a rendering close to the final result. Figma, Adobe XD or Sketch are suitable for this step.
+
+</Step>
+<Step number={6} title="Gather feedback and iterate">
+
+Share the mockup with stakeholders and target users. Gather feedback, prioritize adjustments and iterate (i.e. repeat the cycle of modification and validation) before handing the files off to development.
+
+</Step>
+</StepByStep>
+
+## Best practices for mockup design
+
+1.  Apply a user-centered approach
+
+Every design decision should be guided by the needs and behaviors of target users, identified during the UX research phase.
+
+1.  Prioritize clarity
+
+Avoid visual overload. A clean interface, with a clear visual hierarchy (size, contrast, spacing), improves legibility and reduces the user's cognitive load.
+
+1.  Test multiple variants
+
+Produce two or three versions of the same screen to compare approaches and identify the most effective one through user testing or design reviews.
+
+1.  Use a grid system
+
+Align all elements on a grid system, typically 12 columns for desktop. The grid ensures alignment, regular spacing and consistency between pages.
+
+1.  Design responsive from the start
+
+Each mockup should provide for at least three breakpoints to cover desktop, tablet and mobile formats.
+
+<Callout variant="developpeur" title="Mockup responsive from the start">
+Design your mockups in at least three reference widths: desktop (1440px), tablet (768px) and mobile (375px). In Figma, use frames and auto-layouts to manage these variants in the same file and ensure consistent spacing across breakpoints.
+</Callout>
+
+## The mockup, a structuring step in the design process
+
+Creating mockups is an essential step in any web project. It allows you to validate interface choices before development, reduce correction costs and ensure a coherent user experience. A methodical approach, combined with the right tools, is the condition for an effective design process.
+
+<Quiz
+  question="What is the main difference between a mockup and a prototype?"
+  options={[
+    "A mockup is more expensive to produce than a prototype",
+    "A mockup is static while a prototype is interactive",
+    "A prototype is always in black and white",
+    "There is no difference between the two"
+  ]}
+  answer={1}
+  explanation="A mockup is a static visual representation that defines the layout of elements, visual hierarchy and graphic choices. A prototype, on the other hand, includes simulated interactions (clicks, transitions, navigation) that allow user journeys to be tested before development."
+/>

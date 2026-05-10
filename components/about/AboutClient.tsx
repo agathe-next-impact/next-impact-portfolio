@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   CheckCircle,
   Zap,
@@ -13,14 +13,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { CountUp } from "@/components/ui/count-up";
 import PageLayout from "@/components/page-layout";
+import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { ABOUT_PAGE_VARIANTS } from "@/lib/homepage-profiles";
+import { getAboutPageVariants } from "@/lib/homepage-profiles";
+import type { Locale } from "@/i18n/routing";
 
 export default function AboutClient() {
   const { profileId } = useDocumentationMode();
-  const variant = profileId
-    ? ABOUT_PAGE_VARIANTS[profileId]
-    : ABOUT_PAGE_VARIANTS.default;
+  const locale = useLocale() as Locale;
+  const aboutVariants = getAboutPageVariants(locale);
+  const variant = profileId ? aboutVariants[profileId] : aboutVariants.default;
+  const t = useTranslations("aboutPage");
 
   const key = profileId || "default";
 
@@ -90,13 +93,13 @@ export default function AboutClient() {
       <section className="container mx-auto px-4 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-            Le parcours
+            {t("journey.label")}
           </p>
           <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
-            De l&apos;utilisateur WordPress à l&apos;architecte de stacks modernes
+            {t("journey.title")}
           </h2>
           <p className="text-lg text-white/70 text-center mb-16 font-googletexte">
-            Vingt ans à manipuler, personnaliser puis reconstruire WordPress — du back-office à l&apos;architecture headless.
+            {t("journey.subtitle")}
           </p>
 
           {/* Timeline */}
@@ -107,7 +110,7 @@ export default function AboutClient() {
             <div className="absolute right-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
               <Image
                 src="/img/about-nb-asso.jpg"
-                alt="Engagement associatif de Next Impact"
+                alt={t("journey.step1.imageAlt")}
                 width={200}
                 height={200}
                 className="h-full w-full object-cover rounded-2xl border border-white/10"
@@ -116,19 +119,14 @@ export default function AboutClient() {
             <div className="relative flex flex-col md:flex-row md:items-start mb-16">
               <div className="md:w-1/2 md:pr-12 bg-mediumblue/20 backdrop-blur-md md:text-right p-4 md:pl-12 md:pl-0 border md:ml-8 border-white/10 rounded-2xl">
                 <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  2005 — Le terrain
+                  {t("journey.step1.year")}
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Quinze ans à utiliser WordPress avant de le coder
+                  {t("journey.step1.title")}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Mettre de côté une passion pour le développement informatique
-                  pour plonger dans la communication digitale. Pendant 15 ans,
-                  utiliser WordPress au quotidien : créer des pages, gérer des
-                  contenus, configurer des thèmes, débugger des plugins. Vivre de
-                  l&apos;intérieur ce qui marche — et surtout ce qui frustre les
-                  équipes éditoriales sur cet outil.
+                  {t("journey.step1.description")}
                 </p>
               </div>
             </div>
@@ -138,7 +136,7 @@ export default function AboutClient() {
               <div className="absolute left-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
                 <Image
                   src="/img/about-code.jpg"
-                  alt="Retour au code de Next Impact"
+                  alt={t("journey.step2.imageAlt")}
                   width={200}
                   height={200}
                   className="h-full w-full object-cover rounded-2xl border border-white/10"
@@ -152,18 +150,14 @@ export default function AboutClient() {
               </div>
               <div className="md:w-1/2 md:pl-12 border md:mr-8 border-white/10 rounded-2xl bg-mediumblue/20 backdrop-blur-md p-4">
                 <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  2020 — Le retour au code
+                  {t("journey.step2.year")}
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  De la personnalisation WordPress au développement sur-mesure
+                  {t("journey.step2.title")}
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
-                  Face aux limites des thèmes et plugins du marché, repasser au
-                  code. D&apos;abord au coup par coup pour résoudre des frictions
-                  précises, puis de façon structurelle : thèmes custom, plugins
-                  WordPress sur-mesure, intégrations API. Une expertise WordPress
-                  full-stack, construite par la nécessité.
+                  {t("journey.step2.description")}
                 </p>
               </div>
             </div>
@@ -173,7 +167,7 @@ export default function AboutClient() {
               <div className="absolute right-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
                 <Image
                   src="/img/contact-agathe-km.png"
-                  alt="Engagement associatif de Next Impact"
+                  alt={t("journey.step3.imageAlt")}
                   width={200}
                   height={200}
                   className="h-full w-full object-cover rounded-2xl border border-white/10"
@@ -181,39 +175,35 @@ export default function AboutClient() {
               </div>
               <div className="md:w-1/2 md:text-right md:pr-12 pl-4 border md:ml-8 border-white/10 rounded-2xl bg-mediumblue/20 backdrop-blur-md p-4">
                 <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  Aujourd&apos;hui — Next Impact
+                  {t("journey.step3.year")}
                 </span>
                 <hr className="border-white/10 my-4" />
                 <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  Trois stacks WordPress, une conviction
+                  {t("journey.step3.title")}
                 </h3>
                 <ul className="space-y-4 text-white/70 font-googletexte">
                   <li className="flex items-start gap-3 md:flex-row-reverse">
                     <span className="text-white/70">
                       <strong className="text-white">
-                        L&apos;expertise utilisateur :
+                        {t("journey.step3.items.user.label")}
                       </strong>{" "}
-                      15 ans à manipuler WordPress côté édition pour comprendre
-                      ce qu&apos;il faut absolument préserver de son admin.
+                      {t("journey.step3.items.user.text")}
                     </span>
                   </li>
                   <li className="flex items-start gap-3 md:flex-row-reverse">
                     <span className="text-white/70">
                       <strong className="text-white">
-                        La maîtrise technique :
+                        {t("journey.step3.items.tech.label")}
                       </strong>{" "}
-                      Trois stacks au choix — WordPress monolithique optimisé,
-                      headless + Astro, headless + Next.js — pour révolutionner
-                      le front sans toucher à l&apos;admin.
+                      {t("journey.step3.items.tech.text")}
                     </span>
                   </li>
                   <li className="flex items-start gap-3 md:flex-row-reverse">
                     <span className="text-white/70">
                       <strong className="text-white">
-                        L&apos;accélération par l&apos;IA :
+                        {t("journey.step3.items.ai.label")}
                       </strong>{" "}
-                      Outils d&apos;audit et workflows IA pour livrer plus vite
-                      des sites WordPress aux standards de la Tech.
+                      {t("journey.step3.items.ai.text")}
                     </span>
                   </li>
                 </ul>
@@ -244,7 +234,7 @@ export default function AboutClient() {
             </motion.blockquote>
           </AnimatePresence>
           <p className="text-lg text-white/60 font-googletexte">
-            — Agathe Karinthi-Martin, Fondateur de Next Impact
+            {t("citationByline")}
           </p>
         </div>
       </section>
@@ -253,10 +243,10 @@ export default function AboutClient() {
       <section className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4">
-            En chiffres
+            {t("metrics.label")}
           </p>
           <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white">
-            Preuve par l&apos;engagement
+            {t("metrics.title")}
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -265,7 +255,7 @@ export default function AboutClient() {
               <CountUp end={15} prefix="+" className="text-coral" />
             </p>
             <p className="text-lg text-white/60 font-googletexte">
-              ans d&apos;engagement
+              {t("metrics.yearsCommitment")}
             </p>
           </div>
           <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center">
@@ -273,7 +263,7 @@ export default function AboutClient() {
               <CountUp end={8} prefix="+" className="text-white" />
             </p>
             <p className="text-lg text-white/60 font-googletexte">
-              ans de développement
+              {t("metrics.yearsDevelopment")}
             </p>
           </div>
           <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center">
@@ -281,7 +271,7 @@ export default function AboutClient() {
               <CountUp end={25} prefix="+" className="text-lightyellow" />
             </p>
             <p className="text-lg text-white/60 font-googletexte">
-              projets web livrés
+              {t("metrics.projectsDelivered")}
             </p>
           </div>
         </div>

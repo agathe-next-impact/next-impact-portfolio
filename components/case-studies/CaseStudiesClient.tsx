@@ -3,17 +3,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
 import Realisations from "@/components/case-studies/realisations";
+import { useLocale } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { CASE_STUDIES_PAGE_VARIANTS } from "@/lib/homepage-profiles";
+import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
+import type { Locale } from "@/i18n/routing";
 
 export default function CaseStudiesClient() {
   const { profileId } = useDocumentationMode();
-  const variant = profileId
-    ? CASE_STUDIES_PAGE_VARIANTS[profileId]
-    : CASE_STUDIES_PAGE_VARIANTS.default;
+  const locale = useLocale() as Locale;
+  const caseStudiesVariants = getCaseStudiesPageVariants(locale);
+  const variant = profileId ? caseStudiesVariants[profileId] : caseStudiesVariants.default;
 
   return (
     <PageLayout titre={variant.titre} sousTitre={variant.sousTitre}>

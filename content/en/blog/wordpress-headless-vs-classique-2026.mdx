@@ -1,0 +1,200 @@
+---
+title: "WordPress Headless vs classic: complete 2026 comparison"
+slug: "wordpress-headless-vs-classique-2026"
+date: "2026-04-14"
+author: "Agathe Karinthi-Martin"
+excerpt: "Performance, cost, security, SEO: 8 criteria and a simple decision rule to choose between classic WordPress and WordPress Headless."
+tags: ["WordPress Headless", "Performance", "TCO", "Decision"]
+readingTime: 8
+---
+
+## Introduction
+
+Your WordPress site has been running for 5 years. It works. Your teams know how to use it. And yet, one provider talks to you about "WordPress Headless," another about a "complete redesign," a third about Webflow.
+
+The quotes vary by a factor of three. You don't really understand why.
+
+<Callout type="info">
+If you first want to understand what headless is technically, start with our [guide "Understanding headless"](/documentation/headless-cms/comprendre-le-headless). This article focuses on the **decision**: when to choose one over the other, what it really costs, and how to decide.
+</Callout>
+
+No unnecessary jargon. Real numbers. And if WordPress Headless isn't the right answer for you, I'll tell you that too.
+
+## What classic WordPress is (and why it still works very well)
+
+In a classic WordPress architecture, everything is in the same place: the content you manage in the admin, and the site your visitors see. WordPress generates pages on demand, themes control the appearance, plugins add features.
+
+**What this looks like in practice:**
+- Your teams write in the Gutenberg editor
+- WordPress assembles the page and sends it to the browser
+- A cache plugin can improve performance
+- A premium theme can make the site visually attractive
+
+**When classic WordPress is the right choice:**
+- Budget under €3,000
+- Traffic under 5,000 visits/month
+- Non-technical team that manages everything autonomously
+- No critical performance constraints
+
+<Callout type="example">
+**Real example: Café Citoyen**, an association with 5 updates/month and a budget of €2,500. Optimized WordPress, delivered in 3 weeks, zero support calls in 6 months. The team is 100% autonomous. Headless would have been overkill.
+</Callout>
+
+## What WordPress Headless is — without the jargon
+
+"Headless" literally means "without a head." In a headless architecture, two things that used to be glued together are separated:
+
+- **The back-end** (the "head" being removed): WordPress continues to manage your content, articles and media. Your teams change nothing about their habits.
+- **The front-end** (what your visitors see): a modern technology (Next.js or Astro) retrieves content via an API and builds pages in a highly optimized way.
+
+**What this looks like in practice:**
+- Your editors still write in WordPress — identical to before
+- The Next.js or Astro front-end pre-generates the pages
+- The visitor receives an already-built page in milliseconds
+- The WordPress server is no longer directly exposed to the public
+
+## The full comparison: 8 key criteria
+
+### 1. Performance (Lighthouse / Core Web Vitals)
+
+| Architecture | Typical Lighthouse score | Average load time |
+|---|---|---|
+| Unoptimized classic WordPress | 30–55 | 4–8 seconds |
+| Well-optimized classic WordPress | 55–75 | 2–4 seconds |
+| WordPress Headless + Astro | 85–95 | 0.8–1.5 seconds |
+| WordPress Headless + Next.js | 90–98 | 0.5–1.2 seconds |
+
+<Callout type="success">
+**Real data: Comme des Fous**, a media outlet with 30+ articles/month. Before migration: 6.4 seconds, Lighthouse 42. After WP Headless + Next.js migration: 0.9 seconds, Lighthouse 96. Result after 3 months: organic traffic +38%.
+</Callout>
+
+### 2. Content management (editorial team side)
+
+This is the question no one asks enough: **will your teams have to change their habits?**
+
+| Architecture | Impact on teams |
+|---|---|
+| Classic WordPress | No change |
+| WordPress Headless | **No change** — the admin remains identical |
+| Webflow | Full migration, new interface |
+| Wix Pro | Full migration, new interface |
+
+This is the decisive advantage of well-executed headless: you modernize the infrastructure without disrupting your editors' daily workflow.
+
+### 3. Security
+
+A classic WordPress exposes its admin interface on a public URL (`/wp-admin`). It's the target of 90% of automated attacks on WordPress.
+
+With a headless architecture:
+- WordPress is moved to a non-public subdomain (`cms.yoursite.com`)
+- The front-end does not execute PHP
+- The attack surface is reduced to near zero
+
+<Callout type="example">
+**Real example: États Généraux Communaux** (sensitive data, critical security). WP Headless + Astro architecture. A+ security audit.
+</Callout>
+
+### 4. Maintenance cost over 3 years
+
+This is where financial reality changes decisions the most.
+
+| Component | Classic WP | Headless WP (Accelerated Growth) | Webflow Premium |
+|---|---|---|---|
+| Initial investment | €3,000 | €5,000 | €6,000 |
+| AGEFIPH deduction (TIH) | — | −€1,200 | — |
+| Maintenance × 3 years | €3,600 | €900 | €1,800 |
+| Subscription × 3 years | — | — | €1,800 |
+| **Total 3-year TCO** | **€6,600** | **€4,700 net** | **€9,600** |
+
+<Callout type="info">
+Applicable if your provider is a TIH (French independent worker with disability scheme). On a €5,000 project, up to €1,500 in direct deduction from the AGEFIPH contribution.
+</Callout>
+
+Maintenance is lower with headless because the Next.js or Astro front-end doesn't depend on a plugin ecosystem as unstable as traditional WordPress.
+
+### 5. SEO and AI visibility (GEO)
+
+Search engines and AI (ChatGPT, Perplexity, Gemini) favor pages that load fast and are structured with schema.org data.
+
+| SEO criterion | Classic WP | Headless WP |
+|---|---|---|
+| Core Web Vitals (LCP, CLS, INP) | Hard to control | Excellent natively |
+| Structured Schema.org | Via plugin (limited) | Full control in the code |
+| Server-side rendering (SSR/ISR) | No | Yes — pre-generated pages |
+| AI visibility (GEO) | Limited | Natively optimizable |
+
+### 6. API integrations and scalability
+
+Connecting a CRM, a personalization tool, an external e-commerce platform — these integrations are far simpler with a headless architecture.
+
+| Need | Classic WP | Headless WP |
+|---|---|---|
+| External REST API | Possible but complex | Native |
+| Complex multisite | Limited | Advanced architectures possible |
+| Internationalization | Via plugin | Full control |
+| Future migration to another CMS | Difficult | Simple (the front-end is independent) |
+
+### 7. Time-to-market and implementation complexity
+
+| Architecture | Typical timeframe | Complexity |
+|---|---|---|
+| Optimized WP (Essential Presence) | 3–5 weeks | Low |
+| WP Headless + Astro (Accelerated Growth) | 6–8 weeks | Medium |
+| WP Headless + Next.js (Custom Platform) | 8–14 weeks | High |
+
+### 8. Risk and technical debt
+
+Classic WordPress accumulates technical debt: plugins that no longer get updated, abandoned themes, PHP compatibility to manage. The risk grows over time.
+
+A headless architecture isolates the front-end from this ecosystem. If WordPress evolves (or if you decide one day to switch CMS), the front-end isn't affected.
+
+## The decision rule: 4 questions to settle it
+
+Ask yourself these 4 questions in order:
+
+**1. Is your Lighthouse score under 70?**
+If yes, current performance is costing you traffic and conversions.
+
+**2. Does your traffic exceed 10,000 visits/month?**
+Below that, the impact of a headless migration will be less visible in the short term.
+
+**3. Do you have API integrations or advanced personalization needs?**
+If yes, headless is often the only architecture that holds up long-term.
+
+**4. Is your editorial team non-technical?**
+Headless preserves their habits entirely. That's an argument for it, not against.
+
+<Callout type="warning">
+**If you answer yes to 2 or more questions**: a WordPress Headless migration deserves a serious quote. **If you answer yes to fewer than 2**: start by optimizing your current WordPress. That's often enough.
+</Callout>
+
+## Next.js or Astro: which to choose for your headless setup?
+
+This isn't the main topic of this article, but here's the quick rule:
+
+- **Astro**: sites with mostly static content, strong security priority, little client-side dynamism. Maximum Lighthouse score. *Example: États Généraux Communaux.*
+- **Next.js**: sites with dynamic content (news, e-commerce, personalization), complex API integrations, high traffic with peaks. *Example: Comme des Fous, Comme des Fous Jeux.*
+
+## What this migration does not solve
+
+Editorial honesty requires it:
+
+- **WordPress Headless does not replace a content strategy.** A fast site without quality content remains invisible.
+- **It does not solve a UX design problem.** Performance is a necessary condition, not a sufficient one.
+- **It is not suited to all budgets.** Below €3,500, an optimized WordPress will deliver better results.
+- **It complicates deployment.** Your technical team (in-house or external) must be comfortable with Node.js environments and CI/CD pipelines.
+
+## Conclusion: the decision in one sentence
+
+If your WordPress site is your main acquisition channel and your current performance is hurting you, migrating to a headless architecture is a self-funding investment — often within less than a year through traffic and conversions.
+
+If you're a small business or association with a tight budget and moderate traffic, optimize what you already have first.
+
+**The right choice isn't the most modern one. It's the one that matches your actual situation.**
+
+## Going further
+
+- [Simulate the ROI of a redesign or headless migration](/outils/simulateur-roi)
+- [Reduce your AGEFIPH contribution through TIH subcontracting](/articles/reduire-contribution-agefiph-sous-traitance-tih)
+- [Complete guide: migrating from classic WordPress to headless](/documentation/headless-cms/migration-monolithique-vers-headless)
+- [Understanding headless — definition and principles](/documentation/headless-cms/comprendre-le-headless)

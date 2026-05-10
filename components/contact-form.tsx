@@ -4,8 +4,12 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Input} from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
 export default function ContactForm() {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,6 +25,7 @@ export default function ContactForm() {
         name: formData.get("name"),
         email: formData.get("email"),
         message: formData.get("message"),
+        locale,
       }),
     });
 
@@ -37,31 +42,37 @@ export default function ContactForm() {
     >
 
       {status === "sent" ? (
-        <p className="text-regularblue">Merci, votre message a bien été envoyé.</p>
+        <p className="text-regularblue">
+          {isEn ? "Thank you, your message has been sent." : "Merci, votre message a bien été envoyé."}
+        </p>
       ) : (
-        
+
         <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-semibold text-regularblue mb-2">Envoyer un message</h2>
-            <p className="mb-4">Vous préférez m'écrire&nbsp;? Remplissez le formulaire ci-dessous.</p>
+            <h2 className="text-2xl font-semibold text-regularblue mb-2">
+              {isEn ? "Send a message" : "Envoyer un message"}
+            </h2>
+            <p className="mb-4">
+              {isEn ? "Prefer to write? Fill out the form below." : "Vous préférez m'écrire ? Remplissez le formulaire ci-dessous."}
+            </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             type="text"
             name="name"
             required
-            placeholder="Votre nom"
+            placeholder={isEn ? "Your name" : "Votre nom"}
             className="w-full border px-4 py-2 rounded"
           />
           <Input
             type="email"
             name="email"
             required
-            placeholder="Votre email"
+            placeholder={isEn ? "Your email" : "Votre email"}
             className="w-full border px-4 py-2 rounded"
           />
           <Textarea
             name="message"
             required
-            placeholder="Votre message"
+            placeholder={isEn ? "Your message" : "Votre message"}
             rows={5}
             className="w-full border px-4 py-2 rounded"
           />
@@ -72,10 +83,14 @@ export default function ContactForm() {
             className="w-max gap-1 rounded-full px-6 py-2 text-darkblue md:text-lg bg-regularblue transition-all duration-300 ease-in-out"
             disabled={status === "loading"}
           >
-            {status === "loading" ? "Envoi en cours..." : "Envoyer"}
+            {status === "loading"
+              ? isEn ? "Sending…" : "Envoi en cours..."
+              : isEn ? "Send" : "Envoyer"}
           </motion.button>
           {status === "error" && (
-            <p className="text-pink-600 mt-2">Une erreur est survenue.</p>
+            <p className="text-pink-600 mt-2">
+              {isEn ? "Something went wrong." : "Une erreur est survenue."}
+            </p>
           )}
         </form>
         </div>

@@ -2,7 +2,8 @@ import { sendMail } from "@/lib/sendMail";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
 
 export async function POST(req: Request) {
-  const { name, email, message, formData, type } = await req.json();
+  const { name, email, message, formData, type, locale } = await req.json();
+  const isEn = locale === "en";
 
   try {
     // Générer le PDF si la requête vient du cahier des charges
@@ -52,8 +53,116 @@ export async function POST(req: Request) {
         <p><strong>Message :</strong><br>${message}</p>
       `;
 
-    // Email utilisateur
-    const userHtml = isCahierDesCharges
+    // Email utilisateur — locale-aware
+    const userHtml = isCahierDesCharges && isEn
+      ? `
+        <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');</style>
+        <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;background:#ffffff;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:0;background:#020F59;border-radius:12px 12px 0 0;padding:0;">
+            <tr>
+              <td style="padding:24px 32px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td valign="middle" style="width:50%;">
+                      <a href="https://next-impact.digital/en" style="text-decoration:none;">
+                        <img src="https://next-impact.digital/img/logo-blanc-carre.png" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
+                      </a>
+                    </td>
+                    <td valign="middle" style="width:50%;text-align:right;">
+                      <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86" style="font-family:'Nunito',Arial,sans-serif;font-size:12px;color:#FF6B6B;text-decoration:none;font-weight:700;margin-right:16px;">
+                        Video call
+                      </a>
+                      <a href="tel:+33673981638" style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#D0DCF2;text-decoration:none;">
+                        +33 6 73 98 16 38
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <div style="height:4px;background:linear-gradient(90deg,#FF6B6B 0%,#F29F05 50%,#F2E57E 100%);"></div>
+          <div style="padding:40px 32px 32px;">
+            <h1 style="font-family:'Nunito',Arial,sans-serif;font-size:24px;font-weight:700;color:#020F59;margin:0 0 8px;">
+              Hi ${name},
+            </h1>
+            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 20px;">
+              Thank you for your trust.
+            </p>
+            <div style="background:#f0f4ff;border-left:4px solid #1F54BF;border-radius:0 8px 8px 0;padding:20px 24px;margin:0 0 24px;">
+              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0 0 8px;">
+                We have received your <strong>project specifications</strong>. The complete PDF is attached.
+              </p>
+              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0;">
+                Our team will review it carefully and get back to you shortly to discuss your project.
+              </p>
+            </div>
+            <h2 style="font-family:'Nunito',Arial,sans-serif;font-size:16px;font-weight:700;color:#020F59;margin:0 0 16px;text-transform:uppercase;letter-spacing:1px;">
+              Next steps
+            </h2>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+              <tr>
+                <td style="padding:12px 16px;vertical-align:top;width:40px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">1</div>
+                </td>
+                <td style="padding:12px 16px;vertical-align:middle;">
+                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
+                    <strong>Review</strong> — We study your specifications in detail
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;vertical-align:top;width:40px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">2</div>
+                </td>
+                <td style="padding:12px 16px;vertical-align:middle;">
+                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
+                    <strong>Discussion</strong> — We get back to you to refine the requirements
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;vertical-align:top;width:40px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">3</div>
+                </td>
+                <td style="padding:12px 16px;vertical-align:middle;">
+                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
+                    <strong>Proposal</strong> — You receive a personalized quote
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <hr style="border:none;border-top:1px solid #D0DCF2;margin:0 0 24px;" />
+            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 16px;text-align:center;">
+              Want to discuss it now?
+            </p>
+            <p style="text-align:center;margin:0 0 32px;">
+              <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
+                 style="font-family:'Nunito',Arial,sans-serif;display:inline-block;background:#FF6B6B;color:#ffffff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.5px;">
+                Book a video call
+              </a>
+            </p>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#020F59;border-radius:0 0 12px 12px;">
+            <tr>
+              <td style="padding:24px 32px;text-align:center;">
+                <p style="font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;color:#D0DCF2;margin:0 0 8px;">
+                  Next Impact Digital
+                </p>
+                <p style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#719ED9;margin:0 0 4px;">
+                  <a href="mailto:agathe@next-impact.digital" style="color:#FF6B6B;text-decoration:none;">agathe@next-impact.digital</a>
+                  &nbsp;&middot;&nbsp;
+                  <a href="tel:+33673981638" style="color:#D0DCF2;text-decoration:none;">+33 6 73 98 16 38</a>
+                </p>
+                <p style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#719ED9;margin:8px 0 0;">
+                  <a href="https://next-impact.digital/en" style="color:#719ED9;text-decoration:none;">next-impact.digital</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `
+      : isCahierDesCharges
       ? `
         <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');</style>
         <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;background:#ffffff;">
@@ -176,6 +285,16 @@ export async function POST(req: Request) {
           </table>
         </div>
       `
+      : isEn
+      ? `
+        <h3>Hi ${name},</h3>
+        <p>We have received your message:</p>
+        <blockquote style="border-left:2px solid #ccc;padding-left:10px;">
+          ${message}
+        </blockquote>
+        <p>Our team will get back to you shortly.</p>
+        <p>Thanks for reaching out,<br>The Next Impact Digital team</p>
+      `
       : `
         <h3>Bonjour ${name},</h3>
         <p>Nous avons bien reçu votre message :</p>
@@ -198,16 +317,20 @@ export async function POST(req: Request) {
       sendMail({
         to: [email],
         subject: isCahierDesCharges
-          ? "Votre cahier des charges — Next Impact Digital"
+          ? isEn
+            ? "Your project specifications — Next Impact Digital"
+            : "Votre cahier des charges — Next Impact Digital"
+          : isEn
+          ? "We received your message — Next Impact Digital"
           : "Confirmation de réception de votre message — Next Impact Digital",
         html: userHtml,
         attachments,
       }),
     ]);
 
-    return new Response("Message envoyé", { status: 200 });
+    return new Response(isEn ? "Message sent" : "Message envoyé", { status: 200 });
   } catch (err) {
     console.error("Erreur contact:", err);
-    return new Response("Erreur: " + String(err), { status: 500 });
+    return new Response((isEn ? "Error: " : "Erreur: ") + String(err), { status: 500 });
   }
 }

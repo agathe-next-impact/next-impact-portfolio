@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
+import type { Locale } from "@/i18n/routing"
 
 export interface ArticleKpi {
   value: string
@@ -31,47 +32,75 @@ export interface ArticleMeta {
   tags: string[]
   relatedArticles: RelatedArticle[]
   relatedDocs: RelatedDoc[]
+  isFallback?: boolean
 }
 
 export interface Article extends ArticleMeta {
   content: string
 }
 
-const articlesDirectory = path.join(process.cwd(), "content", "articles")
+const articlesRootFr = path.join(process.cwd(), "content", "articles")
+const articlesRootEn = path.join(process.cwd(), "content", "en", "articles")
 
-export async function getArticles(): Promise<ArticleMeta[]> {
-  if (!fs.existsSync(articlesDirectory)) return []
-
-  const files = fs.readdirSync(articlesDirectory).filter((f) => f.endsWith(".mdx"))
-
-  const articles: ArticleMeta[] = files.map((file) => {
-    const filePath = path.join(articlesDirectory, file)
-    const fileContents = fs.readFileSync(filePath, "utf8")
-    const { data } = matter(fileContents)
-
-    return {
-      slug: data.slug || file.replace(/\.mdx$/, ""),
-      title: data.title || "",
-      date: data.date || "",
-      author: data.author || "",
-      authorRole: data.authorRole || "",
-      category: data.category || "",
-      cluster: data.cluster || "",
-      readingTime: data.readingTime || 0,
-      kpis: data.kpis || [],
-      tags: data.tags || [],
-      relatedArticles: data.relatedArticles || [],
-      relatedDocs: data.relatedDocs || [],
-    }
-  })
-
-  articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-  return articles
+function buildMeta(filePath: string, fallback: boolean): ArticleMeta | null {
+  if (!fs.existsSync(filePath)) return null
+  const fileContents = fs.readFileSync(filePath, "utf8")
+  const { data } = matter(fileContents)
+  return {
+    slug: data.slug || path.basename(filePath, ".mdx"),
+    title: data.title || "",
+    date: data.date || "",
+    author: data.author || "",
+    authorRole: data.authorRole || "",
+    category: data.category || "",
+    cluster: data.cluster || "",
+    readingTime: data.readingTime || 0,
+    kpis: data.kpis || [],
+    tags: data.tags || [],
+    relatedArticles: data.relatedArticles || [],
+    relatedDocs: data.relatedDocs || [],
+    isFallback: fallback,
+  }
 }
 
-export async function getArticle(slug: string): Promise<Article> {
-  const filePath = path.join(articlesDirectory, `${slug}.mdx`)
+export async function getArticles(locale?: Locale): Promise<ArticleMeta[]> {
+  const articles = new Map<string, ArticleMeta>()
+
+  if (fs.existsSync(articlesRootFr)) {
+    for (const file of fs.readdirSync(articlesRootFr).filter((f) => f.endsWith(".mdx"))) {
+      const meta = buildMeta(path.join(articlesRootFr, file), locale === "en")
+      if (meta) articles.set(meta.slug, meta)
+    }
+  }
+
+  if (locale === "en" && fs.existsSync(articlesRootEn)) {
+    for (const file of fs.readdirSync(articlesRootEn).filter((f) => f.endsWith(".mdx"))) {
+      const meta = buildMeta(path.join(articlesRootEn, file), false)
+      if (meta) articles.set(meta.slug, meta)
+    }
+  }
+
+  return [...articles.values()].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  )
+}
+
+export async function getArticle(slug: string, locale?: Locale): Promise<Article> {
+  let isFallback = false
+  let filePath = ""
+
+  if (locale === "en") {
+    const enPath = path.join(articlesRootEn, `${slug}.mdx`)
+    if (fs.existsSync(enPath)) {
+      filePath = enPath
+    } else {
+      filePath = path.join(articlesRootFr, `${slug}.mdx`)
+      isFallback = true
+    }
+  } else {
+    filePath = path.join(articlesRootFr, `${slug}.mdx`)
+  }
+
   const fileContents = fs.readFileSync(filePath, "utf8")
   const { data, content } = matter(fileContents)
 
@@ -89,5 +118,6 @@ export async function getArticle(slug: string): Promise<Article> {
     relatedArticles: data.relatedArticles || [],
     relatedDocs: data.relatedDocs || [],
     content,
+    isFallback,
   }
 }

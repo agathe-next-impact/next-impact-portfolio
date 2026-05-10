@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { HEADLESS_TABS } from "@/lib/data/headless-explainer"
+import { HEADLESS_TABS, getHeadlessTabs } from "@/lib/data/headless-explainer"
 import TimelineStep from "./TimelineStep"
 import ProjectGrid from "./ProjectGrid"
 import StructureColumns from "./StructureColumns"
 import ProsCons from "./ProsCons"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/i18n/routing"
 
 function TabPanel({ tab }: { tab: (typeof HEADLESS_TABS)[number] }) {
   const { content } = tab
@@ -42,8 +44,10 @@ function TabPanel({ tab }: { tab: (typeof HEADLESS_TABS)[number] }) {
 }
 
 export default function HeadlessExplainer() {
-  const [activeTab, setActiveTab] = useState(HEADLESS_TABS[0].id)
-  const current = HEADLESS_TABS.find((t) => t.id === activeTab) ?? HEADLESS_TABS[0]
+  const locale = useLocale() as Locale
+  const tabs = useMemo(() => getHeadlessTabs(locale), [locale])
+  const [activeTab, setActiveTab] = useState(tabs[0].id)
+  const current = tabs.find((t) => t.id === activeTab) ?? tabs[0]
 
   return (
     <section aria-labelledby="headless-explainer-title" className="w-full bg-mediumblue/90 backdrop-blur-md pt-6 pb-10 rounded-2xl">
@@ -55,7 +59,7 @@ export default function HeadlessExplainer() {
           aria-label="Parcours WordPress Headless"
           className="flex flex-col sm:flex-row sm:overflow-x-auto scrollbar-none border-b border-white/10 mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center gap-1"
         >
-          {HEADLESS_TABS.map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               role="tab"
