@@ -1,9 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { CheckCircle2, AlertCircle, Loader2, ScreenShareIcon } from "lucide-react";
-import MarkdownRenderer from "./markdown-renderer";
-import AuditDashboard from "./audit-dashboard";
+import { CheckCircle2, AlertCircle, Loader2, MailCheck, ScreenShareIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -55,59 +52,69 @@ export default function AuditSendFormClient({
   }, [userInfo, url, markdownFull]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-2 md:p-6 bg-white/80 backdrop-blur-lg rounded-2xl mt-8">
-      {/* Bandeau statut d'envoi */}
-      {userInfo && (
-        <div className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-googletexte ${
-          sendStatus === "sending" ? "text-mediumblue" :
-          sendStatus === "sent" ? "text-mediumblue" :
-          sendStatus === "error" ? "text-red-700" :
-          "bg-gray-50 text-gray-500"
-        }`}>
-          {sendStatus === "sending" && (
-            <>
-              <Loader2 className="size-4 animate-spin" />
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 p-6 md:p-10 bg-white/80 backdrop-blur-lg rounded-2xl mt-8 text-center items-center">
+      {sendStatus === "sending" && (
+        <>
+          <Loader2 className="size-12 animate-spin text-mediumblue" />
+          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-mediumblue">
+            {isEn ? "Sending your report…" : "Envoi de votre rapport en cours…"}
+          </h2>
+          {userInfo && (
+            <p className="text-mediumblue/70 font-googletexte">
               {isEn
-                ? `Sending report to ${userInfo.email}…`
-                : `Envoi du rapport en cours vers ${userInfo.email}...`}
-            </>
+                ? `We are sending the audit to ${userInfo.email}.`
+                : `Nous envoyons l'audit à ${userInfo.email}.`}
+            </p>
           )}
-          {sendStatus === "sent" && (
-            <>
-              <CheckCircle2 className="size-4" />
-              {isEn
-                ? `Report sent to ${userInfo.email}`
-                : `Rapport envoyé avec succès à ${userInfo.email}`}
-            </>
-          )}
-          {sendStatus === "error" && (
-            <>
-              <AlertCircle className="size-4" />
-              {isEn ? `Send error: ${sendError}` : `Erreur lors de l'envoi : ${sendError}`}
-            </>
-          )}
-        </div>
+        </>
       )}
 
-      {/* Dashboard Visuel (Badges, Jauges) */}
-      <AuditDashboard markdown={markdownFull} />
+      {sendStatus === "sent" && (
+        <>
+          <MailCheck className="size-14 text-coral" />
+          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-mediumblue">
+            {isEn ? "Your audit is on its way!" : "Votre audit est en route !"}
+          </h2>
+          <p className="text-mediumblue/80 font-googletexte text-base md:text-lg">
+            {isEn
+              ? userInfo
+                ? `We have just sent the full report to ${userInfo.email}. Check your inbox (and spam folder, just in case).`
+                : "We have just sent you the full report by email. Check your inbox (and spam folder, just in case)."
+              : userInfo
+                ? `Nous venons d'envoyer le rapport complet à ${userInfo.email}. Pensez à vérifier votre boîte de réception (et vos spams, au cas où).`
+                : "Nous venons de vous envoyer le rapport complet par email. Pensez à vérifier votre boîte de réception (et vos spams, au cas où)."}
+          </p>
+        </>
+      )}
 
-      {/* Affichage intégral du résultat d'analyse via le nouveau composant */}
-      <MarkdownRenderer content={markdownFull} analyzedUrl={url} />
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+      {sendStatus === "error" && (
+        <>
+          <AlertCircle className="size-12 text-red-600" />
+          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-red-700">
+            {isEn ? "We could not send your audit" : "Impossible d'envoyer votre audit"}
+          </h2>
+          <p className="text-red-700/80 font-googletexte">
+            {isEn
+              ? `Send error: ${sendError ?? "unknown error"}. Please contact us directly so we can send it to you.`
+              : `Erreur lors de l'envoi : ${sendError ?? "erreur inconnue"}. Contactez-nous directement, nous vous l'enverrons.`}
+          </p>
+        </>
+      )}
+
+      <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 items-center gap-4">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-        <a
-          href="mailto:agathe@next-impact.digital"
-          className="text-mediumblue font-googletitre font-medium text-lg text-center md:text-left"
-        >
-          agathe@next-impact.digital
-        </a>
-        <a
+          <a
+            href="mailto:agathe@next-impact.digital"
+            className="text-mediumblue font-googletitre font-medium text-lg"
+          >
+            agathe@next-impact.digital
+          </a>
+          <a
             href="tel:0673981638"
-            className="text-mediumblue font-googletitre font-medium text-lg text-center md:text-right"
-            >
+            className="text-mediumblue font-googletitre font-medium text-lg"
+          >
             06 73 98 16 38
-        </a>
+          </a>
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"

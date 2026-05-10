@@ -159,7 +159,18 @@ function renderStackCardHtml(stack: string, highlights: string[]) {
       <div style="font-family:${FONT_TITRE};font-size:22px;font-weight:700;color:#064e3b;margin-bottom:12px;">
         ${stack}
       </div>
-      ${highlights.length > 0 ? `<ul style="font-family:${FONT_TEXTE};list-style:disc;text-align:left;padding-left:20px;color:#065f46;font-size:13px;line-height:1.6;">${highlightsList}</ul>` : ""}
+      ${highlights.length > 0 ? `<ul style="font-family:${FONT_TEXTE};list-style:disc;text-align:left;padding-left:20px;color:#065f46;font-size:13px;line-height:1.6;margin-bottom:20px;">${highlightsList}</ul>` : ""}
+      <div style="border-top:1px solid #a7f3d0;margin-top:16px;padding-top:16px;">
+        <div style="font-family:${FONT_TITRE};font-size:14px;font-weight:700;color:#064e3b;margin-bottom:12px;">
+          Discutons de cette recommandation
+        </div>
+        <a href="${CONTACT_URL}" style="font-family:${FONT_TITRE};display:inline-block;background:#ff6b6b;color:#1e3a5f;text-decoration:none;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;margin:0 6px 8px 6px;">
+          Nous contacter
+        </a>
+        <a href="${SITE_URL}" style="font-family:${FONT_TITRE};display:inline-block;background:#ffffff;color:#1e3a5f;text-decoration:none;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;border:1px solid #1e3a5f;margin:0 6px 8px 6px;">
+          Découvrir Next Impact
+        </a>
+      </div>
     </div>
   `;
 }
@@ -167,6 +178,8 @@ function renderStackCardHtml(stack: string, highlights: string[]) {
 // --- Header email (logo + liens) ---
 const LOGO_URL = "https://next-impact.digital/img/logo-small.png";
 const VISIO_URL = "https://calendar.app.google/Cw7TGQBzeZ1szKU86";
+const SITE_URL = "https://next-impact.digital";
+const CONTACT_URL = `${SITE_URL}/contact`;
 
 function renderEmailHeader() {
   return `

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useRef, useState, useEffect } from "react";
-import { ArrowRight, CheckCircle2, ChevronDown, Info, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, ScreenShareIcon, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -426,6 +426,36 @@ export default function EligibilityForm() {
                 {isEn ? `File: ${name}` : `Dossier : ${name}`}
               </p>
             )}
+            <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-3">
+              <p className="text-sm uppercase tracking-widest font-googletexte text-white/60">
+                {isEn ? "Discuss this recommendation" : "Discutons de cette recommandation"}
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-coral text-darkblue font-googletitre font-semibold px-5 py-2.5 hover:bg-coral/80 transition"
+                >
+                  <ScreenShareIcon className="h-5 w-5" />
+                  {isEn ? "Book a video call" : "Échanger en visio"}
+                </a>
+                <a
+                  href="mailto:agathe@next-impact.digital"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
+                >
+                  <Mail className="h-4 w-4 text-coral" />
+                  agathe@next-impact.digital
+                </a>
+                <a
+                  href="tel:0673981638"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
+                >
+                  <Phone className="h-4 w-4 text-lightyellow" />
+                  06 73 98 16 38
+                </a>
+              </div>
+            </div>
           </div>
         )}
       </div>
