@@ -136,7 +136,7 @@ const META: CaseStudyMeta[] = [
     clientName: "Panorama Pub",
     imageUrl: "/img/desktop-screen-panoramapub.png",
     galleryUrl: "/img/desktop-screen-panoramapub.png",
-    date: { month: 5, year: 2025 },
+    date: { month: 5, year: 2026 },
     technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
     website: "https://panorama-pub.com",
     youtubeVideoId: "9fMaBL1amYk",

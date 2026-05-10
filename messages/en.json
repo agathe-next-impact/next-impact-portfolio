@@ -245,6 +245,7 @@
   },
   "realisations": {
     "tabs": {
+      "recents": "Recent work",
       "webapp": "Web App",
       "headless": "Headless WordPress",
       "wordpress": "WordPress"

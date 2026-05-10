@@ -19,39 +19,46 @@ interface ProjectMeta {
 
 const PROJECTS_META: ProjectMeta[] = [
   {
-    id: 17,
-    type: "headless",
-    image: "/img/desktop-screen-cafe-citoyen.png",
-    link: "/etudes-de-cas/cafe-citoyen",
-    tab: ["headless"],
+    id: 19,
+    type: "webapp",
+    image: "/img/desktop-screen-panoramapub.png",
+    link: "/etudes-de-cas/panorama-pub",
+    tab: ["recents", "webapp"],
   },
   {
     id: 18,
     type: "webapp",
     image: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
     link: "/etudes-de-cas/hermitage-jeu-de-piste",
-    tab: ["webapp"],
+    tab: ["recents", "webapp"],
+  },
+  {
+    id: 17,
+    type: "headless",
+    image: "/img/desktop-screen-cafe-citoyen.png",
+    link: "/etudes-de-cas/cafe-citoyen",
+    tab: ["recents", "headless"],
   },
   {
     id: 16,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous-jeux.jpg",
     link: "/etudes-de-cas/comme-des-fous-jeux",
-    tab: ["headless"],
+    tab: ["recents", "headless"],
   },
   {
     id: 15,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous.jpg",
     link: "/etudes-de-cas/comme-des-fous",
-    tab: ["headless"],
+    tab: ["recents", "headless"],
   },
   {
     id: 5,
     type: "headless",
     image: "/img/desktop-screen-next-event.webp",
     link: "/etudes-de-cas/next-event",
-    tab: ["headless"],
+    tab: ["recents", "headless"],
   },
   {
     id: 3,
@@ -66,13 +73,6 @@ const PROJECTS_META: ProjectMeta[] = [
     image: "/img/desktop-screen-lesdoleances.webp",
     link: "/etudes-de-cas/doleances",
     tab: ["headless"],
-  },
-  {
-    id: 19,
-    type: "webapp",
-    image: "/img/desktop-screen-panoramapub.png",
-    link: "/etudes-de-cas/panorama-pub",
-    tab: ["webapp"],
   },
   {
     id: 1,
@@ -368,7 +368,7 @@ interface RealisationsProps {
   defaultTab?: string;
 }
 
-export default function Realisations({ count, defaultTab = "headless" }: RealisationsProps) {
+export default function Realisations({ count, defaultTab = "recents" }: RealisationsProps) {
   const t = useTranslations("realisations");
   const locale = useLocale() as Locale;
 
@@ -378,6 +378,12 @@ export default function Realisations({ count, defaultTab = "headless" }: Realisa
         <Tabs defaultValue={defaultTab} className="w-full">
           <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
             <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
+              <TabsTrigger
+                value="recents"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
+              >
+                {t("tabs.recents")}
+              </TabsTrigger>
               <TabsTrigger
                 value="webapp"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
@@ -399,7 +405,7 @@ export default function Realisations({ count, defaultTab = "headless" }: Realisa
             </TabsList>
           </div>
 
-          {["webapp", "headless", "wordpress"].map((tab) => (
+          {["recents", "webapp", "headless", "wordpress"].map((tab) => (
             <TabsContent value={tab} className="mt-0" key={tab}>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {getProjectsByTab(tab, count ?? PROJECTS_META.length).map(
