@@ -1,65 +1,110 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { sendMail } from "@/lib/sendMail";
 import { renderAuditEmailHtml } from "@/lib/audit-email-renderer";
 
-export async function POST(req: NextRequest) {
+export const maxDuration = 300;
+
+async function runGeminiAnalysis(url: string, prompt: string, systemInstruction: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("Clé API Gemini manquante");
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const modelsToTry = [
+    "gemini-2.5-pro",
+    "gemini-2.0-pro",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+  ];
+
+  const generationConfig = {
+    temperature: 0.2,
+    topP: 0.85,
+    topK: 20,
+    maxOutputTokens: 8192,
+  };
+  const safetySettings = [
+    { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+    { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+    { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+    { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+  ];
+
+  const fullPrompt = prompt.replace(/\{\$url\}|\*\*url\*\*/g, url);
+
+  let lastError: any = null;
+  for (const modelName of modelsToTry) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction,
+        generationConfig,
+        safetySettings,
+      });
+      const result = await model.generateContent(fullPrompt);
+      return result.response.text();
+    } catch (err: any) {
+      lastError = err;
+      continue;
+    }
+  }
+  throw new Error(`Aucun modèle Gemini disponible. Dernière erreur: ${lastError?.message || "inconnu"}`);
+}
+
+async function deliverAudit(opts: {
+  name: string;
+  company: string;
+  email: string;
+  url: string;
+  locale: string;
+  prompt: string;
+  systemInstruction: string;
+}) {
+  const { name, company, email, url, locale, prompt, systemInstruction } = opts;
+  const isEn = locale === "en";
+
   try {
-    const { name, company, email, url, markdown, locale } = await req.json();
-    const isEn = locale === "en";
-
-    if (!name || !email || !url || !markdown) {
-      return NextResponse.json(
-        { error: "Champs obligatoires manquants (name, email, url, markdown)" },
-        { status: 400 }
-      );
-    }
-
-    const adminTo = process.env.AUDIT_MAIL_TO;
-    if (!adminTo) {
-      return NextResponse.json(
-        { error: "AUDIT_MAIL_TO non configuré" },
-        { status: 500 }
-      );
-    }
-
-    // Rendu HTML identique au site (dashboard + tableaux + stack + markdown)
+    const markdown = await runGeminiAnalysis(url, prompt, systemInstruction);
     const auditHtml = renderAuditEmailHtml(markdown, url);
 
     const fontTitre = "'Nunito', Arial, sans-serif";
     const fontTexte = "'Inter', Arial, sans-serif";
 
-    // 1. Email admin : coordonnées + audit complet rendu
-    await sendMail({
-      to: adminTo,
-      subject: `Nouvel audit IA demandé — ${url}`,
-      html: `
-        <div style="font-family:${fontTexte};max-width:700px;margin:0 auto;">
-          <h2 style="font-family:${fontTitre};color:#1e3a5f;">Nouvelle demande d'audit</h2>
-          <table style="font-family:${fontTexte};border-collapse:collapse;width:100%;margin-bottom:24px;">
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Nom</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Entreprise</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;">${company || "—"}</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Email</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;"><a href="mailto:${email}">${email}</a></td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">URL analysée</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;"><a href="${url}">${url}</a></td>
-            </tr>
-          </table>
-          <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-          ${auditHtml}
-        </div>
-      `,
-    });
+    const adminTo = process.env.AUDIT_MAIL_TO;
+    if (adminTo) {
+      await sendMail({
+        to: adminTo,
+        subject: `Nouvel audit IA demandé — ${url}`,
+        html: `
+          <div style="font-family:${fontTexte};max-width:700px;margin:0 auto;">
+            <h2 style="font-family:${fontTitre};color:#1e3a5f;">Nouvelle demande d'audit</h2>
+            <table style="font-family:${fontTexte};border-collapse:collapse;width:100%;margin-bottom:24px;">
+              <tr>
+                <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Nom</td>
+                <td style="padding:8px 12px;border:1px solid #d0d7de;">${name}</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Entreprise</td>
+                <td style="padding:8px 12px;border:1px solid #d0d7de;">${company || "—"}</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Email</td>
+                <td style="padding:8px 12px;border:1px solid #d0d7de;"><a href="mailto:${email}">${email}</a></td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">URL analysée</td>
+                <td style="padding:8px 12px;border:1px solid #d0d7de;"><a href="${url}">${url}</a></td>
+              </tr>
+            </table>
+            <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
+            ${auditHtml}
+          </div>
+        `,
+      });
+    }
 
-    // 2. Email utilisateur : message d'accompagnement + audit rendu (locale-aware)
     const userSubject = isEn
       ? `Your AI audit is ready — ${url}`
       : `Votre audit IA est prêt — ${url}`;
@@ -122,18 +167,67 @@ export async function POST(req: NextRequest) {
         </div>
       `;
 
-    await sendMail({
-      to: email,
-      subject: userSubject,
-      html: userHtml,
-    });
+    await sendMail({ to: email, subject: userSubject, html: userHtml });
+  } catch (err: any) {
+    console.error("[send-audit] background failure:", err);
+    const adminTo = process.env.AUDIT_MAIL_TO;
+    if (adminTo) {
+      try {
+        await sendMail({
+          to: adminTo,
+          subject: `[ECHEC] Audit IA — ${url}`,
+          html: `
+            <p>L'audit en arrière-plan a échoué pour <strong>${email}</strong> (${name}).</p>
+            <p>URL : <a href="${url}">${url}</a></p>
+            <p>Erreur : ${err?.message || "inconnue"}</p>
+          `,
+        });
+      } catch (mailErr) {
+        console.error("[send-audit] failed to notify admin:", mailErr);
+      }
+    }
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { name, company, email, url, locale, prompt, systemInstruction } = await req.json();
+
+    if (!name || !email || !url || !prompt || !systemInstruction) {
+      return NextResponse.json(
+        { error: "Champs obligatoires manquants (name, email, url, prompt, systemInstruction)" },
+        { status: 400 },
+      );
+    }
+
+    try {
+      new URL(url);
+    } catch {
+      return NextResponse.json({ error: "Format d'URL invalide" }, { status: 400 });
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json({ error: "Clé API Gemini manquante" }, { status: 500 });
+    }
+
+    after(() =>
+      deliverAudit({
+        name,
+        company: company || "",
+        email,
+        url,
+        locale: locale || "fr",
+        prompt,
+        systemInstruction,
+      }),
+    );
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
     console.error("Erreur envoi audit:", err);
     return NextResponse.json(
       { error: err.message || "Erreur lors de l'envoi" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

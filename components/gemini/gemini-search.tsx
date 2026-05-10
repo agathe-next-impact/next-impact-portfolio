@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Image from "next/image";
-import { TypewriterLoading } from "../ui/typewriter-loading";
 import dynamic from "next/dynamic";
 const AuditSendFormClient = dynamic(() => import("./AuditSendFormClient"), { ssr: false });
 import { Button } from "../ui/button";
@@ -29,8 +27,8 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
   const [url, setUrl] = useState(defaultUrl || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<any>(null);
   const [showResultPage, setShowResultPage] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   // Optin popup state
   const [showOptin, setShowOptin] = useState(false);
@@ -49,17 +47,11 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
   // Lance la détection CMS automatiquement si defaultUrl est fourni
   React.useEffect(() => {
-    if (defaultUrl && defaultUrl.trim() && !result && !loading && !cmsDetecting) {
+    if (defaultUrl && defaultUrl.trim() && !showResultPage && !loading && !cmsDetecting) {
       detectCms(defaultUrl.trim());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultUrl]);
-
-  React.useEffect(() => {
-    if (result) {
-      setShowResultPage(true);
-    }
-  }, [result]);
 
   const validateUrl = (): boolean => {
     const trimmedUrl = url.trim();
@@ -155,27 +147,34 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
     const trimmedUrl = url.trim();
     setLoading(true);
     setError(null);
-    setResult(null);
+    setSendError(null);
 
     try {
-      const res = await fetch("/api/gemini-analyze", {
+      const res = await fetch("/api/send-audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: trimmedUrl, prompt, systemInstruction }),
+        body: JSON.stringify({
+          name: info.name,
+          company: info.company,
+          email: info.email,
+          url: trimmedUrl,
+          locale,
+          prompt,
+          systemInstruction,
+        }),
       });
       if (!res.ok) {
-        const errorData = await res.json();
+        const errorData = await res.json().catch(() => ({}));
         throw new Error(
           errorData.error ||
-            (isEn ? "Error calling Gemini" : "Erreur lors de l'appel à Gemini"),
+            (isEn ? "Error sending the audit" : "Erreur lors de l'envoi de l'audit"),
         );
       }
-      const data = await res.json();
-      setResult(data);
-      onResult(data);
+      onResult({ queued: true });
       setShowResultPage(true);
     } catch (err: any) {
-      setError(err.message || (isEn ? "Unknown error" : "Erreur inconnue"));
+      setSendError(err.message || (isEn ? "Unknown error" : "Erreur inconnue"));
+      setShowResultPage(true);
     } finally {
       setLoading(false);
     }
@@ -371,37 +370,19 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
       {loading && (
         <div className="w-full max-w-xl mt-4 mx-auto flex flex-col items-center justify-center p-6">
-          <TypewriterLoading
-            messages={
-              isEn
-                ? [
-                    "Running analysis…",
-                    "It takes a moment…",
-                    "It's detailed…",
-                    "It's personalized…",
-                    "Almost done…",
-                  ]
-                : [
-                    "Analyse en cours...",
-                    "C'est un peu long...",
-                    "C'est détaillé...",
-                    "C'est personnalisé...",
-                    "Presque fini...",
-                  ]
-            }
-            speed={40}
-            className="h-6 mt-12 text-2xl"
-          />
+          <Loader2 className="size-8 animate-spin text-coral mb-4" />
+          <p className="text-white/80 font-googletexte text-lg">
+            {isEn ? "Preparing your audit…" : "Préparation de votre audit…"}
+          </p>
         </div>
       )}
 
-      {showResultPage && result && (
+      {showResultPage && (
         <AuditSendFormClient
-          markdownFull={
-            result.text || JSON.stringify(result, null, 2)
-          }
           url={url}
           userInfo={userInfo || undefined}
+          status={sendError ? "error" : "sent"}
+          errorMessage={sendError || undefined}
         />
       )}
     </>

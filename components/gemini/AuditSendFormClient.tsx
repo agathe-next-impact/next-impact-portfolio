@@ -1,75 +1,26 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2, AlertCircle, Loader2, MailCheck, ScreenShareIcon } from "lucide-react";
+import React from "react";
+import { AlertCircle, MailCheck, ScreenShareIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
 interface AuditSendFormProps {
-  markdownFull: string;
   url: string;
   userInfo?: { name: string; company: string; email: string };
+  status: "sent" | "error";
+  errorMessage?: string;
 }
 export default function AuditSendFormClient({
-  markdownFull,
-  url,
   userInfo,
+  status,
+  errorMessage,
 }: AuditSendFormProps) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
-  const [sendStatus, setSendStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [sendError, setSendError] = useState<string | null>(null);
-  const hasSent = useRef(false);
-
-  // Envoi automatique dès que le composant monte avec userInfo disponible
-  useEffect(() => {
-    if (!userInfo || hasSent.current) return;
-    hasSent.current = true;
-
-    const sendAudit = async () => {
-      setSendStatus("sending");
-      try {
-        const res = await fetch("/api/send-audit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: userInfo.name,
-            company: userInfo.company,
-            email: userInfo.email,
-            url,
-            markdown: markdownFull,
-            locale,
-          }),
-        });
-        if (!res.ok) throw new Error(isEn ? "Send failed" : "Erreur lors de l'envoi");
-        setSendStatus("sent");
-      } catch (err: any) {
-        setSendError(err.message || (isEn ? "Unknown error" : "Erreur inconnue"));
-        setSendStatus("error");
-      }
-    };
-
-    sendAudit();
-  }, [userInfo, url, markdownFull]);
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 p-6 md:p-10 bg-white/80 backdrop-blur-lg rounded-2xl mt-8 text-center items-center">
-      {sendStatus === "sending" && (
-        <>
-          <Loader2 className="size-12 animate-spin text-mediumblue" />
-          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-mediumblue">
-            {isEn ? "Sending your report…" : "Envoi de votre rapport en cours…"}
-          </h2>
-          {userInfo && (
-            <p className="text-mediumblue/70 font-googletexte">
-              {isEn
-                ? `We are sending the audit to ${userInfo.email}.`
-                : `Nous envoyons l'audit à ${userInfo.email}.`}
-            </p>
-          )}
-        </>
-      )}
-
-      {sendStatus === "sent" && (
+      {status === "sent" && (
         <>
           <MailCheck className="size-14 text-coral" />
           <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-mediumblue">
@@ -78,16 +29,16 @@ export default function AuditSendFormClient({
           <p className="text-mediumblue/80 font-googletexte text-base md:text-lg">
             {isEn
               ? userInfo
-                ? `We have just sent the full report to ${userInfo.email}. Check your inbox (and spam folder, just in case).`
-                : "We have just sent you the full report by email. Check your inbox (and spam folder, just in case)."
+                ? `We will send the full report to ${userInfo.email} as soon as it is ready (a few minutes). Check your inbox (and spam folder, just in case).`
+                : "We will send you the full report by email as soon as it is ready (a few minutes). Check your inbox (and spam folder, just in case)."
               : userInfo
-                ? `Nous venons d'envoyer le rapport complet à ${userInfo.email}. Pensez à vérifier votre boîte de réception (et vos spams, au cas où).`
-                : "Nous venons de vous envoyer le rapport complet par email. Pensez à vérifier votre boîte de réception (et vos spams, au cas où)."}
+                ? `Nous enverrons le rapport complet à ${userInfo.email} dès qu'il sera prêt (quelques minutes). Pensez à vérifier votre boîte de réception (et vos spams, au cas où).`
+                : "Nous vous enverrons le rapport complet par email dès qu'il sera prêt (quelques minutes). Pensez à vérifier votre boîte de réception (et vos spams, au cas où)."}
           </p>
         </>
       )}
 
-      {sendStatus === "error" && (
+      {status === "error" && (
         <>
           <AlertCircle className="size-12 text-red-600" />
           <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-red-700">
@@ -95,8 +46,8 @@ export default function AuditSendFormClient({
           </h2>
           <p className="text-red-700/80 font-googletexte">
             {isEn
-              ? `Send error: ${sendError ?? "unknown error"}. Please contact us directly so we can send it to you.`
-              : `Erreur lors de l'envoi : ${sendError ?? "erreur inconnue"}. Contactez-nous directement, nous vous l'enverrons.`}
+              ? `Send error: ${errorMessage ?? "unknown error"}. Please contact us directly so we can send it to you.`
+              : `Erreur lors de l'envoi : ${errorMessage ?? "erreur inconnue"}. Contactez-nous directement, nous vous l'enverrons.`}
           </p>
         </>
       )}
