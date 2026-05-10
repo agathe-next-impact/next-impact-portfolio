@@ -23,133 +23,133 @@ const PROJECTS_META: ProjectMeta[] = [
     type: "headless",
     image: "/img/desktop-screen-cafe-citoyen.png",
     link: "/etudes-de-cas/cafe-citoyen",
-    tab: ["derniers", "headless"],
+    tab: ["headless"],
   },
   {
     id: 18,
-    type: "headless",
+    type: "webapp",
     image: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
     link: "/etudes-de-cas/hermitage-jeu-de-piste",
-    tab: ["derniers", "headless"],
+    tab: ["webapp"],
   },
   {
     id: 16,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous-jeux.jpg",
     link: "/etudes-de-cas/comme-des-fous-jeux",
-    tab: ["derniers", "headless"],
+    tab: ["headless"],
   },
   {
     id: 15,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous.jpg",
     link: "/etudes-de-cas/comme-des-fous",
-    tab: ["derniers", "headless"],
+    tab: ["headless"],
   },
   {
     id: 5,
     type: "headless",
     image: "/img/desktop-screen-next-event.webp",
     link: "/etudes-de-cas/next-event",
-    tab: ["derniers", "headless"],
+    tab: ["headless"],
   },
   {
     id: 3,
     type: "headless",
     image: "/img/desktop-screen-egc.webp",
     link: "/etudes-de-cas/les-etats-generaux-communaux",
-    tab: ["derniers", "association", "headless", "ess"],
+    tab: ["headless"],
   },
   {
     id: 4,
     type: "headless",
     image: "/img/desktop-screen-lesdoleances.webp",
     link: "/etudes-de-cas/doleances",
-    tab: ["derniers", "derniers", "headless", "ess"],
+    tab: ["headless"],
   },
   {
     id: 19,
-    type: "corporate",
+    type: "webapp",
     image: "/img/desktop-screen-panoramapub.png",
     link: "/etudes-de-cas/panorama-pub",
-    tab: ["derniers", "corporate"],
+    tab: ["webapp"],
   },
   {
     id: 1,
-    type: "corporate",
+    type: "wordpress",
     image: "/img/desktop-screen-proditec.webp",
     link: "/etudes-de-cas/proditec",
-    tab: ["derniers", "corporate"],
+    tab: ["wordpress"],
   },
   {
     id: 2,
-    type: "institution",
+    type: "wordpress",
     image: "/img/desktop-screen-sowee.webp",
     link: "/etudes-de-cas/sowee",
-    tab: ["derniers", "derniers", "institutional"],
+    tab: ["wordpress"],
   },
   {
     id: 11,
-    type: "institutional",
+    type: "wordpress",
     image: "/img/desktop-screen-infralliance.webp",
     link: "/etudes-de-cas/infralliance",
-    tab: ["derniers", "institutional"],
+    tab: ["wordpress"],
   },
   {
     id: 12,
-    type: "institutional",
+    type: "wordpress",
     image: "/img/desktop-screen-sdevo.webp",
     link: "/etudes-de-cas/sdevo",
-    tab: ["derniers", "institutional"],
+    tab: ["wordpress"],
   },
   {
     id: 6,
-    type: "corporate",
+    type: "wordpress",
     image: "/img/desktop-screen-salondelacarrosserie.webp",
     link: "/etudes-de-cas/salon-de-la-carrosserie",
-    tab: ["derniers", "corporate"],
+    tab: ["wordpress"],
   },
   {
     id: 7,
-    type: "ess",
+    type: "wordpress",
     image: "/img/desktop-screen-hermitage.webp",
     link: "/etudes-de-cas/hermitage",
-    tab: ["derniers", "ess"],
+    tab: ["wordpress"],
   },
   {
     id: 8,
-    type: "corporate",
+    type: "wordpress",
     image: "/img/desktop-screen-erp-services.webp",
     link: "/etudes-de-cas/erp-services",
-    tab: ["derniers", "corporate"],
+    tab: ["wordpress"],
   },
   {
     id: 10,
-    type: "corporate",
+    type: "wordpress",
     image: "/img/desktop-screen-wagner-hamisky.webp",
     link: "/etudes-de-cas/wagner-hamisky",
-    tab: ["derniers", "corporate"],
+    tab: ["wordpress"],
   },
   {
     id: 14,
-    type: "ess",
+    type: "wordpress",
     image: "/img/desktop-screen-mediatico.webp",
     link: "/etudes-de-cas/mediatico",
-    tab: ["derniers", "ess"],
+    tab: ["wordpress"],
   },
   {
     id: 9,
-    type: "corporate",
+    type: "wordpress",
     image: "/img/desktop-screen-senza-nature.webp",
     link: "/etudes-de-cas/senza-nature",
-    tab: ["derniers", "corporate"],
+    tab: ["wordpress"],
   },
   {
     id: 13,
-    type: "ess",
+    type: "wordpress",
     image: "/img/desktop-screen-gem-connexion.webp",
     link: "/etudes-de-cas/connexion-plus",
-    tab: ["derniers", "ess"],
+    tab: ["wordpress"],
   },
 ];
 
@@ -368,7 +368,7 @@ interface RealisationsProps {
   defaultTab?: string;
 }
 
-export default function Realisations({ count, defaultTab = "derniers" }: RealisationsProps) {
+export default function Realisations({ count, defaultTab = "headless" }: RealisationsProps) {
   const t = useTranslations("realisations");
   const locale = useLocale() as Locale;
 
@@ -379,28 +379,10 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
           <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
             <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
               <TabsTrigger
-                value="derniers"
+                value="webapp"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                {t("tabs.derniers")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="corporate"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.corporate")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="institutional"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.institutional")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="ess"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.ess")}
+                {t("tabs.webapp")}
               </TabsTrigger>
               <TabsTrigger
                 value="headless"
@@ -408,10 +390,16 @@ export default function Realisations({ count, defaultTab = "derniers" }: Realisa
               >
                 {t("tabs.headless")}
               </TabsTrigger>
+              <TabsTrigger
+                value="wordpress"
+                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
+              >
+                {t("tabs.wordpress")}
+              </TabsTrigger>
             </TabsList>
           </div>
 
-          {["derniers", "ess", "corporate", "institutional", "headless"].map((tab) => (
+          {["webapp", "headless", "wordpress"].map((tab) => (
             <TabsContent value={tab} className="mt-0" key={tab}>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {getProjectsByTab(tab, count ?? PROJECTS_META.length).map(

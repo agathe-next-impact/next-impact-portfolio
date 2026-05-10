@@ -19,7 +19,9 @@
       "Bash(cat eslint.config.*)",
       "Bash(curl:*)",
       "Read(//tmp/**)",
-      "Bash(taskkill //F //IM node.exe //T)"
+      "Bash(taskkill //F //IM node.exe //T)",
+      "Bash(git commit -m ' *)",
+      "Bash(git rm *)"
     ]
   }
 }

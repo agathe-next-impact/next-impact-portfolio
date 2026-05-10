@@ -245,11 +245,9 @@
   },
   "realisations": {
     "tabs": {
-      "derniers": "Réalisations marquantes",
-      "corporate": "Corporate",
-      "institutional": "Institutionnel",
-      "ess": "ESS",
-      "headless": "Headless"
+      "webapp": "Web App",
+      "headless": "WordPress Headless",
+      "wordpress": "WordPress"
     },
     "viewProject": "Voir le projet"
   },

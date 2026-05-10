@@ -245,11 +245,9 @@
   },
   "realisations": {
     "tabs": {
-      "derniers": "Featured work",
-      "corporate": "Corporate",
-      "institutional": "Institutional",
-      "ess": "Social economy",
-      "headless": "Headless"
+      "webapp": "Web App",
+      "headless": "Headless WordPress",
+      "wordpress": "WordPress"
     },
     "viewProject": "View project"
   },
