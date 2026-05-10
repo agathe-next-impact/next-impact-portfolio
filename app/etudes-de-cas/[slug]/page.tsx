@@ -310,6 +310,44 @@ const CASE_STUDIES: CaseStudy[] = [
     website: "https://lesetatsgenerauxcommunaux.org",
   },
   {
+    id: "19",
+    slug: "panorama-pub",
+    title: "Panorama Pub",
+    description:
+      "Lancement de Panorama Pub, premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires : un nouveau marché digital pour connecter acheteurs et fournisseurs sur un secteur encore éclaté.",
+    imageUrl: "/img/desktop-screen-panoramapub.png",
+    clientType: "PME",
+    clientName: "Panorama Pub",
+    date: {
+      month: 5,
+      year: 2025,
+    },
+    tags: ["PME", "Annuaire B2B", "Marketplace", "Lancement produit"],
+    objectives: [
+      "Occuper un marché vacant en créant la référence digitale du secteur des objets publicitaires",
+      "Centraliser une offre fournisseurs aujourd'hui dispersée et difficile à comparer",
+      "Faire gagner un temps précieux aux acheteurs (agences, services com', marketing) dans leur sourcing",
+      "Offrir aux fournisseurs une visibilité qualifiée auprès d'une cible B2B engagée",
+      "Poser une fondation technique capable d'absorber la croissance du catalogue et du trafic",
+    ],
+    results: [
+      "Plateforme inédite sur son segment : aucun équivalent existant sur le marché français",
+      "Sourcing fournisseurs simplifié : recherche, filtrage et comparaison en quelques clics",
+      "Catalogue évolutif : ajout, mise à jour et enrichissement des fiches fournisseurs en autonomie",
+      "Architecture pensée pour le SEO et la croissance : prête à monter en charge",
+      "Mise en ligne en 2 mois, du concept à la production",
+    ],
+    youtubeVideoId: "9fMaBL1amYk",
+    gallery: {
+      url: "/img/desktop-screen-panoramapub.png",
+      alt: "Annuaire en ligne Panorama Pub",
+    },
+    detailedDescription: `Le marché des objets publicitaires reste l'un des derniers secteurs B2B sans plateforme de référence : les acheteurs (agences de communication, services marketing, événementiel) doivent encore composer avec des recherches éclatées, des bases incomplètes et des heures perdues à identifier le bon fournisseur. Panorama Pub est né de ce constat : créer l'annuaire qui n'existe pas encore et s'imposer comme la référence digitale du secteur.\n\nJ'ai accompagné le projet du concept à la mise en ligne : structuration de la base fournisseurs, parcours utilisateur orienté efficacité de sourcing, fiches fournisseurs riches et lisibles, recherche performante, et back-office permettant d'enrichir le catalogue en toute autonomie. L'enjeu n'était pas seulement de livrer un site, mais de poser les fondations d'un produit destiné à grandir : SEO solide pour capter une demande encore non adressée, performances optimales pour un référencement durable, architecture évolutive pour absorber l'ajout de milliers de fiches et de futures fonctionnalités (espaces fournisseurs, mise en relation, contenus éditoriaux).\n\nLivré en 2 mois, Panorama Pub est aujourd'hui en ligne et prêt à conquérir son marché : un positionnement de pionnier, une plateforme déjà solide, et une feuille de route claire pour devenir l'incontournable du sourcing d'objets publicitaires en France.`,
+    technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
+    duration: "2 mois",
+    website: "https://panorama-pub.com",
+  },
+  {
     id: "1",
     slug: "proditec",
     title: "Proditec",
@@ -873,6 +911,11 @@ const RESULT_HIGHLIGHTS: Record<string, { value: string; label: string }[]> = {
     { value: "98/100", label: "Score PageSpeed" },
     { value: "+30%", label: "Accessibilité améliorée" },
     { value: "5 langues", label: "Support multilingue" },
+  ],
+  "panorama-pub": [
+    { value: "1er", label: "Annuaire du secteur en France" },
+    { value: "2 mois", label: "Du concept à la mise en ligne" },
+    { value: "B2B", label: "Sourcing fournisseurs simplifié" },
   ],
   "doleances": [
     { value: "2 mois", label: "Délai de réalisation" },

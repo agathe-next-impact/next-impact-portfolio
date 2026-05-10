@@ -17,6 +17,7 @@ const caseStudyItems = [
   { name: "Next Event", url: "/etudes-de-cas/next-event", description: "Billetterie événementielle WordPress Headless" },
   { name: "Les États Généraux Communaux", url: "/etudes-de-cas/les-etats-generaux-communaux", description: "Site vitrine des États Généraux Communaux" },
   { name: "Les Doléances", url: "/etudes-de-cas/doleances", description: "Vitrine des Doléances citoyennes" },
+  { name: "Panorama Pub", url: "/etudes-de-cas/panorama-pub", description: "Premier annuaire en ligne des fournisseurs d'objets publicitaires" },
   { name: "Proditec", url: "/etudes-de-cas/proditec", description: "Site corporate multilingue" },
   { name: "Sowee", url: "/etudes-de-cas/sowee", description: "Section blog de Sowee" },
   { name: "Infralliance", url: "/etudes-de-cas/infralliance", description: "Site vitrine d'Infralliance" },

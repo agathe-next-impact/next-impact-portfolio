@@ -80,6 +80,16 @@ const PROJECTS = [
     tab: ["derniers", "derniers", "headless", "ess"],
   },
   {
+    id: 19,
+    title: "Panorama Pub",
+    type: "corporate",
+    image: "/img/desktop-screen-panoramapub.png",
+    alt: "Annuaire Panorama Pub - fournisseurs d'objets publicitaires",
+    description: "Premier annuaire en ligne des fournisseurs d'objets publicitaires",
+    link: "/etudes-de-cas/panorama-pub",
+    tab: ["derniers", "corporate"],
+  },
+  {
     id: 1,
     title: "Proditec",
     type: "corporate",

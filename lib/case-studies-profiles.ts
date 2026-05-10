@@ -291,4 +291,64 @@ export const CASE_STUDY_PROFILE_OVERRIDES: Record<string, ProfileOverrides> = {
       ],
     },
   },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Panorama Pub — Annuaire des fournisseurs d'objets publicitaires
+  // ──────────────────────────────────────────────────────────────────────────
+  "panorama-pub": {
+    decideur: {
+      description:
+        "Lancement du premier annuaire en ligne des fournisseurs d'objets publicitaires : un positionnement de pionnier sur un marché B2B encore vacant.",
+      detailedDescription:
+        "Le marché des objets publicitaires reste l'un des derniers secteurs B2B sans plateforme de référence : aucun annuaire centralisé n'existe aujourd'hui en France. Panorama Pub se positionne pour occuper ce vide et devenir l'incontournable du sourcing d'objets publicitaires.\n\nL'enjeu n'est pas seulement de livrer un site, mais de poser les fondations d'un produit destiné à grandir : un avantage de pionnier sur un marché vacant, une cible B2B claire (agences de communication, services marketing, événementiel), et un modèle économique scalable (visibilité fournisseurs, mise en relation, contenus éditoriaux).\n\nLivrée en 2 mois du concept à la mise en ligne, la plateforme est aujourd'hui prête à conquérir son marché : positionnement de référence, fondation technique solide, et roadmap claire pour transformer l'audience en levier business.",
+      objectives: [
+        "Occuper un marché vacant et s'imposer comme la référence du secteur",
+        "Construire un actif digital scalable, capable de monétiser une audience B2B qualifiée",
+        "Sécuriser un time-to-market court pour prendre l'avantage sur d'éventuels suiveurs",
+        "Poser une fondation technique qui ne sera pas à refaire dans 2 ans",
+      ],
+      results: [
+        "Plateforme inédite sur son segment, sans équivalent en France",
+        "Mise en ligne en 2 mois, du concept à la production",
+        "Architecture pensée SEO et croissance, prête à monter en charge",
+        "Roadmap claire pour les prochaines briques : espaces fournisseurs, mise en relation, contenus",
+      ],
+    },
+    utilisateur: {
+      description:
+        "Un annuaire pensé pour faire gagner du temps aux acheteurs et donner de la visibilité aux fournisseurs : recherche, comparaison, fiches claires.",
+      detailedDescription:
+        "Aujourd'hui, identifier le bon fournisseur d'objets publicitaires est un parcours du combattant : recherches éclatées sur Google, bases incomplètes, fournisseurs difficiles à comparer. Panorama Pub a été pensé comme l'outil qui simplifie ce sourcing — pour les agences, services com', services marketing et événementiel.\n\nL'expérience est volontairement directe : recherche par typologie d'objet, par fournisseur, par critères ; fiches fournisseurs riches et lisibles ; navigation rapide entre les profils. L'acheteur trouve, compare, choisit — sans perdre une demi-journée.\n\nCôté fournisseurs, l'outil offre une visibilité qualifiée auprès d'une audience qui cherche déjà à acheter, avec des fiches valorisantes et un back-office permettant de tenir l'information à jour en autonomie.",
+      objectives: [
+        "Permettre aux acheteurs de trouver rapidement le bon fournisseur sans recherches multiples",
+        "Offrir une comparaison claire entre fournisseurs sur des critères pertinents",
+        "Donner aux fournisseurs un espace de visibilité valorisant et facile à maintenir",
+        "Garantir une navigation simple et rapide, sans courbe d'apprentissage",
+      ],
+      results: [
+        "Sourcing fournisseurs centralisé en un seul endroit",
+        "Recherche, filtrage et comparaison disponibles en quelques clics",
+        "Fiches fournisseurs riches et lisibles, mises à jour en autonomie",
+        "Aucune formation nécessaire pour les acheteurs comme pour les fournisseurs",
+      ],
+    },
+    developpeur: {
+      description:
+        "Annuaire B2B full-stack Next.js + PostgreSQL : architecture App Router, recherche performante, base relationnelle prête à monter en charge.",
+      detailedDescription:
+        "Panorama Pub est une application full-stack développée avec Next.js (App Router) et PostgreSQL. Le projet a été pensé dès le départ pour absorber la croissance du catalogue (potentiellement plusieurs milliers de fiches fournisseurs) et pour offrir un référencement naturel solide — deux contraintes qui ont guidé toutes les décisions techniques.\n\nLe rendu repose sur du SSG/ISR pour les pages publiques (fiches fournisseurs, listings, catégories) afin de garantir des temps de chargement instantanés et un crawl SEO optimal. La base PostgreSQL modélise fournisseurs, catégories, typologies d'objets et critères de filtrage avec une schéma normalisé. Les Server Actions Next.js sont utilisées pour les opérations admin (back-office d'enrichissement du catalogue), avec une stricte séparation lecture publique / écriture authentifiée.\n\nStack : Next.js App Router, TypeScript, PostgreSQL, Tailwind CSS, déploiement Vercel. Architecture pensée pour évoluer vers des espaces fournisseurs authentifiés, un système de mise en relation et un module éditorial sans réécriture du socle.",
+      objectives: [
+        "Concevoir une architecture full-stack Next.js + PostgreSQL prête à scaler",
+        "Optimiser SEO et perfs avec SSG/ISR sur toutes les pages publiques",
+        "Modéliser proprement les entités métier (fournisseurs, catégories, critères) en relationnel",
+        "Préparer le socle aux extensions futures (auth fournisseurs, mise en relation, contenus)",
+      ],
+      results: [
+        "Architecture App Router + PostgreSQL claire et maintenable",
+        "SSG/ISR sur les pages publiques pour des temps de chargement instantanés",
+        "Schéma relationnel normalisé, extensible sans dette technique",
+        "Back-office Server Actions sécurisé pour l'enrichissement du catalogue",
+      ],
+    },
+  },
 };
