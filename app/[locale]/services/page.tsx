@@ -20,24 +20,24 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "Headless WordPress services",
+            "website build services",
             "Headless WordPress pricing",
-            "site cost",
-            "optimized monolithic WordPress",
-            "WordPress Astro",
+            "custom web app",
+            "freelance mobile application",
             "WordPress Next.js",
-            "WordPress modernization",
-            "WordPress stack",
+            "PWA build",
+            "marketplace build",
+            "web project pricing",
           ]
         : [
-            "services WordPress Headless",
+            "services création site web",
             "tarifs WordPress Headless",
-            "prix site web",
-            "WordPress monolithique optimisé",
-            "WordPress Astro",
+            "prix application web",
+            "web app sur-mesure",
+            "application mobile freelance",
             "WordPress Next.js",
-            "modernisation WordPress",
-            "stack WordPress",
+            "marketplace freelance",
+            "PWA création",
           ],
     locale,
   })
@@ -66,13 +66,13 @@ export default async function ServicesPage({
       <ServiceJsonLd
         name={
           locale === "en"
-            ? "Headless WordPress site build services"
-            : "Services de création de site web WordPress Headless"
+            ? "Website and custom application build services"
+            : "Services de création de sites web et d'applications sur-mesure"
         }
         description={
           locale === "en"
-            ? "Three WordPress stacks: optimized monolithic, hybrid Astro and full Next.js. Solutions tailored to SMEs, enterprises and organizations with strong web requirements."
-            : "Trois stacks WordPress : monolithique optimisé, hybride Astro et Next.js complet. Solutions adaptées aux PME, entreprises et organisations à fort enjeu web."
+            ? "Custom websites and applications: classic WordPress, Headless WordPress + Next.js, custom web apps and mobile PWAs. Solutions tailored to SMEs, enterprises and organizations with strong web requirements."
+            : "Sites web et applications sur-mesure : WordPress classique, Headless WordPress + Next.js, web apps et PWA mobile. Solutions adaptées aux PME, entreprises et organisations à fort enjeu web."
         }
         serviceType={locale === "en" ? "Web development" : "Développement web"}
         url="/services"

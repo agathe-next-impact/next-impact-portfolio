@@ -69,18 +69,21 @@ const nunito = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.next-impact.digital'),
   title: {
-    default: 'Next Impact — Expert WordPress Headless & Next.js',
+    default: 'Next Impact — Création Site web | Web & Mobile App',
     template: '%s | Next Impact',
   },
   description:
-    'Solutions WordPress Headless avec Next.js et Astro. ' +
-    'Création, refonte, audit et conseil par un développeur freelance.',
+    'Création de sites web et d\'applications (web & mobile) sur-mesure : WordPress classique, ' +
+    'Headless WordPress + Next.js, web app et PWA. Studio freelance en France.',
   keywords: [
+    'création site web',
     'WordPress Headless',
     'Next.js',
-    'Astro',
+    'web app sur-mesure',
+    'application mobile',
+    'PWA',
+    'marketplace',
     'développeur freelance',
-    'création site web',
     'refonte site web',
     'CMS Headless',
     'React',

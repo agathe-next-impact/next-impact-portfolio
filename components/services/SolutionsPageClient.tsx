@@ -43,7 +43,7 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
         },
         {
           need: "My current site is too slow and dated",
-          solution: "Astro + Headless",
+          solution: "Headless + Next.js",
           icon: TrendingUp,
         },
         {
@@ -60,7 +60,7 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
         },
         {
           need: "Mon site actuel est trop lent et daté",
-          solution: "Astro + Headless",
+          solution: "Headless + Next.js",
           icon: TrendingUp,
         },
         {

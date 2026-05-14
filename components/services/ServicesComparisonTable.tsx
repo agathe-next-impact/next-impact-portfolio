@@ -10,18 +10,18 @@ export function ServicesComparisonTable() {
   const isEn = locale === "en";
   const labels = isEn
     ? {
-        title: "Stack comparison",
+        title: "Tier comparison",
         feature: "Feature",
-        essential: "Essential Presence",
-        growth: "Accelerated Growth",
-        custom: "Custom Platform",
+        essential: "Solidarity",
+        growth: "Balance",
+        custom: "Support",
       }
     : {
-        title: "Comparatif des stacks",
+        title: "Comparatif des forfaits",
         feature: "Fonctionnalité",
-        essential: "Présence Essentielle",
-        growth: "Croissance Accélérée",
-        custom: "Plateforme Sur-Mesure",
+        essential: "Solidaire",
+        growth: "Équilibre",
+        custom: "Soutien",
       };
 
   const comparison = isEn

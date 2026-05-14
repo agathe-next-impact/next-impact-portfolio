@@ -10,11 +10,13 @@ type ProjectKey =
   | "vitrine"
   | "blog"
   | "ecommerce"
-  | "app"
+  | "webapp"
+  | "mobile"
   | "platform";
 
 type IntegrationKey = "none" | "crm" | "api" | "multi-source";
-type ReasonKey = "performance" | "security" | "ecodesign" | "custom";
+type ReasonKey = "performance" | "security" | "ecodesign" | "custom" | "business-logic";
+type UsersKey = "none" | "accounts" | "mobile";
 
 const projectLabels: Record<ProjectKey, { fr: string; en: string }> = {
   vitrine: {
@@ -23,9 +25,13 @@ const projectLabels: Record<ProjectKey, { fr: string; en: string }> = {
   },
   blog: { fr: "Blog ou site éditorial", en: "Blog or editorial site" },
   ecommerce: { fr: "Site e-commerce", en: "E-commerce site" },
-  app: {
-    fr: "Application web ou portail métier",
-    en: "Web app or business portal",
+  webapp: {
+    fr: "Plateforme métier ou web app sur-mesure",
+    en: "Business platform or custom web app",
+  },
+  mobile: {
+    fr: "Outil mobile ou usage sur le terrain",
+    en: "Mobile tool or on-site usage",
   },
   platform: {
     fr: "Multisite ou plateforme à fort volume",
@@ -37,7 +43,8 @@ const projectKeys: ProjectKey[] = [
   "vitrine",
   "blog",
   "ecommerce",
-  "app",
+  "webapp",
+  "mobile",
   "platform",
 ];
 
@@ -73,9 +80,30 @@ const reasonLabels: Record<ReasonKey, { fr: string; en: string }> = {
     fr: "Besoin de sur-mesure total",
     en: "Need for fully bespoke",
   },
+  "business-logic": {
+    fr: "Logique métier ou fonctionnalités avancées",
+    en: "Business logic or advanced features",
+  },
 };
 
-const reasonKeys: ReasonKey[] = ["performance", "security", "ecodesign", "custom"];
+const reasonKeys: ReasonKey[] = ["performance", "security", "ecodesign", "custom", "business-logic"];
+
+const usersLabels: Record<UsersKey, { fr: string; en: string }> = {
+  none: {
+    fr: "Non, juste de la consultation de contenu",
+    en: "No, just content browsing",
+  },
+  accounts: {
+    fr: "Oui, des comptes utilisateurs",
+    en: "Yes, user accounts",
+  },
+  mobile: {
+    fr: "Oui, une expérience mobile dédiée",
+    en: "Yes, a dedicated mobile experience",
+  },
+};
+
+const usersKeys: UsersKey[] = ["none", "accounts", "mobile"];
 
 type TrafficBand = "low" | "medium" | "high";
 
@@ -86,55 +114,75 @@ type Result = {
   highlight: string;
 };
 
-const RESULTS: Record<"customPlatform" | "growth" | "essential", Record<Locale, Result>> = {
-  customPlatform: {
+const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<Locale, Result>> = {
+  mobileApp: {
     fr: {
-      title: "Plateforme Sur-Mesure",
-      amount: "À partir de 5 000 €",
+      title: "Application mobile (Voie D)",
+      amount: "Sur devis",
       message:
-        "Votre projet appelle une stack WordPress headless + Next.js : architecture évolutive, ISR/SSR et CI/CD complet pour absorber votre volumétrie et vos intégrations.",
-      highlight: "Conservation de l'admin WordPress, révolution complète du front.",
+        "Votre projet appelle une application mobile PWA : Next.js + service worker, installable sur smartphone sans passer par les stores, fonctionnement hors-ligne et géolocalisation native si besoin.",
+      highlight:
+        "Une vraie app mobile, sans contrainte de store ni dépendance permanente à une connexion.",
     },
     en: {
-      title: "Custom Platform",
-      amount: "From €5,000",
+      title: "Mobile application (Path D)",
+      amount: "On quote",
       message:
-        "Your project calls for a Headless WordPress + Next.js stack: scalable architecture, ISR/SSR and complete CI/CD to absorb your volume and integrations.",
-      highlight: "Keep the WordPress admin, fully revolutionize the front end.",
+        "Your project calls for a mobile PWA: Next.js + service worker, installable on smartphones without going through app stores, with offline operation and native geolocation if needed.",
+      highlight:
+        "A true mobile app, without app-store constraints or permanent-connection dependency.",
     },
   },
-  growth: {
+  webApp: {
     fr: {
-      title: "Croissance Accélérée",
+      title: "Plateforme sur-mesure (Voie C)",
+      amount: "Sur devis",
+      message:
+        "Votre projet appelle une web app sur-mesure : Next.js + base PostgreSQL serverless, comptes utilisateurs, logique métier propre et admin autonome conçu pour votre activité.",
+      highlight:
+        "Vous gardez la main sur vos contenus, vos données et vos utilisateurs — sans dépendance technique récurrente.",
+    },
+    en: {
+      title: "Custom platform (Path C)",
+      amount: "On quote",
+      message:
+        "Your project calls for a custom web app: Next.js + serverless PostgreSQL database, user accounts, dedicated business logic and an autonomous admin built for your activity.",
+      highlight:
+        "You stay in control of your content, data and users — without ongoing technical dependency.",
+    },
+  },
+  headless: {
+    fr: {
+      title: "Équilibre — Site Headless (Voie B)",
       amount: "À partir de 4 000 €",
       message:
-        "Votre projet a tout intérêt à passer en WordPress headless + Astro : performance front maximale, hydratation partielle, Core Web Vitals au vert.",
+        "Votre projet a tout intérêt à passer en WordPress Headless + Next.js : performance front maximale, hydratation partielle, Core Web Vitals au vert et SEO préservé.",
       highlight:
-        "Le bon compromis entre performance et coût pour un site à fort enjeu SEO.",
+        "Le bon compromis entre performance et coût pour un site à fort enjeu SEO ou éditorial.",
     },
     en: {
-      title: "Accelerated Growth",
+      title: "Balance — Headless site (Path B)",
       amount: "From €4,000",
       message:
-        "Your project will benefit from Headless WordPress + Astro: maximum front-end performance, partial hydration, green Core Web Vitals.",
+        "Your project will benefit from Headless WordPress + Next.js: maximum front-end performance, partial hydration, green Core Web Vitals and preserved SEO.",
       highlight:
-        "The right trade-off between performance and cost for a site with strong SEO stakes.",
+        "The right trade-off between performance and cost for a site with strong SEO or editorial stakes.",
     },
   },
-  essential: {
+  wpClassic: {
     fr: {
-      title: "Présence Essentielle",
+      title: "Solidaire — WordPress classique (Voie A)",
       amount: "À partir de 2 250 €",
       message:
-        "Un WordPress monolithique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide.",
-      highlight: "Vous gardez l'admin que vous connaissez, je révolutionne le front.",
+        "Un WordPress classique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide. Coût maîtrisé, autonomie totale via l'admin WordPress.",
+      highlight: "Vous gardez l'admin que vous connaissez, je modernise tout le reste.",
     },
     en: {
-      title: "Essential Presence",
+      title: "Solidarity — Classic WordPress (Path A)",
       amount: "From €2,250",
       message:
-        "An optimized monolithic WordPress is enough for your project: modern custom theme, hardened security, quick to ship.",
-      highlight: "You keep the admin you know, I revolutionize the front end.",
+        "An optimized classic WordPress is enough for your project: modern custom theme, hardened security, quick to ship. Controlled cost, full autonomy via the WordPress admin.",
+      highlight: "You keep the admin you know, I modernize everything else.",
     },
   },
 };
@@ -160,31 +208,48 @@ export default function EligibilityForm() {
   const [needsCustomApi, setNeedsCustomApi] = useState(false);
   const [selectedIntegrations, setSelectedIntegrations] = useState<IntegrationKey[]>([]);
   const [selectedReasons, setSelectedReasons] = useState<ReasonKey[]>([]);
+  const [users, setUsers] = useState<UsersKey>("none");
   const [result, setResult] = useState<Result | null>(null);
 
-  const isComplexProject = useMemo(
-    () => projectType === "app" || projectType === "platform",
-    [projectType]
+  const wantsBusinessLogic = useMemo(
+    () => selectedReasons.includes("business-logic") || selectedReasons.includes("custom"),
+    [selectedReasons]
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isComplexProject || traffic === "high" || needsCustomApi) {
-      setResult(RESULTS.customPlatform[locale] ?? RESULTS.customPlatform.fr);
+    // Voie D — Application mobile : usage terrain ou expérience mobile dédiée
+    if (projectType === "mobile" || users === "mobile") {
+      setResult(RESULTS.mobileApp[locale] ?? RESULTS.mobileApp.fr);
       return;
     }
 
+    // Voie C — Web app sur-mesure : plateforme métier, logique métier, comptes utilisateurs
     if (
+      projectType === "webapp" ||
+      users === "accounts" ||
+      wantsBusinessLogic
+    ) {
+      setResult(RESULTS.webApp[locale] ?? RESULTS.webApp.fr);
+      return;
+    }
+
+    // Voie B — Site Headless WordPress + Next.js : SEO/éditorial, trafic moyen, API
+    if (
+      projectType === "platform" ||
+      traffic === "high" ||
       traffic === "medium" ||
+      needsCustomApi ||
       projectType === "blog" ||
       projectType === "ecommerce"
     ) {
-      setResult(RESULTS.growth[locale] ?? RESULTS.growth.fr);
+      setResult(RESULTS.headless[locale] ?? RESULTS.headless.fr);
       return;
     }
 
-    setResult(RESULTS.essential[locale] ?? RESULTS.essential.fr);
+    // Voie A — Solidaire / WordPress classique : site vitrine, petit trafic, sans intégration
+    setResult(RESULTS.wpClassic[locale] ?? RESULTS.wpClassic.fr);
   };
 
   function toggle<T>(value: T, setter: React.Dispatch<React.SetStateAction<T[]>>) {
@@ -195,14 +260,14 @@ export default function EligibilityForm() {
 
   const trafficBands: { key: TrafficBand; title: string; subtitle: string }[] = isEn
     ? [
-        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Essential Presence" },
-        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Accelerated Growth" },
-        { key: "high", title: "More than 100k / month", subtitle: "Likely Custom Platform" },
+        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Solidarity" },
+        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Balance" },
+        { key: "high", title: "More than 100k / month", subtitle: "Likely Support" },
       ]
     : [
-        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Présence Essentielle" },
-        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Croissance Accélérée" },
-        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Plateforme Sur-Mesure" },
+        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Solidaire" },
+        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Équilibre" },
+        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Soutien" },
       ];
 
   return (
@@ -212,12 +277,12 @@ export default function EligibilityForm() {
           <Sparkles className="h-6 w-6 text-lightyellow" />
           <div>
             <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              {isEn ? "Stack diagnostic" : "Diagnostic de stack"}
+              {isEn ? "Project diagnostic" : "Diagnostic projet"}
             </p>
             <p className="text-white font-googletexte mt-2">
               {isEn
-                ? "Identify in 2 minutes the WordPress stack that fits your project: optimized monolithic, hybrid Astro or full Next.js."
-                : "Identifiez en 2 minutes la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète."}
+                ? "Identify in 2 minutes the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
+                : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile."}
             </p>
           </div>
         </div>
@@ -273,7 +338,7 @@ export default function EligibilityForm() {
             </div>
           </div>
 
-          {/* Étape 2 */}
+          {/* Étape 2 — Volumétrie */}
           <div className="space-y-3">
             <p className="text-sm text-white/70 font-googletexte">
               {isEn ? "Expected traffic volume" : "Volumétrie de trafic attendue"}
@@ -303,7 +368,7 @@ export default function EligibilityForm() {
             </div>
           </div>
 
-          {/* Étape 3 */}
+          {/* Étape 3 — Intégrations */}
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <p className="text-sm text-white/70 font-googletexte">
@@ -362,7 +427,40 @@ export default function EligibilityForm() {
             </div>
           </div>
 
-          {/* Étape 4 */}
+          {/* Étape 4 — Comptes utilisateurs / mobile (nouvelle question §5.7) */}
+          <div className="space-y-2">
+            <p className="text-sm text-white/70 font-googletexte">
+              {isEn
+                ? "Will your users need accounts or a dedicated mobile experience?"
+                : "Vos utilisateurs auront-ils besoin d'un compte ou d'une expérience mobile dédiée ?"}
+            </p>
+            <div className="grid gap-2 md:grid-cols-3">
+              {usersKeys.map((key) => (
+                <label
+                  key={key}
+                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 cursor-pointer transition ${
+                    users === key
+                      ? "border-lightyellow bg-lightyellow/10"
+                      : "border-white/10 bg-white/5"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="users"
+                    value={key}
+                    checked={users === key}
+                    onChange={() => setUsers(key)}
+                    className="accent-lightyellow"
+                  />
+                  <span className="text-white/80 font-googletexte text-sm">
+                    {usersLabels[key][locale] ?? usersLabels[key].fr}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Étape 5 — Raison de modernisation */}
           <div className="space-y-2">
             <p className="text-sm text-white/70 font-googletexte">
               {isEn
@@ -395,15 +493,15 @@ export default function EligibilityForm() {
 
           <div className="flex items-center gap-3">
             <Button type="submit" className="rounded-full bg-lightyellow text-darkblue hover:bg-lightyellow/90 font-googletitre font-semibold">
-              {isEn ? "Show my stack" : "Voir ma stack"}
+              {isEn ? "Show my path" : "Voir ma voie"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <div className="flex items-center gap-2 text-white/60 font-googletexte text-sm">
               <Info className="h-4 w-4" />
               <span className="text-white/60">
                 {isEn
-                  ? "Diagnostic based on project type and traffic volume."
-                  : "Diagnostic basé sur le type de projet et la volumétrie."}
+                  ? "Diagnostic based on project type, traffic and usage needs."
+                  : "Diagnostic basé sur le type de projet, le trafic et les besoins d'usage."}
               </span>
             </div>
           </div>
@@ -414,7 +512,7 @@ export default function EligibilityForm() {
             <div className="flex items-center gap-2 text-lightyellow">
               <CheckCircle2 className="h-5 w-5" />
               <p className="text-sm uppercase tracking-widest font-googletexte text-extralightblue">
-                {isEn ? "Recommended stack" : "Stack recommandée"}
+                {isEn ? "Recommended path" : "Voie recommandée"}
               </p>
             </div>
             <h4 className="text-2xl font-googletitre text-white">{result.title}</h4>

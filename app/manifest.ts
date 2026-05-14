@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Next Impact — WordPress Headless & Next.js",
+    name: "Next Impact — Création Site web | Web & Mobile App",
     short_name: "Next Impact",
     description:
-      "Développeur freelance spécialisé WordPress Headless, Next.js & Astro.",
+      "Création de sites web et d'applications (web & mobile) sur-mesure : WordPress, Headless WordPress + Next.js, web app et PWA.",
     start_url: "/",
     display: "standalone",
     background_color: "#1A1A2E",

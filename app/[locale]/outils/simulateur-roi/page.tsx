@@ -26,7 +26,9 @@ export async function generateMetadata({
         ? [
             "ROI simulator",
             "web performance calculator",
+            "site modernization",
             "headless migration",
+            "web app build",
             "website speed",
             "conversion optimization",
             "slow site cost",
@@ -34,7 +36,9 @@ export async function generateMetadata({
         : [
             "simulateur ROI",
             "calculateur performance web",
+            "modernisation site",
             "migration headless",
+            "création web app",
             "vitesse site web",
             "optimisation conversion",
             "coût site lent",

@@ -30,11 +30,13 @@
     "blog": "Blog",
     "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
-    "whitepaper": "Livre blanc WordPress Headless",
+    "whitepaperHeadless": "Livre blanc — WordPress Headless",
+    "whitepaperWebApp": "Livre blanc — Du site web à la web app",
     "freeAiAudit": "Audit IA gratuit",
     "roiSimulator": "Simulateur ROI",
     "benchmarking": "Benchmarking",
     "agefiphSimulator": "Simulateur AGEFIPH (TIH)",
+    "startWebApp": "Démarrer une application web",
     "copyright": "© {year} Next Impact Digital — Tous droits réservés",
     "tihMention": "EI Agathe Karinthi-Martin — Prestataire TIH (Travailleur Indépendant Handicapé) — Attestation OETH disponible",
     "certificationAlt": "Certification"
@@ -82,19 +84,18 @@
   },
   "hero": {
     "available": "Disponible",
-    "experience": "8+ ans d'expérience",
+    "experience": "20 ans d'expérience digitale dont 6 en développement",
     "tihMention": "Prestataire TIH — Déduction AGEFIPH",
     "auditTimer": "en 2 minutes",
     "wordpressLogoAlt": "Logo WordPress",
     "nextjsLogoAlt": "Logo Next.js",
-    "astroLogoAlt": "Logo Astro",
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — Devis WordPress Headless & Appel Découverte Gratuit",
-    "metaDescription": "Identifiez la stack adaptée à votre projet en 4 étapes : WordPress monolithique optimisé, hybride Astro ou Next.js complet. Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
-    "title": "Choisissez votre stack",
-    "subtitle": "Répondez à quelques questions pour identifier la stack WordPress adaptée à votre projet.",
+    "metaTitle": "Contact — Devis site web ou application & Appel Découverte Gratuit",
+    "metaDescription": "Identifiez en quelques étapes la voie adaptée à votre projet : site WordPress classique, site Headless, web app ou application mobile. Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
+    "title": "Diagnostic de projet",
+    "subtitle": "Répondez à quelques questions pour identifier la voie adaptée à votre projet — site web ou application sur-mesure.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -123,18 +124,18 @@
       "badge": "Questionnaire interactif",
       "title": "Déterminez l'offre adaptée",
       "promiseStart": "Obtenez une estimation personnalisée pour",
-      "promiseHighlight": "un site combinant performance et le back-office le plus utilisé au monde",
+      "promiseHighlight": "un site ou une application sur-mesure, performant et facile à administrer en autonomie",
       "promiseEnd": ".",
       "secondary": "Répondez à quelques questions pour recevoir une offre adaptée à votre profil et votre budget.",
       "ctaLabel": "Démarrer mon projet",
-      "footer": "Disponible · Réponse sous 24h · 8+ ans d'expérience"
+      "footer": "Disponible · Réponse sous 24h · 20 ans d'expérience digitale dont 6 en développement"
     },
     "roi": {
       "badge": "Simulateur gratuit",
       "title": "Calculez votre ROI",
       "promiseStart": "Mesurez le",
       "promiseHighlight": "manque à gagner dû à un site lent",
-      "promiseEnd": "et projetez vos revenus après migration headless.",
+      "promiseEnd": "et projetez vos revenus après modernisation (site Headless, web app ou refonte).",
       "secondary": "Résultats instantanés basés sur vos données réelles de trafic et de conversion.",
       "ctaLabel": "Simuler mon ROI",
       "footer": "Gratuit · Résultats instantanés · Sans engagement"
@@ -164,8 +165,8 @@
       "title": "Parlons de votre projet",
       "subtitle": "Pas besoin de tester ? Contactez-moi directement.",
       "available": "Disponible",
-      "experience": "8+ ans d'expérience",
-      "wpHeadlessDev": "Développeur WordPress Headless",
+      "experience": "20 ans d'expérience digitale dont 6 en développement",
+      "wpHeadlessDev": "Création de sites et d'applications sur-mesure",
       "tih": "Prestataire TIH",
       "company": "Next Impact Digital",
       "owner": "EI Agathe Karinthi-Martin",
@@ -220,9 +221,9 @@
     "breadcrumbDemo": "Démo"
   },
   "solutionsPage": {
-    "metaTitle": "Solutions WordPress Headless Next.js et Astro - Next Impact",
-    "metaDescription": "Découvrez nos solutions WordPress adaptées à vos besoins : Essentiel (WordPress standard), Premium (WordPress + Astro) et Ultimate (WordPress Headless + Next.js). De la TPE à l'entreprise avec besoins avancés.",
-    "title": "Nos services WordPress Headless",
+    "metaTitle": "Solutions Sites web & Applications sur-mesure - Next Impact",
+    "metaDescription": "Découvrez nos solutions adaptées à vos besoins : sites WordPress classiques, sites Headless WordPress + Next.js et applications web ou mobiles sur-mesure. De la TPE à la PME avec besoins avancés.",
+    "title": "Nos services",
     "subtitle": "Choisissez la solution adaptée à vos besoins et à votre budget.",
     "breadcrumbHome": "Accueil",
     "breadcrumbSolutions": "Solutions"
@@ -310,8 +311,8 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Services & Tarifs WordPress Headless — Trois stacks, trois résultats",
-    "metaDescription": "Trois niveaux de modernisation WordPress : Présence Essentielle (monolithique optimisé) dès 2 250 €, Croissance Accélérée (Astro headless) dès 4 000 €, Plateforme Sur-Mesure (Next.js) dès 5 000 €.",
+    "metaTitle": "Services & Tarifs — Sites web et applications sur-mesure",
+    "metaDescription": "Trois forfaits sites web (Solidaire dès 2 250 €, Équilibre dès 4 000 €, Soutien dès 5 000 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Services & Tarifs",
     "calculateGain": {
@@ -362,8 +363,8 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "À propos de Next Impact — Agathe Karinthi-Martin, développeuse WordPress Headless",
-    "metaDescription": "Agathe Karinthi-Martin est développeuse freelance WordPress Headless chez Next Impact. 8 ans de développement web, 15 ans d'engagement associatif. Spécialiste Next.js, Astro et WPGraphQL au service de l'ESS et des TPE-PME.",
+    "metaTitle": "À propos de Next Impact — Agathe Karinthi-Martin, création de sites web et d'applications",
+    "metaDescription": "Agathe Karinthi-Martin est développeuse freelance chez Next Impact : sites WordPress, sites Headless WordPress + Next.js et applications web ou mobiles sur-mesure. 20 ans d'expérience digitale dont 6 en développement.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "journey": {
@@ -393,7 +394,7 @@
           },
           "tech": {
             "label": "La maîtrise technique :",
-            "text": "Trois stacks au choix — WordPress monolithique optimisé, headless + Astro, headless + Next.js — pour révolutionner le front sans toucher à l'admin."
+            "text": "Deux savoir-faire complémentaires — moderniser les sites WordPress qui en valent la peine (classique ou Headless + Next.js) et bâtir des applications web et mobiles sur-mesure quand WordPress n'est plus le bon outil."
           },
           "ai": {
             "label": "L'accélération par l'IA :",

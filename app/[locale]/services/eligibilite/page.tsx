@@ -13,17 +13,17 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "WordPress stack diagnostic — Essential Presence, Accelerated Growth or Custom Platform"
-        : "Diagnostic de stack WordPress — Présence Essentielle, Croissance Accélérée ou Plateforme Sur-Mesure",
+        ? "Project diagnostic — Solidarity, Balance, Support or custom application"
+        : "Diagnostic de projet — Solidaire, Équilibre, Soutien ou application sur-mesure",
     description:
       locale === "en"
-        ? "Identify in 2 minutes the WordPress stack that fits your project: optimized monolithic, hybrid Astro or full Next.js."
-        : "Identifiez en 2 minutes la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
+        ? "Identify in 2 minutes the path that fits your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
+        : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
     path: "/services/eligibilite",
     keywords:
       locale === "en"
-        ? ["stack diagnostic", "monolithic WordPress", "WordPress Astro", "WordPress Next.js", "WordPress modernization"]
-        : ["diagnostic stack", "WordPress monolithique", "WordPress Astro", "WordPress Next.js", "modernisation WordPress"],
+        ? ["project diagnostic", "classic WordPress", "Headless WordPress Next.js", "custom web app", "mobile PWA"]
+        : ["diagnostic projet", "WordPress classique", "Headless WordPress Next.js", "web app sur-mesure", "PWA mobile"],
     locale,
   });
 }
@@ -38,13 +38,13 @@ export default async function EligibilityPage({
     <PageLayout
       titre={
         locale === "en"
-          ? "WordPress stack diagnostic"
-          : "Diagnostic de stack WordPress"
+          ? "Project diagnostic"
+          : "Diagnostic de projet"
       }
       sousTitre={
         locale === "en"
-          ? "An instant diagnostic to identify the stack — Essential Presence, Accelerated Growth or Custom Platform — that fits your project best."
-          : "Un diagnostic immédiat pour identifier la stack — Présence Essentielle, Croissance Accélérée ou Plateforme Sur-Mesure — la plus adaptée à votre projet."
+          ? "An instant diagnostic to identify the right path — classic WordPress site, Headless site, custom web app or mobile application — for your project."
+          : "Un diagnostic immédiat pour identifier la voie adaptée à votre projet — site WordPress classique, site Headless, web app sur-mesure ou application mobile."
       }
     >
       <section className="container mx-auto px-4 py-16 md:py-20">

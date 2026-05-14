@@ -536,8 +536,8 @@ const developpeurContent: ContentFactory[] = [
     <div className="flex flex-col gap-8">
       <div className="text-lg text-white/80">
         {isEn
-          ? "Headless architecture separates the backend (WordPress) from the frontend (Next.js / Astro), communicating via API."
-          : "L'architecture headless sépare le backend (WordPress) du frontend (Next.js/Astro) en communiquant via API."}
+          ? "Headless architecture separates the backend (WordPress) from the frontend (Next.js), communicating via API."
+          : "L'architecture headless sépare le backend (WordPress) du frontend (Next.js) en communiquant via API."}
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center gap-6">
         <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 border border-lightblue/30">
@@ -546,8 +546,8 @@ const developpeurContent: ContentFactory[] = [
         </div>
         <div className="text-lightblue font-mono text-2xl">{`<->`}</div>
         <div className="flex flex-col items-center bg-darkblue/70 rounded-xl p-4 w-60 border border-lightblue/30">
-          <span className="font-medium text-lightblue font-googletitre text-xl mb-2">Frontend React</span>
-          <span className="text-sm text-white/80 text-center font-mono">Next.js / Astro<br/>SSG + ISR + SSR<br/>Vercel Deploy</span>
+          <span className="font-medium text-lightblue font-googletitre text-xl mb-2">Frontend Next.js</span>
+          <span className="text-sm text-white/80 text-center font-mono">Next.js App Router<br/>SSG + ISR + SSR<br/>Vercel Deploy</span>
         </div>
       </div>
       <div className="text-lg text-white/80">

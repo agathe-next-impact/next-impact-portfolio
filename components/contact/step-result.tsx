@@ -33,64 +33,63 @@ interface OfferConfig {
 }
 
 function getOffer(_profile: ProfileType, budget: BudgetRange, siteType: SiteType): OfferConfig {
-  // Une application web a quasi systématiquement besoin d'une stack Next.js,
-  // quel que soit le budget annoncé.
+  // Une application web : voie Web app sur-mesure (Next.js + PostgreSQL)
   if (siteType === "application") {
     return {
-      badge: "Plateforme Sur-Mesure",
+      badge: "Web app sur-mesure",
       badgeColor: "bg-lightblue/10 text-extralightblue border-lightblue/20",
-      title: "Votre projet appelle une Plateforme Sur-Mesure",
-      highlight: "WordPress headless + Next.js",
+      title: "Votre projet appelle une web app sur-mesure",
+      highlight: "Next.js + PostgreSQL",
       highlightColor: "text-extralightblue",
       description:
-        "Une application web à base de WordPress demande une architecture découplée : Next.js App Router, ISR/SSR, intégrations API et CI/CD complet. C'est exactement le périmètre de la stack Plateforme Sur-Mesure.",
+        "Une application web sur-mesure : Next.js, base PostgreSQL serverless, comptes utilisateurs, admin autonome conçu pour votre logique métier. Vous gardez la main sur vos contenus, vos données et vos utilisateurs.",
       ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
       ctaColor: "bg-regularblue text-darkblue ",
     };
   }
 
-  // Petit budget — site vitrine ou institutionnel : WordPress monolithique optimisé
+  // Petit budget — site vitrine ou institutionnel : WordPress classique optimisé
   if (budget === "less-3000") {
     return {
-      badge: "Présence Essentielle",
+      badge: "Solidaire",
       badgeColor: "bg-coral/10 text-coral border-coral/20",
-      title: "La stack Présence Essentielle est faite pour vous",
+      title: "Le forfait Solidaire est fait pour vous",
       highlight: "À partir de 2 250 €",
       highlightColor: "text-coral",
       description:
-        "Un WordPress monolithique optimisé suffit largement pour votre projet : thème custom moderne, build rapide, sécurité durcie. Vous gardez l'admin que vous connaissez, je révolutionne le front — pour un coût maîtrisé.",
+        "Un WordPress classique optimisé suffit largement pour votre projet : thème custom moderne, build rapide, sécurité durcie. Vous gardez l'admin que vous connaissez, je révolutionne le reste — pour un coût maîtrisé.",
       ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
       ctaColor: "bg-coral text-darkblue ",
     };
   }
 
-  // Budget intermédiaire — site à fort enjeu SEO ou éditorial : WordPress + Astro
+  // Budget intermédiaire — site à fort enjeu SEO ou éditorial : Headless + Next.js
   if (budget === "3000-5000") {
     return {
-      badge: "Croissance Accélérée",
+      badge: "Équilibre",
       badgeColor: "bg-lightyellow/10 text-lightyellow border-lightyellow/20",
-      title: "La stack Croissance Accélérée correspond à vos enjeux",
-      highlight: "WordPress headless + Astro",
+      title: "Le forfait Équilibre correspond à vos enjeux",
+      highlight: "WordPress Headless + Next.js",
       highlightColor: "text-lightyellow",
       description:
-        "Pour un site à fort enjeu SEO ou éditorial, l'architecture WordPress headless + Astro offre le meilleur compromis : conservation de l'admin WordPress, performance front maximale, hydratation partielle pour des Core Web Vitals au vert.",
+        "Pour un site à fort enjeu SEO ou éditorial, l'architecture WordPress Headless + Next.js offre le meilleur compromis : conservation de l'admin WordPress, performance front maximale, hydratation partielle pour des Core Web Vitals au vert.",
       ctaLabel: "Planifier un appel de découverte",
       ctaLink: CALENDAR_LINK,
       ctaColor: "bg-lightyellow text-darkblue ",
     };
   }
 
-  // Gros budget : Plateforme Sur-Mesure (Next.js)
+  // Gros budget : Soutien (Headless complexe / multisites) ou Web app
   return {
-    badge: "Plateforme Sur-Mesure",
+    badge: "Soutien",
     badgeColor: "bg-lightblue/10 text-extralightblue border-lightblue/20",
-    title: "La stack Plateforme Sur-Mesure correspond à votre ambition",
-    highlight: "WordPress headless + Next.js",
+    title: "Le forfait Soutien correspond à votre ambition",
+    highlight: "WordPress Headless complexe / multisites",
     highlightColor: "text-extralightblue",
     description:
-      "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes, WordPress headless + Next.js offre une architecture évolutive, ISR/SSR à la demande et un CI/CD complet. Une plateforme prête à grandir avec votre activité.",
+      "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes, WordPress Headless + Next.js offre une architecture évolutive, ISR/SSR à la demande et un CI/CD complet. Une plateforme prête à grandir avec votre activité.",
     ctaLabel: "Demander mon Audit IA Gratuit",
     ctaColor: "bg-regularblue text-darkblue ",
   };

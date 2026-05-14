@@ -45,11 +45,11 @@ In a classic WordPress architecture, everything is in the same place: the conten
 "Headless" literally means "without a head." In a headless architecture, two things that used to be glued together are separated:
 
 - **The back-end** (the "head" being removed): WordPress continues to manage your content, articles and media. Your teams change nothing about their habits.
-- **The front-end** (what your visitors see): a modern technology (Next.js or Astro) retrieves content via an API and builds pages in a highly optimized way.
+- **The front-end** (what your visitors see): a modern technology (Next.js) retrieves content via an API and builds pages in a highly optimized way.
 
 **What this looks like in practice:**
 - Your editors still write in WordPress — identical to before
-- The Next.js or Astro front-end pre-generates the pages
+- The Next.js front-end pre-generates the pages
 - The visitor receives an already-built page in milliseconds
 - The WordPress server is no longer directly exposed to the public
 
@@ -61,7 +61,6 @@ In a classic WordPress architecture, everything is in the same place: the conten
 |---|---|---|
 | Unoptimized classic WordPress | 30–55 | 4–8 seconds |
 | Well-optimized classic WordPress | 55–75 | 2–4 seconds |
-| WordPress Headless + Astro | 85–95 | 0.8–1.5 seconds |
 | WordPress Headless + Next.js | 90–98 | 0.5–1.2 seconds |
 
 <Callout type="success">
@@ -91,14 +90,14 @@ With a headless architecture:
 - The attack surface is reduced to near zero
 
 <Callout type="example">
-**Real example: États Généraux Communaux** (sensitive data, critical security). WP Headless + Astro architecture. A+ security audit.
+**Real example: États Généraux Communaux** (sensitive data, critical security). WP Headless + Next.js architecture. A+ security audit.
 </Callout>
 
 ### 4. Maintenance cost over 3 years
 
 This is where financial reality changes decisions the most.
 
-| Component | Classic WP | Headless WP (Accelerated Growth) | Webflow Premium |
+| Component | Classic WP | Headless WP (Balance) | Webflow Premium |
 |---|---|---|---|
 | Initial investment | €3,000 | €5,000 | €6,000 |
 | AGEFIPH deduction (TIH) | — | −€1,200 | — |
@@ -110,7 +109,7 @@ This is where financial reality changes decisions the most.
 Applicable if your provider is a TIH (French independent worker with disability scheme). On a €5,000 project, up to €1,500 in direct deduction from the AGEFIPH contribution.
 </Callout>
 
-Maintenance is lower with headless because the Next.js or Astro front-end doesn't depend on a plugin ecosystem as unstable as traditional WordPress.
+Maintenance is lower with headless because the Next.js front-end doesn't depend on a plugin ecosystem as unstable as traditional WordPress.
 
 ### 5. SEO and AI visibility (GEO)
 
@@ -138,9 +137,9 @@ Connecting a CRM, a personalization tool, an external e-commerce platform — th
 
 | Architecture | Typical timeframe | Complexity |
 |---|---|---|
-| Optimized WP (Essential Presence) | 3–5 weeks | Low |
-| WP Headless + Astro (Accelerated Growth) | 6–8 weeks | Medium |
-| WP Headless + Next.js (Custom Platform) | 8–14 weeks | High |
+| Optimized WP (Solidarity) | 3–5 weeks | Low |
+| WP Headless + Next.js (Balance) | 6–8 weeks | Medium |
+| Advanced / multisite WP Headless + Next.js (Support) | 8–14 weeks | High |
 
 ### 8. Risk and technical debt
 
@@ -168,12 +167,15 @@ Headless preserves their habits entirely. That's an argument for it, not against
 **If you answer yes to 2 or more questions**: a WordPress Headless migration deserves a serious quote. **If you answer yes to fewer than 2**: start by optimizing your current WordPress. That's often enough.
 </Callout>
 
-## Next.js or Astro: which to choose for your headless setup?
+## Why Next.js for the Headless front-end?
 
-This isn't the main topic of this article, but here's the quick rule:
+This isn't the main topic of this article, but here's the quick rule. At Next Impact, all Headless sites are built on **Next.js App Router**:
 
-- **Astro**: sites with mostly static content, strong security priority, little client-side dynamism. Maximum Lighthouse score. *Example: États Généraux Communaux.*
-- **Next.js**: sites with dynamic content (news, e-commerce, personalization), complex API integrations, high traffic with peaks. *Example: Comme des Fous, Comme des Fous Jeux.*
+- **Hybrid rendering**: SSG for stable pages, ISR for editorial pages, on-demand SSR for dynamic zones — one stack, one team to train.
+- **Robust ecosystem**: strict TypeScript, Tailwind CSS, integrated Vercel deployment (preview deployments, instant rollback).
+- **Scalability**: the stack powering Headless sites is the same one used for custom web apps and mobile PWAs — accumulated expertise, no surprises for future evolutions.
+
+*Examples: Comme des Fous (participatory media), États Généraux Communaux (critical security), Comme des Fous Jeux (applicative extension).*
 
 ## What this migration does not solve
 

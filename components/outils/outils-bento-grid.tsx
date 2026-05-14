@@ -100,10 +100,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
   },
   "determiner-offre": {
     id: "determiner-offre",
-    title: isEn ? "Pick my stack" : "Choisir ma stack",
+    title: isEn ? "Project diagnostic" : "Diagnostic projet",
     description: isEn
-      ? "In a few clicks, identify the WordPress stack that fits your project: optimized monolithic, hybrid Astro or full Next.js."
-      : "Identifiez en quelques clics la stack WordPress adaptée à votre projet : monolithique optimisée, hybride Astro ou Next.js complète.",
+      ? "In a few clicks, identify the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
+      : "Identifiez en quelques clics la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
     icon: BadgePercent,
     href: "/contact",
     gradient: "bg-gradient-to-br from-amber-500/20 via-mediumblue to-darkblue",

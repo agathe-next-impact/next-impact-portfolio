@@ -11,60 +11,60 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Headless WordPress",
-    subHeadline: "developer",
+    headline: "From brochure sites",
+    subHeadline: "to custom business platforms",
     description:
-      "Your team keeps the WordPress admin they already know. I rebuild everything underneath.",
+      "I design and build your websites and applications (web & mobile). From a WordPress brochure site to a fully custom build, the right tool for the right project.",
     valueProposition:
-      "Three levels of modernization — from optimized monolithic WordPress to headless Next.js — for the world's most-used CMS.",
-    ctaPrimary: { label: "Free stack diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Pick my stack", href: "/contact" },
-    auditTitle: "Which stack fits your website?",
-    auditSubtitle: "Stack diagnostic",
+      "WordPress sites (classic or Headless + Next.js) and custom applications: full management autonomy on every project, without ongoing technical dependency.",
+    ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
+    ctaSecondary: { label: "Start my project", href: "/contact" },
+    auditTitle: "Which path fits your project?",
+    auditSubtitle: "Project diagnostic",
     auditDescription:
-      "Describe your project in a few clicks and get the WordPress stack that fits best: Essential Presence (optimized monolithic), Accelerated Growth (Astro headless) or Custom Platform (Next.js).",
+      "Describe your project in a few clicks and get the right path: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application.",
   },
   decideur: {
-    headline: "Your website,",
+    headline: "Your digital project,",
     subHeadline: "a growth engine",
     description:
-      "A modern WordPress turns into a competitive edge: faster, safer, more performant. Three technical tiers, one measurable ROI.",
+      "From a brochure site to a custom business platform: an investment that pays back. Measurable ROI, transverse OETH deduction, controlled time-to-market.",
     valueProposition:
-      "Performance, SEO and conversion: measurable results, whatever stack you pick.",
-    ctaPrimary: { label: "Free stack diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Pick my stack", href: "/contact" },
-    auditTitle: "Which stack fits your website?",
-    auditSubtitle: "Stack diagnostic",
+      "Performance, SEO, conversion and management autonomy: measurable results, whatever path you pick.",
+    ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
+    ctaSecondary: { label: "Start my project", href: "/contact" },
+    auditTitle: "Which path fits your project?",
+    auditSubtitle: "Project diagnostic",
     auditDescription:
-      "Identify in 2 minutes the right level of modernization for your project — optimized monolithic, hybrid Astro or Next.js — and estimate the performance gains you can expect.",
+      "Identify in 2 minutes the right path for your project — classic WordPress site, Headless site, web app or mobile app — and estimate the gains you can expect.",
   },
   utilisateur: {
-    headline: "Your WordPress,",
-    subHeadline: "simple and powerful",
+    headline: "Your site or your app,",
+    subHeadline: "simple to use every day",
     description:
-      "You keep the WordPress interface you use every day. I modernize the front end so your site is fast, safe and pleasant — for your visitors and for you.",
+      "Whether you run a WordPress site, a custom web app or a mobile application, you stay in control of your content, your data and your users — without ongoing technical dependency.",
     valueProposition:
-      "Same WordPress admin, brand-new front end: nothing new to learn.",
-    ctaPrimary: { label: "Free stack diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Find my stack", href: "/contact" },
-    auditTitle: "Which stack fits your website?",
-    auditSubtitle: "Stack diagnostic",
+      "An admin interface built for your business logic: zero daily friction.",
+    ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
+    ctaSecondary: { label: "Find my path", href: "/contact" },
+    auditTitle: "Which path fits your project?",
+    auditSubtitle: "Project diagnostic",
     auditDescription:
-      "In 2 minutes, find the WordPress stack tailored to your project — without ever leaving the admin you already know.",
+      "In 2 minutes, find the path tailored to your project — WordPress site, Headless, web app or mobile app — without ever losing control of your admin.",
   },
   developpeur: {
-    headline: "Headless WordPress",
-    subHeadline: "architecture",
+    headline: "Architecture",
+    subHeadline: "Next.js sites & apps",
     description:
-      "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, Vercel deployment. Three levels of decoupling depending on your needs.",
+      "WordPress API + Next.js for websites, dedicated PostgreSQL database for custom web apps, installable PWA for mobile. SSG, SSR, ISR, TypeScript, Tailwind, Vercel deployment.",
     valueProposition:
-      "The world's most-used CMS, paired with a modern frontend stack. Optimized monolithic, hybrid Astro or full Next.js.",
-    ctaPrimary: { label: "Free stack diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Explore the stacks", href: "/contact" },
-    auditTitle: "Which stack fits your website?",
-    auditSubtitle: "Stack diagnostic",
+      "WordPress sites (classic or Headless + Next.js) and custom applications: the right tool for each project, without technical over-engineering.",
+    ctaPrimary: { label: "Free diagnostic", href: "#audit" },
+    ctaSecondary: { label: "Explore the paths", href: "/contact" },
+    auditTitle: "Which path fits your project?",
+    auditSubtitle: "Technical diagnostic",
     auditDescription:
-      "Technical diagnostic in 2 minutes: optimized WordPress theme, headless Astro with SSG, or Next.js App Router with ISR/SSR — based on your traffic, integrations and scalability needs.",
+      "Technical diagnostic in 2 minutes: classic WordPress site, Headless Next.js (SSG/ISR/SSR), custom web app (Next.js + PostgreSQL) or mobile PWA — based on your traffic, integrations and business logic.",
   },
 };
 
@@ -72,11 +72,11 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "WordPress, modernized at your pace",
+    titre: "Custom websites and applications",
     sousTitre:
-      "Three levels of transformation for your WordPress. From the optimized monolithic theme to headless Next.js — you keep the admin, I rebuild the front end.",
+      "Three Website tiers (Solidarity, Balance, Support) and a Web & Mobile App offer on quote. The right tool for the right project, with guaranteed management autonomy.",
     carouselLabel: "Why Next Impact?",
-    budgetTitle: "Which level of modernization fits your project?",
+    budgetTitle: "What investment level fits your project?",
     budgetCards: {
       left: {
         title: "Showcase or institutional site",
@@ -94,8 +94,8 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     },
     ctaTitle: "Pick your stack",
     ctaDescription:
-      "Answer a few questions to identify the right stack for your project — optimized monolithic, hybrid Astro or full Next.js.",
-    ctaLabel: "Pick my stack",
+      "Answer a few questions to identify the right path for your project — classic WordPress site, Headless site, web app or mobile app.",
+    ctaLabel: "Run the diagnostic",
     ctaHref: "/contact",
     faqs: [
       {
@@ -111,7 +111,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "How long does the build take?",
         answer:
-          "Plan for 2-4 weeks for an optimized monolithic WordPress site, 4-6 weeks for a hybrid Astro solution, and 6-10 weeks for a full Next.js architecture, depending on project complexity.",
+          "Plan for 2-4 weeks for an optimized classic WordPress site, 4-6 weeks for a standard Headless + Next.js architecture, and 6-10 weeks for a complex Headless platform or a custom application, depending on project complexity.",
       },
       {
         question: "Will my WordPress plugins still work?",
@@ -130,7 +130,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       left: {
         title: "Growing SMBs",
         description:
-          "An optimized monolithic WordPress or a hybrid Astro is enough to boost your SEO, lower bounce rate and increase conversions. Investment pays back within a few months.",
+          "A WordPress site (optimized classic or Headless + Next.js) is enough to boost your SEO, lower bounce rate and increase conversions. Investment pays back within a few months.",
         price: "4,000",
       },
       right: {
@@ -214,25 +214,25 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "Will my current content be kept?",
         answer:
-          "Yes, all your content (text, images, media) is migrated automatically. Nothing is lost. Migration is included on the Accelerated Growth and Custom Platform stacks.",
+          "Yes, all your content (text, images, media) is migrated automatically. Nothing is lost. Migration is included on the Balance and Support tiers.",
       },
     ],
   },
   developpeur: {
-    titre: "Three WordPress stacks, from monolithic to headless Next.js",
+    titre: "WordPress sites and custom applications",
     sousTitre:
-      "WordPress API + Next.js / Astro. SSG, SSR, ISR. TypeScript, Tailwind, Vercel deployment. Decoupled, modular, maintainable architecture.",
+      "WordPress API + Next.js for sites, dedicated PostgreSQL database for web apps, installable PWA for mobile. SSG, SSR, ISR, TypeScript, Tailwind, Vercel deployment.",
     carouselLabel: "Why this stack?",
-    budgetTitle: "What does each stack include technically?",
+    budgetTitle: "What does each path include technically?",
     budgetCards: {
       left: {
-        title: "Essential Presence (monolithic)",
+        title: "Solidarity (classic WordPress)",
         description:
           "Custom WordPress theme, modern build (Vite), Core Web Vitals optimizations, hardened security. Ideal for a high-performance showcase site at controlled cost.",
         price: "2,250",
       },
       right: {
-        title: "Custom Platform (Next.js)",
+        title: "Support (complex / multisite Headless)",
         description:
           "WordPress headless + Next.js App Router, hybrid ISR/SSR, multisite, custom APIs, third-party integrations, full CI/CD. Architecture built for scalability.",
         highlight:
@@ -248,7 +248,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "What technical stack is used?",
         answer:
-          "Three tiers: (1) monolithic WordPress with a modern custom theme, (2) WordPress headless + Astro (SSG, mostly static content), (3) WordPress headless + Next.js App Router (SSG/ISR/SSR, strict TypeScript, Tailwind, Vercel deployment).",
+          "Four paths: (1) classic WordPress with a modern custom theme, (2) Headless WordPress + Next.js App Router (SSG/ISR/SSR, strict TypeScript, Tailwind, Vercel deployment), (3) custom web app (Next.js + serverless PostgreSQL database, autonomous admin built for the business logic), (4) mobile PWA (Next.js + service worker, geolocation and local persistence as needed).",
       },
       {
         question: "How does data fetching work in headless?",
@@ -275,9 +275,9 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
   default: {
     titre: "Case studies",
     sousTitre:
-      "Discover our WordPress projects — from optimized monolithic to headless Next.js — across various industries.",
+      "Discover the Next Impact projects: WordPress sites, Headless WordPress + Next.js sites, custom web apps and mobile PWAs — across various industries.",
     defaultTab: "recents",
-    tabsLabel: "Filter by industry",
+    tabsLabel: "Filter by family",
     ctaLabel: "Discuss your project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:
@@ -309,7 +309,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
   developpeur: {
     titre: "Technical case studies",
     sousTitre:
-      "Optimized monolithic WordPress, headless + Astro, headless + Next.js. REST API, WPGraphQL. Technical details for every project.",
+      "Optimized classic WordPress sites, Headless WordPress + Next.js, custom web apps and mobile PWAs. REST API, WPGraphQL, PostgreSQL. Technical details for every project.",
     defaultTab: "recents",
     tabsLabel: "Filter by architecture",
     ctaLabel: "Explore documentation",
@@ -325,28 +325,28 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
   default: {
     titre: "About",
     sousTitre:
-      "WordPress expertise, from optimized monolithic to headless Next.js — at the service of your project.",
+      "Two complementary skill sets: modernizing the WordPress sites that are worth it, and building custom web and mobile applications when WordPress is no longer the right tool.",
     manifesteIntro:
-      "WordPress powers more than 40% of the web. It's the world's most-used CMS, and probably one of the worst-served. Too many WordPress sites run on bloated themes, stacks of redundant plugins and an outdated front end — even though today's tooling lets us build web experiences as fast and resilient as the largest platforms.",
+      "WordPress powers more than 40% of the web. For many projects, it's still the right foundation — when properly modernized. But when the stake is no longer editorial but applicative (marketplace, business platform, mobile tool, simulator), WordPress hits its limits. In that case, you have to build something else, with the same autonomy promise: a custom admin so you stay in control of your content, your data and your users.",
     manifesteAccroche:
-      "Next Impact exists to reconcile WordPress with today's technical standards: keep the admin, rebuild the front.",
+      "Next Impact is two complementary skill sets: modernizing WordPress sites and building custom applications. The right tool for the right project.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
-        title: "Keep the WordPress admin",
+        title: "Guaranteed management autonomy",
         description:
-          "Your editorial team keeps the interface they already master. No new back office to learn, no daily friction. WordPress stays WordPress on the editing side.",
+          "On a WordPress site, you keep the admin you already know. On a custom application, a dedicated admin is built for your business logic — you stay in control of your content, your data and your users without ongoing technical dependency.",
         items: [
-          "Identical WordPress admin interface",
-          "Back-end plugins (SEO, analytics) preserved",
-          "Editorial workflow unchanged",
+          "WordPress site: identical WordPress admin",
+          "Web app: custom admin for your business",
+          "Editorial workflow unchanged on the content side",
         ],
       },
       {
         icon: "/icons/globe-network-icon.svg",
         title: "Rebuild the front end",
         description:
-          "Three technical tiers to modernize the front: optimized monolithic theme, hybrid Astro for mostly-static sites, or full Next.js for scalable platforms.",
+          "Several technical paths to modernize: optimized classic WordPress theme, Headless WordPress + Next.js for scalable platforms, or custom application when WordPress is no longer the right tool.",
         items: [
           "Core Web Vitals all green",
           "Industrial-grade technical SEO",
@@ -362,7 +362,7 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
       },
     ],
     citation:
-      "WordPress isn't the problem. What we do with it can be — and that's exactly what I modernize.",
+      "WordPress isn't the problem. What we do with it can be — and that's what I modernize. When it isn't the right answer, I build something else.",
     ctaLabel: "Discuss your project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:
@@ -400,13 +400,13 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
       },
       {
         icon: "/icons/eco-design-icon.svg",
-        title: "Three tiers, controlled investment",
+        title: "Several paths, controlled investment",
         description:
-          "Not every project needs Next.js. The right technical tier is the one that pays back your investment — not the most sophisticated one.",
+          "Not every project needs the same solution. The right technical path is the one that pays back your investment — not the most sophisticated one.",
         items: [
-          "Essential Presence for showcase sites",
-          "Accelerated Growth for SEO-heavy sites",
-          "Custom Platform for scalable architectures",
+          "Classic WordPress site for showcases",
+          "Headless + Next.js for SEO-heavy sites or scalable platforms",
+          "Custom web app or mobile app when WordPress is no longer the right tool",
         ],
       },
     ],
@@ -468,11 +468,11 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
   developpeur: {
     titre: "The Next Impact stack",
     sousTitre:
-      "Optimized monolithic WordPress, WordPress + Astro, WordPress + Next.js. Decoupled architecture, SSG/SSR/ISR, TypeScript, Vercel deployment.",
+      "Optimized classic WordPress, Headless WordPress + Next.js, custom web apps (Next.js + PostgreSQL), mobile PWA. Decoupled architecture, SSG/SSR/ISR, TypeScript, Vercel deployment.",
     manifesteIntro:
-      "Next Impact was born from the conviction that WordPress deserves a modern frontend architecture. The world's most-used CMS, paired with the right framework — Astro for mostly-static sites, Next.js for scalable platforms — offers the best of both worlds: WordPress's editorial power and the performance of a modern stack.",
+      "Next Impact was born from the conviction that WordPress sites deserve a modern architecture — and that not everything deserves to be a WordPress site. For showcase and editorial platforms, WordPress stays a solid foundation when properly modernized. For marketplaces, business tools or mobile applications, we build something else: custom web app or PWA, with an autonomous admin tailored to the project's logic.",
     manifesteAccroche:
-      "Three technical tiers, one core conviction: keep the admin, rebuild the front.",
+      "Two complementary skill sets, one core conviction: the right tool for the right project.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
@@ -487,13 +487,14 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
       },
       {
         icon: "/icons/globe-network-icon.svg",
-        title: "Three front-end modernization tiers",
+        title: "Four technical paths",
         description:
-          "Modern WordPress theme (Vite build, all-green Core Web Vitals), Astro for hybrid static, or Next.js App Router with SSG/SSR/ISR for complex platforms.",
+          "Optimized classic WordPress theme, Headless + Next.js App Router (SSG/ISR/SSR) for scalable editorial platforms, custom web app (Next.js + serverless PostgreSQL, autonomous admin), or installable mobile PWA.",
         items: [
-          "Essential Presence: modern custom theme",
-          "Accelerated Growth: WordPress + Astro (SSG)",
-          "Custom Platform: WordPress + Next.js (ISR/SSR)",
+          "Solidarity: classic WordPress with modern custom theme",
+          "Balance / Support: Headless WordPress + Next.js (SSG/ISR/SSR)",
+          "Web app: Next.js + PostgreSQL + custom autonomous admin",
+          "Mobile app: Next.js PWA, geolocation and local persistence as needed",
         ],
       },
       {

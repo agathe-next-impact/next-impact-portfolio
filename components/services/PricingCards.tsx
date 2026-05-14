@@ -33,12 +33,12 @@ type Tier = {
 
 function getTiers(isEn: boolean): Tier[] {
   return [
-    // Présence Essentielle
+    // Solidaire
     {
       iconSrc: "/icons/brand-reach-icon.svg",
-      iconAlt: isEn ? "Essential Presence" : "Présence Essentielle",
-      name: isEn ? "ESSENTIAL PRESENCE" : "PRÉSENCE ESSENTIELLE",
-      tech: isEn ? "Optimized monolithic WordPress" : "WordPress monolithique optimisé",
+      iconAlt: isEn ? "Solidarity tier" : "Solidaire",
+      name: isEn ? "SOLIDARITY" : "SOLIDAIRE",
+      tech: isEn ? "Classic or light headless WordPress" : "WordPress classique ou Headless léger",
       price: isEn ? "From €2,250" : "Depuis 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -72,12 +72,12 @@ function getTiers(isEn: boolean): Tier[] {
       ctaLabel: isEn ? "Pick this stack" : "Choisir cette stack",
       ctaHref: "/contact",
     },
-    // Croissance Accélérée
+    // Équilibre
     {
       iconSrc: "/icons/scale-icon.svg",
-      iconAlt: isEn ? "Accelerated Growth" : "Croissance Accélérée",
-      name: isEn ? "ACCELERATED GROWTH" : "CROISSANCE ACCÉLÉRÉE",
-      tech: isEn ? "Headless WordPress + Astro" : "WordPress headless + Astro",
+      iconAlt: isEn ? "Balance tier" : "Équilibre",
+      name: isEn ? "BALANCE" : "ÉQUILIBRE",
+      tech: isEn ? "Headless WordPress + Next.js" : "WordPress headless + Next.js",
       price: isEn ? "From €4,000" : "Depuis 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -87,11 +87,11 @@ function getTiers(isEn: boolean): Tier[] {
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn ? (
         <>
-          Headless WordPress as backend + <strong className="text-lightyellow">Astro</strong> as frontend (SSG, partial hydration).
+          Headless WordPress as backend + <strong className="text-lightyellow">Next.js</strong> as frontend (SSG, ISR, partial hydration).
         </>
       ) : (
         <>
-          WordPress headless en backend + <strong className="text-lightyellow">Astro</strong> en frontend (SSG, hydratation partielle).
+          WordPress headless en backend + <strong className="text-lightyellow">Next.js</strong> en frontend (SSG, ISR, hydratation partielle).
         </>
       ),
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
@@ -112,12 +112,12 @@ function getTiers(isEn: boolean): Tier[] {
       badge: isEn ? "Most popular" : "Le plus demandé",
       ctaHref: "/contact",
     },
-    // Plateforme Sur-Mesure
+    // Soutien
     {
       iconSrc: "/icons/rocket-icon.svg",
-      iconAlt: isEn ? "Custom Platform" : "Plateforme Sur-Mesure",
-      name: isEn ? "CUSTOM PLATFORM" : "PLATEFORME SUR-MESURE",
-      tech: isEn ? "Headless WordPress + Next.js" : "WordPress headless + Next.js",
+      iconAlt: isEn ? "Support tier" : "Soutien",
+      name: isEn ? "SUPPORT" : "SOUTIEN",
+      tech: isEn ? "Complex / multisite Headless WordPress" : "WordPress Headless complexe / multisites",
       price: isEn ? "From €5,000" : "Depuis 5 000 €",
       priceTagline: isEn
         ? "Scalable architecture, ISR/SSR, multisite"

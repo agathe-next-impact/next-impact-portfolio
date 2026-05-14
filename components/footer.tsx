@@ -90,7 +90,10 @@ export default function Footer() {
           </h3>
           <nav className="flex flex-col gap-2">
             <a href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("whitepaper")}
+              {t("whitepaperHeadless")}
+            </a>
+            <a href="/ressources/livre_blanc_web_app.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              {t("whitepaperWebApp")}
             </a>
             <Link href="/audit-site-ia" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               {t("freeAiAudit")}
@@ -103,6 +106,9 @@ export default function Footer() {
             </Link>
             <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               {t("agefiphSimulator")}
+            </Link>
+            <Link href="/contact" className="text-white/70 hover:text-white transition text-sm font-googletexte">
+              {t("startWebApp")}
             </Link>
           </nav>
         </div>

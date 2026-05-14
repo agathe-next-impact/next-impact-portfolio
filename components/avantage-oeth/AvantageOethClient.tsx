@@ -133,13 +133,13 @@ export default function AvantageOethClient() {
     <PageLayout
       titre={
         isEn
-          ? "Reduce your AGEFIPH contribution by investing in your website"
-          : "Réduisez votre contribution AGEFIPH en investissant dans votre site web"
+          ? "Reduce your AGEFIPH contribution by investing in your web project"
+          : "Réduisez votre contribution AGEFIPH en investissant dans votre projet web"
       }
       sousTitre={
         isEn
-          ? "TIH provider specialized in Headless WordPress: 30% of labor cost deductible from your French disability employment obligation."
-          : "Prestataire TIH spécialisé WordPress Headless : 30% du coût de main-d'œuvre déductible de votre obligation d'emploi."
+          ? "TIH provider specialized in building websites and applications: 30% of labor cost deductible from your French disability employment obligation, whatever the project type (brochure site, Headless site, web app or mobile application)."
+          : "Prestataire TIH spécialisé création de sites et d'applications : 30 % du coût de main-d'œuvre déductible de votre obligation d'emploi, quelle que soit la nature du projet (site vitrine, site Headless, web app ou application mobile)."
       }
     >
       <div className="mt-8 mb-6 space-y-24">
@@ -351,8 +351,8 @@ export default function AvantageOethClient() {
             </p>
             <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-12 text-center">
               {isEn
-                ? "Why choose a TIH provider specialized in Headless WordPress?"
-                : "Pourquoi choisir un prestataire TIH spécialisé WordPress Headless ?"}
+                ? "Why choose a TIH provider specialized in website and application building?"
+                : "Pourquoi choisir un prestataire TIH spécialisé en création web ?"}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -370,8 +370,8 @@ export default function AvantageOethClient() {
                 </h3>
                 <p className="text-white/70 font-googletexte leading-relaxed">
                   {isEn
-                    ? "A Headless WordPress site at modern tech standards: load times under 1s, maximum security, natively optimized SEO with Next.js or Astro."
-                    : "Un site WordPress Headless aux standards de la Tech : temps de chargement < 1s, sécurité maximale, SEO optimisé nativement avec Next.js ou Astro."}
+                    ? "Modern tech standards on every project: load times under 1s, maximum security, SEO and accessibility carefully tuned — whether you commission a classic WordPress site, a Headless site or a custom application."
+                    : "Des standards techniques élevés sur tous les projets : temps de chargement < 1s, sécurité renforcée, SEO et accessibilité soignés — que vous nous confiiez un site WordPress, un site Headless ou une application sur-mesure."}
                 </p>
               </motion.div>
 

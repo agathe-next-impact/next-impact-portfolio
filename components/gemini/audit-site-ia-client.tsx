@@ -61,7 +61,7 @@ const prompt_fr = `
 
 ### 5. Stack recommandée (uniquement si migration recommandée et sur WordPress Headless)
 
-Comparatif des stacks : WordPress monolithique, WP Astro, WP Next.js
+Comparatif des stacks : WordPress classique, WordPress Headless + Next.js, application sur-mesure (Next.js + PostgreSQL)
 Recommandation de stack
 ---
 
@@ -119,7 +119,7 @@ const prompt_en = `
 
 ### 5. Recommended stack (only if migration is recommended and on Headless WordPress)
 
-Stack comparison: monolithic WordPress, WP Astro, WP Next.js
+Stack comparison: classic WordPress, Headless WordPress + Next.js, custom application (Next.js + PostgreSQL)
 Stack recommendation
 ---
 
@@ -158,7 +158,7 @@ export default function AuditSiteIaClient() {
           systemInstruction={isEn ? system_instruction_en : system_instruction_fr}
           defaultUrl={url}
         />
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+        <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 max-w-2xl">
             <div
               className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
             >
@@ -171,13 +171,6 @@ export default function AuditSiteIaClient() {
             >
               <div className="w-40 h-40 rounded-lg flex items-center justify-center">
                 <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <BrandLogo src="/img/logo-astro-blanc.webp" srcLight="/img/logo-astro.webp" alt="Logo Astro" width={120} height={120} />
               </div>
             </div>
         </div>

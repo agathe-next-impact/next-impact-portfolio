@@ -19,19 +19,19 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "WordPress solutions",
+            "website solutions",
             "Headless WordPress",
-            "Astro",
             "Next.js",
-            "custom website",
+            "custom web app",
+            "mobile PWA",
             "web development",
           ]
         : [
-            "solutions WordPress",
+            "solutions site web",
             "WordPress Headless",
-            "Astro",
             "Next.js",
-            "site web sur mesure",
+            "web app sur-mesure",
+            "PWA mobile",
             "développement web",
           ],
     locale,
@@ -51,7 +51,7 @@ const SOLUTIONS_OFFERS_FR = [
   },
   {
     name: "PREMIUM",
-    tech: "WordPress + Astro",
+    tech: "WordPress Headless + Next.js",
     target: "Enjeux d'image, de SEO et de performance",
     concept: "La puissance des technologies modernes.",
     icon: "/icons/speed-icon.svg",
@@ -59,23 +59,23 @@ const SOLUTIONS_OFFERS_FR = [
     features: [
       "Flexibilité totale du design",
       "Score PageSpeed maximum",
-      "Sécurité maximale (statique)",
+      "Sécurité renforcée par découplage",
       "SEO optimisé nativement",
     ],
     recommended: true,
   },
   {
     name: "ULTIMATE",
-    tech: "WordPress + Next.js",
-    target: "Pour des fonctionnalités spécifiques",
+    tech: "Application sur-mesure (Next.js + PostgreSQL)",
+    target: "Pour une logique métier ou une application mobile",
     concept: "L'expérience utilisateur fluide d'une application.",
     icon: "/icons/saas-features-icon.svg",
     color: "oklch(87.9% 0.169 91.605)",
     features: [
       "Interactions dynamiques",
-      "Espace client complexe",
-      "Flexibilité totale du design",
-      "Intégrations API illimitées",
+      "Comptes utilisateurs et données métier",
+      "Admin autonome conçu sur-mesure",
+      "Web app ou app mobile (PWA)",
     ],
     recommended: false,
   },
@@ -94,7 +94,7 @@ const SOLUTIONS_OFFERS_EN = [
   },
   {
     name: "PREMIUM",
-    tech: "WordPress + Astro",
+    tech: "Headless WordPress + Next.js",
     target: "Brand image, SEO and performance focus",
     concept: "The power of modern technologies.",
     icon: "/icons/speed-icon.svg",
@@ -102,23 +102,23 @@ const SOLUTIONS_OFFERS_EN = [
     features: [
       "Full design flexibility",
       "Maximum PageSpeed score",
-      "Maximum security (static)",
+      "Security strengthened by decoupling",
       "Native SEO optimization",
     ],
     recommended: true,
   },
   {
     name: "ULTIMATE",
-    tech: "WordPress + Next.js",
-    target: "For specific features",
+    tech: "Custom application (Next.js + PostgreSQL)",
+    target: "For business logic or a mobile application",
     concept: "The smooth user experience of an application.",
     icon: "/icons/saas-features-icon.svg",
     color: "oklch(87.9% 0.169 91.605)",
     features: [
       "Dynamic interactions",
-      "Complex client portal",
-      "Full design flexibility",
-      "Unlimited API integrations",
+      "User accounts and business data",
+      "Custom autonomous admin",
+      "Web app or mobile app (PWA)",
     ],
     recommended: false,
   },
@@ -138,7 +138,7 @@ const SOLUTIONS_FAQS_FR = [
   {
     question: "Combien de temps prend la mise en place ?",
     answer:
-      "Comptez 2-4 semaines pour un site WordPress classique, 4-6 semaines pour une solution Astro, et 6-10 semaines pour une architecture Next.js complète, selon la complexité du projet.",
+      "Comptez 2-4 semaines pour un site WordPress classique, 4-6 semaines pour une architecture Headless WordPress + Next.js standard, et 6-10 semaines pour une plateforme Headless complexe ou une application sur-mesure, selon la complexité du projet.",
   },
   {
     question: "Mes plugins WordPress fonctionneront-ils encore ?",
@@ -161,7 +161,7 @@ const SOLUTIONS_FAQS_EN = [
   {
     question: "How long does setup take?",
     answer:
-      "Plan for 2-4 weeks for a standard WordPress site, 4-6 weeks for an Astro solution, and 6-10 weeks for a full Next.js architecture, depending on project complexity.",
+      "Plan for 2-4 weeks for a standard WordPress site, 4-6 weeks for a standard Headless WordPress + Next.js architecture, and 6-10 weeks for a complex Headless platform or a custom application, depending on project complexity.",
   },
   {
     question: "Will my WordPress plugins still work?",
@@ -191,13 +191,13 @@ export default async function SolutionsPage({
       <ServiceJsonLd
         name={
           locale === "en"
-            ? "Custom WordPress solutions"
-            : "Solutions WordPress sur mesure"
+            ? "Custom website and application solutions"
+            : "Solutions sites web et applications sur-mesure"
         }
         description={
           locale === "en"
-            ? "WordPress solutions tailored to every project: standard WordPress, WordPress + Astro for performance, or Headless WordPress + Next.js for advanced web applications."
-            : "Solutions WordPress adaptées à tous vos projets : WordPress standard, WordPress + Astro pour la performance, ou WordPress Headless + Next.js pour les applications web avancées."
+            ? "Solutions tailored to every project: standard WordPress, Headless WordPress + Next.js for performance, or custom Next.js + PostgreSQL applications for advanced web or mobile apps."
+            : "Solutions adaptées à tous vos projets : WordPress classique, Headless WordPress + Next.js pour la performance, ou application sur-mesure Next.js + PostgreSQL pour les web apps et applications mobiles avancées."
         }
         serviceType={locale === "en" ? "Web development" : "Développement Web"}
         url="/solutions"

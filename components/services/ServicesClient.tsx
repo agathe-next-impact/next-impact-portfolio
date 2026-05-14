@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { PricingCards } from "@/components/services/PricingCards";
+import AppsSection from "@/components/services/AppsSection";
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
@@ -35,11 +36,14 @@ export default function ServicesClient() {
           <HeadlessExplainer />
         </section>
 
-        {/* 3 Offres tarifaires */}
+        {/* Section 1 — Création de sites web (3 forfaits) */}
         <PricingCards />
 
         {/* Comparatif des offres */}
         <ServicesComparisonTable />
+
+        {/* Section 2 — Applications web & mobile sur-mesure */}
+        <AppsSection />
 
         {/* CTA tertiaire — Simulateur ROI */}
         <section className="container mx-auto px-4">

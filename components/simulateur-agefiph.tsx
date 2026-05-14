@@ -32,14 +32,16 @@ function formatEuro(value: number, locale: Locale): string {
 }
 
 const presetsFr = [
-  { label: "Présence Essentielle", value: 2250 },
-  { label: "Croissance Accélérée", value: 4000 },
-  { label: "Plateforme Sur-Mesure", value: 5000 },
+  { label: "Solidaire", value: 2250 },
+  { label: "Équilibre", value: 4000 },
+  { label: "Soutien", value: 5000 },
+  { label: "Application sur-mesure", value: 15000 },
 ];
 const presetsEn = [
-  { label: "Essential Presence", value: 2250 },
-  { label: "Accelerated Growth", value: 4000 },
-  { label: "Custom Platform", value: 5000 },
+  { label: "Solidarity", value: 2250 },
+  { label: "Balance", value: 4000 },
+  { label: "Support", value: 5000 },
+  { label: "Custom application", value: 15000 },
 ];
 
 export default function SimulateurAgefiph() {

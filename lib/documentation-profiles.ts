@@ -14,6 +14,7 @@ import {
   Rocket,
   SearchCheck,
   Network,
+  Smartphone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -323,6 +324,17 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       textColor: "text-white",
     },
     {
+      id: "dec-apps",
+      title: "Applications web & mobile",
+      description: "Quand WordPress n'est plus le bon outil : web app, marketplace, PWA.",
+      icon: Smartphone,
+      href: "/documentation/applications-web-mobile",
+      colSpan: "md:col-span-1",
+      rowSpan: "",
+      gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
+      textColor: "text-white",
+    },
+    {
       id: "dec-performance",
       title: "Performance & ROI",
       description: "Core Web Vitals et impact SEO.",
@@ -414,6 +426,17 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       textColor: "text-white",
     },
     {
+      id: "util-apps",
+      title: "Applications web & mobile",
+      description: "Une admin sur-mesure pour votre logique métier — comme WordPress, mais pour votre activité.",
+      icon: Smartphone,
+      href: "/documentation/applications-web-mobile",
+      colSpan: "md:col-span-1",
+      rowSpan: "",
+      gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
+      textColor: "text-white",
+    },
+    {
       id: "util-livre-blanc",
       title: "Livre Blanc",
       description: "Téléchargez le guide complet : qu'est-ce que WordPress Headless ?",
@@ -491,6 +514,17 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
       colSpan: "md:col-span-1",
       rowSpan: "",
       gradient: "bg-darkblue/60 backdrop-blur-xl border-regularblue/20",
+      textColor: "text-white",
+    },
+    {
+      id: "dev-apps",
+      title: "Applications web & mobile",
+      description: "Next.js + PostgreSQL serverless pour les web apps, PWA pour le mobile. Admin autonome sur-mesure.",
+      icon: Smartphone,
+      href: "/documentation/applications-web-mobile",
+      colSpan: "md:col-span-1",
+      rowSpan: "",
+      gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
       textColor: "text-white",
     },
     {

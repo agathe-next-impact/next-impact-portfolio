@@ -57,6 +57,18 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 
 const META: CaseStudyMeta[] = [
   {
+    id: "19",
+    slug: "panorama-pub",
+    clientType: "pme",
+    clientName: "Panorama Pub",
+    imageUrl: "/img/desktop-screen-panorama-pub.jpg",
+    galleryUrl: "/img/desktop-screen-panorama-pub.jpg",
+    date: { month: 5, year: 2026 },
+    technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
+    website: "https://panorama-pub.com",
+    youtubeVideoId: "9fMaBL1amYk",
+  },
+  {
     id: "17",
     slug: "cafe-citoyen",
     clientType: "association",
@@ -76,7 +88,7 @@ const META: CaseStudyMeta[] = [
     imageUrl: "/img/logo-hermitage.webp",
     galleryUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
     date: { month: 4, year: 2026 },
-    technologies: ["WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel"],
+    technologies: ["Next.js", "PWA", "Géolocalisation", "Persistance locale", "Tailwind CSS", "Vercel"],
     website: "https://jeu-de-piste.hermitagelelab.com/",
     youtubeVideoId: "_kt_wA4zT68",
     youtubeIsShort: true,
@@ -288,6 +300,27 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  "panorama-pub": {
+    title: "Panorama Pub",
+    description:
+      "Lancement de Panorama Pub, premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires : un nouveau marché digital pour connecter acheteurs et fournisseurs sur un secteur encore éclaté.",
+    detailedDescription: `Le marché des objets publicitaires reste l'un des derniers secteurs B2B sans plateforme de référence : aucun annuaire centralisé n'existe aujourd'hui en France. Panorama Pub se positionne pour occuper ce vide et devenir l'incontournable du sourcing d'objets publicitaires.\n\nL'enjeu n'est pas seulement de livrer un site, mais de poser les fondations d'un produit destiné à grandir : un avantage de pionnier sur un marché vacant, une cible B2B claire (agences de communication, services marketing, événementiel), et un modèle économique scalable (visibilité fournisseurs, mise en relation, contenus éditoriaux).\n\nLivrée en 2 mois du concept à la mise en ligne, la plateforme est aujourd'hui prête à conquérir son marché : positionnement de référence, fondation technique solide, et roadmap claire pour transformer l'audience en levier business.`,
+    objectives: [
+      "Occuper un marché vacant et s'imposer comme la référence du secteur",
+      "Construire un actif digital scalable, capable de monétiser une audience B2B qualifiée",
+      "Sécuriser un time-to-market court pour prendre l'avantage sur d'éventuels suiveurs",
+      "Poser une fondation technique qui ne sera pas à refaire dans 2 ans",
+    ],
+    results: [
+      "Plateforme inédite sur son segment, sans équivalent en France",
+      "Mise en ligne en 2 mois, du concept à la production",
+      "Architecture pensée SEO et croissance, prête à monter en charge",
+      "Roadmap claire pour les prochaines briques : espaces fournisseurs, mise en relation, contenus",
+    ],
+    galleryAlt: "Page d'accueil de l'annuaire Panorama Pub — marketplace B2B des fournisseurs d'objets publicitaires",
+    tags: ["PME", "Web app sur-mesure", "Marketplace", "Annuaire B2B", "Lancement produit"],
+    duration: "2 mois",
+  },
   "cafe-citoyen": {
     title: "Café citoyen",
     description:
@@ -310,20 +343,21 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
   "hermitage-jeu-de-piste": {
     title: "L'hermitage - Jeu de piste",
     description:
-      "Création d'un jeu de piste en ligne pour le domaine forestier du Tiers Lieu L'Hermitage, utilisant une architecture WordPress Headless avec Next.js pour offrir une expérience ludique et interactive aux visiteurs.",
-    detailedDescription: `Le Tiers Lieu L'Hermitage, un lieu de séjours sur-mesure pour entreprises et de rencontres situé dans un domaine forestier, souhaitait créer un jeu de piste en ligne pour offrir une expérience ludique et interactive aux équipes en séjour d'entreprise. L'objectif était de développer un jeu qui encourage les visiteurs à explorer le domaine tout en utilisant une architecture WordPress Headless pour garantir des performances optimales.\n\nJ'ai développé un jeu de piste en ligne intégré au site WordPress en mode Headless avec Next.js. Le jeu est conçu pour être engageant et interactif, encourageant les visiteurs à découvrir les différentes zones du domaine à travers des énigmes et des défis avec un score final de rapidité et de précision.\n\nLe jeu a été un succès, avec un engagement accru des visiteurs et une expérience utilisateur fluide et réactive.`,
+      "Création d'une application mobile (PWA) pour le domaine forestier du Tiers Lieu L'Hermitage. Une expérience ludique et géolocalisée, installable sur smartphone sans passer par les stores et fonctionnant sans connexion permanente.",
+    detailedDescription: `Le Tiers Lieu L'Hermitage, un lieu de séjours sur-mesure pour entreprises et de rencontres situé dans un domaine forestier, souhaitait offrir aux équipes en séjour une expérience ludique et interactive pour découvrir le domaine. L'objectif : un jeu de piste mobile, fluide en pleine forêt, sans contrainte de téléchargement sur les stores ni dépendance à une connexion stable.\n\nJ'ai développé une Progressive Web App (PWA) avec Next.js : aucun serveur dédié, aucun compte à créer. L'application tourne entièrement sur le smartphone des visiteurs et s'installe d'un tap depuis le navigateur sur l'écran d'accueil iOS ou Android, en mode plein écran comme une vraie app.\n\nLa géolocalisation native du navigateur déclenche les énigmes contextuelles selon la position des joueurs dans le domaine. Toute la progression et les scores sont persistés localement sur l'appareil (LocalStorage / IndexedDB) — la partie reste exploitable même hors-ligne et reprend où elle s'est arrêtée.\n\nLe jeu a été un succès, avec un engagement accru des visiteurs et une expérience utilisateur fluide, immédiate et adaptée à un usage en pleine nature.`,
     objectives: [
-      "Créer un jeu de piste en ligne pour le domaine forestier du Tiers Lieu L'Hermitage",
-      "Offrir une expérience ludique et interactive aux visiteurs",
-      "Utiliser une architecture WordPress Headless pour garantir des performances optimales",
+      "Créer une application mobile pour explorer le domaine forestier du Tiers Lieu L'Hermitage",
+      "Offrir une expérience ludique, géolocalisée et interactive aux visiteurs",
+      "Permettre une installation sans store et un fonctionnement hors-ligne",
     ],
     results: [
-      "Jeu de piste en ligne développé avec succès",
+      "Application mobile (PWA) installable sans passer par les stores iOS / Android",
+      "Énigmes déclenchées par la géolocalisation des joueurs dans le domaine",
+      "Progression et scores persistés localement, fonctionnement hors-ligne",
       "Visiteurs des séjours engagés dans la découverte active du domaine",
-      "Expérience utilisateur fluide et réactive",
     ],
-    galleryAlt: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
-    tags: ["ESS", "WordPress", "Headless", "Next.js", "Jeu en ligne"],
+    galleryAlt: "Application mobile de jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
+    tags: ["ESS", "App mobile", "PWA", "Géolocalisation", "Gamification", "Hors-ligne"],
     duration: "4 semaines",
   },
   "comme-des-fous-jeux": {
@@ -694,6 +728,27 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "panorama-pub": {
+    title: "Panorama Pub",
+    description:
+      "Launch of Panorama Pub, the first online directory dedicated to promotional product suppliers: a new digital marketplace connecting buyers and suppliers in a still-fragmented industry.",
+    detailedDescription: `The promotional products market is one of the last B2B sectors without a reference platform: no centralized directory exists in France today. Panorama Pub steps into that gap to become the go-to source for sourcing promotional products.\n\nThe challenge wasn't just to ship a site — it was to lay the foundations of a product built to scale: pioneer advantage on an open market, a clear B2B target (communication agencies, marketing departments, event teams), and a scalable business model (supplier visibility, lead matching, editorial content).\n\nDelivered in 2 months from concept to launch, the platform is now ready to claim its market: reference positioning, solid technical foundation, and a clear roadmap to turn audience into business leverage.`,
+    objectives: [
+      "Claim an open market and establish the reference platform of the sector",
+      "Build a scalable digital asset that can monetize a qualified B2B audience",
+      "Secure a short time-to-market to outpace potential followers",
+      "Lay a technical foundation that won't need redoing in 2 years",
+    ],
+    results: [
+      "A platform with no equivalent in France in its segment",
+      "Shipped in 2 months, from concept to production",
+      "Architecture designed for SEO and growth, ready to scale",
+      "Clear roadmap for the next building blocks: supplier accounts, lead matching, editorial content",
+    ],
+    galleryAlt: "Homepage of the Panorama Pub directory — B2B marketplace for promotional product suppliers",
+    tags: ["SME", "Custom web app", "Marketplace", "B2B directory", "Product launch"],
+    duration: "2 months",
+  },
   "cafe-citoyen": {
     title: "Café Citoyen",
     description:
@@ -716,20 +771,21 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
   "hermitage-jeu-de-piste": {
     title: "L'Hermitage – Treasure Hunt",
     description:
-      "An online treasure hunt for the woodland estate of Tiers Lieu L'Hermitage, built on a Headless WordPress + Next.js architecture for a playful, interactive visitor experience.",
-    detailedDescription: `Tiers Lieu L'Hermitage — a tailor-made retreat venue for companies and gatherings, set in a woodland estate — wanted an online treasure hunt to give a playful, interactive experience to teams visiting on corporate retreats. The goal: a game that gets visitors actively exploring the estate, on a Headless WordPress architecture for top-tier performance.\n\nI built an online treasure hunt integrated into the Headless WordPress site with Next.js. The game is engaging and interactive, prompting visitors to discover the estate's different zones through riddles and challenges, with a final score for speed and accuracy.\n\nThe game has been a hit, with stronger visitor engagement and a smooth, responsive user experience.`,
+      "A mobile application (PWA) for the woodland estate of Tiers Lieu L'Hermitage. A playful, geolocated experience, installable on smartphones without app stores and working without a permanent connection.",
+    detailedDescription: `Tiers Lieu L'Hermitage — a tailor-made retreat venue for companies and gatherings, set in a woodland estate — wanted to give teams on corporate retreats a playful, interactive way to explore the grounds. The goal: a mobile treasure hunt that runs smoothly deep in the forest, with no app-store download and no dependency on a stable connection.\n\nI built a Progressive Web App (PWA) with Next.js: no dedicated server, no account required. The app runs entirely on the visitor's smartphone and can be installed with a single tap from the browser onto the iOS or Android home screen, in full-screen mode like a native app.\n\nThe browser's native geolocation API triggers contextual riddles depending on where the players are in the estate. Progress and scores are persisted locally on the device (LocalStorage / IndexedDB) — the game stays playable offline and resumes exactly where it was left.\n\nThe game has been a hit, with stronger visitor engagement and a smooth, immediate user experience suited to outdoor use.`,
     objectives: [
-      "Build an online treasure hunt for the L'Hermitage woodland estate",
-      "Deliver a playful, interactive experience for visitors",
-      "Use a Headless WordPress architecture to guarantee top-tier performance",
+      "Build a mobile application to explore the L'Hermitage woodland estate",
+      "Deliver a playful, geolocated and interactive experience for visitors",
+      "Enable store-free installation and offline operation",
     ],
     results: [
-      "Online treasure hunt successfully shipped",
+      "Mobile app (PWA) installable without going through iOS / Android stores",
+      "Riddles triggered by the players' geolocation across the estate",
+      "Progress and scores persisted locally, offline operation",
       "Retreat visitors actively engaged in exploring the estate",
-      "Smooth, responsive user experience",
     ],
-    galleryAlt: "Treasure hunt across the Tiers Lieu L'Hermitage woodland estate",
-    tags: ["Social economy", "WordPress", "Headless", "Next.js", "Online game"],
+    galleryAlt: "Mobile treasure hunt application for the Tiers Lieu L'Hermitage woodland estate",
+    tags: ["Social economy", "Mobile app", "PWA", "Geolocation", "Gamification", "Offline"],
     duration: "4 weeks",
   },
   "comme-des-fous-jeux": {
@@ -1099,6 +1155,11 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  "panorama-pub": [
+    { value: "1er", label: "Annuaire du secteur en France" },
+    { value: "2 mois", label: "Du concept à la mise en ligne" },
+    { value: "B2B", label: "Sourcing fournisseurs simplifié" },
+  ],
   "cafe-citoyen": [
     { value: "+20%", label: "Visites du lieu" },
     { value: "x3", label: "Abonnements à la newsletter" },
@@ -1197,6 +1258,11 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  "panorama-pub": [
+    { value: "1st", label: "Industry directory in France" },
+    { value: "2 months", label: "From concept to launch" },
+    { value: "B2B", label: "Streamlined supplier sourcing" },
+  ],
   "cafe-citoyen": [
     { value: "+20%", label: "On-site visits" },
     { value: "x3", label: "Newsletter signups" },

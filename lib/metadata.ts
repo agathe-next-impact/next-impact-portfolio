@@ -29,15 +29,16 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Développeur freelance spécialisé WordPress Headless + Next.js & Astro. " +
-    "8+ ans d'expérience. Création, refonte et migration de sites ultra-performants.",
+    "Création de sites web et d'applications (web & mobile) sur-mesure. " +
+    "WordPress classique, Headless WordPress + Next.js, web app et PWA. " +
+    "20 ans d'expérience digitale, dont 6 en développement.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact — WordPress Headless & Next.js",
+    alt: "Next Impact — Création Site web | Web & Mobile App",
   },
   creator: "Agathe Karinthi-Martin",
   keywords: [
@@ -46,10 +47,14 @@ export const siteConfig = {
     "Freelance",
     "Développeur",
     "Next.js",
-    "Astro",
     "React",
     "Site web",
     "Application web",
+    "Web app sur-mesure",
+    "Application mobile",
+    "PWA",
+    "Marketplace",
+    "PostgreSQL",
     "CMS Headless",
   ],
   authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
@@ -193,32 +198,36 @@ type LocalizedMeta = {
 
 const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Next Impact — Développeur WordPress Headless, Next.js & Astro en France",
+    title: "Next Impact — Création Site web | Web & Mobile App en France",
     description:
-      "Next Impact est une agence freelance spécialisée en WordPress Headless, Next.js et Astro. " +
-      "Création, refonte et migration de sites performants pour TPE, PME et ESS. " +
+      "Next Impact est un studio freelance qui conçoit et développe des sites web et des applications (web & mobile) sur-mesure : " +
+      "WordPress classique, Headless WordPress + Next.js, web app et PWA. " +
       "Basée en Auvergne, intervention dans toute la France. Audit gratuit.",
     keywords: [
-      "WordPress Headless freelance",
+      "création site web freelance",
       "développeur Next.js France",
-      "création site headless",
-      "migration WordPress Headless",
-      "agence WordPress Headless",
+      "WordPress Headless freelance",
+      "web app sur-mesure",
+      "application mobile freelance",
+      "marketplace Next.js",
+      "PWA freelance",
       "Next Impact",
     ],
   },
   en: {
-    title: "Next Impact — Headless WordPress, Next.js & Astro freelance developer",
+    title: "Next Impact — Websites and Web & Mobile Apps freelance developer",
     description:
-      "Next Impact is a freelance studio specialized in Headless WordPress, Next.js and Astro. " +
-      "Build, redesign and migration of high-performance sites for SMEs and social-economy organizations. " +
+      "Next Impact is a freelance studio that designs and builds custom websites and applications (web & mobile): " +
+      "classic WordPress, Headless WordPress + Next.js, web apps and PWAs. " +
       "Based in France, working internationally. Free audit included.",
     keywords: [
-      "Headless WordPress freelance",
+      "freelance website build",
       "Next.js developer",
-      "headless site build",
-      "WordPress migration",
-      "Headless WordPress studio",
+      "Headless WordPress freelance",
+      "custom web app",
+      "freelance mobile app",
+      "Next.js marketplace",
+      "freelance PWA",
       "Next Impact",
     ],
   },
@@ -226,92 +235,98 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Création de site WordPress Headless, Next.js & Astro — Services et tarifs",
+    title: "Création de sites web et d'applications sur-mesure — Services et tarifs",
     description:
-      "3 offres adaptées à chaque budget : WordPress optimisé dès 2 250 €, " +
-      "WordPress + Astro dès 4 000 €, WordPress + Next.js dès 5 000 €. " +
-      "Création, refonte, migration et audit. Devis personnalisé sous 48 h.",
+      "Trois forfaits Sites web — Solidaire dès 2 250 €, Équilibre dès 4 000 €, Soutien dès 5 000 € — " +
+      "et une offre Applications web & mobile sur devis. " +
+      "Avantage OETH transverse : 30 % du coût main-d'œuvre déductible AGEFIPH. Devis sous 48 h.",
     keywords: [
-      "services WordPress Headless",
+      "services création site web",
+      "création site WordPress",
       "création site Next.js",
-      "développement Astro",
-      "refonte WordPress",
+      "web app sur-mesure",
+      "application mobile freelance",
       "tarif site WordPress Headless",
-      "prix site Next.js",
+      "prix application web",
     ],
   },
   en: {
-    title: "Headless WordPress, Next.js & Astro builds — Services and pricing",
+    title: "Custom websites and applications — Services and pricing",
     description:
-      "Three packages for every budget: optimized WordPress from €2,250, " +
-      "WordPress + Astro from €4,000, WordPress + Next.js from €5,000. " +
-      "Build, redesign, migration and audit. Personalized quote within 48 hours.",
+      "Three website tiers — Solidarity from €2,250, Balance from €4,000, Support from €5,000 — " +
+      "and a Web & Mobile App offer on quote. " +
+      "Transverse OETH benefit: 30% of labor cost deductible from your AGEFIPH contribution. Quote within 48 hours.",
     keywords: [
-      "Headless WordPress services",
+      "website build services",
+      "WordPress site build",
       "Next.js site build",
-      "Astro development",
-      "WordPress redesign",
+      "custom web app",
+      "freelance mobile application",
       "Headless WordPress pricing",
-      "Next.js site cost",
+      "web app pricing",
     ],
   },
 };
 
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact — Devis WordPress Headless & Appel Découverte Gratuit",
+    title: "Contact — Devis site web ou application & Appel Découverte Gratuit",
     description:
-      "Identifiez la stack adaptée à votre projet en 4 étapes : WordPress monolithique optimisé, hybride Astro ou Next.js complet. " +
+      "Identifiez en quelques étapes la voie adaptée à votre projet : site WordPress classique, site Headless, web app ou application mobile. " +
       "Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
     keywords: [
-      "contact développeur WordPress Headless",
-      "devis site WordPress Headless",
+      "contact développeur freelance",
+      "devis site web",
+      "devis application web",
       "demande de projet web",
       "rendez-vous visio freelance",
-      "diagnostic stack WordPress",
+      "diagnostic projet web",
       "audit site gratuit",
       "appel découverte",
-      "tarif site Next.js",
     ],
   },
   en: {
-    title: "Contact — Headless WordPress quote & free discovery call",
+    title: "Contact — Website or app quote & free discovery call",
     description:
-      "Identify the right stack for your project in 4 steps: optimized monolithic WordPress, hybrid Astro or full Next.js. " +
+      "Identify in a few steps the right path for your project: classic WordPress site, Headless site, web app or mobile app. " +
       "Free AI audit, 15-min video call and personalized quote within 48 hours.",
     keywords: [
-      "contact Headless WordPress developer",
-      "Headless WordPress quote",
+      "contact freelance developer",
+      "website quote",
+      "web app quote",
       "web project request",
       "freelance video call",
-      "WordPress stack diagnostic",
+      "project diagnostic",
       "free site audit",
       "discovery call",
-      "Next.js project pricing",
     ],
   },
 };
 
 const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Études de cas WordPress Headless — Réalisations",
+    title: "Études de cas — Sites web, web apps et applications mobiles",
     description:
-      "Découvrez les projets réalisés : sites corporate, institutionnels, plateformes headless. " +
+      "Découvrez les projets réalisés : sites WordPress, sites Headless, web apps sur-mesure (marketplace, plateforme métier) et applications mobiles (PWA). " +
       "Résultats concrets en performance, design et conversion.",
     keywords: [
-      "portfolio WordPress Headless",
+      "portfolio site web",
       "réalisations Next.js",
+      "web app marketplace",
+      "application mobile PWA",
       "études de cas",
     ],
   },
   en: {
-    title: "Headless WordPress case studies — Selected work",
+    title: "Case studies — Websites, web apps and mobile applications",
     description:
-      "Selected projects: corporate, institutional and headless platforms. " +
+      "Selected projects: WordPress sites, Headless sites, custom web apps (marketplace, business platforms) and mobile applications (PWA). " +
       "Concrete results in performance, design and conversion.",
     keywords: [
-      "Headless WordPress portfolio",
+      "website portfolio",
       "Next.js work",
+      "marketplace web app",
+      "mobile PWA application",
       "case studies",
     ],
   },
@@ -319,24 +334,26 @@ const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const DOCUMENTATION_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Ressources WordPress Headless & Next.js",
+    title: "Ressources — Sites web, applications & WordPress Headless",
     description:
-      "Guides techniques, tutoriels et bonnes pratiques WordPress Headless, " +
-      "Next.js et Astro. Ressources pour développeurs et chefs de projet.",
+      "Guides techniques, tutoriels et bonnes pratiques : WordPress Headless, " +
+      "Next.js, applications web et mobiles. Ressources pour développeurs et chefs de projet.",
     keywords: [
       "documentation WordPress Headless",
       "tutoriels Next.js",
+      "guides applications web",
       "guides techniques",
     ],
   },
   en: {
-    title: "Headless WordPress & Next.js resources",
+    title: "Resources — Websites, applications & Headless WordPress",
     description:
-      "Technical guides, tutorials and best practices for Headless WordPress, " +
-      "Next.js and Astro. Resources for developers and project leads.",
+      "Technical guides, tutorials and best practices: Headless WordPress, " +
+      "Next.js, web and mobile applications. Resources for developers and project leads.",
     keywords: [
       "Headless WordPress documentation",
       "Next.js tutorials",
+      "web application guides",
       "technical guides",
     ],
   },

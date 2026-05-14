@@ -69,16 +69,6 @@ export default function Hero() {
                 priority
                 fetchPriority="high"
               />
-              <BrandLogo
-                src="/img/logo-astro-blanc.webp"
-                srcLight="/img/logo-astro.webp"
-                alt={t("astroLogoAlt")}
-                width={90}
-                height={80}
-                className="mt-1.5"
-                priority
-                fetchPriority="high"
-              />
             </div>
             <AnimatePresence mode="wait">
               <motion.div
