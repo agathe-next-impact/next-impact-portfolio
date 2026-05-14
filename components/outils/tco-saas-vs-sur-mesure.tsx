@@ -237,7 +237,7 @@ export default function TcoSaasVsSurMesure() {
                 <p className="text-3xl md:text-4xl font-googletitre font-medium text-coral">
                   {formatEuro(calc.saasTrueCost, locale)}
                 </p>
-                <div className="mt-3 space-y-1 text-xs text-white/60 font-googletexte">
+                <div className="mt-3 space-y-1 text-xs text-white font-googletexte">
                   <p>{isEn ? "Licenses" : "Licences"} : {formatEuro(calc.saasTotal, locale)}</p>
                   <p>{isEn ? "Workarounds" : "Contournements"} : {formatEuro(calc.workaroundTotal, locale)}</p>
                 </div>
@@ -249,7 +249,7 @@ export default function TcoSaasVsSurMesure() {
                 <p className="text-3xl md:text-4xl font-googletitre font-medium text-lightyellow">
                   {formatEuro(calc.customTotal, locale)}
                 </p>
-                <div className="mt-3 space-y-1 text-xs text-white/60 font-googletexte">
+                <div className="mt-3 space-y-1 text-xs text-white font-googletexte">
                   <p>{isEn ? "Initial" : "Initial"} : {formatEuro(customInitial, locale)}</p>
                   <p>{isEn ? "Maintenance" : "Maintenance"} : {formatEuro(customMaintenance * years, locale)}</p>
                 </div>

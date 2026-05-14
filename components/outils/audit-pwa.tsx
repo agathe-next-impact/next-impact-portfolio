@@ -12,7 +12,6 @@ import {
   Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -54,7 +53,6 @@ const INITIAL: FormState = {
 export default function AuditPwa() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
-  const [url, setUrl] = useState("");
   const [state, setState] = useState<FormState>(INITIAL);
   const [submitted, setSubmitted] = useState(false);
 
@@ -281,19 +279,6 @@ export default function AuditPwa() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-sm text-white/70 font-googletexte">
-              {isEn ? "Site URL (optional)" : "URL du site (optionnel)"}
-            </label>
-            <Input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://"
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-coral focus:outline-none"
-            />
-          </div>
-
           <div className="grid gap-4 md:grid-cols-2">
             <Field
               label={isEn ? "Is HTTPS enabled?" : "HTTPS activé ?"}
@@ -528,7 +513,7 @@ function Field({
               onClick={() => onChange(opt.value)}
               className={`rounded-full border px-4 py-2 text-sm font-googletexte transition ${
                 selected
-                  ? "border-coral bg-coral/15 text-white"
+                  ? "border-coral bg-coral text-darkblue font-semibold"
                   : "border-white/10 bg-white/5 text-white/70 hover:border-white/30"
               }`}
             >

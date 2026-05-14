@@ -233,7 +233,7 @@ export default function EstimateurBudget() {
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
               >
                 {(Object.keys(roleLabels) as Roles[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue">
+                  <option key={key} value={key} className="bg-darkblue text-white">
                     {isEn ? roleLabels[key].en : roleLabels[key].fr}
                   </option>
                 ))}
@@ -250,7 +250,7 @@ export default function EstimateurBudget() {
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
               >
                 {(Object.keys(entitiesLabels) as Entities[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue">
+                  <option key={key} value={key} className="bg-darkblue text-white">
                     {isEn ? entitiesLabels[key].en : entitiesLabels[key].fr}
                   </option>
                 ))}
@@ -267,7 +267,7 @@ export default function EstimateurBudget() {
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
               >
                 {(Object.keys(integrationsLabels) as Integrations[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue">
+                  <option key={key} value={key} className="bg-darkblue text-white">
                     {isEn ? integrationsLabels[key].en : integrationsLabels[key].fr}
                   </option>
                 ))}
@@ -284,7 +284,7 @@ export default function EstimateurBudget() {
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
               >
                 {(Object.keys(designLabels) as Design[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue">
+                  <option key={key} value={key} className="bg-darkblue text-white">
                     {isEn ? designLabels[key].en : designLabels[key].fr}
                   </option>
                 ))}
