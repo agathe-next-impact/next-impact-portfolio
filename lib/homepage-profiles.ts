@@ -135,7 +135,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ctaDescription:
       "Répondez à quelques questions pour identifier la voie adaptée à votre projet — site WordPress, site Headless, web app ou application mobile.",
     ctaLabel: "Lancer le diagnostic",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "Est-ce que je pourrai toujours modifier mes textes ?",
@@ -184,7 +184,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ctaDescription:
       "En 2 minutes, identifiez le bon niveau de modernisation pour votre projet et estimez les gains de performance attendus.",
     ctaLabel: "Choisir ma stack",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "Quel est le retour sur investissement concret ?",
@@ -233,7 +233,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ctaDescription:
       "Répondez à quelques questions simples pour identifier la formule qui correspond le mieux à votre projet.",
     ctaLabel: "Choisir ma stack",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "Vais-je devoir apprendre un nouvel outil ?",

@@ -1,0 +1,179 @@
+---
+title: "Anatomy of a custom web app"
+description: "Breaking down a web app: front, database, autonomous admin, hosting. Understand what's under the hood of a Next.js + PostgreSQL platform — without becoming a developer."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 4
+---
+
+## Why understand the anatomy of a web app
+
+You don't need to know how to code to drive an applicative project. But you gain **enormous decision-making autonomy** if you understand the major puzzle pieces:
+
+- What costs a lot and why
+- Which decisions have long-term impact
+- Which technical arguments hold water, and which are marketing
+
+This article breaks down a modern web app (the kind I deliver) into four layers, without unnecessary jargon.
+
+## The big picture
+
+<FlowDiagram
+  nodes={[
+    { label: "Front (Next.js)", description: "What your users see: pages, forms, interactions", icon: "🖥️" },
+    { label: "API / Business logic", description: "Your activity rules: calculations, validations, workflows", icon: "⚙️" },
+    { label: "Database (PostgreSQL)", description: "Structured storage of your business data", icon: "🗄️" },
+    { label: "Autonomous admin", description: "Your driver's seat: manage content, data, users", icon: "🎛️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+Four layers, complementary roles. Let's take them one by one.
+
+## Layer 1 — The front (Next.js)
+
+### What it is
+
+It's **everything your users see**: the homepage, input forms, lists, detail sheets, dashboard screens. It's the visible part of the iceberg.
+
+### Technology
+
+Next.js, the reference framework for modern web applications, based on React (the most widely used frontend library in the world). Concretely:
+
+- **Server-side rendering (SSR)** for personalized pages
+- **Pre-generation (SSG)** for fast public pages
+- **Incremental regeneration (ISR)** for content that changes occasionally
+- **Strict TypeScript** to avoid a whole class of bugs
+- **Tailwind CSS** for consistent, maintainable styles
+
+### What matters for you
+
+- **Perceived performance**: with Next.js done right, pages load in under 500ms even under traffic
+- **Mastered SEO**: unlike pure SPAs (React alone, Vue, Angular), content is served server-side and indexable
+- **Scalability**: adding a new page or screen is fast and inexpensive
+
+> Important: Next.js is used by Notion, TikTok, Twitch, Hulu, Airbnb (among others). You benefit from a massive ecosystem and guaranteed longevity.
+
+## Layer 2 — Business logic (API + server)
+
+### What it is
+
+It's **your business translated into code**: rules, calculations, validations, workflows. When a user clicks "Submit" on a form, it's not the browser that decides what to do — it's the server-side business logic.
+
+Concrete examples:
+
+- "A supplier can only publish their listing if their VAT number is valid"
+- "When a project transitions to Validated status, send an email to the client and lock editing"
+- "A buyer can view a supplier listing, but can't see contact details if they're not registered"
+- "Quote calculation depends on 12 parameters entered by the user and rates defined by the admin"
+
+### Technology
+
+In a Next.js web app, business logic lives in **API Routes** (or Route Handlers). It's TypeScript on the server side, which:
+
+- Receives requests from the front
+- Verifies authentication and permissions
+- Applies business rules
+- Reads/writes to the database
+- Returns the response
+
+### What matters for you
+
+- **Business logic is the main asset** of your application: it materializes your know-how, your differentiation, your intellectual property
+- It must be **well documented** (comments + tests) to be maintainable
+- It must be **isolated**: a display bug should never corrupt your business data
+
+## Layer 3 — The database (PostgreSQL)
+
+### What it is
+
+**Your activity's vault.** Everything that must survive the closing of a user's browser lives here: accounts, transactions, content, settings, history.
+
+### Technology
+
+PostgreSQL, open-source relational database, considered the most reliable and complete in the market. In serverless version (Neon, Supabase, Vercel Postgres, etc.):
+
+- No server to manage
+- Automatic backups
+- Automatic scaling under traffic
+- Pay-as-you-go pricing
+
+### What matters for you
+
+- **Your data is structured**: each entity (user, product, transaction…) has a defined schema
+- **Your data is secure**: backups, encryption at rest, controlled access
+- **Your data is exportable**: at any time, you can fetch a full export (CSV, SQL). You're not locked into a proprietary format
+- **Your data is GDPR-compliant**: hosted in Europe, access/erasure rights are native operations
+
+> WordPress also uses a database (MySQL). The difference: in WordPress, all your business is stored in key-value form in a single table. In well-designed PostgreSQL, each entity has its own table with a typed schema.
+
+## Layer 4 — The autonomous admin
+
+### What it is
+
+**Your dashboard to drive the application day to day**, without touching code. It's the equivalent of the WordPress admin, but built specifically for your project's business logic.
+
+Concretely, the admin lets you:
+
+- Manage editorial content (classic CMS)
+- Manage users (create, suspend, change role)
+- Manage business data (create / modify / archive the main entities)
+- Moderate (validate registrations, handle reports, approve content)
+- Check indicators (how many signups this week, which content performs best, etc.)
+- Configure (adjust settings without developer involvement)
+
+### Technology
+
+The admin is generally developed **in the same application** as the public front (same Next.js, same database) — with a permission system that restricts its access to admin accounts.
+
+### What matters for you
+
+- **Full autonomy** on day-to-day operations — no need to call me to change a label or ban a user
+- **Custom-built**: the admin contains exactly the functions you need, no more, no less. No plugin jungle, no useless menus
+- **Evolutive**: we add functions as needs arise. It's clean code, not plugin tinkering
+- **No dependency**: if tomorrow you want to change vendor, the admin remains readable, editable and documented
+
+## Cross-cutting layer — Hosting
+
+### Vercel
+
+Hosting of the Next.js web apps I deliver is done on Vercel (Next.js's editor). Advantages:
+
+- Automatic deployment on every code update (CI/CD)
+- Preview of every modification before production
+- Instant rollback if a deployment causes issues
+- Worldwide distribution (CDN) for optimal performance
+- Pay-as-you-go pricing
+
+### Typical hosting cost
+
+- A web app with 1,000 - 5,000 users: €20 - €60/month (Vercel + serverless PostgreSQL)
+- A web app with 10,000 - 50,000 users: €60 - €200/month
+- Beyond that: on quote, case by case
+
+Compare to "high-performance" shared WordPress hosting (€10-30/month) or VPS (€40-100/month) plus plugin licenses (€300-1,000/year).
+
+## The simplified diagram to remember
+
+| Layer | Role | Technology | What you manage |
+|---|---|---|---|
+| Front | What the user sees | Next.js + Tailwind | Nothing directly (unless admin-editable) |
+| Business logic | What the application does | Server-side TypeScript | Nothing (modified by the developer) |
+| Database | Data storage | PostgreSQL | Via the admin |
+| Autonomous admin | Day-to-day driver | Custom-built | **Everything** |
+
+## The central argument — isolation
+
+The big advantage of this architecture vs WordPress: **each layer is isolated**. A front update doesn't break the database. A display bug doesn't alter data. A security flaw in a module is contained. The application is **maintainable for the long run**.
+
+It's the exact opposite of the WordPress syndrome, where each plugin update may break another plugin, and where a flaw in a plugin endangers the entire installation.
+
+## Going further
+
+- [Website or web app: how to choose?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir)
+- [The autonomous admin: like WordPress, but for your business](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure)
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+
+To discuss a specific project: [project diagnostic](/contact) or [discovery call](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

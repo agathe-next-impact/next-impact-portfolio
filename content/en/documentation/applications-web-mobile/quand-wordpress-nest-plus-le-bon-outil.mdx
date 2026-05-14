@@ -1,0 +1,157 @@
+---
+title: "When WordPress is no longer the right tool"
+description: "The 4 concrete limits of WordPress facing an applicative project — illustrated by real cases. And why forcing the CMS past these limits costs more than a custom build."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 3
+---
+
+## The honest preamble
+
+WordPress powers more than 40% of the web. It is, for a simple reason, **an exceptional tool** for managing editorial content: 20 years of maturity, a massive plugin ecosystem, a huge community, very low entry cost. For a brochure site, an editorial blog, a media outlet, even a small e-commerce, the debate doesn't even start — WordPress is often the right answer.
+
+But WordPress was not designed to carry **complex applicative logic**. By adding plugins, hacking, stacking premium extensions to do what a modern framework does natively, you end up with a system that's:
+
+- Fragile (the slightest update breaks something)
+- Slow (each plugin adds latency)
+- Expensive to maintain (premium licenses stacking up)
+- Hard to evolve (technical debt brakes every new feature)
+
+This article identifies the 4 limits beyond which WordPress becomes a burden, and for each proposes a tipping point toward a custom web app.
+
+## Limit 1 — Complex business logic
+
+### The symptom
+
+You want a 4-step validation workflow with roles, email notifications at each transition, statuses visible in a dashboard. You look at available WordPress plugins. You find:
+
+- A free plugin that does 60% of what you want, but poorly
+- A premium plugin at €200/year that does 90%, but with a dated UI and odd limitations
+- A combo of 3 plugins that does 100% but must be configured with surgical precision
+
+End of the day, you pay €600/year in licenses, you have a broken UI, and any tweak costs hours of manual configuration.
+
+### The diagnosis
+
+WordPress is an **editorial CMS**: designed to publish articles, pages, media. Business logic (workflows, calculations, multi-step validations) is grafted onto it after the fact. Conversely, in a custom web app:
+
+- The workflow is coded directly into the business logic
+- Notifications, statuses and permissions are part of the model
+- The UI is designed for the workflow, not for working around a CMS
+
+### Tipping point
+
+If you identify **more than 3 premium plugins** essential to carry your business logic, you're already paying the annual equivalent of an applicative scoping over 5 years — without the robustness.
+
+## Limit 2 — The business data model
+
+### The symptom
+
+You want to store structured entities: products with 30 fields, contracts with parties and amendments, projects with phases and deliverables, applications with attachments and statuses. You look at Custom Post Types and ACF Pro.
+
+ACF Pro works miracles for modeling structured data in WordPress. It's really good — for an enriched editorial site. But as soon as:
+
+- You need **complex relations** (a project has multiple phases, each phase has multiple deliverables, each deliverable has a supplier, etc.)
+- You want to **query** these relations (show me all projects with at least one phase running late)
+- You need **integrity** (it should be impossible to delete a client who has active contracts)
+
+…ACF shows its limits. WordPress stores everything in a `wp_postmeta` table in key-value form. Complex joins are slow, queries become fragile, referential integrity is non-existent.
+
+### The diagnosis
+
+WordPress doesn't have a **business data schema**. It's a CMS, not a database. A custom web app uses PostgreSQL (or equivalent) with:
+
+- A typed schema for each business entity
+- Explicit relations between entities (foreign keys)
+- Indexes on frequently queried columns
+- Referential integrity guaranteed by the database itself
+
+> On a recent project, the query "list suppliers with at least one active listing in region X with certification Y" took 4 seconds on WordPress + ACF. Rewritten on PostgreSQL with proper indexes: 18 milliseconds.
+
+### Tipping point
+
+If your business data model has more than 6-7 entities with relations between them, and you want to query non-trivially across them, WordPress will cost you more (in performance, in bugs, in frustration) than a custom build.
+
+## Limit 3 — Advanced user accounts
+
+### The symptom
+
+You want:
+
+- Multiple roles with fine-grained permissions (a client sees their own projects, a salesperson sees those of their clients, an admin sees everything)
+- A personalized onboarding by profile
+- User data that drives the interface (the logged-in user sees their dashboard with THEIR data)
+- An SSO integration (Google Workspace, Azure AD, or other)
+
+WordPress has a concept of **roles** (admin, editor, contributor, subscriber). It's rigid, designed for editorial logic. Plugins like Members or User Role Editor let you go further, but you quickly fall into permission-by-permission tinkering.
+
+### The diagnosis
+
+In a web app, **user and permission management** is a fundamental pillar, not an optional feature to enable. It's designed from the start for the project:
+
+- Role model specific to the business
+- Permissions at the entity level, not just the action level
+- Flexible authentication (email/password, magic link, SSO, OAuth)
+- Session management, refresh tokens, security by design
+
+### Tipping point
+
+If you have more than 3 distinct roles AND need permissions at the data level (not just actions), WordPress becomes a headache. A web app does it natively.
+
+## Limit 4 — Applicative performance
+
+### The symptom
+
+Your WordPress site runs fine when serving content. But as soon as you add:
+
+- A dashboard that loads 200 entries at once
+- A search engine with dynamic filters
+- A view that joins multiple entities
+
+…everything slows down. You add a cache (W3 Total Cache, WP Rocket), it helps public pages, but not logged-in pages which are by nature non-cacheable. You hack MySQL indexes, optimize ACF queries, and you remain with a 2-4 second response time while the modern standard expects 200ms.
+
+### The diagnosis
+
+WordPress is a **page rendering engine**. On every request, it loads the PHP framework, runs hooks, queries the database, applies filters, generates the page. It's heavy. For cacheable content, it works. For applicative (personalized per user pages, complex real-time queries), it quickly hits a ceiling.
+
+A modern web app (Next.js + serverless PostgreSQL):
+
+- Serves pre-generated pages when possible (SSG, ISR)
+- Serves personalized pages via SSR with < 200ms latency
+- Uses a database designed for complex queries
+- Avoids all the PHP/WordPress framework weight on applicative pages
+
+### Tipping point
+
+If your applicative pages (logged-in, personalized, joined) take more than 1 second to load despite caching, you've hit WordPress's technical ceiling for that usage.
+
+## The simplified decision rule
+
+Do you mainly do **content editing**? → WordPress (classic or Headless).
+
+Do you mainly do **business data manipulation** (create, modify, query, join)? → Custom web app.
+
+Both? → Headless WordPress + Next.js site, with a custom applicative zone for the business part. This is exactly the profile of the [Comme des Fous Jeux](/etudes-de-cas/comme-des-fous-jeux) case study: a Headless media outlet with an applicative extension for interactive games.
+
+## Forcing WordPress past these limits: the real bill
+
+I'm often told: "But you can do everything with WordPress." Technically true. Economically false.
+
+Forcing WordPress to carry complex applicative logic typically costs:
+
+- **Premium licenses**: €600 to €2,000/year of essential plugins
+- **Increased maintenance**: each WordPress update breaks one plugin in two
+- **Degraded performance**: ongoing optimizations to stay below 3 seconds
+- **Security**: more attack surface via plugins
+- **Technical debt**: the older the project, the harder a simple feature becomes to add
+
+Over 3 years, the extra cost of a "forced" WordPress vs a custom web app typically sits **between 60% and 200%** — for a worse technical outcome.
+
+## Going further
+
+- [Website or web app: how to choose?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir) — The 5-question test
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app) — How it's built
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) — Ranges by typology
+
+Still hesitating? [Run the project diagnostic](/contact) — reply within 24h, no strings attached.

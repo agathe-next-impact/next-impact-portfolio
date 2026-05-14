@@ -1,0 +1,108 @@
+---
+title: "Website or web app: how to choose?"
+description: "The 5 signals that indicate a project moves out of the website scope into applicative territory. A simple test, concrete examples, a recommendation at the end."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 2
+---
+
+## The problem: we can't draw the line anymore
+
+Ten years ago, the question hardly came up. Either you wanted a website, or you wanted software. Today, the web has gained so much functional depth that the line between "site" and "software" has become blurry. A site can have a member area. Software can run in a browser. A blog can embed a simulator. A newsletter can generate personalized PDF on the fly.
+
+Hence the constant ambiguity: **is my project a site or a web app?** And behind this question, budget gaps of 1 to 10.
+
+This article gives a simple 5-question test to decide, illustrated with real cases.
+
+## The 5-question test
+
+For each question, answer yes or no. Count the "yes" answers at the end.
+
+### 1. Will your users have a personal account?
+
+Not a contact form, not a newsletter — a **real account** with:
+
+- A username and password (or SSO)
+- A personal space they access after login
+- Data that belongs to them and that they find on every visit
+
+> A WordPress site can technically add accounts via a plugin. But as soon as accounts become a central element (10% of user time spent logged in), you're in web app territory.
+
+### 2. Will your users enter and store business data?
+
+Not filling out a contact form whose result is sent by email. Entering **structured** and **persistent** data:
+
+- Creating product entries, contact entries, appointments
+- Completing a record, tracking the progress of a request
+- Filling out a questionnaire whose answers are kept and processed
+
+If your users will produce structured content that your system has to process, you need a business database — it's a web app.
+
+### 3. Is there business logic specific to your activity?
+
+Logic that exists nowhere else: a validation workflow, a specific quote calculation, a matching algorithm, a scoring system, an approval path, a recommendation engine.
+
+> If you can describe your business logic by saying "like [some well-known software/site]", you're probably still on a site with some custom. If you have to explain in detail because nobody does it the same way, you're on a web app.
+
+### 4. Will multiple users interact with each other through the platform?
+
+Exchange messages, see others' actions in real time, collaborate on a document, take part in a shared game, apply to a job offer, respond to a public request.
+
+This interaction implies: data shared between users, notifications, fine-grained permissions (who can see what, who can do what), sometimes real-time.
+
+### 5. Does the interface need to transform significantly depending on the user?
+
+Not just "show the first name" and "personalize the dashboard". A real transformation:
+
+- The menu, available options, accessible features differ by role
+- An admin sees X, a client sees Y, a subcontractor sees Z
+- The central content (the "displayed data") is driven by what the user has entered/done
+
+If the experience of a logged-in user is radically different from a public visitor, you're on a web app.
+
+## The decision rule
+
+- **0 to 1 yes** → you're on a site. WordPress (classic or Headless + Next.js) is plenty. Budget: €2,250 to €8,000, delivery 3-8 weeks.
+- **2 yes** → gray zone. Probably a Headless site with a bit of applicative logic (advanced form, simulator, light member area). Budget: €5,000 to €15,000, delivery 6-10 weeks.
+- **3 yes or more** → **web app**. WordPress is no longer the right tool. Stack Next.js + PostgreSQL + custom admin. Budget: €15,000 to €80,000+, delivery 2 to 6 months depending on complexity.
+
+## Concrete examples
+
+### Case 1 — Site, no hesitation
+
+A law firm wants a new site that presents the team, specialties, news and a contact form for appointments. **0 out of 5 yes.** Optimized classic WordPress is enough, budget €2,250 (Classic tier).
+
+### Case 2 — Headless site
+
+An independent media outlet publishes 15 articles per month, wants maximum SEO score, a well-structured editorial blog, themed dossiers. No reader accounts, just a newsletter. **0 out of 5 yes but maximum performance need.** Headless WordPress + Next.js, budget €4,000 (Headless tier).
+
+### Case 3 — Gray zone
+
+A consultant wants a site that presents his offers AND an eligibility simulator for a tax scheme that takes 12 parameters and generates a personalized PDF. **2 out of 5 yes** (specific business logic, but no accounts or user interaction). Headless site + Next.js with an applicative module, budget €6,000 to €9,000.
+
+### Case 4 — Pure web app (Panorama Pub)
+
+An editor wants to launch a B2B directory of promotional product suppliers. Suppliers create accounts, manage their listings. Buyers search, compare, contact. The admin drives everything. **4 out of 5 yes.** Custom web app, Next.js + PostgreSQL, autonomous admin. Delivery 2 months.
+
+### Case 5 — Custom mobile app (Hermitage)
+
+A woodland estate wants a mobile treasure hunt for visitors: geolocation, contextual riddles, scores. No accounts (progress is local), but exclusively mobile and offline usage. **2-3 out of 5 yes** + strong mobile need. PWA Next.js, local persistence, native geolocation.
+
+## A question nobody asks
+
+**What if I still hesitate after the test?**
+
+Three principles to decide in the gray zone:
+
+1. **Start small.** A web app can almost always start with an MVP that looks like a site with some custom. If the project takes off, evolve. If not, you haven't spent €50k.
+2. **Avoid defensive over-architecture.** "In case we need…" is the main source of budget waste on web projects.
+3. **Think data model.** If you can describe your business data model in less than 5 minutes (entities, relations, rules), a web app makes sense. If you struggle, it's probably because you're on a site with a light functional layer.
+
+## Going further
+
+- [What is a web app?](/documentation/applications-web-mobile/quest-ce-quune-web-app) — The 5 families defined clearly
+- [When WordPress is no longer the right tool](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) — The concrete CMS limits
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) — Ranges by typology
+
+For a personalized project diagnostic: [run the form](/contact) or [book a call](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

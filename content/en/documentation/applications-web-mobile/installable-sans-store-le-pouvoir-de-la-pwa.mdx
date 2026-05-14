@@ -1,0 +1,160 @@
+---
+title: "Installable without store: the power of a PWA"
+description: "Geolocation, offline, home screen, notifications — what changes vs a responsive mobile site. The 2026 PWA maturity check."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 11
+---
+
+## Why this article now
+
+PWAs have had a roller-coaster trajectory. Launched by Google in 2015, long held back on iOS, they became in 2023-2024 a credible option for nearly all consumer mobile projects. In 2026, PWA capabilities on iOS and Android are **sufficient to replace a native app** in 90% of cases — for 3 to 10 times less.
+
+This article tours the actual capabilities, residual limits and use cases where the PWA is the right answer.
+
+## What a PWA is, concretely
+
+A PWA is **three technical ingredients** added to a classic website:
+
+1. **A manifest** (JSON file) that describes the application: name, icon, splash screen color, installation behavior
+2. **A service worker**: a script that runs in the background, manages cache, offline, notifications
+3. **Mandatory HTTPS**: the PWA only installs on a site served over HTTPS
+
+When a visitor lands on your PWA site from their phone, the browser offers: "Add to home screen". A tap, and the app installs: icon on screen, full-screen launch, native-app-like behavior.
+
+## PWA capabilities in 2026
+
+### Install and app experience
+
+- **Icon on home screen** ✓
+- **Full-screen launch** (no address bar) ✓
+- **Splash screen** at startup ✓
+- **Standalone behavior** indistinguishable from a native app for the end user ✓
+
+### Connectivity
+
+- **Full offline mode** via service worker (asset caching, data, reconnection management) ✓
+- **Background sync** when connection returns ✓
+- **Offline-first cache** for apps that must work in degraded situations ✓
+
+### Sensors
+
+- **Geolocation** (position, configurable accuracy) ✓
+- **Accelerometer, gyroscope, orientation** ✓
+- **Camera** (photo capture, QR code scan, file selection) ✓
+- **Microphone** (audio recording) ✓
+- **Biometric sensors**: limited (Touch/Face ID via WebAuthn) — possible with constraints
+- **Advanced sensors** (heart rate, NFC, deep Bluetooth): limited or unavailable
+
+### Notifications
+
+- **Push notifications on Android**: fully supported for a long time ✓
+- **Push notifications on iOS**: supported since iOS 16.4 (March 2023). Small constraint: the user must install the PWA on the home screen to be entitled ✓
+- **Local notifications** (triggered by PWA code) ✓
+
+### Performance
+
+- **As fast as a native app** on 95% of uses
+- **Smooth animations** at 60 fps possible with careful design
+- **Limit**: 3D games, real-time video editing or augmented reality remain better served by native
+
+### Data persistence
+
+- **LocalStorage**: for small simple data
+- **IndexedDB**: for larger bases, high-performance queries
+- **Cache API**: for network resources
+- **Storage capacity**: several gigabytes depending on the browser
+
+## Uses where PWA shines
+
+### Field tool
+
+A field intervention team needs a mobile tool: report entry, photos, geolocation, working even in no-network areas. → **Perfect PWA**. No-store install (simpler centralized management), offline operation, sync on reconnection.
+
+### Treasure hunt, tourist trail, event
+
+The user arrives on-site, scans a QR code, installs the app in one tap. Geolocation, contextual content, local persistence to track progress. → **Ideal PWA** (see [Hermitage Jeu de piste](/etudes-de-cas/hermitage-jeu-de-piste)).
+
+### Booking app, appointment scheduling
+
+Classic website with client area + installable version for regular users (reminder notifications, home screen shortcut). → **Perfect PWA**, no significant extra cost vs the website.
+
+### Mobile-first marketplace
+
+A mostly-mobile marketplace site can be offered as an installable PWA. Frequent users install it, others use it as a website. **No native needed** as long as there's no mandatory in-app payment.
+
+### Internal tool for collaborators
+
+For 50, 500 or 5,000 internal collaborators, deploying a native app demands managing deployments via Apple Business Manager / Google Workspace. A PWA installs via a simple link — radically simplified management.
+
+## Residual limits to know
+
+### 1. Not in the stores
+
+For a consumer product that depends on store visibility, it's a real limit. For B2B, internal tools, usage captured by your direct marketing: it's irrelevant.
+
+### 2. No appearance in some iOS "natives"
+
+A PWA installed on iOS appears on the home screen, but not in the native app switcher (Home double-tap to switch between apps). It's a UX detail that goes unnoticed for most users.
+
+### 3. User confirmation for install
+
+Installing a PWA requires an explicit user action (add to home screen). It's less smooth than clicking "Install" in a store. Mitigation: onboarding that guides this step, especially on iOS where the gesture is less obvious.
+
+### 4. High graphic performance
+
+For uses pushing display to its limits (3D games, complex animations, real-time video), a PWA remains slightly behind native. For 95% of business uses, no perceived difference.
+
+### 5. Deep OS integrations
+
+Home screen widgets, Siri / Google Assistant integration, iOS App Clips, advanced sharing via Action Extensions: these are native features a PWA doesn't have (or doesn't yet).
+
+## User-side installation — UX to refine
+
+It's the **main UX challenge** of a PWA. On Android, the browser often proposes installation spontaneously; on iOS, you must guide the user ("Tap Share → Add to home screen").
+
+### Patterns that work
+
+- **Small visual tutorial** on first mobile visit: 3 images showing the 3 gestures
+- **Non-intrusive banner** in the footer: "Install this app on my phone"
+- **Platform detection**: show only on mobile, adapt message to iOS / Android
+
+### Patterns that fail
+
+- **Aggressive modal** on first visit ("INSTALL NOW!") → user closes and leaves
+- **Multiple reminders**: insisting kills conversion
+- **Technical text**: "PWA", "manifest", "service worker" mean nothing to the end user
+
+## The "half-PWA" trap
+
+Many sites claim PWA status because they have **just a manifest**. For a PWA to hold its promise, you need a well-designed service worker that:
+
+- Caches essential assets at first load
+- Manages offline mode with a clear strategy (network-first, cache-first, stale-while-revalidate by resource)
+- Synchronizes queued modifications when network returns
+- Updates cleanly when a new version is deployed
+
+Without that, the "PWA" delivers nothing more than a responsive mobile site.
+
+## Maturity check — is your project PWA-friendly?
+
+Give yourself a score out of 5 (one point per "yes"):
+
+1. Is the main usage on mobile?
+2. Do your users come back regularly (at least a few times per month)?
+3. Is geolocation or offline mode useful to your use?
+4. Are you ready to recruit your users through your direct marketing (not via the stores)?
+5. Can you do without mandatory in-app payment through the stores?
+
+- **4-5 points**: PWA is very likely the right answer. Major savings vs native.
+- **2-3 points**: PWA possible as MVP, to reassess after first user feedback.
+- **0-1 point**: reconsider the real need for a mobile app. A responsive mobile site may be enough.
+
+## Going further
+
+- [PWA vs native mobile app](/documentation/applications-web-mobile/pwa-vs-application-native)
+- [Case study — Hermitage Jeu de piste (PWA in practice)](/etudes-de-cas/hermitage-jeu-de-piste)
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app)
+
+You have a mobile project to scope? [Run the diagnostic](/contact) — I'll orient you honestly between PWA and native.

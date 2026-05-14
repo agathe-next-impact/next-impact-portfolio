@@ -20,8 +20,13 @@
       "Bash(curl:*)",
       "Read(//tmp/**)",
       "Bash(taskkill //F //IM node.exe //T)",
+      "Bash(node *)",
       "Bash(git commit -m ' *)",
-      "Bash(git rm *)"
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "Bash(grep *)",
+      "Bash(git stash *)",
+      "Bash(git rebase *)"
     ]
   }
 }

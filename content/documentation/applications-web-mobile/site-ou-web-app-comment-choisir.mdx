@@ -1,0 +1,108 @@
+---
+title: "Site web ou web app : comment choisir ?"
+description: "Les 5 signaux qui indiquent qu'un projet sort du périmètre site classique et bascule en applicatif. Un test simple, des exemples concrets, une recommandation à la fin."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 2
+---
+
+## Le problème : on ne sait plus tracer la frontière
+
+Il y a dix ans, la question ne se posait pas vraiment. Soit vous vouliez un site, soit vous vouliez un logiciel. Aujourd'hui, le web a tellement gagné en richesse fonctionnelle que la frontière entre "site" et "logiciel" est devenue floue. Un site peut avoir un espace membres. Un logiciel peut tourner dans un navigateur. Un blog peut intégrer un simulateur. Une newsletter peut générer du PDF personnalisé à la volée.
+
+D'où l'ambiguïté permanente : **est-ce que mon projet est un site ou une web app ?** Et derrière cette question, des écarts budgétaires de 1 à 10.
+
+Cet article donne un test simple en 5 questions pour trancher, illustré par des cas réels.
+
+## Le test des 5 questions
+
+Pour chacune, répondez par oui ou non. Vous comptez les "oui" à la fin.
+
+### 1. Vos utilisateurs auront-ils un compte personnel ?
+
+Pas un formulaire de contact, pas une newsletter — un **vrai compte** avec :
+
+- Un identifiant et un mot de passe (ou un SSO)
+- Un espace personnel auquel ils accèdent après connexion
+- Des données qui leur appartiennent et qu'ils retrouvent à chaque visite
+
+> Un site WordPress peut techniquement faire des comptes avec un plugin. Mais dès que les comptes deviennent un élément central (10 % du temps utilisateur passé connecté), vous êtes en territoire web app.
+
+### 2. Vos utilisateurs vont-ils saisir et stocker de la donnée métier ?
+
+Pas remplir un formulaire de contact dont le résultat part en email. Saisir des données **structurées** et **persistantes** :
+
+- Créer des fiches produits, des fiches contacts, des rendez-vous
+- Compléter un dossier, suivre l'avancement d'une demande
+- Renseigner un questionnaire dont les réponses sont conservées et exploitées
+
+Si vos utilisateurs vont produire du contenu structuré que votre système doit traiter, vous avez besoin d'une base de données métier — c'est une web app.
+
+### 3. Y a-t-il une logique métier propre à votre activité ?
+
+Une logique qui n'existe nulle part ailleurs : un workflow de validation, un calcul de devis spécifique, un algorithme de matching, un système de scoring, un parcours d'approbation, un moteur de recommandation.
+
+> Si vous pouvez décrire votre logique métier en disant "comme [tel logiciel/site connu]", vous êtes probablement encore sur du site avec un peu de custom. Si vous devez expliquer en détail parce que personne ne fait pareil, vous êtes sur une web app.
+
+### 4. Plusieurs utilisateurs vont-ils interagir entre eux via la plateforme ?
+
+Échanger des messages, voir les actions des autres en temps réel, collaborer sur un document, participer à un jeu commun, candidater à une offre, répondre à une demande publique.
+
+Cette interaction implique : une donnée partagée entre utilisateurs, des notifications, des permissions fines (qui peut voir quoi, qui peut faire quoi), parfois du temps réel.
+
+### 5. L'interface doit-elle se transformer fortement selon l'utilisateur ?
+
+Pas juste "afficher le prénom" et "personnaliser le dashboard". Une vraie transformation :
+
+- Le menu, les options disponibles, les fonctionnalités accessibles diffèrent selon le rôle
+- Un admin voit X, un client voit Y, un sous-traitant voit Z
+- Le contenu central (la "donnée affichée") est piloté par ce que l'utilisateur a saisi/fait
+
+Si l'expérience d'un utilisateur connecté est radicalement différente de celle d'un visiteur public, vous êtes sur une web app.
+
+## La règle de décision
+
+- **0 à 1 oui** → vous êtes sur un site. WordPress (classique ou Headless + Next.js) suffit largement. Budget : 2 250 à 8 000 €, livraison 3-8 semaines.
+- **2 oui** → zone grise. Probablement un site Headless avec un peu de logique applicative (formulaire avancé, simulateur, espace membres léger). Budget : 5 000 à 15 000 €, livraison 6-10 semaines.
+- **3 oui et plus** → **web app**. WordPress n'est plus le bon outil. Stack Next.js + PostgreSQL + admin sur-mesure. Budget : 15 000 à 80 000 €+, livraison 2 à 6 mois selon complexité.
+
+## Exemples concrets
+
+### Cas 1 — Site, sans hésitation
+
+Un cabinet d'avocats veut un nouveau site qui présente l'équipe, les spécialités, les actualités et un formulaire de contact pour prendre rendez-vous. **0 oui sur 5.** WordPress classique optimisé suffit, budget 2 250 € (forfait Classique).
+
+### Cas 2 — Site Headless
+
+Un média indépendant publie 15 articles par mois, veut un score SEO maximal, un blog éditorial bien structuré, des dossiers thématiques. Pas de comptes lecteurs, juste une newsletter. **0 oui sur 5 mais besoin de performance maximale.** WordPress Headless + Next.js, budget 4 000 € (forfait Headless).
+
+### Cas 3 — Zone grise
+
+Un consultant veut un site qui présente ses offres ET un simulateur de calcul d'éligibilité à un dispositif fiscal qui prend 12 paramètres et génère un PDF personnalisé. **2 oui sur 5** (logique métier propre, mais pas de comptes ni d'interaction utilisateur). Site Headless + Next.js avec un module applicatif, budget 6 000 à 9 000 €.
+
+### Cas 4 — Web app pure (Panorama Pub)
+
+Un éditeur veut lancer un annuaire B2B des fournisseurs d'objets publicitaires. Les fournisseurs créent des comptes, gèrent leurs fiches. Les acheteurs cherchent, comparent, contactent. L'admin pilote tout. **4 oui sur 5.** Web app sur-mesure, Next.js + PostgreSQL, admin autonome. Livraison 2 mois.
+
+### Cas 5 — App mobile sur-mesure (Hermitage)
+
+Un domaine forestier veut un jeu de piste mobile pour les visiteurs : géolocalisation, énigmes contextuelles, scores. Pas de comptes (la progression est locale), mais un usage exclusivement mobile et hors-ligne. **2-3 oui sur 5** + besoin mobile fort. PWA Next.js, persistance locale, géolocalisation native.
+
+## Une question que personne ne pose
+
+**Et si je doute encore après le test ?**
+
+Trois principes pour trancher en zone grise :
+
+1. **Commencez petit.** Une web app peut quasiment toujours commencer par un MVP (Minimum Viable Product) qui ressemble à un site avec un peu de custom. Si le projet décolle, on évolue. Si non, vous n'avez pas dépensé 50 k€.
+2. **Évitez la sur-architecture défensive.** "Au cas où on aurait besoin de…" est la principale source de gaspillage budgétaire sur les projets web.
+3. **Pensez modèle de données.** Si vous savez décrire votre modèle de données métier en moins de 5 minutes (entités, relations, règles), une web app a du sens. Si vous galérez, c'est probablement parce que vous êtes sur du site avec une couche fonctionnelle légère.
+
+## Pour aller plus loin
+
+- [Qu'est-ce qu'une web app ?](/documentation/applications-web-mobile/quest-ce-quune-web-app) — Les 5 familles définies clairement
+- [Quand WordPress n'est plus le bon outil](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) — Les limites concrètes du CMS
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) — Les fourchettes par typologie
+
+Pour un diagnostic projet personnalisé : [lancez le formulaire](/contact) ou [planifiez un appel](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

@@ -1,0 +1,185 @@
+---
+title: "User accounts and security in a web app"
+description: "Authentication (sessions, JWT), roles, GDPR, reduced attack surface — without technical overload. What a web app commissioner should understand."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 12
+---
+
+## Why this topic can't be fully delegated
+
+The security of a web app, and particularly user account management, is often seen as a "technical" topic fully delegated to the vendor. That's a mistake.
+
+As commissioner, you don't need to know how to code an authentication function, but you must understand the key concepts to:
+
+- **Validate** the architectural choices proposed
+- **Audit** what's delivered (and not be a technical hostage)
+- **Anticipate** GDPR and compliance implications
+- **React** correctly in case of incident
+
+This article tours the essentials without going into code.
+
+## Authentication — the 4 common models
+
+### 1. Email + password
+
+The classic model. The user enters their email and password. The server checks.
+
+**Advantages**: familiar, works everywhere, no third-party dependency.
+
+**Disadvantages**: passwords are one of the main vectors of data leaks. Must be rigorously implemented: password hashing (bcrypt, Argon2), no clear-text storage, complexity verification, rate limiting on login attempts.
+
+**To ask your vendor**: "How are passwords stored? Which hashing algorithm?" Expected answer: bcrypt or Argon2id, never "encrypted" (a password isn't encrypted, it's hashed).
+
+### 2. Magic link (link in email)
+
+The user enters their email. They receive a temporary link. They click, they're logged in. No password to manage.
+
+**Advantages**: no password to memorize, so no risk of weak or reused password. Simple UX.
+
+**Disadvantages**: requires impeccable email deliverability. Frustrating if the user doesn't have easy access to their inbox.
+
+**When to use**: occasionally-used applications (e.g., client dashboard), or with a less technical clientele.
+
+### 3. SSO (Single Sign-On) — Google, Microsoft, etc.
+
+The user clicks "Log in with Google". No password to manage, authentication is delegated to the giant.
+
+**Advantages**: minimal login friction, security delegated to a competent actor, attractive for pro accounts (Google Workspace, Microsoft 365).
+
+**Disadvantages**: third-party dependency, GDPR concerns depending on context (data transfer), not always relevant for individuals.
+
+**When to use**: B2B applications where the user already has a Google or Microsoft pro account.
+
+### 4. WebAuthn / passkey
+
+The user authenticates with a fingerprint, Face ID, or a physical key (YubiKey). No password.
+
+**Advantages**: the future of authentication. Very secure, very simple user-side.
+
+**Disadvantages**: still being adopted, complex to implement, requires support across multiple OS and browsers.
+
+**When to use**: premium projects, very sensitive applications, or as second-factor.
+
+## Sessions — how the user stays logged in
+
+Once authenticated, how does the server know it's still you on each click? Two models:
+
+### Server-stored sessions
+
+A session identifier is stored in a cookie. On each request, the server checks the identifier in its session store.
+
+**Advantages**: a session can be revoked instantly (useful for "Log out of all devices").
+
+**Disadvantages**: requires server-side session storage.
+
+### JWT tokens (JSON Web Tokens)
+
+A signed token is stored browser-side. It contains the user's identity and is valid for a defined duration.
+
+**Advantages**: no server-side session storage, so simpler to scale.
+
+**Disadvantages**: hard to revoke a token before expiration. To use sparingly and with short duration (15-60 min, with a server-side refresh token).
+
+> In the vast majority of web apps, the "server-side session" model remains the healthiest. JWTs are useful mostly for public APIs or distributed architectures. For a classic web app, asking for "session" is usually the right answer.
+
+## Roles and permissions
+
+### The classic RBAC (Role-Based Access Control)
+
+Each user has one or more roles (admin, moderator, client, contributor). Each action or screen requires a minimum role.
+
+**Good for**: most projects. Simple to understand, model, maintain.
+
+### The finer ABAC (Attribute-Based)
+
+Permissions aren't only role-based, but also depend on attributes of the data. Example: "A salesperson can edit clients of their territory, not those of another salesperson."
+
+**Good for**: complex applications with row-level permissions (multi-tenancy, hierarchical organization, granular sharing).
+
+### The critical point not to neglect
+
+**Permissions must be checked server-side**, not just front-side. Hiding a "Delete" button in the interface doesn't prevent a malicious user from directly calling the corresponding API. Every API must itself verify the caller is allowed to perform the action.
+
+It's a **frequent error** that absolutely must be checked on any delivered project.
+
+## Daily security — 7 measures to verify
+
+1. **HTTPS everywhere**: no non-HTTPS page on a site with accounts. Today, that's the absolute standard.
+2. **Hashed passwords** (bcrypt / Argon2id): never in clear text, never symmetrically "encrypted".
+3. **Rate limiting** on sensitive routes: no more than 5 login attempts per minute per IP, for example.
+4. **CSP (Content Security Policy)**: HTTP header that prevents execution of unauthorized scripts. Good defense against XSS.
+5. **No sensitive data in URLs**: a password reset token should not appear in browser history.
+6. **Access logs** to admin functions and sensitive data: if someone misbehaves, we must be able to trace it.
+7. **Regular dependency updates**: a Next.js project has dozens of dependencies. A weekly audit (with a tool like Dependabot or Snyk) catches known vulnerabilities.
+
+## The good questions to ask your vendor
+
+To validate the security approach without becoming a developer:
+
+1. "How are passwords stored?" → Expected answer: bcrypt or Argon2id.
+2. "How are sessions handled? How long do they last?" → Server sessions with reasonable expiration (typically 7-30 days with activity, 24h idle).
+3. "Is there rate limiting on sensitive routes?" → Yes for login, password reset, account creation.
+4. "Are all privileged actions verified server-side?" → Yes (and this is a non-negotiable audit point).
+5. "How is communication encrypted?" → HTTPS everywhere, valid certificates (Let's Encrypt is enough).
+6. "How are password leaks handled?" → Check against haveibeenpwned when choosing a password.
+7. "How are logs and alerts handled in case of suspicious activity?" → Centralized logs (Sentry, Vercel, etc.) + alerts on abnormal attempts.
+
+## GDPR — the essentials without the blah-blah
+
+A web app that handles user accounts collects personal data. Minimum compliance:
+
+### 1. Clear information
+
+- Accessible and understandable privacy policy
+- Information at the time of collection (signup form: "Your data is used for…")
+- Mention in transactional emails
+
+### 2. Explicit consent when necessary
+
+- No pre-checked boxes
+- Separate consent for newsletter / marketing emails
+- No mandatory global "I accept everything" consent
+
+### 3. Easy-to-exercise user rights
+
+- **Right of access**: the user can download their data from their personal area
+- **Right of rectification**: edit their information
+- **Right to erasure**: delete their account (with anonymization of remaining contents if needed)
+- **Right of portability**: structured export (JSON, CSV)
+
+### 4. Data minimization
+
+Only collect what's necessary. If you don't need the birth date, don't ask for it.
+
+### 5. Technical security
+
+- Hosting in Europe (or in a country with an adequacy agreement)
+- Encrypted backups
+- Restricted access to data (not everyone on the team should be able to consult user records)
+
+### 6. Subcontractors and registers
+
+- Keep a processing register (GDPR article 30)
+- Have signed a DPA (data processing agreement) with each subcontractor processing data for you (host, transactional email, analytics, etc.)
+
+## The reduced attack surface of a modern web app
+
+Compared to a classic WordPress exposed on the Internet, a modern Next.js web app has a **significantly reduced attack surface**:
+
+- No public WordPress admin (/wp-admin), which is the target of 90% of automated attacks
+- No third-party plugins (so no zero-day flaw in a plugin)
+- No exposed PHP
+- Typed TypeScript code that eliminates a whole class of bugs
+- Authentication implemented in the application code (you know what it does)
+
+Concretely: on a well-built project, **mass attacks don't work**. You remain exposed to targeted attacks (social, reverse engineering, etc.) but these are much rarer and require specific intent.
+
+## Going further
+
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app)
+- [When WordPress is no longer the right tool](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) (the security section)
+- [Headless WordPress security](/documentation/headless-cms/securite-wordpress-headless) (to compare with the Headless approach)
+
+You have a project with security or compliance stakes? [Run the diagnostic](/contact) — I establish explicit requirements scoping before any pricing.

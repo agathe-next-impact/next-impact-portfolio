@@ -1,0 +1,181 @@
+---
+title: "Combien coûte une web app sur-mesure ?"
+description: "Décomposition des coûts (cadrage, design, dev, infrastructure, maintenance), fourchettes par typologie, leviers de réduction (TIH/OETH), pièges à éviter."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 7
+---
+
+## Pourquoi la question fait peur — et mérite des chiffres
+
+Quand on évoque "web app sur-mesure", la première crainte est budgétaire. Et c'est légitime : les écarts annoncés par les prestataires vont de 8 k€ à 800 k€ pour des projets qui sonnent pareil. Cet article démystifie la composition d'un budget et donne des fourchettes réalistes par typologie.
+
+> **Important** — Ces fourchettes sont indicatives, basées sur des projets réels. Un cadrage précis nécessite un échange : selon votre périmètre exact, vous pouvez être en bas ou en haut de la fourchette, voire en dehors.
+
+## Les 5 postes de coût
+
+### 1. Cadrage (typiquement 5 à 15 % du budget total)
+
+Avant de coder, il faut **savoir quoi construire**. Le cadrage couvre :
+
+- Entretiens utilisateurs et besoins métier
+- Définition du périmètre fonctionnel (ce qu'on fait, ce qu'on ne fait pas)
+- Modélisation des données (les entités, leurs relations, leurs règles)
+- Définition des écrans clés (wireframes)
+- Estimation du planning et des jalons
+
+Sur un petit projet, le cadrage peut tenir en 2-3 jours (1 500 - 4 500 €). Sur un projet complexe, il peut courir sur 3-4 semaines (8 - 15 k€).
+
+> Un cadrage skip ou bâclé est l'erreur la plus coûteuse sur un projet web. Refaire un écran mal pensé coûte 3 à 5 fois plus que de bien le penser au départ.
+
+### 2. Design et UX (10 à 25 % du budget)
+
+Pas seulement de la "déco". Le design d'une web app couvre :
+
+- L'architecture d'information (comment l'utilisateur navigue)
+- Le design des écrans clés (avec rendus visuels finalisés)
+- Le design system (composants réutilisables, cohérence)
+- Le responsive (comportement mobile / tablette / desktop)
+- L'accessibilité (RGAA, contrastes, navigation clavier)
+
+Sur Panorama Pub, le design a représenté environ 15 % du budget. Sur des projets plus complexes (espace utilisateur riche, plusieurs rôles, dashboards), c'est facilement 25 %.
+
+### 3. Développement (50 à 70 % du budget)
+
+C'est le poste principal. Il couvre :
+
+- **Front** : développement de tous les écrans (Next.js, TypeScript, Tailwind)
+- **Back / API** : développement de la logique métier
+- **Base de données** : modélisation et implémentation du schéma
+- **Admin** : développement de l'interface de gestion
+- **Authentification** : comptes, sessions, rôles
+- **Intégrations** : connexions à des services tiers (Stripe, SendGrid, etc.)
+- **Tests** : unitaires, intégration, end-to-end
+- **CI/CD** : pipeline de déploiement automatique
+
+À TJM 450 € HT (forfait Équilibre), le développement d'une web app simple représente 15-25 jours (7 à 11 k€). Pour une marketplace ou un outil métier riche, on tombe sur 40-80 jours (18-36 k€).
+
+### 4. Infrastructure et hébergement (5 à 10 % du budget initial, puis récurrent)
+
+- Mise en place de l'hébergement Vercel
+- Configuration de la base PostgreSQL serverless (Neon, Supabase, Vercel Postgres)
+- Configuration du domaine, SSL, CDN
+- Mise en place du monitoring (Sentry, Vercel Analytics, etc.)
+- Configuration des sauvegardes et de la sécurité
+
+Récurrent : 20 à 200 €/mois selon le trafic et la taille de la base.
+
+### 5. Maintenance et évolution (15 à 30 % du budget initial par an)
+
+Sur les 12 mois suivant le lancement, on observe typiquement :
+
+- **Corrections** : bugs remontés par les utilisateurs (5 à 10 % du budget initial)
+- **Petites évolutions** : ajustements UX, nouveaux libellés, petits ajouts fonctionnels (10 à 15 %)
+- **Évolutions majeures** : nouvelles fonctionnalités significatives (selon la roadmap)
+
+Pour une web app à 30 k€ initial, prévoir 6 à 9 k€ de maintenance/évolution en année 1, puis 15-20 % par an ensuite.
+
+## Fourchettes par typologie
+
+### Web app simple (outil interne, configurateur, simulateur)
+
+- 1 à 2 rôles utilisateurs
+- 3 à 5 entités métier
+- 10 à 15 écrans principaux
+- Pas d'intégration tiers complexe
+
+**Budget initial : 12 à 25 k€**
+**Délai : 6 à 10 semaines**
+
+### Web app moyenne (marketplace simple, plateforme métier, espace clients)
+
+- 2 à 4 rôles utilisateurs
+- 5 à 10 entités métier
+- 20 à 40 écrans principaux
+- Intégrations standard (paiement, email transactionnel)
+- Admin riche
+
+**Budget initial : 25 à 50 k€**
+**Délai : 8 à 16 semaines** (Panorama Pub est dans cette fourchette : ~30 k€, 8 semaines)
+
+### Web app complexe (marketplace mature, SaaS B2B, plateforme événementielle)
+
+- 4+ rôles utilisateurs avec permissions fines
+- 10+ entités métier en relations complexes
+- 50+ écrans
+- Intégrations multiples (CRM, ERP, services externes)
+- Tableaux de bord analytiques
+- Workflows métier élaborés
+
+**Budget initial : 50 à 150 k€**
+**Délai : 4 à 9 mois**
+
+### Application mobile (PWA)
+
+- Souvent un sous-périmètre d'une web app, conçue pour le mobile
+- Géolocalisation, persistance locale, mode hors-ligne au besoin
+- Pas de paiement in-app obligatoire (sinon natif)
+
+**Budget initial : 8 à 30 k€** (en standalone)
+**Délai : 4 à 10 semaines**
+
+## L'avantage OETH — réduction de 30 %
+
+Si vous êtes une entreprise soumise à l'obligation d'emploi des travailleurs handicapés (OETH), vous pouvez déduire **30 % du coût main-d'œuvre** de votre contribution annuelle AGEFIPH, dans la limite des plafonds applicables.
+
+Concrètement, sur un projet à 30 k€ HT avec 25 k€ de main-d'œuvre, vous pouvez déduire jusqu'à **7 500 €** de votre contribution AGEFIPH. Le coût net du projet tombe à 22,5 k€.
+
+Conditions : votre prestataire doit être Travailleur Indépendant Handicapé (TIH) — c'est mon statut. [En savoir plus sur l'avantage OETH](/avantage-oeth).
+
+## Les pièges qui font exploser un budget
+
+### 1. Le scope creep silencieux
+
+"On peut aussi ajouter un système de notifications, hein ? Et puis tant qu'à faire, des badges utilisateur. Et une page admin pour gérer ça." Chaque mini-ajout en cours de projet coûte 2 à 4 fois plus cher que s'il avait été prévu au cadrage.
+
+**Mitigation** : un cadrage solide, et un protocole clair pour les évolutions hors scope (devis complémentaire à part).
+
+### 2. Le "comme [grand acteur]"
+
+"On veut un truc comme Airbnb / Doctolib / Le Bon Coin." Ces plateformes ont coûté plusieurs dizaines (centaines) de millions à construire, sur 5-10 ans. Vouloir leur équivalent en V1 garantit l'échec.
+
+**Mitigation** : MVP focus. Quelle est la fonctionnalité centrale qui crée 80 % de la valeur ? On la fait bien. Le reste, plus tard.
+
+### 3. Le design qui s'éternise
+
+Plus de 3 aller-retours sur les maquettes → c'est qu'on cherche autre chose qu'un design (souvent : on ne sait pas encore exactement ce qu'on veut construire). Retour au cadrage.
+
+**Mitigation** : un nombre fixe d'itérations sur le design, contractuel.
+
+### 4. Les intégrations sous-estimées
+
+"Tu intègres juste avec notre CRM, ça doit être rapide." Sauf que le CRM en question a une API datée, peu documentée, et nécessite 3 jours juste pour la stabiliser.
+
+**Mitigation** : auditer chaque intégration en cadrage. Prévoir une marge de 30-50 % sur les intégrations identifiées comme risquées.
+
+### 5. La maintenance non budgétée
+
+Au lancement, tout va bien. Trois mois plus tard, un bug critique apparaît, et il n'y a plus de budget. Le projet meurt.
+
+**Mitigation** : budgéter dès le départ 15-25 % du coût initial en maintenance année 1.
+
+## Ce qui ne fait PAS gagner d'argent
+
+- "On peut faire la moitié en WordPress et la moitié en web app ?" → Non, ça coûte plus cher d'avoir 2 stacks.
+- "On peut copier-coller une autre web app similaire ?" → Non, la spécificité métier est précisément ce qui coûte cher à modéliser et coder.
+- "On peut faire faire le design par un free­lance moins cher en parallèle ?" → Rarement viable. Le design et le développement se construisent ensemble.
+
+## Comment je facture, concrètement
+
+Pour la majorité des projets de moins de 20 k€, je propose un **forfait** : un montant fixe pour un périmètre fixe. Avantage client : pas de surprise. Avantage développeur : pas de débordement non couvert.
+
+Au-delà, je travaille en **régie au TJM** (entre 350 et 650 € HT/jour selon le projet), avec un cadrage précis du périmètre et des points de validation à chaque jalon. C'est plus flexible — et nécessite un cadrage rigoureux pour éviter le scope creep.
+
+## Pour aller plus loin
+
+- [Délai et jalons d'une web app](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app)
+- [L'avantage OETH : 30 % de déduction AGEFIPH](/avantage-oeth)
+- [Site web ou web app : comment choisir ?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir)
+
+Pour une estimation personnalisée sur votre projet : [lancez le diagnostic](/contact). Réponse sous 24h, devis sous 48h.

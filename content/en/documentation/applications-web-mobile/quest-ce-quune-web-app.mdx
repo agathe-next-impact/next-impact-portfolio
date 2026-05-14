@@ -1,0 +1,107 @@
+---
+title: "What is a web app?"
+description: "Clearly define the difference between a site, a Headless site, a web app and a mobile app — without jargon, with concrete examples."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 1
+---
+
+## Why this question deserves more than a quick answer
+
+Site, Headless site, web app, mobile app, PWA. Five words used every day by agencies, vendors and procurement — and which actually describe **five very different technical and budgetary realities**. Mixing up the first two is rarely a problem. Mixing up a "web app" and a "big site" can drift a budget from €4,000 to €40,000.
+
+This article lays out clear definitions, gives concrete markers for each family, and illustrates with examples.
+
+## The five families, without jargon
+
+### 1. The classic brochure site
+
+A site that **presents**: your activity, your services, your team, your content. The visitor **consumes** information — reads, watches, clicks, and may fill out a contact form.
+
+On the technical side, the classic WordPress site remains relevant: a theme, a few plugins, the Gutenberg editor for content. The visitor receives an HTML page generated on demand by the PHP server.
+
+**Examples**: a lawyer's website, a non-profit site, the site of an industrial SME.
+
+### 2. The Headless site
+
+Still a site that presents, but **whose architecture is split in two**: a back-office (WordPress, in our case) that manages content, and a front end (Next.js) that displays it. Performance perceived by the visitor is on a different scale: pre-generated pages, near-instant load, Lighthouse score > 90.
+
+It's still a **site**, not a web app — the visitor doesn't create an account, doesn't enter business data, doesn't trigger applicative logic. They consume content, just faster.
+
+**Examples**: a high-traffic media site, an editorial platform, an institutional site with structured content and an active blog.
+
+### 3. The web app
+
+Here we cross over. The visitor **is no longer just a spectator**: they create an account, enter data, interact with other users, trigger business processes. The site becomes a **tool**.
+
+A web app has:
+
+- A **dedicated database** to store business data (users, products, transactions, etc.)
+- An **authentication system** (accounts, sessions, roles)
+- Its own **business logic** (calculations, workflows, validations)
+- A **custom admin interface** to drive it all
+
+Stack-wise, we leave WordPress: Next.js + serverless PostgreSQL database + autonomous admin designed for the project.
+
+**Examples**: a B2B marketplace (Panorama Pub), an internal management tool, a quote configurator, a complex calculator, a member area with personalized content.
+
+### 4. The mobile application (PWA)
+
+This is a web app **designed for mobile** and **installable** on the phone's home screen — without going through the App Store or Play Store. The visitor taps "Add to home screen" from their browser, and the app installs like a real app.
+
+A PWA can access geolocation, work offline, receive notifications. It's technically a website, but the user experience feels like a native app.
+
+**Examples**: a mobile treasure hunt (Hermitage), a field tool for technicians, an installable tourist guide.
+
+### 5. The native mobile application
+
+Built with **Swift (iOS) or Kotlin (Android)**, published on the Apple and Google stores, downloaded and installed. It has access to all phone features: advanced camera, sensors, integrated payment, complex push notifications, deep OS integration.
+
+Cost-wise, we change orders of magnitude: specific development per platform, store validation (a few days to several weeks), maintenance across 2 distinct environments.
+
+**Example**: a mobile bank, a social network like TikTok, a mobile video game.
+
+> Next Impact doesn't build native apps. For 95% of mobile projects, a well-designed PWA is enough and costs three to ten times less. When the need falls outside that scope, I refer to a specialized mobile studio.
+
+## The 5 markers to recognize a web app
+
+If any of these 5 markers appears in your spec, you're describing a web app — not a site:
+
+1. **User accounts** with personal data to store
+2. **Business logic**: calculations, workflows, complex validations
+3. **Structured data** specific to the business (catalogues, transactions, appointments, etc.)
+4. **Real-time interaction** between users (chat, notifications, live updates)
+5. **Strong personalization** of the interface based on the logged-in user
+
+Conversely, if your project boils down to "**presenting** content, **highlighting** an activity, **collecting** leads through a contact form" — you're on a site, not a web app.
+
+## Management autonomy: a myth to dispel
+
+A common fear: "**If I leave WordPress for a custom web app, I lose the autonomy to edit my own content.**"
+
+That's wrong — at least when the app is well designed. Every web app delivered by Next Impact comes with a **custom admin interface**, built for the project's business logic:
+
+- You manage your content, your data, your users
+- You don't need a developer for everyday operations
+- The interface is designed for your team, not for a generic audience
+
+It's the equivalent of the WordPress admin, but for an applicative logic specific to your project instead of a generic editorial logic.
+
+## Summary
+
+| Family | The visitor | Typical stack | Indicative budget |
+|---|---|---|---|
+| Brochure site | Consumes | Classic WordPress | €2,250 - €6,000 |
+| Headless site | Consumes (fast) | WordPress + Next.js | €4,000 - €15,000 |
+| Web app | Creates, enters, interacts | Next.js + PostgreSQL | €15,000 - €80,000+ |
+| Mobile PWA | Same + field/mobile usage | Next.js + PWA | On quote |
+| Native app | Same + OS integration | Swift / Kotlin | €50,000+ |
+
+## Going further
+
+- [Website or web app: how to choose?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir) — The 5-question test
+- [When WordPress is no longer the right tool](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) — The 4 limits of the CMS against an applicative project
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app) — Under the hood of a Next.js + PostgreSQL platform
+
+Want to discuss your project? [Run the diagnostic](/contact) or [book a discovery call](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

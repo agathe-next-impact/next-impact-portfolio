@@ -171,7 +171,7 @@ function CTAConversion() {
             className="inline-flex items-center gap-2 bg-coral text-darkblue py-3 px-8 rounded-full hover:scale-[1.02] transition-all duration-300 font-googletitre text-base md:text-lg font-semibold"
             asChild
           >
-            <Link href="/contact">
+            <Link href="/services/eligibilite">
               {t("ctaLabel")}
               <ArrowRight className="w-4 h-4" />
             </Link>

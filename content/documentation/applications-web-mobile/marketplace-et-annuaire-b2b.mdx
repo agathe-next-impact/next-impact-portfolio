@@ -1,0 +1,181 @@
+---
+title: "Marketplace et annuaire B2B : ce qu'il faut savoir avant de se lancer"
+description: "Stratégie produit, fondamentaux techniques, modèles de monétisation, retour d'expérience Panorama Pub. Les questions à se poser avant d'engager un budget."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 9
+---
+
+## La marketplace, projet d'avenir et casse-tête de lancement
+
+Lancer une marketplace ou un annuaire B2B est l'un des projets web les plus séduisants : un actif digital scalable, un modèle économique récurrent, une position de référence sur un marché. C'est aussi l'un des plus exigeants à cadrer : un mauvais positionnement initial fait perdre 18 mois, un mauvais MVP grille un budget sans valider le marché.
+
+Cet article rassemble les questions critiques à poser **avant** d'engager le développement.
+
+## Annuaire ou marketplace ?
+
+Première distinction fondamentale. Les deux sont souvent confondus dans les briefs initiaux :
+
+### Annuaire
+
+Une plateforme qui **liste et organise** des acteurs / produits / services d'un secteur. Le visiteur **trouve, compare, consulte**. La mise en relation se fait **hors plateforme** (le visiteur contacte directement).
+
+- Modèle économique typique : abonnement fournisseur (être référencé), publicité, mise en avant payante, contenus premium
+- Exemples : Panorama Pub, Pages Jaunes, GetApp
+
+### Marketplace
+
+Une plateforme qui **héberge la transaction**. Le visiteur trouve, compare, **et achète/réserve directement** via la plateforme. La plateforme prélève une commission sur la transaction.
+
+- Modèle économique typique : commission par transaction (5-25 % selon les secteurs)
+- Exemples : Airbnb, Doctolib, Le Bon Coin Pro
+
+### Conséquences techniques et budgétaires
+
+| Aspect | Annuaire | Marketplace |
+|---|---|---|
+| Complexité MVP | Moyenne | Élevée |
+| Budget MVP indicatif | 20-40 k€ | 50-150 k€ |
+| Délai MVP | 2-4 mois | 4-9 mois |
+| Paiement intégré | Non | Oui (Stripe Connect ou équivalent) |
+| KYC / vérification | Léger | Strict (selon réglementation) |
+| Gestion litiges | Hors plateforme | Sur plateforme |
+
+> Le piège fréquent : démarrer en "marketplace" alors qu'un annuaire suffit largement à valider le marché. Panorama Pub a commencé en annuaire. Quand le marché sera validé et la base fournisseurs robuste, l'évolution vers une vraie mise en relation transactionnelle devient pertinente.
+
+## Le problème du double-side (chicken & egg)
+
+Toute marketplace ou annuaire B2B a un défi commun : **il faut une masse critique des deux côtés** (fournisseurs ET acheteurs) pour que la plateforme prenne. Mais personne ne veut s'inscrire en premier sur une plateforme vide.
+
+### Stratégies pour résoudre le chicken & egg
+
+1. **Démarrer "amorcé" côté offre** : pré-remplir la plateforme avec une base de fournisseurs avant le lancement public. Panorama Pub a démarré avec des centaines de fiches fournisseurs déjà en ligne.
+2. **Apporter de la valeur même sans transactions** : contenus éditoriaux, comparateurs, calculateurs. Le visiteur a une raison de venir même si la mise en relation n'est pas encore mature.
+3. **Solution single-player utile** : la plateforme apporte de la valeur même à un fournisseur seul (gestion de catalogue, fiche SEO, statistiques de consultation). Ça motive l'inscription côté offre sans attendre la demande.
+4. **Cible verticale étroite** : se concentrer sur un sous-marché précis pour atteindre la masse critique plus vite. Mieux vaut être leader d'une niche que 12ᵉ d'un marché général.
+
+## Les 7 questions à trancher avant le dev
+
+### 1. Quel est le marché vacant ou mal servi ?
+
+Une marketplace généraliste sur un marché mature est presque toujours vouée à l'échec. Le bon angle : **un marché mal couvert**, où l'offre actuelle est dispersée, où il n'y a pas de référence claire.
+
+Panorama Pub : l'annuaire des fournisseurs d'objets publicitaires en France. Aucun annuaire centralisé n'existait, les acheteurs (agences, services com', événementiel) devaient bricoler des recherches éclatées. **Marché identifié, vacant, suffisamment large.**
+
+### 2. Qui sont les acheteurs et où sont-ils ?
+
+Décrire les acheteurs **au-delà des persona génériques**. Combien sont-ils ? Comment trouvent-ils aujourd'hui leurs fournisseurs ? Quelle est leur principale frustration ?
+
+Si vous ne savez pas comment **toucher 100 acheteurs** dans les 3 mois après le lancement, la plateforme aura beau être parfaite, elle ne décollera pas.
+
+### 3. Qui sont les fournisseurs et que veulent-ils ?
+
+Idem. Les fournisseurs payeront-ils ? Combien ? Pour quelle valeur ?
+
+Sur un annuaire B2B, le test : **iriez-vous démarcher 20 fournisseurs en physique** pour les convaincre de s'inscrire avant le lancement public ? Si non, la plateforme aura du mal à recruter les fournisseurs spontanément.
+
+### 4. Quel est le modèle économique précis ?
+
+Trop vague : "On monétisera via la publicité / la commission / les abonnements." Précis :
+
+- Abonnement Basic 39 €/mois (3 photos, 1 contact), Pro 99 €/mois (illimité + mise en avant)
+- Commission de 8 % par transaction (versée par le fournisseur), seuil de gratuité jusqu'à 500 €/mois
+- Mise en avant payante : 200 €/mois pour apparaître en haut de liste sur la catégorie X
+
+Sans ces chiffres, on ne peut pas savoir si le business model est viable.
+
+### 5. Quel volume pour atteindre le seuil de rentabilité ?
+
+Faire un calcul simple :
+
+> Coûts fixes mensuels (hébergement + maintenance + frais) = 800 €. Marge moyenne par fournisseur abonné = 60 €/mois. Seuil = 14 fournisseurs payants en continu. Croissance prévue = 3 fournisseurs payants nets par mois → seuil atteint au mois 5.
+
+Si le calcul donne 6 mois, faisable. S'il donne 18 mois, il faut revoir le modèle ou augmenter le ticket.
+
+### 6. Quelle est la masse critique pour avoir un effet réseau ?
+
+Combien de fournisseurs faut-il pour que la plateforme soit **utile** à un acheteur ? Et inversement, combien d'acheteurs sur la plateforme avant qu'un fournisseur paie pour y être ?
+
+Ces chiffres définissent le **palier de viabilité**. Tant qu'on ne l'a pas atteint, la plateforme reste fragile.
+
+### 7. Quelles sont les barrières réglementaires ?
+
+- Si c'est une marketplace transactionnelle, vérifier les obligations KYC, anti-blanchiment, fiscales (TVA, déclarations DAC7)
+- Si vous gérez des données sensibles (santé, finance, mineurs), prévoir conformité spécifique
+- Si vous opérez à l'international, considérer GDPR / RGPD pour les utilisateurs européens
+
+Ces dimensions peuvent **doubler** le budget initial si elles ne sont pas anticipées.
+
+## Les fondamentaux techniques d'une marketplace B2B
+
+### Modèle de données
+
+Au minimum :
+
+- **Utilisateurs** (avec rôles : admin, fournisseur, acheteur, visiteur)
+- **Fournisseurs / annonceurs** (entreprises avec fiche, contacts, métadonnées)
+- **Offres / produits / services** (ce qui est listé)
+- **Catégories / taxonomies** (souvent hiérarchiques, parfois multi-axes)
+- **Demandes / contacts** (qui demande quoi à qui)
+- **Statistiques** (vues, clics, conversions par fiche)
+
+Pour une marketplace transactionnelle, ajouter :
+
+- **Transactions / commandes** (avec statuts, paiement, livraison)
+- **Litiges**
+- **Évaluations / avis**
+- **Mouvements financiers** (commissions, paiements, remboursements)
+
+### Recherche performante
+
+C'est **le cœur fonctionnel** d'une marketplace. Une recherche lente, imprécise ou mal pensée tue l'usage. Critères :
+
+- Recherche full-text avec scoring de pertinence
+- Filtres multi-axes (catégorie, localisation, certifications, prix, etc.)
+- Tri (pertinence, distance, prix, popularité)
+- Auto-complétion
+- Réponse < 200 ms même sur des bases de plusieurs milliers de fiches
+
+Techniquement : PostgreSQL avec ses extensions full-text suffit jusqu'à ~100 k fiches. Au-delà, considérer Algolia, Meilisearch ou Elasticsearch.
+
+### SEO natif
+
+Une marketplace B2B vit en grande partie de son SEO. Chaque fiche, chaque catégorie, chaque page doit être :
+
+- Indexable (rendu serveur, pas SPA pure)
+- Avec métadonnées riches (title, description, schema.org)
+- Avec URL propre et hiérarchique (`/categorie/sous-categorie/fiche-slug`)
+- Rapide (Core Web Vitals au vert)
+
+Next.js est très adapté à ces exigences (SSG/ISR pour les pages stables, SSR pour les pages personnalisées).
+
+### Admin riche
+
+Sur une marketplace, l'admin est **un poste critique de qualité**. Le modérateur doit pouvoir :
+
+- Valider rapidement des inscriptions
+- Repérer les fiches problématiques (signalements, qualité, fraude)
+- Suspendre un compte en un clic
+- Modifier en masse (par exemple changer la catégorie de 50 fiches)
+- Avoir une vue d'ensemble du trafic et des conversions
+
+## Retour d'expérience Panorama Pub
+
+Panorama Pub a été livré en 2 mois en mode annuaire (pas marketplace transactionnelle). Les choix qui ont permis ce délai :
+
+- **Périmètre MVP serré** : annuaire avec recherche, fiches fournisseurs, admin solide. Pas (encore) de paiement, de mise en relation transactionnelle, de système d'avis.
+- **Modèle de données stable** : modélisé en 3 jours en cadrage, puis non modifié.
+- **Recherche performante dès la V1** : PostgreSQL full-text avec ranking.
+- **Pré-remplissage côté offre** : centaines de fiches fournisseurs ajoutées avant le lancement public.
+- **SEO natif au cœur** : Next.js App Router avec SSG + ISR, URLs propres, schema.org pour les fiches.
+
+Coût initial : ~30 k€. Délai : 2 mois. Roadmap claire pour les briques suivantes (espace fournisseur, mise en relation, contenus).
+
+## Pour aller plus loin
+
+- [Étude de cas — Panorama Pub](/etudes-de-cas/panorama-pub)
+- [Anatomie d'une web app sur-mesure](/documentation/applications-web-mobile/anatomie-dune-web-app)
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+
+Vous avez un projet d'annuaire ou de marketplace ? [Lancez le diagnostic](/contact) — je vous aide à le cadrer avant tout chiffrage.

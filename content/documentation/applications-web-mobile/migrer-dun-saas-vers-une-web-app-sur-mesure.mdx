@@ -1,0 +1,209 @@
+---
+title: "Migrer d'un SaaS vers une web app sur-mesure"
+description: "Quand et comment quitter un SaaS pour reprendre la main sur ses données et sa logique métier. Critères, étapes, pièges, retour d'expérience."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 13
+---
+
+## Le signal qu'il est temps de réfléchir à une migration
+
+Pendant les premières années, un SaaS est généralement un excellent choix : faible coût initial, mise en route rapide, fonctionnalités prêtes à l'emploi. Puis arrive un moment, souvent au bout de 2-3 ans, où **plusieurs signaux convergent** :
+
+- "Notre SaaS coûte 18 k€/an et ne couvre plus que 60 % de nos besoins"
+- "On a 4 outils différents pour faire ce qui devrait être unifié"
+- "Chaque mois je passe 2 jours à bricoler des exports / imports / Zapier"
+- "L'éditeur ne livrera jamais la fonctionnalité dont on a besoin"
+- "Quand on grandit, le coût SaaS scale linéairement et fait mal"
+
+Si vous reconnaissez 2 ou 3 de ces signaux, il est probablement temps d'évaluer une migration vers du sur-mesure.
+
+## Le test du ROI en 5 minutes
+
+Faites ce calcul rapide :
+
+| Poste | Annuel |
+|---|---|
+| Coût direct du SaaS (licences) | A |
+| SaaS complémentaires bricolés autour | B |
+| Temps perdu sur contournements (estim. en jours × TJM interne) | C |
+| Manque à gagner sur fonctionnalités absentes | D |
+| **Total annuel "vrai coût" du SaaS** | **A + B + C + D** |
+
+Comparez avec :
+
+- Coût sur-mesure année 1 : coût initial + maintenance
+- Coût sur-mesure année 2 et + : maintenance seulement
+
+Si le "vrai coût" du SaaS dépasse 1,5× le coût annualisé sur-mesure (calculé sur 5 ans), la migration mérite un cadrage sérieux.
+
+> **Exemple chiffré** : SaaS à 12 k€/an + 25 k€/an de temps perdu (40 j × 625 €/j) = 37 k€/an. Sur-mesure : 40 k€ initial + 8 k€/an maintenance. ROI : 1,5 an. Sur 5 ans : 185 k€ économisés.
+
+## Les 5 critères pour décider
+
+### 1. Stabilité du besoin métier
+
+Si votre métier change tous les 6 mois, **n'investissez pas en sur-mesure** maintenant — refaire un sur-mesure tous les 18 mois coûte plus cher. Restez en SaaS, payez la flexibilité.
+
+Si votre métier est stable et que vos process sont éprouvés depuis 2-3 ans, le sur-mesure verrouille votre savoir-faire dans un outil maîtrisé.
+
+### 2. Volume actuel et croissance
+
+- Faible volume + croissance lente → restez en SaaS, payez la flexibilité
+- Volume modéré + croissance forte → sur-mesure devient pertinent
+- Gros volume → sur-mesure rentable presque mécaniquement (le SaaS scale en coût avec le volume)
+
+### 3. Spécificité
+
+Combien de **contournements** mettez-vous en place dans votre SaaS pour faire fonctionner votre métier ? Plus il y en a, plus le SaaS vous frotte. Si vous avez 5+ Zapier, 3 champs custom utilisés bizarrement, 2 exports manuels chaque mois — vous avez clairement dépassé le périmètre du SaaS.
+
+### 4. Volume de données
+
+Migrer 500 fiches vers une nouvelle plateforme est trivial. Migrer 50 000 fiches avec 10 ans d'historique demande un projet de migration en soi.
+
+Si vous avez beaucoup de données mais qu'elles sont **bien structurées et exportables**, la migration reste raisonnable. Si elles sont éparpillées, mal taggées, partiellement dans le SaaS et partiellement ailleurs : prévoir un budget de nettoyage avant migration.
+
+### 5. Effet réseau et intégrations
+
+Combien d'autres outils sont **connectés** à votre SaaS ? Plus ils sont nombreux, plus la migration demande de reconstruire les ponts.
+
+Si votre SaaS est isolé (entrée/sortie uniquement par exports manuels), migration facile. Si votre SaaS est au centre d'un écosystème de 5 outils interconnectés, prévoir une migration progressive sur 6-12 mois.
+
+## Les 6 étapes d'une migration réussie
+
+### Étape 1 — Audit du SaaS actuel
+
+Lister exhaustivement :
+
+- Toutes les **fonctionnalités utilisées** (et celles **non utilisées** — vous serez surpris)
+- Toutes les **données stockées** (entités, volumes, qualité)
+- Toutes les **intégrations** (entrées et sorties)
+- Tous les **utilisateurs et rôles**
+- Tous les **contournements** mis en place
+
+Durée : 1-3 jours selon la complexité.
+
+### Étape 2 — Définition du périmètre cible
+
+Le piège : vouloir reproduire 100 % du SaaS à l'identique. **Mauvais réflexe**. La migration est une opportunité de :
+
+- **Garder** ce qui marche
+- **Améliorer** ce qui frottait
+- **Supprimer** ce que personne n'utilisait
+- **Ajouter** ce qui manquait
+
+Le périmètre cible est typiquement **70-85 % du SaaS original + 15-30 % de spécifique à votre métier**.
+
+Durée : 1-2 semaines.
+
+### Étape 3 — Cadrage technique et budgétaire
+
+Comme un cadrage de nouveau projet, mais **enrichi** par la connaissance des données existantes :
+
+- Modèle de données précis (parfois inspiré du modèle SaaS, parfois repensé)
+- Plan de migration des données existantes
+- Stratégie de bascule (big bang ou progressive ?)
+- Plan de formation des utilisateurs
+
+Durée : 2-4 semaines selon la complexité.
+
+### Étape 4 — Développement
+
+Standard pour une web app, avec une **spécificité** : la phase d'import des données existantes est généralement plus consommatrice qu'un développement from scratch. Compter +20-40 % de temps sur les modules concernés par la migration.
+
+Durée : selon le périmètre. 2-6 mois pour la plupart des projets.
+
+### Étape 5 — Migration des données et bascule
+
+**La phase la plus critique.** Plusieurs stratégies :
+
+#### Stratégie "big bang"
+
+À la date J, on bascule tout. Le SaaS est arrêté, le nouveau système est utilisé.
+
+- **Avantages** : pas de double maintenance, transition rapide
+- **Inconvénients** : si quelque chose dysfonctionne, l'impact est immédiat. Prévoir un plan de rollback.
+- **Quand l'utiliser** : petits volumes, équipes restreintes, sur-mesure très bien testé.
+
+#### Stratégie progressive
+
+Pendant 1-3 mois, le SaaS et le sur-mesure coexistent. On migre par modules ou par utilisateurs.
+
+- **Avantages** : risque réduit, les anciens et nouveaux flux peuvent coexister
+- **Inconvénients** : double maintenance temporaire, complexité accrue
+- **Quand l'utiliser** : projets importants, équipes plus grandes, modules indépendants
+
+#### Stratégie hybride durable
+
+Garder le SaaS pour certaines fonctions, sur-mesure pour les fonctions différenciantes.
+
+- **Avantages** : ne pas refaire ce qui marche en SaaS, focus sur la différenciation
+- **Inconvénients** : intégration permanente entre les deux systèmes
+- **Quand l'utiliser** : quand 70 % du SaaS est satisfaisant, et que 30 % est central à votre activité.
+
+### Étape 6 — Formation et adoption
+
+Souvent sous-estimée. Un nouvel outil, même mieux que l'ancien, demande **3 à 8 semaines d'adoption complète** par les équipes.
+
+Mesures qui aident :
+
+- Documentation accessible directement dans l'app (tooltips, aides contextuelles)
+- Sessions de formation par groupe d'utilisateurs (admin, opérationnels, etc.)
+- Un référent interne identifié pour les questions du quotidien
+- Suivi des points de friction pendant les premières semaines, avec ajustements rapides
+
+## Les pièges fréquents
+
+### 1. La fonctionnalité oubliée
+
+"On avait oublié que 3 personnes utilisaient X dans le SaaS." Découvert après la bascule. Mitigation : audit exhaustif, validé par les utilisateurs principaux.
+
+### 2. Les données non documentées
+
+"Cette colonne servait à quoi déjà ? Personne ne sait." Mitigation : nettoyer **avant** la migration, et accepter de perdre ce qui n'est plus pertinent.
+
+### 3. Le "comme avant"
+
+Les utilisateurs résistent au changement si l'interface est trop différente. Trouver le bon équilibre : ne pas reproduire l'interface SaaS à l'identique (pourquoi migrer alors ?), mais ne pas non plus tout réinventer.
+
+### 4. La sous-estimation de la formation
+
+Un sur-mesure parfait abandonné parce que les équipes refusent de s'y adapter : c'est l'échec le plus douloureux. Budgéter la conduite du changement (1-3 semaines de mobilisation côté client).
+
+### 5. La bascule prématurée
+
+Migrer alors qu'il reste des trous fonctionnels = retour en arrière. Mieux vaut décaler la bascule d'un mois et avoir un produit prêt.
+
+## Quand NE PAS migrer
+
+Quelques situations où rester en SaaS est la bonne décision :
+
+- Vos processus changent encore beaucoup
+- Le SaaS couvre 90 % de vos besoins et le 10 % manquant n'est pas critique
+- Votre équipe technique interne est saturée et ne peut pas piloter une migration
+- Votre activité ne génère pas le ROI pour amortir un sur-mesure (faible volume, faible marge)
+- Vous n'avez pas la stabilité financière pour absorber un investissement initial significatif
+
+Dans ces cas, **renforcer le SaaS** (bricolages plus propres, scripts d'automatisation, formation interne) est probablement plus pertinent.
+
+## Le cas particulier — quitter un SaaS qui ferme
+
+Parfois la décision est prise pour vous : votre SaaS ferme, change de modèle, augmente massivement ses prix, ou est racheté par un acteur qui le sabote. Dans ce cas, la migration est **subie**.
+
+Mesures à prendre tôt :
+
+1. **Exporter immédiatement** toutes vos données (sans attendre la fin de l'abonnement)
+2. **Documenter** vos process actuels (peut-être en interne le SaaS faisait des choses qu'on prenait pour acquises)
+3. **Cadrer** la cible vite mais sans précipitation excessive
+4. **Communiquer** clairement aux équipes — la transition imposée crée plus de friction que la transition choisie
+
+Dans ce contexte, un sur-mesure peut être une bonne réponse — mais aussi un autre SaaS, selon le budget et le timing.
+
+## Pour aller plus loin
+
+- [Plateforme métier sur-mesure vs SaaS générique](/documentation/applications-web-mobile/plateforme-metier-vs-saas)
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+- [Délai et jalons d'une web app](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app)
+
+Vous évaluez une migration depuis un SaaS ? [Lancez le diagnostic](/contact) — un cadrage initial vous donnera une fourchette claire de coût et de délai sous 48h.

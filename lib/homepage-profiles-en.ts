@@ -96,7 +96,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "Answer a few questions to identify the right path for your project — classic WordPress site, Headless site, web app or mobile app.",
     ctaLabel: "Run the diagnostic",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "Will I still be able to edit my own copy?",
@@ -145,7 +145,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "In 2 minutes, identify the right level of modernization for your project and estimate the performance gains you can expect.",
     ctaLabel: "Pick my stack",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "What's the concrete return on investment?",
@@ -194,7 +194,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "Answer a few simple questions to find the formula that best matches your project.",
     ctaLabel: "Pick my stack",
-    ctaHref: "/contact",
+    ctaHref: "/services/eligibilite",
     faqs: [
       {
         question: "Will I have to learn a new tool?",

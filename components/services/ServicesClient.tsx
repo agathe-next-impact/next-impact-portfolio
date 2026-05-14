@@ -196,7 +196,7 @@ export default function ServicesClient() {
               </div>
             </Link>
 
-            <Link href="/contact" className="group">
+            <Link href="/services/eligibilite" className="group">
               <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
                 <Image src="/icons/optimize-icon.svg" alt={t("shortcuts.stack.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
                 <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.stack.title")}</h3>

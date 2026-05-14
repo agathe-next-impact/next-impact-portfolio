@@ -1,0 +1,181 @@
+---
+title: "How much does a custom web app cost?"
+description: "Cost breakdown (scoping, design, dev, infrastructure, maintenance), ranges by typology, levers for reduction (TIH/OETH), traps to avoid."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 7
+---
+
+## Why the question scares — and deserves real numbers
+
+When "custom web app" comes up, the first concern is budgetary. And it's legitimate: vendor estimates range from €8k to €800k for projects that sound the same. This article demystifies a budget's composition and gives realistic ranges by typology.
+
+> **Important** — These ranges are indicative, based on real projects. Precise scoping requires a conversation: depending on your exact scope, you may be at the low end, high end, or even outside the range.
+
+## The 5 cost categories
+
+### 1. Scoping (typically 5 to 15% of total budget)
+
+Before coding, you need to **know what to build**. Scoping covers:
+
+- User and business needs interviews
+- Functional perimeter definition (what we do, what we don't)
+- Data modeling (entities, relations, rules)
+- Definition of key screens (wireframes)
+- Planning and milestones estimation
+
+On a small project, scoping can take 2-3 days (€1,500 - €4,500). On a complex project, it can stretch over 3-4 weeks (€8-15k).
+
+> Skipped or sloppy scoping is the most expensive mistake on a web project. Re-doing a poorly thought-out screen costs 3-5 times more than thinking it through at the start.
+
+### 2. Design and UX (10 to 25% of budget)
+
+Not just "decoration". The design of a web app covers:
+
+- Information architecture (how the user navigates)
+- Design of key screens (with finalized visuals)
+- Design system (reusable components, consistency)
+- Responsive behavior (mobile / tablet / desktop)
+- Accessibility (WCAG, contrasts, keyboard navigation)
+
+On Panorama Pub, design represented about 15% of the budget. On more complex projects (rich user area, multiple roles, dashboards), it easily reaches 25%.
+
+### 3. Development (50 to 70% of budget)
+
+It's the main category. It covers:
+
+- **Front**: development of all screens (Next.js, TypeScript, Tailwind)
+- **Back / API**: business logic development
+- **Database**: schema modeling and implementation
+- **Admin**: management interface development
+- **Authentication**: accounts, sessions, roles
+- **Integrations**: connections to third-party services (Stripe, SendGrid, etc.)
+- **Tests**: unit, integration, end-to-end
+- **CI/CD**: automated deployment pipeline
+
+At a daily rate of €450 HT (Balance tier), the development of a simple web app represents 15-25 days (€7-11k). For a rich marketplace or business tool, you land on 40-80 days (€18-36k).
+
+### 4. Infrastructure and hosting (5 to 10% of initial budget, then recurring)
+
+- Vercel hosting setup
+- Serverless PostgreSQL database configuration (Neon, Supabase, Vercel Postgres)
+- Domain, SSL, CDN configuration
+- Monitoring setup (Sentry, Vercel Analytics, etc.)
+- Backups and security configuration
+
+Recurring: €20 to €200/month depending on traffic and database size.
+
+### 5. Maintenance and evolution (15 to 30% of initial budget per year)
+
+Over the 12 months following launch, you typically observe:
+
+- **Fixes**: bugs reported by users (5 to 10% of initial budget)
+- **Small evolutions**: UX adjustments, new labels, small functional additions (10 to 15%)
+- **Major evolutions**: significant new features (per the roadmap)
+
+For a web app at €30k initial, plan €6-9k of maintenance/evolution in year 1, then 15-20% per year thereafter.
+
+## Ranges by typology
+
+### Simple web app (internal tool, configurator, simulator)
+
+- 1 to 2 user roles
+- 3 to 5 business entities
+- 10 to 15 main screens
+- No complex third-party integration
+
+**Initial budget: €12 to €25k**
+**Lead time: 6 to 10 weeks**
+
+### Medium web app (simple marketplace, business platform, client area)
+
+- 2 to 4 user roles
+- 5 to 10 business entities
+- 20 to 40 main screens
+- Standard integrations (payment, transactional email)
+- Rich admin
+
+**Initial budget: €25 to €50k**
+**Lead time: 8 to 16 weeks** (Panorama Pub is in this range: ~€30k, 8 weeks)
+
+### Complex web app (mature marketplace, B2B SaaS, events platform)
+
+- 4+ user roles with fine-grained permissions
+- 10+ business entities with complex relations
+- 50+ screens
+- Multiple integrations (CRM, ERP, external services)
+- Analytics dashboards
+- Elaborate business workflows
+
+**Initial budget: €50 to €150k**
+**Lead time: 4 to 9 months**
+
+### Mobile application (PWA)
+
+- Often a sub-scope of a web app, designed for mobile
+- Geolocation, local persistence, offline mode as needed
+- No mandatory in-app payment (otherwise native)
+
+**Initial budget: €8 to €30k** (standalone)
+**Lead time: 4 to 10 weeks**
+
+## The OETH benefit — 30% reduction
+
+If you're a French company subject to the disabled worker employment obligation (OETH), you can deduct **30% of the labor cost** from your annual AGEFIPH contribution, within applicable limits.
+
+Concretely, on a €30k HT project with €25k of labor, you can deduct up to **€7,500** from your AGEFIPH contribution. Net project cost drops to €22.5k.
+
+Conditions: your vendor must be a TIH (French independent worker with disability) — that's my status. [Learn more about the OETH benefit](/avantage-oeth).
+
+## Traps that explode a budget
+
+### 1. Silent scope creep
+
+"Could we also add a notification system? And while we're at it, user badges. And an admin page to manage that." Each mini-addition mid-project costs 2-4 times more than if it had been planned at scoping.
+
+**Mitigation**: solid scoping, and a clear protocol for out-of-scope evolutions (separate quotes).
+
+### 2. The "like [big player]"
+
+"We want something like Airbnb / Doctolib / Le Bon Coin." These platforms cost tens (hundreds) of millions to build over 5-10 years. Wanting their equivalent in V1 guarantees failure.
+
+**Mitigation**: MVP focus. What is the central feature that creates 80% of the value? We do it well. The rest, later.
+
+### 3. The endless design phase
+
+More than 3 design iterations → you're looking for something other than design (often: you don't yet know exactly what you want to build). Back to scoping.
+
+**Mitigation**: a fixed number of design iterations, contractual.
+
+### 4. Underestimated integrations
+
+"You just integrate with our CRM, should be quick." Except the CRM has an outdated API, poorly documented, and needs 3 days just to stabilize.
+
+**Mitigation**: audit each integration at scoping. Plan a 30-50% margin on integrations flagged as risky.
+
+### 5. Unbudgeted maintenance
+
+At launch, all is well. Three months later, a critical bug emerges, and the budget is gone. Project dies.
+
+**Mitigation**: budget 15-25% of initial cost in year-1 maintenance from the start.
+
+## What does NOT save money
+
+- "Can we do half in WordPress and half in web app?" → No, having 2 stacks costs more.
+- "Can we copy-paste a similar web app?" → No, business specificity is precisely what costs money to model and code.
+- "Can we have the design done by a cheaper freelancer in parallel?" → Rarely viable. Design and development are built together.
+
+## How I bill, concretely
+
+For most projects under €20k, I propose a **fixed price**: a set amount for a set scope. Client advantage: no surprise. Developer advantage: no uncovered overrun.
+
+Beyond that, I work **on a daily rate** (between €350 and €650 HT/day depending on the project), with precise scoping and validation points at each milestone. It's more flexible — and requires rigorous scoping to avoid scope creep.
+
+## Going further
+
+- [Web app lead time and milestones](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app)
+- [The OETH benefit: 30% AGEFIPH deduction](/avantage-oeth)
+- [Website or web app: how to choose?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir)
+
+For a personalized estimate on your project: [run the diagnostic](/contact). Reply within 24h, quote within 48h.

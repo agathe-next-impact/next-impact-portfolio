@@ -1,0 +1,107 @@
+---
+title: "Qu'est-ce qu'une web app ?"
+description: "Définir clairement la différence entre site, site Headless, web app et app mobile — sans jargon, avec des exemples concrets."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 1
+---
+
+## Pourquoi cette question mérite mieux qu'une réponse rapide
+
+Site, site Headless, web app, application mobile, PWA. Cinq mots utilisés tous les jours par les agences, les prestataires et les services achats — et qui désignent **cinq réalités techniques et budgétaires très différentes**. Confondre les deux premiers est rarement grave. Confondre une "web app" et un "gros site" peut faire dériver un budget de 4 000 € à 40 000 €.
+
+Cet article pose les définitions claires, donne les marqueurs concrets de chaque famille et illustre avec des exemples.
+
+## Les cinq familles, sans jargon
+
+### 1. Le site vitrine classique
+
+Un site qui **présente** : votre activité, vos services, votre équipe, vos contenus. Le visiteur **consomme** de l'information — il lit, regarde, clique, et éventuellement remplit un formulaire de contact.
+
+Côté technique, le site WordPress classique reste pertinent : un thème, quelques plugins, un éditeur Gutenberg pour les contenus. Le visiteur reçoit une page HTML générée à la demande par le serveur PHP.
+
+**Exemples** : un site d'avocat, un site d'association, le site d'une PME industrielle.
+
+### 2. Le site Headless
+
+Toujours un site qui présente, mais **dont l'architecture est séparée en deux couches** : un back-office (WordPress, dans notre cas) qui gère les contenus, et un front (Next.js) qui les affiche. La performance perçue par le visiteur est sans commune mesure : pages pré-générées, chargement quasi instantané, score Lighthouse > 90.
+
+C'est toujours un **site**, pas une web app — le visiteur ne crée pas de compte, ne saisit pas de données métier, ne déclenche pas de logique applicative. Il consomme du contenu, juste plus vite.
+
+**Exemples** : un site média à fort trafic, une plateforme éditoriale, un site institutionnel avec des contenus structurés et un blog actif.
+
+### 3. La web app
+
+Là, on bascule. Le visiteur **n'est plus seulement spectateur** : il crée un compte, saisit des données, interagit avec d'autres utilisateurs, déclenche des traitements métier. Le site devient un **outil**.
+
+Une web app a :
+
+- Une **base de données dédiée** pour stocker la donnée métier (utilisateurs, produits, transactions, etc.)
+- Un **système d'authentification** (comptes, sessions, rôles)
+- Une **logique métier propre** (calculs, workflows, validations)
+- Une **interface d'administration sur-mesure** pour piloter le tout
+
+Côté stack, on quitte WordPress : Next.js + base PostgreSQL serverless + admin autonome conçu pour le projet.
+
+**Exemples** : une marketplace B2B (Panorama Pub), un outil de gestion interne, un configurateur de devis, un simulateur de calcul complexe, un espace membres avec contenus personnalisés.
+
+### 4. L'application mobile (PWA)
+
+C'est une web app **conçue pour le mobile** et **installable** sur l'écran d'accueil du téléphone — sans passer par l'App Store ou le Play Store. Le visiteur appuie sur "Ajouter à l'écran d'accueil" depuis son navigateur, et l'app s'installe comme une vraie app.
+
+Une PWA peut accéder à la géolocalisation, fonctionner hors-ligne, recevoir des notifications. Elle est techniquement un site web, mais l'expérience utilisateur ressemble à une app native.
+
+**Exemples** : un jeu de piste mobile (Hermitage), un outil terrain pour techniciens, un guide touristique installable.
+
+### 5. L'application mobile native
+
+Construite avec **Swift (iOS) ou Kotlin (Android)**, publiée sur les stores Apple et Google, téléchargée et installée. Elle a accès à toutes les fonctionnalités du téléphone : appareil photo avancé, capteurs, paiement intégré, notifications push complexes, intégration avec l'OS.
+
+Côté coût et délais, on change d'ordre de grandeur : développement spécifique par plateforme, validation par les stores (de quelques jours à plusieurs semaines), maintenance sur 2 environnements distincts.
+
+**Exemple** : une banque mobile, un réseau social comme TikTok, un jeu vidéo mobile.
+
+> Next Impact ne fait pas d'app native. Pour 95 % des projets mobiles, une PWA bien conçue suffit et coûte trois à dix fois moins cher. Quand le besoin sort de ce périmètre, on oriente vers un studio mobile spécialisé.
+
+## Les 5 marqueurs pour reconnaître une web app
+
+Si l'un de ces 5 marqueurs apparaît dans votre cahier des charges, vous êtes en train de spécifier une web app — pas un site :
+
+1. **Comptes utilisateurs** avec données personnelles à stocker
+2. **Logique métier** : calculs, workflows, validations complexes
+3. **Données structurées** propres au métier (catalogues, transactions, rendez-vous, etc.)
+4. **Interaction temps réel** entre utilisateurs (chat, notifications, mise à jour live)
+5. **Personnalisation forte** de l'interface selon l'utilisateur connecté
+
+À l'inverse, si votre projet se résume à "**présenter** des contenus, **mettre en avant** une activité, **collecter** des leads via un formulaire de contact" — vous êtes sur un site, pas une web app.
+
+## L'autonomie de gestion : un mythe à dissiper
+
+Une crainte fréquente : "**Si je quitte WordPress pour une web app sur-mesure, je perds l'autonomie d'éditer mes contenus.**"
+
+C'est faux — du moins quand l'app est bien conçue. Chaque web app livrée par Next Impact s'accompagne d'une **interface d'administration sur-mesure**, pensée pour la logique métier du projet :
+
+- Vous y gérez vos contenus, vos données, vos utilisateurs
+- Vous n'avez pas besoin d'un développeur pour les opérations courantes
+- L'interface est conçue pour votre équipe, pas pour un public générique
+
+C'est l'équivalent de l'admin WordPress, mais pour une logique applicative spécifique au lieu d'une logique éditoriale générique.
+
+## Récapitulatif
+
+| Famille | Le visiteur | Stack typique | Budget indicatif |
+|---|---|---|---|
+| Site vitrine | Consomme | WordPress classique | 2 250 - 6 000 € |
+| Site Headless | Consomme (vite) | WordPress + Next.js | 4 000 - 15 000 € |
+| Web app | Crée, saisit, interagit | Next.js + PostgreSQL | 15 000 - 80 000 €+ |
+| PWA mobile | Idem + usage terrain/mobile | Next.js + PWA | Sur devis |
+| App native | Idem + intégration OS | Swift / Kotlin | 50 000 €+ |
+
+## Pour aller plus loin
+
+- [Site web ou web app : comment choisir ?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir) — Le test de 5 questions pour trancher
+- [Quand WordPress n'est plus le bon outil](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) — Les 4 limites du CMS face à un projet applicatif
+- [Anatomie d'une web app sur-mesure](/documentation/applications-web-mobile/anatomie-dune-web-app) — Sous le capot d'une plateforme Next.js + PostgreSQL
+
+Envie d'en discuter pour votre projet ? [Lancez le diagnostic](/contact) ou [planifiez un appel découverte](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

@@ -1,0 +1,179 @@
+---
+title: "Anatomie d'une web app sur-mesure"
+description: "Décortiquer une web app : front, base de données, admin autonome, hébergement. Comprendre ce qui se passe sous le capot d'une plateforme Next.js + PostgreSQL — sans devenir développeur."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 4
+---
+
+## Pourquoi comprendre l'anatomie d'une web app
+
+Vous n'avez pas besoin de savoir coder pour piloter un projet applicatif. Mais vous gagnez **énormément en autonomie de décision** si vous comprenez les grandes pièces du puzzle :
+
+- Qu'est-ce qui coûte cher et pourquoi
+- Quelles décisions ont un impact à long terme
+- Quels arguments techniques tiennent la route, et lesquels sont du marketing
+
+Cet article décortique une web app moderne (du type de celles que je livre) en quatre couches, sans jargon inutile.
+
+## La vue d'ensemble
+
+<FlowDiagram
+  nodes={[
+    { label: "Front (Next.js)", description: "Ce que voient vos utilisateurs : pages, formulaires, interactions", icon: "🖥️" },
+    { label: "API / Logique métier", description: "Les règles de votre activité : calculs, validations, workflows", icon: "⚙️" },
+    { label: "Base de données (PostgreSQL)", description: "Le stockage structuré de votre donnée métier", icon: "🗄️" },
+    { label: "Admin autonome", description: "Votre interface de pilotage : gérer contenus, données, utilisateurs", icon: "🎛️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+Quatre couches, des rôles complémentaires. Reprenons une par une.
+
+## Couche 1 — Le front (Next.js)
+
+### Ce que c'est
+
+C'est **tout ce que voient vos utilisateurs** : la page d'accueil, les formulaires de saisie, les listes, les fiches détaillées, les écrans de tableau de bord. C'est la partie visible de l'iceberg.
+
+### Technologie
+
+Next.js, framework de référence pour les applications web modernes, basé sur React (la bibliothèque la plus utilisée au monde côté frontend). Concrètement :
+
+- **Rendu côté serveur (SSR)** pour les pages personnalisées
+- **Pré-génération (SSG)** pour les pages publiques rapides
+- **Régénération incrémentale (ISR)** pour les contenus qui changent occasionnellement
+- **TypeScript strict** pour éviter une grosse classe de bugs
+- **Tailwind CSS** pour des styles cohérents et maintenables
+
+### Ce qui compte pour vous
+
+- **Performance perçue** : avec Next.js bien fait, les pages chargent en moins de 500 ms même sous trafic
+- **SEO maîtrisé** : contrairement aux SPA pures (React seul, Vue, Angular), le contenu est servi côté serveur et indexable
+- **Évolutivité** : ajouter une nouvelle page, un nouvel écran, est rapide et peu coûteux
+
+> Important : Next.js est utilisé par Notion, TikTok, Twitch, Hulu, Airbnb (entre autres). Vous bénéficiez d'un écosystème massif et d'une longévité garantie.
+
+## Couche 2 — La logique métier (API + serveur)
+
+### Ce que c'est
+
+C'est **votre métier traduit en code** : les règles, les calculs, les validations, les workflows. Quand un utilisateur clique sur "Soumettre" dans un formulaire, ce n'est pas le navigateur qui décide quoi faire — c'est la logique métier côté serveur.
+
+Exemples concrets :
+
+- "Un fournisseur ne peut publier sa fiche que si son SIRET est valide"
+- "Quand un projet passe en statut Validé, envoyer un email au client et bloquer l'édition"
+- "Un acheteur peut consulter une fiche fournisseur, mais ne peut pas voir les coordonnées s'il n'est pas inscrit"
+- "Le calcul du devis dépend de 12 paramètres saisis par l'utilisateur et de tarifs définis par l'admin"
+
+### Technologie
+
+Dans une web app Next.js, la logique métier vit dans des **API Routes** (ou Route Handlers). C'est du TypeScript côté serveur, qui :
+
+- Reçoit les requêtes du front
+- Vérifie l'authentification et les permissions
+- Applique les règles métier
+- Lit/écrit dans la base de données
+- Renvoie la réponse
+
+### Ce qui compte pour vous
+
+- **La logique métier est l'actif principal** de votre application : c'est elle qui matérialise votre savoir-faire, votre différenciation, votre propriété intellectuelle
+- Elle doit être **bien documentée** (commentaires + tests) pour être maintenable
+- Elle doit être **isolée** : un bug d'affichage ne doit jamais corrompre vos données métier
+
+## Couche 3 — La base de données (PostgreSQL)
+
+### Ce que c'est
+
+**Le coffre-fort de votre activité.** Tout ce qui doit survivre à la fermeture du navigateur d'un utilisateur vit ici : comptes, transactions, contenus, paramètres, historiques.
+
+### Technologie
+
+PostgreSQL, base de données relationnelle open-source, considérée comme la plus fiable et la plus complète du marché. En version serverless (Neon, Supabase, Vercel Postgres, etc.) :
+
+- Pas de serveur à gérer
+- Sauvegardes automatiques
+- Mise à l'échelle automatique en cas de trafic
+- Tarification à l'usage (vous payez ce que vous consommez)
+
+### Ce qui compte pour vous
+
+- **Vos données sont structurées** : chaque entité (utilisateur, produit, transaction…) a un schéma défini
+- **Vos données sont sécurisées** : sauvegardes, chiffrement au repos, accès contrôlé
+- **Vos données sont exportables** : à tout moment, vous pouvez récupérer un export complet (CSV, SQL). Vous n'êtes pas prisonnier d'un format propriétaire
+- **Vos données sont conformes RGPD** : la base est hébergée en Europe, les opérations de droit d'accès et d'effacement sont natives
+
+> WordPress utilise aussi une base de données (MySQL). La différence : sur WordPress, tout votre métier est stocké en clé-valeur dans une seule table. Sur PostgreSQL bien conçu, chaque entité a sa propre table avec un schéma typé.
+
+## Couche 4 — L'admin autonome
+
+### Ce que c'est
+
+**Votre tableau de bord pour piloter l'application au quotidien**, sans toucher au code. C'est l'équivalent de l'admin WordPress, mais conçu spécifiquement pour la logique métier de votre projet.
+
+Concrètement, l'admin permet de :
+
+- Gérer les contenus éditoriaux (CMS classique)
+- Gérer les utilisateurs (créer, suspendre, changer le rôle)
+- Gérer les données métier (créer / modifier / archiver les entités principales)
+- Modérer (valider des inscriptions, traiter des signalements, valider des contenus)
+- Consulter des indicateurs (combien d'inscriptions cette semaine, quels contenus marchent le mieux, etc.)
+- Configurer (ajuster des paramètres sans intervention dev)
+
+### Technologie
+
+L'admin est généralement développée **dans la même application** que le front public (même Next.js, même base de données) — avec un système de permissions qui réserve son accès aux comptes administrateurs.
+
+### Ce qui compte pour vous
+
+- **Autonomie complète** sur les opérations courantes — pas besoin de m'appeler pour changer un libellé ou bannir un utilisateur
+- **Sur-mesure** : l'admin contient exactement les fonctions dont vous avez besoin, ni plus ni moins. Pas de jungle de plugins, pas de menus inutiles
+- **Évolutive** : on ajoute des fonctions au fil des besoins. C'est du code propre, pas du bricolage de plugins
+- **Pas de dépendance** : si demain vous voulez changer de prestataire, l'admin reste lisible, modifiable et documentée
+
+## Couche transverse — L'hébergement
+
+### Vercel
+
+L'hébergement des web apps Next.js que je livre se fait sur Vercel (l'éditeur de Next.js). Avantages :
+
+- Déploiement automatique à chaque mise à jour du code (CI/CD)
+- Aperçu (preview) de chaque modification avant mise en production
+- Rollback instantané si un déploiement pose problème
+- Distribution mondiale (CDN) pour des performances optimales
+- Tarification à l'usage : vous payez ce que vous consommez
+
+### Coût d'hébergement typique
+
+- Une web app à 1 000 - 5 000 utilisateurs : 20 - 60 €/mois (Vercel + base PostgreSQL serverless)
+- Une web app à 10 000 - 50 000 utilisateurs : 60 - 200 €/mois
+- Au-delà : sur devis, à étudier au cas par cas
+
+À comparer à un hébergement WordPress mutualisé "performant" (10-30 €/mois) ou VPS (40-100 €/mois) auquel il faut ajouter les licences plugins (300-1 000 €/an).
+
+## Le schéma simplifié à retenir
+
+| Couche | Rôle | Technologie | Ce que vous gérez |
+|---|---|---|---|
+| Front | Ce que voit l'utilisateur | Next.js + Tailwind | Rien directement (sauf si admin éditable) |
+| Logique métier | Ce que fait l'application | TypeScript côté serveur | Rien (modifié par le développeur) |
+| Base de données | Stockage de la donnée | PostgreSQL | Via l'admin |
+| Admin autonome | Pilotage quotidien | Sur-mesure | **Tout** |
+
+## L'argument central — l'isolation
+
+Le grand avantage de cette architecture par rapport à WordPress : **chaque couche est isolée**. Une mise à jour du front ne casse pas la base. Un bug d'affichage n'altère pas les données. Une faille de sécurité dans un module est contenue. L'application est **maintenable sur le long terme**.
+
+C'est exactement l'inverse du syndrome WordPress, où chaque mise à jour de plugin peut casser un autre plugin, et où une faille dans un plugin met en péril toute l'installation.
+
+## Pour aller plus loin
+
+- [Site web ou web app : comment choisir ?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir)
+- [L'admin autonome : comme WordPress, mais pour votre métier](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure)
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+
+Pour discuter d'un projet précis : [diagnostic projet](/contact) ou [appel découverte](https://calendar.app.google/Cw7TGQBzeZ1szKU86).

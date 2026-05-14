@@ -105,7 +105,7 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       ? "In a few clicks, identify the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
       : "Identifiez en quelques clics la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
     icon: BadgePercent,
-    href: "/contact",
+    href: "/services/eligibilite",
     gradient: "bg-gradient-to-br from-amber-500/20 via-mediumblue to-darkblue",
     textColor: "text-white",
     accentColor: "text-amber-400",

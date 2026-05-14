@@ -1,0 +1,130 @@
+---
+title: "PWA vs application mobile native : avantages, limites, coûts"
+description: "Tableau comparatif décisionnel, exemples concrets, quand chacune s'impose et quand l'une remplace avantageusement l'autre."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 5
+---
+
+## La question, mal posée 9 fois sur 10
+
+"On a besoin d'une app mobile." C'est la phrase que j'entends dans 80 % des premiers échanges sur projet mobile. Sous-entendu : une application téléchargeable sur l'App Store et le Play Store, codée en Swift et Kotlin, avec un développement spécifique par plateforme.
+
+La plupart du temps, **ce n'est pas le bon framework de décision**. La vraie question, c'est : "Que doivent pouvoir faire mes utilisateurs en situation de mobilité ?" Et selon la réponse, une PWA bien conçue suffit dans 90 % des cas — pour 3 à 10 fois moins cher.
+
+Cet article démêle les deux options.
+
+## Définitions claires
+
+### PWA (Progressive Web App)
+
+Une application web qui s'installe sur l'écran d'accueil du téléphone **sans passer par les stores**. L'utilisateur visite votre site, le navigateur propose "Ajouter à l'écran d'accueil", l'app se comporte ensuite comme une vraie app : icône, lancement plein écran, accès aux capteurs (géolocalisation, caméra basique), persistance locale, fonctionnement hors-ligne.
+
+Techniquement : un site web Next.js + un service worker + un manifest. Pas de store, pas de validation, pas de duplication de code.
+
+**Exemples** : le jeu de piste mobile [Hermitage](/etudes-de-cas/hermitage-jeu-de-piste), la version mobile de Twitter, l'app Starbucks, l'app Pinterest.
+
+### Application native
+
+Une application développée spécifiquement pour iOS (Swift) **et/ou** Android (Kotlin), distribuée via l'App Store et le Play Store. Elle a accès à toutes les fonctionnalités du système : capteurs avancés, paiement intégré, notifications push complexes, intégration profonde avec l'OS, performances graphiques élevées.
+
+**Exemples** : les apps bancaires majeures, les réseaux sociaux complets (Instagram, TikTok), les jeux vidéo 3D, les apps de santé connectée.
+
+## Tableau comparatif
+
+| Critère | PWA | App native |
+|---|---|---|
+| **Coût initial** | 1× | 3× à 10× |
+| **Délai de livraison** | 4 à 16 semaines | 4 à 12 mois |
+| **Distribution** | URL + ajout écran d'accueil | App Store + Play Store (validation 1-2 semaines) |
+| **Mise à jour** | Instantanée pour tous les utilisateurs | Validation store puis téléchargement par les utilisateurs |
+| **iOS + Android** | Une seule app couvre les deux | Deux développements distincts |
+| **Accès géolocalisation** | Oui (API navigateur) | Oui (plus précis sur certains capteurs) |
+| **Caméra** | Oui (basique) | Oui (contrôle fin de l'optique) |
+| **Hors-ligne** | Oui (service worker) | Oui (natif) |
+| **Notifications push** | Oui (iOS depuis 2023) | Oui (sans limite) |
+| **Performances** | Excellentes pour 95 % des usages | Référence pour les usages exigeants |
+| **Maintenance** | Une seule codebase | Deux codebases à maintenir |
+| **Visibilité Stores** | Non | Oui (mais payer pour être trouvé) |
+| **Paiement in-app** | Non (commissions évitées) | Oui (Apple/Google prélèvent 15-30 %) |
+
+## Les vraies questions à se poser
+
+### Q1 — Avez-vous besoin de la visibilité Stores ?
+
+C'est l'argument le plus souvent évoqué : "Je veux être dans les stores pour être trouvé." Réalité 2026 : la visibilité organique sur l'App Store et le Play Store est **largement saturée**. Une app non sponsorisée a quasi zéro chance d'être découverte par recherche store.
+
+Si votre stratégie d'acquisition utilisateur passe par votre site, vos contenus, votre réseau, vos commerciaux — les stores n'ajoutent rien. Une PWA installable depuis votre site fait aussi bien.
+
+Si votre stratégie passe par de l'achat de visibilité sur les stores (publicité Apple Search Ads, par exemple) — alors les stores ont un sens, et il faut probablement aller en natif.
+
+### Q2 — Avez-vous des fonctionnalités exigeantes en performances ?
+
+Quelques exemples qui sortent du périmètre PWA :
+
+- Jeu 3D avec rendu graphique avancé
+- Édition vidéo en temps réel
+- Réalité augmentée
+- Traitement audio professionnel
+- Accès profond à des capteurs de santé (rythme cardiaque, capteur d'oxygène)
+
+Si vous êtes dans ces cas-là, allez en natif. Pour le reste — formulaires, listes, cartes, médias, géoloc basique, paiement web — la PWA fait jeu égal.
+
+### Q3 — Avez-vous besoin de paiement in-app obligatoire ?
+
+Si vous vendez du contenu numérique (vidéo, audio, e-book), Apple et Google **imposent leur système de paiement** sur leurs stores et prélèvent 15 à 30 %. Une PWA évite ce prélèvement (mais ne peut pas être en simultané dans les stores avec un paiement web alternatif).
+
+Si vous vendez du physique (e-commerce), du service (réservation, abonnement à un service hors plateforme), aucune commission n'est due — et la PWA est très intéressante.
+
+### Q4 — Quel est votre budget ?
+
+| Type de projet | PWA | Natif (iOS + Android) |
+|---|---|---|
+| Outil terrain simple | 8 - 20 k€ | 50 - 120 k€ |
+| App grand public moyenne | 15 - 40 k€ | 80 - 250 k€ |
+| App complexe (réseau social, marketplace) | 40 - 100 k€ | 250 k€ - 1 M€ |
+
+À fonctionnalités équivalentes, le natif coûte typiquement **3 à 10 fois plus** — et exige une maintenance permanente sur deux plateformes.
+
+## Quand la PWA gagne (90 % des projets mobiles)
+
+- **Outil interne** : équipe terrain, application métier accessible en mobilité
+- **Jeu de piste, guide touristique, application événementielle** (cf. [Hermitage](/etudes-de-cas/hermitage-jeu-de-piste))
+- **App de réservation, prise de rendez-vous, suivi de commande**
+- **App de communauté ou de média** (lecture, interaction légère, notifications)
+- **App de simulation ou de calculateur** (devis, éligibilité, configurateur)
+- **App de fidélité** (carte virtuelle, programme de points, coupons)
+- **Marketplace mobile-first** sans paiement in-app obligatoire
+
+## Quand le natif s'impose (10 % des projets mobiles)
+
+- Jeu vidéo avec rendu 3D ou physique avancée
+- App de santé avec capteurs profonds
+- Réalité augmentée (Pokémon Go, applications industrielles AR)
+- Édition multimédia avancée (montage vidéo, retouche photo pro)
+- Apps avec présence indispensable dans les stores (FinTech grand public)
+- Apps qui vendent du contenu numérique et veulent rester sur les stores
+
+## Le piège classique : "On veut les deux"
+
+Une stratégie qu'on me propose parfois : "Faisons une PWA pour la V1 puis on portera en natif dans 2 ans." Mauvaise idée la plupart du temps.
+
+- Si la PWA répond à 95 % des besoins, vous n'allez jamais avoir le ROI pour justifier un portage natif
+- Si la PWA ne répond qu'à 60 % des besoins, vous n'auriez pas dû commencer par là
+
+Une seule exception : **commencer par une PWA en MVP pour valider le marché**, avec un budget contenu. Si le produit décolle et qu'on identifie des besoins natifs précis, on porte. Si non, on a économisé 80 % du budget initial.
+
+C'est exactement la stratégie qu'a suivie le jeu de piste Hermitage : PWA en 4 semaines pour valider l'expérience, sans investissement disproportionné. Si demain la fréquentation explose et qu'un usage natif s'impose, on aura les chiffres pour décider.
+
+## La règle de décision en une phrase
+
+> Pour 90 % des projets mobiles, **commencez par une PWA**. Vous gagnez 60 à 80 % de budget et de délai. Vous passez au natif **seulement** si une fonctionnalité native indispensable apparaît.
+
+## Pour aller plus loin
+
+- [Installable sans store : le pouvoir d'une PWA](/documentation/applications-web-mobile/installable-sans-store-le-pouvoir-de-la-pwa)
+- [Étude de cas — Hermitage : jeu de piste mobile en PWA](/etudes-de-cas/hermitage-jeu-de-piste)
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+
+Vous hésitez sur la bonne approche mobile ? [Lancez le diagnostic](/contact) — je vous oriente honnêtement, y compris si c'est vers un studio natif spécialisé.

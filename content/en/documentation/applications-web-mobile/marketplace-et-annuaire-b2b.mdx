@@ -1,0 +1,181 @@
+---
+title: "B2B marketplace and directory: what you need to know before launching"
+description: "Product strategy, technical fundamentals, monetization models, Panorama Pub feedback. Questions to ask before committing a budget."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 9
+---
+
+## The marketplace, future-proof project and launch puzzle
+
+Launching a B2B marketplace or directory is one of the most exciting web projects: a scalable digital asset, a recurring business model, a reference position on a market. It's also one of the hardest to scope: bad initial positioning loses 18 months, a bad MVP burns a budget without validating the market.
+
+This article gathers the critical questions to ask **before** committing to development.
+
+## Directory or marketplace?
+
+First fundamental distinction. Both are often confused in initial briefs:
+
+### Directory
+
+A platform that **lists and organizes** actors / products / services of a sector. The visitor **finds, compares, consults**. The connection happens **off-platform** (the visitor contacts directly).
+
+- Typical business model: supplier subscription (to be listed), advertising, paid spotlighting, premium content
+- Examples: Panorama Pub, Yellow Pages, GetApp
+
+### Marketplace
+
+A platform that **hosts the transaction**. The visitor finds, compares, **and buys/books directly** via the platform. The platform takes a commission on the transaction.
+
+- Typical business model: commission per transaction (5-25% depending on sectors)
+- Examples: Airbnb, Doctolib, Le Bon Coin Pro
+
+### Technical and budgetary consequences
+
+| Aspect | Directory | Marketplace |
+|---|---|---|
+| MVP complexity | Medium | High |
+| Indicative MVP budget | €20-40k | €50-150k |
+| MVP timeline | 2-4 months | 4-9 months |
+| Integrated payment | No | Yes (Stripe Connect or equivalent) |
+| KYC / verification | Light | Strict (depending on regulation) |
+| Dispute management | Off-platform | On-platform |
+
+> The frequent trap: starting as a "marketplace" when a directory is plenty to validate the market. Panorama Pub started as a directory. Once the market is validated and the supplier base is robust, evolving to real transactional matchmaking becomes relevant.
+
+## The double-side problem (chicken & egg)
+
+Every marketplace or B2B directory has one common challenge: **you need critical mass on both sides** (suppliers AND buyers) for the platform to take off. But nobody wants to be the first to register on an empty platform.
+
+### Strategies to solve chicken & egg
+
+1. **Start "primed" on the supply side**: pre-fill the platform with a supplier base before public launch. Panorama Pub started with hundreds of supplier listings already online.
+2. **Deliver value even without transactions**: editorial content, comparators, calculators. The visitor has a reason to come even if matchmaking isn't mature yet.
+3. **Useful single-player solution**: the platform delivers value even to a lone supplier (catalog management, SEO listing, consultation stats). It motivates registration on the supply side without waiting for demand.
+4. **Narrow vertical target**: focus on a specific sub-market to reach critical mass faster. Better to be the leader of a niche than 12th on a general market.
+
+## The 7 questions to settle before dev
+
+### 1. What is the vacant or poorly served market?
+
+A generalist marketplace on a mature market is almost always doomed. The right angle: **a poorly covered market**, where current supply is fragmented, where there's no clear reference.
+
+Panorama Pub: directory of promotional product suppliers in France. No centralized directory existed, buyers (agencies, comm services, events) had to cobble together scattered searches. **Identified, vacant, sufficiently large market.**
+
+### 2. Who are the buyers and where are they?
+
+Describe the buyers **beyond generic personas**. How many are they? How do they find their suppliers today? What's their main frustration?
+
+If you don't know how to **reach 100 buyers** in the 3 months after launch, no matter how perfect the platform is, it won't take off.
+
+### 3. Who are the suppliers and what do they want?
+
+Same thing. Will suppliers pay? How much? For what value?
+
+On a B2B directory, the test: **would you go canvas 20 suppliers in person** to convince them to register before the public launch? If not, the platform will struggle to recruit suppliers organically.
+
+### 4. What is the precise business model?
+
+Too vague: "We'll monetize via advertising / commission / subscriptions." Precise:
+
+- Subscription Basic €39/month (3 photos, 1 contact), Pro €99/month (unlimited + spotlight)
+- 8% commission per transaction (supplier-paid), free threshold up to €500/month
+- Paid spotlighting: €200/month to appear at top of category X
+
+Without those numbers, we can't tell whether the business model is viable.
+
+### 5. What volume to reach break-even?
+
+A simple calculation:
+
+> Monthly fixed costs (hosting + maintenance + fees) = €800. Average margin per paying supplier = €60/month. Threshold = 14 ongoing paying suppliers. Projected growth = 3 net paying suppliers per month → threshold reached at month 5.
+
+If the calculation gives 6 months, doable. If it gives 18 months, the model or ticket size needs revisiting.
+
+### 6. What's the critical mass for network effect?
+
+How many suppliers needed for the platform to be **useful** to a buyer? And conversely, how many buyers before a supplier pays to be there?
+
+These numbers define the **viability threshold**. Until we reach it, the platform remains fragile.
+
+### 7. What are the regulatory barriers?
+
+- If it's a transactional marketplace, check KYC obligations, anti-money-laundering, tax (VAT, DAC7 declarations)
+- If you handle sensitive data (health, finance, minors), plan specific compliance
+- If you operate internationally, consider GDPR for European users
+
+These dimensions can **double** the initial budget if not anticipated.
+
+## Technical fundamentals of a B2B marketplace
+
+### Data model
+
+At minimum:
+
+- **Users** (with roles: admin, supplier, buyer, visitor)
+- **Suppliers / advertisers** (companies with listing, contacts, metadata)
+- **Offers / products / services** (what's listed)
+- **Categories / taxonomies** (often hierarchical, sometimes multi-axis)
+- **Requests / contacts** (who asks what to whom)
+- **Statistics** (views, clicks, conversions per listing)
+
+For a transactional marketplace, add:
+
+- **Transactions / orders** (with statuses, payment, delivery)
+- **Disputes**
+- **Reviews / ratings**
+- **Financial movements** (commissions, payments, refunds)
+
+### High-performance search
+
+It's **the functional core** of a marketplace. Slow, imprecise or poorly thought-out search kills usage. Criteria:
+
+- Full-text search with relevance scoring
+- Multi-axis filters (category, location, certifications, price, etc.)
+- Sort (relevance, distance, price, popularity)
+- Auto-complete
+- Response < 200 ms even on bases of several thousand listings
+
+Technically: PostgreSQL with its full-text extensions is enough up to ~100k listings. Beyond that, consider Algolia, Meilisearch or Elasticsearch.
+
+### Native SEO
+
+A B2B marketplace largely lives off its SEO. Every listing, category, page must be:
+
+- Indexable (server rendering, not pure SPA)
+- With rich metadata (title, description, schema.org)
+- With clean and hierarchical URLs (`/category/sub-category/listing-slug`)
+- Fast (Core Web Vitals all green)
+
+Next.js is well-suited to these requirements (SSG/ISR for stable pages, SSR for personalized pages).
+
+### Rich admin
+
+On a marketplace, the admin is **a critical quality position**. The moderator must be able to:
+
+- Quickly validate registrations
+- Spot problematic listings (reports, quality, fraud)
+- Suspend an account in one click
+- Bulk-modify (e.g., change category of 50 listings)
+- Have an overview of traffic and conversions
+
+## Panorama Pub feedback
+
+Panorama Pub was delivered in 2 months as a directory (not transactional marketplace). Choices that enabled this timeline:
+
+- **Tight MVP perimeter**: directory with search, supplier listings, solid admin. No (yet) payment, transactional matchmaking, review system.
+- **Stable data model**: modeled in 3 days during scoping, then not modified.
+- **High-performance search from V1**: PostgreSQL full-text with ranking.
+- **Pre-fill on supply side**: hundreds of supplier listings added before public launch.
+- **Native SEO at the core**: Next.js App Router with SSG + ISR, clean URLs, schema.org for listings.
+
+Initial cost: ~€30k. Lead time: 2 months. Clear roadmap for the next building blocks (supplier area, matchmaking, content).
+
+## Going further
+
+- [Case study — Panorama Pub](/etudes-de-cas/panorama-pub)
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app)
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+
+You have a directory or marketplace project? [Run the diagnostic](/contact) — I'll help scope it before any pricing.
