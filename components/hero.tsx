@@ -135,11 +135,6 @@ export default function Hero() {
                 </span>
               </div>
 
-              <div className="absolute right-4 bottom-12 bg-extralightblue py-2 px-4 rounded-full animate-float-delayed">
-                <span className="text-sm font-medium text-black">
-                  {t("experience")}
-                </span>
-              </div>
 
               <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full animate-float hidden md:flex items-center gap-1.5">
                 <span className="text-xs font-medium text-darkblue">
