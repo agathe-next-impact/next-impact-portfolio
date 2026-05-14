@@ -42,6 +42,10 @@ async function runGeminiAnalysis(url: string, prompt: string, systemInstruction:
         systemInstruction,
         generationConfig,
         safetySettings,
+        // Grounding via Google Search : Gemini va lire la page en temps réel
+        // au lieu de halluciner à partir du nom de domaine.
+        // googleSearch (Gemini 2.0+) n'est pas dans les types SDK v0.24.x → cast.
+        tools: [{ googleSearch: {} } as unknown as never],
       });
       const result = await model.generateContent(fullPrompt);
       return result.response.text();

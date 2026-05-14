@@ -18,7 +18,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "WordPress sites (classic or Headless + Next.js) and custom applications: full management autonomy on every project, without ongoing technical dependency.",
     ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Start my project", href: "/contact" },
+    ctaSecondary: { label: "Contact me", href: "/contact" },
     auditTitle: "Which path fits your project?",
     auditSubtitle: "Project diagnostic",
     auditDescription:
@@ -32,7 +32,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "Performance, SEO, conversion and management autonomy: measurable results, whatever path you pick.",
     ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Start my project", href: "/contact" },
+    ctaSecondary: { label: "Contact me", href: "/contact" },
     auditTitle: "Which path fits your project?",
     auditSubtitle: "Project diagnostic",
     auditDescription:
@@ -46,7 +46,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "An admin interface built for your business logic: zero daily friction.",
     ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Find my path", href: "/contact" },
+    ctaSecondary: { label: "Contact me", href: "/contact" },
     auditTitle: "Which path fits your project?",
     auditSubtitle: "Project diagnostic",
     auditDescription:
@@ -60,7 +60,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
     valueProposition:
       "WordPress sites (classic or Headless + Next.js) and custom applications: the right tool for each project, without technical over-engineering.",
     ctaPrimary: { label: "Free diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Explore the paths", href: "/contact" },
+    ctaSecondary: { label: "Contact me", href: "/contact" },
     auditTitle: "Which path fits your project?",
     auditSubtitle: "Technical diagnostic",
     auditDescription:

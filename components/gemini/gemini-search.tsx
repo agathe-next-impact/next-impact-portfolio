@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 const AuditSendFormClient = dynamic(() => import("./AuditSendFormClient"), { ssr: false });
 import { Button } from "../ui/button";
-import { ArrowRight, ShieldCheck, AlertTriangle, Loader2 } from "lucide-react";
+import { ArrowRight, ShieldCheck, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -39,7 +39,6 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
   // CMS detection state
   const [cmsDetecting, setCmsDetecting] = useState(false);
-  const [showNotWordPress, setShowNotWordPress] = useState(false);
   const [detectedCms, setDetectedCms] = useState<string | null>(null);
 
   // User info collected from optin
@@ -105,15 +104,9 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
       const data = await res.json();
 
-      if (data.isWordPress && data.isMonolithic) {
-        // WordPress monolithique détecté → afficher l'optin
-        setDetectedCms("WordPress");
-        setShowOptin(true);
-      } else {
-        // Pas WordPress monolithique → afficher le popup informatif
-        setDetectedCms(data.detectedCms);
-        setShowNotWordPress(true);
-      }
+      // Toute stack détectée est acceptée — le prompt analyse n'importe quel CMS.
+      setDetectedCms(data.detectedCms || (data.isWordPress ? "WordPress" : null));
+      setShowOptin(true);
     } catch (err: any) {
       setError(
         err.message || (isEn ? "CMS detection error" : "Erreur lors de la détection du CMS"),
@@ -192,7 +185,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               htmlFor="gemini_url"
               className="font-googletexte text-white/80 "
             >
-              {isEn ? "WordPress URL to analyze" : "URL WordPress à analyser"}
+              {isEn ? "Site URL to analyze" : "URL du site à analyser"}
             </label>
           </div>
           <input
@@ -256,9 +249,13 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               {isEn ? "Before running the audit" : "Avant de lancer l'audit"}
             </DialogTitle>
             <DialogDescription className="text-white/70 font-googletexte">
-              {isEn
-                ? "Monolithic WordPress detected. Enter your contact details to receive your full audit report."
-                : "WordPress monolithique détecté. Renseignez vos coordonnées pour recevoir votre rapport d'audit complet."}
+              {detectedCms
+                ? isEn
+                  ? `${detectedCms} detected. Enter your contact details to receive your full audit report.`
+                  : `${detectedCms} détecté. Renseignez vos coordonnées pour recevoir votre rapport d'audit complet.`
+                : isEn
+                  ? "Enter your contact details to receive your full audit report."
+                  : "Renseignez vos coordonnées pour recevoir votre rapport d'audit complet."}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleOptinSubmit} className="flex flex-col gap-4 mt-2">
@@ -317,54 +314,6 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
                 : "Vos données sont utilisées uniquement pour vous envoyer votre rapport."}
             </p>
           </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Popup site non WordPress monolithique */}
-      <Dialog open={showNotWordPress} onOpenChange={(open) => { if (!open) setShowNotWordPress(false); }}>
-        <DialogContent className="bg-darkblue border-mediumblue/30 sm:max-w-md pb-4">
-          <DialogHeader>
-            <DialogTitle className="text-white font-googletitre text-xl flex items-center gap-2">
-              <AlertTriangle className="size-5 text-orange" />
-              {isEn ? "Not a monolithic WordPress site" : "Site non WordPress monolithique"}
-            </DialogTitle>
-            <DialogDescription className="text-white/70 font-googletexte">
-              {detectedCms
-                ? isEn
-                  ? `The analyzed site uses ${detectedCms} rather than monolithic WordPress.`
-                  : `Le site analysé utilise ${detectedCms} et non WordPress monolithique.`
-                : isEn
-                  ? "No monolithic WordPress CMS was detected on this site."
-                  : "Aucun CMS WordPress monolithique n'a été détecté sur ce site."}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-4 mt-2">
-            <p className="text-white/60 text-sm font-googletexte">
-              {isEn
-                ? "Our headless migration audit is specifically designed for monolithic WordPress sites."
-                : "Notre audit de migration headless est spécifiquement conçu pour les sites WordPress monolithiques."}
-              {detectedCms && detectedCms !== "WordPress" && (
-                <>
-                  {isEn ? " Your site appears to use " : " Votre site semble utiliser "}
-                  <strong className="text-white/80">{detectedCms}</strong>.
-                </>
-              )}
-              {!detectedCms && (
-                <>
-                  {" "}
-                  {isEn
-                    ? "The CMS used by this site could not be identified, or it isn't a standard CMS."
-                    : "Le CMS utilisé par ce site n'a pas pu être identifié, ou il ne s'agit pas d'un CMS standard."}
-                </>
-              )}
-            </p>
-            <Button
-              onClick={() => setShowNotWordPress(false)}
-              className="bg-coral text-darkblue font-googletitre font-semibold transition-all duration-300"
-            >
-              {isEn ? "Got it" : "Compris"}
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
 

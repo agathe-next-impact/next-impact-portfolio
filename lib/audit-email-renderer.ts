@@ -19,8 +19,11 @@ function extractDashboardData(md: string) {
   let score = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
   if (score > 10) score = 0;
 
-  const verdictMatch = md.match(/\*\*Verdict Stratégique.*?:.*?\*?\[?(.*?)(?:\]|\.| \n)/i);
-  const verdict = verdictMatch ? verdictMatch[1].replace(/[*\[\]]/g, "").trim() : "Non défini";
+  // Nouveau format : "**Voie recommandée :** ✅ B. WordPress Headless + Next.js"
+  const verdictMatch = md.match(/\*\*Voie recommandée\s*:\*\*\s*✅?\s*([^\n]+)/i);
+  const verdict = verdictMatch
+    ? verdictMatch[1].replace(/[*\[\]✅]/g, "").trim()
+    : "Non défini";
 
   const natureMatch = md.match(/1\.\s*\*\*Nature de l'organisation.*?:.*?\*\*(.*?)(?:\n|$)/i);
   const natureMatchBF = md.match(/1\.\s*\*\*Nature de l'organisation.*?:(.*?)(?:\n|$)/i);
@@ -48,14 +51,19 @@ function parseAllMarkdownTables(markdown: string) {
   return tables;
 }
 
-// --- Extraction de la stack recommandée (même logique que parseRecommendedStack.ts) ---
+// --- Extraction de la stack recommandée ---
+// Source primaire : ligne du tableau §5 commençant par "| ✅ Nom de la stack |"
+// Fallback : si le tableau est cassé, extraire depuis "**Voie recommandée :** ✅ B. <stack>"
 function parseRecommendedStack(markdown: string) {
-  const stackSection = markdown.match(/\*\*Stack recommandée.*?\n([\s\S]*?)(?:\n---|\n\*\*|$)/i);
-  if (!stackSection) return null;
-  const lines = stackSection[1].split("\n").map((l) => l.trim()).filter(Boolean);
-  const stack = lines[0] || "";
-  const highlights = lines.slice(1).map((l) => l.replace(/^[-*]\s*/, ""));
-  return { stack, highlights };
+  const tableRow = markdown.match(/\|\s*✅\s*([^|]+?)\s*\|/);
+  if (tableRow) {
+    return { stack: tableRow[1].trim(), highlights: [] as string[] };
+  }
+  const verdictLine = markdown.match(/\*\*Voie recommandée\s*:\*\*\s*✅?\s*[A-E]\.\s*([^\n]+)/i);
+  if (verdictLine) {
+    return { stack: verdictLine[1].replace(/[*\[\]]/g, "").trim(), highlights: [] as string[] };
+  }
+  return null;
 }
 
 // --- Nettoyage du markdown (même logique que markdown-renderer.tsx) ---
@@ -84,7 +92,7 @@ function renderDashboardHtml(score: number, verdict: string) {
 
   return `
     <h1 style="font-family:${FONT_TITRE};font-size:22px;font-weight:700;text-align:center;color:#1e3a5f;margin-bottom:24px;">
-      Audit d'opportunité pour une migration WordPress Headless
+      Audit IA — Quelle techno pour votre refonte ?
     </h1>
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
       <tr>
@@ -219,7 +227,8 @@ export function renderAuditEmailHtml(markdown: string, url: string): string {
     markdownBody = markdownBody.replace(tbl.raw, "");
   });
   if (stackData) {
-    const stackSection = markdown.match(/\*\*Stack recommandée.*?\n([\s\S]*?)(?:\n---|\n\*\*|$)/i);
+    // Nouveau format : "### 5. Stack recommandée — comparatif" jusqu'à la fin ou prochain h3/---
+    const stackSection = markdownBody.match(/###\s*\d+\.\s*Stack recommandée[\s\S]*?(?=\n###\s|\n---|$)/i);
     if (stackSection) {
       markdownBody = markdownBody.replace(stackSection[0], "");
     }
