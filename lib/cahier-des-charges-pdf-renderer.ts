@@ -232,12 +232,22 @@ export async function generateCahierDesChargesPDF(formData: Record<string, any>)
   y = MARGIN;
   y = renderSectionTitle(doc, "1. PRÉSENTATION GÉNÉRALE DU PROJET", y);
   y = renderSubsectionTitle(doc, "1.1 Contexte", y);
+  const projectTypeLabels: Record<string, string> = {
+    "site-classique": "Site WordPress classique",
+    "site-headless": "Site Headless WordPress + Next.js",
+    "web-app": "Web app sur-mesure",
+    "app-mobile": "Application mobile (PWA)",
+  };
+  const projectTypeValue = formData.project_type
+    ? projectTypeLabels[formData.project_type] ?? formData.project_type
+    : "";
+  y = renderField(doc, "Type de projet :", val(projectTypeValue), y);
   y = renderField(doc, "Nom de l'organisation :", val(formData.organisation_name), y);
   y = renderField(doc, "Secteur d'activité :", val(formData.secteur_activite), y);
   y = renderField(doc, "Public cible :", val(formData.public_cible), y);
   y = renderField(doc, "Problématiques identifiées :", val(formData.problematiques), y);
   y = renderField(doc, "Objectifs principaux :", val(formData.objectifs_refonte), y);
-  y = renderSubsectionTitle(doc, "1.2 Description du site existant", y);
+  y = renderSubsectionTitle(doc, "1.2 Description du projet existant", y);
   y = renderField(doc, "URL du site actuel :", val(formData.site_url), y);
   y = renderField(doc, "Date de création :", val(formData.site_creation_date), y);
   y = renderField(doc, "Technologies utilisées :", val(formData.technologies_actuelles), y);

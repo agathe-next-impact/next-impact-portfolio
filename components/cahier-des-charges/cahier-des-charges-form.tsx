@@ -31,8 +31,8 @@ type FormSection = {
 type FormField = {
   id: string;
   label: string;
-  type: "text" | "textarea" | "checkbox" | "checkboxGroup";
-  options?: { id: string; label: string }[];
+  type: "text" | "textarea" | "checkbox" | "checkboxGroup" | "radioGroup";
+  options?: { id: string; label: string; description?: string }[];
   placeholder?: string;
 };
 
@@ -158,7 +158,39 @@ export function CahierDesChargesForm() {
                         <div className="grid gap-6">
                           {section.fields.map((field) => (
                             <div key={field.id} className="space-y-2">
-                              {field.type === "checkboxGroup" ? (
+                              {field.type === "radioGroup" ? (
+                                <>
+                                  <Label className="text-sm font-semibold text-white/80 font-googletitre">
+                                    {field.label}
+                                  </Label>
+                                  <div className="grid gap-2 pt-2 sm:grid-cols-2">
+                                    {field.options?.map((option) => {
+                                      const selected = formData[field.id] === option.id;
+                                      return (
+                                        <button
+                                          key={option.id}
+                                          type="button"
+                                          onClick={() => handleInputChange(field.id, option.id)}
+                                          className={`text-left rounded-xl border px-4 py-3 transition ${
+                                            selected
+                                              ? "border-lightyellow bg-lightyellow/10"
+                                              : "border-white/10 bg-white/5 hover:border-white/30"
+                                          }`}
+                                        >
+                                          <p className="text-white font-googletitre text-sm font-semibold">
+                                            {option.label}
+                                          </p>
+                                          {option.description && (
+                                            <p className="text-xs text-white/60 font-googletexte mt-1 leading-snug">
+                                              {option.description}
+                                            </p>
+                                          )}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </>
+                              ) : field.type === "checkboxGroup" ? (
                                 <>
                                   <Label className="text-sm font-semibold text-white/80 font-googletitre">
                                     {field.label}
@@ -306,6 +338,33 @@ const formSectionsFr: FormSection[] = [
     title: "1. Présentation Générale du Projet",
     fields: [
       {
+        id: "project_type",
+        label: "Type de projet",
+        type: "radioGroup",
+        options: [
+          {
+            id: "site-classique",
+            label: "Site WordPress classique",
+            description: "Vitrine, institutionnel ou refonte WordPress optimisée",
+          },
+          {
+            id: "site-headless",
+            label: "Site Headless WordPress + Next.js",
+            description: "Performance maximale, SEO renforcé, plateforme éditoriale",
+          },
+          {
+            id: "web-app",
+            label: "Web app sur-mesure",
+            description: "Marketplace, plateforme métier, configurateur (Next.js + PostgreSQL)",
+          },
+          {
+            id: "app-mobile",
+            label: "Application mobile (PWA)",
+            description: "App installable sans store, géolocalisation, hors-ligne",
+          },
+        ],
+      },
+      {
         id: "organisation_name",
         label: "Nom de l'organisation",
         type: "text",
@@ -321,38 +380,38 @@ const formSectionsFr: FormSection[] = [
         id: "public_cible",
         label: "Public cible",
         type: "textarea",
-        placeholder: "Décrivez votre audience principale",
+        placeholder: "Décrivez votre audience principale ou vos utilisateurs",
       },
       {
         id: "problematiques",
-        label: "Problématiques identifiées avec le site actuel",
+        label: "Problématiques identifiées (projet actuel ou nouveau besoin)",
         type: "textarea",
-        placeholder: "Ex: Lenteur, design obsolète, non responsive...",
+        placeholder: "Ex: Lenteur du site actuel, fonctionnalités manquantes, processus métier non outillé...",
       },
       {
         id: "objectifs_refonte",
-        label: "Objectifs principaux de la refonte",
+        label: "Objectifs principaux du projet",
         type: "textarea",
         placeholder:
-          "Ex: Améliorer l'expérience utilisateur, augmenter les conversions...",
+          "Ex: Améliorer l'expérience utilisateur, lancer un nouveau service, outiller une équipe métier...",
       },
       {
         id: "site_url",
-        label: "URL du site actuel",
+        label: "URL du site actuel (si refonte)",
         type: "text",
         placeholder: "https://www.example.com",
       },
       {
         id: "site_creation_date",
-        label: "Date de création du site actuel",
+        label: "Date de création du projet actuel (si refonte)",
         type: "text",
         placeholder: "Ex: Janvier 2018",
       },
       {
         id: "technologies_actuelles",
-        label: "Technologies utilisées actuellement",
+        label: "Technologies utilisées actuellement (si applicable)",
         type: "text",
-        placeholder: "Ex: WordPress, PHP, MySQL...",
+        placeholder: "Ex: WordPress, PHP, MySQL, SaaS existant...",
       },
     ],
   },
@@ -734,14 +793,41 @@ const formSectionsEn: FormSection[] = [
     id: "section-1",
     title: "1. Project Overview",
     fields: [
+      {
+        id: "project_type",
+        label: "Type of project",
+        type: "radioGroup",
+        options: [
+          {
+            id: "site-classique",
+            label: "Classic WordPress site",
+            description: "Brochure, institutional or optimized WordPress rebuild",
+          },
+          {
+            id: "site-headless",
+            label: "Headless WordPress + Next.js site",
+            description: "Maximum performance, stronger SEO, editorial platform",
+          },
+          {
+            id: "web-app",
+            label: "Custom web app",
+            description: "Marketplace, business platform, configurator (Next.js + PostgreSQL)",
+          },
+          {
+            id: "app-mobile",
+            label: "Mobile application (PWA)",
+            description: "Installable without store, geolocation, offline mode",
+          },
+        ],
+      },
       { id: "organisation_name", label: "Organization name", type: "text", placeholder: "e.g. XYZ Company" },
       { id: "secteur_activite", label: "Industry", type: "text", placeholder: "e.g. Retail, Healthcare, Education…" },
-      { id: "public_cible", label: "Target audience", type: "textarea", placeholder: "Describe your primary audience" },
-      { id: "problematiques", label: "Issues identified with the current site", type: "textarea", placeholder: "e.g. Slowness, dated design, not responsive…" },
-      { id: "objectifs_refonte", label: "Main redesign objectives", type: "textarea", placeholder: "e.g. Improve UX, increase conversions…" },
-      { id: "site_url", label: "Current site URL", type: "text", placeholder: "https://www.example.com" },
-      { id: "site_creation_date", label: "Current site creation date", type: "text", placeholder: "e.g. January 2018" },
-      { id: "technologies_actuelles", label: "Current technologies", type: "text", placeholder: "e.g. WordPress, PHP, MySQL…" },
+      { id: "public_cible", label: "Target audience", type: "textarea", placeholder: "Describe your primary audience or users" },
+      { id: "problematiques", label: "Issues identified (current project or new need)", type: "textarea", placeholder: "e.g. Slow current site, missing features, business process not tooled…" },
+      { id: "objectifs_refonte", label: "Main project objectives", type: "textarea", placeholder: "e.g. Improve UX, launch a new service, equip a business team…" },
+      { id: "site_url", label: "Current site URL (if rebuild)", type: "text", placeholder: "https://www.example.com" },
+      { id: "site_creation_date", label: "Current project creation date (if rebuild)", type: "text", placeholder: "e.g. January 2018" },
+      { id: "technologies_actuelles", label: "Current technologies (if applicable)", type: "text", placeholder: "e.g. WordPress, PHP, MySQL, existing SaaS…" },
     ],
   },
   {

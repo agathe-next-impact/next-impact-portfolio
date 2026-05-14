@@ -24,7 +24,7 @@ type Strings = {
   toc: string
   tocItems: string[]
   sectionTitles: string[]
-  section1: { sub1: string; sub2: string; orgName: string; industry: string; targetAudience: string; issues: string; objectives: string; siteUrl: string; siteCreationDate: string; technologies: string }
+  section1: { sub1: string; sub2: string; projectType: string; projectTypeLabels: Record<string, string>; orgName: string; industry: string; targetAudience: string; issues: string; objectives: string; siteUrl: string; siteCreationDate: string; technologies: string }
   section2: { sub1: string; sub2: string; sub3: string; sub4: string; sitemap: string; contentTypes: string; standardEmpty: string; advancedEmpty: string; constraints: string }
   section3: { sub1: string; sub2: string; brandEmpty: string; inspirations: string; colors: string; typography: string; mood: string; uxPriorities: string; responsive: string; accessibility: string; navigation: string }
   section4: { sub1: string; sub2: string; sub3: string; sub4: string; cms: string; languages: string; database: string; hosting: string; security: string; loadTime: string; seo: string }
@@ -74,7 +74,14 @@ const STRINGS_FR: Strings = {
   ],
   section1: {
     sub1: "1.1 Contexte",
-    sub2: "1.2 Description du site existant",
+    sub2: "1.2 Description du projet existant",
+    projectType: "Type de projet :",
+    projectTypeLabels: {
+      "site-classique": "Site WordPress classique",
+      "site-headless": "Site Headless WordPress + Next.js",
+      "web-app": "Web app sur-mesure",
+      "app-mobile": "Application mobile (PWA)",
+    },
     orgName: "Nom de l'organisation :",
     industry: "Secteur d'activité :",
     targetAudience: "Public cible :",
@@ -201,7 +208,14 @@ const STRINGS_EN: Strings = {
   ],
   section1: {
     sub1: "1.1 Context",
-    sub2: "1.2 Existing site description",
+    sub2: "1.2 Existing project description",
+    projectType: "Type of project:",
+    projectTypeLabels: {
+      "site-classique": "Classic WordPress site",
+      "site-headless": "Headless WordPress + Next.js site",
+      "web-app": "Custom web app",
+      "app-mobile": "Mobile application (PWA)",
+    },
     orgName: "Organization name:",
     industry: "Industry:",
     targetAudience: "Target audience:",
@@ -429,6 +443,11 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
           <SectionHeader title={t.sectionTitles[0]} />
           <div className="ml-2 md:ml-4 space-y-6">
             <SubSection title={t.section1.sub1}>
+              <PreviewField
+                label={t.section1.projectType}
+                value={formData.project_type ? t.section1.projectTypeLabels[formData.project_type] : undefined}
+                fallback={t.notSpecified}
+              />
               <PreviewField label={t.section1.orgName} value={formData.organisation_name} fallback={t.notSpecified} />
               <PreviewField label={t.section1.industry} value={formData.secteur_activite} fallback={t.notSpecified} />
               <PreviewField label={t.section1.targetAudience} value={formData.public_cible} fallback={t.notSpecified} />
