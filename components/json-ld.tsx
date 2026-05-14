@@ -285,7 +285,7 @@ export function ContactPageJsonLd() {
         itemListElement: [
           {
             "@type": "Offer",
-            name: "Solidaire — WordPress classique",
+            name: "Classique — WordPress",
             description: "Site vitrine WordPress avec thème custom moderne, build optimisé et sécurité durcie. Conservation de l'admin, modernisation du reste.",
             price: "2250",
             priceCurrency: "EUR",
@@ -293,7 +293,7 @@ export function ContactPageJsonLd() {
           },
           {
             "@type": "Offer",
-            name: "Équilibre — WordPress Headless + Next.js",
+            name: "Headless — WordPress Headless + Next.js",
             description: "WordPress headless en backend, Next.js App Router en frontend (SSG, ISR, hydratation partielle). Performance front et SEO de niveau industriel.",
             price: "4000",
             priceCurrency: "EUR",
@@ -301,8 +301,8 @@ export function ContactPageJsonLd() {
           },
           {
             "@type": "Offer",
-            name: "Soutien — WordPress Headless complexe / multisites",
-            description: "Architecture WordPress Headless + Next.js App Router (SSG/ISR/SSR), TypeScript, multisites, intégrations API et CI/CD complet.",
+            name: "Web app — WordPress Headless complexe ou Next.js + PostgreSQL",
+            description: "Architecture WordPress Headless + Next.js App Router (SSG/ISR/SSR), TypeScript, multisites, intégrations API et CI/CD complet. Ou web app sur-mesure avec base PostgreSQL et admin autonome.",
             price: "5000",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/services`,
@@ -531,7 +531,7 @@ export function HomepageJsonLd() {
           itemListElement: [
             {
               "@type": "Offer",
-              name: "Solidaire — WordPress classique",
+              name: "Classique — WordPress",
               description:
                 "Site vitrine WordPress avec thème custom moderne, build optimisé et sécurité durcie.",
               price: "2250",
@@ -540,7 +540,7 @@ export function HomepageJsonLd() {
             },
             {
               "@type": "Offer",
-              name: "Équilibre — WordPress Headless + Next.js",
+              name: "Headless — WordPress Headless + Next.js",
               description:
                 "WordPress headless en backend, Next.js App Router en frontend. Performance et SEO de niveau industriel.",
               price: "4000",
@@ -549,9 +549,9 @@ export function HomepageJsonLd() {
             },
             {
               "@type": "Offer",
-              name: "Soutien — WordPress Headless complexe / multisites",
+              name: "Web app — WordPress Headless complexe ou Next.js + PostgreSQL",
               description:
-                "Architecture WordPress Headless + Next.js App Router, TypeScript, multisites, intégrations API et CI/CD complet.",
+                "Architecture WordPress Headless + Next.js App Router, TypeScript, multisites, intégrations API et CI/CD complet. Ou web app sur-mesure avec base PostgreSQL.",
               price: "5000",
               priceCurrency: "EUR",
               url: `${baseUrl}/services`,

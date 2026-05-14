@@ -32,15 +32,15 @@ function formatEuro(value: number, locale: Locale): string {
 }
 
 const presetsFr = [
-  { label: "Solidaire", value: 2250 },
-  { label: "Équilibre", value: 4000 },
-  { label: "Soutien", value: 5000 },
+  { label: "Classique", value: 2250 },
+  { label: "Headless", value: 4000 },
+  { label: "Web app", value: 5000 },
   { label: "Application sur-mesure", value: 15000 },
 ];
 const presetsEn = [
-  { label: "Solidarity", value: 2250 },
-  { label: "Balance", value: 4000 },
-  { label: "Support", value: 5000 },
+  { label: "Classic", value: 2250 },
+  { label: "Headless", value: 4000 },
+  { label: "Web app", value: 5000 },
   { label: "Custom application", value: 15000 },
 ];
 

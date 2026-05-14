@@ -33,11 +33,11 @@ type Tier = {
 
 function getTiers(isEn: boolean): Tier[] {
   return [
-    // Solidaire
+    // Classique
     {
       iconSrc: "/icons/brand-reach-icon.svg",
-      iconAlt: isEn ? "Solidarity tier" : "Solidaire",
-      name: isEn ? "SOLIDARITY" : "SOLIDAIRE",
+      iconAlt: isEn ? "Classic tier" : "Classique",
+      name: isEn ? "CLASSIC" : "CLASSIQUE",
       tech: isEn ? "Classic or light headless WordPress" : "WordPress classique ou Headless léger",
       price: isEn ? "From €2,250" : "Depuis 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
@@ -72,11 +72,11 @@ function getTiers(isEn: boolean): Tier[] {
       ctaLabel: isEn ? "Pick this stack" : "Choisir cette stack",
       ctaHref: "/contact",
     },
-    // Équilibre
+    // Headless
     {
       iconSrc: "/icons/scale-icon.svg",
-      iconAlt: isEn ? "Balance tier" : "Équilibre",
-      name: isEn ? "BALANCE" : "ÉQUILIBRE",
+      iconAlt: isEn ? "Headless tier" : "Headless",
+      name: isEn ? "HEADLESS" : "HEADLESS",
       tech: isEn ? "Headless WordPress + Next.js" : "WordPress headless + Next.js",
       price: isEn ? "From €4,000" : "Depuis 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
@@ -112,11 +112,11 @@ function getTiers(isEn: boolean): Tier[] {
       badge: isEn ? "Most popular" : "Le plus demandé",
       ctaHref: "/contact",
     },
-    // Soutien
+    // Web app
     {
       iconSrc: "/icons/rocket-icon.svg",
-      iconAlt: isEn ? "Support tier" : "Soutien",
-      name: isEn ? "SUPPORT" : "SOUTIEN",
+      iconAlt: isEn ? "Web app tier" : "Web app",
+      name: isEn ? "WEB APP" : "WEB APP",
       tech: isEn ? "Complex / multisite Headless WordPress" : "WordPress Headless complexe / multisites",
       price: isEn ? "From €5,000" : "Depuis 5 000 €",
       priceTagline: isEn

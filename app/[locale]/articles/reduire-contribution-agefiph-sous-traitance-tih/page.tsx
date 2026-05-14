@@ -305,7 +305,7 @@ export default function ArticleReduireAgefiph() {
                     "Un site web ultra-performant aux standards de la Tech (< 1s de chargement, SEO natif, sécurité maximale)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
-                    "Trois forfaits Sites web — Solidaire (2 250 €), Équilibre (4 000 €), Soutien (5 000 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
+                    "Trois forfaits Sites web — Classique (2 250 €), Headless (4 000 €), Web app (5 000 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-lightyellow mt-0.5 shrink-0" />

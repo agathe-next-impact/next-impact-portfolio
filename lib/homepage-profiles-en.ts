@@ -74,7 +74,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
   default: {
     titre: "Custom websites and applications",
     sousTitre:
-      "Three Website tiers (Solidarity, Balance, Support) and a Web & Mobile App offer on quote. The right tool for the right project, with guaranteed management autonomy.",
+      "Three Website tiers (Classic, Headless, Web app) and a Web & Mobile App offer on quote. The right tool for the right project, with guaranteed management autonomy.",
     carouselLabel: "Why Next Impact?",
     budgetTitle: "What investment level fits your project?",
     budgetCards: {
@@ -214,7 +214,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "Will my current content be kept?",
         answer:
-          "Yes, all your content (text, images, media) is migrated automatically. Nothing is lost. Migration is included on the Balance and Support tiers.",
+          "Yes, all your content (text, images, media) is migrated automatically. Nothing is lost. Migration is included on the Headless and Web app tiers.",
       },
     ],
   },
@@ -226,13 +226,13 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     budgetTitle: "What does each path include technically?",
     budgetCards: {
       left: {
-        title: "Solidarity (classic WordPress)",
+        title: "Classic (WordPress)",
         description:
           "Custom WordPress theme, modern build (Vite), Core Web Vitals optimizations, hardened security. Ideal for a high-performance showcase site at controlled cost.",
         price: "2,250",
       },
       right: {
-        title: "Support (complex / multisite Headless)",
+        title: "Web app (complex Headless or Next.js + PostgreSQL)",
         description:
           "WordPress headless + Next.js App Router, hybrid ISR/SSR, multisite, custom APIs, third-party integrations, full CI/CD. Architecture built for scalability.",
         highlight:
@@ -491,8 +491,8 @@ export const ABOUT_PAGE_VARIANTS_EN: Record<ProfileId | "default", AboutPageVari
         description:
           "Optimized classic WordPress theme, Headless + Next.js App Router (SSG/ISR/SSR) for scalable editorial platforms, custom web app (Next.js + serverless PostgreSQL, autonomous admin), or installable mobile PWA.",
         items: [
-          "Solidarity: classic WordPress with modern custom theme",
-          "Balance / Support: Headless WordPress + Next.js (SSG/ISR/SSR)",
+          "Classic: WordPress with modern custom theme",
+          "Headless / Web app: Headless WordPress + Next.js (SSG/ISR/SSR)",
           "Web app: Next.js + PostgreSQL + custom autonomous admin",
           "Mobile app: Next.js PWA, geolocation and local persistence as needed",
         ],

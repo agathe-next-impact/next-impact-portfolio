@@ -312,7 +312,7 @@
   },
   "servicesPage": {
     "metaTitle": "Services & Tarifs — Sites web et applications sur-mesure",
-    "metaDescription": "Trois forfaits sites web (Solidaire dès 2 250 €, Équilibre dès 4 000 €, Soutien dès 5 000 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
+    "metaDescription": "Trois forfaits sites web (Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 5 000 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Services & Tarifs",
     "calculateGain": {

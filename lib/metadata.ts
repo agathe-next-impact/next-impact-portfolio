@@ -237,7 +237,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Création de sites web et d'applications sur-mesure — Services et tarifs",
     description:
-      "Trois forfaits Sites web — Solidaire dès 2 250 €, Équilibre dès 4 000 €, Soutien dès 5 000 € — " +
+      "Trois forfaits Sites web — Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 5 000 € — " +
       "et une offre Applications web & mobile sur devis. " +
       "Avantage OETH transverse : 30 % du coût main-d'œuvre déductible AGEFIPH. Devis sous 48 h.",
     keywords: [
@@ -253,7 +253,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "Custom websites and applications — Services and pricing",
     description:
-      "Three website tiers — Solidarity from €2,250, Balance from €4,000, Support from €5,000 — " +
+      "Three website tiers — Classic from €2,250, Headless from €4,000, Web app from €5,000 — " +
       "and a Web & Mobile App offer on quote. " +
       "Transverse OETH benefit: 30% of labor cost deductible from your AGEFIPH contribution. Quote within 48 hours.",
     keywords: [

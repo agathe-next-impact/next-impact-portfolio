@@ -113,7 +113,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
   default: {
     titre: "Sites web et applications sur-mesure",
     sousTitre:
-      "Trois forfaits Sites web (Solidaire, Équilibre, Soutien) et une offre Applications web & mobile sur-mesure. Le bon outil pour le bon projet, avec une autonomie de gestion garantie.",
+      "Trois forfaits Sites web (Classique, Headless, Web app) et une offre Applications web & mobile sur-mesure. Le bon outil pour le bon projet, avec une autonomie de gestion garantie.",
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel niveau d'investissement pour votre projet ?",
     budgetCards: {
@@ -253,7 +253,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
       {
         question: "Mes contenus actuels seront-ils conservés ?",
         answer:
-          "Oui, tous vos contenus (textes, images, médias) sont migrés automatiquement. Rien n'est perdu. La migration est incluse dans les forfaits Équilibre et Soutien.",
+          "Oui, tous vos contenus (textes, images, médias) sont migrés automatiquement. Rien n'est perdu. La migration est incluse dans les forfaits Headless et Web app.",
       },
     ],
   },
@@ -265,13 +265,13 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     budgetTitle: "Que comprend chaque voie techniquement ?",
     budgetCards: {
       left: {
-        title: "Solidaire (WordPress classique)",
+        title: "Classique (WordPress)",
         description:
           "Thème WordPress custom, build moderne (Vite), optimisations Core Web Vitals, sécurité durcie. Idéal pour un site vitrine performant à coût maîtrisé.",
         price: "2 250",
       },
       right: {
-        title: "Soutien (Headless complexe / multisites)",
+        title: "Web app (Headless complexe ou Next.js + PostgreSQL)",
         description:
           "WordPress headless + Next.js App Router, ISR/SSR hybride, multisites, API custom, intégrations tierces, CI/CD complet. Architecture pensée pour l'évolutivité.",
         highlight:
@@ -558,8 +558,8 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
         description:
           "Thème WordPress classique optimisé, Headless + Next.js App Router (SSG/ISR/SSR) pour les plateformes éditoriales évolutives, web app sur-mesure (Next.js + PostgreSQL serverless, admin autonome), ou PWA installable côté mobile.",
         items: [
-          "Solidaire : WordPress classique avec thème custom moderne",
-          "Équilibre / Soutien : WordPress Headless + Next.js (SSG/ISR/SSR)",
+          "Classique : WordPress avec thème custom moderne",
+          "Headless / Web app : WordPress Headless + Next.js (SSG/ISR/SSR)",
           "Web app : Next.js + PostgreSQL + admin autonome sur-mesure",
           "App mobile : PWA Next.js, géolocalisation et persistance locale au besoin",
         ],

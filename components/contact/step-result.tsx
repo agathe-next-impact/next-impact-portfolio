@@ -52,9 +52,9 @@ function getOffer(_profile: ProfileType, budget: BudgetRange, siteType: SiteType
   // Petit budget — site vitrine ou institutionnel : WordPress classique optimisé
   if (budget === "less-3000") {
     return {
-      badge: "Solidaire",
+      badge: "Classique",
       badgeColor: "bg-coral/10 text-coral border-coral/20",
-      title: "Le forfait Solidaire est fait pour vous",
+      title: "Le forfait Classique est fait pour vous",
       highlight: "À partir de 2 250 €",
       highlightColor: "text-coral",
       description:
@@ -68,9 +68,9 @@ function getOffer(_profile: ProfileType, budget: BudgetRange, siteType: SiteType
   // Budget intermédiaire — site à fort enjeu SEO ou éditorial : Headless + Next.js
   if (budget === "3000-5000") {
     return {
-      badge: "Équilibre",
+      badge: "Headless",
       badgeColor: "bg-lightyellow/10 text-lightyellow border-lightyellow/20",
-      title: "Le forfait Équilibre correspond à vos enjeux",
+      title: "Le forfait Headless correspond à vos enjeux",
       highlight: "WordPress Headless + Next.js",
       highlightColor: "text-lightyellow",
       description:
@@ -81,11 +81,11 @@ function getOffer(_profile: ProfileType, budget: BudgetRange, siteType: SiteType
     };
   }
 
-  // Gros budget : Soutien (Headless complexe / multisites) ou Web app
+  // Gros budget : Web app (Headless complexe / multisites ou Next.js + PostgreSQL)
   return {
-    badge: "Soutien",
+    badge: "Web app",
     badgeColor: "bg-lightblue/10 text-extralightblue border-lightblue/20",
-    title: "Le forfait Soutien correspond à votre ambition",
+    title: "Le forfait Web app correspond à votre ambition",
     highlight: "WordPress Headless complexe / multisites",
     highlightColor: "text-extralightblue",
     description:

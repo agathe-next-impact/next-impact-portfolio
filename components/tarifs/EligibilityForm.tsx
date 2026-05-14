@@ -1,10 +1,13 @@
 "use client";
 
 import { FormEvent, useMemo, useRef, useState, useEffect } from "react";
-import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, ScreenShareIcon, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, Sparkles, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+
+const CALENDAR_LINK = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
 type ProjectKey =
   | "vitrine"
@@ -153,7 +156,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   },
   headless: {
     fr: {
-      title: "Équilibre — Site Headless (Voie B)",
+      title: "Headless — Site Headless (Voie B)",
       amount: "À partir de 4 000 €",
       message:
         "Votre projet a tout intérêt à passer en WordPress Headless + Next.js : performance front maximale, hydratation partielle, Core Web Vitals au vert et SEO préservé.",
@@ -161,7 +164,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
         "Le bon compromis entre performance et coût pour un site à fort enjeu SEO ou éditorial.",
     },
     en: {
-      title: "Balance — Headless site (Path B)",
+      title: "Headless — Headless site (Path B)",
       amount: "From €4,000",
       message:
         "Your project will benefit from Headless WordPress + Next.js: maximum front-end performance, partial hydration, green Core Web Vitals and preserved SEO.",
@@ -171,14 +174,14 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   },
   wpClassic: {
     fr: {
-      title: "Solidaire — WordPress classique (Voie A)",
+      title: "Classique — WordPress (Voie A)",
       amount: "À partir de 2 250 €",
       message:
         "Un WordPress classique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide. Coût maîtrisé, autonomie totale via l'admin WordPress.",
       highlight: "Vous gardez l'admin que vous connaissez, je modernise tout le reste.",
     },
     en: {
-      title: "Solidarity — Classic WordPress (Path A)",
+      title: "Classic — WordPress (Path A)",
       amount: "From €2,250",
       message:
         "An optimized classic WordPress is enough for your project: modern custom theme, hardened security, quick to ship. Controlled cost, full autonomy via the WordPress admin.",
@@ -248,7 +251,7 @@ export default function EligibilityForm() {
       return;
     }
 
-    // Voie A — Solidaire / WordPress classique : site vitrine, petit trafic, sans intégration
+    // Voie A — Classique / WordPress : site vitrine, petit trafic, sans intégration
     setResult(RESULTS.wpClassic[locale] ?? RESULTS.wpClassic.fr);
   };
 
@@ -260,14 +263,14 @@ export default function EligibilityForm() {
 
   const trafficBands: { key: TrafficBand; title: string; subtitle: string }[] = isEn
     ? [
-        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Solidarity" },
-        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Balance" },
-        { key: "high", title: "More than 100k / month", subtitle: "Likely Support" },
+        { key: "low", title: "Less than 10k visits / month", subtitle: "Likely Classic" },
+        { key: "medium", title: "10k to 100k / month", subtitle: "Likely Headless" },
+        { key: "high", title: "More than 100k / month", subtitle: "Likely Web app" },
       ]
     : [
-        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Solidaire" },
-        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Équilibre" },
-        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Soutien" },
+        { key: "low", title: "Moins de 10k visites / mois", subtitle: "Plutôt Classique" },
+        { key: "medium", title: "10k à 100k / mois", subtitle: "Plutôt Headless" },
+        { key: "high", title: "Plus de 100k / mois", subtitle: "Plutôt Web app" },
       ];
 
   return (
@@ -508,7 +511,7 @@ export default function EligibilityForm() {
         </form>
 
         {result && (
-          <div className="mt-8 rounded-2xl border border-lightyellow/30 bg-lightyellow/10 p-6 flex flex-col gap-3">
+          <div className="mt-8 rounded-2xl border border-lightyellow/30 bg-lightyellow/10 p-6 md:p-8 flex flex-col gap-4">
             <div className="flex items-center gap-2 text-lightyellow">
               <CheckCircle2 className="h-5 w-5" />
               <p className="text-sm uppercase tracking-widest font-googletexte text-extralightblue">
@@ -524,8 +527,10 @@ export default function EligibilityForm() {
                 {isEn ? `File: ${name}` : `Dossier : ${name}`}
               </p>
             )}
-            <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-3">
-              <p className="text-sm uppercase tracking-widest font-googletexte text-white/60">
+
+            {/* CTAs de contact */}
+            <div className="mt-2 pt-4 border-t border-lightyellow/20 flex flex-col gap-3">
+              <p className="text-sm uppercase tracking-widest font-googletitre text-white/60">
                 {isEn ? "Discuss this recommendation" : "Discutons de cette recommandation"}
               </p>
               <div className="flex flex-wrap items-center gap-3">
@@ -535,9 +540,16 @@ export default function EligibilityForm() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full bg-coral text-darkblue font-googletitre font-semibold px-5 py-2.5 hover:bg-coral/80 transition"
                 >
-                  <ScreenShareIcon className="h-5 w-5" />
-                  {isEn ? "Book a video call" : "Échanger en visio"}
+                  <Video className="h-5 w-5" />
+                  {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}
                 </a>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
+                >
+                  <Mail className="h-4 w-4 text-coral" />
+                  {isEn ? "Describe my project in writing" : "Décrire mon projet par écrit"}
+                </Link>
                 <a
                   href="mailto:agathe@next-impact.digital"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
@@ -553,6 +565,11 @@ export default function EligibilityForm() {
                   06 73 98 16 38
                 </a>
               </div>
+              <p className="text-xs text-white/50 font-googletexte">
+                {isEn
+                  ? "Reply within 24h · Personalized quote within 48h · Free, no strings attached"
+                  : "Réponse sous 24h · Devis personnalisé sous 48h · Gratuit, sans engagement"}
+              </p>
             </div>
           </div>
         )}

@@ -12,16 +12,16 @@ export function ServicesComparisonTable() {
     ? {
         title: "Tier comparison",
         feature: "Feature",
-        essential: "Solidarity",
-        growth: "Balance",
-        custom: "Support",
+        essential: "Classic",
+        growth: "Headless",
+        custom: "Web app",
       }
     : {
         title: "Comparatif des forfaits",
         feature: "Fonctionnalité",
-        essential: "Solidaire",
-        growth: "Équilibre",
-        custom: "Soutien",
+        essential: "Classique",
+        growth: "Headless",
+        custom: "Web app",
       };
 
   const comparison = isEn

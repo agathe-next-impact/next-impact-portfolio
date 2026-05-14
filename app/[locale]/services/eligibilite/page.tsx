@@ -13,8 +13,8 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "Project diagnostic — Solidarity, Balance, Support or custom application"
-        : "Diagnostic de projet — Solidaire, Équilibre, Soutien ou application sur-mesure",
+        ? "Project diagnostic — Classic, Headless, Web app or custom application"
+        : "Diagnostic de projet — Classique, Headless, Web app ou application sur-mesure",
     description:
       locale === "en"
         ? "Identify in 2 minutes the path that fits your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
