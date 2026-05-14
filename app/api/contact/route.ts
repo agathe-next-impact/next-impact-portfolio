@@ -2,7 +2,7 @@ import { sendMail } from "@/lib/sendMail";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
 
 export async function POST(req: Request) {
-  const { name, email, message, formData, type, locale } = await req.json();
+  const { name, email, message, formData, type, subject, locale } = await req.json();
   const isEn = locale === "en";
 
   try {
@@ -48,9 +48,10 @@ export async function POST(req: Request) {
       `
       : `
         <h3>Message reçu via le site</h3>
+        ${subject ? `<p><strong>Objet :</strong> ${subject}</p>` : ""}
         <p><strong>Nom :</strong> ${name}</p>
         <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Message :</strong><br>${message}</p>
+        <p><strong>Message :</strong><br>${(message || "").replace(/\n/g, "<br>")}</p>
       `;
 
     // Email utilisateur — locale-aware
@@ -310,6 +311,8 @@ export async function POST(req: Request) {
         to: ["agathe@next-impact.digital"],
         subject: isCahierDesCharges
           ? `Nouveau cahier des charges de ${name}`
+          : subject
+          ? `[${subject}] Nouveau message de ${name}`
           : `Nouveau message de ${name}`,
         html: adminHtml,
         attachments,

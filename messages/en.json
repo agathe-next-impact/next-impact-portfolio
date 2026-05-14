@@ -92,10 +92,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact — Website or App Quote & Free Discovery Call",
-    "metaDescription": "Identify in a few steps the right path for your project: classic WordPress site, Headless site, web app or mobile app. Free AI audit, 15-min video call and personalized quote within 48 hours.",
-    "title": "Project diagnostic",
-    "subtitle": "Answer a few questions to identify the right path for your project — website or custom application.",
+    "metaTitle": "Contact — Website, application, OETH or AI audit quote",
+    "metaDescription": "Reach out to Next Impact based on the subject of your request: website, custom application, OETH benefit (TIH), AI audit or technical question. Reply within 24h, personalized quote within 48h.",
+    "title": "Contact",
+    "subtitle": "Website, custom application, OETH, AI audit, technical question: pick the subject of your request, I'll reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -215,8 +215,8 @@
     "breadcrumbAudit": "AI website audit"
   },
   "demoPage": {
-    "metaTitle": "Headless WordPress demo — Next.js project videos",
-    "metaDescription": "See in video how a Headless WordPress site works with Next.js. Demos of real projects: ticketing, participatory media, citizen platform.",
+    "metaTitle": "Demos — Websites, web apps and mobile applications",
+    "metaDescription": "Watch Next Impact projects in action: B2B Next.js + PostgreSQL marketplace (Panorama Pub), mobile PWA treasure hunt (Hermitage), Headless WordPress + Next.js sites (media, citizen platform, ticketing).",
     "breadcrumbHome": "Home",
     "breadcrumbDemo": "Demo"
   },

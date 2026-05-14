@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/json-ld";
-import EligibilityForm from "@/components/tarifs/EligibilityForm";
+import MultiSubjectContactForm from "@/components/contact/multi-subject-form";
 import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
 import PageLayout from "@/components/page-layout";
 import type { Locale } from "@/i18n/routing";
@@ -69,7 +69,7 @@ export default async function ContactPage({
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
         <section className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-5xl mx-auto space-y-12">
-            <EligibilityForm />
+            <MultiSubjectContactForm />
             <ContactDirectInfo />
           </div>
         </section>

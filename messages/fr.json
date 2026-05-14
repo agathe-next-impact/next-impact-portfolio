@@ -92,10 +92,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — Devis site web ou application & Appel Découverte Gratuit",
-    "metaDescription": "Identifiez en quelques étapes la voie adaptée à votre projet : site WordPress classique, site Headless, web app ou application mobile. Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
-    "title": "Diagnostic de projet",
-    "subtitle": "Répondez à quelques questions pour identifier la voie adaptée à votre projet — site web ou application sur-mesure.",
+    "metaTitle": "Contact — Devis site web, application, OETH ou audit IA",
+    "metaDescription": "Contactez Next Impact selon l'objet de votre demande : site web, application sur-mesure, avantage OETH (TIH), audit IA ou question technique. Réponse sous 24 h, devis personnalisé sous 48 h.",
+    "title": "Contact",
+    "subtitle": "Site web, application sur-mesure, OETH, audit IA, question technique : choisissez l'objet de votre demande, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -215,8 +215,8 @@
     "breadcrumbAudit": "Audit site web IA"
   },
   "demoPage": {
-    "metaTitle": "Démo WordPress Headless — Vidéos de projets Next.js",
-    "metaDescription": "Découvrez en vidéo le fonctionnement d'un site WordPress Headless avec Next.js. Démonstrations de projets réels : billetterie, média participatif, plateforme citoyenne.",
+    "metaTitle": "Démos — Sites web, web apps et applications mobiles",
+    "metaDescription": "Découvrez en vidéo les réalisations Next Impact : marketplace B2B Next.js + PostgreSQL (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js (média, plateforme citoyenne, billetterie).",
     "breadcrumbHome": "Accueil",
     "breadcrumbDemo": "Démo"
   },

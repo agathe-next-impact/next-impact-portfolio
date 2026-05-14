@@ -61,8 +61,8 @@ const META: CaseStudyMeta[] = [
     slug: "panorama-pub",
     clientType: "pme",
     clientName: "Panorama Pub",
-    imageUrl: "/img/desktop-screen-panorama-pub.jpg",
-    galleryUrl: "/img/desktop-screen-panorama-pub.jpg",
+    imageUrl: "",
+    galleryUrl: "",
     date: { month: 5, year: 2026 },
     technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
     website: "https://panorama-pub.com",
@@ -140,18 +140,6 @@ const META: CaseStudyMeta[] = [
     technologies: ["WordPress", "Headless CMS", "Next.js", "Tailwind CSS", "Vercel"],
     website: "https://lesetatsgenerauxcommunaux.org",
     youtubeVideoId: "dJIndpLBm7o",
-  },
-  {
-    id: "19",
-    slug: "panorama-pub",
-    clientType: "pme",
-    clientName: "Panorama Pub",
-    imageUrl: "/img/desktop-screen-panoramapub.png",
-    galleryUrl: "/img/desktop-screen-panoramapub.png",
-    date: { month: 5, year: 2026 },
-    technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
-    website: "https://panorama-pub.com",
-    youtubeVideoId: "9fMaBL1amYk",
   },
   {
     id: "1",
@@ -300,27 +288,6 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
-  "panorama-pub": {
-    title: "Panorama Pub",
-    description:
-      "Lancement de Panorama Pub, premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires : un nouveau marché digital pour connecter acheteurs et fournisseurs sur un secteur encore éclaté.",
-    detailedDescription: `Le marché des objets publicitaires reste l'un des derniers secteurs B2B sans plateforme de référence : aucun annuaire centralisé n'existe aujourd'hui en France. Panorama Pub se positionne pour occuper ce vide et devenir l'incontournable du sourcing d'objets publicitaires.\n\nL'enjeu n'est pas seulement de livrer un site, mais de poser les fondations d'un produit destiné à grandir : un avantage de pionnier sur un marché vacant, une cible B2B claire (agences de communication, services marketing, événementiel), et un modèle économique scalable (visibilité fournisseurs, mise en relation, contenus éditoriaux).\n\nLivrée en 2 mois du concept à la mise en ligne, la plateforme est aujourd'hui prête à conquérir son marché : positionnement de référence, fondation technique solide, et roadmap claire pour transformer l'audience en levier business.`,
-    objectives: [
-      "Occuper un marché vacant et s'imposer comme la référence du secteur",
-      "Construire un actif digital scalable, capable de monétiser une audience B2B qualifiée",
-      "Sécuriser un time-to-market court pour prendre l'avantage sur d'éventuels suiveurs",
-      "Poser une fondation technique qui ne sera pas à refaire dans 2 ans",
-    ],
-    results: [
-      "Plateforme inédite sur son segment, sans équivalent en France",
-      "Mise en ligne en 2 mois, du concept à la production",
-      "Architecture pensée SEO et croissance, prête à monter en charge",
-      "Roadmap claire pour les prochaines briques : espaces fournisseurs, mise en relation, contenus",
-    ],
-    galleryAlt: "Page d'accueil de l'annuaire Panorama Pub — marketplace B2B des fournisseurs d'objets publicitaires",
-    tags: ["PME", "Web app sur-mesure", "Marketplace", "Annuaire B2B", "Lancement produit"],
-    duration: "2 mois",
-  },
   "cafe-citoyen": {
     title: "Café citoyen",
     description:
@@ -728,27 +695,6 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
-  "panorama-pub": {
-    title: "Panorama Pub",
-    description:
-      "Launch of Panorama Pub, the first online directory dedicated to promotional product suppliers: a new digital marketplace connecting buyers and suppliers in a still-fragmented industry.",
-    detailedDescription: `The promotional products market is one of the last B2B sectors without a reference platform: no centralized directory exists in France today. Panorama Pub steps into that gap to become the go-to source for sourcing promotional products.\n\nThe challenge wasn't just to ship a site — it was to lay the foundations of a product built to scale: pioneer advantage on an open market, a clear B2B target (communication agencies, marketing departments, event teams), and a scalable business model (supplier visibility, lead matching, editorial content).\n\nDelivered in 2 months from concept to launch, the platform is now ready to claim its market: reference positioning, solid technical foundation, and a clear roadmap to turn audience into business leverage.`,
-    objectives: [
-      "Claim an open market and establish the reference platform of the sector",
-      "Build a scalable digital asset that can monetize a qualified B2B audience",
-      "Secure a short time-to-market to outpace potential followers",
-      "Lay a technical foundation that won't need redoing in 2 years",
-    ],
-    results: [
-      "A platform with no equivalent in France in its segment",
-      "Shipped in 2 months, from concept to production",
-      "Architecture designed for SEO and growth, ready to scale",
-      "Clear roadmap for the next building blocks: supplier accounts, lead matching, editorial content",
-    ],
-    galleryAlt: "Homepage of the Panorama Pub directory — B2B marketplace for promotional product suppliers",
-    tags: ["SME", "Custom web app", "Marketplace", "B2B directory", "Product launch"],
-    duration: "2 months",
-  },
   "cafe-citoyen": {
     title: "Café Citoyen",
     description:
@@ -1190,11 +1136,6 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
     { value: "J-0", label: "Livré avant l'événement" },
     { value: "Carte", label: "Groupes locaux interactifs" },
   ],
-  "panorama-pub": [
-    { value: "1er", label: "Annuaire du secteur en France" },
-    { value: "2 mois", label: "Du concept à la mise en ligne" },
-    { value: "B2B", label: "Sourcing fournisseurs simplifié" },
-  ],
   proditec: [
     { value: "98/100", label: "Score PageSpeed" },
     { value: "+30%", label: "Accessibilité améliorée" },
@@ -1292,11 +1233,6 @@ const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
     { value: "4 weeks", label: "Build time" },
     { value: "D-0", label: "Shipped before the event" },
     { value: "Map", label: "Interactive local groups" },
-  ],
-  "panorama-pub": [
-    { value: "1st", label: "Directory of its kind in France" },
-    { value: "2 months", label: "From concept to launch" },
-    { value: "B2B", label: "Streamlined supplier sourcing" },
   ],
   proditec: [
     { value: "98/100", label: "PageSpeed score" },

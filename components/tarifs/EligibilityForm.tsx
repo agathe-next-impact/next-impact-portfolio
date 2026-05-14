@@ -3,7 +3,6 @@
 import { FormEvent, useMemo, useRef, useState, useEffect } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, Sparkles, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -543,19 +542,12 @@ export default function EligibilityForm() {
                   <Video className="h-5 w-5" />
                   {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}
                 </a>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
-                >
-                  <Mail className="h-4 w-4 text-coral" />
-                  {isEn ? "Describe my project in writing" : "Décrire mon projet par écrit"}
-                </Link>
                 <a
                   href="mailto:agathe@next-impact.digital"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
                 >
                   <Mail className="h-4 w-4 text-coral" />
-                  agathe@next-impact.digital
+                  {isEn ? "Describe my project in writing" : "Décrire mon projet par écrit"}
                 </a>
                 <a
                   href="tel:0673981638"

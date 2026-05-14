@@ -21,16 +21,20 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
+            "Next.js demo",
+            "web app video",
+            "mobile PWA demo",
             "Headless WordPress demo",
-            "Next.js video",
+            "marketplace demo",
             "website demonstration",
-            "Headless WordPress in action",
           ]
         : [
+            "démo Next.js",
+            "vidéo web app",
+            "démo PWA mobile",
             "démo WordPress Headless",
-            "vidéo Next.js",
+            "démo marketplace",
             "démonstration site web",
-            "WordPress Headless en action",
           ],
     locale,
   });
@@ -52,18 +56,34 @@ export default async function DemoPage({
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <VideoObjectJsonLd
-        name="WordPress Headless en action — Présentation de la plateforme Next Event"
-        description="Démonstration complète d'un site WordPress Headless avec Next.js : billetterie événementielle, performance et expérience utilisateur."
-        thumbnailUrl="/img/desktop-screen-next-event.jpg"
-        uploadDate="2024-06-01"
-        contentUrl="https://youtu.be/I1qi5o31Lnk"
-        embedUrl="https://www.youtube.com/embed/I1qi5o31Lnk"
+        name="Panorama Pub — Marketplace B2B livrée en 2 mois"
+        description="Démonstration de Panorama Pub, premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires. Web app sur-mesure : Next.js + base PostgreSQL serverless, admin autonome, architecture pensée SEO et croissance."
+        thumbnailUrl="/img/desktop-screen-panoramapub.png"
+        uploadDate="2026-05-01"
+        contentUrl="https://youtu.be/9fMaBL1amYk"
+        embedUrl="https://www.youtube.com/embed/9fMaBL1amYk"
+      />
+      <VideoObjectJsonLd
+        name="Hermitage — Jeu de piste mobile (PWA)"
+        description="Application mobile installable sans store, géolocalisée et fonctionnant hors-ligne pour le domaine forestier du Tiers Lieu L'Hermitage. PWA Next.js, service worker, persistance locale."
+        thumbnailUrl="/img/mobile-screen-jeu-de-piste-hermitage.jpg"
+        uploadDate="2026-04-01"
+        contentUrl="https://youtube.com/shorts/_kt_wA4zT68"
+        embedUrl="https://www.youtube.com/embed/_kt_wA4zT68"
+      />
+      <VideoObjectJsonLd
+        name="Comme des Fous — Section Jeux en ligne"
+        description="Une zone applicative (jeux interactifs) intégrée au site Headless du média Comme des Fous : extension web app sur socle WordPress + Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/SIj61ECS1Mo/maxresdefault.jpg"
+        uploadDate="2026-02-01"
+        contentUrl="https://youtu.be/SIj61ECS1Mo"
+        embedUrl="https://www.youtube.com/embed/SIj61ECS1Mo"
       />
       <VideoObjectJsonLd
         name="WordPress Headless pour Le Café citoyen — Site vitrine"
-        description="Découvrez le site vitrine du Café citoyen d'Auger-Saint-Vincent, propulsé par WordPress Headless et Next.js, avec les événemeents et l'histoire du café."
+        description="Découvrez le site vitrine du Café citoyen d'Auger-Saint-Vincent, propulsé par WordPress Headless et Next.js, avec les événements et l'histoire du café."
         thumbnailUrl="/img/desktop-screen-cafe-citoyen.png"
-        uploadDate="2025-03-01"
+        uploadDate="2026-03-01"
         contentUrl="https://youtu.be/8aVVoDFakCY"
         embedUrl="https://www.youtube.com/embed/8aVVoDFakCY"
       />
@@ -71,33 +91,33 @@ export default async function DemoPage({
         name="WordPress Headless pour Comme des Fous — Média participatif"
         description="Le site du média participatif Comme des Fous, propulsé par WordPress Headless et Next.js."
         thumbnailUrl="https://img.youtube.com/vi/6vUSbG6F50w/maxresdefault.jpg"
-        uploadDate="2024-06-01"
+        uploadDate="2026-01-01"
         contentUrl="https://youtu.be/6vUSbG6F50w"
         embedUrl="https://www.youtube.com/embed/6vUSbG6F50w"
       />
       <VideoObjectJsonLd
-        name="WordPress Headless pour Les Doléances — Plateforme citoyenne"
-        description="Un site de promotion des doléances citoyennes avec WordPress Headless et Next.js."
-        thumbnailUrl="https://img.youtube.com/vi/_OjiGiOWJus/maxresdefault.jpg"
-        uploadDate="2024-06-01"
-        contentUrl="https://youtu.be/_OjiGiOWJus"
-        embedUrl="https://www.youtube.com/embed/_OjiGiOWJus"
+        name="Next Event — Démo billetterie WordPress Headless"
+        description="Démonstration complète d'un site WordPress Headless avec Next.js : billetterie événementielle, performance et expérience utilisateur."
+        thumbnailUrl="/img/desktop-screen-next-event.jpg"
+        uploadDate="2025-10-01"
+        contentUrl="https://youtu.be/I1qi5o31Lnk"
+        embedUrl="https://www.youtube.com/embed/I1qi5o31Lnk"
       />
       <VideoObjectJsonLd
         name="WordPress Headless pour les États Généraux Communaux"
         description="Une plateforme pour les États Généraux Communaux utilisant WordPress Headless avec Next.js."
         thumbnailUrl="https://img.youtube.com/vi/dJIndpLBm7o/maxresdefault.jpg"
-        uploadDate="2024-06-01"
+        uploadDate="2025-10-01"
         contentUrl="https://youtu.be/dJIndpLBm7o"
         embedUrl="https://www.youtube.com/embed/dJIndpLBm7o"
       />
       <VideoObjectJsonLd
-        name="Comme des Fous — Section Jeux en ligne"
-        description="Une section de jeux en ligne intégrée au site de Comme des Fous, développée en WordPress Headless avec Next.js."
-        thumbnailUrl="https://img.youtube.com/vi/SIj61ECS1Mo/maxresdefault.jpg"
-        uploadDate="2024-06-01"
-        contentUrl="https://youtu.be/SIj61ECS1Mo"
-        embedUrl="https://www.youtube.com/embed/SIj61ECS1Mo"
+        name="WordPress Headless pour Les Doléances — Site de mobilisation"
+        description="Un site de promotion des doléances citoyennes avec WordPress Headless et Next.js."
+        thumbnailUrl="https://img.youtube.com/vi/_OjiGiOWJus/maxresdefault.jpg"
+        uploadDate="2025-05-01"
+        contentUrl="https://youtu.be/_OjiGiOWJus"
+        embedUrl="https://www.youtube.com/embed/_OjiGiOWJus"
       />
       <DemoClient />
     </>

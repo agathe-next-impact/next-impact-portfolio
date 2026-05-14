@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -115,16 +114,16 @@ export default function FeaturedRealisation() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="relative overflow-hidden rounded-2xl border border-white/10 bg-darkblue/40 shadow-2xl"
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"
           >
-            <div className="relative aspect-[16/10] w-full">
-              <Image
-                src="/img/desktop-screen-panorama-pub.jpg"
-                alt={copy.imageAlt}
-                fill
-                priority
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover object-top"
+            <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                src="https://www.youtube.com/embed/9fMaBL1amYk"
+                title={copy.imageAlt}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+                className="absolute top-0 left-0 w-full h-full border-0"
               />
             </div>
           </motion.div>
