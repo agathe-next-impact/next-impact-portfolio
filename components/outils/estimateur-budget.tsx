@@ -211,11 +211,11 @@ export default function EstimateurBudget() {
                     onClick={() => setProjectType(key)}
                     className={`rounded-xl border px-4 py-3 text-left transition ${
                       selected
-                        ? "border-lightyellow bg-lightyellow/10 text-white"
-                        : "border-white/10 bg-white/5 text-white/80 hover:border-white/30"
+                        ? "border-lightyellow bg-lightyellow text-darkblue font-semibold"
+                        : "border-white/10 bg-white/5 text-white hover:border-white/30"
                     }`}
                   >
-                    <span className="font-googletitre">{label}</span>
+                    <span className="font-googletitre text-current">{label}</span>
                   </button>
                 );
               })}
