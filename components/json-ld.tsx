@@ -5,6 +5,22 @@
 
 import { siteConfig } from "@/lib/metadata";
 
+const figaroArticle = {
+  "@type": "NewsArticle",
+  "@id":
+    "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
+  url: "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
+  headline:
+    "WordPress Headless : comment les PME peuvent moderniser leur site sans tout reconstruire, avec Next Impact Digital",
+  datePublished: "2026-05-12",
+  inLanguage: "fr-FR",
+  publisher: {
+    "@type": "NewsMediaOrganization",
+    name: "Le Figaro",
+    url: "https://www.lefigaro.fr",
+  },
+};
+
 interface JsonLdProps {
   data: Record<string, unknown>;
 }
@@ -382,6 +398,7 @@ export function PersonJsonLd({
       "Web Development",
       "API Development",
     ],
+    subjectOf: figaroArticle,
   };
 
   return <JsonLd data={data} />;
@@ -435,6 +452,7 @@ export function HomepageJsonLd() {
           "https://www.linkedin.com/in/agat-dev/",
           "https://github.com/agat-dev",
         ],
+        subjectOf: figaroArticle,
       },
 
       // — Organization —

@@ -207,6 +207,20 @@ export default function AboutClient() {
                     </span>
                   </li>
                 </ul>
+                <p className="mt-6 text-sm italic text-white/60 font-googletexte">
+                  {t.rich("journey.step3.figaroMention", {
+                    lien: (chunks) => (
+                      <a
+                        href="https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline decoration-lightyellow/60 underline-offset-4 hover:text-lightyellow dark:text-lightyellow transition-colors"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
+                </p>
               </div>
               <div className="absolute left-2 md:left-1/2 md:-translate-x-1/2 top-0" />
               <div className="md:w-1/2 md:pl-12 hidden md:flex items-center">

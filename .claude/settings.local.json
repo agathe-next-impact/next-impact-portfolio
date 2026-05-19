@@ -27,11 +27,8 @@
       "Bash(grep *)",
       "Bash(git stash *)",
       "Bash(git rebase *)",
-      "Bash(awk 'NR==38' C:/DEV/next-impact-portfolio/components/gemini/audit-site-ia-client.tsx)",
-      "Bash(awk 'NR>=35 && NR<=40' C:/DEV/next-impact-portfolio/components/gemini/audit-site-ia-client.tsx)",
-      "Bash(awk *)",
-      "WebFetch(domain:retrogamerie.fr)",
-      "WebFetch(domain:mastora.fr)"
+      "Bash(git merge *)",
+      "Bash(git reset *)"
     ]
   }
 }

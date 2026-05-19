@@ -92,9 +92,6 @@ export default function Footer() {
             <a href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               {t("whitepaperHeadless")}
             </a>
-            <a href="/ressources/livre_blanc_web_app.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("whitepaperWebApp")}
-            </a>
             <Link href="/audit-site-ia" className="text-white/70 hover:text-white transition text-sm font-googletexte">
               {t("freeAiAudit")}
             </Link>
@@ -128,6 +125,20 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="container border-t border-white/10 pt-4 space-y-1">
+        <p className="text-center text-xs text-white/50 font-googletexte">
+          {t.rich("figaroMention", {
+            lien: (chunks) => (
+              <a
+                href="https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-lightyellow/60 underline-offset-4 hover:text-lightyellow dark:text-lightyellow transition-colors"
+              >
+                {chunks}
+              </a>
+            ),
+          })}
+        </p>
         <p className="text-center text-sm text-white/50 font-googletexte">
           {t("copyright", { year: new Date().getFullYear() })}
         </p>

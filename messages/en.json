@@ -39,6 +39,7 @@
     "startWebApp": "Start a web application",
     "copyright": "© {year} Next Impact Digital — All rights reserved",
     "tihMention": "EI Agathe Karinthi-Martin — TIH provider (Independent Worker with Disability, French scheme) — OETH attestation available",
+    "figaroMention": "As seen in <lien>Le Figaro</lien> — May 2026",
     "certificationAlt": "Certification"
   },
   "floatingContact": {
@@ -400,7 +401,8 @@
             "label": "AI acceleration:",
             "text": "Audit tools and AI workflows to deliver WordPress sites at modern tech standards, faster."
           }
-        }
+        },
+        "figaroMention": "An approach featured in <lien>Le Figaro</lien>, on Headless WordPress modernization for SME websites."
       }
     },
     "citationByline": "— Agathe Karinthi-Martin, Founder of Next Impact",

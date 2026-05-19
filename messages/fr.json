@@ -39,6 +39,7 @@
     "startWebApp": "Démarrer une application web",
     "copyright": "© {year} Next Impact Digital — Tous droits réservés",
     "tihMention": "EI Agathe Karinthi-Martin — Prestataire TIH (Travailleur Indépendant Handicapé) — Attestation OETH disponible",
+    "figaroMention": "Vu dans <lien>Le Figaro</lien> — mai 2026",
     "certificationAlt": "Certification"
   },
   "floatingContact": {
@@ -400,7 +401,8 @@
             "label": "L'accélération par l'IA :",
             "text": "Outils d'audit et workflows IA pour livrer plus vite des sites WordPress aux standards de la Tech."
           }
-        }
+        },
+        "figaroMention": "Une approche évoquée dans <lien>Le Figaro</lien>, sur la modernisation Headless des sites WordPress de PME."
       }
     },
     "citationByline": "— Agathe Karinthi-Martin, Fondatrice de Next Impact",

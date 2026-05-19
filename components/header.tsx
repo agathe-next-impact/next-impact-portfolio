@@ -146,14 +146,6 @@ export function NavBar() {
                     <Link href="/a-propos" onClick={handleMenuClick} aria-label={t("about")}>
                       <UserCheck className="w-8 h-8 text-white/90 hover:text-white transition" />
                     </Link>
-                    <a
-                      href="/ressources/livre_blanc_wp_headless.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={t("whitepaperTitle")}
-                    >
-                      <File className="w-8 h-8 text-white/90 hover:text-white transition" />
-                    </a>
                     <ThemeToggle />
                     <LocaleSwitcher />
                   </div>
@@ -262,14 +254,6 @@ export default function Header() {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <a
-          href="/ressources/livre_blanc_wp_headless.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          title={t("whitepaperTitle")}
-        >
-          <BookOpenText className="w-6 h-6 text-white/90 hover:text-white transition" />
-        </a>
         <Link href="/a-propos" aria-label={t("about")}>
           <UserCheck className="w-6 h-6 text-white/90 hover:text-white transition" />
         </Link>
