@@ -247,12 +247,13 @@
   },
   "realisations": {
     "tabs": {
-      "recents": "Recent work",
+      "landing": "Landing",
       "webapp": "Web App",
       "headless": "Headless WordPress",
       "wordpress": "WordPress"
     },
-    "viewProject": "View project"
+    "viewProject": "View project",
+    "visitLanding": "Visit site"
   },
   "caseStudiesPage": {
     "breadcrumbHome": "Home",

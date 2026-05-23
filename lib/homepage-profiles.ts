@@ -326,7 +326,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Études de cas",
     sousTitre:
       "Découvrez les réalisations Next Impact : sites WordPress, sites Headless WordPress + Next.js, web apps sur-mesure et applications mobiles PWA — pour divers secteurs d'activité.",
-    defaultTab: "recents",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par famille",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -337,7 +337,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Nos réalisations clients",
     sousTitre:
       "Des projets concrets avec des résultats mesurables : performance, SEO et conversion au service de la croissance.",
-    defaultTab: "recents",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par secteur",
     ctaLabel: "Évaluer mon projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -349,7 +349,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Des sites simples et performants",
     sousTitre:
       "Des sites que leurs propriétaires gèrent au quotidien avec WordPress — simplement, sans compétence technique.",
-    defaultTab: "recents",
+    defaultTab: "webapp",
     tabsLabel: "Explorer les projets",
     ctaLabel: "Voir une démo",
     ctaHref: "/demo",
@@ -360,7 +360,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Réalisations techniques",
     sousTitre:
       "Sites WordPress classiques optimisés, Headless WordPress + Next.js, web apps sur-mesure et PWA mobiles. API REST, WPGraphQL, PostgreSQL. Détails techniques de chaque projet.",
-    defaultTab: "recents",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par architecture",
     ctaLabel: "Explorer la documentation",
     ctaHref: "/documentation",

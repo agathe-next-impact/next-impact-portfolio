@@ -11,11 +11,17 @@ import type { Locale } from "@/i18n/routing";
 function toYoutubeEmbed(url: string) {
   if (!url) return url;
   if (url.includes("youtube.com/embed/")) return url;
+  const matchShorts = url.match(/youtube\.com\/shorts\/([\w-]+)/);
+  if (matchShorts) return `https://www.youtube.com/embed/${matchShorts[1]}`;
   const matchShort = url.match(/youtu\.be\/([\w-]+)/);
   if (matchShort) return `https://www.youtube.com/embed/${matchShort[1]}`;
   const matchLong = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
   if (matchLong) return `https://www.youtube.com/embed/${matchLong[1]}`;
   return url;
+}
+
+function isYoutubeShort(url: string) {
+  return /youtube\.com\/shorts\//.test(url);
 }
 
 const mainVideoFr = {
@@ -42,7 +48,7 @@ const demoVideosFr = [
   // Web app extension applicative
   {
     title: "Extension applicative",
-    url: "https://youtu.be/SIj61ECS1Mo",
+    url: "https://youtu.be/KU5K44bU9NM",
     projectLink: "/etudes-de-cas/comme-des-fous-jeux",
     projectName: "Comme des Fous — Section jeux en ligne",
     projectDescription:
@@ -105,7 +111,7 @@ const demoVideosEn = [
   // Applicative extension
   {
     title: "Applicative extension",
-    url: "https://youtu.be/SIj61ECS1Mo",
+    url: "https://youtu.be/KU5K44bU9NM",
     projectLink: "/etudes-de-cas/comme-des-fous-jeux",
     projectName: "Comme des Fous — Online games section",
     projectDescription:
@@ -234,22 +240,28 @@ export default function DemoClient() {
             </div>
             {/* Demo videos grid */}
             <div className="mt-36 grid grid-cols-1 gap-8">
-              {demoVideos.map((video, idx) => (
+              {demoVideos.map((video, idx) => {
+                const isShort = isYoutubeShort(video.url);
+                return (
                 <div
                   key={idx}
                   className="grid grid-cols-1 md:grid-cols-5 gap-0 w-full rounded-2xl overflow-hidden border"
                   style={{ minHeight: "320px" }}
                 >
                   {/* Colonne vidéo */}
-                  <div className="col-span-1 md:col-span-3 h-full flex items-center justify-center bg-black">
+                  <div className="col-span-1 md:col-span-3 h-full flex items-center justify-center bg-black p-4">
                     <div
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ position: "relative", width: "100%" }}
+                      className={
+                        isShort
+                          ? "w-full max-w-[280px] mx-auto"
+                          : "w-full"
+                      }
+                      style={{ position: "relative" }}
                     >
                       <div
                         style={{
                           width: "100%",
-                          paddingTop: "56.25%",
+                          paddingTop: isShort ? "177.78%" : "56.25%",
                           position: "relative",
                         }}
                       >
@@ -285,7 +297,8 @@ export default function DemoClient() {
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         </div>

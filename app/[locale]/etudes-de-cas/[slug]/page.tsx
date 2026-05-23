@@ -163,15 +163,27 @@ export default async function CaseStudyPage({
                 <div className="rounded-lg border overflow-hidden">
                   {caseStudy.youtubeVideoId ? (
                     caseStudy.youtubeIsShort ? (
-                      <div className="flex justify-center bg-black">
-                        <iframe
-                          width="315"
-                          height="560"
-                          src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
-                          title={caseStudy.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
+                      <div className="flex justify-center bg-black p-4">
+                        <div
+                          className="w-full max-w-[280px]"
+                          style={{ position: "relative" }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              paddingTop: "177.78%",
+                              position: "relative",
+                            }}
+                          >
+                            <iframe
+                              className="absolute top-0 left-0 w-full h-full border-0"
+                              src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
+                              title={caseStudy.title}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
                       </div>
                     ) : (
                       <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>

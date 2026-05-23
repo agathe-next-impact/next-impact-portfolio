@@ -28,7 +28,11 @@
       "Bash(git stash *)",
       "Bash(git rebase *)",
       "Bash(git merge *)",
-      "Bash(git reset *)"
+      "Bash(git reset *)",
+      "WebFetch(domain:sejours.hermitagelelab.com)",
+      "WebFetch(domain:www.nicocecile23mai2026.fr)",
+      "WebFetch(domain:www.mariage-agathe-et-alain.fun)",
+      "WebFetch(domain:artisan-coiffeur.lapetitevitrine.com)"
     ]
   }
 }

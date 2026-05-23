@@ -19,46 +19,74 @@ interface ProjectMeta {
 
 const PROJECTS_META: ProjectMeta[] = [
   {
+    id: 23,
+    type: "landing",
+    image: "/img/desktop-screen-sejours-hermitage.jpg",
+    link: "https://sejours.hermitagelelab.com/",
+    tab: ["landing"],
+  },
+  {
+    id: 22,
+    type: "landing",
+    image: "/img/desktop-screen-mariage-1.jpg",
+    link: "https://www.nicocecile23mai2026.fr/",
+    tab: ["landing"],
+  },
+  {
+    id: 21,
+    type: "landing",
+    image: "/img/desktop-screen-mariage-2.jpg",
+    link: "https://www.mariage-agathe-et-alain.fun/",
+    tab: ["landing"],
+  },
+  {
+    id: 20,
+    type: "landing",
+    image: "/img/desktop-screen-coiffeur.jpg",
+    link: "https://artisan-coiffeur.lapetitevitrine.com/",
+    tab: ["landing"],
+  },
+  {
     id: 19,
     type: "webapp",
     image: "/img/desktop-screen-panoramapub.png",
     link: "/etudes-de-cas/panorama-pub",
-    tab: ["recents", "webapp"],
+    tab: ["webapp"],
   },
   {
     id: 18,
     type: "webapp",
     image: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
     link: "/etudes-de-cas/hermitage-jeu-de-piste",
-    tab: ["recents", "webapp"],
+    tab: ["webapp"],
   },
   {
     id: 17,
     type: "headless",
     image: "/img/desktop-screen-cafe-citoyen.png",
     link: "/etudes-de-cas/cafe-citoyen",
-    tab: ["recents", "headless"],
+    tab: ["headless"],
   },
   {
     id: 16,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous-jeux.jpg",
     link: "/etudes-de-cas/comme-des-fous-jeux",
-    tab: ["recents", "headless"],
+    tab: ["headless"],
   },
   {
     id: 15,
     type: "headless",
     image: "/img/desktop-screen-comme-des-fous.jpg",
     link: "/etudes-de-cas/comme-des-fous",
-    tab: ["recents", "headless"],
+    tab: ["headless"],
   },
   {
     id: 5,
     type: "headless",
     image: "/img/desktop-screen-next-event.webp",
     link: "/etudes-de-cas/next-event",
-    tab: ["recents", "headless"],
+    tab: ["headless"],
   },
   {
     id: 3,
@@ -160,6 +188,30 @@ interface ProjectContent {
 }
 
 const CONTENT_FR: Record<number, ProjectContent> = {
+  23: {
+    title: "Séjours à L'Hermitage",
+    alt: "Landing de séjours dans un Tiers Lieu rural",
+    description:
+      "Séjours d'entreprise sur-mesure en nature, team-building et séminaires innovants.",
+  },
+  22: {
+    title: "Mariage Nicolas & Cécile",
+    alt: "Landing de mariage Nicolas et Cécile",
+    description:
+      "Nicolas et Cécile se marient le 23 mai 2026 — programme détaillé, ton intime et RSVP brunch.",
+  },
+  21: {
+    title: "Mariage Agathe & Alain",
+    alt: "Landing de mariage Agathe et Alain",
+    description:
+      "Agathe et Alain célèbrent leur mariage le 27 septembre — programme, hébergement et ton chaleureux.",
+  },
+  20: {
+    title: "Artisan Coiffeur",
+    alt: "Landing artisan coiffeur — La Petite Vitrine",
+    description:
+      "Salon de coiffure moderne à Paris proposant des services de coiffure professionnels.",
+  },
   17: {
     title: "Café citoyen",
     alt: "Site vitrine du Café citoyen",
@@ -258,6 +310,30 @@ const CONTENT_FR: Record<number, ProjectContent> = {
 };
 
 const CONTENT_EN: Record<number, ProjectContent> = {
+  23: {
+    title: "L'Hermitage Stays",
+    alt: "Landing page — stays at a rural Tiers Lieu",
+    description:
+      "Bespoke corporate stays in nature — team-building and innovative offsites.",
+  },
+  22: {
+    title: "Nicolas & Cécile's Wedding",
+    alt: "Wedding landing page — Nicolas and Cécile",
+    description:
+      "Nicolas and Cécile are getting married on 23 May 2026 — full programme, intimate tone and brunch RSVP.",
+  },
+  21: {
+    title: "Agathe & Alain's Wedding",
+    alt: "Wedding landing page — Agathe and Alain",
+    description:
+      "Agathe and Alain celebrate their wedding on 27 September — programme, accommodation and warm tone.",
+  },
+  20: {
+    title: "Artisan Coiffeur",
+    alt: "Artisan hairdresser landing — La Petite Vitrine",
+    description:
+      "A modern Paris hair salon offering professional hairdressing services.",
+  },
   17: {
     title: "Café Citoyen",
     alt: "Café Citoyen brochure site",
@@ -368,7 +444,7 @@ interface RealisationsProps {
   defaultTab?: string;
 }
 
-export default function Realisations({ count, defaultTab = "recents" }: RealisationsProps) {
+export default function Realisations({ count, defaultTab = "webapp" }: RealisationsProps) {
   const t = useTranslations("realisations");
   const locale = useLocale() as Locale;
 
@@ -379,10 +455,10 @@ export default function Realisations({ count, defaultTab = "recents" }: Realisat
           <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
             <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
               <TabsTrigger
-                value="recents"
+                value="landing"
                 className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
               >
-                {t("tabs.recents")}
+                {t("tabs.landing")}
               </TabsTrigger>
               <TabsTrigger
                 value="webapp"
@@ -405,12 +481,16 @@ export default function Realisations({ count, defaultTab = "recents" }: Realisat
             </TabsList>
           </div>
 
-          {["recents", "webapp", "headless", "wordpress"].map((tab) => (
+          {["landing", "webapp", "headless", "wordpress"].map((tab) => (
             <TabsContent value={tab} className="mt-0" key={tab}>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {getProjectsByTab(tab, count ?? PROJECTS_META.length).map(
                   (project, index) => {
                     const content = getProjectContent(locale, project.id);
+                    const isExternal = project.link.startsWith("http");
+                    const externalProps = isExternal
+                      ? { target: "_blank" as const, rel: "noopener noreferrer" }
+                      : {};
                     return (
                       <motion.div
                         key={project.id}
@@ -430,7 +510,7 @@ export default function Realisations({ count, defaultTab = "recents" }: Realisat
                             />
                           </div>
                           <div className="p-6 flex flex-col flex-1">
-                            <Link href={project.link}>
+                            <Link href={project.link} {...externalProps}>
                               <h3 className="text-2xl font-medium transition-colors duration-300 text-white group-hover:text-white/70">
                                 {content.title}
                               </h3>
@@ -438,12 +518,13 @@ export default function Realisations({ count, defaultTab = "recents" }: Realisat
                                 {content.description}
                               </p>
                             </Link>
-                            <div className="mt-4 mt-auto">
+                            <div className="mt-auto">
                               <Link
                                 href={project.link}
+                                {...externalProps}
                                 className="inline-flex items-center text-sm font-medium  text-white group-hover:text-white/70 transition-all duration-300 hover:translate-x-1"
                               >
-                                {t("viewProject")}
+                                {isExternal ? t("visitLanding") : t("viewProject")}
                                 <ArrowRight className="ml-1 h-4 w-4" />
                               </Link>
                             </div>
