@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Smartphone, MapPin, Database, Wifi, Lock, Settings2 } from "lucide-react";
+import {
+  ArrowRight,
+  Smartphone,
+  MapPin,
+  Database,
+  Wifi,
+  Lock,
+  Settings2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
@@ -44,7 +52,10 @@ const COPY: Record<Locale, Copy> = {
       { icon: Settings2, text: "Logique métier propre" },
       { icon: Lock, text: "Comptes utilisateurs" },
       { icon: Database, text: "Données temps réel" },
-      { icon: MapPin, text: "Géolocalisation, mode hors-ligne, installation sur écran d'accueil" },
+      {
+        icon: MapPin,
+        text: "Géolocalisation, mode hors-ligne, installation sur écran d'accueil",
+      },
     ],
     useCasesLabel: "Cas d'usage",
     useCases: [
@@ -76,12 +87,13 @@ const COPY: Record<Locale, Copy> = {
         slug: "panorama-pub",
         title: "Panorama Pub",
         tagline: "Marketplace B2B livrée en 2 mois — admin autonome sur-mesure",
-        imageUrl: "/img/desktop-screen-panorama-pub.jpg",
+        imageUrl: "/img/desktop-screen-panoramapub.png",
       },
       {
         slug: "hermitage-jeu-de-piste",
         title: "Hermitage — Jeu de piste",
-        tagline: "Application mobile PWA — géolocalisée, installable sans store, hors-ligne",
+        tagline:
+          "Application mobile PWA — géolocalisée, installable sans store, hors-ligne",
         imageUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg",
       },
     ],
@@ -103,7 +115,10 @@ const COPY: Record<Locale, Copy> = {
       { icon: Settings2, text: "Dedicated business logic" },
       { icon: Lock, text: "User accounts" },
       { icon: Database, text: "Real-time data" },
-      { icon: MapPin, text: "Geolocation, offline mode, install on home screen" },
+      {
+        icon: MapPin,
+        text: "Geolocation, offline mode, install on home screen",
+      },
     ],
     useCasesLabel: "Use cases",
     useCases: [
@@ -134,8 +149,9 @@ const COPY: Record<Locale, Copy> = {
       {
         slug: "panorama-pub",
         title: "Panorama Pub",
-        tagline: "B2B marketplace shipped in 2 months — custom autonomous admin",
-        imageUrl: "/img/desktop-screen-panorama-pub.jpg",
+        tagline:
+          "B2B marketplace shipped in 2 months — custom autonomous admin",
+        imageUrl: "/img/desktop-screen-panoramapub.png",
       },
       {
         slug: "hermitage-jeu-de-piste",
@@ -194,7 +210,9 @@ export default function AppsSection() {
                 return (
                   <li key={idx} className="flex items-start gap-3">
                     <Icon className="h-5 w-5 text-lightyellow shrink-0 mt-0.5" />
-                    <span className="text-white/80 font-googletexte">{item.text}</span>
+                    <span className="text-white/80 font-googletexte">
+                      {item.text}
+                    </span>
                   </li>
                 );
               })}
@@ -206,9 +224,14 @@ export default function AppsSection() {
             </p>
             <ul className="space-y-2">
               {copy.useCases.map((useCase, idx) => (
-                <li key={idx} className="text-white/80 font-googletexte flex items-start gap-2">
+                <li
+                  key={idx}
+                  className="text-white/80 font-googletexte flex items-start gap-2"
+                >
                   <span className="text-coral">·</span>
-                  <span>{useCase}</span>
+                  <span className="text-white/80 font-googletexte">
+                    {useCase}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -244,7 +267,12 @@ export default function AppsSection() {
             </p>
             <ul className="space-y-2">
               {copy.advantages.map((adv, idx) => (
-                <li key={idx} className="text-white/80 font-googletexte text-sm">+ {adv}</li>
+                <li
+                  key={idx}
+                  className="text-white/80 font-googletexte text-sm"
+                >
+                  + {adv}
+                </li>
               ))}
             </ul>
           </div>
@@ -254,7 +282,12 @@ export default function AppsSection() {
             </p>
             <ul className="space-y-2">
               {copy.limits.map((lim, idx) => (
-                <li key={idx} className="text-white/70 font-googletexte text-sm">— {lim}</li>
+                <li
+                  key={idx}
+                  className="text-white/70 font-googletexte text-sm"
+                >
+                  — {lim}
+                </li>
               ))}
             </ul>
           </div>
@@ -286,7 +319,9 @@ export default function AppsSection() {
                     <h4 className="text-xl font-googletitre font-medium text-white mb-1">
                       {proof.title}
                     </h4>
-                    <p className="text-sm text-white/60 font-googletexte">{proof.tagline}</p>
+                    <p className="text-sm text-white/60 font-googletexte">
+                      {proof.tagline}
+                    </p>
                   </div>
                 </div>
               </Link>
@@ -322,7 +357,11 @@ export default function AppsSection() {
 
         {/* CTA principal */}
         <div className="text-center">
-          <Link href="https://calendar.app.google/RwZqaabSR5aDMnk46" target="_blank" rel="noopener noreferrer">
+          <Link
+            href="https://calendar.app.google/RwZqaabSR5aDMnk46"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full bg-coral text-darkblue transition-all duration-300 hover:scale-[1.02]">
               {copy.ctaPrimary}
               <ArrowRight className="ml-2 h-5 w-5" />
