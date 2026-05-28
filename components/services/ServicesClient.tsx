@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { PricingCards } from "@/components/services/PricingCards";
@@ -24,57 +23,21 @@ export default function ServicesClient() {
 
   return (
     <PageLayout titre={variant.titre} sousTitre="">
-      {/* Comprendre le WordPress Headless */}
-      <section className="s">
+
+      {/* § 01 — Comparatif des stacks */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
           <HeadlessExplainer />
         </div>
       </section>
 
-      {/* Pricing — Section 1 */}
+      {/* § 02 — Tarifs */}
       <PricingCards />
 
-      {/* Comparison table */}
+      {/* § 03 — Tableau comparatif */}
       <ServicesComparisonTable />
 
-      {/* Apps sur-mesure — Section 2 */}
-      <AppsSection />
-
-      {/* CTA tertiaire — Simulateur ROI */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: 32,
-              alignItems: "center",
-              border: "1px solid var(--rule)",
-              padding: "28px 32px",
-              background: "var(--paper-2)",
-            }}
-          >
-            <div>
-              <h3 className="ni-serif" style={{ fontSize: "clamp(18px, 2vw, 26px)", marginBottom: 6, color: "var(--ink)" }}>
-                {t("calculateGain.title")}
-              </h3>
-              <p style={{ fontSize: 13, color: "var(--ink-2)" }}>
-                {t("calculateGain.description")}
-              </p>
-            </div>
-            <Link
-              href="/outils/simulateur-roi"
-              className="btn"
-              style={{ whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 8 }}
-            >
-              {t("calculateGain.ctaLabel")}
-              <ArrowRight size={13} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Comment choisir sa stack */}
+      {/* § 04 — Comment choisir */}
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
           <div className="sec-head">
@@ -84,20 +47,13 @@ export default function ServicesClient() {
             </h2>
             <div className="sec-meta">{t("stackMethod.label")}</div>
           </div>
-
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {[
-              { src: "/icons/content-icon.svg", alt: t("stackMethod.scope.iconAlt"), title: t("stackMethod.scope.title"), desc: t("stackMethod.scope.description") },
-              { src: "/icons/globe-network-icon.svg", alt: t("stackMethod.volume.iconAlt"), title: t("stackMethod.volume.title"), desc: t("stackMethod.volume.description") },
-              { src: "/icons/eco-design-icon.svg", alt: t("stackMethod.scalability.iconAlt"), title: t("stackMethod.scalability.title"), desc: t("stackMethod.scalability.description") },
+              { src: "/icons/content-icon.svg",      alt: t("stackMethod.scope.iconAlt"),        title: t("stackMethod.scope.title"),        desc: t("stackMethod.scope.description") },
+              { src: "/icons/globe-network-icon.svg", alt: t("stackMethod.volume.iconAlt"),       title: t("stackMethod.volume.title"),       desc: t("stackMethod.volume.description") },
+              { src: "/icons/eco-design-icon.svg",    alt: t("stackMethod.scalability.iconAlt"),  title: t("stackMethod.scalability.title"),  desc: t("stackMethod.scalability.description") },
             ].map((card, i) => (
-              <div
-                key={card.title}
-                style={{
-                  padding: "40px 32px",
-                  borderRight: i < 2 ? "1px solid var(--rule)" : "none",
-                }}
-              >
+              <div key={card.title} style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none" }}>
                 <Image src={card.src} alt={card.alt} width={32} height={32} style={{ marginBottom: 20, opacity: 0.7 }} />
                 <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>
                   {card.title}
@@ -111,86 +67,31 @@ export default function ServicesClient() {
         </div>
       </section>
 
-      {/* Budget / ROI — profil adaptatif */}
+      {/* § 05 — Stack sur-mesure (web app) */}
+      <AppsSection />
+
+      {/* § 06 — Méthode */}
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ —</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
-              {variant.budgetTitle}
-            </h2>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {/* Left card */}
-            <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <Image src="/icons/brand-reach-icon.svg" alt={t("budgetCardsAlt.left")} width={24} height={24} style={{ opacity: 0.7 }} />
-                <h3 className="ni-serif" style={{ fontSize: 20, color: "var(--ink)" }}>
-                  {variant.budgetCards.left.title}
-                </h3>
-              </div>
-              <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
-                {variant.budgetCards.left.description}
-              </p>
-              {variant.budgetCards.left.price && (
-                <div className="ni-serif" style={{ fontSize: 40, color: "var(--accent-color)", lineHeight: 1 }}>
-                  {variant.budgetCards.left.price}
-                  <span style={{ fontSize: 18, color: "var(--ink-2)" }}> €</span>
-                </div>
-              )}
-            </div>
-
-            {/* Right card */}
-            <div style={{ padding: "40px 32px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <Image src="/icons/rocket-icon.svg" alt={t("budgetCardsAlt.right")} width={24} height={24} style={{ opacity: 0.7 }} />
-                <h3 className="ni-serif" style={{ fontSize: 20, color: "var(--ink)" }}>
-                  {variant.budgetCards.right.title}
-                </h3>
-              </div>
-              <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
-                {variant.budgetCards.right.description}
-              </p>
-              {variant.budgetCards.right.highlight && (
-                <p
-                  style={{
-                    fontFamily: "var(--serif)",
-                    fontStyle: "italic",
-                    fontSize: 15,
-                    color: "var(--accent-color)",
-                    borderLeft: "2px solid var(--accent-color)",
-                    paddingLeft: 16,
-                  }}
-                >
-                  {variant.budgetCards.right.highlight}
-                </p>
-              )}
-            </div>
-          </div>
+          <Process />
         </div>
       </section>
 
-      {/* Shortcuts — Audit / Démo / Éligibilité */}
+      {/* § 07 — FAQ */}
+      <ServicesFAQ faqs={variant.faqs} />
+
+      {/* § 08 — Raccourcis */}
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {[
-              { href: "/outils", src: "/icons/scan-icon.svg", alt: t("shortcuts.tools.iconAlt"), title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
-              { href: "/demo", src: "/icons/desktop-headless-icon.svg", alt: t("shortcuts.demo.iconAlt"), title: t("shortcuts.demo.title"), desc: t("shortcuts.demo.description") },
-              { href: "/services/eligibilite", src: "/icons/optimize-icon.svg", alt: t("shortcuts.stack.iconAlt"), title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
+              { href: "/outils",               src: "/icons/scan-icon.svg",             alt: t("shortcuts.tools.iconAlt"), title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
+              { href: "/demo",                 src: "/icons/desktop-headless-icon.svg", alt: t("shortcuts.demo.iconAlt"),  title: t("shortcuts.demo.title"),  desc: t("shortcuts.demo.description") },
+              { href: "/services/eligibilite", src: "/icons/optimize-icon.svg",         alt: t("shortcuts.stack.iconAlt"), title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
             ].map((card, i) => (
-              <Link
-                key={card.href}
-                href={card.href as Parameters<typeof Link>[0]["href"]}
-                style={{ display: "block", textDecoration: "none" }}
-              >
+              <Link key={card.href} href={card.href as Parameters<typeof Link>[0]["href"]} style={{ display: "block", textDecoration: "none" }}>
                 <div
-                  style={{
-                    padding: "40px 32px",
-                    borderRight: i < 2 ? "1px solid var(--rule)" : "none",
-                    transition: "background 0.15s",
-                  }}
+                  style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none", transition: "background 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 >
@@ -201,17 +102,7 @@ export default function ServicesClient() {
                   <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
                     {card.desc}
                   </p>
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 10,
-                      letterSpacing: "0.08em",
-                      color: "var(--accent-color)",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 4,
-                    }}
-                  >
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.08em", color: "var(--accent-color)", display: "inline-flex", alignItems: "center", gap: 4 }}>
                     → {card.title}
                   </span>
                 </div>
@@ -221,15 +112,6 @@ export default function ServicesClient() {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <Process />
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <ServicesFAQ faqs={variant.faqs} />
     </PageLayout>
   );
 }
