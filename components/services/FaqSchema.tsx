@@ -1,12 +1,5 @@
 "use client";
-import React from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
 
 export interface FaqItem {
   question: string;
@@ -20,65 +13,111 @@ interface FaqSchemaProps {
   sectionId?: string;
 }
 
-/**
- * Composant FAQ réutilisable avec balises schema.org
- */
 const FaqSchema: React.FC<FaqSchemaProps> = ({
   faqs,
   title = "Questions fréquentes",
-  description =
-    "Vous avez des questions ? Voici les réponses aux questions les plus fréquentes que je reçois.",
+  description = "Vous avez des questions ? Voici les réponses aux questions les plus fréquentes que je reçois.",
   sectionId = "faq",
 }) => {
-  // Générer le JSON-LD pour schema.org FAQPage
+  const [open, setOpen] = useState<number | null>(null);
+
   const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
+      "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
-        '@type': 'Answer',
-        text:
-          typeof faq.answer === 'string'
-            ? faq.answer
-            : (typeof window === 'undefined' ? '' : (document.createElement('div').appendChild(document.createElement('span')).innerHTML = '')),
+        "@type": "Answer",
+        text: typeof faq.answer === "string" ? faq.answer : "",
       },
     })),
   };
 
   return (
-    <section id={sectionId}>
+    <section id={sectionId} className="s">
       <div className="container">
-        <div className="text-center mb-8 md:mb-16">
-          <h2 className="text-3xl md:text-4xl text-white font-medium mb-6">{title}</h2>
-          <p className="text-base md:text-xl max-w-3xl mx-auto text-white/70">{description}</p>
+        <div className="sec-head">
+          <div className="sec-no">№ —</div>
+          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
+            {title}
+          </h2>
         </div>
-        <div className="mx-auto max-w-3xl md:py-12">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, idx) => (
-              <AccordionItem value={`item-${idx + 1}`} key={idx}>
-                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                {/* Animation Framer Motion sur le contenu */}
-                <AccordionContent>
-                  <AnimatePresence initial={false}>
-                    {/* Utilisation de motion.div pour l'animation du contenu */}
-                    <motion.div
-                      key={`faq-content-${idx}`}
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 1.4, ease: "circOut", type: "tween" }}
-                    >
-                      {faq.answer}
-                    </motion.div>
-                  </AnimatePresence>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+
+        {description && (
+          <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 560, marginBottom: 40 }}>
+            {description}
+          </p>
+        )}
+
+        <div style={{ borderTop: "1px solid var(--rule)" }}>
+          {faqs.map((faq, idx) => (
+            <div
+              key={idx}
+              style={{ borderBottom: "1px solid var(--rule)", cursor: "pointer" }}
+              onClick={() => setOpen(open === idx ? null : idx)}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "48px 1fr 24px",
+                  gap: 24,
+                  padding: "24px 0",
+                  alignItems: "baseline",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    color: "var(--accent-color)",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <h3
+                  className="ni-serif"
+                  style={{
+                    fontSize: 16,
+                    margin: 0,
+                    fontStyle: open === idx ? "italic" : "normal",
+                    color: "var(--ink)",
+                  }}
+                >
+                  {faq.question}
+                </h3>
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 16,
+                    color: "var(--muted-color)",
+                    transform: open === idx ? "rotate(45deg)" : "none",
+                    transition: "transform 0.2s",
+                    display: "inline-block",
+                    textAlign: "center",
+                  }}
+                >
+                  +
+                </span>
+              </div>
+              {open === idx && (
+                <div
+                  style={{
+                    paddingLeft: 72,
+                    paddingBottom: 24,
+                    fontSize: 14,
+                    color: "var(--ink-2)",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {faq.answer}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-        {/* Balise JSON-LD schema.org FAQPage */}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

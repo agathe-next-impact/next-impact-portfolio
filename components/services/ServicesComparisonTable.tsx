@@ -1,7 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { CheckCircle2, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -9,20 +7,8 @@ export function ServicesComparisonTable() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const labels = isEn
-    ? {
-        title: "Tier comparison",
-        feature: "Feature",
-        essential: "Classic",
-        growth: "Headless",
-        custom: "Web app",
-      }
-    : {
-        title: "Comparatif des forfaits",
-        feature: "Fonctionnalité",
-        essential: "Classique",
-        growth: "Headless",
-        custom: "Web app",
-      };
+    ? { title: "Tier comparison", feature: "Feature", essential: "Classic", growth: "Headless", custom: "Web app" }
+    : { title: "Comparatif des forfaits", feature: "Fonctionnalité", essential: "Classique", growth: "Headless", custom: "Web app" };
 
   const comparison = isEn
     ? [
@@ -52,131 +38,58 @@ export function ServicesComparisonTable() {
         { feature: "Attestation OETH (TIH)", pack1: true, pack2: true, pack3: "Optimisé pour la déduction OETH" },
       ];
 
-  return (
-    <section className="py-0 md:py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="text-3xl md:text-4xl font-semibold text-white/80 text-center mb-10">
-          {labels.title}
-        </h2>
+  const cellStyle = (val: boolean | string): React.CSSProperties => ({
+    padding: "14px 20px",
+    textAlign: "center",
+    fontFamily: typeof val === "string" && val !== "" ? "var(--sans)" : "var(--mono)",
+    fontSize: 13,
+    color: val === true ? "var(--accent-color)" : val === false ? "var(--rule-strong)" : "var(--ink-2)",
+    borderRight: "1px solid var(--rule)",
+  });
 
-        {/* Table desktop */}
-        <div className="hidden md:block">
-          <Card className="overflow-hidden bg-mediumblue/60 backdrop-blur-xl border-[#719ED9]/30 ">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[#719ED9]/30 bg-[#D0DCF2]/10">
-                    <th className="text-left p-6 text-white font-semibold font-googletitre text-xl">
-                      {labels.feature}
-                    </th>
-                    <th className="text-center p-6 text-coral font-semibold font-googletitre text-xl">
-                      {labels.essential}
-                    </th>
-                    <th className="text-center p-6 text-lightyellow font-semibold font-googletitre text-xl">
-                      {labels.growth}
-                    </th>
-                    <th className="text-center p-6 text-extralightblue font-semibold font-googletitre text-xl">
-                      {labels.custom}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparison.map((row, idx) => (
-                    <tr
-                      key={idx}
-                      className="border-b border-[#719ED9]/20 hover:bg-[#D0DCF2]/10 transition-colors"
-                    >
-                      <td className="p-6 text-white/80 text-lg">{row.feature}</td>
-                      <td className="p-6 text-center text-lg">
-                        {typeof row.pack1 === "boolean" ? (
-                          row.pack1 ? (
-                            <CheckCircle2 className="h-5 w-5 text-coral mx-auto" />
-                          ) : (
-                            <X className="h-5 w-5 text-coral/30 mx-auto" />
-                          )
-                        ) : (
-                          <span className="text-white/80">{row.pack1}</span>
-                        )}
-                      </td>
-                      <td className="p-6 text-center">
-                        {typeof row.pack2 === "boolean" ? (
-                          row.pack2 ? (
-                            <CheckCircle2 className="h-5 w-5 text-lightyellow mx-auto" />
-                          ) : (
-                            <X className="h-5 w-5 text-lightyellow/30 mx-auto" />
-                          )
-                        ) : (
-                          <span className="text-white/80">
-                            {row.pack2}
-                          </span>
-                        )}
-                      </td>
-                      <td className="p-6 text-center">
-                        {typeof row.pack3 === "boolean" ? (
-                          row.pack3 ? (
-                            <CheckCircle2 className="h-5 w-5 text-extralightblue mx-auto" />
-                          ) : (
-                            <X className="h-5 w-5 text-extralightblue/30 mx-auto" />
-                          )
-                        ) : (
-                          <span className="text-white/80">
-                            {row.pack3}
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+  return (
+    <section className="s">
+      <div className="container">
+        <div className="sec-head">
+          <div className="sec-no">№ —</div>
+          <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
+            {labels.title}
+          </h2>
         </div>
 
-        {/* Mobile version: cartes empilées */}
-        <div className="md:hidden space-y-8">
-          {comparison.map((row, idx) => (
-            <Card key={idx} className="p-6 bg-mediumblue/60 border-[#719ED9]/30 ">
-              <div className="md:font-semibold text-white mb-2 text-2xl md:text-lg">{row.feature}</div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-coral text-xl">{labels.essential}</span>
-                  {typeof row.pack1 === "boolean" ? (
-                    row.pack1 ? (
-                      <CheckCircle2 className="h-5 w-5 text-coral" />
-                    ) : (
-                      <X className="h-5 w-5 text-coral/30" />
-                    )
-                  ) : (
-                    <span className="text-white/80 text-lg">{row.pack1}</span>
-                  )}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-lightyellow text-xl">{labels.growth}</span>
-                  {typeof row.pack2 === "boolean" ? (
-                    row.pack2 ? (
-                      <CheckCircle2 className="h-5 w-5 text-lightyellow" />
-                    ) : (
-                      <X className="h-5 w-5 text-lightyellow/30" />
-                    )
-                  ) : (
-                    <span className="text-white/80 font-medium text-lg">{row.pack2}</span>
-                  )}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-googletitre text-extralightblue text-xl">{labels.custom}</span>
-                  {typeof row.pack3 === "boolean" ? (
-                    row.pack3 ? (
-                      <CheckCircle2 className="h-5 w-5 text-extralightblue" />
-                    ) : (
-                      <X className="h-5 w-5 text-extralightblue/30" />
-                    )
-                  ) : (
-                    <span className="text-white/80 font-medium text-lg">{row.pack3}</span>
-                  )}
-                </div>
-              </div>
-            </Card>
-          ))}
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid var(--rule)" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid var(--rule-strong)" }}>
+                <th style={{ padding: "14px 20px", textAlign: "left", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", borderRight: "1px solid var(--rule)" }}>
+                  {labels.feature}
+                </th>
+                {[labels.essential, labels.growth, labels.custom].map((col, i, arr) => (
+                  <th key={col} style={{ padding: "14px 20px", textAlign: "center", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: i === 1 ? "var(--accent-color)" : "var(--ink-2)", borderRight: i < arr.length - 1 ? "1px solid var(--rule)" : "none" }}>
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {comparison.map((row, idx) => (
+                <tr key={idx} style={{ borderBottom: "1px solid var(--rule)", background: idx % 2 === 1 ? "var(--paper-2)" : "transparent" }}>
+                  <td style={{ padding: "14px 20px", fontSize: 13, color: "var(--ink)", borderRight: "1px solid var(--rule)" }}>
+                    {row.feature}
+                  </td>
+                  <td style={cellStyle(row.pack1)}>
+                    {row.pack1 === true ? "✓" : row.pack1 === false ? "—" : row.pack1}
+                  </td>
+                  <td style={{ ...cellStyle(row.pack2), fontWeight: typeof row.pack2 === "string" ? 500 : undefined }}>
+                    {row.pack2 === true ? "✓" : row.pack2 === false ? "—" : row.pack2}
+                  </td>
+                  <td style={{ ...cellStyle(row.pack3), borderRight: "none" }}>
+                    {row.pack3 === true ? "✓" : row.pack3 === false ? "—" : row.pack3}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>

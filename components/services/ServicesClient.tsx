@@ -1,9 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { PricingCards } from "@/components/services/PricingCards";
 import AppsSection from "@/components/services/AppsSection";
@@ -25,208 +23,213 @@ export default function ServicesClient() {
   const t = useTranslations("servicesPage");
 
   return (
-    <PageLayout
-      titre={variant.titre}
-      sousTitre=""
-    >
-      <div className="mt-8 mb-6 space-y-24">
-
-        {/* Comprendre le WordPress Headless — parcours interactif */}
-        <section className="container mx-auto px-4 pb-12">
+    <PageLayout titre={variant.titre} sousTitre="">
+      {/* Comprendre le WordPress Headless */}
+      <section className="s">
+        <div className="container">
           <HeadlessExplainer />
-        </section>
+        </div>
+      </section>
 
-        {/* Section 1 — Création de sites web (3 forfaits) */}
-        <PricingCards />
+      {/* Pricing — Section 1 */}
+      <PricingCards />
 
-        {/* Comparatif des offres */}
-        <ServicesComparisonTable />
+      {/* Comparison table */}
+      <ServicesComparisonTable />
 
-        {/* Section 2 — Applications web & mobile sur-mesure */}
-        <AppsSection />
+      {/* Apps sur-mesure — Section 2 */}
+      <AppsSection />
 
-        {/* CTA tertiaire — Simulateur ROI */}
-        <section className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto rounded-2xl border border-lightyellow/20 bg-gradient-to-r from-darkblue/60 to-mediumblue/40 backdrop-blur-sm p-6 md:p-8">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lightyellow/10 border border-lightyellow/20 shrink-0">
-                <Image src="/icons/analytics-icon.svg" alt={t("calculateGain.iconAlt")} width={24} height={24} />
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="font-googletitre text-lg md:text-xl font-medium text-white mb-1">
-                  {t("calculateGain.title")}
-                </h3>
-                <p className="text-sm text-white/60 font-googletexte">
-                  {t("calculateGain.description")}
-                </p>
-              </div>
-              <Link
-                href="/outils/simulateur-roi"
-                className="inline-flex items-center gap-2 text-lightyellow text-sm font-googletitre font-semibold hover:text-white transition-colors shrink-0"
-              >
-                {t("calculateGain.ctaLabel")}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+      {/* CTA tertiaire — Simulateur ROI */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr auto",
+              gap: 32,
+              alignItems: "center",
+              border: "1px solid var(--rule)",
+              padding: "28px 32px",
+              background: "var(--paper-2)",
+            }}
+          >
+            <div>
+              <h3 className="ni-serif" style={{ fontSize: "clamp(18px, 2vw, 26px)", marginBottom: 6, color: "var(--ink)" }}>
+                {t("calculateGain.title")}
+              </h3>
+              <p style={{ fontSize: 13, color: "var(--ink-2)" }}>
+                {t("calculateGain.description")}
+              </p>
             </div>
+            <Link
+              href="/outils/simulateur-roi"
+              className="btn"
+              style={{ whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 8 }}
+            >
+              {t("calculateGain.ctaLabel")}
+              <ArrowRight size={13} />
+            </Link>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Comment choisir sa stack */}
-        <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
-          <div className="max-w-4xl mx-auto px-4">
-            <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-              {t("stackMethod.label")}
-            </p>
-            <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
+      {/* Comment choisir sa stack */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <div className="sec-head">
+            <div className="sec-no">№ —</div>
+            <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
               {t("stackMethod.title")}
             </h2>
+            <div className="sec-meta">{t("stackMethod.label")}</div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/content-icon.svg" alt={t("stackMethod.scope.iconAlt")} width={48} height={48} className="mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("stackMethod.scope.title")}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+            {[
+              { src: "/icons/content-icon.svg", alt: t("stackMethod.scope.iconAlt"), title: t("stackMethod.scope.title"), desc: t("stackMethod.scope.description") },
+              { src: "/icons/globe-network-icon.svg", alt: t("stackMethod.volume.iconAlt"), title: t("stackMethod.volume.title"), desc: t("stackMethod.volume.description") },
+              { src: "/icons/eco-design-icon.svg", alt: t("stackMethod.scalability.iconAlt"), title: t("stackMethod.scalability.title"), desc: t("stackMethod.scalability.description") },
+            ].map((card, i) => (
+              <div
+                key={card.title}
+                style={{
+                  padding: "40px 32px",
+                  borderRight: i < 2 ? "1px solid var(--rule)" : "none",
+                }}
+              >
+                <Image src={card.src} alt={card.alt} width={32} height={32} style={{ marginBottom: 20, opacity: 0.7 }} />
+                <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>
+                  {card.title}
                 </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  {t("stackMethod.scope.description")}
+                <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
+                  {card.desc}
                 </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/globe-network-icon.svg" alt={t("stackMethod.volume.iconAlt")} width={48} height={48} className="mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("stackMethod.volume.title")}
-                </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  {t("stackMethod.volume.description")}
-                </p>
-              </div>
+      {/* Budget / ROI — profil adaptatif */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
+        <div className="container">
+          <div className="sec-head">
+            <div className="sec-no">№ —</div>
+            <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
+              {variant.budgetTitle}
+            </h2>
+          </div>
 
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                <Image src="/icons/eco-design-icon.svg" alt={t("stackMethod.scalability.iconAlt")} width={48} height={48} className="mb-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("stackMethod.scalability.title")}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+            {/* Left card */}
+            <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <Image src="/icons/brand-reach-icon.svg" alt={t("budgetCardsAlt.left")} width={24} height={24} style={{ opacity: 0.7 }} />
+                <h3 className="ni-serif" style={{ fontSize: 20, color: "var(--ink)" }}>
+                  {variant.budgetCards.left.title}
                 </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  {t("stackMethod.scalability.description")}
-                </p>
               </div>
+              <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
+                {variant.budgetCards.left.description}
+              </p>
+              {variant.budgetCards.left.price && (
+                <div className="ni-serif" style={{ fontSize: 40, color: "var(--accent-color)", lineHeight: 1 }}>
+                  {variant.budgetCards.left.price}
+                  <span style={{ fontSize: 18, color: "var(--ink-2)" }}> €</span>
+                </div>
+              )}
+            </div>
+
+            {/* Right card */}
+            <div style={{ padding: "40px 32px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <Image src="/icons/rocket-icon.svg" alt={t("budgetCardsAlt.right")} width={24} height={24} style={{ opacity: 0.7 }} />
+                <h3 className="ni-serif" style={{ fontSize: 20, color: "var(--ink)" }}>
+                  {variant.budgetCards.right.title}
+                </h3>
+              </div>
+              <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
+                {variant.budgetCards.right.description}
+              </p>
+              {variant.budgetCards.right.highlight && (
+                <p
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontStyle: "italic",
+                    fontSize: 15,
+                    color: "var(--accent-color)",
+                    borderLeft: "2px solid var(--accent-color)",
+                    paddingLeft: 16,
+                  }}
+                >
+                  {variant.budgetCards.right.highlight}
+                </p>
+              )}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Budget / ROI — contenu adaptatif */}
-        <AnimatePresence mode="wait">
-          <motion.section
-            key={`budget-${profileId || "default"}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative"
-          >
-            <div className="max-w-5xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-12 text-center">
-                {variant.budgetTitle}
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Carte gauche */}
-                <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Image src="/icons/brand-reach-icon.svg" alt={t("budgetCardsAlt.left")} width={32} height={32} className="shrink-0" />
-                    <h3 className="text-xl font-googletitre font-medium text-white">
-                      {variant.budgetCards.left.title}
-                    </h3>
-                  </div>
-                  <p className="text-white/70 font-googletexte leading-relaxed mb-4">
-                    {variant.budgetCards.left.description}
+      {/* Shortcuts — Audit / Démo / Éligibilité */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+            {[
+              { href: "/outils", src: "/icons/scan-icon.svg", alt: t("shortcuts.tools.iconAlt"), title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
+              { href: "/demo", src: "/icons/desktop-headless-icon.svg", alt: t("shortcuts.demo.iconAlt"), title: t("shortcuts.demo.title"), desc: t("shortcuts.demo.description") },
+              { href: "/services/eligibilite", src: "/icons/optimize-icon.svg", alt: t("shortcuts.stack.iconAlt"), title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
+            ].map((card, i) => (
+              <Link
+                key={card.href}
+                href={card.href as Parameters<typeof Link>[0]["href"]}
+                style={{ display: "block", textDecoration: "none" }}
+              >
+                <div
+                  style={{
+                    padding: "40px 32px",
+                    borderRight: i < 2 ? "1px solid var(--rule)" : "none",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                >
+                  <Image src={card.src} alt={card.alt} width={32} height={32} style={{ marginBottom: 20, opacity: 0.6 }} />
+                  <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 8, color: "var(--ink)" }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
+                    {card.desc}
                   </p>
-                  {variant.budgetCards.left.price && (
-                    <p className="text-4xl font-googletitre font-medium text-coral text-center py-4">
-                      {variant.budgetCards.left.price} <span className="text-2xl text-white/60">€</span>
-                    </p>
-                  )}
+                  <span
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 10,
+                      letterSpacing: "0.08em",
+                      color: "var(--accent-color)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    → {card.title}
+                  </span>
                 </div>
-
-                {/* Carte droite */}
-                <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Image src="/icons/rocket-icon.svg" alt={t("budgetCardsAlt.right")} width={32} height={32} className="shrink-0" />
-                    <h3 className="text-xl font-googletitre font-medium text-white">
-                      {variant.budgetCards.right.title}
-                    </h3>
-                  </div>
-                  <p className="text-white/70 font-googletexte leading-relaxed mb-4">
-                    {variant.budgetCards.right.description}
-                  </p>
-                  {variant.budgetCards.right.highlight && (
-                    <div className="bg-lightblue/10 border border-lightblue/20 rounded-xl p-4 text-center">
-                      <p className="text-lightyellow font-googletitre font-medium">
-                        {variant.budgetCards.right.highlight}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.section>
-        </AnimatePresence>
-
-        {/* Bandeau Audit / Démo / Éligibilité */}
-        <section className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <Link href="/outils" className="group">
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-coral/40 transition-all duration-300">
-                <Image src="/icons/scan-icon.svg" alt={t("shortcuts.tools.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.tools.title")}</h3>
-                <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  {t("shortcuts.tools.description")}
-                </p>
-              </div>
-            </Link>
-
-            <Link href="/demo" className="group">
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightyellow/40 transition-all duration-300">
-                <Image src="/icons/desktop-headless-icon.svg" alt={t("shortcuts.demo.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.demo.title")}</h3>
-                <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  {t("shortcuts.demo.description")}
-                </p>
-              </div>
-            </Link>
-
-            <Link href="/services/eligibilite" className="group">
-              <div className="flex flex-col items-center text-center border border-white/10 rounded-2xl p-8 bg-mediumblue/60 backdrop-blur-lg hover:border-lightblue/40 transition-all duration-300">
-                <Image src="/icons/optimize-icon.svg" alt={t("shortcuts.stack.iconAlt")} width={48} height={48} className="mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-googletitre font-semibold text-white mb-2">{t("shortcuts.stack.title")}</h3>
-                <p className="text-white/60 font-googletexte text-sm leading-relaxed">
-                  {t("shortcuts.stack.description")}
-                </p>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Process */}
-        <Process />
+      {/* Process */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <Process />
+        </div>
+      </section>
 
-        {/* FAQ — contenu adaptatif */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`faq-${profileId || "default"}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <ServicesFAQ faqs={variant.faqs} />
-          </motion.div>
-        </AnimatePresence>
-
-
-
-      </div>
+      {/* FAQ */}
+      <ServicesFAQ faqs={variant.faqs} />
     </PageLayout>
   );
 }

@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
 import Realisations from "@/components/case-studies/realisations";
@@ -19,36 +18,50 @@ export default function CaseStudiesClient() {
 
   return (
     <PageLayout titre={variant.titre} sousTitre={variant.sousTitre}>
-      <div className="mt-8 mb-16 px-4 space-y-16">
-        <Realisations count={30} defaultTab={variant.defaultTab} />
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <Realisations count={30} defaultTab={variant.defaultTab} />
+        </div>
+      </section>
 
-        {/* CTA adaptatif par profil */}
-        <AnimatePresence mode="wait">
-          <motion.section
-            key={`cta-${profileId || "default"}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="max-w-2xl mx-auto text-center"
-          >
-            <p className="text-lg text-white/70 font-googletexte mb-6">
+      <AnimatePresence mode="wait">
+        <motion.section
+          key={`cta-${profileId || "default"}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="s"
+          style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}
+        >
+          <div className="container">
+            <p style={{ fontSize: 16, color: "var(--ink-2)", maxWidth: 480, marginBottom: 24, lineHeight: 1.65 }}>
               {variant.ctaDescription}
             </p>
-            <Link
-              href={variant.ctaHref}
-              {...(variant.ctaHref.startsWith("http")
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
-            >
-              <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full bg-coral text-darkblue transition-all duration-300">
+            {variant.ctaHref.startsWith("http") ? (
+              <a
+                href={variant.ctaHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn primary"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
                 {variant.ctaLabel}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </motion.section>
-        </AnimatePresence>
-      </div>
+                <ArrowRight size={14} />
+              </a>
+            ) : (
+              <Link
+                href={variant.ctaHref as Parameters<typeof Link>[0]["href"]}
+                className="btn primary"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                {variant.ctaLabel}
+                <ArrowRight size={14} />
+              </Link>
+            )}
+          </div>
+        </motion.section>
+      </AnimatePresence>
     </PageLayout>
   );
 }

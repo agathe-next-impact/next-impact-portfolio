@@ -1,16 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import {
-  CheckCircle,
-  Zap,
-  Code,
-  Quote,
-  ArrowRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { CountUp } from "@/components/ui/count-up";
 import PageLayout from "@/components/page-layout";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,301 +17,307 @@ export default function AboutClient() {
   const aboutVariants = getAboutPageVariants(locale);
   const variant = profileId ? aboutVariants[profileId] : aboutVariants.default;
   const t = useTranslations("aboutPage");
-
   const key = profileId || "default";
 
   return (
     <PageLayout titre={variant.titre} sousTitre={variant.sousTitre}>
-      {/* Manifeste Section — adaptatif */}
+
+      {/* Manifeste — adaptatif */}
       <AnimatePresence mode="wait">
         <motion.section
           key={`manifeste-${key}`}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3 }}
-          className="bg-mediumblue/60 w-full mx-auto mt-20 flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="s"
+          style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}
         >
-          <div className="max-w-4xl mx-auto px-4 mb-16">
-            <p className="text-lg text-white/80 font-googletexte leading-relaxed">
+          <div className="container">
+            <div className="sec-head">
+              <div className="sec-no">№ 01</div>
+              <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
+                {variant.manifesteAccroche}
+              </h2>
+            </div>
+
+            <p style={{ fontSize: 16, color: "var(--ink-2)", lineHeight: 1.7, maxWidth: 640, marginBottom: 48 }}>
               {variant.manifesteIntro}
             </p>
-            <p className="text-2xl text-lightyellow font-googletitre font-medium mt-6">
-              {variant.manifesteAccroche}
-            </p>
-          </div>
 
-          {/* Piliers */}
-          <div className="grid grid-cols-1 gap-8 max-w-5xl mx-auto px-4">
-            {variant.piliers.map((pilier, index) => (
-              <div
-                key={index}
-                className="flex flex-col md:flex-row border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm"
-              >
-                <div className="basis-1/3 flex items-center gap-3 mb-4">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+              {variant.piliers.map((pilier, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "80px 1fr",
+                    gap: 40,
+                    padding: "32px 0",
+                    borderBottom: "1px solid var(--rule)",
+                    alignItems: "start",
+                  }}
+                >
                   <Image
                     src={pilier.icon}
                     alt={pilier.title}
-                    width={72}
-                    height={72}
-                    className="w-1/2 h-full md:w-full text-lightyellow"
+                    width={48}
+                    height={48}
+                    style={{ opacity: 0.65 }}
                   />
+                  <div>
+                    <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 10, color: "var(--ink)" }}>
+                      {pilier.title}
+                    </h3>
+                    <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 16 }}>
+                      {pilier.description}
+                    </p>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {pilier.items.map((item, i) => (
+                        <li key={i} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--ink-2)" }}>
+                          <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11 }}>→</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div className="flex flex-col md:ml-12">
-                  <h3 className="text-xl font-googletitre font-medium text-white">
-                    {pilier.title}
-                  </h3>
-                  <p className="text-white/70 font-googletexte leading-relaxed mb-4">
-                    {pilier.description}
-                  </p>
-                  <ul className="space-y-3 ml-12">
-                    {pilier.items.map((item, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-3 text-white/80 font-googletexte"
-                      >
-                        <CheckCircle className="h-5 w-5 text-lightyellow mt-0.5 shrink-0" />
-                        <span className="text-white/70">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </motion.section>
       </AnimatePresence>
 
-      {/* Parcours / Histoire Section — statique */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4 text-center">
-            {t("journey.label")}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white mb-4 text-center">
-            {t("journey.title")}
-          </h2>
-          <p className="text-lg text-white/70 text-center mb-16 font-googletexte">
+      {/* Parcours — statique */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <div className="sec-head">
+            <div className="sec-no">№ 02</div>
+            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
+              {t("journey.title")}
+            </h2>
+            <div className="sec-meta">{t("journey.label")}</div>
+          </div>
+
+          <p style={{ fontSize: 16, color: "var(--ink-2)", maxWidth: 540, marginBottom: 48 }}>
             {t("journey.subtitle")}
           </p>
 
-          {/* Timeline */}
-          <div className="relative">
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-regularblue/60 via-coral/60 to-lightyellow/60" />
-
-            {/* Étape 1 - 2005 */}
-            <div className="absolute right-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
-              <Image
-                src="/img/about-nb-asso.jpg"
-                alt={t("journey.step1.imageAlt")}
-                width={200}
-                height={200}
-                className="h-full w-full object-cover rounded-2xl border border-white/10"
-              />
-            </div>
-            <div className="relative flex flex-col md:flex-row md:items-start mb-16">
-              <div className="md:w-1/2 md:pr-12 bg-mediumblue/20 backdrop-blur-md md:text-right p-4 md:pl-12 md:pl-0 border md:ml-8 border-white/10 rounded-2xl">
-                <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  {t("journey.step1.year")}
-                </span>
-                <hr className="border-white/10 my-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("journey.step1.title")}
-                </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  {t("journey.step1.description")}
-                </p>
+          {/* Timeline — 3 steps */}
+          <div style={{ borderTop: "1px solid var(--rule)" }}>
+            {[
+              {
+                year: t("journey.step1.year"),
+                title: t("journey.step1.title"),
+                content: <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>{t("journey.step1.description")}</p>,
+                imageSrc: "/img/about-nb-asso.jpg",
+                imageAlt: t("journey.step1.imageAlt"),
+              },
+              {
+                year: t("journey.step2.year"),
+                title: t("journey.step2.title"),
+                content: <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>{t("journey.step2.description")}</p>,
+                imageSrc: "/img/about-code.jpg",
+                imageAlt: t("journey.step2.imageAlt"),
+              },
+              {
+                year: t("journey.step3.year"),
+                title: t("journey.step3.title"),
+                content: (
+                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                    {(["user", "tech", "ai"] as const).map((key) => (
+                      <li key={key} style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
+                        <strong style={{ color: "var(--ink)" }}>{t(`journey.step3.items.${key}.label`)}</strong>{" "}
+                        {t(`journey.step3.items.${key}.text`)}
+                      </li>
+                    ))}
+                    <li style={{ fontSize: 13, fontStyle: "italic", color: "var(--muted-color)", marginTop: 8 }}>
+                      {t.rich("journey.step3.figaroMention", {
+                        lien: (chunks) => (
+                          <a
+                            href="https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "var(--accent-color)", textDecoration: "underline" }}
+                          >
+                            {chunks}
+                          </a>
+                        ),
+                      })}
+                    </li>
+                  </ul>
+                ),
+                imageSrc: "/img/contact-agathe-km.png",
+                imageAlt: t("journey.step3.imageAlt"),
+              },
+            ].map((step, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "120px 1fr 280px",
+                  gap: 40,
+                  padding: "40px 0",
+                  borderBottom: "1px solid var(--rule)",
+                  alignItems: "start",
+                }}
+              >
+                <div
+                  className="ni-serif"
+                  style={{ fontSize: 28, color: "var(--accent-color)", lineHeight: 1, paddingTop: 4 }}
+                >
+                  {step.year}
+                </div>
+                <div>
+                  <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 12, color: "var(--ink)" }}>
+                    {step.title}
+                  </h3>
+                  {step.content}
+                </div>
+                <div style={{ position: "relative", height: 180, overflow: "hidden", border: "1px solid var(--rule)" }}>
+                  <Image
+                    src={step.imageSrc}
+                    alt={step.imageAlt}
+                    fill
+                    style={{ objectFit: "cover", objectPosition: "top" }}
+                    sizes="280px"
+                  />
+                </div>
               </div>
-            </div>
-
-            {/* Étape 2 - Le retour au code */}
-            <div className="relative flex flex-col md:flex-row md:items-start mb-16">
-              <div className="absolute left-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
-                <Image
-                  src="/img/about-code.jpg"
-                  alt={t("journey.step2.imageAlt")}
-                  width={200}
-                  height={200}
-                  className="h-full w-full object-cover rounded-2xl border border-white/10"
-                />
-              </div>
-              <div className="md:w-1/2 md:pr-12 hidden md:flex md:justify-end items-center">
-                <Code className="h-12 w-12 text-lightyellow/40" />
-              </div>
-              <div className="absolute left-2 md:left-1/2 md:-translate-x-1/2 top-0">
-                <div className="h-5 w-5 rounded-full bg-regularblue border-4" />
-              </div>
-              <div className="md:w-1/2 md:pl-12 border md:mr-8 border-white/10 rounded-2xl bg-mediumblue/20 backdrop-blur-md p-4">
-                <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  {t("journey.step2.year")}
-                </span>
-                <hr className="border-white/10 my-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("journey.step2.title")}
-                </h3>
-                <p className="text-white/70 font-googletexte leading-relaxed">
-                  {t("journey.step2.description")}
-                </p>
-              </div>
-            </div>
-
-            {/* Étape 3 - Next Impact */}
-            <div className="relative flex flex-col md:flex-row md:items-start">
-              <div className="absolute right-0 top-10 md:w-1/2 md:h-64 hidden md:flex items-center">
-                <Image
-                  src="/img/contact-agathe-km.png"
-                  alt={t("journey.step3.imageAlt")}
-                  width={200}
-                  height={200}
-                  className="h-full w-full object-cover rounded-2xl border border-white/10"
-                />
-              </div>
-              <div className="md:w-1/2 md:text-right md:pr-12 pl-4 border md:ml-8 border-white/10 rounded-2xl bg-mediumblue/20 backdrop-blur-md p-4">
-                <span className="inline-block text-2xl font-googletitre text-lightyellow font-medium mb-2">
-                  {t("journey.step3.year")}
-                </span>
-                <hr className="border-white/10 my-4" />
-                <h3 className="text-xl font-googletitre font-medium text-white mb-3">
-                  {t("journey.step3.title")}
-                </h3>
-                <ul className="space-y-4 text-white/70 font-googletexte">
-                  <li className="flex items-start gap-3 md:flex-row-reverse">
-                    <span className="text-white/70">
-                      <strong className="text-white">
-                        {t("journey.step3.items.user.label")}
-                      </strong>{" "}
-                      {t("journey.step3.items.user.text")}
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 md:flex-row-reverse">
-                    <span className="text-white/70">
-                      <strong className="text-white">
-                        {t("journey.step3.items.tech.label")}
-                      </strong>{" "}
-                      {t("journey.step3.items.tech.text")}
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3 md:flex-row-reverse">
-                    <span className="text-white/70">
-                      <strong className="text-white">
-                        {t("journey.step3.items.ai.label")}
-                      </strong>{" "}
-                      {t("journey.step3.items.ai.text")}
-                    </span>
-                  </li>
-                </ul>
-                <p className="mt-6 text-sm italic text-white/60 font-googletexte">
-                  {t.rich("journey.step3.figaroMention", {
-                    lien: (chunks) => (
-                      <a
-                        href="https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline decoration-lightyellow/60 underline-offset-4 hover:text-lightyellow dark:text-lightyellow transition-colors"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                  })}
-                </p>
-              </div>
-              <div className="absolute left-2 md:left-1/2 md:-translate-x-1/2 top-0" />
-              <div className="md:w-1/2 md:pl-12 hidden md:flex items-center">
-                <Zap className="h-12 w-12 text-lightyellow/40" />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Citation — adaptatif */}
-      <section className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <Quote className="h-10 w-10 text-lightyellow/60 mx-auto mb-6" />
-          <AnimatePresence mode="wait">
-            <motion.blockquote
-              key={`citation-${key}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="text-2xl md:text-3xl font-googletitre font-medium text-white leading-relaxed mb-6"
-            >
-              &ldquo;{variant.citation}&rdquo;
-            </motion.blockquote>
-          </AnimatePresence>
-          <p className="text-lg text-white/60 font-googletexte">
-            {t("citationByline")}
-          </p>
-        </div>
-      </section>
-
-      {/* Chiffres clés — statique */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <p className="text-white/60 font-googletexte uppercase tracking-widest mb-4">
-            {t("metrics.label")}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-googletitre font-medium text-white">
-            {t("metrics.title")}
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center">
-            <p className="text-5xl font-googletitre font-medium text-coral mb-2">
-              <CountUp end={15} prefix="+" className="text-coral" />
-            </p>
-            <p className="text-lg text-white/60 font-googletexte">
-              {t("metrics.yearsCommitment")}
-            </p>
-          </div>
-          <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center">
-            <p className="text-5xl font-googletitre font-medium text-white/80 mb-2">
-              <CountUp end={8} prefix="+" className="text-white" />
-            </p>
-            <p className="text-lg text-white/60 font-googletexte">
-              {t("metrics.yearsDevelopment")}
-            </p>
-          </div>
-          <div className="border border-white/10 rounded-2xl p-8 bg-darkblue/40 backdrop-blur-sm text-center">
-            <p className="text-5xl font-googletitre font-medium text-lightyellow mb-2">
-              <CountUp end={25} prefix="+" className="text-lightyellow" />
-            </p>
-            <p className="text-lg text-white/60 font-googletexte">
-              {t("metrics.projectsDelivered")}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Final — adaptatif */}
       <AnimatePresence mode="wait">
         <motion.section
-          key={`cta-${key}`}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3 }}
-          className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative"
+          key={`citation-${key}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="s"
+          style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}
         >
-          <div className="max-w-2xl mx-auto px-4 text-center">
-            <p className="text-lg text-white/70 font-googletexte mb-8">
-              {variant.ctaDescription}
-            </p>
-            <Link
-              href={variant.ctaHref}
-              {...(variant.ctaHref.startsWith("http")
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
+          <div className="container">
+            <div className="sec-no">№ 03</div>
+            <blockquote
+              style={{
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                fontSize: "clamp(22px, 3vw, 36px)",
+                lineHeight: 1.35,
+                color: "var(--ink)",
+                maxWidth: 720,
+                borderLeft: "3px solid var(--accent-color)",
+                paddingLeft: 32,
+                marginBottom: 16,
+              }}
             >
-              <Button className="h-14 px-10 font-bold font-googletitre text-lg rounded-full bg-coral text-darkblue transition-all duration-300">
-                {variant.ctaLabel}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+              &ldquo;{variant.citation}&rdquo;
+            </blockquote>
+            <p
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                paddingLeft: 35,
+              }}
+            >
+              {t("citationByline")}
+            </p>
           </div>
         </motion.section>
       </AnimatePresence>
+
+      {/* Chiffres clés */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <div className="sec-head">
+            <div className="sec-no">№ 04</div>
+            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
+              {t("metrics.title")}
+            </h2>
+            <div className="sec-meta">{t("metrics.label")}</div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+            {[
+              { end: 15, prefix: "+", label: t("metrics.yearsCommitment") },
+              { end: 8, prefix: "+", label: t("metrics.yearsDevelopment") },
+              { end: 25, prefix: "+", label: t("metrics.projectsDelivered") },
+            ].map((stat, i) => (
+              <div
+                key={stat.label}
+                style={{
+                  padding: "48px 32px",
+                  borderRight: i < 2 ? "1px solid var(--rule)" : "none",
+                  textAlign: "center",
+                }}
+              >
+                <div className="ni-serif" style={{ fontSize: 56, color: "var(--accent-color)", lineHeight: 1, marginBottom: 8 }}>
+                  <CountUp end={stat.end} prefix={stat.prefix} />
+                </div>
+                <p
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 10,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                  }}
+                >
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA final — adaptatif */}
+      <AnimatePresence mode="wait">
+        <motion.section
+          key={`cta-${key}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="s"
+          style={{ background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        >
+          <div className="container">
+            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", maxWidth: 520, marginBottom: 32, lineHeight: 1.65 }}>
+              {variant.ctaDescription}
+            </p>
+            {variant.ctaHref.startsWith("http") ? (
+              <a
+                href={variant.ctaHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn primary"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                {variant.ctaLabel}
+                <ArrowRight size={14} />
+              </a>
+            ) : (
+              <Link
+                href={variant.ctaHref as Parameters<typeof Link>[0]["href"]}
+                className="btn primary"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                {variant.ctaLabel}
+                <ArrowRight size={14} />
+              </Link>
+            )}
+          </div>
+        </motion.section>
+      </AnimatePresence>
+
     </PageLayout>
   );
 }

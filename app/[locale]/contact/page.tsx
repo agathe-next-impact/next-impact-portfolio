@@ -67,8 +67,8 @@ export default async function ContactPage({
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ContactPageJsonLd />
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
-        <section className="container mx-auto px-4 py-16 md:py-20">
-          <div className="max-w-5xl mx-auto space-y-12">
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48, alignItems: "start" }}>
             <MultiSubjectContactForm />
             <ContactDirectInfo />
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { Mail, Phone, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -9,45 +8,51 @@ export function ContactDirectInfo() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, duration: 0.5 }}
-      className="w-full max-w-lg mx-auto border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 bg-darkblue/40 backdrop-blur-sm text-center space-y-3 sm:space-y-4"
+    <div
+      style={{
+        border: "1px solid var(--rule)",
+        padding: "32px",
+        background: "var(--paper-2)",
+      }}
     >
-      <p className="text-white/60 font-googletexte uppercase tracking-widest text-sm">
+      <div
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 9,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: "var(--muted-color)",
+          marginBottom: 20,
+        }}
+      >
         {isEn ? "Prefer a direct conversation?" : "Vous préférez un échange direct ?"}
+      </div>
+
+      <p style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)", marginBottom: 4 }}>
+        Agathe Karinthi-Martin{" "}
+        <span style={{ fontWeight: 400, color: "var(--ink-2)" }}>— Next Impact Digital</span>
       </p>
 
-      <div className="space-y-3">
-        <p className="font-googletitre font-semibold text-white text-base">
-          Agathe Karinthi-Martin
-          <span className="text-white/60 font-googletexte font-normal"> — Next Impact Digital</span>
-        </p>
-
-        <div className="flex flex-col items-center gap-2.5 text-sm font-googletexte text-white/70">
-          <a
-            href="mailto:agathe@next-impact.digital"
-            className="flex items-center gap-2 text-lightyellow transition-colors"
-          >
-            <Mail className="w-4 h-4 text-coral shrink-0 text-white/60" />
-            agathe@next-impact.digital
-          </a>
-
-          <a
-            href="tel:0673981638"
-            className="flex items-center gap-2 text-lightyellow transition-colors"
-          >
-            <Phone className="w-4 h-4 text-lightyellow shrink-0 text-white/60" />
-            06 73 98 16 38
-          </a>
-
-          <span className="flex items-center gap-2 text-white/60">
-            <MapPin className="w-4 h-4 text-white/40 shrink-0" />
-            {isEn ? "4 rue du centre, 15400 Trizac, France" : "4 rue du centre, 15400 Trizac"}
-          </span>
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+        <a
+          href="mailto:agathe@next-impact.digital"
+          style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--ink-2)", textDecoration: "none" }}
+        >
+          <Mail size={14} style={{ color: "var(--accent-color)", flexShrink: 0 }} />
+          agathe@next-impact.digital
+        </a>
+        <a
+          href="tel:0673981638"
+          style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--ink-2)", textDecoration: "none" }}
+        >
+          <Phone size={14} style={{ color: "var(--accent-color)", flexShrink: 0 }} />
+          06 73 98 16 38
+        </a>
+        <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--muted-color)" }}>
+          <MapPin size={14} style={{ flexShrink: 0 }} />
+          {isEn ? "4 rue du centre, 15400 Trizac, France" : "4 rue du centre, 15400 Trizac"}
+        </span>
       </div>
-    </motion.div>
+    </div>
   );
 }

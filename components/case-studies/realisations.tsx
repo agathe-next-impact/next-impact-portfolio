@@ -1,7 +1,6 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -449,96 +448,97 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
   const locale = useLocale() as Locale;
 
   return (
-    <section id="realisations" className="relative overflow-hidden">
-      <div className="container relative p-0">
-        <Tabs defaultValue={defaultTab} className="w-full">
-          <div className="flex justify-center mb-12 -mx-4 px-4 md:mx-0 md:px-0">
-            <TabsList className="flex overflow-x-auto md:overflow-visible md:flex-wrap bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1 max-w-full scrollbar-hide">
-              <TabsTrigger
-                value="landing"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.landing")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="webapp"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.webapp")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="headless"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.headless")}
-              </TabsTrigger>
-              <TabsTrigger
-                value="wordpress"
-                className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm"
-              >
-                {t("tabs.wordpress")}
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
+    <section id="realisations">
+      <Tabs defaultValue={defaultTab} className="w-full">
+        <TabsList
+          style={{
+            display: "flex",
+            overflowX: "auto",
+            flexWrap: "wrap",
+            background: "transparent",
+            padding: 0,
+            gap: 0,
+            marginBottom: 40,
+            borderBottom: "1px solid var(--rule)",
+          }}
+        >
           {["landing", "webapp", "headless", "wordpress"].map((tab) => (
-            <TabsContent value={tab} className="mt-0" key={tab}>
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {getProjectsByTab(tab, count ?? PROJECTS_META.length).map(
-                  (project, index) => {
-                    const content = getProjectContent(locale, project.id);
-                    const isExternal = project.link.startsWith("http");
-                    const externalProps = isExternal
-                      ? { target: "_blank" as const, rel: "noopener noreferrer" }
-                      : {};
-                    return (
-                      <motion.div
-                        key={project.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="h-full"
-                      >
-                        <div className="group relative overflow-hidden rounded-2xl bg-mediumblue/30 backdrop-blur-md transition-all duration-500 border border-1 border-white/10 h-full flex flex-col">
-                          <div className="relative aspect-video overflow-hidden">
-                            <Image
-                              src={project.image}
-                              alt={content.alt}
-                              fill
-                              className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                            />
-                          </div>
-                          <div className="p-6 flex flex-col flex-1">
-                            <Link href={project.link} {...externalProps}>
-                              <h3 className="text-2xl font-medium transition-colors duration-300 text-white group-hover:text-white/70">
-                                {content.title}
-                              </h3>
-                              <p className="mt-2 text-white/70 text-sm group-hover:text-white/50">
-                                {content.description}
-                              </p>
-                            </Link>
-                            <div className="mt-auto">
-                              <Link
-                                href={project.link}
-                                {...externalProps}
-                                className="inline-flex items-center text-sm font-medium  text-white group-hover:text-white/70 transition-all duration-300 hover:translate-x-1"
-                              >
-                                {isExternal ? t("visitLanding") : t("viewProject")}
-                                <ArrowRight className="ml-1 h-4 w-4" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  },
-                )}
-              </div>
-            </TabsContent>
+            <TabsTrigger
+              key={tab}
+              value={tab}
+              style={{ borderRadius: 0 }}
+              className="data-[state=active]:border-b-[2px] data-[state=active]:border-b-[var(--accent-color)] whitespace-nowrap text-xs uppercase tracking-widest font-mono px-6 py-3"
+            >
+              {t(`tabs.${tab as "landing" | "webapp" | "headless" | "wordpress"}`)}
+            </TabsTrigger>
           ))}
-        </Tabs>
-      </div>
+        </TabsList>
+
+        {["landing", "webapp", "headless", "wordpress"].map((tab) => (
+          <TabsContent value={tab} className="mt-0" key={tab}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
+              {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project, index) => {
+                const content = getProjectContent(locale, project.id);
+                const isExternal = project.link.startsWith("http");
+                const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
+                const col = index % 3;
+                return (
+                  <div
+                    key={project.id}
+                    style={{
+                      border: "1px solid var(--rule)",
+                      marginRight: col < 2 ? -1 : 0,
+                      marginBottom: -1,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+                      <Image
+                        src={project.image}
+                        alt={content.alt}
+                        fill
+                        style={{ objectFit: "cover", objectPosition: "top" }}
+                        sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                      />
+                    </div>
+                    <div style={{ padding: "20px 24px", borderTop: "1px solid var(--rule)", flex: 1, display: "flex", flexDirection: "column" }}>
+                      <Link href={project.link} {...externalProps} style={{ textDecoration: "none", display: "block" }}>
+                        <h3 className="ni-serif" style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}>
+                          {content.title}
+                        </h3>
+                        <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                          {content.description}
+                        </p>
+                      </Link>
+                      <div style={{ marginTop: "auto", paddingTop: 16 }}>
+                        <Link
+                          href={project.link}
+                          {...externalProps}
+                          style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: 10,
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            color: "var(--accent-color)",
+                            textDecoration: "none",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          {isExternal ? t("visitLanding") : t("viewProject")}
+                          <ArrowRight size={10} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
     </section>
   );
 }
