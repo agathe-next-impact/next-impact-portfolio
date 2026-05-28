@@ -1,8 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useRef, useState, useEffect } from "react";
-import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, Sparkles, Video } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, CheckCircle2, ChevronDown, Info, Mail, Phone, Video } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -273,27 +272,54 @@ export default function EligibilityForm() {
       ];
 
   return (
-    <div className="w-full">
-      <div className="bg-darkblue/50 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur">
-        <div className="flex items-start gap-3 mb-6">
-          <Sparkles className="h-6 w-6 text-lightyellow" />
-          <div>
-            <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              {isEn ? "Project diagnostic" : "Diagnostic projet"}
-            </p>
-            <p className="text-white font-googletexte mt-2">
-              {isEn
-                ? "Identify in 2 minutes the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
-                : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile."}
-            </p>
-          </div>
+    <div style={{ width: "100%" }}>
+      <div
+        style={{
+          border: "1px solid var(--rule)",
+          background: "var(--paper)",
+          padding: "32px",
+        }}
+      >
+        {/* Header row */}
+        <div style={{ marginBottom: 24 }}>
+          <p
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              color: "var(--muted-color)",
+              margin: 0,
+            }}
+          >
+            {isEn ? "Project diagnostic" : "Diagnostic projet"}
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: 14,
+              color: "var(--ink-2)",
+              marginTop: 8,
+              marginBottom: 0,
+            }}
+          >
+            {isEn
+              ? "Identify in 2 minutes the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
+              : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile."}
+          </p>
         </div>
 
-        <form className="space-y-8" onSubmit={handleSubmit}>
+        <form style={{ display: "flex", flexDirection: "column", gap: 32 }} onSubmit={handleSubmit}>
           {/* Étape 1 */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <label
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                }}
+              >
                 {isEn ? "Your organization name" : "Nom de votre organisation"}
               </label>
               <input
@@ -301,34 +327,106 @@ export default function EligibilityForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={isEn ? "e.g. Atelier Martin & Co" : "Ex : Atelier Martin & Co"}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-lightyellow focus:outline-none"
+                style={{
+                  border: "1px solid var(--rule)",
+                  background: "var(--paper)",
+                  color: "var(--ink)",
+                  fontFamily: "var(--sans)",
+                  fontSize: 14,
+                  padding: "10px 12px",
+                  width: "100%",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <label
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                }}
+              >
                 {isEn ? "Project type" : "Type de projet"}
               </label>
-              <div ref={projectRef} className="relative">
+              <div ref={projectRef} style={{ position: "relative" }}>
                 <button
                   type="button"
                   onClick={() => setProjectOpen((prev) => !prev)}
-                  className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white transition focus:border-lightyellow focus:outline-none"
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                    color: "var(--ink)",
+                    padding: "10px 12px",
+                    cursor: "pointer",
+                    fontFamily: "var(--sans)",
+                    fontSize: 14,
+                    textAlign: "left",
+                    boxSizing: "border-box",
+                  }}
                 >
-                  <span className="truncate text-white/60">
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {projectLabels[projectType][locale] ?? projectLabels[projectType].fr}
                   </span>
-                  <ChevronDown className={`ml-2 h-4 w-4 shrink-0 text-white/50 transition-transform ${projectOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    size={16}
+                    style={{
+                      flexShrink: 0,
+                      marginLeft: 8,
+                      transform: projectOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.15s",
+                    }}
+                  />
                 </button>
                 {projectOpen && (
-                  <ul className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-white/10 bg-darkblue/95 backdrop-blur-md ">
+                  <ul
+                    style={{
+                      position: "absolute",
+                      zIndex: 50,
+                      width: "100%",
+                      border: "1px solid var(--rule)",
+                      background: "var(--paper)",
+                      margin: 0,
+                      padding: 0,
+                      listStyle: "none",
+                      top: "100%",
+                    }}
+                  >
                     {projectKeys.map((key) => (
                       <li key={key}>
                         <button
                           type="button"
                           onClick={() => { setProjectType(key); setProjectOpen(false); }}
-                          className={`w-full px-4 py-3 text-left text-sm font-googletexte transition hover:bg-lightyellow/10 hover:text-white ${
-                            projectType === key ? "bg-lightyellow/10 text-lightyellow" : "text-white/80"
-                          }`}
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            padding: "10px 12px",
+                            fontFamily: "var(--sans)",
+                            fontSize: 13,
+                            textAlign: "left",
+                            cursor: "pointer",
+                            background: projectType === key ? "var(--paper-2)" : "var(--paper)",
+                            borderTop: "none",
+                            borderRight: "none",
+                            borderBottom: "none",
+                            borderLeft: projectType === key ? "3px solid var(--accent-color)" : "3px solid transparent",
+                            color: "var(--ink)",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (projectType !== key) {
+                              (e.currentTarget as HTMLButtonElement).style.background = "var(--paper-2)";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (projectType !== key) {
+                              (e.currentTarget as HTMLButtonElement).style.background = "var(--paper)";
+                            }
+                          }}
                         >
                           {projectLabels[key][locale] ?? projectLabels[key].fr}
                         </button>
@@ -341,17 +439,31 @@ export default function EligibilityForm() {
           </div>
 
           {/* Étape 2 — Volumétrie */}
-          <div className="space-y-3">
-            <p className="text-sm text-white/70 font-googletexte">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                color: "var(--muted-color)",
+                margin: 0,
+              }}
+            >
               {isEn ? "Expected traffic volume" : "Volumétrie de trafic attendue"}
             </p>
-            <div className="grid gap-3 md:grid-cols-3">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
               {trafficBands.map((band) => (
                 <label
                   key={band.key}
-                  className={`flex items-start gap-3 rounded-xl border px-4 py-3 cursor-pointer transition ${
-                    traffic === band.key ? "border-lightyellow bg-lightyellow/10" : "border-white/10 bg-white/5"
-                  }`}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    border: traffic === band.key ? "1px solid var(--rule)" : "1px solid var(--rule)",
+                    borderLeft: traffic === band.key ? "3px solid var(--accent-color)" : "1px solid var(--rule)",
+                    background: traffic === band.key ? "var(--paper-2)" : "var(--paper)",
+                    padding: "12px 16px",
+                    cursor: "pointer",
+                  }}
                 >
                   <input
                     type="radio"
@@ -359,11 +471,31 @@ export default function EligibilityForm() {
                     value={band.key}
                     checked={traffic === band.key}
                     onChange={() => setTraffic(band.key)}
-                    className="mt-1 accent-lightyellow"
+                    style={{ accentColor: "var(--accent-color)", marginTop: 2 }}
                   />
                   <div>
-                    <p className="text-white font-googletitre text-base">{band.title}</p>
-                    <p className="text-sm text-white/60 font-googletexte">{band.subtitle}</p>
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        margin: 0,
+                      }}
+                    >
+                      {band.title}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 12,
+                        color: "var(--muted-color)",
+                        fontFamily: "var(--sans)",
+                        margin: 0,
+                        marginTop: 2,
+                      }}
+                    >
+                      {band.subtitle}
+                    </p>
                   </div>
                 </label>
               ))}
@@ -371,56 +503,97 @@ export default function EligibilityForm() {
           </div>
 
           {/* Étape 3 — Intégrations */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <p className="text-sm text-white/70 font-googletexte">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                  margin: 0,
+                }}
+              >
                 {isEn
                   ? "Do you need custom APIs or integrations?"
                   : "Avez-vous besoin d'API ou d'intégrations sur-mesure ?"}
               </p>
-              <div className="flex gap-3">
+              <div style={{ display: "flex", gap: 12 }}>
                 <button
                   type="button"
                   onClick={() => setNeedsCustomApi(true)}
-                  className={`flex-1 rounded-full border px-4 py-2 font-googletexte transition ${
-                    needsCustomApi ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
-                  }`}
+                  style={{
+                    flex: 1,
+                    padding: "10px 12px",
+                    fontFamily: "var(--sans)",
+                    fontSize: 14,
+                    cursor: "pointer",
+                    background: needsCustomApi ? "var(--ink)" : "var(--paper)",
+                    color: needsCustomApi ? "var(--paper)" : "var(--ink)",
+                    border: needsCustomApi ? "1px solid var(--ink)" : "1px solid var(--rule)",
+                  }}
                 >
                   {isEn ? "Yes" : "Oui"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setNeedsCustomApi(false)}
-                  className={`flex-1 rounded-full border px-4 py-2 font-googletexte transition ${
-                    !needsCustomApi ? "border-lightyellow bg-lightyellow/10 text-white" : "border-white/10 text-white/70"
-                  }`}
+                  style={{
+                    flex: 1,
+                    padding: "10px 12px",
+                    fontFamily: "var(--sans)",
+                    fontSize: 14,
+                    cursor: "pointer",
+                    background: !needsCustomApi ? "var(--ink)" : "var(--paper)",
+                    color: !needsCustomApi ? "var(--paper)" : "var(--ink)",
+                    border: !needsCustomApi ? "1px solid var(--ink)" : "1px solid var(--rule)",
+                  }}
                 >
                   {isEn ? "No" : "Non"}
                 </button>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <p className="text-sm text-white/70 font-googletexte">
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                  margin: 0,
+                }}
+              >
                 {isEn ? "Existing integrations" : "Intégrations existantes"}
               </p>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                 {integrationKeys.map((key) => (
                   <label
                     key={key}
-                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 cursor-pointer transition ${
-                      selectedIntegrations.includes(key)
-                        ? "border-lightyellow bg-lightyellow/10"
-                        : "border-white/10 bg-white/5"
-                    }`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      border: "1px solid var(--rule)",
+                      borderLeft: selectedIntegrations.includes(key)
+                        ? "3px solid var(--accent-color)"
+                        : "1px solid var(--rule)",
+                      background: selectedIntegrations.includes(key) ? "var(--paper-2)" : "var(--paper)",
+                      padding: "10px 12px",
+                      cursor: "pointer",
+                    }}
                   >
                     <input
                       type="checkbox"
                       checked={selectedIntegrations.includes(key)}
                       onChange={() => toggle(key, setSelectedIntegrations)}
-                      className="accent-lightyellow"
+                      style={{ accentColor: "var(--accent-color)" }}
                     />
-                    <span className="text-white/80 font-googletexte text-sm">
+                    <span
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: 13,
+                        color: "var(--ink-2)",
+                      }}
+                    >
                       {integrationLabels[key][locale] ?? integrationLabels[key].fr}
                     </span>
                   </label>
@@ -429,22 +602,36 @@ export default function EligibilityForm() {
             </div>
           </div>
 
-          {/* Étape 4 — Comptes utilisateurs / mobile (nouvelle question §5.7) */}
-          <div className="space-y-2">
-            <p className="text-sm text-white/70 font-googletexte">
+          {/* Étape 4 — Comptes utilisateurs / mobile */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                color: "var(--muted-color)",
+                margin: 0,
+              }}
+            >
               {isEn
                 ? "Will your users need accounts or a dedicated mobile experience?"
                 : "Vos utilisateurs auront-ils besoin d'un compte ou d'une expérience mobile dédiée ?"}
             </p>
-            <div className="grid gap-2 md:grid-cols-3">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
               {usersKeys.map((key) => (
                 <label
                   key={key}
-                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 cursor-pointer transition ${
-                    users === key
-                      ? "border-lightyellow bg-lightyellow/10"
-                      : "border-white/10 bg-white/5"
-                  }`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    border: "1px solid var(--rule)",
+                    borderLeft: users === key
+                      ? "3px solid var(--accent-color)"
+                      : "1px solid var(--rule)",
+                    background: users === key ? "var(--paper-2)" : "var(--paper)",
+                    padding: "12px 16px",
+                    cursor: "pointer",
+                  }}
                 >
                   <input
                     type="radio"
@@ -452,9 +639,16 @@ export default function EligibilityForm() {
                     value={key}
                     checked={users === key}
                     onChange={() => setUsers(key)}
-                    className="accent-lightyellow"
+                    style={{ accentColor: "var(--accent-color)" }}
                   />
-                  <span className="text-white/80 font-googletexte text-sm">
+                  <span
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: 14,
+                      fontWeight: users === key ? 600 : 400,
+                      color: "var(--ink)",
+                    }}
+                  >
                     {usersLabels[key][locale] ?? usersLabels[key].fr}
                   </span>
                 </label>
@@ -463,29 +657,49 @@ export default function EligibilityForm() {
           </div>
 
           {/* Étape 5 — Raison de modernisation */}
-          <div className="space-y-2">
-            <p className="text-sm text-white/70 font-googletexte">
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                color: "var(--muted-color)",
+                margin: 0,
+              }}
+            >
               {isEn
                 ? "Why are you considering modernization?"
                 : "Pourquoi envisagez-vous une modernisation ?"}
             </p>
-            <div className="grid gap-2 md:grid-cols-2">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
               {reasonKeys.map((key) => (
                 <label
                   key={key}
-                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 cursor-pointer transition ${
-                    selectedReasons.includes(key)
-                      ? "border-lightyellow bg-lightyellow/10"
-                      : "border-white/10 bg-white/5"
-                  }`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    border: "1px solid var(--rule)",
+                    borderLeft: selectedReasons.includes(key)
+                      ? "3px solid var(--accent-color)"
+                      : "1px solid var(--rule)",
+                    background: selectedReasons.includes(key) ? "var(--paper-2)" : "var(--paper)",
+                    padding: "10px 12px",
+                    cursor: "pointer",
+                  }}
                 >
                   <input
                     type="checkbox"
                     checked={selectedReasons.includes(key)}
                     onChange={() => toggle(key, setSelectedReasons)}
-                    className="accent-lightyellow"
+                    style={{ accentColor: "var(--accent-color)" }}
                   />
-                  <span className="text-white/80 font-googletexte text-sm">
+                  <span
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: 13,
+                      color: "var(--ink-2)",
+                    }}
+                  >
                     {reasonLabels[key][locale] ?? reasonLabels[key].fr}
                   </span>
                 </label>
@@ -493,14 +707,40 @@ export default function EligibilityForm() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button type="submit" className="rounded-full bg-lightyellow text-darkblue hover:bg-lightyellow/90 font-googletitre font-semibold">
+          {/* Submit row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <button
+              type="submit"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                border: "1px solid var(--ink)",
+                background: "var(--ink)",
+                color: "var(--paper)",
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "12px 24px",
+                cursor: "pointer",
+              }}
+            >
               {isEn ? "Show my path" : "Voir ma voie"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2 text-white/60 font-googletexte text-sm">
-              <Info className="h-4 w-4" />
-              <span className="text-white/60">
+              <ArrowRight size={14} />
+            </button>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontFamily: "var(--sans)",
+                fontSize: 12,
+                color: "var(--muted-color)",
+              }}
+            >
+              <Info size={14} />
+              <span>
                 {isEn
                   ? "Diagnostic based on project type, traffic and usage needs."
                   : "Diagnostic basé sur le type de projet, le trafic et les besoins d'usage."}
@@ -509,55 +749,178 @@ export default function EligibilityForm() {
           </div>
         </form>
 
+        {/* Result block */}
         {result && (
-          <div className="mt-8 rounded-2xl border border-lightyellow/30 bg-lightyellow/10 p-6 md:p-8 flex flex-col gap-4">
-            <div className="flex items-center gap-2 text-lightyellow">
-              <CheckCircle2 className="h-5 w-5" />
-              <p className="text-sm uppercase tracking-widest font-googletexte text-extralightblue">
+          <div
+            style={{
+              border: "1px solid var(--rule)",
+              borderLeft: "3px solid #2a7a2a",
+              background: "var(--paper-2)",
+              padding: 24,
+              marginTop: 32,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <CheckCircle2 size={16} style={{ color: "#2a7a2a" }} />
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "#2a7a2a",
+                  margin: 0,
+                }}
+              >
                 {isEn ? "Recommended path" : "Voie recommandée"}
               </p>
             </div>
-            <h4 className="text-2xl font-googletitre text-white">{result.title}</h4>
-            <p className="text-lg font-googletexte text-white/90">{result.message}</p>
-            <p className="text-3xl font-googletitre text-lightyellow">{result.amount}</p>
-            <p className="text-white/70 font-googletexte">{result.highlight}</p>
+            <h4
+              style={{
+                fontFamily: "var(--serif)",
+                fontSize: 22,
+                color: "var(--ink)",
+                margin: 0,
+                marginBottom: 12,
+              }}
+            >
+              {result.title}
+            </h4>
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 14,
+                color: "var(--ink-2)",
+                margin: 0,
+                marginBottom: 12,
+              }}
+            >
+              {result.message}
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 24,
+                color: "var(--accent-color)",
+                margin: 0,
+                marginBottom: 12,
+              }}
+            >
+              {result.amount}
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                fontStyle: "italic",
+                color: "var(--ink)",
+                margin: 0,
+              }}
+            >
+              {result.highlight}
+            </p>
             {name && (
-              <p className="text-white/60 text-sm font-googletexte">
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                  margin: 0,
+                  marginTop: 8,
+                }}
+              >
                 {isEn ? `File: ${name}` : `Dossier : ${name}`}
               </p>
             )}
 
             {/* CTAs de contact */}
-            <div className="mt-2 pt-4 border-t border-lightyellow/20 flex flex-col gap-3">
-              <p className="text-sm uppercase tracking-widest font-googletitre text-white/60">
+            <div
+              style={{
+                borderTop: "1px solid var(--rule)",
+                paddingTop: 16,
+                marginTop: 16,
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--muted-color)",
+                  margin: 0,
+                }}
+              >
                 {isEn ? "Discuss this recommendation" : "Discutons de cette recommandation"}
               </p>
-              <div className="flex flex-wrap items-center gap-3">
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
                 <a
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-coral text-darkblue font-googletitre font-semibold px-5 py-2.5 hover:bg-coral/80 transition"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    border: "1px solid var(--accent-color)",
+                    background: "var(--accent-color)",
+                    color: "var(--paper)",
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    padding: "10px 18px",
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
                 >
-                  <Video className="h-5 w-5" />
+                  <Video size={14} />
                   {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}
                 </a>
                 <a
                   href="mailto:agathe@next-impact.digital"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    color: "var(--ink)",
+                    fontFamily: "var(--sans)",
+                    fontSize: 13,
+                    textDecoration: "none",
+                    padding: "10px 0",
+                  }}
                 >
-                  <Mail className="h-4 w-4 text-coral" />
+                  <Mail size={14} />
                   {isEn ? "Describe my project in writing" : "Décrire mon projet par écrit"}
                 </a>
                 <a
                   href="tel:0673981638"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white font-googletexte px-5 py-2.5 hover:bg-white/10 transition"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    color: "var(--ink)",
+                    fontFamily: "var(--sans)",
+                    fontSize: 13,
+                    textDecoration: "none",
+                    padding: "10px 0",
+                  }}
                 >
-                  <Phone className="h-4 w-4 text-lightyellow" />
+                  <Phone size={14} />
                   06 73 98 16 38
                 </a>
               </div>
-              <p className="text-xs text-white/50 font-googletexte">
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 12,
+                  color: "var(--muted-color)",
+                  margin: 0,
+                }}
+              >
                 {isEn
                   ? "Reply within 24h · Personalized quote within 48h · Free, no strings attached"
                   : "Réponse sous 24h · Devis personnalisé sous 48h · Gratuit, sans engagement"}

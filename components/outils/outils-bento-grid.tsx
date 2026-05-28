@@ -5,14 +5,9 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Link } from "@/i18n/navigation"
 import {
   BarChart3,
-  Search,
   BotMessageSquare,
   Trophy,
-  TrendingUp,
-  Zap,
-  ArrowRight,
   FileText,
-  Network,
   BadgePercent,
   Smartphone,
   Calculator,
@@ -74,7 +69,7 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
   },
   "audit-ia": {
     id: "audit-ia",
-    title: isEn ? "AI site audit" : "Audit IA de site",
+    title: isEn ? "Should I migrate to Headless WordPress?" : "Faut-il migrer en WordPress Headless ?",
     description: isEn
       ? "AI-powered audit: performance, SEO, accessibility, conversion. Personalized recommendations."
       : "Audit IA de votre site actuel : performance, SEO, accessibilité, conversion.",
@@ -99,16 +94,6 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     icon: Trophy,
     href: "/outils/benchmarking",
   },
-  "mind-map": {
-    id: "mind-map",
-    title: isEn ? "Headless Mind Map" : "Mind Map Headless",
-    description: isEn
-      ? "Explore Headless WordPress architecture interactively: benefits, challenges, roadmap."
-      : "Explorez l'architecture WordPress Headless de façon interactive : avantages, défis et roadmap.",
-    icon: Network,
-    href: "/documentation/mind-map",
-    hideOnMobile: true,
-  },
   "audit-pwa": {
     id: "audit-pwa",
     title: isEn ? "PWA / mobile readiness audit" : "Audit PWA / mobile readiness",
@@ -132,10 +117,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "simulateur-roi", "tco-saas", "audit-ia", "cahier-des-charges", "benchmarking", "audit-pwa", "mind-map"],
-  default: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "audit-ia", "simulateur-roi", "audit-pwa", "tco-saas", "benchmarking", "cahier-des-charges", "mind-map"],
-  utilisateur: ["determiner-offre", "cahier-des-charges", "estimateur-budget", "audit-ia", "audit-pwa", "simulateur-agefiph", "tco-saas", "simulateur-roi", "benchmarking", "mind-map"],
-  developpeur: ["audit-pwa", "mind-map", "audit-ia", "benchmarking", "estimateur-budget", "simulateur-roi", "tco-saas", "determiner-offre", "simulateur-agefiph", "cahier-des-charges"],
+  decideur: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "simulateur-roi", "tco-saas", "audit-ia", "cahier-des-charges", "benchmarking", "audit-pwa"],
+  default: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "audit-ia", "simulateur-roi", "audit-pwa", "tco-saas", "benchmarking", "cahier-des-charges"],
+  utilisateur: ["determiner-offre", "cahier-des-charges", "estimateur-budget", "audit-ia", "audit-pwa", "simulateur-agefiph", "tco-saas", "simulateur-roi", "benchmarking"],
+  developpeur: ["audit-pwa", "audit-ia", "benchmarking", "estimateur-budget", "simulateur-roi", "tco-saas", "determiner-offre", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {

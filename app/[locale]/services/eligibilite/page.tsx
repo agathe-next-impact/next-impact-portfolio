@@ -47,8 +47,8 @@ export default async function EligibilityPage({
           : "Un diagnostic immédiat pour identifier la voie adaptée à votre projet — site WordPress classique, site Headless, web app sur-mesure ou application mobile."
       }
     >
-      <section className="container mx-auto px-4 py-16 md:py-20">
-        <div className="max-w-5xl mx-auto">
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
           <EligibilityForm />
         </div>
       </section>
