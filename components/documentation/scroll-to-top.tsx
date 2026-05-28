@@ -16,6 +16,7 @@ export function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Retour en haut"
+      className="scroll-to-top-btn"
       style={{
         position: "fixed",
         zIndex: 40,

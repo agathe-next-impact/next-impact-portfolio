@@ -36,6 +36,7 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
           borderBottom: "1px solid var(--rule)",
           marginBottom: "2rem",
           gap: 0,
+          flexWrap: "wrap",
         }}>
           {categories.map((cat) => (
             <button

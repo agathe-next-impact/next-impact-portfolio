@@ -180,6 +180,7 @@ export function BentoGrid() {
           >
             <Link
               href={card.href}
+              className={isBig ? "bento-card-big" : "bento-card-small"}
               style={{
                 display: "flex",
                 flexDirection: "column",

@@ -307,7 +307,7 @@ function DefaultDemos({ isEn }: { isEn: boolean }) {
         </DemoCard>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1px", background: "var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "var(--rule)" }}>
         {[VIDEOS.cdf, VIDEOS.doleances, VIDEOS.egc].map((video) => (
           <DemoCard
             key={video.url}
@@ -455,7 +455,7 @@ function DeveloppeurDemos({ isEn }: { isEn: boolean }) {
         </DemoCard>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1px", background: "var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "var(--rule)" }}>
         {[VIDEOS.cdf, VIDEOS.doleances, VIDEOS.egc].map((video) => (
           <DemoCard key={video.url} icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={video.title}>
             <VideoEmbed url={video.url} title={video.title} compact />
