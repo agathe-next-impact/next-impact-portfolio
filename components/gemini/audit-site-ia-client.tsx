@@ -188,37 +188,40 @@ export default function AuditSiteIaClient() {
             : "Testez votre site pour un rapport complet avec des recommandations personnalisées — WordPress optimisé, Headless, web app sur-mesure ou app mobile/PWA."
         }
       >
-        <div className="container px-4 md:px-6">
+        <div className="container">
           <Link
             href="/outils"
-            className="inline-flex items-center gap-1.5 text-sm text-extralightblue/60 hover:text-white transition mb-8"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              textDecoration: "none",
+              marginBottom: 40,
+            }}
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft size={12} />
             {isEn ? "Back to tools" : "Retour aux outils"}
           </Link>
         </div>
-        <div className="relative md:max-w-5xl my-8 md:my-16 mx-4 md:mx-auto bg-mediumblue/60 backdrop-blur-md border p-2 md:p-12 border-1 border-white/10 rounded-2xl">
+        <div className="container" style={{ marginTop: 32, marginBottom: 64, border: "1px solid var(--rule)", padding: "32px" }}>
         <GeminiSearch
           onResult={() => {}}
           prompt={isEn ? prompt_en : prompt_fr}
           systemInstruction={isEn ? system_instruction_en : system_instruction_fr}
           defaultUrl={url}
         />
-        <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 max-w-2xl">
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <BrandLogo src="/img/logo-wordpress-blanc.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-            </div>
-            <div
-              className="hidden md:flex flex-col items-center justify-center gap-3 backdrop-blur-sm rounded-xl px-4 py-4 border border-white/20 hover:bg-white/15 transition-all hover:scale-105"
-            >
-              <div className="w-40 h-40 rounded-lg flex items-center justify-center">
-                <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
-            </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 48, maxWidth: 480, margin: "48px auto 0" }}>
+          <div className="hidden md:flex" style={{ flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", border: "1px solid var(--rule)" }}>
+            <BrandLogo src="/img/logo-wordpress-blanc.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
+          </div>
+          <div className="hidden md:flex" style={{ flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", border: "1px solid var(--rule)" }}>
+            <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
+          </div>
         </div>
         </div>
       </PageLayout>

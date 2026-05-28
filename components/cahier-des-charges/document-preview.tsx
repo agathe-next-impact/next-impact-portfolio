@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Skeleton } from "@/components/ui/skeleton"
 import { ContactFormModal } from "./ContactFormModal"
 import { Send, FileText } from "lucide-react"
 import { useLocale } from "next-intl"
@@ -310,9 +308,9 @@ const STRINGS_EN: Strings = {
 
 function PreviewField({ label, value, fallback }: { label: string; value?: string; fallback: string }) {
   return (
-    <div>
-      <span className="font-semibold text-white/80 font-googletitre text-sm">{label} </span>
-      <span className="text-white/60 font-googletexte text-sm bg-white/5 px-2 py-0.5 rounded inline-block mt-0.5">
+    <div style={{ marginBottom: 6 }}>
+      <span style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: 13, color: "var(--ink)" }}>{label} </span>
+      <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>
         {value || fallback}
       </span>
     </div>
@@ -321,20 +319,22 @@ function PreviewField({ label, value, fallback }: { label: string; value?: strin
 
 function CheckboxList({ data, fallback }: { data: Record<string, any> | undefined; fallback: string }) {
   if (!data) {
-    return <span className="text-white/40 text-sm font-googletexte">{fallback}</span>
+    return <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--muted-color)" }}>{fallback}</span>
   }
   return (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
       {Object.entries(data).map(([key, value]: [string, any]) => (
-        <li key={key} className="flex items-center gap-2">
-          <div
-            className={`w-4 h-4 rounded-sm flex items-center justify-center shrink-0 ${
-              value?.checked ? "bg-lightyellow" : "border border-white/20"
-            }`}
-          >
-            {value?.checked && <span className="text-darkblue text-xs font-bold">&#10003;</span>}
-          </div>
-          <span className="text-white/60 text-sm font-googletexte">{value?.label || key}</span>
+        <li key={key} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+          <span style={{ fontSize: 13, color: value?.checked ? "var(--ink)" : "var(--muted-color)" }}>
+            {value?.checked ? "•" : "•"}
+          </span>
+          <span style={{
+            fontFamily: "var(--sans)",
+            fontSize: 13,
+            color: value?.checked ? "var(--ink)" : "var(--muted-color)",
+          }}>
+            {value?.label || key}
+          </span>
         </li>
       ))}
     </ul>
@@ -343,19 +343,41 @@ function CheckboxList({ data, fallback }: { data: Record<string, any> | undefine
 
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="bg-white/5 border border-white/10 py-2.5 px-4 rounded-xl mb-4">
-      <h2 className="text-base font-bold text-white font-googletitre">{title}</h2>
+    <div style={{ borderBottom: "2px solid var(--ink)", padding: "8px 0", marginBottom: 16 }}>
+      <h2 style={{
+        fontFamily: "var(--mono)",
+        fontSize: 11,
+        letterSpacing: "0.12em",
+        textTransform: "uppercase",
+        color: "var(--ink)",
+        margin: 0,
+        fontWeight: 700,
+      }}>
+        {title}
+      </h2>
     </div>
   )
 }
 
 function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div>
-      <h3 className="text-lightyellow/80 font-semibold font-googletitre text-sm mb-3 border-b border-white/10 pb-1 inline-block">
+    <div style={{ marginBottom: 20 }}>
+      <h3 style={{
+        fontFamily: "var(--mono)",
+        fontSize: 10,
+        color: "var(--accent-color)",
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        borderBottom: "1px solid var(--rule)",
+        paddingBottom: 4,
+        marginBottom: 12,
+        margin: 0,
+        marginTop: 0,
+        fontWeight: 600,
+      }}>
         {title}
       </h3>
-      <div className="ml-2 md:ml-4 space-y-4 mt-2">
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
         {children}
       </div>
     </div>
@@ -378,60 +400,103 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
   const renderPreviewContent = () => {
     if (isLoading) {
       return (
-        <div className="space-y-6 p-6">
-          <Skeleton className="h-12 w-3/4 bg-white/10" />
-          <Skeleton className="h-8 w-1/2 bg-white/10" />
-          <div className="space-y-4 mt-8">
-            <Skeleton className="h-6 w-full bg-white/5" />
-            <Skeleton className="h-6 w-full bg-white/5" />
-            <Skeleton className="h-6 w-3/4 bg-white/5" />
+        <div style={{ padding: 24 }}>
+          <div style={{ background: "var(--paper-2)", height: 48, marginBottom: 8 }} />
+          <div style={{ background: "var(--paper-2)", height: 32, marginBottom: 8, width: "50%" }} />
+          <div style={{ marginTop: 32 }}>
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8 }} />
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8 }} />
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8, width: "75%" }} />
           </div>
-          <div className="space-y-4 mt-8">
-            <Skeleton className="h-6 w-full bg-white/5" />
-            <Skeleton className="h-6 w-full bg-white/5" />
-            <Skeleton className="h-6 w-3/4 bg-white/5" />
+          <div style={{ marginTop: 32 }}>
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8 }} />
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8 }} />
+            <div style={{ background: "var(--paper-2)", height: 24, marginBottom: 8, width: "75%" }} />
           </div>
         </div>
       )
     }
 
     return (
-      <div className="w-full space-y-8">
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 32 }}>
         {/* Cover */}
-        <div className="bg-white/5 border border-white/10 p-6 md:p-8 rounded-2xl border-t-4 border-t-lightyellow">
-          <div className="text-center space-y-4">
-            <h1 className="text-2xl md:text-3xl font-bold text-white font-googletitre">{t.documentTitle}</h1>
-            <h2 className="text-lg text-white/70 font-medium font-googletexte">{t.subtitle}</h2>
+        <div style={{
+          border: "1px solid var(--rule)",
+          borderTop: "3px solid var(--accent-color)",
+          background: "var(--paper)",
+          padding: 32,
+        }}>
+          <div style={{ textAlign: "center" }}>
+            <h1 style={{
+              fontFamily: "var(--serif)",
+              fontSize: 28,
+              color: "var(--ink)",
+              margin: 0,
+              fontWeight: 700,
+            }}>
+              {t.documentTitle}
+            </h1>
+            <h2 style={{
+              fontFamily: "var(--sans)",
+              fontSize: 15,
+              color: "var(--ink-2)",
+              margin: "8px 0 0 0",
+              fontWeight: 400,
+            }}>
+              {t.subtitle}
+            </h2>
 
-            <div className="mt-8 space-y-3 text-left max-w-md mx-auto">
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <span className="font-googletitre text-white/80 font-semibold text-sm sm:w-40 shrink-0">{t.organization}</span>
-                <span className="text-sm text-white/60 font-googletexte">{formData.organisation_name || t.notSpecified}</span>
+            <div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 10, maxWidth: 400, marginLeft: "auto", marginRight: "auto", textAlign: "left" }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: 13, color: "var(--ink)", minWidth: 140, flexShrink: 0 }}>{t.organization}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>{formData.organisation_name || t.notSpecified}</span>
               </div>
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <span className="font-googletitre text-white/80 font-semibold text-sm sm:w-40 shrink-0">{t.industry}</span>
-                <span className="text-sm text-white/60 font-googletexte">{formData.secteur_activite || t.notSpecified}</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: 13, color: "var(--ink)", minWidth: 140, flexShrink: 0 }}>{t.industry}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>{formData.secteur_activite || t.notSpecified}</span>
               </div>
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <span className="font-googletitre text-white/80 font-semibold text-sm sm:w-40 shrink-0">{t.date}</span>
-                <span className="text-sm text-white/60 font-googletexte">{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: 13, color: "var(--ink)", minWidth: 140, flexShrink: 0 }}>{t.date}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
               </div>
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <span className="font-googletitre text-white/80 font-semibold text-sm sm:w-40 shrink-0">{t.author}</span>
-                <span className="text-sm text-white/60 font-googletexte">{formData.redacteur || t.notSpecified}</span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: 13, color: "var(--ink)", minWidth: 140, flexShrink: 0 }}>{t.author}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>{formData.redacteur || t.notSpecified}</span>
               </div>
             </div>
 
-            <p className="text-xs text-white/30 mt-6 font-googletexte">{t.confidential}</p>
+            <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: "var(--muted-color)", marginTop: 24, marginBottom: 0 }}>{t.confidential}</p>
           </div>
         </div>
 
         {/* TOC */}
-        <div className="rounded-xl bg-white/5 border border-white/10 p-4 md:p-6">
-          <h2 className="text-base font-bold text-white text-center mb-4 font-googletitre">{t.toc}</h2>
-          <ul className="space-y-2">
+        <div style={{
+          border: "1px solid var(--rule)",
+          padding: 24,
+          background: "var(--paper-2)",
+        }}>
+          <h2 style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            textTransform: "uppercase",
+            letterSpacing: "0.12em",
+            color: "var(--ink)",
+            margin: 0,
+            marginBottom: 16,
+            textAlign: "center",
+            fontWeight: 700,
+          }}>
+            {t.toc}
+          </h2>
+          <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
             {t.tocItems.map((item) => (
-              <li key={item} className="text-sm text-white/60 font-googletexte py-1 border-b border-white/5 last:border-0">
+              <li key={item} style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                color: "var(--ink-2)",
+                borderBottom: "1px solid var(--rule)",
+                padding: "6px 0",
+              }}>
                 {item}
               </li>
             ))}
@@ -441,7 +506,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 1 */}
         <div>
           <SectionHeader title={t.sectionTitles[0]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section1.sub1}>
               <PreviewField
                 label={t.section1.projectType}
@@ -465,18 +530,18 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 2 */}
         <div>
           <SectionHeader title={t.sectionTitles[1]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section2.sub1}>
               <PreviewField label={t.section2.sitemap} value={formData.arborescence} fallback={t.notSpecified} />
               <PreviewField label={t.section2.contentTypes} value={formData.types_contenus} fallback={t.notSpecified} />
             </SubSection>
             <SubSection title={t.section2.sub2}>
-              <div className="bg-white/5 rounded-xl p-3 md:p-4">
+              <div style={{ background: "var(--paper-2)", padding: 16 }}>
                 <CheckboxList data={formData.fonctionnalites_standards} fallback={t.section2.standardEmpty} />
               </div>
             </SubSection>
             <SubSection title={t.section2.sub3}>
-              <div className="bg-white/5 rounded-xl p-3 md:p-4">
+              <div style={{ background: "var(--paper-2)", padding: 16 }}>
                 <CheckboxList data={formData.fonctionnalites_avancees} fallback={t.section2.advancedEmpty} />
               </div>
             </SubSection>
@@ -489,9 +554,9 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 3 */}
         <div>
           <SectionHeader title={t.sectionTitles[2]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section3.sub1}>
-              <div className="bg-white/5 rounded-xl p-3 md:p-4">
+              <div style={{ background: "var(--paper-2)", padding: 16 }}>
                 <CheckboxList data={formData.charte_graphique} fallback={t.section3.brandEmpty} />
               </div>
               <PreviewField label={t.section3.inspirations} value={formData.inspirations} fallback={t.notSpecified} />
@@ -511,7 +576,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 4 */}
         <div>
           <SectionHeader title={t.sectionTitles[3]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section4.sub1}>
               <PreviewField label={t.section4.cms} value={formData.cms_framework} fallback={t.notSpecified} />
               <PreviewField label={t.section4.languages} value={formData.langages} fallback={t.notSpecified} />
@@ -533,7 +598,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 5 */}
         <div>
           <SectionHeader title={t.sectionTitles[4]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section5.sub1}>
               <PreviewField label={t.section5.volume} value={formData.migration_volume} fallback={t.notSpecified} />
               <PreviewField label={t.section5.types} value={formData.migration_types} fallback={t.notSpecified} />
@@ -550,9 +615,9 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 6 */}
         <div>
           <SectionHeader title={t.sectionTitles[5]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section6.sub1}>
-              <div className="bg-white/5 rounded-xl p-3 md:p-4">
+              <div style={{ background: "var(--paper-2)", padding: 16 }}>
                 <CheckboxList data={formData.phases_projet} fallback={t.section6.phasesEmpty} />
               </div>
               <PreviewField label={t.section6.methodology} value={formData.methodologie} fallback={t.notSpecified} />
@@ -564,7 +629,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 7 */}
         <div>
           <SectionHeader title={t.sectionTitles[6]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section7.sub1}>
               <PreviewField label={t.section7.startDate} value={formData.date_demarrage} fallback={t.notSpecified} />
               <PreviewField label={t.section7.goLiveDate} value={formData.date_mise_en_ligne} fallback={t.notSpecified} />
@@ -579,7 +644,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 8 */}
         <div>
           <SectionHeader title={t.sectionTitles[7]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section8.sub1}>
               <PreviewField label={t.section8.deadline} value={formData.date_limite} fallback={t.notSpecified} />
               <PreviewField label={t.section8.responseMode} value={formData.mode_reponse} fallback={t.notSpecified} />
@@ -598,9 +663,9 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         {/* Section 9 */}
         <div>
           <SectionHeader title={t.sectionTitles[8]} />
-          <div className="ml-2 md:ml-4 space-y-6">
+          <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", gap: 20 }}>
             <SubSection title={t.section9.sub1}>
-              <div className="bg-white/5 rounded-xl p-3 md:p-4">
+              <div style={{ background: "var(--paper-2)", padding: 16 }}>
                 <CheckboxList data={formData.documents_fournis} fallback={t.section9.documentsEmpty} />
               </div>
             </SubSection>
@@ -608,7 +673,18 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-white/10 pt-4 mt-8 flex flex-col sm:flex-row justify-between gap-2 text-xs text-white/40 font-googletexte">
+        <div style={{
+          borderTop: "1px solid var(--rule)",
+          paddingTop: 16,
+          marginTop: 8,
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          gap: 8,
+          fontFamily: "var(--sans)",
+          fontSize: 11,
+          color: "var(--muted-color)",
+        }}>
           <span>{formData.organisation_name || t.defaultDocTitle}</span>
           <span>{formData.redacteur || t.defaultAuthor}</span>
           <span>{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
@@ -619,23 +695,55 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl overflow-hidden">
+    <div>
+      <div style={{
+        border: "1px solid var(--rule)",
+        background: "var(--paper)",
+        overflow: "hidden",
+      }}>
         {/* Header bar */}
-        <div className="bg-white/5 border-b border-white/10 p-4 md:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-lightyellow" />
-            <h3 className="text-base font-semibold text-white font-googletitre">{t.preview}</h3>
+        <div style={{
+          background: "var(--paper-2)",
+          borderBottom: "1px solid var(--rule)",
+          padding: "16px 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <FileText style={{ width: 18, height: 18, color: "var(--ink-2)" }} />
+            <h3 style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--ink)",
+              margin: 0,
+              fontWeight: 600,
+            }}>
+              {t.preview}
+            </h3>
           </div>
           <button
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-lg font-bold bg-lightyellow text-darkblue transition-all duration-300 font-googletitre"
+            style={{
+              border: "1px solid var(--ink)",
+              background: "var(--ink)",
+              color: "var(--paper)",
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              padding: "12px 24px",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+            }}
             onClick={() => setShowContactForm(true)}
           >
-            <Send className="w-4 h-4" />
+            <Send style={{ width: 14, height: 14 }} />
             {t.send}
           </button>
           {showContactForm && (
@@ -647,10 +755,10 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         </div>
 
         {/* Document content */}
-        <div className="p-4 md:p-8 max-h-[800px] overflow-y-auto">
+        <div style={{ padding: 32, maxHeight: 800, overflowY: "auto" }}>
           {renderPreviewContent()}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

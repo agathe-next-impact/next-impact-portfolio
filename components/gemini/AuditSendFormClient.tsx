@@ -10,23 +10,27 @@ interface AuditSendFormProps {
   status: "sent" | "error";
   errorMessage?: string;
 }
-export default function AuditSendFormClient({
-  userInfo,
-  status,
-  errorMessage,
-}: AuditSendFormProps) {
+
+export default function AuditSendFormClient({ userInfo, status, errorMessage }: AuditSendFormProps) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 p-6 md:p-10 bg-white/80 backdrop-blur-lg rounded-2xl mt-8 text-center items-center">
+    <div style={{
+      maxWidth: 600, margin: "32px auto 0",
+      border: "1px solid var(--rule)",
+      borderTop: status === "sent" ? "3px solid #2a7a2a" : "3px solid var(--accent-color)",
+      background: "var(--paper)",
+      padding: "40px 32px",
+      display: "flex", flexDirection: "column", gap: 16, alignItems: "center", textAlign: "center",
+    }}>
       {status === "sent" && (
         <>
-          <MailCheck className="size-14 text-coral" />
-          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-mediumblue">
+          <MailCheck size={40} style={{ color: "#2a7a2a" }} />
+          <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--ink)", margin: 0 }}>
             {isEn ? "Your audit is on its way!" : "Votre audit est en route !"}
           </h2>
-          <p className="text-mediumblue/80 font-googletexte text-base md:text-lg">
+          <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6 }}>
             {isEn
               ? userInfo
                 ? `We will send the full report to ${userInfo.email} as soon as it is ready (a few minutes). Check your inbox (and spam folder, just in case).`
@@ -40,11 +44,11 @@ export default function AuditSendFormClient({
 
       {status === "error" && (
         <>
-          <AlertCircle className="size-12 text-red-600" />
-          <h2 className="text-2xl md:text-3xl font-googletitre font-semibold text-red-700">
+          <AlertCircle size={40} style={{ color: "var(--accent-color)" }} />
+          <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--accent-color)", margin: 0 }}>
             {isEn ? "We could not send your audit" : "Impossible d'envoyer votre audit"}
           </h2>
-          <p className="text-red-700/80 font-googletexte">
+          <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6 }}>
             {isEn
               ? `Send error: ${errorMessage ?? "unknown error"}. Please contact us directly so we can send it to you.`
               : `Erreur lors de l'envoi : ${errorMessage ?? "erreur inconnue"}. Contactez-nous directement, nous vous l'enverrons.`}
@@ -52,26 +56,25 @@ export default function AuditSendFormClient({
         </>
       )}
 
-      <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <a
-            href="mailto:agathe@next-impact.digital"
-            className="text-mediumblue font-googletitre font-medium text-lg"
-          >
+      <div style={{ marginTop: 16, width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <a href="mailto:agathe@next-impact.digital" style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--ink)", textDecoration: "none" }}>
             agathe@next-impact.digital
           </a>
-          <a
-            href="tel:0673981638"
-            className="text-mediumblue font-googletitre font-medium text-lg"
-          >
+          <a href="tel:0673981638" style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--ink)", textDecoration: "none" }}>
             06 73 98 16 38
           </a>
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-          className="bg-coral backdrop-blur-sm text-mediumblue font-googletitre font-semibold text-lg px-6 py-3 rounded-full hover:bg-coral/80 transition text-center"
+          style={{
+            border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
+            fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
+            padding: "12px 16px", textDecoration: "none",
+            display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+          }}
         >
-          <ScreenShareIcon className="inline-block mr-2 size-7 font-medium" />
+          <ScreenShareIcon size={14} />
           {isEn ? "Discuss on video" : "En discuter en visio"}
         </a>
       </div>

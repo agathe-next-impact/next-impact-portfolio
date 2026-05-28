@@ -45,8 +45,14 @@ export async function generateMetadata({
 
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-coral"></div>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "50vh" }}>
+      <div style={{
+        width: 32, height: 32,
+        border: "2px solid var(--rule)",
+        borderTopColor: "var(--ink)",
+        borderRadius: "50%",
+        animation: "spin 0.8s linear infinite",
+      }} />
     </div>
   );
 }

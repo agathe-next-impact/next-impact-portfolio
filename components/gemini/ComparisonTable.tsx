@@ -5,27 +5,24 @@ interface ComparisonTableProps {
   rows: string[][];
 }
 
-// Fonction utilitaire pour convertir une appréciation en nombre d'étoiles
-function getStars(text: string): number {
-  const t = text.toLowerCase();
-  if (t.includes("excellente") || t.includes("très élevée") || t.includes("très bonne")) return 5;
-  if (t.includes("bonne") || t.includes("élevée")) return 4;
-  if (t.includes("moyenne")) return 3;
-  if (t.includes("faible") || t.includes("limitée")) return 1;
-  return 0;
-}
-
 export default function ComparisonTable({ headers, rows }: ComparisonTableProps) {
   return (
-    <div className="overflow-x-auto my-8">
-      <table className="min-w-full border rounded-xl bg-mediumblue">
+    <div style={{ overflowX: "auto", margin: "32px 0" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid var(--rule)", background: "var(--paper)" }}>
         <thead>
-          <tr>
+          <tr style={{ background: "var(--paper-2)" }}>
             {headers.map((h, i) => (
-              <th
-                key={i}
-                className="px-6 py-4 bg-white/10 text-white font-light uppercase border-b"
-              >
+              <th key={i} style={{
+                padding: "12px 16px",
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                fontWeight: 600,
+                textAlign: "left",
+                borderBottom: "1px solid var(--rule)",
+              }}>
                 {h}
               </th>
             ))}
@@ -33,15 +30,19 @@ export default function ComparisonTable({ headers, rows }: ComparisonTableProps)
         </thead>
         <tbody>
           {rows.map((row, rIdx) => (
-            <tr key={rIdx} className="even:bg-mediumblue/20 text-white">
+            <tr key={rIdx} style={{ background: rIdx % 2 === 0 ? "var(--paper)" : "var(--paper-2)" }}>
               {row.map((cell, cIdx) => {
                 const cleanCell = cell.replace(/\*+/g, "");
-                const stars = getStars(cleanCell);
                 return (
-                  <td key={cIdx} className="px-6 py-4 border-b text-white align-top">
-                    <span className="flex flex-col items-center justify-start gap-1">
-                      <span className="ml-2 text-white text-center text-sm">{cleanCell}</span>
-                    </span>
+                  <td key={cIdx} style={{
+                    padding: "12px 16px",
+                    borderBottom: "1px solid var(--rule)",
+                    fontFamily: "var(--sans)",
+                    fontSize: 13,
+                    color: "var(--ink-2)",
+                    verticalAlign: "top",
+                  }}>
+                    {cleanCell}
                   </td>
                 );
               })}

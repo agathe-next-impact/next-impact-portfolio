@@ -37,27 +37,25 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
   const renderer = new marked.Renderer();
   renderer.table = (table) => {
     return `
-      <div class="not-prose my-8 w-full overflow-hidden rounded-xl border border-mediumblue/10 bg-white/50 backdrop-blur-sm">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-mediumblue/5 text-mediumblue font-googletitre border-b border-mediumblue/10">
-              ${table.header}
-            </thead>
-            <tbody class="divide-y divide-mediumblue/10 bg-transparent">
-              ${table.body}
-            </tbody>
-          </table>
-        </div>
+      <div style="margin:32px 0;overflow-x:auto;border:1px solid var(--rule)">
+        <table style="width:100%;border-collapse:collapse;background:var(--paper)">
+          <thead style="background:var(--paper-2)">
+            ${table.header}
+          </thead>
+          <tbody>
+            ${table.body}
+          </tbody>
+        </table>
       </div>
     `;
   };
   renderer.tablecell = (cell) => {
     const isHeader = cell.header;
     const Tag = isHeader ? 'th' : 'td';
-    let classes = isHeader 
-      ? "px-6 py-4 font-semibold uppercase tracking-wider text-xs whitespace-nowrap" 
-      : "px-6 py-4 text-gray-600";
-    return `<${Tag} class="${classes}">${cell.text}</${Tag}>`;
+    const style = isHeader
+      ? 'padding:10px 16px;font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);text-align:left;border-bottom:1px solid var(--rule);'
+      : 'padding:10px 16px;font-family:var(--sans);font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--rule);vertical-align:top;';
+    return `<${Tag} style="${style}">${cell.text}</${Tag}>`;
   };
   marked.use({ renderer });
 
@@ -91,14 +89,11 @@ export default function MarkdownRenderer({ content, className = "", analyzedUrl 
     <>
       <div>
         <div
-          className={`prose prose-lg dark:prose-invert max-w-none 
-        prose-headings:font-googletitre prose-headings:font-semibold prose-headings:text-mediumblue
-        prose-h1:text-3xl prose-h2:text-3xl prose-h3:text-2xl 
-        prose-p:text-mediumblue prose-li:text-mediumblue 
-        prose-strong:text-mediumblue prose-strong:font-semibold
-        prose-a:text-coral prose-a:no-underline hover:prose-a:underline 
-        prose:code:text-regularblue prose:code:text-googletitre prose-code:font-medium
-        prose-img:rounded-xl 
+          className={`prose prose-lg max-w-none
+        prose-headings:font-sans prose-headings:font-semibold
+        prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
+        prose-a:text-[var(--accent-color)] prose-a:no-underline hover:prose-a:underline
+        prose-code:font-medium
         ${className}`}
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />

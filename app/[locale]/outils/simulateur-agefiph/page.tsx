@@ -77,30 +77,41 @@ export default async function SimulateurAgefiphPage({
             : "Estimez la déduction de 30 % du coût main-d'œuvre applicable à votre projet web. Valable pour les sites, plateformes Headless, web apps sur-mesure et applications mobiles."
         }
       >
-        <section className="w-full py-8 md:py-12">
-          <div className="container px-4 md:px-6">
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container">
             <Link
               href="/outils"
-              className="inline-flex items-center gap-1.5 text-sm text-extralightblue/60 hover:text-white transition mb-8"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+                marginBottom: 40,
+              }}
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft size={12} />
               {isEn ? "Back to tools" : "Retour aux outils"}
             </Link>
             <SimulateurAgefiph />
-            <div className="mt-12 max-w-3xl mx-auto text-center">
-              <p className="text-white/60 font-googletexte text-sm">
+            <div style={{ marginTop: 48, textAlign: "center" }}>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>
                 {isEn ? (
                   <>
                     Want more context on the OETH benefit?{" "}
-                    <Link href="/avantage-oeth" className="text-lightyellow hover:text-lightyellow/80 underline">
+                    <Link href="/avantage-oeth" style={{ color: "var(--accent-color)", textDecoration: "underline" }}>
                       Read the full OETH page
                     </Link>
                     .
                   </>
                 ) : (
                   <>
-                    Vous voulez plus de contexte sur l'avantage OETH ?{" "}
-                    <Link href="/avantage-oeth" className="text-lightyellow hover:text-lightyellow/80 underline">
+                    Vous voulez plus de contexte sur l&apos;avantage OETH ?{" "}
+                    <Link href="/avantage-oeth" style={{ color: "var(--accent-color)", textDecoration: "underline" }}>
                       Consultez la page OETH complète
                     </Link>
                     .

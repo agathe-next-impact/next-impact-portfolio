@@ -77,13 +77,24 @@ export default async function EstimateurBudgetPage({
             : "Obtenez en 60 secondes une fourchette de budget et un délai réaliste pour votre projet web. Site, web app, PWA mobile — toutes les voies couvertes."
         }
       >
-        <section className="w-full py-8 md:py-12">
-          <div className="container px-4 md:px-6 max-w-5xl mx-auto">
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container">
             <Link
               href="/outils"
-              className="inline-flex items-center gap-1.5 text-sm text-extralightblue/60 hover:text-white transition mb-8"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+                marginBottom: 40,
+              }}
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft size={12} />
               {isEn ? "Back to tools" : "Retour aux outils"}
             </Link>
             <EstimateurBudget />

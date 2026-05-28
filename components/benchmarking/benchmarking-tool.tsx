@@ -1,21 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import { AnimatePresence } from "framer-motion"
 import {
   Globe,
-  Loader2,
   Trophy,
   AlertTriangle,
   TrendingDown,
@@ -31,7 +19,6 @@ import {
   Plus,
   X,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
 import {
   type BenchmarkResult,
   type BenchmarkGap,
@@ -46,44 +33,39 @@ import type { Locale } from "@/i18n/routing"
 // Helpers
 // ---------------------------------------------------------------------------
 
-const COMPETITOR_COLORS = [
-  "bg-blue-400",
-  "bg-purple-400",
-  "bg-cyan-400",
-]
-const COMPETITOR_TEXT_COLORS = [
-  "text-blue-400",
-  "text-purple-400",
-  "text-cyan-400",
+const COMPETITOR_FILL_COLORS = [
+  "#93c5fd", // blue-300-ish, readable on paper
+  "#c4b5fd", // purple-300-ish
+  "#67e8f9", // cyan-300-ish
 ]
 
 const verdictConfigFr = {
   ahead: {
     label: "En avance sur vos concurrents",
     description: "Votre site surpasse les concurrents directs analysés.",
-    color: "text-green-400",
-    bg: "bg-green-500/10 border-green-500/20",
+    color: "#2a7a2a",
+    borderColor: "#2a7a2a",
     icon: Trophy,
   },
   average: {
     label: "Au coude-à-coude",
     description: "Votre site est dans la même gamme que vos concurrents, mais quelques optimisations vous feraient prendre l'avantage.",
-    color: "text-lightblue",
-    bg: "bg-lightblue/10 border-lightblue/20",
+    color: "#b85c09",
+    borderColor: "#b85c09",
     icon: TrendingUp,
   },
   behind: {
     label: "En retard sur vos concurrents",
     description: "Vos concurrents directs offrent une meilleure expérience de chargement. Vos prospects risquent de les préférer.",
-    color: "text-orange",
-    bg: "bg-orange/10 border-orange/20",
+    color: "#b85c09",
+    borderColor: "#b85c09",
     icon: TrendingDown,
   },
   critical: {
     label: "Nettement distancé",
     description: "L'écart avec vos concurrents est significatif. Chaque seconde de retard se traduit par des clients perdus.",
-    color: "text-coral",
-    bg: "bg-coral/10 border-coral/20",
+    color: "var(--accent-color)",
+    borderColor: "var(--accent-color)",
     icon: AlertTriangle,
   },
 }
@@ -92,48 +74,49 @@ const verdictConfigEn = {
   ahead: {
     label: "Ahead of your competitors",
     description: "Your site outperforms the direct competitors analyzed.",
-    color: "text-green-400",
-    bg: "bg-green-500/10 border-green-500/20",
+    color: "#2a7a2a",
+    borderColor: "#2a7a2a",
     icon: Trophy,
   },
   average: {
     label: "Neck and neck",
     description: "Your site is in the same range as your competitors, but a few optimizations would give you the edge.",
-    color: "text-lightblue",
-    bg: "bg-lightblue/10 border-lightblue/20",
+    color: "#b85c09",
+    borderColor: "#b85c09",
     icon: TrendingUp,
   },
   behind: {
     label: "Behind your competitors",
     description: "Your direct competitors offer a better loading experience. Prospects may prefer them.",
-    color: "text-orange",
-    bg: "bg-orange/10 border-orange/20",
+    color: "#b85c09",
+    borderColor: "#b85c09",
     icon: TrendingDown,
   },
   critical: {
     label: "Significantly behind",
     description: "The gap with your competitors is significant. Every second of delay means lost customers.",
-    color: "text-coral",
-    bg: "bg-coral/10 border-coral/20",
+    color: "var(--accent-color)",
+    borderColor: "var(--accent-color)",
     icon: AlertTriangle,
   },
 }
 
-function impactIcon(impact: BenchmarkGap["impact"]) {
+function impactIconEl(impact: BenchmarkGap["impact"]) {
+  const style = { width: 16, height: 16, flexShrink: 0 }
   switch (impact) {
-    case "positive": return <CheckCircle2 className="w-4 h-4 text-green-400" />
-    case "neutral": return <Minus className="w-4 h-4 text-lightblue" />
-    case "warning": return <AlertTriangle className="w-4 h-4 text-orange" />
-    case "critical": return <XCircle className="w-4 h-4 text-coral" />
+    case "positive": return <CheckCircle2 style={{ ...style, color: "#2a7a2a" }} />
+    case "neutral":  return <Minus style={{ ...style, color: "#b85c09" }} />
+    case "warning":  return <AlertTriangle style={{ ...style, color: "#b85c09" }} />
+    case "critical": return <XCircle style={{ ...style, color: "var(--accent-color)" }} />
   }
 }
 
-function impactColor(impact: BenchmarkGap["impact"]) {
+function impactCssColor(impact: BenchmarkGap["impact"]): string {
   switch (impact) {
-    case "positive": return "text-green-400"
-    case "neutral": return "text-lightblue"
-    case "warning": return "text-orange"
-    case "critical": return "text-coral"
+    case "positive": return "#2a7a2a"
+    case "neutral":  return "#b85c09"
+    case "warning":  return "#b85c09"
+    case "critical": return "var(--accent-color)"
   }
 }
 
@@ -166,10 +149,10 @@ const buildSoloMetrics = (
 
 const SOLO_METRICS = buildSoloMetrics(false)
 
-function scoreColor(score: number): string {
-  if (score >= 90) return "text-green-400"
-  if (score >= 50) return "text-orange"
-  return "text-coral"
+function scoreArcColor(score: number): string {
+  if (score >= 90) return "#2a7a2a"
+  if (score >= 50) return "#b85c09"
+  return "var(--accent-color)"
 }
 
 function metricStatus(key: keyof BenchmarkMetrics, value: number): "good" | "mid" | "poor" {
@@ -182,10 +165,10 @@ function metricStatus(key: keyof BenchmarkMetrics, value: number): "good" | "mid
   return value <= def.good ? "good" : value <= def.poor ? "mid" : "poor"
 }
 
-const STATUS_COLORS = {
-  good: "text-green-400",
-  mid: "text-orange",
-  poor: "text-coral",
+const STATUS_CSS_COLORS = {
+  good: "#2a7a2a",
+  mid:  "#b85c09",
+  poor: "var(--accent-color)",
 }
 
 const STATUS_LABELS_FR = {
@@ -219,18 +202,16 @@ function extractName(url: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Score Gauge
+// Score Gauge — Swiss-styled SVG ring
 // ---------------------------------------------------------------------------
 
 function ScoreGauge({
   score,
   label,
-  color,
   size = "lg",
 }: {
   score: number
   label: string
-  color: string
   size?: "sm" | "lg"
 }) {
   const radius = size === "lg" ? 52 : 28
@@ -238,42 +219,73 @@ function ScoreGauge({
   const circumference = 2 * Math.PI * radius
   const progress = (score / 100) * circumference
   const svgSize = (radius + stroke) * 2
+  const arcColor = scoreArcColor(score)
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <div className="relative">
-        <svg width={svgSize} height={svgSize} className="rotate-[-90deg]">
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <div style={{ position: "relative" }}>
+        <svg
+          width={svgSize}
+          height={svgSize}
+          style={{ transform: "rotate(-90deg)" }}
+        >
+          {/* Track */}
           <circle
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
             fill="none"
-            stroke="currentColor"
+            stroke="var(--rule)"
             strokeWidth={stroke}
-            className="text-white/10"
           />
-          <motion.circle
+          {/* Progress arc */}
+          <circle
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
             fill="none"
-            stroke="currentColor"
+            stroke={arcColor}
             strokeWidth={stroke}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             strokeDasharray={circumference}
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset: circumference - progress }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className={color}
+            strokeDashoffset={circumference - progress}
+            style={{ transition: "stroke-dashoffset 0.8s ease-out" }}
           />
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className={cn("font-bold font-googletitre", size === "lg" ? "text-3xl" : "text-base", color)}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontWeight: 700,
+              fontSize: size === "lg" ? 28 : 14,
+              color: arcColor,
+              lineHeight: 1,
+            }}
+          >
             {score}
           </span>
         </div>
       </div>
-      <span className="text-xs text-white/50 font-googletexte text-center max-w-[80px] leading-tight">{label}</span>
+      <span
+        style={{
+          fontFamily: "var(--sans)",
+          fontSize: 11,
+          color: "var(--muted-color)",
+          textAlign: "center",
+          maxWidth: 80,
+          lineHeight: 1.3,
+        }}
+      >
+        {label}
+      </span>
     </div>
   )
 }
@@ -288,21 +300,32 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
   const isScoreMetric = gap.metric === "performanceScore"
   const allValues = [gap.siteValue, ...gap.competitorValues.map((c) => c.value)]
   const maxVal = Math.max(...allValues) * 1.15 || 1
+  const fillColor = impactCssColor(gap.impact)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-2"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {impactIcon(gap.impact)}
-          <span className="text-sm font-medium text-white font-googletexte">
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {/* Header row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {impactIconEl(gap.impact)}
+          <span
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: 13,
+              fontWeight: 500,
+              color: "var(--ink)",
+            }}
+          >
             {gap.label}
           </span>
         </div>
-        <span className={cn("text-xs font-medium", impactColor(gap.impact))}>
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            color: fillColor,
+          }}
+        >
           {gap.competitorValues.length === 0 ? (
             isEn ? "Insufficient data" : "Données insuffisantes"
           ) : gap.gapPercent === 0 ? (
@@ -327,69 +350,145 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
         </span>
       </div>
 
-      <div className="space-y-1.5">
+      {/* Bar rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {/* Your site */}
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] text-white/60 w-24 shrink-0 text-right font-medium">
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              color: "var(--ink-2)",
+              width: 96,
+              flexShrink: 0,
+              textAlign: "right",
+            }}
+          >
             {isEn ? "Your site" : "Votre site"}
           </span>
-          <div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: barWidth(gap.siteValue, maxVal) }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className={cn(
-                "h-full rounded-full",
-                gap.impact === "positive" ? "bg-green-500" :
-                gap.impact === "neutral" ? "bg-lightblue" :
-                gap.impact === "warning" ? "bg-orange" : "bg-coral"
-              )}
+          <div
+            style={{
+              flex: 1,
+              height: 10,
+              background: "var(--paper-2)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: barWidth(gap.siteValue, maxVal),
+                height: "100%",
+                background: fillColor,
+                transition: "width 0.8s ease-out",
+              }}
             />
           </div>
-          <span className="text-xs text-white/70 w-16 font-mono">
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              color: "var(--ink-2)",
+              width: 64,
+            }}
+          >
             {gap.siteValue}{gap.unit}
           </span>
         </div>
 
         {/* Each competitor */}
         {gap.competitorValues.map((cv, i) => (
-          <div key={cv.name} className="flex items-center gap-3">
-            <span className="text-[10px] text-white/40 w-24 shrink-0 text-right truncate" title={cv.name}>
+          <div key={cv.name} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                color: "var(--muted-color)",
+                width: 96,
+                flexShrink: 0,
+                textAlign: "right",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+              title={cv.name}
+            >
               {cv.name}
             </span>
-            <div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: barWidth(cv.value, maxVal) }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 * (i + 1) }}
-                className={cn("h-full rounded-full", COMPETITOR_COLORS[i] || "bg-white/30")}
+            <div
+              style={{
+                flex: 1,
+                height: 10,
+                background: "var(--paper-2)",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  width: barWidth(cv.value, maxVal),
+                  height: "100%",
+                  background: COMPETITOR_FILL_COLORS[i] ?? "rgba(14,14,12,0.2)",
+                  transition: "width 0.8s ease-out",
+                }}
               />
             </div>
-            <span className="text-xs text-white/50 w-16 font-mono">
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                color: "var(--muted-color)",
+                width: 64,
+              }}
+            >
               {cv.value}{gap.unit}
             </span>
           </div>
         ))}
 
-        {/* Average */}
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] text-white/30 w-24 shrink-0 text-right italic">
+        {/* Competitor average */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              color: "var(--muted-color)",
+              width: 96,
+              flexShrink: 0,
+              textAlign: "right",
+              fontStyle: "italic",
+            }}
+          >
             {isEn ? "Avg. competitors" : "Moy. concurrents"}
           </span>
-          <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: barWidth(gap.competitorAvgValue, maxVal) }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-              className="h-full rounded-full bg-white/15"
+          <div
+            style={{
+              flex: 1,
+              height: 6,
+              background: "var(--paper-2)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: barWidth(gap.competitorAvgValue, maxVal),
+                height: "100%",
+                background: "rgba(14,14,12,0.18)",
+                transition: "width 0.8s ease-out",
+              }}
             />
           </div>
-          <span className="text-xs text-white/30 w-16 font-mono">
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              color: "var(--muted-color)",
+              width: 64,
+            }}
+          >
             {gap.competitorAvgValue}{gap.unit}
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -481,229 +580,445 @@ export default function BenchmarkingTool() {
     }
   }
 
-  return (
-    <section className="w-full max-w-6xl mx-auto">
-      {/* Input form */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-6 md:p-8 mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <h2 className="text-white font-googletitre text-2xl font-medium">
-              {isEn ? "Analyze your site" : "Analysez votre site"}
-            </h2>
-          </div>
-          <p className="text-white/60 font-googletexte text-sm mb-4">
-            {isEn
-              ? "Enter your URL — add up to 3 competitors for a direct comparison. Real-time analysis via Google PageSpeed Insights."
-              : "Entrez votre URL — ajoutez jusqu'à 3 concurrents pour une comparaison directe. Analyse en temps réel via Google PageSpeed Insights."}
-          </p>
+  // ---------------------------------------------------------------------------
+  // Shared input style
+  // ---------------------------------------------------------------------------
+  const inputStyle: React.CSSProperties = {
+    border: "1px solid var(--rule)",
+    background: "var(--paper)",
+    color: "var(--ink)",
+    fontFamily: "var(--sans)",
+    padding: "10px 12px",
+    fontSize: 14,
+    width: "100%",
+    outline: "none",
+    boxSizing: "border-box",
+  }
 
-          {/* Strategy toggle */}
-          <div className="flex items-center gap-2 mb-6">
-            <span className="text-xs text-white/50 font-googletexte mr-1">
-              {isEn ? "Strategy:" : "Stratégie :"}
+  const btnPrimaryStyle: React.CSSProperties = {
+    border: "1px solid var(--ink)",
+    background: "var(--ink)",
+    color: "var(--paper)",
+    fontFamily: "var(--mono)",
+    fontSize: 11,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    padding: "12px 24px",
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+  }
+
+  const btnPrimaryDisabledStyle: React.CSSProperties = {
+    ...btnPrimaryStyle,
+    opacity: 0.4,
+    cursor: "not-allowed",
+  }
+
+  return (
+    <section style={{ width: "100%", maxWidth: 1152, margin: "0 auto" }}>
+      {/* ── Input form ── */}
+      <div
+        style={{
+          border: "1px solid var(--rule)",
+          padding: "32px",
+          background: "var(--paper)",
+          marginBottom: 32,
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "var(--serif)",
+            fontSize: 24,
+            fontWeight: 500,
+            color: "var(--ink)",
+            marginBottom: 4,
+            marginTop: 0,
+          }}
+        >
+          {isEn ? "Analyze your site" : "Analysez votre site"}
+        </h2>
+        <p
+          style={{
+            fontFamily: "var(--sans)",
+            fontSize: 13,
+            color: "var(--muted-color)",
+            marginBottom: 20,
+            marginTop: 0,
+          }}
+        >
+          {isEn
+            ? "Enter your URL — add up to 3 competitors for a direct comparison. Real-time analysis via Google PageSpeed Insights."
+            : "Entrez votre URL — ajoutez jusqu'à 3 concurrents pour une comparaison directe. Analyse en temps réel via Google PageSpeed Insights."}
+        </p>
+
+        {/* Strategy toggle */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
+          <span
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: 12,
+              color: "var(--muted-color)",
+              marginRight: 4,
+            }}
+          >
+            {isEn ? "Strategy:" : "Stratégie :"}
+          </span>
+          <button
+            type="button"
+            onClick={() => setStrategy("mobile")}
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: 12,
+              padding: "6px 12px",
+              background: "none",
+              border: "none",
+              borderBottom: strategy === "mobile" ? "2px solid var(--ink)" : "2px solid transparent",
+              color: strategy === "mobile" ? "var(--ink)" : "var(--muted-color)",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <Smartphone style={{ width: 13, height: 13 }} />
+            Mobile
+          </button>
+          <button
+            type="button"
+            onClick={() => setStrategy("desktop")}
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: 12,
+              padding: "6px 12px",
+              background: "none",
+              border: "none",
+              borderBottom: strategy === "desktop" ? "2px solid var(--ink)" : "2px solid transparent",
+              color: strategy === "desktop" ? "var(--ink)" : "var(--muted-color)",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <Monitor style={{ width: 13, height: 13 }} />
+            Desktop
+          </button>
+          {strategy === "mobile" && (
+            <span
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 10,
+                color: "var(--muted-color)",
+                marginLeft: 4,
+              }}
+            >
+              {isEn
+                ? "Recommended — Google indexes the mobile version first"
+                : "Recommandé — Google indexe en priorité la version mobile"}
             </span>
-            <button
-              type="button"
-              onClick={() => setStrategy("mobile")}
-              className={cn(
-                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-googletexte transition-all border",
-                strategy === "mobile"
-                  ? "bg-lightyellow/15 border-lightyellow/30 text-lightyellow"
-                  : "bg-white/5 border-white/10 text-white/40 hover:text-white/60 hover:border-white/20"
-              )}
+          )}
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {/* Your URL */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label
+              htmlFor="bench-url"
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "var(--ink-2)",
+              }}
             >
-              <Smartphone className="w-3 h-3" />
-              Mobile
-            </button>
-            <button
-              type="button"
-              onClick={() => setStrategy("desktop")}
-              className={cn(
-                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-googletexte transition-all border",
-                strategy === "desktop"
-                  ? "bg-lightblue/15 border-lightblue/30 text-lightblue"
-                  : "bg-white/5 border-white/10 text-white/40 hover:text-white/60 hover:border-white/20"
-              )}
-            >
-              <Monitor className="w-3 h-3" />
-              Desktop
-            </button>
-            {strategy === "mobile" && (
-              <span className="text-[10px] text-white/30 font-googletexte ml-1">
-                {isEn
-                  ? "Recommended — Google indexes the mobile version first"
-                  : "Recommandé — Google indexe en priorité la version mobile"}
-              </span>
+              {isEn ? "Your site URL" : "URL de votre site"}
+            </label>
+            <div style={{ position: "relative" }}>
+              <Globe
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  width: 15,
+                  height: 15,
+                  color: "var(--muted-color)",
+                  pointerEvents: "none",
+                }}
+              />
+              <input
+                id="bench-url"
+                type="text"
+                placeholder={isEn ? "https://www.your-site.com" : "https://www.votre-site.fr"}
+                value={url}
+                onChange={(e) => {
+                  setUrl(e.target.value)
+                  if (urlErrors.site) setUrlErrors((prev) => ({ ...prev, site: undefined }))
+                }}
+                style={{
+                  ...inputStyle,
+                  paddingLeft: 36,
+                  borderColor: urlErrors.site ? "var(--accent-color)" : "var(--rule)",
+                }}
+                required
+              />
+            </div>
+            {urlErrors.site && (
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: "var(--accent-color)", margin: 0 }}>
+                {urlErrors.site}
+              </p>
             )}
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Your URL */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="bench-url"
-                className="text-white/80 font-googletitre text-sm font-semibold"
+
+          {/* Divider */}
+          <div style={{ borderTop: "1px solid var(--rule)" }} />
+
+          {/* Competitor URLs */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--ink-2)",
+                }}
               >
-                {isEn ? "Your site URL" : "URL de votre site"}
-              </Label>
-              <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                <Input
-                  id="bench-url"
-                  type="text"
-                  placeholder={isEn ? "https://www.your-site.com" : "https://www.votre-site.fr"}
-                  value={url}
-                  onChange={(e) => {
-                    setUrl(e.target.value)
-                    if (urlErrors.site) setUrlErrors((prev) => ({ ...prev, site: undefined }))
-                  }}
-                  className={cn(
-                    "pl-10 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
-                    urlErrors.site ? "border-coral" : "border-white/20"
-                  )}
-                  required
-                />
-              </div>
-              {urlErrors.site && (
-                <p className="text-xs text-coral font-googletexte">{urlErrors.site}</p>
-              )}
-            </div>
-
-            <Separator className="bg-white/10" />
-
-            {/* Competitor URLs */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-white/80 font-googletitre text-sm font-semibold">
-                  {competitors.length === 0
+                {competitors.length === 0
+                  ? isEn
+                    ? "Competitors (optional)"
+                    : "Concurrents (optionnel)"
+                  : competitors.length === 1
                     ? isEn
-                      ? "Competitors (optional)"
-                      : "Concurrents (optionnel)"
-                    : competitors.length === 1
-                      ? isEn
-                        ? "1 competitor site"
-                        : "1 site concurrent"
-                      : isEn
-                        ? `${competitors.length} competitor sites`
-                        : `${competitors.length} sites concurrents`}
-                </Label>
-                {competitors.length < 3 && (
-                  <button
-                    type="button"
-                    onClick={addCompetitor}
-                    className="inline-flex items-center gap-1 text-xs text-lightblue hover:text-lightblue/80 font-googletexte font-medium transition"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    {isEn ? "Add a competitor" : "Ajouter un concurrent"}
-                  </button>
-                )}
-              </div>
-              {competitors.length > 0 && (
-                <div className={cn("grid gap-3", competitors.length === 1 ? "md:grid-cols-1 max-w-md" : competitors.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")}>
-                  {competitors.map((comp, i) => (
-                    <div key={i} className="space-y-1">
-                      <div className="relative">
-                        <div
-                          className={cn(
-                            "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white",
-                            i === 0 && "bg-blue-500",
-                            i === 1 && "bg-purple-500",
-                            i === 2 && "bg-cyan-500"
-                          )}
-                        >
-                          {i + 1}
-                        </div>
-                        <Input
-                          type="text"
-                          placeholder={
-                            isEn
-                              ? `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://competitor-${i + 1}.com`
-                              : `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0https://concurrent-${i + 1}.fr`
-                          }
-                          value={comp}
-                          onChange={(e) => {
-                            updateCompetitor(i, e.target.value)
-                            if (urlErrors.competitors[i]) {
-                              setUrlErrors((prev) => {
-                                const next = [...prev.competitors]
-                                next[i] = null
-                                return { ...prev, competitors: next }
-                              })
-                            }
-                          }}
-                          className={cn(
-                            "pl-7 bg-white/10 text-white placeholder:text-white/40 focus-visible:ring-lightblue/40",
-                            urlErrors.competitors[i] ? "border-coral" : "border-white/20",
-                            "pr-9"
-                          )}
-                          required
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeCompetitor(i)}
-                          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-white/30 hover:text-coral hover:bg-coral/10 transition"
-                          title={isEn ? "Remove this competitor" : "Retirer ce concurrent"}
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                      {urlErrors.competitors[i] && (
-                        <p className="text-xs text-coral font-googletexte">{urlErrors.competitors[i]}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                      ? "1 competitor site"
+                      : "1 site concurrent"
+                    : isEn
+                      ? `${competitors.length} competitor sites`
+                      : `${competitors.length} sites concurrents`}
+              </span>
+              {competitors.length < 3 && (
+                <button
+                  type="button"
+                  onClick={addCompetitor}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    fontFamily: "var(--sans)",
+                    fontSize: 12,
+                    color: "var(--ink-2)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    textDecoration: "underline",
+                    textUnderlineOffset: 3,
+                    padding: 0,
+                  }}
+                >
+                  <Plus style={{ width: 13, height: 13 }} />
+                  {isEn ? "Add a competitor" : "Ajouter un concurrent"}
+                </button>
               )}
             </div>
+            {competitors.length > 0 && (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    competitors.length === 1
+                      ? "1fr"
+                      : competitors.length === 2
+                        ? "1fr 1fr"
+                        : "1fr 1fr 1fr",
+                  gap: 12,
+                }}
+              >
+                {competitors.map((comp, i) => (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    <div style={{ position: "relative" }}>
+                      {/* Competitor index badge */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 10,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          width: 18,
+                          height: 18,
+                          background: "var(--ink-2)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontFamily: "var(--mono)",
+                          fontSize: 9,
+                          fontWeight: 700,
+                          color: "var(--paper)",
+                          flexShrink: 0,
+                          pointerEvents: "none",
+                        }}
+                      >
+                        {i + 1}
+                      </div>
+                      <input
+                        type="text"
+                        placeholder={
+                          isEn
+                            ? `https://competitor-${i + 1}.com`
+                            : `https://concurrent-${i + 1}.fr`
+                        }
+                        value={comp}
+                        onChange={(e) => {
+                          updateCompetitor(i, e.target.value)
+                          if (urlErrors.competitors[i]) {
+                            setUrlErrors((prev) => {
+                              const next = [...prev.competitors]
+                              next[i] = null
+                              return { ...prev, competitors: next }
+                            })
+                          }
+                        }}
+                        style={{
+                          ...inputStyle,
+                          paddingLeft: 36,
+                          paddingRight: 36,
+                          borderColor: urlErrors.competitors[i] ? "var(--accent-color)" : "var(--rule)",
+                        }}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeCompetitor(i)}
+                        title={isEn ? "Remove this competitor" : "Retirer ce concurrent"}
+                        style={{
+                          position: "absolute",
+                          right: 10,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "var(--muted-color)",
+                          padding: 2,
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <X style={{ width: 13, height: 13 }} />
+                      </button>
+                    </div>
+                    {urlErrors.competitors[i] && (
+                      <p
+                        style={{
+                          fontFamily: "var(--sans)",
+                          fontSize: 12,
+                          color: "var(--accent-color)",
+                          margin: 0,
+                        }}
+                      >
+                        {urlErrors.competitors[i]}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-            {/* Submit */}
-            <Button
+          {/* Submit */}
+          <div>
+            <button
               type="submit"
               disabled={isLoading || !url.trim() || competitors.some((c) => !c.trim())}
-              className="w-full md:w-auto gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold "
+              style={
+                isLoading || !url.trim() || competitors.some((c) => !c.trim())
+                  ? btnPrimaryDisabledStyle
+                  : btnPrimaryStyle
+              }
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span
+                    style={{
+                      width: 14,
+                      height: 14,
+                      border: "2px solid var(--rule)",
+                      borderTopColor: "var(--paper)",
+                      borderRadius: "50%",
+                      display: "inline-block",
+                      animation: "spin 0.8s linear infinite",
+                    }}
+                  />
                   {isEn ? "Running analysis…" : "Analyse en cours..."}
                 </>
               ) : competitors.length === 0 ? (
                 <>
-                  <Zap className="w-4 h-4" />
+                  <Zap style={{ width: 14, height: 14 }} />
                   {isEn ? "Run audit" : "Lancer l'audit"}
                 </>
               ) : (
                 <>
-                  <BarChart3 className="w-4 h-4" />
+                  <BarChart3 style={{ width: 14, height: 14 }} />
                   {isEn ? "Run benchmark" : "Lancer le benchmark"}
                 </>
               )}
-            </Button>
-          </form>
-        </div>
-      </motion.div>
+            </button>
+          </div>
+        </form>
+      </div>
 
-      {/* Loading state */}
+      {/* Keyframe for spinner */}
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+
+      {/* ── Loading state ── */}
       <AnimatePresence>
         {isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex flex-col items-center justify-center py-16 gap-4"
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "64px 0",
+              gap: 16,
+            }}
           >
-            <div className="relative">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-lightyellow/20 border-t-lightyellow" />
-              <Zap className="absolute inset-0 m-auto w-6 h-6 text-lightyellow" />
+            <div style={{ position: "relative", width: 56, height: 56 }}>
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  border: "3px solid var(--rule)",
+                  borderTopColor: "var(--ink)",
+                  borderRadius: "50%",
+                  animation: "spin 0.8s linear infinite",
+                }}
+              />
+              <Zap
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  margin: "auto",
+                  width: 20,
+                  height: 20,
+                  color: "var(--ink-2)",
+                }}
+              />
             </div>
             {(() => {
               const total = 1 + competitors.filter((c) => c.trim()).length
               return (
                 <>
-                  <p className="text-white/60 font-googletexte text-sm">
+                  <p
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: 13,
+                      color: "var(--muted-color)",
+                      margin: 0,
+                      textAlign: "center",
+                    }}
+                  >
                     {isEn
                       ? `${strategy === "mobile" ? "Mobile" : "Desktop"} analysis ${
                           total === 1 ? "of your site" : `of ${total} sites`
@@ -712,13 +1027,43 @@ export default function BenchmarkingTool() {
                           total === 1 ? "de votre site" : `de ${total} sites`
                         } via Google PageSpeed...`}
                   </p>
-                  <div className="flex flex-wrap justify-center gap-2 text-xs">
-                    <span className="px-2 py-1 rounded bg-white/10 text-white/70">{url}</span>
+                  <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 8 }}>
+                    <span
+                      style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: 11,
+                        color: "var(--ink-2)",
+                        padding: "3px 8px",
+                        border: "1px solid var(--rule)",
+                        background: "var(--paper-2)",
+                      }}
+                    >
+                      {url}
+                    </span>
                     {competitors.filter((c) => c.trim()).map((c, i) => (
-                      <span key={i} className="px-2 py-1 rounded bg-white/5 text-white/40">{extractName(c)}</span>
+                      <span
+                        key={i}
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: 11,
+                          color: "var(--muted-color)",
+                          padding: "3px 8px",
+                          border: "1px solid var(--rule)",
+                          background: "var(--paper-2)",
+                        }}
+                      >
+                        {extractName(c)}
+                      </span>
                     ))}
                   </div>
-                  <p className="text-white/40 font-googletexte text-xs">
+                  <p
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: 11,
+                      color: "var(--muted-color)",
+                      margin: 0,
+                    }}
+                  >
                     {isEn
                       ? total === 1
                         ? "This may take 15 to 30 seconds"
@@ -730,55 +1075,84 @@ export default function BenchmarkingTool() {
                 </>
               )
             })()}
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
-      {/* Error */}
+      {/* ── Error ── */}
       <AnimatePresence>
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="rounded-xl bg-coral/10 border border-coral/20 p-5 text-center"
+          <div
+            style={{
+              border: "1px solid var(--rule)",
+              borderLeft: "3px solid var(--accent-color)",
+              background: "var(--paper-2)",
+              padding: 20,
+              textAlign: "center",
+              marginBottom: 24,
+            }}
           >
-            <AlertTriangle className="w-6 h-6 text-coral mx-auto mb-2" />
-            <p className="text-coral font-medium">{error}</p>
-          </motion.div>
+            <AlertTriangle
+              style={{ width: 22, height: 22, color: "var(--accent-color)", margin: "0 auto 8px" }}
+            />
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 14,
+                color: "var(--accent-color)",
+                margin: 0,
+              }}
+            >
+              {error}
+            </p>
+          </div>
         )}
       </AnimatePresence>
 
-      {/* Results */}
+      {/* ── Results ── */}
       <AnimatePresence>
         {result && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+
             {/* Warning if some sites failed */}
             {(result.siteMetrics.performanceScore === 0 ||
               result.competitors.some((c) => c.error)) && (
-              <div className="rounded-xl bg-orange/10 border border-orange/20 p-4 flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-orange shrink-0 mt-0.5" />
-                <div className="text-sm text-white/70">
-                  <p className="font-medium text-orange mb-1">
+              <div
+                style={{
+                  border: "1px solid var(--rule)",
+                  borderLeft: "3px solid #b85c09",
+                  background: "var(--paper-2)",
+                  padding: 16,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 12,
+                }}
+              >
+                <AlertTriangle
+                  style={{ width: 18, height: 18, color: "#b85c09", flexShrink: 0, marginTop: 2 }}
+                />
+                <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>
+                  <p style={{ fontWeight: 600, color: "#b85c09", margin: "0 0 4px" }}>
                     {result.competitors.length === 0
-                      ? isEn ? "Your site could not be analyzed" : "Votre site n\u2019a pas pu être analysé"
-                      : isEn ? "Some sites could not be analyzed" : "Certains sites n\u2019ont pas pu être analysés"}
+                      ? isEn ? "Your site could not be analyzed" : "Votre site n'a pas pu être analysé"
+                      : isEn ? "Some sites could not be analyzed" : "Certains sites n'ont pas pu être analysés"}
                   </p>
                   {result.siteMetrics.performanceScore === 0 && (
-                    <p>{isEn ? "Your site did not return PageSpeed data." : "Votre site n&apos;a pas retourné de données PageSpeed."}</p>
+                    <p style={{ margin: "0 0 2px" }}>
+                      {isEn ? "Your site did not return PageSpeed data." : "Votre site n'a pas retourné de données PageSpeed."}
+                    </p>
                   )}
                   {result.competitors
                     .filter((c) => c.error)
                     .map((c) => (
-                      <p key={c.name}>{c.name} — {isEn ? "analysis failed." : "échec de l&apos;analyse."}</p>
+                      <p key={c.name} style={{ margin: "0 0 2px" }}>
+                        {c.name} — {isEn ? "analysis failed." : "échec de l'analyse."}
+                      </p>
                     ))}
-                  <p className="mt-1 text-white/50">
-                    {isEn ? "Make sure the URLs are publicly accessible. Without a PageSpeed API key, quotas are limited." : "Vérifiez que les URLs sont accessibles publiquement. Sans clé API PageSpeed, les quotas sont limités."}
+                  <p style={{ marginTop: 4, color: "var(--muted-color)", margin: "4px 0 0" }}>
+                    {isEn
+                      ? "Make sure the URLs are publicly accessible. Without a PageSpeed API key, quotas are limited."
+                      : "Vérifiez que les URLs sont accessibles publiquement. Sans clé API PageSpeed, les quotas sont limités."}
                   </p>
                 </div>
               </div>
@@ -788,86 +1162,223 @@ export default function BenchmarkingTool() {
             {result.competitors.length === 0 ? (
               <>
                 {/* Score card */}
-                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl overflow-hidden">
-                  <CardContent className="p-6 md:p-8">
-                    <div className="flex flex-col items-center gap-4">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
-                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                        {isEn ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} score` : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} PageSpeed`}
-                      </span>
-                      <ScoreGauge
-                        score={result.siteMetrics.performanceScore}
-                        label={isEn ? "Your site" : "Votre site"}
-                        color={scoreColor(result.siteMetrics.performanceScore)}
-                      />
-                      <p className="text-white/60 text-sm font-googletexte text-center max-w-md">
-                        {result.siteMetrics.performanceScore >= 90
+                <div
+                  style={{
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                    padding: "32px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 16,
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "var(--muted-color)",
+                      }}
+                    >
+                      {result.strategy === "mobile" ? (
+                        <Smartphone style={{ width: 12, height: 12 }} />
+                      ) : (
+                        <Monitor style={{ width: 12, height: 12 }} />
+                      )}
+                      {isEn
+                        ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} score`
+                        : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} PageSpeed`}
+                    </span>
+                    <ScoreGauge
+                      score={result.siteMetrics.performanceScore}
+                      label={isEn ? "Your site" : "Votre site"}
+                    />
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: 13,
+                        color: "var(--muted-color)",
+                        textAlign: "center",
+                        maxWidth: 480,
+                        margin: 0,
+                      }}
+                    >
+                      {result.siteMetrics.performanceScore >= 90
+                        ? isEn
+                          ? `Excellent — your site performs very well on ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
+                          : `Excellent — votre site est très performant en ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
+                        : result.siteMetrics.performanceScore >= 50
                           ? isEn
-                            ? `Excellent — your site performs very well on ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
-                            : `Excellent — votre site est très performant en ${result.strategy === "mobile" ? "mobile" : "desktop"}.`
-                          : result.siteMetrics.performanceScore >= 50
-                            ? isEn
-                              ? "Decent — targeted optimizations can improve the user experience."
-                              : "Correct — des optimisations ciblées peuvent améliorer l\u2019expérience utilisateur."
-                            : isEn
-                              ? "Poor — significant improvements are needed to stay competitive."
-                              : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                            ? "Decent — targeted optimizations can improve the user experience."
+                            : "Correct — des optimisations ciblées peuvent améliorer l'expérience utilisateur."
+                          : isEn
+                            ? "Poor — significant improvements are needed to stay competitive."
+                            : "Faible — des améliorations significatives sont nécessaires pour rester compétitif."}
+                    </p>
+                  </div>
+                </div>
 
                 {/* Core Web Vitals grid */}
-                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-white font-googletitre text-xl">
+                <div
+                  style={{
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "20px 24px 16px",
+                      borderBottom: "1px solid var(--rule)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <h3
+                        style={{
+                          fontFamily: "var(--serif)",
+                          fontSize: 20,
+                          fontWeight: 500,
+                          color: "var(--ink)",
+                          margin: 0,
+                        }}
+                      >
                         Core Web Vitals
-                      </CardTitle>
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
-                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                        {result.strategy === "mobile" ? "Mobile" : "Desktop"}
-                      </span>
+                      </h3>
+                      <p
+                        style={{
+                          fontFamily: "var(--sans)",
+                          fontSize: 12,
+                          color: "var(--muted-color)",
+                          margin: "4px 0 0",
+                        }}
+                      >
+                        {isEn
+                          ? "Performance metrics breakdown — Google recommended thresholds"
+                          : "Détail des métriques de performance — seuils recommandés par Google"}
+                      </p>
                     </div>
-                    <CardDescription className="text-white/50">
-                      {isEn ? "Performance metrics breakdown — Google recommended thresholds" : "Détail des métriques de performance — seuils recommandés par Google"}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {SOLO_METRICS_LOCALIZED.map((m) => {
-                        const value = result.siteMetrics[m.key]
-                        const status = metricStatus(m.key, value)
-                        return (
-                          <div key={m.key} className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1.5">
-                            <span className="text-[11px] text-white/40 font-googletexte">{m.label}</span>
-                            <p className={cn("text-xl font-bold font-googletitre", STATUS_COLORS[status])}>
-                              {value}{m.unit}
-                            </p>
-                            <span className={cn("text-[10px] font-medium", STATUS_COLORS[status])}>
-                              {STATUS_LABELS[status]}
-                            </span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        color: "var(--muted-color)",
+                        border: "1px solid var(--rule)",
+                        padding: "3px 8px",
+                      }}
+                    >
+                      {result.strategy === "mobile" ? (
+                        <Smartphone style={{ width: 11, height: 11 }} />
+                      ) : (
+                        <Monitor style={{ width: 11, height: 11 }} />
+                      )}
+                      {result.strategy === "mobile" ? "Mobile" : "Desktop"}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      padding: 24,
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+                      gap: 12,
+                    }}
+                  >
+                    {SOLO_METRICS_LOCALIZED.map((m) => {
+                      const value = result.siteMetrics[m.key]
+                      const status = metricStatus(m.key, value)
+                      return (
+                        <div
+                          key={m.key}
+                          style={{
+                            border: "1px solid var(--rule)",
+                            background: "var(--paper-2)",
+                            padding: 16,
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: "var(--mono)",
+                              fontSize: 10,
+                              color: "var(--muted-color)",
+                              display: "block",
+                              marginBottom: 6,
+                            }}
+                          >
+                            {m.label}
+                          </span>
+                          <p
+                            style={{
+                              fontFamily: "var(--mono)",
+                              fontSize: 22,
+                              fontWeight: 700,
+                              color: STATUS_CSS_COLORS[status],
+                              margin: "0 0 4px",
+                            }}
+                          >
+                            {value}{m.unit}
+                          </p>
+                          <span
+                            style={{
+                              fontFamily: "var(--sans)",
+                              fontSize: 10,
+                              color: STATUS_CSS_COLORS[status],
+                            }}
+                          >
+                            {STATUS_LABELS[status]}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
 
                 {/* CTA: add competitors */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="rounded-2xl bg-mediumblue/60 backdrop-blur-xl border border-lightblue/20 p-6 md:p-8 text-center"
+                <div
+                  style={{
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper-2)",
+                    padding: "32px",
+                    textAlign: "center",
+                  }}
                 >
-                  <h3 className="text-xl font-googletitre font-bold text-white mb-2">
+                  <h3
+                    style={{
+                      fontFamily: "var(--serif)",
+                      fontSize: 20,
+                      fontWeight: 500,
+                      color: "var(--ink)",
+                      marginTop: 0,
+                      marginBottom: 8,
+                    }}
+                  >
                     {isEn ? "Compare with your competitors" : "Comparez avec vos concurrents"}
                   </h3>
-                  <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
+                  <p
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: 13,
+                      color: "var(--muted-color)",
+                      marginBottom: 20,
+                      maxWidth: 480,
+                      margin: "0 auto 20px",
+                    }}
+                  >
                     {isEn
                       ? "Add up to 3 competitor sites to see where you stand and identify areas for improvement."
-                      : "Ajoutez jusqu&apos;à 3 sites concurrents pour voir où vous vous situez et identifier vos axes d&apos;amélioration."}
+                      : "Ajoutez jusqu'à 3 sites concurrents pour voir où vous vous situez et identifier vos axes d'amélioration."}
                   </p>
                   <button
                     type="button"
@@ -875,138 +1386,273 @@ export default function BenchmarkingTool() {
                       addCompetitor()
                       window.scrollTo({ top: 0, behavior: "smooth" })
                     }}
-                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-lightblue/20 text-lightblue border border-lightblue/30 hover:bg-lightblue/30 transition"
+                    style={btnPrimaryStyle}
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus style={{ width: 14, height: 14 }} />
                     {isEn ? "Add competitors" : "Ajouter des concurrents"}
                   </button>
-                </motion.div>
+                </div>
               </>
             ) : (
               <>
                 {/* ── Comparison mode (with competitors) ── */}
 
                 {/* Verdict + scores */}
-                <Card
-                  className={cn(
-                    "border backdrop-blur-sm overflow-hidden",
-                    verdictConfig[result.overallVerdict].bg
-                  )}
-                >
-                  <CardContent className="p-6 md:p-8">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                      {/* Score gauges — your site + each competitor */}
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-googletexte uppercase tracking-wider">
-                          {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                          {isEn ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} scores` : `Scores ${result.strategy === "mobile" ? "mobiles" : "desktop"} PageSpeed`}
+                {(() => {
+                  const V = verdictConfig[result.overallVerdict]
+                  const Icon = V.icon
+                  return (
+                    <div
+                      style={{
+                        border: "1px solid var(--rule)",
+                        borderLeft: `3px solid ${V.borderColor}`,
+                        background: "var(--paper)",
+                        padding: "32px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 32,
+                        }}
+                      >
+                        {/* Strategy label */}
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            fontFamily: "var(--mono)",
+                            fontSize: 10,
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            color: "var(--muted-color)",
+                          }}
+                        >
+                          {result.strategy === "mobile" ? (
+                            <Smartphone style={{ width: 12, height: 12 }} />
+                          ) : (
+                            <Monitor style={{ width: 12, height: 12 }} />
+                          )}
+                          {isEn
+                            ? `PageSpeed ${result.strategy === "mobile" ? "mobile" : "desktop"} scores`
+                            : `Scores ${result.strategy === "mobile" ? "mobiles" : "desktop"} PageSpeed`}
                         </span>
-                        <div className="flex items-end gap-4">
+
+                        {/* Score gauges */}
+                        <div style={{ display: "flex", alignItems: "flex-end", gap: 24, flexWrap: "wrap" }}>
                           <ScoreGauge
                             score={result.siteMetrics.performanceScore}
                             label={isEn ? "Your site" : "Votre site"}
-                            color={verdictConfig[result.overallVerdict].color}
                           />
-                          {result.competitors.filter((c) => !c.error).map((c, i) => (
+                          {result.competitors.filter((c) => !c.error).map((c) => (
                             <ScoreGauge
                               key={c.name}
                               score={c.metrics.performanceScore}
                               label={c.name}
-                              color={COMPETITOR_TEXT_COLORS[i] || "text-white/40"}
                               size="sm"
                             />
                           ))}
                         </div>
-                      </div>
 
-                      {/* Verdict text */}
-                      <div className="flex-1 text-center md:text-left">
-                        {(() => {
-                          const V = verdictConfig[result.overallVerdict]
-                          const Icon = V.icon
-                          return (
-                            <>
-                              <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                                <Icon className={cn("w-6 h-6", V.color)} />
-                                <h3 className={cn("text-2xl font-googletitre font-bold", V.color)}>
-                                  {V.label}
-                                </h3>
-                              </div>
-                              <p className="text-white/70 font-googletexte mb-3">
-                                {V.description}
-                              </p>
-                              <p className="text-sm text-white/50 font-googletexte">
-                                {isEn ? `Average competitor ${result.strategy === "mobile" ? "mobile" : "desktop"} score:` : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} moyen concurrents :`} <span className="text-white/70">{result.competitorAvg.performanceScore}/100</span>
-                                {result.competitors.some((c) => c.error) && (
-                                  <span className="text-orange"> ({result.competitors.filter((c) => !c.error).length}/{result.competitors.length} {isEn ? "analyzed" : "analysés"})</span>
-                                )}
-                              </p>
-                            </>
-                          )
-                        })()}
+                        {/* Verdict text */}
+                        <div>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              marginBottom: 8,
+                            }}
+                          >
+                            <Icon style={{ width: 22, height: 22, color: V.color, flexShrink: 0 }} />
+                            <h3
+                              style={{
+                                fontFamily: "var(--serif)",
+                                fontSize: 22,
+                                fontWeight: 500,
+                                color: V.color,
+                                margin: 0,
+                              }}
+                            >
+                              {V.label}
+                            </h3>
+                          </div>
+                          <p
+                            style={{
+                              fontFamily: "var(--sans)",
+                              fontSize: 14,
+                              color: "var(--ink-2)",
+                              margin: "0 0 8px",
+                            }}
+                          >
+                            {V.description}
+                          </p>
+                          <p
+                            style={{
+                              fontFamily: "var(--sans)",
+                              fontSize: 13,
+                              color: "var(--muted-color)",
+                              margin: 0,
+                            }}
+                          >
+                            {isEn
+                              ? `Average competitor ${result.strategy === "mobile" ? "mobile" : "desktop"} score:`
+                              : `Score ${result.strategy === "mobile" ? "mobile" : "desktop"} moyen concurrents :`}{" "}
+                            <strong style={{ color: "var(--ink-2)" }}>{result.competitorAvg.performanceScore}/100</strong>
+                            {result.competitors.some((c) => c.error) && (
+                              <span style={{ color: "#b85c09" }}>
+                                {" "}({result.competitors.filter((c) => !c.error).length}/{result.competitors.length}{" "}
+                                {isEn ? "analyzed" : "analysés"})
+                              </span>
+                            )}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  )
+                })()}
 
                 {/* Metrics comparison */}
-                <Card className="border-white/10 bg-mediumblue/60 backdrop-blur-xl rounded-2xl">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-white font-googletitre text-xl">
+                <div
+                  style={{
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "20px 24px 16px",
+                      borderBottom: "1px solid var(--rule)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <h3
+                        style={{
+                          fontFamily: "var(--serif)",
+                          fontSize: 20,
+                          fontWeight: 500,
+                          color: "var(--ink)",
+                          margin: 0,
+                        }}
+                      >
                         {isEn ? "Metric-by-metric comparison" : "Comparaison métrique par métrique"}
-                      </CardTitle>
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-medium">
-                        {result.strategy === "mobile" ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
-                        {result.strategy === "mobile" ? "Mobile" : "Desktop"}
-                      </span>
+                      </h3>
+                      <p
+                        style={{
+                          fontFamily: "var(--sans)",
+                          fontSize: 12,
+                          color: "var(--muted-color)",
+                          margin: "4px 0 0",
+                        }}
+                      >
+                        {isEn
+                          ? `Core Web Vitals (${result.strategy}) — your site vs ${result.competitors.map((c) => c.name).join(", ")}`
+                          : `Core Web Vitals (${result.strategy}) — votre site vs ${result.competitors.map((c) => c.name).join(", ")}`}
+                      </p>
                     </div>
-                    <CardDescription className="text-white/50">
-                      {isEn
-                        ? `Core Web Vitals (${result.strategy}) — your site vs ${result.competitors.map((c) => c.name).join(", ")}`
-                        : `Core Web Vitals (${result.strategy}) — votre site vs ${result.competitors.map((c) => c.name).join(", ")}`}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        color: "var(--muted-color)",
+                        border: "1px solid var(--rule)",
+                        padding: "3px 8px",
+                      }}
+                    >
+                      {result.strategy === "mobile" ? (
+                        <Smartphone style={{ width: 11, height: 11 }} />
+                      ) : (
+                        <Monitor style={{ width: 11, height: 11 }} />
+                      )}
+                      {result.strategy === "mobile" ? "Mobile" : "Desktop"}
+                    </span>
+                  </div>
+                  <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 24 }}>
                     {result.gaps.map((gap, i) => (
                       <div key={gap.metric}>
                         <MetricBar gap={gap} />
                         {i < result.gaps.length - 1 && (
-                          <Separator className="bg-white/5 mt-5" />
+                          <div
+                            style={{ borderTop: "1px solid var(--rule)", marginTop: 24 }}
+                          />
                         )}
                       </div>
                     ))}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
                 {/* Key takeaways */}
-                <div className="grid gap-4 md:grid-cols-3">
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                    gap: 16,
+                  }}
+                >
                   {(() => {
                     const criticals = result.gaps.filter((g) => g.impact === "critical" || g.impact === "warning")
                     if (criticals.length === 0) return null
                     return (
-                      <Card className="border-coral/20 bg-coral/5 backdrop-blur-sm md:col-span-2">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-coral font-googletitre text-lg flex items-center gap-2">
-                            <AlertTriangle className="w-5 h-5" />
-                            {isEn ? "Competitors are ahead on" : "Vos concurrents vous devancent sur"}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <ul className="space-y-2">
-                            {criticals.map((gap) => (
-                              <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
-                                {impactIcon(gap.impact)}
-                                <span>
-                                  <strong className="text-white">{gap.label}</strong> :{" "}
-                                  {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit} {isEn ? "(avg. competitors)" : "(moy. concurrents)"}
-                                  — <span className={impactColor(gap.impact)}>{gap.gapPercent}% {isEn ? "gap" : "d&apos;écart"}</span>
+                      <div
+                        style={{
+                          border: "1px solid var(--rule)",
+                          borderLeft: "3px solid var(--accent-color)",
+                          background: "var(--paper-2)",
+                          padding: 20,
+                          gridColumn: criticals.length > 2 ? "span 2" : undefined,
+                        }}
+                      >
+                        <h4
+                          style={{
+                            fontFamily: "var(--sans)",
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: "var(--accent-color)",
+                            margin: "0 0 12px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                          }}
+                        >
+                          <AlertTriangle style={{ width: 15, height: 15 }} />
+                          {isEn ? "Competitors are ahead on" : "Vos concurrents vous devancent sur"}
+                        </h4>
+                        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+                          {criticals.map((gap) => (
+                            <li
+                              key={gap.metric}
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 8,
+                                fontFamily: "var(--sans)",
+                                fontSize: 13,
+                                color: "var(--ink-2)",
+                              }}
+                            >
+                              {impactIconEl(gap.impact)}
+                              <span>
+                                <strong style={{ color: "var(--ink)" }}>{gap.label}</strong>
+                                {" "}:{" "}
+                                {gap.siteValue}{gap.unit} vs {gap.competitorAvgValue}{gap.unit}{" "}
+                                {isEn ? "(avg. competitors)" : "(moy. concurrents)"}
+                                {" "}—{" "}
+                                <span style={{ color: impactCssColor(gap.impact) }}>
+                                  {gap.gapPercent}% {isEn ? "gap" : "d'écart"}
                                 </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </CardContent>
-                      </Card>
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )
                   })()}
 
@@ -1014,43 +1660,87 @@ export default function BenchmarkingTool() {
                     const positives = result.gaps.filter((g) => g.impact === "positive")
                     if (positives.length === 0) return null
                     return (
-                      <Card className="border-green-500/20 bg-green-500/5 backdrop-blur-sm">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-green-400 font-googletitre text-lg flex items-center gap-2">
-                            <CheckCircle2 className="w-5 h-5" />
-                            {isEn ? "You are ahead on" : "Vous les devancez sur"}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <ul className="space-y-2">
-                            {positives.map((gap) => (
-                              <li key={gap.metric} className="flex items-start gap-2 text-sm text-white/70">
-                                <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                                <span className="text-white">{gap.label}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </CardContent>
-                      </Card>
+                      <div
+                        style={{
+                          border: "1px solid var(--rule)",
+                          borderLeft: "3px solid #2a7a2a",
+                          background: "var(--paper-2)",
+                          padding: 20,
+                        }}
+                      >
+                        <h4
+                          style={{
+                            fontFamily: "var(--sans)",
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: "#2a7a2a",
+                            margin: "0 0 12px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                          }}
+                        >
+                          <CheckCircle2 style={{ width: 15, height: 15 }} />
+                          {isEn ? "You are ahead on" : "Vous les devancez sur"}
+                        </h4>
+                        <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+                          {positives.map((gap) => (
+                            <li
+                              key={gap.metric}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 8,
+                                fontFamily: "var(--sans)",
+                                fontSize: 13,
+                                color: "var(--ink)",
+                              }}
+                            >
+                              <CheckCircle2 style={{ width: 14, height: 14, color: "#2a7a2a", flexShrink: 0 }} />
+                              {gap.label}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )
                   })()}
                 </div>
               </>
             )}
 
-            {/* CTA — shared between solo and comparison */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="rounded-2xl bg-mediumblue/60 backdrop-blur-xl border border-white/10 p-6 md:p-8 text-center"
+            {/* ── CTA — shared between solo and comparison ── */}
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: "32px",
+                textAlign: "center",
+              }}
             >
-              <h3 className="text-xl font-googletitre font-bold text-white mb-2">
+              <h3
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: 20,
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginTop: 0,
+                  marginBottom: 8,
+                }}
+              >
                 {result.competitors.length === 0
-                  ? isEn ? "Want to go further?" : "Envie d\u2019aller plus loin ?"
-                  : isEn ? "Want to close the gap?" : "Envie de combler l\u2019écart ?"}
+                  ? isEn ? "Want to go further?" : "Envie d'aller plus loin ?"
+                  : isEn ? "Want to close the gap?" : "Envie de combler l'écart ?"}
               </h3>
-              <p className="text-white/60 font-googletexte mb-4 text-sm max-w-lg mx-auto">
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                  marginBottom: 20,
+                  maxWidth: 480,
+                  margin: "0 auto 20px",
+                }}
+              >
                 {isEn ? "A Headless architecture (Next.js + WordPress) can" : "Une architecture Headless (Next.js + WordPress) peut"}
                 {result.competitors.length === 0
                   ? isEn
@@ -1060,40 +1750,74 @@ export default function BenchmarkingTool() {
                     ? " bring you closer — or even ahead — of your competitors in a few weeks."
                     : " vous rapprocher — voire dépasser — vos concurrents en quelques semaines."}
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
                 <a
                   href="/outils/simulateur-roi"
-                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "var(--ink)",
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                    padding: "12px 20px",
+                    textDecoration: "none",
+                  }}
                 >
                   {isEn ? "Calculate my ROI" : "Calculer mon ROI"}
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight style={{ width: 13, height: 13 }} />
                 </a>
                 <a
                   href="/audit-site-ia"
-                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-coral text-darkblue transition-all duration-300 "
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "var(--paper)",
+                    border: "1px solid var(--ink)",
+                    background: "var(--ink)",
+                    padding: "12px 20px",
+                    textDecoration: "none",
+                  }}
                 >
                   {isEn ? "Full AI audit" : "Audit IA complet"}
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight style={{ width: 13, height: 13 }} />
                 </a>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Methodology */}
-            <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/5 p-4">
-              <div className="flex items-start gap-3">
+            {/* ── Methodology ── */}
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: 16,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 {result.strategy === "mobile" ? (
-                  <Smartphone className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                  <Smartphone style={{ width: 14, height: 14, color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }} />
                 ) : (
-                  <Monitor className="w-4 h-4 text-white/30 shrink-0 mt-0.5" />
+                  <Monitor style={{ width: 14, height: 14, color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }} />
                 )}
-                <p className="text-xs text-white/40 leading-relaxed">
-                  <strong className="text-white/50">
-                    {isEn ? `Methodology — ${result.strategy === "mobile" ? "Mobile" : "Desktop"} score:` : `Méthodologie — Score ${result.strategy === "mobile" ? "Mobile" : "Desktop"} :`}
+                <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: "var(--muted-color)", lineHeight: 1.6, margin: 0 }}>
+                  <strong style={{ color: "var(--ink-2)" }}>
+                    {isEn
+                      ? `Methodology — ${result.strategy === "mobile" ? "Mobile" : "Desktop"} score:`
+                      : `Méthodologie — Score ${result.strategy === "mobile" ? "Mobile" : "Desktop"} :`}
                   </strong>{" "}
                   {result.competitors.length === 0 ? (
                     isEn ? (
                       <>
-                        The score is based on the <strong className="text-white/50">{result.strategy} strategy</strong> from
+                        The score is based on the <strong style={{ color: "var(--ink-2)" }}>{result.strategy} strategy</strong> from
                         Google PageSpeed Insights.
                         {result.strategy === "mobile" && (
                           <> It&apos;s the score that matters most: since
@@ -1103,7 +1827,7 @@ export default function BenchmarkingTool() {
                       </>
                     ) : (
                       <>
-                        Le score est basé sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                        Le score est basé sur la <strong style={{ color: "var(--ink-2)" }}>stratégie {result.strategy}</strong> de
                         Google PageSpeed Insights.
                         {result.strategy === "mobile" && (
                           <> C&apos;est le score qui compte le plus : depuis
@@ -1115,7 +1839,7 @@ export default function BenchmarkingTool() {
                   ) : (
                     isEn ? (
                       <>
-                        All scores are based on the <strong className="text-white/50">{result.strategy} strategy</strong> from
+                        All scores are based on the <strong style={{ color: "var(--ink-2)" }}>{result.strategy} strategy</strong> from
                         Google PageSpeed Insights.
                         {result.strategy === "mobile" && (
                           <> It&apos;s the score that matters most: since
@@ -1126,7 +1850,7 @@ export default function BenchmarkingTool() {
                       </>
                     ) : (
                       <>
-                        Tous les scores sont basés sur la <strong className="text-white/50">stratégie {result.strategy}</strong> de
+                        Tous les scores sont basés sur la <strong style={{ color: "var(--ink-2)" }}>stratégie {result.strategy}</strong> de
                         Google PageSpeed Insights.
                         {result.strategy === "mobile" && (
                           <> C&apos;est le score qui compte le plus : depuis
@@ -1140,7 +1864,8 @@ export default function BenchmarkingTool() {
                 </p>
               </div>
             </div>
-          </motion.div>
+
+          </div>
         )}
       </AnimatePresence>
     </section>

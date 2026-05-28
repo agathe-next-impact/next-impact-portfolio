@@ -3,22 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentPreview } from "@/components/cahier-des-charges/document-preview";
-import { FileText, Eye, ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -35,6 +20,67 @@ type FormField = {
   options?: { id: string; label: string; description?: string }[];
   placeholder?: string;
 };
+
+// Collapsible section component
+function CollapsibleSection({
+  title,
+  children,
+  defaultOpen = true,
+}: {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div style={{ marginBottom: 0 }}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+          borderTop: "none",
+          borderLeft: "none",
+          borderRight: "none",
+          borderBottom: "1px solid var(--rule)",
+          padding: "16px 0",
+          background: "none",
+          cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--sans)",
+            fontWeight: 600,
+            fontSize: 15,
+            color: "var(--ink)",
+          }}
+        >
+          {title}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 18,
+            color: "var(--muted-color)",
+            lineHeight: 1,
+            userSelect: "none",
+          }}
+        >
+          {open ? "−" : "+"}
+        </span>
+      </button>
+      {open && (
+        <div style={{ paddingTop: 20, paddingBottom: 8 }}>{children}</div>
+      )}
+    </div>
+  );
+}
 
 export function CahierDesChargesForm() {
   const locale = useLocale() as Locale;
@@ -83,251 +129,444 @@ export function CahierDesChargesForm() {
   const filledCount = Object.values(formData).filter((v) => {
     if (typeof v === "string") return v.trim().length > 0;
     if (typeof v === "boolean") return v;
-    if (typeof v === "object" && v !== null) return Object.values(v).some((item: any) => item?.checked);
+    if (typeof v === "object" && v !== null)
+      return Object.values(v).some((item: any) => item?.checked);
     return false;
   }).length;
 
+  // Shared input style
+  const inputStyle: React.CSSProperties = {
+    border: "1px solid var(--rule)",
+    background: "var(--paper)",
+    color: "var(--ink)",
+    fontFamily: "var(--sans)",
+    padding: "10px 12px",
+    fontSize: 14,
+    width: "100%",
+    boxSizing: "border-box",
+    outline: "none",
+  };
+
+  const textareaStyle: React.CSSProperties = {
+    ...inputStyle,
+    minHeight: 100,
+    resize: "vertical",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontFamily: "var(--sans)",
+    fontSize: 13,
+    fontWeight: 600,
+    color: "var(--ink)",
+    marginBottom: 6,
+  };
+
   return (
-    <section className="w-full max-w-6xl mx-auto">
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        {/* Tab navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex justify-center mb-8"
-        >
-          <TabsList className="flex bg-white/10 backdrop-blur-sm p-1 rounded-full gap-1">
-            <TabsTrigger value="form" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
-              <FileText className="h-4 w-4 mr-4"  />
-              {isEn ? "Form" : "Formulaire"}
-            </TabsTrigger>
-            <TabsTrigger value="preview" className="rounded-full data-[state=active]:bg-background/10 whitespace-nowrap shrink-0 text-xs md:text-sm flex items-center gap-2">
-              <Eye className="h-4 w-4 mr-4" />
-              {isEn ? "Preview" : "Apercu"}
-            </TabsTrigger>
-          </TabsList>
-        </motion.div>
-
-        <TabsContent value="form">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+    <section style={{ width: "100%", maxWidth: 900, margin: "0 auto" }}>
+      {/* Tab navigation */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: 32,
+        }}
+      >
+        <div style={{ display: "flex" }}>
+          <button
+            type="button"
+            onClick={() => handleTabChange("form")}
+            style={{
+              border: "1px solid var(--rule)",
+              background: activeTab === "form" ? "var(--ink)" : "var(--paper)",
+              color: activeTab === "form" ? "var(--paper)" : "var(--ink)",
+              fontFamily: "var(--sans)",
+              fontSize: 13,
+              fontWeight: 600,
+              padding: "10px 24px",
+              cursor: "pointer",
+              letterSpacing: "0.04em",
+            }}
           >
-            {/* Progress indicator */}
-            <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 mb-6 flex items-center justify-between">
-              <p className="text-sm text-white/60 font-googletexte">
-                <span className="text-lightyellow font-bold">{filledCount}</span>{" "}
+            {isEn ? "Form" : "Formulaire"}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabChange("preview")}
+            style={{
+              border: "1px solid var(--rule)",
+              borderLeft: "none",
+              background:
+                activeTab === "preview" ? "var(--ink)" : "var(--paper)",
+              color: activeTab === "preview" ? "var(--paper)" : "var(--ink)",
+              fontFamily: "var(--sans)",
+              fontSize: 13,
+              fontWeight: 600,
+              padding: "10px 24px",
+              cursor: "pointer",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {isEn ? "Preview" : "Aperçu"}
+          </button>
+        </div>
+      </div>
+
+      {/* Form tab */}
+      {activeTab === "form" && (
+        <div>
+          {/* Progress indicator */}
+          <div
+            style={{
+              border: "1px solid var(--rule)",
+              padding: "12px 16px",
+              marginBottom: 24,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              background: "var(--paper)",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                color: "var(--muted-color)",
+                margin: 0,
+              }}
+            >
+              <span style={{ color: "var(--accent-color)", fontWeight: 700 }}>
+                {filledCount}
+              </span>{" "}
+              {isEn
+                ? `field${filledCount > 1 ? "s" : ""} filled`
+                : `champ${filledCount > 1 ? "s" : ""} rempli${filledCount > 1 ? "s" : ""}`}
+            </p>
+            <button
+              type="button"
+              onClick={() => handleTabChange("preview")}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--accent-color)",
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              {isEn ? "View preview" : "Voir l'aperçu"}
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper)",
+                padding: 32,
+              }}
+            >
+              <h2
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: 22,
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  margin: "0 0 4px 0",
+                }}
+              >
+                {isEn ? "Your project" : "Votre projet"}
+              </h2>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 13,
+                  color: "var(--muted-color)",
+                  margin: "0 0 24px 0",
+                }}
+              >
                 {isEn
-                  ? `field${filledCount > 1 ? "s" : ""} filled`
-                  : `champ${filledCount > 1 ? "s" : ""} rempli${filledCount > 1 ? "s" : ""}`}
+                  ? "Fill out the sections below to generate your specifications document"
+                  : "Remplissez les sections ci-dessous pour générer votre cahier des charges"}
               </p>
-              <Button
-                onClick={() => handleTabChange("preview")}
-                variant="ghost"
-                className="gap-2 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded-full"
-              >
-                {isEn ? "View preview" : "Voir l'apercu"}
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="rounded-2xl border border-white/10 bg-mediumblue/60 backdrop-blur-xl p-4 md:p-8">
-                <h2 className="text-white font-googletitre text-2xl font-medium mb-1">
-                  {isEn ? "Your project" : "Votre projet"}
-                </h2>
-                <p className="text-white/60 font-googletexte text-sm mb-6">
-                  {isEn
-                    ? "Fill out the sections below to generate your specifications document"
-                    : "Remplissez les sections ci-dessous pour générer votre cahier des charges"}
-                </p>
-
-                <Accordion
-                  type="multiple"
-                  defaultValue={formSections.length > 0 ? [formSections[0].id] : []}
-                  className="w-full"
+              {/* Accordion sections */}
+              {formSections.map((section) => (
+                <CollapsibleSection
+                  key={section.id}
+                  title={section.title}
+                  defaultOpen={true}
                 >
-                  {formSections.map((section) => (
-                    <AccordionItem key={section.id} value={section.id}>
-                      <AccordionTrigger className="text-lg md:text-xl font-semibold font-googletitre">
-                        {section.title}
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div className="grid gap-6">
-                          {section.fields.map((field) => (
-                            <div key={field.id} className="space-y-2">
-                              {field.type === "radioGroup" ? (
-                                <>
-                                  <Label className="text-sm font-semibold text-white/80 font-googletitre">
-                                    {field.label}
-                                  </Label>
-                                  <div className="grid gap-2 pt-2 sm:grid-cols-2">
-                                    {field.options?.map((option) => {
-                                      const selected = formData[field.id] === option.id;
-                                      return (
-                                        <button
-                                          key={option.id}
-                                          type="button"
-                                          onClick={() => handleInputChange(field.id, option.id)}
-                                          className={`text-left rounded-xl border px-4 py-3 transition ${
-                                            selected
-                                              ? "border-lightyellow bg-lightyellow/10"
-                                              : "border-white/10 bg-white/5 hover:border-white/30"
-                                          }`}
-                                        >
-                                          <p className="text-white font-googletitre text-sm font-semibold">
-                                            {option.label}
-                                          </p>
-                                          {option.description && (
-                                            <p className="text-xs text-white/60 font-googletexte mt-1 leading-snug">
-                                              {option.description}
-                                            </p>
-                                          )}
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                </>
-                              ) : field.type === "checkboxGroup" ? (
-                                <>
-                                  <Label className="text-sm font-semibold text-white/80 font-googletitre">
-                                    {field.label}
-                                  </Label>
-                                  <div className="grid gap-3 pt-2 sm:grid-cols-2">
-                                    {field.options?.map((option) => (
-                                      <div
-                                        key={option.id}
-                                        className="flex items-start space-x-2.5 p-2.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-                                      >
-                                        <Checkbox
-                                          id={`${field.id}-${option.id}`}
-                                          checked={
-                                            formData[field.id]?.[option.id]
-                                              ?.checked || false
-                                          }
-                                          onCheckedChange={(checked) =>
-                                            handleCheckboxGroupChange(
-                                              field.id,
-                                              option.id,
-                                              checked as boolean,
-                                              option.label
-                                            )
-                                          }
-                                        />
-                                        <Label
-                                          htmlFor={`${field.id}-${option.id}`}
-                                          className="text-sm text-white/70 font-googletexte font-normal leading-tight cursor-pointer"
-                                        >
-                                          {option.label}
-                                        </Label>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </>
-                              ) : field.type === "checkbox" ? (
-                                <div className="flex items-start space-x-2.5 p-2.5 rounded-lg hover:bg-white/5 transition-colors">
-                                  <Checkbox
-                                    id={field.id}
-                                    checked={formData[field.id] || false}
-                                    onCheckedChange={(checked) =>
-                                      handleInputChange(
-                                        field.id,
-                                        checked as boolean
-                                      )
+                  <div style={{ display: "grid", gap: 20 }}>
+                    {section.fields.map((field) => (
+                      <div key={field.id}>
+                        {field.type === "radioGroup" ? (
+                          <>
+                            <label style={labelStyle}>{field.label}</label>
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                  "repeat(auto-fill, minmax(220px, 1fr))",
+                                gap: 8,
+                                paddingTop: 4,
+                              }}
+                            >
+                              {field.options?.map((option) => {
+                                const selected =
+                                  formData[field.id] === option.id;
+                                return (
+                                  <button
+                                    key={option.id}
+                                    type="button"
+                                    onClick={() =>
+                                      handleInputChange(field.id, option.id)
                                     }
-                                  />
-                                  <Label
-                                    htmlFor={field.id}
-                                    className="text-sm text-white/70 font-googletexte font-normal leading-tight cursor-pointer"
+                                    style={{
+                                      border: selected
+                                        ? "1px solid var(--rule)"
+                                        : "1px solid var(--rule)",
+                                      borderLeft: selected
+                                        ? "3px solid var(--accent-color)"
+                                        : "1px solid var(--rule)",
+                                      background: selected
+                                        ? "var(--paper-2)"
+                                        : "var(--paper)",
+                                      padding: 16,
+                                      textAlign: "left",
+                                      cursor: "pointer",
+                                    }}
                                   >
-                                    {field.label}
-                                  </Label>
-                                </div>
-                              ) : (
-                                <>
-                                  <Label
-                                    htmlFor={field.id}
-                                    className="text-sm font-semibold text-white/80 font-googletitre"
-                                  >
-                                    {field.label}
-                                  </Label>
-                                  {field.type === "textarea" ? (
-                                    <Textarea
-                                      id={field.id}
-                                      placeholder={field.placeholder}
-                                      value={formData[field.id] || ""}
-                                      onChange={(e) =>
-                                        handleInputChange(
-                                          field.id,
-                                          e.target.value
-                                        )
-                                      }
-                                      className="min-h-[100px] bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 rounded-xl"
-                                    />
-                                  ) : (
-                                    <Input
-                                      id={field.id}
-                                      placeholder={field.placeholder}
-                                      value={formData[field.id] || ""}
-                                      onChange={(e) =>
-                                        handleInputChange(
-                                          field.id,
-                                          e.target.value
-                                        )
-                                      }
-                                      className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
-                                    />
-                                  )}
-                                </>
-                              )}
+                                    <p
+                                      style={{
+                                        fontFamily: "var(--sans)",
+                                        fontSize: 13,
+                                        fontWeight: 600,
+                                        color: "var(--ink)",
+                                        margin: "0 0 4px 0",
+                                      }}
+                                    >
+                                      {option.label}
+                                    </p>
+                                    {option.description && (
+                                      <p
+                                        style={{
+                                          fontFamily: "var(--sans)",
+                                          fontSize: 12,
+                                          color: "var(--muted-color)",
+                                          margin: 0,
+                                          lineHeight: 1.4,
+                                        }}
+                                      >
+                                        {option.description}
+                                      </p>
+                                    )}
+                                  </button>
+                                );
+                              })}
                             </div>
-                          ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+                          </>
+                        ) : field.type === "checkboxGroup" ? (
+                          <>
+                            <label style={labelStyle}>{field.label}</label>
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                  "repeat(auto-fill, minmax(220px, 1fr))",
+                                gap: 6,
+                                paddingTop: 4,
+                              }}
+                            >
+                              {field.options?.map((option) => {
+                                const isChecked =
+                                  formData[field.id]?.[option.id]?.checked ||
+                                  false;
+                                return (
+                                  <label
+                                    key={option.id}
+                                    htmlFor={`${field.id}-${option.id}`}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 10,
+                                      border: "1px solid var(--rule)",
+                                      padding: "10px 12px",
+                                      background: isChecked
+                                        ? "var(--paper-2)"
+                                        : "var(--paper)",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      id={`${field.id}-${option.id}`}
+                                      checked={isChecked}
+                                      onChange={(e) =>
+                                        handleCheckboxGroupChange(
+                                          field.id,
+                                          option.id,
+                                          e.target.checked,
+                                          option.label
+                                        )
+                                      }
+                                      style={{
+                                        accentColor: "var(--accent-color)",
+                                        flexShrink: 0,
+                                      }}
+                                    />
+                                    <span
+                                      style={{
+                                        fontFamily: "var(--sans)",
+                                        fontSize: 13,
+                                        color: "var(--ink-2)",
+                                        lineHeight: 1.4,
+                                      }}
+                                    >
+                                      {option.label}
+                                    </span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          </>
+                        ) : field.type === "checkbox" ? (
+                          <label
+                            htmlFor={field.id}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              border: "1px solid var(--rule)",
+                              padding: "10px 12px",
+                              background: formData[field.id]
+                                ? "var(--paper-2)"
+                                : "var(--paper)",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              id={field.id}
+                              checked={formData[field.id] || false}
+                              onChange={(e) =>
+                                handleInputChange(field.id, e.target.checked)
+                              }
+                              style={{
+                                accentColor: "var(--accent-color)",
+                                flexShrink: 0,
+                              }}
+                            />
+                            <span
+                              style={{
+                                fontFamily: "var(--sans)",
+                                fontSize: 13,
+                                color: "var(--ink-2)",
+                                lineHeight: 1.4,
+                              }}
+                            >
+                              {field.label}
+                            </span>
+                          </label>
+                        ) : (
+                          <>
+                            <label htmlFor={field.id} style={labelStyle}>
+                              {field.label}
+                            </label>
+                            {field.type === "textarea" ? (
+                              <textarea
+                                id={field.id}
+                                placeholder={field.placeholder}
+                                value={formData[field.id] || ""}
+                                onChange={(e) =>
+                                  handleInputChange(field.id, e.target.value)
+                                }
+                                style={textareaStyle}
+                              />
+                            ) : (
+                              <input
+                                type="text"
+                                id={field.id}
+                                placeholder={field.placeholder}
+                                value={formData[field.id] || ""}
+                                onChange={(e) =>
+                                  handleInputChange(field.id, e.target.value)
+                                }
+                                style={inputStyle}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CollapsibleSection>
+              ))}
 
-                <Separator className="bg-white/10 my-6" />
+              {/* Separator */}
+              <div
+                style={{
+                  borderTop: "1px solid var(--rule)",
+                  margin: "24px 0",
+                }}
+              />
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button
-                    type="submit"
-                    className="gap-2 rounded-full text-white bg-coral hover:bg-coral/90 font-googletitre font-bold px-8"
-                  >
-                    <Eye className="w-4 h-4" />
-                    {isEn ? "Preview the document" : "Voir l'apercu du document"}
-                  </Button>
-                </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <button
+                  type="submit"
+                  style={{
+                    border: "1px solid var(--ink)",
+                    background: "var(--ink)",
+                    color: "var(--paper)",
+                    fontFamily: "var(--mono)",
+                    fontSize: 11,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    padding: "12px 32px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {isEn ? "Preview the document" : "Voir l'aperçu du document"}
+                </button>
               </div>
-            </form>
-          </motion.div>
-        </TabsContent>
-
-        <TabsContent value="preview">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="space-y-6"
-          >
-            <DocumentPreview formData={formData} />
-
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button
-                onClick={() => handleTabChange("form")}
-                variant="ghost"
-                className="gap-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 border border-white/20 font-googletitre"
-              >
-                <FileText className="w-4 h-4" />
-                {isEn ? "Back to form" : "Retour au formulaire"}
-              </Button>
             </div>
-          </motion.div>
-        </TabsContent>
-      </Tabs>
+          </form>
+        </div>
+      )}
+
+      {/* Preview tab */}
+      {activeTab === "preview" && (
+        <div>
+          <DocumentPreview formData={formData} />
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 24,
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => handleTabChange("form")}
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper)",
+                color: "var(--ink)",
+                fontFamily: "var(--sans)",
+                fontSize: 13,
+                fontWeight: 600,
+                padding: "10px 24px",
+                cursor: "pointer",
+                letterSpacing: "0.04em",
+              }}
+            >
+              {isEn ? "Back to form" : "Retour au formulaire"}
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

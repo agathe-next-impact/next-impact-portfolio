@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, CheckCircle2 } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -46,17 +44,24 @@ async function sendContactForm({
   }
 }
 
+const inputStyle: React.CSSProperties = {
+  border: "1px solid var(--rule)",
+  background: "var(--paper)",
+  color: "var(--ink)",
+  fontFamily: "var(--sans)",
+  fontSize: 14,
+  padding: "10px 12px",
+  width: "100%",
+  outline: "none",
+};
+
 export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fields, setFields] = useState({
-    nom: "",
-    email: "",
-    message: "",
-  });
+  const [fields, setFields] = useState({ nom: "", email: "", message: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
@@ -66,22 +71,11 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
     e.preventDefault();
     setSending(true);
     setError(null);
-
     try {
-      await sendContactForm({
-        nom: fields.nom,
-        email: fields.email,
-        message: fields.message,
-        formData,
-        locale,
-      });
+      await sendContactForm({ nom: fields.nom, email: fields.email, message: fields.message, formData, locale });
       setSent(true);
     } catch {
-      setError(
-        isEn
-          ? "Sending failed. Please try again."
-          : "Erreur lors de l'envoi. Merci de réessayer.",
-      );
+      setError(isEn ? "Sending failed. Please try again." : "Erreur lors de l'envoi. Merci de réessayer.");
     } finally {
       setSending(false);
     }
@@ -94,133 +88,133 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-mediumblue/60 backdrop-blur-sm flex items-center justify-center p-4"
+        style={{
+          position: "fixed", inset: 0, zIndex: 50,
+          background: "rgba(14,14,12,0.72)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 16,
+        }}
         onClick={onClose}
       >
-        <motion.div
-          key="modal-content"
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="rounded-2xl border border-white/10 bg-darkblue/80 backdrop-blur-xl max-w-md w-full p-6 md:p-8 relative"
+        <div
+          style={{
+            background: "var(--paper)",
+            border: "1px solid var(--rule)",
+            borderTop: "3px solid var(--accent-color)",
+            maxWidth: 480, width: "100%",
+            padding: "32px",
+            position: "relative",
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           <button
-            className="absolute top-4 right-4 text-white/40 hover:text-white transition p-1 rounded-full hover:bg-white/10"
             onClick={onClose}
             aria-label={isEn ? "Close" : "Fermer"}
             type="button"
+            style={{
+              position: "absolute", top: 16, right: 16,
+              background: "none", border: "none",
+              color: "var(--muted-color)", cursor: "pointer",
+              display: "flex", alignItems: "center",
+            }}
           >
-            <X className="w-5 h-5" />
+            <X size={18} />
           </button>
 
           {sent ? (
-            <div className="text-center space-y-4 py-8">
-              <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-8 h-8 text-green-400" />
-              </div>
-              <h2 className="text-2xl text-white font-googletitre font-bold">
+            <div style={{ textAlign: "center", padding: "32px 0" }}>
+              <CheckCircle2 size={40} style={{ color: "#2a7a2a", margin: "0 auto 16px" }} />
+              <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--ink)", marginBottom: 8 }}>
                 {isEn ? "Thank you!" : "Merci !"}
               </h2>
-              <p className="text-white/60 font-googletexte">
+              <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)", marginBottom: 24 }}>
                 {isEn ? "Your request has been sent." : "Votre demande a bien été envoyée."}
               </p>
               <button
-                className="mt-4 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition font-googletitre"
                 onClick={onClose}
+                style={{
+                  border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
+                  fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em",
+                  textTransform: "uppercase", padding: "10px 24px", cursor: "pointer",
+                }}
               >
                 {isEn ? "Close" : "Fermer"}
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div>
-                <h2 className="text-xl font-bold text-white font-googletitre mb-1">
+                <h2 style={{ fontFamily: "var(--serif)", fontSize: 22, color: "var(--ink)", marginBottom: 4 }}>
                   {isEn ? "Request a quote" : "Demander un devis"}
                 </h2>
-                <p className="text-sm text-white/50 font-googletexte">
+                <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--muted-color)" }}>
                   {isEn
                     ? "Your specifications document will be attached automatically"
                     : "Votre cahier des charges sera joint automatiquement"}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm text-white/80 font-googletitre font-semibold">
+              <div>
+                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
                   {isEn ? "Your name" : "Votre nom"}
                 </label>
-                <Input
-                  type="text"
-                  name="nom"
-                  value={fields.nom}
-                  onChange={handleChange}
-                  required
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
-                  placeholder={isEn ? "Jane Doe" : "Jean Dupont"}
-                  disabled={sending}
-                />
+                <input type="text" name="nom" value={fields.nom} onChange={handleChange} required style={inputStyle}
+                  placeholder={isEn ? "Jane Doe" : "Jean Dupont"} disabled={sending} />
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm text-white/80 font-googletitre font-semibold">
+              <div>
+                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
                   {isEn ? "Your email" : "Votre email"}
                 </label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={fields.email}
-                  onChange={handleChange}
-                  required
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 h-11 rounded-xl"
-                  placeholder={isEn ? "jane@example.com" : "jean@exemple.com"}
-                  disabled={sending}
-                />
+                <input type="email" name="email" value={fields.email} onChange={handleChange} required style={inputStyle}
+                  placeholder={isEn ? "jane@example.com" : "jean@exemple.com"} disabled={sending} />
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm text-white/80 font-googletitre font-semibold">
-                  {isEn ? "Message" : "Message"} <span className="text-white/40 font-normal">{isEn ? "(optional)" : "(optionnel)"}</span>
+              <div>
+                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+                  {isEn ? "Message" : "Message"}{" "}
+                  <span style={{ fontWeight: 400, color: "var(--muted-color)" }}>
+                    {isEn ? "(optional)" : "(optionnel)"}
+                  </span>
                 </label>
-                <Textarea
-                  name="message"
-                  value={fields.message}
-                  onChange={handleChange}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-lightblue/40 rounded-xl min-h-[80px]"
-                  placeholder={
-                    isEn ? "Project details..." : "Des précisions sur votre projet..."
-                  }
-                  rows={3}
-                  disabled={sending}
-                />
+                <textarea name="message" value={fields.message} onChange={handleChange}
+                  style={{ ...inputStyle, minHeight: 80, resize: "vertical" }}
+                  placeholder={isEn ? "Project details..." : "Des précisions sur votre projet..."}
+                  rows={3} disabled={sending} />
               </div>
 
               {error && (
-                <div className="rounded-xl bg-coral/10 border border-coral/20 p-3 text-sm text-coral font-googletexte">
+                <div style={{ border: "1px solid var(--accent-color)", borderLeft: "3px solid var(--accent-color)", padding: "10px 12px", background: "var(--paper-2)", fontSize: 13, color: "var(--accent-color)", fontFamily: "var(--sans)" }}>
                   {error}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold bg-coral text-darkblue transition-all duration-300 font-googletitre disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={sending}
+                style={{
+                  border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
+                  fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em",
+                  textTransform: "uppercase", padding: "12px 24px", cursor: sending ? "not-allowed" : "pointer",
+                  opacity: sending ? 0.6 : 1,
+                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                }}
               >
                 {sending ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-darkblue/20 border-t-darkblue" />
+                    <div style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "var(--paper)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
                     {isEn ? "Sending…" : "Envoi en cours..."}
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4" />
+                    <Send size={14} />
                     {isEn ? "Send request" : "Envoyer la demande"}
                   </>
                 )}
               </button>
             </form>
           )}
-        </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>,
     document.body

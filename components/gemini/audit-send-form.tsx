@@ -5,9 +5,15 @@ interface AuditSendFormProps {
 
 export default function AuditSendForm({ markdownFull, url }: AuditSendFormProps) {
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 p-6 bg-extralightblue/90 rounded-2xl mt-8">
-      <span className="w-max px-4 py-1 bg-coral rounded-full text-white font-googletitre text-xl">{url}</span>
-      <div className="prose prose-lg dark:prose-invert" dangerouslySetInnerHTML={{ __html: marked.parse(markdownFull) }} />
+    <div style={{
+      maxWidth: 900, margin: "32px auto 0",
+      border: "1px solid var(--rule)", background: "var(--paper)", padding: "32px",
+      display: "flex", flexDirection: "column", gap: 16,
+    }}>
+      <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink)", borderBottom: "1px solid var(--rule)", paddingBottom: 8 }}>
+        {url}
+      </span>
+      <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: markdownFull }} />
     </div>
   );
 }

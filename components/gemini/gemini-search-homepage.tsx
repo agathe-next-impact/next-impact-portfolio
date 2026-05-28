@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -15,21 +14,22 @@ export default function GeminiSearchHomepage() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mt-8 flex flex-col gap-6 mx-auto"
-    >
-      <div className="flex items-end">
-        <label
-          htmlFor="gemini_url"
-          className="font-googletexte text-white/80 "
-        >
-          URL WordPress à analyser
-        </label>
-      </div>
+    <form onSubmit={handleSubmit} style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 12 }}>
+      <label htmlFor="gemini_url_home" style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+        URL WordPress à analyser
+      </label>
       <input
-        id="gemini_url"
-        className="w-2xl bg-white/80 border rounded-2xl p-2 -mt-4 mb-2 focus-visible:bg-white"
+        id="gemini_url_home"
+        style={{
+          border: "1px solid var(--rule)",
+          background: "var(--paper)",
+          color: "var(--ink)",
+          fontFamily: "var(--sans)",
+          fontSize: 15,
+          padding: "12px 16px",
+          width: "100%",
+          outline: "none",
+        }}
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         placeholder="https://test.com"
@@ -37,17 +37,22 @@ export default function GeminiSearchHomepage() {
         type="url"
         pattern="https?://.+"
       />
-      <Button
-        type="submit"
-        variant="default"
-        className="bg-lightyellow hover:bg-lightyellow/90 text-darkblue px-6 py-2 text-xl font-googletitre font-medium flex items-center justify-center"
-        disabled={!url.trim()}
-      >
-        Lancer l'analyse
-        <span className="ml-2 flex items-center text-darkblue">
-          <ArrowRight className="size-5" />
-        </span>
-      </Button>
+      <div>
+        <button
+          type="submit"
+          disabled={!url.trim()}
+          style={{
+            border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
+            fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
+            padding: "14px 28px", cursor: url.trim() ? "pointer" : "not-allowed",
+            opacity: url.trim() ? 1 : 0.5,
+            display: "inline-flex", alignItems: "center", gap: 8,
+          }}
+        >
+          Lancer l&apos;analyse
+          <ArrowRight size={14} />
+        </button>
+      </div>
     </form>
   );
 }
