@@ -32,9 +32,9 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    sectionLabel: "Applications web & mobile sur-mesure",
-    title: "Quand WordPress n'est plus le bon outil",
-    subtitle: "Pour vos marketplaces, outils métier, simulateurs ou applications mobiles : une stack sur-mesure pensée pour votre logique métier.",
+    sectionLabel: "Applications web & mobile · Fig. 03",
+    title: "Stack sur-mesure",
+    subtitle: "Marketplace, outil métier, simulateur ou application mobile : une architecture dédiée à votre logique métier, avec une admin aussi autonome que WordPress.",
     priceLabel: "Sur devis, après cadrage",
     characteristicsLabel: "Caractéristiques",
     characteristics: [
@@ -78,9 +78,9 @@ const COPY: Record<Locale, Copy> = {
     ctaPrimary: "Discuter de mon projet",
   },
   en: {
-    sectionLabel: "Custom web & mobile applications",
-    title: "When WordPress is no longer the right tool",
-    subtitle: "For your marketplaces, business tools, simulators or mobile applications: a custom stack built for your business logic.",
+    sectionLabel: "Web & mobile applications · Fig. 03",
+    title: "Bespoke stack",
+    subtitle: "Marketplace, business tool, simulator or mobile application: a dedicated architecture built for your business logic, with an admin as autonomous as WordPress.",
     priceLabel: "On quote, after scoping",
     characteristicsLabel: "Characteristics",
     characteristics: [

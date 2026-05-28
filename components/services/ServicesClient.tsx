@@ -112,7 +112,7 @@ export default function ServicesClient() {
       </section>
 
       {/* Budget / ROI — profil adaptatif */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
           <div className="sec-head">
             <div className="sec-no">№ —</div>

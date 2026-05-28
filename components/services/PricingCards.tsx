@@ -137,7 +137,7 @@ export function PricingCards() {
   return (
     <section
       style={{
-        background: "var(--paper-2)",
+        background: "var(--paper)",
         borderTop: "1px solid var(--rule)",
         borderBottom: "1px solid var(--rule)",
         padding: "80px 0",
