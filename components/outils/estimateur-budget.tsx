@@ -1,16 +1,12 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Calculator,
   Clock,
   CheckCircle2,
   Info,
-  Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -178,29 +174,80 @@ export default function EstimateurBudget() {
     signature: { fr: "Design signature distinctif", en: "Distinctive signature design" },
   };
 
-  return (
-    <div className="w-full">
-      <div className="bg-darkblue/50 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur">
-        <div className="flex items-start gap-3 mb-6">
-          <Calculator className="h-6 w-6 text-lightyellow shrink-0 mt-1" />
-          <div>
-            <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              {isEn ? "Budget & timeline estimator" : "Estimateur budget & délai"}
-            </p>
-            <p className="text-white font-googletexte mt-2">
-              {isEn
-                ? "Get an indicative budget range and lead time for your web project. Estimate based on real Next Impact projects."
-                : "Obtenez une fourchette de budget et un délai indicatif pour votre projet web. Estimation basée sur les projets réels Next Impact."}
-            </p>
-          </div>
-        </div>
+  const selectStyle: React.CSSProperties = {
+    border: "1px solid var(--rule)",
+    background: "var(--paper)",
+    color: "var(--ink)",
+    padding: "10px 14px",
+    width: "100%",
+    borderRadius: 0,
+    outline: "none",
+    fontFamily: "var(--sans)",
+    fontSize: 14,
+    appearance: "auto",
+  };
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-3">
-            <p className="text-sm text-white/70 font-googletexte">
-              {isEn ? "Type of project" : "Type de projet"} <span className="text-coral">*</span>
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+  const labelStyle: React.CSSProperties = {
+    fontFamily: "var(--mono)",
+    fontSize: 9,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    color: "var(--muted-color)",
+    display: "block",
+    marginBottom: 6,
+  };
+
+  return (
+    <div style={{ width: "100%", border: "1px solid var(--rule)" }}>
+      {/* Header */}
+      <div
+        style={{
+          padding: "24px 32px",
+          borderBottom: "1px solid var(--rule)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            display: "inline-block",
+            fontFamily: "var(--mono)",
+            fontSize: 9,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+            border: "1px solid var(--rule)",
+            padding: "3px 8px",
+            alignSelf: "flex-start",
+          }}
+        >
+          {isEn ? "Budget & timeline estimator" : "Estimateur budget & délai"}
+        </span>
+        <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)", margin: 0, lineHeight: 1.6 }}>
+          {isEn
+            ? "Get an indicative budget range and lead time for your web project. Estimate based on real Next Impact projects."
+            : "Obtenez une fourchette de budget et un délai indicatif pour votre projet web. Estimation basée sur les projets réels Next Impact."}
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit}>
+        <div style={{ padding: "32px", display: "flex", flexDirection: "column", gap: 28 }}>
+
+          {/* Project type */}
+          <div>
+            <span style={labelStyle}>
+              {isEn ? "Type of project" : "Type de projet"}
+            </span>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 1,
+                border: "1px solid var(--rule)",
+              }}
+            >
               {(Object.keys(projectLabels) as ProjectType[]).map((key) => {
                 const label = isEn ? projectLabels[key].en : projectLabels[key].fr;
                 const selected = projectType === key;
@@ -209,82 +256,92 @@ export default function EstimateurBudget() {
                     key={key}
                     type="button"
                     onClick={() => setProjectType(key)}
-                    className={`rounded-xl border px-4 py-3 text-left transition ${
-                      selected
-                        ? "border-lightyellow bg-lightyellow text-darkblue font-semibold"
-                        : "border-white/10 bg-white/5 text-white hover:border-white/30"
-                    }`}
+                    style={{
+                      background: selected ? "var(--paper-2)" : "var(--paper)",
+                      border: "none",
+                      borderLeft: selected ? "3px solid var(--accent-color)" : "3px solid transparent",
+                      padding: "12px 16px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontFamily: "var(--sans)",
+                      fontSize: 13,
+                      color: selected ? "var(--ink)" : "var(--ink-2)",
+                      fontWeight: selected ? 600 : 400,
+                      outline: "none",
+                      borderBottom: "1px solid var(--rule)",
+                    }}
                   >
-                    <span className="font-googletitre text-current">{label}</span>
+                    {label}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+          {/* Selects grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div>
+              <label style={labelStyle}>
                 {isEn ? "User roles" : "Rôles utilisateurs"}
               </label>
               <select
                 value={roles}
                 onChange={(e) => setRoles(e.target.value as Roles)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
+                style={selectStyle}
               >
                 {(Object.keys(roleLabels) as Roles[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue text-white">
+                  <option key={key} value={key}>
                     {isEn ? roleLabels[key].en : roleLabels[key].fr}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+            <div>
+              <label style={labelStyle}>
                 {isEn ? "Data model" : "Modèle de données"}
               </label>
               <select
                 value={entities}
                 onChange={(e) => setEntities(e.target.value as Entities)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
+                style={selectStyle}
               >
                 {(Object.keys(entitiesLabels) as Entities[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue text-white">
+                  <option key={key} value={key}>
                     {isEn ? entitiesLabels[key].en : entitiesLabels[key].fr}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+            <div>
+              <label style={labelStyle}>
                 {isEn ? "Third-party integrations" : "Intégrations tierces"}
               </label>
               <select
                 value={integrations}
                 onChange={(e) => setIntegrations(e.target.value as Integrations)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
+                style={selectStyle}
               >
                 {(Object.keys(integrationsLabels) as Integrations[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue text-white">
+                  <option key={key} value={key}>
                     {isEn ? integrationsLabels[key].en : integrationsLabels[key].fr}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-white/70 font-googletexte">
+            <div>
+              <label style={labelStyle}>
                 {isEn ? "Design approach" : "Approche design"}
               </label>
               <select
                 value={design}
                 onChange={(e) => setDesign(e.target.value as Design)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-lightyellow focus:outline-none"
+                style={selectStyle}
               >
                 {(Object.keys(designLabels) as Design[]).map((key) => (
-                  <option key={key} value={key} className="bg-darkblue text-white">
+                  <option key={key} value={key}>
                     {isEn ? designLabels[key].en : designLabels[key].fr}
                   </option>
                 ))}
@@ -292,88 +349,192 @@ export default function EstimateurBudget() {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            className="rounded-full bg-lightyellow text-darkblue hover:bg-lightyellow/90 font-googletitre font-semibold px-6 py-3"
-          >
-            <Sparkles className="mr-2 h-4 w-4" />
-            {isEn ? "Get my estimate" : "Voir mon estimation"}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </form>
+          {/* Submit */}
+          <div>
+            <button type="submit" className="btn primary">
+              {isEn ? "Get my estimate" : "Voir mon estimation"}
+              <ArrowRight style={{ display: "inline", marginLeft: 8, width: 14, height: 14, verticalAlign: "middle" }} />
+            </button>
+          </div>
+        </div>
 
+        {/* Results section */}
         {submitted && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mt-8 rounded-2xl border border-lightyellow/30 bg-lightyellow/10 p-6 md:p-8 flex flex-col gap-5"
+          <div
+            style={{
+              borderTop: "1px solid var(--rule)",
+              padding: "32px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
           >
-            <div className="flex items-center gap-2 text-lightyellow">
-              <CheckCircle2 className="h-5 w-5" />
-              <p className="text-sm uppercase tracking-widest font-googletitre">
+            {/* Result header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <CheckCircle2
+                style={{ width: 14, height: 14, color: "var(--accent-color)", flexShrink: 0 }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 9,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--muted-color)",
+                }}
+              >
                 {isEn ? "Estimate" : "Estimation"}
-              </p>
+              </span>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-xl border border-white/10 bg-darkblue/40 p-5">
-                <p className="text-sm text-white/60 font-googletexte uppercase tracking-widest mb-2">
+            {/* Stat cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {/* Budget card */}
+              <div
+                style={{
+                  border: "1px solid var(--rule)",
+                  background: "var(--paper-2)",
+                  padding: 24,
+                }}
+              >
+                <span style={labelStyle}>
                   {isEn ? "Budget range" : "Fourchette budget"}
-                </p>
-                <p className="text-3xl md:text-4xl font-googletitre font-medium text-lightyellow">
+                </span>
+                <p
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(28px, 3vw, 40px)",
+                    color: "var(--ink)",
+                    margin: "4px 0 2px",
+                    lineHeight: 1.1,
+                  }}
+                >
                   {formatEuro(estimate.budgetMin, locale)} – {formatEuro(estimate.budgetMax, locale)}
                 </p>
-                <p className="text-xs text-white/50 font-googletexte mt-1">{isEn ? "Net before tax" : "HT"}</p>
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                  }}
+                >
+                  {isEn ? "Net before tax" : "HT"}
+                </span>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-darkblue/40 p-5">
-                <p className="text-sm text-white/60 font-googletexte uppercase tracking-widest mb-2">
-                  <Clock className="inline h-3 w-3 mr-1" />
+              {/* Timeline card */}
+              <div
+                style={{
+                  border: "1px solid var(--rule)",
+                  background: "var(--paper-2)",
+                  padding: 24,
+                }}
+              >
+                <span style={{ ...labelStyle, display: "flex", alignItems: "center", gap: 4 }}>
+                  <Clock style={{ width: 10, height: 10, flexShrink: 0 }} />
                   {isEn ? "Lead time" : "Délai indicatif"}
+                </span>
+                <p
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(28px, 3vw, 40px)",
+                    color: "var(--ink)",
+                    margin: "4px 0 2px",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {estimate.weeksMin} – {estimate.weeksMax}{" "}
+                  <span style={{ fontSize: "0.5em", fontFamily: "var(--sans)", fontWeight: 400 }}>
+                    {isEn ? "weeks" : "semaines"}
+                  </span>
                 </p>
-                <p className="text-3xl md:text-4xl font-googletitre font-medium text-coral">
-                  {estimate.weeksMin} – {estimate.weeksMax} {isEn ? "weeks" : "semaines"}
-                </p>
-                <p className="text-xs text-white/50 font-googletexte mt-1">
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                  }}
+                >
                   {isEn ? "From kick-off to launch" : "Du lancement à la mise en ligne"}
-                </p>
+                </span>
               </div>
             </div>
 
-            <div className="rounded-xl border border-lightyellow/20 bg-lightyellow/5 p-5">
-              <p className="text-sm uppercase tracking-widest text-lightyellow font-googletitre mb-2">
+            {/* Recommendation */}
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: 24,
+              }}
+            >
+              <span style={labelStyle}>
                 {isEn ? "Recommendation" : "Recommandation"}
+              </span>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 14,
+                  color: "var(--ink-2)",
+                  lineHeight: 1.65,
+                  margin: 0,
+                }}
+              >
+                {estimate.recommendation}
               </p>
-              <p className="text-white/90 font-googletexte leading-relaxed">{estimate.recommendation}</p>
             </div>
 
-            <div className="rounded-xl border border-extralightblue/20 bg-extralightblue/5 p-4 flex items-start gap-3">
-              <Info className="h-4 w-4 text-extralightblue shrink-0 mt-0.5" />
-              <p className="text-xs text-white/60 font-googletexte leading-relaxed">
+            {/* Info note */}
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: "16px 20px",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 10,
+              }}
+            >
+              <Info
+                style={{ width: 14, height: 14, color: "var(--muted-color)", flexShrink: 0, marginTop: 1 }}
+              />
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: 12,
+                  color: "var(--muted-color)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
                 {isEn
                   ? "Indicative estimate based on real Next Impact projects. A precise scoping (1-3 days) is needed to lock in budget and timeline. OETH benefit: TIH-eligible companies can deduct up to 30% of labor cost from their AGEFIPH contribution."
                   : "Estimation indicative basée sur les projets réels Next Impact. Un cadrage précis (1-3 jours) est nécessaire pour figer budget et délai. Avantage OETH : les entreprises éligibles TIH peuvent déduire jusqu'à 30 % du coût main-d'œuvre de leur contribution AGEFIPH."}
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link href="/contact" className="flex-1">
-                <Button className="w-full rounded-full bg-lightyellow text-darkblue hover:bg-lightyellow/90 font-googletitre font-semibold">
+            {/* CTAs */}
+            <div style={{ display: "flex", gap: 12, paddingTop: 4, flexWrap: "wrap" }}>
+              <Link href="/contact" style={{ flex: "1 1 auto" }}>
+                <button type="button" className="btn primary" style={{ width: "100%" }}>
                   {isEn ? "Discuss this estimate" : "Discuter de cette estimation"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <ArrowRight style={{ display: "inline", marginLeft: 8, width: 14, height: 14, verticalAlign: "middle" }} />
+                </button>
               </Link>
-              <Link href="/outils/simulateur-agefiph" className="flex-1">
-                <Button className="w-full rounded-full border border-white/30 bg-transparent text-white hover:bg-white/10 font-googletitre font-semibold">
+              <Link href="/outils/simulateur-agefiph" style={{ flex: "1 1 auto" }}>
+                <button type="button" className="btn" style={{ width: "100%" }}>
                   {isEn ? "Calculate AGEFIPH deduction" : "Calculer la déduction AGEFIPH"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <ArrowRight style={{ display: "inline", marginLeft: 8, width: 14, height: 14, verticalAlign: "middle" }} />
+                </button>
               </Link>
             </div>
-          </motion.div>
+          </div>
         )}
-      </div>
+      </form>
     </div>
   );
 }

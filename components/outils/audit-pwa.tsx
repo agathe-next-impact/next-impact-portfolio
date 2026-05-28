@@ -1,17 +1,12 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import {
-  ArrowRight,
   CheckCircle2,
   AlertTriangle,
   XCircle,
-  Smartphone,
-  Sparkles,
   Info,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -239,20 +234,20 @@ export default function AuditPwa() {
       return {
         fr: "Très bon niveau — votre site est largement prêt à devenir une PWA, peu d'ajustements nécessaires.",
         en: "Strong baseline — your site is largely PWA-ready, few adjustments needed.",
-        color: "text-lightyellow",
+        color: "#2a7a2a",
       };
     }
     if (score >= 50) {
       return {
         fr: "Niveau intermédiaire — quelques chantiers à mener avant qu'une PWA livre toute sa valeur.",
         en: "Intermediate level — a few items to address before a PWA delivers full value.",
-        color: "text-orange",
+        color: "#b85c09",
       };
     }
     return {
       fr: "Travail conséquent — refonte ou modernisation nécessaire avant d'envisager une PWA performante.",
       en: "Significant work — modernization or rebuild needed before a performant PWA is feasible.",
-      color: "text-coral",
+      color: "var(--accent-color)",
     };
   }, [score]);
 
@@ -261,228 +256,397 @@ export default function AuditPwa() {
     setSubmitted(true);
   };
 
+  const statusColor = (status: "ok" | "warn" | "ko") => {
+    if (status === "ok") return "#2a7a2a";
+    if (status === "warn") return "#b85c09";
+    return "var(--accent-color)";
+  };
+
   return (
-    <div className="w-full">
-      <div className="bg-darkblue/50 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur">
-        <div className="flex items-start gap-3 mb-6">
-          <Smartphone className="h-6 w-6 text-coral shrink-0 mt-1" />
+    <div style={{ width: "100%", border: "1px solid var(--rule)" }}>
+      {/* Header */}
+      <div
+        style={{
+          padding: "24px 32px",
+          borderBottom: "1px solid var(--rule)",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: "11px",
+            textTransform: "uppercase",
+            letterSpacing: "0.18em",
+            color: "var(--muted-color)",
+            marginBottom: "8px",
+          }}
+        >
+          {isEn ? "PWA / mobile readiness audit" : "Audit PWA / mobile readiness"}
+        </p>
+        <p
+          style={{
+            fontFamily: "var(--sans)",
+            fontSize: "15px",
+            color: "var(--ink)",
+            lineHeight: 1.5,
+          }}
+        >
+          {isEn
+            ? "Is your site ready to become an installable PWA? Test 9 criteria in 60 seconds."
+            : "Votre site est-il prêt à devenir une PWA installable ? Évaluez 9 critères en 60 secondes."}
+        </p>
+      </div>
+
+      {/* Results — shown above form after submit */}
+      {submitted && (
+        <div
+          style={{
+            borderBottom: "1px solid var(--rule)",
+            padding: "32px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "32px",
+          }}
+        >
+          {/* Score + Verdict */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 2fr",
+              gap: "16px",
+            }}
+          >
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: "24px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "10px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.18em",
+                  color: "var(--muted-color)",
+                  marginBottom: "12px",
+                }}
+              >
+                {isEn ? "Score" : "Score"}
+              </p>
+              <p
+                className="ni-serif"
+                style={{
+                  fontSize: "56px",
+                  lineHeight: 1,
+                  color: "var(--ink)",
+                  fontWeight: 400,
+                }}
+              >
+                {score}
+                <span
+                  style={{
+                    fontSize: "24px",
+                    color: "var(--muted-color)",
+                    fontFamily: "var(--sans)",
+                  }}
+                >
+                  /100
+                </span>
+              </p>
+            </div>
+            <div
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper-2)",
+                padding: "24px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "10px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.18em",
+                  color: "var(--muted-color)",
+                  marginBottom: "12px",
+                }}
+              >
+                {isEn ? "Verdict" : "Verdict"}
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: "15px",
+                  lineHeight: 1.6,
+                  color: verdict.color,
+                }}
+              >
+                {isEn ? verdict.en : verdict.fr}
+              </p>
+            </div>
+          </div>
+
+          {/* Detailed checks */}
           <div>
-            <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              {isEn ? "PWA / mobile readiness audit" : "Audit PWA / mobile readiness"}
+            <p
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "10px",
+                textTransform: "uppercase",
+                letterSpacing: "0.18em",
+                color: "var(--muted-color)",
+                marginBottom: "16px",
+              }}
+            >
+              {isEn ? "Detailed checks" : "Diagnostic détaillé"}
             </p>
-            <p className="text-white font-googletexte mt-2">
-              {isEn
-                ? "Is your site ready to become an installable PWA? Test 9 criteria in 60 seconds."
-                : "Votre site est-il prêt à devenir une PWA installable ? Évaluez 9 critères en 60 secondes."}
-            </p>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field
-              label={isEn ? "Is HTTPS enabled?" : "HTTPS activé ?"}
-              value={state.https}
-              onChange={(v) => setState({ ...state, https: v as FormState["https"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Mobile-responsive design?" : "Design responsive mobile ?"}
-              value={state.responsive}
-              onChange={(v) => setState({ ...state, responsive: v as FormState["responsive"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-                { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Mobile load time?" : "Temps de chargement mobile ?"}
-              value={state.loadTime}
-              onChange={(v) => setState({ ...state, loadTime: v as FormState["loadTime"] })}
-              options={[
-                { value: "fast", labelFr: "< 2 s", labelEn: "< 2 s" },
-                { value: "medium", labelFr: "2-4 s", labelEn: "2-4 s" },
-                { value: "slow", labelFr: "> 4 s", labelEn: "> 4 s" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Accessible touch targets?" : "Zones tactiles ≥ 44×44 px ?"}
-              value={state.touchTargets}
-              onChange={(v) => setState({ ...state, touchTargets: v as FormState["touchTargets"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-                { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Web app manifest in place?" : "Web app manifest en place ?"}
-              value={state.manifest}
-              onChange={(v) => setState({ ...state, manifest: v as FormState["manifest"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-                { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Service worker installed?" : "Service worker installé ?"}
-              value={state.serviceWorker}
-              onChange={(v) => setState({ ...state, serviceWorker: v as FormState["serviceWorker"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-                { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Offline mode needed?" : "Besoin de mode hors-ligne ?"}
-              value={state.offlineNeed}
-              onChange={(v) => setState({ ...state, offlineNeed: v as FormState["offlineNeed"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Geolocation needed?" : "Besoin de géolocalisation ?"}
-              value={state.geolocation}
-              onChange={(v) => setState({ ...state, geolocation: v as FormState["geolocation"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
-                { value: "no", labelFr: "Non", labelEn: "No" },
-              ]}
-              isEn={isEn}
-            />
-            <Field
-              label={isEn ? "Install prompt / tutorial?" : "Onboarding installation prévu ?"}
-              value={state.installPrompt}
-              onChange={(v) => setState({ ...state, installPrompt: v as FormState["installPrompt"] })}
-              options={[
-                { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-                { value: "no", labelFr: "Non / pas encore", labelEn: "No / not yet" },
-                { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-              ]}
-              isEn={isEn}
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className="rounded-full bg-coral text-darkblue hover:bg-coral/90 font-googletitre font-semibold px-6 py-3"
-          >
-            <Sparkles className="mr-2 h-4 w-4" />
-            {isEn ? "Get my PWA audit" : "Voir mon audit PWA"}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </form>
-
-        {submitted && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mt-8 rounded-2xl border border-coral/30 bg-coral/5 p-6 md:p-8 flex flex-col gap-5"
-          >
-            <div className="flex items-center gap-2 text-coral">
-              <CheckCircle2 className="h-5 w-5" />
-              <p className="text-sm uppercase tracking-widest font-googletitre">
-                {isEn ? "PWA readiness audit" : "Audit PWA readiness"}
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-3">
-              <div className="md:col-span-1 rounded-xl border border-white/10 bg-darkblue/40 p-5 flex flex-col items-center justify-center text-center">
-                <p className="text-sm text-white/60 font-googletexte uppercase tracking-widest mb-2">
-                  {isEn ? "Score" : "Score"}
-                </p>
-                <p className={`text-5xl font-googletitre font-medium ${verdict.color}`}>
-                  {score}<span className="text-2xl text-white/40">/100</span>
-                </p>
-              </div>
-              <div className="md:col-span-2 rounded-xl border border-white/10 bg-darkblue/40 p-5 flex flex-col justify-center">
-                <p className="text-sm uppercase tracking-widest text-white/60 font-googletitre mb-2">
-                  {isEn ? "Verdict" : "Verdict"}
-                </p>
-                <p className={`font-googletexte leading-relaxed ${verdict.color}`}>
-                  {isEn ? verdict.en : verdict.fr}
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-sm uppercase tracking-widest text-white/60 font-googletitre">
-                {isEn ? "Detailed checks" : "Diagnostic détaillé"}
-              </p>
-              {results.map((r) => (
+            <div>
+              {results.map((r, i) => (
                 <div
                   key={r.id}
-                  className={`rounded-xl border p-4 flex items-start gap-3 ${
-                    r.status === "ok"
-                      ? "border-lightyellow/30 bg-lightyellow/5"
-                      : r.status === "warn"
-                      ? "border-orange/30 bg-orange/5"
-                      : "border-coral/30 bg-coral/5"
-                  }`}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                    padding: "14px 16px",
+                    borderBottom:
+                      i < results.length - 1 ? "1px solid var(--rule)" : undefined,
+                    borderLeft: `3px solid ${statusColor(r.status)}`,
+                  }}
                 >
                   {r.status === "ok" ? (
-                    <CheckCircle2 className="h-5 w-5 text-lightyellow shrink-0 mt-0.5" />
+                    <CheckCircle2
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        color: "#2a7a2a",
+                        flexShrink: 0,
+                        marginTop: "2px",
+                      }}
+                    />
                   ) : r.status === "warn" ? (
-                    <AlertTriangle className="h-5 w-5 text-orange shrink-0 mt-0.5" />
+                    <AlertTriangle
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        color: "#b85c09",
+                        flexShrink: 0,
+                        marginTop: "2px",
+                      }}
+                    />
                   ) : (
-                    <XCircle className="h-5 w-5 text-coral shrink-0 mt-0.5" />
+                    <XCircle
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        color: "var(--accent-color)",
+                        flexShrink: 0,
+                        marginTop: "2px",
+                      }}
+                    />
                   )}
                   <div>
-                    <p className="text-white font-googletitre font-medium">
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        marginBottom: "4px",
+                      }}
+                    >
                       {isEn ? r.labelEn : r.labelFr}
                     </p>
-                    <p className="text-sm text-white/70 font-googletexte leading-relaxed mt-1">
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: "13px",
+                        color: "var(--ink-2)",
+                        lineHeight: 1.6,
+                      }}
+                    >
                       {isEn ? r.detailEn : r.detailFr}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
 
-            <div className="rounded-xl border border-extralightblue/20 bg-extralightblue/5 p-4 flex items-start gap-3">
-              <Info className="h-4 w-4 text-extralightblue shrink-0 mt-0.5" />
-              <p className="text-xs text-white/60 font-googletexte leading-relaxed">
-                {isEn
-                  ? "Self-assessment based on declared answers. A full PWA audit requires technical inspection (manifest contents, service worker strategy, Lighthouse mobile run, real-device tests)."
-                  : "Auto-évaluation basée sur les réponses déclarées. Un audit PWA complet nécessite une inspection technique (contenu du manifest, stratégie service worker, Lighthouse mobile, tests sur appareils réels)."}
-              </p>
-            </div>
+          {/* Info box */}
+          <div
+            style={{
+              background: "var(--paper-2)",
+              border: "1px solid var(--rule)",
+              padding: "14px 16px",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "10px",
+            }}
+          >
+            <Info
+              style={{
+                width: "13px",
+                height: "13px",
+                color: "var(--muted-color)",
+                flexShrink: 0,
+                marginTop: "2px",
+              }}
+            />
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: "12px",
+                color: "var(--muted-color)",
+                lineHeight: 1.6,
+              }}
+            >
+              {isEn
+                ? "Self-assessment based on declared answers. A full PWA audit requires technical inspection (manifest contents, service worker strategy, Lighthouse mobile run, real-device tests)."
+                : "Auto-évaluation basée sur les réponses déclarées. Un audit PWA complet nécessite une inspection technique (contenu du manifest, stratégie service worker, Lighthouse mobile, tests sur appareils réels)."}
+            </p>
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link href="/contact" className="flex-1">
-                <Button className="w-full rounded-full bg-coral text-darkblue hover:bg-coral/90 font-googletitre font-semibold">
-                  {isEn ? "Discuss this audit" : "Discuter de cet audit"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/documentation/applications-web-mobile/installable-sans-store-le-pouvoir-de-la-pwa" className="flex-1">
-                <Button className="w-full rounded-full border border-white/30 bg-transparent text-white hover:bg-white/10 font-googletitre font-semibold">
-                  {isEn ? "Learn more about PWAs" : "En savoir plus sur les PWA"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </div>
+          {/* CTAs */}
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <Link href="/contact">
+              <button className="btn primary">
+                {isEn ? "Discuss this audit" : "Discuter de cet audit"}
+              </button>
+            </Link>
+            <Link href="/documentation/applications-web-mobile/installable-sans-store-le-pouvoir-de-la-pwa">
+              <button className="btn">
+                {isEn ? "Learn more about PWAs" : "En savoir plus sur les PWA"}
+              </button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} style={{ padding: "32px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "24px",
+            marginBottom: "32px",
+          }}
+        >
+          <Field
+            label={isEn ? "Is HTTPS enabled?" : "HTTPS activé ?"}
+            value={state.https}
+            onChange={(v) => setState({ ...state, https: v as FormState["https"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Mobile-responsive design?" : "Design responsive mobile ?"}
+            value={state.responsive}
+            onChange={(v) => setState({ ...state, responsive: v as FormState["responsive"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Mobile load time?" : "Temps de chargement mobile ?"}
+            value={state.loadTime}
+            onChange={(v) => setState({ ...state, loadTime: v as FormState["loadTime"] })}
+            options={[
+              { value: "fast", labelFr: "< 2 s", labelEn: "< 2 s" },
+              { value: "medium", labelFr: "2-4 s", labelEn: "2-4 s" },
+              { value: "slow", labelFr: "> 4 s", labelEn: "> 4 s" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Accessible touch targets?" : "Zones tactiles ≥ 44×44 px ?"}
+            value={state.touchTargets}
+            onChange={(v) => setState({ ...state, touchTargets: v as FormState["touchTargets"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Web app manifest in place?" : "Web app manifest en place ?"}
+            value={state.manifest}
+            onChange={(v) => setState({ ...state, manifest: v as FormState["manifest"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Service worker installed?" : "Service worker installé ?"}
+            value={state.serviceWorker}
+            onChange={(v) => setState({ ...state, serviceWorker: v as FormState["serviceWorker"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Offline mode needed?" : "Besoin de mode hors-ligne ?"}
+            value={state.offlineNeed}
+            onChange={(v) => setState({ ...state, offlineNeed: v as FormState["offlineNeed"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Geolocation needed?" : "Besoin de géolocalisation ?"}
+            value={state.geolocation}
+            onChange={(v) => setState({ ...state, geolocation: v as FormState["geolocation"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
+              { value: "no", labelFr: "Non", labelEn: "No" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Install prompt / tutorial?" : "Onboarding installation prévu ?"}
+            value={state.installPrompt}
+            onChange={(v) => setState({ ...state, installPrompt: v as FormState["installPrompt"] })}
+            options={[
+              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "no", labelFr: "Non / pas encore", labelEn: "No / not yet" },
+              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+            ]}
+            isEn={isEn}
+          />
+        </div>
+
+        <button type="submit" className="btn primary">
+          {isEn ? "Get my PWA audit" : "Voir mon audit PWA"}
+        </button>
+      </form>
     </div>
   );
 }
@@ -501,9 +665,18 @@ function Field({
   isEn: boolean;
 }) {
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-white/70 font-googletexte">{label}</p>
-      <div className="flex flex-wrap gap-2">
+    <div>
+      <p
+        style={{
+          fontFamily: "var(--sans)",
+          fontSize: "13px",
+          color: "var(--ink-2)",
+          marginBottom: "10px",
+        }}
+      >
+        {label}
+      </p>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
         {options.map((opt) => {
           const selected = value === opt.value;
           return (
@@ -511,11 +684,21 @@ function Field({
               key={opt.value}
               type="button"
               onClick={() => onChange(opt.value)}
-              className={`rounded-full border px-4 py-2 text-sm font-googletexte transition ${
-                selected
-                  ? "border-coral bg-coral text-darkblue font-semibold"
-                  : "border-white/10 bg-white/5 text-white/70 hover:border-white/30"
-              }`}
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: "13px",
+                padding: "6px 14px",
+                border: selected
+                  ? "1px solid var(--rule)"
+                  : "1px solid var(--rule)",
+                borderLeft: selected
+                  ? "3px solid var(--accent-color)"
+                  : "1px solid var(--rule)",
+                background: selected ? "var(--paper-2)" : "transparent",
+                color: selected ? "var(--ink)" : "var(--muted-color)",
+                cursor: "pointer",
+                transition: "background 0.1s, color 0.1s",
+              }}
             >
               {isEn ? opt.labelEn : opt.labelFr}
             </button>

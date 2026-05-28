@@ -1,17 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Calculator,
-  CheckCircle2,
-  Info,
-  Sparkles,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -112,29 +102,61 @@ export default function TcoSaasVsSurMesure() {
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-darkblue/50 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur">
-        <div className="flex items-start gap-3 mb-6">
-          <Calculator className="h-6 w-6 text-extralightblue shrink-0 mt-1" />
-          <div>
-            <p className="text-sm uppercase tracking-[0.25rem] text-white/50 font-googletexte">
-              {isEn ? "SaaS vs custom TCO calculator" : "Calculateur TCO SaaS vs sur-mesure"}
-            </p>
-            <p className="text-white font-googletexte mt-2">
-              {isEn
-                ? "Compare the 3-year cost of staying on your current SaaS vs migrating to a custom web app. Includes workaround time."
-                : "Comparez le coût sur 3 ans entre rester sur votre SaaS actuel et migrer vers une web app sur-mesure. Inclut le temps perdu en contournements."}
-            </p>
-          </div>
-        </div>
+    <div style={{ border: "1px solid var(--rule)" }}>
+      {/* Header */}
+      <div
+        style={{
+          padding: "24px 32px",
+          borderBottom: "1px solid var(--rule)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: "11px",
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+            display: "inline-block",
+          }}
+        >
+          {isEn ? "SaaS vs custom — TCO calculator" : "SaaS vs sur-mesure — Calculateur TCO"}
+        </span>
+        <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink)", lineHeight: 1.6, margin: 0 }}>
+          {isEn
+            ? "Compare the cost of staying on your current SaaS vs migrating to a custom web app. Includes workaround time."
+            : "Comparez le coût entre rester sur votre SaaS actuel et migrer vers une web app sur-mesure. Inclut le temps perdu en contournements."}
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form */}
+      <form onSubmit={handleSubmit}>
+        <div style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "32px" }}>
+
           {/* SaaS actuel */}
-          <div className="rounded-xl border border-coral/20 bg-coral/5 p-5 space-y-4">
-            <p className="text-sm uppercase tracking-widest text-coral font-googletitre">
+          <fieldset style={{ border: "none", margin: 0, padding: 0 }}>
+            <legend
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                marginBottom: "16px",
+              }}
+            >
               {isEn ? "Current SaaS" : "SaaS actuel"}
-            </p>
-            <div className="grid gap-4 md:grid-cols-2">
+            </legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                gap: "16px",
+              }}
+            >
               <NumberField
                 label={isEn ? "Monthly SaaS cost (€)" : "Coût SaaS mensuel (€)"}
                 value={saasMonthly}
@@ -167,14 +189,29 @@ export default function TcoSaasVsSurMesure() {
                 step={50}
               />
             </div>
-          </div>
+          </fieldset>
 
           {/* Sur-mesure */}
-          <div className="rounded-xl border border-lightyellow/20 bg-lightyellow/5 p-5 space-y-4">
-            <p className="text-sm uppercase tracking-widest text-lightyellow font-googletitre">
+          <fieldset style={{ border: "none", margin: 0, padding: 0 }}>
+            <legend
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                marginBottom: "16px",
+              }}
+            >
               {isEn ? "Custom alternative" : "Alternative sur-mesure"}
-            </p>
-            <div className="grid gap-4 md:grid-cols-2">
+            </legend>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                gap: "16px",
+              }}
+            >
               <NumberField
                 label={isEn ? "Initial cost (€)" : "Coût initial (€)"}
                 value={customInitial}
@@ -192,9 +229,10 @@ export default function TcoSaasVsSurMesure() {
                 step={500}
               />
             </div>
-          </div>
+          </fieldset>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          {/* Horizon */}
+          <div style={{ maxWidth: "220px" }}>
             <NumberField
               label={isEn ? "Horizon (years)" : "Horizon (années)"}
               value={years}
@@ -205,81 +243,186 @@ export default function TcoSaasVsSurMesure() {
             />
           </div>
 
-          <Button
-            type="submit"
-            className="rounded-full bg-extralightblue text-darkblue hover:bg-extralightblue/90 font-googletitre font-semibold px-6 py-3"
-          >
-            <Sparkles className="mr-2 h-4 w-4" />
-            {isEn ? "Compare" : "Comparer"}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </form>
+          <div>
+            <button type="submit" className="btn primary">
+              {isEn ? "Compare" : "Comparer"}
+            </button>
+          </div>
+        </div>
 
+        {/* Results */}
         {submitted && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mt-8 rounded-2xl border border-extralightblue/30 bg-extralightblue/5 p-6 md:p-8 flex flex-col gap-5"
+          <div
+            style={{
+              borderTop: "1px solid var(--rule)",
+              padding: "32px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+            }}
           >
-            <div className="flex items-center gap-2 text-extralightblue">
-              <CheckCircle2 className="h-5 w-5" />
-              <p className="text-sm uppercase tracking-widest font-googletitre">
-                {isEn ? `TCO over ${years} years` : `TCO sur ${years} ans`}
-              </p>
-            </div>
+            {/* TCO label */}
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+              }}
+            >
+              {isEn ? `TCO over ${years} years` : `TCO sur ${years} ans`}
+            </span>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-xl border border-coral/30 bg-coral/10 p-5">
-                <p className="text-sm uppercase tracking-widest text-coral font-googletitre mb-2">
+            {/* 2-col comparison */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "16px",
+              }}
+            >
+              {/* SaaS column */}
+              <div style={{ border: "1px solid var(--rule)", padding: "24px" }}>
+                <p
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "11px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                    margin: "0 0 12px 0",
+                  }}
+                >
                   {isEn ? "Total SaaS cost" : "Coût total SaaS"}
                 </p>
-                <p className="text-3xl md:text-4xl font-googletitre font-medium text-coral">
+                <p
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(28px, 3vw, 40px)",
+                    color: "var(--ink)",
+                    margin: "0 0 16px 0",
+                    lineHeight: 1.1,
+                  }}
+                >
                   {formatEuro(calc.saasTrueCost, locale)}
                 </p>
-                <div className="mt-3 space-y-1 text-xs font-googletexte">
-                  <p className="text-white">{isEn ? "Licenses" : "Licences"} : {formatEuro(calc.saasTotal, locale)}</p>
-                  <p className="text-white">{isEn ? "Workarounds" : "Contournements"} : {formatEuro(calc.workaroundTotal, locale)}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "12px",
+                      color: "var(--muted-color)",
+                      margin: 0,
+                    }}
+                  >
+                    {isEn ? "Licenses" : "Licences"}: {formatEuro(calc.saasTotal, locale)}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "12px",
+                      color: "var(--muted-color)",
+                      margin: 0,
+                    }}
+                  >
+                    {isEn ? "Workarounds" : "Contournements"}: {formatEuro(calc.workaroundTotal, locale)}
+                  </p>
                 </div>
               </div>
-              <div className="rounded-xl border border-lightyellow/30 bg-lightyellow/10 p-5">
-                <p className="text-sm uppercase tracking-widest text-lightyellow font-googletitre mb-2">
+
+              {/* Custom column */}
+              <div style={{ border: "1px solid var(--rule)", padding: "24px" }}>
+                <p
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "11px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                    margin: "0 0 12px 0",
+                  }}
+                >
                   {isEn ? "Total custom cost" : "Coût total sur-mesure"}
                 </p>
-                <p className="text-3xl md:text-4xl font-googletitre font-medium text-lightyellow">
+                <p
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(28px, 3vw, 40px)",
+                    color: "var(--ink)",
+                    margin: "0 0 16px 0",
+                    lineHeight: 1.1,
+                  }}
+                >
                   {formatEuro(calc.customTotal, locale)}
                 </p>
-                <div className="mt-3 space-y-1 text-xs font-googletexte">
-                  <p className="text-white">{isEn ? "Initial" : "Initial"} : {formatEuro(customInitial, locale)}</p>
-                  <p className="text-white">{isEn ? "Maintenance" : "Maintenance"} : {formatEuro(customMaintenance * years, locale)}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "12px",
+                      color: "var(--muted-color)",
+                      margin: 0,
+                    }}
+                  >
+                    {isEn ? "Initial" : "Initial"}: {formatEuro(customInitial, locale)}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "12px",
+                      color: "var(--muted-color)",
+                      margin: 0,
+                    }}
+                  >
+                    {isEn ? "Maintenance" : "Maintenance"}: {formatEuro(customMaintenance * years, locale)}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className={`rounded-xl border p-5 ${
-              calc.diff > 0
-                ? "border-lightyellow/30 bg-lightyellow/10"
-                : "border-coral/30 bg-coral/10"
-            }`}>
-              <div className="flex items-center gap-3 mb-2">
-                {calc.diff > 0 ? (
-                  <TrendingDown className="h-6 w-6 text-lightyellow" />
-                ) : (
-                  <TrendingUp className="h-6 w-6 text-coral" />
-                )}
-                <p className="text-sm uppercase tracking-widest font-googletitre text-white">
-                  {calc.diff > 0
-                    ? isEn ? "Savings with custom" : "Économie avec sur-mesure"
-                    : isEn ? "Extra cost with custom" : "Surcoût avec sur-mesure"}
-                </p>
-              </div>
-              <p className={`text-4xl md:text-5xl font-googletitre font-medium ${
-                calc.diff > 0 ? "text-lightyellow" : "text-coral"
-              }`}>
+            {/* Verdict */}
+            <div
+              style={{
+                background: "var(--paper-2)",
+                border: "1px solid var(--rule)",
+                padding: "24px",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "var(--muted-color)",
+                  margin: "0 0 12px 0",
+                }}
+              >
+                {calc.diff > 0
+                  ? isEn ? "Savings with custom" : "Économie avec sur-mesure"
+                  : isEn ? "Extra cost with custom" : "Surcoût avec sur-mesure"}
+              </p>
+              <p
+                className="ni-serif"
+                style={{
+                  fontSize: "clamp(28px, 3vw, 40px)",
+                  color: calc.diff > 0 ? "var(--accent-color)" : "var(--ink)",
+                  margin: "0 0 8px 0",
+                  lineHeight: 1.1,
+                }}
+              >
                 {formatEuro(Math.abs(calc.diff), locale)}
               </p>
               {calc.diff > 0 && calc.breakEvenYears < years && (
-                <p className="mt-2 text-sm text-white/70 font-googletexte">
+                <p
+                  style={{
+                    fontFamily: "var(--sans)",
+                    fontSize: "13px",
+                    color: "var(--muted-color)",
+                    margin: 0,
+                  }}
+                >
                   {isEn
                     ? `Break-even reached around year ${calc.breakEvenYears.toFixed(1)}.`
                     : `Seuil de rentabilité atteint vers l'année ${calc.breakEvenYears.toFixed(1)}.`}
@@ -287,41 +430,68 @@ export default function TcoSaasVsSurMesure() {
               )}
             </div>
 
-            <div className="rounded-xl border border-extralightblue/20 bg-extralightblue/5 p-5">
-              <p className="text-sm uppercase tracking-widest text-extralightblue font-googletitre mb-2">
+            {/* Recommendation */}
+            <div style={{ border: "1px solid var(--rule)", padding: "24px" }}>
+              <p
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "var(--muted-color)",
+                  margin: "0 0 10px 0",
+                }}
+              >
                 {isEn ? "Recommendation" : "Recommandation"}
               </p>
-              <p className="text-white/90 font-googletexte leading-relaxed">
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: "15px",
+                  color: "var(--ink)",
+                  lineHeight: 1.65,
+                  margin: 0,
+                }}
+              >
                 {isEn ? calc.recommendation.en : calc.recommendation.fr}
               </p>
             </div>
 
-            <div className="rounded-xl border border-white/10 bg-darkblue/40 p-4 flex items-start gap-3">
-              <Info className="h-4 w-4 text-white/40 shrink-0 mt-0.5" />
-              <p className="text-xs text-white/60 font-googletexte leading-relaxed">
-                {isEn
-                  ? "Indicative comparison. A real migration evaluation also considers non-financial factors: vendor lock-in, regulatory specificity, business agility, team autonomy. OETH-eligible companies can deduct up to 30% of custom labor cost from their AGEFIPH contribution."
-                  : "Comparaison indicative. Une vraie évaluation de migration considère aussi des facteurs non financiers : dépendance vendeur, spécificité réglementaire, agilité métier, autonomie d'équipe. Les entreprises éligibles OETH peuvent déduire jusqu'à 30 % du coût main-d'œuvre sur-mesure de leur contribution AGEFIPH."}
-              </p>
-            </div>
+            {/* Disclaimer */}
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: "12px",
+                color: "var(--muted-color)",
+                lineHeight: 1.6,
+                margin: 0,
+                borderTop: "1px solid var(--rule)",
+                paddingTop: "16px",
+              }}
+            >
+              {isEn
+                ? "Indicative comparison. A real migration evaluation also considers non-financial factors: vendor lock-in, regulatory specificity, business agility, team autonomy. OETH-eligible companies can deduct up to 30% of custom labor cost from their AGEFIPH contribution."
+                : "Comparaison indicative. Une vraie évaluation de migration considère aussi des facteurs non financiers : dépendance vendeur, spécificité réglementaire, agilité métier, autonomie d'équipe. Les entreprises éligibles OETH peuvent déduire jusqu'à 30 % du coût main-d'œuvre sur-mesure de leur contribution AGEFIPH."}
+            </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link href="/contact" className="flex-1">
-                <Button className="w-full rounded-full bg-extralightblue text-darkblue hover:bg-extralightblue/90 font-googletitre font-semibold">
+            {/* CTAs */}
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", paddingTop: "8px" }}>
+              <Link href="/contact">
+                <button className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
                   {isEn ? "Discuss this migration" : "Discuter de cette migration"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <ArrowRight size={14} />
+                </button>
               </Link>
-              <Link href="/documentation/applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure" className="flex-1">
-                <Button className="w-full rounded-full border border-white/30 bg-transparent text-white hover:bg-white/10 font-googletitre font-semibold">
+              <Link href="/documentation/applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure">
+                <button className="btn" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
                   {isEn ? "Read the migration guide" : "Lire le guide de migration"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <ArrowRight size={14} />
+                </button>
               </Link>
             </div>
-          </motion.div>
+          </div>
         )}
-      </div>
+      </form>
     </div>
   );
 }
@@ -342,8 +512,18 @@ function NumberField({
   step?: number;
 }) {
   return (
-    <div className="space-y-2">
-      <label className="text-sm text-white/70 font-googletexte">{label}</label>
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      <label
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: "11px",
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--muted-color)",
+        }}
+      >
+        {label}
+      </label>
       <input
         type="number"
         value={value}
@@ -351,7 +531,17 @@ function NumberField({
         max={max}
         step={step}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-extralightblue focus:outline-none"
+        style={{
+          border: "1px solid var(--rule)",
+          background: "var(--paper)",
+          color: "var(--ink)",
+          padding: "10px 14px",
+          fontFamily: "var(--mono)",
+          fontSize: "14px",
+          width: "100%",
+          outline: "none",
+          borderRadius: 0,
+        }}
       />
     </div>
   );

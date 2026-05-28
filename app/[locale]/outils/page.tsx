@@ -78,12 +78,12 @@ export default async function OutilsPage({
         items={outilsItems}
       />
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
-        <div className="container mx-auto py-12">
-          <OutilsBentoGrid />
-          <div className="mt-12">
-            <BlocReassurance />
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container">
+            <OutilsBentoGrid />
           </div>
-        </div>
+        </section>
+        <BlocReassurance />
       </PageLayout>
     </main>
   )
