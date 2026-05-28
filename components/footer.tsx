@@ -123,8 +123,7 @@ export default function Footer() {
           <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { href: "/audit-site-ia",          key: "freeAiAudit" },
-              { href: "/outils/simulateur-roi",  key: "roiSimulator" },
-              { href: "/outils/benchmarking",    key: "benchmarking" },
+              { href: "/outils",                 key: "tools" },
               { href: "/contact",                key: "startWebApp" },
             ].map((item) => (
               <Link

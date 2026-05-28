@@ -30,8 +30,7 @@
     "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
     "freeAiAudit": "Audit IA gratuit",
-    "roiSimulator": "Simulateur ROI",
-    "benchmarking": "Benchmarking",
+    "tools": "Tous les outils",
     "agefiphSimulator": "Simulateur AGEFIPH (TIH)",
     "startWebApp": "Démarrer une application web",
     "copyright": "© {year} Next Impact Digital — Tous droits réservés",
@@ -172,15 +171,15 @@
     "breadcrumbSpecs": "Cahier des charges"
   },
   "toolsPage": {
-    "metaTitle": "Boîte à outils — Simulateur ROI, Benchmarking & Audit",
-    "metaDescription": "Des outils gratuits pour évaluer, mesurer et projeter la performance de votre présence digitale. Simulateur de ROI, benchmarking concurrentiel et audit de site web.",
+    "metaTitle": "Boîte à outils — Audit IA, AGEFIPH & Cahier des charges",
+    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web : audit IA, simulateur AGEFIPH, diagnostic d'opportunité PWA et générateur de cahier des charges.",
     "title": "Boîte à outils",
-    "subtitle": "Des outils gratuits pour évaluer, mesurer et projeter la performance de votre présence digitale.",
+    "subtitle": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web.",
     "breadcrumbHome": "Accueil",
     "breadcrumbTools": "Outils",
     "backToTools": "Retour aux outils",
-    "collectionName": "Boîte à outils — Simulateur ROI, Benchmarking & Audit",
-    "collectionDescription": "Des outils gratuits pour évaluer, mesurer et projeter la performance de votre présence digitale."
+    "collectionName": "Boîte à outils — Audit IA, AGEFIPH & Cahier des charges",
+    "collectionDescription": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web."
   },
   "benchmarkingPage": {
     "metaTitle": "Benchmarking concurrentiel — Comparez votre site aux leaders",

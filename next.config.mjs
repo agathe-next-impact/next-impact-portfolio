@@ -39,6 +39,22 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
   async redirects() {
+    // Tools temporarily disabled — redirect to home so old bookmarks /
+    // external links don't 404. permanent: false (HTTP 307) so browsers
+    // don't cache forever if we re-enable them.
+    const disabledTools = [
+      'benchmarking',
+      'estimateur-budget',
+      'simulateur-roi',
+      'tco-saas-vs-sur-mesure',
+    ]
+    const disabledToolRedirects = disabledTools.flatMap((slug) => [
+      // FR (default locale, no prefix — next-intl localePrefix: "as-needed")
+      { source: `/outils/${slug}`, destination: '/', permanent: false },
+      // EN
+      { source: `/en/outils/${slug}`, destination: '/en', permanent: false },
+    ])
+
     return [
       {
         source: '/tarifs',
@@ -60,6 +76,7 @@ const nextConfig = {
         destination: '/services',
         permanent: true,
       },
+      ...disabledToolRedirects,
     ]
   },
 }

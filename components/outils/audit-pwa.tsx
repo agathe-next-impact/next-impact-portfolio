@@ -1,12 +1,7 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import {
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Info,
-} from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -22,27 +17,27 @@ interface CheckResult {
 }
 
 type FormState = {
-  https: "yes" | "no";
-  responsive: "yes" | "no" | "unsure";
-  loadTime: "fast" | "medium" | "slow";
-  touchTargets: "yes" | "no" | "unsure";
-  manifest: "yes" | "no" | "unsure";
-  serviceWorker: "yes" | "no" | "unsure";
-  offlineNeed: "yes" | "no" | "maybe";
-  geolocation: "yes" | "no" | "maybe";
-  installPrompt: "yes" | "no" | "unsure";
+  mobileUsage: "high" | "medium" | "low";
+  repeatUsage: "frequent" | "occasional" | "rare";
+  fieldContext: "yes" | "maybe" | "no";
+  installValue: "yes" | "maybe" | "no";
+  offlineNeed: "yes" | "maybe" | "no";
+  deviceFeatures: "yes" | "maybe" | "no";
+  storeNeed: "none" | "maybe" | "required";
+  nativeComplexity: "low" | "medium" | "high";
+  technicalBase: "ready" | "partial" | "weak";
 };
 
 const INITIAL: FormState = {
-  https: "yes",
-  responsive: "yes",
-  loadTime: "medium",
-  touchTargets: "unsure",
-  manifest: "no",
-  serviceWorker: "no",
+  mobileUsage: "medium",
+  repeatUsage: "occasional",
+  fieldContext: "maybe",
+  installValue: "maybe",
   offlineNeed: "maybe",
-  geolocation: "maybe",
-  installPrompt: "no",
+  deviceFeatures: "maybe",
+  storeNeed: "none",
+  nativeComplexity: "low",
+  technicalBase: "partial",
 };
 
 export default function AuditPwa() {
@@ -50,169 +45,197 @@ export default function AuditPwa() {
   const isEn = locale === "en";
   const [state, setState] = useState<FormState>(INITIAL);
   const [submitted, setSubmitted] = useState(false);
+  const [submitCount, setSubmitCount] = useState(0);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!submitted || submitCount === 0 || typeof window === "undefined") return;
+    if (!window.matchMedia("(max-width: 768px)").matches) return;
+
+    resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [submitted, submitCount]);
 
   const results = useMemo<CheckResult[]>(() => {
     const r: CheckResult[] = [];
 
     r.push({
-      id: "https",
-      labelFr: "HTTPS activé",
-      labelEn: "HTTPS enabled",
-      status: state.https === "yes" ? "ok" : "ko",
+      id: "mobileUsage",
+      labelFr: "Usage mobile attendu",
+      labelEn: "Expected mobile usage",
+      status: state.mobileUsage === "high" ? "ok" : state.mobileUsage === "medium" ? "warn" : "ko",
       detailFr:
-        state.https === "yes"
-          ? "HTTPS est indispensable pour une PWA. Aucun navigateur n'autorise l'installation d'une PWA en HTTP."
-          : "HTTPS est OBLIGATOIRE pour une PWA. Il faut activer un certificat (Let's Encrypt suffit, gratuit).",
+        state.mobileUsage === "high"
+          ? "Très bon signal : si l'usage principal se fait sur smartphone, la PWA peut améliorer l'accès, la rétention et la fluidité."
+          : state.mobileUsage === "medium"
+          ? "Opportunité possible : la PWA devient pertinente si certains parcours clés sont vraiment mobiles."
+          : "Signal faible : si vos utilisateurs restent surtout sur desktop, une PWA risque d'apporter peu de valeur immédiate.",
       detailEn:
-        state.https === "yes"
-          ? "HTTPS is a hard requirement for PWAs. No browser allows PWA install over plain HTTP."
-          : "HTTPS is MANDATORY for a PWA. A certificate must be enabled (Let's Encrypt is free).",
-      weight: 25,
+        state.mobileUsage === "high"
+          ? "Strong signal: if the main usage happens on smartphones, a PWA can improve access, retention and UX."
+          : state.mobileUsage === "medium"
+          ? "Possible opportunity: a PWA makes sense if key journeys are genuinely mobile."
+          : "Weak signal: if users mostly stay on desktop, a PWA may bring limited immediate value.",
+      weight: 18,
     });
 
     r.push({
-      id: "responsive",
-      labelFr: "Design responsive mobile",
-      labelEn: "Mobile-responsive design",
-      status: state.responsive === "yes" ? "ok" : state.responsive === "unsure" ? "warn" : "ko",
+      id: "repeatUsage",
+      labelFr: "Usage récurrent",
+      labelEn: "Recurring usage",
+      status: state.repeatUsage === "frequent" ? "ok" : state.repeatUsage === "occasional" ? "warn" : "ko",
       detailFr:
-        state.responsive === "yes"
-          ? "Un design qui s'adapte au mobile est un prérequis. ✓"
-          : state.responsive === "unsure"
-          ? "À vérifier — un test sur smartphone permet de constater la qualité du responsive."
-          : "Sans responsive, l'expérience mobile sera frustrante. Refonte CSS / Tailwind nécessaire.",
+        state.repeatUsage === "frequent"
+          ? "Très favorable : l'installation sur l'écran d'accueil a du sens quand l'utilisateur revient souvent."
+          : state.repeatUsage === "occasional"
+          ? "À cadrer : la PWA peut aider, mais il faut identifier le moment où l'utilisateur voudra l'installer."
+          : "Peu favorable : pour un usage unique, un bon site mobile suffit souvent.",
       detailEn:
-        state.responsive === "yes"
-          ? "A mobile-responsive design is a prerequisite. ✓"
-          : state.responsive === "unsure"
-          ? "To verify — a smartphone test will reveal responsive quality."
-          : "Without responsive, mobile UX will be frustrating. CSS/Tailwind rebuild needed.",
-      weight: 15,
+        state.repeatUsage === "frequent"
+          ? "Very favorable: home-screen install makes sense when users come back often."
+          : state.repeatUsage === "occasional"
+          ? "To scope: a PWA can help, but the install moment must be clear."
+          : "Less favorable: for one-off usage, a good mobile site is often enough.",
+      weight: 16,
     });
 
     r.push({
-      id: "loadTime",
-      labelFr: "Temps de chargement mobile",
-      labelEn: "Mobile load time",
-      status:
-        state.loadTime === "fast" ? "ok" : state.loadTime === "medium" ? "warn" : "ko",
+      id: "fieldContext",
+      labelFr: "Contexte terrain ou mobilité",
+      labelEn: "Field or on-the-go context",
+      status: state.fieldContext === "yes" ? "ok" : state.fieldContext === "maybe" ? "warn" : "ko",
       detailFr:
-        state.loadTime === "fast"
-          ? "Excellent — moins de 2 secondes garantit une bonne expérience PWA."
-          : state.loadTime === "medium"
-          ? "Acceptable mais perfectible. Une PWA optimisée vise < 2s en 4G."
-          : "Lent (> 4s). Une PWA doit charger en moins de 2s, sinon les utilisateurs ne reviennent pas. Audit performance nécessaire.",
+        state.fieldContext === "yes"
+          ? "Très bon cas PWA : intervention terrain, tourisme, événementiel, suivi mobile ou outil interne nomade."
+          : state.fieldContext === "maybe"
+          ? "Potentiel à clarifier : la PWA est intéressante si l'utilisateur agit vraiment en déplacement."
+          : "Si l'expérience n'a pas de contexte mobile fort, la priorité peut rester un site responsive performant.",
       detailEn:
-        state.loadTime === "fast"
-          ? "Excellent — under 2 seconds ensures great PWA UX."
-          : state.loadTime === "medium"
-          ? "Acceptable but improvable. An optimized PWA aims for < 2s on 4G."
-          : "Slow (> 4s). A PWA must load in under 2s, otherwise users don't return. Performance audit needed.",
-      weight: 15,
+        state.fieldContext === "yes"
+          ? "Strong PWA use case: field operations, tourism, events, mobile tracking or internal mobile tools."
+          : state.fieldContext === "maybe"
+          ? "Potential to clarify: a PWA is interesting if users truly act on the go."
+          : "Without a strong mobile context, a performant responsive site may remain the priority.",
+      weight: 14,
     });
 
     r.push({
-      id: "touchTargets",
-      labelFr: "Zones tactiles accessibles",
-      labelEn: "Accessible touch targets",
-      status: state.touchTargets === "yes" ? "ok" : state.touchTargets === "unsure" ? "warn" : "ko",
+      id: "installValue",
+      labelFr: "Valeur de l'installation",
+      labelEn: "Install value",
+      status: state.installValue === "yes" ? "ok" : state.installValue === "maybe" ? "warn" : "ko",
       detailFr:
-        state.touchTargets === "yes"
-          ? "Boutons et liens dimensionnés pour le tactile (minimum 44×44 px). ✓"
-          : state.touchTargets === "unsure"
-          ? "À vérifier — règle iOS Human Interface : minimum 44×44 px par cible tactile."
-          : "Cibles tactiles trop petites = frustration. Ajustements CSS nécessaires.",
+        state.installValue === "yes"
+          ? "Bon signal : icône, plein écran, raccourci et notifications peuvent renforcer l'expérience."
+          : state.installValue === "maybe"
+          ? "À tester : l'installation doit résoudre un vrai irritant, pas seulement faire plus applicatif."
+          : "Si l'installation n'apporte rien à l'utilisateur, la PWA risque d'être cosmétique.",
       detailEn:
-        state.touchTargets === "yes"
-          ? "Buttons and links sized for touch (minimum 44×44 px). ✓"
-          : state.touchTargets === "unsure"
-          ? "To verify — iOS Human Interface rule: minimum 44×44 px per touch target."
-          : "Touch targets too small = frustration. CSS adjustments needed.",
-      weight: 8,
-    });
-
-    r.push({
-      id: "manifest",
-      labelFr: "Web App Manifest",
-      labelEn: "Web App Manifest",
-      status: state.manifest === "yes" ? "ok" : "ko",
-      detailFr:
-        state.manifest === "yes"
-          ? "Manifest présent. ✓ À vérifier qu'il contient name, icons, start_url, display."
-          : "À ajouter — fichier JSON décrivant l'app (nom, icônes, splash, comportement). Simple à mettre en place.",
-      detailEn:
-        state.manifest === "yes"
-          ? "Manifest present. ✓ Check it contains name, icons, start_url, display."
-          : "To add — JSON file describing the app (name, icons, splash, behavior). Simple to set up.",
-      weight: 10,
-    });
-
-    r.push({
-      id: "serviceWorker",
-      labelFr: "Service worker",
-      labelEn: "Service worker",
-      status: state.serviceWorker === "yes" ? "ok" : "ko",
-      detailFr:
-        state.serviceWorker === "yes"
-          ? "Service worker en place. ✓ À auditer pour vérifier la stratégie de cache."
-          : "À ajouter — c'est ce qui rend une PWA installable et fonctionnelle hors-ligne. Composant Next.js (next-pwa) ou implémentation custom.",
-      detailEn:
-        state.serviceWorker === "yes"
-          ? "Service worker in place. ✓ To audit for cache strategy."
-          : "To add — this is what makes a PWA installable and offline-capable. Next.js component (next-pwa) or custom.",
+        state.installValue === "yes"
+          ? "Good signal: icon, full-screen mode, shortcut and notifications can strengthen the experience."
+          : state.installValue === "maybe"
+          ? "Worth testing: install should solve a real friction point, not just look more app-like."
+          : "If install brings no user value, the PWA may be mostly cosmetic.",
       weight: 12,
     });
 
     r.push({
       id: "offlineNeed",
-      labelFr: "Besoin de mode hors-ligne",
-      labelEn: "Offline mode need",
-      status: state.offlineNeed === "yes" ? "warn" : "ok",
+      labelFr: "Tolérance aux zones sans réseau",
+      labelEn: "Tolerance to poor connectivity",
+      status: state.offlineNeed === "yes" ? "ok" : state.offlineNeed === "maybe" ? "warn" : "ok",
       detailFr:
         state.offlineNeed === "yes"
-          ? "Besoin identifié — il faut une stratégie de cache offline-first et de synchronisation en arrière-plan."
+          ? "Très favorable : le hors-ligne est un des meilleurs arguments pour créer une PWA."
           : state.offlineNeed === "maybe"
-          ? "Pas critique — un cache simple des assets statiques suffit pour la plupart des cas."
-          : "Pas de besoin offline — implémentation PWA simplifiée.",
+          ? "Opportunité modérée : un cache simple peut déjà rendre l'expérience plus robuste."
+          : "Pas bloquant : une PWA peut être utile sans mode hors-ligne complet, si l'usage mobile est fort.",
       detailEn:
         state.offlineNeed === "yes"
-          ? "Need identified — requires offline-first cache strategy and background sync."
+          ? "Very favorable: offline support is one of the strongest reasons to build a PWA."
           : state.offlineNeed === "maybe"
-          ? "Not critical — a simple static-asset cache is enough for most cases."
-          : "No offline need — simplified PWA implementation.",
-      weight: 5,
+          ? "Moderate opportunity: a simple cache can already make the experience more resilient."
+          : "Not blocking: a PWA can still help without full offline mode if mobile usage is strong.",
+      weight: 10,
     });
 
     r.push({
-      id: "geolocation",
-      labelFr: "Géolocalisation",
-      labelEn: "Geolocation",
-      status: state.geolocation === "yes" ? "warn" : "ok",
+      id: "deviceFeatures",
+      labelFr: "Fonctions smartphone utiles",
+      labelEn: "Useful smartphone features",
+      status: state.deviceFeatures === "yes" ? "ok" : state.deviceFeatures === "maybe" ? "warn" : "ko",
       detailFr:
-        state.geolocation === "yes"
-          ? "Pertinent — API navigateur native, fonctionne en PWA sans contrainte particulière."
-          : "Pas de besoin géoloc — n'impacte pas la PWA.",
+        state.deviceFeatures === "yes"
+          ? "Bon signal : géolocalisation, appareil photo, stockage local ou notifications cadrent bien avec une PWA."
+          : state.deviceFeatures === "maybe"
+          ? "À préciser : la PWA devient plus convaincante si ces fonctions soutiennent un parcours métier."
+          : "Signal limité : sans capacité mobile spécifique, le gain par rapport au site responsive est plus faible.",
       detailEn:
-        state.geolocation === "yes"
-          ? "Relevant — native browser API, works in PWA without special constraints."
-          : "No geo need — doesn't impact the PWA.",
-      weight: 5,
+        state.deviceFeatures === "yes"
+          ? "Good signal: geolocation, camera, local storage or notifications fit well with a PWA."
+          : state.deviceFeatures === "maybe"
+          ? "To clarify: a PWA is more convincing when these features support a business journey."
+          : "Limited signal: without mobile-specific capabilities, the gain over responsive web is lower.",
+      weight: 10,
     });
 
     r.push({
-      id: "installPrompt",
-      labelFr: "Onboarding installation",
-      labelEn: "Install onboarding",
-      status: state.installPrompt === "yes" ? "ok" : "warn",
+      id: "storeNeed",
+      labelFr: "Besoin d'App Store / Play Store",
+      labelEn: "App Store / Play Store need",
+      status: state.storeNeed === "none" ? "ok" : state.storeNeed === "maybe" ? "warn" : "ko",
       detailFr:
-        state.installPrompt === "yes"
-          ? "Onboarding installation en place. ✓"
-          : "À prévoir — un mini-tutoriel visuel pour guider l'utilisateur (surtout sur iOS où l'install demande une action manuelle).",
+        state.storeNeed === "none"
+          ? "Très favorable : si la distribution peut passer par un lien ou un QR code, la PWA évite les stores."
+          : state.storeNeed === "maybe"
+          ? "À arbitrer : le store apporte de la visibilité seulement dans certains cas. La PWA peut rester une excellente V1."
+          : "Attention : si la présence store est stratégique ou obligatoire, il faut comparer avec une app native.",
       detailEn:
-        state.installPrompt === "yes"
-          ? "Install onboarding in place. ✓"
-          : "To add — small visual tutorial to guide the user (especially on iOS where install requires a manual action).",
-      weight: 5,
+        state.storeNeed === "none"
+          ? "Very favorable: if distribution can happen through a link or QR code, a PWA avoids app stores."
+          : state.storeNeed === "maybe"
+          ? "Decision needed: stores bring visibility only in some cases. A PWA can still be an excellent V1."
+          : "Caution: if store presence is strategic or mandatory, compare against native app development.",
+      weight: 10,
+    });
+
+    r.push({
+      id: "nativeComplexity",
+      labelFr: "Complexité native indispensable",
+      labelEn: "Mandatory native complexity",
+      status: state.nativeComplexity === "low" ? "ok" : state.nativeComplexity === "medium" ? "warn" : "ko",
+      detailFr:
+        state.nativeComplexity === "low"
+          ? "Bon terrain PWA : formulaires, cartes, contenus, comptes, paiement web ou outil métier restent très adaptés."
+          : state.nativeComplexity === "medium"
+          ? "À vérifier : certains besoins avancés peuvent rester compatibles, mais il faut cadrer les limites iOS/Android."
+          : "Risque élevé : si le projet dépend de widgets natifs, Bluetooth avancé, arrière-plan lourd ou 3D intensive, le natif peut s'imposer.",
+      detailEn:
+        state.nativeComplexity === "low"
+          ? "Good PWA ground: forms, maps, content, accounts, web payment or business tools fit well."
+          : state.nativeComplexity === "medium"
+          ? "Needs checking: some advanced needs may still work, but iOS/Android limits must be scoped."
+          : "High risk: if the project depends on native widgets, advanced Bluetooth, heavy background work or intensive 3D, native may be required.",
+      weight: 12,
+    });
+
+    r.push({
+      id: "technicalBase",
+      labelFr: "Base technique du site actuel",
+      labelEn: "Current technical baseline",
+      status: state.technicalBase === "ready" ? "ok" : state.technicalBase === "partial" ? "warn" : "ko",
+      detailFr:
+        state.technicalBase === "ready"
+          ? "Bonne base : HTTPS, responsive et performance mobile facilitent une transformation PWA."
+          : state.technicalBase === "partial"
+          ? "Prévoir un socle technique : manifest, service worker, cache, UX mobile et tests appareils."
+          : "Avant la PWA, il faudra probablement moderniser le site mobile et la performance.",
+      detailEn:
+        state.technicalBase === "ready"
+          ? "Good baseline: HTTPS, responsive design and mobile performance make PWA conversion easier."
+          : state.technicalBase === "partial"
+          ? "Plan a technical baseline: manifest, service worker, cache, mobile UX and real-device tests."
+          : "Before the PWA, the mobile site and performance probably need modernization.",
+      weight: 8,
     });
 
     return r;
@@ -232,21 +255,21 @@ export default function AuditPwa() {
   const verdict = useMemo(() => {
     if (score >= 80) {
       return {
-        fr: "Très bon niveau — votre site est largement prêt à devenir une PWA, peu d'ajustements nécessaires.",
-        en: "Strong baseline — your site is largely PWA-ready, few adjustments needed.",
+        fr: "Très forte opportunité : une PWA semble pertinente pour améliorer l'expérience mobile, éviter une app native coûteuse et accélérer la mise en marché.",
+        en: "Very strong opportunity: a PWA looks relevant to improve mobile UX, avoid costly native development and ship faster.",
         color: "#2a7a2a",
       };
     }
-    if (score >= 50) {
+    if (score >= 55) {
       return {
-        fr: "Niveau intermédiaire — quelques chantiers à mener avant qu'une PWA livre toute sa valeur.",
-        en: "Intermediate level — a few items to address before a PWA delivers full value.",
+        fr: "Opportunité à cadrer : une PWA peut être une bonne V1, à condition de valider les usages mobiles et les fonctionnalités vraiment utiles.",
+        en: "Opportunity to scope: a PWA can be a good V1 if mobile usage and truly useful features are validated.",
         color: "#b85c09",
       };
     }
     return {
-      fr: "Travail conséquent — refonte ou modernisation nécessaire avant d'envisager une PWA performante.",
-      en: "Significant work — modernization or rebuild needed before a performant PWA is feasible.",
+      fr: "Opportunité faible à ce stade : mieux vaut renforcer le site mobile ou clarifier le besoin avant d'investir dans une PWA.",
+      en: "Weak opportunity for now: strengthen the mobile site or clarify the need before investing in a PWA.",
       color: "var(--accent-color)",
     };
   }, [score]);
@@ -254,6 +277,7 @@ export default function AuditPwa() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
+    setSubmitCount((count) => count + 1);
   };
 
   const statusColor = (status: "ok" | "warn" | "ko") => {
@@ -264,13 +288,7 @@ export default function AuditPwa() {
 
   return (
     <div style={{ width: "100%", border: "1px solid var(--rule)" }}>
-      {/* Header */}
-      <div
-        style={{
-          padding: "24px 32px",
-          borderBottom: "1px solid var(--rule)",
-        }}
-      >
+      <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--rule)" }}>
         <p
           style={{
             fontFamily: "var(--mono)",
@@ -281,25 +299,18 @@ export default function AuditPwa() {
             marginBottom: "8px",
           }}
         >
-          {isEn ? "PWA / mobile readiness audit" : "Audit PWA / mobile readiness"}
+          {isEn ? "PWA opportunity diagnostic" : "Diagnostic d'opportunité PWA"}
         </p>
-        <p
-          style={{
-            fontFamily: "var(--sans)",
-            fontSize: "15px",
-            color: "var(--ink)",
-            lineHeight: 1.5,
-          }}
-        >
+        <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink)", lineHeight: 1.5 }}>
           {isEn
-            ? "Is your site ready to become an installable PWA? Test 9 criteria in 60 seconds."
-            : "Votre site est-il prêt à devenir une PWA installable ? Évaluez 9 critères en 60 secondes."}
+            ? "Should you turn your site or mobile idea into an installable PWA? Answer 9 strategic questions."
+            : "Faut-il transformer votre site ou votre idée mobile en PWA installable ? Répondez à 9 questions de cadrage."}
         </p>
       </div>
 
-      {/* Results — shown above form after submit */}
       {submitted && (
         <div
+          ref={resultRef}
           style={{
             borderBottom: "1px solid var(--rule)",
             padding: "32px",
@@ -308,14 +319,7 @@ export default function AuditPwa() {
             gap: "32px",
           }}
         >
-          {/* Score + Verdict */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 2fr",
-              gap: "16px",
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "16px" }}>
             <div
               style={{
                 border: "1px solid var(--rule)",
@@ -338,27 +342,11 @@ export default function AuditPwa() {
                   marginBottom: "12px",
                 }}
               >
-                {isEn ? "Score" : "Score"}
+                {isEn ? "Opportunity score" : "Score d'opportunité"}
               </p>
-              <p
-                className="ni-serif"
-                style={{
-                  fontSize: "56px",
-                  lineHeight: 1,
-                  color: "var(--ink)",
-                  fontWeight: 400,
-                }}
-              >
+              <p className="ni-serif" style={{ fontSize: "56px", lineHeight: 1, color: "var(--ink)", fontWeight: 400 }}>
                 {score}
-                <span
-                  style={{
-                    fontSize: "24px",
-                    color: "var(--muted-color)",
-                    fontFamily: "var(--sans)",
-                  }}
-                >
-                  /100
-                </span>
+                <span style={{ fontSize: "24px", color: "var(--muted-color)", fontFamily: "var(--sans)" }}>/100</span>
               </p>
             </div>
             <div
@@ -381,22 +369,14 @@ export default function AuditPwa() {
                   marginBottom: "12px",
                 }}
               >
-                {isEn ? "Verdict" : "Verdict"}
+                {isEn ? "Decision signal" : "Signal de décision"}
               </p>
-              <p
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "15px",
-                  lineHeight: 1.6,
-                  color: verdict.color,
-                }}
-              >
+              <p style={{ fontFamily: "var(--sans)", fontSize: "15px", lineHeight: 1.6, color: verdict.color }}>
                 {isEn ? verdict.en : verdict.fr}
               </p>
             </div>
           </div>
 
-          {/* Detailed checks */}
           <div>
             <p
               style={{
@@ -408,7 +388,7 @@ export default function AuditPwa() {
                 marginBottom: "16px",
               }}
             >
-              {isEn ? "Detailed checks" : "Diagnostic détaillé"}
+              {isEn ? "Opportunity factors" : "Facteurs d'opportunité"}
             </p>
             <div>
               {results.map((r, i) => (
@@ -419,62 +399,22 @@ export default function AuditPwa() {
                     alignItems: "flex-start",
                     gap: "12px",
                     padding: "14px 16px",
-                    borderBottom:
-                      i < results.length - 1 ? "1px solid var(--rule)" : undefined,
+                    borderBottom: i < results.length - 1 ? "1px solid var(--rule)" : undefined,
                     borderLeft: `3px solid ${statusColor(r.status)}`,
                   }}
                 >
                   {r.status === "ok" ? (
-                    <CheckCircle2
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                        color: "#2a7a2a",
-                        flexShrink: 0,
-                        marginTop: "2px",
-                      }}
-                    />
+                    <CheckCircle2 style={{ width: "16px", height: "16px", color: "#2a7a2a", flexShrink: 0, marginTop: "2px" }} />
                   ) : r.status === "warn" ? (
-                    <AlertTriangle
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                        color: "#b85c09",
-                        flexShrink: 0,
-                        marginTop: "2px",
-                      }}
-                    />
+                    <AlertTriangle style={{ width: "16px", height: "16px", color: "#b85c09", flexShrink: 0, marginTop: "2px" }} />
                   ) : (
-                    <XCircle
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                        color: "var(--accent-color)",
-                        flexShrink: 0,
-                        marginTop: "2px",
-                      }}
-                    />
+                    <XCircle style={{ width: "16px", height: "16px", color: "var(--accent-color)", flexShrink: 0, marginTop: "2px" }} />
                   )}
                   <div>
-                    <p
-                      style={{
-                        fontFamily: "var(--sans)",
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                        marginBottom: "4px",
-                      }}
-                    >
+                    <p style={{ fontFamily: "var(--sans)", fontSize: "14px", fontWeight: 600, color: "var(--ink)", marginBottom: "4px" }}>
                       {isEn ? r.labelEn : r.labelFr}
                     </p>
-                    <p
-                      style={{
-                        fontFamily: "var(--sans)",
-                        fontSize: "13px",
-                        color: "var(--ink-2)",
-                        lineHeight: 1.6,
-                      }}
-                    >
+                    <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-2)", lineHeight: 1.6 }}>
                       {isEn ? r.detailEn : r.detailFr}
                     </p>
                   </div>
@@ -483,7 +423,6 @@ export default function AuditPwa() {
             </div>
           </div>
 
-          {/* Info box */}
           <div
             style={{
               background: "var(--paper-2)",
@@ -494,46 +433,25 @@ export default function AuditPwa() {
               gap: "10px",
             }}
           >
-            <Info
-              style={{
-                width: "13px",
-                height: "13px",
-                color: "var(--muted-color)",
-                flexShrink: 0,
-                marginTop: "2px",
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "12px",
-                color: "var(--muted-color)",
-                lineHeight: 1.6,
-              }}
-            >
+            <Info style={{ width: "13px", height: "13px", color: "var(--muted-color)", flexShrink: 0, marginTop: "2px" }} />
+            <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--muted-color)", lineHeight: 1.6 }}>
               {isEn
-                ? "Self-assessment based on declared answers. A full PWA audit requires technical inspection (manifest contents, service worker strategy, Lighthouse mobile run, real-device tests)."
-                : "Auto-évaluation basée sur les réponses déclarées. Un audit PWA complet nécessite une inspection technique (contenu du manifest, stratégie service worker, Lighthouse mobile, tests sur appareils réels)."}
+                ? "This is an opportunity diagnostic, not a Lighthouse audit. The next step is to validate priority user journeys, then check manifest, service worker, cache strategy, mobile performance and real-device behavior."
+                : "Ce diagnostic mesure l'intérêt de faire une PWA, pas seulement sa conformité technique. L'étape suivante consiste à valider les parcours prioritaires, puis à vérifier manifest, service worker, stratégie de cache, performance mobile et comportement sur appareils réels."}
             </p>
           </div>
 
-          {/* CTAs */}
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <Link href="/contact">
-              <button className="btn primary">
-                {isEn ? "Discuss this audit" : "Discuter de cet audit"}
-              </button>
+              <button className="btn primary">{isEn ? "Scope my PWA opportunity" : "Cadrer mon opportunité PWA"}</button>
             </Link>
-            <Link href="/documentation/applications-web-mobile/installable-sans-store-le-pouvoir-de-la-pwa">
-              <button className="btn">
-                {isEn ? "Learn more about PWAs" : "En savoir plus sur les PWA"}
-              </button>
+            <Link href="/documentation/applications-web-mobile/pwa-vs-application-native">
+              <button className="btn">{isEn ? "Compare PWA and native" : "Comparer PWA et app native"}</button>
             </Link>
           </div>
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} style={{ padding: "32px" }}>
         <div
           style={{
@@ -544,85 +462,64 @@ export default function AuditPwa() {
           }}
         >
           <Field
-            label={isEn ? "Is HTTPS enabled?" : "HTTPS activé ?"}
-            value={state.https}
-            onChange={(v) => setState({ ...state, https: v as FormState["https"] })}
+            label={isEn ? "How important is mobile usage?" : "Quelle est l'importance de l'usage mobile ?"}
+            value={state.mobileUsage}
+            onChange={(v) => setState({ ...state, mobileUsage: v as FormState["mobileUsage"] })}
+            options={[
+              { value: "high", labelFr: "Central", labelEn: "Central" },
+              { value: "medium", labelFr: "Important", labelEn: "Important" },
+              { value: "low", labelFr: "Secondaire", labelEn: "Secondary" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Will users come back often?" : "Les utilisateurs reviendront-ils souvent ?"}
+            value={state.repeatUsage}
+            onChange={(v) => setState({ ...state, repeatUsage: v as FormState["repeatUsage"] })}
+            options={[
+              { value: "frequent", labelFr: "Souvent", labelEn: "Often" },
+              { value: "occasional", labelFr: "Par moments", labelEn: "Sometimes" },
+              { value: "rare", labelFr: "Rarement", labelEn: "Rarely" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Is there a field or on-site context?" : "Y a-t-il un usage terrain ou sur site ?"}
+            value={state.fieldContext}
+            onChange={(v) => setState({ ...state, fieldContext: v as FormState["fieldContext"] })}
             options={[
               { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
               { value: "no", labelFr: "Non", labelEn: "No" },
             ]}
             isEn={isEn}
           />
           <Field
-            label={isEn ? "Mobile-responsive design?" : "Design responsive mobile ?"}
-            value={state.responsive}
-            onChange={(v) => setState({ ...state, responsive: v as FormState["responsive"] })}
+            label={isEn ? "Would home-screen install add value?" : "L'installation sur l'écran d'accueil apporte-t-elle une valeur ?"}
+            value={state.installValue}
+            onChange={(v) => setState({ ...state, installValue: v as FormState["installValue"] })}
             options={[
               { value: "yes", labelFr: "Oui", labelEn: "Yes" },
+              { value: "maybe", labelFr: "À tester", labelEn: "To test" },
               { value: "no", labelFr: "Non", labelEn: "No" },
-              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
             ]}
             isEn={isEn}
           />
           <Field
-            label={isEn ? "Mobile load time?" : "Temps de chargement mobile ?"}
-            value={state.loadTime}
-            onChange={(v) => setState({ ...state, loadTime: v as FormState["loadTime"] })}
-            options={[
-              { value: "fast", labelFr: "< 2 s", labelEn: "< 2 s" },
-              { value: "medium", labelFr: "2-4 s", labelEn: "2-4 s" },
-              { value: "slow", labelFr: "> 4 s", labelEn: "> 4 s" },
-            ]}
-            isEn={isEn}
-          />
-          <Field
-            label={isEn ? "Accessible touch targets?" : "Zones tactiles ≥ 44×44 px ?"}
-            value={state.touchTargets}
-            onChange={(v) => setState({ ...state, touchTargets: v as FormState["touchTargets"] })}
-            options={[
-              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-              { value: "no", labelFr: "Non", labelEn: "No" },
-              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-            ]}
-            isEn={isEn}
-          />
-          <Field
-            label={isEn ? "Web app manifest in place?" : "Web app manifest en place ?"}
-            value={state.manifest}
-            onChange={(v) => setState({ ...state, manifest: v as FormState["manifest"] })}
-            options={[
-              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-              { value: "no", labelFr: "Non", labelEn: "No" },
-              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-            ]}
-            isEn={isEn}
-          />
-          <Field
-            label={isEn ? "Service worker installed?" : "Service worker installé ?"}
-            value={state.serviceWorker}
-            onChange={(v) => setState({ ...state, serviceWorker: v as FormState["serviceWorker"] })}
-            options={[
-              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-              { value: "no", labelFr: "Non", labelEn: "No" },
-              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
-            ]}
-            isEn={isEn}
-          />
-          <Field
-            label={isEn ? "Offline mode needed?" : "Besoin de mode hors-ligne ?"}
+            label={isEn ? "Should it tolerate poor connection?" : "Doit-elle fonctionner avec peu ou pas de réseau ?"}
             value={state.offlineNeed}
             onChange={(v) => setState({ ...state, offlineNeed: v as FormState["offlineNeed"] })}
             options={[
               { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-              { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
+              { value: "maybe", labelFr: "Parfois", labelEn: "Sometimes" },
               { value: "no", labelFr: "Non", labelEn: "No" },
             ]}
             isEn={isEn}
           />
           <Field
-            label={isEn ? "Geolocation needed?" : "Besoin de géolocalisation ?"}
-            value={state.geolocation}
-            onChange={(v) => setState({ ...state, geolocation: v as FormState["geolocation"] })}
+            label={isEn ? "Are phone features useful?" : "Des fonctions smartphone sont-elles utiles ?"}
+            value={state.deviceFeatures}
+            onChange={(v) => setState({ ...state, deviceFeatures: v as FormState["deviceFeatures"] })}
             options={[
               { value: "yes", labelFr: "Oui", labelEn: "Yes" },
               { value: "maybe", labelFr: "Peut-être", labelEn: "Maybe" },
@@ -631,20 +528,42 @@ export default function AuditPwa() {
             isEn={isEn}
           />
           <Field
-            label={isEn ? "Install prompt / tutorial?" : "Onboarding installation prévu ?"}
-            value={state.installPrompt}
-            onChange={(v) => setState({ ...state, installPrompt: v as FormState["installPrompt"] })}
+            label={isEn ? "Is store presence mandatory?" : "La présence sur les stores est-elle indispensable ?"}
+            value={state.storeNeed}
+            onChange={(v) => setState({ ...state, storeNeed: v as FormState["storeNeed"] })}
             options={[
-              { value: "yes", labelFr: "Oui", labelEn: "Yes" },
-              { value: "no", labelFr: "Non / pas encore", labelEn: "No / not yet" },
-              { value: "unsure", labelFr: "Je ne sais pas", labelEn: "Not sure" },
+              { value: "none", labelFr: "Non", labelEn: "No" },
+              { value: "maybe", labelFr: "À arbitrer", labelEn: "To decide" },
+              { value: "required", labelFr: "Oui", labelEn: "Yes" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "How native-specific is the feature set?" : "Les fonctionnalités sont-elles très natives ?"}
+            value={state.nativeComplexity}
+            onChange={(v) => setState({ ...state, nativeComplexity: v as FormState["nativeComplexity"] })}
+            options={[
+              { value: "low", labelFr: "Peu", labelEn: "Low" },
+              { value: "medium", labelFr: "À vérifier", labelEn: "To check" },
+              { value: "high", labelFr: "Très natives", labelEn: "Very native" },
+            ]}
+            isEn={isEn}
+          />
+          <Field
+            label={isEn ? "Current mobile technical baseline?" : "État technique mobile actuel ?"}
+            value={state.technicalBase}
+            onChange={(v) => setState({ ...state, technicalBase: v as FormState["technicalBase"] })}
+            options={[
+              { value: "ready", labelFr: "Solide", labelEn: "Solid" },
+              { value: "partial", labelFr: "Partiel", labelEn: "Partial" },
+              { value: "weak", labelFr: "À refaire", labelEn: "Weak" },
             ]}
             isEn={isEn}
           />
         </div>
 
         <button type="submit" className="btn primary">
-          {isEn ? "Get my PWA audit" : "Voir mon audit PWA"}
+          {isEn ? "Evaluate the PWA opportunity" : "Évaluer l'opportunité PWA"}
         </button>
       </form>
     </div>
@@ -666,16 +585,7 @@ function Field({
 }) {
   return (
     <div>
-      <p
-        style={{
-          fontFamily: "var(--sans)",
-          fontSize: "13px",
-          color: "var(--ink-2)",
-          marginBottom: "10px",
-        }}
-      >
-        {label}
-      </p>
+      <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-2)", marginBottom: "10px" }}>{label}</p>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
         {options.map((opt) => {
           const selected = value === opt.value;
@@ -688,12 +598,8 @@ function Field({
                 fontFamily: "var(--sans)",
                 fontSize: "13px",
                 padding: "6px 14px",
-                border: selected
-                  ? "1px solid var(--rule)"
-                  : "1px solid var(--rule)",
-                borderLeft: selected
-                  ? "3px solid var(--accent-color)"
-                  : "1px solid var(--rule)",
+                border: "1px solid var(--rule)",
+                borderLeft: selected ? "3px solid var(--accent-color)" : "1px solid var(--rule)",
                 background: selected ? "var(--paper-2)" : "transparent",
                 color: selected ? "var(--ink)" : "var(--muted-color)",
                 cursor: "pointer",

@@ -4,13 +4,10 @@ import { useMemo } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Link } from "@/i18n/navigation"
 import {
-  BarChart3,
   BotMessageSquare,
-  Trophy,
   FileText,
   BadgePercent,
   Smartphone,
-  Calculator,
   Scale,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
@@ -37,16 +34,6 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       : "Identifiez en quelques clics la voie adaptée : site WordPress classique, Headless + Next.js, web app ou mobile.",
     icon: BadgePercent,
     href: "/services/eligibilite",
-  },
-  "estimateur-budget": {
-    id: "estimateur-budget",
-    title: isEn ? "Budget & timeline estimator" : "Estimateur budget & délai",
-    description: isEn
-      ? "Get an indicative budget range and lead time for your web project."
-      : "Obtenez une fourchette de budget et un délai indicatif pour votre projet web.",
-    icon: Calculator,
-    href: "/outils/estimateur-budget",
-    tag: isEn ? "New" : "Nouveau",
   },
   "cahier-des-charges": {
     id: "cahier-des-charges",
@@ -76,51 +63,23 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     icon: BotMessageSquare,
     href: "/audit-site-ia",
   },
-  "simulateur-roi": {
-    id: "simulateur-roi",
-    title: isEn ? "Web project ROI simulator" : "Simulateur de ROI projet web",
-    description: isEn
-      ? "Calculate revenue lost to a slow site and project earnings after modernization."
-      : "Calculez le manque à gagner dû à un site lent et projetez les revenus après modernisation.",
-    icon: BarChart3,
-    href: "/outils/simulateur-roi",
-  },
-  "benchmarking": {
-    id: "benchmarking",
-    title: isEn ? "Competitive benchmarking" : "Benchmarking concurrentiel",
-    description: isEn
-      ? "Compare your site to sector leaders — Core Web Vitals, speed, performance."
-      : "Comparez votre site aux leaders de votre secteur — Core Web Vitals, vitesse, performance.",
-    icon: Trophy,
-    href: "/outils/benchmarking",
-  },
   "audit-pwa": {
     id: "audit-pwa",
-    title: isEn ? "PWA / mobile readiness audit" : "Audit PWA / mobile readiness",
+    title: isEn ? "PWA opportunity diagnostic" : "Diagnostic d'opportunité PWA",
     description: isEn
-      ? "Is your site ready to become an installable mobile app? 9 criteria, a score and a verdict."
-      : "Votre site est-il prêt à devenir une app mobile installable ? 9 critères, un score et un verdict.",
+      ? "Should your project become an installable mobile app? 9 questions and a decision signal."
+      : "Votre projet gagnerait-il à devenir une app mobile installable ? 9 questions et un signal de décision.",
     icon: Smartphone,
     href: "/outils/audit-pwa",
-    tag: isEn ? "New" : "Nouveau",
-  },
-  "tco-saas": {
-    id: "tco-saas",
-    title: isEn ? "TCO — SaaS vs custom" : "TCO — SaaS vs sur-mesure",
-    description: isEn
-      ? "Compare the 3-year cost of staying on SaaS vs migrating to a custom web app."
-      : "Comparez le coût sur 3 ans entre rester sur votre SaaS et migrer vers une web app sur-mesure.",
-    icon: Calculator,
-    href: "/outils/tco-saas-vs-sur-mesure",
     tag: isEn ? "New" : "Nouveau",
   },
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "simulateur-roi", "tco-saas", "audit-ia", "cahier-des-charges", "benchmarking", "audit-pwa"],
-  default: ["determiner-offre", "estimateur-budget", "simulateur-agefiph", "audit-ia", "simulateur-roi", "audit-pwa", "tco-saas", "benchmarking", "cahier-des-charges"],
-  utilisateur: ["determiner-offre", "cahier-des-charges", "estimateur-budget", "audit-ia", "audit-pwa", "simulateur-agefiph", "tco-saas", "simulateur-roi", "benchmarking"],
-  developpeur: ["audit-pwa", "audit-ia", "benchmarking", "estimateur-budget", "simulateur-roi", "tco-saas", "determiner-offre", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["determiner-offre", "cahier-des-charges", "audit-ia", "audit-pwa", "simulateur-agefiph"],
+  developpeur: ["audit-pwa", "audit-ia", "determiner-offre", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {

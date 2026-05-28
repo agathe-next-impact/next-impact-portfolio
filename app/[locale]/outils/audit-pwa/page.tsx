@@ -18,28 +18,28 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "PWA / mobile readiness audit — Is your site ready?"
-        : "Audit PWA / mobile readiness — Votre site est-il prêt ?",
+        ? "PWA opportunity diagnostic - Should you build one?"
+        : "Diagnostic d'opportunité PWA - Faut-il en créer une ?",
     description:
       locale === "en"
-        ? "9-criteria self-assessment to know if your site is ready to become an installable Progressive Web App. HTTPS, manifest, service worker, mobile performance, touch UX."
-        : "Auto-évaluation en 9 critères pour savoir si votre site est prêt à devenir une PWA installable. HTTPS, manifest, service worker, performance mobile, UX tactile.",
+        ? "9 strategic questions to evaluate whether an installable PWA is relevant for your project: mobile usage, offline needs, store dependency, native complexity and technical baseline."
+        : "9 questions de cadrage pour évaluer si une PWA installable est pertinente pour votre projet : usage mobile, hors-ligne, dépendance aux stores, complexité native et socle technique.",
     path: "/outils/audit-pwa",
     keywords:
       locale === "en"
         ? [
-            "PWA audit",
-            "mobile readiness",
-            "Progressive Web App test",
-            "PWA checklist",
-            "PWA install",
+            "PWA opportunity",
+            "Progressive Web App diagnostic",
+            "PWA or native app",
+            "mobile app strategy",
+            "PWA business case",
           ]
         : [
-            "audit PWA",
-            "mobile readiness",
-            "test Progressive Web App",
-            "checklist PWA",
-            "installer PWA",
+            "opportunité PWA",
+            "diagnostic Progressive Web App",
+            "PWA ou application native",
+            "stratégie application mobile",
+            "business case PWA",
           ],
     locale,
   });
@@ -57,7 +57,7 @@ export default async function AuditPwaPage({
     { name: isEn ? "Home" : "Accueil", url: "/" },
     { name: isEn ? "Tools" : "Outils", url: "/outils" },
     {
-      name: isEn ? "PWA audit" : "Audit PWA",
+      name: isEn ? "PWA opportunity" : "Opportunité PWA",
       url: "/outils/audit-pwa",
     },
   ];
@@ -68,13 +68,13 @@ export default async function AuditPwaPage({
       <PageLayout
         titre={
           isEn
-            ? "PWA / mobile readiness audit"
-            : "Audit PWA / mobile readiness"
+            ? "PWA opportunity diagnostic"
+            : "Diagnostic d'opportunité PWA"
         }
         sousTitre={
           isEn
-            ? "Is your site ready to become an installable mobile app? 9 questions, a score and a verdict."
-            : "Votre site est-il prêt à devenir une app mobile installable ? 9 questions, un score et un verdict."
+            ? "Should your project become an installable mobile app? 9 questions, an opportunity score and a decision signal."
+            : "Votre projet gagnerait-il à devenir une app mobile installable ? 9 questions, un score d'opportunité et un signal de décision."
         }
       >
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>

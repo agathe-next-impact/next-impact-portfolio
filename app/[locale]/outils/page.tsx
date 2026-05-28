@@ -23,22 +23,20 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "ROI simulator",
-            "web performance calculator",
             "free website audit",
+            "AGEFIPH simulator",
+            "PWA opportunity diagnostic",
+            "specifications generator",
+            "TIH provider",
             "headless migration",
-            "website speed",
-            "conversion optimization",
-            "competitive benchmarking",
           ]
         : [
-            "simulateur ROI",
-            "calculateur performance web",
             "audit site web gratuit",
+            "simulateur AGEFIPH",
+            "diagnostic opportunité PWA",
+            "cahier des charges",
+            "prestataire TIH",
             "migration headless",
-            "vitesse site web",
-            "optimisation conversion",
-            "benchmarking concurrentiel",
           ],
     locale,
   })

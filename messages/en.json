@@ -30,8 +30,7 @@
     "oethAdvantage": "OETH Advantage",
     "resources": "Resources",
     "freeAiAudit": "Free AI audit",
-    "roiSimulator": "ROI simulator",
-    "benchmarking": "Benchmarking",
+    "tools": "All tools",
     "agefiphSimulator": "AGEFIPH simulator (TIH)",
     "startWebApp": "Start a web application",
     "copyright": "© {year} Next Impact Digital — All rights reserved",
@@ -172,15 +171,15 @@
     "breadcrumbSpecs": "Specifications"
   },
   "toolsPage": {
-    "metaTitle": "Toolbox — ROI simulator, Benchmarking & Audit",
-    "metaDescription": "Free tools to evaluate, measure and project the performance of your digital presence. ROI simulator, competitive benchmarking and website audit.",
+    "metaTitle": "Toolbox — AI audit, AGEFIPH & Specifications",
+    "metaDescription": "Free tools to evaluate, scope and prepare your web project: AI audit, AGEFIPH simulator, PWA opportunity diagnostic and specifications generator.",
     "title": "Toolbox",
-    "subtitle": "Free tools to evaluate, measure and project the performance of your digital presence.",
+    "subtitle": "Free tools to evaluate, scope and prepare your web project.",
     "breadcrumbHome": "Home",
     "breadcrumbTools": "Tools",
     "backToTools": "Back to tools",
-    "collectionName": "Toolbox — ROI simulator, Benchmarking & Audit",
-    "collectionDescription": "Free tools to evaluate, measure and project the performance of your digital presence."
+    "collectionName": "Toolbox — AI audit, AGEFIPH & Specifications",
+    "collectionDescription": "Free tools to evaluate, scope and prepare your web project."
   },
   "benchmarkingPage": {
     "metaTitle": "Competitive benchmarking — Compare your site to leaders",

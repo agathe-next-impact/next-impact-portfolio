@@ -37,20 +37,6 @@ const TOOL_LINKS_FR: ToolLink[] = [
     color: "text-lightyellow",
   },
   {
-    href: "/outils/simulateur-roi",
-    title: "Simulateur ROI",
-    description: "Calculez le manque à gagner dû à un site lent.",
-    icon: Calculator,
-    color: "text-lightblue",
-  },
-  {
-    href: "/outils/benchmarking",
-    title: "Benchmarking",
-    description: "Comparez vos performances face à vos concurrents.",
-    icon: BarChart3,
-    color: "text-regularblue",
-  },
-  {
     href: "/cahier-des-charges",
     title: "Cahier des charges",
     description: "Générez un cahier des charges structuré pour votre projet.",
@@ -66,20 +52,6 @@ const TOOL_LINKS_EN: ToolLink[] = [
     description: "Analyze your site's performance, SEO and conversion.",
     icon: SearchCheck,
     color: "text-lightyellow",
-  },
-  {
-    href: "/outils/simulateur-roi",
-    title: "ROI simulator",
-    description: "Calculate the revenue lost to a slow site.",
-    icon: Calculator,
-    color: "text-lightblue",
-  },
-  {
-    href: "/outils/benchmarking",
-    title: "Benchmarking",
-    description: "Compare your performance against competitors.",
-    icon: BarChart3,
-    color: "text-regularblue",
   },
   {
     href: "/cahier-des-charges",
@@ -591,7 +563,6 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
-        { href: "/outils/simulateur-roi", title: t("ROI simulator", "Simulateur ROI") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/services", title: t("Our offerings", "Nos offres") },
       ];
@@ -601,12 +572,10 @@ function getCategoryRelevantLinks(
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/documentation/headless-cms", title: "Headless CMS" },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/outils/benchmarking", title: "Benchmarking" },
       ];
     case "seo":
       return [
         ...base,
-        { href: "/outils/benchmarking", title: "Benchmarking" },
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
         { href: "/services", title: t("Our SEO offerings", "Nos offres SEO") },
@@ -622,9 +591,8 @@ function getCategoryRelevantLinks(
     case "marketing-digital":
       return [
         ...base,
-        { href: "/outils/simulateur-roi", title: t("ROI simulator", "Simulateur ROI") },
         { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
-        { href: "/outils/benchmarking", title: "Benchmarking" },
+        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     case "projet-site-web":

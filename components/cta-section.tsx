@@ -6,14 +6,8 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import type { ProfileId } from "@/lib/documentation-profiles";
 import {
   ArrowRight,
-  Zap,
-  TrendingUp,
-  PiggyBank,
   Search,
   ClipboardCheck,
-  Calculator,
-  BarChart3,
-  FileText,
   Download,
   Mail,
   Phone,
@@ -189,62 +183,10 @@ function CTAConversion() {
 }
 
 /* ─────────────────────────────────────────────
-   2b. CTA ROI Simulator
-   ───────────────────────────────────────────── */
-function CTASimulateurROI() {
-  const t = useTranslations("ctaSection.roi");
-  return (
-    <CTACard
-      badgeIcon={Calculator}
-      badge={t("badge")}
-      title={t("title")}
-      description={
-        <>
-          {t("promiseStart")}{" "}
-          <em style={{ color: "var(--accent-color)" }}>{t("promiseHighlight")}</em>{" "}
-          {t("promiseEnd")}
-          {t("secondary") && (
-            <span style={{ display: "block", marginTop: 8, color: "var(--muted-color)" }}>
-              {t("secondary")}
-            </span>
-          )}
-        </>
-      }
-      ctaHref="/outils/simulateur-roi"
-      ctaLabel={t("ctaLabel")}
-      footer={t("footer")}
-    />
-  );
-}
-
-/* ─────────────────────────────────────────────
-   2c. CTA Benchmarking
-   ───────────────────────────────────────────── */
-function CTABenchmarking() {
-  const t = useTranslations("ctaSection.benchmarking");
-  return (
-    <CTACard
-      badgeIcon={BarChart3}
-      badge={t("badge")}
-      title={t("title")}
-      description={
-        <>
-          {t("promiseStart")}{" "}
-          <em style={{ color: "var(--accent-color)" }}>{t("promiseHighlight")}</em>{" "}
-          {t("promiseEnd")}
-          {t("secondary") && (
-            <span style={{ display: "block", marginTop: 8, color: "var(--muted-color)" }}>
-              {t("secondary")}
-            </span>
-          )}
-        </>
-      }
-      ctaHref="/outils/benchmarking"
-      ctaLabel={t("ctaLabel")}
-      footer={t("footer")}
-    />
-  );
-}
+   2b. CTA ROI Simulator + 2c. CTA Benchmarking
+   ─────────────────────────────────────────────
+   Disabled — see next.config.mjs `disabledTools` redirects.
+   Cards removed from CARD_COMPONENTS/PROFILE_CARDS below. */
 
 /* ─────────────────────────────────────────────
    3. Reassurance block — direct contact
@@ -377,30 +319,26 @@ export function BlocReassurance() {
 /* ─────────────────────────────────────────────
    Card selection per profile / context
    ───────────────────────────────────────────── */
-type CardId = "audit" | "conversion" | "roi" | "benchmarking";
+type CardId = "audit" | "conversion";
 
 const CARD_COMPONENTS: Record<CardId, React.FC> = {
   audit: CTALeadMagnet,
   conversion: CTAConversion,
-  roi: CTASimulateurROI,
-  benchmarking: CTABenchmarking,
 };
 
 const CARD_PAGES: Record<CardId, string[]> = {
   audit: ["/audit-site-ia", "/documentation/headless-cms"],
   conversion: ["/contact"],
-  roi: ["/outils/simulateur-roi", "/tarifs"],
-  benchmarking: ["/outils/benchmarking"],
 };
 
 const PROFILE_CARDS: Record<ProfileId | "default", CardId[]> = {
-  decideur:    ["roi", "conversion", "benchmarking", "audit"],
-  utilisateur: ["benchmarking", "conversion", "roi", "audit"],
-  developpeur: ["benchmarking", "roi", "conversion", "audit"],
-  default:     ["conversion", "roi", "benchmarking", "audit"],
+  decideur:    ["conversion", "audit"],
+  utilisateur: ["conversion", "audit"],
+  developpeur: ["audit", "conversion"],
+  default:     ["conversion", "audit"],
 };
 
-const TOOL_CARDS: CardId[] = ["audit", "roi", "benchmarking"];
+const TOOL_CARDS: CardId[] = ["audit", "conversion"];
 
 const TOOL_PAGE_PREFIXES = [
   "/outils",
@@ -425,7 +363,7 @@ function useSelectedCards(): [React.FC, React.FC] {
     !CARD_PAGES[id].some((p) => pathname === p || pathname.startsWith(p + "/"))
   );
 
-  const first = available[0] ?? "roi";
+  const first = available[0] ?? "conversion";
   const second = available[1] ?? "audit";
 
   return [CARD_COMPONENTS[first], CARD_COMPONENTS[second]];
