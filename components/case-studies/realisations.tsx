@@ -472,14 +472,15 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
               className={isActive ? "tab-sel-active" : ""}
               style={{
                 flex: 1,
-                padding: "14px 20px",
+                minWidth: 0,
+                padding: "14px 8px",
                 border: "none",
                 borderRight: idx < TAB_KEYS.length - 1 ? "1px solid var(--rule)" : "none",
                 background: isActive ? "var(--ink)" : "var(--paper)",
                 color: isActive ? "#ffffff" : "var(--ink-2)",
                 fontFamily: "var(--mono)",
                 fontSize: 10,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 transition: "background 0.15s, color 0.15s",
@@ -487,7 +488,8 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
                 flexDirection: "column",
                 alignItems: "center",
                 gap: 3,
-                whiteSpace: "nowrap",
+                lineHeight: 1.2,
+                textAlign: "center",
               }}
               onMouseEnter={(e) => {
                 if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper-2)";

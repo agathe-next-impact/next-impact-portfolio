@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ArticleCard } from "./ArticleCard"
+import PageLayout from "@/components/page-layout"
 import type { ArticleMeta } from "@/lib/articles"
 
 const categories = ["Tous", "WP Headless", "TIH / AGEFIPH", "ROI & Budget"]
@@ -19,17 +20,12 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
       : articles.filter((a) => a.category === activeCategory)
 
   return (
-    <section className="s">
-      <div className="container">
-        {/* Header */}
-        <div className="sec-head">
-          <span className="sec-no">01</span>
-          <h1>Articles &amp; Comparatifs</h1>
-          <p className="sec-meta">
-            Analyses, comparatifs et retours d&apos;expérience pour prendre les bonnes décisions web.
-          </p>
-        </div>
-
+    <PageLayout
+      titre="Articles & Comparatifs"
+      sousTitre="Analyses, comparatifs et retours d'expérience pour prendre les bonnes décisions web."
+    >
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
         {/* Filtres tab-style */}
         <div style={{
           display: "flex",
@@ -85,7 +81,8 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
             Aucun article dans cette catégorie pour le moment.
           </p>
         )}
-      </div>
-    </section>
+        </div>
+      </section>
+    </PageLayout>
   )
 }

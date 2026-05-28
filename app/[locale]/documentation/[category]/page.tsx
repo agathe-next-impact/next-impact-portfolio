@@ -123,11 +123,20 @@ export default async function CategoryPage(props: CategoryPageProps) {
 
           {/* Section header */}
           <div className="sec-head" style={{ marginBottom: "2.5rem" }}>
-            <h1>{categoryTitle}</h1>
-            {categoryDescription && (
-              <p className="sec-meta">{categoryDescription}</p>
-            )}
+            <div className="sec-no">№ —</div>
+            <h1
+              className="ni-serif"
+              style={{ fontSize: "clamp(32px, 4vw, 64px)", lineHeight: 1.05, margin: 0 }}
+            >
+              {categoryTitle}
+            </h1>
+            <div className="sec-meta">Documentation · Fig. 01</div>
           </div>
+          {categoryDescription && (
+            <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 640, marginBottom: "2.5rem" }}>
+              {categoryDescription}
+            </p>
+          )}
 
           {/* Theme cards + Articles grid */}
           <CategoryPageContent articles={articles} category={category} />

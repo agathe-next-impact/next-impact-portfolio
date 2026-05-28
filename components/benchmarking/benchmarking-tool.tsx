@@ -654,7 +654,7 @@ export default function BenchmarkingTool() {
         </p>
 
         {/* Strategy toggle */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
           <span
             style={{
               fontFamily: "var(--sans)",

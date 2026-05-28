@@ -217,35 +217,79 @@ ol.steps li p {
   .sec-meta { display: none; }
   .cap-row { grid-template-columns: 48px 1fr; }
   ol.steps li { grid-template-columns: 48px 1fr; }
+
+  /* Article reading area: tighter horizontal padding on small screens
+     (the .container already adds 20px gutter, so 40px inner padding
+     left only ~270px for text on a 390px viewport). */
+  .light.article-text,
+  .light .article-text {
+    padding: 1.5rem 1rem !important;
+  }
+  /* …but only the outer wrapper — preserve the inner MarkdownContent /
+     MdxContent wrapper's zero-padding so we don't get double padding. */
+  .light.article-text .article-text,
+  .light .article-text .article-text {
+    padding: 0 !important;
+  }
+
+  /* HeadlessExplainer tabs and similar tab strips: shrink padding so
+     labels like "Classique" / "Headless" / "Web App" fit on mobile. */
+  [role="tablist"] button[role="tab"] {
+    padding: 12px 8px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.06em !important;
+  }
 }
 
-/* Responsive guardrail for legacy inline grids used across public pages. */
+/* Responsive guardrail for legacy inline grids used across public pages.
+   React serialises inline styles without a space after the colon
+   (`grid-template-columns:1fr 1fr`), so we duplicate every selector
+   in both the spaced and unspaced forms to catch hand-written CSS too. */
 @media (max-width: 900px) {
   [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"],
   [style*="grid-template-columns: 1.2fr 1fr"],
+  [style*="grid-template-columns:1.2fr 1fr"],
   [style*="grid-template-columns: 1.4fr 1fr"],
+  [style*="grid-template-columns:1.4fr 1fr"],
   [style*="grid-template-columns: 1fr 1.6fr"],
+  [style*="grid-template-columns:1fr 1.6fr"],
   [style*="grid-template-columns: 1fr 2fr"],
+  [style*="grid-template-columns:1fr 2fr"],
   [style*="grid-template-columns: 3fr 2fr"],
+  [style*="grid-template-columns:3fr 2fr"],
   [style*="grid-template-columns: 1fr 320px"],
+  [style*="grid-template-columns:1fr 320px"],
   [style*="grid-template-columns: 1fr auto"],
+  [style*="grid-template-columns:1fr auto"],
   [style*="grid-template-columns: auto 1fr auto"],
+  [style*="grid-template-columns:auto 1fr auto"],
   [style*="grid-template-columns: 56px 1fr auto"],
+  [style*="grid-template-columns:56px 1fr auto"],
   [style*="grid-template-columns: 80px 1fr 24px"],
+  [style*="grid-template-columns:80px 1fr 24px"],
   [style*="grid-template-columns: 120px 1fr 280px"],
+  [style*="grid-template-columns:120px 1fr 280px"],
   [style*="grid-template-columns: repeat(2, 1fr)"],
+  [style*="grid-template-columns:repeat(2,1fr)"],
   [style*="grid-template-columns: repeat(3, 1fr)"],
+  [style*="grid-template-columns:repeat(3,1fr)"],
   [style*="grid-template-columns: repeat(4, 1fr)"],
+  [style*="grid-template-columns:repeat(4,1fr)"],
   [style*="grid-template-columns: repeat(5, 1fr)"],
-  [style*="grid-template-columns: 1fr 1fr 1fr"] {
+  [style*="grid-template-columns:repeat(5,1fr)"],
+  [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr 1fr"] {
     grid-template-columns: 1fr !important;
   }
 
-  [style*="border-right: 1px solid var(--rule)"] {
+  [style*="border-right: 1px solid var(--rule)"],
+  [style*="border-right:1px solid var(--rule)"] {
     border-right: 0 !important;
   }
 
-  [style*="border-left: 1px solid var(--rule)"] {
+  [style*="border-left: 1px solid var(--rule)"],
+  [style*="border-left:1px solid var(--rule)"] {
     border-left: 0 !important;
     padding-left: 0 !important;
   }
@@ -713,40 +757,74 @@ body {
 
 .light body { color: var(--ink); background-color: var(--paper); }
 
-/* --- .article-text (MDX) : ink palette --- */
+/* --- .article-text (MDX) : ink palette ---
+   The `.light .article-text X` descendant selectors only matched when
+   `.light` was on an *ancestor*. Some pages (blog, articles) put both
+   classes on the same element, so the descendant form silently failed
+   and text stayed white-on-paper. Each rule below is duplicated with
+   `.light.article-text` (compound, same element) to cover both cases. */
 .light .article-text,
 .light .article-text p,
 .light .article-text li,
 .light .article-text h1,
 .light .article-text h2,
 .light .article-text h3,
-.light .article-text h4 { color: var(--ink) !important; }
-.light .article-text > p:first-child { color: var(--ink) !important; }
-.light .article-text strong { color: var(--ink) !important; }
-.light .article-text blockquote p { color: var(--ink-2) !important; }
-.light .article-text pre {
+.light .article-text h4,
+.light.article-text,
+.light.article-text p,
+.light.article-text li,
+.light.article-text h1,
+.light.article-text h2,
+.light.article-text h3,
+.light.article-text h4 { color: var(--ink) !important; }
+.light .article-text > p:first-child,
+.light.article-text > p:first-child { color: var(--ink) !important; }
+.light .article-text strong,
+.light.article-text strong { color: var(--ink) !important; }
+.light .article-text blockquote p,
+.light.article-text blockquote p { color: var(--ink-2) !important; }
+.light .article-text pre,
+.light.article-text pre {
   background-color: var(--paper-2) !important;
   color: var(--ink) !important;
 }
-.light .article-text code { color: var(--ink) !important; background-color: rgba(14, 14, 12, 0.06) !important; }
-.light .article-text a    { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
-.light .article-text th   { color: var(--ink) !important; background-color: var(--paper-2) !important; }
-.light .article-text td   { color: var(--ink-2) !important; border-color: var(--rule) !important; }
-.light .article-text tr:nth-child(even) td { background-color: rgba(14, 14, 12, 0.03) !important; }
-.light .article-text tr:hover td { background-color: var(--paper-2) !important; }
-.light .article-text h2 { border-left-color: var(--rule-strong) !important; }
-.light .article-text blockquote { border-left-color: var(--rule-strong) !important; background: var(--paper-2) !important; }
-.light .article-text ul li::before { color: var(--accent-color) !important; }
+.light .article-text code,
+.light.article-text code { color: var(--ink) !important; background-color: rgba(14, 14, 12, 0.06) !important; }
+.light .article-text a,
+.light.article-text a    { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
+.light .article-text th,
+.light.article-text th   { color: var(--ink) !important; background-color: var(--paper-2) !important; }
+.light .article-text td,
+.light.article-text td   { color: var(--ink-2) !important; border-color: var(--rule) !important; }
+.light .article-text tr:nth-child(even) td,
+.light.article-text tr:nth-child(even) td { background-color: rgba(14, 14, 12, 0.03) !important; }
+.light .article-text tr:hover td,
+.light.article-text tr:hover td { background-color: var(--paper-2) !important; }
+.light .article-text h2,
+.light.article-text h2 { border-left-color: var(--rule-strong) !important; }
+.light .article-text blockquote,
+.light.article-text blockquote { border-left-color: var(--rule-strong) !important; background: var(--paper-2) !important; }
+.light .article-text ul li::before,
+.light.article-text ul li::before { color: var(--accent-color) !important; }
 /* Ordered lists: use native decimal numbering in light mode (respects HTML start attribute) */
-.light .article-text ol { list-style-type: decimal !important; padding-left: 1.5rem !important; }
-.light .article-text ol li { padding-left: 0.25rem !important; counter-increment: none !important; }
-.light .article-text ol li::before { display: none !important; }
+.light .article-text ol,
+.light.article-text ol { list-style-type: decimal !important; padding-left: 1.5rem !important; }
+.light .article-text ol li,
+.light.article-text ol li { padding-left: 0.25rem !important; counter-increment: none !important; }
+.light .article-text ol li::before,
+.light.article-text ol li::before { display: none !important; }
 .light .article-text .diagnostic-dark h3,
 .light .article-text .diagnostic-dark h4,
 .light .article-text .diagnostic-dark p,
 .light .article-text .diagnostic-dark span,
 .light .article-text .diagnostic-dark li,
-.light .article-text .diagnostic-dark a { color: var(--ink) !important; }
+.light .article-text .diagnostic-dark a,
+.light.article-text .diagnostic-dark h3,
+.light.article-text .diagnostic-dark h4,
+.light.article-text .diagnostic-dark p,
+.light.article-text .diagnostic-dark span,
+.light.article-text .diagnostic-dark li,
+.light.article-text .diagnostic-dark a { color: var(--ink) !important; }
 
 /* --- .mentions-legales --- */
 .light .mentions-legales,
