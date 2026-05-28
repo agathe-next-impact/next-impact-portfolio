@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { ArrowRight, Info } from "lucide-react";
+import type React from "react";
+import { ArrowRight, Info, BarChart2, Shield, Scale, TrendingUp, GitBranch, Bell, Gauge, type LucideIcon } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
 import SimulateurAgefiph from "@/components/simulateur-agefiph";
@@ -9,14 +9,16 @@ import FaqSchema from "@/components/services/FaqSchema";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
-const stepsFr = [
-  { number: "01", iconSrc: "/icons/analytics-icon.svg", title: "30% déductibles automatiquement", description: "30% du coût de main-d'œuvre de la prestation est déductible de votre contribution annuelle AGEFIPH. Le calcul est intégré à la facture." },
-  { number: "02", iconSrc: "/icons/shield-icon.svg", title: "Attestation officielle", description: "Vous recevez une attestation de déductibilité annuelle conforme à l'article D.5212-7 du Code du travail, à joindre à votre déclaration OETH." },
+type Step = { number: string; Icon: LucideIcon; title: string; description: string };
+
+const stepsFr: Step[] = [
+  { number: "01", Icon: BarChart2, title: "30% déductibles automatiquement", description: "30% du coût de main-d'œuvre de la prestation est déductible de votre contribution annuelle AGEFIPH. Le calcul est intégré à la facture." },
+  { number: "02", Icon: Shield, title: "Attestation officielle", description: "Vous recevez une attestation de déductibilité annuelle conforme à l'article D.5212-7 du Code du travail, à joindre à votre déclaration OETH." },
 ];
 
-const stepsEn = [
-  { number: "01", iconSrc: "/icons/analytics-icon.svg", title: "30% deductible automatically", description: "30% of the labor cost of the service is deductible from your annual AGEFIPH contribution. The calculation is built into the invoice." },
-  { number: "02", iconSrc: "/icons/shield-icon.svg", title: "Official attestation", description: "You receive an annual deductibility attestation compliant with article D.5212-7 of the French Labor Code, to attach to your OETH return." },
+const stepsEn: Step[] = [
+  { number: "01", Icon: BarChart2, title: "30% deductible automatically", description: "30% of the labor cost of the service is deductible from your annual AGEFIPH contribution. The calculation is built into the invoice." },
+  { number: "02", Icon: Shield, title: "Official attestation", description: "You receive an annual deductibility attestation compliant with article D.5212-7 of the French Labor Code, to attach to your OETH return." },
 ];
 
 const faqsFr = [
@@ -103,7 +105,7 @@ export default function AvantageOethClient() {
                   >
                     {step.number}
                   </span>
-                  <Image src={step.iconSrc} alt={step.title} width={32} height={32} style={{ opacity: 0.7 }} />
+                  <step.Icon size={28} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
                 </div>
                 <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 12, color: "var(--ink)" }}>
                   {step.title}
@@ -136,26 +138,23 @@ export default function AvantageOethClient() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {[
+            {([
               {
-                icon: "/icons/scale-icon.svg",
-                alt: isEn ? "TIH subcontracting" : "Sous-traitance TIH",
+                Icon: Scale,
                 title: isEn ? "TIH subcontracting remains an active lever" : "La sous-traitance TIH reste un levier actif",
                 content: isEn
                   ? "Among the few remaining active deduction levers in 2025, subcontracting to TIH, EA and ESAT remains fully deductible from the AGEFIPH contribution."
                   : "Parmi les rares leviers de déduction encore actifs en 2025, la sous-traitance auprès de TIH, EA et ESAT reste pleinement déductible de la contribution AGEFIPH.",
               },
               {
-                icon: "/icons/growth-icon.svg",
-                alt: isEn ? "Over-contribution" : "Surcontribution",
+                Icon: TrendingUp,
                 title: isEn ? "Over-contribution" : "Surcontribution",
                 content: isEn
                   ? "Companies that take no action for 3 consecutive years face an over-contribution of 1,500 × hourly minimum wage per missing disabled worker (€17,820 in 2025)."
                   : "Les entreprises n'ayant entrepris aucune action pendant 3 années consécutives s'exposent à une surcontribution de 1 500 × SMIC horaire par TH manquant (soit 17 820 € en 2025).",
               },
               {
-                icon: "/icons/workflow-icon.svg",
-                alt: isEn ? "Rate schedule" : "Barème",
+                Icon: GitBranch,
                 title: isEn ? "2025 rate schedule" : "Barème 2025",
                 content: (
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 6, fontSize: 13, color: "var(--ink-2)" }}>
@@ -179,14 +178,13 @@ export default function AvantageOethClient() {
                 ),
               },
               {
-                icon: "/icons/notification-icon.svg",
-                alt: isEn ? "End of capping" : "Écrêtement",
+                Icon: Bell,
                 title: isEn ? "End of the transitional capping" : "Fin de l'écrêtement",
                 content: isEn
                   ? "Since January 1, 2025, the transitional capping measures have ended. Some expenses that were previously deductible no longer are. The AGEFIPH contribution now reaches its real amount for all companies."
                   : "Depuis le 1er janvier 2025, les mesures transitoires d'écrêtement sont terminées. Certaines dépenses autrefois déductibles ne le sont plus. La contribution AGEFIPH atteint désormais son montant réel pour toutes les entreprises.",
               },
-            ].map((card, i) => (
+            ] as { Icon: LucideIcon; title: string; content: React.ReactNode }[]).map((card, i) => (
               <div
                 key={card.title}
                 style={{
@@ -196,7 +194,7 @@ export default function AvantageOethClient() {
                 }}
               >
                 <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 16 }}>
-                  <Image src={card.icon} alt={card.alt} width={28} height={28} style={{ opacity: 0.65, marginTop: 2 }} />
+                  <card.Icon size={24} strokeWidth={1.5} style={{ color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }} />
                   <h3 className="ni-serif" style={{ fontSize: 19, color: "var(--ink)", lineHeight: 1.2 }}>
                     {card.title}
                   </h3>
@@ -223,22 +221,22 @@ export default function AvantageOethClient() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {[
+            {([
               {
-                icon: "/icons/speed-icon.svg",
+                Icon: Gauge,
                 title: isEn ? "Technical performance" : "Performance technique",
                 desc: isEn
                   ? "Modern tech standards on every project: load times under 1s, maximum security, SEO and accessibility carefully tuned — whether classic WordPress, Headless or a custom application."
                   : "Des standards techniques élevés sur tous les projets : temps de chargement < 1s, sécurité renforcée, SEO et accessibilité soignés — que ce soit un site WordPress, Headless ou une application sur-mesure.",
               },
               {
-                icon: "/icons/analytics-icon.svg",
+                Icon: BarChart2,
                 title: isEn ? "Tax benefit" : "Avantage fiscal",
                 desc: isEn
                   ? "30% of the labor cost deductible from your AGEFIPH contribution. A web investment that directly reduces your social-charge bill."
                   : "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH. Un investissement web qui réduit directement vos charges sociales.",
               },
-            ].map((card, i) => (
+            ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
               <div
                 key={card.title}
                 style={{
@@ -246,7 +244,7 @@ export default function AvantageOethClient() {
                   borderRight: i === 0 ? "1px solid var(--rule)" : "none",
                 }}
               >
-                <Image src={card.icon} alt={card.title} width={32} height={32} style={{ marginBottom: 20, opacity: 0.65 }} />
+                <card.Icon size={28} strokeWidth={1.5} style={{ marginBottom: 20, color: "var(--muted-color)", display: "block" }} />
                 <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 12, color: "var(--ink)" }}>
                   {card.title}
                 </h3>
