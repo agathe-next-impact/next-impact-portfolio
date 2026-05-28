@@ -1,44 +1,44 @@
-import LandingCard from '@/components/ui/landing-cards';
+import LandingCard from "@/components/ui/landing-cards"
 
 interface GainsLandingProps {
-    title?: string;
-    subtitle?: string;
-    landingCards?: {
-        imageUrl: string;
-        title: string;
-        text: string;
-    }[];
+  title?: string
+  subtitle?: string
+  landingCards?: { imageUrl: string; title: string; text: string }[]
 }
 
-
-export default function GainsLanding(
-    { title = "Les gains de la solution",
-      subtitle = "Découvrez comment notre solution peut transformer votre activité",
-      landingCards = [] }: GainsLandingProps
-) {
-    return (
-
-        <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl font-medium text-regularblue mb-4">
+export default function GainsLanding({
+  title = "Les gains de la solution",
+  subtitle = "Découvrez comment notre solution peut transformer votre activité",
+  landingCards = [],
+}: GainsLandingProps) {
+  return (
+    <section className="s">
+      <div className="container">
+        <div className="sec-head">
+          <div className="sec-no">№ 03</div>
+          <h2
+            className="ni-serif"
+            style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
+          >
             {title}
           </h2>
-          <p className="text-lg text-regularblue/80">
-            {subtitle}
-          </p>
+          <div className="sec-meta">Bénéfices · Fig. 03</div>
         </div>
-        <div className="flex flex-col md:flex-row gap-24 justify-center items-center max-w-6xl mx-auto mb-24 flex-wrap">
-            {landingCards.map((card, idx) => (
-          <LandingCard
-              key={idx}
-              imageUrl={card.imageUrl}
-              title={card.title}
-              text={card.text}
-          />
-            ))}
+        {subtitle && (
+          <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{subtitle}</p>
+        )}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            columnGap: 24,
+          }}
+        >
+          {landingCards.map((card, i) => (
+            <LandingCard key={i} imageUrl={card.imageUrl} title={card.title} text={card.text} />
+          ))}
         </div>
-      </section>
-
-
-    )
+      </div>
+    </section>
+  )
 }

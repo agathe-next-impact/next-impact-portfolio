@@ -1,54 +1,53 @@
-import Image from 'next/image';
-import { CheckCircle } from 'lucide-react';
+import Image from "next/image"
 
 interface SolutionLandingProps {
-    title?: string;
-    subtitle?: string;
-    imageUrl?: string;
-    features?: string[];
+  title?: string
+  subtitle?: string
+  imageUrl?: string
+  features?: string[]
 }
 
-export default function SolutionLanding({
-    title,
-    subtitle,
-    imageUrl,
-    features,
-    }: SolutionLandingProps
-) {
-    return (
-    <section className="bg-mediumblue/60 w-full mx-auto mt-24 flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 relative">
-        <div className="max-w-5xl mx-auto mb-12">
-          <h2 className="text-3xl font-medium text-white mb-4">
+export default function SolutionLanding({ title, subtitle, imageUrl, features }: SolutionLandingProps) {
+  return (
+    <section className="s">
+      <div className="container">
+        <div className="sec-head">
+          <div className="sec-no">№ 02</div>
+          <h2
+            className="ni-serif"
+            style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
+          >
             {title}
           </h2>
-          <p className="text-lg text-white/80">
-            {subtitle}
-          </p>
+          <div className="sec-meta">Solution · Fig. 02</div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div>
-            <Image
-                src={imageUrl || '/images/motivation-landing.jpg'}
-                alt={title}
-                width={600}
-                height={400}
-                className="w-full h-auto rounded-lg mb-8"
-            />
-        </div>
-        <div className="max-w-2xl mx-auto">
-        {features && features.length > 0 && (
-            <ul className="mt-6 space-y-6 text-white text-lg">
-                {features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-white/80">
-                        <CheckCircle className="h-5 w-5 text-coral" />
-                        {feature}
-                    </li>
-                ))}
-            </ul>
+        {subtitle && (
+          <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{subtitle}</p>
         )}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid var(--rule)" }}>
+          <div style={{ overflow: "hidden" }}>
+            <Image
+              src={imageUrl || "/img/placeholder.jpg"}
+              alt={title || "Solution"}
+              width={600}
+              height={400}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
+            />
+          </div>
+          <div style={{ borderLeft: "1px solid var(--rule)", padding: "32px 28px", display: "flex", alignItems: "center" }}>
+            {features && features.length > 0 && (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+                {features.map((f, i) => (
+                  <li key={i} style={{ fontSize: 14, color: "var(--ink-2)", display: "flex", gap: 10 }}>
+                    <span style={{ color: "var(--accent-color)", flexShrink: 0 }}>→</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-        </div>
-      </section>
-    );
-    }
+      </div>
+    </section>
+  )
+}

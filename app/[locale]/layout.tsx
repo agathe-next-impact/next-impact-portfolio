@@ -2,67 +2,39 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import localFont from 'next/font/local'
+import { Instrument_Serif, Geist, Geist_Mono } from 'next/font/google'
 import Header from '@/components/header'
 import '../globals.css'
 import Script from "next/script"
 import Footer from '@/components/footer'
-import Image from 'next/image'
 import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
 import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { HomepageProfileBanner } from '@/components/homepage-profile-banner'
-import { ThemeProvider } from '@/components/theme-provider'
 import { FloatingContact } from '@/components/floating-contact'
+import { ThemeProvider } from '@/components/theme-provider'
 import { routing } from '@/i18n/routing'
 
-const inter = localFont({
-  src: [
-    {
-      path: '../../public/fonts/Inter-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Inter-Medium.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Inter-SemiBold.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Inter-Bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-inter',
+const instrumentSerif = Instrument_Serif({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-serif',
   display: 'swap',
 })
 
-const nunito = localFont({
-  src: [
-    {
-      path: '../../public/fonts/Nunito-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Nunito-SemiBold.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/Nunito-Bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-nunito',
+const geist = Geist({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const geistMono = Geist_Mono({
+  weight: ['300', '400', '500'],
+  subsets: ['latin'],
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -164,8 +136,11 @@ export default async function RootLayout({
   setRequestLocale(locale)
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${nunito.variable}`}>
-      <body className="bg-background">
+    <html
+      lang={locale}
+      className={`scroll-smooth ${instrumentSerif.variable} ${geist.variable} ${geistMono.variable}`}
+    >
+      <body>
         <OrganizationJsonLd />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-3D5PKXEN72"
@@ -185,38 +160,21 @@ export default async function RootLayout({
         />
         <ClarityScript />
         <NextIntlClientProvider>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
-          {/* theme-system: Background SVG dark */}
-          <div className="fixed inset-0 z-0 will-change-transform hidden dark:block" style={{ WebkitBackfaceVisibility: 'hidden' }}>
-            <Image
-              src="/img/chipset-tech-background.svg"
-              alt=""
-              fill
-              className="object-cover"
-              priority
-              quality={90}
-            />
-          </div>
-          {/* theme-system: Background SVG light */}
-          <div className="fixed inset-0 z-0 will-change-transform block dark:hidden" style={{ WebkitBackfaceVisibility: 'hidden', opacity: 0.5 }}>
-            <Image
-              src="/img/chipset-background-light.svg"
-              alt=""
-              fill
-              className="object-cover"
-              quality={90}
-            />
-          </div>
-          <DocumentationModeProvider>
-            <Header />
-            <HomepageProfileBanner />
-            {children}
-            <Footer />
-            <FloatingContact />
-            <MetadataDebugger />
-          </DocumentationModeProvider>
-        </ThemeProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
+            <DocumentationModeProvider>
+              <Header />
+              <HomepageProfileBanner />
+              {children}
+              <Footer />
+              <FloatingContact />
+              <MetadataDebugger />
+            </DocumentationModeProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
+        <div className="edge-ticks">
+          <span>48°51′N 2°21′E</span>
+          <span>Ed. 2026 · Vol. 02</span>
+        </div>
       </body>
     </html>
   )

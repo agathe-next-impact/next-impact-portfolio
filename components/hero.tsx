@@ -1,17 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { BrandLogo } from "@/components/brand-logo";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  ArrowDownLeft,
-  ArrowLeftRightIcon,
-  ArrowRightLeftIcon,
-  ArrowRightSquare,
-  LucideArrowUpRight,
-  PresentationIcon,
-} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import AiAuditBannerSVG from "./AiAuditBannerSVG";
 import EligibilityForm from "@/components/tarifs/EligibilityForm";
@@ -29,164 +19,258 @@ export default function Hero() {
 
   return (
     <>
-      <main className="h-full md:h-screen flex items-center relative overflow-hidden">
-
-        <div className="container flex flex-col lg:flex-row justify-between lg:justify-evenly items-end gap-12 lg:gap-24 px-4 md:px-6 relative">
-          {/* Text Content */}
-          <div className="flex flex-col lg:col-span-7 bg-darkblue/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-2xl mt-4 md:mt-12 lg:mt-0">
+      {/* ─── Section 1 — Hero ─────────────────────────────────────────── */}
+      <section
+        style={{
+          padding: "80px 0 96px",
+          borderBottom: "1px solid var(--rule)",
+        }}
+      >
+        <div className="container">
+          {/* Sec-head */}
+          <div className="sec-head" style={{ marginBottom: 48 }}>
+            <div className="sec-no">№ 01</div>
             <AnimatePresence mode="wait">
-              <motion.div
+              <motion.h1
                 key={profileId || "default"}
-                initial={{ opacity: 0, y: 10 }}
+                className="ni-serif"
+                style={{
+                  fontSize: "clamp(36px, 5vw, 80px)",
+                  lineHeight: 1.0,
+                  margin: 0,
+                  color: "var(--ink)",
+                }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h1 className="mb-1 text-3xl lg:text-4xl text-white/80 font-googletexte">
-                  {variant.headline}
-                </h1>
-                <p className="mt-2 text-4xl lg:text-5xl text-coral font-googletitre font-medium">
-                  {variant.subHeadline}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-            <div className="mt-5 flex flex-wrap items-center justify-start gap-4">
-              <BrandLogo
-                src="/img/logo-wordpress-blanc.webp"
-                srcLight="/img/logo-wordpress-small.webp"
-                alt={t("wordpressLogoAlt")}
-                width={45}
-                height={60}
-                priority
-                fetchPriority="high"
-              />
-              <BrandLogo
-                src="/img/logo-nextjs-blanc.webp"
-                srcLight="/img/logo-nextjs.webp"
-                alt={t("nextjsLogoAlt")}
-                width={80}
-                height={80}
-                priority
-                fetchPriority="high"
-              />
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`desc-${profileId || "default"}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
               >
-                <p className="mt-10 md:mt-16 font-googletexte md:text-xl text-white/80 max-w-xl">
-                  {variant.description}
-                </p>
-
-                <p className="mt-4 mb-4 font-googletexte italic text-white/70 text-base">
-                  {variant.valueProposition}
-                </p>
-                <div className="flex flex-col sm:flex-row content-start justify-start gap-4">
-                  <Button className="mx-0 inline-flex bg-orange py-2 px-8 rounded-2xl hover:scale-[1.02] transition-all duration-300 ease-in">
-                    <Link
-                      href={variant.ctaPrimary.href}
-                      className="gap-2 text-darkblue font-googletitre font-semibold text-lg"
-                    >
-                      {variant.ctaPrimary.label}
-                    </Link>
-                    <LucideArrowUpRight className="w-8 h-8 text-darkblue" />
-                  </Button>
-                  <Button className="mx-0 inline-flex border border-white/30 bg-transparent py-2 px-8 rounded-2xl hover:bg-white/10 transition-all duration-300 ease-in">
-                    <Link
-                      href={variant.ctaSecondary.href}
-                      className="gap-2 text-white font-googletitre font-semibold text-lg"
-                    >
-                      {variant.ctaSecondary.label}
-                    </Link>
-                    <LucideArrowUpRight className="w-8 h-8 text-white/70" />
-                  </Button>
-                </div>
-              </motion.div>
+                {variant.headline}{" "}
+                <em style={{ color: "var(--accent-color)" }}>{variant.subHeadline}</em>
+              </motion.h1>
             </AnimatePresence>
-
+            <div className="sec-meta">Studio · Fig. 01</div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative lg:col-span-5">
-            <div className="relative rounded-xl overflow-hidden aspect-square max-w-md mx-auto">
-              {/* Placeholder for profile image - replace with actual image */}
-              <div className="bg-gradient-to-br from-brand-400/80 to-brand-600/80 w-full h-full flex items-center justify-center">
+          {/* 2-col grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1.4fr 1fr",
+              gap: 48,
+              borderTop: "1px solid var(--rule)",
+              paddingTop: 40,
+              alignItems: "start",
+            }}
+          >
+            {/* Left — text */}
+            <div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`desc-${profileId || "default"}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 12, maxWidth: 540 }}>
+                    {variant.description}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      color: "var(--muted-color)",
+                      fontStyle: "italic",
+                      fontFamily: "var(--serif)",
+                      marginBottom: 36,
+                      maxWidth: 540,
+                    }}
+                  >
+                    {variant.valueProposition}
+                  </p>
+                  <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                    <Link href={variant.ctaPrimary.href as Parameters<typeof Link>[0]["href"]} className="btn primary">
+                      {variant.ctaPrimary.label}
+                    </Link>
+                    <Link href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]} className="btn">
+                      {variant.ctaSecondary.label}
+                    </Link>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Tech logos */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 24,
+                  alignItems: "center",
+                  marginTop: 48,
+                  paddingTop: 24,
+                  borderTop: "1px solid var(--rule)",
+                }}
+              >
+                <Image
+                  src="/img/logo-wordpress-small.webp"
+                  alt={t("wordpressLogoAlt")}
+                  width={36}
+                  height={48}
+                  style={{ opacity: 0.6 }}
+                  priority
+                />
+                <Image
+                  src="/img/logo-nextjs.webp"
+                  alt={t("nextjsLogoAlt")}
+                  width={64}
+                  height={64}
+                  style={{ opacity: 0.6 }}
+                  priority
+                />
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                  }}
+                >
+                  Stack technique
+                </span>
+              </div>
+            </div>
+
+            {/* Right — portrait */}
+            <div>
+              <div
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  aspectRatio: "3/4",
+                  maxWidth: 360,
+                }}
+              >
                 <Image
                   src="/img/avatar.jpg"
                   alt={t("profileImageAlt")}
-                  className="bg-white object-cover w-full h-full rounded-xl"
-                  width={500}
-                  height={500}
+                  fill
+                  style={{ objectFit: "cover", objectPosition: "top" }}
                   priority
-                  fetchPriority="high"
-                  style={{ width: 'auto', height: 'auto' }}
+                  sizes="(max-width: 900px) 100vw, 360px"
                 />
-              </div>
-
-              {/* Floating badges */}
-              <div className="absolute left-6 top-6 bg-extralightblue py-2 px-4 rounded-full flex items-center gap-2 animate-float">
-                <span className="h-3 w-3 bg-green-500 rounded-full"></span>
-                <span className="text-sm font-medium text-black">
-                  {t("available")}
-                </span>
-              </div>
-
-
-              <div className="absolute left-4 bottom-4 bg-lightyellow py-1.5 px-3 rounded-full animate-float hidden md:flex items-center gap-1.5">
-                <span className="text-xs font-medium text-darkblue">
-                  {t("tihMention")}
-                </span>
+                {/* Disponible badge */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 16,
+                    left: 16,
+                    background: "var(--paper)",
+                    border: "1px solid var(--rule)",
+                    padding: "4px 12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span className="status-dot" />
+                  <span
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 9,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--ink)",
+                    }}
+                  >
+                    {t("available")}
+                  </span>
+                </div>
+                {/* TIH mention */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 16,
+                    left: 16,
+                    background: "var(--paper)",
+                    border: "1px solid var(--rule)",
+                    padding: "4px 12px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 9,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "var(--muted-color)",
+                    }}
+                  >
+                    {t("tihMention")}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </section>
 
-      {/* Diagnostic de stack — formulaire interactif */}
-      <section id="audit" className="bg-mediumblue/60 w-full mx-auto flex flex-col backdrop-blur-xl border-y border-white/10 md:px-6 py-16 md:py-32 relative">
+      {/* ─── Section 2 — Diagnostic de stack ─────────────────────────── */}
+      <section
+        id="audit"
+        style={{
+          background: "var(--paper-2)",
+          padding: "80px 0",
+          borderBottom: "1px solid var(--rule)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background SVG décor */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "50%",
+            height: "100%",
+            opacity: 0.07,
+            pointerEvents: "none",
+          }}
+        >
+          <AiAuditBannerSVG />
+        </div>
 
-          <h2 className="font-googletitre text-white text-4xl md:text-5xl font-medium flex items-end justify-center px-4 gap-4 z-10 text-center">
-            {variant.auditTitle}
-          </h2>
-        <div className="w-full max-w-full mx-auto xl:max-w-5xl flex flex-col relative px-4 md:px-20 md:mt-8 xl:mt-0 xl:px-0">
-          <div className="text-left mt-1 xxl:mt-24 lg:pt-6 z-10">
-            <h3 className="font-googletexte text-2xl lg:text-3xl">
-              <span className="text-3xl md:text-4xl font-googletitre text-coral dark:text-lightyellow font-medium">
-                {variant.auditSubtitle}
-              </span>
-              {" "}
-              <span className="text-white/70">
-               {t("auditTimer")}
-              </span>
-            </h3>
-            <p className="text-white/70 text-lg md:text-xl mt-2 md:mb-8">
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div className="sec-head">
+            <div className="sec-no">№ 02</div>
+            <h2
+              className="ni-serif"
+              style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
+            >
+              {variant.auditTitle}
+            </h2>
+            <div className="sec-meta">Diagnostic · Fig. 02</div>
+          </div>
+
+          <div style={{ marginBottom: 32 }}>
+            <p
+              style={{
+                fontSize: 18,
+                fontFamily: "var(--serif)",
+                fontStyle: "italic",
+                color: "var(--accent-color)",
+                marginBottom: 8,
+              }}
+            >
+              {variant.auditSubtitle}
+            </p>
+            <p style={{ fontSize: 14, color: "var(--ink-2)", maxWidth: 600 }}>
               {variant.auditDescription}
             </p>
           </div>
-          <div style={{
-          position: "absolute",
-          top: 140,
-          left: 0,
-          width: "70vw",
-          height: "100vh",
-          zIndex: 0,
-          overflow: "hidden",
-          opacity: 0.4,
-        }}
-        className="md:top-[-120px]">
-            <AiAuditBannerSVG />
-          </div>
-          <div className="w-full max-w-6xl mx-auto relative h-full overflow-hidden">
-            <div className="relative z-10">
-              <div className="relative md:max-w-5xl my-16 mx-0 md:mx-auto">
-                <EligibilityForm />
-              </div>
-            </div>
-          </div>
+
+          <EligibilityForm />
         </div>
       </section>
     </>

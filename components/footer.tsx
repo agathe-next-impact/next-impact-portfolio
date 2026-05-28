@@ -1,151 +1,287 @@
-import Image from "next/image";
-import { Mail, Phone, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CTASection } from "./cta-section";
 
 export default function Footer() {
   const t = useTranslations("footer");
-  return (
-    <footer className="w-full p-4 md:p-12 bg-mediumblue/10 backdrop-blur-sm border-t border-white/10 space-y-8">
-      {/* CTA Section — cartes contextuelles */}
-      <CTASection />
+  const year = new Date().getFullYear();
 
-      {/* Contact direct — dernier filet avant les liens */}
-      <div className="container max-w-2xl mx-auto py-8 border-t border-white/10 text-center space-y-3">
-        <p className="text-white/50 font-googletexte text-sm uppercase tracking-widest">
-          {t("contactQuestion")}
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+  return (
+    <footer
+      style={{
+        borderTop: "1px solid var(--rule-strong)",
+        background: "var(--paper)",
+        padding: "0 var(--gutter, 32px)",
+      }}
+    >
+      {/* Main footer grid */}
+      <div
+        style={{
+          maxWidth: "var(--container-w, 1200px)",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr 1fr",
+          borderBottom: "1px solid var(--rule)",
+          gap: 0,
+        }}
+        className="footer-grid"
+      >
+        {/* Col 1 — Identity */}
+        <div
+          style={{
+            padding: "40px 0 40px",
+            borderRight: "1px solid var(--rule)",
+            paddingRight: 32,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              marginBottom: 16,
+            }}
+          >
+            Studio
+          </div>
+          <div
+            style={{
+              fontFamily: "var(--serif)",
+              fontSize: 20,
+              color: "var(--ink)",
+              marginBottom: 12,
+            }}
+          >
+            {t("company")}
+          </div>
+          <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
+            {t("owner")}
+          </p>
+          <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, marginTop: 8, marginBottom: 0 }}>
+            {t("address")}
+          </p>
+        </div>
+
+        {/* Col 2 — Navigation */}
+        <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
+          <div
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              marginBottom: 16,
+            }}
+          >
+            {t("usefulLinks")}
+          </div>
+          <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { href: "/services",       key: "services" },
+              { href: "/etudes-de-cas",  key: "caseStudies" },
+              { href: "/documentation",  key: "documentation" },
+              { href: "/avantage-oeth",  key: "oethAdvantage" },
+              { href: "/a-propos",       key: "about" },
+              { href: "/mentions-legales", key: "legalNotice" },
+            ].map((item) => (
+              <Link
+                key={item.key}
+                href={item.href as Parameters<typeof Link>[0]["href"]}
+                style={{
+                  fontFamily: "var(--mono, monospace)",
+                  fontSize: 11,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--ink-2)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+              >
+                {t(item.key as Parameters<typeof t>[0])}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        {/* Col 3 — Resources */}
+        <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
+          <div
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              marginBottom: 16,
+            }}
+          >
+            {t("resources")}
+          </div>
+          <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { href: "/audit-site-ia",          key: "freeAiAudit" },
+              { href: "/outils/simulateur-roi",  key: "roiSimulator" },
+              { href: "/outils/benchmarking",    key: "benchmarking" },
+              { href: "/contact",                key: "startWebApp" },
+            ].map((item) => (
+              <Link
+                key={item.key}
+                href={item.href as Parameters<typeof Link>[0]["href"]}
+                style={{
+                  fontFamily: "var(--mono, monospace)",
+                  fontSize: 11,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--ink-2)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+              >
+                {t(item.key as Parameters<typeof t>[0])}
+              </Link>
+            ))}
+            <a
+              href="/ressources/livre_blanc_wp_headless.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: "var(--mono, monospace)",
+                fontSize: 11,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "var(--ink-2)",
+                textDecoration: "none",
+                transition: "color 0.15s",
+              }}
+            >
+              {t("whitepaperHeadless")}
+            </a>
+          </nav>
+        </div>
+
+        {/* Col 4 — Contact */}
+        <div style={{ padding: "40px 0 40px 32px" }}>
+          <div
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              marginBottom: 16,
+            }}
+          >
+            {t("contactQuestion")}
+          </div>
           <a
             href="mailto:agathe@next-impact.digital"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition text-sm font-googletexte"
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 11,
+              letterSpacing: "0.06em",
+              color: "var(--ink)",
+              textDecoration: "none",
+              display: "block",
+              marginBottom: 8,
+            }}
           >
-            <Mail className="w-4 h-4 text-coral shrink-0" />
             agathe@next-impact.digital
           </a>
           <a
             href="tel:0673981638"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition text-sm font-googletexte"
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 11,
+              letterSpacing: "0.06em",
+              color: "var(--ink)",
+              textDecoration: "none",
+              display: "block",
+              marginBottom: 16,
+            }}
           >
-            <Phone className="w-4 h-4 text-lightyellow shrink-0" />
             06 73 98 16 38
           </a>
-        </div>
-        <p className="text-xs text-white/40 font-googletexte">
-          {t("availability")}
-        </p>
-      </div>
-
-      {/* Footer info */}
-      <div className="container grid grid-cols-1 md:grid-cols-4 gap-10 py-8 border-t border-white/10">
-        {/* Colonne 1 : Identité */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-googletitre text-white text-lg font-semibold mb-2">
-            {t("company")}
-          </h3>
-          <p className="text-white/70 text-sm font-googletexte">
-            {t("owner")}
-          </p>
-          <div className="flex items-start gap-2 text-white/60 text-sm font-googletexte">
-            <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-            <span className="text-white/70">{t("address")}</span>
-          </div>
-        </div>
-
-        {/* Colonne 2 : Liens */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-googletitre text-white text-lg font-semibold mb-2">
-            {t("usefulLinks")}
-          </h3>
-          <nav className="flex flex-col gap-2">
-            <Link href="/mentions-legales" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("legalNotice")}
-            </Link>
-            <Link href="/a-propos" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("about")}
-            </Link>
-            <Link href="/services" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("services")}
-            </Link>
-            <Link href="/etudes-de-cas" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("caseStudies")}
-            </Link>
-            <Link href="/documentation" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("documentation")}
-            </Link>
-            <Link href="/blog" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("blog")}
-            </Link>
-            <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("oethAdvantage")}
-            </Link>
-          </nav>
-        </div>
-
-        {/* Colonne 3 : Ressources */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-googletitre text-white text-lg font-semibold mb-2">
-            {t("resources")}
-          </h3>
-          <nav className="flex flex-col gap-2">
-            <a href="/ressources/livre_blanc_wp_headless.pdf" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("whitepaperHeadless")}
-            </a>
-            <Link href="/audit-site-ia" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("freeAiAudit")}
-            </Link>
-            <Link href="/outils/simulateur-roi" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("roiSimulator")}
-            </Link>
-            <Link href="/outils/benchmarking" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("benchmarking")}
-            </Link>
-            <Link href="/avantage-oeth" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("agefiphSimulator")}
-            </Link>
-            <Link href="/contact" className="text-white/70 hover:text-white transition text-sm font-googletexte">
-              {t("startWebApp")}
-            </Link>
-          </nav>
-        </div>
-
-        {/* Colonne 4 : Logo certification */}
-        <div className="flex flex-col items-center justify-center gap-3">
-          <Image
-            src="/img/logo-activateurs.svg"
-            alt={t("certificationAlt")}
-            width={120}
-            height={120}
-            className="object-contain"
-            style={{ width: "auto", height: "auto" }}
-          />
+          <Link href="/contact" className="btn primary" style={{ height: 36, fontSize: 10 }}>
+            {t("startWebApp")}
+          </Link>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="container border-t border-white/10 pt-4 space-y-1">
-        <p className="text-center text-xs text-white/50 font-googletexte">
-          {t.rich("figaroMention", {
-            lien: (chunks) => (
-              <a
-                href="https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline decoration-lightyellow/60 underline-offset-4 hover:text-lightyellow dark:text-lightyellow transition-colors"
-              >
-                {chunks}
-              </a>
-            ),
-          })}
-        </p>
-        <p className="text-center text-sm text-white/50 font-googletexte">
-          {t("copyright", { year: new Date().getFullYear() })}
-        </p>
-        <p className="text-center text-xs text-white/35 font-googletexte">
-          {t("tihMention")}
-        </p>
+      {/* Colophon */}
+      <div
+        style={{
+          maxWidth: "var(--container-w, 1200px)",
+          margin: "0 auto",
+          padding: "16px 0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--mono, monospace)",
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+          }}
+        >
+          © {year} NEXT IMPACT DIGITAL
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--mono, monospace)",
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+          }}
+        >
+          ED. {year} · VOL. 02
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--mono, monospace)",
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+          }}
+        >
+          SET EN INSTRUMENT SERIF / GEIST
+        </span>
+        <a
+          href="#__next"
+          style={{
+            fontFamily: "var(--mono, monospace)",
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+            textDecoration: "none",
+          }}
+        >
+          ↑ HAUT DE PAGE
+        </a>
       </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }

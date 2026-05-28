@@ -1,87 +1,91 @@
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { MagicCard } from './magicui/magic-card';
+const TESTIMONIALS = [
+  {
+    quote: "Agathe se distingue par sa capacité à comprendre rapidement les enjeux business et à les traduire en solutions techniques efficaces. Pour notre projet, elle a su créer une landing page sur mesure qui reflète parfaitement notre identité de marque, tout en intégrant un système multilingue fluide et intuitif.",
+    author: "Christophe Riboulet",
+    position: "PDG",
+    company: "Proditec",
+    no: "01",
+  },
+  {
+    quote: "Nous travaillons exclusivement avec Agathe désormais pour gérer notre site internet. Elle est très pro, de bons conseils et rapide. Ses offres sont claires et adaptées à nos besoins. Nous le recommandons très volontiers !",
+    author: "Laura Schorestene",
+    position: "Fondatrice",
+    company: "Senza Nature",
+    no: "02",
+  },
+  {
+    quote: "Quand réactivité, savoir-faire sont réunis cela assure un résultat. Si en plus de cela l'échange même à distance est facile et efficace, cela rend la mission agréable… Merci Agathe.",
+    author: "Philippe Barrat",
+    position: "CTO",
+    company: "Neway Partners",
+    no: "03",
+  },
+]
 
-const Testimonials = () => {
-  const testimonials = [
-    {
-      quote: "Agathe se distingue par sa capacité à comprendre rapidement les enjeux business et à les traduire en solutions techniques efficaces. Pour notre projet, elle a su créer une landing page sur mesure qui reflète parfaitement notre identité de marque, tout en intégrant un système multilingue fluide et intuitif.",
-      author: "Christophe Riboulet",
-      position: "PDG",
-      company: "Proditec",
-      rating: 5
-    },
-    {
-      quote: "Nous travaillons exclusivement avec Agathe désormais pour gérer notre site internet. Elle est très pro, de bons conseils et rapide. Ses offres sont claires et adaptées à nos besoins. Nous le recommandons très volontiers !",
-      author: "Laura Schorestene",
-      position: "Fondatrice",
-      company: "Senza Nature",
-      rating: 5
-    },
-    {
-      quote: "Quand réactivité, savoir-faire sont réunis cela assure un résultat. Si en plus de cela l'échange même à distance est facile et efficace, cela rend la mission agréable…:) Merci Agathe.",
-      author: "Philippe Barrat",
-      position: "CTO",
-      company: "Neway Partners",
-      rating: 5
-    }
-  ];
-
-  const renderStars = (rating: number) => {
-    return Array(5).fill(0).map((_, i) => (
-      <svg 
-        key={i} 
-        xmlns="http://www.w3.org/2000/svg" 
-        viewBox="0 0 24 24" 
-        fill={i < rating ? "currentColor" : "none"}
-        stroke={i < rating ? "none" : "currentColor"}
-        className={`w-5 h-5 ${i < rating ? 'text-yellow-500' : 'text-gray-600'}`}
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-      </svg>
-    ));
-  };
-
+export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-24 md:py-32 ">
-      <div className="container">
-        <div className='text-center'>
-          <h2 className="text-4xl md:text-5xl text-regularblue mb-6">Ce qu'en disent mes clients</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-          {testimonials.map((testimonial, index) => (
-            <MagicCard key={index} className="h-max rounded-2xl">
-              <Card 
-                className="bg-white border border-pink-200/40 rounded-2xl transition-all overflow-hidden "
+    <section id="testimonials">
+      <div style={{ borderTop: "1px solid var(--rule)" }}>
+        {TESTIMONIALS.map((t) => (
+          <div
+            key={t.no}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "56px 1fr 240px",
+              gap: 32,
+              padding: "40px 0",
+              borderBottom: "1px solid var(--rule)",
+              alignItems: "start",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+                color: "var(--accent-color)",
+                letterSpacing: "0.08em",
+                paddingTop: 6,
+              }}
+            >
+              {t.no}
+            </span>
+            <blockquote
+              className="quote"
+              style={{ margin: 0, fontSize: "clamp(15px, 2vw, 20px)" }}
+            >
+              « {t.quote} »
+            </blockquote>
+            <div style={{ paddingTop: 6 }}>
+              <div className="ni-serif" style={{ fontSize: 16, marginBottom: 4 }}>
+                {t.author}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--muted-color)",
+                  marginBottom: 2,
+                }}
               >
-                <CardContent className="pt-8 flex-grow">     
-                  <div className="flex items-center mb-4">
-                    {renderStars(testimonial.rating)}
-                    <span className="ml-2 text-sm text-regularblue/70">
-                      {testimonial.rating} étoiles
-                    </span>
-                  </div>
-                
-                  <p className="text-md mb-4 text-regularblue leading-relaxed">{testimonial.quote}</p>
-                </CardContent>
-                
-                <CardFooter className="pt-2">
-                  <div>
-                    <p className="font-medium font-googletitre text-base text-regularblue">{testimonial.author}</p>
-                    <p className="text-sm font-googletitre text-regularblue/70">
-                      {testimonial.position}</p>
-                    <p className="mt-2 text-xs text-regularblue/70 uppercase">
-                      {testimonial.company}
-                    </p>
-                  </div>
-                </CardFooter>
-              </Card>
-            </MagicCard>
-          ))}
-        </div>
+                {t.position}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--accent-color)",
+                }}
+              >
+                {t.company}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
-  );
-};
-
-export default Testimonials;
+  )
+}
