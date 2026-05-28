@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import AiAuditBannerSVG from "./AiAuditBannerSVG";
-import EligibilityForm from "@/components/tarifs/EligibilityForm";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
@@ -197,64 +195,6 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* ─── Section 2 — Diagnostic de stack ─────────────────────────── */}
-      <section
-        id="audit"
-        style={{
-          background: "var(--paper-2)",
-          padding: "80px 0",
-          borderBottom: "1px solid var(--rule)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Background SVG décor */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "50%",
-            height: "100%",
-            opacity: 0.07,
-            pointerEvents: "none",
-          }}
-        >
-          <AiAuditBannerSVG />
-        </div>
-
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div className="sec-head">
-            <div className="sec-no">№ 02</div>
-            <h2
-              className="ni-serif"
-              style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
-            >
-              {variant.auditTitle}
-            </h2>
-            <div className="sec-meta">Diagnostic · Fig. 02</div>
-          </div>
-
-          <div style={{ marginBottom: 32 }}>
-            <p
-              style={{
-                fontSize: 18,
-                fontFamily: "var(--serif)",
-                fontStyle: "italic",
-                color: "var(--accent-color)",
-                marginBottom: 8,
-              }}
-            >
-              {variant.auditSubtitle}
-            </p>
-            <p style={{ fontSize: 14, color: "var(--ink-2)", maxWidth: 600 }}>
-              {variant.auditDescription}
-            </p>
-          </div>
-
-          <EligibilityForm />
-        </div>
-      </section>
     </>
   );
 }

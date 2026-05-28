@@ -1,31 +1,59 @@
 "use client";
+
 import dynamic from "next/dynamic";
-// Dynamic imports pour les composants lourds
+import Process from "@/components/process";
+
 const Hero = dynamic(() => import("@/components/hero"), {
-  loading: () => <div className="min-h-screen" />
+  loading: () => <div style={{ minHeight: "100vh" }} />,
 });
 
 const FeaturedRealisation = dynamic(() => import("./featured-realisation"), {
-  loading: () => <div className="min-h-[400px]" />
+  loading: () => <div style={{ minHeight: 400 }} />,
 });
 
-const ExpandableCardDemo = dynamic(() => import("./expandable-cards").then(mod => ({ default: mod.ExpandableCardDemo })), {
-  loading: () => <div className="min-h-[400px]" />
+const HomeOffres = dynamic(() => import("./home-offres"), {
+  loading: () => <div style={{ minHeight: 400 }} />,
+});
+
+const HomeTihTeaser = dynamic(() => import("./home-tih-teaser"), {
+  loading: () => <div style={{ minHeight: 120 }} />,
+});
+
+const HomeDiagnostic = dynamic(() => import("./home-diagnostic"), {
+  loading: () => <div style={{ minHeight: 400 }} />,
+});
+
+const HomeCta = dynamic(() => import("./home-cta"), {
+  loading: () => <div style={{ minHeight: 200 }} />,
 });
 
 export default function HomeClient() {
   return (
-    <>
-      <main className="flex-1">
-        {/* Hero Section */}
-        <Hero />
+    <main className="flex-1">
+      {/* § 01 — Hero */}
+      <Hero />
 
-        {/* Réalisation phare — Panorama Pub */}
-        <FeaturedRealisation />
+      {/* § 02 — Réalisation phare */}
+      <FeaturedRealisation />
 
-        {/* Bloc pédagogique : sites web & applications */}
-        <ExpandableCardDemo />
-      </main>
-    </>
+      {/* § 03 — Offres : 3 stacks */}
+      <HomeOffres />
+
+      {/* § 04 — Méthode */}
+      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+        <div className="container">
+          <Process />
+        </div>
+      </section>
+
+      {/* § 05 — Avantage TIH */}
+      <HomeTihTeaser />
+
+      {/* § 06 — Diagnostic de stack */}
+      <HomeDiagnostic />
+
+      {/* § 07 — CTA final */}
+      <HomeCta />
+    </main>
   );
 }
