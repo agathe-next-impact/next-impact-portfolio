@@ -58,7 +58,6 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
   className = "",
 }) => {
   const BASE_URL = "https://next-impact.digital";
-  // Handle relative URLs by prepending the base domain
   const fullUrl = url.startsWith("/") ? `${BASE_URL}${url}` : url.replace(/https?:\/\/[^/]+/g, BASE_URL).replace(/([^:]\/)\/+/g, "$1");
   const [copied, setCopied] = React.useState(false);
 
@@ -70,8 +69,22 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
     }
   };
 
+  const btnStyle: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "1.75rem",
+    height: "1.75rem",
+    border: "1px solid var(--rule)",
+    background: "var(--paper)",
+    color: "var(--muted-color)",
+    cursor: "pointer",
+    textDecoration: "none",
+    transition: "color 0.15s, background 0.15s",
+  };
+
   return (
-    <div className={`flex gap-1.5 ${className}`}>
+    <div className={`flex gap-1 ${className}`}>
       {socialPlatforms.map((platform) => (
         <a
           key={platform.name}
@@ -79,19 +92,42 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Partager sur ${platform.name}`}
-          className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-2 transition-colors"
+          style={btnStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--ink)";
+            e.currentTarget.style.background = "var(--paper-2)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--muted-color)";
+            e.currentTarget.style.background = "var(--paper)";
+          }}
         >
-          <platform.icon size={16} />
+          <platform.icon size={13} />
         </a>
       ))}
       <button
         type="button"
         aria-label="Copier le lien"
         onClick={handleCopy}
-        className={`rounded-full p-2 transition-colors ${copied ? "text-green-400" : "text-white/70 hover:text-white hover:bg-white/10"}`}
         title={copied ? "Lien copié !" : "Copier le lien"}
+        style={{
+          ...btnStyle,
+          color: copied ? "var(--accent-color)" : "var(--muted-color)",
+        }}
+        onMouseEnter={(e) => {
+          if (!copied) {
+            e.currentTarget.style.color = "var(--ink)";
+            e.currentTarget.style.background = "var(--paper-2)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!copied) {
+            e.currentTarget.style.color = "var(--muted-color)";
+            e.currentTarget.style.background = "var(--paper)";
+          }
+        }}
       >
-        <FaShareAlt size={16} />
+        <FaShareAlt size={13} />
       </button>
     </div>
   )

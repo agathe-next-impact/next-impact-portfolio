@@ -32,7 +32,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
       "Sites WordPress (classiques ou Headless + Next.js) et applications sur-mesure : autonomie de gestion sur tous les projets, sans dépendance technique récurrente.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
     ctaSecondary: { label: "Me contacter", href: "/contact" },
-    auditTitle: "Quelle voie pour votre projet ?",
+    auditTitle: "Quelle techno pour votre projet ?",
     auditSubtitle: "Diagnostic projet",
     auditDescription:
       "Décrivez votre projet en quelques clics et obtenez la voie adaptée : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
@@ -46,7 +46,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
       "Performance, SEO, conversion et autonomie de gestion : des résultats mesurables, quelle que soit la voie choisie.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
     ctaSecondary: { label: "Me contacter", href: "/contact" },
-    auditTitle: "Quelle voie pour votre projet ?",
+    auditTitle: "Quelle techno pour votre projet ?",
     auditSubtitle: "Diagnostic projet",
     auditDescription:
       "Identifiez en 2 minutes la voie adaptée à votre projet — site WordPress, site Headless, web app ou application mobile — et estimez les gains attendus.",
@@ -160,7 +160,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   decideur: {
-    titre: "Modernisez votre WordPress, mesurez vos résultats",
+    titre: "Choisissez la bonne voie technique",
     sousTitre:
       "Trois paliers techniques au service de votre croissance : ROI mesurable, sécurité renforcée, conversion optimisée. Vous gardez l'admin que vos équipes connaissent.",
     carouselLabel: "Pourquoi investir dans la modernisation ?",
@@ -209,7 +209,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ],
   },
   utilisateur: {
-    titre: "Votre WordPress, en mieux",
+    titre: "Votre stack, en clair",
     sousTitre:
       "Vous gardez l'interface WordPress que vous connaissez, avec un site moderne, rapide et agréable à gérer au quotidien. Trois niveaux de modernisation, selon votre projet.",
     carouselLabel: "Pourquoi c'est plus simple ?",
@@ -262,7 +262,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     sousTitre:
       "WordPress API + Next.js pour les sites, base PostgreSQL dédiée pour les web apps, PWA installable pour le mobile. SSG, SSR, ISR, TypeScript, Tailwind, déploiement Vercel.",
     carouselLabel: "Pourquoi cette stack ?",
-    budgetTitle: "Que comprend chaque voie techniquement ?",
+    budgetTitle: "Que comprend chaque solution techniquement ?",
     budgetCards: {
       left: {
         title: "Classique (WordPress)",
@@ -467,7 +467,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       },
       {
         icon: "/icons/eco-design-icon.svg",
-        title: "Plusieurs voies, un investissement maîtrisé",
+        title: "Plusieurs solutions, un investissement maîtrisé",
         description:
           "Tous les projets n'ont pas besoin de la même solution. La bonne voie technique, c'est celle qui rentabilise votre investissement — pas la plus sophistiquée.",
         items: [
@@ -554,7 +554,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       },
       {
         icon: "/icons/globe-network-icon.svg",
-        title: "Quatre voies techniques",
+        title: "Quatre solutions techniques",
         description:
           "Thème WordPress classique optimisé, Headless + Next.js App Router (SSG/ISR/SSR) pour les plateformes éditoriales évolutives, web app sur-mesure (Next.js + PostgreSQL serverless, admin autonome), ou PWA installable côté mobile.",
         items: [

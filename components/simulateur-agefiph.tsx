@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -24,13 +24,13 @@ function formatEuro(value: number, locale: Locale): string {
 const presetsFr = [
   { label: "Classique", value: 2250 },
   { label: "Headless", value: 4000 },
-  { label: "Web app", value: 5000 },
+  { label: "Web app", value: 6500 },
   { label: "Application sur-mesure", value: 15000 },
 ];
 const presetsEn = [
   { label: "Classic", value: 2250 },
   { label: "Headless", value: 4000 },
-  { label: "Web app", value: 5000 },
+  { label: "Web app", value: 6500 },
   { label: "Custom application", value: 15000 },
 ];
 
@@ -544,10 +544,10 @@ export default function SimulateurAgefiph() {
 
             {/* CTAs */}
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <Link href={`/${locale}/contact`} className="btn primary">
+              <Link href="/contact" className="btn primary">
                 {isEn ? "Start a project" : "Démarrer un projet"}
               </Link>
-              <Link href={`/${locale}/services`} className="btn">
+              <Link href="/services" className="btn">
                 {isEn ? "See services" : "Voir les services"}
               </Link>
             </div>

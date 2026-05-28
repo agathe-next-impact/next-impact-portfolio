@@ -12,8 +12,7 @@
     "contact": "Contact",
     "about": "About",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "whitepaperTitle": "White paper: What is Headless WordPress?"
+    "closeMenu": "Close menu"
   },
   "footer": {
     "contactQuestion": "Have a question? Reach me directly.",
@@ -30,8 +29,6 @@
     "blog": "Blog",
     "oethAdvantage": "OETH Advantage",
     "resources": "Resources",
-    "whitepaperHeadless": "White paper — Headless WordPress",
-    "whitepaperWebApp": "White paper — From websites to web apps",
     "freeAiAudit": "Free AI audit",
     "roiSimulator": "ROI simulator",
     "benchmarking": "Benchmarking",
@@ -150,16 +147,6 @@
       "secondary": "Core Web Vitals audit and competitive analysis in seconds.",
       "ctaLabel": "Start benchmarking",
       "footer": "Free · Core Web Vitals analysis · No strings attached"
-    },
-    "livreBlanc": {
-      "badge": "Free guide",
-      "title": "What is Headless WordPress?",
-      "promiseStart": "Find out in our white paper",
-      "promiseHighlight": "everything you need to know about headless architecture",
-      "promiseEnd": ": benefits, use cases and implementation.",
-      "secondary": "A complete guide to understand, evaluate and adopt Headless WordPress.",
-      "ctaLabel": "Download the white paper",
-      "footer": "Free · Complete PDF · No signup"
     },
     "reassurance": {
       "directContact": "Direct contact",
@@ -314,7 +301,7 @@
   },
   "servicesPage": {
     "metaTitle": "Services & Pricing — Websites and custom applications",
-    "metaDescription": "Three website tiers (Classic from €2,250, Headless from €4,000, Web app from €5,000) and a Web & Mobile App offer on quote. Transverse OETH benefit: 30% AGEFIPH deduction.",
+    "metaDescription": "Three website tiers (Classic from €2,250, Headless from €4,000, Web app from €6,500) and a Web & Mobile App offer on quote. Transverse OETH benefit: 30% AGEFIPH deduction.",
     "breadcrumbHome": "Home",
     "breadcrumbServices": "Services & Pricing",
     "calculateGain": {

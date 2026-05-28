@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 import { Lightbulb, AlertTriangle, Info, Briefcase, Code, User } from "lucide-react";
 
 type CalloutVariant = "tip" | "warning" | "info" | "decideur" | "developpeur" | "utilisateur";
@@ -12,48 +11,40 @@ interface CalloutProps {
   children: ReactNode;
 }
 
-const variantConfig: Record<CalloutVariant, { icon: typeof Info; bg: string; border: string; iconColor: string; titleColor: string }> = {
+const variantConfig: Record<CalloutVariant, {
+  icon: typeof Info;
+  borderColor: string;
+  iconColor: string;
+}> = {
   tip: {
     icon: Lightbulb,
-    bg: "bg-orange/5",
-    border: "border-orange/30",
-    iconColor: "text-orange",
-    titleColor: "text-orange",
+    borderColor: "var(--accent-color)",
+    iconColor: "var(--accent-color)",
   },
   warning: {
     icon: AlertTriangle,
-    bg: "bg-coral/5",
-    border: "border-coral/30",
-    iconColor: "text-coral",
-    titleColor: "text-coral",
+    borderColor: "var(--ink)",
+    iconColor: "var(--ink)",
   },
   info: {
     icon: Info,
-    bg: "bg-regularblue/5",
-    border: "border-regularblue/30",
-    iconColor: "text-regularblue",
-    titleColor: "text-regularblue",
+    borderColor: "var(--rule-strong)",
+    iconColor: "var(--muted-color)",
   },
   decideur: {
     icon: Briefcase,
-    bg: "bg-orange/5",
-    border: "border-orange/20",
-    iconColor: "text-orange",
-    titleColor: "text-orange",
+    borderColor: "var(--accent-color)",
+    iconColor: "var(--accent-color)",
   },
   developpeur: {
     icon: Code,
-    bg: "bg-regularblue/5",
-    border: "border-regularblue/20",
-    iconColor: "text-regularblue",
-    titleColor: "text-regularblue",
+    borderColor: "var(--ink-2)",
+    iconColor: "var(--ink-2)",
   },
   utilisateur: {
     icon: User,
-    bg: "bg-lightyellow/20",
-    border: "border-lightyellow/40",
-    iconColor: "text-mediumblue",
-    titleColor: "text-mediumblue",
+    borderColor: "var(--rule-strong)",
+    iconColor: "var(--muted-color)",
   },
 };
 
@@ -62,16 +53,29 @@ export function Callout({ variant = "info", title, children }: CalloutProps) {
   const Icon = config.icon;
 
   return (
-    <div className={cn("my-6 rounded-2xl border-l-4 px-5 py-4", config.bg, config.border)}>
-      <div className="flex items-start gap-3">
-        <Icon className={cn("h-5 w-5 mt-0.5 shrink-0", config.iconColor)} />
-        <div className="flex-1 min-w-0">
+    <div style={{
+      margin: "1.5rem 0",
+      padding: "1rem 1.25rem",
+      background: "var(--paper-2)",
+      borderLeft: `3px solid ${config.borderColor}`,
+    }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+        <Icon style={{ width: "1rem", height: "1rem", marginTop: "0.125rem", flexShrink: 0, color: config.iconColor }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
           {title && (
-            <p className={cn("font-googletitre font-medium text-sm mb-1", config.titleColor)}>
+            <p style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.6875rem",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: config.iconColor,
+              marginBottom: "0.375rem",
+              fontWeight: 500,
+            }}>
               {title}
             </p>
           )}
-          <div className="text-mediumblue/80 text-sm font-googletexte [&>p]:mb-2 [&>p:last-child]:mb-0">
+          <div style={{ fontSize: "0.875rem", color: "var(--ink-2)", lineHeight: 1.65 }}>
             {children}
           </div>
         </div>

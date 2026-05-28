@@ -122,41 +122,66 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
   if (relatedCategories.length === 0) return null;
 
   return (
-    <section className="mt-12 pt-20 border-t border-lightblue/10">
-      <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
+    <section style={{ marginTop: "4rem", borderTop: "1px solid var(--rule)", paddingTop: "2.5rem" }}>
+      <h2 style={{
+        fontFamily: "var(--font-serif)",
+        fontSize: "1.5rem",
+        fontWeight: 400,
+        color: "var(--ink)",
+        marginBottom: "0.375rem",
+      }}>
         {isEn ? "Related categories" : "Catégories associées"}
       </h2>
-      <p className="text-sm text-white/60 font-googletexte mb-6">
+      <p style={{ fontSize: "0.875rem", color: "var(--muted-color)", marginBottom: "1.5rem" }}>
         {isEn
           ? "Continue exploring with complementary topics."
           : "Continuez votre exploration avec des thématiques complémentaires."}
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "1px",
+        background: "var(--rule)",
+      }}>
         {relatedCategories.map((cat) => (
-            <Link
-              key={cat.slug}
-              // @ts-expect-error – href built from category slug at runtime
-              href={`/documentation/${cat.slug}`}
-              className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-darkblue/40 backdrop-blur-sm hover:border-lightblue/30 hover:bg-darkblue/60 transition-all duration-300"
-            >
-              <div className="flex items-start gap-3">
-                <div className="flex-1 min-w-0">
-                <FolderOpen className="h-6 w-6 text-coral shrink-0" />
-
-                  <h3 className="font-googletitre text-lg font-medium text-white/90 group-hover:text-white transition-colors">
-                    {cat.title}
-                  </h3>
-                  <p className="text-sm text-white/60 font-googletexte mt-1 line-clamp-2">
-                    {cat.description}
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-sm text-coral font-googletexte mt-2 group-hover:text-coral/80 transition-colors">
-                    {cat.articleCount}
-                    <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </div>
-              </div>
-            </Link>
+          <Link
+            key={cat.slug}
+            href={`/documentation/${cat.slug}` as never}
+            className="hover-row"
+            style={{
+              display: "block",
+              padding: "1.25rem",
+              background: "var(--paper)",
+              textDecoration: "none",
+            }}
+          >
+            <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", marginBottom: "0.5rem" }} />
+            <h3 style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "1.125rem",
+              fontWeight: 400,
+              color: "var(--ink)",
+              marginBottom: "0.25rem",
+            }}>
+              {cat.title}
+            </h3>
+            <p style={{ fontSize: "0.8125rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
+              {cat.description}
+            </p>
+            <span style={{
+              fontSize: "0.75rem",
+              color: "var(--muted-color)",
+              fontFamily: "var(--font-mono)",
+              marginTop: "0.5rem",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.25rem",
+            }}>
+              {cat.articleCount}
+              <ArrowRight style={{ width: "0.75rem", height: "0.75rem" }} />
+            </span>
+          </Link>
         ))}
       </div>
     </section>
@@ -169,47 +194,68 @@ export function AllCategoriesGrid() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const allCategories = isEn ? ALL_CATEGORIES_EN : ALL_CATEGORIES_FR;
+
   return (
-    <section className="relative mt-12">
-      {/* Full-width background + borders */}
-      <div className="absolute inset-0 -left-[calc((100vw-100%)/2)] w-screen bg-darkblue/90 border-y border-lightblue/10" />
+    <section style={{ marginTop: "3rem", borderTop: "1px solid var(--rule)", paddingTop: "2.5rem", borderBottom: "1px solid var(--rule)", paddingBottom: "2.5rem" }}>
+      <h2 style={{
+        fontFamily: "var(--font-serif)",
+        fontSize: "1.5rem",
+        fontWeight: 400,
+        color: "var(--ink)",
+        marginBottom: "0.375rem",
+      }}>
+        {isEn ? "Explore the documentation" : "Explorer la documentation"}
+      </h2>
+      <p style={{ fontSize: "0.875rem", color: "var(--muted-color)", marginBottom: "1.5rem" }}>
+        {isEn
+          ? "All guides and resources, organized by topic."
+          : "Tous nos guides et ressources, organisés par thématique."}
+      </p>
 
-      <div className="relative py-20">
-        <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
-          {isEn ? "Explore the documentation" : "Explorer la documentation"}
-        </h2>
-        <p className="text-sm text-white/60 font-googletexte mb-6">
-          {isEn
-            ? "All guides and resources, organized by topic."
-            : "Tous nos guides et ressources, organisés par thématique."}
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {allCategories.map((cat) => (
-              <Link
-                key={cat.slug}
-                // @ts-expect-error – href built from category slug at runtime
-                href={`/documentation/${cat.slug}`}
-                className="group relative overflow-hidden rounded-2xl p-5 border border-lightblue/10 bg-white/5 backdrop-blur-sm hover:border-lightblue/30 hover:bg-mediumblue/80 transition-all duration-300"
-              >
-                <div>
-                  <FolderOpen className="h-6 w-6 text-coral mb-2" />
-                  <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/90 group-hover:text-white transition-colors">
-                    {cat.title}
-                  </h3>
-                  <p className="text-sm text-white/60 font-googletexte mt-1 line-clamp-2">
-                    {cat.description}
-                  </p>
-                </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-lightblue/5">
-                  <span className="text-sm text-white/40 font-googletexte">
-                    {cat.articleCount}
-                  </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-white/30 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </Link>
-          ))}
-        </div>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "1px",
+        background: "var(--rule)",
+      }}>
+        {allCategories.map((cat) => (
+          <Link
+            key={cat.slug}
+            href={`/documentation/${cat.slug}` as never}
+            className="hover-row"
+            style={{
+              display: "block",
+              padding: "1.25rem",
+              background: "var(--paper)",
+              textDecoration: "none",
+            }}
+          >
+            <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", marginBottom: "0.5rem" }} />
+            <h3 style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "1.25rem",
+              fontWeight: 400,
+              color: "var(--ink)",
+              marginBottom: "0.25rem",
+            }}>
+              {cat.title}
+            </h3>
+            <p style={{ fontSize: "0.8125rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
+              {cat.description}
+            </p>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderTop: "1px solid var(--rule)",
+              marginTop: "0.75rem",
+              paddingTop: "0.75rem",
+            }}>
+              <span className="annot">{cat.articleCount}</span>
+              <ArrowRight style={{ width: "0.875rem", height: "0.875rem", color: "var(--muted-color)" }} />
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

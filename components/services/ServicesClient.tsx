@@ -8,6 +8,7 @@ import { ServicesComparisonTable } from "@/components/services/ServicesCompariso
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import { HeadlessExplainer } from "@/components/headless-explainer";
+import HomeDiagnostic from "@/components/home-diagnostic";
 import PageLayout from "@/components/page-layout";
 import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
@@ -67,7 +68,10 @@ export default function ServicesClient() {
         </div>
       </section>
 
-      {/* § 05 — Stack sur-mesure (web app) */}
+      {/* § 05 — Diagnostic projet */}
+      <HomeDiagnostic />
+
+      {/* § 06 — Stack sur-mesure (web app) */}
       <AppsSection />
 
       {/* § 06 — Méthode */}

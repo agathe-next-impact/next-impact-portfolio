@@ -47,7 +47,7 @@ export default async function PlaygroundPage({
   ];
 
   return (
-    <div className="relative min-h-screen">
+    <div style={{ minHeight: "100vh" }}>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <VideoObjectJsonLd
         name="Billeterie événementielle — WordPress Headless Next.js"
@@ -89,66 +89,72 @@ export default async function PlaygroundPage({
         contentUrl="https://youtu.be/SIj61ECS1Mo"
         embedUrl="https://www.youtube.com/embed/SIj61ECS1Mo"
       />
-      <main className="flex-1">
-        <section className="w-full py-8 md:py-12 lg:py-16">
-          <div className="container px-4 md:px-6">
-            {/* Header */}
-            <div className="mb-10">
-              <Link
-                href="/documentation"
-                className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10 mb-6"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {t("breadcrumbDocs")}
-              </Link>
-              <h1 className="font-googletitre text-3xl sm:text-4xl md:text-5xl font-medium text-white tracking-tight">
-                Playground
-              </h1>
-              <p className="mt-3 text-lg text-white/80 font-googletexte max-w-2xl">
-                {locale === "en"
-                  ? "Explore the design system, watch demos and test components in real time."
-                  : "Explorez le design system, visionnez les démos et testez les composants en temps réel."}
-              </p>
-            </div>
+      <section className="s">
+        <div className="container">
+          {/* Back link */}
+          <div style={{ marginBottom: "2rem" }}>
+            <Link
+              href="/documentation"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                fontSize: "0.8125rem",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+              }}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t("breadcrumbDocs")}
+            </Link>
+          </div>
 
-            <div className="space-y-10">
-              {/* 1. MDX Component Gallery */}
-              <MdxGallery />
+          {/* Header */}
+          <div style={{ borderTop: "2px solid var(--ink)", paddingTop: "2.5rem", marginBottom: "3rem" }}>
+            <h1 style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2rem, 5vw, 3rem)",
+              fontWeight: 400,
+              color: "var(--ink)",
+              marginBottom: "0.75rem",
+            }}>
+              Playground
+            </h1>
+            <p style={{ fontSize: "1.0625rem", color: "var(--muted-color)", maxWidth: "52ch", lineHeight: 1.6 }}>
+              {locale === "en"
+                ? "Explore the design system, watch demos and test components in real time."
+                : "Explorez le design system, visionnez les démos et testez les composants en temps réel."}
+            </p>
+          </div>
 
-              {/* 2. Spring Animation Lab */}
-              <SpringLab />
-
-              {/* 3. Button playground */}
-              <LiveButtonPlayground />
-
-              {/* 5. Typography */}
-              <TypographyShowcase />
-
-              {/* 6. Profile-aware content demo */}
-              <ConditionalContent
-                simple={
-                  <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-6 md:p-8">
-                    <h3 className="font-googletitre text-xl text-white font-medium mb-4">
-                      Comment fonctionne le headless ?
-                    </h3>
-                    <p className="text-white/80 font-googletexte leading-relaxed">
-                      Votre site WordPress envoie le contenu via une API. Le
-                      frontend (Next.js) récupère ce contenu et l&apos;affiche
-                      avec un design moderne et performant.
-                    </p>
-                  </div>
-                }
-                advanced={
-                  <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-6 md:p-8">
-                    <h3 className="font-googletitre text-xl text-white font-medium mb-4">
-                      Architecture technique headless
-                    </h3>
-                    <p className="text-white/80 font-googletexte mb-4">
-                      L&apos;API REST de WordPress expose les endpoints
-                      suivants :
-                    </p>
-                    <pre className="rounded-2xl bg-darkblue/60 border border-lightblue/10 p-5 text-sm text-extralightblue/80 font-mono overflow-x-auto">
-                      <code>{`GET /wp-json/wp/v2/posts
+          <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+            <MdxGallery />
+            <SpringLab />
+            <LiveButtonPlayground />
+            <TypographyShowcase />
+            <ConditionalContent
+              simple={
+                <div style={{ border: "1px solid var(--rule)", borderLeft: "3px solid var(--rule-strong)", background: "var(--paper-2)", padding: "1.5rem 2rem" }}>
+                  <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.125rem", fontWeight: 400, color: "var(--ink)", marginBottom: "0.75rem" }}>
+                    Comment fonctionne le headless ?
+                  </h3>
+                  <p style={{ fontSize: "0.9375rem", color: "var(--muted-color)", lineHeight: 1.65 }}>
+                    Votre site WordPress envoie le contenu via une API. Le
+                    frontend (Next.js) récupère ce contenu et l&apos;affiche
+                    avec un design moderne et performant.
+                  </p>
+                </div>
+              }
+              advanced={
+                <div style={{ border: "1px solid var(--rule)", borderLeft: "3px solid var(--ink)", background: "var(--paper-2)", padding: "1.5rem 2rem" }}>
+                  <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.125rem", fontWeight: 400, color: "var(--ink)", marginBottom: "0.75rem" }}>
+                    Architecture technique headless
+                  </h3>
+                  <p style={{ fontSize: "0.9375rem", color: "var(--muted-color)", marginBottom: "1rem" }}>
+                    L&apos;API REST de WordPress expose les endpoints suivants :
+                  </p>
+                  <pre style={{ background: "var(--paper)", border: "1px solid var(--rule)", padding: "1rem", fontSize: "0.8125rem", fontFamily: "var(--font-mono)", color: "var(--ink-2)", overflowX: "auto", lineHeight: 1.6 }}>
+                    <code>{`GET /wp-json/wp/v2/posts
 GET /wp-json/wp/v2/pages?per_page=100
 GET /wp-json/wp/v2/media?parent=<id>
 
@@ -157,17 +163,14 @@ const res = await fetch(
   'https://votre-site.com/wp-json/wp/v2/posts'
 );
 const posts = await res.json();`}</code>
-                    </pre>
-                  </div>
-                }
-              />
-
-              {/* 8. Video demos */}
-              <VideoGallery />
-            </div>
+                  </pre>
+                </div>
+              }
+            />
+            <VideoGallery />
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
     </div>
   );
 }

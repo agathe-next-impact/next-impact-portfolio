@@ -1,5 +1,5 @@
 import { ArrowLeft, Clock } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import type { BlogPost } from "@/lib/blog"
 import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
 
@@ -18,56 +18,88 @@ export function BlogLayout({ post, children }: BlogLayoutProps) {
     : ""
 
   return (
-    <div className="relative z-10 min-h-screen">
+    <div style={{ minHeight: "100vh" }}>
       <TranslationFallbackBanner show={post.isFallback} />
-      <main className="flex-1">
-        <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16">
-          <div className="flex items-center gap-3 mb-8 flex-wrap">
+      <section className="s">
+        <div className="container">
+          {/* Breadcrumb */}
+          <div style={{ marginBottom: "2rem" }}>
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10 font-googletexte"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                fontSize: "0.8125rem",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+              }}
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft style={{ width: "0.875rem", height: "0.875rem" }} />
               Blog
             </Link>
           </div>
 
-          <header className="mb-8 space-y-4">
-            <h1 className="font-googletitre text-3xl md:text-4xl lg:text-5xl tracking-tight font-medium text-white leading-tight">
-              {post.title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/60 font-googletexte">
-              {post.author && <span>{post.author}</span>}
-              {formattedDate && <span>{formattedDate}</span>}
+          {/* Article header */}
+          <div style={{
+            borderTop: "2px solid var(--ink)",
+            paddingTop: "2.5rem",
+            marginBottom: "2.5rem",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+              {formattedDate && <span className="label">{formattedDate}</span>}
+              {post.author && (
+                <span style={{ fontSize: "0.8125rem", color: "var(--muted-color)" }}>
+                  {post.author}
+                </span>
+              )}
               {post.readingTime > 0 && (
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" />
+                <span style={{
+                  fontSize: "0.75rem",
+                  color: "var(--muted-color)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.375rem",
+                }}>
+                  <Clock style={{ width: "0.75rem", height: "0.75rem" }} />
                   {post.readingTime} min
                 </span>
               )}
             </div>
+
             {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.25rem" }}>
                 {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-lightblue/10 bg-darkblue/40 px-2.5 py-0.5 text-[10px] font-googletexte text-white/70"
-                  >
-                    {tag}
-                  </span>
+                  <span key={tag} className="label">{tag}</span>
                 ))}
               </div>
             )}
-          </header>
 
+            <h1 style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2rem, 5vw, 3rem)",
+              fontWeight: 400,
+              lineHeight: 1.15,
+              color: "var(--ink)",
+            }}>
+              {post.title}
+            </h1>
+          </div>
+
+          {/* Content */}
           <div
             data-article-content
-            className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl article-text text-white/80"
+            className="light article-text"
+            style={{
+              padding: "2.5rem",
+              background: "var(--paper-2)",
+              color: "var(--ink)",
+            }}
           >
             {children}
           </div>
         </div>
-      </main>
+      </section>
     </div>
   )
 }

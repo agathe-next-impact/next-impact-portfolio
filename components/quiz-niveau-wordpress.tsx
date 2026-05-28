@@ -16,7 +16,7 @@ const results = {
       "Formation équipe incluse",
       "Architecture évolutive",
     ],
-    cta: "/services/wordpress",
+    cta: "/services",
     badgeClass: "professionnel",
   },
   avance: {
@@ -32,7 +32,7 @@ const results = {
       "Multi-sites si besoin",
       "Architecture headless-ready",
     ],
-    cta: "/services/wordpress",
+    cta: "/services",
     badgeClass: "avance",
   },
   headless: {
@@ -48,7 +48,7 @@ const results = {
       "Technologies future-proof",
       "Support premium inclus",
     ],
-    cta: "/services/headless",
+    cta: "/services",
     badgeClass: "headless",
   },
 };

@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleSidebar } from "./ArticleSidebar"
 import type { Article } from "@/lib/articles"
@@ -13,46 +13,58 @@ interface ArticleLayoutProps {
 
 export function ArticleLayout({ article, sectionCount, children }: ArticleLayoutProps) {
   return (
-    <div className="relative z-10 min-h-screen">
+    <div style={{ minHeight: "100vh" }}>
       <TranslationFallbackBanner show={article.isFallback} />
-      <main className="flex-1">
-        <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16">
+      <section className="s">
+        <div className="container">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-3 mb-8 flex-wrap">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem", flexWrap: "wrap" }}>
             <Link
               href="/articles"
-              className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10 font-googletexte"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                fontSize: "0.8125rem",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+              }}
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft style={{ width: "0.875rem", height: "0.875rem" }} />
               Articles
             </Link>
-            <span className="rounded-full bg-darkblue/50 backdrop-blur-sm px-3 py-1.5 text-xs text-white/80 transition-colors border border-lightblue/10 font-googletexte">
+            <span style={{ color: "var(--rule-strong)" }}>·</span>
+            <span style={{ fontSize: "0.8125rem", color: "var(--muted-color)" }}>
               {article.category}
             </span>
           </div>
 
-          {/* Article header — hero style */}
+          {/* Article header */}
           <ArticleHeader article={article} sectionCount={sectionCount} />
 
-          {/* Content grid: TOC sidebar + Article body */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Content grid: sidebar + body */}
+          <div className="grid grid-cols-1 lg:grid-cols-4" style={{ gap: "3rem" }}>
             <ArticleSidebar
               relatedArticles={article.relatedArticles}
               relatedDocs={article.relatedDocs}
             />
-
-            <div id="article-body" className="col-span-1 lg:col-span-3 flex flex-col gap-8">
-              {/* Reading area */}
+            <div id="article-body" className="col-span-1 lg:col-span-3" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               <div
                 data-article-content
-                className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl article-text text-white/80"
+                className="light article-text"
+                style={{
+                  width: "100%",
+                  padding: "2.5rem",
+                  background: "var(--paper-2)",
+                  color: "var(--ink)",
+                }}
               >
                 {children}
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </section>
     </div>
   )
 }

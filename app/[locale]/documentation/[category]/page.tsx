@@ -99,39 +99,43 @@ export default async function CategoryPage(props: CategoryPageProps) {
   ];
 
   return (
-    <div className="relative min-h-screen">
+    <div style={{ minHeight: "100vh" }}>
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <main className="flex-1">
-        <section className="w-full py-8 md:py-12 lg:py-16">
-          <div className="container px-4 md:px-6">
-            {/* Header */}
-            <div className="mb-8">
-              <Link
-                href="/documentation"
-                className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10 mb-6"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {t("breadcrumbDocs")}
-              </Link>
-              <h1 className="font-googletitre text-3xl sm:text-4xl md:text-5xl font-medium text-white tracking-tight">
-                {categoryTitle}
-              </h1>
-              {categoryDescription && (
-                <p className="mt-3 text-lg text-white/80 font-googletexte max-w-2xl">
-                  {categoryDescription}
-                </p>
-              )}
-            </div>
-
-            {/* Theme cards + Articles grid */}
-            <CategoryPageContent articles={articles} category={category} />
-
-            {/* Catégories associées */}
-            <CrossCategoryNav currentCategory={category} />
-
+      <section className="s">
+        <div className="container">
+          {/* Back link */}
+          <div style={{ marginBottom: "2rem" }}>
+            <Link
+              href="/documentation"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                fontSize: "0.8125rem",
+                color: "var(--muted-color)",
+                textDecoration: "none",
+              }}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t("breadcrumbDocs")}
+            </Link>
           </div>
-        </section>
-      </main>
+
+          {/* Section header */}
+          <div className="sec-head" style={{ marginBottom: "2.5rem" }}>
+            <h1>{categoryTitle}</h1>
+            {categoryDescription && (
+              <p className="sec-meta">{categoryDescription}</p>
+            )}
+          </div>
+
+          {/* Theme cards + Articles grid */}
+          <CategoryPageContent articles={articles} category={category} />
+
+          {/* Catégories associées */}
+          <CrossCategoryNav currentCategory={category} />
+        </div>
+      </section>
     </div>
   )
 }

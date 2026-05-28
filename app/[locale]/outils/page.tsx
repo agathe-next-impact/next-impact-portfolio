@@ -58,13 +58,13 @@ export default async function OutilsPage({
   const outilsItems =
     locale === "en"
       ? [
-          { name: "Pricing simulator", url: "/simulateur-tarifs", description: "Estimate the cost of your web project in a few clicks." },
-          { name: "WordPress or Headless quiz", url: "/cms-headless", description: "Find out which CMS solution best fits your needs." },
+          { name: "Pricing simulator", url: "/tarifs", description: "Estimate the cost of your web project in a few clicks." },
+          { name: "WordPress or Headless quiz", url: "/documentation/headless-cms", description: "Find out which CMS solution best fits your needs." },
           { name: "Project specifications generator", url: "/cahier-des-charges", description: "Build your complete, personalized specifications document." },
         ]
       : [
-          { name: "Simulateur de tarifs", url: "/simulateur-tarifs", description: "Estimez le coût de votre projet web en quelques clics." },
-          { name: "Quiz WordPress ou Headless", url: "/cms-headless", description: "Déterminez la solution CMS la plus adaptée à vos besoins." },
+          { name: "Simulateur de tarifs", url: "/tarifs", description: "Estimez le coût de votre projet web en quelques clics." },
+          { name: "Quiz WordPress ou Headless", url: "/documentation/headless-cms", description: "Déterminez la solution CMS la plus adaptée à vos besoins." },
           { name: "Générateur de cahier des charges", url: "/cahier-des-charges", description: "Créez votre cahier des charges complet et personnalisé." },
         ]
 

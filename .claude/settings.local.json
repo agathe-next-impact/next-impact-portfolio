@@ -32,7 +32,15 @@
       "WebFetch(domain:sejours.hermitagelelab.com)",
       "WebFetch(domain:www.nicocecile23mai2026.fr)",
       "WebFetch(domain:www.mariage-agathe-et-alain.fun)",
-      "WebFetch(domain:artisan-coiffeur.lapetitevitrine.com)"
+      "WebFetch(domain:artisan-coiffeur.lapetitevitrine.com)",
+      "Bash(find C:\\\\\\\\dev\\\\\\\\next-impact-portfolio\\\\\\\\app -name \"page.tsx\"*)",
+      "Bash(sed -i 's|\"/simulateur-tarifs\"|\"/tarifs\"|g; s|\"/cms-headless\"|\"/documentation/headless-cms\"|g' components/cta-section.tsx components/tools.tsx)",
+      "Bash(sed -i 's|\"/services/wordpress\"|\"/services\"|g; s|\"/services/headless\"|\"/services\"|g; s|\"/services/wordpress#tarifs\"|\"/services\"|g; s|\"/services/headless#tarifs\"|\"/services\"|g' components/quiz-niveau-wordpress.tsx components/services-dev.tsx components/strategie-prix.tsx)",
+      "Bash(sed -i 's|href=\"/simulateur-tarifs\"|href=\"/tarifs\"|g; s|href=\"/cms-headless\"|href=\"/documentation/headless-cms\"|g; s|url: \"/simulateur-tarifs\"|url: \"/tarifs\"|g; s|url: \"/cms-headless\"|url: \"/documentation/headless-cms\"|g' \"app/[locale]/outils/page.tsx\")",
+      "Bash(sed -i 's|href: \"/simulateur-tarifs\"|href: \"/tarifs\"|g' components/documentation/documentation-internal-links.tsx)",
+      "Bash(sed -i \"s|import Link from \\\\\"next/link\\\\\";|import { Link } from \\\\\"@/i18n/navigation\\\\\";|g\" components/documentation/learning-path.tsx components/mind-map/mind-map.tsx)",
+      "Bash(sed -i \"s|import Link from \\\\\"next/link\\\\\"\\\\$|import { Link } from \\\\\"@/i18n/navigation\\\\\"|g\" components/simulateur-agefiph.tsx)",
+      "Bash(python -c ' *)"
     ]
   }
 }

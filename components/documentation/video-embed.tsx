@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Play } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 function toYoutubeId(url: string): string | null {
   const short = url.match(/youtu\.be\/([\w-]+)/);
@@ -21,12 +20,7 @@ interface VideoEmbedProps {
   compact?: boolean;
 }
 
-export function VideoEmbed({
-  url,
-  title,
-  className,
-  compact = false,
-}: VideoEmbedProps) {
+export function VideoEmbed({ url, title, className, compact = false }: VideoEmbedProps) {
   const [loaded, setLoaded] = useState(false);
   const videoId = toYoutubeId(url);
 
@@ -36,43 +30,59 @@ export function VideoEmbed({
 
   return (
     <div
-      className={cn(
-        "relative overflow-hidden rounded-2xl border border-lightblue/10 bg-darkblue/60",
-        className
-      )}
+      className={className}
+      style={{ position: "relative", overflow: "hidden" }}
     >
-      <div
-        className="relative w-full"
-        style={{ paddingTop: compact ? "56.25%" : "56.25%" }}
-      >
+      <div style={{ position: "relative", width: "100%", paddingTop: "56.25%" }}>
         {loaded ? (
           <iframe
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
             title={title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="absolute inset-0 h-full w-full border-0"
+            style={{ position: "absolute", inset: 0, height: "100%", width: "100%", border: 0 }}
           />
         ) : (
           <button
             onClick={() => setLoaded(true)}
-            className="absolute inset-0 h-full w-full group cursor-pointer"
+            style={{
+              position: "absolute",
+              inset: 0,
+              height: "100%",
+              width: "100%",
+              cursor: "pointer",
+              background: "none",
+              border: "none",
+              padding: 0,
+            }}
             aria-label={`Lire : ${title}`}
           >
             {/* Thumbnail */}
             <img
               src={thumbnailUrl}
               alt={title}
-              className="absolute inset-0 h-full w-full object-cover"
+              style={{ position: "absolute", inset: 0, height: "100%", width: "100%", objectFit: "cover" }}
               loading="lazy"
             />
-            {/* Play button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-full backdrop-blur-sm border border-white/40 group-hover:scale-110 transition-all duration-300"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.45)" }}
-              >
-                <Play className="h-6 w-6 ml-0.5" style={{ color: "#FFFFFF" }} />
+            {/* Play button — carré Swiss */}
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "3rem",
+                height: "3rem",
+                background: "var(--paper)",
+                border: "2px solid var(--ink)",
+                transition: "background 0.15s",
+              }}>
+                <Play style={{ width: "1rem", height: "1rem", color: "var(--ink)", marginLeft: "0.125rem" }} />
               </div>
             </div>
           </button>
@@ -92,34 +102,26 @@ interface VideoCardProps {
   className?: string;
 }
 
-export function VideoCard({
-  url,
-  title,
-  description,
-  projectLink,
-  className,
-}: VideoCardProps) {
+export function VideoCard({ url, title, description, projectLink, className }: VideoCardProps) {
   return (
     <div
-      className={cn(
-        "rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm overflow-hidden",
-        className
-      )}
+      className={className}
+      style={{ border: "1px solid var(--rule)", background: "var(--paper)", overflow: "hidden" }}
     >
       <VideoEmbed url={url} title={title} />
-      <div className="p-4 md:p-5">
-        <h4 className="font-googletitre text-sm font-medium text-white mb-1">
+      <div style={{ padding: "1rem 1.25rem" }}>
+        <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "0.9375rem", fontWeight: 400, color: "var(--ink)", marginBottom: "0.25rem" }}>
           {title}
         </h4>
         {description && (
-          <p className="text-xs text-white/80 font-googletexte line-clamp-2">
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", lineHeight: 1.5 }}>
             {description}
           </p>
         )}
         {projectLink && (
           <a
             href={projectLink}
-            className="inline-block mt-2 text-xs text-orange/70 hover:text-orange font-googletexte transition-colors"
+            style={{ display: "inline-block", marginTop: "0.5rem", fontSize: "0.75rem", color: "var(--accent-color)", textDecoration: "none", fontFamily: "var(--font-mono)" }}
           >
             Voir le projet →
           </a>

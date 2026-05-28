@@ -13,7 +13,6 @@ Allow: /avantage-oeth
 Disallow: /api/
 Disallow: /_next/
 Disallow: /demo/metadata-test
-Disallow: /documentation/playground
 
 # Google — accès complet
 User-agent: Googlebot

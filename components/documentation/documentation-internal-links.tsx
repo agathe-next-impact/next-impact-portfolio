@@ -12,8 +12,6 @@ import {
   FolderOpen,
   Wrench,
   PlayCircle,
-  Network,
-  Code,
 } from "lucide-react";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import type { ProfileId } from "@/lib/documentation-profiles";
@@ -140,9 +138,7 @@ const SERVICE_LINKS_EN: ToolLink[] = [
   },
 ];
 
-/* ─── Outils par profil (jamais ceux du footer) ──────────────────────────── */
-// Footer contient : Audit IA, Simulateur ROI, Benchmarking, Services, Études de cas
-// → On ne les affiche jamais ici.
+/* ─── Outils par profil ──────────────────────────────────────────────────── */
 
 const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
   default: [
@@ -177,7 +173,7 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/simulateur-tarifs",
+      href: "/tarifs",
       title: "Simulateur de tarifs",
       description: "Estimez le budget adapté à votre projet.",
       icon: Calculator,
@@ -216,17 +212,10 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
   ],
   developpeur: [
     {
-      href: "/documentation/mind-map",
-      title: "Mind Map",
-      description: "Explorez l'architecture headless de façon interactive.",
-      icon: Network,
-      color: "text-extralightblue",
-    },
-    {
-      href: "/documentation/playground",
-      title: "Playground",
-      description: "Testez les composants et le rendu en direct.",
-      icon: Code,
+      href: "/demo",
+      title: "Démo interactive",
+      description: "Découvrez un site WordPress Headless en action.",
+      icon: PlayCircle,
       color: "text-lightyellow",
     },
     {
@@ -272,7 +261,7 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/simulateur-tarifs",
+      href: "/tarifs",
       title: "Pricing simulator",
       description: "Estimate the budget that fits your project.",
       icon: Calculator,
@@ -311,17 +300,10 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
   ],
   developpeur: [
     {
-      href: "/documentation/mind-map",
-      title: "Mind Map",
-      description: "Explore the headless architecture interactively.",
-      icon: Network,
-      color: "text-extralightblue",
-    },
-    {
-      href: "/documentation/playground",
-      title: "Playground",
-      description: "Test components and rendering live.",
-      icon: Code,
+      href: "/demo",
+      title: "Interactive demo",
+      description: "Discover a Headless WordPress site in action.",
+      icon: PlayCircle,
       color: "text-lightyellow",
     },
     {
@@ -343,37 +325,72 @@ export function DocumentationToolsSection() {
   const tools = (isEn ? PROFILE_TOOLS_EN : PROFILE_TOOLS_FR)[profileId || "default"];
 
   return (
-    <section className="mt-12 py-12">
-      <h2 className="font-googletitre text-2xl md:text-3xl font-medium text-white mb-2">
-        {isEn ? "Tools and resources" : "Outils et ressources"}
-      </h2>
-      <p className="text-sm text-white/60 font-googletexte mb-6">
-        {isEn
-          ? "Free tools to evaluate and plan your web project."
-          : "Des outils gratuits pour évaluer et planifier votre projet web."}
-      </p>
+    <section style={{ marginTop: 48, paddingTop: 48, borderTop: "1px solid var(--rule)" }}>
+      <div style={{ marginBottom: 32 }}>
+        <h2
+          className="ni-serif"
+          style={{ fontSize: "clamp(20px, 2vw, 28px)", color: "var(--ink)", marginBottom: 8 }}
+        >
+          {isEn ? "Tools and resources" : "Outils et ressources"}
+        </h2>
+        <p style={{ fontSize: 14, color: "var(--ink-2)" }}>
+          {isEn
+            ? "Free tools to evaluate and plan your web project."
+            : "Des outils gratuits pour évaluer et planifier votre projet web."}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 0,
+          borderTop: "1px solid var(--rule)",
+          borderLeft: "1px solid var(--rule)",
+        }}
+      >
         {tools.map((tool) => {
           const Icon = tool.icon;
           return (
             <Link
               key={tool.href}
-              // @ts-expect-error – href comes from internal data
               href={tool.href}
-              className="group rounded-2xl p-5 border border-lightblue/10 bg-darkblue/90 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/60 transition-all duration-300"
+              style={{
+                border: "1px solid var(--rule)",
+                borderTop: "none",
+                borderLeft: "none",
+                padding: "28px 32px",
+                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                background: "var(--paper)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
-              <Icon className={`h-12 w-12 ${tool.color} mb-3`} />
-              <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/90 group-hover:text-white transition-colors">
+              <Icon
+                size={20}
+                strokeWidth={1.5}
+                style={{ color: "var(--muted-color)", marginBottom: 12, display: "block" }}
+              />
+              <h3 className="ni-serif" style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}>
                 {tool.title}
               </h3>
-              <p className="text-sm text-white/50 font-googletexte mt-1 line-clamp-2">
+              <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, flex: 1 }}>
                 {tool.description}
               </p>
-              <span className={`inline-flex items-center gap-1 text-sm ${tool.color} font-googletexte mt-3 group-hover:text-regularblue transition-colors`}>
-                {isEn ? "Discover" : "Découvrir"}
-                <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-              </span>
+              <div
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--accent-color)",
+                  marginTop: 16,
+                }}
+              >
+                {isEn ? "Discover →" : "Découvrir →"}
+              </div>
             </Link>
           );
         })}
@@ -438,34 +455,62 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
   const tools = buildCategoryTools(isEn)[category] || TOOL_LINKS.slice(0, 3);
 
   return (
-    <section className="mt-10 pt-8 border-t border-lightblue/10">
-      <div className="flex items-center gap-2 mb-4">
-        <Wrench className="h-6 w-6 text-extralightblue mt-2" />
-        <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white/80">
+    <section style={{ marginTop: 40, paddingTop: 32, borderTop: "1px solid var(--rule)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+        <Wrench size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />
+        <h3
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "var(--ink-2)",
+            margin: 0,
+          }}
+        >
           {isEn ? "Useful tools" : "Outils utiles"}
         </h3>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {tools.map((tool) => {
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 0,
+          border: "1px solid var(--rule)",
+        }}
+      >
+        {tools.map((tool, i) => {
           const Icon = tool.icon;
           return (
             <Link
               key={tool.href}
-              // @ts-expect-error – href comes from internal data
               href={tool.href}
-              className="group flex items-center gap-3 rounded-2xl p-4 border border-lightblue/10 bg-darkblue/30 backdrop-blur-sm hover:border-lightblue/20 hover:bg-darkblue/50 transition-all duration-300"
+              style={{
+                padding: "20px 24px",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                borderRight: i < tools.length - 1 ? "1px solid var(--rule)" : "none",
+                background: "var(--paper)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
-              <Icon className={`h-5 w-5 ${tool.color} shrink-0`} />
-              <div className="flex-1 min-w-0">
-                <p className="text-base font-medium text-white/80 group-hover:text-white font-googletexte transition-colors">
+              <Icon
+                size={16}
+                strokeWidth={1.5}
+                style={{ color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }}
+              />
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)", marginBottom: 4 }}>
                   {tool.title}
                 </p>
-                <p className="text-xs text-white/40 font-googletexte mt-0.5 line-clamp-1">
+                <p style={{ fontSize: 12, color: "var(--ink-2)", lineHeight: 1.5 }}>
                   {tool.description}
                 </p>
               </div>
-              <ArrowRight className="h-3.5 w-3.5 text-white/20 group-hover:text-white/50 shrink-0 group-hover:translate-x-0.5 transition-all" />
             </Link>
           );
         })}
@@ -482,20 +527,51 @@ export function ArticleInternalLinks({ category }: { category: string }) {
   const links = getCategoryRelevantLinks(category, isEn);
 
   return (
-    <div className="mt-6 rounded-2xl border border-lightblue/10 bg-darkblue/30 backdrop-blur-sm p-5">
-      <p className="text-xs text-white/40 font-googletexte uppercase tracking-wider mb-3">
+    <div
+      style={{
+        marginTop: 24,
+        padding: "20px 24px",
+        border: "1px solid var(--rule)",
+        borderLeft: "3px solid var(--accent-color)",
+        background: "var(--paper-2)",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "var(--mono)",
+          fontSize: 10,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--muted-color)",
+          marginBottom: 12,
+        }}
+      >
         {isEn ? "Going further" : "Pour aller plus loin"}
       </p>
-      <div className="flex flex-wrap gap-2">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {links.map((link) => (
           <Link
             key={link.href}
-            // @ts-expect-error – href comes from internal data
             href={link.href}
-            className="inline-flex items-center gap-1.5 rounded-full bg-mediumblue/60 border border-lightblue/10 px-3 py-1.5 text-xs text-white/70 hover:text-white hover:border-lightblue/20 hover:bg-mediumblue/80 transition-all duration-200 font-googletexte"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              border: "1px solid var(--rule)",
+              padding: "6px 12px",
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "var(--ink-2)",
+              textDecoration: "none",
+              background: "var(--paper)",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
           >
             {link.title}
-            <ArrowRight className="h-2.5 w-2.5" />
+            <ArrowRight size={10} />
           </Link>
         ))}
       </div>

@@ -1,5 +1,4 @@
 import { Link } from "@/i18n/navigation"
-import Image from "next/image"
 import { ArrowLeft, Clock, BookOpen } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import type { Locale } from "@/i18n/routing"
@@ -156,7 +155,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
     ];
 
     return (
-      <div className="relative min-h-screen">
+      <div style={{ minHeight: "100vh" }}>
         <BreadcrumbJsonLd items={breadcrumbItems} />
         <ArticleJsonLd
           title={article.title}
@@ -171,88 +170,120 @@ export default async function ArticlePage(props: ArticlePageProps) {
         <ScrollToTop />
         <MobileToc tableOfContents={tableOfContents} />
         <TranslationFallbackBanner show={article.isFallback} />
-        <main className="flex-1">
-          <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16">
+        <section className="s">
+          <div className="container">
             {/* Breadcrumb */}
-            <div className="flex items-center gap-3 mb-8 flex-wrap">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem", flexWrap: "wrap" }}>
               <Link
                 href="/documentation"
-                className="inline-flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-mediumblue/80 transition-colors border border-lightblue/10"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.375rem",
+                  fontSize: "0.8125rem",
+                  color: "var(--muted-color)",
+                  textDecoration: "none",
+                }}
               >
                 <ArrowLeft className="h-4 w-4" />
                 {t("breadcrumbDocs")}
               </Link>
+              <span style={{ color: "var(--rule-strong)" }}>·</span>
               <Link
-                // @ts-expect-error – href built from article.category at runtime
-                href={`/documentation/${article.category}`}
-                className="rounded-full bg-darkblue/50 backdrop-blur-sm px-3 py-1.5 text-xs text-white/80 hover:text-white/80 transition-colors border border-lightblue/10"
+                href={`/documentation/${article.category}` as never}
+                style={{
+                  fontSize: "0.8125rem",
+                  color: "var(--muted-color)",
+                  textDecoration: "none",
+                }}
               >
                 {categoryLabel}
               </Link>
             </div>
 
-            {/* Article header — hero style */}
-            <div className="rounded-3xl bg-gradient-to-br from-mediumblue/90 via-mediumblue/80 to-darkblue/70 backdrop-blur-sm p-6 md:p-10 lg:p-12 border border-lightblue/10 mb-6">
-              {/* Category + Reading time */}
-              <div className="flex items-center gap-3 mb-6 flex-wrap">
-                <span className="rounded-full bg-regularblue/20 border border-regularblue/30 px-3 py-1 text-xs font-googletexte text-regularblue">
-                  {categoryLabel}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs text-white/80 font-googletexte">
+            {/* Article header */}
+            <div style={{
+              borderTop: "2px solid var(--ink)",
+              paddingTop: "2.5rem",
+              marginBottom: "2.5rem",
+            }}>
+              {/* Meta row */}
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+                <span className="label">{categoryLabel}</span>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
                   <Clock className="h-3 w-3" />
                   {readingTime} {tArticle.minutes}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-white/80 font-googletexte">
+                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
                   <BookOpen className="h-3 w-3" />
                   {tableOfContents.filter(toc => toc.level === 2).length} {tArticle.sections}
                 </span>
               </div>
 
               {/* Title */}
-              <h1 className="font-googletitre text-3xl md:text-4xl lg:text-5xl tracking-tight font-medium mb-5 text-white leading-tight">
+              <h1 style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                fontWeight: 400,
+                lineHeight: 1.15,
+                color: "var(--ink)",
+                marginBottom: "1rem",
+              }}>
                 {article.title}
               </h1>
 
               {/* Description */}
-              <p className="text-lg md:text-xl text-white/80 font-googletexte font-light max-w-3xl leading-relaxed">
+              <p style={{
+                fontSize: "1.0625rem",
+                color: "var(--muted-color)",
+                lineHeight: 1.65,
+                maxWidth: "56ch",
+                marginBottom: "1.5rem",
+              }}>
                 {article.description}
               </p>
 
-              {/* Meta row */}
-              <div className="flex items-center gap-4 mt-8 pt-6 border-t border-lightblue/10 flex-wrap">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/img/logo-blanc-carre.png"
-                    alt="Next Impact"
-                    width={28}
-                    height={28}
-                    className="object-contain rounded-lg"
-                  />
-                  <div>
-                    <p className="text-sm text-white/80 font-googletexte font-medium">
-                      {article.author || "Next Impact"}
-                    </p>
-                    <p className="text-xs text-white/80 font-googletexte">
-                      {typeof article.date === "string" ? article.date : tArticle.recently}
-                    </p>
-                  </div>
+              {/* Author / date / share */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderTop: "1px solid var(--rule)",
+                paddingTop: "1rem",
+                flexWrap: "wrap",
+                gap: "0.75rem",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", fontWeight: 500 }}>
+                    {article.author || "Next Impact"}
+                  </span>
+                  <span style={{ color: "var(--rule-strong)" }}>·</span>
+                  <span className="annot">
+                    {typeof article.date === "string" ? article.date : tArticle.recently}
+                  </span>
                 </div>
-                <div className="ml-auto">
-                  <ShareSocial url={`/documentation/${article.category}/${article.slug}`} title={article.title} />
-                </div>
+                <ShareSocial url={`/documentation/${article.category}/${article.slug}`} title={article.title} />
               </div>
             </div>
 
             {/* Content grid: TOC + Article */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4" style={{ gap: "3rem" }}>
               <aside className="col-span-1 hidden lg:block">
-                <div className="sticky top-28 space-y-4">
+                <div style={{ position: "sticky", top: "7rem" }}>
                   <TableOfContentsPopup tableOfContents={tableOfContents} />
                 </div>
               </aside>
-              <div id="article-body" className="col-span-1 lg:col-span-3 flex flex-col gap-8">
+              <div id="article-body" className="col-span-1 lg:col-span-3" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                 {/* Reading area */}
-                <div className="w-full p-5 md:p-10 bg-mediumblue/90 rounded-3xl ">
+                <div
+                  className="light article-text"
+                  style={{
+                    width: "100%",
+                    padding: "2.5rem",
+                    background: "var(--paper-2)",
+                    color: "var(--ink)",
+                  }}
+                >
                   {article.isMdx ? (
                     <MdxContent source={article.content} />
                   ) : (
@@ -277,7 +308,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
               </div>
             </div>
           </div>
-        </main>
+        </section>
       </div>
     )
 }

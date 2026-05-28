@@ -1,81 +1,88 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 
-type ButtonVariant = "default" | "outline" | "secondary" | "ghost";
-
-const variants: { label: string; value: ButtonVariant }[] = [
-  { label: "Primaire", value: "default" },
-  { label: "Secondaire", value: "secondary" },
-  { label: "Contour", value: "outline" },
-  { label: "Fantôme", value: "ghost" },
-];
+type Variant = "primary" | "secondary" | "outline" | "ghost";
 
 export function LiveButtonPlayground() {
-  const [variant, setVariant] = useState<ButtonVariant>("default");
-  const [label, setLabel] = useState("Cliquez-moi");
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const [active, setActive] = useState<Variant>("primary");
+
+  const variants: { label: string; value: Variant }[] = [
+    { label: isEn ? "Primary" : "Primaire", value: "primary" },
+    { label: isEn ? "Secondary" : "Secondaire", value: "secondary" },
+    { label: isEn ? "Outline" : "Contour", value: "outline" },
+    { label: isEn ? "Ghost" : "Fantôme", value: "ghost" },
+  ];
 
   return (
-    <div className="rounded-3xl border border-lightblue/10 bg-mediumblue/80 backdrop-blur-sm p-6 md:p-8 space-y-6">
-      <h3 className="font-googletitre text-xl text-white font-medium">
-        Playground : Bouton interactif
-      </h3>
+    <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "2rem" }}>
+      <p style={{
+        fontFamily: "var(--font-mono)",
+        fontSize: "0.6875rem",
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: "var(--muted-color)",
+        marginBottom: "1.25rem",
+      }}>
+        {isEn ? "Button playground" : "Playground boutons"}
+      </p>
 
-      {/* Preview area */}
-      <div className="flex items-center justify-center rounded-2xl bg-darkblue/60 border border-lightblue/10 p-8 min-h-[120px]">
-        <motion.div
-          key={variant}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          <Button variant={variant} size="lg">
-            {label}
-          </Button>
-        </motion.div>
+      {/* Preview */}
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "var(--paper-2)",
+        border: "1px solid var(--rule)",
+        minHeight: "8rem",
+        marginBottom: "1rem",
+      }}>
+        {active === "primary" && (
+          <button className="btn primary">{isEn ? "Click me" : "Cliquez-moi"}</button>
+        )}
+        {active === "secondary" && (
+          <button className="btn" style={{ background: "var(--paper-2)", border: "1px solid var(--rule-strong)" }}>
+            {isEn ? "Click me" : "Cliquez-moi"}
+          </button>
+        )}
+        {active === "outline" && (
+          <button className="btn" style={{ background: "transparent", border: "1px solid var(--rule)" }}>
+            {isEn ? "Click me" : "Cliquez-moi"}
+          </button>
+        )}
+        {active === "ghost" && (
+          <button className="btn" style={{ background: "transparent", border: "none", color: "var(--muted-color)" }}>
+            {isEn ? "Click me" : "Cliquez-moi"}
+          </button>
+        )}
       </div>
 
-      {/* Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Variant selector */}
-        <div>
-          <label className="text-sm text-white/80 mb-2 block font-googletexte">
-            Variante
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {variants.map((v) => (
-              <button
-                key={v.value}
-                onClick={() => setVariant(v.value)}
-                className={cn(
-                  "rounded-full px-3 py-1.5 text-sm font-googletexte transition-all duration-200 border",
-                  variant === v.value
-                    ? "bg-regularblue/30 text-white border-regularblue/40"
-                    : "bg-darkblue/40 text-white/80 border-lightblue/10 hover:bg-darkblue/60 hover:text-white/80"
-                )}
-              >
-                {v.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Label input */}
-        <div>
-          <label className="text-sm text-white/80 mb-2 block font-googletexte">
-            Texte du bouton
-          </label>
-          <input
-            type="text"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            className="w-full rounded-xl bg-darkblue/50 border border-lightblue/10 px-3 py-2 text-white text-sm font-googletexte outline-none focus:border-lightblue/30 transition-colors"
-            maxLength={30}
-          />
-        </div>
+      {/* Variant selector */}
+      <div style={{ display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
+        {variants.map(v => (
+          <button
+            key={v.value}
+            onClick={() => setActive(v.value)}
+            style={{
+              padding: "0.375rem 0.875rem",
+              fontSize: "0.6875rem",
+              fontFamily: "var(--font-mono)",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              border: "1px solid var(--rule)",
+              background: active === v.value ? "var(--ink)" : "var(--paper)",
+              color: active === v.value ? "white" : "var(--muted-color)",
+              cursor: "pointer",
+              transition: "background 0.15s, color 0.15s",
+            }}
+          >
+            {v.label}
+          </button>
+        ))}
       </div>
     </div>
   );

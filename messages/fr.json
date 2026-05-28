@@ -12,8 +12,7 @@
     "contact": "Contact",
     "about": "À propos",
     "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu",
-    "whitepaperTitle": "Livre blanc : Qu'est-ce que WordPress Headless ?"
+    "closeMenu": "Fermer le menu"
   },
   "footer": {
     "contactQuestion": "Une question ? Contactez-moi directement.",
@@ -30,8 +29,6 @@
     "blog": "Blog",
     "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
-    "whitepaperHeadless": "Livre blanc — WordPress Headless",
-    "whitepaperWebApp": "Livre blanc — Du site web à la web app",
     "freeAiAudit": "Audit IA gratuit",
     "roiSimulator": "Simulateur ROI",
     "benchmarking": "Benchmarking",
@@ -150,16 +147,6 @@
       "secondary": "Audit Core Web Vitals et analyse concurrentielle en quelques secondes.",
       "ctaLabel": "Lancer le benchmarking",
       "footer": "Gratuit · Analyse Core Web Vitals · Sans engagement"
-    },
-    "livreBlanc": {
-      "badge": "Guide gratuit",
-      "title": "Qu'est-ce que WordPress Headless ?",
-      "promiseStart": "Découvrez dans notre livre blanc",
-      "promiseHighlight": "tout ce qu'il faut savoir sur l'architecture headless",
-      "promiseEnd": ": avantages, cas d'usage et mise en œuvre.",
-      "secondary": "Un guide complet pour comprendre, évaluer et adopter WordPress Headless.",
-      "ctaLabel": "Télécharger le livre blanc",
-      "footer": "Gratuit · PDF complet · Sans inscription"
     },
     "reassurance": {
       "directContact": "Contact direct",
@@ -314,7 +301,7 @@
   },
   "servicesPage": {
     "metaTitle": "Services & Tarifs — Sites web et applications sur-mesure",
-    "metaDescription": "Trois forfaits sites web (Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 5 000 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
+    "metaDescription": "Trois forfaits sites web (Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 6 500 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Services & Tarifs",
     "calculateGain": {

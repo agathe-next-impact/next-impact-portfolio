@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
@@ -17,19 +16,35 @@ export function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Retour en haut"
-      className={cn(
-        "fixed z-40 transition-all duration-300",
-        "bottom-20 right-6 lg:bottom-6",
-        "flex h-10 w-10 items-center justify-center rounded-full",
-        "bg-darkblue/80 backdrop-blur-sm border border-lightblue/10",
-        "text-white/80 hover:text-white hover:border-lightblue/30 hover:bg-darkblue",
-        "",
-        visible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-4 pointer-events-none"
-      )}
+      style={{
+        position: "fixed",
+        zIndex: 40,
+        bottom: "1.5rem",
+        right: "1.5rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "2.25rem",
+        height: "2.25rem",
+        border: "1px solid var(--rule-strong)",
+        background: "var(--paper)",
+        color: "var(--muted-color)",
+        cursor: "pointer",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(0.5rem)",
+        pointerEvents: visible ? "auto" : "none",
+        transition: "opacity 0.2s, transform 0.2s, color 0.15s, background 0.15s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.color = "var(--ink)";
+        e.currentTarget.style.background = "var(--paper-2)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.color = "var(--muted-color)";
+        e.currentTarget.style.background = "var(--paper)";
+      }}
     >
-      <ArrowUp className="h-4 w-4" />
+      <ArrowUp style={{ width: "0.875rem", height: "0.875rem" }} />
     </button>
   );
 }

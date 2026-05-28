@@ -282,7 +282,7 @@ export default function AppsSection() {
           ))}
         </div>
 
-        {/* Case studies */}
+        {/* Case studies 
         <div style={{ marginBottom: 40 }}>
           <div
             style={{
@@ -324,6 +324,7 @@ export default function AppsSection() {
             ))}
           </div>
         </div>
+        /*}
 
         {/* OETH banner */}
         <div

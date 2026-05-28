@@ -38,7 +38,7 @@ import {
   Shrink,
   ExternalLink,
 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { useTheme } from "next-themes"
 import { useLocale } from "next-intl"
 import type { Locale } from "@/i18n/routing"

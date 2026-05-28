@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { ArrowRight } from "lucide-react";
 import { JOURNEYS, PROFILES } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { cn } from "@/lib/utils";
 
 interface ArticleNavigationProps {
   category: string;
@@ -23,7 +22,6 @@ export function ArticleNavigation({ category, slug }: ArticleNavigationProps) {
     (s) => `${s.category}/${s.slug}` === currentKey
   );
 
-  // If this article isn't in the journey, find the next unread article
   const nextStep =
     currentIndex >= 0 && currentIndex < journey.length - 1
       ? journey[currentIndex + 1]
@@ -34,33 +32,56 @@ export function ArticleNavigation({ category, slug }: ArticleNavigationProps) {
   const Icon = profile.icon;
 
   return (
-    <div className="mt-6">
+    <div>
       <Link
-        href={`/documentation/${nextStep.category}/${nextStep.slug}`}
-        className={cn(
-          "group flex items-center gap-4 rounded-3xl p-5 border transition-all duration-300",
-          "bg-gradient-to-r from-mediumblue/80 to-darkblue/60 backdrop-blur-sm",
-          "border-lightblue/10 hover:border-lightblue/30 "
-        )}
+        href={`/documentation/${nextStep.category}/${nextStep.slug}` as never}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          padding: "1.25rem 1.5rem",
+          border: "1px solid var(--rule)",
+          borderLeft: "3px solid var(--accent-color)",
+          background: "var(--paper-2)",
+          textDecoration: "none",
+          transition: "background 0.15s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper)")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
       >
-        <div
-          className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-            profile.gradient
-          )}
-        >
-          <Icon className={cn("h-5 w-5", profile.accentColor)} />
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "2rem",
+          height: "2rem",
+          border: "1px solid var(--rule)",
+          background: "var(--paper)",
+          flexShrink: 0,
+        }}>
+          <Icon style={{ width: "1rem", height: "1rem", color: "var(--accent-color)" }} />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-xs text-white/80 font-googletexte flex items-center gap-1.5 mb-1">
-            <Sparkles className="h-3 w-3" />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p className="annot" style={{
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            marginBottom: "0.25rem",
+          }}>
             Prochain dans votre parcours {profile.label}
           </p>
-          <p className="text-sm font-medium text-white font-googletexte truncate group-hover:text-white/90">
+          <p style={{
+            fontSize: "0.875rem",
+            color: "var(--ink)",
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}>
             {nextStep.title}
           </p>
         </div>
-        <ArrowRight className="h-4 w-4 text-white/80 group-hover:text-white/80 group-hover:translate-x-1 transition-all shrink-0" />
+        <ArrowRight style={{ width: "1rem", height: "1rem", color: "var(--muted-color)", flexShrink: 0 }} />
       </Link>
     </div>
   );

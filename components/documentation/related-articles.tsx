@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Clock } from "lucide-react";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { isArticleRelevantToProfile } from "@/lib/documentation-profiles";
@@ -31,12 +31,24 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
   if (display.length === 0) return null;
 
   return (
-    <div className="space-y-5">
-      <div className="border-t border-lightblue/10 pt-8" />
-      <h3 className="font-googletitre text-xl font-medium text-white/80">
-        Continuer la lecture
-      </h3>
-      <div className="grid gap-4 md:grid-cols-3">
+    <div>
+      <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "2rem", marginBottom: "1.25rem" }}>
+        <h3 style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "1.25rem",
+          fontWeight: 400,
+          color: "var(--ink)",
+        }}>
+          Continuer la lecture
+        </h3>
+      </div>
+
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "1px",
+        background: "var(--rule)",
+      }}>
         {display.map((article, i) => {
           const isRecommended = profileId
             ? isArticleRelevantToProfile(article.category, article.slug, profileId)
@@ -45,33 +57,63 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
           return (
             <Link
               key={article.slug}
-              href={`/documentation/${article.category}/${article.slug}`}
-              className="group relative rounded-3xl border border-lightblue/10 p-5 hover:border-lightblue/30 transition-all duration-300 bg-darkblue/50 backdrop-blur-sm overflow-hidden"
+              href={`/documentation/${article.category}/${article.slug}` as never}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "1.25rem",
+                background: "var(--paper)",
+                textDecoration: "none",
+                transition: "background 0.15s",
+                position: "relative",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
-              <span className="absolute top-4 right-4 text-5xl font-googletitre font-bold text-white/[0.03]">
-                {i + 1}
-              </span>
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="inline-block rounded-full bg-regularblue/10 px-2.5 py-0.5 text-[10px] font-googletexte text-regularblue/80">
-                    {categoryLabels[article.category] || article.category}
+              <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", marginBottom: "0.5rem" }}>
+                <span className="label">
+                  {categoryLabels[article.category] || article.category}
+                </span>
+                {isRecommended && (
+                  <span className="label" style={{ color: "var(--accent-color)", borderColor: "var(--accent-color)" }}>
+                    Recommandé
                   </span>
-                  {isRecommended && (
-                    <span className="inline-block rounded-full bg-orange/10 px-2.5 py-0.5 text-[10px] font-googletexte text-orange/80 border border-orange/20">
-                      Recommandé
-                    </span>
-                  )}
-                </div>
-                <h4 className="font-googletitre font-medium text-white/80 group-hover:text-white transition-colors text-sm leading-snug">
-                  {article.title}
-                </h4>
-                <p className="text-xs text-white/80 font-googletexte mt-2 line-clamp-2">
-                  {article.description}
-                </p>
-                <div className="flex items-center gap-1 mt-3 text-[10px] text-white/80 font-googletexte">
-                  <Clock className="h-3 w-3" />
-                  <span>{article.readingTime} min</span>
-                </div>
+                )}
+              </div>
+              <h4 style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "0.9375rem",
+                fontWeight: 400,
+                color: "var(--ink)",
+                lineHeight: 1.35,
+                marginBottom: "0.375rem",
+                flex: 1,
+              }}>
+                {article.title}
+              </h4>
+              <p style={{
+                fontSize: "0.75rem",
+                color: "var(--muted-color)",
+                lineHeight: 1.5,
+                marginBottom: "0.5rem",
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+              }}>
+                {article.description}
+              </p>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                color: "var(--muted-color)",
+                fontSize: "0.6875rem",
+                fontFamily: "var(--font-mono)",
+              }}>
+                <Clock style={{ width: "0.75rem", height: "0.75rem" }} />
+                <span>{article.readingTime} min</span>
+                <span style={{ marginLeft: "auto" }} className="annot">{String(i + 1).padStart(2, "0")}</span>
               </div>
             </Link>
           );

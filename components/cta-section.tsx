@@ -247,36 +247,6 @@ function CTABenchmarking() {
 }
 
 /* ─────────────────────────────────────────────
-   2d. CTA White Paper
-   ───────────────────────────────────────────── */
-function CTALivreBlanc() {
-  const t = useTranslations("ctaSection.livreBlanc");
-  return (
-    <CTACard
-      badgeIcon={FileText}
-      badge={t("badge")}
-      title={t("title")}
-      description={
-        <>
-          {t("promiseStart")}{" "}
-          <em style={{ color: "var(--accent-color)" }}>{t("promiseHighlight")}</em>{" "}
-          {t("promiseEnd")}
-          {t("secondary") && (
-            <span style={{ display: "block", marginTop: 8, color: "var(--muted-color)" }}>
-              {t("secondary")}
-            </span>
-          )}
-        </>
-      }
-      ctaHref="/ressources/livre_blanc_wp_headless.pdf"
-      ctaLabel={t("ctaLabel")}
-      ctaIsDownload
-      footer={t("footer")}
-    />
-  );
-}
-
-/* ─────────────────────────────────────────────
    3. Reassurance block — direct contact
    ───────────────────────────────────────────── */
 export function BlocReassurance() {
@@ -407,29 +377,27 @@ export function BlocReassurance() {
 /* ─────────────────────────────────────────────
    Card selection per profile / context
    ───────────────────────────────────────────── */
-type CardId = "audit" | "conversion" | "roi" | "benchmarking" | "livre-blanc";
+type CardId = "audit" | "conversion" | "roi" | "benchmarking";
 
 const CARD_COMPONENTS: Record<CardId, React.FC> = {
   audit: CTALeadMagnet,
   conversion: CTAConversion,
   roi: CTASimulateurROI,
   benchmarking: CTABenchmarking,
-  "livre-blanc": CTALivreBlanc,
 };
 
 const CARD_PAGES: Record<CardId, string[]> = {
-  audit: ["/audit-site-ia", "/cms-headless"],
+  audit: ["/audit-site-ia", "/documentation/headless-cms"],
   conversion: ["/contact"],
-  roi: ["/outils/simulateur-roi", "/simulateur-tarifs"],
+  roi: ["/outils/simulateur-roi", "/tarifs"],
   benchmarking: ["/outils/benchmarking"],
-  "livre-blanc": ["/documentation"],
 };
 
 const PROFILE_CARDS: Record<ProfileId | "default", CardId[]> = {
-  decideur:    ["livre-blanc", "roi", "conversion", "benchmarking", "audit"],
-  utilisateur: ["benchmarking", "conversion", "livre-blanc", "roi", "audit"],
-  developpeur: ["benchmarking", "roi", "conversion", "audit", "livre-blanc"],
-  default:     ["conversion", "livre-blanc", "roi", "benchmarking", "audit"],
+  decideur:    ["roi", "conversion", "benchmarking", "audit"],
+  utilisateur: ["benchmarking", "conversion", "roi", "audit"],
+  developpeur: ["benchmarking", "roi", "conversion", "audit"],
+  default:     ["conversion", "roi", "benchmarking", "audit"],
 };
 
 const TOOL_CARDS: CardId[] = ["audit", "roi", "benchmarking"];
@@ -437,8 +405,8 @@ const TOOL_CARDS: CardId[] = ["audit", "roi", "benchmarking"];
 const TOOL_PAGE_PREFIXES = [
   "/outils",
   "/audit-site-ia",
-  "/simulateur-tarifs",
-  "/cms-headless",
+  "/tarifs",
+  "/documentation/headless-cms",
 ];
 
 function isToolPage(pathname: string) {

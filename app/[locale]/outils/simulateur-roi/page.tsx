@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { generatePageMetadata } from "@/lib/metadata"
-import { BreadcrumbJsonLd } from "@/components/json-ld"
+import { BreadcrumbJsonLd, WebApplicationJsonLd } from "@/components/json-ld"
 import ROISimulator from "@/components/roi-simulator/roi-simulator-wrapper"
 import PageLayout from "@/components/page-layout"
 import { Link } from "@/i18n/navigation"
@@ -64,6 +64,13 @@ export default async function SimulateurROIPage({
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      <WebApplicationJsonLd
+        name={t("metaTitle")}
+        description={t("metaDescription")}
+        url="/outils/simulateur-roi"
+        applicationCategory="BusinessApplication"
+        offers={{ price: "0" }}
+      />
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">

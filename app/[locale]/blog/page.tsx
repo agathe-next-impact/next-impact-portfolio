@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { generatePageMetadata } from "@/lib/metadata"
 import type { Locale } from "@/i18n/routing"
+import { BreadcrumbJsonLd, CollectionPageJsonLd } from "@/components/json-ld"
 
 export async function generateMetadata({
   params,
@@ -27,6 +28,26 @@ export default async function BlogPage({
 }) {
   const { locale } = await params
   const posts = await getBlogPosts(locale)
+  const t = await getTranslations({ locale, namespace: "blogPage" })
+  const breadcrumbItems = [
+    { name: locale === "en" ? "Home" : "Accueil", url: "/" },
+    { name: "Blog", url: "/blog" },
+  ]
 
-  return <BlogIndex posts={posts} />
+  return (
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <CollectionPageJsonLd
+        name={t("metaTitle")}
+        description={t("metaDescription")}
+        url="/blog"
+        items={posts.map((p) => ({
+          name: p.title,
+          url: `/blog/${p.slug}`,
+          description: p.excerpt || p.title,
+        }))}
+      />
+      <BlogIndex posts={posts} />
+    </>
+  )
 }

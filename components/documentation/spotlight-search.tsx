@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import { Search, FileText } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Search, FileText, X } from "lucide-react";
 
 interface SpotlightArticle {
   slug: string;
@@ -89,81 +87,195 @@ export function SpotlightSearch() {
     return () => document.removeEventListener("keydown", handleNav);
   }, [open, filtered, activeIndex, handleSelect]);
 
-  // Reset active index when query changes
   useEffect(() => {
     setActiveIndex(0);
   }, [query]);
 
-  return (
-    <AnimatePresence>
-      {open && (
-        <>
-          {/* Glassmorphism overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-darkblue/60 backdrop-blur-lg"
-            onClick={() => setOpen(false)}
-          />
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed left-4 right-4 top-[15%] sm:left-1/2 sm:right-auto sm:top-[20%] sm:w-[calc(100%-2rem)] z-[70] max-w-lg sm:-translate-x-1/2 rounded-3xl border border-lightblue/20 bg-darkblue/90 backdrop-blur-xl overflow-hidden"
-          >
-            {/* Search input */}
-            <div className="flex items-center gap-2 sm:gap-3 border-b border-lightblue/10 px-3 sm:px-5 py-3 sm:py-4">
-              <Search className="h-5 w-5 text-lightblue/80 shrink-0" />
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Rechercher..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 min-w-0 bg-transparent text-white placeholder:text-white/80 outline-none text-sm sm:text-base font-googletexte"
-              />
-              <kbd className="hidden sm:inline-block rounded-md bg-white/10 px-2 py-0.5 text-xs text-white/80 font-mono shrink-0">
-                Esc
-              </kbd>
-            </div>
+  if (!open) return null;
 
-            {/* Results */}
-            <div className="max-h-[60vh] sm:max-h-80 overflow-y-auto p-1.5 sm:p-2">
-              {filtered.length === 0 ? (
-                <p className="py-8 text-center text-sm text-white/80 font-googletexte">
-                  Aucun résultat trouvé
-                </p>
-              ) : (
-                filtered.map((article, index) => (
-                  <button
-                    key={`${article.category}-${article.slug}`}
-                    onClick={() => handleSelect(article)}
-                    className={cn(
-                      "flex w-full items-start gap-2 sm:gap-3 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-left transition-all duration-200",
-                      index === activeIndex
-                        ? "bg-regularblue/20 border border-regularblue/30 text-white"
-                        : "text-white/80 hover:bg-mediumblue/40 border border-transparent"
-                    )}
-                  >
-                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-lightblue/80" />
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm font-medium font-googletexte text-inherit truncate">
-                        {article.title}
-                      </div>
-                      <p className="text-xs text-white/80 line-clamp-1 font-googletexte">
-                        {article.description}
-                      </p>
-                    </div>
-                  </button>
-                ))
-              )}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 60,
+          background: "rgba(14,14,12,0.45)",
+        }}
+        onClick={() => setOpen(false)}
+      />
+
+      {/* Panel */}
+      <div
+        style={{
+          position: "fixed",
+          left: "50%",
+          top: "20%",
+          transform: "translateX(-50%)",
+          width: "min(560px, calc(100vw - 2rem))",
+          zIndex: 70,
+          background: "var(--paper)",
+          border: "1px solid var(--rule-strong)",
+          borderTop: "2px solid var(--ink)",
+          overflow: "hidden",
+        }}
+      >
+        {/* Input row */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+          borderBottom: "1px solid var(--rule)",
+          padding: "0.75rem 1rem",
+        }}>
+          <Search style={{ width: "1rem", height: "1rem", color: "var(--muted-color)", flexShrink: 0 }} />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Rechercher..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{
+              flex: 1,
+              minWidth: 0,
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              fontSize: "0.9375rem",
+              color: "var(--ink)",
+              fontFamily: "var(--font-sans)",
+            }}
+          />
+          <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", flexShrink: 0 }}>
+            <kbd style={{
+              border: "1px solid var(--rule)",
+              padding: "0.125rem 0.375rem",
+              fontSize: "0.625rem",
+              fontFamily: "var(--font-mono)",
+              color: "var(--muted-color)",
+              background: "var(--paper-2)",
+            }}>
+              Esc
+            </kbd>
+            <button
+              onClick={() => setOpen(false)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "1.5rem",
+                height: "1.5rem",
+                border: "1px solid var(--rule)",
+                background: "var(--paper)",
+                color: "var(--muted-color)",
+                cursor: "pointer",
+              }}
+            >
+              <X style={{ width: "0.75rem", height: "0.75rem" }} />
+            </button>
+          </div>
+        </div>
+
+        {/* Results */}
+        <div style={{ maxHeight: "20rem", overflowY: "auto" }}>
+          {filtered.length === 0 ? (
+            <p style={{
+              padding: "2rem",
+              textAlign: "center",
+              fontSize: "0.875rem",
+              color: "var(--muted-color)",
+            }}>
+              Aucun résultat trouvé
+            </p>
+          ) : (
+            filtered.map((article, index) => (
+              <button
+                key={`${article.category}-${article.slug}`}
+                onClick={() => handleSelect(article)}
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "flex-start",
+                  gap: "0.75rem",
+                  padding: "0.75rem 1rem",
+                  textAlign: "left",
+                  border: "none",
+                  borderBottom: "1px solid var(--rule)",
+                  borderLeft: index === activeIndex
+                    ? "3px solid var(--accent-color)"
+                    : "3px solid transparent",
+                  background: index === activeIndex ? "var(--paper-2)" : "var(--paper)",
+                  cursor: "pointer",
+                  transition: "background 0.1s, border-left-color 0.1s",
+                }}
+                onMouseEnter={() => setActiveIndex(index)}
+              >
+                <FileText style={{
+                  marginTop: "0.125rem",
+                  width: "0.875rem",
+                  height: "0.875rem",
+                  flexShrink: 0,
+                  color: index === activeIndex ? "var(--accent-color)" : "var(--muted-color)",
+                }} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{
+                    fontSize: "0.875rem",
+                    fontWeight: 500,
+                    color: "var(--ink)",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {article.title}
+                  </div>
+                  <p style={{
+                    fontSize: "0.75rem",
+                    color: "var(--muted-color)",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    marginTop: "0.125rem",
+                  }}>
+                    {article.description}
+                  </p>
+                </div>
+                <span className="annot" style={{ flexShrink: 0, paddingTop: "0.125rem" }}>
+                  {article.category}
+                </span>
+              </button>
+            ))
+          )}
+        </div>
+
+        {/* Footer hint */}
+        <div style={{
+          borderTop: "1px solid var(--rule)",
+          padding: "0.5rem 1rem",
+          display: "flex",
+          gap: "1rem",
+        }}>
+          {[
+            { key: "↑↓", label: "naviguer" },
+            { key: "↵", label: "ouvrir" },
+            { key: "Esc", label: "fermer" },
+          ].map(({ key, label }) => (
+            <span key={key} style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
+              <kbd style={{
+                border: "1px solid var(--rule)",
+                padding: "0.0625rem 0.375rem",
+                fontSize: "0.5625rem",
+                fontFamily: "var(--font-mono)",
+                color: "var(--muted-color)",
+                background: "var(--paper-2)",
+              }}>
+                {key}
+              </kbd>
+              <span className="annot">{label}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

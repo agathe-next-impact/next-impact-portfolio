@@ -162,6 +162,15 @@ ol.steps li p {
   color: var(--muted-color);
 }
 
+/* ─── Tab selector active state ───────────────────────── */
+.tab-sel-active {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+}
+.tab-sel-active span {
+  color: #ffffff !important;
+}
+
 /* ─── Hover row ───────────────────────────────────────── */
 .hover-row:hover { background: var(--paper-2); }
 
@@ -208,6 +217,70 @@ ol.steps li p {
   .sec-meta { display: none; }
   .cap-row { grid-template-columns: 48px 1fr; }
   ol.steps li { grid-template-columns: 48px 1fr; }
+}
+
+/* Responsive guardrail for legacy inline grids used across public pages. */
+@media (max-width: 900px) {
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns: 1.2fr 1fr"],
+  [style*="grid-template-columns: 1.4fr 1fr"],
+  [style*="grid-template-columns: 1fr 1.6fr"],
+  [style*="grid-template-columns: 1fr 2fr"],
+  [style*="grid-template-columns: 3fr 2fr"],
+  [style*="grid-template-columns: 1fr 320px"],
+  [style*="grid-template-columns: 1fr auto"],
+  [style*="grid-template-columns: auto 1fr auto"],
+  [style*="grid-template-columns: 56px 1fr auto"],
+  [style*="grid-template-columns: 80px 1fr 24px"],
+  [style*="grid-template-columns: 120px 1fr 280px"],
+  [style*="grid-template-columns: repeat(2, 1fr)"],
+  [style*="grid-template-columns: repeat(3, 1fr)"],
+  [style*="grid-template-columns: repeat(4, 1fr)"],
+  [style*="grid-template-columns: repeat(5, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="border-right: 1px solid var(--rule)"] {
+    border-right: 0 !important;
+  }
+
+  [style*="border-left: 1px solid var(--rule)"] {
+    border-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    min-height: 44px;
+    height: auto;
+    justify-content: center;
+    padding: 10px 16px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  a,
+  span,
+  button {
+    overflow-wrap: anywhere;
+  }
+
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }
 
 /* ─── Legacy overrides (keep for existing blue-themed pages) ── */
@@ -653,6 +726,13 @@ body {
 .light .article-text td   { color: var(--ink-2) !important; border-color: var(--rule) !important; }
 .light .article-text tr:nth-child(even) td { background-color: rgba(14, 14, 12, 0.03) !important; }
 .light .article-text tr:hover td { background-color: var(--paper-2) !important; }
+.light .article-text h2 { border-left-color: var(--rule-strong) !important; }
+.light .article-text blockquote { border-left-color: var(--rule-strong) !important; background: var(--paper-2) !important; }
+.light .article-text ul li::before { color: var(--accent-color) !important; }
+/* Ordered lists: use native decimal numbering in light mode (respects HTML start attribute) */
+.light .article-text ol { list-style-type: decimal !important; padding-left: 1.5rem !important; }
+.light .article-text ol li { padding-left: 0.25rem !important; counter-increment: none !important; }
+.light .article-text ol li::before { display: none !important; }
 .light .article-text .diagnostic-dark h3,
 .light .article-text .diagnostic-dark h4,
 .light .article-text .diagnostic-dark p,

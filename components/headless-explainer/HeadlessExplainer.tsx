@@ -67,7 +67,7 @@ function getStackTabs(isEn: boolean): StackTab[] {
       ],
       ideal: ["Marketplaces and B2B directories", "Business tools and internal platforms", "Simulators, calculators, configurators", "Mobile field applications"],
       limit: "Largest investment — scoping session required before quoting",
-      priceFrom: "From €5,000",
+      priceFrom: "From €6,500",
     },
   ]
   return [
@@ -117,7 +117,7 @@ function getStackTabs(isEn: boolean): StackTab[] {
       ],
       ideal: ["Marketplaces et annuaires B2B", "Outils métier et plateformes internes", "Simulateurs, calculateurs, configurateurs", "Applications terrain et mobiles"],
       limit: "Investissement le plus conséquent — cadrage requis avant devis",
-      priceFrom: "Depuis 5 000 €",
+      priceFrom: "Depuis 6 500 €",
     },
   ]
 }

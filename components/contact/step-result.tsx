@@ -207,23 +207,6 @@ export function StepResult({ profile, painPoint, budget, siteType, onCtaClick }:
           )}
         </motion.div>
 
-        {/* Livre blanc */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="pt-4 border-t border-white/10 mt-4"
-        >
-          <Link
-            href="/ressources/livre_blanc_wp_headless.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-googletexte text-white/50 hover:text-white transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-            En attendant, découvrez notre livre blanc WordPress Headless
-          </Link>
-        </motion.div>
       </div>
     </motion.div>
   );

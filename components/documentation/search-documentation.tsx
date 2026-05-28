@@ -1,11 +1,10 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { useRouter } from "next/navigation"
-import { Input } from "@/components/ui/input"
+import { Search, X } from "lucide-react"
 import type { ArticleMeta } from "@/lib/markdown"
 
 interface Category {
@@ -29,45 +28,31 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  // Fonction de recherche
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredCategories([])
       setFilteredArticles([])
       return
     }
-
     const query = searchQuery.toLowerCase()
-
-    // Filtrer les catégories
-    const matchedCategories = categories.filter(
-      (category) => category.title.toLowerCase().includes(query) || category.description.toLowerCase().includes(query),
-    )
-
-    // Filtrer les articles
-    const matchedArticles = articles.filter(
-      (article) => article.title.toLowerCase().includes(query) || article.description.toLowerCase().includes(query),
-    )
-
-    setFilteredCategories(matchedCategories)
-    setFilteredArticles(matchedArticles)
+    setFilteredCategories(categories.filter(
+      (c) => c.title.toLowerCase().includes(query) || c.description.toLowerCase().includes(query),
+    ))
+    setFilteredArticles(articles.filter(
+      (a) => a.title.toLowerCase().includes(query) || a.description.toLowerCase().includes(query),
+    ))
   }, [searchQuery, articles, categories])
 
-  // Gérer le clic en dehors du composant de recherche
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsSearching(false)
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
+    return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  // Gérer la navigation avec les touches
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       setIsSearching(false)
@@ -78,46 +63,111 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
     }
   }
 
-  // Fonction pour effacer la recherche
   const clearSearch = () => {
     setSearchQuery("")
     inputRef.current?.focus()
   }
 
   return (
-    <div className="w-full" ref={searchRef}>
-      <div className="relative max-w-2xl mx-auto">
-        <Input
+    <div style={{ width: "100%" }} ref={searchRef}>
+      {/* Input */}
+      <div style={{ position: "relative", maxWidth: "36rem", margin: "0 auto" }}>
+        <Search style={{
+          position: "absolute",
+          left: "0.875rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "0.875rem",
+          height: "0.875rem",
+          color: "var(--muted-color)",
+          pointerEvents: "none",
+        }} />
+        <input
           ref={inputRef}
           type="search"
           placeholder="Rechercher dans la documentation..."
-          className="w-full rounded-full appearance-none pl-8 pr-10 ring-0 focus:ring-0 bg-extralightblue"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsSearching(true)}
           onKeyDown={handleKeyDown}
+          style={{
+            width: "100%",
+            border: "1px solid var(--rule-strong)",
+            borderTop: "2px solid var(--ink)",
+            background: "var(--paper)",
+            padding: "0.625rem 2.5rem",
+            fontSize: "0.9375rem",
+            color: "var(--ink)",
+            fontFamily: "var(--font-sans)",
+            outline: "none",
+          }}
+          onFocusCapture={(e) => { e.currentTarget.style.borderTopColor = "var(--accent-color)"; }}
+          onBlurCapture={(e) => { e.currentTarget.style.borderTopColor = "var(--ink)"; }}
         />
+        {searchQuery && (
+          <button
+            onClick={clearSearch}
+            style={{
+              position: "absolute",
+              right: "0.75rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "var(--muted-color)",
+              padding: 0,
+              display: "flex",
+            }}
+          >
+            <X style={{ width: "0.875rem", height: "0.875rem" }} />
+          </button>
+        )}
       </div>
 
+      {/* Results */}
       {isSearching && searchQuery.trim() !== "" && (
-        <div className="mt-6 w-full">
+        <div style={{ marginTop: "1.5rem", width: "100%" }}>
           {filteredCategories.length === 0 && filteredArticles.length === 0 ? (
-            <p className="text-center text-sm text-white/80 py-6">Aucun résultat trouvé</p>
+            <p style={{ textAlign: "center", fontSize: "0.875rem", color: "var(--muted-color)", padding: "1.5rem 0" }}>
+              Aucun résultat trouvé
+            </p>
           ) : (
-            <div className="space-y-6">
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+
               {filteredCategories.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-medium font-googletexte text-white/80 mb-3">Catégories</h3>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+                    Catégories
+                  </p>
+                  <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(14rem, 1fr))",
+                    gap: "1px",
+                    background: "var(--rule)",
+                    border: "1px solid var(--rule)",
+                  }}>
                     {filteredCategories.map((category) => (
                       <Link
                         key={category.id}
-                        href={category.url}
-                        className="block rounded-xl p-4 bg-mediumblue/80 backdrop-blur-md border border-lightblue/10 hover:border-lightblue/20 transition-colors"
+                        href={category.url as never}
+                        style={{
+                          display: "block",
+                          padding: "1rem",
+                          background: "var(--paper)",
+                          textDecoration: "none",
+                          transition: "background 0.15s",
+                        }}
                         onClick={() => setIsSearching(false)}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
                       >
-                        <div className="font-medium font-googletexte text-white">{category.title}</div>
-                        <div className="text-sm text-white/80 font-googletexte mt-1">{category.description}</div>
+                        <div style={{ fontSize: "0.9375rem", fontWeight: 500, color: "var(--ink)", marginBottom: "0.25rem", fontFamily: "var(--font-serif)" }}>
+                          {category.title}
+                        </div>
+                        <div style={{ fontSize: "0.8125rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
+                          {category.description}
+                        </div>
                       </Link>
                     ))}
                   </div>
@@ -126,22 +176,39 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
 
               {filteredArticles.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-medium font-googletexte text-white/80 mb-3">
+                  <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
                     Articles ({filteredArticles.length})
-                  </h3>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  </p>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    border: "1px solid var(--rule)",
+                  }}>
                     {filteredArticles.map((article) => (
                       <Link
                         key={article.slug}
-                        href={`/documentation/${article.category}/${article.slug}`}
-                        className="block rounded-xl p-4 bg-mediumblue/80 backdrop-blur-md border border-lightblue/10 hover:border-lightblue/20 transition-colors"
+                        href={`/documentation/${article.category}/${article.slug}` as never}
+                        style={{
+                          display: "block",
+                          padding: "0.875rem 1rem",
+                          borderBottom: "1px solid var(--rule)",
+                          background: "var(--paper)",
+                          textDecoration: "none",
+                          transition: "background 0.15s",
+                        }}
                         onClick={() => setIsSearching(false)}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
                       >
-                        <div className="font-medium font-googletexte text-white">{article.title}</div>
-                        <div className="text-sm text-white/80 font-googletexte mt-1 line-clamp-2">{article.description}</div>
-                        <div className="mt-2 text-xs text-extralightblue/80 font-googletexte">
-                          {categories.find((c) => c.id === article.category)?.title || article.category}
+                        <div style={{ fontSize: "0.9375rem", fontFamily: "var(--font-serif)", fontWeight: 400, color: "var(--ink)", marginBottom: "0.2rem" }}>
+                          {article.title}
                         </div>
+                        <div style={{ fontSize: "0.8125rem", color: "var(--muted-color)", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                          {article.description}
+                        </div>
+                        <span className="label" style={{ marginTop: "0.375rem", display: "inline-block" }}>
+                          {categories.find((c) => c.id === article.category)?.title || article.category}
+                        </span>
                       </Link>
                     ))}
                   </div>
@@ -154,4 +221,3 @@ export function SearchDocumentation({ articles, categories }: SearchDocumentatio
     </div>
   )
 }
-

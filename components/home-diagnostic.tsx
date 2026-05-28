@@ -1,6 +1,5 @@
 "use client";
 
-import AiAuditBannerSVG from "./AiAuditBannerSVG";
 import EligibilityForm from "@/components/tarifs/EligibilityForm";
 import { useLocale } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
@@ -20,25 +19,9 @@ export default function HomeDiagnostic() {
         background: "var(--paper-2)",
         padding: "80px 0",
         borderTop: "1px solid var(--rule)",
-        position: "relative",
-        overflow: "hidden",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "50%",
-          height: "100%",
-          opacity: 0.07,
-          pointerEvents: "none",
-        }}
-      >
-        <AiAuditBannerSVG />
-      </div>
-
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+      <div className="container">
         <div className="sec-head">
           <div className="sec-no">№ 06</div>
           <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>

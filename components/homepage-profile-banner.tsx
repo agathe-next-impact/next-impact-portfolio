@@ -1,53 +1,89 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { PROFILES, type ProfileId } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { cn } from "@/lib/utils";
 
 const profileOrder: ProfileId[] = ["decideur", "utilisateur", "developpeur"];
 
 export function HomepageProfileBanner() {
   const { profileId, setProfile } = useDocumentationMode();
   const t = useTranslations("profileSwitcher");
+  const [hoveredId, setHoveredId] = useState<ProfileId | null>(null);
 
   return (
-    <AnimatePresence>
-      {!profileId && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-          className="bg-mediumblue/60 backdrop-blur-md border-b border-white/10 overflow-hidden"
+    <div
+      style={{
+        maxHeight: profileId ? 0 : "220px",
+        opacity: profileId ? 0 : 1,
+        overflow: "hidden",
+        transition: "max-height 0.25s ease, opacity 0.18s ease",
+        background: "var(--paper-2)",
+        borderBottom: "1px solid var(--rule)",
+      }}
+      aria-hidden={!!profileId}
+    >
+      <div
+        className="container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1.25rem",
+          minHeight: "48px",
+          paddingTop: 8,
+          paddingBottom: 8,
+          flexWrap: "wrap",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 9,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+            whiteSpace: "nowrap",
+          }}
         >
-          <div className="container flex flex-col sm:flex-row items-center justify-center gap-4 py-4 px-4">
-            <span className="text-white/80 font-googletexte text-sm">
-              {t("customizeExperience")}
-            </span>
-            <div className="flex gap-2 flex-wrap justify-center">
-              {profileOrder.map((id) => {
-                const profile = PROFILES[id];
-                const Icon = profile.icon;
-                return (
-                  <button
-                    key={id}
-                    onClick={() => setProfile(id)}
-                    className={cn(
-                      "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm border transition-all duration-300",
-                      "bg-darkblue/40 border-lightblue/20 text-white/80 hover:text-white hover:border-lightblue/40 hover:bg-darkblue/60"
-                    )}
-                  >
-                    <Icon className={cn("h-4 w-4", profile.accentColor)} />
-                    <span className="font-googletexte text-white">{t(`${id}.label`)}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          {t("customizeExperience")}
+        </span>
+
+        <div style={{ display: "flex", gap: "1px", flexWrap: "wrap" }}>
+          {profileOrder.map((id) => {
+            const profile = PROFILES[id];
+            const Icon = profile.icon;
+            const isHovered = hoveredId === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setProfile(id)}
+                onMouseEnter={() => setHoveredId(id)}
+                onMouseLeave={() => setHoveredId(null)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: isHovered ? "var(--ink)" : "var(--ink-2)",
+                  background: isHovered ? "var(--paper)" : "transparent",
+                  border: "1px solid var(--rule)",
+                  padding: "5px 14px",
+                  cursor: "pointer",
+                  transition: "color 0.15s, background 0.15s",
+                }}
+              >
+                <Icon size={12} strokeWidth={1.5} />
+                {t(`${id}.label`)}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }

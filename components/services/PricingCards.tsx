@@ -91,7 +91,7 @@ function getTiers(isEn: boolean): Tier[] {
     {
       name: "WEB APP",
       tech: isEn ? "Complex / multisite Headless WordPress" : "WordPress Headless complexe / multisites",
-      price: isEn ? "From €5,000" : "Depuis 5 000 €",
+      price: isEn ? "From €6,500" : "Depuis 6 500 €",
       priceTagline: isEn ? "Scalable architecture, ISR/SSR, multisite" : "Architecture évolutive, ISR/SSR, multisites",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
       forProject: isEn

@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm"
 import { getBlogPost, getBlogPosts } from "@/lib/blog"
 import { BlogLayout } from "@/components/blog/BlogLayout"
 import { ArticleCallout } from "@/components/articles/ArticleCallout"
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 
 function slugify(text: string): string {
   return text
@@ -108,5 +109,24 @@ export default async function BlogPostPage({
     },
   })
 
-  return <BlogLayout post={post}>{content}</BlogLayout>
+  const breadcrumbItems = [
+    { name: locale === "en" ? "Home" : "Accueil", url: "/" },
+    { name: "Blog", url: "/blog" },
+    { name: post.title, url: `/blog/${slug}` },
+  ]
+
+  return (
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ArticleJsonLd
+        title={post.title}
+        description={post.excerpt || post.title}
+        image="/img/desktop-screen-next-impact.png"
+        datePublished={post.date || new Date().toISOString()}
+        author={post.author || "Agathe"}
+        url={`/blog/${slug}`}
+      />
+      <BlogLayout post={post}>{content}</BlogLayout>
+    </>
+  )
 }

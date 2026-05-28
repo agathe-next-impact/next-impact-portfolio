@@ -86,7 +86,7 @@ export default function Tools() {
       title: "Choisir entre WordPress CMS et Headless ?",
       lottie: "/img/quiz-cms.webp",
       ctaText: "Test en ligne",
-      ctaLink: "/cms-headless",
+      ctaLink: "/documentation/headless-cms",
       content: `
       <p>
         Outil diagnostique en ligne gratuit qui analyse votre projet de site web
@@ -119,7 +119,7 @@ export default function Tools() {
       title: "Tarifs courants selon projet et prestataire ?",
       lottie: "/img/simulateur-tarifs.webp",
       ctaText: "Simulateur",
-      ctaLink: "/simulateur-tarifs",
+      ctaLink: "/tarifs",
       content: `
       <p>
         Simulateur en ligne et gratuit qui calcule instantanément le coût précis
@@ -160,7 +160,7 @@ export function CMSQuizCard() {
       title: "Choisir entre WordPress CMS et Headless ?",
       lottie: "/img/quiz-cms.webp",
       ctaText: "Test en ligne",
-      ctaLink: "/cms-headless",
+      ctaLink: "/documentation/headless-cms",
       content: `
       <p>
         Outil diagnostique en ligne gratuit qui analyse votre projet de site web
@@ -185,7 +185,7 @@ export function PriceQuizCard() {
       title: "Tarifs courants selon projet et prestataire ?",
       lottie: "/img/simulateur-tarifs.webp",
       ctaText: "Simulateur",
-      ctaLink: "/simulateur-tarifs",
+      ctaLink: "/tarifs",
       content: `
       <p>
         Simulateur en ligne et gratuit qui calcule instantanément le coût précis

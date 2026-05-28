@@ -48,6 +48,28 @@ async function getDocumentationCategories() {
   return result;
 }
 
+// Récupère dynamiquement les slugs du blog
+async function getBlogSlugs() {
+  const blogDir = path.join(process.cwd(), "content/blog");
+  try {
+    const files = await fs.readdir(blogDir);
+    const slugs: { slug: string; lastmod: string }[] = [];
+    for (const file of files) {
+      if (file.endsWith(".md") || file.endsWith(".mdx")) {
+        const filePath = path.join(blogDir, file);
+        const stat = await fs.stat(filePath);
+        slugs.push({
+          slug: file.replace(/\.mdx?$/, ""),
+          lastmod: stat.mtime.toISOString().split("T")[0],
+        });
+      }
+    }
+    return slugs;
+  } catch {
+    return [];
+  }
+}
+
 // Études de cas — tous les slugs existants
 const caseStudiesSlugs = [
   "cafe-citoyen",
@@ -134,17 +156,21 @@ export async function GET() {
       { path: "services/eligibilite", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "etudes-de-cas", changefreq: "weekly", priority: 0.8, lastmod: today },
       { path: "documentation", changefreq: "weekly", priority: 0.8, lastmod: today },
-      { path: "documentation/mind-map", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "audit-site-ia", changefreq: "monthly", priority: 0.8, lastmod: today },
       { path: "outils", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "outils/benchmarking", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "outils/simulateur-roi", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "outils/audit-pwa", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "outils/estimateur-budget", changefreq: "monthly", priority: 0.6, lastmod: today },
+      { path: "outils/simulateur-agefiph", changefreq: "monthly", priority: 0.7, lastmod: today },
+      { path: "outils/tco-saas-vs-sur-mesure", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "demo", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "solutions", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "cahier-des-charges", changefreq: "monthly", priority: 0.7, lastmod: today },
       { path: "a-propos", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "contact", changefreq: "monthly", priority: 0.6, lastmod: today },
       { path: "avantage-oeth", changefreq: "weekly", priority: 0.8, lastmod: today },
+      { path: "blog", changefreq: "weekly", priority: 0.7, lastmod: today },
     ];
 
     // Pages FR uniquement (mentions légales = obligation FR; articles spécifiques au droit français)
@@ -165,6 +191,16 @@ export async function GET() {
         changefreq: "monthly",
         priority: 0.7,
         lastmod: today,
+      })
+    );
+
+    // Articles de blog dynamiques
+    const blogSlugs = await getBlogSlugs();
+    const blogUrls = blogSlugs.map((post) =>
+      localizedUrlEntry(`blog/${post.slug}`, {
+        changefreq: "monthly",
+        priority: 0.6,
+        lastmod: post.lastmod,
       })
     );
 
@@ -193,6 +229,7 @@ export async function GET() {
       ...localizedPages.map((page) => localizedUrlEntry(page.path, page)),
       ...frOnlyPages.map((page) => frOnlyUrlEntry(page.path, page)),
       ...caseStudiesUrls,
+      ...blogUrls,
       ...docCategoryUrls,
       ...documentationUrls,
     ].join("");

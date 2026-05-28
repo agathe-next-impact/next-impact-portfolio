@@ -65,8 +65,8 @@ export const metadata: Metadata = {
   creator: 'Agathe Karinthi-Martin',
   publisher: 'Next Impact',
   icons: {
-    icon: '/img/logo-small.webp',
-    apple: '/img/logo-small.webp',
+    icon: '/img/logo-rouge-noir-carre-icon.png',
+    apple: '/img/logo-rouge-noir-carre-icon.png',
   },
   openGraph: {
     type: 'website',

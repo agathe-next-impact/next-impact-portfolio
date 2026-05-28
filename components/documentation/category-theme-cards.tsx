@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { isArticleRelevantToProfile } from "@/lib/documentation-profiles";
 import { FileText, FolderOpen } from "lucide-react";
@@ -316,8 +314,13 @@ export function CategoryPageContent({
     <>
       {/* Theme cards */}
       {themes && (
-        <div className="mb-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div style={{ marginBottom: "2.5rem" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${Math.min(themes.length, 5)}, 1fr)`,
+            gap: "1px",
+            background: "var(--rule)",
+          }}>
             {themes.map((theme, index) => {
               const isActive = activeTheme === index;
               const count = articles.filter((a) =>
@@ -325,133 +328,135 @@ export function CategoryPageContent({
               ).length;
 
               return (
-                <motion.button
+                <button
                   key={theme.title}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: index * 0.06,
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 24,
+                  onClick={() => setActiveTheme(isActive ? null : index)}
+                  style={{
+                    background: isActive ? "var(--paper-2)" : "var(--paper)",
+                    padding: "1.25rem",
+                    textAlign: "left",
+                    border: "none",
+                    borderBottom: isActive
+                      ? "2px solid var(--ink)"
+                      : "2px solid transparent",
+                    cursor: "pointer",
+                    transition: "background 0.15s, border-color 0.15s",
                   }}
-                  onClick={() =>
-                    setActiveTheme(isActive ? null : index)
-                  }
-                  className={cn(
-                    "group relative rounded-2xl p-4 border text-left transition-all duration-200",
-                    isActive
-                      ? "bg-regularblue/20 border-regularblue/40 "
-                      : "bg-darkblue/40 border-lightblue/10 hover:bg-darkblue/60 hover:border-lightblue/20"
-                  )}
                 >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <FolderOpen className="h-8 w-8 text-coral shrink-0" />
-                    <span
-                      className={cn(
-                        "font-mono tabular-nums rounded-full px-1.5 py-0.5",
-                        isActive
-                          ? "bg-regularblue/30 text-white/80"
-                          : "bg-darkblue/60 text-white/80"
-                      )}
-                    >
-                      {count}
-                    </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", flexShrink: 0 }} />
+                    <span className="annot">{count}</span>
                   </div>
-                  <p
-                    className={cn(
-                      "text-lg font-googletitre font-medium leading-tight transition-colors",
-                      isActive ? "text-white" : "text-white/90"
-                    )}
-                  >
+                  <p style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1rem",
+                    fontWeight: 400,
+                    color: "var(--ink)",
+                    lineHeight: 1.3,
+                    marginBottom: "0.25rem",
+                  }}>
                     {theme.title}
                   </p>
-                  <p className="text-xs text-white/80 font-googletexte mt-0.5 line-clamp-2">
+                  <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
                     {theme.description}
                   </p>
-                </motion.button>
+                </button>
               );
             })}
           </div>
 
           {/* Active filter indicator */}
-          <AnimatePresence>
-            {activeTheme !== null && themes[activeTheme] && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-3 overflow-hidden"
+          {activeTheme !== null && themes[activeTheme] && (
+            <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <span className="annot">
+                Filtre actif : {themes[activeTheme].title}
+              </span>
+              <span style={{ color: "var(--rule-strong)" }}>·</span>
+              <button
+                onClick={() => setActiveTheme(null)}
+                style={{
+                  fontSize: "0.75rem",
+                  color: "var(--accent-color)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  fontFamily: "var(--font-mono)",
+                }}
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-white/80 font-googletexte">
-                    Filtre actif : {themes[activeTheme].title}
-                  </span>
-                  <span className="text-xs text-white/80">·</span>
-                  <button
-                    onClick={() => setActiveTheme(null)}
-                    className="text-xs text-regularblue/80 hover:text-regularblue font-googletexte transition-colors"
-                  >
-                    Afficher tout
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                Afficher tout
+              </button>
+            </div>
+          )}
         </div>
       )}
 
       {/* Article grid */}
-      <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {filteredArticles.map((article) => {
-            const relevant = isArticleRelevantToProfile(
-              article.category,
-              article.slug,
-              profileId
-            );
-            return (
-              <motion.div
-                key={article.slug}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className={cn(
-                  "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 transition-all duration-300",
-                  profileId && !relevant && "opacity-40 hover:opacity-70"
-                )}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-6 w-6 text-lightyellow shrink-0 mt-2" />
-                      <h3 className="font-googletitre text-xl font-medium text-white/90 group-hover:text-white transition-colors">
-                        {article.title}
-                      </h3>
-                    </div>
-                    {profileId && relevant && (
-                      <span className="shrink-0 rounded-full bg-orange/10 px-2.5 py-0.5 text-xs font-googletexte text-orange/80">
-                        Recommandé
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-white/80 font-googletexte line-clamp-3">
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, 1fr)",
+        gap: "0 4rem",
+      }}>
+        {filteredArticles.map((article) => {
+          const relevant = isArticleRelevantToProfile(
+            article.category,
+            article.slug,
+            profileId
+          );
+          return (
+            <Link
+              key={article.slug}
+              href={`/documentation/${article.category}/${article.slug}` as never}
+              className="hover-row"
+              style={{
+                display: "block",
+                borderTop: "1px solid var(--rule)",
+                padding: "1.25rem 0",
+                textDecoration: "none",
+                opacity: profileId && !relevant ? 0.4 : 1,
+                transition: "opacity 0.15s",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                <FileText style={{
+                  width: "0.875rem",
+                  height: "0.875rem",
+                  color: "var(--accent-color)",
+                  marginTop: "0.25rem",
+                  flexShrink: 0,
+                }} />
+                <div>
+                  {profileId && relevant && (
+                    <span className="label" style={{ marginBottom: "0.375rem", display: "inline-block" }}>
+                      Recommandé
+                    </span>
+                  )}
+                  <h3 style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1rem",
+                    fontWeight: 400,
+                    color: "var(--ink)",
+                    lineHeight: 1.35,
+                    marginBottom: "0.25rem",
+                  }}>
+                    {article.title}
+                  </h3>
+                  <p style={{
+                    fontSize: "0.8125rem",
+                    color: "var(--muted-color)",
+                    lineHeight: 1.5,
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}>
                     {article.description}
                   </p>
                 </div>
-                <Link
-                  href={`/documentation/${article.category}/${article.slug}`}
-                  className="absolute inset-0 rounded-3xl"
-                  aria-label={article.title}
-                >
-                  <span className="sr-only">{article.title}</span>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </>
   );

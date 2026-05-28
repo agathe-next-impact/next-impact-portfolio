@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
 export function ServicesComparisonTable() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
+  const [open, setOpen] = useState(false);
   const labels = isEn
     ? { title: "Tier comparison", feature: "Feature", essential: "Classic", growth: "Headless", custom: "Web app" }
     : { title: "Comparatif des forfaits", feature: "Fonctionnalité", essential: "Classique", growth: "Headless", custom: "Web app" };
@@ -48,16 +51,53 @@ export function ServicesComparisonTable() {
   });
 
   return (
-    <section className="s">
+    <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
       <div className="container">
-        <div className="sec-head">
-          <div className="sec-no">№ —</div>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
-            {labels.title}
-          </h2>
-        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            background: "none",
+            border: "none",
+            borderBottom: open ? "1px solid var(--rule)" : "none",
+            padding: "32px 0",
+            cursor: "pointer",
+            textAlign: "left",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "baseline", gap: 20 }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", flexShrink: 0 }}>
+              № —
+            </span>
+            <span className="ni-serif" style={{ fontSize: "clamp(20px, 2.2vw, 32px)", lineHeight: 1.1, color: "var(--ink)" }}>
+              {labels.title}
+            </span>
+          </div>
+          <ChevronDown
+            size={18}
+            strokeWidth={1.5}
+            style={{
+              color: "var(--muted-color)",
+              flexShrink: 0,
+              transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.22s ease",
+            }}
+          />
+        </button>
 
-        <div style={{ overflowX: "auto" }}>
+        <div
+          style={{
+            maxHeight: open ? 1200 : 0,
+            overflow: "hidden",
+            transition: "max-height 0.35s ease",
+          }}
+        >
+        <div style={{ overflowX: "auto", paddingTop: 1 }}>
           <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid var(--rule)" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--rule-strong)" }}>
@@ -90,6 +130,7 @@ export function ServicesComparisonTable() {
               ))}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </section>

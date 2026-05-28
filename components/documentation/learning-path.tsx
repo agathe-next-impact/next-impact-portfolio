@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { JOURNEYS, PROFILES } from "@/lib/documentation-profiles";

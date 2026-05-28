@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 import type { ArticleMeta } from "@/lib/markdown";
 
 interface ArticleSequentialNavProps {
@@ -13,48 +12,86 @@ interface ArticleSequentialNavProps {
 export function ArticleSequentialNav({ prev, next }: ArticleSequentialNavProps) {
   if (!prev && !next) return null;
 
+  const cardStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.375rem",
+    border: "1px solid var(--rule)",
+    padding: "1rem 1.25rem",
+    textDecoration: "none",
+    background: "var(--paper)",
+    transition: "background 0.15s",
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-4 mt-2">
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
       {prev ? (
         <Link
-          href={`/documentation/${prev.category}/${prev.slug}`}
-          className={cn(
-            "group flex flex-col gap-2 rounded-3xl p-5 border transition-all duration-300",
-            "bg-darkblue/50 backdrop-blur-sm border-lightblue/10",
-            "hover:border-lightblue/30 "
-          )}
+          href={`/documentation/${prev.category}/${prev.slug}` as never}
+          style={cardStyle}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
         >
-          <span className="flex items-center gap-1.5 text-xs text-white/80 font-googletexte">
-            <ArrowLeft className="h-3 w-3" />
+          <span style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.375rem",
+            fontSize: "0.6875rem",
+            color: "var(--muted-color)",
+            fontFamily: "var(--font-mono)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}>
+            <ArrowLeft style={{ width: "0.75rem", height: "0.75rem" }} />
             Article précédent
           </span>
-          <p className="text-sm font-medium text-white/80 group-hover:text-white font-googletexte transition-colors leading-snug">
+          <p style={{
+            fontSize: "0.875rem",
+            color: "var(--ink-2)",
+            lineHeight: 1.4,
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400,
+          }}>
             {prev.title}
           </p>
         </Link>
       ) : (
-        <div />
+        <div style={{ background: "var(--paper)" }} />
       )}
 
       {next ? (
         <Link
-          href={`/documentation/${next.category}/${next.slug}`}
-          className={cn(
-            "group flex flex-col gap-2 rounded-3xl p-5 border transition-all duration-300 text-right",
-            "bg-darkblue/50 backdrop-blur-sm border-lightblue/10",
-            "hover:border-lightblue/30 "
-          )}
+          href={`/documentation/${next.category}/${next.slug}` as never}
+          style={{ ...cardStyle, textAlign: "right" }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
         >
-          <span className="flex items-center justify-end gap-1.5 text-xs text-white/80 font-googletexte">
+          <span style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: "0.375rem",
+            fontSize: "0.6875rem",
+            color: "var(--muted-color)",
+            fontFamily: "var(--font-mono)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}>
             Article suivant
-            <ArrowRight className="h-3 w-3" />
+            <ArrowRight style={{ width: "0.75rem", height: "0.75rem" }} />
           </span>
-          <p className="text-sm font-medium text-white/80 group-hover:text-white font-googletexte transition-colors leading-snug">
+          <p style={{
+            fontSize: "0.875rem",
+            color: "var(--ink-2)",
+            lineHeight: 1.4,
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400,
+          }}>
             {next.title}
           </p>
         </Link>
       ) : (
-        <div />
+        <div style={{ background: "var(--paper)" }} />
       )}
     </div>
   );

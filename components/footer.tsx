@@ -82,6 +82,7 @@ export default function Footer() {
               { href: "/services",       key: "services" },
               { href: "/etudes-de-cas",  key: "caseStudies" },
               { href: "/documentation",  key: "documentation" },
+              { href: "/blog",           key: "blog" },
               { href: "/avantage-oeth",  key: "oethAdvantage" },
               { href: "/a-propos",       key: "about" },
               { href: "/mentions-legales", key: "legalNotice" },
@@ -142,22 +143,6 @@ export default function Footer() {
                 {t(item.key as Parameters<typeof t>[0])}
               </Link>
             ))}
-            <a
-              href="/ressources/livre_blanc_wp_headless.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: "var(--mono, monospace)",
-                fontSize: 11,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "var(--ink-2)",
-                textDecoration: "none",
-                transition: "color 0.15s",
-              }}
-            >
-              {t("whitepaperHeadless")}
-            </a>
           </nav>
         </div>
 

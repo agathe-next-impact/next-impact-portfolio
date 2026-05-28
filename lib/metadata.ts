@@ -29,16 +29,16 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Création de sites web et d'applications (web & mobile) sur-mesure. " +
-    "WordPress classique, Headless WordPress + Next.js, web app et PWA. " +
-    "20 ans d'expérience digitale, dont 6 en développement.",
+    "Studio freelance spécialisé WordPress Headless et Next.js. " +
+    "Trois stacks : WordPress classique, Headless + Next.js, web app sur-mesure. " +
+    "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact — Création Site web | Web & Mobile App",
+    alt: "Next Impact — WordPress Headless & Next.js — Prestataire TIH",
   },
   creator: "Agathe Karinthi-Martin",
   keywords: [
@@ -56,6 +56,11 @@ export const siteConfig = {
     "Marketplace",
     "PostgreSQL",
     "CMS Headless",
+    "TIH",
+    "OETH",
+    "AGEFIPH",
+    "prestataire TIH",
+    "déduction AGEFIPH",
   ],
   authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
 };
@@ -198,36 +203,36 @@ type LocalizedMeta = {
 
 const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Next Impact — Création Site web | Web & Mobile App en France",
+    title: "Next Impact — WordPress Headless & Next.js | Prestataire TIH",
     description:
-      "Next Impact est un studio freelance qui conçoit et développe des sites web et des applications (web & mobile) sur-mesure : " +
-      "WordPress classique, Headless WordPress + Next.js, web app et PWA. " +
-      "Basée en Auvergne, intervention dans toute la France. Audit gratuit.",
+      "Studio freelance spécialisé dans la modernisation WordPress : site classique, Headless + Next.js, web app sur-mesure. " +
+      "Basée en Auvergne, intervention dans toute la France. " +
+      "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
     keywords: [
       "création site web freelance",
       "développeur Next.js France",
       "WordPress Headless freelance",
       "web app sur-mesure",
-      "application mobile freelance",
-      "marketplace Next.js",
-      "PWA freelance",
+      "prestataire TIH développement web",
+      "déduction AGEFIPH sous-traitance",
+      "OETH numérique",
       "Next Impact",
     ],
   },
   en: {
-    title: "Next Impact — Websites and Web & Mobile Apps freelance developer",
+    title: "Next Impact — Headless WordPress & Next.js | French TIH provider",
     description:
-      "Next Impact is a freelance studio that designs and builds custom websites and applications (web & mobile): " +
-      "classic WordPress, Headless WordPress + Next.js, web apps and PWAs. " +
-      "Based in France, working internationally. Free audit included.",
+      "Freelance studio specialising in WordPress modernisation: classic site, Headless + Next.js, custom web apps. " +
+      "Based in France, working internationally. " +
+      "French TIH provider: 30% of labour cost deductible from your AGEFIPH contribution.",
     keywords: [
       "freelance website build",
-      "Next.js developer",
+      "Next.js developer France",
       "Headless WordPress freelance",
       "custom web app",
-      "freelance mobile app",
-      "Next.js marketplace",
-      "freelance PWA",
+      "French TIH provider web development",
+      "AGEFIPH deduction subcontracting",
+      "OETH digital",
       "Next Impact",
     ],
   },
@@ -237,7 +242,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Création de sites web et d'applications sur-mesure — Services et tarifs",
     description:
-      "Trois forfaits Sites web — Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 5 000 € — " +
+      "Trois forfaits Sites web — Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 6 500 € — " +
       "et une offre Applications web & mobile sur devis. " +
       "Avantage OETH transverse : 30 % du coût main-d'œuvre déductible AGEFIPH. Devis sous 48 h.",
     keywords: [
@@ -253,7 +258,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "Custom websites and applications — Services and pricing",
     description:
-      "Three website tiers — Classic from €2,250, Headless from €4,000, Web app from €5,000 — " +
+      "Three website tiers — Classic from €2,250, Headless from €4,000, Web app from €6,500 — " +
       "and a Web & Mobile App offer on quote. " +
       "Transverse OETH benefit: 30% of labor cost deductible from your AGEFIPH contribution. Quote within 48 hours.",
     keywords: [

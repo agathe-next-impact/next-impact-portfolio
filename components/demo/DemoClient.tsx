@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
-import { Button } from "@/components/ui/button";
-import { LivreBlancBanner } from "@/components/livre-blanc-banner";
+import { ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
@@ -27,16 +25,13 @@ function isYoutubeShort(url: string) {
 const mainVideoFr = {
   title: "Panorama Pub — Marketplace B2B Next.js + PostgreSQL",
   url: "https://youtu.be/9fMaBL1amYk",
-  websiteLink: "https://panorama-pub.com",
 };
 const mainVideoEn = {
   title: "Panorama Pub — B2B marketplace, Next.js + PostgreSQL",
   url: "https://youtu.be/9fMaBL1amYk",
-  websiteLink: "https://panorama-pub.com",
 };
 
 const demoVideosFr = [
-  // App mobile / PWA
   {
     title: "App mobile (PWA)",
     url: "https://youtube.com/shorts/_kt_wA4zT68",
@@ -45,7 +40,6 @@ const demoVideosFr = [
     projectDescription:
       "Application mobile installable sans store, géolocalisée et fonctionnant hors-ligne. Next.js + service worker, persistance locale.",
   },
-  // Web app extension applicative
   {
     title: "Extension applicative",
     url: "https://youtu.be/KU5K44bU9NM",
@@ -54,7 +48,6 @@ const demoVideosFr = [
     projectDescription:
       "Une zone applicative (jeux interactifs) intégrée au site Headless du média Comme des Fous : extension web app sur socle WordPress + Next.js.",
   },
-  // Sites Headless
   {
     title: "Site vitrine Headless",
     url: "https://youtu.be/8aVVoDFakCY",
@@ -79,7 +72,6 @@ const demoVideosFr = [
     projectDescription:
       "Démonstration d'un site WordPress Headless avec Next.js : billetterie événementielle, agenda et expérience utilisateur soignée.",
   },
-  // Plateformes citoyennes
   {
     title: "Plateforme citoyenne",
     url: "https://youtu.be/dJIndpLBm7o",
@@ -99,7 +91,6 @@ const demoVideosFr = [
 ];
 
 const demoVideosEn = [
-  // Mobile app / PWA
   {
     title: "Mobile app (PWA)",
     url: "https://youtube.com/shorts/_kt_wA4zT68",
@@ -108,7 +99,6 @@ const demoVideosEn = [
     projectDescription:
       "A mobile app installable without app stores, geolocated and working offline. Next.js + service worker, local persistence.",
   },
-  // Applicative extension
   {
     title: "Applicative extension",
     url: "https://youtu.be/KU5K44bU9NM",
@@ -117,7 +107,6 @@ const demoVideosEn = [
     projectDescription:
       "An applicative zone (interactive games) embedded in the Headless media Comme des Fous: a web-app extension on top of a WordPress + Next.js foundation.",
   },
-  // Headless sites
   {
     title: "Headless brochure site",
     url: "https://youtu.be/8aVVoDFakCY",
@@ -142,7 +131,6 @@ const demoVideosEn = [
     projectDescription:
       "Demo of a Headless WordPress site with Next.js: event ticketing, agenda and polished user experience.",
   },
-  // Citizen platforms
   {
     title: "Citizen platform",
     url: "https://youtu.be/dJIndpLBm7o",
@@ -162,7 +150,6 @@ const demoVideosEn = [
 ];
 
 export default function DemoClient() {
-  const [isHovered, setIsHovered] = useState(false);
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const mainVideo = isEn ? mainVideoEn : mainVideoFr;
@@ -171,137 +158,191 @@ export default function DemoClient() {
   return (
     <main>
       <PageLayout
-        titre={isEn ? "Demos — Websites, web apps and mobile applications" : "Démos — Sites web, web apps et applications mobiles"}
+        titre={
+          isEn
+            ? "Demos — Websites, web apps and mobile applications"
+            : "Démos — Sites web, web apps et applications mobiles"
+        }
         sousTitre={
           isEn
             ? "From a Next.js + PostgreSQL B2B marketplace to a mobile PWA and Headless WordPress sites: see Next Impact projects in action."
             : "De la marketplace B2B Next.js + PostgreSQL au jeu de piste mobile PWA en passant par les sites Headless WordPress : les réalisations Next Impact en action."
         }
       >
-        <div id="demo-main-video" className="mt-8 mb-16">
-          <section className="max-w-5xl mx-auto px-4 py-12">
-            {/* Video container with animations */}
-            <div
-              className="relative group animate-scale-in delay-300"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              {/* Video wrapper */}
-              <div className="relative border border-border rounded-2xl overflow-hidden transform transition-transform duration-500">
-                {/* Video placeholder */}
-
-                <div
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container">
+            {/* Main video */}
+            <div style={{ marginBottom: 64, border: "1px solid var(--rule)" }}>
+              <div style={{ width: "100%", paddingTop: "56.25%", position: "relative" }}>
+                <iframe
+                  src={toYoutubeEmbed(mainVideo.url)}
+                  title={mainVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                   style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
                     width: "100%",
-                    paddingTop: "56.25%",
-                    position: "relative",
+                    height: "100%",
+                    border: 0,
+                    background: "#000",
                   }}
+                />
+              </div>
+              <div
+                style={{
+                  padding: "24px 32px",
+                  borderTop: "1px solid var(--rule)",
+                  background: "var(--paper-2)",
+                }}
+              >
+                <h2
+                  className="ni-serif"
+                  style={{ fontSize: "clamp(18px, 2vw, 24px)", color: "var(--ink)", marginBottom: 6 }}
                 >
-                  <iframe
-                    src={toYoutubeEmbed(mainVideo.url)}
-                    title={mainVideo.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute top-0 left-0 w-full h-full border-0"
-                    style={{ background: "black" }}
-                  ></iframe>
-                </div>
+                  {isEn
+                    ? "Panorama Pub — B2B marketplace shipped in 2 months"
+                    : "Panorama Pub — Marketplace B2B livrée en 2 mois"}
+                </h2>
+                <p style={{ fontSize: 14, color: "var(--ink-2)" }}>
+                  {isEn
+                    ? "Custom web app · Next.js + PostgreSQL + Vercel"
+                    : "Web app sur-mesure · Next.js + PostgreSQL + Vercel"}
+                </p>
               </div>
-              {/* Info bar */}
-              <div className="p-6 bg-mediumblue/50 backdrop-blur-sm border-x border-1 border-white/20">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div className="space-y-1">
-                    <h2 className="font-medium text-3xl text-white/90">
-                      {isEn
-                        ? "Panorama Pub — B2B marketplace shipped in 2 months"
-                        : "Panorama Pub — Marketplace B2B livrée en 2 mois"}
-                    </h2>
-                    <p className="text-lg text-white/80">
-                      {isEn
-                        ? "Custom web app · Next.js + PostgreSQL + Vercel"
-                        : "Web app sur-mesure · Next.js + PostgreSQL + Vercel"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA Section */}
-              <div className="p-6 bg-darkblue/20 backdrop-blur-sm text-center rounded-b-3xl border border-white/20">
+              <div
+                style={{
+                  padding: "20px 32px",
+                  borderTop: "1px solid var(--rule)",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 <a
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="btn primary"
                 >
-                  <Button className="bg-lightyellow hover:bg-lightyellow/90 text-darkblue px-6 py-3 text-xl font-googletitre font-medium">
-                    {isEn ? "Book a video call" : "Réserver une visio"}
-                  </Button>
+                  {isEn ? "Book a video call" : "Réserver une visio"}
                 </a>
               </div>
             </div>
-            {/* Demo videos grid */}
-            <div className="mt-36 grid grid-cols-1 gap-8">
+
+            {/* Demo videos */}
+            <div style={{ borderTop: "1px solid var(--rule)" }}>
               {demoVideos.map((video, idx) => {
                 const isShort = isYoutubeShort(video.url);
                 return (
-                <div
-                  key={idx}
-                  className="grid grid-cols-1 md:grid-cols-5 gap-0 w-full rounded-2xl overflow-hidden border"
-                  style={{ minHeight: "320px" }}
-                >
-                  {/* Colonne vidéo */}
-                  <div className="col-span-1 md:col-span-3 h-full flex items-center justify-center bg-black p-4">
+                  <div
+                    key={idx}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: isShort ? "1fr 2fr" : "3fr 2fr",
+                      borderBottom: "1px solid var(--rule)",
+                    }}
+                  >
+                    {/* Video column */}
                     <div
-                      className={
-                        isShort
-                          ? "w-full max-w-[280px] mx-auto"
-                          : "w-full"
-                      }
-                      style={{ position: "relative" }}
+                      style={{
+                        background: "#000",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: isShort ? 24 : 0,
+                      }}
                     >
                       <div
-                        style={{
-                          width: "100%",
-                          paddingTop: isShort ? "177.78%" : "56.25%",
-                          position: "relative",
-                        }}
+                        style={
+                          isShort
+                            ? { width: "100%", maxWidth: 240, margin: "0 auto" }
+                            : { width: "100%" }
+                        }
                       >
-                        <iframe
-                          src={toYoutubeEmbed(video.url)}
-                          title={video.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          className="absolute top-0 left-0 w-full h-full border-0"
-                          style={{ background: "black" }}
-                        ></iframe>
+                        <div
+                          style={{
+                            width: "100%",
+                            paddingTop: isShort ? "177.78%" : "56.25%",
+                            position: "relative",
+                          }}
+                        >
+                          <iframe
+                            src={toYoutubeEmbed(video.url)}
+                            title={video.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              height: "100%",
+                              border: 0,
+                              background: "#000",
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {/* Colonne infos */}
-                  <div className="col-span-1 md:col-span-2 flex flex-col justify-center items-start p-6 bg-mediumblue/40 backdrop-blur-md h-full">
-                    <div className="mb-4">
-                      <h3 className="text-2xl md:text-xl font-semibold text-white mb-2">
+
+                    {/* Info column */}
+                    <div
+                      style={{
+                        padding: "32px",
+                        background: "var(--paper-2)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderLeft: "1px solid var(--rule)",
+                      }}
+                    >
+                      <h3
+                        className="ni-serif"
+                        style={{
+                          fontSize: "clamp(16px, 1.5vw, 20px)",
+                          color: "var(--ink)",
+                          marginBottom: 12,
+                        }}
+                      >
                         {video.projectName}
                       </h3>
-                      <p className="text-base text-white/80 mb-2">
+                      <p
+                        style={{
+                          fontSize: 14,
+                          color: "var(--ink-2)",
+                          lineHeight: 1.6,
+                          marginBottom: 20,
+                        }}
+                      >
                         {video.projectDescription}
                       </p>
+                      {video.projectLink && (
+                        <Link
+                          href={video.projectLink}
+                          style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: 10,
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            color: "var(--accent-color)",
+                            textDecoration: "none",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          {isEn ? "View project" : "Voir le projet"}
+                          <ArrowRight size={10} />
+                        </Link>
+                      )}
                     </div>
-                    {video.projectLink && (
-                      <Link
-                        // @ts-expect-error – href comes from internal data
-                        href={video.projectLink}
-                        className="text-coral font-medium underline hover:text-coral/80 transition"
-                      >
-                        {isEn ? "View project" : "Voir le projet"}
-                      </Link>
-                    )}
                   </div>
-                </div>
                 );
               })}
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </PageLayout>
     </main>
   );

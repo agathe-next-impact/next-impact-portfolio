@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Phone,
-  Video,
-  Mail,
-  Newspaper,
-  MessageCircle,
-  X,
-  ExternalLink,
-} from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const PHONE = "0673981638";
@@ -19,193 +10,225 @@ const EMAIL = "agathe@next-impact.digital";
 const VISIO_URL = "https://calendar.app.google/Cw7TGQBzeZ1szKU86";
 const NEWSLETTER_URL = "https://substack.com/@comesattollo626215";
 
-type ContactOption = {
-  key: string;
-  icon: typeof Phone;
-  label: string;
-  description: string;
-  iconColor: string;
-  iconBg: string;
-  href: string;
-  external?: boolean;
-};
+type OptionKey = "phone" | "visio" | "email" | "newsletter";
 
 export function FloatingContact() {
-  const [open, setOpen] = useState(false);
+  const [activeKey, setActiveKey] = useState<OptionKey | null>(null);
+  const [visible, setVisible] = useState(false);
+  const [hoveredKey, setHoveredKey] = useState<OptionKey | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const railRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
   const t = useTranslations("floatingContact");
 
-  const closePanel = () => {
-    setOpen(false);
+  type Option = {
+    key: OptionKey;
+    Icon: typeof Phone;
+    label: string;
+    sub: string;
+    href: string;
+    external?: boolean;
   };
 
-  useEffect(() => {
-    if (!open) return;
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closePanel();
-    };
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        panelRef.current &&
-        !panelRef.current.contains(target) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(target)
-      ) {
-        closePanel();
-      }
-    };
-
-    document.addEventListener("keydown", handleKey);
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("keydown", handleKey);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open]);
-
-  const options: ContactOption[] = [
+  const options: Option[] = [
     {
       key: "phone",
-      icon: Phone,
+      Icon: Phone,
       label: t("phone"),
-      description: PHONE_DISPLAY,
+      sub: PHONE_DISPLAY,
       href: `tel:${PHONE}`,
-      iconColor: "text-lightyellow",
-      iconBg: "bg-lightyellow/10 border-lightyellow/20",
     },
     {
       key: "visio",
-      icon: Video,
+      Icon: Video,
       label: t("video"),
-      description: t("videoDescription"),
+      sub: t("videoDescription"),
       href: VISIO_URL,
       external: true,
-      iconColor: "text-coral",
-      iconBg: "bg-coral/10 border-coral/20",
     },
     {
-      key: "mail",
-      icon: Mail,
+      key: "email",
+      Icon: Mail,
       label: t("email"),
-      description: EMAIL,
+      sub: EMAIL,
       href: `mailto:${EMAIL}`,
-      iconColor: "text-lightblue",
-      iconBg: "bg-lightblue/10 border-lightblue/20",
     },
     {
       key: "newsletter",
-      icon: Newspaper,
+      Icon: Newspaper,
       label: t("newsletter"),
-      description: t("newsletterDescription"),
+      sub: t("newsletterDescription"),
       href: NEWSLETTER_URL,
       external: true,
-      iconColor: "text-orange",
-      iconBg: "bg-orange/10 border-orange/20",
     },
   ];
 
+  const close = () => {
+    setVisible(false);
+    timerRef.current = setTimeout(() => setActiveKey(null), 180);
+  };
+
+  const toggle = (key: OptionKey) => {
+    if (activeKey === key) {
+      close();
+      return;
+    }
+    clearTimeout(timerRef.current);
+    setVisible(false);
+    setActiveKey(key);
+    requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+  };
+
+  useEffect(() => {
+    return () => clearTimeout(timerRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (!activeKey) return;
+
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    const onDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (
+        panelRef.current?.contains(t) ||
+        railRef.current?.contains(t)
+      ) return;
+      close();
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [activeKey]);
+
+  const activeOption = options.find((o) => o.key === activeKey);
+
   return (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={() => (open ? closePanel() : setOpen(true))}
-        aria-label={open ? t("closeLabel") : t("openLabel")}
-        aria-expanded={open}
-        className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-coral text-darkblue shadow-lg shadow-coral/30 hover:scale-105 hover:bg-coral/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-coral focus:ring-offset-2 focus:ring-offset-darkblue"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          {open ? (
-            <motion.span
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.18 }}
+      {/* Panel — slides in from the right, anchored to rail */}
+      {activeKey && (
+        <div
+          ref={panelRef}
+          role="dialog"
+          aria-modal="false"
+          aria-label={t("ariaLabel")}
+          style={{
+            position: "fixed",
+            right: "2.5rem",
+            top: "50%",
+            transform: `translateY(-50%) translateX(${visible ? "0" : "100%"})`,
+            width: 256,
+            background: "var(--paper)",
+            border: "1px solid var(--rule)",
+            borderRight: "none",
+            zIndex: 49,
+            transition: "transform 0.18s ease",
+          }}
+        >
+          <div style={{ padding: "1.25rem 1.25rem 1rem" }}>
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 9,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--muted-color)",
+                marginBottom: 10,
+              }}
             >
-              <X className="h-6 w-6" strokeWidth={2.4} />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="open"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-            >
-              <MessageCircle className="h-6 w-6" strokeWidth={2.4} />
-            </motion.span>
-          )}
-        </AnimatePresence>
-        <span className="sr-only">{t("srLabel")}</span>
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={panelRef}
-            key="contact-panel"
-            initial={{ opacity: 0, y: 16, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.92 }}
-            transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.8 }}
-            style={{ transformOrigin: "bottom right" }}
-            role="dialog"
-            aria-modal="false"
-            aria-label={t("ariaLabel")}
-            className="fixed bottom-24 right-5 md:right-6 z-50 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 bg-mediumblue/95 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden"
-          >
-            <div className="p-5 md:p-6">
-              <div className="space-y-2 mb-5">
-                <h2 className="text-2xl md:text-3xl font-googletitre text-white">
-                  {t("title")}
-                </h2>
-                <p className="text-base text-white/70 font-googletexte">
-                  {t("subtitle")}
-                </p>
-              </div>
-
-              <ul className="space-y-2.5">
-                {options.map((opt) => {
-                  const Icon = opt.icon;
-                  return (
-                    <li key={opt.key}>
-                      <a
-                        href={opt.href}
-                        {...(opt.external
-                          ? { target: "_blank", rel: "noopener noreferrer" }
-                          : {})}
-                        onClick={() => closePanel()}
-                        className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200"
-                      >
-                        <span
-                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${opt.iconBg}`}
-                        >
-                          <Icon className={`h-5 w-5 ${opt.iconColor}`} />
-                        </span>
-                        <span className="flex-1 min-w-0 text-left">
-                          <span className="block font-googletitre text-base font-medium text-white">
-                            {opt.label}
-                          </span>
-                          <span className="block text-sm text-white/60 font-googletexte truncate">
-                            {opt.description}
-                          </span>
-                        </span>
-                        {opt.external && (
-                          <ExternalLink className="h-4 w-4 text-white/30 shrink-0" />
-                        )}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+              {activeOption?.label}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 11,
+                color: "var(--ink)",
+                lineHeight: 1.5,
+                marginBottom: 16,
+                wordBreak: "break-all",
+              }}
+            >
+              {activeOption?.sub}
+            </p>
+
+            <a
+              href={activeOption?.href}
+              {...(activeOption?.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              className="btn primary"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 11,
+                padding: "0.4rem 0.75rem",
+              }}
+              onClick={close}
+            >
+              {activeOption?.label}
+              <ArrowRight size={10} />
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Rail — fixed right edge, vertically centered */}
+      <div
+        ref={railRef}
+        aria-label={t("ariaLabel")}
+        style={{
+          position: "fixed",
+          right: 0,
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 50,
+          background: "var(--paper)",
+          border: "1px solid var(--rule)",
+        }}
+      >
+        {options.map((opt, i) => {
+          const Icon = opt.Icon;
+          const isActive = activeKey === opt.key;
+          return (
+            <button
+              key={opt.key}
+              type="button"
+              aria-label={opt.label}
+              aria-expanded={isActive}
+              onClick={() => toggle(opt.key)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "2.5rem",
+                height: "2.5rem",
+                background: isActive ? "var(--paper-2)" : "transparent",
+                border: "none",
+                borderTop: i > 0 ? "1px solid var(--rule)" : "none",
+                borderLeft: isActive
+                  ? "3px solid var(--accent-color)"
+                  : "3px solid transparent",
+                cursor: "pointer",
+                color: isActive
+                  ? "var(--accent-color)"
+                  : hoveredKey === opt.key
+                  ? "var(--ink)"
+                  : "var(--ink-2)",
+                transition: "color 0.15s, background 0.15s, border-color 0.15s",
+              }}
+              onMouseEnter={() => setHoveredKey(opt.key)}
+              onMouseLeave={() => setHoveredKey(null)}
+            >
+              <Icon size={14} strokeWidth={1.5} />
+            </button>
+          );
+        })}
+      </div>
     </>
   );
 }

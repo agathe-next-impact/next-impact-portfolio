@@ -299,7 +299,7 @@ export default function ArticleReduireAgefiph() {
                 <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 32 }}>
                   Prenons l&apos;exemple d&apos;une PME de 80 salariés qui
                   n&apos;emploie aucun travailleur handicapé et qui confie la
-                  refonte de son site web à Next Impact pour 5 000 € HT.
+                  refonte de son site web à Next Impact pour 6 500 € HT.
                 </p>
 
                 {/* Calculation table */}
@@ -314,8 +314,8 @@ export default function ArticleReduireAgefiph() {
                     { label: "Obligation OETH (6% de 80)", value: "4 TH", accent: false },
                     { label: "TH manquants", value: "4", accent: true },
                     { label: "Contribution brute (4 × 4 752 €)", value: "19 008 €", accent: true },
-                    { label: "Déduction TIH (30% de 5 000 €)", value: "− 1 500 €", accent: true },
-                    { label: "Contribution après déduction", value: "17 508 €", accent: false },
+                    { label: "Déduction TIH (30% de 6 500 €)", value: "− 1 950 €", accent: true },
+                    { label: "Contribution après déduction", value: "17 058 €", accent: false },
                   ].map((row, i) => (
                     <div
                       key={i}
@@ -465,7 +465,7 @@ export default function ArticleReduireAgefiph() {
                     "Un site web ultra-performant aux standards de la Tech (< 1s de chargement, SEO natif, sécurité maximale)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
-                    "Trois forfaits Sites web — Classique (2 250 €), Headless (4 000 €), Web app (5 000 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
+                    "Trois forfaits Sites web — Classique (2 250 €), Headless (4 000 €), Web app (6 500 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
                   ].map((item, i) => (
                     <li
                       key={i}

@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
-import { CheckCircle, BookOpen, SearchCheck, FileText, Layers, Code, Globe, Smartphone } from "lucide-react";
+import { CheckCircle, BookOpen, SearchCheck, FileText, Layers, Code, Globe } from "lucide-react";
 import { useLocale } from "next-intl";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
@@ -32,18 +31,6 @@ const defaultCardsFr: BentoCardConfig[] = [
     gradient: "",
     textColor: "",
   },
-  {
-    id: "livre-blanc",
-    title: "Livre Blanc",
-    description: "Téléchargez le guide complet : qu'est-ce que WordPress Headless ?",
-    icon: FileText,
-    href: "/ressources/livre_blanc_wp_headless.pdf",
-    colSpan: "md:col-span-3",
-    rowSpan: "",
-    gradient: "",
-    textColor: "",
-    external: true,
-  },
 ];
 
 const defaultCardsEn: BentoCardConfig[] = [
@@ -69,18 +56,6 @@ const defaultCardsEn: BentoCardConfig[] = [
     gradient: "",
     textColor: "",
   },
-  {
-    id: "livre-blanc",
-    title: "White paper",
-    description: "Download the complete guide: what is Headless WordPress?",
-    icon: FileText,
-    href: "/ressources/livre_blanc_wp_headless.pdf",
-    colSpan: "md:col-span-3",
-    rowSpan: "",
-    gradient: "",
-    textColor: "",
-    external: true,
-  },
 ];
 
 function InlineLearningPath({ locale }: { locale: Locale }) {
@@ -100,79 +75,73 @@ function InlineLearningPath({ locale }: { locale: Locale }) {
   const progressPercent = Math.round((readCount / journey.length) * 100);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <div
       className="md:col-span-2 md:row-span-2"
-      style={{ border: "1px solid var(--rule)", background: "var(--paper-2)", padding: "32px" }}
+      style={{ border: "1px solid var(--rule)", borderTop: "none", borderLeft: "none", background: "var(--paper-2)", padding: "2rem" }}
     >
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-        <Icon style={{ width: 20, height: 20, color: "var(--accent-color)" }} strokeWidth={1.5} />
-        <h2 className="ni-serif" style={{ fontSize: "clamp(18px, 2vw, 24px)", color: "var(--ink)", margin: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
+        <Icon style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)" }} strokeWidth={1.5} />
+        <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.125rem, 2vw, 1.5rem)", color: "var(--ink)", margin: 0, fontWeight: 400 }}>
           {isEn ? `Your ${profile.label} path` : `Votre parcours ${profile.label}`}
         </h2>
       </div>
 
       {/* Progress bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, marginTop: 16 }}>
-        <div style={{ flex: 1, height: 2, background: "var(--rule)", position: "relative" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, height: "100%", width: `${progressPercent}%`, background: "var(--accent-color)", transition: "width 0.4s" }} />
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem", marginTop: "1rem" }}>
+        <div style={{ flex: 1, height: "2px", background: "var(--rule)", position: "relative" }}>
+          <div style={{
+            position: "absolute", top: 0, left: 0, height: "100%",
+            width: `${progressPercent}%`,
+            background: "var(--accent-color)",
+            transition: "width 0.4s",
+          }} />
         </div>
-        <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", whiteSpace: "nowrap" }}>
-          {readCount} / {journey.length}
-        </span>
+        <span className="annot">{readCount} / {journey.length}</span>
       </div>
 
       {/* Steps */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "1px solid var(--rule)" }}>
-        {journey.map((step, index) => {
+      <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid var(--rule)" }}>
+        {journey.map((step) => {
           const isRead = readArticles.includes(`${step.category}/${step.slug}`);
           return (
-            <motion.div
+            <Link
               key={step.slug}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.06, duration: 0.25 }}
+              href={`/documentation/${step.category}/${step.slug}`}
+              style={{
+                display: "block",
+                padding: "0.875rem 0",
+                borderBottom: "1px solid var(--rule)",
+                textDecoration: "none",
+                borderLeft: isRead ? "3px solid var(--accent-color)" : "3px solid transparent",
+                paddingLeft: isRead ? "0.75rem" : "0",
+                transition: "border-left-color 0.2s, background 0.15s",
+              }}
             >
-              <Link
-                href={`/documentation/${step.category}/${step.slug}`}
-                style={{
-                  display: "block",
-                  padding: "14px 0",
-                  borderBottom: "1px solid var(--rule)",
-                  textDecoration: "none",
-                  borderLeft: isRead ? "3px solid var(--accent-color)" : "3px solid transparent",
-                  paddingLeft: isRead ? 12 : 0,
-                  transition: "border-left-color 0.2s, background 0.15s",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
-                  <div>
-                    <p style={{
-                      fontSize: 14,
-                      color: isRead ? "var(--muted-color)" : "var(--ink)",
-                      textDecoration: isRead ? "line-through" : "none",
-                      marginBottom: 2,
-                      fontWeight: 500,
-                    }}>
-                      {step.title}
-                    </p>
-                    <p style={{ fontSize: 12, color: "var(--ink-2)" }}>
-                      {step.description}
-                    </p>
-                  </div>
-                  {isRead && (
-                    <CheckCircle size={14} style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: 2 }} strokeWidth={1.5} />
-                  )}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem" }}>
+                <div>
+                  <p style={{
+                    fontSize: "0.875rem",
+                    color: isRead ? "var(--muted-color)" : "var(--ink)",
+                    textDecoration: isRead ? "line-through" : "none",
+                    marginBottom: "0.125rem",
+                    fontWeight: 500,
+                  }}>
+                    {step.title}
+                  </p>
+                  <p style={{ fontSize: "0.75rem", color: "var(--ink-2)" }}>
+                    {step.description}
+                  </p>
                 </div>
-              </Link>
-            </motion.div>
+                {isRead && (
+                  <CheckCircle size={14} style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: "0.125rem" }} strokeWidth={1.5} />
+                )}
+              </div>
+            </Link>
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -188,17 +157,17 @@ export function BentoGrid() {
       : defaultCardsFr;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 0, borderTop: "1px solid var(--rule)", borderLeft: "1px solid var(--rule)", marginBottom: 48 }}>
+    <div
+      className="grid grid-cols-1 md:grid-cols-3"
+      style={{ gap: 0, borderTop: "1px solid var(--rule)", borderLeft: "1px solid var(--rule)", marginBottom: "3rem" }}
+    >
       {profileId && <InlineLearningPath locale={locale} />}
-      {cards.map((card, index) => {
+      {cards.map((card) => {
         const Icon = card.icon;
         const isBig = card.id === "headless-cms";
         return (
-          <motion.div
+          <div
             key={card.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: (profileId ? index + 1 : index) * 0.08, duration: 0.3 }}
             className={cn(card.colSpan, card.rowSpan)}
             style={{
               border: "1px solid var(--rule)",
@@ -211,15 +180,23 @@ export function BentoGrid() {
           >
             <Link
               href={card.href}
-              style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", minHeight: isBig ? 320 : 180, padding: "28px 32px", textDecoration: "none" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100%",
+                minHeight: isBig ? "20rem" : "11rem",
+                padding: "1.75rem 2rem",
+                textDecoration: "none",
+              }}
               {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
               {/* Big card infographic */}
               {!profileId && isBig && (
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.5rem" }}>
                     {(isEn
                       ? [
                           { value: "2×", label: "faster than a standard site" },
@@ -232,29 +209,29 @@ export function BentoGrid() {
                           { value: "0",   label: "plugin frontend à maintenir" },
                         ]
                     ).map((stat) => (
-                      <div key={stat.label} style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                        <span className="ni-serif" style={{ fontSize: 32, color: "var(--accent-color)", lineHeight: 1 }}>
+                      <div key={stat.label} style={{ display: "flex", alignItems: "baseline", gap: "0.75rem" }}>
+                        <span style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--accent-color)", lineHeight: 1 }}>
                           {stat.value}
                         </span>
-                        <span style={{ fontSize: 13, color: "var(--ink-2)" }}>{stat.label}</span>
+                        <span style={{ fontSize: "0.8125rem", color: "var(--ink-2)" }}>{stat.label}</span>
                       </div>
                     ))}
                   </div>
                   {/* Stack diagram */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 16, borderTop: "1px solid var(--rule)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "1rem", borderTop: "1px solid var(--rule)" }}>
                     {[
                       { Icon: Layers, label: "WordPress" },
                       { Icon: Code,   label: "Next.js" },
                       { Icon: Globe,  label: isEn ? "Your visitors" : "Vos visiteurs" },
                     ].map(({ Icon: SIcon, label }, i) => (
-                      <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                          <div style={{ border: "1px solid var(--rule)", padding: 8 }}>
-                            <SIcon size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
+                      <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
+                          <div style={{ border: "1px solid var(--rule)", padding: "0.5rem" }}>
+                            <SIcon size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
                           </div>
-                          <span style={{ fontFamily: "var(--mono)", fontSize: 8, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)" }}>{label}</span>
+                          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)" }}>{label}</span>
                         </div>
-                        {i < 2 && <div style={{ width: 16, height: 1, background: "var(--rule)" }} />}
+                        {i < 2 && <div style={{ width: "1rem", height: "1px", background: "var(--rule)" }} />}
                       </div>
                     ))}
                   </div>
@@ -262,21 +239,28 @@ export function BentoGrid() {
               )}
 
               <div style={{ marginTop: "auto" }}>
-                <Icon size={20} strokeWidth={1.5} style={{ color: "var(--muted-color)", marginBottom: 12, display: "block" }} />
-                <h3 className="ni-serif" style={{ fontSize: isBig ? "clamp(20px, 2vw, 28px)" : 18, color: "var(--ink)", marginBottom: 6, lineHeight: 1.15 }}>
+                <Icon size={18} strokeWidth={1.5} style={{ color: "var(--muted-color)", marginBottom: "0.75rem", display: "block" }} />
+                <h3 style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: isBig ? "clamp(1.25rem, 2vw, 1.75rem)" : "1.125rem",
+                  color: "var(--ink)",
+                  marginBottom: "0.375rem",
+                  lineHeight: 1.15,
+                  fontWeight: 400,
+                }}>
                   {card.title}
                 </h3>
-                <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                <p style={{ fontSize: "0.8125rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
                   {card.description}
                 </p>
                 {card.external && (
-                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent-color)", marginTop: 12 }}>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent-color)", marginTop: "0.75rem" }}>
                     ↓ PDF
                   </div>
                 )}
               </div>
             </Link>
-          </motion.div>
+          </div>
         );
       })}
     </div>

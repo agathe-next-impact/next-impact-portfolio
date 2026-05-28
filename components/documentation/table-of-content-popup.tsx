@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface TableOfContentsPopupProps {
   tableOfContents: { id: string; text: string; level: number }[];
@@ -38,22 +37,36 @@ export default function TableOfContentsPopup({
   if (tableOfContents.length === 0) return null;
 
   return (
-    <nav className="relative w-full h-max bg-darkblue/60 backdrop-blur-sm border border-lightblue/10 p-5 rounded-2xl">
-      <p className="text-xs text-white/80 font-googletexte uppercase tracking-wider mb-4">
+    <nav style={{
+      width: "100%",
+      borderTop: "1px solid var(--rule)",
+      paddingTop: "1rem",
+    }}>
+      <p className="annot" style={{
+        textTransform: "uppercase",
+        letterSpacing: "0.08em",
+        marginBottom: "0.75rem",
+      }}>
         Sommaire
       </p>
-      <ul className="space-y-0.5">
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {tableOfContents.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={cn(
-                "block rounded-lg px-3 py-1.5 font-googletexte transition-all duration-200",
-                item.level === 3 ? "pl-6 text-xs" : "text-sm",
-                activeId === item.id
-                  ? "text-white bg-regularblue/15 border-l-2 border-orange"
-                  : "text-white/80 hover:text-white/80 hover:bg-darkblue/40 border-l-2 border-transparent"
-              )}
+              style={{
+                display: "block",
+                padding: "0.375rem 0",
+                paddingLeft: item.level === 3 ? "1rem" : "0.5rem",
+                fontSize: item.level === 3 ? "0.75rem" : "0.8125rem",
+                color: activeId === item.id ? "var(--accent-color)" : "var(--muted-color)",
+                textDecoration: "none",
+                borderLeft: activeId === item.id
+                  ? "2px solid var(--accent-color)"
+                  : "2px solid transparent",
+                transition: "color 0.15s, border-color 0.15s",
+                lineHeight: 1.4,
+              }}
             >
               {item.text}
             </a>

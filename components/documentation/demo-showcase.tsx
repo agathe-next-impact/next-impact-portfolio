@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { VideoEmbed } from "@/components/documentation/video-embed";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
-import { cn } from "@/lib/utils";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import {
@@ -60,55 +57,60 @@ const VIDEOS_EN = {
   },
 };
 
-// ─── Mini button playground (compact) ──────────────────────────────────────
+// ─── Mini button playground ────────────────────────────────────────────────
 
-type ButtonVariant = "default" | "outline" | "secondary" | "ghost";
+type SwissVariant = "primary" | "secondary" | "outline";
 
-const variantsFr: { label: string; value: ButtonVariant }[] = [
-  { label: "Primaire", value: "default" },
-  { label: "Secondaire", value: "secondary" },
-  { label: "Contour", value: "outline" },
-  { label: "Fantôme", value: "ghost" },
-];
-
-const variantsEn: { label: string; value: ButtonVariant }[] = [
-  { label: "Primary", value: "default" },
-  { label: "Secondary", value: "secondary" },
-  { label: "Outline", value: "outline" },
-  { label: "Ghost", value: "ghost" },
-];
-
-function MiniButtonPlayground() {
-  const [variant, setVariant] = useState<ButtonVariant>("default");
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
-  const variants = isEn ? variantsEn : variantsFr;
+function MiniButtonPlayground({ isEn }: { isEn: boolean }) {
+  const [active, setActive] = useState<SwissVariant>("primary");
+  const variants: { label: string; value: SwissVariant }[] = [
+    { label: isEn ? "Primary" : "Primaire", value: "primary" },
+    { label: isEn ? "Secondary" : "Secondaire", value: "secondary" },
+    { label: isEn ? "Outline" : "Contour", value: "outline" },
+  ];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-center rounded-2xl bg-darkblue/60 border border-lightblue/10 p-6 min-h-[100px]">
-        <motion.div
-          key={variant}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          <Button variant={variant} size="lg">
+    <div>
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "var(--paper-2)",
+        border: "1px solid var(--rule)",
+        padding: "1.5rem",
+        minHeight: "6rem",
+      }}>
+        {active === "primary" && (
+          <button className="btn primary">{isEn ? "Click me" : "Cliquez-moi"}</button>
+        )}
+        {active === "secondary" && (
+          <button className="btn" style={{ background: "var(--paper-2)", border: "1px solid var(--rule-strong)" }}>
             {isEn ? "Click me" : "Cliquez-moi"}
-          </Button>
-        </motion.div>
+          </button>
+        )}
+        {active === "outline" && (
+          <button className="btn" style={{ background: "transparent", border: "1px solid var(--rule)" }}>
+            {isEn ? "Click me" : "Cliquez-moi"}
+          </button>
+        )}
       </div>
-      <div className="flex flex-wrap gap-2">
-        {variants.map((v) => (
+      <div style={{ display: "flex", gap: "0.25rem", marginTop: "0.5rem" }}>
+        {variants.map(v => (
           <button
             key={v.value}
-            onClick={() => setVariant(v.value)}
-            className={cn(
-              "rounded-full px-3 py-1.5 text-xs font-googletexte transition-all duration-200 border",
-              variant === v.value
-                ? "bg-regularblue/30 text-white border-regularblue/40"
-                : "bg-darkblue/40 text-white/80 border-lightblue/10 hover:bg-darkblue/60 hover:text-white/80"
-            )}
+            onClick={() => setActive(v.value)}
+            style={{
+              padding: "0.375rem 0.75rem",
+              fontSize: "0.625rem",
+              fontFamily: "var(--font-mono)",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              border: "1px solid var(--rule)",
+              background: active === v.value ? "var(--ink)" : "var(--paper)",
+              color: active === v.value ? "white" : "var(--muted-color)",
+              cursor: "pointer",
+              transition: "background 0.15s, color 0.15s",
+            }}
           >
             {v.label}
           </button>
@@ -118,55 +120,35 @@ function MiniButtonPlayground() {
   );
 }
 
-// ─── Architecture visuelle headless ────────────────────────────────────────
+// ─── Architecture visuelle ─────────────────────────────────────────────────
 
-function HeadlessArchitectureVisual() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function HeadlessArchitectureVisual({ isEn }: { isEn: boolean }) {
   return (
-    <div className="flex items-center justify-center gap-3 md:gap-4 py-4">
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-regularblue/20 border border-regularblue/30">
-          <Layers className="h-6 w-6 text-regularblue" />
-        </div>
-        <span className="text-xs text-white/80 font-googletexte">
-          WordPress
-        </span>
-      </div>
-      <div className="flex flex-col items-center gap-1">
-        <div className="h-px w-8 md:w-12 bg-lightblue/30" />
-        <span className="text-[10px] text-white/80 font-mono">API</span>
-      </div>
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange/20 border border-orange/30">
-          <Code className="h-6 w-6 text-orange" />
-        </div>
-        <span className="text-xs text-white/80 font-googletexte">Next.js</span>
-      </div>
-      <div className="flex flex-col items-center gap-1">
-        <div className="h-px w-8 md:w-12 bg-lightblue/30" />
-        <span className="text-[10px] text-white/80 font-mono">CDN</span>
-      </div>
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-lightblue/20 border border-lightblue/30">
-          <div className="flex gap-1">
-            <Globe className="h-4 w-4 text-lightblue" />
-            <Smartphone className="h-4 w-4 text-lightblue" />
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1rem 0" }}>
+      {[
+        { Icon: Layers, label: "WordPress" },
+        { Icon: Code, label: "Next.js" },
+        { Icon: Globe, label: isEn ? "Your visitors" : "Vos visiteurs" },
+      ].map(({ Icon, label }, i) => (
+        <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
+            <div style={{ border: "1px solid var(--rule)", padding: "0.5rem" }}>
+              <Icon size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
+            </div>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)" }}>
+              {label}
+            </span>
           </div>
+          {i < 2 && <div style={{ width: "1rem", height: "1px", background: "var(--rule)" }} />}
         </div>
-        <span className="text-xs text-white/80 font-googletexte">
-          {isEn ? "Your visitors" : "Vos visiteurs"}
-        </span>
-      </div>
+      ))}
     </div>
   );
 }
 
 // ─── Code snippet ──────────────────────────────────────────────────────────
 
-function CodeSnippet() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function CodeSnippet({ isEn }: { isEn: boolean }) {
   const code = isEn
     ? `// Fetch WordPress via REST API
 const res = await fetch(
@@ -184,33 +166,60 @@ const posts = await res.json();
 
 // Rendu Next.js avec ISR
 export const revalidate = 3600;`;
+
   return (
-    <pre className="rounded-2xl bg-darkblue/60 border border-lightblue/10 p-4 text-xs text-extralightblue/80 font-mono overflow-x-auto leading-relaxed">
+    <pre style={{
+      background: "var(--paper-2)",
+      border: "1px solid var(--rule)",
+      padding: "1rem",
+      fontSize: "0.75rem",
+      color: "var(--ink-2)",
+      fontFamily: "var(--font-mono)",
+      overflowX: "auto",
+      lineHeight: 1.6,
+      margin: 0,
+    }}>
       <code>{code}</code>
     </pre>
   );
 }
 
-// ─── Demo card wrapper ─────────────────────────────────────────────────────
+// ─── Demo card ─────────────────────────────────────────────────────────────
 
 interface DemoCardProps {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-function DemoCard({ icon, title, children, className }: DemoCardProps) {
+function DemoCard({ icon, title, children, className, style: extraStyle }: DemoCardProps) {
   return (
     <div
-      className={cn(
-        "rounded-3xl border border-lightblue/10 bg-white/5 backdrop-blur-sm p-5 md:p-6",
-        className
-      )}
+      className={className}
+      style={{
+        background: "var(--paper)",
+        padding: "1.5rem",
+        ...extraStyle,
+      }}
     >
-      <div className="flex items-center gap-2.5 mb-4">
-        
-        <h3 className="font-googletitre  text-2xl font-medium text-lightyellow">
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "0.625rem",
+        marginBottom: "1rem",
+        paddingBottom: "0.75rem",
+        borderBottom: "1px solid var(--rule)",
+      }}>
+        {icon}
+        <h3 style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "1.0625rem",
+          fontWeight: 400,
+          color: "var(--ink)",
+          margin: 0,
+        }}>
           {title}
         </h3>
       </div>
@@ -228,106 +237,81 @@ export function DemoShowcase() {
   const isEn = locale === "en";
 
   return (
-    <section className="relative mt-12">
-      {/* Full-width background + borders */}
-      <div className="absolute inset-0 -left-[calc((100vw-100%)/2)] w-screen bg-darkblue/90 border-y border-lightblue/10" />
-
-      <motion.div
-        className="relative py-20"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 24, delay: 0.2 }}
-      >
-        {/* Section header */}
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <h2 className="font-googletitre text-2xl md:text-4xl font-medium text-white mb-1">
-              {profileId
-                ? isEn
-                  ? "Interactive demo"
-                  : "Démo interactive"
-                : isEn
-                  ? "See it in action"
-                  : "Voir en action"}
-            </h2>
-            <p className="text-sm text-white/80 font-googletexte">
-              {profileId
-                ? isEn
-                  ? `Videos and components for your ${profile?.label} profile.`
-                  : `Vidéos et composants adaptés à votre profil ${profile?.label}.`
-                : isEn
-                  ? "Real project videos and interactive components."
-                  : "Vidéos de projets réels et composants interactifs."}
-            </p>
-          </div>
-          <Link
-            href="/documentation/playground"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-darkblue/50 border border-lightblue/10 px-3 py-1.5 text-xs text-white/80 hover:text-white/80 hover:border-lightblue/20 transition-all duration-300 font-googletexte shrink-0"
-          >
-            {isEn ? "All playgrounds" : "Tous les playground"}
-            <ArrowRight className="h-3 w-3" />
-          </Link>
+    <section style={{ marginTop: "3rem", borderTop: "1px solid var(--rule)", paddingTop: "2.5rem" }}>
+      {/* Section header */}
+      <div style={{
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        marginBottom: "1.5rem",
+        flexWrap: "wrap",
+        gap: "1rem",
+      }}>
+        <div>
+          <h2 style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+            fontWeight: 400,
+            color: "var(--ink)",
+            marginBottom: "0.25rem",
+          }}>
+            {profileId
+              ? isEn ? "Interactive demo" : "Démo interactive"
+              : isEn ? "See it in action" : "Voir en action"}
+          </h2>
+          <p style={{ fontSize: "0.875rem", color: "var(--muted-color)" }}>
+            {profileId
+              ? isEn
+                ? `Videos and components for your ${profile?.label} profile.`
+                : `Vidéos et composants adaptés à votre profil ${profile?.label}.`
+              : isEn
+                ? "Real project videos and interactive components."
+                : "Vidéos de projets réels et composants interactifs."}
+          </p>
         </div>
+      </div>
 
-        {/* Profile-contextual demos */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={profileId || "default"}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-          >
-            {!profileId && <DefaultDemos />}
-            {profileId === "decideur" && <DecideurDemos />}
-            {profileId === "utilisateur" && <UtilisateurDemos />}
-            {profileId === "developpeur" && <DeveloppeurDemos />}
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
+      {/* Profile-contextual demos */}
+      {!profileId && <DefaultDemos isEn={isEn} />}
+      {profileId === "decideur" && <DecideurDemos isEn={isEn} />}
+      {profileId === "utilisateur" && <UtilisateurDemos isEn={isEn} />}
+      {profileId === "developpeur" && <DeveloppeurDemos isEn={isEn} />}
     </section>
   );
 }
 
 // ─── Demo layouts per profile ──────────────────────────────────────────────
 
-function DefaultDemos() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function DefaultDemos({ isEn }: { isEn: boolean }) {
   const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
-    <div className="space-y-4">
-      {/* Row 1: Video + Architecture */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--rule)", border: "1px solid var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
         <DemoCard
-          icon={<PlayCircle className="h-5 w-5 text-regularblue" />}
+          icon={<PlayCircle size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Headless WordPress in action" : "WordPress Headless en action"}
         >
-          <VideoEmbed
-            url={VIDEOS.plateforme.url}
-            title={VIDEOS.plateforme.title}
-          />
+          <VideoEmbed url={VIDEOS.plateforme.url} title={VIDEOS.plateforme.title} />
         </DemoCard>
 
         <DemoCard
-          icon={<Layers className="h-5 w-5 text-orange" />}
+          icon={<Layers size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Headless architecture" : "Architecture headless"}
         >
-          <HeadlessArchitectureVisual />
-          <p className="text-xs text-white/80 font-googletexte mt-3">
+          <HeadlessArchitectureVisual isEn={isEn} />
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", marginTop: "0.75rem", lineHeight: 1.5 }}>
             {isEn
-              ? "WordPress handles content, Next.js handles rendering. Result: a fast, secure and flexible site."
-              : "WordPress gère le contenu, Next.js gère l'affichage. Résultat : un site rapide, sécurisé et flexible."}
+              ? "WordPress handles content, Next.js handles rendering."
+              : "WordPress gère le contenu, Next.js gère l'affichage."}
           </p>
         </DemoCard>
       </div>
 
-      {/* Row 2: Mini projects */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1px", background: "var(--rule)" }}>
         {[VIDEOS.cdf, VIDEOS.doleances, VIDEOS.egc].map((video) => (
           <DemoCard
             key={video.url}
-            icon={<PlayCircle className="h-4 w-4 text-white/80" />}
+            icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
             title={video.title}
           >
             <VideoEmbed url={video.url} title={video.title} compact />
@@ -338,24 +322,17 @@ function DefaultDemos() {
   );
 }
 
-function DecideurDemos() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function DecideurDemos({ isEn }: { isEn: boolean }) {
   const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
-    <div className="space-y-4">
-      {/* Row 1: Featured video + key numbers */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--rule)", border: "1px solid var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: "1px", background: "var(--rule)" }}>
         <DemoCard
-          icon={<PlayCircle className="h-5 w-5 text-orange" />}
+          icon={<PlayCircle size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Production platform" : "Plateforme en production"}
-          className="md:col-span-3"
         >
-          <VideoEmbed
-            url={VIDEOS.plateforme.url}
-            title={VIDEOS.plateforme.title}
-          />
-          <p className="text-xs text-white/80 font-googletexte mt-3">
+          <VideoEmbed url={VIDEOS.plateforme.url} title={VIDEOS.plateforme.title} />
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", marginTop: "0.75rem", lineHeight: 1.5 }}>
             {isEn
               ? "Event ticketing platform powered by Headless WordPress + Next.js."
               : "Billeterie événementielle propulsée par WordPress Headless + Next.js."}
@@ -363,11 +340,10 @@ function DecideurDemos() {
         </DemoCard>
 
         <DemoCard
-          icon={<Globe className="h-5 w-5 text-orange" />}
+          icon={<Globe size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Why it changes everything" : "Pourquoi ça change tout"}
-          className="md:col-span-2"
         >
-          <div className="space-y-4 mt-2">
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1rem" }}>
             {(isEn
               ? [
                   { value: "2×", label: "faster than a standard site" },
@@ -380,34 +356,23 @@ function DecideurDemos() {
                   { value: "0", label: "plugin frontend à maintenir" },
                 ]
             ).map((stat) => (
-              <div key={stat.label} className="flex items-baseline gap-3">
-                <span className="text-2xl font-googletitre font-medium text-orange">
+              <div key={stat.label} style={{ display: "flex", alignItems: "baseline", gap: "0.75rem" }}>
+                <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.75rem", color: "var(--accent-color)", lineHeight: 1 }}>
                   {stat.value}
                 </span>
-                <span className="text-xs text-white/80 font-googletexte">
-                  {stat.label}
-                </span>
+                <span style={{ fontSize: "0.75rem", color: "var(--muted-color)" }}>{stat.label}</span>
               </div>
             ))}
           </div>
-          <div className="mt-6">
-            <HeadlessArchitectureVisual />
-          </div>
+          <HeadlessArchitectureVisual isEn={isEn} />
         </DemoCard>
       </div>
 
-      {/* Row 2: Project demos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <DemoCard
-          icon={<PlayCircle className="h-4 w-4 text-orange/60" />}
-          title={VIDEOS.cdf.title}
-        >
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
+        <DemoCard icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={VIDEOS.cdf.title}>
           <VideoEmbed url={VIDEOS.cdf.url} title={VIDEOS.cdf.title} compact />
         </DemoCard>
-        <DemoCard
-          icon={<PlayCircle className="h-4 w-4 text-orange/60" />}
-          title={VIDEOS.egc.title}
-        >
+        <DemoCard icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={VIDEOS.egc.title}>
           <VideoEmbed url={VIDEOS.egc.url} title={VIDEOS.egc.title} compact />
         </DemoCard>
       </div>
@@ -415,20 +380,17 @@ function DecideurDemos() {
   );
 }
 
-function UtilisateurDemos() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function UtilisateurDemos({ isEn }: { isEn: boolean }) {
   const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
-    <div className="space-y-4">
-      {/* Row 1: Video + Button playground */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--rule)", border: "1px solid var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
         <DemoCard
-          icon={<PlayCircle className="h-5 w-5 text-regularblue" />}
+          icon={<PlayCircle size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Managing content in headless" : "Gérer du contenu en headless"}
         >
           <VideoEmbed url={VIDEOS.cdf.url} title={VIDEOS.cdf.title} />
-          <p className="text-xs text-white/80 font-googletexte mt-3">
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", marginTop: "0.75rem", lineHeight: 1.5 }}>
             {isEn
               ? "You publish in WordPress as usual. The site updates automatically."
               : "Vous publiez sur WordPress comme d'habitude. Le site se met à jour automatiquement."}
@@ -436,61 +398,39 @@ function UtilisateurDemos() {
         </DemoCard>
 
         <DemoCard
-          icon={<MousePointerClick className="h-5 w-5 text-regularblue" />}
+          icon={<MousePointerClick size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Test the components" : "Testez les composants"}
         >
-          <MiniButtonPlayground />
-          <div className="mt-4">
-            <HeadlessArchitectureVisual />
+          <MiniButtonPlayground isEn={isEn} />
+          <div style={{ marginTop: "1rem" }}>
+            <HeadlessArchitectureVisual isEn={isEn} />
           </div>
         </DemoCard>
       </div>
 
-      {/* Row 2: More project videos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <DemoCard
-          icon={<PlayCircle className="h-4 w-4 text-regularblue/80" />}
-          title={VIDEOS.plateforme.title}
-        >
-          <VideoEmbed
-            url={VIDEOS.plateforme.url}
-            title={VIDEOS.plateforme.title}
-            compact
-          />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
+        <DemoCard icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={VIDEOS.plateforme.title}>
+          <VideoEmbed url={VIDEOS.plateforme.url} title={VIDEOS.plateforme.title} compact />
         </DemoCard>
-        <DemoCard
-          icon={<PlayCircle className="h-4 w-4 text-regularblue/80" />}
-          title={VIDEOS.doleances.title}
-        >
-          <VideoEmbed
-            url={VIDEOS.doleances.url}
-            title={VIDEOS.doleances.title}
-            compact
-          />
+        <DemoCard icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={VIDEOS.doleances.title}>
+          <VideoEmbed url={VIDEOS.doleances.url} title={VIDEOS.doleances.title} compact />
         </DemoCard>
       </div>
     </div>
   );
 }
 
-function DeveloppeurDemos() {
-  const locale = useLocale() as Locale;
-  const isEn = locale === "en";
+function DeveloppeurDemos({ isEn }: { isEn: boolean }) {
   const VIDEOS = isEn ? VIDEOS_EN : VIDEOS_FR;
   return (
-    <div className="space-y-4">
-      {/* Row 1: Video + Code */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--rule)", border: "1px solid var(--rule)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: "1px", background: "var(--rule)" }}>
         <DemoCard
-          icon={<PlayCircle className="h-5 w-5 text-lightblue" />}
+          icon={<PlayCircle size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title={isEn ? "Production architecture" : "Architecture en production"}
-          className="md:col-span-3"
         >
-          <VideoEmbed
-            url={VIDEOS.plateforme.url}
-            title={VIDEOS.plateforme.title}
-          />
-          <p className="text-xs text-white/80 font-googletexte mt-3">
+          <VideoEmbed url={VIDEOS.plateforme.url} title={VIDEOS.plateforme.title} />
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", marginTop: "0.75rem", lineHeight: 1.5 }}>
             {isEn
               ? "Next.js App Router, ISR, WordPress REST API — full stack in production."
               : "Next.js App Router, ISR, API REST WordPress — stack complet en prod."}
@@ -498,40 +438,26 @@ function DeveloppeurDemos() {
         </DemoCard>
 
         <DemoCard
-          icon={<Code className="h-5 w-5 text-lightblue" />}
+          icon={<Code size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />}
           title="REST API & ISR"
-          className="md:col-span-2"
         >
-          <CodeSnippet />
-          <p className="text-xs text-white/80 font-googletexte mt-3">
+          <CodeSnippet isEn={isEn} />
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", marginTop: "0.75rem", lineHeight: 1.5 }}>
             {isEn ? (
-              <>
-                WordPress exposes data via{" "}
-                <code className="text-lightblue/80">wp-json/wp/v2</code>. Next.js
-                regenerates pages in the background.
-              </>
+              <>WordPress exposes data via <code style={{ fontFamily: "var(--font-mono)", color: "var(--accent-color)" }}>wp-json/wp/v2</code>. Next.js regenerates pages in the background.</>
             ) : (
-              <>
-                WordPress expose les données via{" "}
-                <code className="text-lightblue/80">wp-json/wp/v2</code>. Next.js
-                régénère les pages en arrière-plan.
-              </>
+              <>WordPress expose les données via <code style={{ fontFamily: "var(--font-mono)", color: "var(--accent-color)" }}>wp-json/wp/v2</code>. Next.js régénère les pages en arrière-plan.</>
             )}
           </p>
-          <div className="mt-3">
-            <MiniButtonPlayground />
+          <div style={{ marginTop: "0.75rem" }}>
+            <MiniButtonPlayground isEn={isEn} />
           </div>
         </DemoCard>
       </div>
 
-      {/* Row 2: Project demos */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1px", background: "var(--rule)" }}>
         {[VIDEOS.cdf, VIDEOS.doleances, VIDEOS.egc].map((video) => (
-          <DemoCard
-            key={video.url}
-            icon={<PlayCircle className="h-4 w-4 text-lightblue/80" />}
-            title={video.title}
-          >
+          <DemoCard key={video.url} icon={<PlayCircle size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />} title={video.title}>
             <VideoEmbed url={video.url} title={video.title} compact />
           </DemoCard>
         ))}

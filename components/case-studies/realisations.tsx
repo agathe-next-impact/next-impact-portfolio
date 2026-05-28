@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -443,102 +443,158 @@ interface RealisationsProps {
   defaultTab?: string;
 }
 
+const TAB_KEYS = ["landing", "webapp", "headless", "wordpress"] as const;
+type TabKey = typeof TAB_KEYS[number];
+
 export default function Realisations({ count, defaultTab = "webapp" }: RealisationsProps) {
+  const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const t = useTranslations("realisations");
   const locale = useLocale() as Locale;
 
   return (
     <section id="realisations">
-      <Tabs defaultValue={defaultTab} className="w-full">
-        <TabsList
-          style={{
-            display: "flex",
-            overflowX: "auto",
-            flexWrap: "wrap",
-            background: "transparent",
-            padding: 0,
-            gap: 0,
-            marginBottom: 40,
-            borderBottom: "1px solid var(--rule)",
-          }}
-        >
-          {["landing", "webapp", "headless", "wordpress"].map((tab) => (
-            <TabsTrigger
+      {/* Tab selector */}
+      <div
+        style={{
+          display: "flex",
+          border: "1px solid var(--rule)",
+          marginBottom: 48,
+          overflow: "hidden",
+        }}
+      >
+        {TAB_KEYS.map((tab, idx) => {
+          const isActive = activeTab === tab;
+          const projectCount = PROJECTS_META.filter((p) => p.tab.includes(tab)).length;
+          return (
+            <button
               key={tab}
-              value={tab}
-              style={{ borderRadius: 0 }}
-              className="data-[state=active]:border-b-[2px] data-[state=active]:border-b-[var(--accent-color)] whitespace-nowrap text-xs uppercase tracking-widest font-mono px-6 py-3"
+              onClick={() => setActiveTab(tab)}
+              className={isActive ? "tab-sel-active" : ""}
+              style={{
+                flex: 1,
+                padding: "14px 20px",
+                border: "none",
+                borderRight: idx < TAB_KEYS.length - 1 ? "1px solid var(--rule)" : "none",
+                background: isActive ? "var(--ink)" : "var(--paper)",
+                color: isActive ? "#ffffff" : "var(--ink-2)",
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                transition: "background 0.15s, color 0.15s",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 3,
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper-2)";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper)";
+              }}
             >
-              {t(`tabs.${tab as "landing" | "webapp" | "headless" | "wordpress"}`)}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+              <span>{t(`tabs.${tab}`)}</span>
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 9,
+                  opacity: isActive ? 0.5 : 0.4,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {projectCount}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
-        {["landing", "webapp", "headless", "wordpress"].map((tab) => (
-          <TabsContent value={tab} className="mt-0" key={tab}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
-              {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project, index) => {
-                const content = getProjectContent(locale, project.id);
-                const isExternal = project.link.startsWith("http");
-                const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
-                const col = index % 3;
-                return (
+      {/* Content */}
+      {TAB_KEYS.map((tab) =>
+        activeTab === tab ? (
+          <div
+            key={tab}
+            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}
+          >
+            {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project, index) => {
+              const content = getProjectContent(locale, project.id);
+              const isExternal = project.link.startsWith("http");
+              const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
+              const col = index % 3;
+              return (
+                <div
+                  key={project.id}
+                  style={{
+                    border: "1px solid var(--rule)",
+                    marginRight: col < 2 ? -1 : 0,
+                    marginBottom: -1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+                    <Image
+                      src={project.image}
+                      alt={content.alt}
+                      fill
+                      style={{ objectFit: "cover", objectPosition: "top" }}
+                      sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                    />
+                  </div>
                   <div
-                    key={project.id}
                     style={{
-                      border: "1px solid var(--rule)",
-                      marginRight: col < 2 ? -1 : 0,
-                      marginBottom: -1,
+                      padding: "20px 24px",
+                      borderTop: "1px solid var(--rule)",
+                      flex: 1,
                       display: "flex",
                       flexDirection: "column",
                     }}
                   >
-                    <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
-                      <Image
-                        src={project.image}
-                        alt={content.alt}
-                        fill
-                        style={{ objectFit: "cover", objectPosition: "top" }}
-                        sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-                      />
-                    </div>
-                    <div style={{ padding: "20px 24px", borderTop: "1px solid var(--rule)", flex: 1, display: "flex", flexDirection: "column" }}>
-                      <Link href={project.link} {...externalProps} style={{ textDecoration: "none", display: "block" }}>
-                        <h3 className="ni-serif" style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}>
-                          {content.title}
-                        </h3>
-                        <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
-                          {content.description}
-                        </p>
+                    <Link
+                      href={project.link}
+                      {...externalProps}
+                      style={{ textDecoration: "none", display: "block" }}
+                    >
+                      <h3
+                        className="ni-serif"
+                        style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}
+                      >
+                        {content.title}
+                      </h3>
+                      <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                        {content.description}
+                      </p>
+                    </Link>
+                    <div style={{ marginTop: "auto", paddingTop: 16 }}>
+                      <Link
+                        href={project.link}
+                        {...externalProps}
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: 10,
+                          letterSpacing: "0.08em",
+                          textTransform: "uppercase",
+                          color: "var(--accent-color)",
+                          textDecoration: "none",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        {isExternal ? t("visitLanding") : t("viewProject")}
+                        <ArrowRight size={10} />
                       </Link>
-                      <div style={{ marginTop: "auto", paddingTop: 16 }}>
-                        <Link
-                          href={project.link}
-                          {...externalProps}
-                          style={{
-                            fontFamily: "var(--mono)",
-                            fontSize: 10,
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            color: "var(--accent-color)",
-                            textDecoration: "none",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 4,
-                          }}
-                        >
-                          {isExternal ? t("visitLanding") : t("viewProject")}
-                          <ArrowRight size={10} />
-                        </Link>
-                      </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+                </div>
+              );
+            })}
+          </div>
+        ) : null
+      )}
     </section>
   );
 }

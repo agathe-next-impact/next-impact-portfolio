@@ -19,48 +19,72 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
       : articles.filter((a) => a.category === activeCategory)
 
   return (
-    <div className="relative z-10 min-h-screen">
-      <div className="container px-4 md:px-6 py-8 md:py-12 lg:py-16 space-y-8">
-        {/* Hero */}
-        <div className="rounded-3xl bg-gradient-to-br from-mediumblue/90 via-mediumblue/80 to-darkblue/70 backdrop-blur-sm p-6 md:p-10 lg:p-12 border border-lightblue/10">
-          <h1 className="font-googletitre text-3xl md:text-4xl lg:text-5xl tracking-tight font-medium text-white mb-3">
-            Articles &amp; Comparatifs
-          </h1>
-          <p className="text-lg text-white/80 font-googletexte font-light max-w-2xl leading-relaxed">
+    <section className="s">
+      <div className="container">
+        {/* Header */}
+        <div className="sec-head">
+          <span className="sec-no">01</span>
+          <h1>Articles &amp; Comparatifs</h1>
+          <p className="sec-meta">
             Analyses, comparatifs et retours d&apos;expérience pour prendre les bonnes décisions web.
           </p>
+        </div>
 
-          {/* Filtres */}
-          <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-lightblue/10">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium font-googletexte transition-all duration-200 border ${
-                  activeCategory === cat
-                    ? "bg-coral/15 text-coral border-coral/30"
-                    : "bg-transparent text-white/60 border-lightblue/10 hover:text-white/80 hover:border-lightblue/20"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+        {/* Filtres tab-style */}
+        <div style={{
+          display: "flex",
+          borderBottom: "1px solid var(--rule)",
+          marginBottom: "2rem",
+          gap: 0,
+        }}>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              style={{
+                padding: "0.5rem 1rem",
+                fontSize: "0.8125rem",
+                fontFamily: "var(--font-mono)",
+                background: "none",
+                border: "none",
+                borderBottom: activeCategory === cat
+                  ? "2px solid var(--ink)"
+                  : "2px solid transparent",
+                color: activeCategory === cat ? "var(--ink)" : "var(--muted-color)",
+                cursor: "pointer",
+                marginBottom: "-1px",
+                transition: "color 0.15s, border-color 0.15s",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+              }}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         {/* Grille */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "0 4rem",
+        }}>
           {filtered.map((article, i) => (
             <ArticleCard key={article.slug} article={article} index={i} />
           ))}
         </div>
 
         {filtered.length === 0 && (
-          <p className="text-center text-white/40 text-sm font-googletexte py-12">
+          <p style={{
+            color: "var(--muted-color)",
+            fontSize: "0.875rem",
+            padding: "3rem 0",
+            textAlign: "center",
+          }}>
             Aucun article dans cette catégorie pour le moment.
           </p>
         )}
       </div>
-    </div>
+    </section>
   )
 }

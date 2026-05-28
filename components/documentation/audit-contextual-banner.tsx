@@ -8,30 +8,57 @@ import type { Locale } from "@/i18n/routing";
 export function AuditContextualBanner() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
+
   return (
-    <section className="mt-12 rounded-2xl border border-coral/20 bg-gradient-to-r from-darkblue/60 to-mediumblue/40 backdrop-blur-sm p-6 md:p-8">
-      <div className="flex flex-col md:flex-row items-center gap-6">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-coral/10 border border-coral/20 shrink-0">
-          <Zap className="h-7 w-7 text-coral" />
-        </div>
-        <div className="flex-1 text-center md:text-left">
-          <h3 className="font-googletitre text-xl md:text-2xl font-medium text-white mb-1">
-            {isEn ? "Is your current site performing?" : "Votre site actuel est-il performant ?"}
-          </h3>
-          <p className="text-sm text-white/60 font-googletexte">
-            {isEn
-              ? "Compare your site's performance with a Headless site."
-              : "Comparez les performances de votre site avec celles d'un site Headless."}
-          </p>
-        </div>
-        <Link
-          href="/audit-site-ia"
-          className="inline-flex items-center gap-2 rounded-full bg-transparent border-2 border-coral/50 text-coral px-5 py-2.5 text-sm font-googletitre font-semibold hover:bg-coral/10 hover:border-coral transition-all duration-300 shrink-0"
-        >
-          {isEn ? "Start my free audit" : "Lancer mon audit gratuit"}
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+    <section style={{
+      marginTop: "2.5rem",
+      border: "1px solid var(--rule)",
+      borderLeft: "3px solid var(--accent-color)",
+      background: "var(--paper-2)",
+      padding: "1.5rem 2rem",
+      display: "flex",
+      flexWrap: "wrap",
+      alignItems: "center",
+      gap: "1.5rem",
+    }}>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "2.5rem",
+        height: "2.5rem",
+        border: "1px solid var(--rule)",
+        background: "var(--paper)",
+        flexShrink: 0,
+      }}>
+        <Zap style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)" }} />
       </div>
+
+      <div style={{ flex: 1, minWidth: "12rem" }}>
+        <h3 style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "1.125rem",
+          fontWeight: 400,
+          color: "var(--ink)",
+          marginBottom: "0.25rem",
+        }}>
+          {isEn ? "Is your current site performing?" : "Votre site actuel est-il performant ?"}
+        </h3>
+        <p style={{ fontSize: "0.875rem", color: "var(--muted-color)" }}>
+          {isEn
+            ? "Compare your site's performance with a Headless site."
+            : "Comparez les performances de votre site avec celles d'un site Headless."}
+        </p>
+      </div>
+
+      <Link
+        href="/audit-site-ia"
+        className="btn primary"
+        style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", flexShrink: 0 }}
+      >
+        {isEn ? "Start my free audit" : "Lancer mon audit gratuit"}
+        <ArrowRight style={{ width: "0.875rem", height: "0.875rem" }} />
+      </Link>
     </section>
   );
 }

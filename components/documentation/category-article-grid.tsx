@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { FileText } from "lucide-react";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { isArticleRelevantToProfile } from "@/lib/documentation-profiles";
-import { cn } from "@/lib/utils";
 
 interface Article {
   slug: string;
@@ -16,40 +16,65 @@ export function CategoryArticleGrid({ articles }: { articles: Article[] }) {
   const { profileId } = useDocumentationMode();
 
   return (
-    <div className="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(2, 1fr)",
+      gap: "0 4rem",
+    }}>
       {articles.map((article) => {
         const relevant = isArticleRelevantToProfile(article.category, article.slug, profileId);
         return (
-          <div
+          <Link
             key={article.slug}
-            className={cn(
-              "group relative overflow-hidden rounded-3xl bg-mediumblue/80 backdrop-blur-sm p-6 border border-lightblue/10 hover:border-lightblue/30 transition-all duration-300",
-              profileId && !relevant && "opacity-40 hover:opacity-70"
-            )}
+            href={`/documentation/${article.category}/${article.slug}` as never}
+            className="hover-row"
+            style={{
+              display: "block",
+              borderTop: "1px solid var(--rule)",
+              padding: "1.25rem 0",
+              textDecoration: "none",
+              opacity: profileId && !relevant ? 0.4 : 1,
+              transition: "opacity 0.15s",
+            }}
           >
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-googletitre text-xl font-medium text-white/90 group-hover:text-white transition-colors">
-                  {article.title}
-                </h3>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.625rem" }}>
+              <FileText style={{
+                width: "0.875rem",
+                height: "0.875rem",
+                color: "var(--accent-color)",
+                marginTop: "0.25rem",
+                flexShrink: 0,
+              }} />
+              <div>
                 {profileId && relevant && (
-                  <span className="shrink-0 rounded-full bg-orange/10 px-2.5 py-0.5 text-xs font-googletexte text-orange/80">
+                  <span className="label" style={{ marginBottom: "0.375rem", display: "inline-block" }}>
                     Recommandé
                   </span>
                 )}
+                <h3 style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  color: "var(--ink)",
+                  lineHeight: 1.35,
+                  marginBottom: "0.25rem",
+                }}>
+                  {article.title}
+                </h3>
+                <p style={{
+                  fontSize: "0.8125rem",
+                  color: "var(--muted-color)",
+                  lineHeight: 1.5,
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}>
+                  {article.description}
+                </p>
               </div>
-              <p className="text-sm text-white/80 font-googletexte line-clamp-3">
-                {article.description}
-              </p>
             </div>
-            <Link
-              href={`/documentation/${article.category}/${article.slug}`}
-              className="absolute inset-0 rounded-3xl"
-              aria-label={article.title}
-            >
-              <span className="sr-only">{article.title}</span>
-            </Link>
-          </div>
+          </Link>
         );
       })}
     </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface StatCardProps {
   value: string;
@@ -10,14 +9,14 @@ interface StatCardProps {
   accent?: "blue" | "orange" | "coral";
 }
 
-const accentStyles = {
-  blue: { bg: "bg-regularblue/5", border: "border-regularblue/20", value: "text-regularblue" },
-  orange: { bg: "bg-orange/5", border: "border-orange/20", value: "text-orange" },
-  coral: { bg: "bg-coral/5", border: "border-coral/20", value: "text-coral" },
+const accentColor: Record<"blue" | "orange" | "coral", string> = {
+  blue: "var(--ink)",
+  orange: "var(--accent-color)",
+  coral: "var(--accent-color)",
 };
 
 export function StatCard({ value, label, description, accent = "blue" }: StatCardProps) {
-  const style = accentStyles[accent];
+  const color = accentColor[accent];
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -40,20 +39,34 @@ export function StatCard({ value, label, description, accent = "blue" }: StatCar
   return (
     <div
       ref={ref}
-      className={cn(
-        "rounded-2xl border p-5 text-center transition-all duration-500",
-        style.bg, style.border,
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      )}
+      style={{
+        borderTop: `2px solid ${color}`,
+        padding: "1.25rem",
+        textAlign: "center",
+        background: "var(--paper)",
+        border: "1px solid var(--rule)",
+        borderTopWidth: "2px",
+        borderTopColor: color,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(1rem)",
+        transition: "opacity 0.4s, transform 0.4s",
+      }}
     >
-      <p className={cn("text-3xl font-googletitre font-bold mb-1", style.value)}>
+      <p style={{
+        fontFamily: "var(--font-serif)",
+        fontSize: "2.25rem",
+        fontWeight: 400,
+        color,
+        lineHeight: 1,
+        marginBottom: "0.375rem",
+      }}>
         {value}
       </p>
-      <p className="text-sm font-googletexte font-medium text-darkblue mb-1">
+      <p style={{ fontSize: "0.875rem", color: "var(--ink)", fontWeight: 500, marginBottom: "0.25rem" }}>
         {label}
       </p>
       {description && (
-        <p className="text-xs font-googletexte text-mediumblue/80">
+        <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", lineHeight: 1.5 }}>
           {description}
         </p>
       )}
@@ -67,7 +80,13 @@ interface StatGridProps {
 
 export function StatGrid({ children }: StatGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 my-8">
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(10rem, 1fr))",
+      gap: "1px",
+      background: "var(--rule)",
+      margin: "2rem 0",
+    }}>
       {children}
     </div>
   );

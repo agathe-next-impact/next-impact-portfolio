@@ -10,18 +10,48 @@ export function DocumentationToolbar() {
   };
 
   return (
-    <div className="sticky top-16 z-40 border-b backdrop-blur-md bg-mediumblue/60 border-lightblue/10">
-      <div className="container flex items-center justify-end px-4 py-2.5">
-        {/* Cmd+K search trigger */}
+    <div style={{
+      position: "sticky",
+      top: "4rem",
+      zIndex: 40,
+      borderBottom: "1px solid var(--rule)",
+      background: "var(--paper)",
+    }}>
+      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", padding: "0.5rem 0" }}>
         <button
           onClick={handleSearchClick}
-          className="flex items-center gap-2 rounded-full bg-mediumblue/60 backdrop-blur-sm border border-lightblue/25 px-4 py-1.5 text-sm text-white hover:text-white hover:border-lightblue/40 transition-all duration-300"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            border: "1px solid var(--rule)",
+            background: "var(--paper)",
+            padding: "0.375rem 0.875rem",
+            fontSize: "0.8125rem",
+            color: "var(--muted-color)",
+            cursor: "pointer",
+            transition: "color 0.15s, background 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--ink)";
+            e.currentTarget.style.background = "var(--paper-2)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--muted-color)";
+            e.currentTarget.style.background = "var(--paper)";
+          }}
         >
-          <Search className="h-4 w-4" />
-          <span className="hidden sm:inline font-googletexte text-inherit">
-            Rechercher...
-          </span>
-          <kbd className="ml-1 rounded-md bg-white/10 px-1.5 py-0.5 text-xs font-mono text-white/80">
+          <Search style={{ width: "0.875rem", height: "0.875rem" }} />
+          <span>Rechercher...</span>
+          <kbd style={{
+            marginLeft: "0.25rem",
+            border: "1px solid var(--rule)",
+            padding: "0.125rem 0.375rem",
+            fontSize: "0.625rem",
+            fontFamily: "var(--font-mono)",
+            color: "var(--muted-color)",
+            background: "var(--paper-2)",
+          }}>
             ⌘K
           </kbd>
         </button>

@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm"
 import { getArticle, getArticles } from "@/lib/articles"
 import { ArticleLayout } from "@/components/articles/ArticleLayout"
 import { ArticleCallout } from "@/components/articles/ArticleCallout"
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 
 function slugify(text: string): string {
   return text
@@ -134,9 +135,26 @@ export default async function ArticlePage({
     },
   })
 
+  const breadcrumbItems = [
+    { name: locale === "en" ? "Home" : "Accueil", url: "/" },
+    { name: locale === "en" ? "Articles" : "Articles", url: "/articles" },
+    { name: article.title, url: `/articles/${slug}` },
+  ]
+
   return (
-    <ArticleLayout article={article} sectionCount={sectionCount}>
-      {content}
-    </ArticleLayout>
+    <>
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ArticleJsonLd
+        title={article.title}
+        description={article.category}
+        image="/img/desktop-screen-next-impact.png"
+        datePublished={article.date}
+        author={article.author}
+        url={`/articles/${slug}`}
+      />
+      <ArticleLayout article={article} sectionCount={sectionCount}>
+        {content}
+      </ArticleLayout>
+    </>
   )
 }

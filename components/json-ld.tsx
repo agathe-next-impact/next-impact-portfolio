@@ -5,22 +5,6 @@
 
 import { siteConfig } from "@/lib/metadata";
 
-const figaroArticle = {
-  "@type": "NewsArticle",
-  "@id":
-    "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
-  url: "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
-  headline:
-    "WordPress Headless : comment les PME peuvent moderniser leur site sans tout reconstruire, avec Next Impact Digital",
-  datePublished: "2026-05-12",
-  inLanguage: "fr-FR",
-  publisher: {
-    "@type": "NewsMediaOrganization",
-    name: "Le Figaro",
-    url: "https://www.lefigaro.fr",
-  },
-};
-
 interface JsonLdProps {
   data: Record<string, unknown>;
 }
@@ -46,12 +30,12 @@ export function OrganizationJsonLd() {
     "@type": "ProfessionalService",
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/img/logo-blanc-carre.png`,
+    logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
     description: siteConfig.description,
     founder: {
       "@type": "Person",
       name: "Agathe Karinthi-Martin",
-      jobTitle: "Développeur WordPress Headless",
+      jobTitle: "Développeure WordPress Headless & Next.js — Prestataire TIH",
       url: "https://www.linkedin.com/in/agat-dev/",
     },
     address: {
@@ -63,13 +47,14 @@ export function OrganizationJsonLd() {
       name: "France",
     },
     serviceType: [
-      "Création de sites web",
-      "Création de sites WordPress Headless",
+      "Création de sites web WordPress",
+      "Création de sites WordPress Headless + Next.js",
       "Création d'applications web sur-mesure",
       "Création d'applications mobiles (PWA)",
       "Migration WordPress vers Headless",
       "Audit de site web",
       "Développement Next.js",
+      "Prestation TIH déductible AGEFIPH",
     ],
     priceRange: "€€",
     knowsAbout: [
@@ -82,7 +67,9 @@ export function OrganizationJsonLd() {
       "PostgreSQL",
       "PWA",
       "Application web sur-mesure",
-      "Application mobile",
+      "OETH",
+      "TIH",
+      "AGEFIPH",
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
@@ -244,7 +231,7 @@ export function ContactPageJsonLd() {
       "@type": "ProfessionalService",
       name: siteConfig.name,
       url: siteConfig.url,
-      logo: `${siteConfig.url}/img/logo-blanc-carre.png`,
+      logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
       image: `${siteConfig.url}/img/contact-facilitation.jpg`,
       telephone: "+33673981638",
       email: "agathe@next-impact.digital",
@@ -319,7 +306,7 @@ export function ContactPageJsonLd() {
             "@type": "Offer",
             name: "Web app — WordPress Headless complexe ou Next.js + PostgreSQL",
             description: "Architecture WordPress Headless + Next.js App Router (SSG/ISR/SSR), TypeScript, multisites, intégrations API et CI/CD complet. Ou web app sur-mesure avec base PostgreSQL et admin autonome.",
-            price: "5000",
+            price: "6500",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/services`,
           },
@@ -365,8 +352,8 @@ export function WebsiteJsonLd() {
  * Données structurées pour un profil professionnel
  */
 export function PersonJsonLd({
-  name = "Agathe",
-  jobTitle = "Développeur WordPress Freelance",
+  name = "Agathe Karinthi-Martin",
+  jobTitle = "Développeure WordPress Headless & Next.js — Prestataire TIH",
   description = siteConfig.description,
   url = siteConfig.url,
   image = `${siteConfig.url}${siteConfig.ogImage}`,
@@ -391,14 +378,15 @@ export function PersonJsonLd({
     },
     knowsAbout: [
       "WordPress",
+      "WordPress Headless",
       "Next.js",
       "React",
       "TypeScript",
       "Headless CMS",
-      "Web Development",
-      "API Development",
+      "WPGraphQL",
+      "OETH",
+      "TIH",
     ],
-    subjectOf: figaroArticle,
   };
 
   return <JsonLd data={data} />;
@@ -419,7 +407,7 @@ export function HomepageJsonLd() {
         "@type": "Person",
         "@id": `${baseUrl}/#person`,
         name: "Agathe Karinthi-Martin",
-        jobTitle: "Développeur WordPress Headless & Next.js",
+        jobTitle: "Développeure WordPress Headless & Next.js — Prestataire TIH",
         description: siteConfig.description,
         url: baseUrl,
         image: `${baseUrl}${siteConfig.ogImage}`,
@@ -447,12 +435,13 @@ export function HomepageJsonLd() {
           "Application mobile",
           "SEO",
           "API REST",
+          "OETH",
+          "TIH",
         ],
         sameAs: [
           "https://www.linkedin.com/in/agat-dev/",
           "https://github.com/agat-dev",
         ],
-        subjectOf: figaroArticle,
       },
 
       // — Organization —
@@ -463,7 +452,7 @@ export function HomepageJsonLd() {
         url: baseUrl,
         logo: {
           "@type": "ImageObject",
-          url: `${baseUrl}/img/logo-blanc-carre.png`,
+          url: `${baseUrl}/img/logo-rouge-noir-carre-icon.png`,
         },
         description: siteConfig.description,
         founder: { "@id": `${baseUrl}/#person` },
@@ -494,7 +483,7 @@ export function HomepageJsonLd() {
         "@id": `${baseUrl}/#localbusiness`,
         name: siteConfig.name,
         url: baseUrl,
-        logo: `${baseUrl}/img/logo-blanc-carre.png`,
+        logo: `${baseUrl}/img/logo-rouge-noir-carre-icon.png`,
         image: `${baseUrl}${siteConfig.ogImage}`,
         description: siteConfig.description,
         telephone: "+33673981638",
@@ -525,13 +514,14 @@ export function HomepageJsonLd() {
           closes: "18:00",
         },
         serviceType: [
-          "Création de sites web",
-          "Création de sites WordPress Headless",
+          "Création de sites web WordPress",
+          "Création de sites WordPress Headless + Next.js",
           "Création d'applications web sur-mesure",
           "Création d'applications mobiles (PWA)",
           "Migration WordPress vers Headless",
           "Audit de site web",
           "Développement Next.js",
+          "Prestation TIH déductible AGEFIPH",
         ],
         knowsAbout: [
           "WordPress",
@@ -542,6 +532,9 @@ export function HomepageJsonLd() {
           "TypeScript",
           "PostgreSQL",
           "PWA",
+          "OETH",
+          "TIH",
+          "AGEFIPH",
         ],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
@@ -570,7 +563,7 @@ export function HomepageJsonLd() {
               name: "Web app — WordPress Headless complexe ou Next.js + PostgreSQL",
               description:
                 "Architecture WordPress Headless + Next.js App Router, TypeScript, multisites, intégrations API et CI/CD complet. Ou web app sur-mesure avec base PostgreSQL.",
-              price: "5000",
+              price: "6500",
               priceCurrency: "EUR",
               url: `${baseUrl}/services`,
             },
@@ -762,7 +755,7 @@ export function VideoObjectJsonLd({
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/img/logo-blanc-carre.png`,
+        url: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
       },
     },
   };

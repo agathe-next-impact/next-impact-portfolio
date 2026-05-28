@@ -11,10 +11,8 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
   const [html, setHtml] = useState("");
 
   useEffect(() => {
-    // Configuration de marked pour une meilleure sécurité et personnalisation
     const renderer = new marked.Renderer();
 
-    // Ajout d'ancres et de classes sur les titres H1, H2 et H3
     renderer.heading = ({ text, depth }: { text: string; depth: number }) => {
       const anchor = text
         .toLowerCase()
@@ -22,24 +20,15 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
         .replace(/\s+/g, "-")
         .replace(/[^\wÀ-ÖØ-öø-ÿ-]/g, "");
 
-      let className = "";
-      let separator = "";
-      if (depth === 1) {
-        className = "text-4xl font-medium text-regularblue";
-      } else if (depth === 2) {
-        className = "text-3xl font-medium text-mediumblue";
-        separator = `<div class="mt-12 mb-4 flex items-center gap-3"><div class="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent"></div><div class="h-1.5 w-1.5 rounded-full bg-regularblue/30"></div><div class="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent"></div></div>`;
-      } else {
-        className = "text-2xl font-medium text-mediumblue";
-      }
+      // H2 gets a thin rule separator above it
+      const separator = depth === 2
+        ? `<div style="margin-top:3rem;margin-bottom:1rem;border-top:1px solid var(--rule)"></div>`
+        : "";
 
-      return `${separator}<h${depth} id="${anchor}" class="${className}">${text}</h${depth}>`;
+      return `${separator}<h${depth} id="${anchor}">${text}</h${depth}>`;
     };
 
-    marked.setOptions({
-      gfm: true, // GitHub Flavored Markdown
-      renderer,
-    });
+    marked.setOptions({ gfm: true, renderer });
 
     const parsedContent = marked.parse(content);
     if (typeof parsedContent === "string") {
@@ -47,5 +36,10 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
     }
   }, [content]);
 
-  return <div className="article-text text-mediumblue" dangerouslySetInnerHTML={{ __html: html }} />;
+  return (
+    <div
+      className="light article-text"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }

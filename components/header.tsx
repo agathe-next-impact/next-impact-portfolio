@@ -5,10 +5,11 @@ import { X as CloseIcon, Menu as MenuIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { useDocumentationMode } from "@/contexts/documentation-mode-context";
+import { PROFILES } from "@/lib/documentation-profiles";
 
 const NAV_LINKS = [
   { key: "services",     href: "/services" },
-  { key: "oethAdvantage",href: "/avantage-oeth" },
   { key: "demo",         href: "/demo" },
   { key: "tools",        href: "/outils" },
   { key: "caseStudies",  href: "/etudes-de-cas" },
@@ -18,6 +19,7 @@ const NAV_LINKS = [
 export default function Header() {
   const t = useTranslations("nav");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { profileId, clearProfile } = useDocumentationMode();
 
   return (
     <>
@@ -91,6 +93,54 @@ export default function Header() {
 
         {/* Desktop right */}
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 16 }}>
+          {/* Profile tag — visible only when a profile is active */}
+          <div
+            style={{
+              maxWidth: profileId ? 160 : 0,
+              opacity: profileId ? 1 : 0,
+              overflow: "hidden",
+              transition: "max-width 0.25s ease, opacity 0.18s ease",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                borderLeft: "2px solid var(--accent-color)",
+                paddingLeft: 8,
+                fontFamily: "var(--font-mono)",
+                fontSize: 9,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--ink-2)",
+              }}
+            >
+              {profileId && PROFILES[profileId].label}
+              <button
+                type="button"
+                onClick={clearProfile}
+                aria-label="Réinitialiser le profil"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  color: "var(--muted-color)",
+                  lineHeight: 1,
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ink)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-color)"; }}
+              >
+                <CloseIcon size={10} strokeWidth={2} />
+              </button>
+            </span>
+          </div>
+
           <LocaleSwitcher />
           <Link href="/contact" className="btn primary" style={{ height: 36 }}>
             {t("contact")}
@@ -203,6 +253,34 @@ export default function Header() {
                   {t(item.key as Parameters<typeof t>[0])}
                 </Link>
               ))}
+              {profileId && (
+                <button
+                  type="button"
+                  onClick={() => { clearProfile(); setMobileOpen(false); }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    fontFamily: "var(--mono, monospace)",
+                    fontSize: 9,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
+                    background: "none",
+                    border: "none",
+                    borderBottom: "1px solid var(--rule)",
+                    borderLeft: "2px solid var(--accent-color)",
+                    padding: "12px 20px",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  <span>{PROFILES[profileId].label}</span>
+                  <CloseIcon size={10} strokeWidth={2} />
+                </button>
+              )}
+
               <Link
                 href="/contact"
                 onClick={() => setMobileOpen(false)}

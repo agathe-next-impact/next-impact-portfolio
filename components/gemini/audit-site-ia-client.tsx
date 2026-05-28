@@ -217,10 +217,10 @@ export default function AuditSiteIaClient() {
         />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 48, maxWidth: 480, margin: "48px auto 0" }}>
           <div className="hidden md:flex" style={{ flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", border: "1px solid var(--rule)" }}>
-            <BrandLogo src="/img/logo-wordpress-blanc.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
+            <BrandLogo src="/img/logo-wordpress.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
           </div>
           <div className="hidden md:flex" style={{ flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", border: "1px solid var(--rule)" }}>
-            <BrandLogo src="/img/logo-nextjs-blanc.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
+            <BrandLogo src="/img/logo-nextjs.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
           </div>
         </div>
         </div>

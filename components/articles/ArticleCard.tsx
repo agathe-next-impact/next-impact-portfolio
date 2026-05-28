@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Clock } from "lucide-react"
 import type { ArticleMeta } from "@/lib/articles"
 
@@ -11,43 +11,41 @@ export function ArticleCard({ article, index = 0 }: ArticleCardProps) {
   return (
     <Link
       href={`/articles/${article.slug}`}
-      className="group relative rounded-3xl border border-lightblue/10 p-5 hover:border-lightblue/30 transition-all duration-300 bg-darkblue/50 backdrop-blur-sm overflow-hidden"
+      className="hover-row"
+      style={{
+        display: "block",
+        borderTop: "1px solid var(--rule)",
+        padding: "1.25rem 0",
+        textDecoration: "none",
+        color: "var(--ink)",
+      }}
     >
-      {/* Background number */}
-      <span className="absolute top-4 right-4 text-2xl font-googletitre font-bold text-white">
-        {index + 1}
-      </span>
-
-      <div className="relative">
-        {/* Category badge */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="inline-block rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-googletexte text-blue-600 dark:text-blue-300/80">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
+        <div style={{ flex: 1 }}>
+          <span className="label" style={{ marginBottom: "0.5rem", display: "inline-block" }}>
             {article.category}
           </span>
+          <h3 style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "1.0625rem",
+            fontWeight: 400,
+            color: "var(--ink)",
+            lineHeight: 1.3,
+            marginBottom: "0.5rem",
+          }}>
+            {article.title}
+          </h3>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--muted-color)", fontSize: "0.6875rem" }}>
+            <Clock style={{ width: "0.75rem", height: "0.75rem" }} />
+            <span>{article.readingTime} min</span>
+            {article.tags.slice(0, 2).map(tag => (
+              <span key={tag}>· {tag}</span>
+            ))}
+          </div>
         </div>
-
-        {/* Title */}
-        <h3 className="font-googletitre font-medium text-white/80 group-hover:text-white transition-colors text-lg leading-snug line-clamp-2">
-          {article.title}
-        </h3>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {article.tags.slice(0, 2).map((tag) => (
-            <span
-              key={tag}
-              className="text-[9px] text-white/70 font-googletexte"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Meta */}
-        <div className="flex items-center gap-1 mt-3 text-[10px] text-white/80 font-googletexte">
-          <Clock className="h-3 w-3" />
-          <span className="text-white/80">{article.readingTime} min</span>
-        </div>
+        <span className="annot" style={{ paddingTop: "0.125rem" }}>
+          {String(index + 1).padStart(2, "0")}
+        </span>
       </div>
     </Link>
   )

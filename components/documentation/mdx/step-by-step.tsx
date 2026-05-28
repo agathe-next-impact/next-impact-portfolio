@@ -1,12 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-
-interface Step {
-  title: string;
-  children: ReactNode;
-}
 
 interface StepByStepProps {
   children: ReactNode;
@@ -14,10 +8,8 @@ interface StepByStepProps {
 
 export function StepByStep({ children }: StepByStepProps) {
   return (
-    <div className="my-8 relative">
-      <div className="space-y-0">
-        {children}
-      </div>
+    <div style={{ margin: "2rem 0" }}>
+      {children}
     </div>
   );
 }
@@ -30,19 +22,54 @@ interface StepProps {
 
 export function Step({ number, title, children }: StepProps) {
   return (
-    <div className="relative pl-9 sm:pl-12 pb-6 sm:pb-8 last:pb-0">
-      {/* Vertical line */}
-      <div className="absolute left-[11px] sm:left-[15px] top-8 sm:top-10 bottom-0 w-px bg-extralightblue last:hidden" />
-      {/* Number circle */}
-      <div className="absolute left-0 top-0 flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-regularblue/10 border border-regularblue/20">
-        <span className="text-xs sm:text-sm font-googletitre font-bold text-regularblue">{number}</span>
+    <div style={{
+      position: "relative",
+      paddingLeft: "3rem",
+      paddingBottom: "1.75rem",
+    }}>
+      {/* Vertical rule line */}
+      <div style={{
+        position: "absolute",
+        left: "0.9375rem",
+        top: "2rem",
+        bottom: 0,
+        width: "1px",
+        background: "var(--rule)",
+      }} />
+
+      {/* Number badge — carré Swiss */}
+      <div style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        width: "1.875rem",
+        height: "1.875rem",
+        border: "1px solid var(--rule-strong)",
+        background: "var(--paper)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "var(--font-mono)",
+        fontSize: "0.6875rem",
+        color: "var(--muted-color)",
+        letterSpacing: "0.04em",
+      }}>
+        {number != null ? String(number).padStart(2, "0") : "·"}
       </div>
+
       {/* Content */}
       <div>
-        <h4 className="font-googletitre font-medium text-darkblue text-base mb-2 !mt-0 !pt-0">
+        <h4 style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "1rem",
+          fontWeight: 400,
+          color: "var(--ink)",
+          marginBottom: "0.5rem",
+          marginTop: "0.25rem",
+        }}>
           {title}
         </h4>
-        <div className="text-mediumblue/80 text-sm font-googletexte [&>p]:mb-2 [&>p:last-child]:mb-0">
+        <div style={{ fontSize: "0.875rem", color: "var(--muted-color)", lineHeight: 1.65 }}>
           {children}
         </div>
       </div>
