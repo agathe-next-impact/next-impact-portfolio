@@ -9,6 +9,7 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import HeroMockup from "@/components/HeroMockup";
 
 export default function Hero() {
   const { profileId } = useDocumentationMode();
@@ -141,74 +142,55 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right — portrait */}
-            <div>
+            {/* Right — mockup */}
+            <div style={{ position: "relative" }}>
+              <HeroMockup />
+              {/* Disponible badge */}
               <div
                 style={{
-                  position: "relative",
-                  overflow: "hidden",
-                  aspectRatio: "3/4",
-                  maxWidth: 360,
+                  position: "absolute",
+                  top: -12,
+                  right: 0,
+                  background: "var(--paper)",
+                  border: "1px solid var(--rule)",
+                  padding: "4px 12px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
                 }}
               >
-                <Image
-                  src="/img/avatar.jpg"
-                  alt={t("profileImageAlt")}
-                  fill
-                  style={{ objectFit: "cover", objectPosition: "top" }}
-                  priority
-                  sizes="(max-width: 900px) 100vw, 360px"
-                />
-                {/* Disponible badge */}
-                <div
+                <span className="status-dot" />
+                <span
                   style={{
-                    position: "absolute",
-                    top: 16,
-                    left: 16,
-                    background: "var(--paper)",
-                    border: "1px solid var(--rule)",
-                    padding: "4px 12px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--ink)",
                   }}
                 >
-                  <span className="status-dot" />
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--ink)",
-                    }}
-                  >
-                    {t("available")}
-                  </span>
-                </div>
-                {/* TIH mention */}
-                <div
+                  {t("available")}
+                </span>
+              </div>
+              {/* TIH mention */}
+              <div
+                style={{
+                  marginTop: 12,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <span
                   style={{
-                    position: "absolute",
-                    bottom: 16,
-                    left: 16,
-                    background: "var(--paper)",
-                    border: "1px solid var(--rule)",
-                    padding: "4px 12px",
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-color)",
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                    }}
-                  >
-                    {t("tihMention")}
-                  </span>
-                </div>
+                  {t("tihMention")}
+                </span>
               </div>
             </div>
           </div>
