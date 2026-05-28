@@ -1,55 +1,6 @@
-<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="rocketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#719ED9;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1F54BF;stop-opacity:1" />
-    </linearGradient>
-    
-    <filter id="rocketGlow">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  
-  <!-- Corps de la fusée -->
-  <g transform="translate(40, 40)">
-    <animateTransform attributeName="transform" type="translate" values="40,40; 40,38; 40,40" dur="1.5s" repeatCount="indefinite"/>
-    
-    <!-- Corps principal -->
-    <ellipse cx="0" cy="0" rx="12" ry="22" fill="url(#rocketGradient)"/>
-    
-    <!-- Pointe -->
-    <path d="M -12,-22 Q 0,-32 12,-22 L 0,-22 Z" fill="#F29F05"/>
-    
-    <!-- Hublot -->
-    <circle cx="0" cy="-5" r="5" fill="#021373"/>
-    <circle cx="0" cy="-5" r="3" fill="#719ED9" opacity="0.6"/>
-    
-    <!-- Ailerons -->
-    <path d="M -12,10 L -20,22 L -12,22 Z" fill="#1F54BF"/>
-    <path d="M 12,10 L 20,22 L 12,22 Z" fill="#1F54BF"/>
-    
-    <!-- Flammes -->
-    <g transform="translate(0, 22)">
-      <ellipse cx="0" cy="0" rx="8" ry="10" fill="#F29F05" filter="url(#rocketGlow)">
-        <animate attributeName="ry" values="10;14;10" dur="0.3s" repeatCount="indefinite"/>
-      </ellipse>
-      <ellipse cx="0" cy="2" rx="5" ry="8" fill="#FF6B6B">
-        <animate attributeName="ry" values="8;12;8" dur="0.3s" repeatCount="indefinite"/>
-      </ellipse>
-    </g>
-    
-    <!-- Particules -->
-    <circle cx="-5" cy="30" r="2" fill="#F29F05" opacity="0.8">
-      <animate attributeName="cy" values="30;40;50" dur="1s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.8;0;0" dur="1s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="5" cy="32" r="2" fill="#FF6B6B" opacity="0.8">
-      <animate attributeName="cy" values="32;42;52" dur="1.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.8;0;0" dur="1.2s" repeatCount="indefinite"/>
-    </circle>
-  </g>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+  <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+  <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+  <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
 </svg>

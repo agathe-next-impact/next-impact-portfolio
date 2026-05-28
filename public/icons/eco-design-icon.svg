@@ -1,47 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <defs>
-    <linearGradient id="ecoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#719ED9;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1F54BF;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Leaf shape -->
-  <path d="M40 15 Q 50 25 50 40 Q 50 55 40 65 Q 30 55 30 40 Q 30 25 40 15 Z" 
-        fill="url(#ecoGradient)" opacity="0.2"/>
-  
-  <!-- Main leaf outline -->
-  <path d="M40 15 Q 50 25 50 40 Q 50 55 40 65" 
-        stroke="#719ED9" stroke-width="2" fill="none" stroke-linecap="round">
-    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite"/>
-  </path>
-  
-  <path d="M40 15 Q 30 25 30 40 Q 30 55 40 65" 
-        stroke="#719ED9" stroke-width="2" fill="none" stroke-linecap="round">
-    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" begin="0.2s" repeatCount="indefinite"/>
-  </path>
-  
-  <!-- Central vein -->
-  <line x1="40" y1="18" x2="40" y2="62" stroke="#1F54BF" stroke-width="2.5" stroke-linecap="round"/>
-  
-  <!-- Side veins -->
-  <line x1="40" y1="28" x2="45" y2="32" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  <line x1="40" y1="28" x2="35" y2="32" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  
-  <line x1="40" y1="38" x2="46" y2="43" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  <line x1="40" y1="38" x2="34" y2="43" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  
-  <line x1="40" y1="48" x2="45" y2="54" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  <line x1="40" y1="48" x2="35" y2="54" stroke="#1F54BF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  
-  <!-- Sparkles -->
-  <circle cx="52" cy="22" r="1.5" fill="#719ED9">
-    <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="28" cy="26" r="1.5" fill="#719ED9">
-    <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="56" cy="54" r="1.5" fill="#719ED9">
-    <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17 8C8 10 5.9 16.17 3.82 19.34A16.08 16.08 0 0 0 2 21"/>
+  <path d="M2 21c2 0 4-1 5.5-3"/>
+  <path d="M22 2c0 0-3.5 1-7.5 4C10.5 9.5 9.5 13.5 9 16"/>
+  <path d="M2 21c0-2.5 1.5-4 2.5-5"/>
 </svg>

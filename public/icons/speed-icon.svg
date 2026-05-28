@@ -1,46 +1,5 @@
-<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#719ED9;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#F29F05;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Cadran de compteur -->
-  <g transform="translate(40, 45)">
-    <!-- Cercle extérieur -->
-    <circle r="28" fill="none" stroke="#021373" stroke-width="6"/>
-    <circle r="28" fill="none" stroke="url(#speedGradient)" stroke-width="6" stroke-dasharray="88 88" stroke-dashoffset="22" opacity="0.8"/>
-    
-    <!-- Graduations -->
-    <g stroke="#719ED9" stroke-width="2" opacity="0.6">
-      <line x1="0" y1="-24" x2="0" y2="-28"/>
-      <line x1="17" y1="-20" x2="20" y2="-23" transform="rotate(45 0 0)"/>
-      <line x1="24" y1="0" x2="28" y2="0"/>
-      <line x1="17" y1="20" x2="20" y2="23" transform="rotate(-45 0 0)"/>
-    </g>
-    
-    <!-- Aiguille animée -->
-    <g>
-      <animateTransform attributeName="transform" type="rotate" values="-120 0 0; 120 0 0; -120 0 0" dur="3s" repeatCount="indefinite"/>
-      <line x1="0" y1="0" x2="0" y2="-22" stroke="#F29F05" stroke-width="3" stroke-linecap="round"/>
-      <circle r="4" fill="#F29F05"/>
-    </g>
-    
-    <!-- Lignes de vitesse -->
-    <g opacity="0.6">
-      <line x1="-35" y1="-10" x2="-25" y2="-10" stroke="#719ED9" stroke-width="2" stroke-linecap="round">
-        <animate attributeName="x1" values="-35;-45;-35" dur="1s" repeatCount="indefinite"/>
-        <animate attributeName="x2" values="-25;-35;-25" dur="1s" repeatCount="indefinite"/>
-      </line>
-      <line x1="-35" y1="0" x2="-22" y2="0" stroke="#719ED9" stroke-width="2" stroke-linecap="round">
-        <animate attributeName="x1" values="-35;-48;-35" dur="1.2s" repeatCount="indefinite"/>
-        <animate attributeName="x2" values="-22;-35;-22" dur="1.2s" repeatCount="indefinite"/>
-      </line>
-      <line x1="-35" y1="10" x2="-28" y2="10" stroke="#719ED9" stroke-width="2" stroke-linecap="round">
-        <animate attributeName="x1" values="-35;-42;-35" dur="0.8s" repeatCount="indefinite"/>
-        <animate attributeName="x2" values="-28;-35;-28" dur="0.8s" repeatCount="indefinite"/>
-      </line>
-    </g>
-  </g>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3.34 17a10 10 0 1 1 17.32 0"/>
+  <path d="M12 12l-3.5-5"/>
+  <circle cx="12" cy="12" r="1" fill="#0e0e0c" stroke="none"/>
 </svg>

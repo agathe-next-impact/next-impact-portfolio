@@ -1,32 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <!-- Desktop icon for headless with Next.js logo -->
-  
-  <!-- Monitor screen -->
-  <rect x="10" y="12" width="60" height="42" rx="2" fill="#020F59"/>
-  <rect x="10" y="12" width="60" height="42" rx="2" fill="none" stroke="#719ED9" stroke-width="2"/>
-  
-  <!-- Screen content -->
-  <rect x="13" y="15" width="54" height="36" rx="1" fill="#021373"/>
-  
-  <!-- Next.js logo representation -->
-  <path d="M 30 33 L 50 33 L 40 20 Z" fill="#FFFFFF"/>
-  <rect x="42" y="33" width="8" height="15" fill="#FFFFFF"/>
-  
-  <!-- Code brackets decoration -->
-  <text x="20" y="28" font-family="monospace" font-size="8" fill="#719ED9" opacity="0.5">&lt;/&gt;</text>
-  <text x="54" y="45" font-family="monospace" font-size="8" fill="#F29F05" opacity="0.5">{}</text>
-  
-  <!-- Monitor stand -->
-  <rect x="37" y="54" width="6" height="7" fill="#719ED9"/>
-  <rect x="28" y="61" width="24" height="3" rx="1" fill="#719ED9"/>
-  
-  <!-- Animated data particles -->
-  <circle cx="25" cy="25" r="1.5" fill="#F29F05">
-    <animate attributeName="cy" values="25;45;25" dur="2.5s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="1;0.3;1" dur="2.5s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="55" cy="40" r="1.5" fill="#719ED9">
-    <animate attributeName="cy" values="40;20;40" dur="3s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="3" width="20" height="14"/>
+  <path d="M8 21h8M12 17v4"/>
+  <path d="M9 10L7 12l2 2M15 10l2 2-2 2"/>
 </svg>

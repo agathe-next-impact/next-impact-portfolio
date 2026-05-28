@@ -1,31 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <!-- Dashboard icon for WordPress backoffice -->
-  
-  <!-- Background -->
-  <rect width="80" height="80" fill="transparent"/>
-  
-  <!-- Dashboard screen -->
-  <rect x="15" y="12" width="50" height="40" rx="2" fill="#719ED9" opacity="0.2"/>
-  <rect x="15" y="12" width="50" height="40" rx="2" fill="none" stroke="#719ED9" stroke-width="2"/>
-  
-  <!-- Dashboard header -->
-  <rect x="18" y="15" width="44" height="6" rx="1" fill="#1F54BF"/>
-  
-  <!-- Dashboard widgets grid -->
-  <rect x="18" y="24" width="20" height="12" rx="1" fill="#719ED9"/>
-  <rect x="41" y="24" width="20" height="12" rx="1" fill="#F29F05"/>
-  <rect x="18" y="38" width="20" height="12" rx="1" fill="#FF6B6B"/>
-  <rect x="41" y="38" width="20" height="12" rx="1" fill="#719ED9"/>
-  
-  <!-- Stand -->
-  <rect x="37" y="52" width="6" height="8" fill="#021373"/>
-  <rect x="30" y="60" width="20" height="3" rx="1" fill="#021373"/>
-  
-  <!-- Animated pulse on widgets -->
-  <circle cx="28" cy="30" r="2" fill="#FFFFFF">
-    <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="51" cy="30" r="2" fill="#FFFFFF">
-    <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="7" height="9"/>
+  <rect x="14" y="3" width="7" height="5"/>
+  <rect x="14" y="12" width="7" height="9"/>
+  <rect x="3" y="16" width="7" height="5"/>
 </svg>

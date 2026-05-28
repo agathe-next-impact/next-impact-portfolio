@@ -1,19 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <!-- Person 1 -->
-  <circle cx="28" cy="28" r="8" fill="#1F54BF"/>
-  <path d="M 28 38 Q 20 42 18 52 L 38 52 Q 36 42 28 38" fill="#719ED9"/>
-  
-  <!-- Person 2 -->
-  <circle cx="52" cy="28" r="8" fill="#F29F05"/>
-  <path d="M 52 38 Q 44 42 42 52 L 62 52 Q 60 42 52 38" fill="#719ED9"/>
-  
-  <!-- Person 3 (center, larger) -->
-  <circle cx="40" cy="48" r="9" fill="#1F54BF">
-    <animate attributeName="r" values="9;10;9" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <path d="M 40 59 Q 30 64 28 75 L 52 75 Q 50 64 40 59" fill="#719ED9"/>
-  
-  <!-- Connection lines -->
-  <line x1="32" y1="32" x2="36" y2="45" stroke="#D0DCF2" stroke-width="2" opacity="0.5" stroke-dasharray="2,2"/>
-  <line x1="48" y1="32" x2="44" y2="45" stroke="#D0DCF2" stroke-width="2" opacity="0.5" stroke-dasharray="2,2"/>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+  <circle cx="9" cy="7" r="4"/>
+  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
 </svg>

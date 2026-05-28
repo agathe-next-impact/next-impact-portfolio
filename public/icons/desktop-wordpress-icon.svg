@@ -1,29 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <!-- Desktop icon with WordPress logo -->
-  
-  <!-- Monitor screen -->
-  <rect x="10" y="15" width="60" height="40" rx="2" fill="#D0DCF2"/>
-  <rect x="10" y="15" width="60" height="40" rx="2" fill="none" stroke="#021373" stroke-width="2"/>
-  
-  <!-- Screen content background -->
-  <rect x="13" y="18" width="54" height="34" rx="1" fill="#FFFFFF"/>
-  
-  <!-- WordPress logo -->
-  <circle cx="40" cy="35" r="12" fill="#021373"/>
-  <circle cx="40" cy="35" r="10" fill="#FFFFFF"/>
-  <circle cx="40" cy="35" r="3" fill="#021373"/>
-  
-  <!-- WordPress W pattern -->
-  <path d="M 32 35 L 34 42 L 36 35 L 38 42 L 40 28" stroke="#021373" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  <path d="M 40 28 L 42 42 L 44 35 L 46 42 L 48 35" stroke="#021373" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  
-  <!-- Monitor stand -->
-  <rect x="37" y="55" width="6" height="6" fill="#021373"/>
-  <rect x="28" y="61" width="24" height="3" rx="1" fill="#021373"/>
-  
-  <!-- Glow effect -->
-  <circle cx="40" cy="35" r="13" fill="none" stroke="#719ED9" stroke-width="1" opacity="0.3">
-    <animate attributeName="r" values="13;15;13" dur="3s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="3" width="20" height="14"/>
+  <path d="M8 21h8M12 17v4"/>
+  <path d="M8.5 8l1.5 5 2-4 2 4 1.5-5"/>
 </svg>

@@ -1,29 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <defs>
-    <linearGradient id="migrationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#719ED9;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Old server -->
-  <rect x="8" y="25" width="20" height="30" rx="2" fill="#719ED9" opacity="0.6"/>
-  <rect x="10" y="28" width="16" height="3" fill="#D0DCF2"/>
-  <rect x="10" y="34" width="16" height="3" fill="#D0DCF2"/>
-  <rect x="10" y="40" width="16" height="3" fill="#D0DCF2"/>
-  
-  <!-- Arrow with animation -->
-  <path d="M 32 40 L 48 40" stroke="#F29F05" stroke-width="3" fill="none" stroke-linecap="round">
-    <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="1.5s" repeatCount="indefinite"/>
-  </path>
-  <path d="M 44 36 L 52 40 L 44 44" stroke="#F29F05" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-  
-  <!-- New server -->
-  <rect x="52" y="22" width="20" height="33" rx="2" fill="url(#migrationGrad)"/>
-  <rect x="54" y="25" width="16" height="3" fill="#D0DCF2"/>
-  <rect x="54" y="31" width="16" height="3" fill="#D0DCF2"/>
-  <rect x="54" y="37" width="16" height="3" fill="#D0DCF2"/>
-  <circle cx="62" cy="48" r="2" fill="#F29F05">
-    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 3L4 7l4 4"/>
+  <path d="M4 7h16"/>
+  <path d="M16 21l4-4-4-4"/>
+  <path d="M20 17H4"/>
 </svg>

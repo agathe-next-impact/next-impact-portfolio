@@ -1,94 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-  <defs>
-    <!-- Gradient for premium look -->
-    <linearGradient id="saasGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#719ED9;stop-opacity:1" />
-    </linearGradient>
-    
-    <!-- Animation for rotation -->
-    <animateTransform
-      id="rotate"
-      attributeName="transform"
-      attributeType="XML"
-      type="rotate"
-      from="0 40 40"
-      to="360 40 40"
-      dur="20s"
-      repeatCount="indefinite"/>
-  </defs>
-  
-  <!-- Background circle -->
-  <circle cx="40" cy="40" r="38" fill="#020F59" opacity="0.1"/>
-  
-  <!-- Central hub -->
-  <circle cx="40" cy="40" r="8" fill="url(#saasGradient)">
-    <animate attributeName="r" values="8;9;8" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  
-  <!-- Feature modules (4 corners) -->
-  <!-- Top module - API -->
-  <g transform="translate(40, 15)">
-    <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#1F54BF" stroke="#719ED9" stroke-width="1.5"/>
-    <path d="M -3 -2 L -1 0 L -3 2 M 1 -2 L 3 0 L 1 2" stroke="#F29F05" stroke-width="1.5" fill="none"/>
-    <animate attributeName="opacity" values="1;0.6;1" dur="3s" repeatCount="indefinite"/>
-  </g>
-  
-  <!-- Right module - Analytics -->
-  <g transform="translate(65, 40)">
-    <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#1F54BF" stroke="#719ED9" stroke-width="1.5"/>
-    <path d="M -4 2 L -4 -1 M -1 2 L -1 1 M 2 2 L 2 -2" stroke="#F29F05" stroke-width="1.5" stroke-linecap="round"/>
-    <animate attributeName="opacity" values="1;0.6;1" dur="3s" begin="0.5s" repeatCount="indefinite"/>
-  </g>
-  
-  <!-- Bottom module - Cloud -->
-  <g transform="translate(40, 65)">
-    <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#1F54BF" stroke="#719ED9" stroke-width="1.5"/>
-    <path d="M -3 0 Q -3 -2 -1 -2 Q 0 -3 1 -2 Q 3 -2 3 0 L -3 0" fill="#F29F05" opacity="0.8"/>
-    <animate attributeName="opacity" values="1;0.6;1" dur="3s" begin="1s" repeatCount="indefinite"/>
-  </g>
-  
-  <!-- Left module - Security -->
-  <g transform="translate(15, 40)">
-    <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#1F54BF" stroke="#719ED9" stroke-width="1.5"/>
-    <path d="M 0 -3 L -3 0 L 0 3 L 3 0 Z" fill="none" stroke="#F29F05" stroke-width="1.5"/>
-    <circle cx="0" cy="0" r="1.5" fill="#F29F05"/>
-    <animate attributeName="opacity" values="1;0.6;1" dur="3s" begin="1.5s" repeatCount="indefinite"/>
-  </g>
-  
-  <!-- Connection lines -->
-  <g stroke="#719ED9" stroke-width="2" opacity="0.6">
-    <line x1="40" y1="27" x2="40" y2="32">
-      <animate attributeName="stroke-dasharray" values="0,10;10,0;0,10" dur="2s" repeatCount="indefinite"/>
-    </line>
-    <line x1="53" y1="40" x2="48" y2="40">
-      <animate attributeName="stroke-dasharray" values="0,10;10,0;0,10" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-    </line>
-    <line x1="40" y1="53" x2="40" y2="48">
-      <animate attributeName="stroke-dasharray" values="0,10;10,0;0,10" dur="2s" begin="1s" repeatCount="indefinite"/>
-    </line>
-    <line x1="27" y1="40" x2="32" y2="40">
-      <animate attributeName="stroke-dasharray" values="0,10;10,0;0,10" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-    </line>
-  </g>
-  
-  <!-- Data flow particles -->
-  <circle cx="40" cy="30" r="1.5" fill="#F29F05">
-    <animate attributeName="cy" values="30;35;30" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="50" cy="40" r="1.5" fill="#F29F05">
-    <animate attributeName="cx" values="50;45;50" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-  </circle>
-  
-  <!-- Outer orbit ring -->
-  <circle cx="40" cy="40" r="32" fill="none" stroke="#719ED9" stroke-width="1" opacity="0.3" stroke-dasharray="2,4">
-    <animateTransform
-      attributeName="transform"
-      attributeType="XML"
-      type="rotate"
-      from="0 40 40"
-      to="360 40 40"
-      dur="30s"
-      repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0e0e0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="5" height="5"/>
+  <rect x="10" y="3" width="5" height="5"/>
+  <rect x="17" y="3" width="5" height="5"/>
+  <rect x="3" y="10" width="5" height="5"/>
+  <rect x="10" y="10" width="5" height="5"/>
+  <rect x="17" y="10" width="5" height="5"/>
+  <rect x="3" y="17" width="5" height="5"/>
+  <rect x="10" y="17" width="5" height="5"/>
+  <rect x="17" y="17" width="5" height="5"/>
 </svg>

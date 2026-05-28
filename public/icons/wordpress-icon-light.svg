@@ -1,14 +1,4 @@
-<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light mode WordPress icon -->
-  <circle cx="40" cy="40" r="32" fill="#1F54BF" opacity="0.9"/>
-  <circle cx="40" cy="40" r="28" fill="#FFFFFF" opacity="0.95"/>
-  <circle cx="40" cy="40" r="24" fill="#719ED9" opacity="0.8"/>
-  
-  <path d="M 40 16 L 40 40 L 60 50" stroke="#F29F05" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
-  <path d="M 40 40 L 25 60" stroke="#021373" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-  <path d="M 40 40 L 55 60" stroke="#021373" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-  
-  <circle cx="40" cy="40" r="6" fill="#F29F05" opacity="0.9">
-    <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
-  </circle>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/>
+  <path d="M7 9.5L9.5 17l2.5-5.5L14.5 17 17 9.5"/>
 </svg>
