@@ -5,17 +5,17 @@ const AiAuditBannerSVG: React.FC = () => (
     <defs>
       {/* Gradients */}
       <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style={{ stopColor: '#1F54BF', stopOpacity: 1 }} />
-        <stop offset="100%" style={{ stopColor: '#719ED9', stopOpacity: 1 }} />
+        <stop offset="0%" style={{ stopColor: '#d83a1a', stopOpacity: 1 }} />
+        <stop offset="100%" style={{ stopColor: 'rgba(14,14,12,0.3)', stopOpacity: 1 }} />
       </linearGradient>
       <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" style={{ stopColor: '#F29F05', stopOpacity: 0.8 }} />
         <stop offset="100%" style={{ stopColor: '#F29F05', stopOpacity: 0.2 }} />
       </linearGradient>
       <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style={{ stopColor: '#719ED9', stopOpacity: 0 }} />
-        <stop offset="50%" style={{ stopColor: '#719ED9', stopOpacity: 0.6 }} />
-        <stop offset="100%" style={{ stopColor: '#719ED9', stopOpacity: 0 }} />
+        <stop offset="0%" style={{ stopColor: 'rgba(14,14,12,0.3)', stopOpacity: 0 }} />
+        <stop offset="50%" style={{ stopColor: 'rgba(14,14,12,0.3)', stopOpacity: 0.6 }} />
+        <stop offset="100%" style={{ stopColor: 'rgba(14,14,12,0.3)', stopOpacity: 0 }} />
       </linearGradient>
       {/* Filters */}
       <filter id="glow">
@@ -33,7 +33,7 @@ const AiAuditBannerSVG: React.FC = () => (
         <animateMotion path="M 0 0 L 350 0" dur="3s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" />
       </circle>
-      <circle cx="150" cy="200" r="4" fill="#719ED9">
+      <circle cx="150" cy="200" r="4" fill="rgba(14,14,12,0.3)">
         <animateMotion path="M 0 0 L 350 0" dur="3s" begin="0.5s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin="0.5s" repeatCount="indefinite" />
       </circle>
@@ -42,8 +42,8 @@ const AiAuditBannerSVG: React.FC = () => (
         <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin="1s" repeatCount="indefinite" />
       </circle>
       {/* Extended arrow from left to right */}
-      <path d="M 100 200 L 480 200" stroke="#719ED9" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
-      <polygon points="480,200 470,195 470,205" fill="#719ED9" opacity="0.5" />
+      <path d="M 100 200 L 480 200" stroke="rgba(14,14,12,0.3)" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+      <polygon points="480,200 470,195 470,205" fill="rgba(14,14,12,0.3)" opacity="0.5" />
       {/* Scan lines effect */}
       <line x1="200" y1="120" x2="200" y2="280" stroke="url(#glowGradient)" strokeWidth="40" opacity="0.3">
         <animate attributeName="x1" values="100;480;100" dur="4s" repeatCount="indefinite" />
@@ -53,10 +53,10 @@ const AiAuditBannerSVG: React.FC = () => (
     {/* Business Analytics Dashboard (right side) */}
     <g id="business-dashboard">
       {/* Dashboard background */}
-      <rect x="520" y="100" width="240" height="200" rx="12" fill="#021373" opacity="0.4" stroke="#719ED9" strokeWidth="2" />
+      <rect x="520" y="100" width="240" height="200" rx="12" fill="#0e0e0c" opacity="0.4" stroke="rgba(14,14,12,0.3)" strokeWidth="2" />
       {/* ROI Chart */}
       <g id="roi-chart">
-        <text x="540" y="125" fill="#D0DCF2" fontSize="12" fontWeight="600">ROI Projection</text>
+        <text x="540" y="125" fill="#ebe9e3" fontSize="12" fontWeight="600">ROI Projection</text>
         {/* Bar chart */}
         <rect x="540" y="145" width="20" height="50" fill="url(#chartGradient)" rx="2">
           <animate attributeName="height" values="30;50;30" dur="3s" repeatCount="indefinite" />
@@ -80,9 +80,9 @@ const AiAuditBannerSVG: React.FC = () => (
       </g>
       {/* Performance Metrics */}
       <g id="metrics">
-        <text x="680" y="125" fill="#D0DCF2" fontSize="12" fontWeight="600">Performance</text>
+        <text x="680" y="125" fill="#ebe9e3" fontSize="12" fontWeight="600">Performance</text>
         {/* Speed gauge */}
-        <circle cx="720" cy="160" r="25" fill="none" stroke="#021373" strokeWidth="4" />
+        <circle cx="720" cy="160" r="25" fill="none" stroke="#0e0e0c" strokeWidth="4" />
         <circle cx="720" cy="160" r="25" fill="none" stroke="#F29F05" strokeWidth="4" strokeDasharray="120" strokeDashoffset="30" transform="rotate(-90 720 160)">
           <animate attributeName="stroke-dashoffset" values="30;10;30" dur="2s" repeatCount="indefinite" />
         </circle>
@@ -90,13 +90,13 @@ const AiAuditBannerSVG: React.FC = () => (
       </g>
       {/* Cost Optimization */}
       <g id="cost-optimization">
-        <text x="540" y="225" fill="#D0DCF2" fontSize="12" fontWeight="600">Cost Efficiency</text>
+        <text x="540" y="225" fill="#ebe9e3" fontSize="12" fontWeight="600">Cost Efficiency</text>
         {/* Pie chart segments */}
-        <circle cx="580" cy="260" r="20" fill="none" stroke="#1F54BF" strokeWidth="8" strokeDasharray="80 120" transform="rotate(-90 580 260)" />
+        <circle cx="580" cy="260" r="20" fill="none" stroke="#d83a1a" strokeWidth="8" strokeDasharray="80 120" transform="rotate(-90 580 260)" />
         <circle cx="580" cy="260" r="20" fill="none" stroke="#F29F05" strokeWidth="8" strokeDasharray="40 120" strokeDashoffset="-80" transform="rotate(-90 580 260)" />
-        <circle cx="580" cy="260" r="20" fill="none" stroke="#719ED9" strokeWidth="8" strokeDasharray="20 120" strokeDashoffset="-120" transform="rotate(-90 580 260)" />
+        <circle cx="580" cy="260" r="20" fill="none" stroke="rgba(14,14,12,0.3)" strokeWidth="8" strokeDasharray="20 120" strokeDashoffset="-120" transform="rotate(-90 580 260)" />
         {/* Checkmark */}
-        <circle cx="640" cy="260" r="18" fill="#1F54BF" opacity="0.3" />
+        <circle cx="640" cy="260" r="18" fill="#d83a1a" opacity="0.3" />
         <path d="M 632 260 L 638 266 L 648 254" stroke="#F29F05" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" />
         </path>
@@ -113,12 +113,12 @@ const AiAuditBannerSVG: React.FC = () => (
     {/* Decorative elements */}
     <g id="decorative">
       {/* Corner brackets */}
-      <path d="M 100 80 L 80 80 L 80 100" stroke="#719ED9" strokeWidth="2" fill="none" opacity="0.3" />
-      <path d="M 780 80 L 800 80 L 800 100" stroke="#719ED9" strokeWidth="2" fill="none" opacity="0.3" />
-      <path d="M 100 320 L 80 320 L 80 300" stroke="#719ED9" strokeWidth="2" fill="none" opacity="0.3" />
-      <path d="M 780 320 L 800 320 L 800 300" stroke="#719ED9" strokeWidth="2" fill="none" opacity="0.3" />
+      <path d="M 100 80 L 80 80 L 80 100" stroke="rgba(14,14,12,0.3)" strokeWidth="2" fill="none" opacity="0.3" />
+      <path d="M 780 80 L 800 80 L 800 100" stroke="rgba(14,14,12,0.3)" strokeWidth="2" fill="none" opacity="0.3" />
+      <path d="M 100 320 L 80 320 L 80 300" stroke="rgba(14,14,12,0.3)" strokeWidth="2" fill="none" opacity="0.3" />
+      <path d="M 780 320 L 800 320 L 800 300" stroke="rgba(14,14,12,0.3)" strokeWidth="2" fill="none" opacity="0.3" />
       {/* Floating particles */}
-      <circle cx="120" cy="350" r="3" fill="#719ED9" opacity="0.5">
+      <circle cx="120" cy="350" r="3" fill="rgba(14,14,12,0.3)" opacity="0.5">
         <animate attributeName="cy" values="350;320;350" dur="4s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite" />
       </circle>

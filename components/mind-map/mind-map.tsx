@@ -115,7 +115,7 @@ const MIND_MAP_DATA_FR: NodeData = {
     {
       id: "avantages",
       label: "Pourquoi découpler ?",
-      color: "#1F54BF",
+      color: "#d83a1a",
       iconKey: "zap",
       children: [
         {
@@ -217,7 +217,7 @@ const MIND_MAP_DATA_EN: NodeData = {
     {
       id: "avantages",
       label: "Why decouple?",
-      color: "#1F54BF",
+      color: "#d83a1a",
       iconKey: "zap",
       children: [
         {
@@ -513,11 +513,11 @@ function MindMapNodeCard({
                 ? `linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(208, 220, 242, 0.85) 50%, rgba(208, 220, 242, 0.95) 100%)`
                 : `rgba(255, 255, 255, 0.85)`)
             : (isRoot
-                ? `linear-gradient(135deg, rgba(31, 84, 191, 0.4) 0%, rgba(2, 19, 89, 0.6) 50%, rgba(2, 15, 89, 0.8) 100%)`
-                : `rgba(2, 19, 115, 0.8)`),
+                ? `linear-gradient(135deg, rgba(216, 58, 26, 0.4) 0%, rgba(14, 14, 12, 0.6) 50%, rgba(14, 14, 12, 0.8) 100%)`
+                : `rgba(14, 14, 12, 0.8)`),
           borderColor: isExpanded
             ? `${node.color}50`
-            : (isLight ? `rgba(2, 15, 89, 0.15)` : `rgba(113, 158, 217, 0.1)`),
+            : (isLight ? `rgba(14, 14, 12, 0.15)` : `rgba(14, 14, 12, 0.1)`),
           borderLeftWidth: isRoot ? 1 : 3,
           borderLeftColor: node.color,
         }}
@@ -547,7 +547,7 @@ function MindMapNodeCard({
         {/* Label */}
         <span
           className="flex-1 leading-snug line-clamp-2 font-googletitre"
-          style={{ fontSize, fontWeight, color: isLight ? '#020F59' : 'rgba(255,255,255,0.9)' }}
+          style={{ fontSize, fontWeight, color: '#0e0e0c' }}
           title={node.label}
         >
           {node.label}
@@ -921,8 +921,8 @@ export default function MindMap() {
         className="absolute inset-0 opacity-30"
         style={{
           backgroundImage: isLight
-            ? "radial-gradient(circle, rgba(2, 15, 89, 0.18) 1px, transparent 1px)"
-            : "radial-gradient(circle, rgba(113,158,217,0.12) 1px, transparent 1px)",
+            ? "radial-gradient(circle, rgba(14, 14, 12, 0.18) 1px, transparent 1px)"
+            : "radial-gradient(circle, rgba(14,14,12,0.12) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -932,8 +932,8 @@ export default function MindMap() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: isLight
-            ? "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(31, 84, 191, 0.05) 0%, transparent 100%)"
-            : "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(31, 84, 191, 0.08) 0%, transparent 100%)",
+            ? "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(216, 58, 26, 0.05) 0%, transparent 100%)"
+            : "radial-gradient(ellipse 60% 50% at 20% 50%, rgba(216, 58, 26, 0.08) 0%, transparent 100%)",
         }}
       />
 
@@ -969,13 +969,13 @@ export default function MindMap() {
       <div className="absolute bottom-4 left-4 z-30 flex flex-wrap gap-2">
         {(isEn
           ? [
-              { label: "Benefits", color: "#1F54BF" },
+              { label: "Benefits", color: "#d83a1a" },
               { label: "Editor", color: "#8B5CF6" },
               { label: "Challenges", color: "#EF4444" },
               { label: "Roadmap", color: "#10B981" },
             ]
           : [
-              { label: "Avantages", color: "#1F54BF" },
+              { label: "Avantages", color: "#d83a1a" },
               { label: "Éditeur", color: "#8B5CF6" },
               { label: "Défis", color: "#EF4444" },
               { label: "Roadmap", color: "#10B981" },

@@ -707,99 +707,189 @@ export function ExpandableCardDemo() {
   );
 
   return (
-    <section className="relative my-12 md:my-48 py-12 md:py-24 bg-mediumblue/60 backdrop-blur-lg border-y border-white/10 mb-12 px-4 md:px-8 lg:px-16">
-      <div className="pb-12 md:pb-24">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeProfile}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
-            <h2 className="font-googletexte text-4xl tracking-tight text-center text-white mb-2">
-              {sectionTitle.title}{" "}
-              <span className="font-googletitre text-lightyellow text-4xl md:text-5xl font-medium">
-                {sectionTitle.subtitle}
-              </span>
-            </h2>
-            <p className="font-normal text-lg text-center text-white/80">
-              {sectionTitle.tagline}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      <AnimatePresence mode="wait">
-        <motion.ul
-          key={activeProfile}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="max-w-6xl mx-auto w-full flex flex-col gap-12"
+    <section
+      style={{
+        background: "var(--paper-2)",
+        padding: "80px 0",
+        borderTop: "1px solid var(--rule)",
+        borderBottom: "1px solid var(--rule)",
+      }}
+    >
+      <div className="container">
+        {/* Sec-head */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "56px 1fr auto",
+            alignItems: "baseline",
+            gap: "0 24px",
+            marginBottom: 40,
+            borderBottom: "1px solid var(--rule)",
+            paddingBottom: 16,
+          }}
         >
-          {activeCards.map((card, idx) => (
-            <li key={card.title} className="w-full">
-              <button
-                className="w-full p-4 flex flex-col md:flex-row justify-between items-center bg-darkblue/60 hover:bg-darkblue/50 backdrop-blur-xl rounded-xl cursor-pointer focus:outline-none border-1 border-white/20"
-                onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                aria-expanded={openIndex === idx}
-                aria-controls={`panel-${idx}`}
+          <div
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              color: "var(--accent-color)",
+            }}
+          >
+            № 03
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.h2
+              key={activeProfile}
+              className="ni-serif"
+              style={{
+                fontSize: "clamp(28px, 3.5vw, 52px)",
+                lineHeight: 1.1,
+                margin: 0,
+                color: "var(--ink)",
+              }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+            >
+              {sectionTitle.title}{" "}
+              <em style={{ color: "var(--accent-color)" }}>{sectionTitle.subtitle}</em>
+            </motion.h2>
+          </AnimatePresence>
+          <div
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-color)",
+              textAlign: "right",
+            }}
+          >
+            Services · Fig. 03
+          </div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={`tagline-${activeProfile}`}
+            style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 48 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {sectionTitle.tagline}
+          </motion.p>
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait">
+          <motion.ul
+            key={activeProfile}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 0,
+              borderTop: "1px solid var(--rule)",
+            }}
+          >
+            {activeCards.map((card, idx) => (
+              <li
+                key={card.title}
+                style={{ borderBottom: "1px solid var(--rule)" }}
               >
-                <div className="flex md:gap-4 flex-col md:flex-row justify-between items-center wrap w-full">
+                <button
+                  style={{
+                    width: "100%",
+                    display: "grid",
+                    gridTemplateColumns: "80px 1fr 24px",
+                    gap: 24,
+                    padding: "24px 0",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    alignItems: "center",
+                  }}
+                  onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                  aria-expanded={openIndex === idx}
+                  aria-controls={`panel-${idx}`}
+                >
                   <Image
-                    width={100}
-                    height={100}
+                    width={80}
+                    height={60}
                     src={card.src}
                     alt={card.title}
-                    className="h-20 w-20 md:h-30 md:w-30 rounded-lg object-cover object-top hover:blur-sm transition-all duration-300"
+                    style={{ width: 80, height: 60, objectFit: "cover", objectPosition: "top", display: "block" }}
                   />
-                  <div className="flex flex-col items-center md:items-start justify-center flex-1">
-                    <h3 className="font-medium text-lightyellow text-left text-3xl">
+                  <div>
+                    <div
+                      className="ni-serif"
+                      style={{ fontSize: 20, color: "var(--ink)", marginBottom: 4 }}
+                    >
                       {card.title}
-                    </h3>
-                    <p className="text-white/70 text-base text-left">
+                    </div>
+                    <p style={{ fontSize: 13, color: "var(--ink-2)", margin: 0 }}>
                       {card.description}
                     </p>
                   </div>
-                </div>
-              </button>
-              <AnimatePresence initial={false}>
-                {openIndex === idx && (
-                  <motion.div
-                    id={`panel-${idx}`}
-                    initial={{ height: 0, opacity: 0, scale: 0.98 }}
-                    animate={{ height: "auto", opacity: 1, scale: 1 }}
-                    exit={{ height: 0, opacity: 0, scale: 0.98 }}
-                    transition={{
-                      height: { duration: 0.35, ease: "easeInOut" },
-                      opacity: { duration: 0.25 },
-                      scale: { duration: 0.25 },
+                  <span
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 16,
+                      color: "var(--muted-color)",
+                      transform: openIndex === idx ? "rotate(45deg)" : "none",
+                      transition: "transform 0.2s",
+                      display: "inline-block",
+                      textAlign: "center",
                     }}
-                    style={{ originY: 0.1 }}
-                    className="overflow-hidden bg-darkblue/50 rounded-xl mt-4"
                   >
+                    +
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {openIndex === idx && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.25 }}
+                      id={`panel-${idx}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        height: { duration: 0.35, ease: "easeInOut" },
+                        opacity: { duration: 0.25 },
+                      }}
+                      style={{ overflow: "hidden" }}
                     >
-                      <div className="flex flex-col md:flex-row p-6 gap-6">
-                        <div className="flex-1 flex flex-col justify-center min-w-0">
-                          <div className="overflow-auto flex flex-col gap-4">
-                            {card.content(isEn)}
-                          </div>
+                      <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <div
+                          style={{
+                            padding: "0 0 40px 104px",
+                          }}
+                        >
+                          {card.content(isEn)}
                         </div>
-                      </div>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-          ))}
-        </motion.ul>
-      </AnimatePresence>
+                  )}
+                </AnimatePresence>
+              </li>
+            ))}
+          </motion.ul>
+        </AnimatePresence>
+      </div>
     </section>
   );
 }
@@ -811,7 +901,7 @@ export const ArrowTopRightIcon = () => (
     height="20"
     fill="none"
     viewBox="0 0 24 24"
-    stroke="#021373"
+    stroke="var(--ink)"
     strokeWidth="2"
     className="inline-block"
   >

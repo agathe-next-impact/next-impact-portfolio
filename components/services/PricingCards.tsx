@@ -137,19 +137,19 @@ export function PricingCards() {
   return (
     <section
       style={{
-        background: "var(--ink)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        background: "var(--paper-2)",
+        borderTop: "1px solid var(--rule)",
+        borderBottom: "1px solid var(--rule)",
         padding: "80px 0",
       }}
     >
       <div className="container">
-        <div className="sec-head" style={{ borderBottom: "1px solid rgba(255,255,255,0.12)", marginBottom: 0, paddingBottom: 32 }}>
-          <div className="sec-no" style={{ color: "rgba(255,255,255,0.4)" }}>№ —</div>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0, color: "var(--paper)" }}>
+        <div className="sec-head" style={{ borderBottom: "1px solid var(--rule)", marginBottom: 0, paddingBottom: 32 }}>
+          <div className="sec-no">№ —</div>
+          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
             {isEn ? "Pricing" : "Tarifs"}
           </h2>
-          <div className="sec-meta" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <div className="sec-meta">
             {isEn ? "Services · Fig. 01" : "Prestations · Fig. 01"}
           </div>
         </div>
@@ -158,19 +158,20 @@ export function PricingCards() {
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
-            borderBottom: "1px solid rgba(255,255,255,0.12)",
+            borderBottom: "1px solid var(--rule)",
           }}
         >
           {tiers.map((tier, idx) => (
             <div
               key={tier.name}
               style={{
-                borderRight: idx < tiers.length - 1 ? "1px solid rgba(255,255,255,0.12)" : "none",
+                borderRight: idx < tiers.length - 1 ? "1px solid var(--rule)" : "none",
                 padding: "40px 32px",
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
-                background: tier.highlight ? "rgba(255,255,255,0.04)" : "transparent",
+                background: tier.highlight ? "var(--paper)" : "transparent",
+                borderTop: tier.highlight ? `3px solid var(--accent-color)` : "3px solid transparent",
               }}
             >
               {tier.badge && (
@@ -184,7 +185,7 @@ export function PricingCards() {
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     color: "var(--accent-color)",
-                    background: "var(--ink)",
+                    background: "var(--paper-2)",
                     padding: "4px 12px",
                     border: "1px solid var(--accent-color)",
                     transform: "translateY(-50%)",
@@ -201,13 +202,13 @@ export function PricingCards() {
                   fontSize: 11,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: tier.highlight ? "var(--accent-color)" : "rgba(255,255,255,0.5)",
+                  color: tier.highlight ? "var(--accent-color)" : "var(--muted-color)",
                   marginBottom: 8,
                 }}
               >
                 {tier.name}
               </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", marginBottom: 24, fontStyle: "italic" }}>
+              <p style={{ fontSize: 12, color: "var(--muted-color)", marginBottom: 24, fontStyle: "italic" }}>
                 {tier.tech}
               </p>
 
@@ -215,11 +216,11 @@ export function PricingCards() {
               <div style={{ marginBottom: 32 }}>
                 <div
                   className="ni-serif"
-                  style={{ fontSize: "clamp(28px, 3vw, 40px)", color: "var(--paper)", lineHeight: 1 }}
+                  style={{ fontSize: "clamp(28px, 3vw, 40px)", color: "var(--ink)", lineHeight: 1 }}
                 >
                   {tier.price}
                 </div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", marginTop: 6 }}>
+                <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", letterSpacing: "0.08em", marginTop: 6 }}>
                   {tier.priceTagline}
                 </div>
               </div>
@@ -227,8 +228,8 @@ export function PricingCards() {
               {/* Sections */}
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 0 }}>
                 {[
-                  { label: tier.forProjectLabel, content: <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.65 }}>{tier.forProject}</p> },
-                  { label: tier.stackLabel, content: <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.65 }}>{tier.stackHtml}</p> },
+                  { label: tier.forProjectLabel, content: <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>{tier.forProject}</p> },
+                  { label: tier.stackLabel, content: <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>{tier.stackHtml}</p> },
                   {
                     label: tier.includedLabel,
                     content: (
@@ -236,7 +237,7 @@ export function PricingCards() {
                         {tier.included.map((item) => (
                           <li
                             key={item.text}
-                            style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: "rgba(255,255,255,0.7)" }}
+                            style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: "var(--ink-2)" }}
                           >
                             <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11, marginTop: 1 }}>→</span>
                             {item.text}
@@ -248,7 +249,7 @@ export function PricingCards() {
                 ].map(({ label, content }) => (
                   <div
                     key={label}
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 20, paddingBottom: 20 }}
+                    style={{ borderTop: "1px solid var(--rule)", paddingTop: 20, paddingBottom: 20 }}
                   >
                     <div
                       style={{
@@ -256,7 +257,7 @@ export function PricingCards() {
                         fontSize: 9,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.35)",
+                        color: "var(--muted-color)",
                         marginBottom: 10,
                       }}
                     >
@@ -269,7 +270,7 @@ export function PricingCards() {
                 {tier.oeth && (
                   <div
                     style={{
-                      borderTop: "1px solid rgba(255,255,255,0.08)",
+                      borderTop: "1px solid var(--rule)",
                       paddingTop: 20,
                       paddingBottom: 20,
                     }}
@@ -286,7 +287,7 @@ export function PricingCards() {
                     >
                       {tier.oeth.title}
                     </div>
-                    <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, marginBottom: 10 }}>
+                    <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, marginBottom: 10 }}>
                       {tier.oeth.text}
                     </p>
                     <Link
@@ -322,8 +323,6 @@ export function PricingCards() {
                       gap: 8,
                       width: "100%",
                       justifyContent: "center",
-                      borderColor: "rgba(255,255,255,0.4)",
-                      color: "var(--paper)",
                     }}
                   >
                     {tier.ctaLabel}
@@ -333,11 +332,7 @@ export function PricingCards() {
                   <Link
                     href={tier.ctaHref as Parameters<typeof Link>[0]["href"]}
                     className={tier.highlight ? "btn primary" : "btn"}
-                    style={
-                      !tier.highlight
-                        ? { display: "inline-flex", alignItems: "center", gap: 8, width: "100%", justifyContent: "center", borderColor: "rgba(255,255,255,0.4)", color: "var(--paper)" }
-                        : { display: "inline-flex", alignItems: "center", gap: 8, width: "100%", justifyContent: "center" }
-                    }
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "100%", justifyContent: "center" }}
                   >
                     {tier.ctaLabel}
                     <ArrowRight size={14} />

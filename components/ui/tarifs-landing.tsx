@@ -1,95 +1,144 @@
-import React from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import Link from "next/link"
 
 type Offer = {
-    badge: string;
-    title: string;
-    description: string;
-    price: string;
-    features: string[];
-    button: {
-        label: string;
-        href: string;
-        external?: boolean;
-    };
-    highlighted?: boolean;
-};
+  badge: string
+  title: string
+  description: string
+  price: string
+  features: string[]
+  button: {
+    label: string
+    href: string
+    external?: boolean
+  }
+  highlighted?: boolean
+}
 
 type TarifsLandingProps = {
-    sectionTitle: string;
-    sectionSubtitle: string;
-    offers: Offer[];
-};
+  sectionTitle?: string
+  sectionSubtitle?: string
+  offers: Offer[]
+}
 
 export function TarifsLanding({
-    sectionTitle,
-    sectionSubtitle,
-    offers,
+  sectionTitle = "Tarifs",
+  sectionSubtitle,
+  offers,
 }: TarifsLandingProps) {
-    return (
-        <section id="tarifs" className="container mx-auto px-4 pt-8 pb-16">
-            <div className="text-center mb-12">
-                <h2 className="text-4xl font-medium text-regularblue mb-4">
-                    {sectionTitle}
-                </h2>
-                <p className="text-lg text-regularblue/80">{sectionSubtitle}</p>
+  return (
+    <section id="tarifs" className="s">
+      <div className="container">
+        <div className="sec-head">
+          <div className="sec-no">№ 04</div>
+          <h2
+            className="ni-serif"
+            style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
+          >
+            {sectionTitle}
+          </h2>
+          <div className="sec-meta">Tarifs · Fig. 04</div>
+        </div>
+        {sectionSubtitle && (
+          <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{sectionSubtitle}</p>
+        )}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${offers.length}, 1fr)`,
+            borderTop: "1px solid var(--rule)",
+          }}
+        >
+          {offers.map((offer, idx) => (
+            <div
+              key={offer.title}
+              style={{
+                padding: "32px 28px",
+                borderRight: idx < offers.length - 1 ? "1px solid var(--rule)" : "none",
+                background: offer.highlighted ? "var(--paper)" : "transparent",
+                borderTop: offer.highlighted ? "3px solid var(--accent-color)" : "3px solid transparent",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 9,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--accent-color)",
+                  marginBottom: 16,
+                }}
+              >
+                {offer.badge}
+              </div>
+              <div
+                className="ni-serif"
+                style={{
+                  fontSize: 22,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                {offer.title}
+              </div>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: "var(--ink-2)",
+                  lineHeight: 1.5,
+                  marginBottom: 20,
+                }}
+              >
+                {offer.description}
+              </p>
+              <div
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: 32,
+                  color: "var(--ink)",
+                  marginBottom: 24,
+                }}
+              >
+                {offer.price}
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+                {offer.features.map((feature) => (
+                  <li
+                    key={feature}
+                    style={{
+                      fontSize: 13,
+                      color: "var(--ink-2)",
+                      display: "flex",
+                      gap: 8,
+                    }}
+                  >
+                    <span style={{ color: "var(--accent-color)", flexShrink: 0 }}>→</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              {offer.button.external ? (
+                <a
+                  href={offer.button.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                >
+                  {offer.button.label}
+                </a>
+              ) : (
+                <Link
+                  href={offer.button.href}
+                  className={offer.highlighted ? "btn primary" : "btn"}
+                >
+                  {offer.button.label}
+                </Link>
+              )}
             </div>
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                {offers.map((offer, idx) => {
-                    const CardTag = offer.button.external ? "a" : Link;
-                    const cardProps = offer.button.external
-                        ? {
-                                href: offer.button.href,
-                                target: "_blank",
-                                rel: "noopener noreferrer",
-                                className: "w-full block",
-                            }
-                        : {
-                                href: offer.button.href,
-                                className: "w-full",
-                            };
-                    return (
-                        <Card
-                            key={offer.title}
-                            className={offer.highlighted ? "border-lightblue/30 " : ""}
-                        >
-                            <CardHeader>
-                                <Badge className="w-fit mb-4 font-medium uppercase bg-lightblue/10 text-mediumblue">
-                                    {offer.badge}
-                                </Badge>
-                                <CardTitle className="text-2xl font-medium text-regularblue">
-                                    {offer.title}
-                                </CardTitle>
-                                <CardDescription className="text-mediumblue">
-                                    {offer.description}
-                                </CardDescription>
-                                <div className="text-3xl font-medium text-regularblue mt-2">
-                                    {offer.price}
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <ul className="space-y-2 text-mediumblue">
-                                    {offer.features.map((feature) => (
-                                        <li key={feature} className="flex items-center gap-2 text-sm">
-                                            <CheckCircle className="h-4 w-4 text-regularblue" />
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <CardTag {...cardProps}>
-                                    <Button className="w-full mt-6 rounded-full bg-regularblue hover:bg-regularblue/80">
-                                        {offer.button.label}
-                                    </Button>
-                                </CardTag>
-                            </CardContent>
-                        </Card>
-                    );
-                })}
-            </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }

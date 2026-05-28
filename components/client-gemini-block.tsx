@@ -132,7 +132,7 @@ Métadonnées extraites (pour validation uniquement) :
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-20">
                     {[
                       { icon: Zap, text: "3x plus rapide", color: "#F29F05" },
-                      { icon: Shield, text: "Sécurité renforcée", color: "#719ED9" },
+                      { icon: Shield, text: "Sécurité renforcée", color: "rgba(14,14,12,0.3)" },
                       { icon: TrendingUp, text: "SEO optimisé", color: "#FF6B6B" },
                     ].map((benefit, idx) => (
                       <div

@@ -2,6 +2,215 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Swiss Design Tokens ─────────────────────────────── */
+:root {
+  --paper:        #ffffff;
+  --paper-2:      #ebe9e3;
+  --ink:          #0e0e0c;
+  --ink-2:        #2a2a26;
+  --muted-color:  rgba(14, 14, 12, 0.55);
+  --rule:         rgba(14, 14, 12, 0.18);
+  --rule-strong:  rgba(14, 14, 12, 0.42);
+  --accent-color: #d83a1a;
+  --serif:        var(--font-serif);
+  --sans:         var(--font-sans);
+  --mono:         var(--font-mono);
+  --gutter:       32px;
+  --container-w:  1200px;
+}
+
+/* ─── Swiss Layout ────────────────────────────────────── */
+.container {
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+section.s {
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+section.s:first-of-type {
+  border-top: none;
+}
+
+/* ─── Section Header ──────────────────────────────────── */
+.sec-head {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  gap: 0 24px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+.sec-no {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent-color);
+}
+.sec-meta {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+  text-align: right;
+}
+
+/* ─── Typography helpers ──────────────────────────────── */
+.ni-serif { font-family: var(--serif, Georgia, serif); }
+.ni-mono  { font-family: var(--mono, monospace); }
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 44px;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn.primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--paper);
+}
+.btn.primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ─── Ordered Steps ───────────────────────────────────── */
+ol.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+ol.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--rule);
+}
+ol.steps li:first-child {
+  border-top: 1px solid var(--rule);
+}
+ol.steps li::before {
+  content: "0" counter(step);
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent-color);
+  padding-top: 3px;
+}
+ol.steps li h4 {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 18px;
+  margin: 0 0 6px;
+}
+ol.steps li p {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── Cap Row ─────────────────────────────────────────── */
+.cap-row {
+  display: grid;
+  grid-template-columns: 56px 1.6fr 2fr 1fr;
+  gap: 0 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.cap-row:first-child { border-top: 1px solid var(--rule); }
+
+/* ─── Quote ───────────────────────────────────────────── */
+.quote {
+  font-family: var(--serif, Georgia, serif);
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1.5;
+}
+
+/* ─── Labels / Tags ───────────────────────────────────── */
+.label {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  padding: 2px 8px;
+  color: var(--muted-color);
+}
+
+/* ─── Hover row ───────────────────────────────────────── */
+.hover-row:hover { background: var(--paper-2); }
+
+/* ─── Annot ───────────────────────────────────────────── */
+.annot {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted-color);
+}
+
+/* ─── Edge ticks ──────────────────────────────────────── */
+.edge-ticks {
+  position: fixed;
+  left: 20px;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+  pointer-events: none;
+}
+.edge-ticks span {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* ─── Utilities ───────────────────────────────────────── */
+.u-rule-top    { border-top: 1px solid var(--rule); }
+.u-rule-bottom { border-bottom: 1px solid var(--rule); }
+.u-pt-section  { padding-top: 80px; }
+.u-pb-section  { padding-bottom: 80px; }
+
+/* ─── Responsive ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  :root { --gutter: 20px; }
+  section.s { padding: 56px 0; }
+  .sec-head { grid-template-columns: 48px 1fr; gap: 0 16px; }
+  .sec-meta { display: none; }
+  .cap-row { grid-template-columns: 48px 1fr; }
+  ol.steps li { grid-template-columns: 48px 1fr; }
+}
+
+/* ─── Legacy overrides (keep for existing blue-themed pages) ── */
 /* Suppression globale de l'outline sur les champs de formulaire au focus, active et focus-visible */
 input:focus, input:active, input:focus-visible,
 textarea:focus, textarea:active, textarea:focus-visible,
@@ -23,6 +232,13 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overflow-x: hidden;
+  font-family: var(--sans, sans-serif);
+  font-size: 15px;
+  line-height: 1.5;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
 }
 
 @layer utilities {
@@ -82,7 +298,7 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -137,35 +353,35 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  /* theme-system: light mode tokens (shadcn) */
+  /* theme-system: light mode tokens (shadcn) — Swiss palette */
   .light {
     --background: 0 0% 100%;
-    --foreground: 232 96% 18%;
+    --foreground: 0 0% 5.5%;
     --card: 0 0% 100%;
-    --card-foreground: 232 96% 18%;
+    --card-foreground: 0 0% 5.5%;
     --popover: 0 0% 100%;
-    --popover-foreground: 232 96% 18%;
-    --primary: 234 96% 23%;
+    --popover-foreground: 0 0% 5.5%;
+    --primary: 0 0% 5.5%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 219 60% 97%;
-    --secondary-foreground: 232 96% 18%;
-    --muted: 219 60% 97%;
-    --muted-foreground: 234 96% 23%;
-    --accent: 219 60% 97%;
-    --accent-foreground: 232 96% 18%;
-    --destructive: 0 72% 42%;
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 5.5%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 5.5%;
+    --accent: 0 0% 92%;
+    --accent-foreground: 0 0% 5.5%;
+    --destructive: 10 72% 46%;
     --destructive-foreground: 0 0% 100%;
-    --border: 219 60% 90%;
-    --input: 219 60% 90%;
-    --ring: 234 96% 23%;
+    --border: 0 0% 5.5%;
+    --input: 0 0% 5.5%;
+    --ring: 0 0% 5.5%;
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 232 96% 18%;
-    --sidebar-primary: 234 96% 23%;
+    --sidebar-foreground: 0 0% 5.5%;
+    --sidebar-primary: 0 0% 5.5%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 219 60% 97%;
-    --sidebar-accent-foreground: 232 96% 18%;
-    --sidebar-border: 219 60% 90%;
-    --sidebar-ring: 234 96% 23%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 0% 5.5%;
+    --sidebar-border: 0 0% 5.5%;
+    --sidebar-ring: 0 0% 5.5%;
   }
 }
 
@@ -414,134 +630,46 @@ body {
    Sélecteurs d'attribut pour capter les variantes d'opacité (bg-darkblue/40).
    =========================================================================== */
 
-.light body { color: #020F59; background-color: #FFFFFF; }
+.light body { color: var(--ink); background-color: var(--paper); }
 
-/* --- Surfaces : tous les bleus → bleu très clair translucide + blur --- */
-.light [class*="bg-darkblue"],
-.light [class*="bg-mediumblue"],
-.light [class*="bg-regularblue"],
-.light [class*="bg-lightblue"],
-.light [class*="bg-extralightblue"] {
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-.light [class*="bg-white"]  { background-color: #FFFFFF !important; }
-.light [class*="bg-black"]  { background-color: rgba(2, 15, 89, 0.4) !important; }
-
-/* --- Textes : blanc/bleu clair → darkblue/mediumblue ---
-   Sélecteurs avec ^= ou " " pour exclure les variantes préfixées (dark:text-…) */
-.light [class^="text-white"],      .light [class*=" text-white"],
-.light [class^="text-extralightblue"], .light [class*=" text-extralightblue"],
-.light [class^="text-lightblue"],  .light [class*=" text-lightblue"]   { color: #020F59 !important; }
-.light [class^="text-darkblue"],   .light [class*=" text-darkblue"]    { color: #020F59 !important; }
-.light [class^="text-mediumblue"], .light [class*=" text-mediumblue"]  { color: #021373 !important; }
-.light [class^="text-regularblue"],.light [class*=" text-regularblue"] { color: #021373 !important; }
-
-/* --- Variantes hover/focus/group-hover sur text-white/light : éviter clair-sur-clair --- */
-.light [class*="hover:text-white"]:hover,
-.light [class*="hover:text-extralightblue"]:hover,
-.light [class*="hover:text-lightblue"]:hover,
-.light [class*="focus:text-white"]:focus,
-.light [class*="focus:text-extralightblue"]:focus,
-.light [class*="focus:text-lightblue"]:focus { color: #020F59 !important; }
-.light .group:hover [class*="group-hover:text-white"],
-.light .group:hover [class*="group-hover:text-extralightblue"],
-.light .group:hover [class*="group-hover:text-lightblue"] { color: #020F59 !important; }
-
-/* --- Bordures : discrètes en bleu très clair --- */
-.light [class*="border-white"],
-.light [class*="border-darkblue"],
-.light [class*="border-mediumblue"],
-.light [class*="border-regularblue"],
-.light [class*="border-lightblue"],
-.light [class*="border-extralightblue"] {
-  border-color: rgba(208, 220, 242, 0.6) !important;
-}
-
-/* --- Gradients brand : annulés et remplacés par fond bleu très clair --- */
-.light [class*="from-darkblue"],
-.light [class*="from-mediumblue"],
-.light [class*="from-regularblue"],
-.light [class*="from-lightblue"],
-.light [class*="from-extralightblue"],
-.light [class*="to-darkblue"],
-.light [class*="to-mediumblue"],
-.light [class*="to-regularblue"],
-.light [class*="to-lightblue"],
-.light [class*="to-extralightblue"],
-.light [class*="via-darkblue"],
-.light [class*="via-mediumblue"],
-.light [class*="via-regularblue"],
-.light [class*="via-lightblue"],
-.light [class*="via-extralightblue"] {
-  --tw-gradient-from: rgba(255, 255, 255, 0.35) !important;
-  --tw-gradient-to: rgba(255, 255, 255, 0.35) !important;
-  --tw-gradient-via: rgba(255, 255, 255, 0.35) !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-  background-image: none !important;
-  background-color: rgba(255, 255, 255, 0.35) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-
-/* --- SVG inline : fill/stroke blanc → darkblue --- */
-.light [fill="white"],  .light [fill="#fff"],
-.light [fill="#FFF"],   .light [fill="#ffffff"],
-.light [fill="#FFFFFF"] { fill: #020F59 !important; }
-.light [stroke="white"],.light [stroke="#fff"],
-.light [stroke="#FFF"], .light [stroke="#ffffff"],
-.light [stroke="#FFFFFF"] { stroke: #020F59 !important; }
-.light .fill-white   { fill: #020F59 !important; }
-.light .stroke-white { stroke: #020F59 !important; }
-
-/* --- Accents (orange/coral/yellow) : assombris en TEXTE pour contraste AA --- */
-.light [class^="text-orange"],     .light [class*=" text-orange"]      { color: #021373 !important; }
-.light [class^="text-coral"],      .light [class*=" text-coral"]       { color: #021373 !important; }
-.light [class^="text-lightyellow"],.light [class*=" text-lightyellow"] { color: #021373 !important; }
-
-/* --- .article-text (MDX) : texte blanc → bleu foncé --- */
+/* --- .article-text (MDX) : ink palette --- */
 .light .article-text,
 .light .article-text p,
 .light .article-text li,
 .light .article-text h1,
 .light .article-text h2,
 .light .article-text h3,
-.light .article-text h4 { color: #021373 !important; }
-.light .article-text > p:first-child { color: #020F59 !important; }
-.light .article-text strong { color: #020F59 !important; }
-.light .article-text blockquote p { color: #021373 !important; }
+.light .article-text h4 { color: var(--ink) !important; }
+.light .article-text > p:first-child { color: var(--ink) !important; }
+.light .article-text strong { color: var(--ink) !important; }
+.light .article-text blockquote p { color: var(--ink-2) !important; }
 .light .article-text pre {
-  background-color: rgba(208, 220, 242, 0.4) !important;
-  color: #020F59 !important;
+  background-color: var(--paper-2) !important;
+  color: var(--ink) !important;
 }
-.light .article-text code { color: #021373 !important; background-color: rgba(242, 159, 5, 0.1) !important; }
-.light .article-text a    { color: #021373 !important; text-decoration-color: rgba(184, 92, 9, 0.5) !important; }
-.light .article-text th   { color: #020F59 !important; background-color: rgba(242, 159, 5, 0.1) !important; }
-.light .article-text td   { color: #021373 !important; border-color: rgba(208, 220, 242, 0.6) !important; }
-.light .article-text tr:nth-child(even) td { background-color: rgba(208, 220, 242, 0.15) !important; }
-.light .article-text tr:hover td { background-color: rgba(208, 220, 242, 0.3) !important; }
+.light .article-text code { color: var(--ink) !important; background-color: rgba(14, 14, 12, 0.06) !important; }
+.light .article-text a    { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
+.light .article-text th   { color: var(--ink) !important; background-color: var(--paper-2) !important; }
+.light .article-text td   { color: var(--ink-2) !important; border-color: var(--rule) !important; }
+.light .article-text tr:nth-child(even) td { background-color: rgba(14, 14, 12, 0.03) !important; }
+.light .article-text tr:hover td { background-color: var(--paper-2) !important; }
 .light .article-text .diagnostic-dark h3,
 .light .article-text .diagnostic-dark h4,
 .light .article-text .diagnostic-dark p,
 .light .article-text .diagnostic-dark span,
 .light .article-text .diagnostic-dark li,
-.light .article-text .diagnostic-dark a { color: #020F59 !important; }
+.light .article-text .diagnostic-dark a { color: var(--ink) !important; }
 
-/* --- li orphelin (ligne 376 base layer) --- */
-.light li { color: #021373; }
-
-/* --- .mentions-legales : les variants [&_p]:text-white/80 ciblent les enfants p/li/a directement,
-   donc l'override global [class*="text-white"] ne les attrape pas. On force ici. --- */
+/* --- .mentions-legales --- */
 .light .mentions-legales,
 .light .mentions-legales h2,
 .light .mentions-legales h3,
 .light .mentions-legales h4,
 .light .mentions-legales strong,
-.light .mentions-legales b { color: #020F59 !important; }
+.light .mentions-legales b { color: var(--ink) !important; }
 .light .mentions-legales p,
-.light .mentions-legales li { color: rgba(2, 19, 115, 0.85) !important; }
-.light .mentions-legales a { color: #021373 !important; text-decoration-color: rgba(31, 84, 191, 0.5) !important; }
+.light .mentions-legales li { color: var(--ink-2) !important; }
+.light .mentions-legales a { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
 
 /* === CTA coral/orange : texte blanc forcé (light + dark) ===
    Sélecteurs ^= / " " pour ne matcher que bg-coral standalone, pas hover:bg-coral/10 etc.

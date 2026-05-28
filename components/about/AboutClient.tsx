@@ -287,10 +287,10 @@ export default function AboutClient() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
           className="s"
-          style={{ background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+          style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}
         >
           <div className="container">
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", maxWidth: 520, marginBottom: 32, lineHeight: 1.65 }}>
+            <p style={{ fontSize: 16, color: "var(--ink-2)", maxWidth: 520, marginBottom: 32, lineHeight: 1.65 }}>
               {variant.ctaDescription}
             </p>
             {variant.ctaHref.startsWith("http") ? (

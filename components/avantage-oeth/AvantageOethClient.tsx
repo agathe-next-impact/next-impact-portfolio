@@ -260,12 +260,12 @@ export default function AvantageOethClient() {
       </section>
 
       {/* CTA */}
-      <section className="s" style={{ background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+      <section className="s" style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}>
         <div className="container">
-          <h2 className="ni-serif" style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.1, color: "var(--paper)", marginBottom: 16 }}>
+          <h2 className="ni-serif" style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.1, color: "var(--ink)", marginBottom: 16 }}>
             {isEn ? "Ready to reduce your AGEFIPH contribution?" : "Prêt à réduire votre contribution AGEFIPH ?"}
           </h2>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", maxWidth: 480, marginBottom: 32, lineHeight: 1.65 }}>
+          <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 480, marginBottom: 32, lineHeight: 1.65 }}>
             {isEn
               ? "Let's discuss your web project. I'll provide a detailed quote with the exact amount deductible from your AGEFIPH contribution."
               : "Discutons de votre projet web. Je vous fournirai un devis détaillé avec le montant exact déductible de votre contribution AGEFIPH."}
@@ -282,7 +282,7 @@ export default function AvantageOethClient() {
             <Link
               href="/services"
               className="btn"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8, borderColor: "rgba(255,255,255,0.4)", color: "var(--paper)" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
             >
               {isEn ? "View offerings" : "Voir les offres"}
             </Link>

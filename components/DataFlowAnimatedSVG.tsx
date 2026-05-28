@@ -4,14 +4,14 @@ export default function DataFlowAnimatedSVG() {
   return (
     <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
       {/* Background */}
-      <rect width="600" height="400" fill="#020F5900" />
+      <rect width="600" height="400" fill="#0e0e0c00" />
       {/* Central Hub */}
       <g id="central-hub">
-        <circle cx="300" cy="200" r="60" fill="#021373" opacity="0.8">
+        <circle cx="300" cy="200" r="60" fill="#0e0e0c" opacity="0.8">
           <animate attributeName="r" values="60;65;60" dur="3s" repeatCount="indefinite" />
         </circle>
-        <circle cx="300" cy="200" r="45" fill="#1F54BF" opacity="0.9" />
-        <circle cx="300" cy="200" r="30" fill="#719ED9" opacity="0.7">
+        <circle cx="300" cy="200" r="45" fill="#d83a1a" opacity="0.9" />
+        <circle cx="300" cy="200" r="30" fill="rgba(14,14,12,0.3)" opacity="0.7">
           <animate attributeName="r" values="30;35;30" dur="2s" repeatCount="indefinite" />
         </circle>
       </g>
@@ -22,12 +22,12 @@ export default function DataFlowAnimatedSVG() {
         </circle>
       </g>
       <g id="node-2">
-        <circle cx="375" cy="100" r="20" fill="#719ED9" opacity="0.8">
+        <circle cx="375" cy="100" r="20" fill="rgba(14,14,12,0.3)" opacity="0.8">
           <animateTransform attributeName="transform" type="rotate" from="90 300 200" to="450 300 200" dur="10s" repeatCount="indefinite" />
         </circle>
       </g>
       <g id="node-3">
-        <circle cx="225" cy="100" r="20" fill="#D0DCF2" opacity="0.8">
+        <circle cx="225" cy="100" r="20" fill="#ebe9e3" opacity="0.8">
           <animateTransform attributeName="transform" type="rotate" from="180 300 200" to="540 300 200" dur="10s" repeatCount="indefinite" />
         </circle>
       </g>
@@ -45,11 +45,11 @@ export default function DataFlowAnimatedSVG() {
         <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 450,200" />
         <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
       </circle>
-      <circle r="4" fill="#719ED9">
+      <circle r="4" fill="rgba(14,14,12,0.3)">
         <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 375,100" begin="0.5s" />
         <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="0.5s" />
       </circle>
-      <circle r="4" fill="#D0DCF2">
+      <circle r="4" fill="#ebe9e3">
         <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 225,100" begin="1s" />
         <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s" />
       </circle>
