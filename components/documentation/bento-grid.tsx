@@ -2,11 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
-import { CheckCircle, BookOpen, SearchCheck, Network, FileText, Layers, Code, Globe, Smartphone } from "lucide-react";
+import { CheckCircle, BookOpen, SearchCheck, FileText, Layers, Code, Globe, Smartphone } from "lucide-react";
 import { useLocale } from "next-intl";
 import { BENTO_CONFIGS, JOURNEYS, PROFILES, type BentoCardConfig } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
@@ -14,25 +13,13 @@ const defaultCardsFr: BentoCardConfig[] = [
   {
     id: "headless-cms",
     title: "Comprendre le headless",
-    description:
-      "Architecture découplée, API WordPress, Next.js et déploiement.",
+    description: "Architecture découplée, API WordPress, Next.js et déploiement.",
     icon: BookOpen,
     href: "/documentation/headless-cms",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
-    gradient: "bg-mediumblue/40 backdrop-blur-xl border-lightblue/20",
-    textColor: "text-white",
-  },
-  {
-    id: "mind-map",
-    title: "Mind Map",
-    description: "Explorez l'architecture headless de façon interactive.",
-    icon: Network,
-    href: "/documentation/mind-map",
-    colSpan: "md:col-span-1",
-    rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-lightblue/20",
-    textColor: "text-extralightblue",
+    gradient: "",
+    textColor: "",
   },
   {
     id: "audit-ia",
@@ -42,8 +29,8 @@ const defaultCardsFr: BentoCardConfig[] = [
     href: "/audit-site-ia",
     colSpan: "md:col-span-1",
     rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
-    textColor: "text-extralightblue",
+    gradient: "",
+    textColor: "",
   },
   {
     id: "livre-blanc",
@@ -53,8 +40,8 @@ const defaultCardsFr: BentoCardConfig[] = [
     href: "/ressources/livre_blanc_wp_headless.pdf",
     colSpan: "md:col-span-3",
     rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-orange/20",
-    textColor: "text-white",
+    gradient: "",
+    textColor: "",
     external: true,
   },
 ];
@@ -63,25 +50,13 @@ const defaultCardsEn: BentoCardConfig[] = [
   {
     id: "headless-cms",
     title: "Understanding headless",
-    description:
-      "Decoupled architecture, WordPress API, Next.js and deployment.",
+    description: "Decoupled architecture, WordPress API, Next.js and deployment.",
     icon: BookOpen,
     href: "/documentation/headless-cms",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
-    gradient: "bg-mediumblue/40 backdrop-blur-xl border-lightblue/20",
-    textColor: "text-white",
-  },
-  {
-    id: "mind-map",
-    title: "Mind Map",
-    description: "Explore the headless architecture interactively.",
-    icon: Network,
-    href: "/documentation/mind-map",
-    colSpan: "md:col-span-1",
-    rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-lightblue/20",
-    textColor: "text-extralightblue",
+    gradient: "",
+    textColor: "",
   },
   {
     id: "audit-ia",
@@ -91,8 +66,8 @@ const defaultCardsEn: BentoCardConfig[] = [
     href: "/audit-site-ia",
     colSpan: "md:col-span-1",
     rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-coral/20",
-    textColor: "text-extralightblue",
+    gradient: "",
+    textColor: "",
   },
   {
     id: "livre-blanc",
@@ -102,8 +77,8 @@ const defaultCardsEn: BentoCardConfig[] = [
     href: "/ressources/livre_blanc_wp_headless.pdf",
     colSpan: "md:col-span-3",
     rowSpan: "",
-    gradient: "bg-darkblue/60 backdrop-blur-xl border-orange/20",
-    textColor: "text-white",
+    gradient: "",
+    textColor: "",
     external: true,
   },
 ];
@@ -128,101 +103,68 @@ function InlineLearningPath({ locale }: { locale: Locale }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      className={cn(
-        "md:col-span-2 md:row-span-2 rounded-3xl border p-6 md:p-8 overflow-hidden bg-mediumblue/40 backdrop-blur-xl",
-        profileId === "decideur" && "border-orange/20",
-        profileId === "utilisateur" && "border-regularblue/20",
-        profileId === "developpeur" && "border-lightblue/20"
-      )}
+      transition={{ duration: 0.3 }}
+      className="md:col-span-2 md:row-span-2"
+      style={{ border: "1px solid var(--rule)", background: "var(--paper-2)", padding: "32px" }}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
-        <div
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl",
-            profile.gradient
-          )}
-        >
-          <Icon className={cn("h-5 w-5", profile.accentColor)} />
-        </div>
-        <h2 className="font-googletitre text-xl md:text-2xl font-medium text-white">
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+        <Icon style={{ width: 20, height: 20, color: "var(--accent-color)" }} strokeWidth={1.5} />
+        <h2 className="ni-serif" style={{ fontSize: "clamp(18px, 2vw, 24px)", color: "var(--ink)", margin: 0 }}>
           {isEn ? `Your ${profile.label} path` : `Votre parcours ${profile.label}`}
         </h2>
       </div>
 
-      {/* Progress */}
-      <div className="flex items-center gap-3 mb-6 mt-4">
-        <Progress
-          value={progressPercent}
-          className="h-2 flex-1 bg-darkblue/60"
-        />
-        <span className="text-sm text-white/80 font-googletexte whitespace-nowrap">
+      {/* Progress bar */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, marginTop: 16 }}>
+        <div style={{ flex: 1, height: 2, background: "var(--rule)", position: "relative" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, height: "100%", width: `${progressPercent}%`, background: "var(--accent-color)", transition: "width 0.4s" }} />
+        </div>
+        <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", whiteSpace: "nowrap" }}>
           {readCount} / {journey.length}
         </span>
       </div>
 
-      {/* Timeline */}
-      <div className="relative pl-6 border-l-2 border-lightblue/20 space-y-3">
+      {/* Steps */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "1px solid var(--rule)" }}>
         {journey.map((step, index) => {
-          const isRead = readArticles.includes(
-            `${step.category}/${step.slug}`
-          );
+          const isRead = readArticles.includes(`${step.category}/${step.slug}`);
           return (
             <motion.div
               key={step.slug}
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{
-                delay: index * 0.08,
-                type: "spring",
-                stiffness: 300,
-                damping: 24,
-              }}
-              className="relative"
+              transition={{ delay: index * 0.06, duration: 0.25 }}
             >
-              <div
-                className={cn(
-                  "absolute -left-[calc(1.5rem+5px)] top-1 h-3 w-3 rounded-full border-2",
-                  isRead
-                    ? "bg-orange border-orange"
-                    : "bg-darkblue border-lightblue/30"
-                )}
-              />
               <Link
                 href={`/documentation/${step.category}/${step.slug}`}
-                className={cn(
-                  "block rounded-2xl p-3 border transition-all duration-300",
-                  isRead
-                    ? "bg-orange/5 border-orange/20 hover:border-orange/40"
-                    : "bg-darkblue/40 border-lightblue/10 hover:border-lightblue/20 hover:bg-darkblue/60"
-                )}
+                style={{
+                  display: "block",
+                  padding: "14px 0",
+                  borderBottom: "1px solid var(--rule)",
+                  textDecoration: "none",
+                  borderLeft: isRead ? "3px solid var(--accent-color)" : "3px solid transparent",
+                  paddingLeft: isRead ? 12 : 0,
+                  transition: "border-left-color 0.2s, background 0.15s",
+                }}
               >
-                <div className="flex items-start justify-between gap-3">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
                   <div>
-                    <p
-                      className={cn(
-                        "font-googletexte font-medium",
-                        isRead
-                          ? "text-mediumblue dark:text-white/70 line-through decoration-orange/40"
-                          : "text-mediumblue dark:text-white"
-                      )}
-                    >
+                    <p style={{
+                      fontSize: 14,
+                      color: isRead ? "var(--muted-color)" : "var(--ink)",
+                      textDecoration: isRead ? "line-through" : "none",
+                      marginBottom: 2,
+                      fontWeight: 500,
+                    }}>
                       {step.title}
                     </p>
-                    <p
-                      className={cn(
-                        "text-xs font-googletexte mt-0.5",
-                        isRead
-                          ? "text-mediumblue/70 dark:text-white/60"
-                          : "text-mediumblue/80 dark:text-white/80"
-                      )}
-                    >
+                    <p style={{ fontSize: 12, color: "var(--ink-2)" }}>
                       {step.description}
                     </p>
                   </div>
                   {isRead && (
-                    <CheckCircle className="h-4 w-4 text-orange shrink-0 mt-0.5" />
+                    <CheckCircle size={14} style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: 2 }} strokeWidth={1.5} />
                   )}
                 </div>
               </Link>
@@ -239,7 +181,6 @@ export function BentoGrid() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
-  // When profile is active, skip the "Mon parcours" card (first one) — it's replaced by InlineLearningPath
   const cards = profileId
     ? BENTO_CONFIGS[profileId].filter((c) => !c.id.startsWith("parcours-"))
     : isEn
@@ -247,114 +188,94 @@ export function BentoGrid() {
       : defaultCardsFr;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 0, borderTop: "1px solid var(--rule)", borderLeft: "1px solid var(--rule)", marginBottom: 48 }}>
       {profileId && <InlineLearningPath locale={locale} />}
       {cards.map((card, index) => {
         const Icon = card.icon;
+        const isBig = card.id === "headless-cms";
         return (
           <motion.div
             key={card.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: (profileId ? index + 1 : index) * 0.1,
-              type: "spring",
-              stiffness: 300,
-              damping: 24,
+            transition={{ delay: (profileId ? index + 1 : index) * 0.08, duration: 0.3 }}
+            className={cn(card.colSpan, card.rowSpan)}
+            style={{
+              border: "1px solid var(--rule)",
+              borderTop: "none",
+              borderLeft: "none",
+              background: "var(--paper)",
+              position: "relative",
+              overflow: "hidden",
             }}
-            whileHover={{ scale: 1.05 }}
-            className={cn(
-              "group relative overflow-hidden rounded-3xl p-6 md:p-8 border border-lightblue/10",
-              "cursor-pointer transition-all duration-300 hover:border-lightblue/20",
-              card.colSpan,
-              card.rowSpan,
-              card.gradient,
-              card.id.includes("mindmap") || card.id === "mind-map" ? "hidden md:block" : ""
-            )}
           >
             <Link
               href={card.href}
-              className="absolute inset-0 z-10"
+              style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", minHeight: isBig ? 320 : 180, padding: "28px 32px", textDecoration: "none" }}
               {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
-              <span className="sr-only">{card.title}</span>
-            </Link>
-            <div className="relative z-0 flex flex-col justify-between h-full min-h-[160px]">
-              <div>
-                <div className="flex items-start justify-between">
-                </div>
-                {/* Infographie "Pourquoi ça change tout" — profil par défaut uniquement */}
-                {!profileId && card.id === "headless-cms" && (
-                  <div className="mt-5 space-y-5">
-                    <div className="flex flex-col gap-3">
-                      {(isEn
-                        ? [
-                            { value: "2×", label: "faster than a standard site" },
-                            { value: "100", label: "achievable Lighthouse score" },
-                            { value: "0", label: "frontend plugins to maintain" },
-                          ]
-                        : [
-                            { value: "2×", label: "plus rapide qu'un site classique" },
-                            { value: "100", label: "score Lighthouse accessible" },
-                            { value: "0", label: "plugin frontend à maintenir" },
-                          ]
-                      ).map((stat) => (
-                        <div key={stat.label} className="flex items-baseline gap-3">
-                          <span className="text-3xl font-googletitre font-medium text-lightyellow">
-                            {stat.value}
-                          </span>
-                          <span className="text-sm text-white/60">{stat.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-3 md:gap-4 pt-2">
-                      <div className="flex flex-col items-center gap-1.5">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-regularblue/20 border border-regularblue/30">
-                          <Layers className="h-5 w-5 text-regularblue" />
-                        </div>
-                        <span className="text-xs text-white/50">WordPress</span>
+              {/* Big card infographic */}
+              {!profileId && isBig && (
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                    {(isEn
+                      ? [
+                          { value: "2×", label: "faster than a standard site" },
+                          { value: "100", label: "achievable Lighthouse score" },
+                          { value: "0",   label: "frontend plugins to maintain" },
+                        ]
+                      : [
+                          { value: "2×", label: "plus rapide qu'un site classique" },
+                          { value: "100", label: "score Lighthouse accessible" },
+                          { value: "0",   label: "plugin frontend à maintenir" },
+                        ]
+                    ).map((stat) => (
+                      <div key={stat.label} style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+                        <span className="ni-serif" style={{ fontSize: 32, color: "var(--accent-color)", lineHeight: 1 }}>
+                          {stat.value}
+                        </span>
+                        <span style={{ fontSize: 13, color: "var(--ink-2)" }}>{stat.label}</span>
                       </div>
-                      <div className="h-px w-6 bg-lightblue/30" />
-                      <div className="flex flex-col items-center gap-1.5">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange/20 border border-orange/30">
-                          <Code className="h-5 w-5 text-orange" />
-                        </div>
-                        <span className="text-xs text-white/50">Next.js</span>
-                      </div>
-                      <div className="h-px w-6 bg-lightblue/30" />
-                      <div className="flex flex-col items-center gap-1.5">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lightblue/20 border border-lightblue/30">
-                          <div className="flex gap-1">
-                            <Globe className="h-4 w-4 text-lightblue" />
-                            <Smartphone className="h-4 w-4 text-lightblue" />
+                    ))}
+                  </div>
+                  {/* Stack diagram */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 16, borderTop: "1px solid var(--rule)" }}>
+                    {[
+                      { Icon: Layers, label: "WordPress" },
+                      { Icon: Code,   label: "Next.js" },
+                      { Icon: Globe,  label: isEn ? "Your visitors" : "Vos visiteurs" },
+                    ].map(({ Icon: SIcon, label }, i) => (
+                      <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                          <div style={{ border: "1px solid var(--rule)", padding: 8 }}>
+                            <SIcon size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
                           </div>
+                          <span style={{ fontFamily: "var(--mono)", fontSize: 8, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)" }}>{label}</span>
                         </div>
-                        <span className="text-xs text-white/50">{isEn ? "Your visitors" : "Vos visiteurs"}</span>
+                        {i < 2 && <div style={{ width: 16, height: 1, background: "var(--rule)" }} />}
                       </div>
-                    </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div style={{ marginTop: "auto" }}>
+                <Icon size={20} strokeWidth={1.5} style={{ color: "var(--muted-color)", marginBottom: 12, display: "block" }} />
+                <h3 className="ni-serif" style={{ fontSize: isBig ? "clamp(20px, 2vw, 28px)" : 18, color: "var(--ink)", marginBottom: 6, lineHeight: 1.15 }}>
+                  {card.title}
+                </h3>
+                <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                  {card.description}
+                </p>
+                {card.external && (
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent-color)", marginTop: 12 }}>
+                    ↓ PDF
                   </div>
                 )}
               </div>
-              <div className="mt-4">
-                <h3
-                  className={cn(
-                    "font-googletitre text-2xl md:text-3xl font-medium mb-2",
-                    card.textColor
-                  )}
-                >
-                  {card.title}
-                </h3>
-                <p
-                  className={cn(
-                    "text-sm md:text-base font-googletexte",
-                    card.textColor,
-                    "opacity-60"
-                  )}
-                >
-                  {card.description}
-                </p>
-              </div>
-            </div>
+            </Link>
           </motion.div>
         );
       })}

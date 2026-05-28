@@ -2,8 +2,8 @@
 
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { ArrowRight } from "lucide-react";
 
 const CTA_TARGETS = {
   default: {
@@ -34,21 +34,14 @@ export default function CaseStudyCTA() {
   const cta = profileId ? CTA_TARGETS[profileId] : CTA_TARGETS.default;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-3">
-      <Button
-        className="md:flex gap-1 rounded-full px-6 bg-regularblue text-darkblue md:text-lg transition-all duration-300 ease-in-out"
-        asChild
-      >
-        <Link
-          href={cta.href}
-          className="text-white"
-          {...(cta.external
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {})}
-        >
-          {t(cta.labelKey)}
-        </Link>
-      </Button>
-    </div>
+    cta.external ? (
+      <a href={cta.href} target="_blank" rel="noopener noreferrer" className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+        {t(cta.labelKey)} <ArrowRight size={13} />
+      </a>
+    ) : (
+      <Link href={cta.href as any} className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+        {t(cta.labelKey)} <ArrowRight size={13} />
+      </Link>
+    )
   );
 }

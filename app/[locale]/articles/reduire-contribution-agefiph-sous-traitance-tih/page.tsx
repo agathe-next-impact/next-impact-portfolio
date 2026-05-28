@@ -4,7 +4,6 @@ import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld
 import PageLayout from "@/components/page-layout";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import Image from "next/image";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -76,113 +75,178 @@ export default function ArticleReduireAgefiph() {
         titre="Comment réduire sa contribution AGEFIPH ?"
         sousTitre=""
       >
-        <article className="mt-8 mb-6 space-y-16">
+        <article style={{ marginBottom: 48 }}>
 
           {/* Section 1 : Comprendre l'OETH */}
-          <section className="container mx-auto px-4 max-w-5xl pt-10">
-            <div className="flex items-center gap-3 mb-6">
-              <Image src="/icons/scale-icon.svg" alt="OETH" width={32} height={32} className="shrink-0" />
-              <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
-                L&apos;obligation d&apos;emploi des travailleurs handicapés (OETH) en 2025
-              </h2>
-            </div>
+          <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(22px, 2.5vw, 36px)",
+                    lineHeight: 1.1,
+                    marginBottom: 24,
+                    color: "var(--ink)",
+                  }}
+                >
+                  L&apos;obligation d&apos;emploi des travailleurs handicapés (OETH) en 2025
+                </h2>
 
-            <div className="space-y-4 text-white/80 font-googletexte leading-relaxed">
-              <p className="text-white/80">
-                L&apos;article L.5212-2 du Code du travail impose aux
-                entreprises de 20 salariés et plus d&apos;employer au moins
-                6% de travailleurs handicapés dans leur effectif total.
-                Lorsque ce taux n&apos;est pas atteint, l&apos;entreprise verse
-                une contribution annuelle à l&apos;AGEFIPH.
-              </p>
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 32 }}>
+                  L&apos;article L.5212-2 du Code du travail impose aux
+                  entreprises de 20 salariés et plus d&apos;employer au moins
+                  6% de travailleurs handicapés dans leur effectif total.
+                  Lorsque ce taux n&apos;est pas atteint, l&apos;entreprise verse
+                  une contribution annuelle à l&apos;AGEFIPH.
+                </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-                <div className="border border-white/10 rounded-xl p-6 bg-mediumblue/60 backdrop-blur-sm text-center">
-                  <p className="text-sm text-white font-googletexte uppercase tracking-widest mb-2">
-                    20 – 249 salariés
-                  </p>
-                  <p className="text-2xl font-googletitre font-medium text-coral">
-                    4 752 €
-                  </p>
-                  <p className="text-xs text-white/80 mt-1">
-                    par TH manquant / an
-                  </p>
+                {/* Stat grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    borderTop: "1px solid var(--rule)",
+                    borderLeft: "1px solid var(--rule)",
+                    marginBottom: 32,
+                  }}
+                >
+                  {[
+                    { label: "20 – 249 salariés", value: "4 752 €" },
+                    { label: "250 – 749 salariés", value: "5 940 €" },
+                    { label: "750+ salariés", value: "7 128 €" },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      style={{
+                        borderRight: "1px solid var(--rule)",
+                        borderBottom: "1px solid var(--rule)",
+                        padding: "24px 20px",
+                        textAlign: "center",
+                        background: "var(--paper)",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: 9,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          color: "var(--muted-color)",
+                          marginBottom: 10,
+                        }}
+                      >
+                        {item.label}
+                      </p>
+                      <p
+                        className="ni-serif"
+                        style={{
+                          fontSize: "clamp(22px, 2.5vw, 32px)",
+                          color: "var(--accent-color)",
+                          lineHeight: 1,
+                          marginBottom: 6,
+                        }}
+                      >
+                        {item.value}
+                      </p>
+                      <p
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: 9,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                          color: "var(--muted-color)",
+                        }}
+                      >
+                        par TH manquant / an
+                      </p>
+                    </div>
+                  ))}
                 </div>
-                <div className="border border-white/10 rounded-xl p-6 bg-mediumblue/60 backdrop-blur-sm text-center">
-                  <p className="text-sm text-white font-googletexte uppercase tracking-widest mb-2">
-                    250 – 749 salariés
-                  </p>
-                  <p className="text-2xl font-googletitre font-medium text-lightyellow">
-                    5 940 €
-                  </p>
-                  <p className="text-xs text-white/80 mt-1">
-                    par TH manquant / an
-                  </p>
-                </div>
-                <div className="border border-white/10 rounded-xl p-6 bg-mediumblue/60 backdrop-blur-sm text-center">
-                  <p className="text-sm text-white font-googletexte uppercase tracking-widest mb-2">
-                    750+ salariés
-                  </p>
-                  <p className="text-2xl font-googletitre font-medium text-lightblue">
-                    7 128 €
-                  </p>
-                  <p className="text-xs text-white/80 mt-1">
-                    par TH manquant / an
-                  </p>
-                </div>
-              </div>
 
-              <div className="border border-coral/20 rounded-xl p-6 bg-coral/5">
-                <div className="flex items-start gap-3">
-                  <Image src="/icons/notification-icon.svg" alt="Attention" width={20} height={20} className="mt-0.5 shrink-0" />
-                  <div>
-                    <p className="font-medium text-white mb-1">
-                      Surcontribution en cas d&apos;inaction
-                    </p>
-                    <p className="text-white/70 text-sm">
-                      Les entreprises n&apos;ayant entrepris aucune action en
-                      faveur de l&apos;emploi des TH pendant 3 années
-                      consécutives s&apos;exposent à une surcontribution de
-                      1 500 × SMIC horaire par TH manquant, soit{" "}
-                      <strong className="text-coral">17 820 € en 2025</strong>.
-                    </p>
-                  </div>
+                {/* Surcontribution callout */}
+                <div
+                  style={{
+                    borderLeft: "3px solid var(--accent-color)",
+                    padding: "20px 24px",
+                    background: "var(--paper-2)",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 9,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      color: "var(--accent-color)",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Surcontribution en cas d&apos;inaction
+                  </p>
+                  <p style={{ color: "var(--ink-2)", lineHeight: 1.65, fontSize: 14 }}>
+                    Les entreprises n&apos;ayant entrepris aucune action en
+                    faveur de l&apos;emploi des TH pendant 3 années
+                    consécutives s&apos;exposent à une surcontribution de
+                    1 500 × SMIC horaire par TH manquant, soit{" "}
+                    <strong style={{ color: "var(--accent-color)" }}>17 820 € en 2025</strong>.
+                  </p>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Section 2 : Le levier TIH */}
-          <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
-            <div className="container mx-auto px-4 max-w-5xl">
-              <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
+          <section
+            className="s"
+            style={{
+              borderTop: "1px solid var(--rule)",
+              background: "var(--paper-2)",
+            }}
+          >
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(22px, 2.5vw, 36px)",
+                    lineHeight: 1.1,
+                    marginBottom: 24,
+                    color: "var(--ink)",
+                  }}
+                >
                   La sous-traitance TIH : un levier méconnu mais puissant
                 </h2>
-              </div>
 
-              <div className="space-y-4 text-white/80 font-googletexte leading-relaxed">
-                <p className="text-white/80">
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 16 }}>
                   L&apos;article L.5212-10-1 du Code du travail prévoit que les
                   entreprises peuvent déduire de leur contribution AGEFIPH
                   une partie du coût des prestations sous-traitées à des{" "}
-                  <strong className="text-lightblue">TIH (Travailleurs
+                  <strong style={{ color: "var(--ink)" }}>TIH (Travailleurs
                   Indépendants Handicapés)</strong>, des EA (Entreprises
                   Adaptées) ou des ESAT.
                 </p>
 
-                <p className="text-white/80">
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 32 }}>
                   Pour les prestations intellectuelles comme le
                   développement web, le montant déductible est de{" "}
-                  <strong className="text-lightyellow">30% du coût de
+                  <strong style={{ color: "var(--ink)" }}>30% du coût de
                   main-d&apos;œuvre</strong>, qui correspond à 30% du montant
                   HT facturé.
                 </p>
 
-                <h3 className="text-xl font-googletitre font-medium text-white mt-8 mb-4">
+                <h3
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(17px, 2vw, 24px)",
+                    color: "var(--ink)",
+                    marginBottom: 20,
+                  }}
+                >
                   Qu&apos;est-ce qu&apos;un TIH ?
                 </h3>
-                <ul className="space-y-3">
+
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                   {[
                     "Indépendant disposant d'une RQTH (Reconnaissance de la Qualité de Travailleur Handicapé)",
                     "Exerce en Entreprise Individuelle",
@@ -190,9 +254,25 @@ export default function ArticleReduireAgefiph() {
                     "75 000 à 80 000 TIH en France",
                     "Fournit une attestation de déductibilité annuelle (art. D.5212-7)",
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-lightblue mt-0.5 shrink-0" />
-                      <span className="text-white">{item}</span>
+                    <li
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 12,
+                        paddingTop: 12,
+                        paddingBottom: 12,
+                        borderBottom: "1px solid var(--rule)",
+                        color: "var(--ink-2)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <CheckCircle2
+                        style={{ color: "var(--muted-color)", marginTop: 2, flexShrink: 0 }}
+                        size={16}
+                        strokeWidth={1.5}
+                      />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -200,180 +280,290 @@ export default function ArticleReduireAgefiph() {
             </div>
           </section>
 
-          {/* Section 3 : Comment ça marche concrètement */}
-          <section className="container mx-auto px-4 max-w-5xl">
-            <div className="flex items-center gap-3 mb-6">
-              <Image src="/icons/analytics-icon.svg" alt="Calcul" width={32} height={32} className="shrink-0" />
-              <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
-                Calcul de la déduction : exemple concret
-              </h2>
-            </div>
+          {/* Section 3 : Calcul concret */}
+          <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(22px, 2.5vw, 36px)",
+                    lineHeight: 1.1,
+                    marginBottom: 24,
+                    color: "var(--ink)",
+                  }}
+                >
+                  Calcul de la déduction : exemple concret
+                </h2>
 
-            <div className="space-y-4 text-white/80 font-googletexte leading-relaxed">
-              <p className="text-white/80">
-                Prenons l&apos;exemple d&apos;une PME de 80 salariés qui
-                n&apos;emploie aucun travailleur handicapé et qui confie la
-                refonte de son site web à Next Impact pour 5 000 € HT.
-              </p>
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 32 }}>
+                  Prenons l&apos;exemple d&apos;une PME de 80 salariés qui
+                  n&apos;emploie aucun travailleur handicapé et qui confie la
+                  refonte de son site web à Next Impact pour 5 000 € HT.
+                </p>
 
-              <div className="border border-white/10 rounded-2xl p-6 md:p-8 bg-darkblue/40 space-y-4 my-8">
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <span className="text-white/60">Obligation OETH (6% de 80)</span>
-                  <span className="font-medium text-white">4 TH</span>
+                {/* Calculation table */}
+                <div
+                  style={{
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                    marginBottom: 32,
+                  }}
+                >
+                  {[
+                    { label: "Obligation OETH (6% de 80)", value: "4 TH", accent: false },
+                    { label: "TH manquants", value: "4", accent: true },
+                    { label: "Contribution brute (4 × 4 752 €)", value: "19 008 €", accent: true },
+                    { label: "Déduction TIH (30% de 5 000 €)", value: "− 1 500 €", accent: true },
+                    { label: "Contribution après déduction", value: "17 508 €", accent: false },
+                  ].map((row, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "12px 20px",
+                        borderBottom: "1px solid var(--rule)",
+                      }}
+                    >
+                      <span style={{ color: "var(--muted-color)", fontSize: 14 }}>
+                        {row.label}
+                      </span>
+                      <span
+                        style={{
+                          color: row.accent ? "var(--accent-color)" : "var(--ink)",
+                          fontWeight: 500,
+                          fontSize: 14,
+                        }}
+                      >
+                        {row.value}
+                      </span>
+                    </div>
+                  ))}
+                  {/* Total row */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "16px 20px",
+                      background: "var(--paper-2)",
+                    }}
+                  >
+                    <span style={{ color: "var(--ink)", fontWeight: 600 }}>
+                      Coût réel du site web
+                    </span>
+                    <span
+                      className="ni-serif"
+                      style={{
+                        color: "var(--accent-color)",
+                        fontSize: "clamp(20px, 2vw, 26px)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      3 500 €
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <span className="text-white/60">TH manquants</span>
-                  <span className="font-medium text-coral">4</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <span className="text-white/60">Contribution brute (4 × 4 752 €)</span>
-                  <span className="font-medium text-coral">19 008 €</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <span className="text-white/60">Déduction TIH (30% de 5 000 €)</span>
-                  <span className="font-medium text-lightyellow">- 1 500 €</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <span className="text-white/60">Contribution après déduction</span>
-                  <span className="font-medium text-lightblue">17 508 €</span>
-                </div>
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-white font-medium">Coût réel du site web</span>
-                  <span className="text-xl font-googletitre font-medium text-lightyellow">3 500 €</span>
-                </div>
+
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7 }}>
+                  L&apos;entreprise économise 1 500 € sur sa contribution
+                  AGEFIPH et obtient un site web performant pour un coût
+                  réel de 3 500 €, soit une réduction de 30%.
+                </p>
               </div>
-
-              <p className="text-white/80">
-                L&apos;entreprise économise 1 500 € sur sa contribution
-                AGEFIPH et obtient un site web performant pour un coût
-                réel de 3 500 €, soit une réduction de 30%.
-              </p>
             </div>
           </section>
 
           {/* Section 4 : Contexte 2025 */}
-          <section className="container mx-auto px-4 max-w-5xl">
-            <div className="flex items-center gap-3 mb-6">
-              <Image src="/icons/growth-icon.svg" alt="Stratégie 2025" width={32} height={32} className="shrink-0" />
-              <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
-                Pourquoi c&apos;est stratégique en 2025
-              </h2>
-            </div>
+          <section
+            className="s"
+            style={{
+              borderTop: "1px solid var(--rule)",
+              background: "var(--paper-2)",
+            }}
+          >
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(22px, 2.5vw, 36px)",
+                    lineHeight: 1.1,
+                    marginBottom: 24,
+                    color: "var(--ink)",
+                  }}
+                >
+                  Pourquoi c&apos;est stratégique en 2025
+                </h2>
 
-            <div className="space-y-4 text-white/80 font-googletexte leading-relaxed">
-              <p className="text-white">
-                Le contexte réglementaire de 2025 rend la sous-traitance
-                TIH particulièrement pertinente :
-              </p>
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 24 }}>
+                  Le contexte réglementaire de 2025 rend la sous-traitance
+                  TIH particulièrement pertinente :
+                </p>
 
-              <ul className="space-y-3 my-6">
-                {[
-                  "Fin des mesures transitoires d'écrêtement au 01/01/2025 : la contribution AGEFIPH atteint son montant réel",
-                  "Certaines dépenses autrefois déductibles ne le sont plus depuis 2025",
-                  "La sous-traitance TIH/EA/ESAT reste l'un des rares leviers de déduction encore actifs",
-                  "La surcontribution de 17 820 € par TH manquant menace les entreprises n'ayant rien fait pendant 3 ans",
-                  "Agir maintenant, même modestement, démontre une volonté d'engagement et protège contre la surcontribution",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-coral mt-0.5 shrink-0" />
-                    <span className="text-white/80">{item}</span>
-                  </li>
-                ))}
-              </ul>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {[
+                    "Fin des mesures transitoires d'écrêtement au 01/01/2025 : la contribution AGEFIPH atteint son montant réel",
+                    "Certaines dépenses autrefois déductibles ne le sont plus depuis 2025",
+                    "La sous-traitance TIH/EA/ESAT reste l'un des rares leviers de déduction encore actifs",
+                    "La surcontribution de 17 820 € par TH manquant menace les entreprises n'ayant rien fait pendant 3 ans",
+                    "Agir maintenant, même modestement, démontre une volonté d'engagement et protège contre la surcontribution",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 12,
+                        paddingTop: 12,
+                        paddingBottom: 12,
+                        borderBottom: "1px solid var(--rule)",
+                        color: "var(--ink-2)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <CheckCircle2
+                        style={{ color: "var(--muted-color)", marginTop: 2, flexShrink: 0 }}
+                        size={16}
+                        strokeWidth={1.5}
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </section>
 
           {/* Section 5 : Next Impact */}
-          <section className="bg-mediumblue/60 w-full backdrop-blur-xl border-y border-white/10 py-16">
-            <div className="container mx-auto px-4 max-w-5xl">
-              <div className="flex items-center gap-3 mb-6">
-                <Image src="/icons/team-icon.svg" alt="Next Impact" width={32} height={32} className="shrink-0" />
-                <h2 className="text-2xl md:text-3xl font-googletitre font-medium text-white">
+          <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2
+                  className="ni-serif"
+                  style={{
+                    fontSize: "clamp(22px, 2.5vw, 36px)",
+                    lineHeight: 1.1,
+                    marginBottom: 24,
+                    color: "var(--ink)",
+                  }}
+                >
                   Next Impact : expertise tech + avantage OETH
                 </h2>
-              </div>
 
-              <div className="space-y-4 text-white/80 font-googletexte leading-relaxed">
-                <p>
+                <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 24 }}>
                   Next Impact est un prestataire TIH spécialisé en{" "}
-                  <strong className="text-lightyellow">création de sites et d&apos;applications</strong>{" "}
+                  <strong style={{ color: "var(--ink)" }}>création de sites et d&apos;applications</strong>{" "}
                   (WordPress, Headless WordPress + Next.js, web app et PWA). En confiant votre projet web à Next
                   Impact, vous bénéficiez d&apos;un double avantage :
                 </p>
-                <ul className="space-y-3 my-6">
+
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 40px" }}>
                   {[
                     "Un site web ultra-performant aux standards de la Tech (< 1s de chargement, SEO natif, sécurité maximale)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
                     "Trois forfaits Sites web — Classique (2 250 €), Headless (4 000 €), Web app (5 000 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-lightyellow mt-0.5 shrink-0" />
-                      <span className="text-white/80">{item}</span>
+                    <li
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 12,
+                        paddingTop: 12,
+                        paddingBottom: 12,
+                        borderBottom: "1px solid var(--rule)",
+                        color: "var(--ink-2)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <CheckCircle2
+                        style={{ color: "var(--muted-color)", marginTop: 2, flexShrink: 0 }}
+                        size={16}
+                        strokeWidth={1.5}
+                      />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
 
-              {/* CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <Link href="/avantage-oeth">
-                  <button className="inline-flex items-center gap-2 h-12 px-8 font-bold font-googletitre text-base rounded-full bg-lightyellow text-darkblue transition-all duration-300">
-                    Simuler mon économie
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </Link>
-                <Link href="/contact">
-                  <button className="inline-flex items-center gap-2 h-12 px-8 font-googletitre text-base rounded-full border border-white/20 text-white hover:bg-white/10 transition-all">
-                    Discuter de mon projet
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </Link>
+                {/* CTAs */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+                  <Link href="/avantage-oeth">
+                    <button className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      Simuler mon économie
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </button>
+                  </Link>
+                  <Link href="/contact">
+                    <button className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      Discuter de mon projet
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           </section>
 
           {/* Sources */}
-          <section className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-xl font-googletitre font-medium text-white mb-4">
-              Sources et références
-            </h2>
-            <ul className="space-y-2 text-white/60 font-googletexte text-sm">
-              <li>
-                <a
-                  href="https://www.urssaf.fr/accueil/employeur/cotisations/liste-cotisations/contribution-annuelle-oeth.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lightblue hover:underline"
+          <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <p
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 9,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    color: "var(--muted-color)",
+                    marginBottom: 20,
+                  }}
                 >
-                  URSSAF — Contribution annuelle OETH
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://entreprendre.service-public.fr/vosdroits/F22523"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lightblue hover:underline"
-                >
-                  Service-Public.fr — Obligation d&apos;emploi des travailleurs handicapés
-                </a>
-              </li>
-              <li className="text-white/80">
-                Code du travail : articles L.5212-10-1 et D.5212-7
-              </li>
-              <li>
-                <a
-                  href="https://www.agefiph.fr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lightblue hover:underline"
-                >
-                  AGEFIPH
-                </a>
-              </li>
-            </ul>
+                  Sources · Références
+                </p>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  <li style={{ paddingBottom: 10 }}>
+                    <a
+                      href="https://www.urssaf.fr/accueil/employeur/cotisations/liste-cotisations/contribution-annuelle-oeth.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--accent-color)", textDecoration: "none", fontSize: 14 }}
+                    >
+                      URSSAF — Contribution annuelle OETH
+                    </a>
+                  </li>
+                  <li style={{ paddingBottom: 10 }}>
+                    <a
+                      href="https://entreprendre.service-public.fr/vosdroits/F22523"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--accent-color)", textDecoration: "none", fontSize: 14 }}
+                    >
+                      Service-Public.fr — Obligation d&apos;emploi des travailleurs handicapés
+                    </a>
+                  </li>
+                  <li style={{ paddingBottom: 10, color: "var(--muted-color)", fontSize: 14 }}>
+                    Code du travail : articles L.5212-10-1 et D.5212-7
+                  </li>
+                  <li style={{ paddingBottom: 10 }}>
+                    <a
+                      href="https://www.agefiph.fr"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--accent-color)", textDecoration: "none", fontSize: 14 }}
+                    >
+                      AGEFIPH
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </section>
+
         </article>
       </PageLayout>
     </main>

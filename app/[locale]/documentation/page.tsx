@@ -74,13 +74,15 @@ export default async function DocumentationPage({
         items={documentationCategories}
       />
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
-        <div className="container mx-auto py-12">
-          <BentoGrid />
-          <AuditContextualBanner />
-          <AllCategoriesGrid />
-          <DocumentationToolsSection />
-          <DemoShowcase />
-        </div>
+        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
+          <div className="container">
+            <BentoGrid />
+            <AuditContextualBanner />
+            <AllCategoriesGrid />
+            <DocumentationToolsSection />
+            <DemoShowcase />
+          </div>
+        </section>
       </PageLayout>
     </main>
   );
