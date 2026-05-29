@@ -40,7 +40,8 @@
       "Bash(sed -i 's|href: \"/simulateur-tarifs\"|href: \"/tarifs\"|g' components/documentation/documentation-internal-links.tsx)",
       "Bash(sed -i \"s|import Link from \\\\\"next/link\\\\\";|import { Link } from \\\\\"@/i18n/navigation\\\\\";|g\" components/documentation/learning-path.tsx components/mind-map/mind-map.tsx)",
       "Bash(sed -i \"s|import Link from \\\\\"next/link\\\\\"\\\\$|import { Link } from \\\\\"@/i18n/navigation\\\\\"|g\" components/simulateur-agefiph.tsx)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(git *)"
     ]
   }
 }
