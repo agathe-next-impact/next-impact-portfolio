@@ -4,6 +4,8 @@ import { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Vous êtes… | Next Impact",
   description: "Solutions WordPress adaptées à votre secteur : artisans, PME industrielles, acteurs du tourisme.",
+  // Page hors détection SEO : non indexée et exclue des surfaces de découverte
+  robots: { index: false, follow: false },
 }
 
 const PERSONAS = [

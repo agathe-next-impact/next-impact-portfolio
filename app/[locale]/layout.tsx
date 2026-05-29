@@ -37,84 +37,125 @@ const geistMono = Geist_Mono({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://www.next-impact.digital'),
-  title: {
-    default: 'Next Impact — Sites web & applications clé en main, PME & ESS',
-    template: '%s | Next Impact',
-  },
-  description:
-    'Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l\'ESS. ' +
-    'Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ.',
-  keywords: [
-    'création site web',
-    'WordPress Headless',
-    'Next.js',
-    'web app sur-mesure',
-    'application mobile',
-    'PWA',
-    'marketplace',
-    'studio indépendant',
-    'refonte site web',
-    'CMS Headless',
-    'React',
-    'TypeScript',
-  ],
-  authors: [{ name: 'Agathe Karinthi-Martin', url: 'https://www.next-impact.digital' }],
-  creator: 'Agathe Karinthi-Martin',
-  publisher: 'Next Impact',
-  icons: {
-    icon: '/img/logo-rouge-noir-carre-icon.png',
-    apple: '/img/logo-rouge-noir-carre-icon.png',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    siteName: 'Next Impact',
-    title: 'Next Impact — Sites web & applications clé en main',
+const SITE_URL = 'https://www.next-impact.digital'
+
+// Valeurs par défaut (fallback) du site, déclinées par locale.
+// Chaque page surcharge ces métadonnées via generatePageMetadata ;
+// ce bloc sert de repli cohérent pour toute page qui ne le ferait pas.
+const LAYOUT_META = {
+  fr: {
+    title: 'Next Impact — Sites web & applications clé en main, PME & ESS',
     description:
+      'Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l\'ESS. ' +
+      'Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ.',
+    ogTitle: 'Next Impact — Sites web & applications clé en main',
+    ogDescription:
       'Studio indépendant pour PME et ESS : sites web et applications performants, ' +
       'clé en main, délai et budget fixés dès le départ.',
-    url: 'https://www.next-impact.digital',
-    images: [
-      {
-        url: '/img/desktop-screen-next-impact.png',
-        width: 1200,
-        height: 630,
-        alt: 'Next Impact — WordPress Headless & Next.js',
-        type: 'image/png',
-      },
-    ],
+    ogLocale: 'fr_FR',
+    altOgLocale: 'en_US',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Next Impact — Sites web & applications clé en main',
+  en: {
+    title: 'Next Impact — Turnkey websites & applications for SMEs & social economy',
     description:
-      'Studio indépendant pour PME et ESS : sites web et applications performants, clé en main.',
-    images: [
-      {
-        url: '/img/desktop-screen-next-impact.png',
-        alt: 'Next Impact — WordPress Headless & Next.js',
-      },
-    ],
+      'Independent studio specialising in fast, durable websites and applications for SMEs and social-economy organisations. ' +
+      'You run your business, I handle the tech: fixed timeline and budget.',
+    ogTitle: 'Next Impact — Turnkey websites & applications',
+    ogDescription:
+      'Independent studio for SMEs and social-economy organisations: fast, durable websites and applications, turnkey.',
+    ogLocale: 'en_US',
+    altOgLocale: 'fr_FR',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+} as const
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const isEn = locale === 'en'
+  const m = isEn ? LAYOUT_META.en : LAYOUT_META.fr
+  const canonical = isEn ? '/en' : '/'
+  const ogUrl = isEn ? `${SITE_URL}/en` : SITE_URL
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: m.title,
+      template: '%s | Next Impact',
+    },
+    description: m.description,
+    keywords: [
+      'création site web',
+      'WordPress Headless',
+      'Next.js',
+      'web app sur-mesure',
+      'application mobile',
+      'PWA',
+      'marketplace',
+      'studio indépendant',
+      'refonte site web',
+      'CMS Headless',
+      'React',
+      'TypeScript',
+    ],
+    authors: [{ name: 'Agathe Karinthi-Martin', url: SITE_URL }],
+    creator: 'Agathe Karinthi-Martin',
+    publisher: 'Next Impact',
+    icons: {
+      icon: '/img/logo-rouge-noir-carre-icon.png',
+      apple: '/img/logo-rouge-noir-carre-icon.png',
+    },
+    openGraph: {
+      type: 'website',
+      locale: m.ogLocale,
+      alternateLocale: [m.altOgLocale],
+      siteName: 'Next Impact',
+      title: m.ogTitle,
+      description: m.ogDescription,
+      url: ogUrl,
+      images: [
+        {
+          url: '/img/desktop-screen-next-impact.png',
+          width: 1200,
+          height: 630,
+          alt: 'Next Impact — WordPress Headless & Next.js',
+          type: 'image/png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: m.ogTitle,
+      description: m.ogDescription,
+      images: [
+        {
+          url: '/img/desktop-screen-next-impact.png',
+          alt: 'Next Impact — WordPress Headless & Next.js',
+        },
+      ],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  alternates: {
-    canonical: '/',
-    languages: {
-      'fr-FR': '/',
+    alternates: {
+      canonical,
+      languages: {
+        'fr-FR': '/',
+        'en-US': '/en',
+        'x-default': '/',
+      },
     },
-  },
+  }
 }
 
 export function generateStaticParams() {

@@ -397,7 +397,7 @@ export const pageMetadata = {
         locale === "en"
           ? "Get a free audit of your WordPress site: performance, SEO, security and accessibility. Full analysis with personalized recommendations."
           : "Obtenez un audit gratuit de votre site WordPress : performance, SEO, sécurité et accessibilité. Analyse complète et recommandations personnalisées.",
-      path: "/audit",
+      path: "/audit-site-ia",
       keywords:
         locale === "en"
           ? ["WordPress audit", "site performance", "SEO", "security"]
@@ -450,7 +450,7 @@ export const pageMetadata = {
         locale === "en"
           ? "Estimate the cost of your WordPress or Headless project in a few clicks. Free simulator for an instant price range."
           : "Estimez le coût de votre projet WordPress ou Headless en quelques clics. Simulateur gratuit pour obtenir une fourchette de prix instantanée.",
-      path: "/simulateur-tarifs",
+      path: "/outils/simulateur-agefiph",
       keywords:
         locale === "en"
           ? ["price simulator", "Headless WordPress pricing", "site cost"]
@@ -468,7 +468,7 @@ export const pageMetadata = {
         locale === "en"
           ? "Build your interactive WordPress project brief. Free tool to structure your needs and get an accurate quote."
           : "Créez votre brief de projet WordPress interactif. Outil gratuit pour structurer vos besoins et obtenir un devis précis.",
-      path: "/brief",
+      path: "/cahier-des-charges",
       keywords:
         locale === "en"
           ? ["project brief", "specifications", "requirements"]

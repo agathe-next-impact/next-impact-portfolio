@@ -33,7 +33,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 export async function GET() {
-  const baseUrl = "https://next-impact.digital";
+  const baseUrl = "https://www.next-impact.digital";
 
   const docStructure = await getDocumentationStructure();
 
@@ -60,25 +60,18 @@ Next Impact est un studio indépendant, basé en France, qui conçoit et livre c
 
 ## Services principaux
 
-- [Services WordPress](${baseUrl}/services/wordpress): Création et développement de sites WordPress sur mesure
-- [Services Headless](${baseUrl}/services/headless): Architecture WordPress Headless avec Next.js
+- [Services & tarifs](${baseUrl}/services): Trois forfaits sites web (Classique, Headless, Web app) + applications sur-mesure
+- [Éligibilité OETH / TIH](${baseUrl}/services/eligibilite): Vérifier la déductibilité AGEFIPH de votre prestation
 - [Solutions](${baseUrl}/solutions): Vue d'ensemble des solutions proposées
-- [CMS Headless](${baseUrl}/cms-headless): Explication du concept CMS Headless
-- [WordPress Headless](${baseUrl}/wp-headless): WordPress comme CMS Headless
-
-## Pages par audience
-
-- [Artisans](${baseUrl}/vous-etes/artisan): Solutions web pour les artisans
-- [PME](${baseUrl}/vous-etes/pme): Solutions web pour les PME
-- [Acteurs du tourisme](${baseUrl}/vous-etes/acteur-tourisme): Solutions web pour le tourisme
+- [Avantage OETH](${baseUrl}/avantage-oeth): 30 % du coût main-d'œuvre déductible de la contribution AGEFIPH
 
 ## Outils & Ressources
 
-- [Simulateur de tarifs](${baseUrl}/simulateur-tarifs): Estimez le coût de votre projet web
-- [Cahier des charges](${baseUrl}/cahier-des-charges): Créez votre cahier des charges
-- [Audit WordPress gratuit](${baseUrl}/audit): Analysez les performances de votre site
+- [Outils](${baseUrl}/outils): Ensemble des outils interactifs
+- [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): Estimez votre déduction de contribution AGEFIPH
+- [Audit PWA](${baseUrl}/outils/audit-pwa): Analysez le niveau PWA de votre site
+- [Cahier des charges](${baseUrl}/cahier-des-charges): Créez votre cahier des charges en ligne
 - [Audit IA](${baseUrl}/audit-site-ia): Audit de site propulsé par l'intelligence artificielle
-- [Brief interactif](${baseUrl}/brief): Créez votre brief projet en ligne
 
 ## Études de cas
 
@@ -90,8 +83,7 @@ ${docSection}
 
 ## Contact
 
-- [Contact](${baseUrl}/contact)
-- [Demande de devis](${baseUrl}/devis)
+- [Contact & demande de devis](${baseUrl}/contact)
 - Site web: ${baseUrl}
 `;
 

@@ -8,8 +8,6 @@ export async function GET() {
 # Règles par défaut — autoriser l'indexation
 User-agent: *
 Allow: /
-Allow: /articles/
-Allow: /avantage-oeth
 Disallow: /api/
 Disallow: /_next/
 Disallow: /demo/metadata-test
@@ -24,17 +22,9 @@ Allow: /
 
 # LLMs & AI Crawlers — accès autorisé pour la visibilité IA
 User-agent: GPTBot
-Allow: /documentation/
-Allow: /etudes-de-cas/
-Allow: /services/
-Allow: /solutions/
-Allow: /outils/
-Allow: /articles/
-Allow: /avantage-oeth
-Allow: /a-propos
-Allow: /cahier-des-charges
 Allow: /
 Disallow: /api/
+Disallow: /demo/metadata-test
 
 User-agent: ChatGPT-User
 Allow: /
