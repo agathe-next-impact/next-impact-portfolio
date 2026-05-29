@@ -2,21 +2,10 @@
 
 import { Link } from "@/i18n/navigation";
 import PageLayout from "@/components/page-layout";
+import { YoutubePlayer } from "@/components/youtube-player";
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-
-function toYoutubeEmbed(url: string) {
-  if (!url) return url;
-  if (url.includes("youtube.com/embed/")) return url;
-  const matchShorts = url.match(/youtube\.com\/shorts\/([\w-]+)/);
-  if (matchShorts) return `https://www.youtube.com/embed/${matchShorts[1]}`;
-  const matchShort = url.match(/youtu\.be\/([\w-]+)/);
-  if (matchShort) return `https://www.youtube.com/embed/${matchShort[1]}`;
-  const matchLong = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
-  if (matchLong) return `https://www.youtube.com/embed/${matchLong[1]}`;
-  return url;
-}
 
 function isYoutubeShort(url: string) {
   return /youtube\.com\/shorts\//.test(url);
@@ -173,23 +162,11 @@ export default function DemoClient() {
           <div className="container">
             {/* Main video */}
             <div style={{ marginBottom: 64, border: "1px solid var(--rule)" }}>
-              <div style={{ width: "100%", paddingTop: "56.25%", position: "relative" }}>
-                <iframe
-                  src={toYoutubeEmbed(mainVideo.url)}
-                  title={mainVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: 0,
-                    background: "#000",
-                  }}
-                />
-              </div>
+              <YoutubePlayer
+                url={mainVideo.url}
+                title={mainVideo.title}
+                label={isEn ? "Featured project" : "Projet phare"}
+              />
               <div
                 style={{
                   padding: "24px 32px",
@@ -260,29 +237,21 @@ export default function DemoClient() {
                             : { width: "100%" }
                         }
                       >
-                        <div
-                          style={{
-                            width: "100%",
-                            paddingTop: isShort ? "177.78%" : "56.25%",
-                            position: "relative",
-                          }}
-                        >
-                          <iframe
-                            src={toYoutubeEmbed(video.url)}
-                            title={video.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              width: "100%",
-                              height: "100%",
-                              border: 0,
-                              background: "#000",
-                            }}
-                          />
-                        </div>
+                        <YoutubePlayer
+                          url={video.url}
+                          title={video.title}
+                          aspect={isShort ? "short" : "video"}
+                          compact
+                          label={
+                            isShort
+                              ? isEn
+                                ? "Mobile demo"
+                                : "Demo mobile"
+                              : isEn
+                                ? "Project demo"
+                                : "Demo projet"
+                          }
+                        />
                       </div>
                     </div>
 

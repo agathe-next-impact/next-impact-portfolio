@@ -2,6 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
+import { YoutubePlayer } from "@/components/youtube-player";
 import type { Locale } from "@/i18n/routing";
 
 type Copy = {
@@ -169,23 +170,7 @@ export default function FeaturedRealisation() {
 
           {/* Right — video */}
           <div style={{ borderTop: "1px solid var(--rule)" }}>
-            <div style={{ position: "relative", paddingBottom: "56.25%" }}>
-              <iframe
-                src="https://www.youtube.com/embed/9fMaBL1amYk"
-                title={copy.imageAlt}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: "none",
-                }}
-              />
-            </div>
+            <YoutubePlayer videoId="9fMaBL1amYk" title={copy.imageAlt} label="Panorama Pub" />
           </div>
         </div>
       </div>

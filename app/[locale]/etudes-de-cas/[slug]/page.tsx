@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
+import { YoutubePlayer } from "@/components/youtube-player";
 import { Metadata } from "next";
 import { generateArticleMetadata } from "@/lib/metadata";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
@@ -185,27 +186,17 @@ export default async function CaseStudyPage({
                     caseStudy.youtubeIsShort ? (
                       <div style={{ display: "flex", justifyContent: "center", background: "#000", padding: 16 }}>
                         <div style={{ width: "100%", maxWidth: 280, position: "relative" }}>
-                          <div style={{ width: "100%", paddingTop: "177.78%", position: "relative" }}>
-                            <iframe
-                              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
-                              src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
-                              title={caseStudy.title}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
+                          <YoutubePlayer
+                            videoId={caseStudy.youtubeVideoId}
+                            title={caseStudy.title}
+                            aspect="short"
+                            compact
+                            label={locale === "en" ? "Mobile demo" : "Demo mobile"}
+                          />
                         </div>
                       </div>
                     ) : (
-                      <div style={{ position: "relative", width: "100%", paddingBottom: "56.25%" }}>
-                        <iframe
-                          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                          src={`https://www.youtube.com/embed/${caseStudy.youtubeVideoId}`}
-                          title={caseStudy.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      </div>
+                      <YoutubePlayer videoId={caseStudy.youtubeVideoId} title={caseStudy.title} />
                     )
                   ) : (
                     <Image
