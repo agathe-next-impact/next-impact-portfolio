@@ -21,20 +21,20 @@ export async function generateMetadata({
         ? [
             "about Next Impact",
             "Agathe Karinthi-Martin",
-            "freelance Headless WordPress developer",
+            "independent web studio",
             "social-economy organizations",
             "sustainable engagement",
             "headless",
-            "freelance journey",
+            "studio journey",
           ]
         : [
             "à propos Next Impact",
             "Agathe Karinthi-Martin",
-            "développeur WordPress Headless freelance",
+            "studio indépendant web",
             "ESS",
             "engagement durable",
             "headless",
-            "parcours freelance",
+            "parcours studio",
           ],
     locale,
   });

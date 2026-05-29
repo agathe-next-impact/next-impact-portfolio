@@ -9,11 +9,11 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 
 const NAV_LINKS = [
-  { key: "services",     href: "/services" },
-  { key: "demo",         href: "/demo" },
-  { key: "tools",        href: "/outils" },
-  { key: "caseStudies",  href: "/etudes-de-cas" },
-  { key: "documentation",href: "/documentation" },
+  { key: "services",      href: "/services" },
+  { key: "caseStudies",   href: "/etudes-de-cas" },
+  { key: "oethAdvantage", href: "/avantage-oeth" },
+  { key: "documentation", href: "/documentation" },
+  { key: "about",         href: "/a-propos" },
 ]
 
 export default function Header() {

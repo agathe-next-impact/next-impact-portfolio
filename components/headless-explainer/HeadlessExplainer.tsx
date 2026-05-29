@@ -135,11 +135,11 @@ export default function HeadlessExplainer() {
         <div className="sec-no">№ —</div>
         <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
           {isEn
-            ? <>Three stacks, <em style={{ color: "var(--accent-color)" }}>one right choice</em></>
-            : <>Trois stacks, <em style={{ color: "var(--accent-color)" }}>un bon choix</em></>}
+            ? <>Three stacks, <em style={{ color: "var(--ink)" }}>one right choice</em></>
+            : <>Trois stacks, <em style={{ color: "var(--ink)" }}>un bon choix</em></>}
         </h2>
         <div className="sec-meta">
-          {isEn ? "Stack comparison · Fig. 01" : "Comparatif technique · Fig. 01"}
+          {isEn ? "Stack comparison" : "Comparatif technique"}
         </div>
       </div>
 

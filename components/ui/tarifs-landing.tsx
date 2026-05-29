@@ -36,7 +36,7 @@ export function TarifsLanding({
           >
             {sectionTitle}
           </h2>
-          <div className="sec-meta">Tarifs · Fig. 04</div>
+          <div className="sec-meta">Tarifs</div>
         </div>
         {sectionSubtitle && (
           <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{sectionSubtitle}</p>
@@ -66,7 +66,7 @@ export function TarifsLanding({
                   fontSize: 9,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "var(--accent-color)",
+                  color: "var(--ink-2)",
                   marginBottom: 16,
                 }}
               >
@@ -113,7 +113,7 @@ export function TarifsLanding({
                       gap: 8,
                     }}
                   >
-                    <span style={{ color: "var(--accent-color)", flexShrink: 0 }}>→</span>
+                    <span style={{ color: "var(--ink-2)", flexShrink: 0 }}>→</span>
                     {feature}
                   </li>
                 ))}

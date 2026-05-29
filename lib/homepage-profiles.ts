@@ -24,18 +24,18 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Du site vitrine",
-    subHeadline: "à la plateforme métier sur-mesure",
+    headline: "Votre site web, conçu et livré clé en main —",
+    subHeadline: "vous gérez votre activité, je gère la technique.",
     description:
-      "Je conçois et développe vos sites web et vos applications (web & mobile). De la vitrine WordPress au sur-mesure complet, le bon outil pour le bon projet.",
+      "Pour les PME et structures de l'ESS qui veulent un site rapide et durable, sans monter d'équipe technique en interne.",
     valueProposition:
-      "Sites WordPress (classiques ou Headless + Next.js) et applications sur-mesure : autonomie de gestion sur tous les projets, sans dépendance technique récurrente.",
-    ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
-    ctaSecondary: { label: "Me contacter", href: "/contact" },
-    auditTitle: "Quelle techno pour votre projet ?",
-    auditSubtitle: "Diagnostic projet",
+      "Délai et budget fixés dès le départ. Et en tant que prestataire TIH, 30 % du coût est déductible de votre contribution AGEFIPH.",
+    ctaPrimary: { label: "Discutons de votre projet", href: "https://calendar.app.google/RwZqaabSR5aDMnk46" },
+    ctaSecondary: { label: "Voir des réalisations", href: "/etudes-de-cas" },
+    auditTitle: "Pas encore sûr de votre besoin ?",
+    auditSubtitle: "Diagnostic en 2 minutes",
     auditDescription:
-      "Décrivez votre projet en quelques clics et obtenez la voie adaptée : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
+      "Faites le point en 2 minutes et obtenez une recommandation claire — sans engagement et sans jargon technique.",
   },
   decideur: {
     headline: "Votre projet digital",

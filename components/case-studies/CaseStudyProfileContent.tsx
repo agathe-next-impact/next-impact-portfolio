@@ -91,7 +91,7 @@ export default function CaseStudyProfileContent({
                   <ArrowRight
                     size={14}
                     strokeWidth={1.5}
-                    style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: 2 }}
+                    style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }}
                   />
                   <span style={{ color: "var(--ink-2)", fontSize: 14, lineHeight: 1.6 }}>{objective}</span>
                 </li>
@@ -120,7 +120,7 @@ export default function CaseStudyProfileContent({
                   <ArrowRight
                     size={14}
                     strokeWidth={1.5}
-                    style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: 2 }}
+                    style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }}
                   />
                   <span style={{ color: "var(--ink-2)", fontSize: 14, lineHeight: 1.6 }}>{result}</span>
                 </li>

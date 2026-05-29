@@ -56,6 +56,17 @@ const config: Config = {
         paper:          "#ffffff",
         ink:            "#0e0e0c",
         vermilion:      "#d83a1a",
+        /* ─── Design tokens « Édition Suisse » ───────────────
+           Base éditoriale formalisée (papier / encre / règles).
+           `action` = rouge vermilion, RÉSERVÉ aux éléments
+           cliquables (boutons, liens). Ne pas l'utiliser pour
+           du décoratif : labels, chiffres et badges restent en
+           encre (ink / ink-2). */
+        "paper-2":      "#ebe9e3",
+        "ink-2":        "#2a2a26",
+        rule:           "rgba(14, 14, 12, 0.18)",
+        "rule-strong":  "rgba(14, 14, 12, 0.42)",
+        action:         "#d83a1a",
         background:     "hsl(var(--background))",
         foreground:     "hsl(var(--foreground))",
         card: {

@@ -253,27 +253,6 @@ ol.steps li p {
   background: var(--accent-color);
 }
 
-/* ─── Edge ticks ──────────────────────────────────────── */
-.edge-ticks {
-  position: fixed;
-  left: 20px;
-  bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  z-index: 10;
-  pointer-events: none;
-}
-.edge-ticks span {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted-color);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
 /* ─── Hover row interaction ───────────────────────────── */
 .hover-row:hover {
   background: var(--paper-2);

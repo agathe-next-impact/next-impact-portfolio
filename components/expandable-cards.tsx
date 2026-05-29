@@ -754,7 +754,7 @@ export function ExpandableCardDemo() {
               transition={{ duration: 0.25 }}
             >
               {sectionTitle.title}{" "}
-              <em style={{ color: "var(--accent-color)" }}>{sectionTitle.subtitle}</em>
+              <em style={{ color: "var(--ink)" }}>{sectionTitle.subtitle}</em>
             </motion.h2>
           </AnimatePresence>
           <div
@@ -767,7 +767,7 @@ export function ExpandableCardDemo() {
               textAlign: "right",
             }}
           >
-            Services · Fig. 03
+            Services
           </div>
         </div>
 

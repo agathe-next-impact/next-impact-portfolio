@@ -50,7 +50,7 @@ export default function FAQ() {
                 style={{
                   fontFamily: "var(--mono)",
                   fontSize: 11,
-                  color: "var(--accent-color)",
+                  color: "var(--ink-2)",
                   letterSpacing: "0.08em",
                 }}
               >

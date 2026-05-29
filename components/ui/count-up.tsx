@@ -17,7 +17,8 @@ export function CountUp({
   suffix = "",
   className,
 }: CountUpProps) {
-  const [count, setCount] = useState(0);
+  // Jamais 0 au chargement : on affiche d'emblée la valeur réelle cible.
+  const [count, setCount] = useState(end);
   const [hasStarted, setHasStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -41,6 +42,18 @@ export function CountUp({
   useEffect(() => {
     if (!hasStarted) return;
 
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReduced) {
+      setCount(end);
+      return;
+    }
+
+    // Animation depuis un plancher non-nul (60 % de la cible) : l'effet de
+    // décompte est conservé sans jamais afficher un état « vide » à zéro.
+    const from = Math.round(end * 0.6);
     let startTime: number | null = null;
     let animationFrame: number;
 
@@ -50,7 +63,7 @@ export function CountUp({
 
       // Ease-out cubic for a decelerating effect
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * end));
+      setCount(Math.round(from + eased * (end - from)));
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);

@@ -1,20 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import HeroMockup from "@/components/HeroMockup";
 
 export default function Hero() {
-  const { profileId } = useDocumentationMode();
   const locale = useLocale() as Locale;
   const t = useTranslations("hero");
-  const heroVariants = getHeroVariants(locale);
-  const variant = profileId ? heroVariants[profileId] : heroVariants.default;
+  const variant = getHeroVariants(locale).default;
+  const isExternal = variant.ctaPrimary.href.startsWith("http");
 
   return (
     <>
@@ -29,26 +26,18 @@ export default function Hero() {
           {/* Sec-head */}
           <div className="sec-head" style={{ marginBottom: 48 }}>
             <div className="sec-no">№ 01</div>
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={profileId || "default"}
-                className="ni-serif"
-                style={{
-                  fontSize: "clamp(36px, 5vw, 80px)",
-                  lineHeight: 1.0,
-                  margin: 0,
-                  color: "var(--ink)",
-                }}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-              >
-                {variant.headline}{" "}
-                <em style={{ color: "var(--accent-color)" }}>{variant.subHeadline}</em>
-              </motion.h1>
-            </AnimatePresence>
-            <div className="sec-meta">Studio · Fig. 01</div>
+            <h1
+              className="ni-serif"
+              style={{
+                fontSize: "clamp(36px, 5vw, 80px)",
+                lineHeight: 1.0,
+                margin: 0,
+                color: "var(--ink)",
+              }}
+            >
+              {variant.headline}{" "}
+              <em style={{ color: "var(--ink)" }}>{variant.subHeadline}</em>
+            </h1>
           </div>
 
           {/* 2-col grid */}
@@ -64,42 +53,43 @@ export default function Hero() {
           >
             {/* Left — text */}
             <div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`desc-${profileId || "default"}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 12, maxWidth: 540 }}>
-                    {variant.description}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.6,
-                      color: "var(--muted-color)",
-                      fontStyle: "italic",
-                      fontFamily: "var(--serif)",
-                      marginBottom: 36,
-                      maxWidth: 540,
-                    }}
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 12, maxWidth: 540 }}>
+                {variant.description}
+              </p>
+              <p
+                style={{
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: "var(--muted-color)",
+                  fontStyle: "italic",
+                  fontFamily: "var(--serif)",
+                  marginBottom: 36,
+                  maxWidth: 540,
+                }}
+              >
+                {variant.valueProposition}
+              </p>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                {isExternal ? (
+                  <a
+                    href={variant.ctaPrimary.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn primary"
                   >
-                    {variant.valueProposition}
-                  </p>
-                  <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                    <Link href={variant.ctaPrimary.href as Parameters<typeof Link>[0]["href"]} className="btn primary">
-                      {variant.ctaPrimary.label}
-                    </Link>
-                    <Link href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]} className="btn">
-                      {variant.ctaSecondary.label}
-                    </Link>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                    {variant.ctaPrimary.label}
+                  </a>
+                ) : (
+                  <Link href={variant.ctaPrimary.href as Parameters<typeof Link>[0]["href"]} className="btn primary">
+                    {variant.ctaPrimary.label}
+                  </Link>
+                )}
+                <Link href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]} className="btn">
+                  {variant.ctaSecondary.label}
+                </Link>
+              </div>
 
-              {/* Tech logos */}
+              {/* Tech logos — preuve discrète (la techno comme garantie, pas comme promesse) */}
               <div
                 style={{
                   display: "flex",
@@ -135,7 +125,9 @@ export default function Hero() {
                     color: "var(--muted-color)",
                   }}
                 >
-                  Stack technique
+                  {locale === "en"
+                    ? "Technology: WordPress Headless + Next.js"
+                    : "Technologie : WordPress Headless + Next.js"}
                 </span>
               </div>
             </div>
@@ -194,7 +186,6 @@ export default function Hero() {
           </div>
         </div>
       </section>
-
     </>
   );
 }

@@ -46,7 +46,7 @@ export function ServicesComparisonTable() {
     textAlign: "center",
     fontFamily: typeof val === "string" && val !== "" ? "var(--sans)" : "var(--mono)",
     fontSize: 13,
-    color: val === true ? "var(--accent-color)" : val === false ? "var(--rule-strong)" : "var(--ink-2)",
+    color: val === true ? "var(--ink)" : val === false ? "var(--rule-strong)" : "var(--ink-2)",
     borderRight: "1px solid var(--rule)",
   });
 
@@ -105,7 +105,7 @@ export function ServicesComparisonTable() {
                   {labels.feature}
                 </th>
                 {[labels.essential, labels.growth, labels.custom].map((col, i, arr) => (
-                  <th key={col} style={{ padding: "14px 20px", textAlign: "center", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: i === 1 ? "var(--accent-color)" : "var(--ink-2)", borderRight: i < arr.length - 1 ? "1px solid var(--rule)" : "none" }}>
+                  <th key={col} style={{ padding: "14px 20px", textAlign: "center", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: i === 1 ? "var(--ink)" : "var(--ink-2)", borderRight: i < arr.length - 1 ? "1px solid var(--rule)" : "none" }}>
                     {col}
                   </th>
                 ))}

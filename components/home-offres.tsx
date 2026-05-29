@@ -6,8 +6,7 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 
 type Stack = {
-  fig: string;
-  label: string;
+  subtitle: string;
   title: string;
   tagline: string;
   price: string;
@@ -17,41 +16,38 @@ type Stack = {
 
 const STACKS_FR: Stack[] = [
   {
-    fig: "Stack 01 · Fig. 03",
-    label: "Site WordPress",
-    title: "WordPress Classique",
-    tagline: "La puissance de WordPress, livrée sans compromis sur la performance.",
+    subtitle: "sur WordPress, thème sur-mesure",
+    title: "Site vitrine performant",
+    tagline: "Un site rapide et fiable, que vous gérez vous-même au quotidien.",
     price: "à partir de 2 250 €",
     strengths: [
-      "Administration WordPress native",
-      "Thème sur-mesure, zéro page builder",
-      "Core Web Vitals > 90, SEO technique soigné",
+      "Administration WordPress, sans compétence technique",
+      "Design sur-mesure, zéro page builder",
+      "Chargement rapide et bien référencé",
     ],
     target: "Site vitrine, blog, association",
   },
   {
-    fig: "Stack 02 · Fig. 04",
-    label: "Site Headless",
-    title: "WordPress Headless",
-    tagline: "WordPress en backend, Next.js en frontend — vitesse maximale, design total.",
+    subtitle: "WordPress Headless + Next.js",
+    title: "Site haute performance",
+    tagline: "La vitesse maximale et un design sans limite, pour les sites à fort enjeu.",
     price: "à partir de 4 000 €",
     strengths: [
       "Interface sur-mesure, aucune limite de design",
-      "Chargement < 1 s, sécurité maximale",
+      "Chargé en moins d'une seconde, sécurité renforcée",
       "Contenu géré dans WordPress comme d'habitude",
     ],
     target: "PME, ESS ambitieuse, site de croissance",
   },
   {
-    fig: "Stack 03 · Fig. 05",
-    label: "Web App",
-    title: "Stack sur-mesure",
-    tagline: "Marketplace, outil métier, simulateur : une architecture dédiée à votre logique.",
+    subtitle: "architecture dédiée",
+    title: "Plateforme métier sur-mesure",
+    tagline: "Marketplace, outil métier, simulateur : une plateforme taillée pour votre activité.",
     price: "sur devis",
     strengths: [
       "Logique métier propre, comptes utilisateurs",
-      "Admin aussi autonome que WordPress",
-      "Géolocalisation, hors-ligne, PWA installable",
+      "Administration aussi simple que WordPress",
+      "Géolocalisation, hors-ligne, installable sur mobile",
     ],
     target: "Marketplace, plateforme, application terrain",
   },
@@ -59,41 +55,38 @@ const STACKS_FR: Stack[] = [
 
 const STACKS_EN: Stack[] = [
   {
-    fig: "Stack 01 · Fig. 03",
-    label: "WordPress site",
-    title: "Classic WordPress",
-    tagline: "The full power of WordPress, delivered without performance compromises.",
+    subtitle: "on WordPress, bespoke theme",
+    title: "High-performance brochure site",
+    tagline: "A fast, reliable site that you manage yourself, day to day.",
     price: "from €2,250",
     strengths: [
-      "Native WordPress admin",
-      "Bespoke theme, no page builder",
-      "Core Web Vitals > 90, technical SEO",
+      "WordPress admin, no technical skills needed",
+      "Bespoke design, no page builder",
+      "Fast loading and well-ranked",
     ],
     target: "Brochure site, blog, association",
   },
   {
-    fig: "Stack 02 · Fig. 04",
-    label: "Headless site",
-    title: "Headless WordPress",
-    tagline: "WordPress as backend, Next.js as frontend — maximum speed, total design freedom.",
+    subtitle: "WordPress Headless + Next.js",
+    title: "High-speed website",
+    tagline: "Maximum speed and unlimited design, for sites where it really counts.",
     price: "from €4,000",
     strengths: [
       "Bespoke interface, no design constraints",
-      "Load time < 1s, maximum security",
+      "Loads in under a second, hardened security",
       "Content managed in WordPress as usual",
     ],
     target: "SME, NGO, growth-oriented site",
   },
   {
-    fig: "Stack 03 · Fig. 05",
-    label: "Web app",
-    title: "Bespoke stack",
-    tagline: "Marketplace, business tool, simulator: an architecture built for your logic.",
+    subtitle: "dedicated architecture",
+    title: "Custom business platform",
+    tagline: "Marketplace, business tool, simulator: a platform built around your activity.",
     price: "on quote",
     strengths: [
       "Custom business logic, user accounts",
-      "Admin as autonomous as WordPress",
-      "Geolocation, offline mode, installable PWA",
+      "Admin as simple as WordPress",
+      "Geolocation, offline mode, installable on mobile",
     ],
     target: "Marketplace, platform, field application",
   },
@@ -110,12 +103,18 @@ export default function HomeOffres() {
         <div className="sec-head">
           <div className="sec-no">№ 03</div>
           <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-            {isEn ? <>Three stacks, <em style={{ color: "var(--accent-color)" }}>one method</em></> : <>Trois stacks, <em style={{ color: "var(--accent-color)" }}>une méthode</em></>}
+            {isEn ? <>The right offering <em style={{ color: "var(--ink)" }}>for your project</em></> : <>La bonne formule <em style={{ color: "var(--ink)" }}>pour votre projet</em></>}
           </h2>
-          <div className="sec-meta">{isEn ? "Offerings · Fig. 03–05" : "Offres · Fig. 03–05"}</div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+        {/* Point d'ancrage anti-paralysie */}
+        <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6, maxWidth: 620, marginTop: 16 }}>
+          {isEn
+            ? "Most brochure projects fall under the first offering. Not sure? The 2-minute diagnostic points you to the right one."
+            : "La plupart des projets vitrine relèvent de la première formule. En cas de doute, le diagnostic en 2 minutes vous oriente vers la bonne."}
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)", marginTop: 32 }}>
           {stacks.map((stack, i) => (
             <div
               key={stack.title}
@@ -126,15 +125,15 @@ export default function HomeOffres() {
                 flexDirection: "column",
               }}
             >
-              {/* Fig label */}
-              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 20 }}>
-                {stack.fig}
-              </div>
-
-              {/* Title */}
-              <h3 className="ni-serif" style={{ fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.1, color: "var(--ink)", marginBottom: 8 }}>
+              {/* Title — bénéfice */}
+              <h3 className="ni-serif" style={{ fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.1, color: "var(--ink)", marginBottom: 4 }}>
                 {stack.title}
               </h3>
+
+              {/* Sous-titre technique — preuve, en dernier */}
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 16 }}>
+                {stack.subtitle}
+              </div>
 
               {/* Tagline */}
               <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, marginBottom: 24 }}>
@@ -142,7 +141,7 @@ export default function HomeOffres() {
               </p>
 
               {/* Price */}
-              <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", color: "var(--accent-color)", marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid var(--rule)" }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", color: "var(--ink)", marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid var(--rule)" }}>
                 {stack.price}
               </div>
 
@@ -150,7 +149,7 @@ export default function HomeOffres() {
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
                 {stack.strengths.map((s) => (
                   <li key={s} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
-                    <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11, flexShrink: 0, paddingTop: 1 }}>→</span>
+                    <span style={{ color: "var(--ink-2)", fontFamily: "var(--mono)", fontSize: 11, flexShrink: 0, paddingTop: 1 }}>→</span>
                     {s}
                   </li>
                 ))}
@@ -167,8 +166,11 @@ export default function HomeOffres() {
           ))}
         </div>
 
-        {/* Footer link */}
-        <div style={{ borderTop: "1px solid var(--rule)", padding: "20px 0", display: "flex", justifyContent: "flex-end" }}>
+        {/* Footer — lien technique discret + comparatif */}
+        <div style={{ borderTop: "1px solid var(--rule)", padding: "20px 0", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <Link href="/documentation" style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.06em", color: "var(--muted-color)", textDecoration: "none" }}>
+            {isEn ? "You're technical? See the architecture details." : "Vous êtes technique ? Voir les détails d'architecture."}
+          </Link>
           <Link href="/services" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent-color)", textDecoration: "none" }}>
             {isEn ? "Compare in detail" : "Comparer en détail"}
             <ArrowRight size={12} />

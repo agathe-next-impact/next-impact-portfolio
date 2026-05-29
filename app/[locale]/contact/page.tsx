@@ -24,22 +24,22 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "contact freelance developer",
+            "contact independent web studio",
             "website quote",
             "web app quote",
             "web project request",
-            "freelance video call",
+            "project video call",
             "project diagnostic",
             "free site audit",
             "discovery call",
             "Next.js pricing",
           ]
         : [
-            "contact développeur freelance",
+            "contact studio web indépendant",
             "devis site web",
             "devis application web",
             "demande de projet web",
-            "rendez-vous visio freelance",
+            "rendez-vous visio projet web",
             "diagnostic projet web",
             "audit site gratuit",
             "appel découverte",

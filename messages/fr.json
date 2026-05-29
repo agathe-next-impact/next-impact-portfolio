@@ -3,12 +3,12 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Services & Tarifs",
-    "oethAdvantage": "Avantage OETH",
+    "services": "Services",
+    "oethAdvantage": "Avantage AGEFIPH",
     "demo": "Démo",
     "tools": "Outils en ligne",
-    "documentation": "Comprendre",
-    "caseStudies": "Études de cas",
+    "documentation": "Ressources",
+    "caseStudies": "Réalisations",
     "contact": "Contact",
     "about": "À propos",
     "openMenu": "Ouvrir le menu",
@@ -352,7 +352,7 @@
   },
   "aboutPage": {
     "metaTitle": "À propos de Next Impact — Agathe Karinthi-Martin, création de sites web et d'applications",
-    "metaDescription": "Agathe Karinthi-Martin est développeuse freelance chez Next Impact : sites WordPress, sites Headless WordPress + Next.js et applications web ou mobiles sur-mesure. 20 ans d'expérience digitale dont 6 en développement.",
+    "metaDescription": "Agathe Karinthi-Martin est à la tête de Next Impact, studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. 20 ans d'expérience digitale dont 6 en développement.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "journey": {

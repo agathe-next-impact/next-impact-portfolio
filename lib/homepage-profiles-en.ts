@@ -11,18 +11,18 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "From brochure sites",
-    subHeadline: "to custom business platforms",
+    headline: "Your website, designed and delivered turnkey —",
+    subHeadline: "you run your business, I handle the tech.",
     description:
-      "I design and build your websites and applications (web & mobile). From a WordPress brochure site to a fully custom build, the right tool for the right project.",
+      "For SMEs and social-economy organisations that want a fast, durable website without building a technical team in-house.",
     valueProposition:
-      "WordPress sites (classic or Headless + Next.js) and custom applications: full management autonomy on every project, without ongoing technical dependency.",
-    ctaPrimary: { label: "Free project diagnostic", href: "#audit" },
-    ctaSecondary: { label: "Contact me", href: "/contact" },
-    auditTitle: "Which path fits your project?",
-    auditSubtitle: "Project diagnostic",
+      "Timeline and budget fixed from the start. And as a French TIH provider, 30% of the cost is deductible from your AGEFIPH contribution.",
+    ctaPrimary: { label: "Let's talk about your project", href: "https://calendar.app.google/RwZqaabSR5aDMnk46" },
+    ctaSecondary: { label: "See our work", href: "/etudes-de-cas" },
+    auditTitle: "Not sure what you need yet?",
+    auditSubtitle: "2-minute diagnostic",
     auditDescription:
-      "Describe your project in a few clicks and get the right path: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application.",
+      "Take 2 minutes and get a clear recommendation — no commitment, no technical jargon.",
   },
   decideur: {
     headline: "Your digital project,",

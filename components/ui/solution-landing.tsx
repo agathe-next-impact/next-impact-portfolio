@@ -19,7 +19,7 @@ export default function SolutionLanding({ title, subtitle, imageUrl, features }:
           >
             {title}
           </h2>
-          <div className="sec-meta">Solution · Fig. 02</div>
+          <div className="sec-meta">Solution</div>
         </div>
         {subtitle && (
           <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{subtitle}</p>
@@ -39,7 +39,7 @@ export default function SolutionLanding({ title, subtitle, imageUrl, features }:
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
                 {features.map((f, i) => (
                   <li key={i} style={{ fontSize: 14, color: "var(--ink-2)", display: "flex", gap: 10 }}>
-                    <span style={{ color: "var(--accent-color)", flexShrink: 0 }}>→</span>
+                    <span style={{ color: "var(--ink-2)", flexShrink: 0 }}>→</span>
                     {f}
                   </li>
                 ))}

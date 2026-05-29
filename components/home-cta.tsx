@@ -20,8 +20,8 @@ export default function HomeCta() {
             </div>
             <h2 className="ni-serif" style={{ fontSize: "clamp(32px, 4.5vw, 72px)", lineHeight: 1.0, color: "var(--ink)", margin: "0 0 16px" }}>
               {isEn
-                ? <>Your project online <em style={{ color: "var(--accent-color)" }}>in 6 to 10 weeks.</em></>
-                : <>Votre projet en ligne <em style={{ color: "var(--accent-color)" }}>en 6 à 10 semaines.</em></>}
+                ? <>Your project online <em style={{ color: "var(--ink)" }}>in 6 to 10 weeks.</em></>
+                : <>Votre projet en ligne <em style={{ color: "var(--ink)" }}>en 6 à 10 semaines.</em></>}
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 520, lineHeight: 1.65, marginBottom: 32 }}>
               {isEn
@@ -37,10 +37,10 @@ export default function HomeCta() {
                 style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
               >
                 <CalendarDays size={14} />
-                {isEn ? "Book a free call" : "Prendre rendez-vous"}
+                {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
               </a>
-              <Link href="/services" className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                {isEn ? "View offerings" : "Voir les offres"}
+              <Link href="/etudes-de-cas" className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                {isEn ? "See our work" : "Voir des réalisations"}
                 <ArrowRight size={13} />
               </Link>
             </div>

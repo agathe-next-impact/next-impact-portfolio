@@ -18,9 +18,9 @@ type Copy = {
 const COPY: Record<Locale, Copy> = {
   fr: {
     badge: "Réalisation phare — Mai 2026",
-    tagline: "Marketplace B2B livrée en 2 mois",
+    tagline: "Le 1er annuaire B2B du secteur, livré en 2 mois",
     description:
-      "Premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires en France : Next.js, base PostgreSQL serverless, architecture pensée SEO et croissance. De l'idée à la mise en ligne en 2 mois.",
+      "Objectif : créer le premier annuaire en ligne des fournisseurs d'objets publicitaires en France, sur un marché encore vacant. Résultat : une plateforme opérationnelle en 2 mois, pensée pour le référencement et la croissance dès la mise en ligne. Rendu possible par Next.js et une base PostgreSQL serverless.",
     stats: [
       { value: "1ᵉʳ",    label: "Annuaire du secteur en France" },
       { value: "2 mois", label: "Du concept à la production" },
@@ -32,9 +32,9 @@ const COPY: Record<Locale, Copy> = {
   },
   en: {
     badge: "Featured project — May 2026",
-    tagline: "B2B marketplace shipped in 2 months",
+    tagline: "The industry's 1st B2B directory, shipped in 2 months",
     description:
-      "The first online directory dedicated to promotional product suppliers in France: Next.js, serverless PostgreSQL database, architecture designed for SEO and growth. From idea to launch in 2 months.",
+      "Objective: build the first online directory of promotional product suppliers in France, on a still-vacant market. Result: a platform operational in 2 months, designed for SEO and growth from day one. Made possible by Next.js and a serverless PostgreSQL database.",
     stats: [
       { value: "1st",      label: "Industry directory in France" },
       { value: "2 months", label: "From concept to production" },
@@ -75,7 +75,7 @@ export default function FeaturedRealisation() {
                 fontSize: 10,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "var(--accent-color)",
+                color: "var(--ink-2)",
                 marginBottom: 16,
               }}
             >
@@ -96,7 +96,7 @@ export default function FeaturedRealisation() {
               style={{
                 fontFamily: "var(--sans)",
                 fontSize: 18,
-                color: "var(--accent-color)",
+                color: "var(--ink)",
                 marginBottom: 20,
               }}
             >

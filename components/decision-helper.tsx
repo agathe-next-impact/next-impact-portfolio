@@ -27,9 +27,9 @@ export async function DecisionHelper() {
           style={{ fontSize: "clamp(24px, 3vw, 44px)", lineHeight: 1.1, margin: 0 }}
         >
           Comment déterminer si le{" "}
-          <em style={{ color: "var(--accent-color)" }}>headless vous convient</em>
+          <em style={{ color: "var(--ink)" }}>headless vous convient</em>
         </h2>
-        <div className="sec-meta">Aide à la décision · Fig. 06</div>
+        <div className="sec-meta">Aide à la décision</div>
       </div>
       <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>
         Critères de décision pour une architecture headless.

@@ -64,7 +64,7 @@ export default function AvantageOethClient() {
                 background: "var(--paper-2)",
               }}
             >
-              <Info size={16} style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: 2 }} />
+              <Info size={16} style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }} />
               <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>
                 <strong style={{ color: "var(--ink)" }}>French legal scheme.</strong>{" "}
                 AGEFIPH is the French employment-of-disabled-workers contribution. This page is most relevant for companies operating in France: it explains how they can reduce that contribution by 30% of labor cost when subcontracting to a TIH-certified independent (Travailleur Indépendant Handicapé).
@@ -100,7 +100,7 @@ export default function AvantageOethClient() {
                       fontFamily: "var(--mono)",
                       fontSize: 11,
                       letterSpacing: "0.12em",
-                      color: "var(--accent-color)",
+                      color: "var(--ink-2)",
                     }}
                   >
                     {step.number}
@@ -324,7 +324,7 @@ export default function AvantageOethClient() {
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 >
-                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent-color)", marginBottom: 12 }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-2)", marginBottom: 12 }}>
                     {article.tag}
                   </div>
                   <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>

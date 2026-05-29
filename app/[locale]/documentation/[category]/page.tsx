@@ -130,7 +130,7 @@ export default async function CategoryPage(props: CategoryPageProps) {
             >
               {categoryTitle}
             </h1>
-            <div className="sec-meta">Documentation · Fig. 01</div>
+            <div className="sec-meta">Documentation</div>
           </div>
           {categoryDescription && (
             <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 640, marginBottom: "2.5rem" }}>

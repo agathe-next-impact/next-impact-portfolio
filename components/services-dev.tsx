@@ -39,7 +39,7 @@ export const ServicesDev = () => {
             WordPress
           </div>
           <h3 className="ni-serif" style={{ fontSize: 22, margin: 0 }}>
-            Sites <em style={{ color: "var(--accent-color)" }}>corporate</em>
+            Sites <em style={{ color: "var(--ink)" }}>corporate</em>
           </h3>
         </div>
 
@@ -96,7 +96,7 @@ export const ServicesDev = () => {
             WordPress Headless Next.js
           </div>
           <h3 className="ni-serif" style={{ fontSize: 22, margin: 0 }}>
-            Applications <em style={{ color: "var(--accent-color)" }}>web</em>
+            Applications <em style={{ color: "var(--ink)" }}>web</em>
           </h3>
         </div>
 

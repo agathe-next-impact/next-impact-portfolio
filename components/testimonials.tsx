@@ -42,7 +42,7 @@ export default function Testimonials() {
               style={{
                 fontFamily: "var(--mono)",
                 fontSize: 11,
-                color: "var(--accent-color)",
+                color: "var(--ink-2)",
                 letterSpacing: "0.08em",
                 paddingTop: 6,
               }}
@@ -77,7 +77,7 @@ export default function Testimonials() {
                   fontSize: 10,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "var(--accent-color)",
+                  color: "var(--ink-2)",
                 }}
               >
                 {t.company}

@@ -87,8 +87,8 @@ export default function Process() {
         <div className="sec-no">№ —</div>
         <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
           {isEn
-            ? <>From brief to <em style={{ color: "var(--accent-color)" }}>go-live</em></>
-            : <>Du brief à la <em style={{ color: "var(--accent-color)" }}>mise en ligne</em></>}
+            ? <>From brief to <em style={{ color: "var(--ink)" }}>go-live</em></>
+            : <>Du brief à la <em style={{ color: "var(--ink)" }}>mise en ligne</em></>}
         </h2>
         <div className="sec-meta">
           {isEn ? "Method · 5 phases" : "Méthode · 5 phases"}
@@ -114,7 +114,7 @@ export default function Process() {
               fontFamily: "var(--mono)",
               fontSize: 11,
               letterSpacing: "0.08em",
-              color: "var(--accent-color)",
+              color: "var(--ink-2)",
               paddingTop: 3,
             }}>
               {String(i + 1).padStart(2, "0")}
@@ -157,7 +157,7 @@ export default function Process() {
               fontSize: 10,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: "var(--accent-color)",
+              color: "var(--ink-2)",
               paddingTop: 3,
               whiteSpace: "nowrap",
             }}>

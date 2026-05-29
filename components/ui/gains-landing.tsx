@@ -22,7 +22,7 @@ export default function GainsLanding({
           >
             {title}
           </h2>
-          <div className="sec-meta">Bénéfices · Fig. 03</div>
+          <div className="sec-meta">Bénéfices</div>
         </div>
         {subtitle && (
           <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{subtitle}</p>

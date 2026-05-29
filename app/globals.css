@@ -47,7 +47,7 @@ section.s:first-of-type {
   font-family: var(--mono, monospace);
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--accent-color);
+  color: var(--ink-2);
 }
 .sec-meta {
   font-family: var(--mono, monospace);
@@ -117,7 +117,7 @@ ol.steps li::before {
   font-family: var(--mono, monospace);
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--accent-color);
+  color: var(--ink-2);
   padding-top: 3px;
 }
 ol.steps li h4 {
@@ -182,26 +182,6 @@ ol.steps li p {
   color: var(--muted-color);
 }
 
-/* ─── Edge ticks ──────────────────────────────────────── */
-.edge-ticks {
-  position: fixed;
-  left: 20px;
-  bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  z-index: 10;
-  pointer-events: none;
-}
-.edge-ticks span {
-  font-family: var(--mono, monospace);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted-color);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
 
 /* ─── Utilities ───────────────────────────────────────── */
 .u-rule-top    { border-top: 1px solid var(--rule); }

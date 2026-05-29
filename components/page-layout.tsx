@@ -21,7 +21,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ titre, sousTitre, children, sec
           >
             {titre}
           </h1>
-          <div className="sec-meta">Page · Fig. 01</div>
         </div>
         {sousTitre && (
           <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 520, marginBottom: 0 }}>{sousTitre}</p>

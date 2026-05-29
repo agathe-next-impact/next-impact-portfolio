@@ -11,7 +11,6 @@ import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
 import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
-import { HomepageProfileBanner } from '@/components/homepage-profile-banner'
 import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
 import { routing } from '@/i18n/routing'
@@ -41,12 +40,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.next-impact.digital'),
   title: {
-    default: 'Next Impact — Création Site web | Web & Mobile App',
+    default: 'Next Impact — Sites web & applications clé en main, PME & ESS',
     template: '%s | Next Impact',
   },
   description:
-    'Création de sites web et d\'applications (web & mobile) sur-mesure : WordPress classique, ' +
-    'Headless WordPress + Next.js, web app et PWA. Studio freelance en France.',
+    'Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l\'ESS. ' +
+    'Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ.',
   keywords: [
     'création site web',
     'WordPress Headless',
@@ -55,7 +54,7 @@ export const metadata: Metadata = {
     'application mobile',
     'PWA',
     'marketplace',
-    'développeur freelance',
+    'studio indépendant',
     'refonte site web',
     'CMS Headless',
     'React',
@@ -72,10 +71,10 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'fr_FR',
     siteName: 'Next Impact',
-    title: 'Next Impact — Expert WordPress Headless & Next.js',
+    title: 'Next Impact — Sites web & applications clé en main',
     description:
-      'Développeur freelance spécialisé WordPress Headless. ' +
-      'Création, refonte et audit de sites ultra-performants.',
+      'Studio indépendant pour PME et ESS : sites web et applications performants, ' +
+      'clé en main, délai et budget fixés dès le départ.',
     url: 'https://www.next-impact.digital',
     images: [
       {
@@ -89,9 +88,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Next Impact — Expert WordPress Headless & Next.js',
+    title: 'Next Impact — Sites web & applications clé en main',
     description:
-      'Développeur freelance spécialisé WordPress Headless + Next.js.',
+      'Studio indépendant pour PME et ESS : sites web et applications performants, clé en main.',
     images: [
       {
         url: '/img/desktop-screen-next-impact.png',
@@ -163,7 +162,6 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
             <DocumentationModeProvider>
               <Header />
-              <HomepageProfileBanner />
               {children}
               <Footer />
               <FloatingContact />
@@ -171,10 +169,6 @@ export default async function RootLayout({
             </DocumentationModeProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
-        <div className="edge-ticks">
-          <span>48°51′N 2°21′E</span>
-          <span>Ed. 2026 · Vol. 02</span>
-        </div>
       </body>
     </html>
   )

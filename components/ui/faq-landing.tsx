@@ -34,7 +34,7 @@ export const FaqLanding: React.FC<FaqLandingProps> = ({
           >
             {title}
           </h2>
-          <div className="sec-meta">Documentation · Fig. 05</div>
+          <div className="sec-meta">Documentation</div>
         </div>
 
         <div
@@ -78,7 +78,7 @@ export const FaqLanding: React.FC<FaqLandingProps> = ({
                       style={{
                         fontFamily: "var(--mono)",
                         fontSize: 10,
-                        color: "var(--accent-color)",
+                        color: "var(--ink-2)",
                         letterSpacing: "0.08em",
                         flexShrink: 0,
                       }}

@@ -29,8 +29,8 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Studio freelance spécialisé WordPress Headless et Next.js. " +
-    "Trois stacks : WordPress classique, Headless + Next.js, web app sur-mesure. " +
+    "Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. " +
+    "Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ. " +
     "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
@@ -44,8 +44,8 @@ export const siteConfig = {
   keywords: [
     "WordPress",
     "WordPress Headless",
-    "Freelance",
-    "Développeur",
+    "Studio indépendant",
+    "Création site web PME ESS",
     "Next.js",
     "React",
     "Site web",
@@ -203,15 +203,15 @@ type LocalizedMeta = {
 
 const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Next Impact — WordPress Headless & Next.js | Prestataire TIH",
+    title: "Next Impact — Sites web & applications clé en main, PME & ESS",
     description:
-      "Studio freelance spécialisé dans la modernisation WordPress : site classique, Headless + Next.js, web app sur-mesure. " +
-      "Basée en Auvergne, intervention dans toute la France. " +
+      "Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. " +
+      "Vous gérez votre activité, je gère la technique : délai et budget fixés dès le départ. " +
       "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
     keywords: [
-      "création site web freelance",
-      "développeur Next.js France",
-      "WordPress Headless freelance",
+      "création site web clé en main",
+      "site web PME ESS",
+      "studio indépendant site web",
       "web app sur-mesure",
       "prestataire TIH développement web",
       "déduction AGEFIPH sous-traitance",
@@ -220,15 +220,15 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Next Impact — Headless WordPress & Next.js | French TIH provider",
+    title: "Next Impact — Turnkey websites & applications for SMEs & social economy",
     description:
-      "Freelance studio specialising in WordPress modernisation: classic site, Headless + Next.js, custom web apps. " +
-      "Based in France, working internationally. " +
+      "Independent studio specialising in fast, durable websites and applications for SMEs and social-economy organisations. " +
+      "You run your business, I handle the tech: fixed timeline and budget. " +
       "French TIH provider: 30% of labour cost deductible from your AGEFIPH contribution.",
     keywords: [
-      "freelance website build",
-      "Next.js developer France",
-      "Headless WordPress freelance",
+      "turnkey website build",
+      "website SME social economy",
+      "independent web studio",
       "custom web app",
       "French TIH provider web development",
       "AGEFIPH deduction subcontracting",
@@ -250,7 +250,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
       "création site WordPress",
       "création site Next.js",
       "web app sur-mesure",
-      "application mobile freelance",
+      "application mobile sur-mesure",
       "tarif site WordPress Headless",
       "prix application web",
     ],
@@ -266,7 +266,7 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
       "WordPress site build",
       "Next.js site build",
       "custom web app",
-      "freelance mobile application",
+      "custom mobile application",
       "Headless WordPress pricing",
       "web app pricing",
     ],
@@ -280,11 +280,11 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
       "Identifiez en quelques étapes la voie adaptée à votre projet : site WordPress classique, site Headless, web app ou application mobile. " +
       "Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
     keywords: [
-      "contact développeur freelance",
+      "contact studio web indépendant",
       "devis site web",
       "devis application web",
       "demande de projet web",
-      "rendez-vous visio freelance",
+      "rendez-vous visio projet web",
       "diagnostic projet web",
       "audit site gratuit",
       "appel découverte",
@@ -296,11 +296,11 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
       "Identify in a few steps the right path for your project: classic WordPress site, Headless site, web app or mobile app. " +
       "Free AI audit, 15-min video call and personalized quote within 48 hours.",
     keywords: [
-      "contact freelance developer",
+      "contact independent web studio",
       "website quote",
       "web app quote",
       "web project request",
-      "freelance video call",
+      "project video call",
       "project diagnostic",
       "free site audit",
       "discovery call",

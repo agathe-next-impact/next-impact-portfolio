@@ -27,8 +27,8 @@ type Tier = {
 function getTiers(isEn: boolean): Tier[] {
   return [
     {
-      name: isEn ? "CLASSIC" : "CLASSIQUE",
-      tech: isEn ? "Classic or light headless WordPress" : "WordPress classique ou Headless léger",
+      name: isEn ? "HIGH-PERFORMANCE BROCHURE SITE" : "SITE VITRINE PERFORMANT",
+      tech: isEn ? "on WordPress, bespoke theme" : "sur WordPress, thème sur-mesure",
       price: isEn ? "From €2,250" : "Depuis 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -37,8 +37,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Site vitrine, site institutionnel ou refonte rapide d'un WordPress vieillissant.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Monolithic WordPress with <em style={{ color: "var(--accent-color)" }}>a modern custom theme</em>, optimized build, hardened security.</>
-        : <>WordPress monolithique avec <em style={{ color: "var(--accent-color)" }}>thème custom moderne</em>, build optimisé, sécurité durcie.</>,
+        ? <>Monolithic WordPress with <em style={{ color: "var(--ink)" }}>a modern custom theme</em>, optimized build, hardened security.</>
+        : <>WordPress monolithique avec <em style={{ color: "var(--ink)" }}>thème custom moderne</em>, build optimisé, sécurité durcie.</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -57,8 +57,8 @@ function getTiers(isEn: boolean): Tier[] {
       ctaHref: "/contact",
     },
     {
-      name: "HEADLESS",
-      tech: isEn ? "Headless WordPress + Next.js" : "WordPress headless + Next.js",
+      name: isEn ? "HIGH-SPEED WEBSITE" : "SITE HAUTE PERFORMANCE",
+      tech: "WordPress Headless + Next.js",
       price: isEn ? "From €4,000" : "Depuis 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -67,8 +67,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Site à fort enjeu SEO, blog éditorial, marque ou produit dont la performance front est un levier de conversion.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Headless WordPress as backend + <em style={{ color: "var(--accent-color)" }}>Next.js</em> as frontend (SSG, ISR, partial hydration).</>
-        : <>WordPress headless en backend + <em style={{ color: "var(--accent-color)" }}>Next.js</em> en frontend (SSG, ISR, hydratation partielle).</>,
+        ? <>Headless WordPress as backend + <em style={{ color: "var(--ink)" }}>Next.js</em> as frontend (SSG, ISR, partial hydration).</>
+        : <>WordPress headless en backend + <em style={{ color: "var(--ink)" }}>Next.js</em> en frontend (SSG, ISR, hydratation partielle).</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -89,8 +89,8 @@ function getTiers(isEn: boolean): Tier[] {
       ctaHref: "/contact",
     },
     {
-      name: "WEB APP",
-      tech: isEn ? "Complex / multisite Headless WordPress" : "WordPress Headless complexe / multisites",
+      name: isEn ? "CUSTOM BUSINESS PLATFORM" : "PLATEFORME MÉTIER SUR-MESURE",
+      tech: isEn ? "dedicated architecture, multisite / high-volume" : "architecture dédiée, multisites / forte volumétrie",
       price: isEn ? "From €6,500" : "Depuis 6 500 €",
       priceTagline: isEn ? "Scalable architecture, ISR/SSR, multisite" : "Architecture évolutive, ISR/SSR, multisites",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -99,8 +99,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Plateforme à forte volumétrie, multisites, intégrations API tierces, applications métier ou portails clients.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Headless WordPress + <em style={{ color: "var(--accent-color)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>
-        : <>WordPress headless + <em style={{ color: "var(--accent-color)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, CI/CD complet.</>,
+        ? <>Headless WordPress + <em style={{ color: "var(--ink)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>
+        : <>WordPress headless + <em style={{ color: "var(--ink)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, CI/CD complet.</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -149,9 +149,6 @@ export function PricingCards() {
           <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
             {isEn ? "Pricing" : "Tarifs"}
           </h2>
-          <div className="sec-meta">
-            {isEn ? "Services · Fig. 01" : "Prestations · Fig. 01"}
-          </div>
         </div>
 
         <div

@@ -7,7 +7,9 @@
     "build": "next build",
     "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -80,6 +82,8 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.1.6",
+    "@storybook/nextjs": "^10.4.1",
+    "storybook": "^10.4.1",
     "@types/node": "^22",
     "@types/nodemailer": "^7.0.5",
     "@types/react": "^19",

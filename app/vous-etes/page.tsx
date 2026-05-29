@@ -38,9 +38,9 @@ export default function VousEtesPage() {
             style={{ fontSize: "clamp(36px, 5vw, 72px)", lineHeight: 1.05, margin: 0 }}
           >
             Vous êtes{" "}
-            <em style={{ color: "var(--accent-color)" }}>…</em>
+            <em style={{ color: "var(--ink)" }}>…</em>
           </h1>
-          <div className="sec-meta">Secteurs · Fig. 01</div>
+          <div className="sec-meta">Secteurs</div>
         </div>
 
         <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 48, maxWidth: 520 }}>

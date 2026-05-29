@@ -32,7 +32,7 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    sectionLabel: "Applications web & mobile · Fig. 03",
+    sectionLabel: "Applications web & mobile",
     title: "Stack sur-mesure",
     subtitle: "Marketplace, outil métier, simulateur ou application mobile : une architecture dédiée à votre logique métier, avec une admin aussi autonome que WordPress.",
     priceLabel: "Sur devis, après cadrage",
@@ -78,7 +78,7 @@ const COPY: Record<Locale, Copy> = {
     ctaPrimary: "Discuter de mon projet",
   },
   en: {
-    sectionLabel: "Web & mobile applications · Fig. 03",
+    sectionLabel: "Web & mobile applications",
     title: "Bespoke stack",
     subtitle: "Marketplace, business tool, simulator or mobile application: a dedicated architecture built for your business logic, with an admin as autonomous as WordPress.",
     priceLabel: "On quote, after scoping",
@@ -150,7 +150,7 @@ export default function AppsSection() {
               fontSize: 10,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: "var(--accent-color)",
+              color: "var(--ink-2)",
             }}
           >
             {copy.priceLabel}
@@ -201,7 +201,7 @@ export default function AppsSection() {
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
                 {col.items.map((item) => (
                   <li key={item} style={{ display: "flex", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
-                    <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 12 }}>{col.symbol}</span>
+                    <span style={{ color: "var(--ink-2)", fontFamily: "var(--mono)", fontSize: 12 }}>{col.symbol}</span>
                     {item}
                   </li>
                 ))}
@@ -213,7 +213,7 @@ export default function AppsSection() {
         {/* Differentiator quote */}
         <blockquote
           style={{
-            borderLeft: "3px solid var(--accent-color)",
+            borderLeft: "3px solid var(--rule-strong)",
             paddingLeft: 32,
             marginBottom: 40,
           }}
@@ -262,7 +262,7 @@ export default function AppsSection() {
                   fontSize: 9,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: i === 0 ? "var(--accent-color)" : "var(--muted-color)",
+                  color: i === 0 ? "var(--ink-2)" : "var(--muted-color)",
                   marginBottom: 16,
                 }}
               >
@@ -271,7 +271,7 @@ export default function AppsSection() {
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
                 {col.items.map((item) => (
                   <li key={item} style={{ display: "flex", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 12, color: i === 0 ? "var(--accent-color)" : "var(--muted-color)" }}>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 12, color: i === 0 ? "var(--ink-2)" : "var(--muted-color)" }}>
                       {col.symbol}
                     </span>
                     {item}
@@ -345,7 +345,7 @@ export default function AppsSection() {
               fontSize: 9,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "var(--accent-color)",
+              color: "var(--ink-2)",
             }}
           >
             {copy.oethBadge}

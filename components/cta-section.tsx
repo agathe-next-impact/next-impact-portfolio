@@ -59,7 +59,7 @@ function CTACard({
           fontSize: 9,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "var(--accent-color)",
+          color: "var(--ink-2)",
           marginBottom: 20,
         }}
       >
@@ -142,7 +142,7 @@ function CTALeadMagnet() {
       description={
         <>
           {t("subtitleStart")}{" "}
-          <em style={{ color: "var(--accent-color)" }}>{t("subtitleHighlight")}</em>{" "}
+          <em style={{ color: "var(--ink)" }}>{t("subtitleHighlight")}</em>{" "}
           {t("subtitleEnd")}
         </>
       }
@@ -230,11 +230,11 @@ export function BlocReassurance() {
         }}
       >
         {[
-          { icon: CircleDot, label: t("available"), accent: true },
+          { icon: CircleDot, label: t("available") },
           { icon: Clock, label: t("experience") },
           { icon: Award, label: t("wpHeadlessDev") },
           { icon: BadgePercent, label: t("tih") },
-        ].map(({ icon: Icon, label, accent }) => (
+        ].map(({ icon: Icon, label }) => (
           <span
             key={label}
             style={{
@@ -245,7 +245,7 @@ export function BlocReassurance() {
               fontSize: 10,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: accent ? "var(--accent-color)" : "var(--ink-2)",
+              color: "var(--ink-2)",
               border: "1px solid var(--rule)",
               padding: "6px 12px",
             }}

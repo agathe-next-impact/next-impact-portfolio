@@ -75,7 +75,7 @@ export default function AboutClient() {
                     <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
                       {pilier.items.map((item, i) => (
                         <li key={i} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--ink-2)" }}>
-                          <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11 }}>→</span>
+                          <span style={{ color: "var(--ink-2)", fontFamily: "var(--mono)", fontSize: 11 }}>→</span>
                           {item}
                         </li>
                       ))}
@@ -164,7 +164,7 @@ export default function AboutClient() {
               >
                 <div
                   className="ni-serif"
-                  style={{ fontSize: 28, color: "var(--accent-color)", lineHeight: 1, paddingTop: 4 }}
+                  style={{ fontSize: 28, color: "var(--ink)", lineHeight: 1, paddingTop: 4 }}
                 >
                   {step.year}
                 </div>
@@ -210,7 +210,7 @@ export default function AboutClient() {
                 lineHeight: 1.35,
                 color: "var(--ink)",
                 maxWidth: 720,
-                borderLeft: "3px solid var(--accent-color)",
+                borderLeft: "3px solid var(--rule-strong)",
                 paddingLeft: 32,
                 marginBottom: 16,
               }}
@@ -258,7 +258,7 @@ export default function AboutClient() {
                   textAlign: "center",
                 }}
               >
-                <div className="ni-serif" style={{ fontSize: 56, color: "var(--accent-color)", lineHeight: 1, marginBottom: 8 }}>
+                <div className="ni-serif" style={{ fontSize: 56, color: "var(--ink)", lineHeight: 1, marginBottom: 8 }}>
                   <CountUp end={stat.end} prefix={stat.prefix} />
                 </div>
                 <p

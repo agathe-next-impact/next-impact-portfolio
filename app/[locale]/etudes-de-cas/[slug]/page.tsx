@@ -234,7 +234,7 @@ export default async function CaseStudyPage({
                           className="ni-serif"
                           style={{
                             fontSize: 32,
-                            color: "var(--accent-color)",
+                            color: "var(--ink)",
                             marginBottom: 4,
                           }}
                         >

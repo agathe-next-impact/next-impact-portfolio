@@ -3,14 +3,26 @@
 import { useEffect, useState } from "react";
 
 function useCountUp(target: number, duration = 1000, delay = 0) {
-  const [value, setValue] = useState(0);
+  // Jamais 0 au chargement : valeur réelle d'emblée, animation depuis un
+  // plancher non-nul (60 % de la cible). Une preuve ne doit pas ressembler
+  // à un état vide.
+  const [value, setValue] = useState(target);
   useEffect(() => {
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      setValue(target);
+      return;
+    }
+    const from = Math.round(target * 0.6);
+    setValue(from);
     const timeout = setTimeout(() => {
       const start = performance.now();
       const tick = (now: number) => {
         const t = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - t, 3);
-        setValue(Math.round(eased * target));
+        setValue(Math.round(from + eased * (target - from)));
         if (t < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
@@ -121,7 +133,7 @@ export default function HeroMockup() {
             marginBottom: 10,
           }}>
             Sites WordPress<br />
-            <em style={{ color: "var(--accent-color)" }}>ultra rapides.</em>
+            <em style={{ color: "var(--ink)" }}>ultra rapides.</em>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 14 }}>
             {[100, 85, 55].map((w, i) => (
