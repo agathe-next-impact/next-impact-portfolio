@@ -1,6 +1,5 @@
 import type { ProfileId } from "@/lib/documentation-profiles";
 import type { Locale } from "@/i18n/routing";
-import { CASE_STUDY_PROFILE_OVERRIDES_EN } from "@/lib/case-studies-profiles-en";
 
 /**
  * Variantes de contenu par profil pour les études de cas headless.
@@ -356,9 +355,7 @@ export const CASE_STUDY_PROFILE_OVERRIDES: Record<string, ProfileOverrides> = {
 };
 
 export function getCaseStudyProfileOverrides(
-  locale: Locale,
+  _locale: Locale,
 ): Record<string, ProfileOverrides> {
-  return locale === "en"
-    ? CASE_STUDY_PROFILE_OVERRIDES_EN
-    : CASE_STUDY_PROFILE_OVERRIDES;
+  return {};
 }

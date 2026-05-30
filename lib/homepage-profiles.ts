@@ -24,8 +24,8 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Votre site web, conçu et livré clé en main —",
-    subHeadline: "vous gérez votre activité, je gère la technique.",
+    headline: "Votre site web",
+    subHeadline: " - conçu et livré clé en main",
     description:
       "Pour les PME et structures de l'ESS qui veulent un site rapide et durable, sans monter d'équipe technique en interne.",
     valueProposition:
@@ -698,30 +698,50 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
 
 // ─── Locale-aware accessors ──────────────────────────────────────────────────
 
+const PROFILE_IDS: ProfileId[] = ["decideur", "utilisateur", "developpeur"];
+
+function defaultOnlyVariants<T>(
+  variants: Partial<Record<ProfileId | "default", T>>,
+): Record<ProfileId | "default", T> {
+  const fallback = variants.default ?? variants.decideur;
+
+  if (!fallback) {
+    throw new Error("Missing default and decideur homepage content variant.");
+  }
+
+  return PROFILE_IDS.reduce(
+    (acc, profileId) => ({
+      ...acc,
+      [profileId]: fallback,
+    }),
+    { default: fallback } as Record<ProfileId | "default", T>,
+  );
+}
+
 export function getHeroVariants(locale: Locale): Record<ProfileId | "default", HeroVariant> {
-  return locale === "en" ? HERO_VARIANTS_EN : HERO_VARIANTS;
+  return defaultOnlyVariants(locale === "en" ? HERO_VARIANTS_EN : HERO_VARIANTS);
 }
 
 export function getServicesPageVariants(
   locale: Locale
 ): Record<ProfileId | "default", ServicesPageVariant> {
-  return locale === "en" ? SERVICES_PAGE_VARIANTS_EN : SERVICES_PAGE_VARIANTS;
+  return defaultOnlyVariants(locale === "en" ? SERVICES_PAGE_VARIANTS_EN : SERVICES_PAGE_VARIANTS);
 }
 
 export function getCaseStudiesPageVariants(
   locale: Locale
 ): Record<ProfileId | "default", CaseStudiesPageVariant> {
-  return locale === "en" ? CASE_STUDIES_PAGE_VARIANTS_EN : CASE_STUDIES_PAGE_VARIANTS;
+  return defaultOnlyVariants(locale === "en" ? CASE_STUDIES_PAGE_VARIANTS_EN : CASE_STUDIES_PAGE_VARIANTS);
 }
 
 export function getAboutPageVariants(
   locale: Locale
 ): Record<ProfileId | "default", AboutPageVariant> {
-  return locale === "en" ? ABOUT_PAGE_VARIANTS_EN : ABOUT_PAGE_VARIANTS;
+  return defaultOnlyVariants(locale === "en" ? ABOUT_PAGE_VARIANTS_EN : ABOUT_PAGE_VARIANTS);
 }
 
 export function getExpandableCardsVariants(
   locale: Locale
 ): Record<ProfileId | "default", ExpandableCardVariant[]> {
-  return locale === "en" ? EXPANDABLE_CARDS_VARIANTS_EN : EXPANDABLE_CARDS_VARIANTS;
+  return defaultOnlyVariants(locale === "en" ? EXPANDABLE_CARDS_VARIANTS_EN : EXPANDABLE_CARDS_VARIANTS);
 }

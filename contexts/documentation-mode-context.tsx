@@ -31,16 +31,13 @@ const DocumentationModeContext = createContext<DocumentationModeContextType>({
 });
 
 export function DocumentationModeProvider({ children }: { children: ReactNode }) {
-  const [profileId, setProfileId] = useState<ProfileId | null>(null);
   const [readArticles, setReadArticles] = useState<string[]>([]);
 
-  // Hydrate from localStorage after mount
+  // Profile-specific content is disabled. Clear the legacy value so existing
+  // sessions always fall back to the default content.
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("doc-profile");
-      if (stored === "decideur" || stored === "utilisateur" || stored === "developpeur") {
-        setProfileId(stored);
-      }
+      localStorage.removeItem("doc-profile");
       const storedRead = localStorage.getItem("doc-read-articles");
       if (storedRead) {
         setReadArticles(JSON.parse(storedRead));
@@ -48,19 +45,15 @@ export function DocumentationModeProvider({ children }: { children: ReactNode })
     } catch {}
   }, []);
 
-  const setProfile = useCallback((id: ProfileId) => {
-    setProfileId(id);
-    try {
-      localStorage.setItem("doc-profile", id);
-    } catch {}
-  }, []);
-
   const clearProfile = useCallback(() => {
-    setProfileId(null);
     try {
       localStorage.removeItem("doc-profile");
     } catch {}
   }, []);
+
+  const setProfile = useCallback((_id: ProfileId) => {
+    clearProfile();
+  }, [clearProfile]);
 
   const markArticleRead = useCallback((category: string, slug: string) => {
     const key = `${category}/${slug}`;
@@ -74,15 +67,12 @@ export function DocumentationModeProvider({ children }: { children: ReactNode })
     });
   }, []);
 
-  // Backward compat: developpeur profile → advanced mode
-  const isAdvancedMode = profileId === "developpeur";
+  // Backward compat: keep the API, but do not expose profile-driven content.
+  const profileId: ProfileId | null = null;
+  const isAdvancedMode = false;
   const toggleMode = useCallback(() => {
-    if (profileId === "developpeur") {
-      clearProfile();
-    } else {
-      setProfile("developpeur");
-    }
-  }, [profileId, clearProfile, setProfile]);
+    clearProfile();
+  }, [clearProfile]);
 
   return (
     <DocumentationModeContext.Provider
