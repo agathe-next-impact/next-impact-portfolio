@@ -6,6 +6,7 @@ import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import HeroMockup from "@/components/HeroMockup";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function Hero() {
   const locale = useLocale() as Locale;
@@ -24,7 +25,7 @@ export default function Hero() {
       >
         <div className="container">
           {/* Sec-head */}
-          <div className="sec-head" style={{ marginBottom: 48 }}>
+          <Reveal className="sec-head" style={{ marginBottom: 48 }}>
             <div className="sec-no">№ 01</div>
             <h1
               className="ni-serif"
@@ -38,7 +39,7 @@ export default function Hero() {
               {variant.headline}{" "}
               <em style={{ color: "var(--ink)" }}>{variant.subHeadline}</em>
             </h1>
-          </div>
+          </Reveal>
 
           {/* 2-col grid */}
           <div
@@ -52,7 +53,7 @@ export default function Hero() {
             }}
           >
             {/* Left — text */}
-            <div>
+            <Reveal delay={0.08}>
               <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 12, maxWidth: 540 }}>
                 {variant.description}
               </p>
@@ -130,10 +131,10 @@ export default function Hero() {
                     : "Technologie : WordPress Headless + Next.js"}
                 </span>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right — mockup */}
-            <div style={{ position: "relative" }}>
+            <Reveal delay={0.16} style={{ position: "relative" }}>
               <HeroMockup />
               {/* Disponible badge */}
               <div
@@ -182,7 +183,7 @@ export default function Hero() {
                   {t("tihMention")}
                 </span>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Stagger, StaggerItem } from "@/components/ui/reveal";
 
 // Locale-agnostic project metadata
 interface ProjectMeta {
@@ -517,8 +518,9 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
       {/* Content */}
       {TAB_KEYS.map((tab) =>
         activeTab === tab ? (
-          <div
+          <Stagger
             key={tab}
+            stagger={0.04}
             style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}
           >
             {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project, index) => {
@@ -527,8 +529,9 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
               const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
               const col = index % 3;
               return (
-                <div
+                <StaggerItem
                   key={project.id}
+                  className="ni-card--bordered"
                   style={{
                     border: "1px solid var(--rule)",
                     marginRight: col < 2 ? -1 : 0,
@@ -591,10 +594,10 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
                       </Link>
                     </div>
                   </div>
-                </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </Stagger>
         ) : null
       )}
     </section>

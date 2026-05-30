@@ -1,7 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import { useLocale } from "next-intl";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
 
 type Phase = {
   title: string;
@@ -81,9 +84,18 @@ export default function Process() {
   const isEn = locale === "en";
   const phases = isEn ? PHASES_EN : PHASES_FR;
 
+  const reduce = useReducedMotion();
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: stepsRef,
+    offset: ["start 80%", "end 65%"],
+  });
+  // Le filet vertical se trace au fil du défilement de la liste des phases.
+  const railHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <>
-      <div className="sec-head">
+      <Reveal className="sec-head">
         <div className="sec-no">№ —</div>
         <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
           {isEn
@@ -93,13 +105,31 @@ export default function Process() {
         <div className="sec-meta">
           {isEn ? "Method · 5 phases" : "Méthode · 5 phases"}
         </div>
-      </div>
+      </Reveal>
 
       {/* Steps */}
-      <div style={{ borderTop: "1px solid var(--rule)" }}>
+      <div ref={stepsRef} style={{ position: "relative", borderTop: "1px solid var(--rule)" }}>
+        {/* Spine — filet vertical entre numéro et contenu */}
+        <div
+          aria-hidden
+          style={{ position: "absolute", left: 56, top: 0, bottom: 0, width: 1, background: "var(--rule)" }}
+        >
+          <motion.div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 1,
+              height: reduce ? "100%" : railHeight,
+              background: "var(--ink-2)",
+            }}
+          />
+        </div>
+
         {phases.map((phase, i) => (
-          <div
+          <Reveal
             key={phase.title}
+            className="ni-card"
             style={{
               display: "grid",
               gridTemplateColumns: "56px 1fr auto",
@@ -163,7 +193,7 @@ export default function Process() {
             }}>
               {phase.duration}
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 

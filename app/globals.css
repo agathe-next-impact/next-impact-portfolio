@@ -94,6 +94,56 @@ section.s:first-of-type {
   border-color: var(--ink);
 }
 
+/* ─── Micro-interactions « Édition Suisse » ───────────────
+   Sobres, ≤ 200 ms, opacity/transform uniquement. */
+
+/* Nudge de la flèche au survol d'un lien/bouton (global, sans markup). */
+.lucide-arrow-right,
+.lucide-arrow-up-right,
+.lucide-move-right {
+  transition: transform 0.18s ease;
+}
+a:hover .lucide-arrow-right,
+a:hover .lucide-arrow-up-right,
+a:hover .lucide-move-right,
+button:hover .lucide-arrow-right,
+.btn:hover .lucide-arrow-right {
+  transform: translateX(3px);
+}
+
+/* Hover de carte de grille — tint paper-2, sans scale ni ombre. */
+.ni-card {
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.ni-card:hover {
+  background: var(--paper-2);
+}
+/* Variante carte à bord complet (grilles hairline) : le filet se renforce
+   et la carte passe au-dessus pour révéler ses 4 côtés. */
+.ni-card--bordered {
+  position: relative;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.ni-card--bordered:hover {
+  border-color: var(--rule-strong);
+  z-index: 1;
+}
+
+/* Souligné qui se déploie de gauche à droite, sans décalage de mise en page. */
+.ni-link {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: left 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition: background-size 0.2s ease;
+}
+.ni-link:hover,
+.ni-link:focus-visible {
+  background-size: 100% 1px;
+}
+
 /* ─── Ordered Steps ───────────────────────────────────── */
 ol.steps {
   list-style: none;
@@ -841,5 +891,19 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
 .light a[class^="bg-coral"] *,      .light a[class*=" bg-coral"] *,
 .light a[class^="bg-orange"] *,     .light a[class*=" bg-orange"] * {
   color: #FFFFFF !important;
+}
+
+/* ─── Accessibilité — respect de prefers-reduced-motion ───
+   Coupe transitions, animations CSS et scroll lissé pour les
+   utilisateurs qui le demandent (complète framer MotionConfig). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 

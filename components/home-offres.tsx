@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
 type Stack = {
   subtitle: string;
@@ -100,24 +101,27 @@ export default function HomeOffres() {
   return (
     <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
       <div className="container">
-        <div className="sec-head">
-          <div className="sec-no">№ 03</div>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-            {isEn ? <>The right offering <em style={{ color: "var(--ink)" }}>for your project</em></> : <>La bonne formule <em style={{ color: "var(--ink)" }}>pour votre projet</em></>}
-          </h2>
-        </div>
+        <Reveal>
+          <div className="sec-head">
+            <div className="sec-no">№ 03</div>
+            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
+              {isEn ? <>The right offering <em style={{ color: "var(--ink)" }}>for your project</em></> : <>La bonne formule <em style={{ color: "var(--ink)" }}>pour votre projet</em></>}
+            </h2>
+          </div>
 
-        {/* Point d'ancrage anti-paralysie */}
-        <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6, maxWidth: 620, marginTop: 16 }}>
-          {isEn
-            ? "Most brochure projects fall under the first offering. Not sure? The 2-minute diagnostic points you to the right one."
-            : "La plupart des projets vitrine relèvent de la première formule. En cas de doute, le diagnostic en 2 minutes vous oriente vers la bonne."}
-        </p>
+          {/* Point d'ancrage anti-paralysie */}
+          <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6, maxWidth: 620, marginTop: 16 }}>
+            {isEn
+              ? "Most brochure projects fall under the first offering. Not sure? The 2-minute diagnostic points you to the right one."
+              : "La plupart des projets vitrine relèvent de la première formule. En cas de doute, le diagnostic en 2 minutes vous oriente vers la bonne."}
+          </p>
+        </Reveal>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)", marginTop: 32 }}>
+        <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)", marginTop: 32 }}>
           {stacks.map((stack, i) => (
-            <div
+            <StaggerItem
               key={stack.title}
+              className="ni-card"
               style={{
                 padding: "40px 32px",
                 borderRight: i < 2 ? "1px solid var(--rule)" : "none",
@@ -162,9 +166,9 @@ export default function HomeOffres() {
                 </div>
                 <p style={{ fontSize: 12, color: "var(--ink-2)" }}>{stack.target}</p>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         {/* Footer — lien technique discret + comparatif */}
         <div style={{ borderTop: "1px solid var(--rule)", padding: "20px 0", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>

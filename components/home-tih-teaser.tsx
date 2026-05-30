@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function HomeTihTeaser() {
   const locale = useLocale() as Locale;
@@ -39,7 +40,7 @@ export default function HomeTihTeaser() {
           }}
         >
           {/* Left — gain concret */}
-          <div>
+          <Reveal>
             <h2
               className="ni-serif"
               style={{ fontSize: "clamp(28px, 3.4vw, 48px)", lineHeight: 1.05, color: "var(--ink)", margin: "0 0 20px", maxWidth: 640 }}
@@ -66,10 +67,12 @@ export default function HomeTihTeaser() {
               {isEn ? "See how it works" : "Découvrir l'avantage AGEFIPH"}
               <ArrowRight size={13} />
             </Link>
-          </div>
+          </Reveal>
 
           {/* Right — chiffre repère */}
-          <div
+          <Reveal
+            as="div"
+            delay={0.12}
             style={{
               borderLeft: "1px solid var(--rule)",
               paddingLeft: 40,
@@ -84,7 +87,7 @@ export default function HomeTihTeaser() {
             <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginTop: 8, maxWidth: 220 }}>
               {isEn ? "of labour cost deductible from your AGEFIPH contribution" : "du coût de main-d'œuvre déductible de votre contribution AGEFIPH"}
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

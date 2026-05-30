@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { YoutubePlayer } from "@/components/youtube-player";
 import type { Locale } from "@/i18n/routing";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
 type Copy = {
   badge: string;
@@ -68,7 +69,7 @@ export default function FeaturedRealisation() {
           }}
         >
           {/* Left — text */}
-          <div>
+          <Reveal>
             <div
               style={{
                 fontFamily: "var(--mono)",
@@ -113,7 +114,8 @@ export default function FeaturedRealisation() {
               {copy.description}
             </p>
 
-            <div
+            <Stagger
+              stagger={0.08}
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1fr",
@@ -122,7 +124,7 @@ export default function FeaturedRealisation() {
               }}
             >
               {copy.stats.map((stat, i) => (
-                <div
+                <StaggerItem
                   key={stat.label}
                   style={{
                     padding: "20px 0",
@@ -148,9 +150,9 @@ export default function FeaturedRealisation() {
                   >
                     {stat.label}
                   </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
 
             <div style={{ display: "flex", gap: 12 }}>
               <Link
@@ -166,12 +168,12 @@ export default function FeaturedRealisation() {
                 {copy.ctaSecondary}
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right — video */}
-          <div style={{ borderTop: "1px solid var(--rule)" }}>
+          <Reveal as="div" delay={0.12} style={{ borderTop: "1px solid var(--rule)" }}>
             <YoutubePlayer videoId="9fMaBL1amYk" title={copy.imageAlt} label="Panorama Pub" />
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

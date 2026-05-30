@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Reveal } from "@/components/ui/reveal";
 
 interface PageLayoutProps {
   titre: string
@@ -13,18 +14,20 @@ const PageLayout: React.FC<PageLayoutProps> = ({ titre, sousTitre, children, sec
   <div>
     <section className="s" style={{ borderTop: "none" }}>
       <div className="container">
-        <div className="sec-head">
-          <div className="sec-no">{secNo}</div>
-          <h1
-            className="ni-serif"
-            style={{ fontSize: "clamp(32px, 4vw, 64px)", lineHeight: 1.05, margin: 0 }}
-          >
-            {titre}
-          </h1>
-        </div>
-        {sousTitre && (
-          <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 520, marginBottom: 0 }}>{sousTitre}</p>
-        )}
+        <Reveal>
+          <div className="sec-head">
+            <div className="sec-no">{secNo}</div>
+            <h1
+              className="ni-serif"
+              style={{ fontSize: "clamp(32px, 4vw, 64px)", lineHeight: 1.05, margin: 0 }}
+            >
+              {titre}
+            </h1>
+          </div>
+          {sousTitre && (
+            <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 520, marginBottom: 0 }}>{sousTitre}</p>
+          )}
+        </Reveal>
       </div>
     </section>
     <div>

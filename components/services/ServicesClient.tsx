@@ -14,6 +14,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getServicesPageVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
+import { Stagger, StaggerItem } from "@/components/ui/reveal";
 
 export default function ServicesClient() {
   const { profileId } = useDocumentationMode();
@@ -48,13 +49,13 @@ export default function ServicesClient() {
             </h2>
             <div className="sec-meta">{t("stackMethod.label")}</div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {([
               { Icon: FileText,  title: t("stackMethod.scope.title"),       desc: t("stackMethod.scope.description") },
               { Icon: Globe,     title: t("stackMethod.volume.title"),      desc: t("stackMethod.volume.description") },
               { Icon: Leaf,      title: t("stackMethod.scalability.title"), desc: t("stackMethod.scalability.description") },
             ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <div key={card.title} style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none" }}>
+              <StaggerItem key={card.title} className="ni-card" style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none" }}>
                 <card.Icon size={24} style={{ marginBottom: 20, color: "var(--muted-color)", display: "block" }} strokeWidth={1.5} />
                 <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>
                   {card.title}
@@ -62,9 +63,9 @@ export default function ServicesClient() {
                 <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
                   {card.desc}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -87,13 +88,14 @@ export default function ServicesClient() {
       {/* § 08 — Raccourcis */}
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {([
               { href: "/outils",               Icon: ScanLine,  title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
               { href: "/demo",                 Icon: Monitor,   title: t("shortcuts.demo.title"),  desc: t("shortcuts.demo.description") },
               { href: "/services/eligibilite", Icon: SlidersHorizontal, title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
             ] as { href: string; Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <Link key={card.href} href={card.href as Parameters<typeof Link>[0]["href"]} style={{ display: "block", textDecoration: "none" }}>
+              <StaggerItem key={card.href}>
+              <Link href={card.href as Parameters<typeof Link>[0]["href"]} style={{ display: "block", textDecoration: "none" }}>
                 <div
                   style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none", transition: "background 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
@@ -111,8 +113,9 @@ export default function ServicesClient() {
                   </span>
                 </div>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 

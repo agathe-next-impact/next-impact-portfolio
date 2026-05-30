@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
 export default function HomeCta() {
   const locale = useLocale() as Locale;
@@ -14,7 +15,7 @@ export default function HomeCta() {
       <div className="container">
         <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 48, display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "end" }}>
           {/* Left */}
-          <div>
+          <Reveal>
             <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 16 }}>
               № 07 — {isEn ? "Start your project" : "Démarrer votre projet"}
             </div>
@@ -44,16 +45,16 @@ export default function HomeCta() {
                 <ArrowRight size={13} />
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right — stats strip */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 0, minWidth: 160, borderLeft: "1px solid var(--rule)", paddingLeft: 40 }}>
+          <Stagger as="div" stagger={0.08} delayChildren={0.1} style={{ display: "flex", flexDirection: "column", gap: 0, minWidth: 160, borderLeft: "1px solid var(--rule)", paddingLeft: 40 }}>
             {[
               { value: "6–10", label: isEn ? "weeks avg." : "semaines moy." },
               { value: "TIH",  label: isEn ? "AGEFIPH −30 %" : "AGEFIPH −30 %" },
               { value: "> 90", label: "Core Web Vitals" },
             ].map((s, i) => (
-              <div
+              <StaggerItem
                 key={s.label}
                 style={{ paddingBottom: i < 2 ? 20 : 0, marginBottom: i < 2 ? 20 : 0, borderBottom: i < 2 ? "1px solid var(--rule)" : "none" }}
               >
@@ -63,9 +64,9 @@ export default function HomeCta() {
                 <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginTop: 4 }}>
                   {s.label}
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </div>
     </section>

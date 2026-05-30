@@ -8,6 +8,7 @@ import SimulateurAgefiph from "@/components/simulateur-agefiph";
 import FaqSchema from "@/components/services/FaqSchema";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
 type Step = { number: string; Icon: LucideIcon; title: string; description: string };
 
@@ -85,10 +86,11 @@ export default function AvantageOethClient() {
             <div className="sec-meta">{isEn ? "A simple process" : "Un processus simple"}</div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {steps.map((step, i) => (
-              <div
+              <StaggerItem
                 key={step.number}
+                className="ni-card"
                 style={{
                   padding: "40px 32px",
                   borderRight: i < steps.length - 1 ? "1px solid var(--rule)" : "none",
@@ -113,9 +115,9 @@ export default function AvantageOethClient() {
                 <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>
                   {step.description}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -187,6 +189,7 @@ export default function AvantageOethClient() {
             ] as { Icon: LucideIcon; title: string; content: React.ReactNode }[]).map((card, i) => (
               <div
                 key={card.title}
+                className="ni-card"
                 style={{
                   padding: "32px",
                   borderRight: i % 2 === 0 ? "1px solid var(--rule)" : "none",
@@ -220,7 +223,7 @@ export default function AvantageOethClient() {
             <div className="sec-meta">{isEn ? "An investment with double payoff" : "Un investissement à double bénéfice"}</div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {([
               {
                 Icon: Gauge,
@@ -237,8 +240,9 @@ export default function AvantageOethClient() {
                   : "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH. Un investissement web qui réduit directement vos charges sociales.",
               },
             ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <div
+              <StaggerItem
                 key={card.title}
+                className="ni-card"
                 style={{
                   padding: "40px 32px",
                   borderRight: i === 0 ? "1px solid var(--rule)" : "none",
@@ -251,15 +255,16 @@ export default function AvantageOethClient() {
                 <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>
                   {card.desc}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       {/* CTA */}
       <section className="s" style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}>
         <div className="container">
+          <Reveal>
           <h2 className="ni-serif" style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.1, color: "var(--ink)", marginBottom: 16 }}>
             {isEn ? "Ready to reduce your AGEFIPH contribution?" : "Prêt à réduire votre contribution AGEFIPH ?"}
           </h2>
@@ -285,6 +290,7 @@ export default function AvantageOethClient() {
               {isEn ? "View offerings" : "Voir les offres"}
             </Link>
           </div>
+          </Reveal>
         </div>
       </section>
 
@@ -299,7 +305,7 @@ export default function AvantageOethClient() {
             <div className="sec-meta">{isEn ? "Going further" : "Pour aller plus loin"}</div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {(isEn
               ? [
                   { href: "/articles/reduire-contribution-agefiph-sous-traitance-tih", title: "Reducing your AGEFIPH contribution", description: "Complete guide for HR and CFOs: 2025 rate schedule, deduction calculation and optimization strategy.", tag: "HR / CFO" },
@@ -310,10 +316,10 @@ export default function AvantageOethClient() {
                   { href: "/articles/attestation-deductibilite-tih-guide-entreprises", title: "Attestation de déductibilité TIH", description: "Processus pas à pas, contenu de l'attestation, points de vigilance comptables et calendrier type.", tag: "Comptabilité" },
                 ]
             ).map((article, i) => (
+              <StaggerItem key={article.href}>
               <Link
-                key={article.href}
                 href={article.href as Parameters<typeof Link>[0]["href"]}
-                style={{ display: "block", textDecoration: "none" }}
+                style={{ display: "block", textDecoration: "none", height: "100%" }}
               >
                 <div
                   style={{
@@ -339,8 +345,9 @@ export default function AvantageOethClient() {
                   </span>
                 </div>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 

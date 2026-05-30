@@ -13,6 +13,7 @@ import { ClarityScript } from '@/components/clarity-script'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
+import { MotionProvider } from '@/components/motion-provider'
 import { routing } from '@/i18n/routing'
 
 const instrumentSerif = Instrument_Serif({
@@ -202,11 +203,13 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
             <DocumentationModeProvider>
-              <Header />
-              {children}
-              <Footer />
-              <FloatingContact />
-              <MetadataDebugger />
+              <MotionProvider>
+                <Header />
+                {children}
+                <Footer />
+                <FloatingContact />
+                <MetadataDebugger />
+              </MotionProvider>
             </DocumentationModeProvider>
           </ThemeProvider>
         </NextIntlClientProvider>

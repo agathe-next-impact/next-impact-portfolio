@@ -10,6 +10,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getAboutPageVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
+import { Stagger, StaggerItem } from "@/components/ui/reveal";
 
 export default function AboutClient() {
   const { profileId } = useDocumentationMode();
@@ -45,9 +46,9 @@ export default function AboutClient() {
               {variant.manifesteIntro}
             </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+            <Stagger style={{ display: "grid", gridTemplateColumns: "1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
               {variant.piliers.map((pilier, index) => (
-                <div
+                <StaggerItem
                   key={index}
                   style={{
                     display: "grid",
@@ -81,9 +82,9 @@ export default function AboutClient() {
                       ))}
                     </ul>
                   </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
         </motion.section>
       </AnimatePresence>
@@ -104,7 +105,7 @@ export default function AboutClient() {
           </p>
 
           {/* Timeline — 3 steps */}
-          <div style={{ borderTop: "1px solid var(--rule)" }}>
+          <Stagger stagger={0.1} style={{ borderTop: "1px solid var(--rule)" }}>
             {[
               {
                 year: t("journey.step1.year"),
@@ -151,7 +152,7 @@ export default function AboutClient() {
                 imageAlt: t("journey.step3.imageAlt"),
               },
             ].map((step, i) => (
-              <div
+              <StaggerItem
                 key={i}
                 style={{
                   display: "grid",
@@ -183,9 +184,9 @@ export default function AboutClient() {
                     sizes="280px"
                   />
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
@@ -244,13 +245,13 @@ export default function AboutClient() {
             <div className="sec-meta">{t("metrics.label")}</div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
+          <Stagger stagger={0.1} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
             {[
               { end: 15, prefix: "+", label: t("metrics.yearsCommitment") },
               { end: 8, prefix: "+", label: t("metrics.yearsDevelopment") },
               { end: 25, prefix: "+", label: t("metrics.projectsDelivered") },
             ].map((stat, i) => (
-              <div
+              <StaggerItem
                 key={stat.label}
                 style={{
                   padding: "48px 32px",
@@ -272,9 +273,9 @@ export default function AboutClient() {
                 >
                   {stat.label}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 import { useLocale } from "next-intl"
 import type { Locale } from "@/i18n/routing"
+import { Stagger, StaggerItem } from "@/components/ui/reveal"
 
 export default function ServicesOffers({ offers }: { offers: any[] }) {
   const locale = useLocale() as Locale;
@@ -14,9 +15,10 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
   return (
     <section id="offres">
       <div className="mx-auto max-w-7xl py-14 px-4 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8">
+        <Stagger className="grid md:grid-cols-3 gap-8">
           {offers.map((offer, index) => (
-            <Card key={index} className="flex flex-col h-full bg-mediumblue/60 backdrop-blur-lg rounded-3xl duration-300 border-white/10 p-4">
+            <StaggerItem key={index} className="h-full">
+            <Card className="flex flex-col h-full bg-mediumblue/60 backdrop-blur-lg rounded-3xl transition-colors duration-300 border-white/10 hover:border-white/30 p-4">
               <div className="mb-4 grid grid-cols-[auto_1fr]">
               <CardHeader className="items-center gap-4">
                 <div className="w-14 h-14 flex-shrink-0">
@@ -67,8 +69,9 @@ export default function ServicesOffers({ offers }: { offers: any[] }) {
                 </Button>
               </a>
             </Card>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )
