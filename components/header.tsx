@@ -11,7 +11,7 @@ import { PROFILES } from "@/lib/documentation-profiles";
 const NAV_LINKS = [
   { key: "services",      href: "/services" },
   { key: "caseStudies",   href: "/etudes-de-cas" },
-  { key: "oethAdvantage", href: "/avantage-oeth" },
+  { key: "tools",         href: "/outils" },
   { key: "documentation", href: "/documentation" },
   { key: "about",         href: "/a-propos" },
 ]
