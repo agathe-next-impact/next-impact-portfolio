@@ -16,7 +16,7 @@ export function JsonLd({ data }: JsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
     />
   );
 }
@@ -28,23 +28,44 @@ export function OrganizationJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
+    image: `${siteConfig.url}${siteConfig.ogImage}`,
     description: siteConfig.description,
     founder: {
       "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
       name: "Agathe Karinthi-Martin",
       jobTitle: "Développeure WordPress Headless & Next.js — Prestataire TIH",
       url: "https://www.linkedin.com/in/agat-dev/",
     },
+    telephone: "+33673981638",
+    email: "agathe@next-impact.digital",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "4 rue du centre",
+      addressLocality: "Trizac",
+      postalCode: "15400",
+      addressRegion: "Auvergne-Rhône-Alpes",
       addressCountry: "FR",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 45.2547,
+      longitude: 2.5264,
     },
     areaServed: {
       "@type": "Country",
       name: "France",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: "+33673981638",
+      email: "agathe@next-impact.digital",
+      availableLanguage: ["French", "English"],
     },
     serviceType: [
       "Création de sites web WordPress",
@@ -114,6 +135,7 @@ export function ArticleJsonLd({
     },
     publisher: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
@@ -178,6 +200,7 @@ export function ServiceJsonLd({
     description: description,
     provider: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: provider,
       url: siteConfig.url,
     },
@@ -332,9 +355,16 @@ export function WebsiteJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${siteConfig.url}/#website`,
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
+    inLanguage: ["fr-FR", "en-US"],
+    publisher: {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: {

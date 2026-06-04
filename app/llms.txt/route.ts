@@ -1,90 +1,150 @@
-import { promises as fs } from "fs";
+import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
 import { NextResponse } from "next/server";
+import { getCaseStudies } from "@/lib/case-studies-data";
 
-// Récupère dynamiquement les catégories et articles de documentation
-async function getDocumentationStructure() {
-  const docsDir = path.join(process.cwd(), "content/documentation");
-  const categories = await fs.readdir(docsDir, { withFileTypes: true });
-  const structure: { category: string; articles: string[] }[] = [];
+const baseUrl = "https://www.next-impact.digital";
+const docsRoot = path.join(process.cwd(), "content", "documentation");
 
-  for (const entry of categories) {
-    if (entry.isDirectory()) {
-      const categoryDir = path.join(docsDir, entry.name);
-      const files = await fs.readdir(categoryDir);
-      const articles = files
-        .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
-        .map((file) => file.replace(/\.mdx?$/, ""));
-      structure.push({ category: entry.name, articles });
-    }
-  }
-  return structure;
-}
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-// Labels lisibles pour les catégories
-const categoryLabels: Record<string, string> = {
-  "blog": "Blog",
-  "design-ui-ux": "Design UI/UX",
-  "headless-cms": "CMS Headless",
-  "marketing-digital": "Marketing Digital",
-  "projet-site-web": "Gestion de Projet Web",
-  "seo": "SEO & Référencement",
-  "wordpress": "WordPress",
+type DocLink = {
+  category: string;
+  slug: string;
+  title: string;
+  description: string;
+  order: number;
 };
 
-export async function GET() {
-  const baseUrl = "https://www.next-impact.digital";
+const categoryLabels: Record<string, string> = {
+  "applications-web-mobile": "Applications web & mobile",
+  "design-ui-ux": "Design UI/UX",
+  "headless-cms": "CMS headless",
+  "marketing-digital": "Marketing digital",
+  "projet-site-web": "Projet de site web",
+  seo: "SEO & referencement",
+  wordpress: "WordPress",
+};
 
-  const docStructure = await getDocumentationStructure();
+function readDocs(): DocLink[] {
+  if (!fs.existsSync(docsRoot)) return [];
 
-  const docSection = docStructure
-    .map((cat) => {
-      const label = categoryLabels[cat.category] || cat.category;
-      const articleLinks = cat.articles
-        .map(
-          (article) =>
-            `  - [${article.replace(/-/g, " ")}](${baseUrl}/documentation/${cat.category}/${article})`
-        )
+  return fs
+    .readdirSync(docsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((category) => {
+      const categoryDir = path.join(docsRoot, category.name);
+      const docs = new Map<string, DocLink>();
+
+      for (const file of fs.readdirSync(categoryDir)) {
+        if (!file.endsWith(".md") && !file.endsWith(".mdx")) continue;
+        const slug = file.replace(/\.mdx?$/, "");
+        const { data } = matter(fs.readFileSync(path.join(categoryDir, file), "utf8"));
+        const previous = docs.get(slug);
+        const current = {
+          category: category.name,
+          slug,
+          title: data.title || slug.replace(/-/g, " "),
+          description: data.description || "",
+          order: typeof data.order === "number" ? data.order : 99,
+        };
+
+        if (!previous || file.endsWith(".mdx")) docs.set(slug, current);
+      }
+
+      return [...docs.values()];
+    })
+    .sort((a, b) => a.category.localeCompare(b.category) || a.order - b.order);
+}
+
+function docSections(docs: DocLink[]) {
+  const byCategory = docs.reduce((groups, doc) => {
+    const docsInCategory = groups.get(doc.category) || [];
+    docsInCategory.push(doc);
+    groups.set(doc.category, docsInCategory);
+    return groups;
+  }, new Map<string, DocLink[]>());
+
+  return [...byCategory.entries()]
+    .map(([category, items]) => {
+      const label = categoryLabels[category] || category;
+      const links = items
+        .slice(0, 12)
+        .map((doc) => {
+          const suffix = doc.description ? `: ${doc.description}` : "";
+          return `- [${doc.title}](${baseUrl}/documentation/${doc.category}/${doc.slug})${suffix}`;
+        })
         .join("\n");
-      return `### ${label}\n${articleLinks}`;
+      return `### ${label}\n${links}`;
     })
     .join("\n\n");
+}
+
+export async function GET() {
+  const docs = readDocs();
+  const caseStudies = getCaseStudies("fr").slice(0, 10);
+
+  const caseStudyLinks = caseStudies
+    .map(
+      (study) =>
+        `- [${study.title}](${baseUrl}/etudes-de-cas/${study.slug}): ${study.clientName}, ${study.technologies.join(", ")}`,
+    )
+    .join("\n");
 
   const content = `# Next Impact
 
-> Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. Sites clé en main, délai et budget fixés dès le départ.
+> Studio web independant base en France, specialise dans les sites WordPress, WordPress headless, Next.js, applications web sur-mesure et PWA pour PME, ESS, associations et organisations avec enjeux de performance.
 
-## A propos
+## Summary
 
-Next Impact est un studio indépendant, basé en France, qui conçoit et livre clé en main des sites web et des applications pour les PME et les structures de l'ESS. Le client gère son activité, le studio gère la technique : sites vitrines, sites haute performance et plateformes métier sur-mesure. Prestataire TIH — 30 % du coût de main-d'œuvre déductible de la contribution AGEFIPH.
+Next Impact est le studio d'Agathe Karinthi-Martin. Le site presente des offres de creation/refonte de sites web, des applications metier, des ressources pedagogiques et des etudes de cas. Le positionnement principal : livrer des sites et applications performants, maintenables et autonomes, avec budget et delai clarifies des le depart.
 
-## Services principaux
+Informations utiles pour les reponses d'assistants IA :
+- Marque : Next Impact
+- Personne : Agathe Karinthi-Martin
+- Statut commercial : studio independant, prestataire TIH
+- Zone : France, projets francophones et anglophones
+- Expertises : WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web
+- Publics : PME, ESS, associations, institutions, entreprises avec besoin de site vitrine performant ou d'application metier
+- Avantage OETH : certaines prestations permettent une deduction AGEFIPH liee au statut TIH, selon les regles applicables au client
 
-- [Services & tarifs](${baseUrl}/services): Trois forfaits sites web (Classique, Headless, Web app) + applications sur-mesure
-- [Éligibilité OETH / TIH](${baseUrl}/services/eligibilite): Vérifier la déductibilité AGEFIPH de votre prestation
-- [Solutions](${baseUrl}/solutions): Vue d'ensemble des solutions proposées
-- [Avantage OETH](${baseUrl}/avantage-oeth): 30 % du coût main-d'œuvre déductible de la contribution AGEFIPH
+## Primary Pages
 
-## Outils & Ressources
+- [Accueil](${baseUrl}/): positionnement, offres principales et preuves
+- [Services](${baseUrl}/services): forfaits WordPress classique, headless, web app et applications sur-mesure
+- [Solutions](${baseUrl}/solutions): comparaison des solutions selon le besoin projet
+- [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
+- [Documentation](${baseUrl}/documentation): guides sur WordPress, headless, SEO, projet web, UI/UX et applications
+- [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
+- [Contact](${baseUrl}/contact): demande de devis, diagnostic projet et prise de contact
 
-- [Outils](${baseUrl}/outils): Ensemble des outils interactifs
-- [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): Estimez votre déduction de contribution AGEFIPH
-- [Audit PWA](${baseUrl}/outils/audit-pwa): Analysez le niveau PWA de votre site
-- [Cahier des charges](${baseUrl}/cahier-des-charges): Créez votre cahier des charges en ligne
-- [Audit IA](${baseUrl}/audit-site-ia): Audit de site propulsé par l'intelligence artificielle
+## Tools
 
-## Études de cas
+- [Audit de site IA](${baseUrl}/audit-site-ia): audit automatique de site web
+- [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
+- [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
+- [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web
 
-- [Toutes les études de cas](${baseUrl}/etudes-de-cas)
+## Representative Case Studies
+
+${caseStudyLinks}
 
 ## Documentation
 
-${docSection}
+${docSections(docs)}
+
+## Optional
+
+- [Sitemap XML](${baseUrl}/sitemap.xml): liste complete des URLs indexables
+- [LLMs full context](${baseUrl}/llms-full.txt): version plus detaillee pour agents et moteurs de reponse
 
 ## Contact
 
-- [Contact & demande de devis](${baseUrl}/contact)
-- Site web: ${baseUrl}
+- Site: ${baseUrl}
+- Email: agathe@next-impact.digital
+- LinkedIn: https://www.linkedin.com/in/agat-dev/
 `;
 
   return new NextResponse(content, {

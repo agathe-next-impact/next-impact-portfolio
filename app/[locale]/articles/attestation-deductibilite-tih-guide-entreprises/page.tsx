@@ -44,7 +44,7 @@ export default function ArticleAttestationTIH() {
   ];
 
   return (
-    <main>
+    <main className="light article-page">
       <ArticleJsonLd
         title="Attestation de déductibilité TIH : guide pratique pour les entreprises"
         description="Tout savoir sur l'attestation de déductibilité TIH : qui la délivre, quelles informations elle contient, comment l'intégrer à votre déclaration OETH auprès de l'URSSAF."

@@ -1,0 +1,153 @@
+---
+title: "Administrer des jeux interactifs depuis WordPress : la démo en 90 secondes"
+slug: "administrer-jeux-interactifs-wordpress-headless"
+date: "2026-06-09"
+author: "Agathe Karinthi-Martin"
+excerpt: "Comment un WordPress Headless peut piloter des jeux, quiz ou simulateurs interactifs sans casser les habitudes éditoriales : retour sur le projet Comme des Fous Jeux."
+tags: ["WordPress Headless", "Jeux interactifs", "Next.js", "Plugin WordPress"]
+readingTime: 7
+---
+
+## Introduction
+
+Peut-on administrer des jeux interactifs depuis WordPress sans transformer l'équipe éditoriale en équipe technique ?
+
+Oui. Et c'est précisément ce que montre cette démo de 90 secondes : des jeux en ligne publiés sur le site Comme des Fous, avec une administration propre depuis WordPress grâce à un plugin sur-mesure.
+
+<div className="article-video">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/KU5K44bU9NM?rel=0"
+    title="Administrer des jeux interactifs depuis WordPress"
+    loading="lazy"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowFullScreen
+  />
+</div>
+
+L'idée centrale est simple : **un WordPress Headless bien architecturé peut accueillir des contenus interactifs sophistiqués sans changer les habitudes de l'équipe qui publie**.
+
+Les rédacteurs restent dans WordPress. Le front Next.js affiche les jeux avec la performance et la liberté d'une application web. Entre les deux, un plugin structure les données, les scores et les réglages métier.
+
+## Le contexte
+
+Comme des Fous est un média participatif. Début 2026, l'équipe veut lancer une rubrique de jeux interactifs pour créer un format plus engageant que l'article classique.
+
+La contrainte était claire : garder WordPress comme outil d'administration et éviter d'appeler un développeur à chaque nouveau jeu.
+
+En 15 jours, le site [jeux.commedesfous.com](https://jeux.commedesfous.com/) était en ligne avec quatre jeux administrables depuis l'admin WordPress existant, via un plugin dédié.
+
+## Pourquoi ne pas utiliser Typeform, Riddle ou un autre SaaS ?
+
+Pour un quiz ponctuel ou un calculateur isolé, une plateforme SaaS peut très bien faire l'affaire. C'est souvent le bon choix pour tester vite, sans budget technique.
+
+Dans ce projet, trois raisons ont rendu le sur-mesure plus pertinent.
+
+### Le volume éditorial
+
+Le média voulait publier des jeux régulièrement. À partir de plusieurs contenus interactifs par an, le coût récurrent d'un SaaS et la dépendance à une plateforme externe deviennent moins intéressants qu'un socle propriétaire.
+
+### La cohérence visuelle
+
+Les jeux devaient reprendre les composants du site principal, respecter la charte et s'intégrer naturellement au média. Une iframe externe aurait cassé cette continuité.
+
+### La propriété des données
+
+Les scores, les réponses et les statistiques d'engagement devaient rester dans l'écosystème du site, pour des raisons de maîtrise, de RGPD et de simplicité d'exploitation.
+
+## Ce que fait le plugin WordPress
+
+Le plugin ajoute une couche métier dans l'administration WordPress, sans transformer WordPress en usine à gaz.
+
+Il gère notamment :
+
+- les profils ou comptes joueurs nécessaires au suivi des parties ;
+- les scores et résultats par jeu ;
+- les statuts de publication ou de modération ;
+- les champs d'administration propres à chaque type de jeu ;
+- les endpoints REST utilisés par le front Next.js.
+
+L'équipe garde donc une interface connue : menus WordPress, listes, champs, brouillons, publication. La nouveauté n'est pas une nouvelle plateforme, mais un nouvel espace métier dans l'outil déjà utilisé.
+
+## Les choix d'architecture
+
+Le résultat tient surtout à cinq décisions techniques.
+
+### 1. Un Custom Post Type central
+
+Plutôt que de créer un type de contenu différent pour chaque jeu, l'architecture repose sur un modèle commun, enrichi avec des champs conditionnels.
+
+Résultat : les statistiques restent plus faciles à agréger, les URLs restent cohérentes, et l'ajout d'un nouveau type de jeu ne demande pas de repenser toute la structure.
+
+### 2. Des champs ACF conditionnels
+
+Advanced Custom Fields permet d'afficher uniquement les champs utiles selon le type de jeu. L'admin reste lisible : on ne montre pas aux rédacteurs des options qui ne concernent pas le contenu en cours.
+
+### 3. Une API REST personnalisée
+
+Le front Next.js ne consomme pas WordPress de manière brute. Des endpoints REST dédiés exposent seulement ce dont les jeux ont besoin.
+
+C'est plus simple à maintenir, plus facile à mettre en cache et plus lisible pour un autre développeur qui reprendrait le projet.
+
+### 4. Des pages servies vite avec ISR
+
+Le front Next.js peut servir les pages très rapidement tout en se mettant à jour après une publication WordPress. Le visiteur reçoit une expérience fluide, et l'équipe éditoriale garde un cycle de publication normal.
+
+### 5. Des composants front réutilisables
+
+Les mécaniques communes aux jeux sont isolées dans des composants réutilisables. Ajouter un nouveau format devient plus rapide : on ne repart plus de zéro, on étend une base existante.
+
+## Pourquoi ce modèle se généralise bien
+
+Le plugin Jeux CDF est spécifique à Comme des Fous, mais le pattern est réutilisable pour beaucoup d'organisations.
+
+On peut l'appliquer à :
+
+- un média B2B qui veut publier des calculateurs liés à ses articles ;
+- une association qui veut créer un parcours d'orientation ;
+- un cabinet de conseil qui veut proposer des simulateurs métier ;
+- un e-commerce qui veut intégrer un configurateur produit ;
+- une institution qui veut publier un outil d'éligibilité ou une calculatrice citoyenne.
+
+Le schéma reste le même : **WordPress pour administrer, un plugin pour structurer, une API pour exposer, Next.js pour afficher**.
+
+## Ce qu'il ne faut pas en déduire
+
+Ce type d'architecture n'est pas nécessaire pour tous les projets WordPress.
+
+Pour un site vitrine classique, un WordPress bien configuré suffit souvent. Pour un seul quiz marketing, un SaaS reste probablement plus rationnel. Le sur-mesure devient intéressant quand les contenus interactifs deviennent un vrai actif éditorial, publiés régulièrement et intégrés au produit.
+
+Il faut aussi assumer une réalité : un plugin sur-mesure crée une dépendance technique. On peut la réduire avec une architecture standard, du code documenté et des choix WordPress classiques comme CPT, ACF et REST. Mais elle ne disparaît pas.
+
+Le bon arbitrage n'est donc pas "SaaS ou sur-mesure" dans l'absolu. C'est : fréquence d'usage, valeur stratégique, besoin de maîtrise, budget et capacité de maintenance.
+
+## Conclusion
+
+Un WordPress Headless ne sert pas seulement à gagner des points Lighthouse.
+
+Son intérêt le plus fort apparaît quand on veut garder l'autonomie éditoriale de WordPress tout en construisant des interfaces riches côté visiteur : jeux, simulateurs, configurateurs, quiz, outils métier.
+
+Comme des Fous Jeux montre ce périmètre exact : assez simple pour rester administrable par une équipe non technique, assez ambitieux pour justifier un front Next.js et une couche WordPress sur-mesure.
+
+Si cette démo déclenche un "on pourrait faire ça chez nous", le bon prochain pas n'est pas encore de choisir une stack. C'est de qualifier le besoin : combien d'outils, quelle fréquence de publication, quelles données, quelle durée de vie, quelle autonomie attendue.
+
+<Callout type="info">
+Pour creuser le projet, vous pouvez lire l'[étude de cas Comme des Fous Jeux](/etudes-de-cas/comme-des-fous-jeux) ou comparer les approches dans l'article [WordPress Headless vs classique](/blog/wordpress-headless-vs-classique-2026).
+</Callout>
+
+## FAQ
+
+### Peut-on vraiment administrer des jeux depuis WordPress ?
+
+Oui, si WordPress sert de back-office structuré. Un plugin peut créer les types de contenus, les champs, les scores et les endpoints nécessaires, tandis qu'un front Next.js gère l'expérience interactive.
+
+### Quand choisir le sur-mesure plutôt qu'un SaaS ?
+
+Quand les contenus interactifs sont réguliers, stratégiques, intégrés à la charte du site, ou quand les données doivent rester dans l'infrastructure de l'organisation.
+
+### Combien de temps faut-il pour former l'équipe ?
+
+Si l'équipe connaît déjà WordPress, la formation est courte. L'objectif du plugin est justement de réutiliser les habitudes existantes : listes, champs, statuts, publication.
+
+### Est-ce maintenable par un autre développeur ?
+
+Oui, à condition d'utiliser les standards WordPress : Custom Post Types, ACF, API REST, code documenté. Un plugin trop exotique serait plus risqué qu'utile.

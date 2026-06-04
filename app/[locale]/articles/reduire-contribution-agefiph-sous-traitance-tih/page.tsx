@@ -44,7 +44,7 @@ export default function ArticleReduireAgefiph() {
   ];
 
   return (
-    <main>
+    <main className="light article-page">
       <ArticleJsonLd
         title="Comment réduire sa contribution AGEFIPH grâce à la sous-traitance TIH dans le numérique"
         description="Guide complet pour les RH et DAF : réduisez votre contribution AGEFIPH en sous-traitant vos projets numériques à un prestataire TIH. Barème 2025, calcul et attestation."

@@ -56,7 +56,7 @@ const AiAuditBannerSVG: React.FC = () => (
       <rect x="520" y="100" width="240" height="200" rx="12" fill="#0e0e0c" opacity="0.4" stroke="rgba(14,14,12,0.3)" strokeWidth="2" />
       {/* ROI Chart */}
       <g id="roi-chart">
-        <text x="540" y="125" fill="#ebe9e3" fontSize="12" fontWeight="600">ROI Projection</text>
+        <text x="540" y="125" fill="#F7F8F9" fontSize="12" fontWeight="600">ROI Projection</text>
         {/* Bar chart */}
         <rect x="540" y="145" width="20" height="50" fill="url(#chartGradient)" rx="2">
           <animate attributeName="height" values="30;50;30" dur="3s" repeatCount="indefinite" />
@@ -80,7 +80,7 @@ const AiAuditBannerSVG: React.FC = () => (
       </g>
       {/* Performance Metrics */}
       <g id="metrics">
-        <text x="680" y="125" fill="#ebe9e3" fontSize="12" fontWeight="600">Performance</text>
+        <text x="680" y="125" fill="#F7F8F9" fontSize="12" fontWeight="600">Performance</text>
         {/* Speed gauge */}
         <circle cx="720" cy="160" r="25" fill="none" stroke="#0e0e0c" strokeWidth="4" />
         <circle cx="720" cy="160" r="25" fill="none" stroke="#F29F05" strokeWidth="4" strokeDasharray="120" strokeDashoffset="30" transform="rotate(-90 720 160)">
@@ -90,7 +90,7 @@ const AiAuditBannerSVG: React.FC = () => (
       </g>
       {/* Cost Optimization */}
       <g id="cost-optimization">
-        <text x="540" y="225" fill="#ebe9e3" fontSize="12" fontWeight="600">Cost Efficiency</text>
+        <text x="540" y="225" fill="#F7F8F9" fontSize="12" fontWeight="600">Cost Efficiency</text>
         {/* Pie chart segments */}
         <circle cx="580" cy="260" r="20" fill="none" stroke="#d83a1a" strokeWidth="8" strokeDasharray="80 120" transform="rotate(-90 580 260)" />
         <circle cx="580" cy="260" r="20" fill="none" stroke="#F29F05" strokeWidth="8" strokeDasharray="40 120" strokeDashoffset="-80" transform="rotate(-90 580 260)" />

@@ -36,7 +36,7 @@ export const Couleurs: Story = {
       </p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
         {swatch("paper", "#ffffff")}
-        {swatch("paper-2", "#ebe9e3")}
+        {swatch("paper-2", "#F7F8F9")}
         {swatch("ink", "#0e0e0c")}
         {swatch("ink-2", "#2a2a26")}
         {swatch("rule", "rgba(14,14,12,0.18)")}

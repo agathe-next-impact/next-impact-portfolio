@@ -13,7 +13,7 @@ interface ArticleLayoutProps {
 
 export function ArticleLayout({ article, sectionCount, children }: ArticleLayoutProps) {
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div className="light article-page" style={{ minHeight: "100vh" }}>
       <TranslationFallbackBanner show={article.isFallback} />
       <section className="s">
         <div className="container">

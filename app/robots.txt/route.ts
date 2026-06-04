@@ -1,56 +1,72 @@
 import { NextResponse } from "next/server";
 
+const baseUrl = "https://www.next-impact.digital";
+
 export async function GET() {
   const content = `
-# Next Impact — robots.txt
-# https://www.next-impact.digital
+# Next Impact - robots.txt
+# Public content is crawlable. API and internal test routes are excluded.
 
-# Règles par défaut — autoriser l'indexation
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /_next/
 Disallow: /demo/metadata-test
+Disallow: /en/demo/metadata-test
 
-# Google — accès complet
 User-agent: Googlebot
-Allow: /
-
-# Bing
-User-agent: Bingbot
-Allow: /
-
-# LLMs & AI Crawlers — accès autorisé pour la visibilité IA
-User-agent: GPTBot
 Allow: /
 Disallow: /api/
 Disallow: /demo/metadata-test
+Disallow: /en/demo/metadata-test
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /demo/metadata-test
+Disallow: /en/demo/metadata-test
+
+# AI search and answer engines
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /demo/metadata-test
+Disallow: /en/demo/metadata-test
 
 User-agent: ChatGPT-User
 Allow: /
 
-User-agent: Google-Extended
+User-agent: GPTBot
 Allow: /
-
-User-agent: Anthropic-ai
-Allow: /
+Disallow: /api/
+Disallow: /demo/metadata-test
+Disallow: /en/demo/metadata-test
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /api/
 
-User-agent: Cohere-ai
+User-agent: anthropic-ai
 Allow: /
+Disallow: /api/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /api/
 
-# Sitemaps
-Sitemap: https://www.next-impact.digital/sitemap.xml
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+Sitemap: ${baseUrl}/sitemap.xml
   `.trim();
 
   return new NextResponse(content, {
     headers: {
-      "Content-Type": "text/plain",
+      "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, max-age=86400, s-maxage=86400",
     },
   });

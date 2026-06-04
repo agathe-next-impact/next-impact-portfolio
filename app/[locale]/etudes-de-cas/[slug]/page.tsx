@@ -45,6 +45,7 @@ export async function generateMetadata(props: {
         ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
         : new Date().toISOString(),
     tags: caseStudy.technologies,
+    locale,
   });
 }
 

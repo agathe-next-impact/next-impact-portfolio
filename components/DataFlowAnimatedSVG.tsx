@@ -27,7 +27,7 @@ export default function DataFlowAnimatedSVG() {
         </circle>
       </g>
       <g id="node-3">
-        <circle cx="225" cy="100" r="20" fill="#ebe9e3" opacity="0.8">
+        <circle cx="225" cy="100" r="20" fill="#F7F8F9" opacity="0.8">
           <animateTransform attributeName="transform" type="rotate" from="180 300 200" to="540 300 200" dur="10s" repeatCount="indefinite" />
         </circle>
       </g>
@@ -49,7 +49,7 @@ export default function DataFlowAnimatedSVG() {
         <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 375,100" begin="0.5s" />
         <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="0.5s" />
       </circle>
-      <circle r="4" fill="#ebe9e3">
+      <circle r="4" fill="#F7F8F9">
         <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 225,100" begin="1s" />
         <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s" />
       </circle>

@@ -5,7 +5,7 @@
 /* ─── Swiss Design Tokens ─────────────────────────────── */
 :root {
   --paper:        #ffffff;
-  --paper-2:      #ebe9e3;
+  --paper-2:      #F7F8F9;
   --ink:          #0e0e0c;
   --ink-2:        #2a2a26;
   --muted-color:  rgba(14, 14, 12, 0.55);
@@ -786,6 +786,75 @@ body {
    =========================================================================== */
 
 .light body { color: var(--ink); background-color: var(--paper); }
+
+.article-page {
+  background: var(--paper);
+  color: var(--ink);
+}
+.article-page section.s {
+  background: var(--paper);
+}
+.article-page h1,
+.article-page h2,
+.article-page h3,
+.article-page h4,
+.article-page p,
+.article-page span,
+.article-page li {
+  color: var(--ink);
+}
+.article-page [data-article-content] {
+  background: var(--paper) !important;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.article-page [data-article-content] img,
+.article-page [data-article-content] video,
+.article-page [data-article-content] iframe,
+.article-page [data-article-content] .article-media,
+.article-page [data-article-content] .article-video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+.article-page [data-article-content] img,
+.article-page [data-article-content] video {
+  height: auto;
+  object-fit: contain;
+}
+.article-page [data-article-content] .article-media,
+.article-page [data-article-content] .article-video {
+  position: relative;
+  margin: 2rem 0;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.article-page [data-article-content] .article-video {
+  aspect-ratio: 16 / 9;
+}
+.article-page [data-article-content] .article-video > iframe,
+.article-page [data-article-content] .article-video > video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+.article-page [data-article-content] > iframe {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 2rem 0;
+  border: 0;
+}
+.article-page .label {
+  background: var(--paper);
+  color: var(--muted-color) !important;
+  border-color: var(--rule);
+}
+.article-page .annot,
+.article-page a:not(.btn) {
+  color: var(--muted-color);
+}
 
 /* --- .article-text (MDX) : ink palette ---
    The `.light .article-text X` descendant selectors only matched when

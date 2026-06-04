@@ -48,7 +48,7 @@ const config: Config = {
         mediumblue:     "#0e0e0c",
         regularblue:    "#2a2a26",
         lightblue:      "#2a2a26",
-        extralightblue: "#ebe9e3",
+        extralightblue: "#F7F8F9",
         white:          "#FFFFFF",
         orange:         "#FF6B6B",
         coral:          "#FF6B6B",
@@ -62,7 +62,7 @@ const config: Config = {
            cliquables (boutons, liens). Ne pas l'utiliser pour
            du décoratif : labels, chiffres et badges restent en
            encre (ink / ink-2). */
-        "paper-2":      "#ebe9e3",
+        "paper-2":      "#F7F8F9",
         "ink-2":        "#2a2a26",
         rule:           "rgba(14, 14, 12, 0.18)",
         "rule-strong":  "rgba(14, 14, 12, 0.42)",

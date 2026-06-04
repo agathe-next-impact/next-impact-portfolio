@@ -11,10 +11,17 @@ const HREFLANG_LOCALES: Record<Locale, string> = {
   en: "en-US",
 };
 
-function buildLocalizedPaths(path: string): Record<string, string> {
+function absoluteUrl(url: string): string {
+  return url.startsWith("http") ? url : `${siteConfig.url}${url}`;
+}
+
+function buildLocalizedPaths(
+  path: string,
+  locales: Locale[] = [...routing.locales],
+): Record<string, string> {
   const cleaned = path === "/" ? "" : path;
   const langs: Record<string, string> = {};
-  for (const loc of routing.locales) {
+  for (const loc of locales) {
     const prefix = loc === routing.defaultLocale ? "" : `/${loc}`;
     langs[HREFLANG_LOCALES[loc]] = `${siteConfig.url}${prefix}${cleaned || "/"}`;
   }
@@ -81,6 +88,7 @@ export interface MetadataOptions {
   noindex?: boolean;
   canonical?: string;
   locale?: Locale;
+  alternateLocales?: Locale[];
 }
 
 /**
@@ -102,6 +110,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
     noindex = false,
     canonical,
     locale = routing.defaultLocale,
+    alternateLocales = [...routing.locales],
   } = options;
 
   // Construction de l'URL complète (avec préfixe de locale si non par défaut)
@@ -109,8 +118,8 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
   const fullPath = path === "/" || !path ? "/" : path;
   const localizedPath = `${localePrefix}${fullPath === "/" ? "" : fullPath}` || "/";
   const url = `${siteConfig.url}${localizedPath}`;
-  const canonicalUrl = canonical || url;
-  const languageAlternates = buildLocalizedPaths(fullPath);
+  const canonicalUrl = canonical ? absoluteUrl(canonical) : url;
+  const languageAlternates = buildLocalizedPaths(fullPath, alternateLocales);
 
   // Gestion de l'image OpenGraph
   let ogImage;
@@ -131,7 +140,10 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
       };
     }
   } else {
-    ogImage = siteConfig.defaultImage;
+    ogImage = {
+      ...siteConfig.defaultImage,
+      url: absoluteUrl(siteConfig.defaultImage.url),
+    };
   }
 
   // Combinaison des mots-clés
@@ -139,6 +151,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
 
   // Construction des métadonnées
   const metadata: Metadata = {
+    metadataBase: new URL(siteConfig.url),
     title,
     description,
     keywords: allKeywords,
@@ -489,6 +502,7 @@ export function generateArticleMetadata(options: {
   modifiedTime?: string;
   authors?: string[];
   tags?: string[];
+  locale?: Locale;
 }): Metadata {
   return generatePageMetadata({
     title: options.title,
@@ -500,6 +514,7 @@ export function generateArticleMetadata(options: {
     modifiedTime: options.modifiedTime,
     authors: options.authors,
     keywords: options.tags,
+    locale: options.locale,
   });
 }
 
@@ -511,6 +526,7 @@ export function generateDocMetadata(options: {
   description: string;
   category: string;
   slug?: string;
+  locale?: Locale;
 }): Metadata {
   const path = options.slug
     ? `/documentation/${options.category}/${options.slug}`
@@ -521,5 +537,6 @@ export function generateDocMetadata(options: {
     description: options.description,
     path,
     keywords: ["documentation", options.category, "guide"],
+    locale: options.locale,
   });
 }

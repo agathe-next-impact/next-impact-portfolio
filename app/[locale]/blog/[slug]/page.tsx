@@ -64,7 +64,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale } = await params
   try {
-    const post = await getBlogPost(slug)
+    const post = await getBlogPost(slug, locale)
     const { generatePageMetadata } = await import("@/lib/metadata")
     return generatePageMetadata({
       title: `${post.title} | Next Impact Digital`,
@@ -73,6 +73,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       authors: post.author ? [post.author] : undefined,
+      keywords: post.tags,
       locale,
     })
   } catch {

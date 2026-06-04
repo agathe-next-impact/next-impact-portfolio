@@ -18,7 +18,7 @@ export function BlogLayout({ post, children }: BlogLayoutProps) {
     : ""
 
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div className="light article-page" style={{ minHeight: "100vh" }}>
       <TranslationFallbackBanner show={post.isFallback} />
       <section className="s">
         <div className="container">
