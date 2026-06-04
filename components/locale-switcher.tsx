@@ -19,30 +19,68 @@ export function LocaleSwitcher({ className = "" }: LocaleSwitcherProps) {
   const t = useTranslations("localeSwitcher");
   const [pending, startTransition] = React.useTransition();
 
-  const otherLocale: Locale = locale === "fr" ? "en" : "fr";
-  const targetLabel = otherLocale === "fr" ? t("fr") : t("en");
-
-  const handleClick = () => {
+  const switchTo = (target: Locale) => {
+    if (target === locale || pending) return;
     startTransition(() => {
       router.replace(
         // @ts-expect-error – next-intl typing for dynamic pathnames
         { pathname, params },
-        { locale: otherLocale }
+        { locale: target }
       );
     });
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      disabled={pending}
-      aria-label={t("switchTo", { target: targetLabel })}
-      title={t("switchTo", { target: targetLabel })}
-      className={`inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-white/20 px-2 text-xs font-semibold uppercase tracking-wider text-white/90 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-regularblue disabled:opacity-60 ${className}`}
+    <div
+      role="group"
+      aria-label={t("label")}
+      className={className}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        border: "1px solid var(--rule)",
+        height: 28,
+        overflow: "hidden",
+      }}
     >
-      {otherLocale}
-    </button>
+      {routing.locales.map((loc, index) => {
+        const active = loc === locale;
+        const targetLabel = loc === "fr" ? t("fr") : t("en");
+        return (
+          <button
+            key={loc}
+            type="button"
+            onClick={() => switchTo(loc)}
+            disabled={pending || active}
+            aria-pressed={active}
+            aria-label={active ? undefined : t("switchTo", { target: targetLabel })}
+            title={active ? undefined : t("switchTo", { target: targetLabel })}
+            style={{
+              fontFamily: "var(--mono, monospace)",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              height: "100%",
+              padding: "0 9px",
+              border: "none",
+              borderLeft: index === 0 ? "none" : "1px solid var(--rule)",
+              background: active ? "var(--ink)" : "transparent",
+              color: active ? "var(--paper)" : "var(--muted-color)",
+              cursor: active ? "default" : "pointer",
+              transition: "color 0.15s, background 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              if (!active) e.currentTarget.style.color = "var(--ink)";
+            }}
+            onMouseLeave={(e) => {
+              if (!active) e.currentTarget.style.color = "var(--muted-color)";
+            }}
+          >
+            {loc}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
