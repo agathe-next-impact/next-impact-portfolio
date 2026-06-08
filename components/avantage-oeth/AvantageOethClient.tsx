@@ -8,7 +8,16 @@ import SimulateurAgefiph from "@/components/simulateur-agefiph";
 import FaqSchema from "@/components/services/FaqSchema";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { RadialGauge } from "@/components/visuals/radial-gauge";
+import { BarBreakdown, MeterBar } from "@/components/visuals/charts";
+
+const BTN_PRIMARY =
+  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+
+const BTN_GHOST =
+  "group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 type Step = { number: string; Icon: LucideIcon; title: string; description: string };
 
@@ -44,6 +53,25 @@ export default function AvantageOethClient() {
   const steps = isEn ? stepsEn : stepsFr;
   const faqs = isEn ? faqsEn : faqsFr;
 
+  // Barème 2025 — données pour le chart (en milliers d'€, par TH manquant).
+  const baremeData = [
+    { label: isEn ? "20–249" : "20–249", value: 4.752 },
+    { label: isEn ? "250–749" : "250–749", value: 5.94 },
+    { label: isEn ? "750+" : "750+", value: 7.128 },
+  ];
+
+  const baremeRows = isEn
+    ? [
+        { range: "20-249 employees", amount: "400 × min. wage = €4,752 / missing disabled worker" },
+        { range: "250-749 employees", amount: "500 × min. wage = €5,940 / missing disabled worker" },
+        { range: "750+ employees", amount: "600 × min. wage = €7,128 / missing disabled worker" },
+      ]
+    : [
+        { range: "20-249 salariés", amount: "400 × SMIC = 4 752 € / TH manquant" },
+        { range: "250-749 salariés", amount: "500 × SMIC = 5 940 € / TH manquant" },
+        { range: "750+ salariés", amount: "600 × SMIC = 7 128 € / TH manquant" },
+      ];
+
   return (
     <PageLayout
       titre={isEn ? "Reduce your AGEFIPH contribution by investing in your web project" : "Réduisez votre contribution AGEFIPH en investissant dans votre projet web"}
@@ -54,304 +82,291 @@ export default function AvantageOethClient() {
 
       {/* EN-only context note */}
       {isEn && (
-        <section className="s" style={{ borderTop: "1px solid var(--rule)", paddingTop: "24px", paddingBottom: "24px" }}>
-          <div className="container">
-            <div
-              style={{
-                display: "flex",
-                gap: 12,
-                padding: "16px 20px",
-                border: "1px solid var(--rule)",
-                background: "var(--paper-2)",
-              }}
-            >
-              <Info size={16} style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }} />
-              <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>
-                <strong style={{ color: "var(--ink)" }}>French legal scheme.</strong>{" "}
-                AGEFIPH is the French employment-of-disabled-workers contribution. This page is most relevant for companies operating in France: it explains how they can reduce that contribution by 30% of labor cost when subcontracting to a TIH-certified independent (Travailleur Indépendant Handicapé).
-              </p>
-            </div>
-          </div>
-        </section>
+        <BlueprintSection innerClassName="px-6 py-10 lg:px-8 lg:py-12">
+          <Reveal className="flex gap-3 rounded-md border border-dark-gray bg-jet p-5">
+            <Info size={16} className="mt-0.5 shrink-0 text-accent-secondary" />
+            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <strong className="font-medium text-foreground">French legal scheme.</strong>{" "}
+              AGEFIPH is the French employment-of-disabled-workers contribution. This page is most relevant for companies operating in France: it explains how they can reduce that contribution by 30% of labor cost when subcontracting to a TIH-certified independent (Travailleur Indépendant Handicapé).
+            </p>
+          </Reveal>
+        </BlueprintSection>
       )}
 
-      {/* Comment ça marche — 2 étapes */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ 01</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-              {isEn ? "How does it work?" : "Comment ça marche ?"}
-            </h2>
-            <div className="sec-meta">{isEn ? "A simple process" : "Un processus simple"}</div>
-          </div>
+      <Separator />
 
-          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {steps.map((step, i) => (
-              <StaggerItem
-                key={step.number}
-                className="ni-card"
-                style={{
-                  padding: "40px 32px",
-                  borderRight: i < steps.length - 1 ? "1px solid var(--rule)" : "none",
-                }}
+      {/* № 01 — Comment ça marche (2 étapes) */}
+      <BlueprintSection>
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 01"
+            kicker={isEn ? "A simple process" : "Un processus simple"}
+            title={isEn ? "How does it work?" : "Comment ça marche ?"}
+          />
+        </Reveal>
+
+        <Stagger className="grid md:grid-cols-2">
+          {steps.map((step, i) => (
+            <StaggerItem key={step.number}>
+              <div
+                className={
+                  "flex h-full flex-col p-6 lg:p-8" +
+                  (i < steps.length - 1 ? " border-b border-dark-gray md:border-b-0 md:border-r md:border-dark-gray" : "")
+                }
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 11,
-                      letterSpacing: "0.12em",
-                      color: "var(--ink-2)",
-                    }}
-                  >
+                <div className="mb-5 flex items-center gap-4">
+                  <span className="font-mono text-[11px] tracking-[0.12em] text-accent-secondary">
                     {step.number}
                   </span>
-                  <step.Icon size={28} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
+                  <step.Icon size={26} strokeWidth={1.5} className="block text-mid-gray" />
                 </div>
-                <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 12, color: "var(--ink)" }}>
+                <h3 className="mb-3 text-xl font-light tracking-tight text-foreground md:text-2xl">
                   {step.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>
+                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
                   {step.description}
                 </p>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
+                {step.number === "01" && (
+                  <div className="mt-6 border-t border-dark-gray pt-6">
+                    <MeterBar
+                      value={30}
+                      label={isEn ? "Labor cost deductible" : "Coût de main-d'œuvre déductible"}
+                      sublabel="30 %"
+                    />
+                  </div>
+                )}
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </BlueprintSection>
 
-      {/* Simulateur */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
-        <div className="container">
+      <Separator />
+
+      {/* Simulateur (composant inchangé, posé dans la grille blueprint) */}
+      <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+        <Reveal>
           <SimulateurAgefiph />
-        </div>
-      </section>
+        </Reveal>
+      </BlueprintSection>
 
-      {/* Contexte OETH 2025-2026 */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ 02</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-              {isEn ? "OETH context 2025–2026" : "Contexte OETH 2025–2026"}
-            </h2>
-            <div className="sec-meta">{isEn ? "Regulatory update" : "Évolution réglementaire"}</div>
-          </div>
+      <Separator />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {([
-              {
-                Icon: Scale,
-                title: isEn ? "TIH subcontracting remains an active lever" : "La sous-traitance TIH reste un levier actif",
-                content: isEn
-                  ? "Among the few remaining active deduction levers in 2025, subcontracting to TIH, EA and ESAT remains fully deductible from the AGEFIPH contribution."
-                  : "Parmi les rares leviers de déduction encore actifs en 2025, la sous-traitance auprès de TIH, EA et ESAT reste pleinement déductible de la contribution AGEFIPH.",
-              },
-              {
-                Icon: TrendingUp,
-                title: isEn ? "Over-contribution" : "Surcontribution",
-                content: isEn
-                  ? "Companies that take no action for 3 consecutive years face an over-contribution of 1,500 × hourly minimum wage per missing disabled worker (€17,820 in 2025)."
-                  : "Les entreprises n'ayant entrepris aucune action pendant 3 années consécutives s'exposent à une surcontribution de 1 500 × SMIC horaire par TH manquant (soit 17 820 € en 2025).",
-              },
-              {
-                Icon: GitBranch,
-                title: isEn ? "2025 rate schedule" : "Barème 2025",
-                content: (
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 6, fontSize: 13, color: "var(--ink-2)" }}>
-                    {(isEn
-                      ? [
-                          { range: "20-249 employees", amount: "400 × min. wage = €4,752 / missing disabled worker" },
-                          { range: "250-749 employees", amount: "500 × min. wage = €5,940 / missing disabled worker" },
-                          { range: "750+ employees", amount: "600 × min. wage = €7,128 / missing disabled worker" },
-                        ]
-                      : [
-                          { range: "20-249 salariés", amount: "400 × SMIC = 4 752 € / TH manquant" },
-                          { range: "250-749 salariés", amount: "500 × SMIC = 5 940 € / TH manquant" },
-                          { range: "750+ salariés", amount: "600 × SMIC = 7 128 € / TH manquant" },
-                        ]
-                    ).map((row) => (
+      {/* № 02 — Contexte OETH 2025-2026 */}
+      <BlueprintSection>
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 02"
+            kicker={isEn ? "Regulatory update" : "Évolution réglementaire"}
+            title={isEn ? "OETH context 2025–2026" : "Contexte OETH 2025–2026"}
+          />
+        </Reveal>
+
+        <div className="grid md:grid-cols-2">
+          {([
+            {
+              Icon: Scale,
+              title: isEn ? "TIH subcontracting remains an active lever" : "La sous-traitance TIH reste un levier actif",
+              content: isEn
+                ? "Among the few remaining active deduction levers in 2025, subcontracting to TIH, EA and ESAT remains fully deductible from the AGEFIPH contribution."
+                : "Parmi les rares leviers de déduction encore actifs en 2025, la sous-traitance auprès de TIH, EA et ESAT reste pleinement déductible de la contribution AGEFIPH.",
+            },
+            {
+              Icon: TrendingUp,
+              title: isEn ? "Over-contribution" : "Surcontribution",
+              content: isEn
+                ? "Companies that take no action for 3 consecutive years face an over-contribution of 1,500 × hourly minimum wage per missing disabled worker (€17,820 in 2025)."
+                : "Les entreprises n'ayant entrepris aucune action pendant 3 années consécutives s'exposent à une surcontribution de 1 500 × SMIC horaire par TH manquant (soit 17 820 € en 2025).",
+            },
+            {
+              Icon: GitBranch,
+              title: isEn ? "2025 rate schedule" : "Barème 2025",
+              content: (
+                <div className="flex flex-col gap-5">
+                  <ul className="flex flex-col gap-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    {baremeRows.map((row) => (
                       <li key={row.range}>
-                        <strong style={{ color: "var(--ink)" }}>{row.range}</strong> : {row.amount}
+                        <strong className="font-medium text-foreground">{row.range}</strong> : {row.amount}
                       </li>
                     ))}
                   </ul>
-                ),
-              },
-              {
-                Icon: Bell,
-                title: isEn ? "End of the transitional capping" : "Fin de l'écrêtement",
-                content: isEn
-                  ? "Since January 1, 2025, the transitional capping measures have ended. Some expenses that were previously deductible no longer are. The AGEFIPH contribution now reaches its real amount for all companies."
-                  : "Depuis le 1er janvier 2025, les mesures transitoires d'écrêtement sont terminées. Certaines dépenses autrefois déductibles ne le sont plus. La contribution AGEFIPH atteint désormais son montant réel pour toutes les entreprises.",
-              },
-            ] as { Icon: LucideIcon; title: string; content: React.ReactNode }[]).map((card, i) => (
-              <div
-                key={card.title}
-                className="ni-card"
-                style={{
-                  padding: "32px",
-                  borderRight: i % 2 === 0 ? "1px solid var(--rule)" : "none",
-                  borderBottom: i < 2 ? "1px solid var(--rule)" : "none",
-                }}
-              >
-                <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 16 }}>
-                  <card.Icon size={24} strokeWidth={1.5} style={{ color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }} />
-                  <h3 className="ni-serif" style={{ fontSize: 19, color: "var(--ink)", lineHeight: 1.2 }}>
-                    {card.title}
-                  </h3>
+                  <div className="rounded-md border border-dark-gray bg-jet p-3">
+                    <BarBreakdown data={baremeData} highlightIndex={2} height={140} />
+                    <p className="mt-1 text-center font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                      {isEn ? "k€ per missing disabled worker" : "k€ par TH manquant"}
+                    </p>
+                  </div>
                 </div>
-                {typeof card.content === "string"
-                  ? <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>{card.content}</p>
-                  : card.content
-                }
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Double Impact */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
-        <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ 03</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-              {isEn ? "Why choose a TIH specialist?" : "Pourquoi choisir un prestataire TIH spécialisé ?"}
-            </h2>
-            <div className="sec-meta">{isEn ? "An investment with double payoff" : "Un investissement à double bénéfice"}</div>
-          </div>
-
-          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {([
-              {
-                Icon: Gauge,
-                title: isEn ? "Technical performance" : "Performance technique",
-                desc: isEn
-                  ? "Modern tech standards on every project: load times under 1s, maximum security, SEO and accessibility carefully tuned — whether classic WordPress, Headless or a custom application."
-                  : "Des standards techniques élevés sur tous les projets : temps de chargement < 1s, sécurité renforcée, SEO et accessibilité soignés — que ce soit un site WordPress, Headless ou une application sur-mesure.",
-              },
-              {
-                Icon: BarChart2,
-                title: isEn ? "Tax benefit" : "Avantage fiscal",
-                desc: isEn
-                  ? "30% of the labor cost deductible from your AGEFIPH contribution. A web investment that directly reduces your social-charge bill."
-                  : "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH. Un investissement web qui réduit directement vos charges sociales.",
-              },
-            ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <StaggerItem
-                key={card.title}
-                className="ni-card"
-                style={{
-                  padding: "40px 32px",
-                  borderRight: i === 0 ? "1px solid var(--rule)" : "none",
-                }}
-              >
-                <card.Icon size={28} strokeWidth={1.5} style={{ marginBottom: 20, color: "var(--muted-color)", display: "block" }} />
-                <h3 className="ni-serif" style={{ fontSize: 22, marginBottom: 12, color: "var(--ink)" }}>
+              ),
+            },
+            {
+              Icon: Bell,
+              title: isEn ? "End of the transitional capping" : "Fin de l'écrêtement",
+              content: isEn
+                ? "Since January 1, 2025, the transitional capping measures have ended. Some expenses that were previously deductible no longer are. The AGEFIPH contribution now reaches its real amount for all companies."
+                : "Depuis le 1er janvier 2025, les mesures transitoires d'écrêtement sont terminées. Certaines dépenses autrefois déductibles ne le sont plus. La contribution AGEFIPH atteint désormais son montant réel pour toutes les entreprises.",
+            },
+          ] as { Icon: LucideIcon; title: string; content: React.ReactNode }[]).map((card, i) => (
+            <div
+              key={card.title}
+              className={
+                "flex flex-col p-6 lg:p-8" +
+                (i % 2 === 0 ? " md:border-r md:border-dark-gray" : "") +
+                (i < 2 ? " border-b border-dark-gray" : "")
+              }
+            >
+              <div className="mb-4 flex items-start gap-3">
+                <card.Icon size={22} strokeWidth={1.5} className="mt-0.5 shrink-0 text-mid-gray" />
+                <h3 className="text-lg font-light leading-snug tracking-tight text-foreground">
                   {card.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.7 }}>
-                  {card.desc}
-                </p>
-              </StaggerItem>
-            ))}
-          </Stagger>
+              </div>
+              {typeof card.content === "string" ? (
+                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{card.content}</p>
+              ) : (
+                card.content
+              )}
+            </div>
+          ))}
         </div>
-      </section>
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* № 03 — Double Impact */}
+      <BlueprintSection tone="jet">
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 03"
+            kicker={isEn ? "An investment with double payoff" : "Un investissement à double bénéfice"}
+            title={isEn ? "Why choose a TIH specialist?" : "Pourquoi choisir un prestataire TIH spécialisé ?"}
+          />
+        </Reveal>
+
+        <Stagger className="grid md:grid-cols-2">
+          {/* Performance technique */}
+          <StaggerItem>
+            <div className="flex h-full flex-col border-b border-dark-gray p-6 md:border-b-0 md:border-r md:border-dark-gray lg:p-8">
+              <Gauge size={26} strokeWidth={1.5} className="mb-5 block text-mid-gray" />
+              <h3 className="mb-3 text-xl font-light tracking-tight text-foreground md:text-2xl">
+                {isEn ? "Technical performance" : "Performance technique"}
+              </h3>
+              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                {isEn
+                  ? "Modern tech standards on every project: load times under 1s, maximum security, SEO and accessibility carefully tuned — whether classic WordPress, Headless or a custom application."
+                  : "Des standards techniques élevés sur tous les projets : temps de chargement < 1s, sécurité renforcée, SEO et accessibilité soignés — que ce soit un site WordPress, Headless ou une application sur-mesure."}
+              </p>
+              <div className="mt-6 flex flex-col gap-3 border-t border-dark-gray pt-6">
+                <MeterBar value={95} label={isEn ? "Performance" : "Performance"} sublabel="> 90" />
+                <MeterBar value={92} label={isEn ? "Accessibility" : "Accessibilité"} sublabel="A11y" />
+              </div>
+            </div>
+          </StaggerItem>
+
+          {/* Avantage fiscal */}
+          <StaggerItem>
+            <div className="flex h-full flex-col p-6 lg:p-8">
+              <BarChart2 size={26} strokeWidth={1.5} className="mb-5 block text-mid-gray" />
+              <h3 className="mb-3 text-xl font-light tracking-tight text-foreground md:text-2xl">
+                {isEn ? "Tax benefit" : "Avantage fiscal"}
+              </h3>
+              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                {isEn
+                  ? "30% of the labor cost deductible from your AGEFIPH contribution. A web investment that directly reduces your social-charge bill."
+                  : "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH. Un investissement web qui réduit directement vos charges sociales."}
+              </p>
+              <div className="mt-6 flex justify-center border-t border-dark-gray pt-6">
+                <RadialGauge
+                  value={30}
+                  size={140}
+                  label={isEn ? "labor cost" : "coût de main-d'œuvre"}
+                  sublabel={isEn ? "deductible" : "déductible"}
+                />
+              </div>
+            </div>
+          </StaggerItem>
+        </Stagger>
+      </BlueprintSection>
+
+      <Separator />
 
       {/* CTA */}
-      <section className="s" style={{ background: "var(--paper-2)", borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <Reveal>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(24px, 3vw, 40px)", lineHeight: 1.1, color: "var(--ink)", marginBottom: 16 }}>
+      <BlueprintSection innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+        <Reveal className="flex flex-col">
+          <h2 className="max-w-2xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
             {isEn ? "Ready to reduce your AGEFIPH contribution?" : "Prêt à réduire votre contribution AGEFIPH ?"}
           </h2>
-          <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 480, marginBottom: 32, lineHeight: 1.65 }}>
+          <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
               ? "Let's discuss your web project. I'll provide a detailed quote with the exact amount deductible from your AGEFIPH contribution."
               : "Discutons de votre projet web. Je vous fournirai un devis détaillé avec le montant exact déductible de votre contribution AGEFIPH."}
           </p>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Link
-              href="/contact"
-              className="btn primary"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-            >
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/contact" className={BTN_PRIMARY}>
               {isEn ? "Discuss my project" : "Discuter de mon projet"}
               <ArrowRight size={14} />
             </Link>
-            <Link
-              href="/services"
-              className="btn"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-            >
+            <Link href="/services" className={BTN_GHOST}>
               {isEn ? "View offerings" : "Voir les offres"}
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
-          </Reveal>
-        </div>
-      </section>
+        </Reveal>
+      </BlueprintSection>
 
-      {/* Articles */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ 04</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
-              {isEn ? "OETH guides and resources" : "Guides et ressources OETH"}
-            </h2>
-            <div className="sec-meta">{isEn ? "Going further" : "Pour aller plus loin"}</div>
-          </div>
+      <Separator />
 
-          <Stagger stagger={0.08} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {(isEn
-              ? [
-                  { href: "/articles/reduire-contribution-agefiph-sous-traitance-tih", title: "Reducing your AGEFIPH contribution", description: "Complete guide for HR and CFOs: 2025 rate schedule, deduction calculation and optimization strategy.", tag: "HR / CFO" },
-                  { href: "/articles/attestation-deductibilite-tih-guide-entreprises", title: "TIH deductibility attestation", description: "Step-by-step process, content of the attestation, accounting watch-points and typical timeline.", tag: "Accounting" },
-                ]
-              : [
-                  { href: "/articles/reduire-contribution-agefiph-sous-traitance-tih", title: "Réduire sa contribution AGEFIPH", description: "Guide complet pour les RH et DAF : barème 2025, calcul de la déduction et stratégie d'optimisation.", tag: "RH / DAF" },
-                  { href: "/articles/attestation-deductibilite-tih-guide-entreprises", title: "Attestation de déductibilité TIH", description: "Processus pas à pas, contenu de l'attestation, points de vigilance comptables et calendrier type.", tag: "Comptabilité" },
-                ]
-            ).map((article, i) => (
-              <StaggerItem key={article.href}>
+      {/* № 04 — Articles */}
+      <BlueprintSection>
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 04"
+            kicker={isEn ? "Going further" : "Pour aller plus loin"}
+            title={isEn ? "OETH guides and resources" : "Guides et ressources OETH"}
+          />
+        </Reveal>
+
+        <Stagger className="grid md:grid-cols-2">
+          {(isEn
+            ? [
+                { href: "/articles/reduire-contribution-agefiph-sous-traitance-tih", title: "Reducing your AGEFIPH contribution", description: "Complete guide for HR and CFOs: 2025 rate schedule, deduction calculation and optimization strategy.", tag: "HR / CFO" },
+                { href: "/articles/attestation-deductibilite-tih-guide-entreprises", title: "TIH deductibility attestation", description: "Step-by-step process, content of the attestation, accounting watch-points and typical timeline.", tag: "Accounting" },
+              ]
+            : [
+                { href: "/articles/reduire-contribution-agefiph-sous-traitance-tih", title: "Réduire sa contribution AGEFIPH", description: "Guide complet pour les RH et DAF : barème 2025, calcul de la déduction et stratégie d'optimisation.", tag: "RH / DAF" },
+                { href: "/articles/attestation-deductibilite-tih-guide-entreprises", title: "Attestation de déductibilité TIH", description: "Processus pas à pas, contenu de l'attestation, points de vigilance comptables et calendrier type.", tag: "Comptabilité" },
+              ]
+          ).map((article, i) => (
+            <StaggerItem key={article.href}>
               <Link
                 href={article.href as Parameters<typeof Link>[0]["href"]}
-                style={{ display: "block", textDecoration: "none", height: "100%" }}
+                className={
+                  "group flex h-full flex-col p-6 transition-colors hover:bg-jet lg:p-8" +
+                  (i === 0 ? " border-b border-dark-gray md:border-b-0 md:border-r md:border-dark-gray" : "")
+                }
               >
-                <div
-                  style={{
-                    padding: "32px",
-                    borderRight: i === 0 ? "1px solid var(--rule)" : "none",
-                    height: "100%",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                >
-                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-2)", marginBottom: 12 }}>
-                    {article.tag}
-                  </div>
-                  <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>
-                    {article.title}
-                  </h3>
-                  <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
-                    {article.description}
-                  </p>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--accent-color)", display: "inline-flex", alignItems: "center", gap: 4 }}>
-                    {isEn ? "Read the article" : "Lire l'article"}
-                    <ArrowRight size={10} />
-                  </span>
+                <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                  {article.tag}
                 </div>
+                <h3 className="mb-2.5 text-xl font-light tracking-tight text-foreground">
+                  {article.title}
+                </h3>
+                <p className="mb-4 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                  {article.description}
+                </p>
+                <span className="mt-auto inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
+                  {isEn ? "Read the article" : "Lire l'article"}
+                  <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
               </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </BlueprintSection>
 
-      {/* FAQ */}
+      <Separator />
+
+      {/* FAQ — bande blueprint autoportée (FaqSchema rend sa propre section) */}
       <FaqSchema
         faqs={faqs}
         title={isEn ? "FAQ on OETH and the TIH status" : "Questions fréquentes sur l'OETH et le statut TIH"}

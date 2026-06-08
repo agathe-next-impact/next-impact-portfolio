@@ -16,36 +16,13 @@ export function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Retour en haut"
-      className="scroll-to-top-btn"
-      style={{
-        position: "fixed",
-        zIndex: 40,
-        bottom: "1.5rem",
-        right: "1.5rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "2.25rem",
-        height: "2.25rem",
-        border: "1px solid var(--rule-strong)",
-        background: "var(--paper)",
-        color: "var(--muted-color)",
-        cursor: "pointer",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(0.5rem)",
-        pointerEvents: visible ? "auto" : "none",
-        transition: "opacity 0.2s, transform 0.2s, color 0.15s, background 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.color = "var(--ink)";
-        e.currentTarget.style.background = "var(--paper-2)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.color = "var(--muted-color)";
-        e.currentTarget.style.background = "var(--paper)";
-      }}
+      className={`fixed bottom-6 right-6 z-40 flex h-9 w-9 items-center justify-center border border-dark-gray bg-obsidian text-mid-gray transition-[opacity,transform,color,background-color] duration-200 hover:border-accent-secondary hover:bg-jet hover:text-accent-secondary ${
+        visible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-2 opacity-0"
+      }`}
     >
-      <ArrowUp style={{ width: "0.875rem", height: "0.875rem" }} />
+      <ArrowUp className="h-3.5 w-3.5" />
     </button>
   );
 }

@@ -31,7 +31,8 @@ export default function CaseStudyProfileContent({
   const override =
     profileId && overrides[slug] ? overrides[slug][profileId] : null;
 
-  const detailedDescription = override?.detailedDescription ?? defaultDetailedDescription;
+  const detailedDescription =
+    override?.detailedDescription ?? defaultDetailedDescription;
   const objectives = override?.objectives ?? defaultObjectives;
   const results = override?.results ?? defaultResults;
 
@@ -45,21 +46,18 @@ export default function CaseStudyProfileContent({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.3 }}
-        style={{ display: "flex", flexDirection: "column", gap: 40 }}
+        className="flex flex-col gap-12"
       >
         {/* Présentation du projet */}
         <section>
-          <h2
-            className="ni-serif"
-            style={{ fontSize: "clamp(20px, 2vw, 26px)", color: "var(--ink)", marginBottom: 24, lineHeight: 1.2 }}
-          >
+          <h2 className="mb-5 text-2xl font-light leading-tight tracking-tight text-foreground md:text-3xl">
             {t("projectPresentation")}
           </h2>
-          <div>
+          <div className="font-inter-tight">
             {detailedDescription.split("\n\n").map((paragraph, index) => (
               <p
                 key={index}
-                style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 16, fontSize: 15 }}
+                className="mb-4 text-[15px] leading-relaxed text-mid-gray"
               >
                 {paragraph}
               </p>
@@ -68,61 +66,47 @@ export default function CaseStudyProfileContent({
         </section>
 
         {/* Objectifs et résultats */}
-        <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+        <section className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
           <div>
-            <h2
-              className="ni-serif"
-              style={{ fontSize: "clamp(18px, 2vw, 22px)", color: "var(--ink)", marginBottom: 20 }}
-            >
+            <h2 className="mb-5 text-xl font-light tracking-tight text-foreground md:text-2xl">
               {t("objectives")}
             </h2>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            <ul className="m-0 list-none p-0">
               {objectives.map((objective, index) => (
                 <li
                   key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 12,
-                    padding: "12px 0",
-                    borderBottom: "1px solid var(--rule)",
-                  }}
+                  className="flex items-start gap-3 border-b border-dark-gray py-3"
                 >
                   <ArrowRight
                     size={14}
                     strokeWidth={1.5}
-                    style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }}
+                    className="mt-0.5 shrink-0 text-accent-secondary"
                   />
-                  <span style={{ color: "var(--ink-2)", fontSize: 14, lineHeight: 1.6 }}>{objective}</span>
+                  <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                    {objective}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2
-              className="ni-serif"
-              style={{ fontSize: "clamp(18px, 2vw, 22px)", color: "var(--ink)", marginBottom: 20 }}
-            >
+            <h2 className="mb-5 text-xl font-light tracking-tight text-foreground md:text-2xl">
               {t("results")}
             </h2>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            <ul className="m-0 list-none p-0">
               {results.map((result, index) => (
                 <li
                   key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 12,
-                    padding: "12px 0",
-                    borderBottom: "1px solid var(--rule)",
-                  }}
+                  className="flex items-start gap-3 border-b border-dark-gray py-3"
                 >
                   <ArrowRight
                     size={14}
                     strokeWidth={1.5}
-                    style={{ color: "var(--ink-2)", flexShrink: 0, marginTop: 2 }}
+                    className="mt-0.5 shrink-0 text-accent-secondary"
                   />
-                  <span style={{ color: "var(--ink-2)", fontSize: 14, lineHeight: 1.6 }}>{result}</span>
+                  <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                    {result}
+                  </span>
                 </li>
               ))}
             </ul>

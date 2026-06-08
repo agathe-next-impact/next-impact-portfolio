@@ -170,95 +170,61 @@ export default async function ArticlePage(props: ArticlePageProps) {
         <ScrollToTop />
         <MobileToc tableOfContents={tableOfContents} />
         <TranslationFallbackBanner show={article.isFallback} />
-        <section className="s">
+        <section className="bg-obsidian">
           <div className="container">
             {/* Breadcrumb */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem", flexWrap: "wrap" }}>
+            <div className="mb-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/documentation"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.375rem",
-                  fontSize: "0.8125rem",
-                  color: "var(--muted-color)",
-                  textDecoration: "none",
-                }}
+                className="inline-flex items-center gap-1.5 text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {t("breadcrumbDocs")}
               </Link>
-              <span style={{ color: "var(--rule-strong)" }}>·</span>
+              <span className="text-dark-gray" aria-hidden>·</span>
               <Link
                 href={`/documentation/${article.category}` as never}
-                style={{
-                  fontSize: "0.8125rem",
-                  color: "var(--muted-color)",
-                  textDecoration: "none",
-                }}
+                className="text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
               >
                 {categoryLabel}
               </Link>
             </div>
 
             {/* Article header */}
-            <div style={{
-              borderTop: "2px solid var(--ink)",
-              paddingTop: "2.5rem",
-              marginBottom: "2.5rem",
-            }}>
+            <div className="mb-10 border-t-2 border-foreground pt-10">
               {/* Meta row */}
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
-                <span className="label">{categoryLabel}</span>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
+              <div className="mb-4 flex flex-wrap items-center gap-4">
+                <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                  {categoryLabel}
+                </span>
+                <span className="flex items-center gap-1.5 text-xs text-mid-gray">
                   <Clock className="h-3 w-3" />
                   {readingTime} {tArticle.minutes}
                 </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
+                <span className="flex items-center gap-1.5 text-xs text-mid-gray">
                   <BookOpen className="h-3 w-3" />
                   {tableOfContents.filter(toc => toc.level === 2).length} {tArticle.sections}
                 </span>
               </div>
 
               {/* Title */}
-              <h1 style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 5vw, 3rem)",
-                fontWeight: 400,
-                lineHeight: 1.15,
-                color: "var(--ink)",
-                marginBottom: "1rem",
-              }}>
+              <h1 className="mb-4 text-3xl font-light leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
                 {article.title}
               </h1>
 
               {/* Description */}
-              <p style={{
-                fontSize: "1.0625rem",
-                color: "var(--muted-color)",
-                lineHeight: 1.65,
-                maxWidth: "56ch",
-                marginBottom: "1.5rem",
-              }}>
+              <p className="mb-6 max-w-[56ch] font-inter-tight text-lg leading-relaxed text-mid-gray">
                 {article.description}
               </p>
 
               {/* Author / date / share */}
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderTop: "1px solid var(--rule)",
-                paddingTop: "1rem",
-                flexWrap: "wrap",
-                gap: "0.75rem",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", fontWeight: 500 }}>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-dark-gray pt-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground">
                     {article.author || "Next Impact"}
                   </span>
-                  <span style={{ color: "var(--rule-strong)" }}>·</span>
-                  <span className="annot">
+                  <span className="text-dark-gray" aria-hidden>·</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                     {typeof article.date === "string" ? article.date : tArticle.recently}
                   </span>
                 </div>
@@ -267,23 +233,15 @@ export default async function ArticlePage(props: ArticlePageProps) {
             </div>
 
             {/* Content grid: TOC + Article */}
-            <div className="grid grid-cols-1 lg:grid-cols-4" style={{ gap: "3rem" }}>
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
               <aside className="col-span-1 hidden lg:block">
-                <div style={{ position: "sticky", top: "7rem" }}>
+                <div className="sticky top-28">
                   <TableOfContentsPopup tableOfContents={tableOfContents} />
                 </div>
               </aside>
-              <div id="article-body" className="col-span-1 lg:col-span-3" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+              <div id="article-body" className="col-span-1 flex flex-col gap-8 lg:col-span-3">
                 {/* Reading area */}
-                <div
-                  className="light article-text"
-                  style={{
-                    width: "100%",
-                    padding: "2.5rem",
-                    background: "var(--paper-2)",
-                    color: "var(--ink)",
-                  }}
-                >
+                <div className="w-full border border-dark-gray bg-jet p-6 md:p-10">
                   {article.isMdx ? (
                     <MdxContent source={article.content} />
                   ) : (

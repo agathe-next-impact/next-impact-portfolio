@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { JOURNEYS, PROFILES } from "@/lib/documentation-profiles";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
+import { Reveal } from "@/components/ui/reveal";
 
 interface ArticleNavigationProps {
   category: string;
@@ -32,57 +33,24 @@ export function ArticleNavigation({ category, slug }: ArticleNavigationProps) {
   const Icon = profile.icon;
 
   return (
-    <div>
+    <Reveal>
       <Link
         href={`/documentation/${nextStep.category}/${nextStep.slug}` as never}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          padding: "1.25rem 1.5rem",
-          border: "1px solid var(--rule)",
-          borderLeft: "3px solid var(--accent-color)",
-          background: "var(--paper-2)",
-          textDecoration: "none",
-          transition: "background 0.15s",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper)")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
+        className="group flex items-center gap-4 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-transparent p-5 px-6 no-underline transition-colors hover:bg-jet/40"
       >
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "2rem",
-          height: "2rem",
-          border: "1px solid var(--rule)",
-          background: "var(--paper)",
-          flexShrink: 0,
-        }}>
-          <Icon style={{ width: "1rem", height: "1rem", color: "var(--accent-color)" }} />
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center border border-dark-gray bg-obsidian">
+          <Icon className="h-4 w-4 text-accent-secondary" />
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p className="annot" style={{
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
-            marginBottom: "0.25rem",
-          }}>
+        <div className="min-w-0 flex-1">
+          <p className="mb-1 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-mid-gray">
             Prochain dans votre parcours {profile.label}
           </p>
-          <p style={{
-            fontSize: "0.875rem",
-            color: "var(--ink)",
-            fontFamily: "var(--font-serif)",
-            fontWeight: 400,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}>
+          <p className="truncate text-sm font-light tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
             {nextStep.title}
           </p>
         </div>
-        <ArrowRight style={{ width: "1rem", height: "1rem", color: "var(--muted-color)", flexShrink: 0 }} />
+        <ArrowRight className="h-4 w-4 flex-shrink-0 text-mid-gray transition-transform group-hover:translate-x-0.5 group-hover:text-accent-secondary" />
       </Link>
-    </div>
+    </Reveal>
   );
 }

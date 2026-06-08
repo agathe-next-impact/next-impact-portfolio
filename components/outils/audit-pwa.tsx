@@ -1,10 +1,19 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Info,
+  XCircle,
+} from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
+import { RadialGauge } from "@/components/visuals/radial-gauge";
+import { Sonar } from "@/components/visuals/sonar";
 
 interface CheckResult {
   id: string;
@@ -39,6 +48,29 @@ const INITIAL: FormState = {
   nativeComplexity: "low",
   technicalBase: "partial",
 };
+
+const BTN_PRIMARY =
+  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+
+const BTN_GHOST =
+  "group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+
+const LABEL_MONO =
+  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+
+/** Couleur de texte d'un état, en tokens DS (jamais de couleur en dur). */
+function statusTextClass(status: "ok" | "warn" | "ko") {
+  if (status === "ok") return "text-accent-secondary";
+  if (status === "warn") return "text-accent";
+  return "text-vermilion";
+}
+
+/** Couleur de filet/liseré d'un état, en tokens DS. */
+function statusBorderClass(status: "ok" | "warn" | "ko") {
+  if (status === "ok") return "border-l-accent-secondary";
+  if (status === "warn") return "border-l-accent";
+  return "border-l-vermilion";
+}
 
 export default function AuditPwa() {
   const locale = useLocale() as Locale;
@@ -257,20 +289,20 @@ export default function AuditPwa() {
       return {
         fr: "Très forte opportunité : une PWA semble pertinente pour améliorer l'expérience mobile, éviter une app native coûteuse et accélérer la mise en marché.",
         en: "Very strong opportunity: a PWA looks relevant to improve mobile UX, avoid costly native development and ship faster.",
-        color: "#2a7a2a",
+        toneClass: "text-accent-secondary",
       };
     }
     if (score >= 55) {
       return {
         fr: "Opportunité à cadrer : une PWA peut être une bonne V1, à condition de valider les usages mobiles et les fonctionnalités vraiment utiles.",
         en: "Opportunity to scope: a PWA can be a good V1 if mobile usage and truly useful features are validated.",
-        color: "#b85c09",
+        toneClass: "text-accent",
       };
     }
     return {
       fr: "Opportunité faible à ce stade : mieux vaut renforcer le site mobile ou clarifier le besoin avant d'investir dans une PWA.",
       en: "Weak opportunity for now: strengthen the mobile site or clarify the need before investing in a PWA.",
-      color: "var(--accent-color)",
+      toneClass: "text-vermilion",
     };
   }, [score]);
 
@@ -280,28 +312,14 @@ export default function AuditPwa() {
     setSubmitCount((count) => count + 1);
   };
 
-  const statusColor = (status: "ok" | "warn" | "ko") => {
-    if (status === "ok") return "#2a7a2a";
-    if (status === "warn") return "#b85c09";
-    return "var(--accent-color)";
-  };
-
   return (
-    <div style={{ width: "100%", border: "1px solid var(--rule)" }}>
-      <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--rule)" }}>
-        <p
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: "11px",
-            textTransform: "uppercase",
-            letterSpacing: "0.18em",
-            color: "var(--muted-color)",
-            marginBottom: "8px",
-          }}
-        >
+    <Reveal className="w-full border border-dark-gray bg-obsidian">
+      {/* Header */}
+      <div className="border-b border-dark-gray px-6 py-6 lg:px-8">
+        <p className={LABEL_MONO}>
           {isEn ? "PWA opportunity diagnostic" : "Diagnostic d'opportunité PWA"}
         </p>
-        <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink)", lineHeight: 1.5 }}>
+        <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
           {isEn
             ? "Should you turn your site or mobile idea into an installable PWA? Answer 9 strategic questions."
             : "Faut-il transformer votre site ou votre idée mobile en PWA installable ? Répondez à 9 questions de cadrage."}
@@ -311,110 +329,71 @@ export default function AuditPwa() {
       {submitted && (
         <div
           ref={resultRef}
-          style={{
-            borderBottom: "1px solid var(--rule)",
-            padding: "32px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "32px",
-          }}
+          className="flex flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
         >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "16px" }}>
-            <div
-              style={{
-                border: "1px solid var(--rule)",
-                background: "var(--paper-2)",
-                padding: "24px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: "10px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.18em",
-                  color: "var(--muted-color)",
-                  marginBottom: "12px",
-                }}
-              >
-                {isEn ? "Opportunity score" : "Score d'opportunité"}
-              </p>
-              <p className="ni-serif" style={{ fontSize: "56px", lineHeight: 1, color: "var(--ink)", fontWeight: 400 }}>
-                {score}
-                <span style={{ fontSize: "24px", color: "var(--muted-color)", fontFamily: "var(--sans)" }}>/100</span>
-              </p>
+          {/* Score + signal de décision */}
+          <div className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
+            {/* Carte score avec jauge + fond sonar discret */}
+            <div className="relative flex items-center justify-center overflow-hidden bg-obsidian p-6">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.18]">
+                <Sonar />
+              </div>
+              <div className="relative flex flex-col items-center gap-3">
+                <p className={LABEL_MONO}>
+                  {isEn ? "Opportunity score" : "Score d'opportunité"}
+                </p>
+                <RadialGauge
+                  value={score}
+                  size={132}
+                  label={isEn ? "out of 100" : "sur 100"}
+                />
+              </div>
             </div>
-            <div
-              style={{
-                border: "1px solid var(--rule)",
-                background: "var(--paper-2)",
-                padding: "24px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: "10px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.18em",
-                  color: "var(--muted-color)",
-                  marginBottom: "12px",
-                }}
-              >
+
+            {/* Signal de décision */}
+            <div className="flex flex-col justify-center bg-obsidian p-6 lg:p-8">
+              <p className={LABEL_MONO}>
                 {isEn ? "Decision signal" : "Signal de décision"}
               </p>
-              <p style={{ fontFamily: "var(--sans)", fontSize: "15px", lineHeight: 1.6, color: verdict.color }}>
+              <p
+                className={`mt-3 font-inter-tight text-[15px] leading-relaxed ${verdict.toneClass}`}
+              >
                 {isEn ? verdict.en : verdict.fr}
               </p>
             </div>
           </div>
 
+          {/* Facteurs d'opportunité */}
           <div>
-            <p
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "10px",
-                textTransform: "uppercase",
-                letterSpacing: "0.18em",
-                color: "var(--muted-color)",
-                marginBottom: "16px",
-              }}
-            >
+            <p className={`${LABEL_MONO} mb-4`}>
               {isEn ? "Opportunity factors" : "Facteurs d'opportunité"}
             </p>
-            <div>
+            <div className="border border-dark-gray">
               {results.map((r, i) => (
                 <div
                   key={r.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "12px",
-                    padding: "14px 16px",
-                    borderBottom: i < results.length - 1 ? "1px solid var(--rule)" : undefined,
-                    borderLeft: `3px solid ${statusColor(r.status)}`,
-                  }}
+                  className={`flex items-start gap-3 border-l-[3px] px-4 py-3.5 ${statusBorderClass(
+                    r.status,
+                  )} ${i < results.length - 1 ? "border-b border-b-dark-gray" : ""}`}
                 >
                   {r.status === "ok" ? (
-                    <CheckCircle2 style={{ width: "16px", height: "16px", color: "#2a7a2a", flexShrink: 0, marginTop: "2px" }} />
+                    <CheckCircle2
+                      size={16}
+                      className="mt-0.5 shrink-0 text-accent-secondary"
+                    />
                   ) : r.status === "warn" ? (
-                    <AlertTriangle style={{ width: "16px", height: "16px", color: "#b85c09", flexShrink: 0, marginTop: "2px" }} />
+                    <AlertTriangle
+                      size={16}
+                      className="mt-0.5 shrink-0 text-accent"
+                    />
                   ) : (
-                    <XCircle style={{ width: "16px", height: "16px", color: "var(--accent-color)", flexShrink: 0, marginTop: "2px" }} />
+                    <XCircle size={16} className="mt-0.5 shrink-0 text-vermilion" />
                   )}
                   <div>
-                    <p style={{ fontFamily: "var(--sans)", fontSize: "14px", fontWeight: 600, color: "var(--ink)", marginBottom: "4px" }}>
+                    <p className="font-inter-tight text-sm font-medium text-foreground">
                       {isEn ? r.labelEn : r.labelFr}
                     </p>
-                    <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-2)", lineHeight: 1.6 }}>
+                    <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                       {isEn ? r.detailEn : r.detailFr}
                     </p>
                   </div>
@@ -423,44 +402,39 @@ export default function AuditPwa() {
             </div>
           </div>
 
-          <div
-            style={{
-              background: "var(--paper-2)",
-              border: "1px solid var(--rule)",
-              padding: "14px 16px",
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "10px",
-            }}
-          >
-            <Info style={{ width: "13px", height: "13px", color: "var(--muted-color)", flexShrink: 0, marginTop: "2px" }} />
-            <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--muted-color)", lineHeight: 1.6 }}>
+          {/* Note méthodologique */}
+          <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
+            <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
+            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "This is an opportunity diagnostic, not a Lighthouse audit. The next step is to validate priority user journeys, then check manifest, service worker, cache strategy, mobile performance and real-device behavior."
                 : "Ce diagnostic mesure l'intérêt de faire une PWA, pas seulement sa conformité technique. L'étape suivante consiste à valider les parcours prioritaires, puis à vérifier manifest, service worker, stratégie de cache, performance mobile et comportement sur appareils réels."}
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            <Link href="/contact">
-              <button className="btn primary">{isEn ? "Scope my PWA opportunity" : "Cadrer mon opportunité PWA"}</button>
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-3">
+            <Link href="/contact" className={BTN_PRIMARY}>
+              {isEn ? "Scope my PWA opportunity" : "Cadrer mon opportunité PWA"}
+              <ArrowRight size={14} />
             </Link>
-            <Link href="/documentation/applications-web-mobile/pwa-vs-application-native">
-              <button className="btn">{isEn ? "Compare PWA and native" : "Comparer PWA et app native"}</button>
+            <Link
+              href="/documentation/applications-web-mobile/pwa-vs-application-native"
+              className={BTN_GHOST}
+            >
+              {isEn ? "Compare PWA and native" : "Comparer PWA et app native"}
+              <ArrowRight
+                size={13}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ padding: "32px" }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "24px",
-            marginBottom: "32px",
-          }}
-        >
+      {/* Formulaire */}
+      <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">
+        <div className="mb-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
           <Field
             label={isEn ? "How important is mobile usage?" : "Quelle est l'importance de l'usage mobile ?"}
             value={state.mobileUsage}
@@ -562,11 +536,12 @@ export default function AuditPwa() {
           />
         </div>
 
-        <button type="submit" className="btn primary">
+        <button type="submit" className={BTN_PRIMARY}>
           {isEn ? "Evaluate the PWA opportunity" : "Évaluer l'opportunité PWA"}
+          <ArrowRight size={14} />
         </button>
       </form>
-    </div>
+    </Reveal>
   );
 }
 
@@ -585,8 +560,8 @@ function Field({
 }) {
   return (
     <div>
-      <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-2)", marginBottom: "10px" }}>{label}</p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+      <p className="mb-2.5 font-inter-tight text-[13px] text-mid-gray">{label}</p>
+      <div className="flex flex-wrap gap-1.5">
         {options.map((opt) => {
           const selected = value === opt.value;
           return (
@@ -594,17 +569,12 @@ function Field({
               key={opt.value}
               type="button"
               onClick={() => onChange(opt.value)}
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "13px",
-                padding: "6px 14px",
-                border: "1px solid var(--rule)",
-                borderLeft: selected ? "3px solid var(--accent-color)" : "1px solid var(--rule)",
-                background: selected ? "var(--paper-2)" : "transparent",
-                color: selected ? "var(--ink)" : "var(--muted-color)",
-                cursor: "pointer",
-                transition: "background 0.1s, color 0.1s",
-              }}
+              className={
+                "rounded-sm border px-3.5 py-1.5 font-inter-tight text-[13px] transition-colors " +
+                (selected
+                  ? "border-l-[3px] border-l-accent-secondary border-dark-gray bg-jet text-foreground"
+                  : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")
+              }
             >
               {isEn ? opt.labelEn : opt.labelFr}
             </button>

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Send, CheckCircle2 } from "lucide-react";
+import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
 type ContactFormModalProps = {
@@ -44,16 +45,11 @@ async function sendContactForm({
   }
 }
 
-const inputStyle: React.CSSProperties = {
-  border: "1px solid var(--rule)",
-  background: "var(--paper)",
-  color: "var(--ink)",
-  fontFamily: "var(--sans)",
-  fontSize: 14,
-  padding: "10px 12px",
-  width: "100%",
-  outline: "none",
-};
+const fieldClass =
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary disabled:opacity-60";
+
+const labelClass =
+  "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
 
 export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
   const locale = useLocale() as Locale;
@@ -88,66 +84,45 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        style={{
-          position: "fixed", inset: 0, zIndex: 50,
-          background: "rgba(14,14,12,0.72)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: 16,
-        }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian/80 p-4 backdrop-blur-sm"
         onClick={onClose}
       >
         <div
-          style={{
-            background: "var(--paper)",
-            border: "1px solid var(--rule)",
-            borderTop: "3px solid var(--accent-color)",
-            maxWidth: 480, width: "100%",
-            padding: "32px",
-            position: "relative",
-          }}
+          className="relative w-full max-w-[480px] border border-dark-gray border-t-2 border-t-accent-secondary bg-jet p-8"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={onClose}
             aria-label={isEn ? "Close" : "Fermer"}
             type="button"
-            style={{
-              position: "absolute", top: 16, right: 16,
-              background: "none", border: "none",
-              color: "var(--muted-color)", cursor: "pointer",
-              display: "flex", alignItems: "center",
-            }}
+            className="absolute right-4 top-4 flex items-center text-mid-gray transition-colors hover:text-foreground"
           >
             <X size={18} />
           </button>
 
           {sent ? (
-            <div style={{ textAlign: "center", padding: "32px 0" }}>
-              <CheckCircle2 size={40} style={{ color: "#2a7a2a", margin: "0 auto 16px" }} />
-              <h2 style={{ fontFamily: "var(--serif)", fontSize: 24, color: "var(--ink)", marginBottom: 8 }}>
+            <div className="py-8 text-center">
+              <CheckCircle2 size={40} className="mx-auto mb-4 text-accent-secondary" />
+              <h2 className="mb-2 text-2xl font-light tracking-tight text-foreground">
                 {isEn ? "Thank you!" : "Merci !"}
               </h2>
-              <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)", marginBottom: 24 }}>
+              <p className="mb-6 font-inter-tight text-sm text-mid-gray">
                 {isEn ? "Your request has been sent." : "Votre demande a bien été envoyée."}
               </p>
               <button
                 onClick={onClose}
-                style={{
-                  border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
-                  fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em",
-                  textTransform: "uppercase", padding: "10px 24px", cursor: "pointer",
-                }}
+                className="border border-dark-gray bg-obsidian px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
               >
                 {isEn ? "Close" : "Fermer"}
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: 22, color: "var(--ink)", marginBottom: 4 }}>
+                <h2 className="mb-1 text-2xl font-light tracking-tight text-foreground">
                   {isEn ? "Request a quote" : "Demander un devis"}
                 </h2>
-                <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--muted-color)" }}>
+                <p className="font-inter-tight text-[13px] text-mid-gray">
                   {isEn
                     ? "Your specifications document will be attached automatically"
                     : "Votre cahier des charges sera joint automatiquement"}
@@ -155,36 +130,36 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               </div>
 
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+                <label className={labelClass}>
                   {isEn ? "Your name" : "Votre nom"}
                 </label>
-                <input type="text" name="nom" value={fields.nom} onChange={handleChange} required style={inputStyle}
+                <input type="text" name="nom" value={fields.nom} onChange={handleChange} required className={fieldClass}
                   placeholder={isEn ? "Jane Doe" : "Jean Dupont"} disabled={sending} />
               </div>
 
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+                <label className={labelClass}>
                   {isEn ? "Your email" : "Votre email"}
                 </label>
-                <input type="email" name="email" value={fields.email} onChange={handleChange} required style={inputStyle}
+                <input type="email" name="email" value={fields.email} onChange={handleChange} required className={fieldClass}
                   placeholder={isEn ? "jane@example.com" : "jean@exemple.com"} disabled={sending} />
               </div>
 
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+                <label className={labelClass}>
                   {isEn ? "Message" : "Message"}{" "}
-                  <span style={{ fontWeight: 400, color: "var(--muted-color)" }}>
+                  <span className="text-mid-gray/70">
                     {isEn ? "(optional)" : "(optionnel)"}
                   </span>
                 </label>
                 <textarea name="message" value={fields.message} onChange={handleChange}
-                  style={{ ...inputStyle, minHeight: 80, resize: "vertical" }}
+                  className={cn(fieldClass, "min-h-[80px] resize-y")}
                   placeholder={isEn ? "Project details..." : "Des précisions sur votre projet..."}
                   rows={3} disabled={sending} />
               </div>
 
               {error && (
-                <div style={{ border: "1px solid var(--accent-color)", borderLeft: "3px solid var(--accent-color)", padding: "10px 12px", background: "var(--paper-2)", fontSize: 13, color: "var(--accent-color)", fontFamily: "var(--sans)" }}>
+                <div className="border border-vermilion/60 border-l-2 border-l-vermilion bg-obsidian px-3 py-2.5 font-inter-tight text-[13px] text-vermilion">
                   {error}
                 </div>
               )}
@@ -192,17 +167,11 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               <button
                 type="submit"
                 disabled={sending}
-                style={{
-                  border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper)",
-                  fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em",
-                  textTransform: "uppercase", padding: "12px 24px", cursor: sending ? "not-allowed" : "pointer",
-                  opacity: sending ? 0.6 : 1,
-                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
-                }}
+                className="inline-flex items-center justify-center gap-2 border border-charcoal bg-vermilion px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sending ? (
                   <>
-                    <div style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "var(--paper)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+                    <Loader2 size={14} className="animate-spin" />
                     {isEn ? "Sending…" : "Envoi en cours..."}
                   </>
                 ) : (

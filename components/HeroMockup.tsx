@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 function useCountUp(target: number, duration = 1000, delay = 0) {
-  // Jamais 0 au chargement : valeur réelle d'emblée, animation depuis un
-  // plancher non-nul (60 % de la cible). Une preuve ne doit pas ressembler
-  // à un état vide.
   const [value, setValue] = useState(target);
   useEffect(() => {
     const prefersReduced =
@@ -32,7 +29,38 @@ function useCountUp(target: number, duration = 1000, delay = 0) {
   return value;
 }
 
-export default function HeroMockup() {
+/**
+ * HeroMockup — cadre « navigateur » blueprint (sans arrondi). Le contenu est un
+ * slot : passez une preview (`children`) pour l'intégrer dynamiquement à
+ * dimensions réduites ; sinon, une maquette animée placeholder s'affiche.
+ */
+export default function HeroMockup({ children }: { children?: ReactNode }) {
+  return (
+    <div className="flex flex-col overflow-hidden border border-dark-gray bg-jet">
+      {/* Chrome navigateur */}
+      <div className="flex flex-shrink-0 items-center gap-2.5 border-b border-dark-gray bg-obsidian px-3.5 py-2.5">
+        <div className="flex gap-1.5">
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="h-[7px] w-[7px] rounded-full border border-charcoal" />
+          ))}
+        </div>
+        <div className="flex flex-1 items-center gap-1.5 border border-dark-gray bg-jet px-2.5 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#2a7a2a]" />
+          <span className="font-mono text-[10px] tracking-[0.04em] text-mid-gray">nextimpact.fr</span>
+        </div>
+      </div>
+
+      {/* Slot de contenu */}
+      {children ? (
+        <div className="relative w-full flex-1 overflow-hidden">{children}</div>
+      ) : (
+        <MockupPlaceholder />
+      )}
+    </div>
+  );
+}
+
+function MockupPlaceholder() {
   const [phase, setPhase] = useState(0);
   const perf = useCountUp(99, 1000, 900);
   const seo = useCountUp(100, 900, 1100);
@@ -54,153 +82,76 @@ export default function HeroMockup() {
   });
 
   return (
-    <div style={{
-      border: "1px solid var(--rule)",
-      background: "var(--paper)",
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
-    }}>
-      {/* ── Browser chrome ── */}
-      <div style={{
-        background: "var(--paper-2)",
-        borderBottom: "1px solid var(--rule)",
-        padding: "10px 14px",
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        flexShrink: 0,
-      }}>
-        <div style={{ display: "flex", gap: 5 }}>
-          {[0, 1, 2].map((i) => (
-            <div key={i} style={{
-              width: 7, height: 7,
-              border: "1px solid var(--rule-strong)",
-              borderRadius: "50%",
-            }} />
-          ))}
-        </div>
-        <div style={{
-          flex: 1,
-          background: "var(--paper)",
-          border: "1px solid var(--rule)",
-          padding: "4px 10px",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}>
-          <div style={{ width: 6, height: 6, background: "#2a7a2a", borderRadius: "50%", flexShrink: 0 }} />
-          <span style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            color: "var(--muted-color)",
-            letterSpacing: "0.04em",
-          }}>
-            nextimpact.fr
-          </span>
-        </div>
-      </div>
-
-      {/* ── Page content ── */}
-      <div style={{ padding: "18px 20px 0", flex: 1 }}>
-
+    <div className="flex flex-1 flex-col">
+      <div className="flex-1 px-5 pt-[18px]">
         {/* Nav */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          paddingBottom: 14,
-          borderBottom: "1px solid var(--rule)",
-          marginBottom: 20,
-          ...fade(phase >= 1),
-        }}>
-          <div style={{ width: 14, height: 14, background: "var(--ink)", flexShrink: 0 }} />
-          <div style={{ flex: 1, display: "flex", gap: 10 }}>
+        <div
+          className="mb-5 flex items-center gap-2.5 border-b border-dark-gray pb-3.5"
+          style={fade(phase >= 1)}
+        >
+          <span className="h-3.5 w-3.5 shrink-0 bg-foreground" />
+          <div className="flex flex-1 gap-2.5">
             {[52, 40, 36, 44].map((w, i) => (
-              <div key={i} style={{ width: w, height: 5, background: "var(--rule-strong)" }} />
+              <span key={i} className="h-[5px] bg-mid-gray/50" style={{ width: w }} />
             ))}
           </div>
-          <div style={{ width: 44, height: 16, background: "var(--ink)" }} />
+          <span className="h-4 w-11 bg-foreground" />
         </div>
 
-        {/* Hero heading */}
-        <div style={{ ...fade(phase >= 2), marginBottom: 14 }}>
-          <div style={{
-            fontFamily: "var(--serif)",
-            fontSize: 20,
-            lineHeight: 1.15,
-            color: "var(--ink)",
-            marginBottom: 10,
-          }}>
+        {/* Titre */}
+        <div className="mb-3.5" style={fade(phase >= 2)}>
+          <div className="mb-2.5 text-[20px] leading-[1.15] text-foreground">
             Sites WordPress<br />
-            <em style={{ color: "var(--ink)" }}>ultra rapides.</em>
+            <span className="text-accent-secondary">ultra rapides.</span>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 14 }}>
+          <div className="mb-3.5 flex flex-col gap-[5px]">
             {[100, 85, 55].map((w, i) => (
-              <div key={i} style={{ width: `${w}%`, height: 4, background: "var(--rule)" }} />
+              <span key={i} className="h-1 bg-dark-gray" style={{ width: `${w}%` }} />
             ))}
           </div>
-          <div style={{ display: "flex", gap: 7 }}>
-            <div style={{ width: 72, height: 18, background: "var(--ink)" }} />
-            <div style={{ width: 60, height: 18, border: "1px solid var(--rule)" }} />
+          <div className="flex gap-[7px]">
+            <span className="h-[18px] w-[72px] bg-foreground" />
+            <span className="h-[18px] w-[60px] border border-dark-gray" />
           </div>
         </div>
 
-        {/* Stack trace */}
-        <div style={{ ...fade(phase >= 3), marginBottom: 0 }}>
-          <div style={{
-            fontFamily: "var(--mono)",
-            fontSize: 9,
-            letterSpacing: "0.08em",
-            color: "var(--muted-color)",
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
-          }}>
-            <span><span style={{ color: "#2a7a2a" }}>✓</span> WordPress Headless · API REST</span>
-            <span><span style={{ color: "#2a7a2a" }}>✓</span> Next.js 15 · SSG / ISR · TypeScript</span>
+        {/* Stack */}
+        <div style={fade(phase >= 3)}>
+          <div className="flex flex-col gap-[3px] font-mono text-[9px] tracking-[0.08em] text-mid-gray">
+            <span><span className="text-[#2a7a2a]">✓</span> WordPress Headless · API REST</span>
+            <span><span className="text-[#2a7a2a]">✓</span> Next.js · SSG / ISR · TypeScript</span>
           </div>
         </div>
       </div>
 
-      {/* ── Scores bar ── */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr 1fr",
-        borderTop: "1px solid var(--rule)",
-        marginTop: 18,
-        ...fade(phase >= 4),
-      }}>
+      {/* Scores */}
+      <div
+        className="mt-[18px] grid grid-cols-4 border-t border-dark-gray"
+        style={fade(phase >= 4)}
+      >
         {[
-          { label: "Perf", value: perf, highlight: true },
-          { label: "SEO", value: seo, highlight: false },
-          { label: "A11y", value: a11y, highlight: false },
-          { label: "LCP", value: null, lcp: lcp, highlight: false },
+          { label: "Perf", value: perf, highlight: true, lcp: undefined as number | undefined },
+          { label: "SEO", value: seo, highlight: false, lcp: undefined as number | undefined },
+          { label: "A11y", value: a11y, highlight: false, lcp: undefined as number | undefined },
+          { label: "LCP", value: null as number | null, highlight: false, lcp },
         ].map((s, i) => (
-          <div key={s.label} style={{
-            padding: "12px 8px",
-            borderRight: i < 3 ? "1px solid var(--rule)" : "none",
-            textAlign: "center",
-          }}>
-            <div style={{
-              fontFamily: "var(--mono)",
-              fontSize: s.lcp !== undefined ? 16 : 22,
-              lineHeight: 1,
-              color: s.highlight ? "var(--accent-color)" : "var(--ink)",
-              marginBottom: 4,
-              letterSpacing: s.lcp !== undefined ? "0.02em" : "0",
-            }}>
-              {s.lcp !== undefined
-                ? `0.${String(s.lcp).padStart(2, "0")}s`
-                : s.value}
+          <div
+            key={s.label}
+            className={i < 3 ? "border-r border-dark-gray px-2 py-3 text-center" : "px-2 py-3 text-center"}
+          >
+            <div
+              className={s.highlight ? "text-accent-secondary" : "text-foreground"}
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: s.lcp !== undefined ? 16 : 22,
+                lineHeight: 1,
+                marginBottom: 4,
+                letterSpacing: s.lcp !== undefined ? "0.02em" : "0",
+              }}
+            >
+              {s.lcp !== undefined ? `0.${String(s.lcp).padStart(2, "0")}s` : s.value}
             </div>
-            <div style={{
-              fontFamily: "var(--mono)",
-              fontSize: 7,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-            }}>
+            <div className="font-mono text-[7px] uppercase tracking-[0.12em] text-mid-gray">
               {s.label}
             </div>
           </div>

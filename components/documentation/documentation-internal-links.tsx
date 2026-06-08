@@ -17,6 +17,7 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import type { ProfileId } from "@/lib/documentation-profiles";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
 
 /* ─── Liens vers outils & services ─────────────────────────────────────────── */
 
@@ -297,70 +298,39 @@ export function DocumentationToolsSection() {
   const tools = (isEn ? PROFILE_TOOLS_EN : PROFILE_TOOLS_FR)[profileId || "default"];
 
   return (
-    <section style={{ marginTop: 48, paddingTop: 48, borderTop: "1px solid var(--rule)" }}>
-      <div style={{ marginBottom: 32 }}>
-        <h2
-          className="ni-serif"
-          style={{ fontSize: "clamp(20px, 2vw, 28px)", color: "var(--ink)", marginBottom: 8 }}
-        >
+    <section className="mt-12 border-t border-dark-gray pt-12">
+      <div className="mb-8">
+        <h2 className="mb-2 text-2xl font-light tracking-tight text-foreground">
           {isEn ? "Tools and resources" : "Outils et ressources"}
         </h2>
-        <p style={{ fontSize: 14, color: "var(--ink-2)" }}>
+        <p className="font-inter-tight text-sm text-mid-gray">
           {isEn
             ? "Free tools to evaluate and plan your web project."
             : "Des outils gratuits pour évaluer et planifier votre projet web."}
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 0,
-          borderTop: "1px solid var(--rule)",
-          borderLeft: "1px solid var(--rule)",
-        }}
-      >
+      <div className="grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-3">
         {tools.map((tool) => {
           const Icon = tool.icon;
           return (
             <Link
               key={tool.href}
               href={tool.href}
-              style={{
-                border: "1px solid var(--rule)",
-                borderTop: "none",
-                borderLeft: "none",
-                padding: "28px 32px",
-                textDecoration: "none",
-                display: "flex",
-                flexDirection: "column",
-                background: "var(--paper)",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
+              className="group flex flex-col border-b border-r border-dark-gray bg-transparent px-8 py-7 no-underline transition-colors hover:bg-jet/40"
             >
               <Icon
                 size={20}
                 strokeWidth={1.5}
-                style={{ color: "var(--muted-color)", marginBottom: 12, display: "block" }}
+                className="mb-3 block text-mid-gray transition-colors group-hover:text-accent-secondary"
               />
-              <h3 className="ni-serif" style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}>
+              <h3 className="mb-1.5 text-lg font-light tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                 {tool.title}
               </h3>
-              <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, flex: 1 }}>
+              <p className="flex-1 font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
                 {tool.description}
               </p>
-              <div
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-color)",
-                  marginTop: 16,
-                }}
-              >
+              <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
                 {isEn ? "Discover →" : "Découvrir →"}
               </div>
             </Link>
@@ -427,59 +397,33 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
   const tools = buildCategoryTools(isEn)[category] || TOOL_LINKS.slice(0, 3);
 
   return (
-    <section style={{ marginTop: 40, paddingTop: 32, borderTop: "1px solid var(--rule)" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-        <Wrench size={16} strokeWidth={1.5} style={{ color: "var(--muted-color)" }} />
-        <h3
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 11,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            color: "var(--ink-2)",
-            margin: 0,
-          }}
-        >
+    <section className="mt-10 border-t border-dark-gray pt-8">
+      <div className="mb-5 flex items-center gap-2">
+        <Wrench size={16} strokeWidth={1.5} className="text-mid-gray" />
+        <h3 className="m-0 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
           {isEn ? "Useful tools" : "Outils utiles"}
         </h3>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 0,
-          border: "1px solid var(--rule)",
-        }}
-      >
-        {tools.map((tool, i) => {
+      <div className="grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-3">
+        {tools.map((tool) => {
           const Icon = tool.icon;
           return (
             <Link
               key={tool.href}
               href={tool.href}
-              style={{
-                padding: "20px 24px",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 12,
-                borderRight: i < tools.length - 1 ? "1px solid var(--rule)" : "none",
-                background: "var(--paper)",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
+              className="group flex items-start gap-3 border-b border-r border-dark-gray bg-transparent px-6 py-5 no-underline transition-colors hover:bg-jet/40"
             >
               <Icon
                 size={16}
                 strokeWidth={1.5}
-                style={{ color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }}
+                className="mt-0.5 flex-shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary"
               />
               <div>
-                <p style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)", marginBottom: 4 }}>
+                <p className="mb-1 text-sm font-medium text-foreground transition-colors group-hover:text-accent-secondary">
                   {tool.title}
                 </p>
-                <p style={{ fontSize: 12, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                <p className="font-inter-tight text-xs leading-relaxed text-mid-gray">
                   {tool.description}
                 </p>
               </div>
@@ -499,55 +443,23 @@ export function ArticleInternalLinks({ category }: { category: string }) {
   const links = getCategoryRelevantLinks(category, isEn);
 
   return (
-    <div
-      style={{
-        marginTop: 24,
-        padding: "20px 24px",
-        border: "1px solid var(--rule)",
-        borderLeft: "3px solid var(--accent-color)",
-        background: "var(--paper-2)",
-      }}
-    >
-      <p
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--muted-color)",
-          marginBottom: 12,
-        }}
-      >
+    <Reveal className="mt-6 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5">
+      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
         {isEn ? "Going further" : "Pour aller plus loin"}
       </p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+      <div className="flex flex-wrap gap-2">
         {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              border: "1px solid var(--rule)",
-              padding: "6px 12px",
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "var(--ink-2)",
-              textDecoration: "none",
-              background: "var(--paper)",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
+            className="inline-flex items-center gap-1 border border-dark-gray bg-obsidian px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:border-accent-secondary hover:text-accent-secondary"
           >
             {link.title}
             <ArrowRight size={10} />
           </Link>
         ))}
       </div>
-    </div>
+    </Reveal>
   );
 }
 

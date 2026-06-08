@@ -4,42 +4,37 @@ import EligibilityForm from "@/components/tarifs/EligibilityForm";
 import { useLocale } from "next-intl";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
+import { NeonArcs } from "@/components/visuals/neon-arcs";
 
 export default function HomeDiagnostic() {
   const locale = useLocale() as Locale;
   const variant = getHeroVariants(locale).default;
 
   return (
-    <section
+    <BlueprintSection
       id="audit"
-      style={{
-        background: "var(--paper-2)",
-        padding: "80px 0",
-        borderTop: "1px solid var(--rule)",
-      }}
+      tone="jet"
+      backdrop={
+        <div className="absolute inset-0 opacity-40">
+          <NeonArcs />
+        </div>
+      }
+      innerClassName="px-6 py-16 lg:px-10 lg:py-24"
     >
-      <div className="container">
-        <Reveal>
-          <div className="sec-head">
-            <div className="sec-no">№ 06</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-              {variant.auditTitle}
-            </h2>
-          </div>
+      <Reveal>
+        <SectionHeading
+          index="№ 06"
+          kicker={variant.auditSubtitle}
+          title={variant.auditTitle}
+          description={variant.auditDescription}
+        />
+      </Reveal>
 
-          <div style={{ marginBottom: 32 }}>
-            <p style={{ fontSize: 18, fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--ink)", marginBottom: 8 }}>
-              {variant.auditSubtitle}
-            </p>
-            <p style={{ fontSize: 14, color: "var(--ink-2)", maxWidth: 600 }}>
-              {variant.auditDescription}
-            </p>
-          </div>
-        </Reveal>
-
+      <Reveal delay={0.08} className="mt-12">
         <EligibilityForm />
-      </div>
-    </section>
+      </Reveal>
+    </BlueprintSection>
   );
 }

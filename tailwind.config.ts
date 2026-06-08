@@ -31,8 +31,10 @@ const config: Config = {
         sans:        ["var(--font-sans)", "var(--font-inter)", "Arial", "Helvetica", "sans-serif"],
         serif:       ["var(--font-serif)", "Georgia", "serif"],
         mono:        ["var(--font-mono)", "Menlo", "monospace"],
-        googletitre: ["var(--font-nunito)", '"Nunito"', "sans-serif"],
-        googletexte: ["var(--font-inter)", '"Inter"', "sans-serif"],
+        /* Legacy : repointés vers la typo aspect (Figtree / Inter Tight). */
+        googletitre: ["var(--font-sans)", "Figtree", "sans-serif"],
+        googletexte: ["var(--font-inter-tight)", "var(--font-sans)", "sans-serif"],
+        "inter-tight": ["var(--font-inter-tight)", "var(--font-sans)", "sans-serif"],
       },
       fontWeight: {
         light:     "300",
@@ -55,7 +57,7 @@ const config: Config = {
         lightyellow:    "#F2E57E",
         paper:          "#ffffff",
         ink:            "#0e0e0c",
-        vermilion:      "#d83a1a",
+        vermilion:      "hsl(var(--vermilion) / <alpha-value>)",
         /* ─── Design tokens « Édition Suisse » ───────────────
            Base éditoriale formalisée (papier / encre / règles).
            `action` = rouge vermilion, RÉSERVÉ aux éléments
@@ -67,6 +69,26 @@ const config: Config = {
         rule:           "rgba(14, 14, 12, 0.18)",
         "rule-strong":  "rgba(14, 14, 12, 0.42)",
         action:         "#d83a1a",
+        /* ─── Blueprint (aspect) — tokens theme-aware (cf. globals.css) ───
+           Sémantique : obsidian = fond de page · dark-gray = traits de
+           grille · jet = panneau alt · ebony/charcoal = bouton ·
+           mid-gray = texte atténué · overlay-gray = cadre d'image.
+           `star` (accent lavande d'aspect) est aliasé sur le vermillon. */
+        obsidian:       "hsl(var(--obsidian) / <alpha-value>)",
+        jet:            "hsl(var(--jet) / <alpha-value>)",
+        "dark-gray":    "hsl(var(--dark-gray) / <alpha-value>)",
+        "mid-gray":     "hsl(var(--mid-gray) / <alpha-value>)",
+        "overlay-gray": "hsl(var(--overlay-gray))",
+        ebony:          "hsl(var(--ebony) / <alpha-value>)",
+        charcoal:       "hsl(var(--charcoal) / <alpha-value>)",
+        star:           "hsl(var(--vermilion) / <alpha-value>)",
+        "vermilion-bright": "hsl(var(--vermilion-bright) / <alpha-value>)",
+        /* Accents — primaire indigo (#021373, éclairci en sombre), secondaire
+           jaune #F2E57E, deep = #021373 exact. Tous theme-aware via globals.css. */
+        "accent-primary":   "hsl(var(--accent) / <alpha-value>)",
+        "accent-secondary": "hsl(var(--accent-2) / <alpha-value>)",
+        "accent-champagne": "hsl(var(--accent-champagne) / <alpha-value>)",
+        "accent-deep":      "hsl(var(--accent-deep) / <alpha-value>)",
         background:     "hsl(var(--background))",
         foreground:     "hsl(var(--foreground))",
         card: {
@@ -119,10 +141,17 @@ const config: Config = {
         },
       },
       borderRadius: {
-        lg:  "0",
-        md:  "0",
+        /* Aucun arrondi d'angle nulle part (demande client). `full` conservé
+           pour les cercles / points. */
+        none: "0",
         sm:  "0",
         DEFAULT: "0",
+        md:  "0",
+        lg:  "0",
+        xl:  "0",
+        "2xl": "0",
+        "3xl": "0",
+        full: "9999px",
       },
       keyframes: {
         "accordion-down": {
@@ -133,10 +162,15 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to:   { height: "0" },
         },
+        marquee: {
+          "0%":   { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up":   "accordion-up 0.2s ease-out",
+        marquee:          "marquee 25s linear infinite",
       },
     },
   },

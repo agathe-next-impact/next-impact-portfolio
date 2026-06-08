@@ -1,51 +1,60 @@
 "use client";
 
-import { ArrowRight, LucideIcon } from "lucide-react"
-import { useLocale } from "next-intl"
-import type { Locale } from "@/i18n/routing"
+import { LucideIcon } from "lucide-react";
+import { useLocale } from "next-intl";
+import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
 interface GuideItem {
-  icon: LucideIcon
-  need: string
-  solution: string
+  icon: LucideIcon;
+  need: string;
+  solution: string;
 }
 
 export default function ServicesGuide({ needsGuide }: { needsGuide: GuideItem[] }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
+
   return (
-    <section className="py-20 md:py-28">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
-        <div className="text-center mb-16 animate-fadeInUp">
-          <h2 className="text-3xl md:text-4xl font-googletitre font-medium mb-6 text-white">
-            {isEn ? "Which stack for which project" : "Quelle stack pour quel projet"}
-          </h2>
-          <p className="text-lg text-white/80">
-            {isEn
+    <BlueprintSection tone="obsidian">
+      {/* En-tête */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <SectionHeading
+          index="№ 05"
+          kicker={isEn ? "Which stack" : "Quelle stack"}
+          title={isEn ? "Which stack for which project" : "Quelle stack pour quel projet"}
+          description={
+            isEn
               ? "Identify the solution that matches your main need"
-              : "Identifiez la solution adaptée à votre besoin principal"}
-          </p>
-        </div>
-        <div className="space-y-4">
-          {needsGuide.map((item, idx) => (
-            <div
-              key={idx}
-              className="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-darkblue/80 backdrop-blur-lg rounded-2xl border border-lightblue/10 transition-all"
-              style={{ animationDelay: `${idx * 0.1}s` }}
-            >
-              <div className="flex items-center gap-4">
-                <div className="hidden md:visible w-12 h-12 rounded-lg flex items-center justify-center">
-                  <item.icon className="h-6 w-6 text-white transition-colors" />
-                </div>
-                <p className="text-mediumblue/80 text-lg text-white transition-colors">"{item.need}"</p>
+              : "Identifiez la solution adaptée à votre besoin principal"
+          }
+        />
+      </Reveal>
+
+      {/* Lignes besoin → solution */}
+      <Stagger>
+        {needsGuide.map((item, idx) => (
+          <StaggerItem
+            key={idx}
+            className="group flex flex-col gap-3 border-b border-dark-gray px-6 py-7 transition-colors last:border-b-0 hover:bg-jet md:flex-row md:items-center md:justify-between lg:px-8"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-overlay-gray">
+                <item.icon className="h-5 w-5 text-mid-gray transition-colors group-hover:text-accent-secondary" strokeWidth={1.5} />
               </div>
-              <div className="flex items-center gap-3 md:ml-auto">
-                <span className="font-googletitre font-medium text-xl whitespace-nowrap text-lightyellow transition-colors"> / {item.solution}</span>
-              </div>
+              <p className="font-inter-tight text-base text-foreground md:text-lg">
+                &laquo;&nbsp;{item.need}&nbsp;&raquo;
+              </p>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+            <div className="flex items-center gap-3 pl-14 md:ml-auto md:pl-0">
+              <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary">
+                → {item.solution}
+              </span>
+            </div>
+          </StaggerItem>
+        ))}
+      </Stagger>
+    </BlueprintSection>
+  );
 }

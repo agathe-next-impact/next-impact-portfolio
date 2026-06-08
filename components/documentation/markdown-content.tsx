@@ -22,7 +22,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 
       // H2 gets a thin rule separator above it
       const separator = depth === 2
-        ? `<div style="margin-top:3rem;margin-bottom:1rem;border-top:1px solid var(--rule)"></div>`
+        ? `<div style="margin-top:3rem;margin-bottom:1rem;border-top:1px solid hsl(var(--dark-gray))"></div>`
         : "";
 
       return `${separator}<h${depth} id="${anchor}">${text}</h${depth}>`;
@@ -38,7 +38,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 
   return (
     <div
-      className="light article-text"
+      className="doc-prose"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

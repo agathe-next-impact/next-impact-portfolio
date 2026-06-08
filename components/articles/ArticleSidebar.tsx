@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Link } from "@/i18n/navigation"
+import { cn } from "@/lib/utils"
 import type { RelatedArticle, RelatedDoc } from "@/lib/articles"
 
 interface TocItem {
@@ -63,45 +64,40 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
 
   return (
     <aside className="col-span-1 hidden lg:block">
-      <div style={{ position: "sticky", top: "7rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
-
+      <div className="sticky top-28 flex flex-col gap-8 px-6 py-12 lg:px-8">
         {/* CTA */}
-        <div style={{ borderTop: "2px solid var(--ink)", paddingTop: "1rem" }}>
+        <div className="border-t border-foreground/80 pt-4">
           <Link
             href="https://next-impact.digital"
-            className="btn primary"
-            style={{ display: "block", textAlign: "center" }}
+            className="block bg-accent-primary px-4 py-2.5 text-center font-mono text-xs uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-deep"
           >
             Diagnostic gratuit →
           </Link>
-          <p style={{ fontSize: "0.6875rem", color: "var(--muted-color)", marginTop: "0.5rem", textAlign: "center" }}>
+          <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
             3 min · Sans engagement
           </p>
         </div>
 
-        {/* TOC */}
+        {/* Sommaire */}
         {tocItems.length > 0 && (
-          <nav style={{ borderTop: "1px solid var(--rule)", paddingTop: "1rem" }}>
-            <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+          <nav className="border-t border-dark-gray pt-4">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
               Sommaire
             </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            <ul className="list-none border-l border-dark-gray">
               {tocItems.map(({ id, text, level }) => (
                 <li key={id}>
                   <a
                     href={`#${id}`}
-                    style={{
-                      display: "block",
-                      padding: "0.375rem 0",
-                      paddingLeft: level === 3 ? "1rem" : "0.5rem",
-                      fontSize: level === 3 ? "0.75rem" : "0.8125rem",
-                      color: activeId === id ? "var(--accent-color)" : "var(--muted-color)",
-                      textDecoration: "none",
-                      borderLeft: activeId === id
-                        ? "2px solid var(--accent-color)"
-                        : "2px solid transparent",
-                      transition: "color 0.15s, border-color 0.15s",
-                    }}
+                    className={cn(
+                      "-ml-px block border-l-2 py-1.5 font-mono transition-colors",
+                      level === 3
+                        ? "pl-6 text-[11px]"
+                        : "pl-3 text-xs",
+                      activeId === id
+                        ? "border-accent-secondary text-accent-secondary"
+                        : "border-transparent text-mid-gray hover:text-foreground"
+                    )}
                   >
                     {text}
                   </a>
@@ -113,29 +109,23 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
 
         {/* Articles liés */}
         {relatedArticles.length > 0 && (
-          <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "1rem" }}>
-            <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+          <div className="border-t border-dark-gray pt-4">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
               Articles liés
             </p>
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div className="flex flex-col">
               {relatedArticles.map((a) => (
                 <Link
                   key={a.slug}
                   href={`/articles/${a.slug}`}
-                  className="hover-row"
-                  style={{
-                    display: "block",
-                    padding: "0.625rem 0",
-                    borderTop: "1px solid var(--rule)",
-                    fontSize: "0.8125rem",
-                    color: "var(--ink-2)",
-                    textDecoration: "none",
-                  }}
+                  className="group block border-t border-dark-gray py-2.5 transition-colors hover:bg-jet"
                 >
-                  <span className="label" style={{ marginBottom: "0.25rem", display: "inline-block" }}>
+                  <span className="mb-1 inline-block font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
                     {a.category}
                   </span>
-                  <span style={{ display: "block", lineHeight: 1.4 }}>{a.title}</span>
+                  <span className="block font-inter-tight text-[0.8125rem] leading-snug text-foreground/90 group-hover:text-foreground">
+                    {a.title}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -144,27 +134,19 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
 
         {/* Documentation liée */}
         {relatedDocs.length > 0 && (
-          <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "1rem" }}>
-            <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+          <div className="border-t border-dark-gray pt-4">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
               Documentation
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            <div className="flex flex-col gap-1">
               {relatedDocs.map((d) => (
                 <Link
                   key={d.path}
                   href={d.path}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    fontSize: "0.8125rem",
-                    color: "var(--muted-color)",
-                    textDecoration: "none",
-                    padding: "0.25rem 0",
-                  }}
+                  className="flex items-center gap-2 py-1 font-inter-tight text-[0.8125rem] text-foreground/90 transition-colors hover:text-foreground"
                 >
-                  <span style={{ color: "var(--accent-color)" }}>→</span>
-                  <span style={{ color: "var(--ink-2)" }}>{d.title}</span>
+                  <span aria-hidden className="text-accent-secondary">→</span>
+                  <span>{d.title}</span>
                 </Link>
               ))}
             </div>

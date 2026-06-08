@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Process from "@/components/process";
+import { BlueprintSection, Separator } from "@/components/aspect/section";
 
 const Hero = dynamic(() => import("@/components/hero"), {
   loading: () => <div style={{ minHeight: "100vh" }} />,
@@ -32,25 +33,29 @@ export default function HomeClient() {
     <main className="flex-1">
       {/* § 01 — Hero */}
       <Hero />
+      <Separator />
 
       {/* § 02 — Réalisation phare */}
       <FeaturedRealisation />
+      <Separator />
 
       {/* § 03 — Offres : 3 stacks */}
       <HomeOffres />
+      <Separator />
 
       {/* § 04 — Méthode */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <Process />
-        </div>
-      </section>
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
+        <Process />
+      </BlueprintSection>
+      <Separator />
 
       {/* § 05 — Avantage TIH */}
       <HomeTihTeaser />
+      <Separator />
 
       {/* § 06 — Diagnostic de stack */}
       <HomeDiagnostic />
+      <Separator />
 
       {/* § 07 — CTA final */}
       <HomeCta />

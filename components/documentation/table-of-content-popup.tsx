@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface TableOfContentsPopupProps {
   tableOfContents: { id: string; text: string; level: number }[];
@@ -37,41 +38,32 @@ export default function TableOfContentsPopup({
   if (tableOfContents.length === 0) return null;
 
   return (
-    <nav style={{
-      width: "100%",
-      borderTop: "1px solid var(--rule)",
-      paddingTop: "1rem",
-    }}>
-      <p className="annot" style={{
-        textTransform: "uppercase",
-        letterSpacing: "0.08em",
-        marginBottom: "0.75rem",
-      }}>
+    <nav className="w-full border-t border-dark-gray pt-4">
+      <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
         Sommaire
       </p>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {tableOfContents.map((item) => (
-          <li key={item.id}>
-            <a
-              href={`#${item.id}`}
-              style={{
-                display: "block",
-                padding: "0.375rem 0",
-                paddingLeft: item.level === 3 ? "1rem" : "0.5rem",
-                fontSize: item.level === 3 ? "0.75rem" : "0.8125rem",
-                color: activeId === item.id ? "var(--accent-color)" : "var(--muted-color)",
-                textDecoration: "none",
-                borderLeft: activeId === item.id
-                  ? "2px solid var(--accent-color)"
-                  : "2px solid transparent",
-                transition: "color 0.15s, border-color 0.15s",
-                lineHeight: 1.4,
-              }}
-            >
-              {item.text}
-            </a>
-          </li>
-        ))}
+      <ul className="m-0 list-none p-0">
+        {tableOfContents.map((item) => {
+          const isActive = activeId === item.id;
+          return (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                className={cn(
+                  "block border-l-2 py-1.5 leading-tight no-underline transition-colors",
+                  item.level === 3
+                    ? "pl-4 text-xs"
+                    : "pl-2 text-[0.8125rem]",
+                  isActive
+                    ? "border-accent-secondary text-accent-secondary"
+                    : "border-transparent text-mid-gray hover:text-foreground",
+                )}
+              >
+                {item.text}
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

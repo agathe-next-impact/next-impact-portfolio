@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
@@ -115,43 +116,20 @@ export function FloatingContact() {
           role="dialog"
           aria-modal="false"
           aria-label={t("ariaLabel")}
+          className="fixed z-[49] w-64 border border-r-0 border-dark-gray bg-jet motion-reduce:!transition-none"
           style={{
-            position: "fixed",
             right: "2.5rem",
             top: "50%",
             transform: `translateY(-50%) translateX(${visible ? "0" : "100%"})`,
-            width: 256,
-            background: "var(--paper)",
-            border: "1px solid var(--rule)",
-            borderRight: "none",
-            zIndex: 49,
             transition: "transform 0.18s ease",
           }}
         >
-          <div style={{ padding: "1.25rem 1.25rem 1rem" }}>
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                marginBottom: 10,
-              }}
-            >
+          <div className="px-5 pb-4 pt-5">
+            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
               {activeOption?.label}
             </div>
 
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                color: "var(--ink)",
-                lineHeight: 1.5,
-                marginBottom: 16,
-                wordBreak: "break-all",
-              }}
-            >
+            <p className="mb-4 break-all font-mono text-[11px] leading-relaxed text-foreground">
               {activeOption?.sub}
             </p>
 
@@ -160,14 +138,7 @@ export function FloatingContact() {
               {...(activeOption?.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="btn primary"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: 11,
-                padding: "0.4rem 0.75rem",
-              }}
+              className="inline-flex items-center gap-1.5 border border-charcoal bg-vermilion px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
               onClick={close}
             >
               {activeOption?.label}
@@ -181,15 +152,7 @@ export function FloatingContact() {
       <div
         ref={railRef}
         aria-label={t("ariaLabel")}
-        style={{
-          position: "fixed",
-          right: 0,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 50,
-          background: "var(--paper)",
-          border: "1px solid var(--rule)",
-        }}
+        className="fixed right-0 top-1/2 z-50 -translate-y-1/2 border border-dark-gray bg-obsidian"
       >
         {options.map((opt, i) => {
           const Icon = opt.Icon;
@@ -201,26 +164,15 @@ export function FloatingContact() {
               aria-label={opt.label}
               aria-expanded={isActive}
               onClick={() => toggle(opt.key)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "2.5rem",
-                height: "2.5rem",
-                background: isActive ? "var(--paper-2)" : "transparent",
-                border: "none",
-                borderTop: i > 0 ? "1px solid var(--rule)" : "none",
-                borderLeft: isActive
-                  ? "3px solid var(--accent-color)"
-                  : "3px solid transparent",
-                cursor: "pointer",
-                color: isActive
-                  ? "var(--accent-color)"
+              className={cn(
+                "flex h-10 w-10 cursor-pointer items-center justify-center border-l-[3px] bg-transparent transition-colors duration-150",
+                i > 0 && "border-t border-t-dark-gray",
+                isActive
+                  ? "border-l-accent-secondary bg-jet text-accent-secondary"
                   : hoveredKey === opt.key
-                  ? "var(--ink)"
-                  : "var(--ink-2)",
-                transition: "color 0.15s, background 0.15s, border-color 0.15s",
-              }}
+                  ? "border-l-transparent text-foreground"
+                  : "border-l-transparent text-mid-gray",
+              )}
               onMouseEnter={() => setHoveredKey(opt.key)}
               onMouseLeave={() => setHoveredKey(null)}
             >

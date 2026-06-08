@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { FileText, Globe, Leaf, ScanLine, Monitor, SlidersHorizontal, type LucideIcon } from "lucide-react";
+import { FileText, Globe, Leaf, ScanLine, Monitor, SlidersHorizontal, ArrowRight, type LucideIcon } from "lucide-react";
 import { PricingCards } from "@/components/services/PricingCards";
 import AppsSection from "@/components/services/AppsSection";
 import { ServicesComparisonTable } from "@/components/services/ServicesComparisonTable";
@@ -9,12 +9,14 @@ import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import { HeadlessExplainer } from "@/components/headless-explainer";
 import HomeDiagnostic from "@/components/home-diagnostic";
-import PageLayout from "@/components/page-layout";
 import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getServicesPageVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
-import { Stagger, StaggerItem } from "@/components/ui/reveal";
+import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { WordAppear } from "@/components/visuals/word-appear";
+import { SignalPaths } from "@/components/visuals/signal-paths";
 
 export default function ServicesClient() {
   const { profileId } = useDocumentationMode();
@@ -22,103 +24,156 @@ export default function ServicesClient() {
   const servicesVariants = getServicesPageVariants(locale);
   const variant = profileId ? servicesVariants[profileId] : servicesVariants.default;
   const t = useTranslations("servicesPage");
+  const isEn = locale === "en";
 
   return (
-    <PageLayout titre={variant.titre} sousTitre="">
+    <main>
+      {/* Héros */}
+      <BlueprintSection
+        tone="obsidian"
+        backdrop={
+          <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
+            <SignalPaths />
+          </div>
+        }
+        innerClassName="px-6 py-16 lg:px-8 lg:py-24"
+      >
+        <Reveal className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+            <span>№ 01</span>
+            <span className="h-px w-6 bg-accent-secondary/50" />
+            <span className="text-mid-gray">Services</span>
+          </div>
+          <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <WordAppear text={variant.titre} />
+          </h1>
+        </Reveal>
+      </BlueprintSection>
 
-      {/* § 01 — Comparatif des stacks */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <HeadlessExplainer />
-        </div>
-      </section>
+      <Separator />
 
-      {/* § 02 — Tarifs */}
+      {/* § 02 — Comparatif des stacks (encore en style « Suisse ») */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
+        <HeadlessExplainer />
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* § 03 — Tarifs */}
       <PricingCards />
 
-      {/* § 03 — Tableau comparatif */}
+      <Separator />
+
+      {/* § 04 — Tableau comparatif */}
       <ServicesComparisonTable />
 
-      {/* § 04 — Comment choisir */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <div className="sec-head">
-            <div className="sec-no">№ —</div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
-              {t("stackMethod.title")}
-            </h2>
-            <div className="sec-meta">{t("stackMethod.label")}</div>
-          </div>
-          <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {([
-              { Icon: FileText,  title: t("stackMethod.scope.title"),       desc: t("stackMethod.scope.description") },
-              { Icon: Globe,     title: t("stackMethod.volume.title"),      desc: t("stackMethod.volume.description") },
-              { Icon: Leaf,      title: t("stackMethod.scalability.title"), desc: t("stackMethod.scalability.description") },
-            ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <StaggerItem key={card.title} className="ni-card" style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none" }}>
-                <card.Icon size={24} style={{ marginBottom: 20, color: "var(--muted-color)", display: "block" }} strokeWidth={1.5} />
-                <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 10, color: "var(--ink)" }}>
-                  {card.title}
-                </h3>
-                <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
-                  {card.desc}
-                </p>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
+      <Separator />
 
-      {/* § 05 — Diagnostic projet */}
+      {/* § 05 — Comment choisir */}
+      <BlueprintSection tone="obsidian">
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 05"
+            kicker={t("stackMethod.label")}
+            title={t("stackMethod.title")}
+          />
+        </Reveal>
+
+        <Stagger className="grid md:grid-cols-3">
+          {([
+            { Icon: FileText, title: t("stackMethod.scope.title"), desc: t("stackMethod.scope.description") },
+            { Icon: Globe, title: t("stackMethod.volume.title"), desc: t("stackMethod.volume.description") },
+            { Icon: Leaf, title: t("stackMethod.scalability.title"), desc: t("stackMethod.scalability.description") },
+          ] as { Icon: LucideIcon; title: string; desc: string }[]).map((card, i, arr) => (
+            <StaggerItem
+              key={card.title}
+              className={`group flex flex-col gap-4 p-6 transition-colors hover:bg-jet lg:p-8 ${
+                i < arr.length - 1 ? "border-b border-dark-gray md:border-b-0 md:border-r" : ""
+              }`}
+            >
+              <card.Icon
+                size={24}
+                strokeWidth={1.5}
+                className="text-mid-gray transition-colors group-hover:text-accent-secondary"
+              />
+              <h3 className="text-lg font-light tracking-tight text-foreground">
+                {card.title}
+              </h3>
+              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                {card.desc}
+              </p>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* § 06 — Diagnostic projet */}
       <HomeDiagnostic />
 
-      {/* § 06 — Stack sur-mesure (web app) */}
+      <Separator />
+
+      {/* § 07 — Stack sur-mesure (web app) */}
       <AppsSection />
 
-      {/* § 06 — Méthode */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <Process />
-        </div>
-      </section>
+      <Separator />
 
-      {/* § 07 — FAQ */}
+      {/* § 08 — Méthode */}
+      <BlueprintSection tone="obsidian" innerClassName="border-t border-dark-gray px-6 py-16 lg:px-8 lg:py-20">
+        <Process />
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* § 09 — FAQ */}
       <ServicesFAQ faqs={variant.faqs} />
 
-      {/* § 08 — Raccourcis */}
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-          <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0, borderTop: "1px solid var(--rule)" }}>
-            {([
-              { href: "/outils",               Icon: ScanLine,  title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
-              { href: "/demo",                 Icon: Monitor,   title: t("shortcuts.demo.title"),  desc: t("shortcuts.demo.description") },
-              { href: "/services/eligibilite", Icon: SlidersHorizontal, title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
-            ] as { href: string; Icon: LucideIcon; title: string; desc: string }[]).map((card, i) => (
-              <StaggerItem key={card.href}>
-              <Link href={card.href as Parameters<typeof Link>[0]["href"]} style={{ display: "block", textDecoration: "none" }}>
-                <div
-                  style={{ padding: "40px 32px", borderRight: i < 2 ? "1px solid var(--rule)" : "none", transition: "background 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                >
-                  <card.Icon size={24} style={{ marginBottom: 20, color: "var(--muted-color)", display: "block" }} strokeWidth={1.5} />
-                  <h3 className="ni-serif" style={{ fontSize: 20, marginBottom: 8, color: "var(--ink)" }}>
-                    {card.title}
-                  </h3>
-                  <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 16 }}>
-                    {card.desc}
-                  </p>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.08em", color: "var(--accent-color)", display: "inline-flex", alignItems: "center", gap: 4 }}>
-                    → {card.title}
-                  </span>
-                </div>
-              </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
+      <Separator />
 
-    </PageLayout>
+      {/* § 10 — Raccourcis */}
+      <BlueprintSection tone="obsidian">
+        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+          <SectionHeading
+            index="№ 10"
+            kicker={isEn ? "Go further" : "Aller plus loin"}
+            title={isEn ? "Useful shortcuts" : "Raccourcis utiles"}
+          />
+        </Reveal>
+
+        <Stagger className="grid md:grid-cols-3">
+          {([
+            { href: "/outils", Icon: ScanLine, title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
+            { href: "/demo", Icon: Monitor, title: t("shortcuts.demo.title"), desc: t("shortcuts.demo.description") },
+            { href: "/services/eligibilite", Icon: SlidersHorizontal, title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
+          ] as { href: string; Icon: LucideIcon; title: string; desc: string }[]).map((card, i, arr) => (
+            <StaggerItem key={card.href}>
+              <Link
+                href={card.href as Parameters<typeof Link>[0]["href"]}
+                className={`group flex h-full flex-col gap-3 p-6 transition-colors hover:bg-jet lg:p-8 ${
+                  i < arr.length - 1 ? "border-b border-dark-gray md:border-b-0 md:border-r" : ""
+                }`}
+              >
+                <card.Icon
+                  size={24}
+                  strokeWidth={1.5}
+                  className="text-mid-gray transition-colors group-hover:text-accent-secondary"
+                />
+                <h3 className="text-lg font-light tracking-tight text-foreground">
+                  {card.title}
+                </h3>
+                <p className="flex-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  {card.desc}
+                </p>
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
+                  {card.title}
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </BlueprintSection>
+    </main>
   );
 }

@@ -1,271 +1,119 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
+const KICKER = "font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray";
+const FOOT_LINK =
+  "font-mono text-[11px] uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
+
+const NAV_LINKS = [
+  { href: "/services",        key: "services" },
+  { href: "/etudes-de-cas",   key: "caseStudies" },
+  { href: "/documentation",   key: "documentation" },
+  { href: "/blog",            key: "blog" },
+  { href: "/avantage-oeth",   key: "oethAdvantage" },
+  { href: "/a-propos",        key: "about" },
+  { href: "/mentions-legales", key: "legalNotice" },
+] as const;
+
+const RESOURCE_LINKS = [
+  { href: "/audit-site-ia", key: "freeAiAudit" },
+  { href: "/outils",        key: "tools" },
+  { href: "/contact",       key: "startWebApp" },
+] as const;
+
 export default function Footer() {
   const t = useTranslations("footer");
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      style={{
-        borderTop: "1px solid var(--rule-strong)",
-        background: "var(--paper)",
-        padding: "0 var(--gutter, 32px)",
-      }}
-    >
-      {/* Main footer grid */}
-      <div
-        style={{
-          maxWidth: "var(--container-w, 1200px)",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr",
-          borderBottom: "1px solid var(--rule)",
-          gap: 0,
-        }}
-        className="footer-grid"
-      >
-        {/* Col 1 — Identity */}
-        <div
-          style={{
-            padding: "40px 0 40px",
-            borderRight: "1px solid var(--rule)",
-            paddingRight: 32,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 16,
-            }}
-          >
-            Studio
+    <footer className="bg-obsidian px-2.5 lg:px-0">
+      <div className="mx-auto w-full max-w-[1200px]">
+        {/* Main grid */}
+        <div className="grid grid-cols-1 divide-y divide-dark-gray border border-dark-gray bg-jet sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-y-0">
+          {/* Col 1 — Identity */}
+          <div className="p-8">
+            <div className={KICKER}>Studio</div>
+            <div className="mt-4 text-lg text-foreground">{t("company")}</div>
+            <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              {t("owner")}
+            </p>
+            <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              {t("address")}
+            </p>
           </div>
-          <div
-            style={{
-              fontFamily: "var(--serif)",
-              fontSize: 20,
-              color: "var(--ink)",
-              marginBottom: 12,
-            }}
-          >
-            {t("company")}
+
+          {/* Col 2 — Navigation */}
+          <div className="p-8">
+            <div className={KICKER}>{t("usefulLinks")}</div>
+            <nav className="mt-4 flex flex-col gap-2.5">
+              {NAV_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  className={FOOT_LINK}
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+            </nav>
           </div>
-          <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
-            {t("owner")}
-          </p>
-          <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, marginTop: 8, marginBottom: 0 }}>
-            {t("address")}
-          </p>
+
+          {/* Col 3 — Resources */}
+          <div className="p-8">
+            <div className={KICKER}>{t("resources")}</div>
+            <nav className="mt-4 flex flex-col gap-2.5">
+              {RESOURCE_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  className={FOOT_LINK}
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Col 4 — Contact */}
+          <div className="p-8">
+            <div className={KICKER}>{t("contactQuestion")}</div>
+            <a
+              href="mailto:agathe@next-impact.digital"
+              className="mt-4 block font-mono text-[11px] tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
+            >
+              agathe@next-impact.digital
+            </a>
+            <a
+              href="tel:0673981638"
+              className="mt-2 block font-mono text-[11px] tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
+            >
+              06 73 98 16 38
+            </a>
+            <Link
+              href="/contact"
+              className="mt-5 inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+            >
+              {t("startWebApp")}
+            </Link>
+          </div>
         </div>
 
-        {/* Col 2 — Navigation */}
-        <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
-          <div
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 16,
-            }}
-          >
-            {t("usefulLinks")}
-          </div>
-          <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { href: "/services",       key: "services" },
-              { href: "/etudes-de-cas",  key: "caseStudies" },
-              { href: "/documentation",  key: "documentation" },
-              { href: "/blog",           key: "blog" },
-              { href: "/avantage-oeth",  key: "oethAdvantage" },
-              { href: "/a-propos",       key: "about" },
-              { href: "/mentions-legales", key: "legalNotice" },
-            ].map((item) => (
-              <Link
-                key={item.key}
-                href={item.href as Parameters<typeof Link>[0]["href"]}
-                style={{
-                  fontFamily: "var(--mono, monospace)",
-                  fontSize: 11,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: "var(--ink-2)",
-                  textDecoration: "none",
-                  transition: "color 0.15s",
-                }}
-              >
-                {t(item.key as Parameters<typeof t>[0])}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Col 3 — Resources */}
-        <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
-          <div
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 16,
-            }}
-          >
-            {t("resources")}
-          </div>
-          <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { href: "/audit-site-ia",          key: "freeAiAudit" },
-              { href: "/outils",                 key: "tools" },
-              { href: "/contact",                key: "startWebApp" },
-            ].map((item) => (
-              <Link
-                key={item.key}
-                href={item.href as Parameters<typeof Link>[0]["href"]}
-                style={{
-                  fontFamily: "var(--mono, monospace)",
-                  fontSize: 11,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: "var(--ink-2)",
-                  textDecoration: "none",
-                  transition: "color 0.15s",
-                }}
-              >
-                {t(item.key as Parameters<typeof t>[0])}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Col 4 — Contact */}
-        <div style={{ padding: "40px 0 40px 32px" }}>
-          <div
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 16,
-            }}
-          >
-            {t("contactQuestion")}
-          </div>
+        {/* Colophon */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border border-t-0 border-dark-gray bg-jet px-6 py-4">
+          <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+            © {year} NEXT IMPACT DIGITAL
+          </span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+            SET EN FIGTREE / INTER TIGHT
+          </span>
           <a
-            href="mailto:agathe@next-impact.digital"
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 11,
-              letterSpacing: "0.06em",
-              color: "var(--ink)",
-              textDecoration: "none",
-              display: "block",
-              marginBottom: 8,
-            }}
+            href="#__next"
+            className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
-            agathe@next-impact.digital
+            ↑ HAUT DE PAGE
           </a>
-          <a
-            href="tel:0673981638"
-            style={{
-              fontFamily: "var(--mono, monospace)",
-              fontSize: 11,
-              letterSpacing: "0.06em",
-              color: "var(--ink)",
-              textDecoration: "none",
-              display: "block",
-              marginBottom: 16,
-            }}
-          >
-            06 73 98 16 38
-          </a>
-          <Link href="/contact" className="btn primary" style={{ height: 36, fontSize: 10 }}>
-            {t("startWebApp")}
-          </Link>
         </div>
       </div>
-
-      {/* Colophon */}
-      <div
-        style={{
-          maxWidth: "var(--container-w, 1200px)",
-          margin: "0 auto",
-          padding: "16px 0",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 8,
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--mono, monospace)",
-            fontSize: 9,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--muted-color)",
-          }}
-        >
-          © {year} NEXT IMPACT DIGITAL
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--mono, monospace)",
-            fontSize: 9,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--muted-color)",
-          }}
-        >
-          ED. {year} · VOL. 02
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--mono, monospace)",
-            fontSize: 9,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--muted-color)",
-          }}
-        >
-          SET EN INSTRUMENT SERIF / GEIST
-        </span>
-        <a
-          href="#__next"
-          style={{
-            fontFamily: "var(--mono, monospace)",
-            fontSize: 9,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--muted-color)",
-            textDecoration: "none",
-          }}
-        >
-          ↑ HAUT DE PAGE
-        </a>
-      </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
-        }
-        @media (max-width: 600px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

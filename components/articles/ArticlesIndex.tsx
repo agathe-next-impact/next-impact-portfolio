@@ -1,88 +1,106 @@
 "use client"
 
 import { useState } from "react"
+import { useLocale } from "next-intl"
 import { ArticleCard } from "./ArticleCard"
-import PageLayout from "@/components/page-layout"
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section"
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal"
+import { cn } from "@/lib/utils"
+import type { Locale } from "@/i18n/routing"
 import type { ArticleMeta } from "@/lib/articles"
 
-const categories = ["Tous", "WP Headless", "TIH / AGEFIPH", "ROI & Budget"]
+/**
+ * Catégories : `value` est la valeur de filtre (= `article.category` issu du
+ * frontmatter, en FR) ; le libellé affiché est localisé. `value: null` = « Tous ».
+ */
+const CATEGORIES: { value: string | null; fr: string; en: string }[] = [
+  { value: null, fr: "Tous", en: "All" },
+  { value: "WP Headless", fr: "WP Headless", en: "Headless WP" },
+  { value: "TIH / AGEFIPH", fr: "TIH / AGEFIPH", en: "TIH / AGEFIPH" },
+  { value: "ROI & Budget", fr: "ROI & Budget", en: "ROI & Budget" },
+]
 
 interface ArticlesIndexProps {
   articles: ArticleMeta[]
 }
 
 export function ArticlesIndex({ articles }: ArticlesIndexProps) {
-  const [activeCategory, setActiveCategory] = useState("Tous")
+  const locale = useLocale() as Locale
+  const isEn = locale === "en"
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
   const filtered =
-    activeCategory === "Tous"
+    activeCategory === null
       ? articles
       : articles.filter((a) => a.category === activeCategory)
 
   return (
-    <PageLayout
-      titre="Articles & Comparatifs"
-      sousTitre="Analyses, comparatifs et retours d'expérience pour prendre les bonnes décisions web."
-    >
-      <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-        <div className="container">
-        {/* Filtres tab-style */}
-        <div style={{
-          display: "flex",
-          borderBottom: "1px solid var(--rule)",
-          marginBottom: "2rem",
-          gap: 0,
-          flexWrap: "wrap",
-        }}>
-          {categories.map((cat) => (
+    <BlueprintSection ticks>
+      {/* En-tête */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <SectionHeading
+          index="№ 01"
+          kicker={isEn ? "Insights" : "Analyses"}
+          title={
+            isEn ? (
+              <>
+                Articles <span className="text-accent-secondary">&amp; comparisons</span>
+              </>
+            ) : (
+              <>
+                Articles <span className="text-accent-secondary">&amp; comparatifs</span>
+              </>
+            )
+          }
+          description={
+            isEn
+              ? "Field-tested analyses to make the right web decisions."
+              : "Analyses de terrain pour prendre les bonnes décisions web."
+          }
+        />
+      </Reveal>
+
+      {/* Filtres en onglets mono */}
+      <div className="flex flex-wrap gap-x-1 gap-y-2 border-b border-dark-gray px-6 py-4 lg:px-8">
+        {CATEGORIES.map((cat) => {
+          const isActive = activeCategory === cat.value
+          return (
             <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              style={{
-                padding: "0.5rem 1rem",
-                fontSize: "0.8125rem",
-                fontFamily: "var(--font-mono)",
-                background: "none",
-                border: "none",
-                borderBottom: activeCategory === cat
-                  ? "2px solid var(--ink)"
-                  : "2px solid transparent",
-                color: activeCategory === cat ? "var(--ink)" : "var(--muted-color)",
-                cursor: "pointer",
-                marginBottom: "-1px",
-                transition: "color 0.15s, border-color 0.15s",
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-              }}
+              key={cat.value ?? "all"}
+              type="button"
+              onClick={() => setActiveCategory(cat.value)}
+              aria-pressed={isActive}
+              className={cn(
+                "border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.1em] transition-colors",
+                isActive
+                  ? "border-accent-secondary/60 bg-accent-secondary/10 text-accent-secondary"
+                  : "border-dark-gray text-mid-gray hover:border-mid-gray hover:text-foreground",
+              )}
             >
-              {cat}
+              {isEn ? cat.en : cat.fr}
             </button>
-          ))}
-        </div>
+          )
+        })}
+      </div>
 
-        {/* Grille */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "0 4rem",
-        }}>
+      {/* Grille de cartes bordées */}
+      {filtered.length > 0 ? (
+        <Stagger className="grid gap-4 px-6 py-8 sm:grid-cols-2 lg:grid-cols-3 lg:px-8 lg:py-10">
           {filtered.map((article, i) => (
-            <ArticleCard key={article.slug} article={article} index={i} />
+            <StaggerItem key={article.slug} className="flex">
+              <ArticleCard article={article} index={i} />
+            </StaggerItem>
           ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <p style={{
-            color: "var(--muted-color)",
-            fontSize: "0.875rem",
-            padding: "3rem 0",
-            textAlign: "center",
-          }}>
-            Aucun article dans cette catégorie pour le moment.
+        </Stagger>
+      ) : (
+        <div className="border-b border-dark-gray px-6 py-16 text-center lg:px-8">
+          <p className="font-inter-tight text-sm text-mid-gray">
+            {isEn
+              ? "No article in this category yet."
+              : "Aucun article dans cette catégorie pour le moment."}
           </p>
-        )}
         </div>
-      </section>
-    </PageLayout>
+      )}
+    </BlueprintSection>
   )
 }

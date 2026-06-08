@@ -47,34 +47,17 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
     <>
       {/* Trigger button */}
       <div
-        className="lg:hidden"
-        style={{
-          position: "fixed",
-          bottom: "1.5rem",
-          right: "4rem",
-          zIndex: 40,
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(0.5rem)",
-          pointerEvents: visible ? "auto" : "none",
-          transition: "opacity 0.2s, transform 0.2s",
-        }}
+        className={`fixed bottom-6 right-16 z-40 transition-[opacity,transform] duration-200 lg:hidden ${
+          visible
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-2 opacity-0"
+        }`}
       >
         <button
           onClick={() => setOpen(true)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            border: "1px solid var(--rule-strong)",
-            background: "var(--paper)",
-            padding: "0.5rem 0.875rem",
-            fontSize: "0.8125rem",
-            fontFamily: "var(--font-mono)",
-            color: "var(--ink-2)",
-            cursor: "pointer",
-          }}
+          className="flex items-center gap-2 border border-dark-gray bg-obsidian px-3.5 py-2 font-mono text-[0.8125rem] text-mid-gray transition-colors hover:border-accent-secondary hover:text-accent-secondary"
         >
-          <List style={{ width: "0.875rem", height: "0.875rem" }} />
+          <List className="h-3.5 w-3.5" />
           Sommaire
         </button>
       </div>
@@ -82,64 +65,45 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
       {/* Drawer overlay */}
       {open && (
         <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 50,
-            background: "rgba(14,14,12,0.4)",
-          }}
+          className="fixed inset-0 z-50 bg-obsidian/70 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* Drawer panel */}
       <div
-        className="lg:hidden"
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 51,
-          background: "var(--paper)",
-          borderTop: "2px solid var(--ink)",
-          padding: "1.5rem 1.25rem 2rem",
-          maxHeight: "70vh",
-          overflowY: "auto",
-          transform: open ? "translateY(0)" : "translateY(100%)",
-          transition: "transform 0.25s ease",
-        }}
+        className={`fixed inset-x-0 bottom-0 z-[51] max-h-[70vh] overflow-y-auto border-t-2 border-dark-gray bg-obsidian px-5 pb-8 pt-6 transition-transform duration-300 ease-out lg:hidden ${
+          open ? "translate-y-0" : "translate-y-full"
+        }`}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-          <p className="annot" style={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        <div className="mb-4 flex items-center justify-between">
+          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-mid-gray">
             Sommaire
           </p>
           <button
             onClick={() => setOpen(false)}
-            style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted-color)", padding: 0 }}
+            aria-label="Fermer le sommaire"
+            className="p-0 text-mid-gray transition-colors hover:text-foreground"
           >
-            <X style={{ width: "1rem", height: "1rem" }} />
+            <X className="h-4 w-4" />
           </button>
         </div>
         <nav>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <ul className="m-0 list-none p-0">
             {tableOfContents.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={() => setOpen(false)}
-                  style={{
-                    display: "block",
-                    padding: "0.5rem 0",
-                    paddingLeft: item.level === 3 ? "1rem" : "0.5rem",
-                    fontSize: item.level === 3 ? "0.8125rem" : "0.9375rem",
-                    color: activeId === item.id ? "var(--accent-color)" : "var(--ink-2)",
-                    textDecoration: "none",
-                    borderLeft: activeId === item.id
-                      ? "2px solid var(--accent-color)"
-                      : "2px solid transparent",
-                    borderBottom: "1px solid var(--rule)",
-                  }}
+                  className={`block border-b border-dark-gray no-underline transition-colors ${
+                    item.level === 3
+                      ? "py-2 pl-4 text-[0.8125rem]"
+                      : "py-2 pl-2 text-[0.9375rem]"
+                  } ${
+                    activeId === item.id
+                      ? "border-l-2 border-l-accent-secondary text-accent-secondary"
+                      : "border-l-2 border-l-transparent text-mid-gray"
+                  }`}
                 >
                   {item.text}
                 </a>

@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { ArrowRight, Info } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
+import { RadialGauge } from "@/components/visuals/radial-gauge";
+import { DonutBreakdown } from "@/components/visuals/charts";
 
 const SMIC_HORAIRE = 11.88;
 
@@ -33,6 +38,59 @@ const presetsEn = [
   { label: "Web app", value: 6500 },
   { label: "Custom application", value: 15000 },
 ];
+
+const BTN_PRIMARY =
+  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+
+const BTN_GHOST =
+  "group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+
+const LABEL_MONO =
+  "block font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+
+/**
+ * Chiffre € qui se réécrit en douceur quand les entrées changent (interpolation
+ * sur 500 ms depuis la valeur précédente). Reduced-motion → bascule directe.
+ */
+function AnimatedEuro({
+  value,
+  locale,
+  className,
+}: {
+  value: number;
+  locale: Locale;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const [display, setDisplay] = useState(value);
+  const prev = useRef(value);
+
+  useEffect(() => {
+    if (reduce) {
+      setDisplay(value);
+      prev.current = value;
+      return;
+    }
+    const start = prev.current;
+    const end = value;
+    if (start === end) return;
+    const duration = 500;
+    let startTime: number | null = null;
+    let raf = 0;
+    const tick = (ts: number) => {
+      if (startTime === null) startTime = ts;
+      const p = Math.min((ts - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setDisplay(start + (end - start) * eased);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else prev.current = end;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, reduce]);
+
+  return <span className={className}>{formatEuro(display, locale)}</span>;
+}
 
 export default function SimulateurAgefiph() {
   const locale = useLocale() as Locale;
@@ -93,522 +151,319 @@ export default function SimulateurAgefiph() {
 
   const objectifTH = Math.floor(effectif * 0.06);
 
-  const inputStyle: React.CSSProperties = {
-    border: "1px solid var(--rule)",
-    background: "var(--paper)",
-    padding: "10px 14px",
-    fontFamily: "var(--sans)",
-    fontSize: "1rem",
-    color: "var(--ink)",
-    outline: "none",
-    width: "100%",
-    boxSizing: "border-box",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    display: "block",
-    fontFamily: "var(--mono)",
-    fontSize: "0.7rem",
-    letterSpacing: "0.1em",
-    textTransform: "uppercase",
-    color: "var(--muted-color)",
-    marginBottom: "10px",
-  };
-
-  const infoCardStyle: React.CSSProperties = {
-    border: "1px solid var(--rule)",
-    background: "var(--paper-2)",
-    padding: "20px",
-  };
+  // Données chart : décomposition de la contribution brute (part déduite vs
+  // part restante). Redessinée à chaque changement d'entrée.
+  const donutData = [
+    {
+      label: isEn ? "Deduction" : "Déduction",
+      value: Math.round(resultats.economie),
+    },
+    {
+      label: isEn ? "Remaining" : "Reste à payer",
+      value: Math.round(resultats.contributionApres),
+    },
+  ];
+  const hasContribution = resultats.contributionBrute > 0;
+  const pctEconomie = Math.round(resultats.pourcentageEconomie);
 
   return (
-    <section style={{ width: "100%" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        {/* Main container */}
-        <div style={{ border: "1px solid var(--rule)" }}>
+    <Reveal className="w-full border border-dark-gray bg-obsidian">
+      {/* Header */}
+      <div className="border-b border-dark-gray px-6 py-6 lg:px-8">
+        <p className={LABEL_MONO}>
+          {isEn ? "Tool — AGEFIPH 2025" : "Outil — AGEFIPH 2025"}
+        </p>
+        <h2 className="mt-2 text-2xl font-light tracking-tight text-foreground md:text-3xl">
+          {isEn
+            ? "AGEFIPH deduction simulator"
+            : "Simulateur de déduction AGEFIPH"}
+        </h2>
+        <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+          {isEn
+            ? "Estimate your AGEFIPH contribution reduction when working with Next Impact."
+            : "Estimez la réduction de votre contribution AGEFIPH en travaillant avec Next Impact."}
+        </p>
+      </div>
 
-          {/* Header */}
-          <div
-            style={{
-              padding: "24px 32px",
-              borderBottom: "1px solid var(--rule)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "0.7rem",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                marginBottom: "8px",
-              }}
-            >
-              {isEn ? "Tool — AGEFIPH 2025" : "Outil — AGEFIPH 2025"}
-            </p>
-            <h2
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
-                fontWeight: 500,
-                color: "var(--ink)",
-                margin: 0,
-              }}
-            >
+      {/* Inputs */}
+      <div className="grid gap-x-8 gap-y-8 px-6 py-8 sm:grid-cols-2 lg:px-8">
+        {/* Effectif */}
+        <div>
+          <label className={LABEL_MONO}>
+            {isEn ? "Number of employees" : "Nombre de salariés"}
+          </label>
+          <div className="mt-2.5 mb-2.5 flex items-baseline justify-between">
+            <span className="text-3xl font-light leading-none text-foreground md:text-4xl">
+              {effectif}
+            </span>
+            <span className="font-mono text-[11px] tracking-[0.05em] text-mid-gray">
               {isEn
-                ? "AGEFIPH deduction simulator"
-                : "Simulateur de déduction AGEFIPH"}
-            </h2>
-            <p
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "0.9rem",
-                color: "var(--muted-color)",
-                marginTop: "8px",
-                marginBottom: 0,
-              }}
-            >
-              {isEn
-                ? "Estimate your AGEFIPH contribution reduction when working with Next Impact."
-                : "Estimez la réduction de votre contribution AGEFIPH en travaillant avec Next Impact."}
-            </p>
+                ? `OETH: ${objectifTH} required`
+                : `OETH : ${objectifTH} TH requis`}
+            </span>
           </div>
+          <input
+            type="range"
+            min={20}
+            max={1000}
+            step={1}
+            value={effectif}
+            onChange={(e) => setEffectif(Number(e.target.value))}
+            className="w-full cursor-pointer accent-accent-secondary"
+            aria-label={isEn ? "Number of employees" : "Nombre de salariés"}
+          />
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-mid-gray">
+            <span>20</span>
+            <span>{isEn ? "1,000" : "1 000"}</span>
+          </div>
+        </div>
 
-          {/* Inputs */}
-          <div style={{ padding: "32px" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "32px",
-              }}
-            >
-              {/* Effectif */}
-              <div>
-                <label style={labelStyle}>
-                  {isEn ? "Number of employees" : "Nombre de salariés"}
-                </label>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <span
-                    className="ni-serif"
-                    style={{
-                      fontSize: "clamp(28px, 3vw, 40px)",
-                      color: "var(--ink)",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {effectif}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.7rem",
-                      color: "var(--muted-color)",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    {isEn
-                      ? `OETH: ${objectifTH} required`
-                      : `OETH : ${objectifTH} TH requis`}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={20}
-                  max={1000}
-                  step={1}
-                  value={effectif}
-                  onChange={(e) => setEffectif(Number(e.target.value))}
-                  style={{
-                    width: "100%",
-                    accentColor: "var(--accent-color)",
-                    cursor: "pointer",
-                  }}
-                  aria-label={
-                    isEn ? "Number of employees" : "Nombre de salariés"
+        {/* TH employés */}
+        <div>
+          <label className={LABEL_MONO}>
+            {isEn
+              ? "Disabled workers employed"
+              : "Travailleurs handicapés employés"}
+          </label>
+          <div className="mt-2.5 flex items-center gap-4">
+            <input
+              type="number"
+              min={0}
+              max={effectif}
+              value={thEmployes}
+              onChange={(e) =>
+                setThEmployes(
+                  Math.min(
+                    Math.max(0, parseInt(e.target.value) || 0),
+                    effectif
+                  )
+                )
+              }
+              className="w-[90px] border border-dark-gray bg-jet px-3 py-2 text-center font-mono text-lg text-foreground outline-none transition-colors focus-visible:border-accent-secondary focus-visible:ring-1 focus-visible:ring-accent-secondary"
+              aria-label={
+                isEn
+                  ? "Number of disabled workers employed"
+                  : "Nombre de travailleurs handicapés employés"
+              }
+            />
+            <span className="font-inter-tight text-sm text-mid-gray">
+              {isEn
+                ? `out of ${objectifTH} required (6%)`
+                : `sur ${objectifTH} requis (6%)`}
+            </span>
+          </div>
+        </div>
+
+        {/* Montant projet */}
+        <div className="sm:col-span-2">
+          <label className={LABEL_MONO}>
+            {isEn ? "Project amount (excl. tax)" : "Montant HT du projet"}
+          </label>
+          <div className="mt-3 mb-3 flex flex-wrap gap-2">
+            {presets.map((p) => {
+              const isActive = montantProjet === p.value && !isCustom;
+              return (
+                <button
+                  key={p.value}
+                  type="button"
+                  onClick={() => handlePreset(p.value)}
+                  className={
+                    "rounded-sm border px-4 py-2 font-inter-tight text-sm transition-colors " +
+                    (isActive
+                      ? "border-accent-secondary bg-jet text-foreground"
+                      : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")
                   }
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "4px",
-                  }}
                 >
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.65rem",
-                      color: "var(--muted-color)",
-                    }}
-                  >
-                    20
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.65rem",
-                      color: "var(--muted-color)",
-                    }}
-                  >
-                    {isEn ? "1,000" : "1 000"}
-                  </span>
-                </div>
-              </div>
-
-              {/* TH employés */}
-              <div>
-                <label style={labelStyle}>
-                  {isEn
-                    ? "Disabled workers employed"
-                    : "Travailleurs handicapés employés"}
-                </label>
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                  <input
-                    type="number"
-                    min={0}
-                    max={effectif}
-                    value={thEmployes}
-                    onChange={(e) =>
-                      setThEmployes(
-                        Math.min(
-                          Math.max(0, parseInt(e.target.value) || 0),
-                          effectif
-                        )
-                      )
-                    }
-                    style={{
-                      ...inputStyle,
-                      width: "90px",
-                      textAlign: "center",
-                      fontFamily: "var(--mono)",
-                      fontSize: "1.2rem",
-                    }}
-                    aria-label={
-                      isEn
-                        ? "Number of disabled workers employed"
-                        : "Nombre de travailleurs handicapés employés"
-                    }
-                  />
-                  <span
-                    style={{
-                      fontFamily: "var(--sans)",
-                      fontSize: "0.85rem",
-                      color: "var(--muted-color)",
-                    }}
-                  >
-                    {isEn
-                      ? `out of ${objectifTH} required (6%)`
-                      : `sur ${objectifTH} requis (6%)`}
-                  </span>
-                </div>
-              </div>
-
-              {/* Montant projet */}
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>
-                  {isEn ? "Project amount (excl. tax)" : "Montant HT du projet"}
-                </label>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                    marginBottom: "12px",
-                  }}
-                >
-                  {presets.map((p) => {
-                    const isActive = montantProjet === p.value && !isCustom;
-                    return (
-                      <button
-                        key={p.value}
-                        onClick={() => handlePreset(p.value)}
-                        style={{
-                          fontFamily: "var(--sans)",
-                          fontSize: "0.85rem",
-                          padding: "8px 16px",
-                          border: isActive
-                            ? "1px solid var(--ink)"
-                            : "1px solid var(--rule)",
-                          background: isActive
-                            ? "var(--ink)"
-                            : "var(--paper)",
-                          color: isActive ? "var(--paper)" : "var(--ink)",
-                          cursor: "pointer",
-                          transition: "none",
-                        }}
-                      >
-                        {p.label} — {formatEuro(p.value, locale)}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    placeholder={
-                      isEn ? "Custom amount" : "Montant personnalisé"
-                    }
-                    value={isCustom ? customMontant : ""}
-                    onChange={handleCustomChange}
-                    onFocus={() => setIsCustom(true)}
-                    style={{
-                      ...inputStyle,
-                      maxWidth: "220px",
-                      outline: isCustom
-                        ? "1px solid var(--ink)"
-                        : "none",
-                    }}
-                    aria-label={
-                      isEn
-                        ? "Custom project amount in euros (excl. tax)"
-                        : "Montant personnalisé du projet en euros HT"
-                    }
-                  />
-                  <span
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.75rem",
-                      color: "var(--muted-color)",
-                    }}
-                  >
-                    {isEn ? "€ excl. tax" : "€ HT"}
-                  </span>
-                </div>
-              </div>
-            </div>
+                  {p.label} — {formatEuro(p.value, locale)}
+                </button>
+              );
+            })}
           </div>
-
-          {/* Result panel */}
-          <div
-            style={{
-              borderTop: "1px solid var(--rule)",
-              padding: "32px",
-            }}
-          >
-            {/* Four result cards */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                gap: "1px",
-                background: "var(--rule)",
-                marginBottom: "32px",
-              }}
-            >
-              {/* Contribution brute */}
-              <div style={{ ...infoCardStyle, background: "var(--paper-2)" }}>
-                <p style={labelStyle}>
-                  {isEn
-                    ? "AGEFIPH contribution before"
-                    : "Contribution AGEFIPH avant"}
-                </p>
-                <p
-                  className="ni-serif"
-                  style={{
-                    fontSize: "clamp(20px, 2.5vw, 28px)",
-                    color: "var(--ink)",
-                    margin: "0 0 6px",
-                  }}
-                >
-                  {formatEuro(resultats.contributionBrute, locale)}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: "0.65rem",
-                    color: "var(--muted-color)",
-                    margin: 0,
-                  }}
-                >
-                  {isEn
-                    ? `${resultats.manquants} missing TH × ${formatEuro(bareme(effectif), locale)}`
-                    : `${resultats.manquants} TH manquant${resultats.manquants > 1 ? "s" : ""} × ${formatEuro(bareme(effectif), locale)}`}
-                </p>
-              </div>
-
-              {/* Déduction Next Impact */}
-              <div style={{ ...infoCardStyle, background: "var(--paper-2)" }}>
-                <p style={labelStyle}>
-                  {isEn ? "Next Impact deduction" : "Déduction Next Impact"}
-                </p>
-                <p
-                  className="ni-serif"
-                  style={{
-                    fontSize: "clamp(20px, 2.5vw, 28px)",
-                    color: "var(--accent-color)",
-                    margin: "0 0 6px",
-                  }}
-                >
-                  − {formatEuro(resultats.economie, locale)}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: "0.65rem",
-                    color: "var(--muted-color)",
-                    margin: 0,
-                  }}
-                >
-                  {isEn
-                    ? "30% of labor cost (capped)"
-                    : "30% du coût de main-d'œuvre, plafonné"}
-                </p>
-              </div>
-
-              {/* Contribution après */}
-              <div style={{ ...infoCardStyle, background: "var(--paper-2)" }}>
-                <p style={labelStyle}>
-                  {isEn
-                    ? "Contribution after deduction"
-                    : "Contribution après déduction"}
-                </p>
-                <p
-                  className="ni-serif"
-                  style={{
-                    fontSize: "clamp(20px, 2.5vw, 28px)",
-                    color: "var(--ink)",
-                    margin: "0 0 6px",
-                  }}
-                >
-                  {formatEuro(resultats.contributionApres, locale)}
-                </p>
-              </div>
-
-              {/* Coût réel — hero card */}
-              <div
-                style={{
-                  ...infoCardStyle,
-                  background: "var(--paper)",
-                  borderLeft: "2px solid var(--accent-color)",
-                }}
-              >
-                <p style={labelStyle}>
-                  {isEn ? "Real cost of the site" : "Coût réel du site"}
-                </p>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: "12px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <p
-                    className="ni-serif"
-                    style={{
-                      fontSize: "clamp(32px, 4vw, 56px)",
-                      color: "var(--accent-color)",
-                      margin: 0,
-                      lineHeight: 1,
-                    }}
-                  >
-                    {formatEuro(resultats.coutReelProjet, locale)}
-                  </p>
-                  {resultats.pourcentageEconomie > 0 && (
-                    <span
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.85rem",
-                        color: "var(--muted-color)",
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      −{Math.round(resultats.pourcentageEconomie)}%
-                    </span>
-                  )}
-                </div>
-                <p
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: "0.65rem",
-                    color: "var(--muted-color)",
-                    marginTop: "8px",
-                    marginBottom: 0,
-                  }}
-                >
-                  {formatEuro(montantProjet, locale)} −{" "}
-                  {formatEuro(resultats.economie, locale)}{" "}
-                  {isEn ? "AGEFIPH deduction" : "de déduction AGEFIPH"}
-                </p>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <Link href="/contact" className="btn primary">
-                {isEn ? "Start a project" : "Démarrer un projet"}
-              </Link>
-              <Link href="/services" className="btn">
-                {isEn ? "See services" : "Voir les services"}
-              </Link>
-            </div>
-          </div>
-
-          {/* Disclaimer */}
-          <div
-            style={{
-              borderTop: "1px solid var(--rule)",
-              padding: "20px 32px",
-              background: "var(--paper-2)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "0.78rem",
-                color: "var(--muted-color)",
-                margin: 0,
-                lineHeight: 1.6,
-              }}
-            >
-              {isEn ? (
-                <>
-                  Indicative estimate based on the 2025 AGEFIPH rate schedule
-                  (hourly minimum wage: €11.88). The actual calculation depends
-                  on additional factors (ECAP, reductions, surcharges). Consult
-                  the{" "}
-                  <Link
-                    href="https://www.agefiph.fr"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "var(--ink)", textDecoration: "underline" }}
-                  >
-                    official AGEFIPH simulator
-                  </Link>
-                  . Attestation compliant with articles L.5212-10-1 and D.5212-7
-                  of the French Labor Code.
-                </>
-              ) : (
-                <>
-                  Estimation indicative basée sur le barème AGEFIPH 2025 (SMIC
-                  horaire : 11,88 €). Le calcul réel dépend de facteurs
-                  complémentaires (ECAP, minorations, majorations). Consultez
-                  le{" "}
-                  <Link
-                    href="https://www.agefiph.fr"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "var(--ink)", textDecoration: "underline" }}
-                  >
-                    simulateur officiel AGEFIPH
-                  </Link>
-                  . Attestation conforme aux articles L.5212-10-1 et D.5212-7
-                  du Code du travail.
-                </>
-              )}
-            </p>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder={isEn ? "Custom amount" : "Montant personnalisé"}
+              value={isCustom ? customMontant : ""}
+              onChange={handleCustomChange}
+              onFocus={() => setIsCustom(true)}
+              className={
+                "max-w-[220px] flex-1 border bg-jet px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:border-accent-secondary focus-visible:ring-1 focus-visible:ring-accent-secondary " +
+                (isCustom ? "border-accent-secondary" : "border-dark-gray")
+              }
+              aria-label={
+                isEn
+                  ? "Custom project amount in euros (excl. tax)"
+                  : "Montant personnalisé du projet en euros HT"
+              }
+            />
+            <span className="font-mono text-xs text-mid-gray">
+              {isEn ? "€ excl. tax" : "€ HT"}
+            </span>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Result panel */}
+      <div className="border-t border-dark-gray">
+        <div className="grid lg:grid-cols-[1.4fr_1fr]">
+          {/* Chiffres clés */}
+          <div className="grid grid-cols-1 sm:grid-cols-2">
+            {/* Contribution brute */}
+            <div className="border-b border-dark-gray p-6 sm:border-r lg:p-8">
+              <p className={LABEL_MONO}>
+                {isEn
+                  ? "AGEFIPH contribution before"
+                  : "Contribution AGEFIPH avant"}
+              </p>
+              <p className="mt-2 text-2xl font-light text-foreground md:text-[28px]">
+                {formatEuro(resultats.contributionBrute, locale)}
+              </p>
+              <p className="mt-1.5 font-mono text-[11px] text-mid-gray">
+                {isEn
+                  ? `${resultats.manquants} missing TH × ${formatEuro(bareme(effectif), locale)}`
+                  : `${resultats.manquants} TH manquant${resultats.manquants > 1 ? "s" : ""} × ${formatEuro(bareme(effectif), locale)}`}
+              </p>
+            </div>
+
+            {/* Déduction Next Impact */}
+            <div className="border-b border-dark-gray p-6 lg:p-8">
+              <p className={LABEL_MONO}>
+                {isEn ? "Next Impact deduction" : "Déduction Next Impact"}
+              </p>
+              <p className="mt-2 text-2xl font-light text-accent-secondary md:text-[28px]">
+                − <AnimatedEuro value={resultats.economie} locale={locale} />
+              </p>
+              <p className="mt-1.5 font-mono text-[11px] text-mid-gray">
+                {isEn
+                  ? "30% of labor cost (capped)"
+                  : "30% du coût de main-d'œuvre, plafonné"}
+              </p>
+            </div>
+
+            {/* Contribution après */}
+            <div className="border-b border-dark-gray p-6 sm:border-r sm:border-b-0 lg:p-8">
+              <p className={LABEL_MONO}>
+                {isEn
+                  ? "Contribution after deduction"
+                  : "Contribution après déduction"}
+              </p>
+              <p className="mt-2 text-2xl font-light text-foreground md:text-[28px]">
+                {formatEuro(resultats.contributionApres, locale)}
+              </p>
+            </div>
+
+            {/* Coût réel — carte mise en avant */}
+            <div className="border-b border-dark-gray border-l-2 border-l-accent-secondary bg-jet p-6 sm:border-b-0 lg:p-8">
+              <p className={LABEL_MONO}>
+                {isEn ? "Real cost of the site" : "Coût réel du site"}
+              </p>
+              <div className="mt-2 flex flex-wrap items-baseline gap-3">
+                <AnimatedEuro
+                  value={resultats.coutReelProjet}
+                  locale={locale}
+                  className="text-3xl font-light leading-none text-accent-secondary md:text-5xl"
+                />
+                {pctEconomie > 0 && (
+                  <span className="font-mono text-sm tracking-[0.05em] text-mid-gray">
+                    −{pctEconomie}%
+                  </span>
+                )}
+              </div>
+              <p className="mt-2 font-mono text-[11px] text-mid-gray">
+                {formatEuro(montantProjet, locale)} −{" "}
+                {formatEuro(resultats.economie, locale)}{" "}
+                {isEn ? "AGEFIPH deduction" : "de déduction AGEFIPH"}
+              </p>
+            </div>
+          </div>
+
+          {/* Visualisations theme-aware (se redessinent au changement d'entrée) */}
+          <div className="flex flex-col items-center justify-center gap-8 border-t border-dark-gray p-6 lg:border-t-0 lg:border-l lg:p-8">
+            {hasContribution ? (
+              <div className="w-full">
+                <DonutBreakdown
+                  data={donutData}
+                  height={180}
+                  centerLabel={`−${pctEconomie}%`}
+                />
+                <div className="mt-3 flex items-center justify-center gap-5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-accent-primary" />
+                    {isEn ? "Deduction" : "Déduction"}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-accent-secondary" />
+                    {isEn ? "Remaining" : "Reste"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <RadialGauge
+                value={Math.min(100, Math.round(resultats.pourcentageEconomie))}
+                size={150}
+                label={isEn ? "of project" : "du projet"}
+                sublabel={isEn ? "saved" : "économisé"}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* CTAs */}
+        <div className="flex flex-wrap gap-3 border-t border-dark-gray px-6 py-6 lg:px-8">
+          <Link href="/contact" className={BTN_PRIMARY}>
+            {isEn ? "Start a project" : "Démarrer un projet"}
+            <ArrowRight size={14} />
+          </Link>
+          <Link href="/services" className={BTN_GHOST}>
+            {isEn ? "See services" : "Voir les services"}
+            <ArrowRight
+              size={13}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <div className="flex gap-3 border-t border-dark-gray bg-jet px-6 py-5 lg:px-8">
+        <Info size={15} className="mt-0.5 shrink-0 text-mid-gray" />
+        <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+          {isEn ? (
+            <>
+              Indicative estimate based on the 2025 AGEFIPH rate schedule
+              (hourly minimum wage: €11.88). The actual calculation depends on
+              additional factors (ECAP, reductions, surcharges). Consult the{" "}
+              <Link
+                href="https://www.agefiph.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline underline-offset-2 transition-colors hover:text-accent-secondary"
+              >
+                official AGEFIPH simulator
+              </Link>
+              . Attestation compliant with articles L.5212-10-1 and D.5212-7 of
+              the French Labor Code.
+            </>
+          ) : (
+            <>
+              Estimation indicative basée sur le barème AGEFIPH 2025 (SMIC
+              horaire : 11,88 €). Le calcul réel dépend de facteurs
+              complémentaires (ECAP, minorations, majorations). Consultez le{" "}
+              <Link
+                href="https://www.agefiph.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline underline-offset-2 transition-colors hover:text-accent-secondary"
+              >
+                simulateur officiel AGEFIPH
+              </Link>
+              . Attestation conforme aux articles L.5212-10-1 et D.5212-7 du Code
+              du travail.
+            </>
+          )}
+        </p>
+      </div>
+    </Reveal>
   );
 }

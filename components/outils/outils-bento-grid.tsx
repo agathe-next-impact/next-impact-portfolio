@@ -9,6 +9,7 @@ import {
   BadgePercent,
   Smartphone,
   Scale,
+  ArrowRight,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
 import type { ProfileId } from "@/lib/documentation-profiles"
@@ -101,90 +102,48 @@ export default function OutilsBentoGrid() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          border: "1px solid var(--rule)",
-        }}
+        /* Bento bordé sans gouttière : rails haut + droite portés par le cadre,
+           chaque cellule ajoute son filet gauche + bas → cadre complet et robuste
+           à tous les breakpoints (1 / 2 / 3 colonnes). */
+        className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3"
       >
-        {orderedCards.map((card, index) => {
+        {orderedCards.map((card) => {
           const Icon = card.icon
-          const col = index % 3
-          const row = Math.floor(index / 3)
-          const totalRows = Math.ceil(orderedCards.length / 3)
           return (
             <div
               key={card.id}
-              style={{
-                borderRight: col < 2 ? "1px solid var(--rule)" : "none",
-                borderBottom: row < totalRows - 1 ? "1px solid var(--rule)" : "none",
-                display: card.hideOnMobile ? undefined : "block",
-              }}
-              className={card.hideOnMobile ? "hidden md:block" : undefined}
+              className={
+                card.hideOnMobile
+                  ? "hidden border-b border-l border-dark-gray md:block"
+                  : "border-b border-l border-dark-gray"
+              }
             >
               <Link
-                // @ts-expect-error – href comes from internal data
-                href={card.href}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  minHeight: 200,
-                  padding: "28px 32px",
-                  textDecoration: "none",
-                  transition: "background 0.15s",
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--paper-2)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+                href={card.href as Parameters<typeof Link>[0]["href"]}
+                className="group flex min-h-[200px] flex-col justify-between p-7 transition-colors hover:bg-jet lg:p-8"
               >
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
-                  <Icon size={18} style={{ color: "var(--muted-color)", flexShrink: 0, marginTop: 2 }} />
+                <div className="mb-5 flex items-start justify-between">
+                  <Icon
+                    size={18}
+                    className="mt-0.5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary"
+                  />
                   {card.tag && (
-                    <span style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: "var(--accent-color)",
-                      border: "1px solid var(--accent-color)",
-                      padding: "2px 8px",
-                    }}>
+                    <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
                       {card.tag}
                     </span>
                   )}
                 </div>
 
                 <div>
-                  <h2 style={{
-                    fontFamily: "var(--sans)",
-                    fontSize: 15,
-                    fontWeight: 600,
-                    color: "var(--ink)",
-                    marginBottom: 8,
-                    lineHeight: 1.3,
-                  }}>
+                  <h2 className="mb-2 text-base font-light leading-snug tracking-tight text-foreground">
                     {card.title}
                   </h2>
-                  <p style={{
-                    fontFamily: "var(--sans)",
-                    fontSize: 13,
-                    color: "var(--ink-2)",
-                    lineHeight: 1.6,
-                    marginBottom: 16,
-                  }}>
+                  <p className="mb-4 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                     {card.description}
                   </p>
-                  <span style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: 10,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    color: "var(--accent-color)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 4,
-                  }}>
-                    {isEn ? "Open" : "Ouvrir"} →
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+                    {isEn ? "Open" : "Ouvrir"}
+                    <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </Link>

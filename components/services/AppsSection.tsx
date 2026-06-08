@@ -5,6 +5,10 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
+import { Reveal } from "@/components/ui/reveal";
+import { SignalPaths } from "@/components/visuals/signal-paths";
+import { cn } from "@/lib/utils";
 
 type Copy = {
   sectionLabel: string;
@@ -130,250 +134,176 @@ export default function AppsSection() {
   const copy = COPY[locale] ?? COPY.fr;
 
   return (
-    <section className="s" id="apps-sur-mesure">
-      <div className="container">
-        <div className="sec-head">
-          <div className="sec-no">№ —</div>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-            {copy.title}
-          </h2>
-          <div className="sec-meta">{copy.sectionLabel}</div>
+    <BlueprintSection
+      id="apps-sur-mesure"
+      tone="obsidian"
+      backdrop={
+        <div className="absolute inset-x-0 top-0 h-48 opacity-30">
+          <SignalPaths />
         </div>
+      }
+    >
+      {/* En-tête */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <SectionHeading
+          index="№ 05"
+          kicker={copy.sectionLabel}
+          title={copy.title}
+          description={copy.subtitle}
+        />
+        <span className="mt-4 inline-flex font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+          {copy.priceLabel}
+        </span>
+      </Reveal>
 
-        <div style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 16, color: "var(--ink-2)", maxWidth: 600, lineHeight: 1.65, marginBottom: 8 }}>
-            {copy.subtitle}
-          </p>
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--ink-2)",
-            }}
+      {/* Caractéristiques + Cas d'usage — bento bordé, sans gouttière */}
+      <div className="grid border-b border-dark-gray md:grid-cols-2">
+        {[
+          { label: copy.characteristicsLabel, items: copy.characteristics, symbol: "→" },
+          { label: copy.useCasesLabel, items: copy.useCases, symbol: "·" },
+        ].map((col) => (
+          <div
+            key={col.label}
+            className="border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:p-8 md:[&:not(:last-child)]:border-r"
           >
-            {copy.priceLabel}
-          </span>
-        </div>
-
-        {/* Characteristics + Use cases */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 0,
-            borderTop: "1px solid var(--rule)",
-            marginBottom: 40,
-          }}
-        >
-          {[
-            {
-              label: copy.characteristicsLabel,
-              items: copy.characteristics,
-              symbol: "→",
-            },
-            {
-              label: copy.useCasesLabel,
-              items: copy.useCases,
-              symbol: "·",
-            },
-          ].map((col, i) => (
-            <div
-              key={col.label}
-              style={{
-                padding: "32px",
-                borderRight: i === 0 ? "1px solid var(--rule)" : "none",
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 9,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--muted-color)",
-                  marginBottom: 16,
-                }}
-              >
-                {col.label}
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-                {col.items.map((item) => (
-                  <li key={item} style={{ display: "flex", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
-                    <span style={{ color: "var(--ink-2)", fontFamily: "var(--mono)", fontSize: 12 }}>{col.symbol}</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              {col.label}
             </div>
-          ))}
-        </div>
+            <ul className="flex flex-col gap-2.5">
+              {col.items.map((item) => (
+                <li key={item} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <span className="shrink-0 pt-px font-mono text-[12px] text-accent-secondary">{col.symbol}</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
 
-        {/* Differentiator quote */}
-        <blockquote
-          style={{
-            borderLeft: "3px solid var(--rule-strong)",
-            paddingLeft: 32,
-            marginBottom: 40,
-          }}
-        >
-          <h3 className="ni-serif" style={{ fontSize: "clamp(18px, 2vw, 26px)", marginBottom: 12, color: "var(--ink)" }}>
+      {/* Différenciateur — citation filet à gauche */}
+      <Reveal className="border-b border-dark-gray px-6 py-10 lg:px-8 lg:py-12">
+        <blockquote className="border-l-2 border-accent-secondary/50 pl-6 md:pl-8">
+          <h3 className="mb-3 text-xl font-light tracking-tight text-foreground md:text-2xl">
             {copy.differentiatorTitle}
           </h3>
-          <p
-            style={{
-              fontFamily: "var(--serif)",
-              fontStyle: "italic",
-              fontSize: 15,
-              color: "var(--ink-2)",
-              lineHeight: 1.7,
-              maxWidth: 640,
-            }}
-          >
+          <p className="max-w-2xl font-inter-tight text-[15px] italic leading-relaxed text-mid-gray">
             {copy.differentiator}
           </p>
         </blockquote>
+      </Reveal>
 
-        {/* Advantages / Limits */}
+      {/* Avantages / À prévoir — bento bordé, sans gouttière */}
+      <div className="grid border-b border-dark-gray md:grid-cols-2">
+        {[
+          { label: copy.advantagesLabel, items: copy.advantages, symbol: "+", accent: true },
+          { label: copy.limitsLabel, items: copy.limits, symbol: "—", accent: false },
+        ].map((col) => (
+          <div
+            key={col.label}
+            className="border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:p-8 md:[&:not(:last-child)]:border-r"
+          >
+            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              {col.label}
+            </div>
+            <ul className="flex flex-col gap-2">
+              {col.items.map((item) => (
+                <li key={item} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <span
+                    className={cn(
+                      "shrink-0 pt-px font-mono text-[12px]",
+                      col.accent ? "text-accent-secondary" : "text-mid-gray",
+                    )}
+                  >
+                    {col.symbol}
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Réalisations
+      <div style={{ marginBottom: 40 }}>
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 0,
-            borderTop: "1px solid var(--rule)",
-            marginBottom: 40,
+            fontFamily: "var(--mono)",
+            fontSize: 9,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--muted-color)",
+            marginBottom: 24,
           }}
         >
-          {[
-            { label: copy.advantagesLabel, items: copy.advantages, symbol: "+" },
-            { label: copy.limitsLabel, items: copy.limits, symbol: "—" },
-          ].map((col, i) => (
-            <div
-              key={col.label}
-              style={{
-                padding: "32px",
-                borderRight: i === 0 ? "1px solid var(--rule)" : "none",
-              }}
+          {copy.proofsLabel}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          {copy.proofs.map((proof) => (
+            <Link
+              key={proof.slug}
+              href={`/etudes-de-cas/${proof.slug}` as Parameters<typeof Link>[0]["href"]}
+              style={{ display: "block", textDecoration: "none" }}
             >
-              <div
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 9,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: i === 0 ? "var(--ink-2)" : "var(--muted-color)",
-                  marginBottom: 16,
-                }}
-              >
-                {col.label}
+              <div style={{ border: "1px solid var(--rule)", overflow: "hidden" }}>
+                <div style={{ position: "relative", aspectRatio: "16/9" }}>
+                  <Image
+                    src={proof.imageUrl}
+                    alt={proof.title}
+                    fill
+                    style={{ objectFit: "cover", objectPosition: "top" }}
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+                <div style={{ padding: "20px 24px", borderTop: "1px solid var(--rule)" }}>
+                  <h4 className="ni-serif" style={{ fontSize: 18, marginBottom: 6, color: "var(--ink)" }}>
+                    {proof.title}
+                  </h4>
+                  <p style={{ fontSize: 13, color: "var(--ink-2)" }}>{proof.tagline}</p>
+                </div>
               </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-                {col.items.map((item) => (
-                  <li key={item} style={{ display: "flex", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 12, color: i === 0 ? "var(--ink-2)" : "var(--muted-color)" }}>
-                      {col.symbol}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </Link>
           ))}
         </div>
+      </div>
+      */}
 
-        {/* Case studies 
-        <div style={{ marginBottom: 40 }}>
-          <div
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 9,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 24,
-            }}
-          >
-            {copy.proofsLabel}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-            {copy.proofs.map((proof) => (
-              <Link
-                key={proof.slug}
-                href={`/etudes-de-cas/${proof.slug}` as Parameters<typeof Link>[0]["href"]}
-                style={{ display: "block", textDecoration: "none" }}
-              >
-                <div style={{ border: "1px solid var(--rule)", overflow: "hidden" }}>
-                  <div style={{ position: "relative", aspectRatio: "16/9" }}>
-                    <Image
-                      src={proof.imageUrl}
-                      alt={proof.title}
-                      fill
-                      style={{ objectFit: "cover", objectPosition: "top" }}
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                    />
-                  </div>
-                  <div style={{ padding: "20px 24px", borderTop: "1px solid var(--rule)" }}>
-                    <h4 className="ni-serif" style={{ fontSize: 18, marginBottom: 6, color: "var(--ink)" }}>
-                      {proof.title}
-                    </h4>
-                    <p style={{ fontSize: 13, color: "var(--ink-2)" }}>{proof.tagline}</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-        /*}
-
-        {/* OETH banner */}
-        <div
-          style={{
-            border: "1px solid var(--rule)",
-            padding: "28px 32px",
-            display: "grid",
-            gridTemplateColumns: "auto 1fr auto",
-            gap: 24,
-            alignItems: "center",
-            marginBottom: 40,
-            background: "var(--paper-2)",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 9,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--ink-2)",
-            }}
-          >
+      {/* Bandeau OETH + CTA */}
+      <div className="flex flex-col gap-8 px-6 py-12 lg:px-8 lg:py-16">
+        <Reveal className="grid items-center gap-6 border border-dark-gray bg-jet p-6 md:grid-cols-[auto_1fr_auto] md:gap-8 md:p-8">
+          <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
             {copy.oethBadge}
           </div>
           <div>
-            <p style={{ fontWeight: 600, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
+            <p className="mb-1 font-light tracking-tight text-foreground">
               {copy.oethTitle}
             </p>
-            <p style={{ fontSize: 13, color: "var(--ink-2)" }}>{copy.oethDescription}</p>
+            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+              {copy.oethDescription}
+            </p>
           </div>
-          <Link href="/avantage-oeth" className="btn" style={{ whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <Link
+            href="/avantage-oeth"
+            className="group inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian"
+          >
             {copy.oethCta}
-            <ArrowRight size={13} />
+            <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
-        </div>
+        </Reveal>
 
-        {/* CTA */}
-        <a
-          href="https://calendar.app.google/RwZqaabSR5aDMnk46"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn primary"
-          style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-        >
-          {copy.ctaPrimary}
-          <ArrowRight size={14} />
-        </a>
+        <Reveal>
+          <a
+            href="https://calendar.app.google/RwZqaabSR5aDMnk46"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex h-11 items-center justify-center gap-2 rounded-sm border border-charcoal bg-vermilion px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+          >
+            {copy.ctaPrimary}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </a>
+        </Reveal>
       </div>
-    </section>
+    </BlueprintSection>
   );
 }

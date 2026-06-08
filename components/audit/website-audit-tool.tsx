@@ -3,8 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/audit/input"
 import { Card } from "@/components/ui/card"
 import { AuditResults } from "@/components/audit/audit-results"
 import { runAudit } from "@/lib/audit/audit-service"
@@ -54,14 +53,14 @@ export function WebsiteAuditTool() {
   }
 
   return (
-    <div className="space-y-8 my-20">
-      <Card className="w-max mx-auto p-6 rounded-3xl">
+    <div className="my-20 space-y-8">
+      <Card className="mx-auto w-max max-w-full rounded-md border-dark-gray bg-jet p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="url" className="text-sm font-medium font-adobetext text-regularblue">
+            <label htmlFor="url" className="font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
               URL du site
             </label>
-            <div className="flex gap-2 w-[40rem]">
+            <div className="flex max-w-[40rem] flex-col gap-2 sm:flex-row">
               <Input
                 id="url"
                 placeholder="exemple.com"
@@ -69,7 +68,11 @@ export function WebsiteAuditTool() {
                 onChange={(e) => setUrl(e.target.value)}
                 className="flex-1"
               />
-              <Button type="submit" disabled={isLoading} className="gap-1 rounded-full text-md font-googletitre font-regular text-white bg-regularblue hover:bg-regularblue/80">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-charcoal bg-vermilion px-7 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-50"
+              >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -78,17 +81,17 @@ export function WebsiteAuditTool() {
                 ) : (
                   "Analyser"
                 )}
-              </Button>
+              </button>
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-sm text-vermilion">{error}</p>}
           </div>
         </form>
       </Card>
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center p-12">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-slate-600">Analyse du site en cours... Cela peut prendre une minute.</p>
+          <Loader2 className="mb-4 h-12 w-12 animate-spin text-accent-secondary" />
+          <p className="font-inter-tight text-mid-gray">Analyse du site en cours... Cela peut prendre une minute.</p>
         </div>
       )}
 

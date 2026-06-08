@@ -3,6 +3,9 @@
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, FolderOpen } from "lucide-react";
 import { useLocale } from "next-intl";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { SpotlightCard } from "@/components/visuals/spotlight-card";
+import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
 /* ─── Données catégories ──────────────────────────────────────────────────── */
@@ -104,6 +107,49 @@ const RELATED_CATEGORIES: Record<string, string[]> = {
   blog: ["headless-cms", "wordpress"],
 };
 
+/* ─── Carte de catégorie (cellule SpotlightCard) ──────────────────────────── */
+
+function CategoryCell({
+  cat,
+  titleClassName,
+}: {
+  cat: CategoryMeta;
+  titleClassName?: string;
+}) {
+  return (
+    <Link
+      href={`/documentation/${cat.slug}` as never}
+      className="group block focus:outline-none"
+    >
+      <SpotlightCard className="h-full rounded-none border-0 bg-transparent p-6 transition-colors hover:bg-jet/40">
+        <FolderOpen
+          className="mb-4 h-4 w-4 text-accent-secondary"
+          strokeWidth={1.5}
+          aria-hidden
+        />
+        <h3
+          className={cn(
+            "font-light tracking-tight text-foreground",
+            titleClassName ?? "text-lg",
+          )}
+        >
+          {cat.title}
+        </h3>
+        <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-mid-gray">
+          {cat.description}
+        </p>
+        <div className="mt-4 flex items-center justify-between border-t border-dark-gray pt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+          <span>{cat.articleCount}</span>
+          <ArrowRight
+            className="h-3.5 w-3.5 text-accent-secondary transition-transform duration-300 group-hover:translate-x-0.5"
+            aria-hidden
+          />
+        </div>
+      </SpotlightCard>
+    </Link>
+  );
+}
+
 /* ─── Composant : liens croisés sur pages catégorie ──────────────────────── */
 
 interface CrossCategoryNavProps {
@@ -122,68 +168,32 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
   if (relatedCategories.length === 0) return null;
 
   return (
-    <section style={{ marginTop: "4rem", borderTop: "1px solid var(--rule)", paddingTop: "2.5rem" }}>
-      <h2 style={{
-        fontFamily: "var(--font-serif)",
-        fontSize: "1.5rem",
-        fontWeight: 400,
-        color: "var(--ink)",
-        marginBottom: "0.375rem",
-      }}>
-        {isEn ? "Related categories" : "Catégories associées"}
-      </h2>
-      <p style={{ fontSize: "0.875rem", color: "var(--muted-color)", marginBottom: "1.5rem" }}>
-        {isEn
-          ? "Continue exploring with complementary topics."
-          : "Continuez votre exploration avec des thématiques complémentaires."}
-      </p>
+    <section className="mt-16 border-t border-dark-gray pt-10">
+      <Reveal>
+        <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <span>{isEn ? "Related" : "À explorer"}</span>
+          <span className="h-px w-6 bg-accent-secondary/50" />
+        </p>
+        <h2 className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
+          {isEn ? "Related categories" : "Catégories associées"}
+        </h2>
+        <p className="mt-1.5 max-w-xl font-inter-tight text-sm text-mid-gray md:text-base">
+          {isEn
+            ? "Continue exploring with complementary topics."
+            : "Continuez votre exploration avec des thématiques complémentaires."}
+        </p>
+      </Reveal>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "1px",
-        background: "var(--rule)",
-      }}>
+      <Stagger className="mt-6 grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
         {relatedCategories.map((cat) => (
-          <Link
+          <StaggerItem
             key={cat.slug}
-            href={`/documentation/${cat.slug}` as never}
-            className="hover-row"
-            style={{
-              display: "block",
-              padding: "1.25rem",
-              background: "var(--paper)",
-              textDecoration: "none",
-            }}
+            className="border-b border-r border-dark-gray"
           >
-            <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", marginBottom: "0.5rem" }} />
-            <h3 style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "1.125rem",
-              fontWeight: 400,
-              color: "var(--ink)",
-              marginBottom: "0.25rem",
-            }}>
-              {cat.title}
-            </h3>
-            <p style={{ fontSize: "0.8125rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
-              {cat.description}
-            </p>
-            <span style={{
-              fontSize: "0.75rem",
-              color: "var(--muted-color)",
-              fontFamily: "var(--font-mono)",
-              marginTop: "0.5rem",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.25rem",
-            }}>
-              {cat.articleCount}
-              <ArrowRight style={{ width: "0.75rem", height: "0.75rem" }} />
-            </span>
-          </Link>
+            <CategoryCell cat={cat} />
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </section>
   );
 }
@@ -196,67 +206,32 @@ export function AllCategoriesGrid() {
   const allCategories = isEn ? ALL_CATEGORIES_EN : ALL_CATEGORIES_FR;
 
   return (
-    <section style={{ marginTop: "3rem", borderTop: "1px solid var(--rule)", paddingTop: "2.5rem", borderBottom: "1px solid var(--rule)", paddingBottom: "2.5rem" }}>
-      <h2 style={{
-        fontFamily: "var(--font-serif)",
-        fontSize: "1.5rem",
-        fontWeight: 400,
-        color: "var(--ink)",
-        marginBottom: "0.375rem",
-      }}>
-        {isEn ? "Explore the documentation" : "Explorer la documentation"}
-      </h2>
-      <p style={{ fontSize: "0.875rem", color: "var(--muted-color)", marginBottom: "1.5rem" }}>
-        {isEn
-          ? "All guides and resources, organized by topic."
-          : "Tous nos guides et ressources, organisés par thématique."}
-      </p>
+    <section className="mt-12 border-y border-dark-gray py-10">
+      <Reveal>
+        <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <span>{isEn ? "Browse" : "Parcourir"}</span>
+          <span className="h-px w-6 bg-accent-secondary/50" />
+        </p>
+        <h2 className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
+          {isEn ? "Explore the documentation" : "Explorer la documentation"}
+        </h2>
+        <p className="mt-1.5 max-w-xl font-inter-tight text-sm text-mid-gray md:text-base">
+          {isEn
+            ? "All guides and resources, organized by topic."
+            : "Tous nos guides et ressources, organisés par thématique."}
+        </p>
+      </Reveal>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "1px",
-        background: "var(--rule)",
-      }}>
+      <Stagger className="mt-6 grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
         {allCategories.map((cat) => (
-          <Link
+          <StaggerItem
             key={cat.slug}
-            href={`/documentation/${cat.slug}` as never}
-            className="hover-row"
-            style={{
-              display: "block",
-              padding: "1.25rem",
-              background: "var(--paper)",
-              textDecoration: "none",
-            }}
+            className="border-b border-r border-dark-gray"
           >
-            <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", marginBottom: "0.5rem" }} />
-            <h3 style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "1.25rem",
-              fontWeight: 400,
-              color: "var(--ink)",
-              marginBottom: "0.25rem",
-            }}>
-              {cat.title}
-            </h3>
-            <p style={{ fontSize: "0.8125rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
-              {cat.description}
-            </p>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderTop: "1px solid var(--rule)",
-              marginTop: "0.75rem",
-              paddingTop: "0.75rem",
-            }}>
-              <span className="annot">{cat.articleCount}</span>
-              <ArrowRight style={{ width: "0.875rem", height: "0.875rem", color: "var(--muted-color)" }} />
-            </div>
-          </Link>
+            <CategoryCell cat={cat} titleClassName="text-xl" />
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </section>
   );
 }

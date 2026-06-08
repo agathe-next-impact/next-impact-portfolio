@@ -5,42 +5,63 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { BlueprintSection } from "@/components/aspect/section";
+import { AuroraGlow } from "@/components/visuals/aurora-glow";
+import { WordAppear } from "@/components/visuals/word-appear";
 
 export default function HomeCta() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
+  const stats = [
+    { value: "6–10", label: isEn ? "weeks avg." : "semaines moy." },
+    { value: "TIH", label: isEn ? "AGEFIPH −30 %" : "AGEFIPH −30 %" },
+    { value: "> 90", label: "Core Web Vitals" },
+  ];
+
   return (
-    <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-      <div className="container">
-        <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 48, display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "end" }}>
+    <BlueprintSection
+      tone="obsidian"
+      backdrop={<AuroraGlow intensity="subtle" />}
+    >
+      <div className="border-t border-dark-gray px-6 py-16 lg:px-8 lg:py-20">
+        <div className="grid items-end gap-10 md:grid-cols-[1fr_auto]">
           {/* Left */}
           <Reveal>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 16 }}>
-              № 07 — {isEn ? "Start your project" : "Démarrer votre projet"}
-            </div>
-            <h2 className="ni-serif" style={{ fontSize: "clamp(32px, 4.5vw, 72px)", lineHeight: 1.0, color: "var(--ink)", margin: "0 0 16px" }}>
-              {isEn
-                ? <>Your project online <em style={{ color: "var(--ink)" }}>in 6 to 10 weeks.</em></>
-                : <>Votre projet en ligne <em style={{ color: "var(--ink)" }}>en 6 à 10 semaines.</em></>}
-            </h2>
-            <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 520, lineHeight: 1.65, marginBottom: 32 }}>
-              {isEn
-                ? "A discovery call to clarify your needs, a scoping document, then design and development. No surprises on budget or timeline."
-                : "Un appel de découverte pour clarifier vos besoins, un document de cadrage, puis la conception et le développement. Zéro surprise sur le budget ou le calendrier."}
+            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              № 07 —{" "}
+              <span className="text-mid-gray">
+                {isEn ? "Start your project" : "Démarrer votre projet"}
+              </span>
             </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <WordAppear
+              as="h2"
+              className="mb-4 max-w-[16ch] text-3xl font-extralight leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl"
+              text={
+                isEn
+                  ? "Your project online in 6 to 10 weeks."
+                  : "Votre projet en ligne en 6 à 10 semaines."
+              }
+            />
+            <p className="mb-8 max-w-[460px] font-inter-tight text-base leading-relaxed text-mid-gray">
+              {isEn
+                ? "A call, a clear scope, then design and build — budget and timeline fixed upfront."
+                : "Un appel, un cadrage clair, puis conception et développement — budget et délai fixés d'emblée."}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
               <a
                 href="https://calendar.app.google/RwZqaabSR5aDMnk46"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn primary"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+                className="inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white hover:bg-vermilion-bright"
               >
                 <CalendarDays size={14} />
                 {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
               </a>
-              <Link href="/etudes-de-cas" className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <Link
+                href="/etudes-de-cas"
+                className="group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground hover:bg-jet"
+              >
                 {isEn ? "See our work" : "Voir des réalisations"}
                 <ArrowRight size={13} />
               </Link>
@@ -48,20 +69,23 @@ export default function HomeCta() {
           </Reveal>
 
           {/* Right — stats strip */}
-          <Stagger as="div" stagger={0.08} delayChildren={0.1} style={{ display: "flex", flexDirection: "column", gap: 0, minWidth: 160, borderLeft: "1px solid var(--rule)", paddingLeft: 40 }}>
-            {[
-              { value: "6–10", label: isEn ? "weeks avg." : "semaines moy." },
-              { value: "TIH",  label: isEn ? "AGEFIPH −30 %" : "AGEFIPH −30 %" },
-              { value: "> 90", label: "Core Web Vitals" },
-            ].map((s, i) => (
+          <Stagger
+            as="div"
+            stagger={0.08}
+            delayChildren={0.1}
+            className="flex min-w-[160px] flex-col border-l border-dark-gray pl-10"
+          >
+            {stats.map((s, i) => (
               <StaggerItem
                 key={s.label}
-                style={{ paddingBottom: i < 2 ? 20 : 0, marginBottom: i < 2 ? 20 : 0, borderBottom: i < 2 ? "1px solid var(--rule)" : "none" }}
+                className={
+                  i < 2 ? "mb-5 border-b border-dark-gray pb-5" : undefined
+                }
               >
-                <div className="ni-serif" style={{ fontSize: 28, color: "var(--ink)", lineHeight: 1 }}>
+                <div className="text-3xl font-extralight leading-none tracking-tight text-foreground">
                   {s.value}
                 </div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginTop: 4 }}>
+                <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray">
                   {s.label}
                 </div>
               </StaggerItem>
@@ -69,6 +93,6 @@ export default function HomeCta() {
           </Stagger>
         </div>
       </div>
-    </section>
+    </BlueprintSection>
   );
 }

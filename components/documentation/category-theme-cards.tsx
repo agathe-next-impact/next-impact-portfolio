@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { isArticleRelevantToProfile } from "@/lib/documentation-profiles";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { cn } from "@/lib/utils";
 import { FileText, FolderOpen } from "lucide-react";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
@@ -312,15 +314,15 @@ export function CategoryPageContent({
 
   return (
     <>
-      {/* Theme cards */}
+      {/* Cartes de thèmes — cellules bordées jointives */}
       {themes && (
-        <div style={{ marginBottom: "2.5rem" }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${Math.min(themes.length, 5)}, 1fr)`,
-            gap: "1px",
-            background: "var(--rule)",
-          }}>
+        <div className="mb-10">
+          <Stagger
+            className={cn(
+              "grid grid-cols-2 border-l border-t border-dark-gray sm:grid-cols-3",
+              themes.length >= 5 ? "lg:grid-cols-5" : "lg:grid-cols-4",
+            )}
+          >
             {themes.map((theme, index) => {
               const isActive = activeTheme === index;
               const count = articles.filter((a) =>
@@ -328,61 +330,61 @@ export function CategoryPageContent({
               ).length;
 
               return (
-                <button
-                  key={theme.title}
-                  onClick={() => setActiveTheme(isActive ? null : index)}
-                  style={{
-                    background: isActive ? "var(--paper-2)" : "var(--paper)",
-                    padding: "1.25rem",
-                    textAlign: "left",
-                    border: "none",
-                    borderBottom: isActive
-                      ? "2px solid var(--ink)"
-                      : "2px solid transparent",
-                    cursor: "pointer",
-                    transition: "background 0.15s, border-color 0.15s",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                    <FolderOpen style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)", flexShrink: 0 }} />
-                    <span className="annot">{count}</span>
-                  </div>
-                  <p style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    lineHeight: 1.3,
-                    marginBottom: "0.25rem",
-                  }}>
-                    {theme.title}
-                  </p>
-                  <p style={{ fontSize: "0.75rem", color: "var(--muted-color)", lineHeight: 1.4 }}>
-                    {theme.description}
-                  </p>
-                </button>
+                <StaggerItem key={theme.title} className="flex">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTheme(isActive ? null : index)}
+                    aria-pressed={isActive}
+                    className={cn(
+                      "group flex w-full flex-col border-b border-r border-dark-gray p-5 text-left transition-colors",
+                      isActive
+                        ? "bg-accent-secondary/10"
+                        : "hover:bg-jet/40",
+                    )}
+                  >
+                    <div className="mb-2 flex items-center gap-2">
+                      <FolderOpen
+                        className={cn(
+                          "h-4 w-4 flex-shrink-0",
+                          isActive ? "text-accent-secondary" : "text-mid-gray",
+                        )}
+                        strokeWidth={1.5}
+                        aria-hidden
+                      />
+                      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                        {count}
+                      </span>
+                    </div>
+                    <p
+                      className={cn(
+                        "font-light leading-snug tracking-tight text-foreground",
+                        isActive && "text-accent-secondary",
+                      )}
+                    >
+                      {theme.title}
+                    </p>
+                    <p className="mt-0.5 font-inter-tight text-xs leading-relaxed text-mid-gray">
+                      {theme.description}
+                    </p>
+                  </button>
+                </StaggerItem>
               );
             })}
-          </div>
+          </Stagger>
 
-          {/* Active filter indicator */}
+          {/* Indicateur de filtre actif */}
           {activeTheme !== null && themes[activeTheme] && (
-            <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span className="annot">
+            <div className="mt-3 flex items-center gap-3">
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
                 Filtre actif : {themes[activeTheme].title}
               </span>
-              <span style={{ color: "var(--rule-strong)" }}>·</span>
+              <span className="text-dark-gray" aria-hidden>
+                ·
+              </span>
               <button
+                type="button"
                 onClick={() => setActiveTheme(null)}
-                style={{
-                  fontSize: "0.75rem",
-                  color: "var(--accent-color)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                  fontFamily: "var(--font-mono)",
-                }}
+                className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary transition-colors hover:text-foreground"
               >
                 Afficher tout
               </button>
@@ -391,12 +393,8 @@ export function CategoryPageContent({
         </div>
       )}
 
-      {/* Article grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: "0 4rem",
-      }}>
+      {/* Grille d'articles */}
+      <div className="grid grid-cols-1 gap-x-16 md:grid-cols-2">
         {filteredArticles.map((article) => {
           const relevant = isArticleRelevantToProfile(
             article.category,
@@ -407,49 +405,27 @@ export function CategoryPageContent({
             <Link
               key={article.slug}
               href={`/documentation/${article.category}/${article.slug}` as never}
-              className="hover-row"
-              style={{
-                display: "block",
-                borderTop: "1px solid var(--rule)",
-                padding: "1.25rem 0",
-                textDecoration: "none",
-                opacity: profileId && !relevant ? 0.4 : 1,
-                transition: "opacity 0.15s",
-              }}
+              className={cn(
+                "group block border-t border-dark-gray py-5 transition-opacity",
+                profileId && !relevant ? "opacity-40" : "opacity-100",
+              )}
             >
-              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-                <FileText style={{
-                  width: "0.875rem",
-                  height: "0.875rem",
-                  color: "var(--accent-color)",
-                  marginTop: "0.25rem",
-                  flexShrink: 0,
-                }} />
+              <div className="flex items-start gap-3">
+                <FileText
+                  className="mt-1 h-3.5 w-3.5 flex-shrink-0 text-accent-secondary"
+                  strokeWidth={1.5}
+                  aria-hidden
+                />
                 <div>
                   {profileId && relevant && (
-                    <span className="label" style={{ marginBottom: "0.375rem", display: "inline-block" }}>
+                    <span className="mb-1.5 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
                       Recommandé
                     </span>
                   )}
-                  <h3 style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    color: "var(--ink)",
-                    lineHeight: 1.35,
-                    marginBottom: "0.25rem",
-                  }}>
+                  <h3 className="font-light leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                     {article.title}
                   </h3>
-                  <p style={{
-                    fontSize: "0.8125rem",
-                    color: "var(--muted-color)",
-                    lineHeight: 1.5,
-                    overflow: "hidden",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                  }}>
+                  <p className="mt-1 line-clamp-2 font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
                     {article.description}
                   </p>
                 </div>

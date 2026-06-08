@@ -13,31 +13,13 @@ interface GeminiSearchProps {
   defaultUrl?: string;
 }
 
-const inputStyle: React.CSSProperties = {
-  border: "1px solid var(--rule)",
-  background: "var(--paper)",
-  color: "var(--ink)",
-  fontFamily: "var(--sans)",
-  fontSize: 15,
-  padding: "12px 16px",
-  width: "100%",
-  outline: "none",
-};
+// Champ URL / texte — surface jet, liseré dark-gray, focus accent secondaire.
+const inputClass =
+  "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-[15px] text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
 
-const btnPrimary: React.CSSProperties = {
-  border: "1px solid var(--ink)",
-  background: "var(--ink)",
-  color: "var(--paper)",
-  fontFamily: "var(--mono)",
-  fontSize: 11,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  padding: "14px 28px",
-  cursor: "pointer",
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 8,
-};
+// Bouton primaire — remplissage indigo bordé charcoal, label mono.
+const btnPrimaryClass =
+  "inline-flex items-center gap-2 border border-charcoal bg-vermilion px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function GeminiSearch({ onResult, prompt, systemInstruction, defaultUrl }: GeminiSearchProps) {
   const locale = useLocale() as Locale;
@@ -165,13 +147,13 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
   return (
     <>
       {!loading && !cmsDetecting && !showResultPage && (
-        <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <label htmlFor="gemini_url" style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+        <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
+          <label htmlFor="gemini_url" className="font-sans text-sm font-semibold text-foreground">
             {isEn ? "Site URL to analyze" : "URL du site à analyser"}
           </label>
           <input
             id="gemini_url"
-            style={inputStyle}
+            className={inputClass}
             value={url}
             onChange={(e) => { setUrl(e.target.value); setOptinRefused(false); }}
             placeholder="https://test.com"
@@ -181,19 +163,19 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             pattern="https?://.+"
           />
           <div>
-            <button type="submit" style={btnPrimary} disabled={loading || cmsDetecting || !url.trim()}>
+            <button type="submit" className={btnPrimaryClass} disabled={loading || cmsDetecting || !url.trim()}>
               {isEn ? "Run analysis" : "Lancer l'analyse"}
               <ArrowRight size={14} />
             </button>
           </div>
           {error && (
-            <div style={{ borderLeft: "3px solid var(--accent-color)", background: "var(--paper-2)", padding: "10px 12px", fontFamily: "var(--sans)", fontSize: 13, color: "var(--accent-color)" }}>
+            <div className="border-l-[3px] border-vermilion bg-jet px-3 py-2.5 font-sans text-[13px] text-vermilion">
               {error}
             </div>
           )}
           {optinRefused && (
-            <div style={{ border: "1px solid var(--rule)", borderLeft: "3px solid #b85c09", background: "var(--paper-2)", padding: "12px 16px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)", flex: 1 }}>
+            <div className="flex flex-wrap items-center gap-3 border border-dark-gray border-l-[3px] border-l-accent-secondary bg-jet px-4 py-3">
+              <span className="flex-1 font-sans text-[13px] text-mid-gray">
                 {isEn
                   ? "Your contact details are required to receive your personalized audit."
                   : "Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé."}
@@ -201,7 +183,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               <button
                 type="button"
                 onClick={() => { setOptinRefused(false); setShowOptin(true); }}
-                style={{ ...btnPrimary, padding: "8px 16px", whiteSpace: "nowrap" }}
+                className={`${btnPrimaryClass} whitespace-nowrap px-4 py-2`}
               >
                 {isEn ? "Enter my details" : "Remplir mes coordonnées"}
               </button>
@@ -211,18 +193,18 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
       )}
 
       {cmsDetecting && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px", gap: 16 }}>
-          <div style={{ width: 28, height: 28, border: "2px solid var(--rule)", borderTopColor: "var(--ink)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-          <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)" }}>
+        <div className="flex flex-col items-center justify-center gap-4 p-8">
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-dark-gray border-t-accent-secondary" />
+          <p className="font-sans text-sm text-mid-gray">
             {isEn ? "Detecting CMS…" : "Vérification du CMS en cours..."}
           </p>
         </div>
       )}
 
       {loading && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px", gap: 16 }}>
-          <div style={{ width: 28, height: 28, border: "2px solid var(--rule)", borderTopColor: "var(--ink)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-          <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: "var(--ink-2)" }}>
+        <div className="flex flex-col items-center justify-center gap-4 p-8">
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-dark-gray border-t-accent-secondary" />
+          <p className="font-sans text-sm text-mid-gray">
             {isEn ? "Preparing your audit…" : "Préparation de votre audit…"}
           </p>
         </div>
@@ -230,18 +212,18 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
 
       {showOptin && typeof document !== "undefined" && createPortal(
         <div
-          style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(14,14,12,0.72)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian/80 p-4 backdrop-blur-sm"
           onClick={handleOptinClose}
         >
           <div
-            style={{ background: "var(--paper)", border: "1px solid var(--rule)", borderTop: "3px solid var(--ink)", maxWidth: 440, width: "100%", padding: "32px", position: "relative" }}
+            className="relative w-full max-w-md border border-dark-gray border-t-[3px] border-t-accent-secondary bg-jet p-8"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--ink)", marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
-              <ShieldCheck size={18} style={{ color: "var(--accent-color)" }} />
+            <h2 className="mb-1 flex items-center gap-2 font-sans text-xl font-light text-foreground">
+              <ShieldCheck size={18} className="text-accent-secondary" />
               {isEn ? "Before running the audit" : "Avant de lancer l'audit"}
             </h2>
-            <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)", marginBottom: 24, lineHeight: 1.5 }}>
+            <p className="mb-6 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {detectedCms
                 ? isEn
                   ? `${detectedCms} detected. Enter your contact details to receive your full audit report.`
@@ -250,31 +232,31 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
                   ? "Enter your contact details to receive your full audit report."
                   : "Renseignez vos coordonnées pour recevoir votre rapport d'audit complet."}
             </p>
-            <form onSubmit={handleOptinSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <form onSubmit={handleOptinSubmit} className="flex flex-col gap-4">
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
-                  {isEn ? "Name" : "Nom"} <span style={{ color: "var(--accent-color)" }}>*</span>
+                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
+                  {isEn ? "Name" : "Nom"} <span className="text-accent-secondary">*</span>
                 </label>
-                <input type="text" value={optinName} onChange={(e) => setOptinName(e.target.value)} required placeholder={isEn ? "Your name" : "Votre nom"} style={inputStyle} />
+                <input type="text" value={optinName} onChange={(e) => setOptinName(e.target.value)} required placeholder={isEn ? "Your name" : "Votre nom"} className={inputClass} />
               </div>
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
                   {isEn ? "Company" : "Entreprise"}{" "}
-                  <span style={{ fontWeight: 400, color: "var(--muted-color)", fontSize: 12 }}>{isEn ? "(optional)" : "(optionnel)"}</span>
+                  <span className="font-normal text-mid-gray text-xs">{isEn ? "(optional)" : "(optionnel)"}</span>
                 </label>
-                <input type="text" value={optinCompany} onChange={(e) => setOptinCompany(e.target.value)} placeholder={isEn ? "Your company" : "Votre entreprise"} style={inputStyle} />
+                <input type="text" value={optinCompany} onChange={(e) => setOptinCompany(e.target.value)} placeholder={isEn ? "Your company" : "Votre entreprise"} className={inputClass} />
               </div>
               <div>
-                <label style={{ display: "block", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
-                  Email <span style={{ color: "var(--accent-color)" }}>*</span>
+                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
+                  Email <span className="text-accent-secondary">*</span>
                 </label>
-                <input type="email" value={optinEmail} onChange={(e) => setOptinEmail(e.target.value)} required placeholder={isEn ? "you@email.com" : "votre@email.com"} style={inputStyle} />
+                <input type="email" value={optinEmail} onChange={(e) => setOptinEmail(e.target.value)} required placeholder={isEn ? "you@email.com" : "votre@email.com"} className={inputClass} />
               </div>
-              <button type="submit" style={btnPrimary}>
+              <button type="submit" className={btnPrimaryClass}>
                 {isEn ? "Run analysis" : "Lancer l'analyse"}
                 <ArrowRight size={14} />
               </button>
-              <p style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)", textAlign: "center" }}>
+              <p className="text-center font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray">
                 {isEn ? "Your data is used only to send you your report." : "Vos données sont utilisées uniquement pour vous envoyer votre rapport."}
               </p>
             </form>

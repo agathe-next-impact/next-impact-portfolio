@@ -28,7 +28,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
       aria-label={label}
       title={label}
       onClick={() => setTheme(next)}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/90 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-regularblue ${className}`}
+      className={`inline-flex h-9 w-9 items-center justify-center rounded-sm border border-dark-gray text-foreground transition-colors hover:bg-ebony focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-vermilion ${className}`}
     >
       {mounted && !isDark ? (
         <Moon className="h-4 w-4" aria-hidden="true" />

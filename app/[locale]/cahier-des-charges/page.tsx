@@ -1,5 +1,6 @@
 import PageLayout from "@/components/page-layout";
 import CahierDesChargesForm from "@/components/cahier-des-charges/cahier-des-charges-form-wrapper"
+import { BlueprintSection } from "@/components/aspect/section";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
@@ -54,29 +55,16 @@ export default async function Home({
         applicationCategory="BusinessApplication"
       />
       <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
-        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-          <div className="container">
-            <Link
-              href="/outils"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                textDecoration: "none",
-                marginBottom: 40,
-              }}
-            >
-              <ArrowLeft size={12} />
-              {tOutils("backToTools")}
-            </Link>
-            <CahierDesChargesForm />
-          </div>
-        </section>
+        <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
+          <Link
+            href="/outils"
+            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:text-foreground"
+          >
+            <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
+            {tOutils("backToTools")}
+          </Link>
+          <CahierDesChargesForm />
+        </BlueprintSection>
       </PageLayout>
     </>
   )

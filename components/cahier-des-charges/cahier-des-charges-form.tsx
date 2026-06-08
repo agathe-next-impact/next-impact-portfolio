@@ -4,7 +4,9 @@ import type React from "react";
 
 import { useState } from "react";
 import { DocumentPreview } from "@/components/cahier-des-charges/document-preview";
+import { Reveal } from "@/components/ui/reveal";
 import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
 type FormSection = {
@@ -21,6 +23,12 @@ type FormField = {
   placeholder?: string;
 };
 
+const fieldClass =
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+
+const labelClass =
+  "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+
 // Collapsible section component
 function CollapsibleSection({
   title,
@@ -34,50 +42,21 @@ function CollapsibleSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div style={{ marginBottom: 0 }}>
+    <div>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-          borderTop: "none",
-          borderLeft: "none",
-          borderRight: "none",
-          borderBottom: "1px solid var(--rule)",
-          padding: "16px 0",
-          background: "none",
-          cursor: "pointer",
-          textAlign: "left",
-        }}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between border-b border-dark-gray py-4 text-left transition-colors hover:border-accent-secondary/50"
       >
-        <span
-          style={{
-            fontFamily: "var(--sans)",
-            fontWeight: 600,
-            fontSize: 15,
-            color: "var(--ink)",
-          }}
-        >
+        <span className="text-[15px] font-medium tracking-tight text-foreground">
           {title}
         </span>
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 18,
-            color: "var(--muted-color)",
-            lineHeight: 1,
-            userSelect: "none",
-          }}
-        >
+        <span className="select-none font-mono text-lg leading-none text-mid-gray">
           {open ? "−" : "+"}
         </span>
       </button>
-      {open && (
-        <div style={{ paddingTop: 20, paddingBottom: 8 }}>{children}</div>
-      )}
+      {open && <div className="pb-2 pt-5">{children}</div>}
     </div>
   );
 }
@@ -134,78 +113,34 @@ export function CahierDesChargesForm() {
     return false;
   }).length;
 
-  // Shared input style
-  const inputStyle: React.CSSProperties = {
-    border: "1px solid var(--rule)",
-    background: "var(--paper)",
-    color: "var(--ink)",
-    fontFamily: "var(--sans)",
-    padding: "10px 12px",
-    fontSize: 14,
-    width: "100%",
-    boxSizing: "border-box",
-    outline: "none",
-  };
-
-  const textareaStyle: React.CSSProperties = {
-    ...inputStyle,
-    minHeight: 100,
-    resize: "vertical",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    display: "block",
-    fontFamily: "var(--sans)",
-    fontSize: 13,
-    fontWeight: 600,
-    color: "var(--ink)",
-    marginBottom: 6,
-  };
-
   return (
-    <section style={{ width: "100%", maxWidth: 900, margin: "0 auto" }}>
+    <section className="mx-auto w-full max-w-[900px]">
       {/* Tab navigation */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: 32,
-        }}
-      >
-        <div style={{ display: "flex" }}>
+      <div className="mb-8 flex justify-center">
+        <div className="flex">
           <button
             type="button"
             onClick={() => handleTabChange("form")}
-            style={{
-              border: "1px solid var(--rule)",
-              background: activeTab === "form" ? "var(--ink)" : "var(--paper)",
-              color: activeTab === "form" ? "var(--paper)" : "var(--ink)",
-              fontFamily: "var(--sans)",
-              fontSize: 13,
-              fontWeight: 600,
-              padding: "10px 24px",
-              cursor: "pointer",
-              letterSpacing: "0.04em",
-            }}
+            aria-pressed={activeTab === "form"}
+            className={cn(
+              "border border-dark-gray px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors",
+              activeTab === "form"
+                ? "bg-accent-secondary text-obsidian"
+                : "bg-jet text-mid-gray hover:text-foreground"
+            )}
           >
             {isEn ? "Form" : "Formulaire"}
           </button>
           <button
             type="button"
             onClick={() => handleTabChange("preview")}
-            style={{
-              border: "1px solid var(--rule)",
-              borderLeft: "none",
-              background:
-                activeTab === "preview" ? "var(--ink)" : "var(--paper)",
-              color: activeTab === "preview" ? "var(--paper)" : "var(--ink)",
-              fontFamily: "var(--sans)",
-              fontSize: 13,
-              fontWeight: 600,
-              padding: "10px 24px",
-              cursor: "pointer",
-              letterSpacing: "0.04em",
-            }}
+            aria-pressed={activeTab === "preview"}
+            className={cn(
+              "border border-l-0 border-dark-gray px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors",
+              activeTab === "preview"
+                ? "bg-accent-secondary text-obsidian"
+                : "bg-jet text-mid-gray hover:text-foreground"
+            )}
           >
             {isEn ? "Preview" : "Aperçu"}
           </button>
@@ -214,28 +149,11 @@ export function CahierDesChargesForm() {
 
       {/* Form tab */}
       {activeTab === "form" && (
-        <div>
+        <Reveal>
           {/* Progress indicator */}
-          <div
-            style={{
-              border: "1px solid var(--rule)",
-              padding: "12px 16px",
-              marginBottom: 24,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              background: "var(--paper)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: 13,
-                color: "var(--muted-color)",
-                margin: 0,
-              }}
-            >
-              <span style={{ color: "var(--accent-color)", fontWeight: 700 }}>
+          <div className="mb-6 flex items-center justify-between border border-dark-gray bg-jet px-4 py-3">
+            <p className="font-inter-tight text-[13px] text-mid-gray">
+              <span className="font-semibold text-accent-secondary">
                 {filledCount}
               </span>{" "}
               {isEn
@@ -245,47 +163,18 @@ export function CahierDesChargesForm() {
             <button
               type="button"
               onClick={() => handleTabChange("preview")}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--accent-color)",
-                fontFamily: "var(--sans)",
-                fontSize: 13,
-                cursor: "pointer",
-                padding: 0,
-              }}
+              className="font-inter-tight text-[13px] text-accent-secondary transition-opacity hover:opacity-75"
             >
               {isEn ? "View preview" : "Voir l'aperçu"}
             </button>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div
-              style={{
-                border: "1px solid var(--rule)",
-                background: "var(--paper)",
-                padding: 32,
-              }}
-            >
-              <h2
-                style={{
-                  fontFamily: "var(--serif)",
-                  fontSize: 22,
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  margin: "0 0 4px 0",
-                }}
-              >
+            <div className="border border-dark-gray bg-jet p-6 md:p-8">
+              <h2 className="mb-1 text-2xl font-light tracking-tight text-foreground">
                 {isEn ? "Your project" : "Votre projet"}
               </h2>
-              <p
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: 13,
-                  color: "var(--muted-color)",
-                  margin: "0 0 24px 0",
-                }}
-              >
+              <p className="mb-6 font-inter-tight text-[13px] text-mid-gray">
                 {isEn
                   ? "Fill out the sections below to generate your specifications document"
                   : "Remplissez les sections ci-dessous pour générer votre cahier des charges"}
@@ -298,21 +187,13 @@ export function CahierDesChargesForm() {
                   title={section.title}
                   defaultOpen={true}
                 >
-                  <div style={{ display: "grid", gap: 20 }}>
+                  <div className="grid gap-5">
                     {section.fields.map((field) => (
                       <div key={field.id}>
                         {field.type === "radioGroup" ? (
                           <>
-                            <label style={labelStyle}>{field.label}</label>
-                            <div
-                              style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                  "repeat(auto-fill, minmax(220px, 1fr))",
-                                gap: 8,
-                                paddingTop: 4,
-                              }}
-                            >
+                            <label className={labelClass}>{field.label}</label>
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2 pt-1">
                               {field.options?.map((option) => {
                                 const selected =
                                   formData[field.id] === option.id;
@@ -323,42 +204,19 @@ export function CahierDesChargesForm() {
                                     onClick={() =>
                                       handleInputChange(field.id, option.id)
                                     }
-                                    style={{
-                                      border: selected
-                                        ? "1px solid var(--rule)"
-                                        : "1px solid var(--rule)",
-                                      borderLeft: selected
-                                        ? "3px solid var(--accent-color)"
-                                        : "1px solid var(--rule)",
-                                      background: selected
-                                        ? "var(--paper-2)"
-                                        : "var(--paper)",
-                                      padding: 16,
-                                      textAlign: "left",
-                                      cursor: "pointer",
-                                    }}
+                                    aria-pressed={selected}
+                                    className={cn(
+                                      "border p-4 text-left transition-colors",
+                                      selected
+                                        ? "border-l-2 border-l-accent-secondary border-dark-gray bg-obsidian"
+                                        : "border-dark-gray bg-obsidian hover:border-mid-gray/60"
+                                    )}
                                   >
-                                    <p
-                                      style={{
-                                        fontFamily: "var(--sans)",
-                                        fontSize: 13,
-                                        fontWeight: 600,
-                                        color: "var(--ink)",
-                                        margin: "0 0 4px 0",
-                                      }}
-                                    >
+                                    <p className="mb-1 text-[13px] font-medium text-foreground">
                                       {option.label}
                                     </p>
                                     {option.description && (
-                                      <p
-                                        style={{
-                                          fontFamily: "var(--sans)",
-                                          fontSize: 12,
-                                          color: "var(--muted-color)",
-                                          margin: 0,
-                                          lineHeight: 1.4,
-                                        }}
-                                      >
+                                      <p className="font-inter-tight text-xs leading-snug text-mid-gray">
                                         {option.description}
                                       </p>
                                     )}
@@ -369,16 +227,8 @@ export function CahierDesChargesForm() {
                           </>
                         ) : field.type === "checkboxGroup" ? (
                           <>
-                            <label style={labelStyle}>{field.label}</label>
-                            <div
-                              style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                  "repeat(auto-fill, minmax(220px, 1fr))",
-                                gap: 6,
-                                paddingTop: 4,
-                              }}
-                            >
+                            <label className={labelClass}>{field.label}</label>
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-1.5 pt-1">
                               {field.options?.map((option) => {
                                 const isChecked =
                                   formData[field.id]?.[option.id]?.checked ||
@@ -387,17 +237,12 @@ export function CahierDesChargesForm() {
                                   <label
                                     key={option.id}
                                     htmlFor={`${field.id}-${option.id}`}
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: 10,
-                                      border: "1px solid var(--rule)",
-                                      padding: "10px 12px",
-                                      background: isChecked
-                                        ? "var(--paper-2)"
-                                        : "var(--paper)",
-                                      cursor: "pointer",
-                                    }}
+                                    className={cn(
+                                      "flex cursor-pointer items-center gap-2.5 border px-3 py-2.5 transition-colors",
+                                      isChecked
+                                        ? "border-accent-secondary/60 bg-obsidian"
+                                        : "border-dark-gray bg-obsidian hover:border-mid-gray/60"
+                                    )}
                                   >
                                     <input
                                       type="checkbox"
@@ -411,19 +256,9 @@ export function CahierDesChargesForm() {
                                           option.label
                                         )
                                       }
-                                      style={{
-                                        accentColor: "var(--accent-color)",
-                                        flexShrink: 0,
-                                      }}
+                                      className="size-3.5 shrink-0 accent-accent-secondary"
                                     />
-                                    <span
-                                      style={{
-                                        fontFamily: "var(--sans)",
-                                        fontSize: 13,
-                                        color: "var(--ink-2)",
-                                        lineHeight: 1.4,
-                                      }}
-                                    >
+                                    <span className="font-inter-tight text-[13px] leading-snug text-foreground">
                                       {option.label}
                                     </span>
                                   </label>
@@ -434,17 +269,12 @@ export function CahierDesChargesForm() {
                         ) : field.type === "checkbox" ? (
                           <label
                             htmlFor={field.id}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 10,
-                              border: "1px solid var(--rule)",
-                              padding: "10px 12px",
-                              background: formData[field.id]
-                                ? "var(--paper-2)"
-                                : "var(--paper)",
-                              cursor: "pointer",
-                            }}
+                            className={cn(
+                              "flex cursor-pointer items-center gap-2.5 border px-3 py-2.5 transition-colors",
+                              formData[field.id]
+                                ? "border-accent-secondary/60 bg-obsidian"
+                                : "border-dark-gray bg-obsidian hover:border-mid-gray/60"
+                            )}
                           >
                             <input
                               type="checkbox"
@@ -453,25 +283,15 @@ export function CahierDesChargesForm() {
                               onChange={(e) =>
                                 handleInputChange(field.id, e.target.checked)
                               }
-                              style={{
-                                accentColor: "var(--accent-color)",
-                                flexShrink: 0,
-                              }}
+                              className="size-3.5 shrink-0 accent-accent-secondary"
                             />
-                            <span
-                              style={{
-                                fontFamily: "var(--sans)",
-                                fontSize: 13,
-                                color: "var(--ink-2)",
-                                lineHeight: 1.4,
-                              }}
-                            >
+                            <span className="font-inter-tight text-[13px] leading-snug text-foreground">
                               {field.label}
                             </span>
                           </label>
                         ) : (
                           <>
-                            <label htmlFor={field.id} style={labelStyle}>
+                            <label htmlFor={field.id} className={labelClass}>
                               {field.label}
                             </label>
                             {field.type === "textarea" ? (
@@ -482,7 +302,7 @@ export function CahierDesChargesForm() {
                                 onChange={(e) =>
                                   handleInputChange(field.id, e.target.value)
                                 }
-                                style={textareaStyle}
+                                className={cn(fieldClass, "min-h-[100px] resize-y")}
                               />
                             ) : (
                               <input
@@ -493,7 +313,7 @@ export function CahierDesChargesForm() {
                                 onChange={(e) =>
                                   handleInputChange(field.id, e.target.value)
                                 }
-                                style={inputStyle}
+                                className={fieldClass}
                               />
                             )}
                           </>
@@ -505,67 +325,36 @@ export function CahierDesChargesForm() {
               ))}
 
               {/* Separator */}
-              <div
-                style={{
-                  borderTop: "1px solid var(--rule)",
-                  margin: "24px 0",
-                }}
-              />
+              <div className="my-6 border-t border-dark-gray" />
 
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div className="flex justify-center">
                 <button
                   type="submit"
-                  style={{
-                    border: "1px solid var(--ink)",
-                    background: "var(--ink)",
-                    color: "var(--paper)",
-                    fontFamily: "var(--mono)",
-                    fontSize: 11,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    padding: "12px 32px",
-                    cursor: "pointer",
-                  }}
+                  className="border border-charcoal bg-vermilion px-8 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
                 >
                   {isEn ? "Preview the document" : "Voir l'aperçu du document"}
                 </button>
               </div>
             </div>
           </form>
-        </div>
+        </Reveal>
       )}
 
       {/* Preview tab */}
       {activeTab === "preview" && (
-        <div>
+        <Reveal>
           <DocumentPreview formData={formData} />
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: 24,
-            }}
-          >
+          <div className="mt-6 flex justify-center">
             <button
               type="button"
               onClick={() => handleTabChange("form")}
-              style={{
-                border: "1px solid var(--rule)",
-                background: "var(--paper)",
-                color: "var(--ink)",
-                fontFamily: "var(--sans)",
-                fontSize: 13,
-                fontWeight: 600,
-                padding: "10px 24px",
-                cursor: "pointer",
-                letterSpacing: "0.04em",
-              }}
+              className="border border-dark-gray bg-jet px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
             >
               {isEn ? "Back to form" : "Retour au formulaire"}
             </button>
           </div>
-        </div>
+        </Reveal>
       )}
     </section>
   );

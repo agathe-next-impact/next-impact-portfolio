@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
 type SubjectKey = "site-web" | "application" | "oeth" | "audit-ia" | "question-technique" | "autre";
@@ -36,26 +37,10 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
 
 const SUBJECT_ORDER: SubjectKey[] = ["site-web", "application", "oeth", "audit-ia", "question-technique", "autre"];
 
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px 14px",
-  fontSize: 14,
-  fontFamily: "var(--sans)",
-  color: "var(--ink)",
-  background: "var(--paper)",
-  border: "1px solid var(--rule)",
-  outline: "none",
-};
+const fieldClass =
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  fontFamily: "var(--mono)",
-  fontSize: 9,
-  letterSpacing: "0.12em",
-  textTransform: "uppercase",
-  color: "var(--muted-color)",
-  marginBottom: 8,
-};
+const labelClass = "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
 
 export default function MultiSubjectContactForm() {
   const locale = useLocale() as Locale;
@@ -93,51 +78,41 @@ export default function MultiSubjectContactForm() {
   };
 
   return (
-    <div style={{ border: "1px solid var(--rule)" }}>
+    <div className="h-full bg-obsidian">
       {/* Header */}
-      <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--rule)" }}>
-        <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 8 }}>
+      <div className="border-b border-dark-gray px-6 py-6 lg:px-8">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
           {isEn ? "Contact form" : "Formulaire de contact"}
-        </div>
-        <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
+        </p>
+        <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
             ? "Pick the topic that fits your request — I'll route the message accordingly."
             : "Choisissez l'objet de votre demande — votre message sera orienté en conséquence."}
         </p>
       </div>
 
-      <div style={{ padding: "32px" }}>
+      <div className="px-6 py-8 lg:px-8">
         {status === "sent" ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 12,
-              padding: "24px",
-              border: "1px solid var(--rule)",
-              background: "var(--paper-2)",
-            }}
-          >
-            <CheckCircle2 size={24} style={{ color: "var(--accent-color)" }} />
-            <h3 className="ni-serif" style={{ fontSize: 24, color: "var(--ink)" }}>
+          <div className="flex flex-col items-start gap-3 border border-dark-gray bg-jet p-6">
+            <CheckCircle2 size={24} className="text-accent-secondary" />
+            <h3 className="text-2xl font-light tracking-tight text-foreground">
               {isEn ? "Message sent" : "Message envoyé"}
             </h3>
-            <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.65 }}>
+            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
               {isEn
                 ? "Thanks — I'll get back to you within 24h. A confirmation has been sent to your inbox."
                 : "Merci — je reviens vers vous sous 24h. Une confirmation a été envoyée dans votre boîte mail."}
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-7">
             {/* Subject selector */}
             <div>
-              <div style={labelStyle}>
+              <div className={labelClass}>
                 {isEn ? "Subject of your request" : "Objet de votre demande"}{" "}
-                <span style={{ color: "var(--accent-color)" }}>*</span>
+                <span className="text-accent-secondary">*</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, border: "1px solid var(--rule)" }}>
+              <div className="grid grid-cols-1 border border-dark-gray sm:grid-cols-2">
                 {SUBJECT_ORDER.map((key, i) => {
                   const config = SUBJECTS[key];
                   const copy = isEn ? config.en : config.fr;
@@ -151,30 +126,27 @@ export default function MultiSubjectContactForm() {
                       key={key}
                       type="button"
                       onClick={() => setSubject(key)}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
-                        padding: "16px 18px",
-                        textAlign: "left",
-                        cursor: "pointer",
-                        background: selected ? "var(--paper-2)" : "transparent",
-                        borderLeft: selected ? "3px solid var(--accent-color)" : "3px solid transparent",
-                        borderRight: col === 0 ? "1px solid var(--rule)" : "none",
-                        borderBottom: row < totalRows - 1 ? "1px solid var(--rule)" : "none",
-                        borderTop: "none",
-                        transition: "background 0.15s",
-                      }}
+                      className={cn(
+                        "flex items-start gap-2.5 border-l-2 px-4 py-4 text-left transition-colors",
+                        selected
+                          ? "border-l-accent-secondary bg-jet"
+                          : "border-l-transparent hover:bg-jet/50",
+                        col === 0 && "sm:border-r sm:border-r-dark-gray",
+                        row < totalRows - 1 && "border-b border-b-dark-gray",
+                      )}
                     >
                       <Icon
                         size={15}
-                        style={{ color: selected ? "var(--accent-color)" : "var(--muted-color)", flexShrink: 0, marginTop: 2 }}
+                        className={cn(
+                          "mt-0.5 shrink-0",
+                          selected ? "text-accent-secondary" : "text-mid-gray",
+                        )}
                       />
                       <div>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)", marginBottom: 2 }}>
+                        <p className="mb-0.5 text-[13px] font-medium text-foreground">
                           {copy.label}
                         </p>
-                        <p style={{ fontSize: 12, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                        <p className="font-inter-tight text-xs leading-snug text-mid-gray">
                           {copy.description}
                         </p>
                       </div>
@@ -193,13 +165,13 @@ export default function MultiSubjectContactForm() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  style={{ display: "flex", flexDirection: "column", gap: 20 }}
+                  className="flex flex-col gap-5"
                 >
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="contact-name" style={labelStyle}>
+                      <label htmlFor="contact-name" className={labelClass}>
                         {isEn ? "Your name" : "Votre nom"}{" "}
-                        <span style={{ color: "var(--accent-color)" }}>*</span>
+                        <span className="text-accent-secondary">*</span>
                       </label>
                       <input
                         id="contact-name"
@@ -208,13 +180,13 @@ export default function MultiSubjectContactForm() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={isEn ? "Alice Martin" : "Alice Martin"}
-                        style={inputStyle}
+                        className={fieldClass}
                       />
                     </div>
                     <div>
-                      <label htmlFor="contact-email" style={labelStyle}>
+                      <label htmlFor="contact-email" className={labelClass}>
                         {isEn ? "Your email" : "Votre email"}{" "}
-                        <span style={{ color: "var(--accent-color)" }}>*</span>
+                        <span className="text-accent-secondary">*</span>
                       </label>
                       <input
                         id="contact-email"
@@ -223,13 +195,13 @@ export default function MultiSubjectContactForm() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={isEn ? "alice@company.com" : "alice@organisation.com"}
-                        style={inputStyle}
+                        className={fieldClass}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="contact-org" style={labelStyle}>
+                    <label htmlFor="contact-org" className={labelClass}>
                       {isEn ? "Organization (optional)" : "Organisation (optionnel)"}
                     </label>
                     <input
@@ -238,14 +210,14 @@ export default function MultiSubjectContactForm() {
                       value={organisation}
                       onChange={(e) => setOrganisation(e.target.value)}
                       placeholder={isEn ? "Atelier Martin & Co" : "Atelier Martin & Co"}
-                      style={inputStyle}
+                      className={fieldClass}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact-message" style={labelStyle}>
+                    <label htmlFor="contact-message" className={labelClass}>
                       {isEn ? "Your message" : "Votre message"}{" "}
-                      <span style={{ color: "var(--accent-color)" }}>*</span>
+                      <span className="text-accent-secondary">*</span>
                     </label>
                     <textarea
                       id="contact-message"
@@ -254,16 +226,15 @@ export default function MultiSubjectContactForm() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder={subjectCopy.placeholder}
-                      style={{ ...inputStyle, resize: "vertical" }}
+                      className={cn(fieldClass, "resize-y")}
                     />
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                  <div className="flex flex-wrap items-center gap-4">
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="btn primary"
-                      style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+                      className="inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:opacity-60"
                     >
                       {status === "loading" ? (
                         <>
@@ -277,25 +248,14 @@ export default function MultiSubjectContactForm() {
                         </>
                       )}
                     </button>
-                    <p style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.08em", color: "var(--muted-color)", textTransform: "uppercase" }}>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                       {isEn ? "Reply within 24h · Free, no strings attached" : "Réponse sous 24h · Gratuit, sans engagement"}
                     </p>
                   </div>
 
                   {status === "error" && (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        padding: "12px 16px",
-                        border: "1px solid var(--accent-color)",
-                        background: "rgba(216, 58, 26, 0.05)",
-                        fontSize: 13,
-                        color: "var(--accent-color)",
-                      }}
-                    >
-                      <AlertCircle size={14} style={{ flexShrink: 0 }} />
+                    <div className="flex items-center gap-2 border border-accent-secondary bg-accent-secondary/5 px-4 py-3 font-inter-tight text-[13px] text-accent-secondary">
+                      <AlertCircle size={14} className="shrink-0" />
                       {isEn
                         ? "Something went wrong. Please try again, or reach out via email or phone."
                         : "Une erreur est survenue. Réessayez ou contactez-moi par email ou téléphone."}

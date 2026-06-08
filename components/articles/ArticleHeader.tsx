@@ -18,73 +18,57 @@ function formatDateFr(dateString: string): string {
 
 export function ArticleHeader({ article, sectionCount }: ArticleHeaderProps) {
   return (
-    <div style={{
-      borderTop: "2px solid var(--ink)",
-      paddingTop: "2.5rem",
-      marginBottom: "2.5rem",
-    }}>
-      {/* Meta row */}
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
-        <span className="label">{article.category}</span>
-        <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
-          <Clock style={{ width: "0.75rem", height: "0.75rem" }} />
+    <div className="border-t border-foreground/80 pt-8">
+      {/* Ligne méta */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+        <span className="text-accent-secondary">{article.category}</span>
+        <span className="flex items-center gap-1.5">
+          <Clock className="h-3 w-3" aria-hidden />
           {article.readingTime} min de lecture
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "var(--muted-color)", fontSize: "0.75rem" }}>
-          <BookOpen style={{ width: "0.75rem", height: "0.75rem" }} />
+        <span className="flex items-center gap-1.5">
+          <BookOpen className="h-3 w-3" aria-hidden />
           {sectionCount} sections
         </span>
       </div>
 
       {/* Tags */}
       {article.tags.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.25rem" }}>
+        <div className="mt-5 flex flex-wrap gap-2">
           {article.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="label">{tag}</span>
+            <span
+              key={tag}
+              className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray"
+            >
+              {tag}
+            </span>
           ))}
         </div>
       )}
 
-      {/* Title */}
-      <h1 style={{
-        fontFamily: "var(--font-serif)",
-        fontSize: "clamp(2rem, 5vw, 3rem)",
-        fontWeight: 400,
-        lineHeight: 1.15,
-        color: "var(--ink)",
-        marginBottom: "1.5rem",
-      }}>
+      {/* Titre */}
+      <h1 className="mt-6 text-3xl font-light leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
         {article.title}
       </h1>
 
-      {/* KPI row */}
+      {/* Ligne KPI */}
       {article.kpis.length > 0 && (
-        <div style={{ display: "flex", gap: "2rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+        <div className="mt-8 flex flex-wrap gap-x-10 gap-y-6">
           {article.kpis.map((kpi, i) => (
             <ArticleKpiCard key={i} value={kpi.value} label={kpi.label} />
           ))}
         </div>
       )}
 
-      {/* Author / date */}
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        borderTop: "1px solid var(--rule)",
-        paddingTop: "1rem",
-        flexWrap: "wrap",
-        gap: "0.5rem",
-      }}>
+      {/* Auteur / date */}
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-2 border-t border-dark-gray pt-4">
         <div>
-          <p style={{ fontSize: "0.875rem", color: "var(--ink-2)", fontWeight: 500 }}>
-            {article.author}
-          </p>
-          <p style={{ fontSize: "0.75rem", color: "var(--muted-color)" }}>
-            {article.authorRole}
-          </p>
+          <p className="text-sm font-medium text-foreground">{article.author}</p>
+          <p className="font-inter-tight text-xs text-mid-gray">{article.authorRole}</p>
         </div>
-        <span className="annot">{formatDateFr(article.date)}</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+          {formatDateFr(article.date)}
+        </span>
       </div>
     </div>
   )

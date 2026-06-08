@@ -5,24 +5,31 @@ interface StructureColumnsProps {
   groups: StructureGroup[]
 }
 
+// Distinction des deux groupes par l'intensité de l'accent (plein vs atténué).
 const colorMap = {
-  teal: "border-teal-400",
-  blue: "border-lightblue",
+  teal: "border-accent-secondary/40",
+  blue: "border-accent-secondary",
 } as const
 
 export default function StructureColumns({ groups }: StructureColumnsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {groups.map((group) => (
-        <div key={group.label} className="rounded-xl border border-white/10 bg-darkblue/40 backdrop-blur-sm p-6">
-          <h4 className="font-googletitre font-medium text-white text-lg mb-4">{group.label}</h4>
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      {groups.map((group, i) => (
+        <div
+          key={group.label}
+          className={cn(
+            "border-b border-dark-gray p-6",
+            i < groups.length - 1 && "md:border-b-0 md:border-r",
+          )}
+        >
+          <h4 className="mb-4 text-lg font-light tracking-tight text-foreground">{group.label}</h4>
           <ul className="space-y-3">
             {group.items.map((item) => (
               <li
                 key={item}
                 className={cn(
-                  "border-l-2 pl-4 py-1 text-white/70 font-googletexte text-sm",
-                  colorMap[group.color]
+                  "border-l-2 py-1 pl-4 font-inter-tight text-sm leading-relaxed text-mid-gray",
+                  colorMap[group.color],
                 )}
               >
                 {item}

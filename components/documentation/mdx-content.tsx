@@ -32,7 +32,7 @@ function MdxH2({ children }: { children?: React.ReactNode }) {
   const id = slugify(text);
   return (
     <>
-      <div style={{ marginTop: "3rem", marginBottom: "1rem", borderTop: "1px solid var(--rule)" }} />
+      <div className="mb-4 mt-12 border-t border-dark-gray" />
       <h2 id={id}>{children}</h2>
     </>
   );
@@ -72,7 +72,7 @@ export async function MdxContent({ source }: MdxContentProps) {
   });
 
   return (
-    <div className="light article-text">
+    <div className="doc-prose">
       {content}
     </div>
   );

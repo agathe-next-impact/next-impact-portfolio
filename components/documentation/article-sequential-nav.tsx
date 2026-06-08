@@ -12,86 +12,43 @@ interface ArticleSequentialNavProps {
 export function ArticleSequentialNav({ prev, next }: ArticleSequentialNavProps) {
   if (!prev && !next) return null;
 
-  const cardStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.375rem",
-    border: "1px solid var(--rule)",
-    padding: "1rem 1.25rem",
-    textDecoration: "none",
-    background: "var(--paper)",
-    transition: "background 0.15s",
-  };
+  const cardClass =
+    "group flex flex-col gap-1.5 border-b border-r border-dark-gray bg-transparent p-4 px-5 no-underline transition-colors hover:bg-jet/40";
+  const labelClass =
+    "flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-mid-gray";
+  const titleClass =
+    "text-sm font-light leading-tight tracking-tight text-foreground transition-colors group-hover:text-accent-secondary";
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--rule)" }}>
+    <div className="grid grid-cols-2 border-l border-t border-dark-gray">
       {prev ? (
         <Link
           href={`/documentation/${prev.category}/${prev.slug}` as never}
-          style={cardStyle}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
+          className={cardClass}
         >
-          <span style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.375rem",
-            fontSize: "0.6875rem",
-            color: "var(--muted-color)",
-            fontFamily: "var(--font-mono)",
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
-          }}>
-            <ArrowLeft style={{ width: "0.75rem", height: "0.75rem" }} />
+          <span className={labelClass}>
+            <ArrowLeft className="h-3 w-3" />
             Article précédent
           </span>
-          <p style={{
-            fontSize: "0.875rem",
-            color: "var(--ink-2)",
-            lineHeight: 1.4,
-            fontFamily: "var(--font-serif)",
-            fontWeight: 400,
-          }}>
-            {prev.title}
-          </p>
+          <p className={titleClass}>{prev.title}</p>
         </Link>
       ) : (
-        <div style={{ background: "var(--paper)" }} />
+        <div className="border-b border-r border-dark-gray" />
       )}
 
       {next ? (
         <Link
           href={`/documentation/${next.category}/${next.slug}` as never}
-          style={{ ...cardStyle, textAlign: "right" }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
+          className={`${cardClass} text-right`}
         >
-          <span style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            gap: "0.375rem",
-            fontSize: "0.6875rem",
-            color: "var(--muted-color)",
-            fontFamily: "var(--font-mono)",
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
-          }}>
+          <span className={`${labelClass} justify-end`}>
             Article suivant
-            <ArrowRight style={{ width: "0.75rem", height: "0.75rem" }} />
+            <ArrowRight className="h-3 w-3" />
           </span>
-          <p style={{
-            fontSize: "0.875rem",
-            color: "var(--ink-2)",
-            lineHeight: 1.4,
-            fontFamily: "var(--font-serif)",
-            fontWeight: 400,
-          }}>
-            {next.title}
-          </p>
+          <p className={titleClass}>{next.title}</p>
         </Link>
       ) : (
-        <div style={{ background: "var(--paper)" }} />
+        <div className="border-b border-r border-dark-gray" />
       )}
     </div>
   );

@@ -29,12 +29,12 @@ function ScoreBar({ label, score }: ProItem) {
   return (
     <div ref={ref} className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
-        <span className="text-white/80 font-googletexte">{label}</span>
-        <span className="text-lightblue font-googletitre font-medium">{score}</span>
+        <span className="font-inter-tight text-foreground/80">{label}</span>
+        <span className="font-mono text-xs text-accent-secondary">{score}</span>
       </div>
-      <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+      <div className="h-1.5 overflow-hidden bg-dark-gray">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-lightblue to-regularblue motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out"
+          className="h-full bg-accent-secondary motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out"
           style={{ width: visible ? `${score}%` : "0%" }}
         />
       </div>
@@ -46,10 +46,10 @@ export default function ProsCons({ pros, cons }: ProsConsProps) {
   const locale = useLocale() as Locale
   const isEn = locale === "en"
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Pros */}
-      <div className="rounded-xl border border-white/10 bg-darkblue/40 backdrop-blur-sm p-6">
-        <h4 className="font-googletitre font-medium text-green-400 text-base mb-5">
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      {/* Avantages */}
+      <div className="border-b border-dark-gray p-6 md:border-b-0 md:border-r">
+        <h4 className="mb-5 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
           {isEn ? "Benefits" : "Avantages"}
         </h4>
         <div className="space-y-4">
@@ -59,16 +59,16 @@ export default function ProsCons({ pros, cons }: ProsConsProps) {
         </div>
       </div>
 
-      {/* Cons */}
-      <div className="rounded-xl border border-white/10 bg-red-500/5 backdrop-blur-sm p-6">
-        <h4 className="font-googletitre font-medium text-red-400 text-base mb-5">
+      {/* Limites */}
+      <div className="bg-jet p-6">
+        <h4 className="mb-5 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
           {isEn ? "Limits" : "Limites"}
         </h4>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {cons.map((con) => (
-            <div key={con.label} className="rounded-lg bg-red-500/10 border border-red-500/20 p-4">
-              <p className="font-googletitre font-medium text-white text-sm">{con.label}</p>
-              <p className="text-white/60 font-googletexte text-sm mt-1">{con.description}</p>
+            <div key={con.label} className="border-l border-dark-gray py-1 pl-4">
+              <p className="text-sm font-light tracking-tight text-foreground">{con.label}</p>
+              <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">{con.description}</p>
             </div>
           ))}
         </div>

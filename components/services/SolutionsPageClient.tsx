@@ -5,9 +5,12 @@ import { ServicesComparisonTable } from "@/components/services/ServicesCompariso
 import ServicesGuide from "@/components/services/ServicesGuide";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
-import PageLayout from "@/components/page-layout";
 import { Monitor, TrendingUp, Smartphone } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, Separator } from "@/components/aspect/section";
+import { Reveal } from "@/components/ui/reveal";
+import { SignalPaths } from "@/components/visuals/signal-paths";
+import { WordAppear } from "@/components/visuals/word-appear";
 
 type Offer = {
   name: string;
@@ -72,22 +75,61 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
 
   return (
     <main>
-      <PageLayout
-        titre={isEn ? "Our Headless WordPress services" : "Nos Services WordPress Headless"}
-        sousTitre={
-          isEn
-            ? "Pick the solution that fits your needs and your budget."
-            : "Choisissez la solution adaptée à vos besoins et à votre budget."
+      {/* Héros */}
+      <BlueprintSection
+        tone="obsidian"
+        backdrop={
+          <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
+            <SignalPaths />
+          </div>
         }
+        innerClassName="px-6 py-16 lg:px-8 lg:py-24"
       >
-        <div className="mt-8 mb-6 space-y-24">
-          <ServicesOffers offers={offers} />
-          <ServicesComparisonTable />
-          <ServicesGuide needsGuide={needsGuide} />
-          <Process />
-          <ServicesFAQ faqs={faqs} />
-        </div>
-      </PageLayout>
+        <Reveal className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+            <span>№ 01</span>
+            <span className="h-px w-6 bg-accent-secondary/50" />
+            <span className="text-mid-gray">{isEn ? "Services" : "Services"}</span>
+          </div>
+          <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <WordAppear
+              text={isEn ? "Our Headless WordPress services" : "Nos Services WordPress Headless"}
+            />
+          </h1>
+          <p className="mt-2 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
+            {isEn
+              ? "Pick the solution that fits your needs and your budget."
+              : "Choisissez la solution adaptée à vos besoins et à votre budget."}
+          </p>
+        </Reveal>
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* § 02 — Offres */}
+      <ServicesOffers offers={offers} />
+
+      <Separator />
+
+      {/* § 03 — Comparatif des forfaits */}
+      <ServicesComparisonTable />
+
+      <Separator />
+
+      {/* § 04 — Quelle stack pour quel projet */}
+      <ServicesGuide needsGuide={needsGuide} />
+
+      <Separator />
+
+      {/* § 05 — Méthode */}
+      <BlueprintSection tone="obsidian" innerClassName="border-t border-dark-gray px-6 py-16 lg:px-8 lg:py-20">
+        <Process />
+      </BlueprintSection>
+
+      <Separator />
+
+      {/* § 06 — FAQ */}
+      <ServicesFAQ faqs={faqs} />
     </main>
   );
 }

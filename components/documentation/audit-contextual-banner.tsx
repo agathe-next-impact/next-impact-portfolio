@@ -4,47 +4,26 @@ import { Link } from "@/i18n/navigation";
 import { Zap, ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { Reveal } from "@/components/ui/reveal";
 
 export function AuditContextualBanner() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
   return (
-    <section style={{
-      marginTop: "2.5rem",
-      border: "1px solid var(--rule)",
-      borderLeft: "3px solid var(--accent-color)",
-      background: "var(--paper-2)",
-      padding: "1.5rem 2rem",
-      display: "flex",
-      flexWrap: "wrap",
-      alignItems: "center",
-      gap: "1.5rem",
-    }}>
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "2.5rem",
-        height: "2.5rem",
-        border: "1px solid var(--rule)",
-        background: "var(--paper)",
-        flexShrink: 0,
-      }}>
-        <Zap style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)" }} />
+    <Reveal
+      as="section"
+      className="mt-10 flex flex-wrap items-center gap-6 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 p-6 px-8"
+    >
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border border-dark-gray bg-obsidian">
+        <Zap className="h-[1.125rem] w-[1.125rem] text-accent-secondary" />
       </div>
 
-      <div style={{ flex: 1, minWidth: "12rem" }}>
-        <h3 style={{
-          fontFamily: "var(--font-serif)",
-          fontSize: "1.125rem",
-          fontWeight: 400,
-          color: "var(--ink)",
-          marginBottom: "0.25rem",
-        }}>
+      <div className="min-w-[12rem] flex-1">
+        <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
           {isEn ? "Is your current site performing?" : "Votre site actuel est-il performant ?"}
         </h3>
-        <p style={{ fontSize: "0.875rem", color: "var(--muted-color)" }}>
+        <p className="font-inter-tight text-sm text-mid-gray">
           {isEn
             ? "Compare your site's performance with a Headless site."
             : "Comparez les performances de votre site avec celles d'un site Headless."}
@@ -53,12 +32,11 @@ export function AuditContextualBanner() {
 
       <Link
         href="/audit-site-ia"
-        className="btn primary"
-        style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", flexShrink: 0 }}
+        className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-accent-deep bg-accent px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-accent-foreground no-underline transition-colors hover:bg-accent/90"
       >
         {isEn ? "Start my free audit" : "Lancer mon audit gratuit"}
-        <ArrowRight style={{ width: "0.875rem", height: "0.875rem" }} />
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
       </Link>
-    </section>
+    </Reveal>
   );
 }

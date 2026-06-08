@@ -75,66 +75,61 @@ function InlineLearningPath({ locale }: { locale: Locale }) {
   const progressPercent = Math.round((readCount / journey.length) * 100);
 
   return (
-    <div
-      className="md:col-span-2 md:row-span-2"
-      style={{ border: "1px solid var(--rule)", borderTop: "none", borderLeft: "none", background: "var(--paper-2)", padding: "2rem" }}
-    >
+    <div className="border border-l-0 border-t-0 border-dark-gray bg-jet/40 p-8 md:col-span-2 md:row-span-2">
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-        <Icon style={{ width: "1.125rem", height: "1.125rem", color: "var(--accent-color)" }} strokeWidth={1.5} />
-        <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.125rem, 2vw, 1.5rem)", color: "var(--ink)", margin: 0, fontWeight: 400 }}>
+      <div className="mb-2 flex items-center gap-3">
+        <Icon className="h-[1.125rem] w-[1.125rem] text-accent-secondary" strokeWidth={1.5} />
+        <h2 className="m-0 text-2xl font-light tracking-tight text-foreground">
           {isEn ? `Your ${profile.label} path` : `Votre parcours ${profile.label}`}
         </h2>
       </div>
 
       {/* Progress bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem", marginTop: "1rem" }}>
-        <div style={{ flex: 1, height: "2px", background: "var(--rule)", position: "relative" }}>
-          <div style={{
-            position: "absolute", top: 0, left: 0, height: "100%",
-            width: `${progressPercent}%`,
-            background: "var(--accent-color)",
-            transition: "width 0.4s",
-          }} />
+      <div className="mb-6 mt-4 flex items-center gap-3">
+        <div className="relative h-0.5 flex-1 bg-dark-gray">
+          <div
+            className="absolute left-0 top-0 h-full bg-accent transition-[width] duration-500"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
-        <span className="annot">{readCount} / {journey.length}</span>
+        <span className="font-mono text-[0.6875rem] tracking-[0.06em] text-mid-gray">
+          {readCount} / {journey.length}
+        </span>
       </div>
 
       {/* Steps */}
-      <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid var(--rule)" }}>
+      <div className="flex flex-col border-t border-dark-gray">
         {journey.map((step) => {
           const isRead = readArticles.includes(`${step.category}/${step.slug}`);
           return (
             <Link
               key={step.slug}
               href={`/documentation/${step.category}/${step.slug}`}
-              style={{
-                display: "block",
-                padding: "0.875rem 0",
-                borderBottom: "1px solid var(--rule)",
-                textDecoration: "none",
-                borderLeft: isRead ? "3px solid var(--accent-color)" : "3px solid transparent",
-                paddingLeft: isRead ? "0.75rem" : "0",
-                transition: "border-left-color 0.2s, background 0.15s",
-              }}
+              className={`group block border-b border-l-[3px] border-dark-gray py-3.5 no-underline transition-[border-color,background-color] hover:bg-jet/60 ${
+                isRead
+                  ? "border-l-accent-secondary pl-3"
+                  : "border-l-transparent pl-0"
+              }`}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem" }}>
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p style={{
-                    fontSize: "0.875rem",
-                    color: isRead ? "var(--muted-color)" : "var(--ink)",
-                    textDecoration: isRead ? "line-through" : "none",
-                    marginBottom: "0.125rem",
-                    fontWeight: 500,
-                  }}>
+                  <p
+                    className={`mb-0.5 text-sm font-medium transition-colors group-hover:text-accent-secondary ${
+                      isRead ? "text-mid-gray line-through" : "text-foreground"
+                    }`}
+                  >
                     {step.title}
                   </p>
-                  <p style={{ fontSize: "0.75rem", color: "var(--ink-2)" }}>
+                  <p className="font-inter-tight text-xs text-mid-gray">
                     {step.description}
                   </p>
                 </div>
                 {isRead && (
-                  <CheckCircle size={14} style={{ color: "var(--accent-color)", flexShrink: 0, marginTop: "0.125rem" }} strokeWidth={1.5} />
+                  <CheckCircle
+                    size={14}
+                    className="mt-0.5 flex-shrink-0 text-accent-secondary"
+                    strokeWidth={1.5}
+                  />
                 )}
               </div>
             </Link>
@@ -157,10 +152,7 @@ export function BentoGrid() {
       : defaultCardsFr;
 
   return (
-    <div
-      className="grid grid-cols-1 md:grid-cols-3"
-      style={{ gap: 0, borderTop: "1px solid var(--rule)", borderLeft: "1px solid var(--rule)", marginBottom: "3rem" }}
-    >
+    <div className="mb-12 grid grid-cols-1 border-l border-t border-dark-gray md:grid-cols-3">
       {profileId && <InlineLearningPath locale={locale} />}
       {cards.map((card) => {
         const Icon = card.icon;
@@ -168,36 +160,24 @@ export function BentoGrid() {
         return (
           <div
             key={card.id}
-            className={cn(card.colSpan, card.rowSpan)}
-            style={{
-              border: "1px solid var(--rule)",
-              borderTop: "none",
-              borderLeft: "none",
-              background: "var(--paper)",
-              position: "relative",
-              overflow: "hidden",
-            }}
+            className={cn(
+              "relative overflow-hidden border border-l-0 border-t-0 border-dark-gray bg-transparent",
+              card.colSpan,
+              card.rowSpan
+            )}
           >
             <Link
               href={card.href}
-              className={isBig ? "bento-card-big" : "bento-card-small"}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                height: "100%",
-                minHeight: isBig ? "20rem" : "11rem",
-                padding: "1.75rem 2rem",
-                textDecoration: "none",
-              }}
+              className={cn(
+                "group flex h-full flex-col justify-between px-8 py-7 no-underline transition-colors hover:bg-jet/40",
+                isBig ? "min-h-[20rem]" : "min-h-[11rem]"
+              )}
               {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
             >
               {/* Big card infographic */}
               {!profileId && isBig && (
-                <div style={{ marginBottom: "1.5rem" }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                <div className="mb-6">
+                  <div className="mb-6 flex flex-col gap-3">
                     {(isEn
                       ? [
                           { value: "2×", label: "faster than a standard site" },
@@ -210,52 +190,50 @@ export function BentoGrid() {
                           { value: "0",   label: "plugin frontend à maintenir" },
                         ]
                     ).map((stat) => (
-                      <div key={stat.label} style={{ display: "flex", alignItems: "baseline", gap: "0.75rem" }}>
-                        <span style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--accent-color)", lineHeight: 1 }}>
+                      <div key={stat.label} className="flex items-baseline gap-3">
+                        <span className="text-3xl font-light leading-none tracking-tight text-accent-secondary">
                           {stat.value}
                         </span>
-                        <span style={{ fontSize: "0.8125rem", color: "var(--ink-2)" }}>{stat.label}</span>
+                        <span className="font-inter-tight text-[0.8125rem] text-mid-gray">{stat.label}</span>
                       </div>
                     ))}
                   </div>
                   {/* Stack diagram */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "1rem", borderTop: "1px solid var(--rule)" }}>
+                  <div className="flex items-center gap-3 border-t border-dark-gray pt-4">
                     {[
                       { Icon: Layers, label: "WordPress" },
                       { Icon: Code,   label: "Next.js" },
                       { Icon: Globe,  label: isEn ? "Your visitors" : "Vos visiteurs" },
                     ].map(({ Icon: SIcon, label }, i) => (
-                      <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
-                          <div style={{ border: "1px solid var(--rule)", padding: "0.5rem" }}>
-                            <SIcon size={14} strokeWidth={1.5} style={{ color: "var(--muted-color)", display: "block" }} />
+                      <div key={label} className="flex items-center gap-2">
+                        <div className="flex flex-col items-center gap-1">
+                          <div className="border border-dark-gray p-2">
+                            <SIcon size={14} strokeWidth={1.5} className="block text-mid-gray" />
                           </div>
-                          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted-color)" }}>{label}</span>
+                          <span className="font-mono text-[0.5rem] uppercase tracking-[0.08em] text-mid-gray">{label}</span>
                         </div>
-                        {i < 2 && <div style={{ width: "1rem", height: "1px", background: "var(--rule)" }} />}
+                        {i < 2 && <div className="h-px w-4 bg-dark-gray" />}
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              <div style={{ marginTop: "auto" }}>
-                <Icon size={18} strokeWidth={1.5} style={{ color: "var(--muted-color)", marginBottom: "0.75rem", display: "block" }} />
-                <h3 style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: isBig ? "clamp(1.25rem, 2vw, 1.75rem)" : "1.125rem",
-                  color: "var(--ink)",
-                  marginBottom: "0.375rem",
-                  lineHeight: 1.15,
-                  fontWeight: 400,
-                }}>
+              <div className="mt-auto">
+                <Icon size={18} strokeWidth={1.5} className="mb-3 block text-mid-gray transition-colors group-hover:text-accent-secondary" />
+                <h3
+                  className={cn(
+                    "mb-1.5 font-light leading-tight tracking-tight text-foreground transition-colors group-hover:text-accent-secondary",
+                    isBig ? "text-2xl" : "text-lg"
+                  )}
+                >
                   {card.title}
                 </h3>
-                <p style={{ fontSize: "0.8125rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
+                <p className="font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
                   {card.description}
                 </p>
                 {card.external && (
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent-color)", marginTop: "0.75rem" }}>
+                  <div className="mt-3 font-mono text-[0.5625rem] uppercase tracking-[0.1em] text-accent-secondary">
                     ↓ PDF
                   </div>
                 )}

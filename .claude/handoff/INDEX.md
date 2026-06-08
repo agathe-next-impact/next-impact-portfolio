@@ -1,6 +1,13 @@
 # Next Impact — Handoff package
 **Édition Suisse · v1.0 · mai 2026**
 
+> ⚠️ **LEGACY — ne plus suivre pour le design.** La refonte visuelle 2026 part
+> désormais du template **aspect** (sombre/blueprint, Figtree, accent vermillon).
+> Source de vérité actuelle : **`.claude/DESIGN-SYSTEM.md`** + plan
+> **`.claude/aspect-refonte-plan.md`**. Ce dossier « Édition Suisse » est conservé
+> pour archive (tokens `--ink/--paper/--accent-color`, prototype React/Babel) mais
+> n'est plus la cible.
+
 Ce dossier contient tout ce qu'il faut pour reprendre la refonte de **next-impact.digital** dans n'importe quel stack (React, Next.js, Astro, WordPress thème custom, etc.).
 
 ---

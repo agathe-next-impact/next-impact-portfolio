@@ -3,6 +3,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
 import AuditPwa from "@/components/outils/audit-pwa";
 import PageLayout from "@/components/page-layout";
+import { BlueprintSection } from "@/components/aspect/section";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
@@ -77,29 +78,22 @@ export default async function AuditPwaPage({
             : "Votre projet gagnerait-il à devenir une app mobile installable ? 9 questions, un score d'opportunité et un signal de décision."
         }
       >
-        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-          <div className="container">
-            <Link
-              href="/outils"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                textDecoration: "none",
-                marginBottom: 40,
-              }}
-            >
-              <ArrowLeft size={12} />
-              {isEn ? "Back to tools" : "Retour aux outils"}
-            </Link>
-            <AuditPwa />
-          </div>
-        </section>
+        <BlueprintSection
+          tone="obsidian"
+          innerClassName="px-6 py-12 lg:px-8 lg:py-16"
+        >
+          <Link
+            href="/outils"
+            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
+          >
+            <ArrowLeft
+              size={12}
+              className="transition-transform group-hover:-translate-x-0.5"
+            />
+            {isEn ? "Back to tools" : "Retour aux outils"}
+          </Link>
+          <AuditPwa />
+        </BlueprintSection>
       </PageLayout>
     </>
   );

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { Instrument_Serif, Geist, Geist_Mono } from 'next/font/google'
+import { Figtree, Inter_Tight, Geist_Mono } from 'next/font/google'
 import Header from '@/components/header'
 import '../globals.css'
 import Script from "next/script"
@@ -16,18 +16,19 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { MotionProvider } from '@/components/motion-provider'
 import { routing } from '@/i18n/routing'
 
-const instrumentSerif = Instrument_Serif({
-  weight: ['400'],
-  style: ['normal', 'italic'],
+// Typographie « Blueprint / aspect » : Figtree (titres + UI + corps par défaut),
+// Inter Tight (paragraphes de contenu via .font-inter-tight), Geist Mono (labels).
+const figtree = Figtree({
+  weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-const geist = Geist({
-  weight: ['300', '400', '500', '600', '700'],
+const interTight = Inter_Tight({
+  weight: ['400', '500'],
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-inter-tight',
   display: 'swap',
 })
 
@@ -179,7 +180,8 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`scroll-smooth ${instrumentSerif.variable} ${geist.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+      className={`scroll-smooth ${figtree.variable} ${interTight.variable} ${geistMono.variable}`}
     >
       <body>
         <OrganizationJsonLd />

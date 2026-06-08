@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
+import { cn } from "@/lib/utils";
 
 // Locale-agnostic project metadata
 interface ProjectMeta {
@@ -454,60 +455,27 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
 
   return (
     <section id="realisations">
-      {/* Tab selector */}
-      <div
-        style={{
-          display: "flex",
-          border: "1px solid var(--rule)",
-          marginBottom: 48,
-          overflow: "hidden",
-        }}
-      >
+      {/* Sélecteur d'onglets — cellules bordées blueprint */}
+      <div className="mb-12 flex border border-dark-gray">
         {TAB_KEYS.map((tab, idx) => {
           const isActive = activeTab === tab;
           const projectCount = PROJECTS_META.filter((p) => p.tab.includes(tab)).length;
           return (
             <button
               key={tab}
+              type="button"
               onClick={() => setActiveTab(tab)}
-              className={isActive ? "tab-sel-active" : ""}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                padding: "14px 8px",
-                border: "none",
-                borderRight: idx < TAB_KEYS.length - 1 ? "1px solid var(--rule)" : "none",
-                background: isActive ? "var(--ink)" : "var(--paper)",
-                color: isActive ? "#ffffff" : "var(--ink-2)",
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                transition: "background 0.15s, color 0.15s",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 3,
-                lineHeight: 1.2,
-                textAlign: "center",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper-2)";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper)";
-              }}
+              aria-pressed={isActive}
+              className={cn(
+                "flex min-w-0 flex-1 flex-col items-center gap-1 px-2 py-3.5 text-center font-mono text-[10px] uppercase leading-tight tracking-[0.08em] transition-colors",
+                idx < TAB_KEYS.length - 1 && "border-r border-dark-gray",
+                isActive
+                  ? "bg-vermilion text-white"
+                  : "bg-jet text-mid-gray hover:bg-ebony hover:text-foreground",
+              )}
             >
               <span>{t(`tabs.${tab}`)}</span>
-              <span
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 9,
-                  opacity: isActive ? 0.5 : 0.4,
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <span className={cn("font-mono text-[9px] tracking-[0.05em]", isActive ? "opacity-60" : "opacity-50")}>
                 {projectCount}
               </span>
             </button>
@@ -515,82 +483,56 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
         })}
       </div>
 
-      {/* Content */}
+      {/* Grille de réalisations — cellules jointives bordées */}
       {TAB_KEYS.map((tab) =>
         activeTab === tab ? (
           <Stagger
             key={tab}
             stagger={0.04}
-            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}
+            className="grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3"
           >
-            {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project, index) => {
+            {getProjectsByTab(tab, count ?? PROJECTS_META.length).map((project) => {
               const content = getProjectContent(locale, project.id);
               const isExternal = project.link.startsWith("http");
               const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
-              const col = index % 3;
               return (
                 <StaggerItem
                   key={project.id}
-                  className="ni-card--bordered"
-                  style={{
-                    border: "1px solid var(--rule)",
-                    marginRight: col < 2 ? -1 : 0,
-                    marginBottom: -1,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
+                  className={cn(
+                    "group relative flex flex-col border-b border-r border-dark-gray transition-colors duration-300",
+                    "hover:border-mid-gray/40 hover:bg-jet/40",
+                  )}
                 >
-                  <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+                  <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
                       src={project.image}
                       alt={content.alt}
                       fill
-                      style={{ objectFit: "cover", objectPosition: "top" }}
-                      sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
                   </div>
-                  <div
-                    style={{
-                      padding: "20px 24px",
-                      borderTop: "1px solid var(--rule)",
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
+                  <div className="flex flex-1 flex-col border-t border-dark-gray px-6 py-5">
                     <Link
                       href={project.link}
                       {...externalProps}
-                      style={{ textDecoration: "none", display: "block" }}
+                      className="block no-underline"
                     >
-                      <h3
-                        className="ni-serif"
-                        style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}
-                      >
+                      <h3 className="text-lg font-light tracking-tight text-foreground">
                         {content.title}
                       </h3>
-                      <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                      <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                         {content.description}
                       </p>
                     </Link>
-                    <div style={{ marginTop: "auto", paddingTop: 16 }}>
+                    <div className="mt-auto pt-4">
                       <Link
                         href={project.link}
                         {...externalProps}
-                        style={{
-                          fontFamily: "var(--mono)",
-                          fontSize: 10,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          color: "var(--accent-color)",
-                          textDecoration: "none",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 4,
-                        }}
+                        className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground"
                       >
                         {isExternal ? t("visitLanding") : t("viewProject")}
-                        <ArrowRight size={10} />
+                        <ArrowRight size={10} className="transition-transform duration-200 group-hover:translate-x-0.5" />
                       </Link>
                     </div>
                   </div>

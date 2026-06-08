@@ -53,20 +53,14 @@ export function YoutubePlayer({
 
   return (
     <div
-      className={cn("group", className)}
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        border: "1px solid var(--rule)",
-        background: "var(--ink)",
-      }}
+      className={cn(
+        "group relative overflow-hidden border border-dark-gray bg-obsidian",
+        className,
+      )}
     >
       <div
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: isShort ? "9 / 16" : "16 / 9",
-        }}
+        className="relative w-full"
+        style={{ aspectRatio: isShort ? "9 / 16" : "16 / 9" }}
       >
         {loaded ? (
           <iframe
@@ -74,111 +68,73 @@ export function YoutubePlayer({
             title={title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              border: 0,
-              background: "#000",
-            }}
+            className="absolute inset-0 h-full w-full border-0 bg-black"
           />
         ) : (
           <button
             type="button"
             onClick={() => setLoaded(true)}
             aria-label={`Lire la video : ${title}`}
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "block",
-              width: "100%",
-              height: "100%",
-              padding: 0,
-              border: 0,
-              background: "var(--paper)",
-              cursor: "pointer",
-              textAlign: "left",
-            }}
+            className="absolute inset-0 block h-full w-full cursor-pointer border-0 bg-jet p-0 text-left"
           >
             <img
               src={thumbnailUrl}
               alt=""
               loading="lazy"
               onError={() => setThumbnailQuality("hqdefault")}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
-            <div
+            {/* Voile discret au survol pour faire ressortir la vignette */}
+            <span
+              aria-hidden
+              className="absolute inset-0 bg-obsidian/0 transition-colors duration-300 group-hover:bg-obsidian/20"
+            />
+            <span
+              className={cn(
+                "absolute grid items-center border border-charcoal bg-jet/90 backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-0.5 motion-reduce:transform-none",
+                compact ? "inset-x-3 bottom-3 gap-2.5" : "inset-x-4 bottom-4 gap-3.5",
+              )}
               style={{
-                position: "absolute",
-                left: compact ? 12 : 18,
-                right: compact ? 12 : 18,
-                bottom: compact ? 12 : 18,
-                display: "grid",
                 gridTemplateColumns: "auto 1fr",
-                alignItems: "center",
-                gap: compact ? 10 : 14,
                 minHeight: compact ? 44 : 56,
-                background: "var(--paper)",
-                border: "1px solid var(--ink)",
-                boxShadow: "6px 6px 0 rgba(14, 14, 12, 0.22)",
               }}
             >
               <span
+                className="grid place-items-center border-r border-charcoal bg-vermilion text-white"
                 style={{
-                  display: "grid",
-                  placeItems: "center",
                   width: compact ? 44 : 56,
                   height: compact ? 44 : 56,
-                  background: "var(--accent-color)",
-                  color: "var(--paper)",
-                  borderRight: "1px solid var(--ink)",
                 }}
               >
                 <Play
                   aria-hidden="true"
                   size={compact ? 17 : 21}
                   fill="currentColor"
-                  style={{ marginLeft: 2 }}
+                  className="ml-0.5"
                 />
               </span>
-              <span style={{ minWidth: 0, paddingRight: compact ? 10 : 16 }}>
+              <span className="min-w-0" style={{ paddingRight: compact ? 10 : 16 }}>
                 <span
+                  className="block font-mono uppercase text-accent-secondary"
                   style={{
-                    display: "block",
-                    fontFamily: "var(--mono)",
                     fontSize: compact ? 8 : 9,
                     letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "var(--accent-color)",
                     marginBottom: compact ? 1 : 3,
                   }}
                 >
                   {label}
                 </span>
                 <span
+                  className="block overflow-hidden text-ellipsis whitespace-nowrap font-sans text-foreground"
                   style={{
-                    display: "block",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    fontFamily: "var(--serif)",
                     fontSize: compact ? 14 : 18,
                     lineHeight: 1.15,
-                    color: "var(--ink)",
                   }}
                 >
                   {title}
                 </span>
               </span>
-            </div>
+            </span>
           </button>
         )}
       </div>

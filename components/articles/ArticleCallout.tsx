@@ -7,16 +7,26 @@ interface ArticleCalloutProps {
   children: React.ReactNode
 }
 
+/**
+ * Callout « blueprint » : panneau jet décollé, filet gauche d'accent, corps en
+ * Inter Tight atténué. Les variantes se distinguent par la couleur du filet
+ * (jaune secondaire / indigo primaire), sans aucune couleur en dur ni arrondi.
+ */
 const variants: Record<CalloutType, string> = {
-  info: "border-l-4 border-blue-500 bg-blue-500/10 text-blue-900 dark:text-white/80",
-  warning: "border-l-4 border-amber-500 bg-amber-500/10 text-amber-900 dark:text-white/80",
-  success: "border-l-4 border-green-500 bg-green-500/10 text-green-900 dark:text-white/80",
-  example: "border-l-4 border-slate-400 bg-slate-500/5 text-slate-700 dark:text-white/70",
+  info: "border-accent-secondary",
+  warning: "border-accent-primary",
+  success: "border-accent-secondary",
+  example: "border-mid-gray/50",
 }
 
 export function ArticleCallout({ type = "info", children }: ArticleCalloutProps) {
   return (
-    <div className={cn("rounded-r-xl p-4 my-4 text-sm font-googletexte", variants[type])}>
+    <div
+      className={cn(
+        "my-6 border-l-2 bg-jet p-4 font-inter-tight text-sm leading-relaxed text-mid-gray",
+        variants[type]
+      )}
+    >
       {children}
     </div>
   )

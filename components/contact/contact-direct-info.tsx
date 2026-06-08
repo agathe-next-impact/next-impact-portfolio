@@ -8,48 +8,33 @@ export function ContactDirectInfo() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   return (
-    <div
-      style={{
-        border: "1px solid var(--rule)",
-        padding: "32px",
-        background: "var(--paper-2)",
-      }}
-    >
-      <div
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 9,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--muted-color)",
-          marginBottom: 20,
-        }}
-      >
+    <div className="h-full bg-jet px-6 py-8 lg:px-8 lg:py-10">
+      <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
         {isEn ? "Prefer a direct conversation?" : "Vous préférez un échange direct ?"}
-      </div>
-
-      <p style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)", marginBottom: 4 }}>
-        Agathe Karinthi-Martin{" "}
-        <span style={{ fontWeight: 400, color: "var(--ink-2)" }}>— Next Impact Digital</span>
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+      <p className="text-[15px] font-medium text-foreground">
+        Agathe Karinthi-Martin{" "}
+        <span className="font-normal text-mid-gray">— Next Impact Digital</span>
+      </p>
+
+      <div className="mt-5 flex flex-col gap-3">
         <a
           href="mailto:agathe@next-impact.digital"
-          style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--ink-2)", textDecoration: "none" }}
+          className="group inline-flex items-center gap-2 font-inter-tight text-sm text-mid-gray transition-colors hover:text-foreground"
         >
-          <Mail size={14} style={{ color: "var(--accent-color)", flexShrink: 0 }} />
+          <Mail size={14} className="shrink-0 text-accent-secondary" />
           agathe@next-impact.digital
         </a>
         <a
           href="tel:0673981638"
-          style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--ink-2)", textDecoration: "none" }}
+          className="group inline-flex items-center gap-2 font-inter-tight text-sm text-mid-gray transition-colors hover:text-foreground"
         >
-          <Phone size={14} style={{ color: "var(--accent-color)", flexShrink: 0 }} />
+          <Phone size={14} className="shrink-0 text-accent-secondary" />
           06 73 98 16 38
         </a>
-        <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--muted-color)" }}>
-          <MapPin size={14} style={{ flexShrink: 0 }} />
+        <span className="inline-flex items-center gap-2 font-inter-tight text-sm text-mid-gray">
+          <MapPin size={14} className="shrink-0" />
           {isEn ? "4 rue du centre, 15400 Trizac, France" : "4 rue du centre, 15400 Trizac"}
         </span>
       </div>

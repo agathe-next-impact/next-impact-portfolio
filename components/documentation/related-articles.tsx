@@ -32,23 +32,13 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
 
   return (
     <div>
-      <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "2rem", marginBottom: "1.25rem" }}>
-        <h3 style={{
-          fontFamily: "var(--font-serif)",
-          fontSize: "1.25rem",
-          fontWeight: 400,
-          color: "var(--ink)",
-        }}>
+      <div className="mb-5 border-t border-dark-gray pt-8">
+        <h3 className="text-xl font-light tracking-tight text-foreground">
           Continuer la lecture
         </h3>
       </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "1px",
-        background: "var(--rule)",
-      }}>
+      <div className="grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-3">
         {display.map((article, i) => {
           const isRecommended = profileId
             ? isArticleRelevantToProfile(article.category, article.slug, profileId)
@@ -58,62 +48,30 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
             <Link
               key={article.slug}
               href={`/documentation/${article.category}/${article.slug}` as never}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "1.25rem",
-                background: "var(--paper)",
-                textDecoration: "none",
-                transition: "background 0.15s",
-                position: "relative",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--paper-2)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--paper)")}
+              className="group relative flex flex-col border-b border-r border-dark-gray bg-transparent p-5 no-underline transition-colors hover:bg-jet/40"
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", marginBottom: "0.5rem" }}>
-                <span className="label">
+              <div className="mb-2 flex flex-wrap items-center gap-1.5">
+                <span className="border border-dark-gray px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
                   {categoryLabels[article.category] || article.category}
                 </span>
                 {isRecommended && (
-                  <span className="label" style={{ color: "var(--accent-color)", borderColor: "var(--accent-color)" }}>
+                  <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-accent-secondary">
                     Recommandé
                   </span>
                 )}
               </div>
-              <h4 style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "0.9375rem",
-                fontWeight: 400,
-                color: "var(--ink)",
-                lineHeight: 1.35,
-                marginBottom: "0.375rem",
-                flex: 1,
-              }}>
+              <h4 className="mb-1.5 flex-1 text-[0.9375rem] font-light leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                 {article.title}
               </h4>
-              <p style={{
-                fontSize: "0.75rem",
-                color: "var(--muted-color)",
-                lineHeight: 1.5,
-                marginBottom: "0.5rem",
-                overflow: "hidden",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-              }}>
+              <p className="mb-2 line-clamp-2 font-inter-tight text-xs leading-relaxed text-mid-gray">
                 {article.description}
               </p>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.375rem",
-                color: "var(--muted-color)",
-                fontSize: "0.6875rem",
-                fontFamily: "var(--font-mono)",
-              }}>
-                <Clock style={{ width: "0.75rem", height: "0.75rem" }} />
+              <div className="flex items-center gap-1.5 font-mono text-[0.6875rem] text-mid-gray">
+                <Clock className="h-3 w-3" />
                 <span>{article.readingTime} min</span>
-                <span style={{ marginLeft: "auto" }} className="annot">{String(i + 1).padStart(2, "0")}</span>
+                <span className="ml-auto font-mono text-[10px] tracking-[0.08em] text-mid-gray">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
             </Link>
           );

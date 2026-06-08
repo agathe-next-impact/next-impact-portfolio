@@ -4,6 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { cn } from "@/lib/utils";
 
 type Tier = {
   name: string;
@@ -37,8 +40,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Site vitrine, site institutionnel ou refonte rapide d'un WordPress vieillissant.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Monolithic WordPress with <em style={{ color: "var(--ink)" }}>a modern custom theme</em>, optimized build, hardened security.</>
-        : <>WordPress monolithique avec <em style={{ color: "var(--ink)" }}>thème custom moderne</em>, build optimisé, sécurité durcie.</>,
+        ? <>Monolithic WordPress with <em className="text-foreground not-italic">a modern custom theme</em>, optimized build, hardened security.</>
+        : <>WordPress monolithique avec <em className="text-foreground not-italic">thème custom moderne</em>, build optimisé, sécurité durcie.</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -67,8 +70,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Site à fort enjeu SEO, blog éditorial, marque ou produit dont la performance front est un levier de conversion.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Headless WordPress as backend + <em style={{ color: "var(--ink)" }}>Next.js</em> as frontend (SSG, ISR, partial hydration).</>
-        : <>WordPress headless en backend + <em style={{ color: "var(--ink)" }}>Next.js</em> en frontend (SSG, ISR, hydratation partielle).</>,
+        ? <>Headless WordPress as backend + <em className="text-foreground not-italic">Next.js</em> as frontend (SSG, ISR, partial hydration).</>
+        : <>WordPress headless en backend + <em className="text-foreground not-italic">Next.js</em> en frontend (SSG, ISR, hydratation partielle).</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -99,8 +102,8 @@ function getTiers(isEn: boolean): Tier[] {
         : "Plateforme à forte volumétrie, multisites, intégrations API tierces, applications métier ou portails clients.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
-        ? <>Headless WordPress + <em style={{ color: "var(--ink)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>
-        : <>WordPress headless + <em style={{ color: "var(--ink)" }}>Next.js App Router</em> (SSG, ISR, SSR), TypeScript, CI/CD complet.</>,
+        ? <>Headless WordPress + <em className="text-foreground not-italic">Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>
+        : <>WordPress headless + <em className="text-foreground not-italic">Next.js App Router</em> (SSG, ISR, SSR), TypeScript, CI/CD complet.</>,
       includedLabel: isEn ? "What's included" : "Ce qui est inclus",
       included: isEn
         ? [
@@ -135,108 +138,96 @@ export function PricingCards() {
   const tiers = getTiers(isEn);
 
   return (
-    <section
-      style={{
-        background: "var(--paper)",
-        borderTop: "1px solid var(--rule)",
-        borderBottom: "1px solid var(--rule)",
-        padding: "80px 0",
-      }}
-    >
-      <div className="container">
-        <div className="sec-head" style={{ borderBottom: "1px solid var(--rule)", marginBottom: 0, paddingBottom: 32 }}>
-          <div className="sec-no">№ —</div>
-          <h2 className="ni-serif" style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}>
-            {isEn ? "Pricing" : "Tarifs"}
-          </h2>
-        </div>
+    <BlueprintSection id="tarifs" tone="obsidian">
+      {/* En-tête */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <SectionHeading
+          index="№ 02"
+          kicker={isEn ? "Pricing" : "Tarifs"}
+          title={
+            isEn ? (
+              <>Transparent <span className="text-accent-secondary">pricing</span></>
+            ) : (
+              <>Des tarifs <span className="text-accent-secondary">transparents</span></>
+            )
+          }
+        />
+      </Reveal>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            borderBottom: "1px solid var(--rule)",
-          }}
-        >
-          {tiers.map((tier, idx) => (
+      {/* Bento — pleine largeur, sans gouttière */}
+      <Stagger className="grid md:grid-cols-3">
+        {tiers.map((tier) => (
+          <StaggerItem key={tier.name} className="h-full">
             <div
-              key={tier.name}
-              style={{
-                borderRight: idx < tiers.length - 1 ? "1px solid var(--rule)" : "none",
-                padding: "40px 32px",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-                background: tier.highlight ? "var(--paper)" : "transparent",
-                borderTop: tier.highlight ? `3px solid var(--accent-color)` : "3px solid transparent",
-              }}
+              className={cn(
+                "group relative flex h-full flex-col p-6 transition-colors hover:bg-jet lg:p-8",
+                "border-b border-dark-gray md:border-b-0",
+                "md:border-r md:border-dark-gray md:[&:nth-child(3n)]:border-r-0",
+                tier.highlight && "bg-jet",
+              )}
             >
-              {tier.badge && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 32,
-                    fontFamily: "var(--mono)",
-                    fontSize: 9,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--accent-color)",
-                    background: "var(--paper-2)",
-                    padding: "4px 12px",
-                    border: "1px solid var(--accent-color)",
-                    transform: "translateY(-50%)",
-                  }}
-                >
-                  {tier.badge}
-                </div>
+              {tier.highlight && (
+                <span className="absolute inset-x-0 top-0 h-0.5 bg-accent-secondary" aria-hidden />
               )}
 
-              {/* Tier name */}
+              {tier.badge && (
+                <span className="mb-4 inline-flex w-fit items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+                  {tier.badge}
+                </span>
+              )}
+
+              {/* Nom + tech */}
               <div
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 11,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: tier.highlight ? "var(--accent-color)" : "var(--muted-color)",
-                  marginBottom: 8,
-                }}
+                className={cn(
+                  "font-mono text-[11px] uppercase tracking-[0.14em]",
+                  tier.highlight ? "text-accent-secondary" : "text-mid-gray",
+                )}
               >
                 {tier.name}
               </div>
-              <p style={{ fontSize: 12, color: "var(--muted-color)", marginBottom: 24, fontStyle: "italic" }}>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
                 {tier.tech}
               </p>
 
-              {/* Price */}
-              <div style={{ marginBottom: 32 }}>
-                <div
-                  className="ni-serif"
-                  style={{ fontSize: "clamp(28px, 3vw, 40px)", color: "var(--ink)", lineHeight: 1 }}
-                >
+              {/* Prix */}
+              <div className="mt-6">
+                <div className="text-3xl font-light leading-none tracking-tight text-foreground md:text-4xl">
                   {tier.price}
                 </div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", letterSpacing: "0.08em", marginTop: 6 }}>
+                <div className="mt-2 font-mono text-[10px] tracking-[0.08em] text-mid-gray">
                   {tier.priceTagline}
                 </div>
               </div>
 
-              {/* Sections */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 0 }}>
+              {/* Sections détaillées */}
+              <div className="mt-6 flex flex-1 flex-col">
                 {[
-                  { label: tier.forProjectLabel, content: <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>{tier.forProject}</p> },
-                  { label: tier.stackLabel, content: <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65 }}>{tier.stackHtml}</p> },
+                  {
+                    label: tier.forProjectLabel,
+                    content: (
+                      <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                        {tier.forProject}
+                      </p>
+                    ),
+                  },
+                  {
+                    label: tier.stackLabel,
+                    content: (
+                      <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                        {tier.stackHtml}
+                      </p>
+                    ),
+                  },
                   {
                     label: tier.includedLabel,
                     content: (
-                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+                      <ul className="flex flex-col gap-1.5">
                         {tier.included.map((item) => (
                           <li
                             key={item.text}
-                            style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: "var(--ink-2)" }}
+                            className="flex items-start gap-2 font-inter-tight text-[13px] leading-relaxed text-mid-gray"
                           >
-                            <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11, marginTop: 1 }}>→</span>
+                            <span className="shrink-0 pt-px font-mono text-[11px] text-accent-secondary">→</span>
                             {item.text}
                           </li>
                         ))}
@@ -244,20 +235,8 @@ export function PricingCards() {
                     ),
                   },
                 ].map(({ label, content }) => (
-                  <div
-                    key={label}
-                    style={{ borderTop: "1px solid var(--rule)", paddingTop: 20, paddingBottom: 20 }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 9,
-                        letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                        color: "var(--muted-color)",
-                        marginBottom: 10,
-                      }}
-                    >
+                  <div key={label} className="border-t border-dark-gray py-5">
+                    <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
                       {label}
                     </div>
                     {content}
@@ -265,81 +244,58 @@ export function PricingCards() {
                 ))}
 
                 {tier.oeth && (
-                  <div
-                    style={{
-                      borderTop: "1px solid var(--rule)",
-                      paddingTop: 20,
-                      paddingBottom: 20,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 9,
-                        letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                        color: "var(--accent-color)",
-                        marginBottom: 8,
-                      }}
-                    >
+                  <div className="border-t border-dark-gray py-5">
+                    <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
                       {tier.oeth.title}
                     </div>
-                    <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6, marginBottom: 10 }}>
+                    <p className="mb-2.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                       {tier.oeth.text}
                     </p>
                     <Link
                       href="/avantage-oeth"
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 11,
-                        color: "var(--accent-color)",
-                        textDecoration: "none",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4,
-                      }}
+                      className="group/oeth inline-flex items-center gap-1.5 font-mono text-[11px] text-accent-secondary transition-colors hover:text-foreground"
                     >
                       {tier.oeth.cta}
-                      <ArrowRight size={11} />
+                      <ArrowRight size={11} className="transition-transform group-hover/oeth:translate-x-0.5" />
                     </Link>
                   </div>
                 )}
               </div>
 
               {/* CTA */}
-              <div style={{ marginTop: 32 }}>
-                {tier.ctaExternal ? (
-                  <a
-                    href={tier.ctaHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                      width: "100%",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {tier.ctaLabel}
-                    <ArrowRight size={14} />
-                  </a>
-                ) : (
-                  <Link
-                    href={tier.ctaHref as Parameters<typeof Link>[0]["href"]}
-                    className={tier.highlight ? "btn primary" : "btn"}
-                    style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "100%", justifyContent: "center" }}
-                  >
-                    {tier.ctaLabel}
-                    <ArrowRight size={14} />
-                  </Link>
-                )}
-              </div>
+              {tier.ctaExternal ? (
+                <a
+                  href={tier.ctaHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
+                    tier.highlight
+                      ? "border border-charcoal bg-vermilion text-white hover:bg-vermilion-bright"
+                      : "border border-dark-gray text-foreground hover:bg-obsidian",
+                  )}
+                >
+                  {tier.ctaLabel}
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </a>
+              ) : (
+                <Link
+                  href={tier.ctaHref as Parameters<typeof Link>[0]["href"]}
+                  className={cn(
+                    "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
+                    tier.highlight
+                      ? "border border-charcoal bg-vermilion text-white hover:bg-vermilion-bright"
+                      : "border border-dark-gray text-foreground hover:bg-obsidian",
+                  )}
+                >
+                  {tier.ctaLabel}
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              )}
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
+          </StaggerItem>
+        ))}
+      </Stagger>
+    </BlueprintSection>
   );
 }

@@ -6,6 +6,9 @@ import { ArrowRight } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { useLocale } from "next-intl"
 import type { Locale } from "@/i18n/routing"
+import { cn } from "@/lib/utils"
+import { Reveal } from "@/components/ui/reveal"
+import { SignalPaths } from "@/components/visuals/signal-paths"
 
 type StackTab = {
   id: string
@@ -131,211 +134,139 @@ export default function HeadlessExplainer() {
 
   return (
     <>
-      <div className="sec-head">
-        <div className="sec-no">№ —</div>
-        <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, margin: 0 }}>
-          {isEn
-            ? <>Three stacks, <em style={{ color: "var(--ink)" }}>one right choice</em></>
-            : <>Trois stacks, <em style={{ color: "var(--ink)" }}>un bon choix</em></>}
-        </h2>
-        <div className="sec-meta">
-          {isEn ? "Stack comparison" : "Comparatif technique"}
-        </div>
-      </div>
-
-      {/* Tab bar */}
-      <div
-        role="tablist"
-        style={{
-          display: "flex",
-          borderTop: "1px solid var(--rule)",
-          borderBottom: "1px solid var(--rule)",
-        }}
-      >
-        {stacks.map((stack, i) => (
-          <button
-            key={stack.id}
-            role="tab"
-            aria-selected={activeId === stack.id}
-            onClick={() => setActiveId(stack.id)}
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              padding: "18px 32px",
-              background: activeId === stack.id ? "var(--paper-2)" : "none",
-              border: "none",
-              borderRight: i < stacks.length - 1 ? "1px solid var(--rule)" : "none",
-              borderBottom: activeId === stack.id ? "2px solid var(--ink)" : "2px solid transparent",
-              color: activeId === stack.id ? "var(--ink)" : "var(--muted-color)",
-              cursor: "pointer",
-              transition: "color 0.15s, background 0.15s",
-              marginBottom: "-1px",
-              textAlign: "left",
-            }}
-          >
-            {stack.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab panel */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current.id}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            borderBottom: "1px solid var(--rule)",
-          }}
-        >
-          {/* Left: description + tech + strengths */}
-          <div style={{ padding: "40px 32px", borderRight: "1px solid var(--rule)" }}>
-            <div style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 16,
-            }}>
-              {current.sublabel}
-            </div>
-            <p style={{
-              fontFamily: "var(--serif)",
-              fontStyle: "italic",
-              fontSize: 16,
-              color: "var(--ink-2)",
-              lineHeight: 1.7,
-              marginBottom: 32,
-            }}>
-              {current.description}
-            </p>
-            <div style={{
-              fontFamily: "var(--mono)",
-              fontSize: 9,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 8,
-            }}>
-              Stack
-            </div>
-            <p style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              color: "var(--ink-2)",
-              marginBottom: 32,
-              letterSpacing: "0.04em",
-              lineHeight: 1.6,
-            }}>
-              {current.tech}
-            </p>
-            <div style={{
-              fontFamily: "var(--mono)",
-              fontSize: 9,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--muted-color)",
-              marginBottom: 14,
-            }}>
-              {isEn ? "Key strengths" : "Points forts"}
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {current.strengths.map((s) => (
-                <li key={s} style={{ display: "flex", gap: 10, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
-                  <span style={{ color: "var(--accent-color)", fontFamily: "var(--mono)", fontSize: 11, flexShrink: 0, marginTop: 1 }}>→</span>
-                  {s}
-                </li>
-              ))}
-            </ul>
+      {/* En-tête de section */}
+      <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+            <span>№ 02</span>
+            <span className="h-px w-6 bg-accent-secondary/50" />
+            <span className="text-mid-gray">{isEn ? "Stack comparison" : "Comparatif technique"}</span>
           </div>
+          <h2 className="max-w-3xl text-3xl font-light tracking-tight text-foreground md:text-4xl">
+            {isEn ? (
+              <>Three stacks, <span className="text-accent-secondary">one right choice</span></>
+            ) : (
+              <>Trois stacks, <span className="text-accent-secondary">un bon choix</span></>
+            )}
+          </h2>
+        </div>
+      </Reveal>
 
-          {/* Right: ideal + limit + price */}
-          <div style={{ padding: "40px 32px", display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: 1 }}>
-              <div style={{
-                fontFamily: "var(--mono)",
-                fontSize: 9,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                marginBottom: 14,
-              }}>
-                {isEn ? "Ideal for" : "Idéal pour"}
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8, marginBottom: 32 }}>
-                {current.ideal.map((item) => (
-                  <li key={item} style={{
-                    fontSize: 13,
-                    color: "var(--ink-2)",
-                    padding: "8px 14px",
-                    borderLeft: "1px solid var(--rule)",
-                    lineHeight: 1.5,
-                  }}>
-                    {item}
+      {/* Barre d'onglets — track bg-jet, onglet actif bg-obsidian + liseré accent */}
+      <div role="tablist" aria-orientation="horizontal" className="flex bg-jet">
+        {stacks.map((stack, i) => {
+          const isActive = activeId === stack.id
+          return (
+            <button
+              key={stack.id}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setActiveId(stack.id)}
+              className={cn(
+                "relative px-6 py-4 text-left font-mono text-[11px] uppercase tracking-[0.12em] transition-colors lg:px-8",
+                i < stacks.length - 1 && "border-r border-dark-gray",
+                isActive
+                  ? "bg-obsidian text-foreground"
+                  : "text-mid-gray hover:text-foreground",
+              )}
+            >
+              {stack.label}
+              {isActive && (
+                <span className="absolute inset-x-0 bottom-[-1px] h-px bg-accent-secondary" />
+              )}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Panneau de l'onglet actif */}
+      <div className="relative border-t border-dark-gray bg-obsidian">
+        {/* Backdrop discret : flux Headless (WordPress → API → Next.js) */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 opacity-[0.18]">
+          <SignalPaths />
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="relative grid md:grid-cols-2"
+          >
+            {/* Gauche : sous-titre + description + stack + points forts */}
+            <div className="border-b border-dark-gray p-6 md:border-b-0 md:border-r lg:p-8">
+              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                {current.sublabel}
+              </p>
+              <p className="mt-4 font-inter-tight text-base leading-relaxed text-mid-gray">
+                {current.description}
+              </p>
+
+              <p className="mt-8 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                Stack
+              </p>
+              <p className="mt-2 font-mono text-[11px] leading-relaxed tracking-[0.04em] text-foreground/80">
+                {current.tech}
+              </p>
+
+              <p className="mt-8 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                {isEn ? "Key strengths" : "Points forts"}
+              </p>
+              <ul className="mt-3 flex flex-col gap-2.5">
+                {current.strengths.map((s) => (
+                  <li key={s} className="flex gap-2.5 font-inter-tight text-sm leading-snug text-foreground/80">
+                    <ArrowRight size={12} className="mt-0.5 shrink-0 text-accent-secondary" />
+                    {s}
                   </li>
                 ))}
               </ul>
+            </div>
 
-              <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 24 }}>
-                <div style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 9,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--muted-color)",
-                  marginBottom: 8,
-                }}>
-                  {isEn ? "To consider" : "À prévoir"}
-                </div>
-                <p style={{
-                  fontSize: 13,
-                  color: "var(--ink-2)",
-                  lineHeight: 1.6,
-                  fontStyle: "italic",
-                }}>
-                  {current.limit}
+            {/* Droite : idéal pour + à prévoir + prix + CTA */}
+            <div className="flex flex-col p-6 lg:p-8">
+              <div className="flex-1">
+                <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                  {isEn ? "Ideal for" : "Idéal pour"}
                 </p>
-              </div>
-            </div>
+                <ul className="mt-3 flex flex-col gap-2">
+                  {current.ideal.map((item) => (
+                    <li
+                      key={item}
+                      className="border-l border-dark-gray py-1 pl-3.5 font-inter-tight text-sm leading-snug text-foreground/80"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
 
-            <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 28, marginTop: 32 }}>
-              <div style={{
-                fontFamily: "var(--serif)",
-                fontSize: "clamp(22px, 2.5vw, 32px)",
-                color: "var(--ink)",
-                lineHeight: 1,
-                marginBottom: 16,
-              }}>
-                {current.priceFrom}
+                <div className="mt-8 border-t border-dark-gray pt-6">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                    {isEn ? "To consider" : "À prévoir"}
+                  </p>
+                  <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                    {current.limit}
+                  </p>
+                </div>
               </div>
-              <Link
-                href="/contact"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-color)",
-                  textDecoration: "none",
-                }}
-              >
-                {isEn ? "Discuss this stack" : "Discuter de cette stack"}
-                <ArrowRight size={11} />
-              </Link>
+
+              <div className="mt-8 border-t border-dark-gray pt-7">
+                <p className="text-3xl font-light leading-none tracking-tight text-foreground">
+                  {current.priceFrom}
+                </p>
+                <Link
+                  href="/contact"
+                  className="group mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary transition-colors hover:text-foreground"
+                >
+                  {isEn ? "Discuss this stack" : "Discuter de cette stack"}
+                  <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </>
   )
 }

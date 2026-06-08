@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Calendar } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
 import { YoutubePlayer } from "@/components/youtube-player";
+import { BlueprintSection } from "@/components/aspect/section";
+import { Reveal } from "@/components/ui/reveal";
 import { Metadata } from "next";
 import { generateArticleMetadata } from "@/lib/metadata";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
@@ -115,78 +117,50 @@ export default async function CaseStudyPage({
       />
 
       <main>
-        {/* Back link + sec-head */}
-        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-          <div className="container">
-            <Link
-              href="/etudes-de-cas"
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--muted-color)",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 32,
-              }}
-            >
-              ← {t("backToCaseStudies")}
-            </Link>
-            <div className="sec-head">
-              <div className="sec-no">№ —</div>
-              <h1
-                className="ni-serif"
-                style={{
-                  fontSize: "clamp(32px, 4.5vw, 64px)",
-                  lineHeight: 1.0,
-                  margin: 0,
-                  color: "var(--ink)",
-                }}
+        {/* Back link + en-tête d'étude de cas */}
+        <BlueprintSection tone="obsidian">
+          <Reveal>
+            <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+              <Link
+                href="/etudes-de-cas"
+                className="group mb-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
               >
-                {caseStudy.title}
-              </h1>
-              <div className="sec-meta">
-                {clientTypeLabel} ·{" "}
-                {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
-                {caseStudy.date.year}
+                <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
+                {t("backToCaseStudies")}
+              </Link>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+                  <span>{clientTypeLabel}</span>
+                  <span className="h-px w-6 bg-accent-secondary/50" />
+                  <span className="text-mid-gray">
+                    {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
+                    {caseStudy.date.year}
+                  </span>
+                </div>
+                <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
+                  {caseStudy.title}
+                </h1>
+                <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
+                  {caseStudy.description}
+                </p>
               </div>
             </div>
-            <p
-              style={{
-                fontSize: 16,
-                color: "var(--ink-2)",
-                maxWidth: 640,
-                lineHeight: 1.65,
-                marginTop: 16,
-              }}
-            >
-              {caseStudy.description}
-            </p>
-          </div>
-        </section>
+          </Reveal>
+        </BlueprintSection>
 
-        {/* Main content */}
-        <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
-          <div className="container">
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 320px",
-                gap: 0,
-                alignItems: "start",
-              }}
-            >
-              {/* Left: media + stats + content */}
-              <div style={{ paddingRight: 48, borderRight: "1px solid var(--rule)" }}>
-                {/* Media */}
-                <div style={{ border: "1px solid var(--rule)", marginBottom: 40 }}>
+        {/* Contenu principal */}
+        <BlueprintSection tone="obsidian">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px]">
+            {/* Colonne gauche : média + chiffres + contenu */}
+            <div className="border-b border-dark-gray px-6 py-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-12">
+              {/* Média */}
+              <Reveal>
+                <div className="mb-10 rounded-md bg-overlay-gray p-2 md:p-4">
                   {caseStudy.youtubeVideoId ? (
                     caseStudy.youtubeIsShort ? (
-                      <div style={{ display: "flex", justifyContent: "center", background: "#000", padding: 16 }}>
-                        <div style={{ width: "100%", maxWidth: 280, position: "relative" }}>
+                      <div className="flex justify-center overflow-hidden rounded-sm bg-obsidian p-4">
+                        <div className="relative w-full max-w-[280px]">
                           <YoutubePlayer
                             videoId={caseStudy.youtubeVideoId}
                             title={caseStudy.title}
@@ -197,7 +171,12 @@ export default async function CaseStudyPage({
                         </div>
                       </div>
                     ) : (
-                      <YoutubePlayer videoId={caseStudy.youtubeVideoId} title={caseStudy.title} />
+                      <div className="overflow-hidden rounded-sm">
+                        <YoutubePlayer
+                          videoId={caseStudy.youtubeVideoId}
+                          title={caseStudy.title}
+                        />
+                      </div>
                     )
                   ) : (
                     <Image
@@ -205,397 +184,206 @@ export default async function CaseStudyPage({
                       alt={caseStudy.gallery.alt}
                       width={800}
                       height={500}
-                      style={{ width: "100%", objectFit: "cover", display: "block" }}
+                      className="block w-full rounded-sm object-cover"
                       priority
                       fetchPriority="high"
                     />
                   )}
                 </div>
+              </Reveal>
 
-                {/* Chiffres clés */}
-                {resultHighlights && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1fr",
-                      borderTop: "1px solid var(--rule)",
-                      marginBottom: 40,
-                    }}
-                  >
+              {/* Chiffres clés */}
+              {resultHighlights && (
+                <Reveal>
+                  <div className="mb-10 grid grid-cols-3 border border-dark-gray">
                     {resultHighlights.map((highlight, i) => (
                       <div
                         key={i}
-                        style={{
-                          padding: "24px",
-                          borderRight: i < 2 ? "1px solid var(--rule)" : "none",
-                          textAlign: "center",
-                        }}
+                        className="px-4 py-6 text-center md:px-6 [&:not(:last-child)]:border-r [&:not(:last-child)]:border-dark-gray"
                       >
-                        <div
-                          className="ni-serif"
-                          style={{
-                            fontSize: 32,
-                            color: "var(--ink)",
-                            marginBottom: 4,
-                          }}
-                        >
+                        <div className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
                           {highlight.value}
                         </div>
-                        <div
-                          style={{
-                            fontFamily: "var(--mono)",
-                            fontSize: 9,
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--muted-color)",
-                          }}
-                        >
+                        <div className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
                           {highlight.label}
                         </div>
                       </div>
                     ))}
                   </div>
-                )}
+                </Reveal>
+              )}
 
-                {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil) */}
-                <CaseStudyProfileContent
-                  slug={caseStudy.slug}
-                  locale={locale}
-                  defaultDescription={caseStudy.description}
-                  defaultDetailedDescription={caseStudy.detailedDescription}
-                  defaultObjectives={caseStudy.objectives}
-                  defaultResults={caseStudy.results}
-                />
+              {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil) */}
+              <CaseStudyProfileContent
+                slug={caseStudy.slug}
+                locale={locale}
+                defaultDescription={caseStudy.description}
+                defaultDetailedDescription={caseStudy.detailedDescription}
+                defaultObjectives={caseStudy.objectives}
+                defaultResults={caseStudy.results}
+              />
 
-                {/* Témoignage client */}
-                {caseStudy.testimonial && (
-                  <blockquote
-                    style={{
-                      borderLeft: "3px solid var(--accent-color)",
-                      paddingLeft: 24,
-                      marginTop: 32,
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: "var(--serif)",
-                        fontStyle: "italic",
-                        fontSize: 15,
-                        color: "var(--ink-2)",
-                        lineHeight: 1.7,
-                        marginBottom: 16,
-                      }}
-                    >
+              {/* Témoignage client */}
+              {caseStudy.testimonial && (
+                <Reveal>
+                  <blockquote className="mt-10 border-l-2 border-accent-secondary pl-6">
+                    <p className="mb-4 font-inter-tight text-[15px] italic leading-relaxed text-foreground">
                       &ldquo;{caseStudy.testimonial.content}&rdquo;
                     </p>
-                    <footer style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <footer className="flex items-center gap-3">
                       <Image
                         src={caseStudy.imageUrl}
                         alt={caseStudy.testimonial.author}
                         width={40}
                         height={40}
-                        style={{ objectFit: "contain" }}
+                        className="object-contain"
                       />
                       <div>
-                        <div style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
+                        <div className="text-sm font-medium text-foreground">
                           {caseStudy.testimonial.author}
                         </div>
-                        <div
-                          style={{
-                            fontFamily: "var(--mono)",
-                            fontSize: 10,
-                            color: "var(--muted-color)",
-                          }}
-                        >
+                        <div className="font-mono text-[10px] text-mid-gray">
                           {caseStudy.testimonial.position}
                         </div>
                       </div>
                     </footer>
                   </blockquote>
-                )}
-              </div>
-
-              {/* Right sidebar: sticky */}
-              <div style={{ paddingLeft: 32, position: "sticky", top: 80 }}>
-                {/* Client */}
-                <div
-                  style={{
-                    paddingBottom: 16,
-                    marginBottom: 16,
-                    borderBottom: "1px solid var(--rule)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                      marginBottom: 6,
-                    }}
-                  >
-                    {t("client")}
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: "var(--ink)" }}>
-                    {caseStudy.clientName}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 10,
-                      color: "var(--muted-color)",
-                      marginTop: 2,
-                    }}
-                  >
-                    {clientTypeLabel}
-                  </div>
-                </div>
-
-                {/* Date de livraison */}
-                <div
-                  style={{
-                    paddingBottom: 16,
-                    marginBottom: 16,
-                    borderBottom: "1px solid var(--rule)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                      marginBottom: 6,
-                    }}
-                  >
-                    {t("deliveryDate")}
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      fontSize: 15,
-                      fontWeight: 500,
-                      color: "var(--ink)",
-                    }}
-                  >
-                    <Calendar size={14} style={{ color: "var(--muted-color)" }} />
-                    {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
-                    {caseStudy.date.year}
-                  </div>
-                </div>
-
-                {/* Durée */}
-                <div
-                  style={{
-                    paddingBottom: 16,
-                    marginBottom: 16,
-                    borderBottom: "1px solid var(--rule)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                      marginBottom: 6,
-                    }}
-                  >
-                    {t("duration")}
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: "var(--ink)" }}>
-                    {caseStudy.duration}
-                  </div>
-                </div>
-
-                {/* Technologies */}
-                <div
-                  style={{
-                    paddingBottom: 16,
-                    marginBottom: 16,
-                    borderBottom: "1px solid var(--rule)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {t("technologies")}
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {caseStudy.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        style={{
-                          fontFamily: "var(--mono)",
-                          fontSize: 9,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          border: "1px solid var(--rule)",
-                          padding: "3px 8px",
-                          color: "var(--ink-2)",
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div
-                  style={{
-                    paddingBottom: 16,
-                    marginBottom: 16,
-                    borderBottom: "1px solid var(--rule)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: 9,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-color)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {t("tags")}
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {caseStudy.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontFamily: "var(--mono)",
-                          fontSize: 9,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          border: "1px solid var(--rule)",
-                          padding: "3px 8px",
-                          color: "var(--ink-2)",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Site web */}
-                {caseStudy.website && (
-                  <div
-                    style={{
-                      paddingBottom: 16,
-                      marginBottom: 16,
-                      borderBottom: "1px solid var(--rule)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 9,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "var(--muted-color)",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {t("website")}
-                    </div>
-                    <a
-                      href={caseStudy.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 11,
-                        color: "var(--ink-2)",
-                        textDecoration: "underline",
-                        wordBreak: "break-all",
-                      }}
-                    >
-                      {caseStudy.website}
-                    </a>
-                  </div>
-                )}
-
-                {/* CTA */}
-                <div style={{ marginTop: 8 }}>
-                  <CaseStudyCTA />
-                </div>
-              </div>
+                </Reveal>
+              )}
             </div>
+
+            {/* Colonne droite : barre latérale sticky */}
+            <aside className="px-6 py-10 lg:sticky lg:top-20 lg:self-start lg:px-8 lg:py-12">
+              {/* Client */}
+              <div className="mb-4 border-b border-dark-gray pb-4">
+                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  {t("client")}
+                </div>
+                <div className="text-[15px] font-medium text-foreground">
+                  {caseStudy.clientName}
+                </div>
+                <div className="mt-0.5 font-mono text-[10px] text-mid-gray">
+                  {clientTypeLabel}
+                </div>
+              </div>
+
+              {/* Date de livraison */}
+              <div className="mb-4 border-b border-dark-gray pb-4">
+                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  {t("deliveryDate")}
+                </div>
+                <div className="flex items-center gap-1.5 text-[15px] font-medium text-foreground">
+                  <Calendar size={14} className="text-mid-gray" />
+                  {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
+                  {caseStudy.date.year}
+                </div>
+              </div>
+
+              {/* Durée */}
+              <div className="mb-4 border-b border-dark-gray pb-4">
+                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  {t("duration")}
+                </div>
+                <div className="text-[15px] font-medium text-foreground">
+                  {caseStudy.duration}
+                </div>
+              </div>
+
+              {/* Technologies */}
+              <div className="mb-4 border-b border-dark-gray pb-4">
+                <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  {t("technologies")}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {caseStudy.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="mb-4 border-b border-dark-gray pb-4">
+                <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  {t("tags")}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {caseStudy.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Site web */}
+              {caseStudy.website && (
+                <div className="mb-4 border-b border-dark-gray pb-4">
+                  <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                    {t("website")}
+                  </div>
+                  <a
+                    href={caseStudy.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="break-all font-mono text-[11px] text-accent-secondary underline underline-offset-2 hover:text-foreground"
+                  >
+                    {caseStudy.website}
+                  </a>
+                </div>
+              )}
+
+              {/* CTA */}
+              <div className="mt-2">
+                <CaseStudyCTA />
+              </div>
+            </aside>
           </div>
-        </section>
+        </BlueprintSection>
 
         {/* Projets similaires */}
-        <section
-          className="s"
-          style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}
-        >
-          <div className="container">
-            <h2
-              className="ni-serif"
-              style={{ fontSize: "clamp(22px, 2.5vw, 36px)", marginBottom: 32 }}
-            >
-              {t("similarProjects")}
-            </h2>
-            <div
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 0 }}
-            >
+        <BlueprintSection tone="jet">
+          <Reveal>
+            <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+              <h2 className="text-2xl font-light tracking-tight text-foreground md:text-3xl lg:text-4xl">
+                {t("similarProjects")}
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3">
               {similarCaseStudies.map((study, i) => (
                 <Link
                   key={study.id}
                   href={`/etudes-de-cas/${study.slug}`}
-                  style={{
-                    display: "block",
-                    textDecoration: "none",
-                    borderRight: i < 2 ? "1px solid var(--rule)" : "none",
-                  }}
+                  className="group block border-b border-dark-gray last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0"
                 >
-                  <div>
-                    <div style={{ position: "relative", aspectRatio: "16/9" }}>
-                      <Image
-                        src={study.gallery.url || "/placeholder.svg"}
-                        alt={study.title}
-                        fill
-                        style={{ objectFit: "cover", objectPosition: "top" }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        padding: "20px 24px",
-                        borderTop: "1px solid var(--rule)",
-                      }}
-                    >
-                      <h3
-                        className="ni-serif"
-                        style={{ fontSize: 18, color: "var(--ink)", marginBottom: 6 }}
-                      >
-                        {study.title}
-                      </h3>
-                      <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.6 }}>
-                        {study.description}
-                      </p>
-                    </div>
+                  <div className="relative aspect-video overflow-hidden">
+                    <Image
+                      src={study.gallery.url || "/placeholder.svg"}
+                      alt={study.title}
+                      fill
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  </div>
+                  <div className="border-t border-dark-gray px-6 py-5">
+                    <h3 className="mb-1.5 text-lg font-light tracking-tight text-foreground">
+                      {study.title}
+                    </h3>
+                    <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                      {study.description}
+                    </p>
                   </div>
                 </Link>
               ))}
             </div>
-          </div>
-        </section>
+          </Reveal>
+        </BlueprintSection>
       </main>
     </>
   );

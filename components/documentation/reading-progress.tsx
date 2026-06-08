@@ -23,24 +23,11 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div style={{
-      position: "fixed",
-      top: "4rem",
-      left: 0,
-      right: 0,
-      zIndex: 50,
-      height: "2px",
-      background: "transparent",
-      pointerEvents: "none",
-    }}>
+    <div className="pointer-events-none fixed inset-x-0 top-16 z-50 h-0.5 bg-transparent">
       <div
         ref={barRef}
-        style={{
-          height: "100%",
-          width: "0%",
-          background: "var(--accent-color)",
-          transition: "width 0.1s linear",
-        }}
+        className="h-full bg-accent"
+        style={{ width: "0%", transition: "width 0.1s linear" }}
       />
     </div>
   );

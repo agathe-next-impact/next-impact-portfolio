@@ -31,9 +31,9 @@ function ArticleH2({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="mt-12 mb-4 flex items-center gap-3">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent" />
-        <div className="h-1.5 w-1.5 rounded-full bg-regularblue/30" />
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lightblue/40 to-transparent" />
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-dark-gray to-transparent" />
+        <div className="h-1.5 w-1.5 bg-accent-secondary/60" />
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-dark-gray to-transparent" />
       </div>
       <h2 id={id}>{children}</h2>
     </>
@@ -48,7 +48,7 @@ function ArticleH3({ children }: { children?: React.ReactNode }) {
 
 function ArticleTable(props: React.ComponentProps<"table">) {
   return (
-    <div className="overflow-x-auto my-8 rounded-xl">
+    <div className="overflow-x-auto my-8 border border-dark-gray">
       <table {...props} />
     </div>
   )
