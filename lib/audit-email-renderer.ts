@@ -1,17 +1,21 @@
 import { marked } from "marked";
+import {
+  EMAIL,
+  CONTACT_URL,
+  SITE_URL,
+  emailButton,
+  emailButtonRow,
+  emailH1,
+  emailKicker,
+  styleMarkdownForEmail,
+} from "@/lib/email-template";
 
 /**
- * Reproduit côté serveur le même rendu que le site :
- * - AuditDashboard (score, verdict, nature)
- * - MarkdownRenderer (nettoyage, tableaux comparatifs, stack recommandée)
- * Le tout en HTML inline-style compatible email.
- * Typographies : Nunito (titres) + Inter (texte) avec fallback Arial.
+ * Reproduit côté serveur le rendu de l'audit (score, verdict, tableaux comparatifs,
+ * stack recommandée) au design system « Blueprint » : sombre, grille en bordures,
+ * libellés mono, accent indigo. Renvoie un bloc de contenu destiné à être enveloppé
+ * par `emailLayout` (en-tête / pied partagés).
  */
-
-// --- Fonts (mêmes que tailwind : googletitre = Nunito, googletexte = Inter) ---
-const FONT_TITRE = "'Nunito', Arial, sans-serif";
-const FONT_TEXTE = "'Inter', Arial, sans-serif";
-const GOOGLE_FONTS_IMPORT = `<style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');</style>`;
 
 // --- Extraction des données (même logique que audit-dashboard.tsx) ---
 function extractDashboardData(md: string) {
@@ -19,7 +23,6 @@ function extractDashboardData(md: string) {
   let score = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
   if (score > 10) score = 0;
 
-  // Nouveau format : "**Voie recommandée :** ✅ B. WordPress Headless + Next.js"
   const verdictMatch = md.match(/\*\*Voie recommandée\s*:\*\*\s*✅?\s*([^\n]+)/i);
   const verdict = verdictMatch
     ? verdictMatch[1].replace(/[*\[\]✅]/g, "").trim()
@@ -52,8 +55,6 @@ function parseAllMarkdownTables(markdown: string) {
 }
 
 // --- Extraction de la stack recommandée ---
-// Source primaire : ligne du tableau §5 commençant par "| ✅ Nom de la stack |"
-// Fallback : si le tableau est cassé, extraire depuis "**Voie recommandée :** ✅ B. <stack>"
 function parseRecommendedStack(markdown: string) {
   const tableRow = markdown.match(/\|\s*✅\s*([^|]+?)\s*\|/);
   if (tableRow) {
@@ -78,43 +79,34 @@ function cleanMarkdown(content: string) {
   return clean.trim();
 }
 
-// --- Dashboard HTML (reproduit audit-dashboard.tsx) ---
+// --- Dashboard : score + verdict en cartes bordées sombres ---
 function renderDashboardHtml(score: number, verdict: string) {
-  let scoreColor = "#ef4444";
-  let scoreBg = "#fef2f2";
-  let scoreBorder = "#fecaca";
-  if (score >= 5) { scoreColor = "#ca8a04"; scoreBg = "#fefce8"; scoreBorder = "#fde68a"; }
-  if (score >= 8) { scoreColor = "#059669"; scoreBg = "#ecfdf5"; scoreBorder = "#a7f3d0"; }
-
-  let verdictColor = "#1e40af";
-  if (verdict.includes("Accélérer")) verdictColor = "#065f46";
-  if (verdict.includes("Pivoter")) verdictColor = "#9a3412";
+  let scoreColor = "#f87171"; // rouge
+  if (score >= 5) scoreColor = "#fbbf24"; // ambre
+  if (score >= 8) scoreColor = "#4ade80"; // vert
 
   return `
-    <h1 style="font-family:${FONT_TITRE};font-size:22px;font-weight:700;text-align:center;color:#1e3a5f;margin-bottom:24px;">
-      Audit IA — Quelle techno pour votre refonte ?
-    </h1>
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border-collapse:separate;">
       <tr>
-        <td width="50%" valign="top" style="padding-right:8px;">
-          <div style="background:${scoreBg};border:2px solid ${scoreBorder};border-radius:16px;padding:24px;text-align:center;">
-            <div style="font-family:${FONT_TITRE};font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:${scoreColor};opacity:0.8;margin-bottom:8px;">
-              Indice de Modernité
+        <td width="50%" valign="top" style="padding-right:7px;">
+          <div style="background:${EMAIL.surface};border:1px solid ${EMAIL.border};border-radius:3px;padding:22px;text-align:center;">
+            <div style="font-family:${EMAIL.mono};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:${EMAIL.muted};margin-bottom:10px;">
+              Indice de modernité
             </div>
-            <div style="font-family:${FONT_TITRE};font-size:48px;font-weight:700;color:${scoreColor};line-height:1;">
-              ${score}<span style="font-size:18px;opacity:0.6;">/10</span>
+            <div style="font-family:${EMAIL.title};font-size:48px;font-weight:300;color:${scoreColor};line-height:1;">
+              ${score}<span style="font-size:18px;color:${EMAIL.faint};">/10</span>
             </div>
           </div>
         </td>
-        <td width="50%" valign="top" style="padding-left:8px;">
-          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:24px;text-align:center;">
-            <div style="font-family:${FONT_TITRE};font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:8px;">
-              Verdict Stratégique
+        <td width="50%" valign="top" style="padding-left:7px;">
+          <div style="background:${EMAIL.surface};border:1px solid ${EMAIL.border};border-radius:3px;padding:22px;text-align:center;">
+            <div style="font-family:${EMAIL.mono};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:${EMAIL.muted};margin-bottom:10px;">
+              Verdict stratégique
             </div>
-            <div style="font-family:${FONT_TITRE};display:inline-block;padding:6px 16px;border-radius:20px;font-weight:700;font-size:16px;color:${verdictColor};text-transform:uppercase;">
+            <div style="font-family:${EMAIL.mono};display:inline-block;padding:7px 14px;border:1px solid ${EMAIL.accent2};border-radius:2px;font-weight:600;font-size:13px;color:${EMAIL.fg};text-transform:uppercase;letter-spacing:0.06em;">
               ${verdict}
             </div>
-            <div style="font-family:${FONT_TEXTE};font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#94a3b8;margin-top:8px;">
+            <div style="font-family:${EMAIL.mono};font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL.faint};margin-top:10px;">
               Recommandation IA
             </div>
           </div>
@@ -124,140 +116,104 @@ function renderDashboardHtml(score: number, verdict: string) {
   `;
 }
 
-// --- Tableau comparatif HTML (reproduit ComparisonTable.tsx) ---
+// --- Tableau comparatif : grille sombre en bordures ---
 function renderComparisonTableHtml(headers: string[], rows: string[][]) {
   const thCells = headers
     .map(
       (h) =>
-        `<th style="font-family:${FONT_TITRE};padding:12px 16px;background:rgba(255,255,255,0.1);color:#ffffff;font-weight:400;text-transform:uppercase;font-size:11px;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.2);">${h}</th>`
+        `<th style="font-family:${EMAIL.mono};padding:11px 14px;background:${EMAIL.surface};color:${EMAIL.muted};font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:0.08em;border:1px solid ${EMAIL.border};text-align:left;">${h}</th>`,
     )
     .join("");
 
   const bodyRows = rows
-    .map((row, rIdx) => {
+    .map((row) => {
       const cells = row
         .map(
-          (cell) =>
-            `<td style="font-family:${FONT_TEXTE};padding:12px 16px;color:#ffffff;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.1);text-align:center;">${cell.replace(/\*+/g, "")}</td>`
+          (cell, cIdx) =>
+            `<td style="font-family:${EMAIL.body};padding:11px 14px;color:${cIdx === 0 ? EMAIL.fg : EMAIL.fgSoft};font-size:13px;border:1px solid ${EMAIL.border};text-align:left;">${cell.replace(/\*+/g, "")}</td>`,
         )
         .join("");
-      return `<tr style="background:${rIdx % 2 === 0 ? "#1e3a5f" : "#1a3352"};">${cells}</tr>`;
+      return `<tr>${cells}</tr>`;
     })
     .join("");
 
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:12px;overflow:hidden;margin:24px 0;background:#1e3a5f;border-collapse:collapse;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background:${EMAIL.panel};border-collapse:collapse;">
       <thead><tr>${thCells}</tr></thead>
       <tbody>${bodyRows}</tbody>
     </table>
   `;
 }
 
-// --- Stack recommandée HTML (reproduit RecommendedStackCard.tsx) ---
+// --- Carte stack recommandée + CTA ---
 function renderStackCardHtml(stack: string, highlights: string[]) {
   const highlightsList = highlights
-    .map((h) => `<li style="margin-bottom:4px;">${h}</li>`)
+    .map(
+      (h) =>
+        `<li style="font-family:${EMAIL.body};font-size:13px;line-height:1.6;color:${EMAIL.muted};margin-bottom:6px;">${h}</li>`,
+    )
     .join("");
 
   return `
-    <div style="max-width:500px;margin:24px auto;border:1px solid #34d399;background:#ecfdf5;border-radius:12px;padding:24px;text-align:center;">
-      <div style="font-family:${FONT_TITRE};font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#047857;margin-bottom:8px;">
+    <div style="border:1px solid ${EMAIL.border};border-left:2px solid ${EMAIL.accent2};background:${EMAIL.surface};border-radius:3px;padding:24px;margin:24px 0;text-align:center;">
+      <div style="font-family:${EMAIL.mono};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:${EMAIL.accent2};margin-bottom:10px;">
         Stack recommandée
       </div>
-      <div style="font-family:${FONT_TITRE};font-size:22px;font-weight:700;color:#064e3b;margin-bottom:12px;">
+      <div style="font-family:${EMAIL.title};font-size:22px;font-weight:400;color:${EMAIL.fg};margin-bottom:${highlights.length ? "16px" : "20px"};">
         ${stack}
       </div>
-      ${highlights.length > 0 ? `<ul style="font-family:${FONT_TEXTE};list-style:disc;text-align:left;padding-left:20px;color:#065f46;font-size:13px;line-height:1.6;margin-bottom:20px;">${highlightsList}</ul>` : ""}
-      <div style="border-top:1px solid #a7f3d0;margin-top:16px;padding-top:16px;">
-        <div style="font-family:${FONT_TITRE};font-size:14px;font-weight:700;color:#064e3b;margin-bottom:12px;">
+      ${highlights.length > 0 ? `<ul style="list-style:disc;text-align:left;padding-left:20px;margin:0 0 20px;">${highlightsList}</ul>` : ""}
+      <div style="border-top:1px solid ${EMAIL.border};margin-top:4px;padding-top:18px;">
+        <div style="font-family:${EMAIL.body};font-size:14px;color:${EMAIL.fgSoft};margin-bottom:14px;">
           Discutons de cette recommandation
         </div>
-        <a href="${CONTACT_URL}" style="font-family:${FONT_TITRE};display:inline-block;background:#ff6b6b;color:#1e3a5f;text-decoration:none;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;margin:0 6px 8px 6px;">
-          Nous contacter
-        </a>
-        <a href="${SITE_URL}" style="font-family:${FONT_TITRE};display:inline-block;background:#ffffff;color:#1e3a5f;text-decoration:none;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;border:1px solid #1e3a5f;margin:0 6px 8px 6px;">
-          Découvrir Next Impact
-        </a>
+        ${emailButtonRow([
+          emailButton(CONTACT_URL, "Nous contacter"),
+          emailButton(SITE_URL, "Découvrir Next Impact", { variant: "ghost" }),
+        ])}
       </div>
     </div>
   `;
 }
 
-// --- Header email (logo + liens) ---
-const LOGO_URL = "https://next-impact.digital/img/logo-small.png";
-const VISIO_URL = "https://calendar.app.google/Cw7TGQBzeZ1szKU86";
-const SITE_URL = "https://next-impact.digital";
-const CONTACT_URL = `${SITE_URL}/contact`;
-
-function renderEmailHeader() {
-  return `
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;border-bottom:2px solid #e5e7eb;padding-bottom:16px;">
-      <tr>
-        <td valign="middle" style="width:50%;">
-          <a href="https://next-impact.digital" style="text-decoration:none;">
-            <img src="${LOGO_URL}" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
-          </a>
-        </td>
-        <td valign="middle" style="width:50%;text-align:right;">
-          <span style="font-family:${FONT_TITRE};font-size:14px;font-weight:700;color:#1e3a5f;display:block;margin-bottom:4px;">
-            Next Impact Digital
-          </span>
-          <a href="${VISIO_URL}" style="font-family:${FONT_TEXTE};font-size:12px;color:#ff6b6b;text-decoration:none;font-weight:600;margin-right:12px;">
-            Visio
-          </a>
-          <a href="tel:0673981638" style="font-family:${FONT_TEXTE};font-size:12px;color:#1e3a5f;text-decoration:none;">
-            06 73 98 16 38
-          </a>
-        </td>
-      </tr>
-    </table>
-  `;
-}
-
-// --- Point d'entrée principal ---
+// --- Point d'entrée principal — renvoie un bloc de contenu (sans en-tête/pied) ---
 export function renderAuditEmailHtml(markdown: string, url: string): string {
   const { score, verdict } = extractDashboardData(markdown);
   const cleaned = cleanMarkdown(markdown);
   const allTables = parseAllMarkdownTables(cleaned);
   const stackData = parseRecommendedStack(markdown);
 
-  // Retirer les tableaux et la stack du markdown pour éviter les doublons
   let markdownBody = cleaned;
   allTables.forEach((tbl) => {
     markdownBody = markdownBody.replace(tbl.raw, "");
   });
   if (stackData) {
-    // Nouveau format : "### 5. Stack recommandée — comparatif" jusqu'à la fin ou prochain h3/---
     const stackSection = markdownBody.match(/###\s*\d+\.\s*Stack recommandée[\s\S]*?(?=\n###\s|\n---|$)/i);
     if (stackSection) {
       markdownBody = markdownBody.replace(stackSection[0], "");
     }
   }
 
-  // Convertir le markdown restant en HTML
-  const bodyHtml = marked.parse(`# ${url}\n\n${markdownBody}`) as string;
+  const bodyHtml = styleMarkdownForEmail(marked.parse(markdownBody) as string);
 
-  // Assembler les tableaux comparatifs
   const tablesHtml = allTables
     .map((tbl) => renderComparisonTableHtml(tbl.headers, tbl.rows))
     .join("");
 
-  // Stack recommandée
   const stackHtml =
     stackData && stackData.stack
       ? renderStackCardHtml(stackData.stack, stackData.highlights)
       : "";
 
   return `
-    ${GOOGLE_FONTS_IMPORT}
-    <div style="font-family:${FONT_TEXTE};max-width:700px;margin:0 auto;color:#1e3a5f;">
-      ${renderEmailHeader()}
-      ${renderDashboardHtml(score, verdict)}
-      <div style="font-family:${FONT_TEXTE};font-size:15px;line-height:1.8;color:#1e3a5f;">
-        ${bodyHtml}
-      </div>
-      ${tablesHtml}
-      ${stackHtml}
-    </div>
+    ${emailKicker("№ AUDIT", "Diagnostic IA")}
+    ${emailH1("Quelle techno pour votre refonte ?")}
+    <p style="font-family:${EMAIL.body};font-size:13px;line-height:1.6;color:${EMAIL.muted};margin:0 0 24px;word-break:break-all;">
+      <a href="${url}" style="color:${EMAIL.accent2};text-decoration:none;">${url}</a>
+    </p>
+    ${renderDashboardHtml(score, verdict)}
+    <div>${bodyHtml}</div>
+    ${tablesHtml}
+    ${stackHtml}
   `;
 }

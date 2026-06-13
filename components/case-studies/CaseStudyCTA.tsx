@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 
 const BTN_PRIMARY =
-  "group inline-flex h-11 w-full items-center justify-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "group inline-flex w-full items-center justify-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
 
 const CTA_TARGETS = {
   default: {

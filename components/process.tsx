@@ -80,7 +80,7 @@ const PHASES_EN: Phase[] = [
   },
 ];
 
-export default function Process() {
+export default function Process({ index = "№ 05" }: { index?: string }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const phases = isEn ? PHASES_EN : PHASES_FR;
@@ -99,7 +99,7 @@ export default function Process() {
       {/* En-tête de section */}
       <Reveal className="flex flex-col gap-4">
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-          <span>№ 04</span>
+          <span>{index}</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">{isEn ? "Method · 5 phases" : "Méthode · 5 phases"}</span>
         </div>

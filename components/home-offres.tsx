@@ -29,7 +29,7 @@ const STACKS_FR: Stack[] = [
     subtitle: "WordPress Headless + Next.js",
     title: "Site haute performance",
     price: "dès 4 000 €",
-    strengths: ["Design sans limite, < 1 s de chargement", "Contenu géré dans WordPress"],
+    strengths: ["Design sans limite, < 1 s de chargement", "Vous gérez tout dans WordPress, comme aujourd'hui"],
     target: "PME, ESS, site de croissance",
     recommended: true,
   },
@@ -54,7 +54,7 @@ const STACKS_EN: Stack[] = [
     subtitle: "WordPress Headless + Next.js",
     title: "High-speed website",
     price: "from €4,000",
-    strengths: ["Unlimited design, loads in < 1 s", "Content managed in WordPress"],
+    strengths: ["Unlimited design, loads in < 1 s", "You manage everything in WordPress, just like today"],
     target: "SME, NGO, growth site",
     recommended: true,
   },
@@ -78,7 +78,7 @@ export default function HomeOffres() {
         {/* En-tête */}
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 03"
+            index="№ 04"
             kicker={isEn ? "Offerings" : "Formules"}
             title={
               isEn ? (
@@ -138,6 +138,25 @@ export default function HomeOffres() {
             </StaggerItem>
           ))}
         </Stagger>
+
+        {/* Comment ça marche — fil rouge « garder WordPress » */}
+        <div className="border-t border-dark-gray px-6 py-5 lg:px-8">
+          <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            {isEn ? (
+              <>
+                How it works:{" "}
+                <span className="text-foreground">your WordPress stays the back-office</span>{" "}
+                — we only replace the front end.
+              </>
+            ) : (
+              <>
+                Comment ça marche :{" "}
+                <span className="text-foreground">votre WordPress reste le back-office</span>{" "}
+                — on remplace seulement la façade.
+              </>
+            )}
+          </p>
+        </div>
 
         {/* Pied — liens internes (préférés aux détails) */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">

@@ -11,15 +11,15 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Your website, designed and delivered turnkey —",
-    subHeadline: "you run your business, I handle the tech.",
+    headline: "WordPress + the modern web.",
+    subHeadline: "Beautiful, intuitive, fast.",
     description:
-      "For SMEs and social-economy organisations that want a fast, durable website without building a technical team in-house.",
+      "I keep the interface you already know and graft a bespoke front end onto it: refined design and a smooth, pleasant experience — for your visitors and for you — plus, along the way, sub-second loading. Without rebuilding everything.",
     valueProposition:
-      "Timeline and budget fixed from the start. And as a French TIH provider, 30% of the cost is deductible from your AGEFIPH contribution.",
-    ctaPrimary: { label: "Let's talk about your project", href: "https://calendar.app.google/RwZqaabSR5aDMnk46" },
+      "For SMEs and social-economy organisations. Budget and timeline fixed from the start — delivered in 6 to 10 weeks.",
+    ctaPrimary: { label: "Free AI audit — 2 min", href: "/audit-site-ia" },
     ctaSecondary: { label: "See our work", href: "/etudes-de-cas" },
-    auditTitle: "Not sure what you need yet?",
+    auditTitle: "Which stack for your project?",
     auditSubtitle: "2-minute diagnostic",
     auditDescription:
       "Take 2 minutes and get a clear recommendation — no commitment, no technical jargon.",
@@ -72,9 +72,9 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Custom websites and applications",
+    titre: "Three packages, fixed price and timeline.",
     sousTitre:
-      "Three Website tiers (Classic, Headless, Web app) and a Web & Mobile App offer on quote. The right tool for the right project, with guaranteed management autonomy.",
+      "From a modernized WordPress to a bespoke platform — you keep your admin and your team, I modernize the rest. Guaranteed performance, delivered in 6 to 10 weeks.",
     carouselLabel: "Why Next Impact?",
     budgetTitle: "What investment level fits your project?",
     budgetCards: {
@@ -276,7 +276,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Case studies",
     sousTitre:
       "Discover the Next Impact projects: WordPress sites, Headless WordPress + Next.js sites, custom web apps and mobile PWAs — across various industries.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filter by family",
     ctaLabel: "Discuss your project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -287,7 +287,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Our client work",
     sousTitre:
       "Real projects with measurable results: performance, SEO and conversion at the service of growth.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filter by industry",
     ctaLabel: "Evaluate my project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -299,7 +299,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Simple, high-performance sites",
     sousTitre:
       "Sites their owners run day to day with WordPress — simply, without any technical skills.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Browse projects",
     ctaLabel: "See a demo",
     ctaHref: "/demo",
@@ -310,7 +310,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Technical case studies",
     sousTitre:
       "Optimized classic WordPress sites, Headless WordPress + Next.js, custom web apps and mobile PWAs. REST API, WPGraphQL, PostgreSQL. Technical details for every project.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filter by architecture",
     ctaLabel: "Explore documentation",
     ctaHref: "/documentation",

@@ -138,7 +138,7 @@ export default function HeadlessExplainer() {
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            <span>№ 02</span>
+            <span>№ 06</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
             <span className="text-mid-gray">{isEn ? "Stack comparison" : "Comparatif technique"}</span>
           </div>

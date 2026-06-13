@@ -1,5 +1,20 @@
 import { sendMail } from "@/lib/sendMail";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
+import {
+  EMAIL,
+  VISIO_URL,
+  emailButton,
+  emailCard,
+  emailDivider,
+  emailH1,
+  emailH2,
+  emailKicker,
+  emailKvTable,
+  emailLayout,
+  emailLead,
+  emailParagraph,
+  emailSteps,
+} from "@/lib/email-template";
 
 export async function POST(req: Request) {
   const { name, email, message, formData, type, subject, locale } = await req.json();
@@ -20,291 +35,89 @@ export async function POST(req: Request) {
       }];
     }
 
-    // Email admin
-    const adminHtml = isCahierDesCharges
-      ? `
-        <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;">
-          <h2 style="font-family:'Nunito',Arial,sans-serif;color:#1e3a5f;">Nouveau cahier des charges reçu</h2>
-          <table style="border-collapse:collapse;width:100%;margin-bottom:24px;">
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Nom</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Email</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;"><a href="mailto:${email}">${email}</a></td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Organisation</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;">${formData.organisation_name || "—"}</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 12px;font-weight:bold;background:#f0f4f8;border:1px solid #d0d7de;">Message</td>
-              <td style="padding:8px 12px;border:1px solid #d0d7de;">${message || "—"}</td>
-            </tr>
-          </table>
-          <p style="font-size:14px;color:#666;">Le cahier des charges complet est joint en PDF.</p>
-        </div>
-      `
-      : `
-        <h3>Message reçu via le site</h3>
-        ${subject ? `<p><strong>Objet :</strong> ${subject}</p>` : ""}
-        <p><strong>Nom :</strong> ${name}</p>
-        <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Message :</strong><br>${(message || "").replace(/\n/g, "<br>")}</p>
-      `;
+    const escapedMsg = (message || "").replace(/\n/g, "<br>");
+    const mailLink = (e: string) =>
+      `<a href="mailto:${e}" style="color:${EMAIL.accent2};text-decoration:none;">${e}</a>`;
 
-    // Email utilisateur — locale-aware
-    const userHtml = isCahierDesCharges && isEn
-      ? `
-        <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');</style>
-        <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;background:#ffffff;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:0;background:#020F59;border-radius:12px 12px 0 0;padding:0;">
-            <tr>
-              <td style="padding:24px 32px;">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td valign="middle" style="width:50%;">
-                      <a href="https://next-impact.digital/en" style="text-decoration:none;">
-                        <img src="https://next-impact.digital/img/logo-blanc-carre.png" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
-                      </a>
-                    </td>
-                    <td valign="middle" style="width:50%;text-align:right;">
-                      <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86" style="font-family:'Nunito',Arial,sans-serif;font-size:12px;color:#FF6B6B;text-decoration:none;font-weight:700;margin-right:16px;">
-                        Video call
-                      </a>
-                      <a href="tel:+33673981638" style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#D0DCF2;text-decoration:none;">
-                        +33 6 73 98 16 38
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-          <div style="height:4px;background:linear-gradient(90deg,#FF6B6B 0%,#F29F05 50%,#F2E57E 100%);"></div>
-          <div style="padding:40px 32px 32px;">
-            <h1 style="font-family:'Nunito',Arial,sans-serif;font-size:24px;font-weight:700;color:#020F59;margin:0 0 8px;">
-              Hi ${name},
-            </h1>
-            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 20px;">
-              Thank you for your trust.
-            </p>
-            <div style="background:#f0f4ff;border-left:4px solid #1F54BF;border-radius:0 8px 8px 0;padding:20px 24px;margin:0 0 24px;">
-              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0 0 8px;">
-                We have received your <strong>project specifications</strong>. The complete PDF is attached.
-              </p>
-              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0;">
-                Our team will review it carefully and get back to you shortly to discuss your project.
-              </p>
-            </div>
-            <h2 style="font-family:'Nunito',Arial,sans-serif;font-size:16px;font-weight:700;color:#020F59;margin:0 0 16px;text-transform:uppercase;letter-spacing:1px;">
-              Next steps
-            </h2>
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">1</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Review</strong> — We study your specifications in detail
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">2</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Discussion</strong> — We get back to you to refine the requirements
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">3</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Proposal</strong> — You receive a personalized quote
-                  </p>
-                </td>
-              </tr>
-            </table>
-            <hr style="border:none;border-top:1px solid #D0DCF2;margin:0 0 24px;" />
-            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 16px;text-align:center;">
-              Want to discuss it now?
-            </p>
-            <p style="text-align:center;margin:0 0 32px;">
-              <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-                 style="font-family:'Nunito',Arial,sans-serif;display:inline-block;background:#FF6B6B;color:#ffffff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.5px;">
-                Book a video call
-              </a>
-            </p>
-          </div>
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#020F59;border-radius:0 0 12px 12px;">
-            <tr>
-              <td style="padding:24px 32px;text-align:center;">
-                <p style="font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;color:#D0DCF2;margin:0 0 8px;">
-                  Next Impact Digital
-                </p>
-                <p style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#719ED9;margin:0 0 4px;">
-                  <a href="mailto:agathe@next-impact.digital" style="color:#FF6B6B;text-decoration:none;">agathe@next-impact.digital</a>
-                  &nbsp;&middot;&nbsp;
-                  <a href="tel:+33673981638" style="color:#D0DCF2;text-decoration:none;">+33 6 73 98 16 38</a>
-                </p>
-                <p style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#719ED9;margin:8px 0 0;">
-                  <a href="https://next-impact.digital/en" style="color:#719ED9;text-decoration:none;">next-impact.digital</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      `
-      : isCahierDesCharges
-      ? `
-        <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');</style>
-        <div style="font-family:'Inter',Arial,sans-serif;max-width:700px;margin:0 auto;background:#ffffff;">
-          <!-- Header -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:0;background:#020F59;border-radius:12px 12px 0 0;padding:0;">
-            <tr>
-              <td style="padding:24px 32px;">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td valign="middle" style="width:50%;">
-                      <a href="https://next-impact.digital" style="text-decoration:none;">
-                        <img src="https://next-impact.digital/img/logo-blanc-carre.png" alt="Next Impact Digital" height="40" style="height:40px;width:auto;display:block;" />
-                      </a>
-                    </td>
-                    <td valign="middle" style="width:50%;text-align:right;">
-                      <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86" style="font-family:'Nunito',Arial,sans-serif;font-size:12px;color:#FF6B6B;text-decoration:none;font-weight:700;margin-right:16px;">
-                        Visio
-                      </a>
-                      <a href="tel:0673981638" style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#D0DCF2;text-decoration:none;">
-                        06 73 98 16 38
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+    // ─── Email admin (interne, FR) ───────────────────────────────────────────
+    const adminContent = isCahierDesCharges
+      ? emailKicker("№ ADMIN", "Cahier des charges") +
+        emailH1("Nouveau cahier des charges") +
+        emailKvTable([
+          ["Nom", name],
+          ["Email", mailLink(email)],
+          ["Organisation", formData?.organisation_name || "—"],
+          ["Message", escapedMsg || "—"],
+        ]) +
+        emailParagraph("Le cahier des charges complet est joint en PDF.")
+      : emailKicker("№ ADMIN", "Message site") +
+        emailH1("Nouveau message") +
+        emailKvTable([
+          ...(subject ? ([["Objet", subject]] as [string, string][]) : []),
+          ["Nom", name],
+          ["Email", mailLink(email)],
+          ["Message", escapedMsg || "—"],
+        ]);
 
-          <!-- Bandeau accent -->
-          <div style="height:4px;background:linear-gradient(90deg,#FF6B6B 0%,#F29F05 50%,#F2E57E 100%);"></div>
+    const adminHtml = emailLayout({
+      contentHtml: adminContent,
+      preheader: isCahierDesCharges ? `Cahier des charges — ${name}` : `Message — ${name}`,
+    });
 
-          <!-- Corps -->
-          <div style="padding:40px 32px 32px;">
-            <h1 style="font-family:'Nunito',Arial,sans-serif;font-size:24px;font-weight:700;color:#020F59;margin:0 0 8px;">
-              Bonjour ${name},
-            </h1>
-            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 20px;">
-              Merci pour votre confiance.
-            </p>
+    // ─── Email utilisateur — locale-aware ────────────────────────────────────
+    const userContent = isCahierDesCharges
+      ? emailKicker("№ 01", isEn ? "Specifications" : "Cahier des charges") +
+        emailH1(isEn ? `Hi ${name},` : `Bonjour ${name},`) +
+        emailLead(isEn ? "Thank you for your trust." : "Merci pour votre confiance.") +
+        emailCard(
+          `<p style="font-family:${EMAIL.body};font-size:15px;line-height:1.7;color:${EMAIL.fgSoft};margin:0;">${
+            isEn
+              ? `We have received your <strong style="color:${EMAIL.fg};">project specifications</strong>. The complete PDF is attached — our team will review it carefully and get back to you shortly.`
+              : `Nous avons bien reçu votre <strong style="color:${EMAIL.fg};">cahier des charges</strong>. Le PDF complet est joint — notre équipe va l'étudier attentivement et vous recontactera rapidement.`
+          }</p>`,
+          { accent: true },
+        ) +
+        emailH2(isEn ? "Next steps" : "Prochaines étapes") +
+        emailSteps(
+          isEn
+            ? [
+                ["Review", "We study your specifications in detail"],
+                ["Discussion", "We get back to you to refine the requirements"],
+                ["Proposal", "You receive a personalized quote"],
+              ]
+            : [
+                ["Analyse", "Nous étudions votre cahier des charges en détail"],
+                ["Échange", "Nous vous recontactons pour affiner vos besoins"],
+                ["Proposition", "Vous recevez un devis personnalisé"],
+              ],
+        ) +
+        emailDivider() +
+        emailParagraph(isEn ? "Want to discuss it now?" : "Vous souhaitez en discuter dès maintenant ?") +
+        `<div>${emailButton(VISIO_URL, isEn ? "Book a video call" : "Réserver un appel visio")}</div>`
+      : emailKicker("№ 01", isEn ? "Message received" : "Message reçu") +
+        emailH1(isEn ? `Hi ${name},` : `Bonjour ${name},`) +
+        emailParagraph(isEn ? "We have received your message:" : "Nous avons bien reçu votre message :") +
+        emailCard(
+          `<p style="font-family:${EMAIL.body};font-size:15px;line-height:1.7;color:${EMAIL.fgSoft};margin:0;">${escapedMsg}</p>`,
+          { accent: true },
+        ) +
+        emailParagraph(
+          isEn
+            ? "Our team will get back to you shortly.<br>Thanks for reaching out — the Next Impact Digital team."
+            : "Notre équipe vous répondra dans les plus brefs délais.<br>Merci de votre confiance — l'équipe Next Impact Digital.",
+        );
 
-            <!-- Card confirmation -->
-            <div style="background:#f0f4ff;border-left:4px solid #1F54BF;border-radius:0 8px 8px 0;padding:20px 24px;margin:0 0 24px;">
-              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0 0 8px;">
-                Nous avons bien reçu votre <strong>cahier des charges</strong>. Vous trouverez ci-joint le PDF complet de votre document.
-              </p>
-              <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#020F59;margin:0;">
-                Notre équipe va l'étudier attentivement et vous recontactera dans les plus brefs délais pour discuter de votre projet.
-              </p>
-            </div>
-
-            <!-- Étapes -->
-            <h2 style="font-family:'Nunito',Arial,sans-serif;font-size:16px;font-weight:700;color:#020F59;margin:0 0 16px;text-transform:uppercase;letter-spacing:1px;">
-              Prochaines étapes
-            </h2>
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">1</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Analyse</strong> — Nous étudions votre cahier des charges en détail
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">2</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Échange</strong> — Nous vous recontactons pour affiner vos besoins
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;vertical-align:top;width:40px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:#1F54BF;color:#ffffff;font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;text-align:center;line-height:32px;">3</div>
-                </td>
-                <td style="padding:12px 16px;vertical-align:middle;">
-                  <p style="font-family:'Inter',Arial,sans-serif;font-size:14px;line-height:1.6;color:#021373;margin:0;">
-                    <strong>Proposition</strong> — Vous recevez un devis personnalisé
-                  </p>
-                </td>
-              </tr>
-            </table>
-
-            <!-- Séparateur -->
-            <hr style="border:none;border-top:1px solid #D0DCF2;margin:0 0 24px;" />
-
-            <!-- CTA -->
-            <p style="font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.7;color:#021373;margin:0 0 16px;text-align:center;">
-              Vous souhaitez en discuter dès maintenant ?
-            </p>
-            <p style="text-align:center;margin:0 0 32px;">
-              <a href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-                 style="font-family:'Nunito',Arial,sans-serif;display:inline-block;background:#FF6B6B;color:#ffffff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.5px;">
-                Réserver un appel visio
-              </a>
-            </p>
-          </div>
-
-          <!-- Footer -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#020F59;border-radius:0 0 12px 12px;">
-            <tr>
-              <td style="padding:24px 32px;text-align:center;">
-                <p style="font-family:'Nunito',Arial,sans-serif;font-size:14px;font-weight:700;color:#D0DCF2;margin:0 0 8px;">
-                  Next Impact Digital
-                </p>
-                <p style="font-family:'Inter',Arial,sans-serif;font-size:12px;color:#719ED9;margin:0 0 4px;">
-                  <a href="mailto:agathe@next-impact.digital" style="color:#FF6B6B;text-decoration:none;">agathe@next-impact.digital</a>
-                  &nbsp;&middot;&nbsp;
-                  <a href="tel:0673981638" style="color:#D0DCF2;text-decoration:none;">06 73 98 16 38</a>
-                </p>
-                <p style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#719ED9;margin:8px 0 0;">
-                  <a href="https://next-impact.digital" style="color:#719ED9;text-decoration:none;">next-impact.digital</a>
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      `
-      : isEn
-      ? `
-        <h3>Hi ${name},</h3>
-        <p>We have received your message:</p>
-        <blockquote style="border-left:2px solid #ccc;padding-left:10px;">
-          ${message}
-        </blockquote>
-        <p>Our team will get back to you shortly.</p>
-        <p>Thanks for reaching out,<br>The Next Impact Digital team</p>
-      `
-      : `
-        <h3>Bonjour ${name},</h3>
-        <p>Nous avons bien reçu votre message :</p>
-        <blockquote style="border-left:2px solid #ccc;padding-left:10px;">
-          ${message}
-        </blockquote>
-        <p>Notre équipe vous répondra dans les plus brefs délais.</p>
-        <p>Merci de votre confiance,<br>L'équipe Next Impact Digital</p>
-      `;
+    const userHtml = emailLayout({
+      contentHtml: userContent,
+      locale,
+      preheader: isCahierDesCharges
+        ? isEn
+          ? "Your project specifications — Next Impact Digital"
+          : "Votre cahier des charges — Next Impact Digital"
+        : isEn
+        ? "We received your message — Next Impact Digital"
+        : "Confirmation de réception — Next Impact Digital",
+    });
 
     await Promise.all([
       sendMail({

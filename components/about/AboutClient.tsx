@@ -66,8 +66,6 @@ export default function AboutClient() {
         </Reveal>
       </BlueprintSection>
 
-      <Separator />
-
       {/* Manifeste — piliers adaptatifs */}
       <AnimatePresence mode="wait">
         <motion.div key={`manifeste-${key}`} {...FADE}>

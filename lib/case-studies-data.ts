@@ -57,12 +57,48 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 
 const META: CaseStudyMeta[] = [
   {
+    id: "22",
+    slug: "arguin-marine",
+    clientType: "pme",
+    clientName: "Arguin Marine",
+    imageUrl: "",
+    galleryUrl: "/img/desktop-screen-arguinmarine.jpg",
+    date: { month: 6, year: 2026 },
+    technologies: ["WordPress", "Full Site Editing"],
+    website: "https://www.arguinmarine.fr",
+    youtubeVideoId: "ash0Q83Z9gQ",
+  },
+  {
+    id: "21",
+    slug: "la-petite-vitrine",
+    clientType: "independant",
+    clientName: "La Petite Vitrine",
+    imageUrl: "",
+    galleryUrl: "/img/desktop-screen-lapetitevitrine.jpg",
+    date: { month: 6, year: 2026 },
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel Blob", "Vercel"],
+    website: "https://lapetitevitrine.com",
+    youtubeVideoId: "lAtVrN9Xh_8",
+  },
+  {
+    id: "20",
+    slug: "peer-to-peer",
+    clientType: "ess",
+    clientName: "Peer to Peer",
+    imageUrl: "",
+    galleryUrl: "/img/desktop-screen-peertopeer.jpg",
+    date: { month: 6, year: 2026 },
+    technologies: ["Next.js", "React", "TypeScript", "Stockage local (navigateur)", "Tailwind CSS", "Vercel"],
+    website: "https://peer-to-peer.fr",
+    youtubeVideoId: "VAB_u0kvR64",
+  },
+  {
     id: "19",
     slug: "panorama-pub",
     clientType: "pme",
     clientName: "Panorama Pub",
-    imageUrl: "",
-    galleryUrl: "",
+    imageUrl: "/img/desktop-screen-panoramapub.png",
+    galleryUrl: "/img/desktop-screen-panoramapub.png",
     date: { month: 5, year: 2026 },
     technologies: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind CSS", "Vercel"],
     website: "https://panorama-pub.com",
@@ -288,6 +324,69 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  "arguin-marine": {
+    title: "Arguin Marine",
+    description:
+      "Création du site vitrine WordPress d'Arguin Marine, service de location de bateaux haut de gamme sur le Bassin d'Arcachon : une présence en ligne simple, soignée et facile à administrer.",
+    detailedDescription: `Arguin Marine propose de la location de bateaux haut de gamme sur le Bassin d'Arcachon. L'entreprise avait besoin d'une présence en ligne simple et soignée, à la hauteur de son positionnement, pour présenter son activité et faciliter la prise de contact.\n\nJ'ai créé un site vitrine WordPress clair et épuré, qui met en avant l'offre de location, les bateaux et les informations pratiques, avec une prise de contact directe. Le site a été pensé pour rester facile à administrer côté client et pour bien se positionner sur les recherches locales (Bassin d'Arcachon, Arcachon, location de bateau).\n\nLe résultat est une vitrine professionnelle, responsive et rapide, qui donne à Arguin Marine une image à la hauteur de son positionnement haut de gamme et un canal de contact simple pour ses clients.`,
+    objectives: [
+      "Donner à Arguin Marine une présence en ligne simple, soignée et professionnelle",
+      "Présenter l'offre de location de bateaux et les informations pratiques",
+      "Faciliter la prise de contact avec les clients",
+      "Livrer un site facile à administrer et optimisé pour les recherches locales",
+    ],
+    results: [
+      "Site vitrine WordPress clair, épuré et responsive",
+      "Offre de location et informations pratiques mises en avant",
+      "Prise de contact directe pour les clients",
+      "Site simple à administrer côté client",
+    ],
+    galleryAlt: "Site vitrine d'Arguin Marine, location de bateaux sur le Bassin d'Arcachon",
+    tags: ["PME", "Nautisme", "Site vitrine", "WordPress"],
+    duration: "3 semaines",
+  },
+  "la-petite-vitrine": {
+    title: "La Petite Vitrine",
+    description:
+      "Conception de La Petite Vitrine, un service packagé de mise en ligne pour indépendants, TPE et artisans : des modèles pensés par métier, intégrés avec votre contenu et publiés après validation, avec hébergement et maintenance gérés.",
+    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. On part d'un modèle adapté à la profession (santé, commerce, services, bien-être, loisirs), j'y intègre le contenu du client, et le site est mis en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nSous le capot, c'est une application Next.js (React, TypeScript, Tailwind) : un catalogue de modèles thématiques, un pipeline d'export et de publication des sites, et un stockage des contenus sur Vercel Blob. L'hébergement et la maintenance sont gérés de bout en bout — le client n'a rien à installer ni à administrer. RGPD par défaut : aucune publicité, aucun traceur.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
+    objectives: [
+      "Offrir aux indépendants et TPE une présence en ligne professionnelle, sans la complexité d'un site sur-mesure ni le bricolage d'un éditeur DIY",
+      "Industrialiser la création de mini-sites par métier à partir de modèles prêts à publier",
+      "Prendre en charge tout le cycle : intégration du contenu, mise en ligne, hébergement et maintenance",
+      "Garantir un cadre clair : prix fixe, RGPD, sans publicité ni traceur",
+    ],
+    results: [
+      "Offre packagée et lisible : 650 € HT la mise en ligne, dès 14 € HT/mois hébergement et maintenance",
+      "Plateforme Next.js avec catalogue de modèles par métier et pipeline de publication",
+      "Sites livrés clés en main, sans installation ni administration côté client",
+      "Programme pilote de 10 projets (santé mentale et artisans) pour documenter le service",
+    ],
+    galleryAlt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
+    tags: ["Indépendants", "TPE", "Produit", "Web App", "Next.js"],
+    duration: "À compléter",
+  },
+  "peer-to-peer": {
+    title: "Peer to Peer",
+    description:
+      "Création de Peer to Peer, une plateforme libre d'auto-observation et de soutien au rétablissement en santé mentale : 14 outils utilisables directement dans le navigateur, sans compte et sans aucune donnée envoyée.",
+    detailedDescription: `Peer to Peer est une initiative à impact de Next Impact : mettre à disposition de toutes et tous, gratuitement, une boîte à outils d'auto-observation et de soutien au rétablissement en santé mentale, inspirée de la pair-aidance et de méthodes et guides existants. L'enjeu central : proposer des outils sensibles — questionnaires, échelles, parcours, carnets — dans un cadre qui protège absolument l'intimité des personnes.\n\nJ'ai conçu une application web pensée « local-first » : aucune création de compte, rien à installer, et surtout aucune donnée envoyée à un serveur. Toutes les saisies de la personne restent dans son propre navigateur, le temps de la session. Cette exigence de confidentialité a guidé toute l'architecture — le traitement se fait intégralement côté client, ce qui est à la fois un parti pris éthique et un gage de confiance pour un public vulnérable.\n\nLa plateforme regroupe 14 outils répartis en deux familles : 9 questionnaires et échelles d'auto-observation (Inventaire de Burns, échelle RAS, pensées négatives, attaques de panique, plan de crise…) et 5 parcours et carnets guidés (directives anticipées, composer avec la psychose, La Fleur de Patricia…). Trois portes d'entrée sont proposées — choisir directement un outil, suivre un parcours guidé, ou explorer librement — pour respecter le rythme de chacun.\n\nLe ton, sans jugement, et le cadrage sont soignés : les outils ne posent aucun diagnostic, ne remplacent pas un professionnel de santé et orientent vers les ressources d'aide. Le résultat est une plateforme sobre, rapide et rassurante, qui rend des outils de rétablissement accessibles à tous, sans barrière et sans collecte de données.`,
+    objectives: [
+      "Rendre accessibles, gratuitement et sans barrière, des outils d'auto-observation en santé mentale",
+      "Garantir une confidentialité absolue : aucun compte, aucune donnée envoyée à un serveur",
+      "Proposer plusieurs portes d'entrée (outil direct, parcours guidé, exploration libre) pour respecter le rythme de chacun",
+      "Inscrire les outils dans un cadre responsable, sans diagnostic et orientant vers l'aide",
+    ],
+    results: [
+      "14 outils d'auto-observation en accès libre (9 questionnaires/échelles, 5 parcours/carnets)",
+      "Traitement 100 % local : les saisies restent dans le navigateur, aucune donnée transmise",
+      "Aucun compte ni installation requis — une porte d'entrée immédiate",
+      "Une expérience sobre et rassurante, adaptée à un public sensible",
+    ],
+    galleryAlt: "Plateforme Peer to Peer d'auto-observation en santé mentale",
+    tags: ["Impact", "Santé mentale", "Web App", "Local-first", "Next.js"],
+    duration: "1 mois",
+  },
   "cafe-citoyen": {
     title: "Café citoyen",
     description:
@@ -695,6 +794,69 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "arguin-marine": {
+    title: "Arguin Marine",
+    description:
+      "Built the WordPress brochure site for Arguin Marine, a high-end boat-rental service on the Arcachon Basin: a simple, polished online presence that's easy to manage.",
+    detailedDescription: `Arguin Marine offers high-end boat rentals on the Arcachon Basin. The business needed a simple, polished online presence — one that matched its positioning — to showcase its activity and make it easy to get in touch.\n\nI built a clean, uncluttered WordPress brochure site that puts the rental offer, the boats and the practical information front and centre, with a direct way to make contact. The site was designed to stay easy for the client to administer and to rank well on local searches (Arcachon Basin, Arcachon, boat rental).\n\nThe result is a professional, responsive and fast brochure site that gives Arguin Marine an image worthy of its high-end positioning and a simple contact channel for its customers.`,
+    objectives: [
+      "Give Arguin Marine a simple, polished and professional online presence",
+      "Showcase the boat-rental offer and the practical information",
+      "Make it easy for customers to get in touch",
+      "Deliver a site that's easy to administer and optimized for local searches",
+    ],
+    results: [
+      "Clean, uncluttered and responsive WordPress brochure site",
+      "Rental offer and practical information put front and centre",
+      "Direct contact channel for customers",
+      "Site that's simple for the client to administer",
+    ],
+    galleryAlt: "Arguin Marine brochure site, boat rental on the Arcachon Basin",
+    tags: ["SMB", "Boating", "Brochure site", "WordPress"],
+    duration: "TBD",
+  },
+  "la-petite-vitrine": {
+    title: "La Petite Vitrine",
+    description:
+      "Built La Petite Vitrine, a packaged go-live service for freelancers, very small businesses and artisans: profession-specific templates, filled with your content and published after validation, with hosting and maintenance handled.",
+    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. La Petite Vitrine was born from that gap — to offer a third path, simple and guided.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. We start from a template suited to the profession (health, retail, services, wellness, leisure), I integrate the client's content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nUnder the hood it's a Next.js application (React, TypeScript, Tailwind): a catalogue of themed templates, an export-and-publish pipeline for the sites, and content stored on Vercel Blob. Hosting and maintenance are handled end to end — the client has nothing to install or administer. GDPR by default: no advertising, no trackers.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
+    objectives: [
+      "Give freelancers and very small businesses a professional online presence, without the complexity of a custom build or the hassle of a DIY builder",
+      "Industrialize the creation of small profession-based sites from ready-to-publish templates",
+      "Own the whole cycle: content integration, go-live, hosting and maintenance",
+      "Guarantee a clear framework: fixed price, GDPR, no advertising or trackers",
+    ],
+    results: [
+      "Clear, packaged offer: €650 excl. VAT to go live, from €14 excl. VAT/month for hosting and maintenance",
+      "Next.js platform with a profession-based template catalogue and a publishing pipeline",
+      "Turnkey sites delivered, with no installation or admin on the client's side",
+      "Pilot programme of 10 projects (mental health and artisans) to document the service",
+    ],
+    galleryAlt: "La Petite Vitrine — go-live service for small profession-based sites",
+    tags: ["Freelancers", "Small business", "Product", "Web App", "Next.js"],
+    duration: "TBD",
+  },
+  "peer-to-peer": {
+    title: "Peer to Peer",
+    description:
+      "Built Peer to Peer, a free self-observation and mental-health recovery support platform: 14 tools that run right in the browser, with no account and no data ever sent.",
+    detailedDescription: `Peer to Peer is an impact initiative by Next Impact: to give everyone free access to a toolbox for self-observation and mental-health recovery support, drawing on peer support and on existing methods and guides. The core challenge: offering sensitive tools — questionnaires, scales, pathways, journals — within a framework that absolutely protects people's privacy.\n\nI built a "local-first" web application: no account to create, nothing to install, and above all no data sent to any server. Everything a person enters stays in their own browser, for the duration of the session. This privacy requirement shaped the entire architecture — all processing happens client-side, which is both an ethical stance and a mark of trust for a vulnerable audience.\n\nThe platform brings together 14 tools in two families: 9 self-observation questionnaires and scales (Burns Inventory, RAS scale, negative thoughts, panic attacks, crisis plan…) and 5 guided pathways and journals (advance directives, living with psychosis, La Fleur de Patricia…). Three entry points are offered — pick a tool directly, follow a guided pathway, or explore freely — to respect each person's pace.\n\nThe non-judgmental tone and careful framing matter: the tools make no diagnosis, don't replace a healthcare professional and point users toward support resources. The result is a calm, fast and reassuring platform that makes recovery tools accessible to everyone, with no barriers and no data collection.`,
+    objectives: [
+      "Make mental-health self-observation tools freely accessible, with no barriers",
+      "Guarantee absolute privacy: no account, no data sent to any server",
+      "Offer several entry points (direct tool, guided pathway, free exploration) to respect each person's pace",
+      "Frame the tools responsibly — no diagnosis, with signposting to support",
+    ],
+    results: [
+      "14 freely accessible self-observation tools (9 questionnaires/scales, 5 pathways/journals)",
+      "100% local processing: entries stay in the browser, no data transmitted",
+      "No account or installation required — an immediate entry point",
+      "A calm, reassuring experience suited to a sensitive audience",
+    ],
+    galleryAlt: "Peer to Peer mental-health self-observation platform",
+    tags: ["Impact", "Mental health", "Web App", "Local-first", "Next.js"],
+    duration: "TBD",
+  },
   "cafe-citoyen": {
     title: "Café Citoyen",
     description:
@@ -1101,6 +1263,21 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  "arguin-marine": [
+    { value: "Vitrine", label: "Présence en ligne clé en main" },
+    { value: "WordPress", label: "Site simple à administrer" },
+    { value: "Arcachon", label: "Location de bateaux haut de gamme" },
+  ],
+  "la-petite-vitrine": [
+    { value: "+10", label: "Templates déployables" },
+    { value: "-1 mois", label: "de développement" },
+    { value: "GEO", label: "Optimisé" },
+  ],
+  "peer-to-peer": [
+    { value: "14", label: "Outils en accès libre" },
+    { value: "100%", label: "Local — aucune donnée envoyée" },
+    { value: "0 compte", label: "Sans inscription ni installation" },
+  ],
   "panorama-pub": [
     { value: "1er", label: "Annuaire du secteur en France" },
     { value: "2 mois", label: "Du concept à la mise en ligne" },
@@ -1199,6 +1376,21 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  "arguin-marine": [
+    { value: "Brochure", label: "Turnkey online presence" },
+    { value: "WordPress", label: "Easy for the client to manage" },
+    { value: "Arcachon", label: "High-end boat rental" },
+  ],
+  "la-petite-vitrine": [
+    { value: "€650", label: "Site live, integration included" },
+    { value: "€14/mo", label: "Hosting & maintenance handled" },
+    { value: "GDPR", label: "No ads, no trackers" },
+  ],
+  "peer-to-peer": [
+    { value: "14", label: "Freely accessible tools" },
+    { value: "100%", label: "Local — no data sent" },
+    { value: "0 account", label: "No sign-up, no install" },
+  ],
   "panorama-pub": [
     { value: "1st", label: "Industry directory in France" },
     { value: "2 months", label: "From concept to launch" },

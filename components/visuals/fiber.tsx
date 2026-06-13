@@ -114,7 +114,7 @@ export function Fiber({
           key={`${c.id}-b`}
           d={c.d}
           fill="none"
-          stroke={c.gold ? "hsl(var(--accent-2) / 0.3)" : "hsl(var(--dark-gray))"}
+          stroke={c.gold ? "hsl(var(--accent-2) / 0.01)" : "hsl(var(--dark-gray) / 0.5)"}
           strokeWidth={c.width}
         />
       ))}

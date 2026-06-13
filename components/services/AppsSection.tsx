@@ -146,7 +146,7 @@ export default function AppsSection() {
       {/* En-tête */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
-          index="№ 05"
+          index="№ 08"
           kicker={copy.sectionLabel}
           title={copy.title}
           description={copy.subtitle}
@@ -225,49 +225,45 @@ export default function AppsSection() {
         ))}
       </div>
 
-      {/* Réalisations
-      <div style={{ marginBottom: 40 }}>
-        <div
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 9,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--muted-color)",
-            marginBottom: 24,
-          }}
-        >
+      {/* Réalisations — preuve (web app & mobile) */}
+      <div className="border-b border-dark-gray px-6 py-10 lg:px-8 lg:py-12">
+        <div className="mb-6 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
           {copy.proofsLabel}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+        <div className="grid gap-px bg-dark-gray md:grid-cols-2">
           {copy.proofs.map((proof) => (
             <Link
               key={proof.slug}
               href={`/etudes-de-cas/${proof.slug}` as Parameters<typeof Link>[0]["href"]}
-              style={{ display: "block", textDecoration: "none" }}
+              className="group flex flex-col bg-obsidian transition-colors hover:bg-jet"
             >
-              <div style={{ border: "1px solid var(--rule)", overflow: "hidden" }}>
-                <div style={{ position: "relative", aspectRatio: "16/9" }}>
-                  <Image
-                    src={proof.imageUrl}
-                    alt={proof.title}
-                    fill
-                    style={{ objectFit: "cover", objectPosition: "top" }}
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                  />
-                </div>
-                <div style={{ padding: "20px 24px", borderTop: "1px solid var(--rule)" }}>
-                  <h4 className="ni-serif" style={{ fontSize: 18, marginBottom: 6, color: "var(--ink)" }}>
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <Image
+                  src={proof.imageUrl}
+                  alt={proof.title}
+                  fill
+                  className="object-cover object-top transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+              </div>
+              <div className="flex items-start justify-between gap-4 border-t border-dark-gray p-5 lg:p-6">
+                <div>
+                  <h4 className="text-lg font-light tracking-tight text-foreground">
                     {proof.title}
                   </h4>
-                  <p style={{ fontSize: 13, color: "var(--ink-2)" }}>{proof.tagline}</p>
+                  <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    {proof.tagline}
+                  </p>
                 </div>
+                <ArrowRight
+                  size={14}
+                  className="mt-1 shrink-0 text-accent-secondary transition-transform group-hover:translate-x-0.5"
+                />
               </div>
             </Link>
           ))}
         </div>
       </div>
-      */}
 
       {/* Bandeau OETH + CTA */}
       <div className="flex flex-col gap-8 px-6 py-12 lg:px-8 lg:py-16">

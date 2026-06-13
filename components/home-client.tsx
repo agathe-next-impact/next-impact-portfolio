@@ -12,12 +12,24 @@ const FeaturedRealisation = dynamic(() => import("./featured-realisation"), {
   loading: () => <div style={{ minHeight: 400 }} />,
 });
 
+const HomeTestimonials = dynamic(() => import("./home-testimonials"), {
+  loading: () => <div style={{ minHeight: 400 }} />,
+});
+
 const HomeOffres = dynamic(() => import("./home-offres"), {
   loading: () => <div style={{ minHeight: 400 }} />,
 });
 
+const HomeStudio = dynamic(() => import("./home-studio"), {
+  loading: () => <div style={{ minHeight: 500 }} />,
+});
+
 const HomeTihTeaser = dynamic(() => import("./home-tih-teaser"), {
   loading: () => <div style={{ minHeight: 120 }} />,
+});
+
+const HomePerf = dynamic(() => import("./home-perf"), {
+  loading: () => <div style={{ minHeight: 400 }} />,
 });
 
 const HomeDiagnostic = dynamic(() => import("./home-diagnostic"), {
@@ -33,31 +45,36 @@ export default function HomeClient() {
     <main className="flex-1">
       {/* § 01 — Hero */}
       <Hero />
-      <Separator />
 
-      {/* § 02 — Réalisation phare */}
+      {/* § 02 — Réalisation phare + preuve sociale (preuve UI/UX) */}
       <FeaturedRealisation />
       <Separator />
 
-      {/* § 03 — Offres : 3 stacks */}
+      {/* § 03 — Témoignages clients */}
+      <HomeTestimonials />
+
+      {/* § 04 — Offres : 3 stacks */}
       <HomeOffres />
       <Separator />
 
-      {/* § 04 — Méthode */}
+      {/* § 05 — Méthode */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
         <Process />
       </BlueprintSection>
       <Separator />
 
-      {/* § 05 — Avantage TIH */}
+      {/* § 06 — Le studio (présence humaine) */}
+      <HomeStudio />
+      {/* § 07 — Avantage TIH */}
       <HomeTihTeaser />
+      {/* § 08 — Preuve de performance (argument secondaire, socle technique) */}
+      <HomePerf />
       <Separator />
 
-      {/* § 06 — Diagnostic de stack */}
+      {/* § 09 — Diagnostic de stack */}
       <HomeDiagnostic />
-      <Separator />
 
-      {/* § 07 — CTA final */}
+      {/* § 10 — CTA final */}
       <HomeCta />
     </main>
   );

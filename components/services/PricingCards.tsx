@@ -9,6 +9,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 type Tier = {
+  slug: string;
   name: string;
   tech: string;
   price: string;
@@ -30,6 +31,7 @@ type Tier = {
 function getTiers(isEn: boolean): Tier[] {
   return [
     {
+      slug: "forfait-classique",
       name: isEn ? "HIGH-PERFORMANCE BROCHURE SITE" : "SITE VITRINE PERFORMANT",
       tech: isEn ? "on WordPress, bespoke theme" : "sur WordPress, thème sur-mesure",
       price: isEn ? "From €2,250" : "Depuis 2 250 €",
@@ -60,6 +62,7 @@ function getTiers(isEn: boolean): Tier[] {
       ctaHref: "/contact",
     },
     {
+      slug: "forfait-headless",
       name: isEn ? "HIGH-SPEED WEBSITE" : "SITE HAUTE PERFORMANCE",
       tech: "WordPress Headless + Next.js",
       price: isEn ? "From €4,000" : "Depuis 4 000 €",
@@ -92,6 +95,7 @@ function getTiers(isEn: boolean): Tier[] {
       ctaHref: "/contact",
     },
     {
+      slug: "forfait-webapp",
       name: isEn ? "CUSTOM BUSINESS PLATFORM" : "PLATEFORME MÉTIER SUR-MESURE",
       tech: isEn ? "dedicated architecture, multisite / high-volume" : "architecture dédiée, multisites / forte volumétrie",
       price: isEn ? "From €6,500" : "Depuis 6 500 €",
@@ -142,7 +146,7 @@ export function PricingCards() {
       {/* En-tête */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
-          index="№ 02"
+          index="№ 04"
           kicker={isEn ? "Pricing" : "Tarifs"}
           title={
             isEn ? (
@@ -159,8 +163,9 @@ export function PricingCards() {
         {tiers.map((tier) => (
           <StaggerItem key={tier.name} className="h-full">
             <div
+              id={tier.slug}
               className={cn(
-                "group relative flex h-full flex-col p-6 transition-colors hover:bg-jet lg:p-8",
+                "group relative flex h-full scroll-mt-24 flex-col p-6 transition-colors hover:bg-jet lg:p-8",
                 "border-b border-dark-gray md:border-b-0",
                 "md:border-r md:border-dark-gray md:[&:nth-child(3n)]:border-r-0",
                 tier.highlight && "bg-jet",

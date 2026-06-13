@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import HeroMockup from "@/components/HeroMockup";
+import HeroLivePreview from "@/components/hero-live-preview";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
@@ -30,22 +30,28 @@ export default function Hero() {
       backdrop={
         <>
           <AuroraGlow intensity="subtle" />
-          <div className="absolute inset-0 opacity-50">
+          {/** <div className="absolute inset-0 opacity-50">
             <Fiber hubX={0.8} hubY={0.5} />
           </div>
+          */}
         </>
       }
-      innerClassName="px-6 py-16 lg:px-10 lg:py-24"
+      innerClassName="px-6 py-16 lg:px-10 lg:py-24 border-b border-dark-gray"
     >
       {/* En-tête */}
       <Reveal className="flex flex-col gap-4">
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
           <span>№ 01</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
+          <span className="text-mid-gray">
+            {locale === "en"
+              ? "Web studio · WordPress & custom"
+              : "Studio web · WordPress & sur-mesure"}
+          </span>
         </div>
-        <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+        <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           <WordAppear text={variant.headline} />{" "}
-          <span className="text-accent-secondary">{variant.subHeadline}</span>
+          <span className="block text-accent-secondary">{variant.subHeadline}</span>
         </h1>
       </Reveal>
 
@@ -56,9 +62,21 @@ export default function Hero() {
           <p className="max-w-xl font-inter-tight text-base leading-relaxed text-foreground">
             {variant.description}
           </p>
-          <p className="mt-3 max-w-xl font-inter-tight text-sm italic leading-relaxed text-mid-gray">
-            {variant.valueProposition}
-          </p>
+          {/* Réassurance — marqueurs lisibles */}
+          <div className="mt-5 flex flex-wrap gap-2">
+            {(locale === "en"
+              ? ["SMEs & social economy", "Fixed budget & timeline", "Delivered in 6–10 weeks"]
+              : ["PME & ESS", "Budget & délai fixés", "Livraison en 6–10 semaines"]
+            ).map((chip) => (
+              <span
+                key={chip}
+                className="inline-flex items-center gap-1.5 border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
+              >
+                <span className="h-1 w-1 rounded-full bg-accent-secondary" />
+                {chip}
+              </span>
+            ))}
+          </div>
 
           <div className="mt-9 flex flex-wrap gap-3">
             {isExternal ? (
@@ -114,24 +132,13 @@ export default function Hero() {
 
         {/* Mockup */}
         <Reveal delay={0.16} className="relative">
-          <div className="rounded-md bg-overlay-gray p-2 md:p-4">
-            <div className="overflow-hidden rounded-sm">
-              <HeroMockup />
-            </div>
-          </div>
+          <HeroLivePreview />
 
           {/* Badge disponible */}
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">
             <span className="status-dot" />
             <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
               {t("available")}
-            </span>
-          </div>
-
-          {/* Mention TIH */}
-          <div className="mt-3 flex justify-end">
-            <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray">
-              {t("tihMention")}
             </span>
           </div>
         </Reveal>

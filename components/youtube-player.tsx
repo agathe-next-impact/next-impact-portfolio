@@ -30,6 +30,11 @@ export function getYoutubeId(url: string): string | null {
   return null;
 }
 
+// YouTube ne génère pas toujours toutes les tailles de miniature (maxresdefault manque
+// souvent, et renvoie alors un placeholder gris 120×90). On descend la qualité jusqu'à
+// hqdefault, qui est toujours disponible.
+const THUMBNAIL_QUALITIES = ["maxresdefault", "sddefault", "hqdefault"] as const;
+
 export function YoutubePlayer({
   url,
   videoId,
@@ -40,15 +45,15 @@ export function YoutubePlayer({
   label = "Demo video",
 }: YoutubePlayerProps) {
   const [loaded, setLoaded] = useState(false);
-  const [thumbnailQuality, setThumbnailQuality] = useState<"maxresdefault" | "hqdefault">(
-    "maxresdefault",
-  );
+  const [qualityIndex, setQualityIndex] = useState(0);
   const id = videoId ?? (url ? getYoutubeId(url) : null);
 
   if (!id) return null;
 
   const isShort = aspect === "short";
-  const thumbnailUrl = `https://img.youtube.com/vi/${id}/${thumbnailQuality}.jpg`;
+  const thumbnailUrl = `https://img.youtube.com/vi/${id}/${THUMBNAIL_QUALITIES[qualityIndex]}.jpg`;
+  const downgradeThumbnail = () =>
+    setQualityIndex((index) => Math.min(index + 1, THUMBNAIL_QUALITIES.length - 1));
   const embedUrl = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
 
   return (
@@ -81,7 +86,11 @@ export function YoutubePlayer({
               src={thumbnailUrl}
               alt=""
               loading="lazy"
-              onError={() => setThumbnailQuality("hqdefault")}
+              onError={downgradeThumbnail}
+              onLoad={(event) => {
+                // YouTube renvoie un placeholder gris 120×90 quand la taille demandée n'existe pas
+                if (event.currentTarget.naturalWidth <= 120) downgradeThumbnail();
+              }}
               className="absolute inset-0 h-full w-full object-cover object-center"
             />
             {/* Voile discret au survol pour faire ressortir la vignette */}

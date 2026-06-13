@@ -1,8 +1,7 @@
 "use client";
 import PageLayout from "@/components/page-layout";
 import dynamic from "next/dynamic";
-import { BlueprintSection, Separator } from "@/components/aspect/section";
-import { Reveal } from "@/components/ui/reveal";
+import { BlueprintSection } from "@/components/aspect/section";
 import { Sonar } from "@/components/visuals/sonar";
 import { BrandLogo } from "@/components/brand-logo";
 import { Link } from "@/i18n/navigation";
@@ -189,46 +188,38 @@ export default function AuditSiteIaClient() {
             ? "Test your site for a full report with personalized recommendations — optimized WordPress, Headless, custom web app or mobile/PWA."
             : "Testez votre site pour un rapport complet avec des recommandations personnalisées — WordPress optimisé, Headless, web app sur-mesure ou app mobile/PWA."
         }
-      >
-        {/* Lien de retour — kicker mono */}
-        <BlueprintSection tone="obsidian" innerClassName="px-6 py-6 lg:px-8">
-          <Link
-            href="/outils"
-            className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
-          >
-            <ArrowLeft size={12} />
-            {isEn ? "Back to tools" : "Retour aux outils"}
-          </Link>
-        </BlueprintSection>
-        <Separator />
-
-        {/* Outil d'audit — panneau encadré avec backdrop « scan » Sonar discret */}
-        <BlueprintSection
-          tone="obsidian"
-          ticks
-          innerClassName="px-6 py-12 lg:px-8 lg:py-16"
-          backdrop={
-            <div className="absolute inset-0 opacity-[0.18] [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_70%)]">
-              <Sonar />
-            </div>
-          }
-        >
-          <Reveal className="mx-auto max-w-2xl">
+        ticks
+        backdrop={
+          <div className="absolute inset-0 opacity-[0.18] [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_70%)]">
+            <Sonar />
+          </div>
+        }
+        headerSlot={
+          <div className="max-w-2xl border-t border-dark-gray pt-8">
             <GeminiSearch
               onResult={() => {}}
               prompt={isEn ? prompt_en : prompt_fr}
               systemInstruction={isEn ? system_instruction_en : system_instruction_fr}
               defaultUrl={url}
             />
-            <div className="mx-auto mt-12 grid max-w-md grid-cols-2">
-              <div className="hidden flex-col items-center justify-center border border-dark-gray bg-jet/40 p-6 md:flex">
-                <BrandLogo src="/img/logo-wordpress.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={120} height={120} />
-              </div>
-              <div className="hidden flex-col items-center justify-center border border-l-0 border-dark-gray bg-jet/40 p-6 md:flex">
-                <BrandLogo src="/img/logo-nextjs.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={120} height={120} />
-              </div>
+          </div>
+        }
+      >
+        {/* Sous le héros — retour aux outils + technologies */}
+        <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <Link
+              href="/outils"
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
+            >
+              <ArrowLeft size={12} />
+              {isEn ? "Back to tools" : "Retour aux outils"}
+            </Link>
+            <div className="flex items-center gap-6 opacity-70">
+              <BrandLogo src="/img/logo-wordpress.webp" srcLight="/img/logo-wordpress-small.webp" alt="Logo WordPress" width={36} height={36} />
+              <BrandLogo src="/img/logo-nextjs.webp" srcLight="/img/logo-nextjs.webp" alt="Logo Next.js" width={48} height={48} />
             </div>
-          </Reveal>
+          </div>
         </BlueprintSection>
       </PageLayout>
     </main>

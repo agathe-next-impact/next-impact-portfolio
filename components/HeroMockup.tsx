@@ -34,7 +34,13 @@ function useCountUp(target: number, duration = 1000, delay = 0) {
  * slot : passez une preview (`children`) pour l'intégrer dynamiquement à
  * dimensions réduites ; sinon, une maquette animée placeholder s'affiche.
  */
-export default function HeroMockup({ children }: { children?: ReactNode }) {
+export default function HeroMockup({
+  children,
+  url = "nextimpact.fr",
+}: {
+  children?: ReactNode;
+  url?: string;
+}) {
   return (
     <div className="flex flex-col overflow-hidden border border-dark-gray bg-jet">
       {/* Chrome navigateur */}
@@ -46,7 +52,7 @@ export default function HeroMockup({ children }: { children?: ReactNode }) {
         </div>
         <div className="flex flex-1 items-center gap-1.5 border border-dark-gray bg-jet px-2.5 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-[#2a7a2a]" />
-          <span className="font-mono text-[10px] tracking-[0.04em] text-mid-gray">nextimpact.fr</span>
+          <span className="font-mono text-[10px] tracking-[0.04em] text-mid-gray">{url}</span>
         </div>
       </div>
 

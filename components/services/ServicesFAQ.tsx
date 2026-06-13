@@ -17,7 +17,7 @@ export default function ServicesFAQ({ faqs }: { faqs: { question: string; answer
           : "Quelques réponses aux questions les plus courantes sur les solutions."
       }
       sectionId="solutions-faq"
-      index="№ 06"
+      index="№ 10"
     />
   );
 }

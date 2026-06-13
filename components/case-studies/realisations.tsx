@@ -20,6 +20,27 @@ interface ProjectMeta {
 
 const PROJECTS_META: ProjectMeta[] = [
   {
+    id: 26,
+    type: "wordpress",
+    image: "/img/desktop-screen-arguinmarine.jpg",
+    link: "/etudes-de-cas/arguin-marine",
+    tab: ["wordpress"],
+  },
+  {
+    id: 25,
+    type: "webapp",
+    image: "/img/desktop-screen-lapetitevitrine.jpg",
+    link: "/etudes-de-cas/la-petite-vitrine",
+    tab: ["webapp"],
+  },
+  {
+    id: 24,
+    type: "webapp",
+    image: "/img/desktop-screen-peertopeer.jpg",
+    link: "/etudes-de-cas/peer-to-peer",
+    tab: ["webapp"],
+  },
+  {
     id: 23,
     type: "landing",
     image: "/img/desktop-screen-sejours-hermitage.jpg",
@@ -189,6 +210,24 @@ interface ProjectContent {
 }
 
 const CONTENT_FR: Record<number, ProjectContent> = {
+  26: {
+    title: "Arguin Marine",
+    alt: "Site vitrine d'Arguin Marine, location de bateaux sur le Bassin d'Arcachon",
+    description:
+      "Vitrine WordPress d'un service de location de bateaux haut de gamme sur le Bassin d'Arcachon.",
+  },
+  25: {
+    title: "La Petite Vitrine",
+    alt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
+    description:
+      "Service packagé de mise en ligne de mini-sites par métier pour indépendants et TPE.",
+  },
+  24: {
+    title: "Peer to Peer",
+    alt: "Plateforme Peer to Peer d'auto-observation en santé mentale",
+    description:
+      "Plateforme libre d'auto-observation en santé mentale, 100 % locale et sans compte.",
+  },
   23: {
     title: "Séjours à L'Hermitage",
     alt: "Landing de séjours dans un Tiers Lieu rural",
@@ -311,6 +350,24 @@ const CONTENT_FR: Record<number, ProjectContent> = {
 };
 
 const CONTENT_EN: Record<number, ProjectContent> = {
+  26: {
+    title: "Arguin Marine",
+    alt: "Arguin Marine brochure site, boat rental on the Arcachon Basin",
+    description:
+      "WordPress brochure site for a high-end boat-rental service on the Arcachon Basin.",
+  },
+  25: {
+    title: "La Petite Vitrine",
+    alt: "La Petite Vitrine — go-live service for small profession-based sites",
+    description:
+      "A packaged go-live service for small profession-based sites, for freelancers and very small businesses.",
+  },
+  24: {
+    title: "Peer to Peer",
+    alt: "Peer to Peer mental-health self-observation platform",
+    description:
+      "A free, fully local mental-health self-observation platform — no account required.",
+  },
   23: {
     title: "L'Hermitage Stays",
     alt: "Landing page — stays at a rural Tiers Lieu",
@@ -448,7 +505,7 @@ interface RealisationsProps {
 const TAB_KEYS = ["landing", "webapp", "headless", "wordpress"] as const;
 type TabKey = typeof TAB_KEYS[number];
 
-export default function Realisations({ count, defaultTab = "webapp" }: RealisationsProps) {
+export default function Realisations({ count, defaultTab = "headless" }: RealisationsProps) {
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const t = useTranslations("realisations");
   const locale = useLocale() as Locale;
@@ -474,8 +531,8 @@ export default function Realisations({ count, defaultTab = "webapp" }: Realisati
                   : "bg-jet text-mid-gray hover:bg-ebony hover:text-foreground",
               )}
             >
-              <span>{t(`tabs.${tab}`)}</span>
-              <span className={cn("font-mono text-[9px] tracking-[0.05em]", isActive ? "opacity-60" : "opacity-50")}>
+              <span className="text-inherit">{t(`tabs.${tab}`)}</span>
+              <span className={cn("font-mono text-[9px] tracking-[0.05em] text-inherit", isActive ? "opacity-100" : "opacity-50")}>
                 {projectCount}
               </span>
             </button>

@@ -36,8 +36,8 @@ export function NeonArcs({ className }: { className?: string }) {
           ) : (
             <motion.circle
               key={i}
-              cx="60"
-              cy="60"
+              cx="220"
+              cy="100"
               r="40"
               strokeWidth="0.7"
               style={{ transformOrigin: "60px 60px" }}
@@ -49,14 +49,7 @@ export function NeonArcs({ className }: { className?: string }) {
         )}
       </g>
 
-      <circle cx="60" cy="60" r="14" fill="none" stroke="hsl(var(--accent-champagne))" strokeWidth="0.5" opacity="0.5" />
-      <circle
-        cx="60"
-        cy="60"
-        r="2"
-        fill="hsl(var(--accent-2))"
-        style={{ filter: "drop-shadow(0 0 3px hsl(var(--accent-2) / 0.85))" }}
-      />
+
     </svg>
   );
 }

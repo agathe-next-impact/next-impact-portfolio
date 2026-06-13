@@ -13,7 +13,7 @@
   --obsidian:       0 0% 2%;
   --jet:            240 10% 4%;
   --dark-gray:      0 0% 14%;
-  --mid-gray:       0 0% 51%;
+  --mid-gray:       0 0% 62%;
   --overlay-gray:   0 0% 20% / 0.27;
   --ebony:          251 14% 15%;
   --charcoal:       0 0% 21%;
@@ -546,7 +546,7 @@ body {
     --secondary: 251 14% 15%;             /* ebony */
     --secondary-foreground: 0 0% 100%;
     --muted: 240 10% 4%;                  /* jet */
-    --muted-foreground: 0 0% 51%;         /* mid-gray */
+    --muted-foreground: 0 0% 62%;         /* mid-gray (remonté de 51% pour lisibilité dark) */
     --accent: 251 14% 15%;                /* ebony */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
@@ -606,7 +606,9 @@ body {
     @apply border-border;
   }
   body {
-    @apply text-regularblue;
+    /* Couleur de texte de base theme-aware (foreground), pas un bleu fixe legacy.
+       En .light, surchargé plus bas par `.light body { color: var(--ink) }`. */
+    color: hsl(var(--foreground));
   }
   h1, h2, h3, h4, h5, h6, a {
     @apply font-normal py-1 font-googletitre;
@@ -637,7 +639,11 @@ body {
     line-height: 1.5;
   }
   p, span, li, input, textarea, label {
-    @apply font-googletexte font-normal text-mediumblue;
+    /* Hériter la couleur du parent (theme-aware) plutôt que d'imposer un bleu Suisse fixe :
+       les éléments nus suivent ainsi le thème, les composants gardent la main via leurs
+       classes utilitaires, et la prose (.doc-prose/.article-prose) via ses propres règles. */
+    @apply font-googletexte font-normal;
+    color: inherit;
     line-height: 1.7;
   }
   a {

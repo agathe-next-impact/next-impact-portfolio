@@ -24,15 +24,15 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Votre site web",
-    subHeadline: " - conçu et livré clé en main",
+    headline: "WordPress + le web moderne.",
+    subHeadline: "Beau, intuitif, rapide.",
     description:
-      "Pour les PME et structures de l'ESS qui veulent un site rapide et durable, sans monter d'équipe technique en interne.",
+      "Je garde l'interface que vous connaissez et je lui greffe un front sur-mesure : un design soigné, une navigation fluide et agréable — pour vos visiteurs comme pour vous — et, au passage, un chargement sous la seconde. Sans tout reconstruire.",
     valueProposition:
-      "Délai et budget fixés dès le départ. Et en tant que prestataire TIH, 30 % du coût est déductible de votre contribution AGEFIPH.",
-    ctaPrimary: { label: "Discutons de votre projet", href: "https://calendar.app.google/RwZqaabSR5aDMnk46" },
+      "Pour les PME et structures de l'ESS. Budget et délai fixés dès le départ — livraison en 6 à 10 semaines.",
+    ctaPrimary: { label: "Audit IA gratuit — 2 min", href: "/audit-site-ia" },
     ctaSecondary: { label: "Voir des réalisations", href: "/etudes-de-cas" },
-    auditTitle: "Pas encore sûr de votre besoin ?",
+    auditTitle: "Quelle stack pour votre projet ?",
     auditSubtitle: "Diagnostic en 2 minutes",
     auditDescription:
       "Faites le point en 2 minutes et obtenez une recommandation claire — sans engagement et sans jargon technique.",
@@ -111,9 +111,9 @@ export interface ServicesPageVariant {
 
 export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Sites web et applications sur-mesure",
+    titre: "Trois forfaits, prix et délai garantis.",
     sousTitre:
-      "Trois forfaits Sites web (Classique, Headless, Web app) et une offre Applications web & mobile sur-mesure. Le bon outil pour le bon projet, avec une autonomie de gestion garantie.",
+      "Du WordPress modernisé à la plateforme sur-mesure — vous gardez votre admin et votre équipe, je modernise le reste. Performance garantie, livraison en 6 à 10 semaines.",
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel niveau d'investissement pour votre projet ?",
     budgetCards: {
@@ -326,7 +326,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Études de cas",
     sousTitre:
       "Découvrez les réalisations Next Impact : sites WordPress, sites Headless WordPress + Next.js, web apps sur-mesure et applications mobiles PWA — pour divers secteurs d'activité.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filtrer par famille",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -337,7 +337,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Nos réalisations clients",
     sousTitre:
       "Des projets concrets avec des résultats mesurables : performance, SEO et conversion au service de la croissance.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filtrer par secteur",
     ctaLabel: "Évaluer mon projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -349,7 +349,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Des sites simples et performants",
     sousTitre:
       "Des sites que leurs propriétaires gèrent au quotidien avec WordPress — simplement, sans compétence technique.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Explorer les projets",
     ctaLabel: "Voir une démo",
     ctaHref: "/demo",
@@ -360,7 +360,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
     titre: "Réalisations techniques",
     sousTitre:
       "Sites WordPress classiques optimisés, Headless WordPress + Next.js, web apps sur-mesure et PWA mobiles. API REST, WPGraphQL, PostgreSQL. Détails techniques de chaque projet.",
-    defaultTab: "webapp",
+    defaultTab: "headless",
     tabsLabel: "Filtrer par architecture",
     ctaLabel: "Explorer la documentation",
     ctaHref: "/documentation",
@@ -396,7 +396,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
     manifesteIntro:
       "WordPress propulse plus de 40 % du web. Pour beaucoup de projets, il reste le bon socle — quand on le modernise. Mais quand l'enjeu n'est plus éditorial mais applicatif (marketplace, plateforme métier, outil mobile, simulateur), WordPress atteint ses limites. Dans ce cas, il faut construire autre chose, avec la même promesse d'autonomie : une admin sur-mesure pour que vous gardiez la main sur vos contenus, vos données et vos utilisateurs.",
     manifesteAccroche:
-      "Next Impact, c'est deux savoir-faire complémentaires : moderniser les sites WordPress et bâtir des applications sur-mesure. Le bon outil pour le bon projet.",
+      "Moderniser WordPress avec des technos récentes.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
@@ -429,7 +429,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       },
     ],
     citation:
-      "WordPress n'est pas le problème. C'est ce qu'on en fait qui peut l'être — et c'est ce que je modernise. Quand il n'est pas la bonne réponse, je construis autre chose.",
+      "Le choix d'une techno, c'est la traduction fidèle au monde réel en solution digitale.",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:

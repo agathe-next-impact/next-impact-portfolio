@@ -62,7 +62,7 @@ export function ServicesComparisonTable() {
       >
         <div className="flex items-baseline gap-5">
           <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            № 03
+            № 05
           </span>
           <span className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
             {labels.title}

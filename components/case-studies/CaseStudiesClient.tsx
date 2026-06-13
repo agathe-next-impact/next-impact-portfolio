@@ -65,7 +65,6 @@ export default function CaseStudiesClient() {
         </Reveal>
       </BlueprintSection>
 
-      <Separator />
 
       {/* Grille des réalisations */}
       <AnimatePresence mode="wait">

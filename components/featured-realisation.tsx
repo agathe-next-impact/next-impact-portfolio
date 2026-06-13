@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { YoutubePlayer } from "@/components/youtube-player";
@@ -53,9 +54,25 @@ const COPY: Record<Locale, Copy> = {
   },
 };
 
+// Clients réels (cf. études de cas) — roster typographique, lisible sur fond sombre
+// quel que soit le format des logos d'origine.
+const CLIENTS = [
+  "Panorama Pub",
+  "Proditec",
+  "Sowee",
+  "Mediatico",
+  "L'Hermitage",
+  "Infralliance",
+  "Salon de la Carrosserie",
+  "Senza Nature",
+  "ERP Services",
+  "Wagner Hamisky",
+];
+
 export default function FeaturedRealisation() {
   const locale = useLocale() as Locale;
   const copy = COPY[locale] ?? COPY.fr;
+  const isEn = locale === "en";
 
   return (
     <BlueprintSection tone="obsidian">
@@ -63,6 +80,7 @@ export default function FeaturedRealisation() {
         {/* En-tête : kicker (badge) + titre + accroche & contexte */}
         <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
+            index="№ 02"
             kicker={copy.badge}
             title="Panorama Pub"
             description={
@@ -105,13 +123,49 @@ export default function FeaturedRealisation() {
         </div>
 
         {/* CTA */}
-        <div className="flex flex-wrap gap-3 px-6 py-8 lg:px-8">
+        <div className="flex flex-wrap gap-3 border-b border-dark-gray px-6 py-8 lg:px-8">
           <Link href="/etudes-de-cas/panorama-pub" className={BTN_PRIMARY}>
             {copy.ctaPrimary}
           </Link>
           <Link href="/contact" className={BTN_GHOST}>
             {copy.ctaSecondary}
           </Link>
+        </div>
+
+        {/* Preuve sociale — compteur + métrique perf réelle + roster clients */}
+        <div className="px-6 py-10 lg:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-light tracking-tight text-foreground">+25</span>
+                <span className="max-w-[140px] font-mono text-[10px] uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
+                  {isEn ? "projects shipped since 2020" : "projets livrés depuis 2020"}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-3 border-dark-gray sm:border-l sm:pl-10">
+                <span className="text-3xl font-light tracking-tight text-foreground">98/100</span>
+                <span className="max-w-[150px] font-mono text-[10px] uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
+                  {isEn ? "PageSpeed reached (Proditec, 45 → 98)" : "PageSpeed atteint (Proditec, 45 → 98)"}
+                </span>
+              </div>
+            </div>
+            <Link
+              href="/etudes-de-cas"
+              className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+            >
+              {isEn ? "All case studies" : "Toutes les études de cas"}
+              <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <p className="mt-8 border-t border-dark-gray pt-6 font-mono text-[11px] leading-[2.2] tracking-[0.04em] text-mid-gray">
+            {CLIENTS.map((name, i) => (
+              <span key={name}>
+                {i > 0 && <span className="px-2.5 text-accent-secondary/50">·</span>}
+                {name}
+              </span>
+            ))}
+          </p>
         </div>
       </Reveal>
     </BlueprintSection>

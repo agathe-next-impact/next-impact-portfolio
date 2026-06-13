@@ -21,20 +21,20 @@ export function AuditContextualBanner() {
 
       <div className="min-w-[12rem] flex-1">
         <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
-          {isEn ? "Is your current site performing?" : "Votre site actuel est-il performant ?"}
+          {isEn ? "Which stack for your project?" : "Quelle stack pour votre projet ?"}
         </h3>
         <p className="font-inter-tight text-sm text-mid-gray">
           {isEn
-            ? "Compare your site's performance with a Headless site."
-            : "Comparez les performances de votre site avec celles d'un site Headless."}
+            ? "Answer a few questions and get a clear recommendation in 2 minutes."
+            : "Répondez à quelques questions et obtenez une recommandation claire en 2 minutes."}
         </p>
       </div>
 
       <Link
-        href="/audit-site-ia"
+        href="/services/eligibilite"
         className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-accent-deep bg-accent px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-accent-foreground no-underline transition-colors hover:bg-accent/90"
       >
-        {isEn ? "Start my free audit" : "Lancer mon audit gratuit"}
+        {isEn ? "Run the diagnostic" : "Lancer le diagnostic"}
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
       </Link>
     </Reveal>
