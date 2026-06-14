@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from "@/components/json-ld";
 import CaseStudiesClient from "@/components/case-studies/CaseStudiesClient";
+import { BlueprintSection } from "@/components/aspect/section";
+import { AuditPromoBanner } from "@/components/audit/audit-promo-banner";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les 6 heures
@@ -63,6 +65,10 @@ export default async function CaseStudiesPage({
       />
       <main>
         <CaseStudiesClient />
+        {/* Maillage : inviter à situer son propre site par rapport aux projets. */}
+        <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
+          <AuditPromoBanner variant="caseStudy" />
+        </BlueprintSection>
       </main>
     </>
   );

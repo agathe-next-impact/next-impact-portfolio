@@ -4,6 +4,8 @@ import { generatePageMetadata } from "@/lib/metadata"
 import { ServiceJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import ServicesClient from "@/components/services/ServicesClient"
 import { getServicesPageVariants } from "@/lib/homepage-profiles"
+import { BlueprintSection } from "@/components/aspect/section"
+import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import type { Locale } from "@/i18n/routing"
 
 export async function generateMetadata({
@@ -84,6 +86,10 @@ export default async function ServicesPage({
         }))}
       />
       <ServicesClient />
+      {/* Maillage : orienter ceux qui hésitent sur la stack vers l'audit. */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
+        <AuditPromoBanner variant="services" />
+      </BlueprintSection>
     </main>
   )
 }

@@ -196,10 +196,10 @@
     "breadcrumbRoi": "ROI simulator"
   },
   "auditPage": {
-    "metaTitle": "Free audit: should you migrate to Headless WordPress?",
-    "metaDescription": "Test your WordPress site for free. Personalized report with headless migration recommendations, projected ROI and performance gains.",
+    "metaTitle": "Free website audit — a clear diagnosis in 2 minutes",
+    "metaDescription": "Analyze your site across 4 axes — performance, SEO, accessibility, conversion — and get a concrete recommendation: optimize what you have, rebuild, go Headless or scope a business application.",
     "breadcrumbHome": "Home",
-    "breadcrumbAudit": "AI website audit"
+    "breadcrumbAudit": "Website audit"
   },
   "demoPage": {
     "metaTitle": "Demos — Websites, web apps and mobile applications",

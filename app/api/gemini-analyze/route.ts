@@ -50,36 +50,35 @@ export async function POST(req: NextRequest) {
       try {
         console.warn(`Tentative avec le modèle: ${modelName}`);
         
-        // Configuration stateless : chaque appel est indépendant, sans historique
+        // Configuration stateless : chaque appel est indépendant, sans historique.
+        // generationConfig + safetySettings portés sur le modèle (et non en 2e
+        // argument de generateContent, qui ne les accepte pas dans le SDK).
         const model = genAI.getGenerativeModel({
           model: modelName,
           systemInstruction,
-          // Pas de cachedContent pour garantir une analyse fraîche à chaque fois
+          generationConfig: {
+            temperature: 0.2, // Déterminisme accru pour extraction factuelle
+            topP: 0.85, // Réduit pour limiter l'interprétation créative
+            topK: 20, // Réduit pour forcer des choix plus consensuels
+            maxOutputTokens: 8192,
+          },
+          safetySettings: [
+            { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+            { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+            { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+            { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+          ],
+          // Grounding via Google Search : Gemini lit la page en temps réel au lieu
+          // d'halluciner depuis le nom de domaine. (Type absent du SDK v0.24 → cast.)
+          tools: [{ googleSearch: {} } as unknown as never],
         });
 
-        const generationConfig = { 
-          temperature: 0.2, // Déterminisme accru pour extraction factuelle
-          topP: 0.85, // Réduit pour limiter l'interprétation créative
-          topK: 20, // Réduit pour forcer des choix plus consensuels
-          maxOutputTokens: 8192 
-        };
-        
-        const safetySettings = [
-          { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-          { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
-          { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
-          { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-        ];
-
-        // Appel stateless : génération unique sans historique de conversation
-        // Remplacer TOUTES les occurrences de {$url} ou **url** dans le prompt
+        // Appel stateless : génération unique sans historique de conversation.
+        // Remplacer TOUTES les occurrences de {$url} ou **url** dans le prompt.
         const fullPrompt = prompt.replace(/\{\$url\}|\*\*url\*\*/g, normalizedUrl);
-        
-        // Logger une partie du prompt pour vérifier le remplacement
-        const promptPreview = fullPrompt.substring(0, 200);
-        console.warn(`[${requestId}] Prompt preview: ${promptPreview}...`);
-        
-        const result = await model.generateContent(fullPrompt, { generationConfig, safetySettings });
+        console.warn(`[${requestId}] Prompt preview: ${fullPrompt.substring(0, 200)}...`);
+
+        const result = await model.generateContent(fullPrompt);
         
         const responseText = result.response.text();
         

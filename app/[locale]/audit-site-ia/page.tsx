@@ -1,13 +1,35 @@
 import { Suspense } from "react";
-import AuditSiteIaClient from "@/components/gemini/audit-site-ia-client";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
+import { getAuditPageContent } from "@/lib/audit-page-content";
+import PageLayout from "@/components/page-layout";
+import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import { Reveal } from "@/components/ui/reveal";
+import { Link } from "@/i18n/navigation";
+import { Sonar } from "@/components/visuals/sonar";
+import { BrandLogo } from "@/components/brand-logo";
 import type { Locale } from "@/i18n/routing";
 
-// Revalidate toutes les 24 heures
+import AuditExperience from "./_components/AuditExperience";
+import {
+  ExempleResultat,
+  PourQui,
+  Preuves,
+  CommentLireVerdict,
+  LimitesAudit,
+  AuditFaq,
+  CtaFinal,
+} from "./_components/sections";
+
+// Revalidate toutes les 24 heures (contenu statique indexable).
 export const revalidate = 86400;
+
+const BTN_PRIMARY =
+  "inline-flex h-12 items-center gap-2 rounded-sm border border-charcoal bg-vermilion px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
 
 export async function generateMetadata({
   params,
@@ -24,35 +46,26 @@ export async function generateMetadata({
       locale === "en"
         ? [
             "free website audit",
-            "Headless audit",
-            "Headless WordPress migration",
-            "AI website audit",
+            "website diagnosis",
+            "WordPress audit",
+            "Core Web Vitals audit",
             "Headless WordPress",
           ]
         : [
             "audit site web gratuit",
-            "audit Headless",
-            "migration WordPress Headless",
-            "audit IA site web",
+            "diagnostic site web",
+            "audit WordPress",
+            "audit Core Web Vitals",
             "WordPress Headless",
           ],
     locale,
   });
 }
 
-
-
-
 function LoadingFallback() {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "50vh" }}>
-      <div style={{
-        width: 32, height: 32,
-        border: "2px solid var(--rule)",
-        borderTopColor: "var(--ink)",
-        borderRadius: "50%",
-        animation: "spin 0.8s linear infinite",
-      }} />
+    <div className="flex min-h-[12rem] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-dark-gray border-t-accent-secondary" />
     </div>
   );
 }
@@ -64,55 +77,111 @@ export default async function AuditSiteIaPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "auditPage" });
+  const c = getAuditPageContent(locale);
+
   const breadcrumbItems = [
     { name: t("breadcrumbHome"), url: "/" },
     { name: t("breadcrumbAudit"), url: "/audit-site-ia" },
   ];
 
-  const faqItems =
-    locale === "en"
-      ? [
-          {
-            question: "How does the AI-powered audit work?",
-            answer:
-              "Our tool uses AI to analyze your website on several criteria: performance, SEO, accessibility and best practices. The analysis runs in real time and you get personalized recommendations.",
-          },
-          {
-            question: "Which aspects of the site are analyzed?",
-            answer:
-              "The audit reviews performance (loading speed), SEO (organic ranking), accessibility (WCAG compliance) and web development best practices.",
-          },
-          {
-            question: "Is the audit free?",
-            answer:
-              "Yes, the base audit is completely free. It gives you a comprehensive view of your site's state and recommendations to improve it.",
-          },
-        ]
-      : [
-          {
-            question: "Comment fonctionne l'audit propulsé par l'IA ?",
-            answer:
-              "Notre outil utilise l'intelligence artificielle pour analyser votre site web sur plusieurs critères : performance, SEO, accessibilité et bonnes pratiques. L'analyse est effectuée en temps réel et vous obtenez des recommandations personnalisées.",
-          },
-          {
-            question: "Quels aspects du site sont analysés ?",
-            answer:
-              "L'audit examine la performance (vitesse de chargement), le SEO (référencement naturel), l'accessibilité (conformité WCAG) et les bonnes pratiques de développement web.",
-          },
-          {
-            question: "L'audit est-il gratuit ?",
-            answer:
-              "Oui, l'audit de base est entièrement gratuit. Il vous permet d'obtenir une vue d'ensemble de l'état de votre site web et des recommandations pour l'améliorer.",
-          },
-        ];
-
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <FAQJsonLd questions={faqItems} />
-      <Suspense fallback={<LoadingFallback />}>
-        <AuditSiteIaClient />
-      </Suspense>
+      <FAQJsonLd
+        questions={c.faq.items.map((f) => ({
+          question: f.question,
+          answer: f.answer,
+        }))}
+      />
+
+      <main>
+        <PageLayout
+          titre={c.hero.title}
+          sousTitre={c.hero.subtitle}
+          secNo="№ 01"
+          ticks
+          backdrop={
+            <div className="absolute inset-0 opacity-[0.18] [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_70%)]">
+              <Sonar />
+            </div>
+          }
+          headerSlot={
+            <div className="flex flex-col gap-4 border-t border-dark-gray pt-8">
+              <div>
+                <a href="#outil" className={BTN_PRIMARY}>
+                  {c.hero.ctaPrimary}
+                  <ArrowRight size={14} />
+                </a>
+              </div>
+              <p className="max-w-xl font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+                {c.hero.reassurance}
+              </p>
+            </div>
+          }
+        >
+          {/* № 02 — Outil interactif (Phase 1 : flux GeminiSearch → rapport email) */}
+          <BlueprintSection
+            id="outil"
+            tone="obsidian"
+            innerClassName="px-6 py-16 lg:px-8 lg:py-20"
+          >
+            <SectionHeading
+              index="№ 02"
+              kicker={c.tool.kicker}
+              title={c.tool.title}
+              description={c.tool.description}
+            />
+            <Reveal className="mt-10 max-w-3xl" delay={0.05}>
+              <Suspense fallback={<LoadingFallback />}>
+                <AuditExperience />
+              </Suspense>
+            </Reveal>
+            <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-dark-gray pt-8">
+              <Link
+                href="/outils"
+                className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
+              >
+                <ArrowLeft
+                  size={12}
+                  className="transition-transform group-hover:-translate-x-0.5"
+                />
+                {c.tool.backToTools}
+              </Link>
+              <div className="flex items-center gap-6 opacity-70">
+                <BrandLogo
+                  src="/img/logo-wordpress.webp"
+                  srcLight="/img/logo-wordpress-small.webp"
+                  alt="Logo WordPress"
+                  width={36}
+                  height={36}
+                />
+                <BrandLogo
+                  src="/img/logo-nextjs.webp"
+                  srcLight="/img/logo-nextjs.webp"
+                  alt="Logo Next.js"
+                  width={48}
+                  height={48}
+                />
+              </div>
+            </div>
+          </BlueprintSection>
+
+          <Separator />
+          <ExempleResultat index="№ 03" content={c.example} />
+          <Separator />
+          <PourQui index="№ 04" content={c.pourQui} />
+          <Separator />
+          <Preuves index="№ 05" content={c.preuves} />
+          <Separator />
+          <CommentLireVerdict index="№ 06" content={c.commentLire} />
+          <Separator />
+          <LimitesAudit index="№ 07" content={c.limites} />
+          <Separator />
+          <AuditFaq index="№ 08" content={c.faq} />
+          <Separator />
+          <CtaFinal index="№ 09" content={c.ctaFinal} />
+        </PageLayout>
+      </main>
     </>
   );
 }

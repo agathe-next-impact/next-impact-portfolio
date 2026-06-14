@@ -6,6 +6,7 @@ import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
 import { CategoryPageContent } from "@/components/documentation/category-theme-cards"
 import { CrossCategoryNav } from "@/components/documentation/cross-category-nav"
 import { CategoryToolsLinks } from "@/components/documentation/documentation-internal-links"
+import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
@@ -140,6 +141,13 @@ export default async function CategoryPage(props: CategoryPageProps) {
 
           {/* Theme cards + Articles grid */}
           <CategoryPageContent articles={articles} category={category} />
+
+          {/* Maillage : sur le Headless, proposer de tester son propre site. */}
+          {category === "headless-cms" && (
+            <div style={{ marginTop: "2.5rem" }}>
+              <AuditPromoBanner variant="headless" />
+            </div>
+          )}
 
           {/* Catégories associées */}
           <CrossCategoryNav currentCategory={category} />
