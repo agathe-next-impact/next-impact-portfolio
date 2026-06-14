@@ -203,7 +203,7 @@ export default async function RootLayout({
         />
         <ClarityScript />
         <NextIntlClientProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
             <DocumentationModeProvider>
               <MotionProvider>
                 <Header />
