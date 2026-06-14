@@ -429,7 +429,7 @@ export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant
       },
     ],
     citation:
-      "Le choix d'une techno, c'est la traduction fidèle au monde réel en solution digitale.",
+      "Le choix d'une techno, c'est la traduction fidèle du monde réel en solution digitale.",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     ctaDescription:

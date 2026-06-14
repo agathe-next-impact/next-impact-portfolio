@@ -432,12 +432,12 @@ const CONTENT_EN: Record<number, ProjectContent> = {
     alt: "Panorama Pub directory — promotional-products suppliers",
     description: "The first online directory of promotional-products suppliers",
   },
-  1: {
+  12: {
     title: "Proditec",
     alt: "Proditec corporate site",
     description: "Multilingual corporate site",
   },
-  2: {
+  1: {
     title: "Sowee",
     alt: "Sowee blog section",
     description: "Sowee blog section",
@@ -447,7 +447,7 @@ const CONTENT_EN: Record<number, ProjectContent> = {
     alt: "Infralliance brochure site",
     description: "Infralliance brochure site",
   },
-  12: {
+  2: {
     title: "Syndicat départemental d'énergie du Val d'Oise",
     alt: "SDEVO grant-management plugin",
     description: "SDEVO grant-management plugin",

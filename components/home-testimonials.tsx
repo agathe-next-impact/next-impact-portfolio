@@ -48,7 +48,7 @@ const EN: Testimonial[] = [
 // pour être lisibles sur fond sombre quel que soit leur format d'origine.
 const LOGOS = [
   { src: "/img/logo-proditec.png", alt: "Proditec" },
-  { src: "/img/logo-sowee.png", alt: "Sowee" },
+  { src: "/img/logo-sowee.webp", alt: "Sowee" },
   { src: "/img/logo-mediatico.webp", alt: "Mediatico" },
   { src: "/img/logo-infralliance.png", alt: "Infralliance" },
   { src: "/img/logo-hermitage.webp", alt: "Tiers Lieu L'Hermitage" },
