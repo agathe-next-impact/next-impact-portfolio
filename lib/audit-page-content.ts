@@ -76,16 +76,6 @@ export interface AuditPageContent {
     wordpressDetected: string;
     unreachableTitle: string;
   };
-  gemini: {
-    kicker: string;
-    title: string;
-    intro: string;
-    loading: string;
-    blocked: string;
-    error: string;
-    retry: string;
-    disclaimer: string;
-  };
   email: {
     kicker: string;
     title: string;
@@ -167,13 +157,13 @@ const AUDIT_PAGE_FR: AuditPageContent = {
       "Analysez votre site selon 4 axes — performance, SEO, accessibilité et conversion — puis recevez une recommandation concrète : optimiser l'existant, refondre sous WordPress, passer en Headless WordPress + Next.js, ou cadrer une application métier.",
     ctaPrimary: "Analyser mon site",
     reassurance:
-      "Résultat immédiat, sans inscription. Vos coordonnées ne servent qu'au rapport complet, si vous le demandez.",
+      "Résultat immédiat, sans inscription. Vos coordonnées ne servent qu'à votre audit gratuit, si vous le demandez.",
   },
   tool: {
     kicker: "Analyse",
     title: "Lancez votre diagnostic",
     description:
-      "Indiquez l'URL et votre objectif : vous obtenez un premier diagnostic immédiat, puis un verdict d'architecture par l'IA. Le rapport complet est envoyé par email, à la demande.",
+      "Indiquez l'URL et votre objectif : vous obtenez un diagnostic immédiat de votre site. Pour aller plus loin, demandez un audit gratuit que je réalise personnellement.",
     backToTools: "Retour aux outils",
   },
   form: {
@@ -212,29 +202,16 @@ const AUDIT_PAGE_FR: AuditPageContent = {
     problemsTitle: "3 priorités détectées",
     orientationTitle: "Orientation préliminaire",
     orientationHint:
-      "Première orientation basée sur votre objectif et les signaux mesurés. L'analyse IA ci-dessous l'affine en lisant votre page.",
+      "Première orientation basée sur votre objectif et les signaux mesurés du site. Un audit approfondi affine ce diagnostic.",
     techLabel: "Stack détectée",
     wordpressDetected: "WordPress détecté",
     unreachableTitle: "Page non récupérée",
   },
-  gemini: {
-    kicker: "Analyse IA",
-    title: "Verdict d'architecture",
-    intro:
-      "L'IA lit votre page en direct et tranche la voie de modernisation la plus pertinente.",
-    loading: "L'IA analyse votre site… (jusqu'à une minute)",
-    blocked:
-      "L'IA n'a pas pu lire votre page (site protégé ou inaccessible). Le rapport complet par email reste possible.",
-    error: "L'analyse IA a échoué. Réessayez dans un instant.",
-    retry: "Relancer l'analyse IA",
-    disclaimer:
-      "Verdict généré par IA à partir du contenu public de la page. Le rapport complet apporte le détail par priorité, le budget indicatif et le délai.",
-  },
   email: {
-    kicker: "Rapport complet",
-    title: "Recevez le rapport complet par email",
+    kicker: "Audit gratuit",
+    title: "Je réalise votre audit gratuitement",
     description:
-      "Analyse détaillée, priorités par impact, budget indicatif, délai estimé et lien de prise de rendez-vous.",
+      "Laissez vos coordonnées : j'analyse votre site personnellement et je vous envoie un audit détaillé — priorités, budget indicatif et délai — sans engagement.",
     nameLabel: "Nom",
     namePlaceholder: "Votre nom",
     companyLabel: "Entreprise",
@@ -242,15 +219,15 @@ const AUDIT_PAGE_FR: AuditPageContent = {
     companyPlaceholder: "Votre entreprise",
     emailLabel: "Email",
     emailPlaceholder: "vous@email.com",
-    submit: "Recevoir le rapport complet",
+    submit: "Demander mon audit gratuit",
     sending: "Envoi en cours…",
-    successTitle: "Rapport en route",
+    successTitle: "Demande envoyée",
     successBody:
-      "Votre rapport complet arrive dans votre boîte mail d'ici quelques minutes. Pensez à vérifier les indésirables.",
+      "Merci ! Je vais analyser votre site et vous envoyer votre audit gratuit sous quelques jours, à l'adresse indiquée.",
     bookingLabel: "Réserver un échange",
     bookingHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
     privacy:
-      "Vos coordonnées servent uniquement à l'envoi du rapport. Aucune revente.",
+      "Vos coordonnées servent uniquement à réaliser et vous envoyer votre audit. Aucune revente.",
     error: "L'envoi a échoué. Vérifiez votre email et réessayez.",
   },
   example: {
@@ -409,13 +386,13 @@ const AUDIT_PAGE_EN: AuditPageContent = {
       "Analyze your site across 4 axes — performance, SEO, accessibility and conversion — then get a concrete recommendation: optimize what you have, rebuild on WordPress, move to Headless WordPress + Next.js, or scope a business application.",
     ctaPrimary: "Analyze my site",
     reassurance:
-      "Instant result, no sign-up. Your details are only used for the full report, if you ask for it.",
+      "Instant result, no sign-up. Your details are only used for your free audit, if you ask for it.",
   },
   tool: {
     kicker: "Analysis",
     title: "Run your diagnosis",
     description:
-      "Enter your URL and goal: you get an instant first diagnosis, then an AI architecture verdict. The full report is emailed on request.",
+      "Enter your URL and goal: you get an instant diagnosis of your site. To go further, request a free audit that I run personally.",
     backToTools: "Back to tools",
   },
   form: {
@@ -454,29 +431,16 @@ const AUDIT_PAGE_EN: AuditPageContent = {
     problemsTitle: "3 priorities detected",
     orientationTitle: "Preliminary orientation",
     orientationHint:
-      "A first orientation based on your goal and the measured signals. The AI analysis below refines it by reading your page.",
+      "A first orientation based on your goal and the measured site signals. An in-depth audit refines this diagnosis.",
     techLabel: "Detected stack",
     wordpressDetected: "WordPress detected",
     unreachableTitle: "Page not retrieved",
   },
-  gemini: {
-    kicker: "AI analysis",
-    title: "Architecture verdict",
-    intro:
-      "The AI reads your page live and decides on the most relevant modernization path.",
-    loading: "The AI is analyzing your site… (up to a minute)",
-    blocked:
-      "The AI couldn't read your page (protected or unreachable site). The full report by email is still available.",
-    error: "The AI analysis failed. Please try again in a moment.",
-    retry: "Retry AI analysis",
-    disclaimer:
-      "Verdict generated by AI from the page's public content. The full report adds per-priority detail, an indicative budget and timeline.",
-  },
   email: {
-    kicker: "Full report",
-    title: "Get the full report by email",
+    kicker: "Free audit",
+    title: "Get a free audit, done by me",
     description:
-      "Detailed analysis, priorities by impact, indicative budget, estimated timeline and a booking link.",
+      "Leave your details: I'll review your site personally and send you a detailed audit — priorities, indicative budget and timeline — no commitment.",
     nameLabel: "Name",
     namePlaceholder: "Your name",
     companyLabel: "Company",
@@ -484,14 +448,14 @@ const AUDIT_PAGE_EN: AuditPageContent = {
     companyPlaceholder: "Your company",
     emailLabel: "Email",
     emailPlaceholder: "you@email.com",
-    submit: "Get the full report",
+    submit: "Request my free audit",
     sending: "Sending…",
-    successTitle: "Report on its way",
+    successTitle: "Request sent",
     successBody:
-      "Your full report will arrive in your inbox within a few minutes. Don't forget to check your spam folder.",
+      "Thanks! I'll review your site and send your free audit within a few days, to the address you provided.",
     bookingLabel: "Book a call",
     bookingHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
-    privacy: "Your details are only used to send the report. No resale.",
+    privacy: "Your details are only used to produce and send your audit. No resale.",
     error: "Sending failed. Check your email and try again.",
   },
   example: {
