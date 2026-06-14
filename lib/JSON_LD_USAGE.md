@@ -170,37 +170,13 @@ export default function AboutPage() {
 }
 ```
 
-### 9. ReviewJsonLd
+### 9. ~~ReviewJsonLd~~ (retiré)
 
-Pour afficher les avis clients avec notation.
-
-```tsx
-import { ReviewJsonLd } from "@/components/json-ld";
-
-export default function TestimonialsPage() {
-  const reviews = [
-    {
-      author: "Jean Dupont",
-      rating: 5,
-      reviewBody: "Excellent travail, très professionnel !",
-      datePublished: "2026-01-10",
-    },
-    {
-      author: "Marie Martin",
-      rating: 5,
-      reviewBody: "Je recommande vivement !",
-      datePublished: "2026-01-15",
-    },
-  ];
-
-  return (
-    <>
-      <ReviewJsonLd reviews={reviews} />
-      {/* Reste du contenu */}
-    </>
-  );
-}
-```
+Helper supprimé volontairement. Un `aggregateRating` au niveau `Organization` /
+`LocalBusiness` construit à partir d'avis auto-collectés est **contraire aux
+consignes Google** : non éligible aux étoiles dans les résultats et passible d'une
+action manuelle. Pour afficher une notation en rich result, elle doit porter sur un
+item précis (`Product`, `Service`, `CreativeWork`…), jamais sur l'entité de marque.
 
 ## Utilisation complète - Exemple
 

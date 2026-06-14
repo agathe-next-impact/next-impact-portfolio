@@ -36,7 +36,7 @@ const STACKS_FR: Stack[] = [
   {
     subtitle: "architecture dédiée",
     title: "Plateforme métier sur-mesure",
-    price: "sur devis",
+    price: "dès 6500 €",
     strengths: ["Logique métier, comptes utilisateurs", "Géoloc, hors-ligne, installable"],
     target: "Marketplace, plateforme, app terrain",
   },

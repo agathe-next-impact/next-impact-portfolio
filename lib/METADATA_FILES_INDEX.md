@@ -22,7 +22,6 @@
    - `FAQJsonLd` - Pages FAQ
    - `ContactPageJsonLd` - Page contact
    - `PersonJsonLd` - Profil professionnel
-   - `ReviewJsonLd` - Avis clients
 
 3. **`components/metadata-debugger.tsx`**
    - Outil de débogage (mode développement uniquement)

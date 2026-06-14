@@ -150,7 +150,7 @@ export async function GET() {
     ] as const;
 
     const singlePages = [
-      { path: "vous-etes", source: "app/vous-etes/page.tsx", changefreq: "monthly", priority: 0.5 },
+      // `vous-etes` est volontairement `noindex` (robots.index=false) → exclu du sitemap.
       { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", source: "app/[locale]/articles/reduire-contribution-agefiph-sous-traitance-tih/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "articles/attestation-deductibilite-tih-guide-entreprises", source: "app/[locale]/articles/attestation-deductibilite-tih-guide-entreprises/page.tsx", changefreq: "monthly", priority: 0.7 },
     ] as const;

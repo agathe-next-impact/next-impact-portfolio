@@ -81,6 +81,12 @@ export async function generateMetadata({
   const canonical = isEn ? '/en' : '/'
   const ogUrl = isEn ? `${SITE_URL}/en` : SITE_URL
 
+  // Image OpenGraph générée à la volée (/og.png) à partir du titre/description.
+  const ogImageUrl = `${SITE_URL}/og.png?${new URLSearchParams({
+    title: m.ogTitle,
+    desc: m.ogDescription,
+  }).toString()}`
+
   return {
     metadataBase: new URL(SITE_URL),
     title: {
@@ -119,10 +125,10 @@ export async function generateMetadata({
       url: ogUrl,
       images: [
         {
-          url: '/img/desktop-screen-next-impact.png',
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: 'Next Impact — WordPress Headless & Next.js',
+          alt: m.ogTitle,
           type: 'image/png',
         },
       ],
@@ -133,8 +139,8 @@ export async function generateMetadata({
       description: m.ogDescription,
       images: [
         {
-          url: '/img/desktop-screen-next-impact.png',
-          alt: 'Next Impact — WordPress Headless & Next.js',
+          url: ogImageUrl,
+          alt: m.ogTitle,
         },
       ],
     },

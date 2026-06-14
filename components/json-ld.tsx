@@ -94,6 +94,7 @@ export function OrganizationJsonLd() {
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
+      "https://github.com/agat-dev",
     ],
   };
 
@@ -475,37 +476,10 @@ export function HomepageJsonLd() {
       },
 
       // — Organization —
-      {
-        "@type": "Organization",
-        "@id": `${baseUrl}/#organization`,
-        name: siteConfig.name,
-        url: baseUrl,
-        logo: {
-          "@type": "ImageObject",
-          url: `${baseUrl}/img/logo-rouge-noir-carre-icon.png`,
-        },
-        description: siteConfig.description,
-        founder: { "@id": `${baseUrl}/#person` },
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "4 rue du centre",
-          addressLocality: "Trizac",
-          postalCode: "15400",
-          addressRegion: "Auvergne-Rhône-Alpes",
-          addressCountry: "FR",
-        },
-        contactPoint: {
-          "@type": "ContactPoint",
-          contactType: "customer service",
-          telephone: "+33673981638",
-          email: "agathe@next-impact.digital",
-          availableLanguage: ["French", "English"],
-        },
-        sameAs: [
-          "https://www.linkedin.com/in/agat-dev/",
-          "https://github.com/agat-dev",
-        ],
-      },
+      // L'entité `#organization` est définie une seule fois, à l'échelle du site,
+      // par <OrganizationJsonLd /> (layout). On ne la redéclare donc PAS ici pour
+      // éviter un conflit de type sur le même @id (ProfessionalService vs Organization).
+      // Les nœuds #person et #localbusiness ci-dessous y font référence via @id.
 
       // — LocalBusiness —
       {
@@ -628,51 +602,12 @@ export function HomepageJsonLd() {
   return <JsonLd data={data} />;
 }
 
-/**
- * Données structurées pour les avis clients
- */
-export function ReviewJsonLd({
-  reviews,
-}: {
-  reviews: Array<{
-    author: string;
-    rating: number;
-    reviewBody: string;
-    datePublished: string;
-  }>;
-}) {
-  const data = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteConfig.name,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: (
-        reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-      ).toFixed(1),
-      reviewCount: reviews.length,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: reviews.map((review) => ({
-      "@type": "Review",
-      author: {
-        "@type": "Person",
-        name: review.author,
-      },
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: review.rating,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      reviewBody: review.reviewBody,
-      datePublished: review.datePublished,
-    })),
-  };
-
-  return <JsonLd data={data} />;
-}
+// NB : un helper `ReviewJsonLd` (aggregateRating au niveau Organization, à partir
+// d'avis auto-collectés) a été retiré volontairement. Google n'autorise plus les
+// avis « self-serving » sur une Organization/LocalBusiness : non éligibles aux
+// étoiles et passibles d'une action manuelle. Pour afficher des notes en rich
+// result, la notation doit porter sur un item précis (Product/Service/CreativeWork),
+// pas sur l'entité de marque.
 
 /**
  * Données structurées pour une page de collection (liste d'articles, études de cas, outils)

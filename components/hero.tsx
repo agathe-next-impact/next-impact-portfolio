@@ -5,11 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import HeroLivePreview from "@/components/hero-live-preview";
+import HeroVideo from "@/components/hero-video";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
-import { Fiber } from "@/components/visuals/fiber";
 import { WordAppear } from "@/components/visuals/word-appear";
 
 const BTN_PRIMARY =
@@ -130,9 +129,9 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        {/* Mockup */}
+        {/* Démonstration vidéo */}
         <Reveal delay={0.16} className="relative">
-          <HeroLivePreview />
+          <HeroVideo />
 
           {/* Badge disponible */}
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">

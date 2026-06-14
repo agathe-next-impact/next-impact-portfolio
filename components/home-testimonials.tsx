@@ -81,7 +81,7 @@ export default function HomeTestimonials() {
           description={
             isEn
               ? "Direct quotes — name, role, company. No anonymous five-stars."
-              : "Des mots de clients, nominatifs : nom, fonction, entreprise. Pas d'étoiles anonymes."
+              : "Quelques retours directs de mes clients."
           }
         />
       </Reveal>

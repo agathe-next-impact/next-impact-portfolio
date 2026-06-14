@@ -15,6 +15,27 @@ function absoluteUrl(url: string): string {
   return url.startsWith("http") ? url : `${siteConfig.url}${url}`;
 }
 
+/**
+ * Construit l'URL d'une image OpenGraph générée à la volée (/og.png).
+ * Le titre et la description (déjà localisés) sont passés en query :
+ * chaque page obtient ainsi une carte sociale unique, à la charte Blueprint.
+ */
+function dynamicOgImage(
+  title: string,
+  description?: string,
+  eyebrow?: string,
+): { url: string; width: number; height: number; alt: string } {
+  const params = new URLSearchParams({ title });
+  if (description) params.set("desc", description);
+  if (eyebrow) params.set("tag", eyebrow);
+  return {
+    url: `${siteConfig.url}/og.png?${params.toString()}`,
+    width: 1200,
+    height: 630,
+    alt: title,
+  };
+}
+
 function buildLocalizedPaths(
   path: string,
   locales: Locale[] = [...routing.locales],
@@ -140,10 +161,9 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
       };
     }
   } else {
-    ogImage = {
-      ...siteConfig.defaultImage,
-      url: absoluteUrl(siteConfig.defaultImage.url),
-    };
+    // Aucune image fournie → carte OpenGraph générée à la volée à partir
+    // du titre et de la description localisés de la page.
+    ogImage = dynamicOgImage(title, description);
   }
 
   // Combinaison des mots-clés

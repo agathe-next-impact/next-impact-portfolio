@@ -30,7 +30,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
       "Je garde l'interface que vous connaissez et je lui greffe un front sur-mesure : un design soigné, une navigation fluide et agréable — pour vos visiteurs comme pour vous — et, au passage, un chargement sous la seconde. Sans tout reconstruire.",
     valueProposition:
       "Pour les PME et structures de l'ESS. Budget et délai fixés dès le départ — livraison en 6 à 10 semaines.",
-    ctaPrimary: { label: "Audit IA gratuit — 2 min", href: "/audit-site-ia" },
+    ctaPrimary: { label: "Trouver votre solution", href: "/services/eligibilite" },
     ctaSecondary: { label: "Voir des réalisations", href: "/etudes-de-cas" },
     auditTitle: "Quelle stack pour votre projet ?",
     auditSubtitle: "Diagnostic en 2 minutes",
