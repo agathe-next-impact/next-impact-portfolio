@@ -98,6 +98,20 @@ export function OrganizationJsonLd() {
       "https://annuaire-entreprises.data.gouv.fr/entreprise/agathe-martin-next-impact-532675386",
       "https://www.pappers.fr/entreprise/martin-agathe-532675386",
     ],
+    // Citation presse indépendante et autoritaire (E-E-A-T / GEO). Le slug d'URL
+    // du Figaro encode le titre ; date issue du slug (20260512).
+    subjectOf: {
+      "@type": "NewsArticle",
+      headline:
+        "WordPress Headless : comment les PME peuvent moderniser leur site sans tout reconstruire, avec Next Impact Digital",
+      url: "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
+      datePublished: "2026-05-12",
+      publisher: {
+        "@type": "NewsMediaOrganization",
+        name: "Le Figaro",
+        url: "https://www.lefigaro.fr",
+      },
+    },
   };
 
   return <JsonLd data={data} />;
