@@ -5,11 +5,10 @@ import { notFound } from 'next/navigation'
 import { Figtree, Inter_Tight, Geist_Mono } from 'next/font/google'
 import Header from '@/components/header'
 import '../globals.css'
-import Script from "next/script"
 import Footer from '@/components/footer'
 import { MetadataDebugger } from '@/components/metadata-debugger'
 import { OrganizationJsonLd } from '@/components/json-ld'
-import { ClarityScript } from '@/components/clarity-script'
+import { ConsentManager } from '@/components/consent-manager'
 import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
 import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -191,23 +190,6 @@ export default async function RootLayout({
     >
       <body>
         <OrganizationJsonLd />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-3D5PKXEN72"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="gtag-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-3D5PKXEN72');
-            `,
-          }}
-        />
-        <ClarityScript />
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
             <DocumentationModeProvider>
@@ -216,6 +198,7 @@ export default async function RootLayout({
                 {children}
                 <Footer />
                 <FloatingContact />
+                <ConsentManager />
                 <MetadataDebugger />
               </MotionProvider>
             </DocumentationModeProvider>

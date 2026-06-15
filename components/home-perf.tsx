@@ -158,8 +158,6 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
     return v !== null && m.isGood(v);
   });
 
-  const psiUrl =
-    "https://pagespeed.web.dev/analyze?url=https%3A%2F%2Fnext-impact.digital";
 
   return (
     <BlueprintSection tone="obsidian">
@@ -265,15 +263,6 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
             {isEn ? "And yours? Audit — 2 min" : "Et le vôtre ? Audit — 2 min"}
             <ArrowRight size={14} />
           </Link>
-          <a
-            href={psiUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
-          >
-            {isEn ? "Verify on PageSpeed Insights" : "Vérifier sur PageSpeed Insights"}
-            <ArrowUpRight size={12} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
         </div>
       </Reveal>
     </BlueprintSection>

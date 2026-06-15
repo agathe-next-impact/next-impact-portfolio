@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
 const KICKER = "font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray";
 const FOOT_LINK =
@@ -13,6 +14,7 @@ const NAV_LINKS = [
   { href: "/avantage-oeth",   key: "oethAdvantage" },
   { href: "/a-propos",        key: "about" },
   { href: "/mentions-legales", key: "legalNotice" },
+  { href: "/confidentialite", key: "privacy" },
 ] as const;
 
 const RESOURCE_LINKS = [
@@ -39,6 +41,9 @@ export default function Footer() {
             </p>
             <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
               {t("address")}
+            </p>
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+              SIREN 532 675 386
             </p>
           </div>
 
@@ -104,8 +109,9 @@ export default function Footer() {
             © {year} NEXT IMPACT DIGITAL
           </span>
           <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
-            SET EN FIGTREE / INTER TIGHT
+            {t("updated")}
           </span>
+          <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
           <a
             href="#__next"
             className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"

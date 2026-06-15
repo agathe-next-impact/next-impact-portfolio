@@ -2,10 +2,15 @@
 
 import dynamic from "next/dynamic";
 import Process from "@/components/process";
+import HomeTldr from "@/components/home-tldr";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
 
 const Hero = dynamic(() => import("@/components/hero"), {
   loading: () => <div style={{ minHeight: "100vh" }} />,
+});
+
+const HomeFaq = dynamic(() => import("./home-faq"), {
+  loading: () => <div style={{ minHeight: 400 }} />,
 });
 
 const FeaturedRealisation = dynamic(() => import("./featured-realisation"), {
@@ -46,6 +51,9 @@ export default function HomeClient() {
       {/* § 01 — Hero */}
       <Hero />
 
+      {/* § 01b — « En bref » (TL;DR citable par les IA) */}
+      <HomeTldr />
+
       {/* § 02 — Réalisation phare + preuve sociale (preuve UI/UX) */}
       <FeaturedRealisation />
       <Separator />
@@ -73,8 +81,12 @@ export default function HomeClient() {
 
       {/* § 09 — Diagnostic de stack */}
       <HomeDiagnostic />
+      <Separator />
 
-      {/* § 10 — CTA final */}
+      {/* § 10 — FAQ (citabilité IA + FAQPage schema) */}
+      <HomeFaq />
+
+      {/* § 11 — CTA final */}
       <HomeCta />
     </main>
   );

@@ -95,6 +95,8 @@ export function OrganizationJsonLd() {
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
       "https://github.com/agat-dev",
+      "https://annuaire-entreprises.data.gouv.fr/entreprise/agathe-martin-next-impact-532675386",
+      "https://www.pappers.fr/entreprise/martin-agathe-532675386",
     ],
   };
 
@@ -433,6 +435,23 @@ export function HomepageJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@graph": [
+      // — WebPage (Speakable : cible le H1 et le bloc « En bref » pour les
+      //   assistants vocaux / lecture IA). Les sélecteurs pointent du contenu visible. —
+      {
+        "@type": "WebPage",
+        "@id": `${baseUrl}/#webpage`,
+        url: baseUrl,
+        name: siteConfig.name,
+        isPartOf: { "@id": `${baseUrl}/#website` },
+        about: { "@id": `${baseUrl}/#organization` },
+        primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
+        dateModified: "2026-06-15",
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: ["h1", ".home-tldr"],
+        },
+      },
+
       // — Person —
       {
         "@type": "Person",
@@ -472,6 +491,8 @@ export function HomepageJsonLd() {
         sameAs: [
           "https://www.linkedin.com/in/agat-dev/",
           "https://github.com/agat-dev",
+          "https://annuaire-entreprises.data.gouv.fr/entreprise/agathe-martin-next-impact-532675386",
+          "https://www.pappers.fr/entreprise/martin-agathe-532675386",
         ],
       },
 
@@ -493,6 +514,12 @@ export function HomepageJsonLd() {
         telephone: "+33673981638",
         email: "agathe@next-impact.digital",
         founder: { "@id": `${baseUrl}/#person` },
+        sameAs: [
+          "https://www.linkedin.com/in/agat-dev/",
+          "https://github.com/agat-dev",
+          "https://annuaire-entreprises.data.gouv.fr/entreprise/agathe-martin-next-impact-532675386",
+          "https://www.pappers.fr/entreprise/martin-agathe-532675386",
+        ],
         address: {
           "@type": "PostalAddress",
           streetAddress: "4 rue du centre",
