@@ -23,6 +23,13 @@ const RESOURCE_LINKS = [
   { href: "/contact",       key: "startWebApp" },
 ] as const;
 
+// Pages partenaires — footer uniquement, jamais dans le header (doctrine :
+// ne pas encombrer la navigation principale d'un prospect froid).
+const PARTNER_LINKS = [
+  { href: "/apporteurs", key: "referralPartners" },
+  { href: "/agences",    key: "whiteLabelAgencies" },
+] as const;
+
 export default function Footer() {
   const t = useTranslations("footer");
   const year = new Date().getFullYear();
@@ -68,6 +75,20 @@ export default function Footer() {
             <div className={KICKER}>{t("resources")}</div>
             <nav className="mt-4 flex flex-col gap-2.5">
               {RESOURCE_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  className={FOOT_LINK}
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Pages partenaires — footer uniquement */}
+            <div className={`${KICKER} mt-6`}>{t("partners")}</div>
+            <nav className="mt-3 flex flex-col gap-2.5">
+              {PARTNER_LINKS.map((item) => (
                 <Link
                   key={item.key}
                   href={item.href as Parameters<typeof Link>[0]["href"]}

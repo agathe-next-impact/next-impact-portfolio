@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from "react";
 import Script from "next/script";
+import { Cookie } from "lucide-react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -19,9 +20,9 @@ const CLARITY_ID = "vl7osdgfi9";
 type Decision = "granted" | "denied" | null;
 
 const BTN_PRIMARY =
-  "inline-flex h-10 items-center rounded-sm border border-charcoal bg-vermilion px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-charcoal bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
 const BTN_GHOST =
-  "inline-flex h-10 items-center rounded-sm border border-dark-gray px-5 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian";
+  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian";
 
 function AnalyticsScripts() {
   return (
@@ -57,16 +58,25 @@ function Banner({
   onRefuse: () => void;
 }) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[70] px-2.5 pb-2.5 lg:px-4 lg:pb-4">
+    <div className="fixed bottom-4 left-4 z-[70] w-[min(20rem,calc(100vw-2rem))] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2">
       <div
         role="dialog"
         aria-label={isEn ? "Cookie consent" : "Consentement aux cookies"}
-        className="mx-auto flex max-w-[1200px] flex-col gap-4 border border-dark-gray bg-jet/95 p-5 shadow-lg backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between lg:px-8"
+        className="relative border border-dark-gray bg-jet/95 p-4 shadow-lg backdrop-blur-sm"
       >
-        <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+        {/* Ergot — donne l'aspect info-bulle, ancré au coin bas-gauche */}
+        <span
+          aria-hidden
+          className="absolute -bottom-[6px] left-5 h-2.5 w-2.5 rotate-45 border-b border-r border-dark-gray bg-jet/95"
+        />
+        <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+          <Cookie size={13} strokeWidth={1.5} />
+          Cookies
+        </div>
+        <p className="font-inter-tight text-[12px] leading-relaxed text-mid-gray">
           {isEn
-            ? "This site uses audience-measurement cookies (Google Analytics, Microsoft Clarity) to improve your experience."
-            : "Ce site utilise des cookies de mesure d'audience (Google Analytics, Microsoft Clarity) pour améliorer votre expérience."}{" "}
+            ? "Audience-measurement cookies (Google Analytics, Microsoft Clarity)."
+            : "Cookies de mesure d'audience (Google Analytics, Microsoft Clarity)."}{" "}
           <Link
             href="/confidentialite"
             className="text-accent-secondary underline-offset-4 hover:underline"
@@ -75,7 +85,7 @@ function Banner({
           </Link>
           .
         </p>
-        <div className="flex shrink-0 gap-3">
+        <div className="mt-3 flex gap-2">
           <button type="button" onClick={onRefuse} className={BTN_GHOST}>
             {isEn ? "Refuse" : "Refuser"}
           </button>
