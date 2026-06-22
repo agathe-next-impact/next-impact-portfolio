@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
+import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner";
 
 const Hero = dynamic(() => import("@/components/hero"), {
   loading: () => <div style={{ minHeight: "100vh" }} />,
@@ -63,6 +64,10 @@ export default function HomeClient() {
 
       {/* § 04 — Offres : 3 stacks */}
       <HomeOffres />
+      <Separator />
+
+      {/* § 04b — Offre d'appel : dépannage WordPress sans abonnement */}
+      <WordpressExpressBanner />
       <Separator />
 
       {/* § 05 — Méthode */}

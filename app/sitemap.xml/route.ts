@@ -132,6 +132,7 @@ export async function GET() {
     const localizedPages = [
       { path: "", source: "app/[locale]/page.tsx", changefreq: "weekly", priority: 1.0 },
       { path: "services", source: "app/[locale]/services/page.tsx", changefreq: "weekly", priority: 0.9 },
+      { path: "depannage-wordpress", source: "app/[locale]/depannage-wordpress/page.tsx", changefreq: "monthly", priority: 0.9 },
       { path: "services/eligibilite", source: "app/[locale]/services/eligibilite/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "etudes-de-cas", source: "app/[locale]/etudes-de-cas/page.tsx", changefreq: "weekly", priority: 0.8 },
       { path: "documentation", source: "app/[locale]/documentation/page.tsx", changefreq: "weekly", priority: 0.8 },

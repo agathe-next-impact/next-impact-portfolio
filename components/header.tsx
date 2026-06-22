@@ -68,10 +68,10 @@ export default function Header() {
 
           <ThemeToggle />
           <Link
-            href="/contact"
+            href="/depannage-wordpress"
             className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
           >
-            {t("contact")}
+            {t("wordpressExpress")}
           </Link>
         </div>
 
@@ -133,11 +133,11 @@ export default function Header() {
               )}
 
               <Link
-                href="/contact"
+                href="/depannage-wordpress"
                 onClick={() => setMobileOpen(false)}
                 className="block border-b border-dark-gray bg-vermilion px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
               >
-                {t("contact")}
+                {t("wordpressExpress")}
               </Link>
             </nav>
           </div>
