@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const KICKER = "font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray";
 const FOOT_LINK =
@@ -133,6 +134,7 @@ export default function Footer() {
             {t("updated")}
           </span>
           <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
+          <LocaleSwitcher />
           <a
             href="#__next"
             className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"

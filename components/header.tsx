@@ -4,7 +4,6 @@ import * as React from "react";
 import { X as CloseIcon, Menu as MenuIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
@@ -67,7 +66,6 @@ export default function Header() {
             </span>
           </div>
 
-          <LocaleSwitcher />
           <ThemeToggle />
           <Link
             href="/contact"
@@ -79,7 +77,6 @@ export default function Header() {
 
         {/* Mobile right */}
         <div className="flex items-center gap-2 lg:hidden">
-          <LocaleSwitcher />
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(true)}
