@@ -7,6 +7,7 @@ import { getServicesPageVariants } from "@/lib/homepage-profiles"
 import { BlueprintSection } from "@/components/aspect/section"
 import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner"
+import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner"
 import type { Locale } from "@/i18n/routing"
 
 export async function generateMetadata({
@@ -87,6 +88,8 @@ export default async function ServicesPage({
         }))}
       />
       <ServicesClient />
+      {/* Une décision à trancher avant de s'engager → visio conseil (déduite du devis). */}
+      <VisioConseilBanner tone="obsidian" />
       {/* Offre d'appel : un besoin ponctuel plutôt qu'un projet → dépannage. */}
       <WordpressExpressBanner tone="jet" />
       {/* Maillage : orienter ceux qui hésitent sur la stack vers l'audit. */}

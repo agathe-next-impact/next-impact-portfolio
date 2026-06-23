@@ -5,6 +5,7 @@ import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
 import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner";
+import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 
 const Hero = dynamic(() => import("@/components/hero"), {
   loading: () => <div style={{ minHeight: "100vh" }} />,
@@ -86,6 +87,12 @@ export default function HomeClient() {
 
       {/* § 09 — Diagnostic de stack */}
       <HomeDiagnostic />
+      <Separator />
+
+      {/* § 09b — Offre tiède : visio conseil payante (déduite du devis).
+          Placée juste après le diagnostic : il pose une décision, la visio la
+          résout. Jamais dans le héros ni en CTA froid. */}
+      <VisioConseilBanner />
       <Separator />
 
       {/* § 10 — FAQ (citabilité IA + FAQPage schema) */}

@@ -12,6 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import { Sonar } from "@/components/visuals/sonar";
 import { BrandLogo } from "@/components/brand-logo";
+import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 import type { Locale } from "@/i18n/routing";
 
 import AuditExperience from "./_components/AuditExperience";
@@ -178,6 +179,10 @@ export default async function AuditSiteIaPage({
           <LimitesAudit index="№ 07" content={c.limites} />
           <Separator />
           <AuditFaq index="№ 08" content={c.faq} />
+          <Separator />
+          {/* Upsell tiède : la preuve gratuite vient d'être livrée → l'étage
+              au-dessus est la visio conseil payante (déduite du devis). */}
+          <VisioConseilBanner tone="jet" />
           <Separator />
           <CtaFinal index="№ 09" content={c.ctaFinal} />
         </PageLayout>

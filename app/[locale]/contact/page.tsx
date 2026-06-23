@@ -6,6 +6,7 @@ import MultiSubjectContactForm from "@/components/contact/multi-subject-form";
 import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
 import { BlueprintSection } from "@/components/aspect/section";
 import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner";
+import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 import { Reveal } from "@/components/ui/reveal";
 import type { Locale } from "@/i18n/routing";
 
@@ -96,6 +97,8 @@ export default async function ContactPage({
         </div>
       </BlueprintSection>
 
+      {/* Pas prêt pour un projet, juste une décision à trancher → visio conseil. */}
+      <VisioConseilBanner tone="obsidian" />
       {/* Besoin ponctuel WordPress plutôt qu'un projet → dépannage à la demande. */}
       <WordpressExpressBanner tone="jet" />
     </main>

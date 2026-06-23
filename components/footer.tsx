@@ -19,8 +19,9 @@ const NAV_LINKS = [
 ] as const;
 
 const RESOURCE_LINKS = [
-  { href: "/depannage-wordpress", key: "wordpressExpress" },
   { href: "/audit-site-ia", key: "freeAiAudit" },
+  { href: "/conseil", key: "visioConseil" },
+  { href: "/depannage-wordpress", key: "wordpressExpress" },
   { href: "/outils",        key: "tools" },
   { href: "/contact",       key: "startWebApp" },
 ] as const;

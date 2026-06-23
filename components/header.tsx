@@ -67,11 +67,14 @@ export default function Header() {
           </div>
 
           <ThemeToggle />
+          {/* CTA universel = audit gratuit (froid). C'est la porte du prospect
+              froid issu de la prospection ; on PROUVE avant de DEMANDER. Le
+              dépannage (payant) reste accessible via bannières + footer. */}
           <Link
-            href="/depannage-wordpress"
+            href="/audit-site-ia"
             className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
           >
-            {t("wordpressExpress")}
+            {t("freeAudit")}
           </Link>
         </div>
 
@@ -133,11 +136,11 @@ export default function Header() {
               )}
 
               <Link
-                href="/depannage-wordpress"
+                href="/audit-site-ia"
                 onClick={() => setMobileOpen(false)}
                 className="block border-b border-dark-gray bg-vermilion px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
               >
-                {t("wordpressExpress")}
+                {t("freeAudit")}
               </Link>
             </nav>
           </div>
