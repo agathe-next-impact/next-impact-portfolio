@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X as CloseIcon, Menu as MenuIcon } from "lucide-react";
+import { X as CloseIcon, Menu as MenuIcon, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -14,6 +14,14 @@ const NAV_LINKS = [
   { key: "tools",         href: "/outils" },
   { key: "documentation", href: "/documentation" },
   { key: "about",         href: "/a-propos" },
+] as const;
+
+// Offres « à la demande » — toujours présentes (menu header + drawer mobile).
+// L'audit (froid, gratuit) reste aussi en bouton CTA distinct pour la prominence.
+const ON_DEMAND = [
+  { key: "freeAudit",        href: "/audit-site-ia",        paid: false },
+  { key: "visioConseil",     href: "/conseil",              paid: true },
+  { key: "wordpressExpress", href: "/depannage-wordpress",  paid: true },
 ] as const;
 
 export default function Header() {
@@ -67,15 +75,38 @@ export default function Header() {
           </div>
 
           <ThemeToggle />
-          {/* CTA universel = audit gratuit (froid). C'est la porte du prospect
-              froid issu de la prospection ; on PROUVE avant de DEMANDER. Le
-              dépannage (payant) reste accessible via bannières + footer. */}
-          <Link
-            href="/audit-site-ia"
-            className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
-          >
-            {t("freeAudit")}
-          </Link>
+          {/* CTA principal = menu « À la demande » : audit gratuit (froid, en
+              tête) + visio conseil + dépannage (payants). Vermillon pour la
+              prominence ; ouvre au survol ET au focus clavier (CSS pur, 0 JS). */}
+          <div className="group relative">
+            <button
+              type="button"
+              aria-haspopup="menu"
+              className="inline-flex h-9 items-center gap-1.5 rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-vermilion-bright group-focus-within:bg-vermilion-bright"
+            >
+              {t("onDemand")}
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+            </button>
+            <div className="invisible absolute right-0 top-full z-50 w-64 border border-dark-gray bg-obsidian opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              {ON_DEMAND.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  className="flex items-center justify-between gap-3 border-b border-dark-gray px-4 py-3 text-sm text-mid-gray no-underline transition-colors last:border-b-0 hover:bg-jet hover:text-foreground"
+                >
+                  <span>{t(item.key as Parameters<typeof t>[0])}</span>
+                  <span
+                    className={
+                      "font-mono text-[9px] uppercase tracking-[0.1em] " +
+                      (item.paid ? "text-mid-gray" : "text-accent-secondary")
+                    }
+                  >
+                    {t(item.paid ? "paid" : "free")}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Mobile right */}
@@ -124,6 +155,29 @@ export default function Header() {
                   {t(item.key as Parameters<typeof t>[0])}
                 </Link>
               ))}
+
+              {/* À la demande — toujours présent dans le drawer */}
+              <div className="border-b border-dark-gray px-5 pb-2 pt-5 font-mono text-[9px] uppercase tracking-[0.14em] text-mid-gray">
+                {t("onDemand")}
+              </div>
+              {ON_DEMAND.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  <span>{t(item.key as Parameters<typeof t>[0])}</span>
+                  <span
+                    className={
+                      "text-[9px] " + (item.paid ? "text-mid-gray" : "text-accent-secondary")
+                    }
+                  >
+                    {t(item.paid ? "paid" : "free")}
+                  </span>
+                </Link>
+              ))}
+
               {profileId && (
                 <button
                   type="button"
@@ -135,13 +189,6 @@ export default function Header() {
                 </button>
               )}
 
-              <Link
-                href="/audit-site-ia"
-                onClick={() => setMobileOpen(false)}
-                className="block border-b border-dark-gray bg-vermilion px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
-              >
-                {t("freeAudit")}
-              </Link>
             </nav>
           </div>
         </>

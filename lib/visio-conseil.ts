@@ -32,14 +32,22 @@ interface OfferCopy {
   bullets: string[];
 }
 
-export interface ConseilOffer {
-  id: string;
+/** Un palier de durée d'un conseil (réservation + paiement Calendly à la résa). */
+export interface ConseilTier {
+  duration: { fr: string; en: string };
   price: string; // montant affiché, ex. « 90 € »
   value: number; // valeur numérique (données structurées)
-  duration: { fr: string; en: string };
-  /** URL de l'event Calendly dédié (réservation + paiement à la résa). */
   calendlyUrl: string;
   featured?: boolean;
+  /** Bonus propre au palier, ex. rapport d'audit pour le 60 min. */
+  note?: { fr: string; en: string };
+}
+
+export interface ConseilOffer {
+  id: string;
+  featured?: boolean;
+  /** Un seul palier = offre simple ; plusieurs = choix de durée. */
+  tiers: ConseilTier[];
   fr: OfferCopy;
   en: OfferCopy;
 }
@@ -48,13 +56,14 @@ export interface ConseilOffer {
 export const OFFERS: ConseilOffer[] = [
   {
     id: "conseil-wordpress",
-    price: "90 €",
-    value: 90,
-    duration: { fr: "45 min", en: "45 min" },
-    // TODO Agathe : remplacer par l'URL exacte de l'event Calendly « Conseil
-    // WordPress » (ex. https://calendly.com/agathe-next-impact/conseil-wordpress).
-    // Par défaut → page Calendly listant les deux events.
-    calendlyUrl: CALENDLY_BASE,
+    tiers: [
+      {
+        duration: { fr: "45 min", en: "45 min" },
+        price: "100 €",
+        value: 100,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-wordpress-theme-plugins`,
+      },
+    ],
     fr: {
       name: "Conseil WordPress",
       tagline: "Thèmes & extensions : faites les bons choix.",
@@ -82,13 +91,35 @@ export const OFFERS: ConseilOffer[] = [
   },
   {
     id: "conseil-techno",
-    price: "150 €",
-    value: 150,
-    duration: { fr: "60 min", en: "60 min" },
-    // TODO Agathe : remplacer par l'URL exacte de l'event Calendly « Conseil
-    // choix de techno » (ex. https://calendly.com/agathe-next-impact/conseil-techno).
-    calendlyUrl: CALENDLY_BASE,
     featured: true,
+    // Variantes par DURÉE — prix et mapping slug↔durée confirmés par Agathe :
+    // 30 min = `conseil-quelle-techno-web`, 45 min = `…-clone`, 60 min = `…-clone-1`
+    // (ce dernier inclut un retour écrit : rapport d'audit + préconisations).
+    tiers: [
+      {
+        duration: { fr: "30 min", en: "30 min" },
+        price: "90 €",
+        value: 90,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-quelle-techno-web`,
+      },
+      {
+        duration: { fr: "45 min", en: "45 min" },
+        price: "120 €",
+        value: 120,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-un-projet-web-clone`,
+      },
+      {
+        duration: { fr: "60 min", en: "60 min" },
+        price: "220 €",
+        value: 220,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-un-projet-web-clone-1`,
+        featured: true,
+        note: {
+          fr: "Inclut un retour écrit : rapport d'audit + préconisations",
+          en: "Includes written feedback: audit report + recommendations",
+        },
+      },
+    ],
     fr: {
       name: "Conseil choix de techno",
       tag: "Recommandé",

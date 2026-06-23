@@ -20,12 +20,13 @@ import {
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
-import { OFFERS, FAQ, CALENDLY_BASE, type ConseilOffer } from "@/lib/visio-conseil";
-import { CalendlyInline } from "@/components/visio-conseil/calendly-embed";
+import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
 function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
   const copy = isEn ? offer.en : offer.fr;
-  const duration = isEn ? offer.duration.en : offer.duration.fr;
+  const single = offer.tiers.length === 1;
+  const cheapest = offer.tiers.reduce((a, b) => (a.value <= b.value ? a : b));
+
   return (
     <div
       className={
@@ -42,17 +43,27 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
         <h3 className="pr-20 text-lg font-medium text-foreground">{copy.name}</h3>
         <p className="mt-1 font-inter-tight text-sm text-mid-gray">{copy.tagline}</p>
       </div>
+
       <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-light tracking-tight text-foreground">{offer.price}</span>
-        <span className="font-mono text-xs text-mid-gray">/ {duration}</span>
+        {!single && (
+          <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+            {isEn ? "From" : "Dès"}
+          </span>
+        )}
+        <span className="text-2xl font-light tracking-tight text-foreground">{cheapest.price}</span>
+        {single && (
+          <span className="font-mono text-xs text-mid-gray">
+            / {isEn ? cheapest.duration.en : cheapest.duration.fr}
+          </span>
+        )}
         <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
       </div>
+
       <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
         {isEn ? "Credited to your project quote" : "Déduit du devis projet"}
       </p>
-      <p className="font-inter-tight text-sm leading-relaxed text-foreground">
-        {copy.forWho}
-      </p>
+      <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
+
       <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">
         {copy.bullets.map((b) => (
           <li key={b} className="flex items-start gap-2.5">
@@ -61,20 +72,58 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
           </li>
         ))}
       </ul>
-      <a
-        href={offer.calendlyUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={
-          "group mt-auto flex w-full items-center justify-center gap-1.5 px-5 py-3 font-mono text-xs uppercase tracking-[0.06em] no-underline transition-colors " +
-          (offer.featured
-            ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
-            : "border border-dark-gray text-foreground hover:border-mid-gray")
-        }
-      >
-        {isEn ? "Book & pay" : "Réserver et payer"}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </a>
+
+      {single ? (
+        <a
+          href={cheapest.calendlyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={
+            "group mt-auto flex w-full items-center justify-center gap-1.5 px-5 py-3 font-mono text-xs uppercase tracking-[0.06em] no-underline transition-colors " +
+            (offer.featured
+              ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
+              : "border border-dark-gray text-foreground hover:border-mid-gray")
+          }
+        >
+          {isEn ? "Book & pay" : "Réserver et payer"}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        </a>
+      ) : (
+        <div className="mt-auto flex flex-col gap-2 border-t border-dark-gray pt-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+            {isEn ? "Choose your duration" : "Choisissez la durée"}
+          </p>
+          {offer.tiers.map((tier) => (
+            <a
+              key={tier.calendlyUrl}
+              href={tier.calendlyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                "group flex items-center justify-between gap-3 border px-4 py-3 no-underline transition-colors " +
+                (tier.featured
+                  ? "border-vermilion bg-vermilion/10 hover:bg-vermilion/20"
+                  : "border-dark-gray hover:border-mid-gray")
+              }
+            >
+              <span className="flex flex-col gap-0.5">
+                <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground">
+                  {isEn ? tier.duration.en : tier.duration.fr} · {tier.price} HT
+                </span>
+                {tier.note && (
+                  <span className="font-inter-tight text-[11px] leading-snug text-accent-secondary">
+                    {isEn ? tier.note.en : tier.note.fr}
+                  </span>
+                )}
+              </span>
+              <span className="inline-flex flex-shrink-0 items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-mid-gray transition-colors group-hover:text-foreground">
+                {isEn ? "Book" : "Réserver"}
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -131,17 +180,17 @@ export default function VisioConseilPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="#reserver"
+              href="#conseils"
               className="group inline-flex h-11 items-center gap-2 border border-vermilion bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
             >
-              {isEn ? "Request my call" : "Réserver mon créneau"}
+              {isEn ? "Book a call" : "Réserver un conseil"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
-              href="#conseils"
+              href="#comment"
               className="inline-flex h-11 items-center border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:border-mid-gray"
             >
-              {isEn ? "See the two advisory calls" : "Voir les deux conseils"}
+              {isEn ? "How it works" : "Comment ça marche"}
             </a>
           </div>
           <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
@@ -161,8 +210,8 @@ export default function VisioConseilPage() {
           title={isEn ? "Pick the one that fits you" : "Celui qui correspond à votre besoin"}
           description={
             isEn
-              ? "Fixed duration, fixed price, no commitment. Every call ends with a written recap — and its price is credited to your quote if a project follows."
-              : "Durée fixe, prix fixe, sans engagement. Chaque appel se termine par un compte-rendu écrit — et son prix est déduit du devis si un projet suit."
+              ? "No commitment. Tech stack advice comes in several durations — the 60-min one includes a written audit report. Every call ends with a written recap, and its price is credited to your quote if a project follows."
+              : "Sans engagement. Le conseil techno existe en plusieurs durées — la version 60 min inclut un rapport d'audit écrit. Chaque appel se termine par un compte-rendu écrit, et son prix est déduit du devis si un projet suit."
           }
         />
         <Stagger className="mt-10 grid gap-4 md:grid-cols-2">
@@ -177,11 +226,21 @@ export default function VisioConseilPage() {
             ? "No subscription. Prices excl. VAT. If you start a project within 30 days, the call's price is deducted from your quote."
             : "Sans abonnement. Prix HT. Si vous lancez un projet dans les 30 jours, le prix de la visio est déduit de votre devis."}
         </p>
+
+        {/* Engagements — réassurance sous les offres */}
+        <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-3">
+          {reassurance.map(([Icon, label]) => (
+            <div key={label} className="flex items-start gap-3 bg-obsidian p-5">
+              <Icon className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
+              <span className="font-inter-tight text-sm leading-snug text-mid-gray">{label}</span>
+            </div>
+          ))}
+        </div>
       </BlueprintSection>
       <Separator />
 
       {/* § 03 — Comment ça marche */}
-      <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+      <BlueprintSection id="comment" tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 03"
           kicker={isEn ? "How it works" : "Comment ça marche"}
@@ -201,40 +260,10 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 04 — Réservation Calendly (paiement à la résa) */}
-      <BlueprintSection id="reserver" tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
-        <SectionHeading
-          index="№ 04"
-          kicker={isEn ? "Book online" : "Réservez en ligne"}
-          title={isEn ? "Pick your slot" : "Choisissez votre créneau"}
-          description={
-            isEn
-              ? "Choose your advice and a time below, pay securely at booking, and get an instant confirmation with the video link. The price is credited to your quote if a project follows."
-              : "Choisissez votre conseil et un horaire ci-dessous, réglez en ligne à la réservation, et recevez aussitôt la confirmation avec le lien de visio. Le prix est déduit du devis si un projet suit."
-          }
-        />
-
-        {/* Engagements — bandeau compact au-dessus du calendrier */}
-        <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-3">
-          {reassurance.map(([Icon, label]) => (
-            <div key={label} className="flex items-start gap-3 bg-obsidian p-5">
-              <Icon className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-              <span className="font-inter-tight text-sm leading-snug text-mid-gray">{label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Calendrier Calendly (liste les deux conseils) */}
-        <Reveal className="mt-px">
-          <CalendlyInline url={CALENDLY_BASE} />
-        </Reveal>
-      </BlueprintSection>
-      <Separator />
-
-      {/* § 05 — FAQ */}
+      {/* § 04 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 05"
+          index="№ 04"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />
