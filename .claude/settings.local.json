@@ -44,7 +44,12 @@
       "Bash(git *)",
       "Bash(Get-ChildItem -Path \"C:\\\\dev\\\\next-impact-portfolio\" -Recurse -Depth 2)",
       "Bash(Select-Object -First 50)",
-      "Bash(Format-List -Property Name, FullName)"
+      "Bash(Format-List -Property Name, FullName)",
+      "PowerShell(npm run lint 2>&1)",
+      "PowerShell(npx tsc --noEmit 2>&1)",
+      "PowerShell(Rename-Item -Path 'content\\\\documentation\\\\headless-cms' -NewName 'wordpress-headless')",
+      "PowerShell(Rename-Item -Path 'content\\\\en\\\\documentation\\\\headless-cms' -NewName 'wordpress-headless')",
+      "PowerShell(\"OK\")"
     ]
   }
 }

@@ -118,7 +118,10 @@ export function OrganizationJsonLd() {
 }
 
 /**
- * Données structurées pour un article de blog ou étude de cas
+ * Données structurées pour un article de blog, étude de cas ou doc technique.
+ * Préférer `type="TechArticle"` pour la documentation technique (WordPress
+ * Headless, Next.js…) — c'est le sous-type Schema.org reconnu par Google
+ * Search et valorisé par les moteurs IA pour les sujets dev.
  */
 export function ArticleJsonLd({
   title,
@@ -128,6 +131,9 @@ export function ArticleJsonLd({
   dateModified,
   author = "Agathe",
   url,
+  type = "Article",
+  proficiencyLevel,
+  dependencies,
 }: {
   title: string;
   description: string;
@@ -136,10 +142,15 @@ export function ArticleJsonLd({
   dateModified?: string;
   author?: string;
   url: string;
+  type?: "Article" | "TechArticle";
+  proficiencyLevel?: "Beginner" | "Intermediate" | "Expert";
+  dependencies?: string;
 }) {
   const data = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": type,
+    ...(type === "TechArticle" && proficiencyLevel ? { proficiencyLevel } : {}),
+    ...(type === "TechArticle" && dependencies ? { dependencies } : {}),
     headline: title,
     description: description,
     image: image.startsWith("http") ? image : `${siteConfig.url}${image}`,

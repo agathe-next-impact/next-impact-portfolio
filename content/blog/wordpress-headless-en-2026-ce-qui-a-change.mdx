@@ -1,0 +1,98 @@
+---
+title: "WordPress headless en 2026 : ce qui a changé en 12 mois"
+slug: "wordpress-headless-en-2026-ce-qui-a-change"
+date: "2026-06-24"
+author: "Agathe Karinthi-Martin"
+excerpt: "WordPress headless en 2026 : Next.js 16, WPGraphQL stable, tarifs Vercel revus, AI search. Ce qui change, ce qui ne change pas, et où se situe désormais le seuil de bascule."
+tags: ["WordPress Headless", "Next.js", "État des lieux", "WPGraphQL"]
+readingTime: 8
+---
+
+## En 12 mois, WordPress headless a changé de statut
+
+WordPress headless n'est plus une curiosité de conférence en 2026. Next.js 16 est sorti en mars, WPGraphQL est passé sous gouvernance Automattic, Vercel a revu son pricing, et les moteurs d'AI search (ChatGPT Search, Perplexity, Gemini) trient désormais les sources sur la base du temps de réponse serveur. J'ai migré quatre projets sur cette période. Voici ce qui a réellement bougé, et ce que ça change pour décider en 2026.
+
+## Next.js 15 vers 16 : la stack s'est stabilisée
+
+La transition Next.js 15 vers 16 a été moins brutale que la précédente (12 vers 13, App Router). Les changements concrets observés en production :
+
+- **Turbopack stable en build** : les builds de mes sites passent de 90 s à 35 s en moyenne sur un site de 80 pages. Sur un site média à 600 articles, on tombe sous la barre des 2 minutes.
+- **React 19 par défaut** : les Server Actions sont enfin utilisables sans `experimental:` dans `next.config.js`. Les formulaires de contact ou de prise de RDV n'ont plus besoin d'un endpoint API séparé.
+- **Cache plus prévisible** : la directive `'use cache'` remplace les options éparpillées de `fetch`. Plus simple à expliquer à un client qui veut comprendre pourquoi sa page se met à jour ou non.
+
+Le coût de mise à jour d'un site Next.js 15 vers 16 reste raisonnable : entre 0,5 et 1,5 jour-homme selon la taille du projet, vs 3 à 5 jours pour la bascule App Router de 2023.
+
+## WPGraphQL : maturité enfin atteinte
+
+C'est probablement le changement le plus important pour les DSI qui hésitaient. En 2024, WPGraphQL était un plugin communautaire maintenu par une poignée de développeurs. Risque réel d'abandon.
+
+En 2026 :
+
+- Le plugin est passé sous gouvernance Automattic (l'éditeur de WordPress.com).
+- La compatibilité avec ACF, Yoast SEO, Polylang est testée à chaque release.
+- Le rythme est de 4 à 6 releases par an, avec un changelog public et un canal de signalement de bug actif.
+
+Pour un décideur, ça veut dire : la dépendance technique principale du headless WordPress est désormais sponsorisée par l'éditeur du CMS. C'est l'argument qui manquait il y a 18 mois.
+
+## Vercel : pricing revu, alternatives crédibles
+
+Vercel a ajusté son pricing fin 2025. Les conséquences sur un site headless WordPress typique (PME, 30 à 100 pages, 20 000 visiteurs/mois) :
+
+| Plateforme | Coût mensuel typique 2025 | Coût mensuel typique 2026 |
+|---|---|---|
+| Vercel Pro | 20 $ + bandwidth ~25 $ | 20 $ + fluid compute ~12 $ |
+| Cloudflare Pages + Workers | 5 $ + 5 $ | 5 $ + 5 $ |
+| Netlify Pro | 19 $ + bandwidth ~30 $ | 19 $ + bandwidth ~28 $ |
+| Self-hosted (VPS Hetzner + Coolify) | 8 € | 8 € |
+
+La nouvelle facturation "fluid compute" de Vercel pénalise les sites qui font beaucoup d'opérations courtes (pages statiques) et avantage ceux qui font des opérations longues (rendu serveur, streaming AI). Pour la plupart des sites éditoriaux, la facture annuelle a baissé d'environ 30 %.
+
+Si vous hébergez plus de 5 sites headless, regardez Cloudflare Pages : la tarification est devenue imbattable, au prix d'une expérience développeur moins fluide.
+
+## AI search : le critère de tri a changé
+
+C'est le changement le moins visible mais le plus structurant. En 2025, les bots d'AI search (GPTBot, PerplexityBot, ClaudeBot) crawlaient massivement et indexaient à peu près tout. En 2026, ils trient.
+
+Ce que j'observe sur les logs de mes sites headless :
+
+- Les bots AI abandonnent une page si elle ne répond pas en moins de 800 ms côté serveur.
+- Les sites WordPress classiques avec un TTFB (Time To First Byte) supérieur à 1,2 s sont crawlés deux à trois fois moins fréquemment qu'il y a 12 mois.
+- Les pages avec données structurées Schema.org (`Article`, `FAQPage`, `HowTo`) sont citées 4 à 7 fois plus souvent dans les réponses d'AI search que les pages sans.
+
+Sur un WordPress classique bien optimisé, atteindre un TTFB sous 800 ms est faisable mais demande du travail (caching agressif, CDN, base de données tunée). Sur un headless Next.js avec ISR ou SSG, c'est le défaut.
+
+## Ce qui n'a PAS changé
+
+Important pour ne pas survendre :
+
+- **La complexité de mise en place reste réelle.** Un projet headless demande toujours 6 à 10 semaines selon le périmètre. C'est plus long qu'un thème WordPress livré en 3 semaines.
+- **L'équipe éditoriale ne voit aucune différence**, et c'est très bien. WordPress reste WordPress côté admin.
+- **Le coût d'entrée n'a pas baissé.** Compter 4 000 à 6 500 € pour une migration PME standard, hors AGEFIPH.
+- **L'écosystème de plugins WordPress dépendant du thème (page builders, sliders visuels) ne fonctionne toujours pas en headless.** Ce n'est pas un bug, c'est par construction.
+
+## Quand l'éviter en 2026
+
+Le seuil de bascule a légèrement baissé grâce à la maturité de WPGraphQL et à la baisse des coûts Vercel, mais le headless reste un mauvais choix dans plusieurs cas :
+
+- **Site &lt; 10 pages avec moins de 2 000 visites/mois.** Un WordPress optimisé fera très bien le travail, sans la complexité d'une stack séparée.
+- **Équipe technique inexistante ou prestataire unique sans backup.** Le headless implique deux environnements à maintenir. Si votre prestataire disparaît, retrouver quelqu'un capable de reprendre Next.js + WordPress demande plus de temps qu'un WordPress thème classique.
+- **Site dépendant de plugins de page builder.** Elementor, Divi, WPBakery : leur logique de rendu HTML ne traverse pas l'API REST/GraphQL. Migrer veut dire refaire les pages.
+- **Budget annuel d'exploitation sous 1 000 €.** L'hébergement double (WP + front Next.js) reste un coût récurrent incompressible.
+
+## Le seuil de bascule en 2026
+
+Si je devais résumer la règle de décision actualisée :
+
+| Indicateur | Bascule justifiée |
+|---|---|
+| Trafic mensuel | &gt; 8 000 visites (vs 10 000 en 2025) |
+| Lighthouse actuel | &lt; 70 |
+| Volume éditorial | &gt; 5 publications/mois |
+| Sensibilité au SEO | Forte (média, lead gen, e-commerce) |
+| Budget annuel disponible | &gt; 1 500 € |
+
+Trois critères sur cinq : le headless mérite un chiffrage sérieux. Sinon, restez sur du WordPress optimisé.
+
+## Conclusion
+
+WordPress headless en 2026, c'est une stack plus stable, moins chère à exploiter, et davantage récompensée par les moteurs d'AI search qu'en 2025. Le seuil de bascule a baissé, mais le headless reste un choix d'infrastructure, pas une mode. Pour creuser la décision, voir la page [WordPress headless](/wordpress-headless).

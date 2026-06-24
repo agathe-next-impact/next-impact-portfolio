@@ -86,7 +86,7 @@ export default function Tools() {
       title: "Choisir entre WordPress CMS et Headless ?",
       lottie: "/img/quiz-cms.webp",
       ctaText: "Test en ligne",
-      ctaLink: "/documentation/headless-cms",
+      ctaLink: "/documentation/wordpress-headless",
       content: `
       <p>
         Outil diagnostique en ligne gratuit qui analyse votre projet de site web
@@ -160,7 +160,7 @@ export function CMSQuizCard() {
       title: "Choisir entre WordPress CMS et Headless ?",
       lottie: "/img/quiz-cms.webp",
       ctaText: "Test en ligne",
-      ctaLink: "/documentation/headless-cms",
+      ctaLink: "/documentation/wordpress-headless",
       content: `
       <p>
         Outil diagnostique en ligne gratuit qui analyse votre projet de site web

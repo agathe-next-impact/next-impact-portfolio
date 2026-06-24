@@ -161,10 +161,10 @@ export default function HomeOffres() {
         {/* Pied — liens internes (préférés aux détails) */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">
           <Link
-            href="/documentation"
+            href="/wordpress-headless"
             className="font-mono text-[10px] tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
           >
-            {isEn ? "Architecture details →" : "Détails d'architecture →"}
+            {isEn ? "Headless WordPress in depth →" : "WordPress Headless en détail →"}
           </Link>
           <Link
             href="/services"

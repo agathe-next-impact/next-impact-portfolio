@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { notFound } from "next/navigation"
 
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
@@ -37,8 +37,8 @@ const categoryInfo: Record<string, { title: string; description: string }> = {
     title: "WordPress",
     description: "Bonnes pratiques et guides pour WordPress.",
   },
-  "headless-cms": {
-    title: "Headless CMS",
+  "wordpress-headless": {
+    title: "WordPress Headless",
     description: "Architecture headless, API REST et découplage front/back.",
   },
   blog: {
@@ -139,11 +139,36 @@ export default async function CategoryPage(props: CategoryPageProps) {
             </p>
           )}
 
+          {/* Page pilier : vue d'ensemble dédiée pour la catégorie wordpress-headless. */}
+          {category === "wordpress-headless" && (
+            <Link
+              href="/wordpress-headless"
+              className="mb-10 flex items-start justify-between gap-4 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 no-underline transition-colors hover:border-accent-secondary"
+            >
+              <div>
+                <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+                  {locale === "en" ? "Overview" : "Vue d'ensemble"}
+                </p>
+                <p className="text-base font-medium text-foreground">
+                  {locale === "en"
+                    ? "Headless WordPress — pillar page"
+                    : "WordPress Headless — page pilier"}
+                </p>
+                <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  {locale === "en"
+                    ? "Definition, comparison table, costs, performance and FAQ — the full picture in one page."
+                    : "Définition, comparatif, coûts, performance et FAQ — la vue complète sur une page."}
+                </p>
+              </div>
+              <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-mid-gray" />
+            </Link>
+          )}
+
           {/* Theme cards + Articles grid */}
           <CategoryPageContent articles={articles} category={category} />
 
           {/* Maillage : sur le Headless, proposer de tester son propre site. */}
-          {category === "headless-cms" && (
+          {category === "wordpress-headless" && (
             <div style={{ marginTop: "2.5rem" }}>
               <AuditPromoBanner variant="headless" />
             </div>

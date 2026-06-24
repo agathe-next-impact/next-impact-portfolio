@@ -27,7 +27,7 @@ interface Article {
 /* ─── Thèmes par catégorie ───────────────────────────────────────────────── */
 
 const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
-  "headless-cms": [
+  "wordpress-headless": [
     {
       icon: "/icons/layers-icon.svg",
       title: "Fondations",

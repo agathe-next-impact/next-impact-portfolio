@@ -235,7 +235,7 @@ function getRecommendation(score: number): Recommendation {
         },
         {
           title: "Performance et Core Web Vitals",
-          href: "/documentation/headless-cms/performance-et-core-web-vitals",
+          href: "/documentation/wordpress-headless/performance-et-core-web-vitals",
         },
       ],
     };
@@ -251,15 +251,15 @@ function getRecommendation(score: number): Recommendation {
       articles: [
         {
           title: "Quand utiliser WordPress headless",
-          href: "/documentation/headless-cms/quand-utiliser-wordpress-headless",
+          href: "/documentation/wordpress-headless/quand-utiliser-wordpress-headless",
         },
         {
           title: "Migration monolithique vers headless",
-          href: "/documentation/headless-cms/migration-monolithique-vers-headless",
+          href: "/documentation/wordpress-headless/migration-monolithique-vers-headless",
         },
         {
           title: "Comprendre le headless",
-          href: "/documentation/headless-cms/comprendre-le-headless",
+          href: "/documentation/wordpress-headless/comprendre-le-headless",
         },
       ],
     };
@@ -274,15 +274,15 @@ function getRecommendation(score: number): Recommendation {
     articles: [
       {
         title: "Comment créer un headless",
-        href: "/documentation/headless-cms/comment-creer-un-headless",
+        href: "/documentation/wordpress-headless/comment-creer-un-headless",
       },
       {
         title: "Next.js pour WordPress headless",
-        href: "/documentation/headless-cms/nextjs-pour-wordpress-headless",
+        href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless",
       },
       {
         title: "Déploiement Vercel + Next.js",
-        href: "/documentation/headless-cms/deploiement-vercel-nextjs",
+        href: "/documentation/wordpress-headless/deploiement-vercel-nextjs",
       },
     ],
   };

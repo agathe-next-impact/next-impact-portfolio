@@ -1,0 +1,311 @@
+---
+title: "The WordPress REST API"
+description: "Endpoints, requests and authentication for WordPress's native REST API in a headless architecture."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 7
+---
+
+<TldrCallout label="TL;DR">
+  The WordPress REST API has shipped natively since version 4.7 (December 2016). It exposes content through HTTP endpoints returning JSON (`/wp-json/wp/v2/posts`, `/pages`, `/media`…) and is, alongside WPGraphQL, one of the two standard gateways for a headless WordPress. Read operations are public by default; write operations require authentication.
+</TldrCallout>
+
+## What is the WordPress REST API?
+
+Since version 4.7 (December 2016), WordPress has natively included a REST API. This API exposes the database content as HTTP endpoints that return data in JSON format. Any client capable of sending HTTP requests (browser, mobile app, Node.js server) can consume this data without depending on the PHP theme system.
+
+The REST API follows HTTP protocol conventions: each resource has a stable URL, and CRUD operations (Create, Read, Update, Delete) map to standard HTTP methods.
+
+<FlowDiagram
+  nodes={[
+    { label: "HTTP client", description: "fetch, curl, Axios, or any other client", icon: "📡" },
+    { label: "WordPress REST API", description: "/wp-json/wp/v2/ — JSON router", icon: "🔄" },
+    { label: "MySQL database", description: "WordPress content storage", icon: "🗄️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+The API entry point is available at `https://your-site.com/wp-json/wp/v2/`. This root URL returns the list of all available routes.
+
+## The main endpoints
+
+The REST API organizes WordPress content into resources, each accessible via a dedicated endpoint.
+
+<ComparisonTable
+  headers={["Endpoint", "Description"]}
+  rows={[
+    { label: "Posts", left: "/wp-json/wp/v2/posts", right: "Blog articles" },
+    { label: "Pages", left: "/wp-json/wp/v2/pages", right: "Static pages" },
+    { label: "Media", left: "/wp-json/wp/v2/media", right: "Images, videos and files" },
+    { label: "Categories", left: "/wp-json/wp/v2/categories", right: "Categories taxonomy" },
+    { label: "Tags", left: "/wp-json/wp/v2/tags", right: "Tags taxonomy" },
+    { label: "Users", left: "/wp-json/wp/v2/users", right: "User accounts" },
+    { label: "Comments", left: "/wp-json/wp/v2/comments", right: "Comments" },
+    { label: "Taxonomies", left: "/wp-json/wp/v2/taxonomies", right: "List of registered taxonomies" }
+  ]}
+/>
+
+Each endpoint supports access to a collection (list) or to an individual resource identified by its ID. For example, `/wp-json/wp/v2/posts/42` returns the post whose ID is 42.
+
+## Making requests: HTTP methods
+
+### GET — Reading data
+
+The GET method retrieves content without modifying it. It is the most common request in a headless architecture.
+
+```bash
+# Retrieve the 10 latest posts
+curl https://your-site.com/wp-json/wp/v2/posts
+
+# Retrieve a specific post by its ID
+curl https://your-site.com/wp-json/wp/v2/posts/42
+
+# Retrieve pages
+curl https://your-site.com/wp-json/wp/v2/pages
+```
+
+In JavaScript with `fetch` (Next.js side):
+
+```javascript
+// Retrieve posts with embedded data
+const response = await fetch(
+  'https://your-site.com/wp-json/wp/v2/posts?_embed&per_page=12'
+);
+const posts = await response.json();
+```
+
+### POST — Creating content
+
+The POST method creates a new resource. It requires authentication.
+
+```javascript
+const response = await fetch('https://your-site.com/wp-json/wp/v2/posts', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic ' + btoa('username:application_password')
+  },
+  body: JSON.stringify({
+    title: 'New post',
+    content: '<p>Post content.</p>',
+    status: 'draft'
+  })
+});
+```
+
+### PUT / PATCH — Updating
+
+PUT replaces a resource entirely. PATCH only modifies the specified fields.
+
+```bash
+# Update the title of an existing post
+curl -X PATCH https://your-site.com/wp-json/wp/v2/posts/42 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk" \
+  -d '{"title": "Updated title"}'
+```
+
+### DELETE — Deleting
+
+```bash
+# Move a post to the trash
+curl -X DELETE https://your-site.com/wp-json/wp/v2/posts/42 \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk"
+
+# Permanent deletion (bypasses the trash)
+curl -X DELETE "https://your-site.com/wp-json/wp/v2/posts/42?force=true" \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk"
+```
+
+## Essential request parameters
+
+GET requests accept parameters that allow filtering, sorting and optimizing responses.
+
+| Parameter | Function | Example |
+|-----------|----------|---------|
+| `per_page` | Number of results per page (max 100) | `?per_page=20` |
+| `page` | Page number for results | `?page=2` |
+| `_embed` | Includes related data (author, image, terms) | `?_embed` |
+| `_fields` | Limits the fields returned | `?_fields=id,title,slug` |
+| `search` | Text search | `?search=headless` |
+| `orderby` | Sort criterion (date, title, id) | `?orderby=title` |
+| `order` | Sort direction (asc, desc) | `?order=asc` |
+| `categories` | Filter by category ID | `?categories=5` |
+| `slug` | Retrieve by slug | `?slug=my-post` |
+| `status` | Publication status (requires auth) | `?status=draft` |
+
+<Callout variant="tip" title="Optimize your requests with _fields">
+The `_fields` parameter reduces the size of the JSON response by returning only the necessary fields. For a listing page, use `?_fields=id,title,slug,excerpt,date,_links` instead of retrieving the full data of each post.
+</Callout>
+
+## Pagination
+
+The REST API uses a pagination system based on HTTP headers. Each paginated response includes two headers:
+
+- `X-WP-Total`: total number of resources matching the request
+- `X-WP-TotalPages`: total number of pages
+
+```javascript
+async function fetchPaginatedPosts(page = 1, perPage = 10) {
+  const response = await fetch(
+    `https://your-site.com/wp-json/wp/v2/posts?per_page=${perPage}&page=${page}`
+  );
+
+  const posts = await response.json();
+  const totalPosts = parseInt(response.headers.get('X-WP-Total'));
+  const totalPages = parseInt(response.headers.get('X-WP-TotalPages'));
+
+  return { posts, totalPosts, totalPages, currentPage: page };
+}
+```
+
+## Authentication
+
+Read requests (GET) on published content do not require authentication. However, creating, modifying and deleting content require identification.
+
+### Application Passwords (recommended)
+
+Since WordPress 5.6, application passwords enable secure HTTP Basic authentication. Each password is tied to a user and can be revoked individually.
+
+<StepByStep>
+  <Step number={1} title="Generate an application password">
+    In the WordPress back-office, go to Users > Your profile. In the "Application Passwords" section, enter a name (for example "Frontend Next.js") and click "Add new application password".
+  </Step>
+  <Step number={2} title="Store the password">
+    WordPress displays the password only once. Copy it and store it in a server-side environment variable (the `.env.local` file of your Next.js project). Never commit it to the Git repository.
+  </Step>
+  <Step number={3} title="Use the password in requests">
+    Encode the `username:password` pair in Base64 and pass it in the Authorization header of your requests.
+  </Step>
+</StepByStep>
+
+```javascript
+// .env.local
+// WP_APP_USER=admin
+// WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
+
+const credentials = Buffer.from(
+  `${process.env.WP_APP_USER}:${process.env.WP_APP_PASSWORD}`
+).toString('base64');
+
+const response = await fetch('https://your-site.com/wp-json/wp/v2/posts', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Basic ${credentials}`
+  },
+  body: JSON.stringify({ title: 'Post created via the API', status: 'draft' })
+});
+```
+
+<Callout variant="warning" title="Credential security">
+Application passwords must never be exposed on the client side (browser). In a Next.js architecture, authenticated requests must go through Route Handlers or server functions (`getServerSideProps`, Server Components) so credentials remain on the server.
+</Callout>
+
+### JWT (JSON Web Tokens)
+
+The JWT Authentication for WP REST API plugin enables token-based authentication. The client sends its credentials once to obtain a token, then uses that token in subsequent requests.
+
+```javascript
+// Step 1: obtain a token
+const tokenResponse = await fetch('https://your-site.com/wp-json/jwt-auth/v1/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username: 'admin', password: 'password' })
+});
+const { token } = await tokenResponse.json();
+
+// Step 2: use the token
+const response = await fetch('https://your-site.com/wp-json/wp/v2/posts', {
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+```
+
+## Creating custom endpoints
+
+The `register_rest_route()` function lets you add bespoke endpoints to expose specific data or implement custom business logic.
+
+```php
+// In functions.php or a custom plugin
+add_action('rest_api_init', function () {
+  register_rest_route('mysite/v1', '/recent-projects', [
+    'methods'  => 'GET',
+    'callback' => 'get_recent_projects',
+    'permission_callback' => '__return_true',
+    'args' => [
+      'count' => [
+        'default' => 6,
+        'sanitize_callback' => 'absint',
+      ],
+    ],
+  ]);
+});
+
+function get_recent_projects($request) {
+  $count = $request->get_param('count');
+  $query = new WP_Query([
+    'post_type'      => 'project',
+    'posts_per_page' => $count,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+  ]);
+
+  $projects = [];
+  foreach ($query->posts as $post) {
+    $projects[] = [
+      'id'    => $post->ID,
+      'title' => $post->post_title,
+      'slug'  => $post->post_name,
+      'image' => get_the_post_thumbnail_url($post->ID, 'large'),
+      'date'  => $post->post_date,
+    ];
+  }
+
+  return new WP_REST_Response($projects, 200);
+}
+```
+
+The endpoint is then accessible at `https://your-site.com/wp-json/mysite/v1/recent-projects?count=3`.
+
+## Error handling
+
+The REST API returns standard HTTP codes and structured JSON error objects.
+
+| Code | Meaning | Common cause |
+|------|---------|--------------|
+| 200 | Success | Request processed correctly |
+| 201 | Created | Resource successfully created (POST) |
+| 400 | Bad Request | Missing or malformed parameters |
+| 401 | Unauthorized | Missing or invalid authentication |
+| 403 | Forbidden | Insufficient permissions |
+| 404 | Not Found | Endpoint or resource does not exist |
+| 500 | Server Error | PHP error on the WordPress side |
+
+```javascript
+async function safeFetch(url) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const error = await response.json();
+    console.error(`Error ${response.status}: ${error.message}`);
+    console.error(`Code: ${error.code}`);
+    return null;
+  }
+
+  return response.json();
+}
+```
+
+<Quiz
+  question="Which parameter reduces the size of the JSON response by returning only certain fields?"
+  options={[
+    "_embed",
+    "_fields",
+    "per_page",
+    "filter"
+  ]}
+  answer={1}
+  explanation="The _fields parameter lets you specify exactly which fields to include in the JSON response. For example, ?_fields=id,title,slug will return only those three fields for each resource, significantly reducing the response size and improving network performance."
+/>

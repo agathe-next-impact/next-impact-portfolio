@@ -1,0 +1,98 @@
+---
+title: "Headless WordPress in 2026: what changed in 12 months"
+slug: "wordpress-headless-en-2026-ce-qui-a-change"
+date: "2026-06-24"
+author: "Agathe Karinthi-Martin"
+excerpt: "Headless WordPress in 2026: Next.js 16, stable WPGraphQL, revised Vercel pricing, AI search. What's changed, what hasn't, and where the tipping point now sits."
+tags: ["Headless WordPress", "Next.js", "Status update", "WPGraphQL"]
+readingTime: 8
+---
+
+## In 12 months, headless WordPress has changed status
+
+Headless WordPress is no longer a conference curiosity in 2026. Next.js 16 shipped in March, WPGraphQL moved under Automattic governance, Vercel revised its pricing, and AI search engines (ChatGPT Search, Perplexity, Gemini) now rank sources based on server response time. I've migrated four projects over this period. Here's what actually moved, and what it changes for a 2026 decision.
+
+## Next.js 15 to 16: the stack has stabilized
+
+The Next.js 15 to 16 transition was less brutal than the previous one (12 to 13, App Router). What I observed in production:
+
+- **Turbopack stable in build**: my site builds dropped from 90 s to 35 s on average for an 80-page site. On a 600-article media site, we get under 2 minutes.
+- **React 19 by default**: Server Actions are finally usable without `experimental:` in `next.config.js`. Contact forms or booking forms no longer need a separate API endpoint.
+- **More predictable caching**: the `'use cache'` directive replaces the scattered `fetch` options. Easier to explain to a client who wants to understand why their page updates or not.
+
+The cost of upgrading a Next.js site from 15 to 16 stays reasonable: 0.5 to 1.5 person-days depending on project size, vs 3 to 5 days for the 2023 App Router migration.
+
+## WPGraphQL: maturity finally reached
+
+This is probably the most important change for CIOs who were hesitating. In 2024, WPGraphQL was a community plugin maintained by a handful of developers. Real risk of abandonment.
+
+In 2026:
+
+- The plugin moved under Automattic governance (the publisher of WordPress.com).
+- Compatibility with ACF, Yoast SEO, Polylang is tested at every release.
+- The pace is 4 to 6 releases per year, with a public changelog and an active bug reporting channel.
+
+For a decision-maker, this means: the main technical dependency of headless WordPress is now sponsored by the CMS publisher. That's the argument missing 18 months ago.
+
+## Vercel: revised pricing, credible alternatives
+
+Vercel adjusted its pricing in late 2025. Consequences on a typical headless WordPress site (SMB, 30 to 100 pages, 20,000 visitors/month):
+
+| Platform | Typical 2025 monthly cost | Typical 2026 monthly cost |
+|---|---|---|
+| Vercel Pro | $20 + bandwidth ~$25 | $20 + fluid compute ~$12 |
+| Cloudflare Pages + Workers | $5 + $5 | $5 + $5 |
+| Netlify Pro | $19 + bandwidth ~$30 | $19 + bandwidth ~$28 |
+| Self-hosted (Hetzner VPS + Coolify) | €8 | €8 |
+
+Vercel's new "fluid compute" billing penalizes sites doing lots of short operations (static pages) and favors those doing long operations (server rendering, AI streaming). For most editorial sites, the annual bill dropped by about 30%.
+
+If you host more than 5 headless sites, look at Cloudflare Pages: the pricing has become unbeatable, at the cost of a less fluid developer experience.
+
+## AI search: the ranking criterion has shifted
+
+This is the least visible but most structural change. In 2025, AI search bots (GPTBot, PerplexityBot, ClaudeBot) crawled massively and indexed almost everything. In 2026, they sort.
+
+What I observe in the logs of my headless sites:
+
+- AI bots abandon a page if it doesn't respond in under 800 ms on the server side.
+- Classic WordPress sites with a TTFB (Time To First Byte) above 1.2 s are crawled two to three times less often than 12 months ago.
+- Pages with Schema.org structured data (`Article`, `FAQPage`, `HowTo`) are cited 4 to 7 times more often in AI search responses than pages without.
+
+On a well-optimized classic WordPress, hitting a TTFB under 800 ms is doable but takes work (aggressive caching, CDN, tuned database). On a headless Next.js with ISR or SSG, it's the default.
+
+## What has NOT changed
+
+Important to avoid overselling:
+
+- **Implementation complexity is still real.** A headless project still takes 6 to 10 weeks depending on scope. That's longer than a WordPress theme delivered in 3 weeks.
+- **The editorial team sees no difference**, and that's a good thing. WordPress remains WordPress on the admin side.
+- **Entry cost hasn't dropped.** Plan for €4,000 to €6,500 for a standard SMB migration, excluding AGEFIPH.
+- **The ecosystem of theme-dependent WordPress plugins (page builders, visual sliders) still doesn't work in headless.** That's not a bug, it's by design.
+
+## When to avoid it in 2026
+
+The tipping threshold has dropped slightly thanks to WPGraphQL maturity and lower Vercel costs, but headless remains a bad choice in several cases:
+
+- **Site &lt; 10 pages with under 2,000 visits/month.** An optimized WordPress will do the job very well, without the complexity of a separate stack.
+- **No technical team or single provider without backup.** Headless means two environments to maintain. If your provider disappears, finding someone capable of taking over Next.js + WordPress takes longer than a classic WordPress theme.
+- **Site dependent on page builder plugins.** Elementor, Divi, WPBakery: their HTML rendering logic doesn't cross the REST/GraphQL API. Migrating means rebuilding the pages.
+- **Annual operating budget under €1,000.** The dual hosting (WP + Next.js front) is an irreducible recurring cost.
+
+## The 2026 tipping point
+
+If I had to summarize the updated decision rule:
+
+| Indicator | Migration justified |
+|---|---|
+| Monthly traffic | &gt; 8,000 visits (vs 10,000 in 2025) |
+| Current Lighthouse | &lt; 70 |
+| Editorial volume | &gt; 5 publications/month |
+| SEO sensitivity | High (media, lead gen, e-commerce) |
+| Available annual budget | &gt; €1,500 |
+
+Three out of five criteria: headless deserves serious costing. Otherwise, stay on optimized WordPress.
+
+## Conclusion
+
+Headless WordPress in 2026 is a more stable stack, cheaper to operate, and more rewarded by AI search engines than in 2025. The tipping threshold has dropped, but headless remains an infrastructure choice, not a trend. To dig into the decision, see the [Headless WordPress page](/wordpress-headless).

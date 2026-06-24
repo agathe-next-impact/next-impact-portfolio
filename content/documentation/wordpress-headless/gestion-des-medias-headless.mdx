@@ -1,0 +1,338 @@
+---
+title: "Gestion des médias et optimisation d'images"
+description: "Gérer les images et fichiers médias WordPress dans une architecture headless avec optimisation Next.js."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 13
+---
+
+<TldrCallout>
+  En WordPress headless, la médiathèque reste l'outil unique d'upload côté éditeur. Les images sont exposées via l'API (`/wp-json/wp/v2/media` ou WPGraphQL) puis affichées côté Next.js avec le composant `next/image`, qui ajoute conversion WebP/AVIF, redimensionnement à la demande, lazy loading et placeholders flous. Le résultat : des LCP inférieurs à 2,5 s même sur des sites riches en visuels.
+</TldrCallout>
+
+## La médiathèque WordPress en architecture headless
+
+WordPress gère les fichiers médias (images, vidéos, documents) via sa médiathèque. Lors de l'upload d'une image, WordPress génère automatiquement plusieurs tailles (thumbnail, medium, large, full) et stocke les métadonnées associées (dimensions, poids, texte alternatif). En mode headless, ces données sont accessibles via l'API REST (`/wp-json/wp/v2/media`) ou via WPGraphQL.
+
+Le frontend Next.js récupère les URLs des images depuis l'API et les affiche avec le composant `next/image`, qui ajoute une couche d'optimisation automatique : redimensionnement à la volée, conversion en formats modernes (WebP, AVIF), lazy loading et génération de placeholders flous.
+
+<ArchitectureDiagram
+  title="Pipeline d'images : WordPress vers le navigateur"
+  layers={[
+    { label: "WordPress", items: ["Upload dans la médiathèque", "Génération des tailles", "Stockage des métadonnées"], color: "dark" },
+    { label: "API", items: ["Endpoint /wp-json/wp/v2/media", "WPGraphQL mediaItems", "URLs et dimensions"], color: "blue" },
+    { label: "Next.js", items: ["Composant next/image", "Optimisation à la volée", "Cache et CDN"], color: "orange" }
+  ]}
+/>
+
+## L'endpoint média de l'API REST
+
+### Récupérer les médias
+
+```bash
+# Liste des 20 derniers médias
+curl https://votre-site.com/wp-json/wp/v2/media?per_page=20
+
+# Un média spécifique par ID
+curl https://votre-site.com/wp-json/wp/v2/media/156
+```
+
+La réponse JSON d'un média contient les informations suivantes :
+
+```json
+{
+  "id": 156,
+  "date": "2024-11-15T10:30:00",
+  "slug": "capture-projet-portfolio",
+  "type": "attachment",
+  "title": { "rendered": "Capture projet portfolio" },
+  "alt_text": "Page d'accueil du site portfolio",
+  "mime_type": "image/jpeg",
+  "source_url": "https://votre-site.com/wp-content/uploads/2024/11/capture-projet.jpg",
+  "media_details": {
+    "width": 2400,
+    "height": 1600,
+    "file": "2024/11/capture-projet.jpg",
+    "sizes": {
+      "thumbnail": {
+        "file": "capture-projet-150x150.jpg",
+        "width": 150,
+        "height": 150,
+        "source_url": "https://votre-site.com/wp-content/uploads/2024/11/capture-projet-150x150.jpg"
+      },
+      "medium": {
+        "file": "capture-projet-300x200.jpg",
+        "width": 300,
+        "height": 200,
+        "source_url": "https://votre-site.com/wp-content/uploads/2024/11/capture-projet-300x200.jpg"
+      },
+      "large": {
+        "file": "capture-projet-1024x683.jpg",
+        "width": 1024,
+        "height": 683,
+        "source_url": "https://votre-site.com/wp-content/uploads/2024/11/capture-projet-1024x683.jpg"
+      },
+      "full": {
+        "file": "capture-projet.jpg",
+        "width": 2400,
+        "height": 1600,
+        "source_url": "https://votre-site.com/wp-content/uploads/2024/11/capture-projet.jpg"
+      }
+    }
+  }
+}
+```
+
+### Récupérer les médias via WPGraphQL
+
+```graphql
+query ImageProjet($id: ID!) {
+  mediaItem(id: $id, idType: DATABASE_ID) {
+    sourceUrl
+    altText
+    title
+    mediaDetails {
+      width
+      height
+      sizes {
+        name
+        sourceUrl
+        width
+        height
+      }
+    }
+  }
+}
+```
+
+## Les tailles d'images WordPress
+
+WordPress génère des tailles prédéfinies lors de l'upload. Des tailles supplémentaires peuvent être enregistrées dans `functions.php`.
+
+<ComparisonTable
+  headers={["Taille", "Dimensions par défaut"]}
+  rows={[
+    { label: "thumbnail", left: "150 x 150 px", right: "Recadrée (crop), carrée" },
+    { label: "medium", left: "300 px max", right: "Proportionnelle, largeur ou hauteur max 300" },
+    { label: "medium_large", left: "768 px max", right: "Proportionnelle, largeur max 768" },
+    { label: "large", left: "1024 px max", right: "Proportionnelle, largeur ou hauteur max 1024" },
+    { label: "full", left: "Taille originale", right: "Image non redimensionnée" }
+  ]}
+/>
+
+### Ajouter des tailles personnalisées
+
+```php
+// functions.php
+add_action('after_setup_theme', function () {
+  // Taille pour les cartes de projet (crop centré)
+  add_image_size('card', 600, 400, true);
+
+  // Taille pour le hero (largeur fixe, hauteur proportionnelle)
+  add_image_size('hero', 1920, 0, false);
+
+  // Taille pour les miniatures de galerie
+  add_image_size('gallery-thumb', 400, 400, true);
+});
+```
+
+Pour que ces tailles apparaissent dans l'API REST et dans WPGraphQL, aucune configuration supplémentaire n'est nécessaire : elles sont automatiquement incluses dans l'objet `media_details.sizes` de la réponse.
+
+## Intégrer les images WordPress avec next/image
+
+Le composant `next/image` de Next.js optimise automatiquement les images : redimensionnement, conversion de format, lazy loading et mise en cache. Pour l'utiliser avec des images provenant de WordPress, la configuration du domaine distant est nécessaire.
+
+### Configuration de next.config.js
+
+```javascript
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'votre-site.com',
+        pathname: '/wp-content/uploads/**',
+      },
+    ],
+    // Formats de sortie optimisés
+    formats: ['image/avif', 'image/webp'],
+    // Tailles de breakpoints pour le srcset
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+};
+
+module.exports = nextConfig;
+```
+
+<Callout variant="warning" title="Configuration obligatoire pour les images distantes">
+Sans la propriété `remotePatterns` dans `next.config.js`, le composant `next/image` refuse de charger les images provenant de domaines externes. Cette configuration est une mesure de sécurité qui empêche l'optimisation d'images provenant de sources non autorisées.
+</Callout>
+
+### Composant d'image WordPress réutilisable
+
+```tsx
+import Image from 'next/image';
+
+interface WPImage {
+  sourceUrl: string;
+  altText: string;
+  mediaDetails: {
+    width: number;
+    height: number;
+  };
+}
+
+interface WordPressImageProps {
+  image: WPImage;
+  priority?: boolean;
+  className?: string;
+  sizes?: string;
+}
+
+export function WordPressImage({
+  image,
+  priority = false,
+  className,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+}: WordPressImageProps) {
+  return (
+    <Image
+      src={image.sourceUrl}
+      alt={image.altText || ''}
+      width={image.mediaDetails.width}
+      height={image.mediaDetails.height}
+      priority={priority}
+      className={className}
+      sizes={sizes}
+      placeholder="blur"
+      blurDataURL={`data:image/svg+xml;base64,...`}
+    />
+  );
+}
+```
+
+## Placeholder flou (blur) pour le chargement progressif
+
+Le composant `next/image` supporte un placeholder flou qui s'affiche pendant le chargement de l'image. Pour les images distantes (WordPress), le placeholder doit être généré manuellement.
+
+### Méthode 1 : placeholder SVG léger
+
+```typescript
+function generateBlurPlaceholder(width: number, height: number): string {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">
+      <filter id="b" color-interpolation-filters="sRGB">
+        <feGaussianBlur stdDeviation="20" />
+      </filter>
+      <rect width="100%" height="100%" fill="#e2e8f0" filter="url(#b)" />
+    </svg>
+  `;
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+}
+```
+
+### Méthode 2 : génération avec plaiceholder
+
+```typescript
+import { getPlaiceholder } from 'plaiceholder';
+
+async function getImageWithBlur(imageUrl: string) {
+  const response = await fetch(imageUrl);
+  const buffer = Buffer.from(await response.arrayBuffer());
+  const { base64 } = await getPlaiceholder(buffer, { size: 10 });
+
+  return { src: imageUrl, blurDataURL: base64 };
+}
+```
+
+## Lazy loading et priorité de chargement
+
+<StepByStep>
+  <Step number={1} title="Images above the fold : priority={true}">
+    Les images visibles sans scroll (hero, logo, première image d'un listing) doivent recevoir la propriété `priority`. Cela déclenche un preload dans le `head` HTML et désactive le lazy loading pour ces images.
+  </Step>
+  <Step number={2} title="Images below the fold : lazy loading automatique">
+    Par défaut, `next/image` applique le lazy loading natif (`loading="lazy"`). Les images ne sont chargées que lorsqu'elles approchent du viewport. Aucune configuration supplémentaire n'est nécessaire.
+  </Step>
+  <Step number={3} title="Attribut sizes pour le srcset">
+    L'attribut `sizes` indique au navigateur quelle largeur l'image occupera selon le viewport. Cela lui permet de sélectionner la taille optimale dans le `srcset` sans attendre le rendu CSS. Exemple : `sizes="(max-width: 768px) 100vw, 50vw"`.
+  </Step>
+  <Step number={4} title="Formats modernes : WebP et AVIF">
+    Avec `formats: ['image/avif', 'image/webp']` dans `next.config.js`, Next.js convertit automatiquement les images JPEG/PNG en AVIF (ou WebP en fallback) si le navigateur le supporte. Le gain de poids est de 30 à 50 % par rapport au JPEG.
+  </Step>
+</StepByStep>
+
+## Performances : gains mesurables
+
+<StatGrid>
+  <StatCard value="-50%" label="de poids d'image" description="Conversion automatique JPEG vers AVIF par next/image" accent="blue" />
+  <StatCard value="×2" label="LCP amélioré" description="Largest Contentful Paint réduit grâce au preload et au dimensionnement correct" accent="orange" />
+  <StatCard value="0 ko" label="JavaScript client" description="next/image génère du HTML natif (img + srcset), sans runtime JS côté client" accent="coral" />
+</StatGrid>
+
+## Stratégies CDN pour les médias WordPress
+
+En architecture headless, les images WordPress peuvent être servies de trois manières :
+
+| Stratégie | Fonctionnement | Avantage |
+|-----------|---------------|----------|
+| Direct | Le frontend pointe vers `votre-site.com/wp-content/uploads/` | Simple, aucune configuration |
+| Proxy Next.js | Les images transitent par le serveur Next.js (`/_next/image`) | Optimisation automatique, cache intégré |
+| CDN dédié | Les médias sont répliqués sur un CDN (Cloudflare, CloudFront) | Latence minimale, décharge le serveur WordPress |
+
+<Callout variant="tip" title="Recommandation : proxy Next.js + CDN">
+La configuration optimale combine le proxy d'images de Next.js (qui gère l'optimisation et le redimensionnement) avec un CDN en amont (qui met en cache les versions optimisées au plus proche des utilisateurs). Le CDN de Vercel gère cette combinaison nativement si le frontend est déployé sur Vercel.
+</Callout>
+
+## Récupérer les images mises en avant avec _embed
+
+En API REST, l'image mise en avant d'un article est référencée par son ID (`featured_media`). Pour éviter une requête supplémentaire par article, utilisez le paramètre `_embed` qui inclut les données complètes de l'image dans la réponse.
+
+```javascript
+// Sans _embed : featured_media contient un ID (nécessite une 2e requête)
+const posts = await fetch('/wp-json/wp/v2/posts').then(r => r.json());
+// posts[0].featured_media = 156
+
+// Avec _embed : les données de l'image sont incluses
+const posts = await fetch('/wp-json/wp/v2/posts?_embed').then(r => r.json());
+// posts[0]._embedded['wp:featuredmedia'][0].source_url = "https://..."
+// posts[0]._embedded['wp:featuredmedia'][0].media_details.sizes = {...}
+```
+
+En GraphQL, les données de l'image sont récupérées directement dans la requête :
+
+```graphql
+query {
+  posts {
+    nodes {
+      title
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+<Quiz
+  question="Pourquoi faut-il configurer remotePatterns dans next.config.js pour afficher des images WordPress avec next/image ?"
+  options={[
+    "Pour améliorer le SEO des images",
+    "Pour activer le lazy loading natif",
+    "Pour autoriser Next.js à optimiser des images provenant d'un domaine externe",
+    "Pour convertir automatiquement les images en SVG"
+  ]}
+  answer={2}
+  explanation="Le composant next/image optimise les images en les faisant transiter par un serveur de redimensionnement intégré à Next.js. Par sécurité, ce serveur refuse de traiter des images provenant de domaines non autorisés. La propriété remotePatterns dans next.config.js déclare explicitement les domaines dont les images peuvent être optimisées, en l'occurrence le domaine du serveur WordPress."
+/>

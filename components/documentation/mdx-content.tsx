@@ -8,6 +8,7 @@ import { VideoInline } from "./mdx/video-inline";
 import { Quiz } from "./mdx/quiz";
 import { FlowDiagram, ArchitectureDiagram, HighlightBox } from "./mdx/infographic";
 import { HeadlessDiagnostic } from "./headless-diagnostic";
+import { TldrCallout } from "./tldr-callout";
 
 function slugify(text: string): string {
   return text
@@ -59,6 +60,7 @@ const mdxComponents = {
   ArchitectureDiagram,
   HighlightBox,
   HeadlessDiagnostic,
+  TldrCallout,
 };
 
 interface MdxContentProps {

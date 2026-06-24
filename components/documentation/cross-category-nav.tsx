@@ -19,7 +19,7 @@ interface CategoryMeta {
 
 const ALL_CATEGORIES_FR: CategoryMeta[] = [
   {
-    slug: "headless-cms",
+    slug: "wordpress-headless",
     title: "Headless CMS",
     description: "Architecture découplée, API WordPress et Next.js.",
     articleCount: "35 articles",
@@ -58,7 +58,7 @@ const ALL_CATEGORIES_FR: CategoryMeta[] = [
 
 const ALL_CATEGORIES_EN: CategoryMeta[] = [
   {
-    slug: "headless-cms",
+    slug: "wordpress-headless",
     title: "Headless CMS",
     description: "Decoupled architecture, WordPress API and Next.js.",
     articleCount: "35 articles",
@@ -98,13 +98,13 @@ const ALL_CATEGORIES_EN: CategoryMeta[] = [
 /* ─── Relations entre catégories ──────────────────────────────────────────── */
 
 const RELATED_CATEGORIES: Record<string, string[]> = {
-  "headless-cms": ["wordpress", "seo", "projet-site-web"],
-  wordpress: ["headless-cms", "design-ui-ux", "projet-site-web"],
-  seo: ["marketing-digital", "headless-cms", "projet-site-web"],
+  "wordpress-headless": ["wordpress", "seo", "projet-site-web"],
+  wordpress: ["wordpress-headless", "design-ui-ux", "projet-site-web"],
+  seo: ["marketing-digital", "wordpress-headless", "projet-site-web"],
   "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
   "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
-  "projet-site-web": ["headless-cms", "design-ui-ux", "seo"],
-  blog: ["headless-cms", "wordpress"],
+  "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
+  blog: ["wordpress-headless", "wordpress"],
 };
 
 /* ─── Carte de catégorie (cellule SpotlightCard) ──────────────────────────── */

@@ -1,0 +1,397 @@
+---
+title: How to build a headless WordPress site?
+description: An overview of the process (stress-free!)
+category: wordpress-headless
+author: Next Impact
+date: "2025-03-15"
+order: 23
+---
+
+<TldrCallout label="TL;DR">
+  Building a headless WordPress site follows a four-phase iterative process: scoping, content preparation, design and Next.js frontend development, then a progressive switchover. The existing site stays live throughout, with no downtime. A typical project runs 6 to 12 weeks depending on complexity.
+</TldrCallout>
+
+Setting up a headless WordPress site follows an iterative process in four phases. The existing site stays live throughout the project: there is no service interruption.
+
+The 4 project phases:
+
+1. Scoping: define objectives, the team and the budget (2 weeks)
+2. Preparation: audit and structure WordPress content (1 week)
+3. Development: build the frontend and the API integration (4-8 weeks)
+4. UAT and go-live: test, migrate and train (1 week)
+
+<StepByStep>
+  <Step number={1} title="Scope the project (2 weeks)">
+    Define business and technical objectives, assemble the team and estimate the budget. The existing site keeps running throughout the development phase.
+  </Step>
+  <Step number={2} title="Prepare WordPress (1 week)">
+    Audit existing content, install and configure the required plugins (ACF, WPGraphQL) and structure content types for API exposure.
+  </Step>
+  <Step number={3} title="Develop the frontend (4-8 weeks)">
+    Initialize the Next.js project, connect the WordPress API, and build page templates iteratively, sprint by sprint.
+  </Step>
+  <Step number={4} title="UAT and go-live (1 week)">
+    Run functional, performance and user acceptance tests, then migrate the DNS with a rollback plan ready.
+  </Step>
+</StepByStep>
+
+The existing site remains online and accessible throughout the development phase. The new frontend is deployed in parallel on a staging environment.
+
+<FlowDiagram
+  nodes={[
+    { label: "Scoping", description: "Goals, team, budget — 2 weeks", icon: "📋" },
+    { label: "Preparation", description: "Content audit, ACF, API structure — 1 week", icon: "🗂️" },
+    { label: "Development", description: "Next.js, API integration, UI — 4-8 weeks", icon: "💻" },
+    { label: "Production", description: "Testing, DNS migration, training — 1 week", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+## Phase 1: Scoping the project
+
+### Defining the objectives
+
+Key questions for scoping:
+
+- What problem does the headless architecture solve in your case? (performance, design, multi-channel)
+- Who are the end users and what are their journeys?
+- What are the functional priorities (MVP vs. full version)?
+- What is the available budget and the target timeline?
+
+Sample project brief: "Reduce e-commerce site load time below one second to improve the conversion rate, with a mobile app planned for the following quarter."
+
+### Assembling the team
+
+Required roles:
+
+- Project Manager / Product Owner: governance, decisions, coordination
+- WordPress backend developer: CMS configuration, custom post types, ACF, API exposure
+- Frontend developer: Next.js, React, API integration, UI/UX
+- UI/UX designer (optional): mockups, design system, user testing
+
+<Callout variant="tip" title="Recommendation for choosing the team">
+
+Favor a vendor (agency or senior freelancer) that masters both layers (WordPress backend and Next.js frontend). This reduces communication risks and ensures architectural consistency between the two systems.
+
+</Callout>
+
+Choosing a vendor with expertise in both layers (WordPress + Next.js) simplifies coordination and reduces the risk of integration issues between backend and frontend.
+
+### Estimating the budget
+
+Indicative ranges by project type:
+
+<StatGrid>
+  <StatCard value="€8k - €15k" label="Showcase site" description="Headless presentation site with essential pages and a contact form" accent="blue" />
+  <StatCard value="€15k - €35k" label="E-commerce" description="Headless online store with product catalog, cart and payment" accent="orange" />
+  <StatCard value="€25k - €60k" label="Custom platform" description="Web application with business features, authentication and third-party integrations" accent="coral" />
+</StatGrid>
+
+- Showcase site: €8,000 - €15,000
+- E-commerce: €15,000 - €35,000
+- Custom platform: €25,000 - €60,000
+
+Typical budget breakdown:
+
+- 30%: scoping, design and architecture
+- 40%: development (backend + frontend)
+- 20%: testing, optimization and UAT
+- 10%: training and technical documentation
+
+## Phase 2: Preparing WordPress
+
+### Auditing existing content
+
+Items to review:
+
+- Inventory of content types (posts, pages, existing custom post types)
+- List of plugins in use and identification of those that are actually necessary
+- State of the media library (formats, image weight, organization)
+- Quality and relevance of existing content
+
+Recommended action: remove obsolete content, optimize media and update information before structuring data for the API.
+
+### Installing and configuring the tools
+
+Advanced Custom Fields (ACF) is the central plugin for structuring content:
+
+- Lets you create typed custom fields (text, image, relationship, repeater)
+- Makes each piece of data accessible individually via the API
+- Provides a clear input interface for editors
+
+Example of structuring with ACF:
+Instead of a single free-text block, content is split into distinct fields:
+
+- Main title (text field)
+- Subtitle (text field)
+- Featured image (image field)
+- Photo gallery (gallery field)
+- Price (number field, if a product)
+- Customer testimonial (repeater field with name + text + photo)
+
+Prerequisite security configuration:
+
+- WordPress up to date (core, plugins, themes)
+- Active SSL/TLS certificate (HTTPS)
+- Automated backups (database + files)
+- Secured admin access (2FA, login attempt limiting)
+
+### Structuring content for API exposure
+
+<Callout variant="tip" title="Key principle: atomic, reusable data">
+
+Each content element should be a distinct, typed field. This granularity allows each frontend to consume only the data it needs and to present it differently depending on the context (website, mobile app, in-store display).
+
+</Callout>
+
+Fundamental principle: structure content into atomic, reusable fields.
+
+Discouraged structure:
+
+```
+
+Article = "Here is our new product [photo] with its features..."
+
+```
+
+Recommended structure:
+
+```
+
+Product =
+- Product name (text field)
+- Short description (textarea field)
+- Long description (WYSIWYG field)
+- Price (number field)
+- Photos (gallery field)
+- Features (repeater field)
+- Testimonials (relation field to Testimonial CPT)
+
+```
+
+This granularity allows each frontend to consume the data it needs and display it in its own format.
+
+## Phase 3: Building the frontend
+
+### Choosing the framework
+
+Next.js is recommended for a first headless WordPress project because:
+
+- The ecosystem offers many starters and integration examples with WordPress
+- SSG (Static Site Generation) and ISR (Incremental Static Regeneration) deliver optimal performance by default
+- SSR (Server-Side Rendering) is available for pages that need real-time data
+- The community is active and the documentation is comprehensive
+
+### Designing the UI
+
+Recommended process:
+
+1. Wireframes: define the structure and information hierarchy (tool: Figma, paper)
+2. UI mockups: design the visual style and the component system (Figma, Adobe XD)
+3. Interactive prototype: validate interactions and transitions
+4. User testing: confront the prototype with real users before development
+
+Priority: a fast, readable interface delivers more value than an over-designed one that hurts load times.
+
+### Iterative development
+
+Weeks 1-2: foundations
+
+- Initialize the Next.js project with TypeScript
+- Configure the API connection (REST or GraphQL via WPGraphQL)
+- Build the first pages (home, article page)
+
+Weeks 3-4: main content
+
+- Templates for every content type (pages, articles, archives)
+- Navigation and dynamic menu
+- Search component
+
+Weeks 5-6: polish and optimization
+
+- Performance optimization (lazy loading, image optimization via next/image)
+- Responsive design (mobile, tablet, desktop)
+- Animations and micro-interactions
+
+Weeks 7-8: stabilization
+
+- Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- SEO audit (meta tags, XML sitemap, structured data)
+- Bug fixing and UI polish
+
+## Phase 4: UAT and go-live
+
+### Testing phase
+
+Functional tests:
+
+- Verify correct rendering of all pages and components
+- Validate internal and external links
+- Test forms and user interactions
+- Verify the internal search engine
+
+Performance tests:
+
+- Goal: Largest Contentful Paint (LCP) below 2.5 seconds
+- Test on mobile (simulated 3G/4G network) and desktop
+- Audit via Google PageSpeed Insights and Lighthouse
+
+User acceptance tests:
+
+- Have the interface tested by users not involved in the project
+- Observe their journeys without interfering
+- Document the friction points identified
+
+### Migration strategy
+
+Option 1: progressive migration
+
+- Deploy the new home page first
+- Migrate the main pages next
+- Switch over the rest of the site last
+
+Option 2: staging on a subdomain
+
+- Deploy the new frontend on staging.mysite.com
+- Test under real conditions with traffic
+- Switch DNS once UAT is signed off
+
+Option 3: full cutover
+
+- Take a full backup of the old site
+- Switch DNS to the new frontend
+- Rollback plan ready (return to the old site in under 1 hour via DNS)
+
+## Training the team
+
+### For editors and content authors
+
+What changes in their workflow:
+
+- ACF custom fields replace or supplement the classic Gutenberg editor
+- Preview goes through the Next.js draft mode (dedicated preview URL)
+- Content propagation time depends on the rendering strategy (instant in SSR, a few minutes in ISR)
+
+Recommended training:
+
+- 1 hour: presentation of the architecture and the new workflow
+- 2 hours: guided practice on content entry and previewing
+- Ongoing support during the first few weeks of production
+
+### For maintenance
+
+Tasks specific to the headless architecture:
+
+- Monitoring two environments (WordPress + frontend / Vercel or Netlify)
+- Coordinating updates (WordPress core, plugins, npm dependencies)
+- Backups of the MySQL database and the frontend source code
+
+Technical documentation to produce:
+
+- Deployment and update procedures
+- Technical contacts and escalation paths
+- Disaster recovery plan (DRP)
+
+## Recommended tools
+
+### Local development
+
+- Local by Flywheel: local WordPress environment with simplified configuration
+- VS Code: code editor with extensions for React, TypeScript and GraphQL
+- GitHub / GitLab: source control and collaboration (pull requests, code review)
+
+### Hosting and deployment
+
+- Vercel or Netlify: frontend hosting with built-in CI/CD and preview deployments
+- WP Engine or Kinsta: optimized WordPress hosting with built-in staging
+- Cloudflare: CDN, DDoS protection and DNS management
+
+### Monitoring and analytics
+
+- UptimeRobot or Better Uptime: uptime monitoring with alerts
+- Google Analytics 4: traffic and conversion tracking
+- Google Search Console: indexing and SEO performance tracking
+
+## Realistic durations by project type
+
+<ComparisonTable
+  headers={["Project type", "Total duration"]}
+  rows={[
+    { label: "Showcase site", left: "Scoping (2 wk) + Dev (2 wk) + UAT (1 wk)", right: "5-6 weeks" },
+    { label: "E-commerce", left: "Scoping (3 wk) + Dev (6 wk) + UAT (2 wk) + Production (1 wk)", right: "12-14 weeks" },
+    { label: "Custom platform", left: "Design (4 wk) + Dev (12 wk) + UAT (3 wk) + Production (1 wk)", right: "20-24 weeks" }
+  ]}
+  highlight="right"
+/>
+
+Showcase site:
+
+- Weeks 1-2: scoping and WordPress preparation
+- Weeks 3-4: frontend development
+- Week 5: UAT and go-live
+- Total: 5-6 weeks
+
+E-commerce:
+
+- Weeks 1-3: scoping, architecture and WordPress preparation
+- Weeks 4-9: iterative development (catalog, cart, payment)
+- Weeks 10-11: UAT and performance optimization
+- Week 12: go-live and training
+- Total: 12-14 weeks
+
+Custom platform:
+
+- Weeks 1-4: scoping, UX design and technical architecture
+- Weeks 5-16: development by sprints
+- Weeks 17-19: full UAT and load testing
+- Week 20: go-live and training
+- Total: 20-24 weeks
+
+## Common pitfalls and solutions
+
+### Pitfall #1: trying to redo everything at once
+
+Solution: keep the existing content structure at first and focus on changing the presentation layer. Restructuring the content can come in a later phase.
+
+### Pitfall #2: neglecting team training
+
+Solution: budget time and money to support editors and maintainers. An architecture change without team buy-in creates friction.
+
+### Pitfall #3: underestimating the testing phase
+
+Solution: allocate at least 20% of the total project duration to testing (functional, performance, user acceptance) and bug fixing.
+
+### Pitfall #4: not validating SEO before go-live
+
+Solution: verify that all pages are indexable (SSR or SSG), that URLs are preserved or redirected (301), and that meta tags, the XML sitemap and structured data are in place.
+
+### Pitfall #5: not having a rollback plan
+
+Solution: keep the old site working and ready to be reactivated through a simple DNS change. Plan for this option for at least 2 to 4 weeks after go-live.
+
+## Frequently asked questions
+
+"How long will the site be inaccessible during the migration?"
+With a planned migration: zero downtime. The new frontend is built in parallel and the cutover happens via a DNS change, with propagation in a few minutes.
+
+"Will Google rankings be impacted?"
+No, provided you preserve existing URLs or set up 301 redirects, and verify that SSR or SSG renders pages so they remain indexable by crawlers.
+
+"What happens if a problem occurs after go-live?"
+The rollback plan allows returning to the old site in under 1 hour by restoring the DNS to the old server.
+
+"Will the editorial team need retraining?"
+Content management stays in WordPress. Training focuses on ACF custom fields and the new preview process — about 3 hours of guided training.
+
+<Quiz
+  question="What is the first phase when building a headless WordPress site?"
+  options={[
+    "Install Next.js and start coding immediately",
+    "Change web host",
+    "Scope the project: define objectives, assemble the team and estimate the budget",
+    "Delete your existing WordPress site"
+  ]}
+  answer={2}
+  explanation="The first phase is scoping: defining business and technical objectives, assembling the team (project manager, backend developer, frontend developer) and estimating the budget. The existing site keeps running throughout development, so there is no rush to start writing code."
+/>

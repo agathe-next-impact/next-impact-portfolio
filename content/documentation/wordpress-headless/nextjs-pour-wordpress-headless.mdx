@@ -1,0 +1,271 @@
+---
+title: "Next.js pour WordPress headless"
+description: "Pourquoi Next.js est le framework frontend de référence pour WordPress headless et comment démarrer un projet."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 11
+---
+
+<TldrCallout>
+  Next.js est le framework front-end de référence pour WordPress headless parce qu'il combine rendu statique, rendu serveur et régénération incrémentale (ISR) dans un même projet, ce qui permet de servir un site rapide même quand le contenu WordPress change souvent. Son optimisation native des images, des polices et du JavaScript se traduit par des Core Web Vitals au vert sans configuration spécifique.
+</TldrCallout>
+
+## Qu'est-ce que Next.js ?
+
+Next.js est un framework open source developpe par Vercel, construit au-dessus de la bibliotheque React. Il ajoute a React un ensemble de fonctionnalites indispensables pour la production : routage base sur le systeme de fichiers, rendu cote serveur, generation statique, optimisation des images et gestion automatique du code-splitting.
+
+Contrairement a une application React classique (Single Page Application), Next.js permet de generer le HTML cote serveur ou au moment du build. Le navigateur recoit donc un document HTML complet, ce qui ameliore a la fois le temps de premier affichage et l'indexation par les moteurs de recherche.
+
+<ArchitectureDiagram
+  title="Architecture WordPress headless avec Next.js"
+  layers={[
+    { name: "Navigateur", components: ["Pages React", "Composants UI", "Client-side routing"], color: "blue" },
+    { name: "Serveur Next.js", components: ["App Router", "API Routes", "SSR / SSG / ISR", "Middleware"], color: "orange" },
+    { name: "Sources de donnees", components: ["WordPress REST API", "WPGraphQL", "Base MySQL"], color: "coral" }
+  ]}
+/>
+
+## Pourquoi Next.js pour WordPress headless ?
+
+Next.js est le framework frontend le plus utilise avec WordPress headless. Cette position s'explique par plusieurs facteurs techniques.
+
+### Strategies de rendu adaptees au contenu editorial
+
+Next.js propose trois strategies de rendu, chacune adaptee a un type de page :
+
+- **SSG (Static Site Generation)** : les pages sont generees en HTML au moment du build. Ideal pour les articles de blog et les pages institutionnelles dont le contenu change rarement.
+- **SSR (Server-Side Rendering)** : le HTML est genere a chaque requete. Adapte aux pages dont le contenu depend de l'utilisateur connecte ou de parametres dynamiques.
+- **ISR (Incremental Static Regeneration)** : les pages statiques sont regenerees en arriere-plan apres un intervalle configurable. Combine la performance du statique avec la fraicheur du contenu dynamique.
+
+### Optimisation des images integree
+
+Le composant `next/image` redimensionne, convertit au format WebP/AVIF et charge les images de maniere differee (lazy loading). Avec WordPress headless, les images stockees dans la mediatheque sont automatiquement optimisees par Next.js au moment du rendu.
+
+### Routage base sur le systeme de fichiers
+
+Chaque fichier dans le repertoire `app/` correspond a une route. Pour un blog WordPress headless, la structure est directe :
+
+```
+app/
+  page.tsx              → /
+  blog/
+    page.tsx            → /blog
+    [slug]/
+      page.tsx          → /blog/mon-article
+  a-propos/
+    page.tsx            → /a-propos
+```
+
+## App Router et Pages Router
+
+Depuis la version 13, Next.js propose deux systemes de routage. L'App Router (repertoire `app/`) est le systeme recommande pour les nouveaux projets.
+
+<ComparisonTable
+  headers={["App Router (app/)", "Pages Router (pages/)"]}
+  rows={[
+    { label: "Composants serveur", left: "Natifs — les composants sont serveur par defaut", right: "Non disponibles — tout est client par defaut" },
+    { label: "Chargement de donnees", left: "Fonctions async directement dans les composants", right: "getStaticProps, getServerSideProps" },
+    { label: "Layouts", left: "Layouts imbriques avec layout.tsx", right: "Layout unique via _app.tsx" },
+    { label: "Streaming", left: "Supporte via loading.tsx et Suspense", right: "Non disponible" },
+    { label: "Statut", left: "Recommande pour les nouveaux projets", right: "Stable, maintenu mais pas d'ajout de fonctionnalites" }
+  ]}
+  highlight="left"
+/>
+
+Pour un projet WordPress headless demarre en 2025, l'App Router est le choix recommande. Les exemples de cet article utilisent l'App Router.
+
+## Demarrer un projet Next.js pour WordPress headless
+
+<StepByStep>
+  <Step number={1} title="Creer le projet Next.js">
+    Executez la commande suivante dans votre terminal. L'outil `create-next-app` genere la structure du projet avec TypeScript, ESLint et Tailwind CSS preconfigures.
+
+    ```bash
+    npx create-next-app@latest mon-site-headless --typescript --tailwind --eslint --app --src-dir
+    ```
+  </Step>
+  <Step number={2} title="Configurer les variables d'environnement">
+    Creez un fichier `.env.local` a la racine du projet. Cette variable sera utilisee par toutes les fonctions de recuperation de donnees.
+
+    ```bash
+    NEXT_PUBLIC_WORDPRESS_URL=https://admin.monsite.fr
+    WORDPRESS_API_TOKEN=votre-token-application-password
+    ```
+  </Step>
+  <Step number={3} title="Creer la fonction de recuperation des donnees">
+    Centralisez les appels a l'API WordPress dans un fichier utilitaire. Cette fonction sera reutilisee dans toutes les pages.
+
+    ```typescript
+    // src/lib/wordpress.ts
+    const API_URL = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2`;
+
+    export async function getPosts(perPage = 10) {
+      const res = await fetch(`${API_URL}/posts?per_page=${perPage}&_embed`, {
+        next: { revalidate: 3600 } // ISR : regeneration toutes les heures
+      });
+      if (!res.ok) throw new Error('Erreur lors de la recuperation des articles');
+      return res.json();
+    }
+
+    export async function getPostBySlug(slug: string) {
+      const res = await fetch(`${API_URL}/posts?slug=${slug}&_embed`, {
+        next: { revalidate: 3600 }
+      });
+      const posts = await res.json();
+      return posts[0] ?? null;
+    }
+    ```
+  </Step>
+  <Step number={4} title="Creer la page de liste des articles">
+    Dans l'App Router, les composants sont des fonctions async par defaut (Server Components). Les donnees sont chargees directement dans le composant.
+
+    ```tsx
+    // src/app/blog/page.tsx
+    import { getPosts } from '@/lib/wordpress';
+
+    export default async function BlogPage() {
+      const posts = await getPosts();
+
+      return (
+        <main>
+          <h1>Blog</h1>
+          <ul>
+            {posts.map((post: any) => (
+              <li key={post.id}>
+                <a href={`/blog/${post.slug}`}>
+                  <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </main>
+      );
+    }
+    ```
+  </Step>
+  <Step number={5} title="Creer la route dynamique avec generateStaticParams">
+    La fonction `generateStaticParams` indique a Next.js quels slugs pre-generer au moment du build. Les pages correspondantes seront servies en tant que fichiers statiques.
+
+    ```tsx
+    // src/app/blog/[slug]/page.tsx
+    import { getPosts, getPostBySlug } from '@/lib/wordpress';
+
+    export async function generateStaticParams() {
+      const posts = await getPosts(100);
+      return posts.map((post: any) => ({ slug: post.slug }));
+    }
+
+    export default async function ArticlePage({ params }: { params: { slug: string } }) {
+      const post = await getPostBySlug(params.slug);
+      if (!post) return <div>Article non trouve</div>;
+
+      return (
+        <article>
+          <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+        </article>
+      );
+    }
+    ```
+  </Step>
+</StepByStep>
+
+## Configuration de next.config.js pour WordPress
+
+Le fichier `next.config.js` doit autoriser le domaine WordPress pour le chargement des images :
+
+```javascript
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'admin.monsite.fr',
+        pathname: '/wp-content/uploads/**',
+      },
+    ],
+  },
+};
+
+module.exports = nextConfig;
+```
+
+## Revalidation du contenu
+
+La revalidation permet de mettre a jour les pages statiques sans rebuild complet. Deux approches sont possibles :
+
+**Revalidation basee sur le temps** : la page est regeneree apres un intervalle fixe.
+
+```typescript
+// Dans un Server Component ou une fonction fetch
+const res = await fetch(url, { next: { revalidate: 3600 } }); // Toutes les heures
+```
+
+**Revalidation a la demande** : un webhook WordPress declenche la regeneration immediate d'une page.
+
+```typescript
+// src/app/api/revalidate/route.ts
+import { revalidatePath } from 'next/cache';
+import { NextRequest } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const secret = request.nextUrl.searchParams.get('secret');
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return new Response('Token invalide', { status: 401 });
+  }
+
+  const body = await request.json();
+  revalidatePath(`/blog/${body.post_name}`);
+  return Response.json({ revalidated: true });
+}
+```
+
+## Next.js face a Gatsby et Nuxt
+
+<ComparisonTable
+  headers={["Next.js", "Gatsby", "Nuxt.js"]}
+  rows={[
+    { label: "Base", left: "React", center: "React", right: "Vue.js" },
+    { label: "Rendu", left: "SSG + SSR + ISR (hybride)", center: "SSG uniquement", right: "SSG + SSR (hybride)" },
+    { label: "Mise a jour du contenu", left: "ISR ou revalidation a la demande", center: "Rebuild complet necessaire", right: "ISR via routeRules" },
+    { label: "Integration WordPress", left: "Fetch natif + nombreux starters", center: "Plugin gatsby-source-wordpress", right: "Modules communautaires" },
+    { label: "Deploiement", left: "Vercel, Netlify, AWS, auto-heberge", center: "CDN statique (Netlify, Cloudflare)", right: "Vercel, Netlify, auto-heberge" },
+    { label: "Communaute", left: "La plus large (React)", center: "En declin depuis 2022", right: "Active, forte en francophonie" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="developpeur" title="Quand choisir une alternative a Next.js ?">
+Gatsby reste pertinent pour les sites dont le contenu ne change que quelques fois par mois (documentation, portfolio). La generation purement statique elimine tout besoin de serveur. Nuxt.js est le choix naturel si votre equipe maitrise Vue.js plutot que React. Les performances et fonctionnalites sont comparables a Next.js.
+</Callout>
+
+## Ce qu'il faut retenir
+
+<HighlightBox title="Points essentiels" accent="blue">
+
+1. **Next.js est un framework React** qui ajoute le routage, le rendu serveur (SSR), la generation statique (SSG) et la regeneration incrementale (ISR) a React.
+
+2. **L'App Router** (`app/`) est le systeme de routage recommande pour les nouveaux projets. Il utilise les Server Components de React par defaut.
+
+3. **La connexion a WordPress** s'effectue via l'API REST ou WPGraphQL. Les donnees sont recuperees directement dans les Server Components avec `fetch`.
+
+4. **generateStaticParams** permet de pre-generer les routes dynamiques (`/blog/[slug]`) au moment du build pour un temps de reponse minimal.
+
+5. **La revalidation** (temporelle ou a la demande) permet de mettre a jour les pages statiques sans rebuild complet du site.
+
+</HighlightBox>
+
+<Quiz
+  question="Quelle fonction Next.js permet de pre-generer les routes dynamiques (comme /blog/[slug]) au moment du build ?"
+  options={[
+    "getStaticProps — elle recupere les donnees au build",
+    "generateStaticParams — elle retourne la liste des parametres a pre-generer",
+    "getServerSideProps — elle genere la page a chaque requete",
+    "useEffect — elle charge les donnees cote client"
+  ]}
+  answer={1}
+  explanation="generateStaticParams est la fonction de l'App Router qui retourne un tableau d'objets representant les parametres des routes a pre-generer. Par exemple, pour /blog/[slug], elle retourne [{ slug: 'article-1' }, { slug: 'article-2' }]. Next.js genere ensuite une page HTML statique pour chaque combinaison de parametres."
+/>

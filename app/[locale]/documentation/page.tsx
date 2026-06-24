@@ -48,7 +48,7 @@ const documentationCategories = [
   { name: "Design & UI/UX", url: "/documentation/design-ui-ux", description: "Expériences utilisateurs engageantes et accessibles." },
   { name: "Projet de site web", url: "/documentation/projet-site-web", description: "Préparer et mener un projet de site web de A à Z." },
   { name: "WordPress", url: "/documentation/wordpress", description: "Bonnes pratiques et guides pour WordPress." },
-  { name: "Headless CMS", url: "/documentation/headless-cms", description: "Architecture headless, API REST et découplage front/back." },
+  { name: "Headless CMS", url: "/documentation/wordpress-headless", description: "Architecture headless, API REST et découplage front/back." },
   { name: "Blog", url: "/documentation/blog", description: "Actualités et analyses sur le développement web." },
 ];
 

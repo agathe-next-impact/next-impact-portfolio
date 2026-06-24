@@ -26,7 +26,7 @@ const categoryLabels: Record<string, string> = {
   "design-ui-ux": "Design & UI/UX",
   "projet-site-web": "Projet de site web",
   wordpress: "WordPress",
-  "headless-cms": "Headless CMS",
+  "wordpress-headless": "WordPress Headless",
   blog: "Blog",
 }
 
@@ -116,13 +116,13 @@ export default async function ArticlePage(props: ArticlePageProps) {
 
     // Cross-category related articles
     const RELATED_CATEGORIES: Record<string, string[]> = {
-      "headless-cms": ["wordpress", "seo", "projet-site-web"],
-      wordpress: ["headless-cms", "design-ui-ux", "projet-site-web"],
-      seo: ["marketing-digital", "headless-cms", "projet-site-web"],
+      "wordpress-headless": ["wordpress", "seo", "projet-site-web"],
+      wordpress: ["wordpress-headless", "design-ui-ux", "projet-site-web"],
+      seo: ["marketing-digital", "wordpress-headless", "projet-site-web"],
       "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
       "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
-      "projet-site-web": ["headless-cms", "design-ui-ux", "seo"],
-      blog: ["headless-cms", "wordpress"],
+      "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
+      blog: ["wordpress-headless", "wordpress"],
     }
 
     const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []
@@ -162,8 +162,11 @@ export default async function ArticlePage(props: ArticlePageProps) {
           description={article.description}
           image="/img/desktop-screen-next-impact.png"
           datePublished={typeof article.date === "string" ? article.date : new Date().toISOString()}
-          author={article.author || "Next Impact"}
+          author={article.author || "Agathe Karinthi-Martin"}
           url={`/documentation/${article.category}/${article.slug}`}
+          type={article.category === "wordpress-headless" ? "TechArticle" : "Article"}
+          proficiencyLevel={article.category === "wordpress-headless" ? "Intermediate" : undefined}
+          dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
         />
         <ReadingProgress />
         <ArticleReadTracker category={params.category} slug={params.slug} />

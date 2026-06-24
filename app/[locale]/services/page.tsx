@@ -8,6 +8,8 @@ import { BlueprintSection } from "@/components/aspect/section"
 import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner"
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner"
+import { Link } from "@/i18n/navigation"
+import { ArrowRight } from "lucide-react"
 import type { Locale } from "@/i18n/routing"
 
 export async function generateMetadata({
@@ -88,6 +90,25 @@ export default async function ServicesPage({
         }))}
       />
       <ServicesClient />
+      {/* Maillage SEO/GEO : ancre exacte vers la page pilier WordPress Headless. */}
+      <BlueprintSection tone="jet" innerClassName="px-6 py-10 lg:px-8 lg:py-12">
+        <Link
+          href="/wordpress-headless"
+          className="group flex flex-col gap-2 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-obsidian/40 p-6 no-underline transition-colors hover:border-accent-secondary"
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+            {locale === "en" ? "Background reading" : "Pour comprendre la techno"}
+          </span>
+          <span className="flex items-center justify-between gap-3">
+            <span className="text-lg font-light tracking-tight text-foreground md:text-xl">
+              {locale === "en"
+                ? "Headless WordPress with Next.js — definition, costs, performance"
+                : "WordPress Headless avec Next.js — définition, coûts, performance"}
+            </span>
+            <ArrowRight className="h-5 w-5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary" />
+          </span>
+        </Link>
+      </BlueprintSection>
       {/* Une décision à trancher avant de s'engager → visio conseil (déduite du devis). */}
       <VisioConseilBanner tone="obsidian" />
       {/* Offre d'appel : un besoin ponctuel plutôt qu'un projet → dépannage. */}

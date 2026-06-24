@@ -348,7 +348,7 @@ function buildCategoryTools(isEn: boolean): Record<string, ToolLink[]> {
   const SERVICE_LINKS = isEn ? SERVICE_LINKS_EN : SERVICE_LINKS_FR;
   const t = (en: string, fr: string) => (isEn ? en : fr);
   return {
-    "headless-cms": [
+    "wordpress-headless": [
       TOOL_LINKS[0],
       TOOL_LINKS[1],
       { ...SERVICE_LINKS[1], description: t("Headless projects in production.", "Projets headless en production.") },
@@ -471,8 +471,9 @@ function getCategoryRelevantLinks(
   const base = [{ href: "/documentation", title: t("All guides", "Tous les guides") }];
 
   switch (category) {
-    case "headless-cms":
+    case "wordpress-headless":
       return [
+        { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         ...base,
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
@@ -481,8 +482,8 @@ function getCategoryRelevantLinks(
     case "wordpress":
       return [
         ...base,
+        { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
-        { href: "/documentation/headless-cms", title: "Headless CMS" },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
       ];
     case "seo":
@@ -512,7 +513,7 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
         { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
-        { href: "/documentation/headless-cms", title: "Headless CMS" },
+        { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     default:

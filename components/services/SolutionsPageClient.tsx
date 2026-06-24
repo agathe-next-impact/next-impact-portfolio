@@ -5,8 +5,9 @@ import { ServicesComparisonTable } from "@/components/services/ServicesCompariso
 import ServicesGuide from "@/components/services/ServicesGuide";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
-import { Monitor, TrendingUp, Smartphone } from "lucide-react";
+import { Monitor, TrendingUp, Smartphone, ArrowRight } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SignalPaths } from "@/components/visuals/signal-paths";
@@ -101,6 +102,15 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
               ? "Pick the solution that fits your needs and your budget."
               : "Choisissez la solution adaptée à vos besoins et à votre budget."}
           </p>
+          <Link
+            href="/wordpress-headless"
+            className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground"
+          >
+            {isEn
+              ? "What is headless WordPress? Read the pillar page"
+              : "C'est quoi le WordPress Headless ? Lire la page pilier"}
+            <ArrowRight size={12} />
+          </Link>
         </Reveal>
       </BlueprintSection>
 

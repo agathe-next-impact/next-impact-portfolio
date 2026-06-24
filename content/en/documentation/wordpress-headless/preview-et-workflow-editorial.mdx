@@ -1,0 +1,320 @@
+---
+title: "Preview and editorial workflow"
+description: "Implementing content preview and organizing the editorial workflow in headless WordPress."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 15
+---
+
+<TldrCallout label="TL;DR">
+  Previewing a draft in headless WordPress relies on Next.js Draft Mode: a webhook configured in WordPress redirects the "Preview" button to a signed URL on the frontend, which renders the page with the unpublished content. Editors see the final rendering in the real design without publishing. That closes the main friction usually held against headless setups.
+</TldrCallout>
+
+## The preview problem in headless
+
+In a traditional WordPress architecture, the "Preview" button generates an HTML page via the active PHP theme. The editor sees the final rendering directly in their browser. In a headless architecture, the PHP theme is no longer used: rendering is handled by the Next.js frontend. WordPress's native "Preview" button therefore displays an empty page or an error message.
+
+This issue is one of the main pain points reported by editorial teams migrating to a headless architecture. The solution relies on Next.js's **Draft Mode**, combined with a preview webhook configured in WordPress.
+
+<FlowDiagram
+  nodes={[
+    { label: "Editor", description: "Clicks Preview in WordPress", icon: "✍️" },
+    { label: "WordPress", description: "Sends the draft via webhook to the frontend", icon: "📤" },
+    { label: "Next.js Draft Mode", description: "Enables draft mode and displays unpublished content", icon: "👁️" },
+    { label: "Preview", description: "The editor sees the actual frontend rendering", icon: "🖥️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Next.js Draft Mode
+
+Draft Mode is a built-in Next.js mechanism that allows you to bypass the static cache to display unpublished content. When enabled, pages are generated on the fly (like SSR) instead of being served from the cache.
+
+### How it works
+
+1. The editor clicks "Preview" in WordPress
+2. WordPress redirects to a Next.js frontend API route with a security token
+3. The API route enables Draft Mode by setting a `__prerender_bypass` cookie in the browser
+4. The browser is redirected to the article page
+5. Next.js detects the cookie and generates the page in real time, fetching the draft via the WordPress API
+
+### Implementing the Draft Mode route
+
+<StepByStep>
+  <Step number={1} title="Create the preview API route">
+    This route receives the request from WordPress, verifies the security token, enables Draft Mode, and redirects to the corresponding page.
+
+    ```typescript
+    // app/api/draft/route.ts
+    import { draftMode } from 'next/headers';
+    import { redirect } from 'next/navigation';
+    import { NextRequest } from 'next/server';
+
+    export async function GET(request: NextRequest) {
+      const secret = request.nextUrl.searchParams.get('secret');
+      const slug = request.nextUrl.searchParams.get('slug');
+      const postType = request.nextUrl.searchParams.get('type') ?? 'post';
+
+      // Security token verification
+      if (secret !== process.env.DRAFT_SECRET_TOKEN) {
+        return new Response('Invalid token', { status: 401 });
+      }
+
+      if (!slug) {
+        return new Response('Missing slug', { status: 400 });
+      }
+
+      // Verify that the content exists in WordPress
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/${postType}s?slug=${slug}&status=draft`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}`,
+          },
+        }
+      );
+      const posts = await res.json();
+
+      if (!posts.length) {
+        return new Response('Content not found', { status: 404 });
+      }
+
+      // Enable Draft Mode
+      draftMode().enable();
+
+      // Redirect to the page
+      const path = postType === 'page' ? `/${slug}` : `/blog/${slug}`;
+      redirect(path);
+    }
+    ```
+  </Step>
+  <Step number={2} title="Adapt the page component for Draft Mode">
+    When Draft Mode is active, the page must fetch the draft (status=draft) instead of the published content.
+
+    ```tsx
+    // app/blog/[slug]/page.tsx
+    import { draftMode } from 'next/headers';
+
+    export default async function ArticlePage({ params }: { params: { slug: string } }) {
+      const { isEnabled } = draftMode();
+
+      // In draft mode: fetch the draft with authentication
+      // In normal mode: fetch the published content
+      const statusParam = isEnabled ? '&status=draft' : '';
+      const headers: HeadersInit = isEnabled
+        ? { Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}` }
+        : {};
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?slug=${params.slug}${statusParam}&_embed`,
+        {
+          headers,
+          cache: isEnabled ? 'no-store' : undefined,
+          next: isEnabled ? undefined : { revalidate: 3600 },
+        }
+      );
+      const posts = await res.json();
+      const post = posts[0];
+
+      return (
+        <article>
+          {isEnabled && (
+            <div style={{ background: '#fef3c7', padding: '12px', marginBottom: '24px' }}>
+              Preview mode active —{' '}
+              <a href="/api/draft/disable">Disable</a>
+            </div>
+          )}
+          <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+        </article>
+      );
+    }
+    ```
+  </Step>
+  <Step number={3} title="Create the route to disable Draft Mode">
+    Lets the editor exit preview mode.
+
+    ```typescript
+    // app/api/draft/disable/route.ts
+    import { draftMode } from 'next/headers';
+    import { redirect } from 'next/navigation';
+
+    export async function GET() {
+      draftMode().disable();
+      redirect('/');
+    }
+    ```
+  </Step>
+  <Step number={4} title="Configure WordPress to redirect to the frontend">
+    In WordPress, change the preview URL to point to the frontend API route. This code goes in the theme's `functions.php` file or in a custom plugin.
+
+    ```php
+    // functions.php or custom plugin
+    function headless_preview_link($preview_link, $post) {
+        $frontend_url = 'https://www.mysite.com';
+        $secret = 'YOUR_SECRET_TOKEN'; // Same as DRAFT_SECRET_TOKEN
+        $slug = $post->post_name;
+        $type = $post->post_type;
+
+        return sprintf(
+            '%s/api/draft?secret=%s&slug=%s&type=%s',
+            $frontend_url,
+            $secret,
+            $slug,
+            $type
+        );
+    }
+    add_filter('preview_post_link', 'headless_preview_link', 10, 2);
+    ```
+  </Step>
+</StepByStep>
+
+## Editorial workflow in headless
+
+Editorial workflow organization does not depend on the technical architecture. WordPress keeps its native publication statuses: draft, pending review, published, scheduled. The difference in headless lies in how each status is made visible to the editor.
+
+### Content lifecycle
+
+<FlowDiagram
+  nodes={[
+    { label: "Draft", description: "The editor creates and edits the content", icon: "📝" },
+    { label: "Review", description: "A reviewer checks content and metadata", icon: "🔍" },
+    { label: "Preview", description: "Verifies the rendering on the frontend via Draft Mode", icon: "👁️" },
+    { label: "Publication", description: "Content is published and visible on the site", icon: "✅" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+### Roles and permissions
+
+WordPress has a native role system that applies in headless mode:
+
+- **Administrator**: full access to WordPress and API settings
+- **Editor**: can publish, modify, and delete all content
+- **Author**: can publish and modify their own content
+- **Contributor**: can create drafts but cannot publish
+
+<Callout variant="decideur" title="Separate publication rights from authoring rights">
+For teams of more than three editors, it is recommended to restrict publication rights to editors. Authors submit articles in "Pending Review" status and an editor approves them after checking the content, SEO metadata, and frontend preview.
+</Callout>
+
+## Revision management
+
+WordPress automatically saves a revision on each save. In headless mode, these revisions are accessible via the REST API:
+
+```bash
+# Fetch revisions of a post (requires authentication)
+GET /wp-json/wp/v2/posts/{id}/revisions
+```
+
+To prevent revisions from accumulating in the database, limit their number in `wp-config.php`:
+
+```php
+// wp-config.php — Limit to 10 revisions per post
+define('WP_POST_REVISIONS', 10);
+```
+
+### Comparing revisions
+
+The WordPress admin interface lets you visually compare two revisions. In headless, this feature remains available in the back-office. To preview a specific revision on the frontend, extend the Draft Mode route:
+
+```typescript
+// Addition in the /api/draft route to support revisions
+const revisionId = request.nextUrl.searchParams.get('revision');
+if (revisionId) {
+  const revisionRes = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts/${postId}/revisions/${revisionId}`,
+    { headers: { Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}` } }
+  );
+  // Use the revision content for rendering
+}
+```
+
+## Scheduled publication
+
+WordPress lets you schedule a post for a future date and time. In headless mode with ISR, the behavior depends on the revalidation strategy:
+
+<ComparisonTable
+  headers={["ISR with interval", "On-demand revalidation"]}
+  rows={[
+    { label: "Time to appear", left: "The post appears at the next revalidation cycle (e.g., within the hour)", right: "The post appears immediately after the webhook fires" },
+    { label: "Configuration", left: "No additional configuration — the standard ISR mechanism is enough", right: "Requires a WordPress webhook triggered by the publish_post hook" },
+    { label: "Time precision", left: "Approximate — depends on the revalidation interval", right: "Exact — the page is regenerated as soon as it's published" },
+    { label: "Recommendation", left: "Acceptable for blogs with low time precision needs", right: "Recommended for sites where publication time matters" }
+  ]}
+  highlight="right"
+/>
+
+For scheduled publication with on-demand revalidation:
+
+```php
+// WordPress plugin — Webhook fired on publication
+function trigger_revalidation($post_id, $post) {
+    if ($post->post_status !== 'publish') return;
+
+    $frontend_url = 'https://www.mysite.com';
+    $secret = 'YOUR_REVALIDATION_SECRET';
+
+    wp_remote_post($frontend_url . '/api/revalidate?secret=' . $secret, [
+        'body' => json_encode([
+            'post_name' => $post->post_name,
+            'post_type' => $post->post_type,
+        ]),
+        'headers' => ['Content-Type' => 'application/json'],
+    ]);
+}
+add_action('publish_post', 'trigger_revalidation', 10, 2);
+```
+
+## Multi-author collaboration
+
+For editorial teams of multiple people, the following recommendations make collaboration easier in headless:
+
+1. **Use custom statuses**: add intermediate statuses (e.g., "In translation", "Legal review") with the PublishPress plugin or via custom code
+2. **Enable notifications**: configure automatic emails on status changes (draft to review, review to publication)
+3. **Centralize SEO metadata**: use Yoast SEO or Rank Math so each author fills in metadata directly in the back-office
+4. **Document conventions**: maintain an editorial style guide accessible from the WordPress back-office
+
+## Staging environment
+
+A staging environment (pre-production) is recommended to validate changes before going live.
+
+<HighlightBox title="Recommended setup" accent="blue">
+
+1. **WordPress staging**: a copy of WordPress with its own database, periodically synced from production
+
+2. **Frontend staging**: a Next.js instance connected to the staging WordPress, deployed on a dedicated URL (e.g., staging.mysite.com)
+
+3. **Environment variables**: each environment uses its own variables (`NEXT_PUBLIC_WORDPRESS_URL`, `DRAFT_SECRET_TOKEN`)
+
+4. **Workflow**: authoring on staging → preview → validation → sync to production → publication
+
+This setup lets you test content and design changes without affecting the live site.
+
+</HighlightBox>
+
+## Key takeaways
+
+<Callout variant="tip" title="Best practices summary">
+
+- Next.js's **Draft Mode** is the standard mechanism for preview in headless. It bypasses the static cache and renders the page in real time with the draft content.
+- **WordPress configuration** (`preview_post_link` filter) is essential so the "Preview" button redirects to the frontend.
+- The **editorial workflow** (draft → review → publication) works identically in headless. Only preview requires extra configuration.
+- **On-demand revalidation** is recommended for scheduled publications to ensure time precision.
+
+</Callout>
+
+<Quiz
+  question="In a headless architecture, why doesn't WordPress's native Preview button work directly?"
+  options={[
+    "Because WordPress doesn't support drafts in headless mode",
+    "Because the REST API can't expose drafts",
+    "Because the PHP theme is no longer used for rendering — the Next.js frontend must be configured to display the draft via Draft Mode",
+    "Because the browser blocks requests to external APIs"
+  ]}
+  answer={2}
+  explanation="In a headless architecture, HTML rendering is no longer handled by the WordPress PHP theme but by the Next.js frontend. The native Preview button tries to display the page through the theme, which no longer exists or is no longer active. The solution is to configure WordPress to redirect the preview to a Next.js frontend API route, which enables Draft Mode and displays the draft with the actual site rendering."
+/>

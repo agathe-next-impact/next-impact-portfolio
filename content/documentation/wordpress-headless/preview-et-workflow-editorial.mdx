@@ -1,0 +1,320 @@
+---
+title: "Prévisualisation et workflow éditorial"
+description: "Implémenter la prévisualisation de contenu et organiser le workflow éditorial dans un WordPress headless."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 15
+---
+
+<TldrCallout>
+  La prévisualisation d'un brouillon dans un WordPress headless s'appuie sur le Draft Mode de Next.js : un webhook configuré dans WordPress redirige le bouton "Aperçu" vers une URL signée côté front-end, qui rend la page avec le contenu non publié. Les éditeurs voient ainsi le rendu final dans le vrai design, sans publier. Cela referme la principale friction reprochée au headless.
+</TldrCallout>
+
+## Le probleme de la previsualisation en headless
+
+Dans une architecture WordPress traditionnelle, le bouton "Apercu" genere une page HTML via le theme PHP actif. Le redacteur voit le rendu final directement dans son navigateur. En architecture headless, le theme PHP n'est plus utilise : le rendu est assure par le frontend Next.js. Le bouton "Apercu" natif de WordPress affiche donc une page vide ou un message d'erreur.
+
+Ce probleme est l'un des principaux points de friction rapportes par les equipes editoriales qui migrent vers une architecture headless. La solution repose sur le **Draft Mode** de Next.js, combine a un webhook de previsualisation configure dans WordPress.
+
+<FlowDiagram
+  nodes={[
+    { label: "Redacteur", description: "Clique sur Apercu dans WordPress", icon: "✍️" },
+    { label: "WordPress", description: "Envoie le brouillon via webhook au frontend", icon: "📤" },
+    { label: "Next.js Draft Mode", description: "Active le mode brouillon et affiche le contenu non publie", icon: "👁️" },
+    { label: "Previsualisation", description: "Le redacteur voit le rendu reel du frontend", icon: "🖥️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Draft Mode de Next.js
+
+Le Draft Mode est un mecanisme integre a Next.js qui permet de contourner le cache statique pour afficher du contenu non publie. Lorsqu'il est active, les pages sont generees a la volee (comme en SSR) au lieu d'etre servies depuis le cache.
+
+### Principe de fonctionnement
+
+1. Le redacteur clique sur "Apercu" dans WordPress
+2. WordPress redirige vers une route API du frontend Next.js avec un token de securite
+3. La route API active le Draft Mode en deposant un cookie `__prerender_bypass` dans le navigateur
+4. Le navigateur est redirige vers la page de l'article
+5. Next.js detecte le cookie et genere la page en temps reel, en recuperant le brouillon via l'API WordPress
+
+### Implementation de la route Draft Mode
+
+<StepByStep>
+  <Step number={1} title="Creer la route API de previsualisation">
+    Cette route recoit la requete de WordPress, verifie le token de securite, active le Draft Mode et redirige vers la page correspondante.
+
+    ```typescript
+    // app/api/draft/route.ts
+    import { draftMode } from 'next/headers';
+    import { redirect } from 'next/navigation';
+    import { NextRequest } from 'next/server';
+
+    export async function GET(request: NextRequest) {
+      const secret = request.nextUrl.searchParams.get('secret');
+      const slug = request.nextUrl.searchParams.get('slug');
+      const postType = request.nextUrl.searchParams.get('type') ?? 'post';
+
+      // Verification du token de securite
+      if (secret !== process.env.DRAFT_SECRET_TOKEN) {
+        return new Response('Token invalide', { status: 401 });
+      }
+
+      if (!slug) {
+        return new Response('Slug manquant', { status: 400 });
+      }
+
+      // Verification que le contenu existe dans WordPress
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/${postType}s?slug=${slug}&status=draft`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}`,
+          },
+        }
+      );
+      const posts = await res.json();
+
+      if (!posts.length) {
+        return new Response('Contenu introuvable', { status: 404 });
+      }
+
+      // Activation du Draft Mode
+      draftMode().enable();
+
+      // Redirection vers la page
+      const path = postType === 'page' ? `/${slug}` : `/blog/${slug}`;
+      redirect(path);
+    }
+    ```
+  </Step>
+  <Step number={2} title="Adapter le composant de page pour le Draft Mode">
+    Lorsque le Draft Mode est actif, la page doit recuperer le brouillon (status=draft) au lieu du contenu publie.
+
+    ```tsx
+    // app/blog/[slug]/page.tsx
+    import { draftMode } from 'next/headers';
+
+    export default async function ArticlePage({ params }: { params: { slug: string } }) {
+      const { isEnabled } = draftMode();
+
+      // En mode draft : recuperer le brouillon avec authentification
+      // En mode normal : recuperer le contenu publie
+      const statusParam = isEnabled ? '&status=draft' : '';
+      const headers: HeadersInit = isEnabled
+        ? { Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}` }
+        : {};
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?slug=${params.slug}${statusParam}&_embed`,
+        {
+          headers,
+          cache: isEnabled ? 'no-store' : undefined,
+          next: isEnabled ? undefined : { revalidate: 3600 },
+        }
+      );
+      const posts = await res.json();
+      const post = posts[0];
+
+      return (
+        <article>
+          {isEnabled && (
+            <div style={{ background: '#fef3c7', padding: '12px', marginBottom: '24px' }}>
+              Mode previsualisation actif —{' '}
+              <a href="/api/draft/disable">Desactiver</a>
+            </div>
+          )}
+          <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+          <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+        </article>
+      );
+    }
+    ```
+  </Step>
+  <Step number={3} title="Creer la route de desactivation du Draft Mode">
+    Permet au redacteur de quitter le mode previsualisation.
+
+    ```typescript
+    // app/api/draft/disable/route.ts
+    import { draftMode } from 'next/headers';
+    import { redirect } from 'next/navigation';
+
+    export async function GET() {
+      draftMode().disable();
+      redirect('/');
+    }
+    ```
+  </Step>
+  <Step number={4} title="Configurer WordPress pour rediriger vers le frontend">
+    Dans WordPress, modifiez l'URL de previsualisation pour pointer vers la route API du frontend. Ce code se place dans le fichier `functions.php` du theme ou dans un plugin personnalise.
+
+    ```php
+    // functions.php ou plugin personnalise
+    function headless_preview_link($preview_link, $post) {
+        $frontend_url = 'https://www.monsite.fr';
+        $secret = 'VOTRE_TOKEN_SECRET'; // Identique a DRAFT_SECRET_TOKEN
+        $slug = $post->post_name;
+        $type = $post->post_type;
+
+        return sprintf(
+            '%s/api/draft?secret=%s&slug=%s&type=%s',
+            $frontend_url,
+            $secret,
+            $slug,
+            $type
+        );
+    }
+    add_filter('preview_post_link', 'headless_preview_link', 10, 2);
+    ```
+  </Step>
+</StepByStep>
+
+## Workflow editorial en headless
+
+L'organisation du workflow editorial ne depend pas de l'architecture technique. WordPress conserve ses statuts de publication natifs : brouillon, en attente de relecture, publie, planifie. La difference en headless reside dans la maniere dont chaque statut est rendu visible au redacteur.
+
+### Cycle de vie d'un contenu
+
+<FlowDiagram
+  nodes={[
+    { label: "Brouillon", description: "Le redacteur cree et edite le contenu", icon: "📝" },
+    { label: "Relecture", description: "Un relecteur verifie le contenu et les metadonnees", icon: "🔍" },
+    { label: "Previsualisation", description: "Verification du rendu sur le frontend via Draft Mode", icon: "👁️" },
+    { label: "Publication", description: "Le contenu est publie et visible sur le site", icon: "✅" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+### Roles et permissions
+
+WordPress dispose d'un systeme de roles natif qui s'applique en mode headless :
+
+- **Administrateur** : acces complet a WordPress et aux reglages de l'API
+- **Editeur** : peut publier, modifier et supprimer tous les contenus
+- **Auteur** : peut publier et modifier ses propres contenus
+- **Contributeur** : peut creer des brouillons mais ne peut pas publier
+
+<Callout variant="decideur" title="Separer les droits de publication des droits de redaction">
+Pour les equipes de plus de trois redacteurs, il est recommande de restreindre le droit de publication aux editeurs. Les redacteurs soumettent leurs articles en "Attente de relecture" et un editeur valide apres verification du contenu, des metadonnees SEO et de la previsualisation sur le frontend.
+</Callout>
+
+## Gestion des revisions
+
+WordPress enregistre automatiquement une revision a chaque sauvegarde. En mode headless, ces revisions sont accessibles via l'API REST :
+
+```bash
+# Recuperer les revisions d'un article (necessite une authentification)
+GET /wp-json/wp/v2/posts/{id}/revisions
+```
+
+Pour eviter l'accumulation de revisions en base de donnees, limitez leur nombre dans `wp-config.php` :
+
+```php
+// wp-config.php — Limiter a 10 revisions par article
+define('WP_POST_REVISIONS', 10);
+```
+
+### Comparer les revisions
+
+L'interface d'administration WordPress permet de comparer visuellement deux revisions. En headless, cette fonctionnalite reste disponible dans le back-office. Pour une previsualisation d'une revision specifique sur le frontend, etendez la route de Draft Mode :
+
+```typescript
+// Ajout dans la route /api/draft pour supporter les revisions
+const revisionId = request.nextUrl.searchParams.get('revision');
+if (revisionId) {
+  const revisionRes = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts/${postId}/revisions/${revisionId}`,
+    { headers: { Authorization: `Bearer ${process.env.WORDPRESS_API_TOKEN}` } }
+  );
+  // Utiliser le contenu de la revision pour le rendu
+}
+```
+
+## Publication planifiee
+
+WordPress permet de planifier la publication d'un article a une date et heure futures. En mode headless avec ISR, le comportement depend de la strategie de revalidation :
+
+<ComparisonTable
+  headers={["ISR avec intervalle", "Revalidation a la demande"]}
+  rows={[
+    { label: "Delai d'apparition", left: "L'article apparait au prochain cycle de revalidation (ex: dans l'heure)", right: "L'article apparait immediatement apres le declenchement du webhook" },
+    { label: "Configuration", left: "Aucune configuration supplementaire — le mecanisme ISR standard suffit", right: "Necessite un webhook WordPress declenche par le hook publish_post" },
+    { label: "Precision temporelle", left: "Approximative — depend de l'intervalle de revalidation", right: "Exacte — la page est regeneree des la publication" },
+    { label: "Recommandation", left: "Acceptable pour les blogs a faible exigence temporelle", right: "Recommande pour les sites ou la date de publication est importante" }
+  ]}
+  highlight="right"
+/>
+
+Pour une publication planifiee avec revalidation a la demande :
+
+```php
+// Plugin WordPress — Webhook declenche a la publication
+function trigger_revalidation($post_id, $post) {
+    if ($post->post_status !== 'publish') return;
+
+    $frontend_url = 'https://www.monsite.fr';
+    $secret = 'VOTRE_SECRET_REVALIDATION';
+
+    wp_remote_post($frontend_url . '/api/revalidate?secret=' . $secret, [
+        'body' => json_encode([
+            'post_name' => $post->post_name,
+            'post_type' => $post->post_type,
+        ]),
+        'headers' => ['Content-Type' => 'application/json'],
+    ]);
+}
+add_action('publish_post', 'trigger_revalidation', 10, 2);
+```
+
+## Collaboration multi-auteurs
+
+Pour les equipes editoriales de plusieurs personnes, les recommandations suivantes facilitent la collaboration en headless :
+
+1. **Utiliser les statuts personnalises** : ajoutez des statuts intermediaires (ex: "En traduction", "En validation juridique") avec le plugin PublishPress ou via du code custom
+2. **Activer les notifications** : configurez des emails automatiques lors des changements de statut (brouillon vers relecture, relecture vers publication)
+3. **Centraliser les metadonnees SEO** : utilisez Yoast SEO ou Rank Math pour que chaque redacteur renseigne les metadonnees directement dans le back-office
+4. **Documenter les conventions** : etablissez un guide de style editorial accessible depuis le back-office WordPress
+
+## Environnement de staging
+
+Un environnement de staging (pre-production) est recommande pour valider les modifications avant la mise en production.
+
+<HighlightBox title="Configuration recommandee" accent="blue">
+
+1. **WordPress staging** : une copie de WordPress avec sa propre base de donnees, synchronisee periodiquement depuis la production
+
+2. **Frontend staging** : une instance Next.js connectee au WordPress de staging, deployee sur une URL dediee (ex: staging.monsite.fr)
+
+3. **Variables d'environnement** : chaque environnement utilise ses propres variables (`NEXT_PUBLIC_WORDPRESS_URL`, `DRAFT_SECRET_TOKEN`)
+
+4. **Workflow** : redaction sur staging → previsualisation → validation → synchronisation vers production → publication
+
+Cette architecture permet de tester les modifications de contenu et de design sans impacter le site en production.
+
+</HighlightBox>
+
+## Ce qu'il faut retenir
+
+<Callout variant="tip" title="Resume des bonnes pratiques">
+
+- Le **Draft Mode** de Next.js est le mecanisme standard pour la previsualisation en headless. Il contourne le cache statique et genere la page en temps reel avec le contenu du brouillon.
+- La **configuration WordPress** (filtre `preview_post_link`) est indispensable pour que le bouton "Apercu" redirige vers le frontend.
+- Le **workflow editorial** (brouillon → relecture → publication) fonctionne de maniere identique en headless. Seule la previsualisation necessite une configuration supplementaire.
+- La **revalidation a la demande** est recommandee pour les publications planifiees afin de garantir la precision temporelle.
+
+</Callout>
+
+<Quiz
+  question="En architecture headless, pourquoi le bouton Apercu natif de WordPress ne fonctionne-t-il pas directement ?"
+  options={[
+    "Parce que WordPress ne supporte pas les brouillons en mode headless",
+    "Parce que l'API REST ne peut pas exposer les brouillons",
+    "Parce que le theme PHP n'est plus utilise pour le rendu — le frontend Next.js doit etre configure pour afficher le brouillon via le Draft Mode",
+    "Parce que le navigateur bloque les requetes vers les API externes"
+  ]}
+  answer={2}
+  explanation="En architecture headless, le rendu HTML n'est plus assure par le theme PHP de WordPress mais par le frontend Next.js. Le bouton Apercu natif tente d'afficher la page via le theme, qui n'existe plus ou n'est pas actif. La solution consiste a configurer WordPress pour rediriger l'apercu vers une route API du frontend Next.js, qui active le Draft Mode et affiche le brouillon avec le rendu reel du site."
+/>

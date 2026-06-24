@@ -1,0 +1,203 @@
+---
+title: Why headless
+description: Why choose to build a website headless?
+category: wordpress-headless
+author: Next Impact
+date: "2025-03-15"
+order: 2
+---
+
+<TldrCallout label="TL;DR">
+  Teams choose headless WordPress for three measurable benefits: superior performance (green Core Web Vitals thanks to pre-generated HTML and CDN delivery), unlimited design freedom decoupled from PHP themes, and a reduced attack surface because the admin is no longer exposed to public visitors. It is also the natural path to reuse a single content base across multiple channels (web, app, kiosks).
+</TldrCallout>
+
+## The technical and business advantages of headless
+
+### 1. Performance: a measurable gain on load times
+
+The problem with monolithic architectures:
+
+- Each page is generated dynamically by PHP on every HTTP request
+- The server runs SQL queries, loads plugins, compiles the theme, then sends the HTML back to the browser
+
+The headless solution:
+
+- Pages are generated as static HTML at build time (Static Site Generation) and distributed via a global CDN
+- The browser receives the pre-rendered HTML directly, without waiting for server-side processing
+
+Measurable results:
+
+<ComparisonTable
+  headers={["Traditional site", "Headless site"]}
+  rows={[
+    { label: "Load time", left: "3 to 5 seconds", right: "Under 1 second" },
+    { label: "Page construction", left: "Dynamic PHP rendering on every request", right: "SSG/SSR pre-rendering with CDN caching" },
+    { label: "Distribution", left: "Single origin server", right: "Global CDN with edge caching" },
+    { label: "SEO impact", left: "Core Web Vitals degraded by latency", right: "LCP, FID, and CLS scores natively optimized" }
+  ]}
+  highlight="right"
+/>
+
+<StatGrid>
+  <StatCard value="3-5s" label="Traditional site" description="Average load time of a monolithic WordPress with plugins" accent="coral" />
+  <StatCard value="< 1s" label="Headless site" description="Load time with SSG and CDN distribution" accent="blue" />
+  <StatCard value="+50%" label="Visitor retention" description="Bounce rate decreases and Core Web Vitals improve, two factors in Google's ranking algorithm" accent="orange" />
+</StatGrid>
+
+- Traditional site: 3 to 5 seconds average load time
+- Headless site: under 1 second
+- Bounce rate decreases and Core Web Vitals improve, two factors in Google's ranking algorithm
+
+### 2. Technological freedom on the front-end
+
+With traditional WordPress:
+
+- Design is constrained by the PHP theme system and its templates
+- Interaction and animation possibilities depend on the capabilities of the installed theme
+
+With headless WordPress:
+
+- The front-end uses a modern JavaScript framework (React, Vue, Svelte) with no constraint tied to the WordPress theme
+- The design is built to spec, pixel by pixel
+
+Examples of technical possibilities:
+
+- High-performance animations via Framer Motion or GSAP
+- Custom business interfaces (product configurators, dashboards, complex forms)
+- Differentiating user experience aligned with business goals
+- The design evolves independently from the back-end, with no risk of regression
+
+### 3. Multi-channel distribution from a single source
+
+Concrete case: a company with several digital touchpoints.
+
+With traditional WordPress:
+
+- Website: a WordPress CMS
+- Mobile app: another back-end system
+- In-store displays: yet another system
+- Issue: content is duplicated, updates have to be made on each platform separately
+
+With headless WordPress:
+
+- WordPress: a single source of truth for content
+- Website: Next.js front-end consuming the API
+- Mobile app: React Native application consuming the same API
+- In-store displays: a dedicated interface consuming the same API
+- An update in WordPress automatically propagates to every channel
+
+## The constraints to consider
+
+<Callout variant="warning" title="Constraints to evaluate before getting started">
+
+Headless architecture is not suited to every project. Initial costs are higher (€5,000 - €25,000 versus €2,000 - €10,000 for monolithic), it requires modern JavaScript development skills, and maintenance involves managing two distinct systems. These factors must be weighed against your real needs.
+
+</Callout>
+
+### 1. Higher upfront investment
+
+Why is the development cost higher?
+
+- Two separate applications to develop and deploy (back-end + front-end)
+- Designing the API architecture and data models
+- More specialized technical skills (a React/Next.js developer in addition to the WordPress developer)
+
+Indicative ranges:
+
+- Traditional WordPress site: €2,000 - €10,000
+- Headless WordPress site: €5,000 - €25,000
+
+This investment pays off through performance gains, lower long-term maintenance costs, and the ability to scale to multiple channels.
+
+### 2. Required technical skills
+
+Traditional WordPress:
+
+- A PHP/WordPress developer typically covers the full scope
+- The market for WordPress developers is large
+- Onboarding a junior profile is fast
+
+Headless WordPress:
+
+- WordPress back-end developer (PHP, API, ACF/CPT)
+- Modern front-end developer (React, Next.js, TypeScript)
+- WordPress + JavaScript full-stack profiles are rarer
+- Coordination between the two layers requires sound technical communication
+
+### 3. Editorial workflow adjustments
+
+For editorial teams:
+
+- Content preview requires specific configuration (draft mode in Next.js)
+- Content propagation time can vary depending on the rendering strategy (SSG vs ISR vs SSR)
+- Training on custom fields (ACF) may be necessary
+
+For maintenance:
+
+- Two environments to monitor (WordPress + front-end)
+- Updates must be coordinated between the two systems
+- Backup strategies cover the MySQL database and the front-end code
+
+## How to determine if headless fits your project
+
+<ComparisonTable
+  headers={["Headless recommended if...", "Monolithic better suited if..."]}
+  rows={[
+    { label: "Budget", left: "Sufficient budget for custom development", right: "Limited budget, priority on initial cost" },
+    { label: "Performance", left: "Load times have a direct business impact (e-commerce, SaaS)", right: "A marketing site or blog with standard performance requirements" },
+    { label: "Design", left: "Need for a custom interface or advanced interactions", right: "An existing WordPress theme meets the needs" },
+    { label: "Growth", left: "Mobile app, kiosks, multi-channel planned in the roadmap", right: "No multi-channel growth anticipated" },
+    { label: "Team", left: "Access to JavaScript developers (React, Next.js)", right: "Team limited to WordPress/PHP skills" },
+    { label: "Timeline", left: "Schedule compatible with custom development (8-20 weeks)", right: "Quick go-live required (2-4 weeks)" }
+  ]}
+  highlight="left"
+/>
+
+### Headless WordPress is recommended for:
+
+- Projects where performance directly impacts revenue
+- Interfaces requiring custom design or advanced interactions
+- Multi-channel architectures (site + mobile app + other touchpoints)
+- Organizations with the budget and technical skills
+- Projects with a long-term vision (3-5 years)
+
+Typical examples:
+
+- High-traffic or highly competitive e-commerce
+- Large enterprise corporate site with performance requirements
+- SaaS platform or web application with high user volume
+- Multi-channel project requiring a single content source
+
+### Traditional WordPress remains relevant for:
+
+- Projects with a limited budget (under €5,000)
+- Marketing sites or blogs with standard needs
+- Urgent launches requiring a quick go-live
+- Teams without access to JavaScript developers
+- Projects depending on specific WordPress plugins (WooCommerce with extensions, LMS, etc.)
+
+Typical examples:
+
+- Personal or association blog
+- SME or craftsman's marketing site
+- Portfolio with a need for fast publication
+- Temporary event website
+
+## The essential decision criterion
+
+"Does well-optimized traditional WordPress cover 100% of my current and future needs?"
+
+- Yes: stick with a well-configured traditional architecture (cache, CDN, plugin optimization)
+- No: headless architecture will let you remove the limitations you've identified
+
+<Quiz
+  question="What is the main advantage of headless in terms of performance?"
+  options={[
+    "It removes the need for a web server",
+    "Pages are pre-generated as static HTML (SSG) and distributed via a global CDN, bringing load times under one second",
+    "It uses a programming language faster than PHP",
+    "It automatically compresses every image on the site"
+  ]}
+  answer={1}
+  explanation="In a headless architecture, pages can be pre-generated at build time (Static Site Generation) and distributed through a global CDN. The browser receives static HTML directly from the closest point of presence, without waiting for PHP server processing. This is what makes it possible to go from 3-5 seconds to under 1 second of load time."
+/>

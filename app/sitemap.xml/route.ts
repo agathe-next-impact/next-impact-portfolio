@@ -131,6 +131,8 @@ export async function GET() {
   try {
     const localizedPages = [
       { path: "", source: "app/[locale]/page.tsx", changefreq: "weekly", priority: 1.0 },
+      // Page pilier WordPress Headless — cible SEO/GEO de fond, priorité haute.
+      { path: "wordpress-headless", source: "app/[locale]/wordpress-headless/page.tsx", changefreq: "weekly", priority: 0.95 },
       { path: "services", source: "app/[locale]/services/page.tsx", changefreq: "weekly", priority: 0.9 },
       { path: "depannage-wordpress", source: "app/[locale]/depannage-wordpress/page.tsx", changefreq: "monthly", priority: 0.9 },
       { path: "services/eligibilite", source: "app/[locale]/services/eligibilite/page.tsx", changefreq: "monthly", priority: 0.7 },

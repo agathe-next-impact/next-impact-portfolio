@@ -8,14 +8,15 @@ const FOOT_LINK =
   "font-mono text-[11px] uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
 
 const NAV_LINKS = [
-  { href: "/services",        key: "services" },
-  { href: "/etudes-de-cas",   key: "caseStudies" },
-  { href: "/documentation",   key: "documentation" },
-  { href: "/blog",            key: "blog" },
-  { href: "/avantage-oeth",   key: "oethAdvantage" },
-  { href: "/a-propos",        key: "about" },
-  { href: "/mentions-legales", key: "legalNotice" },
-  { href: "/confidentialite", key: "privacy" },
+  { href: "/services",            key: "services" },
+  { href: "/wordpress-headless",  key: "wordpressHeadlessPillar" },
+  { href: "/etudes-de-cas",       key: "caseStudies" },
+  { href: "/documentation",       key: "documentation" },
+  { href: "/blog",                key: "blog" },
+  { href: "/avantage-oeth",       key: "oethAdvantage" },
+  { href: "/a-propos",            key: "about" },
+  { href: "/mentions-legales",    key: "legalNotice" },
+  { href: "/confidentialite",     key: "privacy" },
 ] as const;
 
 const RESOURCE_LINKS = [

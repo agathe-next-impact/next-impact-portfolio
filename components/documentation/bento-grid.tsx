@@ -10,11 +10,11 @@ import type { Locale } from "@/i18n/routing";
 
 const defaultCardsFr: BentoCardConfig[] = [
   {
-    id: "headless-cms",
+    id: "wordpress-headless",
     title: "Comprendre le headless",
     description: "Architecture découplée, API WordPress, Next.js et déploiement.",
     icon: BookOpen,
-    href: "/documentation/headless-cms",
+    href: "/documentation/wordpress-headless",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
     gradient: "",
@@ -35,11 +35,11 @@ const defaultCardsFr: BentoCardConfig[] = [
 
 const defaultCardsEn: BentoCardConfig[] = [
   {
-    id: "headless-cms",
+    id: "wordpress-headless",
     title: "Understanding headless",
     description: "Decoupled architecture, WordPress API, Next.js and deployment.",
     icon: BookOpen,
-    href: "/documentation/headless-cms",
+    href: "/documentation/wordpress-headless",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
     gradient: "",
@@ -156,7 +156,7 @@ export function BentoGrid() {
       {profileId && <InlineLearningPath locale={locale} />}
       {cards.map((card) => {
         const Icon = card.icon;
-        const isBig = card.id === "headless-cms";
+        const isBig = card.id === "wordpress-headless";
         return (
           <div
             key={card.id}

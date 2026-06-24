@@ -1,0 +1,358 @@
+---
+title: "Multilingue et internationalisation en headless"
+description: "Gérer un site WordPress headless multilingue avec WPML ou Polylang et le système i18n de Next.js."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 25
+---
+
+<TldrCallout>
+  Pour un site WordPress headless multilingue, le travail se partage entre deux couches : WordPress gère les traductions de contenu via WPML ou Polylang (et les expose à l'API par langue), tandis que Next.js gère le routage localisé (`/fr`, `/en`), les chaînes d'interface (next-intl, next-translate) et les balises `hreflang`. Cette répartition préserve les habitudes éditoriales sans sacrifier le SEO international.
+</TldrCallout>
+
+## Le défi du multilingue en architecture headless
+
+En architecture WordPress traditionnelle, les plugins de traduction (WPML, Polylang) gèrent l'intégralité du processus multilingue : stockage des traductions, sélection de la langue, rendu des pages dans la bonne langue et génération des URL localisées. En mode headless, ce processus est partagé entre deux couches : WordPress stocke et organise les traductions, tandis que Next.js gère le routage par langue, l'affichage et les chaînes de traduction de l'interface.
+
+<FlowDiagram
+  nodes={[
+    { label: "WordPress + WPML/Polylang", description: "Stockage du contenu traduit, association entre traductions", icon: "📝" },
+    { label: "API REST / GraphQL", description: "Exposition du contenu par langue via paramètre ?lang=", icon: "🔄" },
+    { label: "Next.js i18n", description: "Routage /fr/, /en/, détection de langue, UI traduite", icon: "🌐" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Plugins de traduction WordPress et leur compatibilité API
+
+### WPML (WordPress Multilingual Plugin)
+
+WPML est le plugin multilingue le plus utilisé sur WordPress. Il stocke chaque traduction comme un post distinct dans la base de données, liés entre eux par un identifiant de traduction.
+
+Compatibilité API :
+- **REST API** : WPML ajoute le paramètre `?lang=` aux endpoints REST. Exemple : `/wp-json/wp/v2/posts?lang=en` retourne les articles en anglais.
+- **GraphQL** : WPML fournit une extension pour WPGraphQL qui expose les champs de traduction dans les requêtes GraphQL.
+
+### Polylang
+
+Polylang est une alternative gratuite (version de base) à WPML. Son fonctionnement est similaire : chaque traduction est un post distinct, associé à une taxonomie de langue.
+
+Compatibilité API :
+- **REST API** : le plugin complémentaire Polylang REST API (ou Polylang Pro) ajoute le paramètre `?lang=` aux endpoints.
+- **GraphQL** : le plugin Polylang for WPGraphQL ajoute les champs de traduction aux types GraphQL.
+
+<ComparisonTable
+  headers={["WPML", "Polylang"]}
+  rows={[
+    { label: "Licence", left: "Payant (à partir de 39 €/an)", right: "Gratuit (base) ou Pro (99 €/an)" },
+    { label: "Support REST API", left: "Natif", right: "Via extension (gratuite ou Pro)" },
+    { label: "Support WPGraphQL", left: "Extension officielle", right: "Plugin communautaire" },
+    { label: "Traduction de chaînes", left: "WPML String Translation", right: "Polylang Strings" },
+    { label: "Nombre de langues", left: "Illimité", right: "Illimité" },
+    { label: "Traduction des taxonomies", left: "Oui", right: "Oui" },
+    { label: "Adapté pour headless", left: "Oui (API native)", right: "Oui (avec extension API)" },
+  ]}
+/>
+
+## Routage i18n dans Next.js (App Router)
+
+Next.js App Router gère le multilingue via des segments de route dynamiques. La structure de dossiers utilise un paramètre `[locale]` qui détermine la langue de chaque page.
+
+### Structure de fichiers
+
+```
+app/
+├── [locale]/
+│   ├── layout.tsx          # Layout avec la locale
+│   ├── page.tsx            # Page d'accueil localisée
+│   ├── articles/
+│   │   ├── page.tsx        # Liste des articles
+│   │   └── [slug]/
+│   │       └── page.tsx    # Article individuel
+│   └── a-propos/
+│       └── page.tsx
+├── middleware.ts            # Détection et redirection de langue
+└── i18n/
+    ├── config.ts           # Configuration des locales
+    ├── fr.json             # Traductions UI en français
+    └── en.json             # Traductions UI en anglais
+```
+
+### Configuration des locales
+
+```typescript
+// i18n/config.ts
+export const locales = ['fr', 'en'] as const;
+export type Locale = (typeof locales)[number];
+export const defaultLocale: Locale = 'fr';
+
+export function isValidLocale(locale: string): locale is Locale {
+  return locales.includes(locale as Locale);
+}
+```
+
+## Middleware de détection de langue
+
+Le middleware Next.js intercepte chaque requête et redirige l'utilisateur vers la version linguistique appropriée si aucune locale n'est spécifiée dans l'URL.
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { locales, defaultLocale } from './i18n/config';
+
+export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Vérifier si une locale est déjà dans l'URL
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
+
+  if (pathnameHasLocale) return NextResponse.next();
+
+  // Détecter la langue préférée du navigateur
+  const acceptLanguage = request.headers.get('accept-language') || '';
+  const preferredLocale = acceptLanguage.includes('fr') ? 'fr' : 'en';
+  const locale = preferredLocale || defaultLocale;
+
+  // Rediriger vers l'URL avec la locale
+  return NextResponse.redirect(
+    new URL(`/${locale}${pathname}`, request.url)
+  );
+}
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};
+```
+
+<Callout variant="developpeur" title="Détection de langue : priorités">
+L'ordre de priorité recommandé pour la détection de langue est : 1) locale dans l'URL (explicite), 2) cookie de préférence utilisateur (si déjà défini), 3) en-tête Accept-Language du navigateur, 4) locale par défaut. Le middleware ne doit rediriger que les requêtes sans locale dans l'URL.
+</Callout>
+
+## Traduction des chaînes d'interface (next-intl)
+
+Les chaînes d'interface (boutons, labels, messages) ne proviennent pas de WordPress. Elles sont stockées dans des fichiers JSON locaux et chargées par un système de traduction côté Next.js.
+
+```json
+// i18n/fr.json
+{
+  "nav": {
+    "home": "Accueil",
+    "articles": "Articles",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "articles": {
+    "readMore": "Lire la suite",
+    "publishedOn": "Publié le {date}",
+    "byAuthor": "Par {author}",
+    "noResults": "Aucun article trouvé."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue.",
+    "backToHome": "Retour à l'accueil"
+  }
+}
+```
+
+```typescript
+// lib/get-translations.ts — chargement des traductions
+import { Locale } from '@/i18n/config';
+
+const translations: Record<string, any> = {
+  fr: () => import('@/i18n/fr.json').then((m) => m.default),
+  en: () => import('@/i18n/en.json').then((m) => m.default),
+};
+
+export async function getTranslations(locale: Locale) {
+  return translations[locale]();
+}
+
+// Utilisation dans un Server Component
+// const t = await getTranslations(locale);
+// <h1>{t.nav.home}</h1>
+```
+
+<StepByStep>
+  <Step number={1} title="Configurer le plugin de traduction WordPress">
+    Installez WPML ou Polylang sur WordPress. Configurez les langues disponibles et traduisez le contenu (articles, pages, catégories). Vérifiez que l'API REST ou GraphQL retourne le contenu filtré par langue avec le paramètre `?lang=`.
+  </Step>
+  <Step number={2} title="Structurer le routage i18n dans Next.js">
+    Créez la structure de dossiers `app/[locale]/` et configurez les locales dans un fichier de configuration. Chaque page reçoit la locale comme paramètre de route.
+  </Step>
+  <Step number={3} title="Implémenter le middleware de détection">
+    Créez le fichier `middleware.ts` pour rediriger les visiteurs sans locale dans l'URL vers leur langue préférée. Stockez la préférence dans un cookie pour les visites suivantes.
+  </Step>
+  <Step number={4} title="Traduire les chaînes d'interface">
+    Créez les fichiers de traduction JSON (fr.json, en.json) pour les éléments d'interface. Utilisez next-intl ou un système de chargement personnalisé pour injecter les traductions dans les composants.
+  </Step>
+  <Step number={5} title="Récupérer le contenu localisé depuis WordPress">
+    Dans les Server Components, ajoutez le paramètre `?lang=` aux requêtes API WordPress pour récupérer le contenu dans la langue correspondant à la locale de la route.
+  </Step>
+  <Step number={6} title="Ajouter les balises hreflang et le sélecteur de langue">
+    Implémentez les balises hreflang dans `generateMetadata` pour le SEO et créez un composant sélecteur de langue dans la navigation.
+  </Step>
+</StepByStep>
+
+## Récupérer le contenu localisé depuis l'API WordPress
+
+```typescript
+// lib/wordpress.ts — requêtes localisées
+import { Locale } from '@/i18n/config';
+
+export async function getLocalizedPosts(locale: Locale) {
+  const response = await fetch(
+    `${process.env.WORDPRESS_API_URL}/wp/v2/posts?lang=${locale}&per_page=20&_embed`,
+    { next: { revalidate: 3600 } }
+  );
+  return response.json();
+}
+
+export async function getLocalizedPage(slug: string, locale: Locale) {
+  const response = await fetch(
+    `${process.env.WORDPRESS_API_URL}/wp/v2/pages?slug=${slug}&lang=${locale}&_embed`
+  );
+  const pages = await response.json();
+  return pages[0] || null;
+}
+```
+
+```typescript
+// app/[locale]/articles/page.tsx
+import { getLocalizedPosts } from '@/lib/wordpress';
+import { getTranslations } from '@/lib/get-translations';
+import { Locale } from '@/i18n/config';
+
+type Props = { params: { locale: Locale } };
+
+export default async function ArticlesPage({ params }: Props) {
+  const { locale } = params;
+  const [posts, t] = await Promise.all([
+    getLocalizedPosts(locale),
+    getTranslations(locale),
+  ]);
+
+  return (
+    <main>
+      <h1>{t.nav.articles}</h1>
+      {posts.map((post: any) => (
+        <article key={post.id}>
+          <h2>{post.title.rendered}</h2>
+          <a href={`/${locale}/articles/${post.slug}`}>{t.articles.readMore}</a>
+        </article>
+      ))}
+    </main>
+  );
+}
+```
+
+## Balises hreflang pour le SEO multilingue
+
+Les balises hreflang indiquent aux moteurs de recherche les correspondances entre les versions linguistiques d'une page. Elles se configurent dans `generateMetadata`.
+
+```typescript
+// app/[locale]/articles/[slug]/page.tsx
+import { Metadata } from 'next';
+import { locales } from '@/i18n/config';
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = params;
+  const article = await getLocalizedArticle(slug, locale);
+
+  const languages: Record<string, string> = {};
+  for (const loc of locales) {
+    languages[loc] = `https://www.votre-site.fr/${loc}/articles/${slug}`;
+  }
+
+  return {
+    title: article.title.rendered,
+    description: article.excerpt.rendered.replace(/<[^>]*>/g, ''),
+    alternates: {
+      canonical: `https://www.votre-site.fr/${locale}/articles/${slug}`,
+      languages,
+    },
+  };
+}
+```
+
+## Composant sélecteur de langue
+
+```typescript
+// components/LanguageSwitcher.tsx
+'use client';
+
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { locales, Locale } from '@/i18n/config';
+
+const localeNames: Record<Locale, string> = {
+  fr: 'Français',
+  en: 'English',
+};
+
+export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
+  const pathname = usePathname();
+
+  return (
+    <nav aria-label="Sélection de la langue">
+      {locales.map((locale) => {
+        // Remplacer la locale dans le chemin actuel
+        const newPath = pathname.replace(`/${currentLocale}`, `/${locale}`);
+        return (
+          <Link
+            key={locale}
+            href={newPath}
+            lang={locale}
+            hrefLang={locale}
+            className={locale === currentLocale ? 'font-bold' : ''}
+          >
+            {localeNames[locale]}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+```
+
+## Stratégies de structure d'URL
+
+<ComparisonTable
+  headers={["Sous-répertoire (/fr/)", "Sous-domaine (fr.site.com)", "Domaine dédié (site.fr)"]}
+  rows={[
+    { label: "Exemple", left: "votre-site.fr/fr/articles", right: "fr.votre-site.fr/articles | votre-site.fr/articles" },
+    { label: "Configuration", left: "Simple (routage Next.js)", right: "DNS + hébergement par langue" },
+    { label: "Autorité SEO", left: "Partagée (un seul domaine)", right: "Séparée par sous-domaine/domaine" },
+    { label: "Recommandé par Google", left: "Oui", right: "Oui (mais plus complexe)" },
+    { label: "Adapté au headless", left: "Optimal (routing natif Next.js)", right: "Possible mais nécessite une configuration avancée" },
+  ]}
+/>
+
+<Callout variant="tip" title="Structure recommandée pour Next.js headless">
+La structure en sous-répertoire (`/fr/`, `/en/`) est recommandée pour un site headless Next.js. Elle est nativement supportée par le routage App Router, conserve l'autorité SEO sur un domaine unique et simplifie la configuration DNS et le déploiement. C'est également l'approche recommandée par Google pour la majorité des sites multilingues.
+</Callout>
+
+## Synchronisation du contenu entre les langues
+
+La gestion de la synchronisation entre les versions linguistiques se fait côté WordPress :
+
+- **WPML** : le "Translation Editor" intégré permet de traduire chaque champ en parallèle et assure le lien entre les versions
+- **Polylang** : l'interface de traduction associe chaque article à ses traductions via une colonne dédiée dans la liste des posts
+
+Côté frontend, la synchronisation se vérifie en s'assurant que chaque page localisée dispose d'un lien hreflang vers toutes ses traductions. Si une traduction n'existe pas, la page ne doit pas inclure de hreflang vers cette langue manquante.
+
+<Quiz
+  question="Quelle structure d'URL est recommandée pour un site multilingue déployé avec Next.js App Router ?"
+  options={[
+    "Des sous-domaines par langue (fr.votre-site.fr, en.votre-site.fr)",
+    "Des paramètres de requête (?lang=fr, ?lang=en)",
+    "Des sous-répertoires par langue (/fr/, /en/) via le segment [locale]",
+    "Des domaines séparés par langue (votre-site.fr, your-site.com)"
+  ]}
+  answer={2}
+  explanation="La structure en sous-répertoire (/fr/, /en/) est l'approche recommandée pour Next.js App Router. Le segment dynamique [locale] dans la structure de dossiers gère nativement le routage par langue. Cette approche est simple à configurer, conserve l'autorité SEO sur un seul domaine et est recommandée par Google. Les paramètres de requête (?lang=) ne sont pas recommandés car ils ne sont pas considérés comme des URL distinctes par les moteurs de recherche."
+/>

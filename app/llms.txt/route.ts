@@ -21,7 +21,7 @@ type DocLink = {
 const categoryLabels: Record<string, string> = {
   "applications-web-mobile": "Applications web & mobile",
   "design-ui-ux": "Design UI/UX",
-  "headless-cms": "CMS headless",
+  "wordpress-headless": "CMS headless",
   "marketing-digital": "Marketing digital",
   "projet-site-web": "Projet de site web",
   seo: "SEO & referencement",

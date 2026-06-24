@@ -327,7 +327,7 @@ const CARD_COMPONENTS: Record<CardId, React.FC> = {
 };
 
 const CARD_PAGES: Record<CardId, string[]> = {
-  audit: ["/audit-site-ia", "/documentation/headless-cms"],
+  audit: ["/audit-site-ia", "/documentation/wordpress-headless"],
   conversion: ["/contact"],
 };
 
@@ -344,7 +344,7 @@ const TOOL_PAGE_PREFIXES = [
   "/outils",
   "/audit-site-ia",
   "/tarifs",
-  "/documentation/headless-cms",
+  "/documentation/wordpress-headless",
 ];
 
 function isToolPage(pathname: string) {

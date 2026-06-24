@@ -1,4 +1,4 @@
-import bundleAnalyzer from '@next/bundle-analyzer';
+﻿import bundleAnalyzer from '@next/bundle-analyzer';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const withBundleAnalyzer = bundleAnalyzer({
@@ -74,6 +74,19 @@ const nextConfig = {
       {
         source: '/articles/wordpress-headless-impact-social-pme-engagees',
         destination: '/services',
+        permanent: true,
+      },
+      // Renommage du slug de catégorie documentation : headless-cms → wordpress-headless
+      // pour aligner l'URL sur la requête cible « WordPress Headless ».
+      // Le motif :path* couvre aussi le cas sans suffixe.
+      {
+        source: '/documentation/headless-cms/:path*',
+        destination: '/documentation/wordpress-headless/:path*',
+        permanent: true,
+      },
+      {
+        source: '/en/documentation/headless-cms/:path*',
+        destination: '/en/documentation/wordpress-headless/:path*',
         permanent: true,
       },
       ...disabledToolRedirects,

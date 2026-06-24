@@ -1,0 +1,374 @@
+---
+title: Managing content easily in headless mode
+description: How to administer a headless WordPress site simply
+category: wordpress-headless
+author: Next Impact
+date: "2025-03-15"
+order: 14
+---
+
+<TldrCallout label="TL;DR">
+  In headless WordPress, the admin stays exactly the same as in a classic WordPress: Gutenberg editor, media library, user roles, editing plugins (ACF, Yoast). Only the public rendering layer changes. Editors keep their habits; the only new workflow step is preview, which now goes through Next.js Draft Mode.
+</TldrCallout>
+
+<Callout variant="utilisateur" title="The admin interface stays the same">
+If you already use WordPress, you already know how to administer a headless WordPress site. The back-office does not change. Only the public rendering layer is replaced by a dedicated frontend. This guide details the workflow differences and best practices for structuring content.
+</Callout>
+
+## WordPress administration is unchanged
+
+Switching to headless mode does not affect the back-office. The WordPress admin interface stays exactly the same.
+
+What stays the same:
+
+- Writing posts and creating pages via Gutenberg
+- Managing the media library (upload, editing, metadata)
+- Admin interface (dashboard, menus, settings)
+- Publishing workflow (draft, review, scheduling, publication)
+- User, role and permission management
+
+What improves:
+
+- Content can be consumed by multiple clients (website, mobile app, third-party API)
+- Structuring with custom fields enables granular reuse
+- Backend/frontend separation simplifies maintenance of each layer
+
+## Organizing your content for headless
+
+### Structuring as reusable blocks instead of monolithic pages
+
+<ComparisonTable headers={["Traditional method", "Optimized headless method"]} rows={[{label: "Approach", left: "An 'About' page contains all the content in a single HTML field", right: "Content is split into autonomous blocks: Introduction, Team, Testimonials, Values"}, {label: "Reuse", left: "Content tied to a single page, not reusable", right: "Each block is an independent object, reusable in different contexts"}, {label: "Maintenance", left: "Change page by page", right: "Editing a block updates it everywhere it is used"}, {label: "Consistency", left: "Risk of divergence between pages", right: "Consistency guaranteed by a single source for each block"}]} highlight="right" />
+
+Traditional method:
+The content of an "About" page is written in a single HTML field, mixing text, images and testimonials.
+
+Optimized headless method:
+Content is split into autonomous, reusable blocks:
+
+- "Company introduction" block
+- "Team" block (with structured photos and descriptions)
+- "Customer testimonials" block
+- "Values" block
+
+The benefit: each block is an independent content object. It can be displayed on the About page, but also on the home page, in a mobile app or in a newsletter, with no duplication.
+
+### Using custom fields
+
+Custom fields, typically managed via the ACF plugin (Advanced Custom Fields) or the native `register_meta` feature, structure content as typed data instead of free HTML.
+
+Example: product page
+
+Instead of:
+
+```
+
+"Our new SuperTech X1 smartphone
+[phone image]
+Price: €599
+6.1-inch screen, 128GB of storage..."
+
+```
+
+Create separate, typed fields:
+
+- Product name (text field): "SuperTech X1"
+- Category (taxonomy): "Smartphone"
+- Price (number field): 599
+- Short description (text field): "High-performance smartphone"
+- Long description (WYSIWYG field): [detailed text]
+- Images (gallery field): [product photos]
+- Specifications (repeater field): [structured key/value list]
+
+The benefits of this structure:
+
+- The price is numeric data that can be sorted, filtered, compared and formatted by currency
+- Images are independent media objects, reusable in other contexts
+- Specifications feed a comparator or a tech sheet without reprocessing
+- The frontend consumes structured data through the API, which simplifies rendering
+
+## Adapted publishing workflows
+
+### Preview: how do you see the final result?
+
+In headless mode, the native WordPress "Preview" button no longer works directly because rendering is no longer handled by the PHP theme. Several solutions exist.
+
+Solution 1: Staging environment
+
+- A frontend deployment connected to the WordPress API with a `?preview=true` parameter
+- The editor publishes a draft, then visits the staging URL
+- Simple to set up, with a slight delay between save and rendering
+
+Solution 2: Framework-integrated Preview Mode
+
+- Next.js and Nuxt.js offer a "Preview Mode" that renders drafts on the fly
+- The WordPress Preview button is reconfigured to open the frontend in preview mode
+- Experience close to the traditional workflow, requires specific development
+
+Solution 3: Two-step publishing
+
+- Save as draft in WordPress
+- Verify on the staging environment
+- Final publication after validation
+
+### Update delay depending on the frontend architecture
+
+Static sites (SSG, e.g. Gatsby):
+
+- Content is updated on rebuild
+- Delay between publication and display: 1 to 10 minutes depending on the number of pages
+- Suited to content with low update frequency
+
+Sites with ISR (Incremental Static Regeneration, e.g. Next.js):
+
+- Pages are regenerated in the background after a configurable interval (e.g. 60 seconds)
+- The visitor always sees a static page, but content is automatically refreshed
+- A good compromise between performance and content freshness
+
+SSR sites (Server-Side Rendering):
+
+- HTML is generated on every server request
+- Instant updates after publication
+- Suited to real-time content (news, e-commerce)
+
+The choice depends on update frequency: a blog can tolerate a rebuild of a few minutes, a news site needs SSR or ISR with a short interval.
+
+## Structuring content professionally
+
+### Recommended content types
+
+1. Evergreen content
+
+- Institutional pages (About, Contact, Legal)
+- Product and service pages
+- Guides and tutorials
+- Management: structure defined by custom fields, occasional updates
+
+2. Dynamic content
+
+- News and blog posts
+- Time-limited promotions
+- Events
+- Management: frequent publication, limited lifecycle, automatable archiving
+
+3. Modular content
+
+- Customer testimonials
+- Team members
+- FAQ
+- Management: dedicated Custom Post Types (CPTs), reusable in multiple contexts via the API
+
+### Modeling example: a restaurant site
+
+Custom Post Types (CPTs):
+
+- Dishes: name, price, description, allergens, photo (typed ACF fields)
+- Events: date, time, description, price
+- Team: name, role, photo, biography
+- News: title, content, date, featured image
+
+Custom taxonomies:
+
+- Dishes: Starters, Main courses, Desserts, Drinks
+- Events: Concerts, Tastings, Workshops
+- News: Restaurant, Team, Community
+
+Result: each content type is a structured entity, individually queryable via the API and displayable in any frontend context.
+
+## Training the editorial team
+
+### Concrete changes for editors
+
+Change 1: Structured fields instead of a free editor
+
+- Before: a single WYSIWYG field for all content
+- After: dedicated fields for each type of data (title, price, description, images)
+- Benefit: fewer formatting errors, automatic consistency
+
+Change 2: Respecting the content schema
+
+- Before: total freedom of formatting in the editor
+- After: content follows a predetermined structure (custom fields, Gutenberg blocks)
+- Benefit: the frontend can render content uniformly across all channels
+
+Change 3: Adapted preview
+
+- Before: "Preview" button with immediate rendering through the PHP theme
+- After: preview via the staging environment or the framework's preview mode
+- Benefit: the rendering matches exactly what the visitor will see
+
+### Recommended training plan
+
+<StepByStep>
+<Step number={1} title="Session 1 (30 minutes): introduction to headless architecture">
+
+- Explain the backend/frontend decoupling and its advantages
+- Identify what changes and what stays the same for editors
+- Demonstrate the full workflow: writing, preview, publication
+
+</Step>
+<Step number={2} title="Session 2 (1 hour): hands-on with structured fields">
+
+- Present configured custom fields and Custom Post Types
+- Practical exercises: create content, fill in fields, verify rendering
+- Best practices for input (naming, metadata, image formats)
+
+</Step>
+<Step number={3} title="Session 3 (30 minutes): mastering the publishing workflow">
+
+- Full process: draft, staging preview, publication
+- Handling special cases (urgent fix, unpublishing, update)
+- Verifying SEO metadata before publication
+
+</Step>
+<Step number={4} title="Ongoing support">
+
+- Accessible internal documentation (wiki or dedicated page in WordPress)
+- Identified technical lead for questions
+- Monthly check-in to gather feedback and adjust processes
+
+</Step>
+</StepByStep>
+
+## Optimizing content for the headless architecture
+
+### Best practices for images
+
+<Callout variant="tip" title="Three rules for media">
+
+1. **Descriptive naming** — Use `company-logo-2024.jpg` rather than `IMG_1234.jpg`. The file name is used by the API and indexed by search engines.
+2. **Systematic alt text (alt attribute)** — Essential for accessibility (WCAG), useful for SEO, and exploitable by the frontend for conditional rendering.
+3. **Optimized format and weight** — JPEG for photos, PNG for images with transparency, WebP when the browser supports it. Target weight: under 500 KB before frontend optimization.
+
+</Callout>
+
+1. Descriptive naming
+- Avoid: `IMG_1234.jpg`
+- Prefer: `company-logo-2024.jpg`
+1. Systematic alt text
+- Required for WCAG (accessibility) compliance
+- Ranking factor for Google Images
+- Usable by the frontend for conditional display
+1. Optimized format and weight
+- JPEG for photographs
+- PNG for logos and illustrations with transparency
+- Target weight: under 500 KB (the frontend will apply additional optimization through `next/image` or equivalent)
+
+### Media library organization
+
+Recommended folder structure (via a plugin like FileBird or WP Media Folder):
+
+```
+
+/2024/
+  /january/
+    /products/
+    /team/
+    /news/
+  /february/
+    /products/
+    /team/
+    /news/
+
+```
+
+Benefits:
+
+- Quick navigation in the media library
+- Simplified rights and backup management
+- Querying by category possible via the API
+
+### SEO and metadata
+
+Fields to fill in systematically for every piece of content:
+
+- SEO title (meta title): optimized for search engines, distinct from the title shown on the site
+- SEO description (meta description): a 150-160 character summary, shown in search results
+- Featured image: used for social media sharing (Open Graph, Twitter Cards)
+- URL slug: clean, descriptive and stable URL (avoid changing it after publication)
+
+Example:
+
+- Display title: "Our signature chocolate cake"
+- Meta title: "Homemade chocolate cake recipe - Patisserie Martin"
+- Meta description: "Discover our chocolate cake recipe, prepared every morning with organic ingredients and Grand Cru cocoa."
+
+## Handling emergencies and quick fixes
+
+### Urgent correction process
+
+1. Detect the problem
+
+- Wrong price, outdated information, incorrect content
+
+2. Fix in WordPress
+
+- Edit through the admin interface (usual workflow)
+
+3. Verify
+
+- Check on the staging environment if time allows
+- Direct publication if urgency requires it (in SSR or ISR, the update is near-instant)
+
+4. Communicate
+
+- Notify the technical team if the fix impacts the frontend
+- Document the change in the changelog
+
+### Backup strategy
+
+Automatic backups:
+
+- WordPress database: daily (UpdraftPlus, BackupBuddy plugin or hosting provider solution)
+- WordPress files (uploads, plugins, themes): daily
+- Frontend source code: versioned in Git (every commit is a backup)
+
+Restoration procedure:
+
+- Documented and accessible to the team
+- Identified technical lead with access to backups
+- Restoration test performed at least once per quarter
+
+## Frequently asked questions from editorial teams
+
+"How long does it take to get used to the new fields?"
+Generally, 2 to 3 weeks are enough to be fully comfortable with structured fields. Most editors then notice a productivity gain compared with manual formatting.
+
+"Why split content into so many fields?"
+Splitting into typed fields lets the same content be consumed by multiple clients without reprocessing. The same product can power the website, the mobile app and a PDF catalog from a single source.
+
+"What happens if there is an input error?"
+Automatic backups and the WordPress revisions system allow reverting to an earlier version. Content errors are corrected through the admin interface, just as in traditional mode.
+
+"Is existing content preserved?"
+All existing content remains accessible via the API. Switching to headless adds new structuring possibilities without affecting existing data.
+
+"Do we need to acquire new technical skills?"
+No. The required skills remain the same: knowing how to use the WordPress back-office. The difference is in how content is organized (structured fields instead of a free editor), not in the tools.
+
+## Launch checklist
+
+Before launch:
+
+- Editorial team training completed
+- Internal documentation written and accessible
+- Publishing workflow tested end-to-end (draft, preview, publication)
+- Urgent correction procedure defined
+- Technical lead identified
+
+First week:
+
+- Daily support available for editors
+- Collection of team feedback
+- Adjustments to fields and workflow if necessary
+- Documentation of issues encountered
+
+First month:
+
+- Full retrospective with the editorial and technical teams
+- Identification of possible optimizations (additional fields, taxonomy changes)
+- Additional training if gaps are identified
+- Process stabilized and documented
+
+Switching to headless changes the public rendering layer, not the day-to-day work of editors. The admin interface stays the same; what changes is how content is structured and consumed.
+
+<Quiz question="In headless WordPress mode, what mainly changes for a content editor?" options={["They have to learn a new CMS", "The admin interface is replaced by code", "Content is structured in typed, reusable fields, with preview through a staging environment or the framework's preview mode", "Publishing content is no longer possible"]} answer={2} explanation="In headless mode, the WordPress back-office stays the same. The main difference for editors is the structuring of content into typed fields (custom fields) instead of a free HTML editor. This structure makes content reusable across different channels. Preview goes through a staging environment or the framework's preview mode, instead of WordPress's native Preview button." />

@@ -101,6 +101,8 @@ export interface MetadataOptions {
   description: string;
   path?: string;
   image?: string | { url: string; width: number; height: number; alt: string };
+  /** Étiquette en haut-droite de la carte OG dynamique (≤ 42 chars, mis en MAJ). */
+  eyebrow?: string;
   keywords?: string[];
   type?: "website" | "article" | "profile";
   publishedTime?: string;
@@ -123,6 +125,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
     description,
     path = "",
     image,
+    eyebrow,
     keywords = [],
     type = "website",
     publishedTime,
@@ -163,7 +166,7 @@ export function generatePageMetadata(options: MetadataOptions): Metadata {
   } else {
     // Aucune image fournie → carte OpenGraph générée à la volée à partir
     // du titre et de la description localisés de la page.
-    ogImage = dynamicOgImage(title, description);
+    ogImage = dynamicOgImage(title, description, eyebrow);
   }
 
   // Combinaison des mots-clés

@@ -597,7 +597,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre les principes fondamentaux du Headless et comment cette architecture révolutionne la manière dont les sites web sont conçus et gérés.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/headless-cms/comprendre-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "Pourquoi choisir le Headless ?",
@@ -605,7 +605,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre les gains concrets : temps de chargement divisé, coût de maintenance réduit et ROI mesurable sur votre investissement web.",
       src: "/icons/scan-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/headless-cms/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
     },
     {
       title: "Pour quels objectifs ?",
@@ -613,7 +613,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Découvrez si votre projet correspond : pic de trafic à absorber, éco-conception, multi-sites, portail client ou application métier.",
       src: "/icons/analytics-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/headless-cms/quand-utiliser-wordpress-headless",
+      ctaLink: "/documentation/wordpress-headless/quand-utiliser-wordpress-headless",
     },
   ],
   decideur: [
@@ -623,7 +623,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre comment le découplage frontend/backend se traduit en avantage concurrentiel pour votre entreprise.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/headless-cms/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
     },
     {
       title: "ROI et performance business",
@@ -631,7 +631,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Des indicateurs mesurables : temps de chargement, taux de conversion, positionnement SEO. L'impact direct sur votre chiffre d'affaires.",
       src: "/icons/scan-icon.svg",
       ctaText: "Voir les chiffres",
-      ctaLink: "/documentation/headless-cms/performance-et-core-web-vitals",
+      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Cas d'usage : croissance et investissement",
@@ -649,7 +649,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Pas de nouvel outil à apprendre. Vous continuez à gérer votre contenu dans WordPress, exactement comme avant — en mieux.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/headless-cms/gerer-le-contenu",
+      ctaLink: "/documentation/wordpress-headless/gerer-le-contenu",
     },
     {
       title: "Un site plus rapide pour vos visiteurs",
@@ -657,7 +657,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Vos pages se chargent instantanément. Vos visiteurs restent plus longtemps, interagissent plus et reviennent.",
       src: "/icons/scan-icon.svg",
       ctaText: "Comprendre les gains",
-      ctaLink: "/documentation/headless-cms/performance-et-core-web-vitals",
+      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Gérer votre contenu au quotidien",
@@ -665,7 +665,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Prévisualisation, gestion des médias, workflow éditorial : tout ce dont vous avez besoin pour publier sereinement.",
       src: "/icons/analytics-icon.svg",
       ctaText: "Voir le workflow",
-      ctaLink: "/documentation/headless-cms/preview-et-workflow-editorial",
+      ctaLink: "/documentation/wordpress-headless/preview-et-workflow-editorial",
     },
   ],
   developpeur: [
@@ -675,7 +675,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "API REST / GraphQL en backend, React en frontend. Comprendre la séparation des responsabilités et le data fetching.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "Voir l'architecture",
-      ctaLink: "/documentation/headless-cms/comment-fonctionne-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comment-fonctionne-le-headless",
     },
     {
       title: "Stack technique et performance",
@@ -683,7 +683,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Next.js, SSG/SSR/ISR, Core Web Vitals, optimisation images. Les choix techniques pour un Lighthouse à 100.",
       src: "/icons/scan-icon.svg",
       ctaText: "Explorer la stack",
-      ctaLink: "/documentation/headless-cms/nextjs-pour-wordpress-headless",
+      ctaLink: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless",
     },
     {
       title: "Implémentation de A à Z",
@@ -691,7 +691,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Du setup WordPress headless au déploiement Vercel : endpoints, authentification JWT, CI/CD et mise en production.",
       src: "/icons/analytics-icon.svg",
       ctaText: "Voir le guide",
-      ctaLink: "/documentation/headless-cms/deploiement-vercel-nextjs",
+      ctaLink: "/documentation/wordpress-headless/deploiement-vercel-nextjs",
     },
   ],
 };

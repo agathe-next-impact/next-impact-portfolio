@@ -1,0 +1,397 @@
+---
+title: Comment créer un site WordPress headless ?
+description: Vue d'ensemble du processus (sans stress !)
+category: wordpress-headless
+author: Next Impact
+date: "2025-03-15"
+order: 23
+---
+
+<TldrCallout>
+  Créer un site WordPress headless suit un processus itératif en quatre phases : cadrage, préparation du contenu, conception et développement du frontend Next.js, puis bascule progressive. Le site existant reste en ligne pendant toute la durée du projet, sans interruption de service. Le délai usuel va de 6 à 12 semaines selon la complexité.
+</TldrCallout>
+
+La mise en place d'un site WordPress headless suit un processus itératif en quatre phases. Le site existant reste en ligne pendant toute la durée du projet : il n'y a aucune interruption de service.
+
+Les 4 phases du projet :
+
+1. Cadrage : définir les objectifs, l'équipe et le budget (2 semaines)
+2. Préparation : auditer et structurer le contenu WordPress (1 semaine)
+3. Développement : construire le front-end et l'intégration API (4-8 semaines)
+4. Recette et mise en production : tester, migrer et former (1 semaine)
+
+<StepByStep>
+  <Step number={1} title="Cadrer le projet (2 semaines)">
+    Définir les objectifs business et techniques, constituer l'équipe et estimer le budget. Le site existant continue de fonctionner pendant toute la durée du développement.
+  </Step>
+  <Step number={2} title="Préparer WordPress (1 semaine)">
+    Auditer le contenu existant, installer et configurer les plugins nécessaires (ACF, WPGraphQL) et structurer les types de contenu pour l'exposition via API.
+  </Step>
+  <Step number={3} title="Développer le front-end (4-8 semaines)">
+    Initialiser le projet Next.js, connecter l'API WordPress, développer les templates de pages de manière itérative sprint par sprint.
+  </Step>
+  <Step number={4} title="Recette et mise en production (1 semaine)">
+    Exécuter les tests fonctionnels, de performance et d'acceptation utilisateur, puis migrer le DNS avec un plan de rollback prêt.
+  </Step>
+</StepByStep>
+
+Le site existant reste en ligne et accessible pendant l'intégralité du développement. Le nouveau front-end est déployé en parallèle sur un environnement de staging.
+
+<FlowDiagram
+  nodes={[
+    { label: "Cadrage", description: "Objectifs, équipe, budget — 2 semaines", icon: "📋" },
+    { label: "Préparation", description: "Audit contenu, ACF, structure API — 1 semaine", icon: "🗂️" },
+    { label: "Développement", description: "Next.js, intégration API, UI — 4-8 semaines", icon: "💻" },
+    { label: "Production", description: "Tests, migration DNS, formation — 1 semaine", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="orange"
+/>
+
+## Phase 1 : Cadrer le projet
+
+### Définir les objectifs
+
+Questions structurantes pour le cadrage :
+
+- Quel problème l'architecture headless résout-elle dans votre cas ? (performance, design, multi-canal)
+- Qui sont les utilisateurs finaux et quels sont leurs parcours ?
+- Quelles sont les priorités fonctionnelles (MVP vs version complète) ?
+- Quel est le budget disponible et le calendrier cible ?
+
+Exemple de brief projet : "Réduire le temps de chargement du site e-commerce sous la seconde pour améliorer le taux de conversion, avec une application mobile prévue au trimestre suivant."
+
+### Constituer l'équipe
+
+Rôles nécessaires :
+
+- Chef de projet / Product Owner : pilotage, arbitrages, coordination
+- Développeur WordPress back-end : configuration du CMS, custom post types, ACF, exposition API
+- Développeur front-end : Next.js, React, intégration API, UI/UX
+- Designer UI/UX (optionnel) : maquettes, système de design, tests utilisateurs
+
+<Callout variant="tip" title="Recommandation pour le choix de l'équipe">
+
+Privilégiez un prestataire (agence ou freelance senior) maîtrisant les deux couches (WordPress back-end et Next.js front-end). Cela réduit les risques de communication et garantit une cohérence architecturale entre les deux systèmes.
+
+</Callout>
+
+Privilégier un prestataire maîtrisant les deux couches (WordPress + Next.js) simplifie la coordination et réduit les risques de problèmes d'intégration entre back-end et front-end.
+
+### Estimer le budget
+
+Fourchettes indicatives par type de projet :
+
+<StatGrid>
+  <StatCard value="8k - 15k€" label="Site vitrine" description="Site de présentation headless avec pages essentielles et formulaire de contact" accent="blue" />
+  <StatCard value="15k - 35k€" label="E-commerce" description="Boutique en ligne headless avec catalogue produits, panier et paiement" accent="orange" />
+  <StatCard value="25k - 60k€" label="Plateforme sur mesure" description="Application web avec fonctionnalités métier, authentification et intégrations tierces" accent="coral" />
+</StatGrid>
+
+- Site vitrine : 8 000 EUR - 15 000 EUR
+- E-commerce : 15 000 EUR - 35 000 EUR
+- Plateforme sur mesure : 25 000 EUR - 60 000 EUR
+
+Répartition type du budget :
+
+- 30 % : cadrage, conception et architecture
+- 40 % : développement (back-end + front-end)
+- 20 % : tests, optimisation et recette
+- 10 % : formation et documentation technique
+
+## Phase 2 : Préparer WordPress
+
+### Auditer le contenu existant
+
+Points à vérifier :
+
+- Inventaire des types de contenu (articles, pages, custom post types existants)
+- Liste des plugins utilisés et identification de ceux qui sont réellement nécessaires
+- État de la médiathèque (formats, poids des images, organisation)
+- Qualité et pertinence du contenu existant
+
+Action recommandée : supprimer le contenu obsolète, optimiser les médias et mettre à jour les informations avant de structurer les données pour l'API.
+
+### Installer et configurer les outils
+
+Advanced Custom Fields (ACF) est le plugin central pour structurer le contenu :
+
+- Permet de créer des champs personnalisés typés (texte, image, relation, repeater)
+- Rend chaque donnée accessible individuellement via l'API
+- Offre une interface de saisie claire pour les rédacteurs
+
+Exemple de structuration avec ACF :
+Au lieu d'un bloc de texte libre unique, le contenu est découpé en champs distincts :
+
+- Titre principal (champ texte)
+- Sous-titre (champ texte)
+- Image mise en avant (champ image)
+- Galerie photos (champ galerie)
+- Prix (champ numérique, si produit)
+- Témoignage client (champ repeater avec nom + texte + photo)
+
+Configuration de sécurité préalable :
+
+- WordPress à jour (core, plugins, thèmes)
+- Certificat SSL/TLS actif (HTTPS)
+- Sauvegardes automatisées (base de données + fichiers)
+- Accès administrateur sécurisé (2FA, limitation des tentatives de connexion)
+
+### Structurer le contenu pour l'exposition API
+
+<Callout variant="tip" title="Principe clé : des données atomiques et réutilisables">
+
+Chaque élément de contenu doit être un champ distinct et typé. Cette granularité permet à chaque front-end de consommer uniquement les données dont il a besoin et de les présenter différemment selon le contexte (site web, application mobile, affichage en point de vente).
+
+</Callout>
+
+Principe fondamental : structurer le contenu en champs atomiques et réutilisables.
+
+Structure déconseillée :
+
+```
+
+Article = "Voici notre nouveau produit [photo] avec ses caractéristiques..."
+
+```
+
+Structure recommandée :
+
+```
+
+Produit =
+- Nom du produit (champ texte)
+- Description courte (champ textarea)
+- Description longue (champ WYSIWYG)
+- Prix (champ numérique)
+- Photos (champ galerie)
+- Caractéristiques (champ repeater)
+- Témoignages (champ relation vers CPT Témoignage)
+
+```
+
+Cette granularité permet à chaque front-end de consommer les données dont il a besoin et de les afficher selon son propre format.
+
+## Phase 3 : Développer le front-end
+
+### Choisir le framework
+
+Next.js est recommandé pour un premier projet headless WordPress car :
+
+- L'écosystème propose de nombreux starters et exemples d'intégration avec WordPress
+- Le SSG (Static Site Generation) et l'ISR (Incremental Static Regeneration) offrent des performances optimales par défaut
+- Le SSR (Server-Side Rendering) est disponible pour les pages nécessitant des données en temps réel
+- La communauté est active et la documentation est complète
+
+### Concevoir le design
+
+Processus recommandé :
+
+1. Wireframes : définir la structure et la hiérarchie de l'information (outil : Figma, papier)
+2. Maquettes UI : concevoir le design visuel et le système de composants (Figma, Adobe XD)
+3. Prototype interactif : valider les interactions et les transitions
+4. Tests utilisateurs : confronter le prototype à des utilisateurs réels avant le développement
+
+Priorité : une interface performante et lisible apporte plus de valeur qu'un design surchargé qui dégrade les temps de chargement.
+
+### Développement itératif
+
+Semaine 1-2 : fondations
+
+- Initialisation du projet Next.js avec TypeScript
+- Configuration de la connexion API (REST ou GraphQL via WPGraphQL)
+- Développement des premières pages (accueil, page article)
+
+Semaine 3-4 : contenu principal
+
+- Templates pour tous les types de contenu (pages, articles, archives)
+- Navigation et menu dynamique
+- Composant de recherche
+
+Semaine 5-6 : finitions et optimisation
+
+- Optimisation des performances (lazy loading, optimisation images via next/image)
+- Responsive design (mobile, tablette, desktop)
+- Animations et micro-interactions
+
+Semaine 7-8 : stabilisation
+
+- Tests cross-browser (Chrome, Firefox, Safari, Edge)
+- Audit SEO (balises meta, sitemap XML, données structurées)
+- Correction des bugs et polish UI
+
+## Phase 4 : Recette et mise en production
+
+### Phase de tests
+
+Tests fonctionnels :
+
+- Vérification de l'affichage correct de toutes les pages et composants
+- Validation des liens internes et externes
+- Tests des formulaires et interactions utilisateur
+- Vérification du moteur de recherche interne
+
+Tests de performance :
+
+- Objectif : Largest Contentful Paint (LCP) inférieur à 2,5 secondes
+- Tests sur mobile (réseau 3G/4G simulé) et desktop
+- Audit via Google PageSpeed Insights et Lighthouse
+
+Tests d'acceptation utilisateur :
+
+- Faire tester l'interface par des utilisateurs non impliqués dans le projet
+- Observer les parcours sans intervenir
+- Documenter les points de friction identifiés
+
+### Stratégie de migration
+
+Option 1 : migration progressive
+
+- Déployer la nouvelle page d'accueil en premier
+- Migrer les pages principales ensuite
+- Basculer le reste du site en dernier
+
+Option 2 : staging sur sous-domaine
+
+- Déployer le nouveau front-end sur staging.monsite.com
+- Tester en conditions réelles avec du trafic
+- Basculer le DNS quand la recette est validée
+
+Option 3 : migration complète (cutover)
+
+- Sauvegarder intégralement l'ancien site
+- Basculer le DNS vers le nouveau front-end
+- Plan de rollback prêt (retour à l'ancien site en moins d'1 heure via DNS)
+
+## Formation de l'équipe
+
+### Pour les rédacteurs et éditeurs
+
+Ce qui change dans leur workflow :
+
+- Les custom fields ACF remplacent ou complètent l'éditeur Gutenberg classique
+- La prévisualisation passe par le draft mode de Next.js (URL de prévisualisation dédiée)
+- Le temps de propagation du contenu dépend de la stratégie de rendu (instantané en SSR, quelques minutes en ISR)
+
+Formation recommandée :
+
+- 1 heure : présentation de l'architecture et du nouveau workflow
+- 2 heures : pratique guidée sur la saisie de contenu et la prévisualisation
+- Support continu pendant les premières semaines de production
+
+### Pour la maintenance
+
+Tâches spécifiques à l'architecture headless :
+
+- Supervision des deux environnements (WordPress + front-end / Vercel ou Netlify)
+- Coordination des mises à jour (WordPress core, plugins, dépendances npm)
+- Sauvegardes de la base de données MySQL et du code source front-end
+
+Documentation technique à produire :
+
+- Procédures de déploiement et de mise à jour
+- Contacts techniques et escalade
+- Plan de reprise d'activité (PRA)
+
+## Outils recommandés
+
+### Développement local
+
+- Local by Flywheel : environnement WordPress local avec configuration simplifiée
+- VS Code : éditeur de code avec extensions pour React, TypeScript et GraphQL
+- GitHub / GitLab : versionnement du code et collaboration (pull requests, code review)
+
+### Hébergement et déploiement
+
+- Vercel ou Netlify : hébergement front-end avec CI/CD intégré et preview deployments
+- WP Engine ou Kinsta : hébergement WordPress optimisé avec staging intégré
+- Cloudflare : CDN, protection DDoS et gestion DNS
+
+### Supervision et analytics
+
+- UptimeRobot ou Better Uptime : monitoring de disponibilité avec alertes
+- Google Analytics 4 : suivi du trafic et des conversions
+- Google Search Console : suivi de l'indexation et des performances SEO
+
+## Durées réalistes par type de projet
+
+<ComparisonTable
+  headers={["Type de projet", "Durée totale"]}
+  rows={[
+    { label: "Site vitrine", left: "Cadrage (2 sem.) + Dev (2 sem.) + Recette (1 sem.)", right: "5-6 semaines" },
+    { label: "E-commerce", left: "Cadrage (3 sem.) + Dev (6 sem.) + Recette (2 sem.) + Production (1 sem.)", right: "12-14 semaines" },
+    { label: "Plateforme sur mesure", left: "Conception (4 sem.) + Dev (12 sem.) + Recette (3 sem.) + Production (1 sem.)", right: "20-24 semaines" }
+  ]}
+  highlight="right"
+/>
+
+Site vitrine :
+
+- Semaines 1-2 : cadrage et préparation WordPress
+- Semaines 3-4 : développement front-end
+- Semaine 5 : recette et mise en production
+- Total : 5-6 semaines
+
+E-commerce :
+
+- Semaines 1-3 : cadrage, architecture et préparation WordPress
+- Semaines 4-9 : développement itératif (catalogue, panier, paiement)
+- Semaines 10-11 : recette et optimisation performance
+- Semaine 12 : mise en production et formation
+- Total : 12-14 semaines
+
+Plateforme sur mesure :
+
+- Semaines 1-4 : cadrage, conception UX et architecture technique
+- Semaines 5-16 : développement par sprints
+- Semaines 17-19 : recette complète et tests de charge
+- Semaine 20 : mise en production et formation
+- Total : 20-24 semaines
+
+## Erreurs fréquentes et solutions
+
+### Erreur #1 : vouloir tout refondre simultanément
+
+Solution : conserver la structure de contenu existante dans un premier temps et se concentrer sur le changement de couche de présentation. La restructuration du contenu peut intervenir dans une phase ultérieure.
+
+### Erreur #2 : négliger la formation des équipes
+
+Solution : prévoir du temps et du budget pour accompagner les rédacteurs et les mainteneurs. Un changement d'architecture sans appropriation par les équipes génère de la friction.
+
+### Erreur #3 : sous-estimer la phase de tests
+
+Solution : allouer au minimum 20 % de la durée totale du projet aux tests (fonctionnels, performance, acceptation utilisateur) et aux corrections.
+
+### Erreur #4 : ne pas valider le SEO avant la mise en production
+
+Solution : vérifier que toutes les pages sont indexables (SSR ou SSG), que les URLs sont préservées ou redirigées (301), et que les balises meta, le sitemap XML et les données structurées sont en place.
+
+### Erreur #5 : ne pas prévoir de plan de rollback
+
+Solution : conserver l'ancien site fonctionnel et prêt à être réactivé via un simple changement DNS. Prévoir cette possibilité pendant au moins 2 à 4 semaines après la mise en production.
+
+## Questions fréquentes
+
+"Combien de temps le site sera-t-il inaccessible pendant la migration ?"
+Avec une migration planifiée : zéro temps d'arrêt. Le nouveau front-end est développé en parallèle et la bascule se fait par changement DNS, avec propagation en quelques minutes.
+
+"Le référencement Google sera-t-il impacté ?"
+Non, à condition de conserver les URLs existantes ou de mettre en place des redirections 301, et de vérifier que le SSR ou le SSG rend les pages indexables par les crawlers.
+
+"Que se passe-t-il si un problème survient après la mise en production ?"
+Le plan de rollback permet de revenir à l'ancien site en moins d'1 heure par restauration du DNS vers l'ancien serveur.
+
+"L'équipe éditoriale devra-t-elle être reformée ?"
+La gestion du contenu reste dans WordPress. La formation porte sur les custom fields ACF et le nouveau processus de prévisualisation, soit environ 3 heures de formation guidée.
+
+<Quiz
+  question="Quelle est la première phase pour créer un site WordPress headless ?"
+  options={[
+    "Installer Next.js et commencer à développer immédiatement",
+    "Changer d'hébergeur web",
+    "Cadrer le projet : définir les objectifs, constituer l'équipe et estimer le budget",
+    "Supprimer son site WordPress existant"
+  ]}
+  answer={2}
+  explanation="La première phase est le cadrage : définir les objectifs business et techniques, constituer l'équipe (chef de projet, développeur back-end, développeur front-end) et estimer le budget. Le site existant continue de fonctionner pendant toute la durée du développement, il n'y a donc aucune urgence à passer au code."
+/>
