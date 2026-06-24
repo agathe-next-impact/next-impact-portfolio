@@ -23,7 +23,7 @@ export function ArticleCallout({ type = "info", children }: ArticleCalloutProps)
   return (
     <div
       className={cn(
-        "my-6 border-l-2 bg-jet p-4 font-inter-tight text-sm leading-relaxed text-mid-gray",
+        "my-6 border-l-2 bg-jet p-4 font-inter-tight text-sm leading-relaxed text-foreground/90 [&_strong]:font-normal [&_strong]:text-inherit [&_b]:font-normal [&_b]:text-inherit",
         variants[type]
       )}
     >

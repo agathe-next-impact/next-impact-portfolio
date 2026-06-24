@@ -17,23 +17,23 @@ interface BlogLayoutProps {
  * MDX (p, headings, listes, citations, code, tables, liens, images…).
  */
 const prose = [
-  // largeur de lecture confortable + corps
-  "max-w-[68ch] font-inter-tight text-base leading-relaxed text-mid-gray",
+  // largeur : on prend toute la largeur du contenu de la section
+  "w-full font-inter-tight text-base leading-relaxed text-foreground/90",
   // paragraphes
-  "[&_p]:my-6 [&_p]:leading-relaxed",
-  "[&>p:first-child]:text-lg [&>p:first-child]:text-foreground/90",
+  "[&_p]:my-6 [&_p]:leading-relaxed [&_p]:text-foreground/90",
+  "[&>p:first-child]:text-lg [&>p:first-child]:text-foreground",
   // titres Figtree, fins
   "[&_h2]:font-sans [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-light [&_h2]:tracking-tight [&_h2]:text-foreground md:[&_h2]:text-3xl",
   "[&_h3]:font-sans [&_h3]:mt-10 [&_h3]:mb-3 [&_h3]:text-xl [&_h3]:font-light [&_h3]:tracking-tight [&_h3]:text-foreground",
-  "[&_h4]:font-sans [&_h4]:mt-8 [&_h4]:mb-2 [&_h4]:text-lg [&_h4]:font-medium [&_h4]:text-foreground",
-  // emphase
-  "[&_strong]:font-medium [&_strong]:text-foreground",
+  "[&_h4]:font-sans [&_h4]:mt-8 [&_h4]:mb-2 [&_h4]:text-lg [&_h4]:font-normal [&_h4]:text-foreground",
+  // emphase : pas de gras dans le corps, on garde la couleur du texte
+  "[&_strong]:font-normal [&_strong]:text-inherit [&_b]:font-normal [&_b]:text-inherit",
   // liens
   "[&_a]:text-accent-secondary [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-accent-secondary/40 hover:[&_a]:decoration-accent-secondary",
   // listes
   "[&_ul]:my-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:marker:text-accent-secondary",
-  "[&_ol]:my-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:marker:text-mid-gray",
-  "[&_li]:my-2 [&_li]:leading-relaxed",
+  "[&_ol]:my-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:marker:text-foreground/70",
+  "[&_li]:my-2 [&_li]:leading-relaxed [&_li]:text-foreground/90",
   // citations : filet gauche accent
   "[&_blockquote]:my-8 [&_blockquote]:border-l-2 [&_blockquote]:border-accent-secondary [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-foreground/80",
   // code inline
@@ -47,8 +47,12 @@ const prose = [
   "[&_hr]:my-12 [&_hr]:border-dark-gray",
   // tables
   "[&_table]:my-8 [&_table]:w-full [&_table]:border-collapse [&_table]:text-sm",
-  "[&_th]:border-b [&_th]:border-dark-gray [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-mono [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-foreground",
-  "[&_td]:border-b [&_td]:border-dark-gray [&_td]:px-4 [&_td]:py-3 [&_td]:text-mid-gray",
+  "[&_th]:border-b [&_th]:border-dark-gray [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-mono [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-foreground [&_th]:font-normal",
+  "[&_td]:border-b [&_td]:border-dark-gray [&_td]:px-4 [&_td]:py-3 [&_td]:text-foreground/90",
+  // médias intégrés : pleine largeur du contenu de la section
+  "[&_.article-video]:relative [&_.article-video]:my-10 [&_.article-video]:block [&_.article-video]:w-full [&_.article-video]:max-w-none [&_.article-video]:aspect-video [&_.article-video]:overflow-hidden [&_.article-video]:bg-jet",
+  "[&_.article-video>iframe]:absolute [&_.article-video>iframe]:inset-0 [&_.article-video>iframe]:h-full [&_.article-video>iframe]:w-full [&_.article-video>iframe]:border-0",
+  "[&_.article-media]:my-10 [&_.article-media]:block [&_.article-media]:w-full [&_.article-media]:max-w-none",
 ].join(" ")
 
 export function BlogLayout({ post, children }: BlogLayoutProps) {
