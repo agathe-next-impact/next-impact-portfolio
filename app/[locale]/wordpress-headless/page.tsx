@@ -299,7 +299,7 @@ export default async function WordPressHeadlessPillarPage({
               {definition}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/audit-site-ia" className={BTN_PRIMARY}>
+              <Link href="/audit-site-web" className={BTN_PRIMARY}>
                 {isEn ? "Free site audit" : "Audit gratuit du site"}
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -742,7 +742,7 @@ export default async function WordPressHeadlessPillarPage({
                   : "Audit IA gratuit de votre WordPress actuel : Core Web Vitals, exposition sécurité, charge éditoriale, verdict de pertinence du headless. Sans engagement, sans relance commerciale."}
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/audit-site-ia" className={BTN_PRIMARY}>
+                <Link href="/audit-site-web" className={BTN_PRIMARY}>
                   {isEn ? "Run the free audit" : "Lancer l'audit gratuit"}
                   <ArrowRight className="h-4 w-4" />
                 </Link>

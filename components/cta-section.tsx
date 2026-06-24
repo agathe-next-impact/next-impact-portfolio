@@ -146,7 +146,7 @@ function CTALeadMagnet() {
           {t("subtitleEnd")}
         </>
       }
-      ctaHref="/audit-site-ia"
+      ctaHref="/audit-site-web"
       ctaLabel={t("ctaLabel")}
       footer={t("footer")}
     />
@@ -327,7 +327,7 @@ const CARD_COMPONENTS: Record<CardId, React.FC> = {
 };
 
 const CARD_PAGES: Record<CardId, string[]> = {
-  audit: ["/audit-site-ia", "/documentation/wordpress-headless"],
+  audit: ["/audit-site-web", "/documentation/wordpress-headless"],
   conversion: ["/contact"],
 };
 
@@ -342,7 +342,7 @@ const TOOL_CARDS: CardId[] = ["audit", "conversion"];
 
 const TOOL_PAGE_PREFIXES = [
   "/outils",
-  "/audit-site-ia",
+  "/audit-site-web",
   "/tarifs",
   "/documentation/wordpress-headless",
 ];

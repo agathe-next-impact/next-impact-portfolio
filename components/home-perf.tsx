@@ -259,7 +259,7 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
               : "Mesuré en direct depuis votre appareil — les valeurs dépendent de votre réseau et de votre matériel."}
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <Link href="/audit-site-ia" className={BTN_PRIMARY}>
+          <Link href="/audit-site-web" className={BTN_PRIMARY}>
             {isEn ? "And yours? Audit — 2 min" : "Et le vôtre ? Audit — 2 min"}
             <ArrowRight size={14} />
           </Link>

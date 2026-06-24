@@ -1772,7 +1772,7 @@ export default function BenchmarkingTool() {
                   <ArrowRight style={{ width: 13, height: 13 }} />
                 </a>
                 <a
-                  href="/audit-site-ia"
+                  href="/audit-site-web"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",

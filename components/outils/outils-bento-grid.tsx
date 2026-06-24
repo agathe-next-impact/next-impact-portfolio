@@ -62,7 +62,7 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       ? "AI-powered audit: performance, SEO, accessibility, conversion. Personalized recommendations."
       : "Audit IA de votre site actuel : performance, SEO, accessibilité, conversion.",
     icon: BotMessageSquare,
-    href: "/audit-site-ia",
+    href: "/audit-site-web",
   },
   "audit-pwa": {
     id: "audit-pwa",

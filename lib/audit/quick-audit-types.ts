@@ -1,4 +1,4 @@
-// Types de l'audit léger « instantané » (étape 1 du parcours /audit-site-ia).
+// Types de l'audit léger « instantané » (étape 1 du parcours /audit-site-web).
 // Fichier séparé du module "use server" : un fichier d'action serveur ne peut
 // exporter que des fonctions async, donc les types/objectifs vivent ici et sont
 // partagés client + serveur.

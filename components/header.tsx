@@ -19,7 +19,7 @@ const NAV_LINKS = [
 // Offres « à la demande » — toujours présentes (menu header + drawer mobile).
 // L'audit (froid, gratuit) reste aussi en bouton CTA distinct pour la prominence.
 const ON_DEMAND = [
-  { key: "freeAudit",        href: "/audit-site-ia",        paid: false },
+  { key: "freeAudit",        href: "/audit-site-web",        paid: false },
   { key: "visioConseil",     href: "/conseil",              paid: true },
   { key: "wordpressExpress", href: "/depannage-wordpress",  paid: true },
 ] as const;

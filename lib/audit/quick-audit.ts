@@ -1,6 +1,6 @@
 "use server";
 
-// Audit léger « instantané » (étape 1 de /audit-site-ia) : récupère réellement
+// Audit léger « instantané » (étape 1 de /audit-site-web) : récupère réellement
 // la page côté serveur et calcule des heuristiques HONNÊTES et vérifiables sur le
 // HTML (SEO, accessibilité, conversion, détection de stack) + une estimation de
 // légèreté (poids/scripts) clairement labellisée. Rapide (un seul fetch), gratuit,

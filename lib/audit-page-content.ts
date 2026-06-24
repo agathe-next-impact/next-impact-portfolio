@@ -1,7 +1,7 @@
 import type { Locale } from "@/i18n/routing";
 import type { AuditObjective, AxisKey } from "./audit/quick-audit-types";
 
-// ─── Contenu de la page /audit-site-ia ───────────────────────────────────────
+// ─── Contenu de la page /audit-site-web ───────────────────────────────────────
 // Convention du repo (cf. lib/homepage-profiles.ts, lib/case-studies-data.ts) :
 // le contenu marketing structuré et bilingue vit dans un module TS FR + EN avec
 // un accesseur par locale, et non dans messages/*.json (réservé aux libellés

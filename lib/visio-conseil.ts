@@ -9,7 +9,7 @@
 //   2. Conseil choix de techno — stratégique. Pour qui DÉMARRE un projet (créa
 //      ou refonte) et doit choisir la base technique.
 //
-// Doctrine : on PROUVE avant de DEMANDER. L'audit gratuit (/audit-site-ia)
+// Doctrine : on PROUVE avant de DEMANDER. L'audit gratuit (/audit-site-web)
 // reste la porte FROIDE ; la visio est l'étage TIÈDE au-dessus, jamais un CTA
 // froid ni un titre en tête de héros. Levier clé qui dissout la peur de payer
 // un inconnu : le prix de la visio est DÉDUIT du devis si un projet est signé

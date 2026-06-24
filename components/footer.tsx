@@ -20,7 +20,7 @@ const NAV_LINKS = [
 ] as const;
 
 const RESOURCE_LINKS = [
-  { href: "/audit-site-ia", key: "freeAiAudit" },
+  { href: "/audit-site-web", key: "freeAiAudit" },
   { href: "/conseil", key: "visioConseil" },
   { href: "/depannage-wordpress", key: "wordpressExpress" },
   { href: "/outils",        key: "tools" },

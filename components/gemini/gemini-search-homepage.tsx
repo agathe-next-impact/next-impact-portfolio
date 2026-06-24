@@ -9,7 +9,7 @@ export default function GeminiSearchHomepage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (url.trim()) {
-      router.push(`/audit-site-ia?url=${encodeURIComponent(url)}`);
+      router.push(`/audit-site-web?url=${encodeURIComponent(url)}`);
     }
   };
 

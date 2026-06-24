@@ -138,7 +138,7 @@ export async function GET() {
       { path: "services/eligibilite", source: "app/[locale]/services/eligibilite/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "etudes-de-cas", source: "app/[locale]/etudes-de-cas/page.tsx", changefreq: "weekly", priority: 0.8 },
       { path: "documentation", source: "app/[locale]/documentation/page.tsx", changefreq: "weekly", priority: 0.8 },
-      { path: "audit-site-ia", source: "app/[locale]/audit-site-ia/page.tsx", changefreq: "monthly", priority: 0.8 },
+      { path: "audit-site-web", source: "app/[locale]/audit-site-web/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "outils/simulateur-agefiph", source: "app/[locale]/outils/simulateur-agefiph/page.tsx", changefreq: "monthly", priority: 0.7 },

@@ -1,4 +1,4 @@
-// Sections marketing SSR de /audit-site-ia. Composants serveur (aucun hook) :
+// Sections marketing SSR de /audit-site-web. Composants serveur (aucun hook) :
 // rendus dans le HTML initial → indexables. Les seules îles client importées
 // (Reveal, RadialGauge) rendent leur contenu côté serveur et restent
 // reduced-motion-safe. Tout le copy vient de lib/audit-page-content.ts.

@@ -1,6 +1,6 @@
 "use client";
 
-// Orchestrateur du parcours /audit-site-ia :
+// Orchestrateur du parcours /audit-site-web :
 //   1. formulaire minimal (URL + objectif + CMS), sans email ;
 //   2. diagnostic instantané réel du site (runQuickAudit) + vrais Core Web Vitals
 //      en progressif (runPerfAudit, si clé PageSpeed) + orientation A–D ;

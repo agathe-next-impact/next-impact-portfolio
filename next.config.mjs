@@ -89,6 +89,18 @@ const nextConfig = {
         destination: '/en/documentation/wordpress-headless/:path*',
         permanent: true,
       },
+      // Renommage de la page audit : audit-site-ia → audit-site-web
+      // pour cibler la requête principale « audit site web ».
+      {
+        source: '/audit-site-ia',
+        destination: '/audit-site-web',
+        permanent: true,
+      },
+      {
+        source: '/en/audit-site-ia',
+        destination: '/en/audit-site-web',
+        permanent: true,
+      },
       ...disabledToolRedirects,
     ]
   },

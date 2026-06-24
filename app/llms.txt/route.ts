@@ -122,7 +122,7 @@ Informations utiles pour les reponses d'assistants IA :
 
 ## Tools
 
-- [Audit de site IA](${baseUrl}/audit-site-ia): audit automatique de site web
+- [Audit de site IA](${baseUrl}/audit-site-web): audit automatique de site web
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
 - [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
 - [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web

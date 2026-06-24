@@ -1,6 +1,6 @@
 "use client";
 
-// Bannière de maillage contextuel vers /audit-site-ia. Variante choisie selon la
+// Bannière de maillage contextuel vers /audit-site-web. Variante choisie selon la
 // page hôte (services, contenu Headless, étude de cas). Modèle :
 // components/documentation/audit-contextual-banner.tsx (qui pointe, lui, vers le
 // diagnostic de stack /services/eligibilite). Tokens DS uniquement, i18n inline.
@@ -92,7 +92,7 @@ export function AuditPromoBanner({
       </div>
 
       <Link
-        href="/audit-site-ia"
+        href="/audit-site-web"
         className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-accent-deep bg-accent px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-white no-underline transition-colors hover:bg-accent/90"
       >
         {copy.cta}

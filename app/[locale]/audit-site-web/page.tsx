@@ -42,7 +42,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
-    path: "/audit-site-ia",
+    path: "/audit-site-web",
     keywords:
       locale === "en"
         ? [
@@ -82,7 +82,7 @@ export default async function AuditSiteIaPage({
 
   const breadcrumbItems = [
     { name: t("breadcrumbHome"), url: "/" },
-    { name: t("breadcrumbAudit"), url: "/audit-site-ia" },
+    { name: t("breadcrumbAudit"), url: "/audit-site-web" },
   ];
 
   return (

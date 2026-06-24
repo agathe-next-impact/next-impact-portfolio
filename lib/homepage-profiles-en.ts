@@ -17,7 +17,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
       "I keep the interface you already know and graft a bespoke front end onto it: refined design and a smooth, pleasant experience — for your visitors and for you — plus, along the way, sub-second loading. Without rebuilding everything.",
     valueProposition:
       "For SMEs and social-economy organisations. Budget and timeline fixed from the start — delivered in 6 to 10 weeks.",
-    ctaPrimary: { label: "Free AI audit — 2 min", href: "/audit-site-ia" },
+    ctaPrimary: { label: "Free AI audit — 2 min", href: "/audit-site-web" },
     ctaSecondary: { label: "See our work", href: "/etudes-de-cas" },
     auditTitle: "Which stack for your project?",
     auditSubtitle: "2-minute diagnostic",

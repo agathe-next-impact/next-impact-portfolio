@@ -433,7 +433,7 @@ export const pageMetadata = {
         locale === "en"
           ? "Get a free audit of your WordPress site: performance, SEO, security and accessibility. Full analysis with personalized recommendations."
           : "Obtenez un audit gratuit de votre site WordPress : performance, SEO, sécurité et accessibilité. Analyse complète et recommandations personnalisées.",
-      path: "/audit-site-ia",
+      path: "/audit-site-web",
       keywords:
         locale === "en"
           ? ["WordPress audit", "site performance", "SEO", "security"]

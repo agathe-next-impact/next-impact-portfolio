@@ -31,7 +31,7 @@ interface ToolLink {
 
 const TOOL_LINKS_FR: ToolLink[] = [
   {
-    href: "/audit-site-ia",
+    href: "/audit-site-web",
     title: "Audit IA gratuit",
     description: "Analysez performance, SEO et conversion de votre site.",
     icon: SearchCheck,
@@ -48,7 +48,7 @@ const TOOL_LINKS_FR: ToolLink[] = [
 
 const TOOL_LINKS_EN: ToolLink[] = [
   {
-    href: "/audit-site-ia",
+    href: "/audit-site-web",
     title: "Free AI audit",
     description: "Analyze your site's performance, SEO and conversion.",
     icon: SearchCheck,
@@ -475,7 +475,7 @@ function getCategoryRelevantLinks(
       return [
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         ...base,
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/services", title: t("Our offerings", "Nos offres") },
       ];
@@ -483,13 +483,13 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
       ];
     case "seo":
       return [
         ...base,
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
         { href: "/services", title: t("Our SEO offerings", "Nos offres SEO") },
       ];
@@ -505,21 +505,21 @@ function getCategoryRelevantLinks(
       return [
         ...base,
         { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     case "projet-site-web":
       return [
         ...base,
         { href: "/cahier-des-charges", title: t("Specifications", "Cahier des charges") },
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/wordpress-headless", title: t("Headless WordPress", "WordPress Headless") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
     default:
       return [
         ...base,
-        { href: "/audit-site-ia", title: t("AI audit", "Audit IA") },
+        { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
         { href: "/services", title: t("Our offerings", "Nos offres") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
