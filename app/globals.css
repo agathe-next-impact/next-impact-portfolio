@@ -491,7 +491,12 @@ body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 220.13, 72.07%, 43.53%;
+    /* Format ESPACE obligatoire : Tailwind génère `hsl(var(--foreground) / <alpha>)`
+       pour les utilitaires d'opacité (text-foreground/90). Une valeur en virgules
+       cassait l'alpha → couleur ignorée → texte délavé/illisible dans l'état
+       fallback (SSR / avant hydratation du thème). Sombre, cohérent avec ce bloc
+       :root clair (surfaces blanches, --card-foreground 0 0% 3.9%). */
+    --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -506,7 +511,9 @@ body {
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 218.82, 56.67%, 88.24%, 0.2;
+    /* Format ESPACE (cf. --foreground) : une valeur en virgules cassait
+       l'alpha des utilitaires de bordure dans l'état fallback. */
+    --border: 218.82 56.67% 88.24%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --chart-1: 12 76% 61%;
@@ -841,8 +848,11 @@ body {
   .article-text .diagnostic-dark a {
     @apply text-white/70 no-underline;
   }
+  /* Theme-aware : blanc en mode sombre (identique à avant), sombre en mode clair.
+     `text-white` figé rendait TOUS les <li> du site invisibles en mode clair
+     (cartes, listes d'articles…) en écrasant la couleur héritée du <ul>. */
   li {
-    @apply text-white/80;
+    @apply text-foreground/80;
   }
 }
 
