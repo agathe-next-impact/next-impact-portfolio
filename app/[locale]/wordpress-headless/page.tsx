@@ -270,7 +270,7 @@ export default async function WordPressHeadlessPillarPage({
         <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-20 md:px-12 md:py-28">
           <Reveal>
             <div className="flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-              <span>№ 01 — {isEn ? "PILLAR" : "PAGE PILIER"}</span>
+              <span>№ 01 — {isEn ? "REFERENCE" : "REFERENCE"}</span>
               <span className="text-mid-gray">
                 {isEn ? "Updated" : "Mis à jour le"}{" "}
                 <time dateTime={LAST_UPDATED}>{LAST_UPDATED}</time>

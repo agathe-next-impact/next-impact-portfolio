@@ -111,8 +111,8 @@ export async function generateMetadata({
     creator: 'Agathe Karinthi-Martin',
     publisher: 'Next Impact',
     icons: {
-      icon: '/img/logo-rouge-noir-carre-icon.png',
-      apple: '/img/logo-rouge-noir-carre-icon.png',
+      icon: '/logo-carre-bleu.png',
+      apple: '/logo-carre-bleu.png',
     },
     openGraph: {
       type: 'website',

@@ -107,8 +107,8 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
             className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground"
           >
             {isEn
-              ? "What is headless WordPress? Read the pillar page"
-              : "C'est quoi le WordPress Headless ? Lire la page pilier"}
+              ? "What is headless WordPress? Read the reference page"
+              : "C'est quoi le WordPress Headless ? Lire la page de référence"}
             <ArrowRight size={12} />
           </Link>
         </Reveal>
