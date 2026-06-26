@@ -169,6 +169,13 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
+// N'autoriser que les locales connues (fr / en). Toute autre valeur de segment
+// — typiquement le scan de bots vers /aa.php, /ads.txt, etc. que le middleware
+// next-intl laisse passer car le chemin contient un point — renvoie un 404 net
+// au niveau du routing, AVANT generateMetadata/rendu. Évite le 500
+// « Cannot read properties of undefined » quand HOME_BY_LOCALE[locale] est undefined.
+export const dynamicParams = false
+
 export default async function RootLayout({
   children,
   params,
