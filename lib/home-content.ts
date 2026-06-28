@@ -20,10 +20,10 @@ const FR: HomeContent = {
   tldr: {
     label: "En bref",
     lines: [
-      "Next Impact, c'est Agathe, développeuse WordPress Headless & Next.js, en solo et 100 % à distance.",
-      "Je modernise les sites WordPress vieillissants, design soigné, navigation fluide, chargement sous la seconde, sans tout reconstruire.",
-      "Trois voies selon votre projet : WordPress optimisé, Headless + Next.js, ou application métier sur-mesure. Budget et délai fixés dès le départ.",
-      "+25 projets livrés depuis 2020 ; sur la refonte Proditec (2024), le PageSpeed mobile est passé de 45 à 98.",
+      "Next Impact aide les petites structures à choisir la bonne techno web à l'heure où l'IA peut coder vite.",
+      "La question n'est plus seulement de développer : il faut décider quoi construire, avec quelle architecture, et jusqu'où aller.",
+      "La Boussole Techno Web & IA compare WordPress, no-code, IA coding, SaaS, Headless, sur-mesure ou l'option de ne rien construire.",
+      "Quand la solution est claire, Next Impact peut aussi construire, corriger ou stabiliser : WordPress, Headless, outil métier ou dépannage.",
     ],
   },
   faq: {
@@ -31,34 +31,34 @@ const FR: HomeContent = {
     title: "Les questions qu'on me pose le plus",
     items: [
       {
-        question: "Combien coûte un site avec Next Impact ?",
+        question: "Pourquoi payer du conseil si l'IA peut coder ?",
         answer:
-          "Trois forfaits : à partir de 2 250 € pour un WordPress optimisé, autour de 4 000 € pour du Headless WordPress + Next.js, et sur devis pour une application métier. Le budget et le délai sont fixés dès le départ.",
+          "Parce que l'IA facilite la production de code, mais ne remplace pas le choix d'architecture, la priorisation, la sécurité, le SEO, la maintenance ni la cohérence business. Une mauvaise décision peut coûter plus cher qu'un bon cadrage.",
       },
       {
-        question: "Faut-il refaire tout mon site WordPress ?",
+        question: "Qu'est-ce que la Boussole Techno Web & IA ?",
         answer:
-          "Non. Je garde l'interface WordPress que vous connaissez pour gérer vos contenus et je modernise le reste — le front, la performance, le design. Vos contenus existants sont conservés.",
+          "C'est une offre de conseil pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure. Elle aide à décider ce qu'il faut construire, simplifier, réparer ou ne pas construire.",
       },
       {
-        question: "C'est quoi le Headless, en clair ?",
+        question: "Pouvez-vous relire un devis ou un prototype généré avec l'IA ?",
         answer:
-          "Votre WordPress reste le back-office où vous publiez ; un front Next.js l'affiche à part. Résultat : un site beaucoup plus rapide, plus sûr et mieux référencé, sans changer votre façon de travailler.",
+          "Oui. Le second avis vérifie la cohérence de la stack, le niveau de complexité, les risques de dépendance, la dette technique, les données, la sécurité, le SEO et le coût futur.",
       },
       {
-        question: "Le Headless est-il toujours nécessaire ?",
+        question: "Est-ce que Next Impact construit aussi les solutions ?",
         answer:
-          "Non, et je préfère le dire franchement : pour un petit site vitrine, un WordPress optimisé suffit souvent. Le Headless devient vraiment utile quand la performance, le SEO éditorial ou la volumétrie le justifient — je vous oriente vers la voie la plus rentable, pas la plus sophistiquée.",
+          "Oui, si la solution relève du bon périmètre : site WordPress optimisé, WordPress Headless + Next.js, outil métier ou plateforme sur mesure. La production vient après la décision, pas avant.",
       },
       {
-        question: "En combien de temps mon site est-il livré ?",
+        question: "WordPress Headless reste-t-il une offre Next Impact ?",
         answer:
-          "Comptez 2 à 4 semaines pour un WordPress optimisé, et 6 à 10 semaines pour une architecture Headless + Next.js ou une web app sur-mesure, selon la complexité.",
+          "Oui, mais ce n'est plus la réponse poussée par défaut. Le Headless est pertinent quand la performance, l'expérience, le SEO éditorial ou l'évolutivité le justifient.",
       },
       {
-        question: "Pourrai-je gérer mon site moi-même ?",
+        question: "Et si mon WordPress actuel a juste un problème ?",
         answer:
-          "Oui. Vous continuez à publier dans WordPress comme avant, sans compétence technique. Une formation et une documentation sur-mesure sont incluses.",
+          "Le dépannage WordPress reste séparé du conseil : réparer quand c'est suffisant, optimiser si la base est saine, refaire seulement quand c'est justifié.",
       },
       {
         question: "Travaillez-vous à distance ?",
@@ -73,10 +73,10 @@ const EN: HomeContent = {
   tldr: {
     label: "In short",
     lines: [
-      "Next Impact is me: Agathe, a WordPress Headless & Next.js developer, solo and fully remote.",
-      "I modernize ageing WordPress sites — refined design, smooth navigation, sub-second loading — without rebuilding everything.",
-      "Three paths depending on your project: optimized WordPress, Headless + Next.js, or a custom business app. Fixed budget and timeline from the start.",
-      "+25 projects delivered since 2020; on the Proditec rebuild (2024), mobile PageSpeed went from 45 to 98.",
+      "Next Impact helps small teams choose the right web technology when AI can code fast.",
+      "The question is no longer only how to develop: it is what to build, with which architecture, and how far to go.",
+      "The Web & AI Tech Compass compares WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all.",
+      "Once the solution is clear, Next Impact can also build, fix or stabilize: WordPress, Headless, business tools or WordPress support.",
     ],
   },
   faq: {
@@ -84,34 +84,34 @@ const EN: HomeContent = {
     title: "The questions I'm asked most",
     items: [
       {
-        question: "How much does a site with Next Impact cost?",
+        question: "Why pay for advice if AI can code?",
         answer:
-          "Three packages: from €2,250 for an optimized WordPress, around €4,000 for Headless WordPress + Next.js, and on quote for a business application. Budget and timeline are fixed from the start.",
+          "Because AI makes code production easier, but it does not replace architecture choices, prioritization, security, SEO, maintenance or business coherence. A bad decision can cost more than good scoping.",
       },
       {
-        question: "Do I have to rebuild my whole WordPress site?",
+        question: "What is the Web & AI Tech Compass?",
         answer:
-          "No. I keep the WordPress interface you already know to manage your content and modernize the rest — the front-end, performance, design. Your existing content is preserved.",
+          "It is an advisory offer to choose between WordPress, no-code, AI coding, SaaS, Headless or custom development. It helps decide what to build, simplify, fix or not build.",
       },
       {
-        question: "What is Headless, in plain terms?",
+        question: "Can you review a quote or AI-generated prototype?",
         answer:
-          "Your WordPress stays the back-office where you publish; a Next.js front-end displays it separately. The result: a much faster, safer, better-ranked site, without changing how you work.",
+          "Yes. The second opinion checks stack coherence, complexity level, dependency risks, technical debt, data, security, SEO and future cost.",
       },
       {
-        question: "Is Headless always necessary?",
+        question: "Does Next Impact also build the solutions?",
         answer:
-          "No, and I'd rather be upfront: for a small showcase site, an optimized WordPress is often enough. Headless becomes genuinely useful when performance, editorial SEO or scale justify it — I point you to the most cost-effective path, not the most sophisticated one.",
+          "Yes, when the solution fits the right scope: optimized WordPress site, Headless WordPress + Next.js, business tool or custom platform. Implementation comes after the decision, not before.",
       },
       {
-        question: "How long until my site is delivered?",
+        question: "Is Headless WordPress still part of the offer?",
         answer:
-          "Around 2 to 4 weeks for an optimized WordPress, and 6 to 10 weeks for a Headless + Next.js architecture or a custom web app, depending on complexity.",
+          "Yes, but it is no longer the default answer. Headless is relevant when performance, experience, editorial SEO or scalability justify it.",
       },
       {
-        question: "Will I be able to manage the site myself?",
+        question: "What if my current WordPress only has a problem?",
         answer:
-          "Yes. You keep publishing in WordPress as before, with no technical skills. Tailored training and documentation are included.",
+          "WordPress support stays separate from advice: fix when enough, optimize if the base is healthy, rebuild only when justified.",
       },
       {
         question: "Do you work remotely?",

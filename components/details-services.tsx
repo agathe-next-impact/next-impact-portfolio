@@ -12,7 +12,7 @@ const DetailsServices = () => {
         <div>
           <div className="text-center mb-16">
             <p className="text-xl text-regularblue/80 text-center max-w-2xl mx-auto">
-              Trois stacks WordPress, du monolithique optimisé au headless
+              Trois réponses possibles, du WordPress optimisé au sur-mesure
               Next.js : la solution s&apos;adapte au projet, pas l&apos;inverse.
             </p>
           </div>

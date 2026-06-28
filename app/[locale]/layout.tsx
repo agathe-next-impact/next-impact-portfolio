@@ -45,25 +45,22 @@ const SITE_URL = 'https://www.next-impact.digital'
 // ce bloc sert de repli cohérent pour toute page qui ne le ferait pas.
 const LAYOUT_META = {
   fr: {
-    title: 'Next Impact — Sites web & applications clé en main, PME & ESS',
+    title: 'Next Impact — Conseil techno web à l\'heure de l\'IA',
     description:
-      'Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l\'ESS. ' +
-      'Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ.',
-    ogTitle: 'Next Impact — Sites web & applications clé en main',
+      'L\'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu\'où aller.',
+    ogTitle: 'Next Impact — Boussole Techno Web & IA',
     ogDescription:
-      'Studio indépendant pour PME et ESS : sites web et applications performants, ' +
-      'clé en main, délai et budget fixés dès le départ.',
+      'Conseil techno web pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant d\'investir.',
     ogLocale: 'fr_FR',
     altOgLocale: 'en_US',
   },
   en: {
-    title: 'Next Impact — Turnkey websites & applications for SMEs & social economy',
+    title: 'Next Impact — Web technology advice in the age of AI',
     description:
-      'Independent studio specialising in fast, durable websites and applications for SMEs and social-economy organisations. ' +
-      'You run your business, I handle the tech: fixed timeline and budget.',
-    ogTitle: 'Next Impact — Turnkey websites & applications',
+      'AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go.',
+    ogTitle: 'Next Impact — Web & AI Tech Compass',
     ogDescription:
-      'Independent studio for SMEs and social-economy organisations: fast, durable websites and applications, turnkey.',
+      'Web technology advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom before investing.',
     ogLocale: 'en_US',
     altOgLocale: 'fr_FR',
   },
@@ -94,16 +91,15 @@ export async function generateMetadata({
     },
     description: m.description,
     keywords: [
-      'création site web',
+      'conseil techno web',
+      'Boussole Techno Web IA',
+      'IA coding',
+      'no-code',
+      'SaaS',
+      'choix architecture web',
       'WordPress Headless',
       'Next.js',
       'web app sur-mesure',
-      'application mobile',
-      'PWA',
-      'marketplace',
-      'studio indépendant',
-      'refonte site web',
-      'CMS Headless',
       'React',
       'TypeScript',
     ],

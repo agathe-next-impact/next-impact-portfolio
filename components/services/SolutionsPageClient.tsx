@@ -126,7 +126,7 @@ export default function SolutionsPageClient({ locale, offers, faqs }: SolutionsP
 
       <Separator />
 
-      {/* § 04 — Quelle stack pour quel projet */}
+      {/* § 04 — Quelle voie pour quel besoin */}
       <ServicesGuide needsGuide={needsGuide} />
 
       <Separator />

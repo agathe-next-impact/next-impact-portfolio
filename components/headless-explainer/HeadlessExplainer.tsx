@@ -146,7 +146,7 @@ export default function HeadlessExplainer() {
             {isEn ? (
               <>Three stacks, <span className="text-accent-secondary">one right choice</span></>
             ) : (
-              <>Trois stacks, <span className="text-accent-secondary">un bon choix</span></>
+              <>Plusieurs voies, <span className="text-accent-secondary">un bon choix</span></>
             )}
           </h2>
         </div>

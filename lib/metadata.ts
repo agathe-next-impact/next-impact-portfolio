@@ -57,8 +57,8 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. " +
-    "Vous gérez votre activité, je gère la technique : sites clé en main, délai et budget fixés dès le départ. " +
+    "Conseil techno web à l'heure de l'IA pour les petites structures. " +
+    "L'IA peut coder vite : Next Impact aide à choisir quoi construire, avec quelle technologie, et jusqu'où aller. " +
     "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
@@ -66,14 +66,19 @@ export const siteConfig = {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact — WordPress Headless & Next.js — Prestataire TIH",
+    alt: "Next Impact — Boussole Techno Web & IA — Prestataire TIH",
   },
   creator: "Agathe Karinthi-Martin",
   keywords: [
     "WordPress",
+    "Conseil techno web",
+    "Boussole Techno Web IA",
+    "IA coding",
+    "No-code",
+    "SaaS",
     "WordPress Headless",
-    "Studio indépendant",
-    "Création site web PME ESS",
+    "Choix technologie web",
+    "Architecture web",
     "Next.js",
     "React",
     "Site web",
@@ -239,36 +244,34 @@ type LocalizedMeta = {
 
 const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Next Impact — Sites web & applications clé en main, PME & ESS",
+    title: "Next Impact — Conseil techno web à l'heure de l'IA",
     description:
-      "Studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. " +
-      "Vous gérez votre activité, je gère la technique : délai et budget fixés dès le départ. " +
+      "L'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure. " +
       "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
     keywords: [
-      "création site web clé en main",
-      "site web PME ESS",
-      "studio indépendant site web",
-      "web app sur-mesure",
+      "conseil techno web IA",
+      "Boussole Techno Web IA",
+      "choisir technologie web",
+      "IA coding ou no-code",
+      "second avis devis web",
+      "prototype IA maintenable",
       "prestataire TIH développement web",
-      "déduction AGEFIPH sous-traitance",
-      "OETH numérique",
       "Next Impact",
     ],
   },
   en: {
-    title: "Next Impact — Turnkey websites & applications for SMEs & social economy",
+    title: "Next Impact — Web technology advice in the age of AI",
     description:
-      "Independent studio specialising in fast, durable websites and applications for SMEs and social-economy organisations. " +
-      "You run your business, I handle the tech: fixed timeline and budget. " +
+      "AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom. " +
       "French TIH provider: 30% of labour cost deductible from your AGEFIPH contribution.",
     keywords: [
-      "turnkey website build",
-      "website SME social economy",
-      "independent web studio",
-      "custom web app",
+      "web technology advice AI",
+      "Web AI Tech Compass",
+      "choose web technology",
+      "AI coding or no-code",
+      "web quote second opinion",
+      "maintainable AI prototype",
       "French TIH provider web development",
-      "AGEFIPH deduction subcontracting",
-      "OETH digital",
       "Next Impact",
     ],
   },
@@ -276,70 +279,56 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Création de sites web et d'applications sur-mesure — Services et tarifs",
+    title: "Services — construire utile après la Boussole Techno Web & IA",
     description:
-      "Trois forfaits Sites web — Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 6 500 € — " +
-      "et une offre Applications web & mobile sur devis. " +
-      "Avantage OETH transverse : 30 % du coût main-d'œuvre déductible AGEFIPH. Devis sous 48 h.",
+      "Mise en œuvre Next Impact après décision : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €. Construire seulement quand c'est le bon choix.",
     keywords: [
-      "services création site web",
-      "création site WordPress",
-      "création site Next.js",
+      "mise en œuvre après cadrage",
+      "construction site après conseil",
+      "Boussole Techno Web IA",
+      "création site WordPress optimisé",
       "web app sur-mesure",
-      "application mobile sur-mesure",
-      "tarif site WordPress Headless",
-      "prix application web",
+      "outil métier sur-mesure",
     ],
   },
   en: {
-    title: "Custom websites and applications — Services and pricing",
+    title: "Services — build what helps after the Web & AI Tech Compass",
     description:
-      "Three website tiers — Classic from €2,250, Headless from €4,000, Web app from €6,500 — " +
-      "and a Web & Mobile App offer on quote. " +
-      "Transverse OETH benefit: 30% of labor cost deductible from your AGEFIPH contribution. Quote within 48 hours.",
+      "Next Impact implementation after a clear decision: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500. Build only when it is the right choice.",
     keywords: [
-      "website build services",
-      "WordPress site build",
-      "Next.js site build",
+      "implementation after scoping",
+      "build after tech advice",
+      "Web AI Tech Compass",
+      "optimized WordPress build",
       "custom web app",
-      "custom mobile application",
-      "Headless WordPress pricing",
-      "web app pricing",
+      "custom business tool",
     ],
   },
 };
 
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact — Devis site web ou application & Appel Découverte Gratuit",
+    title: "Contact — question techno, devis, prototype IA ou dépannage",
     description:
-      "Identifiez en quelques étapes la voie adaptée à votre projet : site WordPress classique, site Headless, web app ou application mobile. " +
-      "Audit IA gratuit, appel visio 15 min et devis personnalisé sous 48h.",
+      "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet, construire si nécessaire ou demander un dépannage WordPress.",
     keywords: [
-      "contact studio web indépendant",
-      "devis site web",
-      "devis application web",
-      "demande de projet web",
-      "rendez-vous visio projet web",
-      "diagnostic projet web",
-      "audit site gratuit",
-      "appel découverte",
+      "contact conseil techno web",
+      "second avis devis web",
+      "prototype IA maintenable",
+      "diagnostic Web IA",
+      "dépannage WordPress",
     ],
   },
   en: {
-    title: "Contact — Website or app quote & free discovery call",
+    title: "Contact — tech question, quote, AI prototype or support",
     description:
-      "Identify in a few steps the right path for your project: classic WordPress site, Headless site, web app or mobile app. " +
-      "Free AI audit, 15-min video call and personalized quote within 48 hours.",
+      "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project, build if needed or request WordPress support.",
     keywords: [
-      "contact independent web studio",
-      "website quote",
-      "web app quote",
-      "web project request",
-      "project video call",
-      "project diagnostic",
-      "free site audit",
-      "discovery call",
+      "contact web technology advice",
+      "web quote second opinion",
+      "maintainable AI prototype",
+      "Web AI diagnostic",
+      "WordPress support",
     ],
   },
 };
@@ -375,10 +364,9 @@ const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const DOCUMENTATION_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Ressources — Sites web, applications & WordPress Headless",
+    title: "Ressources — choisir sa techno web à l'heure de l'IA",
     description:
-      "Guides techniques, tutoriels et bonnes pratiques : WordPress Headless, " +
-      "Next.js, applications web et mobiles. Ressources pour développeurs et chefs de projet.",
+      "Guides pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure : architecture, SEO, maintenance, coût futur et cadrage.",
     keywords: [
       "documentation WordPress Headless",
       "tutoriels Next.js",
@@ -387,10 +375,9 @@ const DOCUMENTATION_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Resources — Websites, applications & Headless WordPress",
+    title: "Resources — choose web technology in the age of AI",
     description:
-      "Technical guides, tutorials and best practices: Headless WordPress, " +
-      "Next.js, web and mobile applications. Resources for developers and project leads.",
+      "Guides to choose between WordPress, no-code, AI coding, SaaS, Headless or custom: architecture, SEO, maintenance, future cost and scoping.",
     keywords: [
       "Headless WordPress documentation",
       "Next.js tutorials",
@@ -427,17 +414,17 @@ export const pageMetadata = {
     generatePageMetadata({
       title:
         locale === "en"
-          ? "Free WordPress site audit"
-          : "Audit de site web WordPress gratuit",
+          ? "Free Web & AI diagnostic"
+          : "Diagnostic Web & IA gratuit",
       description:
         locale === "en"
-          ? "Get a free audit of your WordPress site: performance, SEO, security and accessibility. Full analysis with personalized recommendations."
-          : "Obtenez un audit gratuit de votre site WordPress : performance, SEO, sécurité et accessibilité. Analyse complète et recommandations personnalisées.",
+          ? "Get a first direction before building: fix, optimize, use SaaS, no-code, WordPress, Headless or custom development."
+          : "Obtenez une première orientation avant de construire : réparer, optimiser, utiliser un SaaS, du no-code, WordPress, Headless ou du sur-mesure.",
       path: "/audit-site-web",
       keywords:
         locale === "en"
-          ? ["WordPress audit", "site performance", "SEO", "security"]
-          : ["audit WordPress", "performance site web", "SEO", "sécurité"],
+          ? ["Web AI diagnostic", "choose web technology", "AI coding", "no-code"]
+          : ["diagnostic Web IA", "choisir technologie web", "IA coding", "no-code"],
       locale,
     }),
 

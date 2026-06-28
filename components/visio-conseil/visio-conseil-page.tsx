@@ -134,30 +134,48 @@ export default function VisioConseilPage() {
 
   const steps = isEn
     ? [
-        ["You book", "Pick your advice and a slot in the online calendar, and pay for the call at booking. Instant confirmation and video link."],
-        ["You set the scene", "In a line or two, tell me your situation so I show up prepared and we don't waste a minute."],
-        ["We talk + recap", "45 min to 1h over video, live analysis, then a written recap with my recommendation and next steps."],
+        ["You choose", "Pick the level that matches your situation: decide, secure or scope before investing."],
+        ["You send context", "Share the site, quote, proposal or project notes so I can prepare the useful questions."],
+        ["We decide", "Video call, analysis and written recap with recommendation, risks and the advised next step."],
       ]
     : [
-        ["Vous réservez", "Choisissez votre conseil et un créneau dans le calendrier en ligne, et réglez la visio à la réservation. Confirmation et lien de visio immédiats."],
-        ["Vous plantez le décor", "En une ligne ou deux, décrivez votre situation pour que j'arrive préparée et qu'on ne perde pas une minute."],
-        ["On se parle + compte-rendu", "45 min à 1h en visio, analyse en direct, puis un compte-rendu écrit avec ma recommandation et les prochaines étapes."],
+        ["Vous choisissez", "Sélectionnez le niveau adapté : décider, sécuriser ou cadrer avant d'investir."],
+        ["Vous envoyez le contexte", "Partagez le site, le devis, la proposition ou les notes projet pour préparer les bonnes questions."],
+        ["On décide", "Visio, analyse puis compte-rendu écrit avec recommandation, risques et prochaine étape conseillée."],
       ];
 
   const reassurance: Array<[typeof ShieldCheck, string]> = isEn
     ? [
-        [Receipt, "Price credited to your quote if a project follows (within 30 days)"],
+        [Receipt, "Project credit available depending on the offer"],
         [CalendarCheck, "Book and pay online — instant confirmation"],
         [Video, "Real video call with screen sharing — not a chatbot"],
         [FileText, "Written recap after the call"],
         [ShieldCheck, "Reschedule or cancel up to 24h before"],
       ]
     : [
-        [Receipt, "Prix déduit du devis si un projet suit (sous 30 jours)"],
+        [Receipt, "Crédit projet possible selon l'offre choisie"],
         [CalendarCheck, "Réservation et paiement en ligne — confirmation immédiate"],
         [Video, "Vraie visio avec partage d'écran — pas un chatbot"],
         [FileText, "Compte-rendu écrit après l'appel"],
         [ShieldCheck, "Report ou annulation possible jusqu'à 24h avant"],
+      ];
+
+  const decisionMatrix = isEn
+    ? [
+        ["I want a website", "Rebuilding too fast", "Check whether to fix, optimize or rebuild"],
+        ["I want an app", "Having something too heavy coded", "Check whether WordPress, Airtable, Notion, no-code or SaaS is enough"],
+        ["AI can code it", "Creating a fragile tool", "Assess maintenance, security, data, hosting and technical debt"],
+        ["I want to use AI", "Adding a gadget", "Identify a real use case and a measurable gain"],
+        ["I want a directory or map", "Installing a random plugin", "Choose between plugin, structured data, Headless or dedicated app"],
+        ["I have a quote", "Signing without understanding", "Challenge the technology, risks and future cost"],
+      ]
+    : [
+        ["Je veux un site", "Refaire trop vite", "Vérifier s'il faut réparer, optimiser ou refondre"],
+        ["Je veux une appli", "Faire coder trop lourd", "Vérifier si WordPress, Airtable, Notion, no-code ou SaaS suffit"],
+        ["Je peux le coder avec l'IA", "Créer un outil fragile", "Évaluer maintenance, sécurité, données, hébergement et dette technique"],
+        ["Je veux utiliser l'IA", "Ajouter un gadget", "Identifier un vrai cas d'usage et un gain mesurable"],
+        ["Je veux un annuaire ou une carte", "Installer un plugin au hasard", "Choisir entre plugin, données structurées, Headless ou app dédiée"],
+        ["J'ai un devis", "Signer sans comprendre", "Challenger la techno, les risques et le coût futur"],
       ];
 
   return (
@@ -170,20 +188,20 @@ export default function VisioConseilPage() {
           </p>
           <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {isEn
-              ? "A web decision to make? A call to see clearly — not to be sold to."
-              : "Une décision web à trancher ? Une visio pour y voir clair — pas pour vous vendre."}
+              ? "Web technology advice in the age of AI."
+              : "Conseil techno web à l'heure de l'IA."}
           </h1>
           <p className="mt-5 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
             {isEn
-              ? "Which themes and plugins for your WordPress? Which technology for your project? Two focused advisory calls: live analysis, a written recap with the way forward — and the price is credited to your quote if we end up working together. You risk nothing."
-              : "Quels thèmes et extensions pour votre WordPress ? Quelle techno pour votre projet ? Deux conseils ciblés : analyse en direct, compte-rendu écrit avec la marche à suivre — et le prix est déduit du devis si on travaille ensemble. Vous ne risquez rien."}
+              ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless, directory, automation or custom business tool."
+              : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless, annuaire, automatisation ou outil métier."}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="#conseils"
               className="group inline-flex h-11 items-center gap-2 border border-vermilion bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
             >
-              {isEn ? "Book a call" : "Réserver un conseil"}
+              {isEn ? "Book the compass call" : "Réserver la boussole"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
@@ -195,8 +213,8 @@ export default function VisioConseilPage() {
           </div>
           <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
             {isEn
-              ? "Reply within 24 business hours · Written recap · Credited to your project quote"
-              : "Réponse sous 24h ouvrées · Compte-rendu écrit · Déduite de votre devis projet"}
+              ? "Architecture · Priorities · Maintenance · Business coherence"
+              : "Architecture · Priorités · Maintenance · Cohérence business"}
           </p>
         </Reveal>
       </BlueprintSection>
@@ -206,12 +224,12 @@ export default function VisioConseilPage() {
       <BlueprintSection id="conseils" tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 02"
-          kicker={isEn ? "Two advisory calls" : "Deux conseils"}
-          title={isEn ? "Pick the one that fits you" : "Celui qui correspond à votre besoin"}
+          kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
+          title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
           description={
             isEn
-              ? "No commitment. Tech stack advice comes in several durations — the 60-min one includes a written audit report. Every call ends with a written recap, and its price is credited to your quote if a project follows."
-              : "Sans engagement. Le conseil techno existe en plusieurs durées — la version 60 min inclut un rapport d'audit écrit. Chaque appel se termine par un compte-rendu écrit, et son prix est déduit du devis si un projet suit."
+              ? "A paid advisory path for small teams that need to choose between WordPress, no-code, AI coding, SaaS, Headless, custom development, or not building at all."
+              : "Un parcours de conseil payant pour les petites structures qui doivent choisir entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure, ou ne rien construire du tout."
           }
         />
         <Stagger className="mt-10 grid gap-4 md:grid-cols-2">
@@ -239,10 +257,50 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 03 — Comment ça marche */}
-      <BlueprintSection id="comment" tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+      {/* § 03 — Matrice de décision */}
+      <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 03"
+          kicker={isEn ? "Decision matrix" : "Matrice de décision"}
+          title={
+            isEn
+              ? "The first question is not always technical"
+              : "La première question n'est pas toujours technique"
+          }
+          description={
+            isEn
+              ? "AI, no-code and SaaS make production faster. That is exactly why the decision before production matters more."
+              : "IA, no-code et SaaS rendent la production plus rapide. C'est précisément pour cela que la décision avant production compte davantage."
+          }
+        />
+        <div className="mt-10 overflow-hidden border border-dark-gray">
+          <div className="hidden border-b border-dark-gray bg-obsidian md:grid md:grid-cols-3">
+            {(isEn
+              ? ["Client situation", "Possible bad reflex", "Next Impact role"]
+              : ["Situation client", "Mauvais réflexe possible", "Rôle de Next Impact"]
+            ).map((head) => (
+              <div key={head} className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+                {head}
+              </div>
+            ))}
+          </div>
+          <Stagger>
+            {decisionMatrix.map(([situation, reflex, role]) => (
+              <StaggerItem key={situation} className="grid grid-cols-1 border-b border-dark-gray last:border-b-0 md:grid-cols-3">
+                <div className="bg-jet px-4 py-4 text-sm font-medium text-foreground">{situation}</div>
+                <div className="bg-jet px-4 py-4 font-inter-tight text-sm text-mid-gray md:border-l md:border-dark-gray">{reflex}</div>
+                <div className="bg-jet px-4 py-4 font-inter-tight text-sm text-mid-gray md:border-l md:border-dark-gray">{role}</div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </BlueprintSection>
+      <Separator />
+
+      {/* § 04 — Comment ça marche */}
+      <BlueprintSection id="comment" tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+        <SectionHeading
+          index="№ 04"
           kicker={isEn ? "How it works" : "Comment ça marche"}
           title={isEn ? "From request to recap" : "De la demande au compte-rendu"}
         />
@@ -260,10 +318,10 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 04 — FAQ */}
+      {/* § 05 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 04"
+          index="№ 05"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />

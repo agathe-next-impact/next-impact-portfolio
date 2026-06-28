@@ -32,8 +32,8 @@ interface ToolLink {
 const TOOL_LINKS_FR: ToolLink[] = [
   {
     href: "/audit-site-web",
-    title: "Audit IA gratuit",
-    description: "Analysez performance, SEO et conversion de votre site.",
+    title: "Diagnostic Web & IA",
+    description: "Obtenez une première orientation avant de construire.",
     icon: SearchCheck,
     color: "text-lightyellow",
   },
@@ -49,8 +49,8 @@ const TOOL_LINKS_FR: ToolLink[] = [
 const TOOL_LINKS_EN: ToolLink[] = [
   {
     href: "/audit-site-web",
-    title: "Free AI audit",
-    description: "Analyze your site's performance, SEO and conversion.",
+    title: "Web & AI diagnostic",
+    description: "Get a first direction before building.",
     icon: SearchCheck,
     color: "text-lightyellow",
   },
@@ -67,7 +67,7 @@ const SERVICE_LINKS_FR: ToolLink[] = [
   {
     href: "/services",
     title: "Nos offres",
-    description: "Solutions WordPress Headless & Next.js adaptées à vos besoins.",
+    description: "Mise en œuvre après une décision Web & IA claire.",
     icon: Briefcase,
     color: "text-orange",
   },
@@ -91,7 +91,7 @@ const SERVICE_LINKS_EN: ToolLink[] = [
   {
     href: "/services",
     title: "Our offerings",
-    description: "Headless WordPress & Next.js solutions tailored to your needs.",
+    description: "Implementation after a clear Web & AI decision.",
     icon: Briefcase,
     color: "text-orange",
   },

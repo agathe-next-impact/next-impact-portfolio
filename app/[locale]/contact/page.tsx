@@ -27,26 +27,20 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "contact independent web studio",
-            "website quote",
-            "web app quote",
-            "web project request",
-            "project video call",
-            "project diagnostic",
-            "free site audit",
-            "discovery call",
-            "Next.js pricing",
+            "contact web technology advice",
+            "AI prototype second opinion",
+            "web quote review",
+            "Web AI Tech Compass",
+            "WordPress support",
+            "project roadmap",
           ]
         : [
-            "contact studio web indépendant",
-            "devis site web",
-            "devis application web",
-            "demande de projet web",
-            "rendez-vous visio projet web",
-            "diagnostic projet web",
-            "audit site gratuit",
-            "appel découverte",
-            "tarif site Next.js",
+            "contact conseil techno web",
+            "second avis prototype IA",
+            "relecture devis web",
+            "Boussole Techno Web IA",
+            "dépannage WordPress",
+            "roadmap projet web",
           ],
     locale,
   });

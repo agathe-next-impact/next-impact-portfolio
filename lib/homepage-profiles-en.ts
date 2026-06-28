@@ -11,18 +11,18 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "WordPress + the modern web.",
-    subHeadline: "Beautiful, intuitive, fast.",
+    headline: "AI can code fast.",
+    subHeadline: "You still need to know what to build.",
     description:
-      "I keep the interface you already know and graft a bespoke front end onto it: refined design and a smooth, pleasant experience — for your visitors and for you — plus, along the way, sub-second loading. Without rebuilding everything.",
+      "Next Impact helps small teams choose the right web technology in the age of AI-assisted coding. WordPress, no-code, AI coding, SaaS, Headless or a business tool: decide what is useful, maintainable and profitable before producing.",
     valueProposition:
-      "For SMEs and social-economy organisations. Budget and timeline fixed from the start — delivered in 6 to 10 weeks.",
-    ctaPrimary: { label: "Free AI audit — 2 min", href: "/audit-site-web" },
-    ctaSecondary: { label: "See our work", href: "/etudes-de-cas" },
-    auditTitle: "Which stack for your project?",
-    auditSubtitle: "2-minute diagnostic",
+      "Independent advice, scoping and implementation to avoid fragile tools, overbuilt stacks and poorly sized projects.",
+    ctaPrimary: { label: "Run the Web & AI diagnostic", href: "/services/eligibilite" },
+    ctaSecondary: { label: "Book a decision call", href: "/conseil" },
+    auditTitle: "Which web technology in the age of AI?",
+    auditSubtitle: "Web & AI Tech Compass",
     auditDescription:
-      "Take 2 minutes and get a clear recommendation — no commitment, no technical jargon.",
+      "Before asking AI, a freelancer or an agency to build, check whether you should fix, optimize, use SaaS, no-code, WordPress or custom development.",
   },
   decideur: {
     headline: "Your digital project,",
@@ -72,9 +72,9 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Three packages, fixed price and timeline.",
+    titre: "Build only when it is the right choice.",
     sousTitre:
-      "From a modernized WordPress to a bespoke platform — you keep your admin and your team, I modernize the rest. Guaranteed performance, delivered in 6 to 10 weeks.",
+      "WordPress, Headless WordPress + Next.js or a custom business tool: these services are not imposed stacks, but possible answers after a clear Web & AI decision.",
     carouselLabel: "Why Next Impact?",
     budgetTitle: "What investment level fits your project?",
     budgetCards: {
@@ -92,7 +92,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
           "A scalable architecture, built to grow with your business.",
       },
     },
-    ctaTitle: "Pick your stack",
+    ctaTitle: "Pick your path",
     ctaDescription:
       "Answer a few questions to identify the right path for your project — classic WordPress site, Headless site, web app or mobile app.",
     ctaLabel: "Run the diagnostic",
@@ -141,7 +141,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
           "A scalable platform, ready to absorb your growth and integrations.",
       },
     },
-    ctaTitle: "Pick your stack",
+    ctaTitle: "Pick your path",
     ctaDescription:
       "In 2 minutes, identify the right level of modernization for your project and estimate the performance gains you can expect.",
     ctaLabel: "Pick my stack",
@@ -190,7 +190,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
           "Nothing new to learn: it's still WordPress.",
       },
     },
-    ctaTitle: "Pick your stack",
+    ctaTitle: "Pick your path",
     ctaDescription:
       "Answer a few simple questions to find the formula that best matches your project.",
     ctaLabel: "Pick my stack",

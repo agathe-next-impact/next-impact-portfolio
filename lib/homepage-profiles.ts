@@ -24,18 +24,18 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "WordPress + le web moderne.",
-    subHeadline: "Beau, intuitif, rapide.",
+    headline: "Choisir la bonne techno web",
+    subHeadline: "à l'heure de l'IA",
     description:
-      "Je garde l'interface que vous connaissez et je lui greffe un front sur-mesure : un design soigné, une navigation fluide et agréable — pour vos visiteurs comme pour vous — et, au passage, un chargement sous la seconde. Sans tout reconstruire.",
+      "Next Impact aide les petites structures à choisir la bonne technologie web à l'heure du code assisté par IA. WordPress, no-code, IA coding, SaaS, Headless ou outil métier : on décide ce qui est utile, maintenable et rentable avant de produire.",
     valueProposition:
-      "Pour les PME et structures de l'ESS. Budget et délai fixés dès le départ — livraison en 6 à 10 semaines.",
-    ctaPrimary: { label: "Diagnostic en ligne", href: "/services/eligibilite" },
-    ctaSecondary: { label: "RDV conseil gratuit", href: "https://calendar.app.google/Cw7TGQBzeZ1szKU86" },
-    auditTitle: "Quelle stack pour votre projet ?",
-    auditSubtitle: "Diagnostic en 2 minutes",
+      "Conseil indépendant, cadrage et mise en œuvre pour éviter les outils fragiles, les stacks trop lourdes et les projets mal dimensionnés.",
+    ctaPrimary: { label: "Faire le diagnostic Web & IA", href: "/services/eligibilite" },
+    ctaSecondary: { label: "Réserver une visio décision", href: "/conseil" },
+    auditTitle: "Quelle techno web à l'heure de l'IA ?",
+    auditSubtitle: "Boussole Techno Web & IA",
     auditDescription:
-      "Faites le point en 2 minutes et obtenez une recommandation claire — sans engagement et sans jargon technique.",
+      "Avant de demander à l'IA, à un freelance ou à une agence de construire, vérifiez s'il faut réparer, optimiser, utiliser un SaaS, du no-code, WordPress ou du sur-mesure.",
   },
   decideur: {
     headline: "Votre projet digital",
@@ -111,9 +111,9 @@ export interface ServicesPageVariant {
 
 export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Trois forfaits, prix et délai garantis.",
+    titre: "Du bon choix techno à la solution web mise en ligne",
     sousTitre:
-      "Du WordPress modernisé à la plateforme sur-mesure — vous gardez votre admin et votre équipe, je modernise le reste. Performance garantie, livraison en 6 à 10 semaines.",
+      "WordPress, Headless WordPress + Next.js ou outil métier sur mesure : ces services ne sont pas des choix imposés, mais des réponses possibles après une décision Web & IA claire.",
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel niveau d'investissement pour votre projet ?",
     budgetCards: {
@@ -131,7 +131,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Une architecture évolutive, pensée pour grandir avec votre activité.",
       },
     },
-    ctaTitle: "Choisissez votre stack",
+    ctaTitle: "Choisissez votre voie",
     ctaDescription:
       "Répondez à quelques questions pour identifier la voie adaptée à votre projet — site WordPress, site Headless, web app ou application mobile.",
     ctaLabel: "Lancer le diagnostic",
@@ -180,7 +180,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Une plateforme évolutive, prête à absorber votre croissance et vos intégrations.",
       },
     },
-    ctaTitle: "Choisissez votre stack",
+    ctaTitle: "Choisissez votre voie",
     ctaDescription:
       "En 2 minutes, identifiez le bon niveau de modernisation pour votre projet et estimez les gains de performance attendus.",
     ctaLabel: "Choisir ma stack",
@@ -229,7 +229,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
           "Vous n'avez rien de nouveau à apprendre : c'est toujours WordPress.",
       },
     },
-    ctaTitle: "Choisissez votre stack",
+    ctaTitle: "Choisissez votre voie",
     ctaDescription:
       "Répondez à quelques questions simples pour identifier la formule qui correspond le mieux à votre projet.",
     ctaLabel: "Choisir ma stack",
@@ -285,7 +285,7 @@ export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageV
     ctaHref: "/documentation",
     faqs: [
       {
-        question: "Quelle stack technique est utilisée ?",
+        question: "Comment choisissez-vous le bon niveau technique ?",
         answer:
           "Quatre voies : (1) WordPress classique avec thème custom moderne, (2) WordPress Headless + Next.js App Router (SSG/ISR/SSR, TypeScript strict, Tailwind, déploiement Vercel), (3) web app sur-mesure (Next.js + base PostgreSQL serverless, admin autonome conçu pour la logique métier), (4) PWA mobile (Next.js + service worker, géolocalisation et persistance locale selon le besoin).",
       },

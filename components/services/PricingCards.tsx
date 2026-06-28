@@ -32,8 +32,8 @@ function getTiers(isEn: boolean): Tier[] {
   return [
     {
       slug: "forfait-classique",
-      name: isEn ? "HIGH-PERFORMANCE BROCHURE SITE" : "SITE VITRINE PERFORMANT",
-      tech: isEn ? "on WordPress, bespoke theme" : "sur WordPress, thème sur-mesure",
+      name: isEn ? "OPTIMIZED WORDPRESS SITE" : "SITE WORDPRESS OPTIMISE",
+      tech: isEn ? "classic WordPress, bespoke theme" : "WordPress classique, thème sur-mesure",
       price: isEn ? "From €2,250" : "Depuis 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
       forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
@@ -63,7 +63,7 @@ function getTiers(isEn: boolean): Tier[] {
     },
     {
       slug: "forfait-headless",
-      name: isEn ? "HIGH-SPEED WEBSITE" : "SITE HAUTE PERFORMANCE",
+      name: isEn ? "HEADLESS WORDPRESS + NEXT.JS" : "WORDPRESS HEADLESS + NEXT.JS",
       tech: "WordPress Headless + Next.js",
       price: isEn ? "From €4,000" : "Depuis 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
@@ -96,7 +96,7 @@ function getTiers(isEn: boolean): Tier[] {
     },
     {
       slug: "forfait-webapp",
-      name: isEn ? "CUSTOM BUSINESS PLATFORM" : "PLATEFORME MÉTIER SUR-MESURE",
+      name: isEn ? "CUSTOM PLATFORM / BUSINESS TOOL" : "PLATEFORME METIER / OUTIL SUR MESURE",
       tech: isEn ? "dedicated architecture, multisite / high-volume" : "architecture dédiée, multisites / forte volumétrie",
       price: isEn ? "From €6,500" : "Depuis 6 500 €",
       priceTagline: isEn ? "Scalable architecture, ISR/SSR, multisite" : "Architecture évolutive, ISR/SSR, multisites",
@@ -147,12 +147,12 @@ export function PricingCards() {
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
           index="№ 04"
-          kicker={isEn ? "Pricing" : "Tarifs"}
+          kicker={isEn ? "Implementation after decision" : "Mise en oeuvre après décision"}
           title={
             isEn ? (
-              <>Transparent <span className="text-accent-secondary">pricing</span></>
+              <>Build only when <span className="text-accent-secondary">it makes sense</span></>
             ) : (
-              <>Des tarifs <span className="text-accent-secondary">transparents</span></>
+              <>Construire seulement <span className="text-accent-secondary">quand c'est utile</span></>
             )
           }
         />

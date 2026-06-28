@@ -44,8 +44,8 @@ export default function Hero() {
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">
             {locale === "en"
-              ? "Web studio · WordPress & custom"
-              : "Studio web · WordPress & sur-mesure"}
+              ? "Web tech advice in the age of AI"
+              : "Conseil techno web à l'heure de l'IA"}
           </span>
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
@@ -64,8 +64,8 @@ export default function Hero() {
           {/* Réassurance — marqueurs lisibles */}
           <div className="mt-5 flex flex-wrap gap-2">
             {(locale === "en"
-              ? ["SMEs & social economy", "Fixed budget & timeline", "Delivered in 6–10 weeks"]
-              : ["PME & ESS", "Budget & délai fixés", "Livraison en 6–10 semaines"]
+              ? ["WordPress", "No-code", "AI coding", "Headless", "Custom"]
+              : ["WordPress", "No-code", "IA coding", "Headless", "Sur-mesure"]
             ).map((chip) => (
               <span
                 key={chip}
@@ -101,6 +101,9 @@ export default function Hero() {
             >
               {variant.ctaSecondary.label}
             </Link>
+            <Link href="/depannage-wordpress" className={BTN_GHOST}>
+              {locale === "en" ? "WordPress support" : "Dépannage WordPress"}
+            </Link>
           </div>
 
           {/* Logos techno — preuve discrète */}
@@ -123,8 +126,8 @@ export default function Hero() {
             />
             <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
               {locale === "en"
-                ? "Technology: WordPress Headless + Next.js"
-                : "Technologie : WordPress Headless + Next.js"}
+                ? "AI can generate code. It cannot decide your architecture for you."
+                : "L'IA peut générer du code. Elle ne décide pas votre architecture à votre place."}
             </span>
           </div>
         </Reveal>

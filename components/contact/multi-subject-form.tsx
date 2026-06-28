@@ -18,7 +18,14 @@ import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
-type SubjectKey = "site-web" | "application" | "oeth" | "audit-ia" | "question-technique" | "autre";
+type SubjectKey =
+  | "decision-techno"
+  | "second-avis"
+  | "roadmap"
+  | "mise-en-oeuvre"
+  | "depannage-wordpress"
+  | "oeth"
+  | "autre";
 
 interface SubjectConfig {
   icon: typeof Globe;
@@ -27,15 +34,24 @@ interface SubjectConfig {
 }
 
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
-  "site-web": { icon: Globe, fr: { label: "Site web", description: "Création, refonte, modernisation Headless WordPress", placeholder: "Décrivez votre projet de site : type (vitrine, institutionnel, e-commerce), volumétrie, délais, contraintes éventuelles…" }, en: { label: "Website", description: "New build, redesign, Headless WordPress modernization", placeholder: "Describe your website project: type (brochure, institutional, e-commerce), traffic, timing, constraints…" } },
-  application: { icon: Smartphone, fr: { label: "Application sur-mesure", description: "Web app (marketplace, plateforme métier) ou app mobile (PWA)", placeholder: "Décrivez votre projet applicatif : logique métier, comptes utilisateurs, mobile / web, fonctionnalités clés…" }, en: { label: "Custom application", description: "Web app (marketplace, business platform) or mobile app (PWA)", placeholder: "Describe your application project: business logic, user accounts, mobile / web, key features…" } },
+  "decision-techno": { icon: SearchCheck, fr: { label: "Visio décision techno", description: "Choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Tech decision call", description: "Choose between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
+  "second-avis": { icon: Layers, fr: { label: "Second avis", description: "Devis, stack ou prototype IA à challenger", placeholder: "Collez les grandes lignes du devis, de la stack ou du prototype IA : objectif, techno proposée, budget, délais, points qui vous inquiètent." }, en: { label: "Second opinion", description: "Quote, stack or AI prototype to challenge", placeholder: "Share the main points of the quote, stack or AI prototype: goal, proposed technology, budget, timing and concerns." } },
+  roadmap: { icon: Smartphone, fr: { label: "Roadmap projet web", description: "Cadrer architecture, données, priorités et budget avant production", placeholder: "Décrivez le projet, les utilisateurs, les fonctionnalités imaginées, les données manipulées et ce qui doit être clarifié avant de construire." }, en: { label: "Web project roadmap", description: "Scope architecture, data, priorities and budget before production", placeholder: "Describe the project, users, imagined features, handled data and what must be clarified before building." } },
+  "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
+  "depannage-wordpress": { icon: AlertCircle, fr: { label: "Dépannage WordPress", description: "Réparer, stabiliser ou décider s'il faut refaire", placeholder: "Indiquez l'URL, le problème rencontré, l'urgence, les accès disponibles et ce qui a déjà été tenté." }, en: { label: "WordPress support", description: "Fix, stabilize or decide whether to rebuild", placeholder: "Share the URL, the issue, urgency, available access and what has already been tried." } },
   oeth: { icon: Scale, fr: { label: "Avantage OETH", description: "Déduction AGEFIPH 30 % via sous-traitance TIH", placeholder: "Précisez votre situation : effectif, taux d'emploi TH actuel, montant de contribution AGEFIPH, projet web envisagé…" }, en: { label: "OETH benefit", description: "30% AGEFIPH deduction via TIH subcontracting", placeholder: "Tell us about your situation: workforce size, current disabled-worker employment rate, AGEFIPH contribution, web project considered…" } },
-  "audit-ia": { icon: SearchCheck, fr: { label: "Audit IA gratuit", description: "Diagnostic performance, SEO et conversion de votre site", placeholder: "Indiquez l'URL du site à auditer et les points sur lesquels vous souhaitez un éclairage particulier." }, en: { label: "Free AI audit", description: "Performance, SEO and conversion diagnostic of your site", placeholder: "Share the URL of the site to audit and the specific points you'd like clarified." } },
-  "question-technique": { icon: Layers, fr: { label: "Question technique", description: "Conseil, accompagnement, collaboration freelance", placeholder: "Décrivez votre question, votre contexte technique ou la nature de la collaboration envisagée." }, en: { label: "Technical question", description: "Advice, support, freelance collaboration", placeholder: "Describe your question, technical context or the nature of the collaboration you have in mind." } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
 
-const SUBJECT_ORDER: SubjectKey[] = ["site-web", "application", "oeth", "audit-ia", "question-technique", "autre"];
+const SUBJECT_ORDER: SubjectKey[] = [
+  "decision-techno",
+  "second-avis",
+  "roadmap",
+  "mise-en-oeuvre",
+  "depannage-wordpress",
+  "oeth",
+  "autre",
+];
 
 const fieldClass =
   "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
@@ -86,8 +102,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic that fits your request — I'll route the message accordingly."
-            : "Choisissez l'objet de votre demande — votre message sera orienté en conséquence."}
+            ? "Pick the topic: decision, second opinion, roadmap, implementation or WordPress support."
+            : "Choisissez le sujet : décision, second avis, roadmap, mise en œuvre ou dépannage WordPress."}
         </p>
       </div>
 

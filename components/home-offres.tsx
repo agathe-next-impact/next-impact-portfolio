@@ -19,51 +19,93 @@ type Stack = {
 
 const STACKS_FR: Stack[] = [
   {
-    subtitle: "WordPress · thème sur-mesure",
-    title: "Site vitrine performant",
-    price: "dès 2 250 €",
-    strengths: ["Administration simple, sans technique", "Rapide et bien référencé"],
-    target: "Vitrine, blog, association",
+    subtitle: "Attirer",
+    title: "Diagnostic Techno Web & IA",
+    price: "gratuit",
+    strengths: ["Identifier s'il faut construire ou non", "Orienter entre WordPress, SaaS, no-code, IA ou sur-mesure"],
+    target: "Premier tri avant production",
   },
   {
-    subtitle: "WordPress Headless + Next.js",
-    title: "Site haute performance",
-    price: "dès 4 000 €",
-    strengths: ["Design sans limite, < 1 s de chargement", "Vous gérez tout dans WordPress, comme aujourd'hui"],
-    target: "PME, ESS, site de croissance",
+    subtitle: "Décider",
+    title: "Visio décision techno",
+    price: "180 € HT",
+    strengths: ["Trancher WordPress, no-code, IA coding, Headless ou sur-mesure", "Compte-rendu court et prochaine étape"],
+    target: "Question précise à arbitrer",
     recommended: true,
   },
   {
-    subtitle: "architecture dédiée",
-    title: "Plateforme métier sur-mesure",
-    price: "dès 6500 €",
-    strengths: ["Logique métier, comptes utilisateurs", "Géoloc, hors-ligne, installable"],
-    target: "Marketplace, plateforme, app terrain",
+    subtitle: "Sécuriser",
+    title: "Second avis devis / stack / prototype IA",
+    price: "390 € HT",
+    strengths: ["Challenger un devis, une stack ou un prototype généré vite", "Repérer risques, dépendances et dette technique"],
+    target: "Avant de signer",
+  },
+  {
+    subtitle: "Cadrer",
+    title: "Roadmap projet web",
+    price: "dès 950 € HT",
+    strengths: ["Prioriser avant de demander à l'IA ou à un prestataire", "Feuille de route avant production"],
+    target: "Projet encore flou",
+  },
+  {
+    subtitle: "Construire",
+    title: "Services Next Impact",
+    price: "dès 2 250 € HT",
+    strengths: ["WordPress optimisé, Headless ou outil métier", "Construire seulement si le besoin le justifie"],
+    target: "Mise en œuvre",
+  },
+  {
+    subtitle: "Corriger",
+    title: "Dépannage WordPress",
+    price: "dès 69 € HT",
+    strengths: ["Réparer quand c'est suffisant", "Éviter de refaire trop vite avec ou sans IA"],
+    target: "Site existant en difficulté",
   },
 ];
 
 const STACKS_EN: Stack[] = [
   {
-    subtitle: "WordPress · bespoke theme",
-    title: "High-performance brochure site",
-    price: "from €2,250",
-    strengths: ["Simple admin, no tech skills", "Fast and well-ranked"],
-    target: "Brochure, blog, association",
+    subtitle: "Attract",
+    title: "Web & AI Tech diagnostic",
+    price: "free",
+    strengths: ["Check whether building is even needed", "Choose between WordPress, SaaS, no-code, AI or custom"],
+    target: "First triage before production",
   },
   {
-    subtitle: "WordPress Headless + Next.js",
-    title: "High-speed website",
-    price: "from €4,000",
-    strengths: ["Unlimited design, loads in < 1 s", "You manage everything in WordPress, just like today"],
-    target: "SME, NGO, growth site",
+    subtitle: "Decide",
+    title: "Tech decision call",
+    price: "€180 excl. VAT",
+    strengths: ["Choose between WordPress, no-code, AI coding, Headless or custom", "Short recap and next step"],
+    target: "One clear question to settle",
     recommended: true,
   },
   {
-    subtitle: "dedicated architecture",
-    title: "Custom business platform",
-    price: "on quote",
-    strengths: ["Business logic, user accounts", "Geoloc, offline, installable"],
-    target: "Marketplace, platform, field app",
+    subtitle: "Secure",
+    title: "Quote / stack / AI prototype second opinion",
+    price: "€390 excl. VAT",
+    strengths: ["Challenge a quote, stack or fast-generated prototype", "Spot risks, dependencies and technical debt"],
+    target: "Before signing",
+  },
+  {
+    subtitle: "Scope",
+    title: "Web project roadmap",
+    price: "from €950 excl. VAT",
+    strengths: ["Prioritize before asking AI or a provider to build", "Roadmap before production"],
+    target: "Unclear project",
+  },
+  {
+    subtitle: "Build",
+    title: "Next Impact services",
+    price: "from €2,250 excl. VAT",
+    strengths: ["Optimized WordPress, Headless or business tool", "Build only when the need justifies it"],
+    target: "Implementation",
+  },
+  {
+    subtitle: "Fix",
+    title: "WordPress support",
+    price: "from €69 excl. VAT",
+    strengths: ["Fix when enough", "Avoid rebuilding too fast, with or without AI"],
+    target: "Existing site in trouble",
   },
 ];
 
@@ -79,18 +121,18 @@ export default function HomeOffres() {
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
             index="№ 04"
-            kicker={isEn ? "Offerings" : "Formules"}
+            kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
             title={
               isEn ? (
-                <>The right offering <span className="text-accent-secondary">for your project</span></>
+                <>AI can code. <span className="text-accent-secondary">It cannot decide everything.</span></>
               ) : (
-                <>La bonne formule <span className="text-accent-secondary">pour votre projet</span></>
+                <>L'IA peut coder. <span className="text-accent-secondary">Elle ne peut pas tout décider.</span></>
               )
             }
             description={
               isEn
-                ? "Most brochure projects fall under the first. Unsure? The 2-min diagnostic points you to the right one."
-                : "La plupart des vitrines relèvent de la première. En cas de doute, le diagnostic en 2 min vous oriente."
+                ? "The real choice is no longer only WordPress vs Headless. It is WordPress, no-code, AI coding, SaaS, custom development, or not building at all."
+                : "Le vrai choix n'est plus seulement WordPress ou Headless. C'est WordPress, no-code, IA coding, SaaS, sur-mesure, ou ne rien construire du tout."
             }
           />
         </Reveal>
@@ -144,15 +186,15 @@ export default function HomeOffres() {
           <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
             {isEn ? (
               <>
-                How it works:{" "}
-                <span className="text-foreground">your WordPress stays the back-office</span>{" "}
-                — we only replace the front end.
+                Key idea:{" "}
+                <span className="text-foreground">production is easier</span>{" "}
+                — judgment, architecture and maintenance still matter.
               </>
             ) : (
               <>
-                Comment ça marche :{" "}
-                <span className="text-foreground">votre WordPress reste le back-office</span>{" "}
-                — on remplace seulement la façade.
+                Idée clé :{" "}
+                <span className="text-foreground">produire devient plus facile</span>{" "}
+                — le jugement, l'architecture et la maintenance restent décisifs.
               </>
             )}
           </p>
@@ -161,10 +203,10 @@ export default function HomeOffres() {
         {/* Pied — liens internes (préférés aux détails) */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">
           <Link
-            href="/wordpress-headless"
+            href="/conseil"
             className="font-mono text-[10px] tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
           >
-            {isEn ? "Headless WordPress in depth →" : "WordPress Headless en détail →"}
+            {isEn ? "Tech advice offers →" : "Offres de conseil techno →"}
           </Link>
           <Link
             href="/services"

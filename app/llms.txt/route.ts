@@ -95,34 +95,44 @@ export async function GET() {
 
   const content = `# Next Impact
 
-> Studio web independant base en France, specialise dans les sites WordPress, WordPress headless, Next.js, applications web sur-mesure et PWA pour PME, ESS, associations et organisations avec enjeux de performance.
+> Conseil techno web a l'heure de l'IA. Next Impact aide les petites structures a choisir quoi construire, avec quelle techno, et jusqu'ou aller quand l'IA, le no-code, WordPress, SaaS, Headless ou le sur-mesure semblent tous possibles.
 
 ## Summary
 
-Next Impact est le studio d'Agathe Karinthi-Martin. Le site presente des offres de creation/refonte de sites web, des applications metier, des ressources pedagogiques et des etudes de cas. Le positionnement principal : livrer des sites et applications performants, maintenables et autonomes, avec budget et delai clarifies des le depart.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente la Boussole Techno Web & IA, des offres de decision, de second avis, de roadmap, de mise en oeuvre et de depannage WordPress. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
 - Personne : Agathe Karinthi-Martin
-- Statut commercial : studio independant, prestataire TIH
+- Statut commercial : conseil techno web independant, prestataire TIH
 - Zone : France, projets francophones et anglophones
-- Expertises : WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web
-- Publics : PME, ESS, associations, institutions, entreprises avec besoin de site vitrine performant ou d'application metier
+- Expertises : choix de technologie web, IA coding, no-code, SaaS, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web, maintenance et dette technique
+- Publics : independants, TPE, PME, ESS, associations, reseaux et petites structures qui doivent choisir entre reparer, optimiser, cadrer, construire ou ne rien construire
 - Avantage OETH : certaines prestations permettent une deduction AGEFIPH liee au statut TIH, selon les regles applicables au client
+
+## Offer Architecture
+
+- Diagnostic Techno Web & IA : premiere orientation gratuite pour savoir s'il faut reparer, optimiser, cadrer, construire ou ne rien construire.
+- Visio decision techno : 180 EUR HT pour trancher une question precise.
+- Second avis devis / stack / prototype IA : 390 EUR HT pour verifier un choix avant d'investir.
+- Roadmap projet web : a partir de 950 EUR HT pour cadrer architecture, donnees, priorites et budget avant production.
+- Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
+- Depannage WordPress : a partir de 69 EUR HT pour corriger un probleme existant.
 
 ## Primary Pages
 
-- [Accueil](${baseUrl}/): positionnement, offres principales et preuves
-- [Services](${baseUrl}/services): forfaits WordPress classique, headless, web app et applications sur-mesure
-- [Solutions](${baseUrl}/solutions): comparaison des solutions selon le besoin projet
+- [Accueil](${baseUrl}/): promesse, Boussole Techno Web & IA, offres principales et preuves
+- [Conseil](${baseUrl}/conseil): visio decision techno, second avis devis/stack/prototype IA, roadmap projet web
+- [Services](${baseUrl}/services): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
+- [Solutions](${baseUrl}/solutions): comparaison des options selon le besoin projet
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Documentation](${baseUrl}/documentation): guides sur WordPress, headless, SEO, projet web, UI/UX et applications
 - [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
-- [Contact](${baseUrl}/contact): demande de devis, diagnostic projet et prise de contact
+- [Contact](${baseUrl}/contact): decision techno, second avis, roadmap, mise en oeuvre, depannage WordPress et prise de contact
 
 ## Tools
 
-- [Audit de site IA](${baseUrl}/audit-site-web): audit automatique de site web
+- [Diagnostic Web & IA](${baseUrl}/audit-site-web): premiere orientation avant de construire
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
 - [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
 - [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web

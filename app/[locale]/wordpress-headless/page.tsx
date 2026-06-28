@@ -739,7 +739,7 @@ export default async function WordPressHeadlessPillarPage({
               <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
                 {isEn
                   ? "Free AI-assisted audit of your existing WordPress: Core Web Vitals, security exposure, editorial weight, headless ROI verdict. No commitment, no follow-up sales call."
-                  : "Audit IA gratuit de votre WordPress actuel : Core Web Vitals, exposition sécurité, charge éditoriale, verdict de pertinence du headless. Sans engagement, sans relance commerciale."}
+                  : "Diagnostic Web & IA de votre WordPress actuel : Core Web Vitals, exposition sécurité, charge éditoriale, verdict de pertinence du headless. Sans engagement, sans relance commerciale."}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/audit-site-web" className={BTN_PRIMARY}>

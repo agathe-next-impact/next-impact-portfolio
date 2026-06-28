@@ -38,7 +38,7 @@
     "oethAdvantage": "OETH Advantage",
     "resources": "Resources",
     "wordpressExpress": "WordPress support",
-    "freeAiAudit": "Free AI audit",
+    "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
     "tools": "All tools",
@@ -103,10 +103,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact — Website, application, OETH or AI audit quote",
-    "metaDescription": "Reach out to Next Impact based on the subject of your request: website, custom application, OETH benefit (TIH), AI audit or technical question. Reply within 24h, personalized quote within 48h.",
+    "metaTitle": "Contact — tech decision, quote, AI prototype or support",
+    "metaDescription": "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project, build if needed or request WordPress support.",
     "title": "Contact",
-    "subtitle": "Website, custom application, OETH, AI audit, technical question: pick the subject of your request, I'll reply within 24h.",
+    "subtitle": "Tech decision, second opinion, roadmap, implementation or WordPress support: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -120,25 +120,25 @@
   },
   "ctaSection": {
     "audit": {
-      "badge": "Free audit",
-      "title": "Evaluate your site in 5 minutes",
+      "badge": "Web & AI diagnostic",
+      "title": "Before building, choose the right path",
       "subtitleStart": "Get a",
       "subtitleHighlight": "complete report with personalized recommendations",
       "subtitleEnd": "— free, no strings attached.",
       "pillPerformance": "Performance ↑",
       "pillRoi": "ROI projection",
       "pillCost": "Cost efficiency",
-      "ctaLabel": "Start my free audit",
+      "ctaLabel": "Run my diagnostic",
       "footer": "Free · 5-minute report · No strings attached"
     },
     "conversion": {
       "badge": "Interactive questionnaire",
-      "title": "Find the right package",
+      "title": "Find the right complexity level",
       "promiseStart": "Get a personalized estimate for",
-      "promiseHighlight": "a website or custom application that's high-performance and easy to manage on your own",
+      "promiseHighlight": "the right option between WordPress, no-code, AI coding, SaaS, Headless or custom",
       "promiseEnd": ".",
       "secondary": "Answer a few questions to receive an offer tailored to your profile and budget.",
-      "ctaLabel": "Start my project",
+      "ctaLabel": "Clarify my project",
       "footer": "Available · Reply within 24h · 20 years of digital experience, 6 in development"
     },
     "roi": {
@@ -146,7 +146,7 @@
       "title": "Calculate your ROI",
       "promiseStart": "Measure the",
       "promiseHighlight": "revenue lost to a slow site",
-      "promiseEnd": "and project your earnings after modernization (Headless site, web app or redesign).",
+      "promiseEnd": "and compare whether to optimize, fix, rebuild or not build at all.",
       "secondary": "Instant results based on your real traffic and conversion data.",
       "ctaLabel": "Run my ROI simulation",
       "footer": "Free · Instant results · No strings attached"
@@ -167,7 +167,7 @@
       "subtitle": "No need to test things first? Reach out directly.",
       "available": "Available",
       "experience": "20 years of digital experience, 6 in development",
-      "wpHeadlessDev": "Custom websites and applications",
+      "wpHeadlessDev": "Web technology advice & implementation",
       "tih": "TIH provider",
       "company": "Next Impact Digital",
       "owner": "EI Agathe Karinthi-Martin",
@@ -185,15 +185,15 @@
     "breadcrumbSpecs": "Specifications"
   },
   "toolsPage": {
-    "metaTitle": "Toolbox — AI audit, AGEFIPH & Specifications",
-    "metaDescription": "Free tools to evaluate, scope and prepare your web project: AI audit, AGEFIPH simulator, PWA opportunity diagnostic and specifications generator.",
+    "metaTitle": "Toolbox — Web & AI Compass, AGEFIPH & scoping",
+    "metaDescription": "Free tools to evaluate, scope and prepare a web decision: Web & AI diagnostic, AGEFIPH simulator, PWA opportunity and project specifications.",
     "title": "Toolbox",
-    "subtitle": "Free tools to evaluate, scope and prepare your web project.",
+    "subtitle": "Free tools to decide what to build, what to simplify and what to avoid.",
     "breadcrumbHome": "Home",
     "breadcrumbTools": "Tools",
     "backToTools": "Back to tools",
-    "collectionName": "Toolbox — AI audit, AGEFIPH & Specifications",
-    "collectionDescription": "Free tools to evaluate, scope and prepare your web project."
+    "collectionName": "Toolbox — Web & AI Compass, AGEFIPH & scoping",
+    "collectionDescription": "Free tools to decide what to build, what to simplify and what to avoid."
   },
   "benchmarkingPage": {
     "metaTitle": "Competitive benchmarking — Compare your site to leaders",
@@ -210,8 +210,8 @@
     "breadcrumbRoi": "ROI simulator"
   },
   "auditPage": {
-    "metaTitle": "Free website audit — a clear diagnosis in 2 minutes",
-    "metaDescription": "Analyze your site across 4 axes — performance, SEO, accessibility, conversion — and get a concrete recommendation: optimize what you have, rebuild, go Headless or scope a business application.",
+    "metaTitle": "Free Web & AI diagnostic — a first direction in 2 minutes",
+    "metaDescription": "Before building with AI, no-code, WordPress or custom development, get a first direction: fix, optimize, scope, rebuild or not build.",
     "breadcrumbHome": "Home",
     "breadcrumbAudit": "Website audit"
   },
@@ -222,10 +222,10 @@
     "breadcrumbDemo": "Demo"
   },
   "solutionsPage": {
-    "metaTitle": "Websites & Custom Apps Solutions - Next Impact",
-    "metaDescription": "Discover our solutions tailored to your needs: classic WordPress sites, Headless WordPress + Next.js sites and custom web or mobile apps. From small businesses to SMEs with advanced needs.",
-    "title": "Our services",
-    "subtitle": "Pick the solution that fits your needs and your budget.",
+    "metaTitle": "Web & AI Solutions — choose before building",
+    "metaDescription": "Compare useful options for your need: WordPress, no-code, AI coding, SaaS, Headless, business tool or no development at all.",
+    "title": "Web & AI Solutions",
+    "subtitle": "Pick the right complexity level before investing.",
     "breadcrumbHome": "Home",
     "breadcrumbSolutions": "Solutions"
   },
@@ -238,12 +238,12 @@
     "breadcrumbDocs": "Learn"
   },
   "blogPage": {
-    "metaTitle": "Blog | Next Impact Digital",
-    "metaDescription": "Notes, lessons learned and behind-the-scenes from Next Impact Digital's web projects."
+    "metaTitle": "Which web technology in the age of AI? | Next Impact",
+    "metaDescription": "Advice, comparisons and lessons learned to choose between WordPress, no-code, AI coding, SaaS, Headless or custom."
   },
   "articlesPage": {
-    "metaTitle": "Articles & comparisons | Next Impact Digital",
-    "metaDescription": "Analyses, comparisons and lessons learned on Headless WordPress, web ROI and TIH/AGEFIPH solutions."
+    "metaTitle": "Web, AI and architecture articles & comparisons | Next Impact",
+    "metaDescription": "Analyses to decide what to build in the age of AI: architecture, maintainability, future cost, WordPress, no-code, Headless and custom."
   },
   "realisations": {
     "tabs": {
@@ -258,8 +258,8 @@
   "caseStudiesPage": {
     "breadcrumbHome": "Home",
     "breadcrumbCaseStudies": "Case studies",
-    "collectionName": "Headless WordPress case studies — Selected work",
-    "collectionDescription": "Selected projects: corporate, institutional, social-economy and headless platforms. Concrete results in performance, design and conversion."
+    "collectionName": "Case studies — tech decisions and selected work",
+    "collectionDescription": "Selected projects where the technology was chosen for the need: WordPress, Headless, PWA, business tool or lighter solution."
   },
   "caseStudyDetail": {
     "metaNotFoundTitle": "Case study not found",
@@ -313,32 +313,32 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Services & Pricing — Websites and custom applications",
-    "metaDescription": "Three website tiers (Classic from €2,250, Headless from €4,000, Web app from €6,500) and a Web & Mobile App offer on quote. Transverse OETH benefit: 30% AGEFIPH deduction.",
+    "metaTitle": "Services — build what helps in the age of AI",
+    "metaDescription": "After the Web & AI Tech Compass, Next Impact builds only when it is the right choice: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500.",
     "breadcrumbHome": "Home",
     "breadcrumbServices": "Services & Pricing",
     "calculateGain": {
       "title": "Calculate your gain",
-      "description": "Estimate the return on investment of a Headless migration based on your real data.",
+      "description": "Estimate whether optimizing, fixing, rebuilding or building can actually pay off.",
       "ctaLabel": "Run my ROI simulation",
       "iconAlt": "Calculate"
     },
     "stackMethod": {
       "label": "Method & Transparency",
-      "title": "How I pick your stack",
+      "title": "How I pick the right complexity level",
       "scope": {
         "title": "Functional scope",
-        "description": "Brochure site, blog, e-commerce, business app: each project type has its ideal stack.",
+        "description": "Website, internal tool, directory, automation: not every need deserves the same technical level.",
         "iconAlt": "Scope"
       },
       "volume": {
         "title": "Volume & traffic",
-        "description": "Under 10k visits/month, optimized monolithic is enough. Above that, headless quickly pays off.",
+        "description": "Traffic, content, data and dependencies show whether to stay simple or invest in a dedicated architecture.",
         "iconAlt": "Volume"
       },
       "scalability": {
         "title": "Target scalability",
-        "description": "API integrations, multisite, business applications: Next.js is the right tier.",
+        "description": "SaaS, no-code, WordPress, AI coding, Headless or custom: the right tier depends on future cost.",
         "iconAlt": "Scalability"
       }
     },
@@ -349,30 +349,30 @@
     "shortcuts": {
       "tools": {
         "title": "Tools",
-        "description": "ROI simulator, site audit and AI diagnostic to evaluate your digital presence.",
+        "description": "Diagnostics and simulators to choose before building.",
         "iconAlt": "Tools"
       },
       "demo": {
         "title": "Demo",
-        "description": "See live the power of Headless WordPress on your project.",
+        "description": "See concrete cases: Headless, PWA, business tool or lighter solution.",
         "iconAlt": "Demo"
       },
       "stack": {
-        "title": "Pick your stack",
-        "description": "Answer a few questions to identify the stack that fits your project.",
+        "title": "Pick your path",
+        "description": "Answer a few questions to identify whether to fix, scope, build or simplify.",
         "iconAlt": "Stack"
       }
     }
   },
   "aboutPage": {
-    "metaTitle": "About Next Impact — Agathe Karinthi-Martin, websites and custom applications",
-    "metaDescription": "Agathe Karinthi-Martin leads Next Impact, an independent studio specialising in high-performance websites and applications for SMEs and social-economy organisations. 20 years of digital experience, 6 in development.",
+    "metaTitle": "About Next Impact — web technology advice in the age of AI",
+    "metaDescription": "Agathe Karinthi-Martin helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom.",
     "breadcrumbHome": "Home",
     "breadcrumbAbout": "About",
     "journey": {
       "label": "The journey",
-      "title": "From WordPress user to modern stack architect",
-      "subtitle": "Twenty years using, customizing and rebuilding WordPress — from the back office to headless architecture.",
+      "title": "From WordPress field experience to the Web & AI Tech Compass",
+      "subtitle": "Twenty years using, fixing, scoping and building web solutions — with one belief: the right technology depends on the need, not the trend.",
       "step1": {
         "year": "2005 — On the ground",
         "title": "Fifteen years using WordPress before coding for it",
@@ -387,7 +387,7 @@
       },
       "step3": {
         "year": "Today — Next Impact",
-        "title": "Three WordPress stacks, one conviction",
+        "title": "A Web & AI compass, not one default technology",
         "imageAlt": "Today at Next Impact",
         "items": {
           "user": {
@@ -396,11 +396,11 @@
           },
           "tech": {
             "label": "Technical mastery:",
-            "text": "Two complementary skill sets — modernizing the WordPress sites that are worth it (classic or Headless + Next.js) and building custom web and mobile applications when WordPress is no longer the right tool."
+            "text": "Two complementary skills — choosing the right complexity level, then building or fixing when the solution is clear."
           },
           "ai": {
             "label": "AI acceleration:",
-            "text": "Audit tools and AI workflows to deliver WordPress sites at modern tech standards, faster."
+            "text": "AI accelerates production, but increases the need for scoping: architecture, data, maintenance, security and business coherence."
           }
         },
         "figaroMention": "An approach featured in <lien>Le Figaro</lien>, on Headless WordPress modernization for SME websites."

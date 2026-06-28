@@ -17,11 +17,11 @@ export async function generateMetadata({
   const isEn = locale === "en";
   return generatePageMetadata({
     title: isEn
-      ? "Paid advisory call — WordPress themes/plugins & tech stack choice"
-      : "Visio conseil payante — thèmes/plugins WordPress & choix de techno",
+      ? "Web technology advice in the age of AI"
+      : "Conseil techno web à l'heure de l'IA",
     description: isEn
-      ? "Two paid video advisory calls: WordPress advice (which themes and plugins, well used) and tech stack advice (which technology for your web project, challenge an agency quote). Live analysis, written recap — and the price is credited to your project quote. No subscription."
-      : "Deux visios conseil payantes : Conseil WordPress (quels thèmes et extensions, bien utilisés) et Conseil choix de techno (quelle technologie pour votre projet web, challenger un devis d'agence). Analyse en direct, compte-rendu écrit — et le prix est déduit de votre devis projet. Sans abonnement.",
+      ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go before investing."
+      : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller avant d'investir.",
     path: "/conseil",
     keywords: isEn
       ? [
@@ -57,18 +57,18 @@ export default async function ConseilPage({
 
   const breadcrumbItems = [
     { name: isEn ? "Home" : "Accueil", url: "/" },
-    { name: isEn ? "Advisory call" : "Visio conseil", url: "/conseil" },
+    { name: isEn ? "Web & AI tech advice" : "Conseil techno Web & IA", url: "/conseil" },
   ];
 
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ServiceJsonLd
-        name={isEn ? "Paid web advisory call" : "Visio conseil web payante"}
+        name={isEn ? "Web & AI technology advice" : "Boussole Techno Web & IA"}
         description={
           isEn
-            ? "Two on-demand paid video advisory calls: WordPress advice (themes and plugins choice and usage) and tech stack advice (which technology for a web project, agency quote review). Written recap, price credited to the project quote."
-            : "Deux visios conseil payantes à la demande : Conseil WordPress (choix et usage des thèmes et extensions) et Conseil choix de techno (quelle technologie pour un projet web, relecture de devis d'agence). Compte-rendu écrit, prix déduit du devis projet."
+            ? "Independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom development before building."
+            : "Conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant de construire."
         }
         serviceType={isEn ? "Web consulting" : "Conseil web"}
         url="/conseil"

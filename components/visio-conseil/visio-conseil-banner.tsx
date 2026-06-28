@@ -15,18 +15,18 @@ import { Reveal } from "@/components/ui/reveal";
 
 const COPY = {
   fr: {
-    eyebrow: "Déduit du devis",
-    title: "Une décision web à trancher ?",
+    eyebrow: "Boussole Techno Web & IA",
+    title: "L'IA peut coder vite. Mais quoi construire ?",
     subtitle:
-      "Thèmes & extensions WordPress, ou choix de techno pour votre projet : une visio pour décider. Compte-rendu écrit — et le prix est déduit du devis si on travaille ensemble.",
-    cta: "Voir la visio conseil",
+      "Visio décision, second avis ou roadmap : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+    cta: "Voir le conseil techno",
   },
   en: {
-    eyebrow: "Credited to your quote",
-    title: "A web decision to make?",
+    eyebrow: "Web & AI Tech Compass",
+    title: "AI can code fast. But what should you build?",
     subtitle:
-      "WordPress themes & plugins, or the tech stack for your project: a video call to decide. Written recap — and the price is credited to your quote if we work together.",
-    cta: "See the advisory call",
+      "Decision call, second opinion or roadmap: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
+    cta: "See tech advice",
   },
 };
 

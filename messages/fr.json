@@ -38,7 +38,7 @@
     "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
     "wordpressExpress": "Dépannage WordPress",
-    "freeAiAudit": "Audit IA gratuit",
+    "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
     "tools": "Tous les outils",
@@ -103,10 +103,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — Devis site web, application, OETH ou audit IA",
-    "metaDescription": "Contactez Next Impact selon l'objet de votre demande : site web, application sur-mesure, avantage OETH (TIH), audit IA ou question technique. Réponse sous 24 h, devis personnalisé sous 48 h.",
+    "metaTitle": "Contact — décision techno, devis, prototype IA ou dépannage",
+    "metaDescription": "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet, construire si nécessaire ou demander un dépannage WordPress.",
     "title": "Contact",
-    "subtitle": "Site web, application sur-mesure, OETH, audit IA, question technique : choisissez l'objet de votre demande, je vous réponds sous 24 h.",
+    "subtitle": "Décision techno, second avis, roadmap, mise en œuvre ou dépannage WordPress : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -120,25 +120,25 @@
   },
   "ctaSection": {
     "audit": {
-      "badge": "Audit gratuit",
-      "title": "Évaluez votre site en 5 minutes",
+      "badge": "Diagnostic Web & IA",
+      "title": "Avant de construire, choisissez la bonne voie",
       "subtitleStart": "Recevez un",
       "subtitleHighlight": "rapport complet avec des recommandations personnalisées",
       "subtitleEnd": "— gratuit, sans engagement.",
       "pillPerformance": "Performance ↑",
       "pillRoi": "Projection ROI",
       "pillCost": "Maîtrise des coûts",
-      "ctaLabel": "Lancer mon audit gratuit",
+      "ctaLabel": "Lancer mon diagnostic",
       "footer": "Gratuit · Rapport en 5 minutes · Sans engagement"
     },
     "conversion": {
       "badge": "Questionnaire interactif",
-      "title": "Déterminez l'offre adaptée",
+      "title": "Déterminez le bon niveau de complexité",
       "promiseStart": "Obtenez une estimation personnalisée pour",
-      "promiseHighlight": "un site ou une application sur-mesure, performant et facile à administrer en autonomie",
+      "promiseHighlight": "la bonne option entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure",
       "promiseEnd": ".",
       "secondary": "Répondez à quelques questions pour recevoir une offre adaptée à votre profil et votre budget.",
-      "ctaLabel": "Démarrer mon projet",
+      "ctaLabel": "Clarifier mon projet",
       "footer": "Disponible · Réponse sous 24h · 20 ans d'expérience digitale dont 6 en développement"
     },
     "roi": {
@@ -146,7 +146,7 @@
       "title": "Calculez votre ROI",
       "promiseStart": "Mesurez le",
       "promiseHighlight": "manque à gagner dû à un site lent",
-      "promiseEnd": "et projetez vos revenus après modernisation (site Headless, web app ou refonte).",
+      "promiseEnd": "et comparez l'intérêt d'optimiser, réparer, refondre ou ne rien construire.",
       "secondary": "Résultats instantanés basés sur vos données réelles de trafic et de conversion.",
       "ctaLabel": "Simuler mon ROI",
       "footer": "Gratuit · Résultats instantanés · Sans engagement"
@@ -167,7 +167,7 @@
       "subtitle": "Pas besoin de tester ? Contactez-moi directement.",
       "available": "Disponible",
       "experience": "20 ans d'expérience digitale dont 6 en développement",
-      "wpHeadlessDev": "Création de sites et d'applications sur-mesure",
+      "wpHeadlessDev": "Conseil techno web & mise en œuvre",
       "tih": "Prestataire TIH",
       "company": "Next Impact Digital",
       "owner": "EI Agathe Karinthi-Martin",
@@ -185,15 +185,15 @@
     "breadcrumbSpecs": "Cahier des charges"
   },
   "toolsPage": {
-    "metaTitle": "Boîte à outils — Audit IA, AGEFIPH & Cahier des charges",
-    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web : audit IA, simulateur AGEFIPH, diagnostic d'opportunité PWA et générateur de cahier des charges.",
+    "metaTitle": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
+    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer une décision web : diagnostic Web & IA, simulateur AGEFIPH, opportunité PWA et cahier des charges.",
     "title": "Boîte à outils",
-    "subtitle": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web.",
+    "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
     "breadcrumbHome": "Accueil",
     "breadcrumbTools": "Outils",
     "backToTools": "Retour aux outils",
-    "collectionName": "Boîte à outils — Audit IA, AGEFIPH & Cahier des charges",
-    "collectionDescription": "Des outils gratuits pour évaluer, cadrer et préparer votre projet web."
+    "collectionName": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
+    "collectionDescription": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter."
   },
   "benchmarkingPage": {
     "metaTitle": "Benchmarking concurrentiel — Comparez votre site aux leaders",
@@ -210,8 +210,8 @@
     "breadcrumbRoi": "Simulateur de ROI"
   },
   "auditPage": {
-    "metaTitle": "Audit de site gratuit — un diagnostic clair en 2 minutes",
-    "metaDescription": "Analysez votre site selon 4 axes — performance, SEO, accessibilité, conversion — et recevez une recommandation concrète : optimiser l'existant, refondre, passer en Headless ou cadrer une application métier.",
+    "metaTitle": "Diagnostic Web & IA gratuit — une première orientation en 2 minutes",
+    "metaDescription": "Avant de construire avec l'IA, du no-code, WordPress ou du sur-mesure, obtenez une première orientation : réparer, optimiser, cadrer, refondre ou ne rien construire.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAudit": "Audit de site"
   },
@@ -222,10 +222,10 @@
     "breadcrumbDemo": "Démo"
   },
   "solutionsPage": {
-    "metaTitle": "Solutions Sites web & Applications sur-mesure - Next Impact",
-    "metaDescription": "Découvrez nos solutions adaptées à vos besoins : sites WordPress classiques, sites Headless WordPress + Next.js et applications web ou mobiles sur-mesure. De la TPE à la PME avec besoins avancés.",
-    "title": "Nos services",
-    "subtitle": "Choisissez la solution adaptée à vos besoins et à votre budget.",
+    "metaTitle": "Solutions Web & IA — choisir avant de construire",
+    "metaDescription": "Comparez les options utiles selon votre besoin : WordPress, no-code, IA coding, SaaS, Headless, outil métier ou absence de développement.",
+    "title": "Solutions Web & IA",
+    "subtitle": "Choisissez le bon niveau de complexité avant d'investir.",
     "breadcrumbHome": "Accueil",
     "breadcrumbSolutions": "Solutions"
   },
@@ -238,12 +238,12 @@
     "breadcrumbDocs": "Comprendre"
   },
   "blogPage": {
-    "metaTitle": "Blog | Next Impact Digital",
-    "metaDescription": "Notes, retours d'expérience et coulisses des projets web de Next Impact Digital."
+    "metaTitle": "Quelle techno web à l'heure de l'IA ? | Next Impact",
+    "metaDescription": "Conseils, comparatifs et retours d'expérience pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure."
   },
   "articlesPage": {
-    "metaTitle": "Articles & comparatifs | Next Impact Digital",
-    "metaDescription": "Analyses, comparatifs et retours d'expérience sur WordPress Headless, le ROI web et les solutions TIH/AGEFIPH."
+    "metaTitle": "Articles & comparatifs Web, IA et architecture | Next Impact",
+    "metaDescription": "Analyses pour décider quoi construire à l'heure de l'IA : architecture, maintenabilité, coût futur, WordPress, no-code, Headless et sur-mesure."
   },
   "realisations": {
     "tabs": {
@@ -258,8 +258,8 @@
   "caseStudiesPage": {
     "breadcrumbHome": "Accueil",
     "breadcrumbCaseStudies": "Études de cas",
-    "collectionName": "Études de cas WordPress Headless — Réalisations",
-    "collectionDescription": "Découvrez les projets réalisés : sites corporate, institutionnels, ESS, headless. Résultats concrets en performance, design et conversion."
+    "collectionName": "Études de cas — décisions techno et réalisations",
+    "collectionDescription": "Découvrez des projets où la techno a été choisie selon le besoin : WordPress, Headless, PWA, outil métier ou solution légère."
   },
   "caseStudyDetail": {
     "metaNotFoundTitle": "Étude de cas introuvable",
@@ -313,32 +313,32 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Services & Tarifs — Sites web et applications sur-mesure",
-    "metaDescription": "Trois forfaits sites web (Classique dès 2 250 €, Headless dès 4 000 €, Web app dès 6 500 €) et une offre Applications web & mobile sur devis. Avantage OETH transverse : 30 % de déduction AGEFIPH.",
+    "metaTitle": "Services — construire utile à l'heure de l'IA",
+    "metaDescription": "Après la Boussole Techno Web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Services & Tarifs",
     "calculateGain": {
       "title": "Calculez votre gain",
-      "description": "Estimez le retour sur investissement d'une migration Headless à partir de vos données réelles.",
+      "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",
       "ctaLabel": "Simuler mon ROI",
       "iconAlt": "Calculer"
     },
     "stackMethod": {
       "label": "Méthode & Transparence",
-      "title": "Comment je choisis votre stack",
+      "title": "Comment je choisis le bon niveau de complexité",
       "scope": {
         "title": "Périmètre fonctionnel",
-        "description": "Site vitrine, blog, e-commerce, application métier : chaque type de projet a sa stack idéale.",
+        "description": "Site, outil interne, annuaire, automatisation : chaque besoin ne mérite pas le même niveau de technique.",
         "iconAlt": "Périmètre"
       },
       "volume": {
         "title": "Volumétrie & trafic",
-        "description": "Sous 10k visites/mois, le monolithique optimisé suffit. Au-delà, le headless rentabilise vite.",
+        "description": "Trafic, contenus, données et dépendances indiquent s'il faut rester simple ou investir dans une architecture dédiée.",
         "iconAlt": "Volumétrie"
       },
       "scalability": {
         "title": "Évolutivité visée",
-        "description": "Intégrations API, multisites, applications métier : Next.js est le bon palier.",
+        "description": "SaaS, no-code, WordPress, IA coding, Headless ou sur-mesure : le bon palier dépend du coût futur.",
         "iconAlt": "Évolutivité"
       }
     },
@@ -349,30 +349,30 @@
     "shortcuts": {
       "tools": {
         "title": "Outils",
-        "description": "Simulateur ROI, audit de site et diagnostic IA pour évaluer votre présence digitale.",
+        "description": "Diagnostics et simulateurs pour choisir avant de construire.",
         "iconAlt": "Outils"
       },
       "demo": {
         "title": "Démo",
-        "description": "Découvrez en live la puissance du WordPress Headless sur votre projet.",
+        "description": "Découvrez des cas concrets : Headless, PWA, outil métier ou solution légère.",
         "iconAlt": "Démo"
       },
       "stack": {
-        "title": "Choisissez votre stack",
-        "description": "Répondez à quelques questions pour identifier la stack adaptée à votre projet.",
+        "title": "Choisissez votre voie",
+        "description": "Répondez à quelques questions pour identifier s'il faut réparer, cadrer, construire ou simplifier.",
         "iconAlt": "Stack"
       }
     }
   },
   "aboutPage": {
-    "metaTitle": "À propos de Next Impact — Agathe Karinthi-Martin, création de sites web et d'applications",
-    "metaDescription": "Agathe Karinthi-Martin est à la tête de Next Impact, studio indépendant spécialisé dans les sites web et applications performants, pour les PME et structures de l'ESS. 20 ans d'expérience digitale dont 6 en développement.",
+    "metaTitle": "À propos de Next Impact — conseil techno web à l'heure de l'IA",
+    "metaDescription": "Agathe Karinthi-Martin aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "journey": {
       "label": "Le parcours",
-      "title": "De l'utilisateur WordPress à l'architecte de stacks modernes",
-      "subtitle": "Vingt ans à manipuler, personnaliser puis reconstruire WordPress — du back-office à l'architecture headless.",
+      "title": "Du terrain WordPress à la boussole techno Web & IA",
+      "subtitle": "Vingt ans à utiliser, réparer, cadrer puis construire des solutions web — avec une conviction : la bonne techno dépend du besoin, pas de la mode.",
       "step1": {
         "year": "2005 — Le terrain",
         "title": "Quinze ans à utiliser WordPress avant de le coder",
@@ -387,7 +387,7 @@
       },
       "step3": {
         "year": "Aujourd'hui — Next Impact",
-        "title": "Trois stacks WordPress, une conviction",
+        "title": "Une boussole Web & IA, pas une techno par défaut",
         "imageAlt": "Aujourd'hui chez Next Impact",
         "items": {
           "user": {
@@ -396,11 +396,11 @@
           },
           "tech": {
             "label": "La maîtrise technique :",
-            "text": "Deux savoir-faire complémentaires — moderniser les sites WordPress qui en valent la peine (classique ou Headless + Next.js) et bâtir des applications web et mobiles sur-mesure quand WordPress n'est plus le bon outil."
+            "text": "Deux savoir-faire complémentaires — choisir le bon niveau de complexité, puis construire ou corriger quand la solution est claire."
           },
           "ai": {
             "label": "L'accélération par l'IA :",
-            "text": "Outils d'audit et workflows IA pour livrer plus vite des sites WordPress aux standards de la Tech."
+            "text": "L'IA accélère la production, mais renforce le besoin de cadrage : architecture, données, maintenance, sécurité et cohérence business."
           }
         },
         "figaroMention": "Une approche évoquée dans <lien>Le Figaro</lien>, sur la modernisation Headless des sites WordPress de PME."

@@ -22,12 +22,12 @@ export default function ServicesGuide({ needsGuide }: { needsGuide: GuideItem[] 
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
           index="№ 05"
-          kicker={isEn ? "Which stack" : "Quelle stack"}
-          title={isEn ? "Which stack for which project" : "Quelle stack pour quel projet"}
+          kicker={isEn ? "Which path" : "Quelle voie"}
+          title={isEn ? "Which complexity level for which need" : "Quel niveau de complexité pour quel besoin"}
           description={
             isEn
-              ? "Identify the solution that matches your main need"
-              : "Identifiez la solution adaptée à votre besoin principal"
+              ? "Identify whether you should fix, simplify, use SaaS, no-code, WordPress, Headless or custom"
+              : "Identifiez s'il faut réparer, simplifier, utiliser un SaaS, du no-code, WordPress, Headless ou du sur-mesure"
           }
         />
       </Reveal>

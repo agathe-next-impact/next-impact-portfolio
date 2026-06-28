@@ -186,10 +186,29 @@ export default function WordpressExpressPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 04 — Comment ça marche */}
+      {/* § 04 — Réparer ou refaire */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 04"
+          kicker={isEn ? "Repair or rebuild" : "Réparer ou refaire ?"}
+          title={
+            isEn
+              ? "Fix when enough. Rebuild only when justified."
+              : "Réparer quand c'est suffisant. Refaire seulement quand c'est justifié."
+          }
+          description={
+            isEn
+              ? "Some WordPress problems are solved in a short intervention. Others reveal a technical base that is too fragile. In that case, Next Impact helps you decide whether to fix, optimize or restart on a healthier foundation."
+              : "Certains problèmes WordPress se règlent en une intervention courte. D'autres révèlent une base technique trop fragile. Dans ce cas, Next Impact vous aide à décider s'il faut corriger, optimiser ou repartir sur une base plus saine."
+          }
+        />
+      </BlueprintSection>
+      <Separator />
+
+      {/* § 04 — Comment ça marche */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+        <SectionHeading
+          index="№ 05"
           kicker={isEn ? "How it works" : "Comment ça marche"}
           title={isEn ? "From request to fix" : "De la demande à la correction"}
         />
@@ -207,10 +226,10 @@ export default function WordpressExpressPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 05 — Demande d'intervention */}
+      {/* § 06 — Demande d'intervention */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 05"
+          index="№ 06"
           kicker={isEn ? "Intervention request" : "Demande d'intervention"}
           title={isEn ? "Describe your need" : "Décrivez votre besoin"}
           description={
@@ -242,10 +261,10 @@ export default function WordpressExpressPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 06 — FAQ */}
+      {/* § 07 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 06"
+          index="№ 07"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />

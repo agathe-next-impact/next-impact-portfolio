@@ -151,8 +151,8 @@ export default async function CategoryPage(props: CategoryPageProps) {
                 </p>
                 <p className="text-base font-medium text-foreground">
                   {locale === "en"
-                    ? "Headless WordPress — pillar page"
-                    : "WordPress Headless — page pilier"}
+                    ? "Headless WordPress"
+                    : "WordPress Headless"}
                 </p>
                 <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
                   {locale === "en"

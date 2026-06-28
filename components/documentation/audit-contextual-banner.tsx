@@ -21,7 +21,7 @@ export function AuditContextualBanner() {
 
       <div className="min-w-[12rem] flex-1">
         <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
-          {isEn ? "Which stack for your project?" : "Quelle stack pour votre projet ?"}
+          {isEn ? "Which path for your project?" : "Quelle voie pour votre projet ?"}
         </h3>
         <p className="font-inter-tight text-sm text-mid-gray">
           {isEn
