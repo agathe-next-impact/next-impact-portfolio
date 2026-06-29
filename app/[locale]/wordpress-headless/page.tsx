@@ -303,7 +303,7 @@ export default async function WordPressHeadlessPillarPage({
                 {isEn ? "Free site audit" : "Audit gratuit du site"}
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/services" className={BTN_SECONDARY}>
+              <Link href="/solutions-web" className={BTN_SECONDARY}>
                 {isEn ? "See offers and pricing" : "Voir les offres et tarifs"}
               </Link>
             </div>

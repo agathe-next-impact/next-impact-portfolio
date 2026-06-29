@@ -415,8 +415,8 @@ export default function SimulateurAgefiph() {
             {isEn ? "Start a project" : "Démarrer un projet"}
             <ArrowRight size={14} />
           </Link>
-          <Link href="/services" className={BTN_GHOST}>
-            {isEn ? "See services" : "Voir les services"}
+          <Link href="/solutions-web" className={BTN_GHOST}>
+            {isEn ? "See web solutions" : "Voir les solutions web"}
             <ArrowRight
               size={13}
               className="transition-transform group-hover:translate-x-0.5"

@@ -3,7 +3,7 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Services",
+    "services": "Solutions web",
     "oethAdvantage": "Avantage OETH",
     "demo": "Démo",
     "tools": "Outils en ligne",
@@ -28,7 +28,7 @@
     "rubReparer": "Réparer ou refaire",
     "rubAvantSigner": "Avant de signer",
     "rubOutilsMetier": "Outils métier",
-    "rubSignal": "Signal techno",
+    "rubPresence": "Présence et audience",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu"
   },
@@ -43,7 +43,7 @@
     "privacy": "Confidentialité",
     "updated": "Mis à jour : juin 2026",
     "about": "À propos",
-    "services": "Services",
+    "services": "Solutions web",
     "caseStudies": "Études de cas",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -248,8 +248,6 @@
     "subtitle": "Le centre de ressources pour comprendre WordPress Headless et Next.js.",
     "hubTitle": "Quelle techno web ?",
     "hubSubtitle": "Le centre de décision pour choisir la bonne technologie web à l'heure de l'IA — comprendre vos options avant de construire, refaire, réparer ou acheter.",
-    "libraryHeading": "Approfondir",
-    "librarySubtitle": "La bibliothèque : guides, tutoriels et concepts pour aller plus loin.",
     "breadcrumbHome": "Accueil",
     "breadcrumbDocs": "Comprendre"
   },
@@ -329,10 +327,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Services — construire utile à l'heure de l'IA",
+    "metaTitle": "Solutions web — construire utile à l'heure de l'IA",
     "metaDescription": "Après la Boussole Techno Web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
     "breadcrumbHome": "Accueil",
-    "breadcrumbServices": "Services & Tarifs",
+    "breadcrumbServices": "Solutions web & Tarifs",
     "calculateGain": {
       "title": "Calculez votre gain",
       "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",

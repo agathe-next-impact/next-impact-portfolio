@@ -375,7 +375,7 @@ export function ContactPageJsonLd() {
             name: "Mise en œuvre Next Impact",
             description: "Construire un site WordPress, Headless ou outil métier seulement si le besoin le justifie.",
             priceCurrency: "EUR",
-            url: `${siteConfig.url}/services`,
+            url: `${siteConfig.url}/solutions-web`,
           },
         ],
       },
@@ -657,7 +657,7 @@ export function HomepageJsonLd() {
               description:
                 "Construire un site WordPress, Headless ou outil métier seulement si le besoin le justifie.",
               priceCurrency: "EUR",
-              url: `${baseUrl}/services`,
+              url: `${baseUrl}/solutions-web`,
             },
           ],
         },

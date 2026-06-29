@@ -11,6 +11,9 @@ import {
   Scale,
   Compass,
   ScrollText,
+  Wrench,
+  FlaskConical,
+  Blocks,
   ArrowRight,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
@@ -49,6 +52,36 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     href: "/outils/decrypteur-devis",
     tag: isEn ? "New" : "Nouveau",
   },
+  "reparer-refaire": {
+    id: "reparer-refaire",
+    title: isEn ? "Repair or rebuild?" : "Réparer ou refaire ?",
+    description: isEn
+      ? "Is your site at the end of the road? 9 checks, a health score and a clear signal: repair, optimize or rebuild."
+      : "Votre site est-il en bout de course ? 9 vérifications, un score de santé et un signal clair : réparer, optimiser ou refondre.",
+    icon: Wrench,
+    href: "/outils/reparer-ou-refaire",
+    tag: isEn ? "New" : "Nouveau",
+  },
+  "prototype-ia": {
+    id: "prototype-ia",
+    title: isEn ? "AI prototype: throwaway or maintainable?" : "Prototype IA : jetable ou maintenable ?",
+    description: isEn
+      ? "Vibe-coded something with AI? 9 checks and a signal: keep the prototype, scope it, or rebuild it for production."
+      : "Un truc vibe-codé avec l'IA ? 9 vérifications et un signal : garder le prototype, le cadrer, ou le reconstruire pour la production.",
+    icon: FlaskConical,
+    href: "/outils/prototype-ia",
+    tag: isEn ? "New" : "Nouveau",
+  },
+  "nocode-saas-surmesure": {
+    id: "nocode-saas-surmesure",
+    title: isEn ? "No-code, SaaS or custom?" : "No-code, SaaS ou sur-mesure ?",
+    description: isEn
+      ? "Build, buy or no-code? 8 criteria to find the right family for your tool."
+      : "Construire, acheter ou no-code ? 8 critères pour trouver la bonne famille pour votre outil.",
+    icon: Blocks,
+    href: "/outils/nocode-saas-surmesure",
+    tag: isEn ? "New" : "Nouveau",
+  },
   "determiner-offre": {
     id: "determiner-offre",
     title: isEn ? "Project diagnostic" : "Diagnostic projet",
@@ -56,7 +89,7 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       ? "In a few clicks, identify the right path: classic WordPress, Headless + Next.js, web app or mobile."
       : "Identifiez en quelques clics la voie adaptée : site WordPress classique, Headless + Next.js, web app ou mobile.",
     icon: BadgePercent,
-    href: "/services/eligibilite",
+    href: "/solutions-web/eligibilite",
   },
   "cahier-des-charges": {
     id: "cahier-des-charges",
@@ -99,10 +132,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["boussole", "decrypteur-devis", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["boussole", "decrypteur-devis", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["boussole", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "audit-ia", "audit-pwa", "simulateur-agefiph"],
-  developpeur: ["boussole", "audit-pwa", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["boussole", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["boussole", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["boussole", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
+  developpeur: ["boussole", "prototype-ia", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {

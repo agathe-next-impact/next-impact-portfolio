@@ -3,7 +3,7 @@
 // Bannière de maillage contextuel vers /audit-site-web. Variante choisie selon la
 // page hôte (services, contenu Headless, étude de cas). Modèle :
 // components/documentation/audit-contextual-banner.tsx (qui pointe, lui, vers le
-// diagnostic de stack /services/eligibilite). Tokens DS uniquement, i18n inline.
+// diagnostic de stack /solutions-web/eligibilite). Tokens DS uniquement, i18n inline.
 
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Gauge } from "lucide-react";

@@ -58,12 +58,12 @@ const nextConfig = {
     return [
       {
         source: '/tarifs',
-        destination: '/services',
+        destination: '/solutions-web',
         permanent: true,
       },
       {
         source: '/tarifs/eligibilite',
-        destination: '/services/eligibilite',
+        destination: '/solutions-web/eligibilite',
         permanent: true,
       },
       {
@@ -73,7 +73,40 @@ const nextConfig = {
       },
       {
         source: '/articles/wordpress-headless-impact-social-pme-engagees',
-        destination: '/services',
+        destination: '/solutions-web',
+        permanent: true,
+      },
+      // Renommage du slug /services → /solutions-web (+ page /solutions supprimée).
+      // 301 pour préserver le SEO et ne casser aucun lien externe existant.
+      // next-intl localePrefix "as-needed" : FR sans préfixe, EN préfixé /en.
+      {
+        source: '/services',
+        destination: '/solutions-web',
+        permanent: true,
+      },
+      {
+        source: '/en/services',
+        destination: '/en/solutions-web',
+        permanent: true,
+      },
+      {
+        source: '/services/eligibilite',
+        destination: '/solutions-web/eligibilite',
+        permanent: true,
+      },
+      {
+        source: '/en/services/eligibilite',
+        destination: '/en/solutions-web/eligibilite',
+        permanent: true,
+      },
+      {
+        source: '/solutions',
+        destination: '/solutions-web',
+        permanent: true,
+      },
+      {
+        source: '/en/solutions',
+        destination: '/en/solutions-web',
         permanent: true,
       },
       // Renommage du slug de catégorie documentation : headless-cms → wordpress-headless

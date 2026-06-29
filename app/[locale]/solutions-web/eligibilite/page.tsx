@@ -19,7 +19,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Identify in 2 minutes the path that fits your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
         : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile.",
-    path: "/services/eligibilite",
+    path: "/solutions-web/eligibilite",
     keywords:
       locale === "en"
         ? ["project diagnostic", "classic WordPress", "Headless WordPress Next.js", "custom web app", "mobile PWA"]

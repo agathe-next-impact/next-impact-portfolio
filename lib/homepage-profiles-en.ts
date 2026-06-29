@@ -17,7 +17,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
       "Next Impact helps small teams choose the right web technology in the age of AI-assisted coding. WordPress, no-code, AI coding, SaaS, Headless or a business tool: decide what is useful, maintainable and profitable before producing.",
     valueProposition:
       "Independent advice, scoping and implementation to avoid fragile tools, overbuilt stacks and poorly sized projects.",
-    ctaPrimary: { label: "Run the Web & AI diagnostic", href: "/services/eligibilite" },
+    ctaPrimary: { label: "Run the Web & AI diagnostic", href: "/solutions-web/eligibilite" },
     ctaSecondary: { label: "Book a decision call", href: "/conseil" },
     auditTitle: "Which web technology in the age of AI?",
     auditSubtitle: "Web & AI Tech Compass",
@@ -96,7 +96,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "Answer a few questions to identify the right path for your project — classic WordPress site, Headless site, web app or mobile app.",
     ctaLabel: "Run the diagnostic",
-    ctaHref: "/services/eligibilite",
+    ctaHref: "/solutions-web/eligibilite",
     faqs: [
       {
         question: "Will I still be able to edit my own copy?",
@@ -145,7 +145,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "In 2 minutes, identify the right level of modernization for your project and estimate the performance gains you can expect.",
     ctaLabel: "Pick my stack",
-    ctaHref: "/services/eligibilite",
+    ctaHref: "/solutions-web/eligibilite",
     faqs: [
       {
         question: "What's the concrete return on investment?",
@@ -194,7 +194,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
     ctaDescription:
       "Answer a few simple questions to find the formula that best matches your project.",
     ctaLabel: "Pick my stack",
-    ctaHref: "/services/eligibilite",
+    ctaHref: "/solutions-web/eligibilite",
     faqs: [
       {
         question: "Will I have to learn a new tool?",

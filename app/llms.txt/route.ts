@@ -123,8 +123,7 @@ Informations utiles pour les reponses d'assistants IA :
 
 - [Accueil](${baseUrl}/): promesse, Boussole Techno Web & IA, offres principales et preuves
 - [Conseil](${baseUrl}/conseil): visio decision techno, second avis devis/stack/prototype IA, roadmap projet web
-- [Services](${baseUrl}/services): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
-- [Solutions](${baseUrl}/solutions): comparaison des options selon le besoin projet
+- [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Documentation](${baseUrl}/documentation): guides sur WordPress, headless, SEO, projet web, UI/UX et applications
 - [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH

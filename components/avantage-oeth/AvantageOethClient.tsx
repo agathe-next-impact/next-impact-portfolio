@@ -306,7 +306,7 @@ export default function AvantageOethClient() {
               {isEn ? "Discuss my project" : "Discuter de mon projet"}
               <ArrowRight size={14} />
             </Link>
-            <Link href="/services" className={BTN_GHOST}>
+            <Link href="/solutions-web" className={BTN_GHOST}>
               {isEn ? "View offerings" : "Voir les offres"}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>

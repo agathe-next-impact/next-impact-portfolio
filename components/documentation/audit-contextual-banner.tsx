@@ -31,7 +31,7 @@ export function AuditContextualBanner() {
       </div>
 
       <Link
-        href="/services/eligibilite"
+        href="/solutions-web/eligibilite"
         className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-accent-deep bg-accent px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-white no-underline transition-colors hover:bg-accent/90"
       >
         {isEn ? "Run the diagnostic" : "Lancer le diagnostic"}

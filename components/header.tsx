@@ -8,15 +8,15 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 
-// Le hub « Quelle techno web ? » — méga-menu : les 6 rubriques décisionnelles
-// (ancres sur /documentation) + accès aux outils et à la bibliothèque.
+// Le hub « Quelle techno web ? » — méga-menu : les 6 pages thématiques
+// (parcours 4 temps) + accès aux outils et à la bibliothèque.
 const HUB_RUBRIQUES = [
-  { key: "rubChoisir",      href: "/documentation#choisir" },
-  { key: "rubIa",           href: "/documentation#ia-et-code" },
-  { key: "rubReparer",      href: "/documentation#reparer" },
-  { key: "rubAvantSigner",  href: "/documentation#avant-signer" },
-  { key: "rubOutilsMetier", href: "/documentation#outils-metier" },
-  { key: "rubSignal",       href: "/documentation#signal" },
+  { key: "rubChoisir",      href: "/documentation/choisir" },
+  { key: "rubIa",           href: "/documentation/ia-et-code" },
+  { key: "rubReparer",      href: "/documentation/reparer" },
+  { key: "rubAvantSigner",  href: "/documentation/avant-signer" },
+  { key: "rubOutilsMetier", href: "/documentation/outils-metier" },
+  { key: "rubPresence",     href: "/documentation/presence" },
 ] as const;
 
 const HUB_LINKS = [
@@ -29,7 +29,7 @@ const HUB_LINKS = [
 // → Réalisations (preuve) → À propos. Le hub a son propre méga-menu à gauche.
 const NAV_LINKS = [
   { key: "conseil",     href: "/conseil" },
-  { key: "services",    href: "/services" },
+  { key: "services",    href: "/solutions-web" },
   { key: "caseStudies", href: "/etudes-de-cas" },
   { key: "about",       href: "/a-propos" },
 ] as const;

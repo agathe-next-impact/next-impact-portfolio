@@ -8,7 +8,7 @@ const FOOT_LINK =
   "font-mono text-[11px] uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
 
 const NAV_LINKS = [
-  { href: "/services",            key: "services" },
+  { href: "/solutions-web",            key: "services" },
   { href: "/wordpress-headless",  key: "wordpressHeadlessPillar" },
   { href: "/etudes-de-cas",       key: "caseStudies" },
   { href: "/documentation",       key: "documentation" },

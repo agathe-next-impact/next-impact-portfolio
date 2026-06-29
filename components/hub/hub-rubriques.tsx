@@ -1,8 +1,9 @@
 // HubRubriques — couche décisionnelle du hub « Quelle techno web ? ».
-// Bandeau-méthode Boussole (8 critères) + 6 rubriques par question, chacune en
-// ancre (#choisir, #ia-et-code, …) reliant des contenus/outils EXISTANTS et une
-// CTA « prochaine étape » vers l'offre. Démonstratif (décision) au premier plan ;
-// les catégories encyclopédiques restent en couche « Approfondir » sous ce bloc.
+// Bandeau-méthode Boussole (8 critères) + 6 rubriques par question. Le titre de
+// chaque rubrique pointe vers sa page thématique /documentation/<slug> (parcours
+// 4 temps) ; les liens reprennent les outils EXISTANTS et la CTA « prochaine
+// étape » route vers l'offre. Démonstratif (décision) au premier plan ; les
+// catégories encyclopédiques restent en couche « Approfondir » sous ce bloc.
 // Tokens DS uniquement, i18n inline (modèle : visio-conseil-banner.tsx).
 
 import { Link } from "@/i18n/navigation";
@@ -13,7 +14,7 @@ import {
   Wrench,
   ScrollText,
   Boxes,
-  Radio,
+  Megaphone,
   ArrowRight,
   ArrowUpRight,
 } from "lucide-react";
@@ -76,6 +77,7 @@ const COPY: Record<
         title: "IA & code",
         question: "L'IA peut coder vite. Mais faut-il construire ?",
         links: [
+          { label: "Prototype IA : jetable ou maintenable ?", href: "/outils/prototype-ia" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
           { label: "Le blog techno", href: "/blog" },
         ],
@@ -87,6 +89,7 @@ const COPY: Record<
         title: "Réparer ou refaire",
         question: "Mon site est-il en bout de course ?",
         links: [
+          { label: "Réparer ou refaire ?", href: "/outils/reparer-ou-refaire" },
           { label: "Auditer mon site", href: "/audit-site-web" },
           { label: "Dépannage WordPress", href: "/depannage-wordpress" },
         ],
@@ -110,21 +113,22 @@ const COPY: Record<
         title: "Outils métier",
         question: "Annuaire, carte, espace membre : construire ou non ?",
         links: [
+          { label: "No-code, SaaS ou sur-mesure ?", href: "/outils/nocode-saas-surmesure" },
           { label: "Diagnostic d'opportunité PWA", href: "/outils/audit-pwa" },
-          { label: "Diagnostic projet", href: "/services/eligibilite" },
+          { label: "Diagnostic projet", href: "/solutions-web/eligibilite" },
         ],
         next: { label: "Cadrer avec une roadmap", href: "/conseil" },
       },
       {
-        id: "signal",
-        icon: Radio,
-        title: "Signal techno",
-        question: "Une veille web & IA décryptée pour décider.",
+        id: "presence",
+        icon: Megaphone,
+        title: "Présence et audience",
+        question: "Site, newsletter, LinkedIn : où investir ?",
         links: [
-          { label: "Le blog techno", href: "/blog" },
-          { label: "Tous les outils", href: "/outils" },
+          { label: "La Boussole Techno Web & IA", href: "/outils/boussole" },
+          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "Découvrir les services", href: "/services" },
+        next: { label: "En parler en visio — 180 €", href: "/conseil" },
       },
     ],
   },
@@ -166,6 +170,7 @@ const COPY: Record<
         title: "AI & code",
         question: "AI can code fast. But should you build?",
         links: [
+          { label: "AI prototype: throwaway or maintainable?", href: "/outils/prototype-ia" },
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
           { label: "The tech blog", href: "/blog" },
         ],
@@ -177,6 +182,7 @@ const COPY: Record<
         title: "Repair or rebuild",
         question: "Is my site reaching the end of the road?",
         links: [
+          { label: "Repair or rebuild?", href: "/outils/reparer-ou-refaire" },
           { label: "Audit my site", href: "/audit-site-web" },
           { label: "WordPress support", href: "/depannage-wordpress" },
         ],
@@ -200,21 +206,22 @@ const COPY: Record<
         title: "Business tools",
         question: "Directory, map, member area: build or not?",
         links: [
+          { label: "No-code, SaaS or custom?", href: "/outils/nocode-saas-surmesure" },
           { label: "PWA opportunity diagnostic", href: "/outils/audit-pwa" },
-          { label: "Project diagnostic", href: "/services/eligibilite" },
+          { label: "Project diagnostic", href: "/solutions-web/eligibilite" },
         ],
         next: { label: "Frame it with a roadmap", href: "/conseil" },
       },
       {
-        id: "signal",
-        icon: Radio,
-        title: "Tech signal",
-        question: "Web & AI news, decoded to help you decide.",
+        id: "presence",
+        icon: Megaphone,
+        title: "Presence & audience",
+        question: "Site, newsletter, LinkedIn: where to invest?",
         links: [
-          { label: "The tech blog", href: "/blog" },
-          { label: "All tools", href: "/outils" },
+          { label: "The Web & AI Tech Compass", href: "/outils/boussole" },
+          { label: "Web & AI diagnostic", href: "/audit-site-web" },
         ],
-        next: { label: "Explore the services", href: "/services" },
+        next: { label: "Talk it through on a call", href: "/conseil" },
       },
     ],
   },
@@ -281,7 +288,16 @@ export function HubRubriques({ locale }: { locale: Locale }) {
                     </span>
                   </div>
                   <h3 className="mb-1.5 text-lg font-light leading-snug tracking-tight text-foreground">
-                    {r.title}
+                    <Link
+                      href={`/documentation/${r.id}` as Parameters<typeof Link>[0]["href"]}
+                      className="group/title inline-flex items-start gap-1 text-foreground no-underline transition-colors hover:text-vermilion"
+                    >
+                      {r.title}
+                      <ArrowUpRight
+                        size={14}
+                        className="mt-1 shrink-0 text-mid-gray transition-transform group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
+                      />
+                    </Link>
                   </h3>
                   <p className="mb-5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                     {r.question}

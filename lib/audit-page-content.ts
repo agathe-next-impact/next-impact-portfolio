@@ -264,7 +264,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
     triPhrase:
       "Si vous n'avez pas encore de site, commencez par le diagnostic projet.",
     triCta: "Diagnostic projet",
-    triHref: "/services/eligibilite",
+    triHref: "/solutions-web/eligibilite",
   },
   preuves: {
     kicker: "Preuves",
@@ -287,7 +287,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
         description:
           "Votre site est sain mais bridé par le thème, les images ou des plugins lourds. Quelques optimisations ciblées suffisent à regagner vitesse et stabilité.",
         offerLabel: "Voir l'offre WordPress optimisé",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "B",
@@ -295,7 +295,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
         description:
           "La base est trop datée ou rigide pour être rattrapée. Une refonte WordPress propre, rapide et facile à gérer remet le site au niveau.",
         offerLabel: "Voir l'offre refonte WordPress",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "C",
@@ -303,7 +303,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
         description:
           "Contenu éditorial fréquent et exigence forte de performance ou de SEO : un front Next.js adossé à votre WordPress débloque vitesse et agilité.",
         offerLabel: "Voir l'offre Headless + Next.js",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "D",
@@ -492,7 +492,7 @@ const AUDIT_PAGE_EN: AuditPageContent = {
     triPhrase:
       "If you don't have a site yet, start with the project diagnosis.",
     triCta: "Project diagnosis",
-    triHref: "/services/eligibilite",
+    triHref: "/solutions-web/eligibilite",
   },
   preuves: {
     kicker: "Proof",
@@ -515,7 +515,7 @@ const AUDIT_PAGE_EN: AuditPageContent = {
         description:
           "Your site is healthy but held back by the theme, images or heavy plugins. A few targeted optimizations are enough to regain speed and stability.",
         offerLabel: "See the optimized WordPress offer",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "B",
@@ -523,7 +523,7 @@ const AUDIT_PAGE_EN: AuditPageContent = {
         description:
           "The foundation is too dated or rigid to catch up. A clean, fast, easy-to-manage WordPress rebuild brings the site back up to standard.",
         offerLabel: "See the WordPress rebuild offer",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "C",
@@ -531,7 +531,7 @@ const AUDIT_PAGE_EN: AuditPageContent = {
         description:
           "Frequent editorial content and high performance or SEO demands: a Next.js front-end on top of your WordPress unlocks speed and agility.",
         offerLabel: "See the Headless + Next.js offer",
-        href: "/services",
+        href: "/solutions-web",
       },
       {
         code: "D",

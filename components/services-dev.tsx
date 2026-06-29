@@ -75,7 +75,7 @@ export const ServicesDev = () => {
           ))}
         </div>
 
-        <Link href="/services" className="btn">
+        <Link href="/solutions-web" className="btn">
           Voir tous les détails →
         </Link>
       </div>
@@ -132,7 +132,7 @@ export const ServicesDev = () => {
           ))}
         </div>
 
-        <Link href="/services" className="btn">
+        <Link href="/solutions-web" className="btn">
           Voir tous les détails →
         </Link>
       </div>

@@ -3,7 +3,7 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Services",
+    "services": "Web solutions",
     "oethAdvantage": "OETH Advantage",
     "demo": "Demo",
     "tools": "Online Tools",
@@ -28,7 +28,7 @@
     "rubReparer": "Repair or rebuild",
     "rubAvantSigner": "Before you sign",
     "rubOutilsMetier": "Business tools",
-    "rubSignal": "Tech signal",
+    "rubPresence": "Presence & audience",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -43,7 +43,7 @@
     "privacy": "Privacy",
     "updated": "Updated: June 2026",
     "about": "About",
-    "services": "Services",
+    "services": "Web solutions",
     "caseStudies": "Case studies",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -248,8 +248,6 @@
     "subtitle": "The resource center to understand Headless WordPress and Next.js.",
     "hubTitle": "Which web tech?",
     "hubSubtitle": "The decision hub to choose the right web technology in the age of AI — understand your options before you build, rebuild, fix or buy.",
-    "libraryHeading": "Go deeper",
-    "librarySubtitle": "The library: guides, tutorials and concepts to dig further.",
     "breadcrumbHome": "Home",
     "breadcrumbDocs": "Learn"
   },
@@ -329,10 +327,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Services — build what helps in the age of AI",
+    "metaTitle": "Web solutions — build what helps in the age of AI",
     "metaDescription": "After the Web & AI Tech Compass, Next Impact builds only when it is the right choice: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500.",
     "breadcrumbHome": "Home",
-    "breadcrumbServices": "Services & Pricing",
+    "breadcrumbServices": "Web solutions & Pricing",
     "calculateGain": {
       "title": "Calculate your gain",
       "description": "Estimate whether optimizing, fixing, rebuilding or building can actually pay off.",

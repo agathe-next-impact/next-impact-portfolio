@@ -152,7 +152,7 @@ chaque rubrique. C'est le fil rouge qui distingue le hub d'un blog.
 
 ## 4. Outils en ligne
 
-7 outils pensés comme **aides à la décision** : chacun répond à une question d'une
+5 outils pensés comme **aides à la décision** : chacun répond à une question d'une
 rubrique, rend un **signal** (jamais une réponse complète), et **route vers une
 offre**. Tous réalisables en **questionnaire / calculateur client-side** (pas
 d'API lourde, cohérent avec le choix sans Stripe et l'audit réel mocké). Les deux
@@ -180,8 +180,6 @@ Second avis, capte les prospects proches d'achat) et **prototype IA** (incarne
 | Outil | Rubrique | Question | Signal de sortie | Offre cible |
 |---|---|---|---|---|
 | **No-code, SaaS ou sur-mesure ?** | Choisir / Outils métier | « Webflow, un SaaS, ou du développement ? » | Autonomie, budget, spécificité, données, volume → famille recommandée | Visio / Services |
-| **Annuaire / plateforme métier : faut-il construire ?** | Outils métier | « Plugin, SaaS existant, ou plateforme dédiée ? » | Nb d'entrées, recherche/carte, espace membre, paiement, MAJ → *plugin / SaaS / sur-mesure justifié* + fourchette budget | **Roadmap 950 €+ / Plateforme 6 500 €+** |
-| **Newsletter propriétaire ou LinkedIn ?** | Signal techno / Choisir | « Où héberger ma newsletter ? » | Propriété des contacts, délivrabilité, SEO, monétisation → reco | Visio / Services |
 
 ### Outils existants à conserver et re-rattacher au hub (pas de doublon)
 

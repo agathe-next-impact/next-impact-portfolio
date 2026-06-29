@@ -16,7 +16,7 @@ const BTN_GHOST =
 
 /**
  * HomeDiagnostic — bandeau CTA (et non plus l'outil embarqué) : la home appelle
- * le diagnostic, qui vit sur sa page dédiée (/services/eligibilite). Allège le
+ * le diagnostic, qui vit sur sa page dédiée (/solutions-web/eligibilite). Allège le
  * bas de page (une seule décision) et garde le diagnostic comme dé-surchargeur.
  */
 export default function HomeDiagnostic({ index = "№ 09" }: { index?: string }) {
@@ -43,7 +43,7 @@ export default function HomeDiagnostic({ index = "№ 09" }: { index?: string })
           description={variant.auditDescription}
         />
         <div className="flex flex-wrap gap-3 lg:shrink-0">
-          <Link href="/services/eligibilite" className={BTN_PRIMARY}>
+          <Link href="/solutions-web/eligibilite" className={BTN_PRIMARY}>
             {isEn ? "Run the diagnostic — 2 min" : "Lancer le diagnostic — 2 min"}
             <ArrowRight size={14} />
           </Link>

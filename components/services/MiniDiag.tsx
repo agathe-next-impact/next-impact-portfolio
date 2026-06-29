@@ -58,7 +58,7 @@ function getOptions(isEn: boolean): Option[] {
 /**
  * MiniDiag — orienteur 1 question. Ramène le choix des 3 forfaits à UNE décision :
  * le visiteur dit ce qu'est son projet, on recommande le forfait + on pointe vers
- * lui. Pour aller plus loin, lien vers le diagnostic complet (/services/eligibilite).
+ * lui. Pour aller plus loin, lien vers le diagnostic complet (/solutions-web/eligibilite).
  */
 export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
   const locale = useLocale() as Locale;
@@ -138,7 +138,7 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
                 <ArrowRight size={14} />
               </a>
               <Link
-                href="/services/eligibilite"
+                href="/solutions-web/eligibilite"
                 className="inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
               >
                 {isEn ? "Full diagnostic" : "Diagnostic complet"}
@@ -150,7 +150,7 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
       ) : (
         <Reveal className="mt-6">
           <Link
-            href="/services/eligibilite"
+            href="/solutions-web/eligibilite"
             className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
           >
             {isEn ? "Or run the full diagnostic — 2 min" : "Ou lancez le diagnostic complet — 2 min"}

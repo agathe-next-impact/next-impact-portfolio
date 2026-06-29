@@ -404,7 +404,7 @@ export const pageMetadata = {
     return generatePageMetadata({
       title: m.title,
       description: m.description,
-      path: "/services",
+      path: "/solutions-web",
       keywords: m.keywords,
       locale,
     });

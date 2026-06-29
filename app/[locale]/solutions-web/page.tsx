@@ -22,7 +22,7 @@ export async function generateMetadata({
   return generatePageMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
-    path: "/services",
+    path: "/solutions-web",
     keywords:
       locale === "en"
         ? [
@@ -63,7 +63,7 @@ export default async function ServicesPage({
 
   const breadcrumbItems = [
     { name: t("breadcrumbHome"), url: "/" },
-    { name: t("breadcrumbServices"), url: "/services" },
+    { name: t("breadcrumbServices"), url: "/solutions-web" },
   ]
 
   return (
@@ -81,7 +81,7 @@ export default async function ServicesPage({
             : "Sites web et applications sur-mesure : WordPress classique, Headless WordPress + Next.js, web apps et PWA mobile. Solutions adaptées aux PME, entreprises et organisations à fort enjeu web."
         }
         serviceType={locale === "en" ? "Web development" : "Développement web"}
-        url="/services"
+        url="/solutions-web"
       />
       <FAQJsonLd
         questions={faqs.map(faq => ({

@@ -80,15 +80,7 @@ export default async function DocumentationPage({
             <HubRubriques locale={locale} />
 
             {/* Couche 2 — bibliothèque : contenus encyclopédiques (démotés) */}
-            <div className="mb-10 border-t border-dark-gray pt-12">
-              <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
-                {t("libraryHeading")}
-              </p>
-              <h2 className="max-w-2xl text-2xl font-light tracking-tight text-foreground">
-                {t("librarySubtitle")}
-              </h2>
-            </div>
-            <BentoGrid />
+            <div className="mb-10 border-t border-dark-gray pt-12" />
             <AuditContextualBanner />
             <AllCategoriesGrid />
             <DocumentationToolsSection />

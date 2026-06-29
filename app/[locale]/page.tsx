@@ -49,7 +49,7 @@ export default async function Home({
             : "Modernisation de sites WordPress vieillissants et développement d'applications Next.js sur-mesure : WordPress optimisé, Headless WordPress + Next.js, web app et PWA. Budget et délai fixés dès le départ."
         }
         serviceType={isEn ? "Web development" : "Développement web"}
-        url="/services"
+        url="/solutions-web"
       />
       <FAQJsonLd
         questions={faq.items.map((f) => ({

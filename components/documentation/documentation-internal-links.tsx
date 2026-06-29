@@ -65,7 +65,7 @@ const TOOL_LINKS_EN: ToolLink[] = [
 
 const SERVICE_LINKS_FR: ToolLink[] = [
   {
-    href: "/services",
+    href: "/solutions-web",
     title: "Nos offres",
     description: "Mise en œuvre après une décision Web & IA claire.",
     icon: Briefcase,
@@ -89,7 +89,7 @@ const SERVICE_LINKS_FR: ToolLink[] = [
 
 const SERVICE_LINKS_EN: ToolLink[] = [
   {
-    href: "/services",
+    href: "/solutions-web",
     title: "Our offerings",
     description: "Implementation after a clear Web & AI decision.",
     icon: Briefcase,
@@ -477,7 +477,7 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/services", title: t("Our offerings", "Nos offres") },
+        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
       ];
     case "wordpress":
       return [
@@ -491,7 +491,7 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/documentation/marketing-digital", title: t("Digital marketing", "Marketing Digital") },
-        { href: "/services", title: t("Our SEO offerings", "Nos offres SEO") },
+        { href: "/solutions-web", title: t("Our SEO offerings", "Nos offres SEO") },
       ];
     case "design-ui-ux":
       return [
@@ -521,7 +521,7 @@ function getCategoryRelevantLinks(
         ...base,
         { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
-        { href: "/services", title: t("Our offerings", "Nos offres") },
+        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
       ];
   }

@@ -48,7 +48,7 @@ export default function ServicesClient() {
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
             <span>№ 01</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
-            <span className="text-mid-gray">Services</span>
+            <span className="text-mid-gray">{isEn ? "Web solutions" : "Solutions web"}</span>
           </div>
           <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             <WordAppear text={variant.titre} />
@@ -59,7 +59,7 @@ export default function ServicesClient() {
             </p>
           )}
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/services/eligibilite" className={BTN_PRIMARY}>
+            <Link href="/solutions-web/eligibilite" className={BTN_PRIMARY}>
               {isEn ? "Run the diagnostic — 2 min" : "Lancer le diagnostic — 2 min"}
               <ArrowRight size={14} />
             </Link>
@@ -228,7 +228,7 @@ export default function ServicesClient() {
           {([
             { href: "/outils", Icon: ScanLine, title: t("shortcuts.tools.title"), desc: t("shortcuts.tools.description") },
             { href: "/demo", Icon: Monitor, title: t("shortcuts.demo.title"), desc: t("shortcuts.demo.description") },
-            { href: "/services/eligibilite", Icon: SlidersHorizontal, title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
+            { href: "/solutions-web/eligibilite", Icon: SlidersHorizontal, title: t("shortcuts.stack.title"), desc: t("shortcuts.stack.description") },
           ] as { href: string; Icon: LucideIcon; title: string; desc: string }[]).map((card, i, arr) => (
             <StaggerItem key={card.href}>
               <Link

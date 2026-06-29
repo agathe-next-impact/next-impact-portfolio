@@ -68,7 +68,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Comprendre le headless (pour comparer)", labelEn: "Understand headless (to compare)", href: "/wordpress-headless" },
       { labelFr: "Simulateur de tarifs", labelEn: "Pricing simulator", href: "/tarifs" },
     ],
-    next: { labelFr: "Voir les services", labelEn: "See the services", href: "/services" },
+    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
   },
   nocode: {
     labelFr: "No-code (Webflow, Framer, Airtable…)",
@@ -94,7 +94,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Comprendre le headless", labelEn: "Understand headless", href: "/wordpress-headless" },
       { labelFr: "Quiz WordPress ou Headless", labelEn: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
     ],
-    next: { labelFr: "Voir les services", labelEn: "See the services", href: "/services" },
+    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",
@@ -118,7 +118,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       "Directory, member area, specific data, features that exist nowhere else: bespoke is justified. To be scoped precisely before building.",
     links: [
       { labelFr: "Générer un cahier des charges", labelEn: "Generate a project brief", href: "/cahier-des-charges" },
-      { labelFr: "Diagnostic projet", labelEn: "Project diagnostic", href: "/services/eligibilite" },
+      { labelFr: "Diagnostic projet", labelEn: "Project diagnostic", href: "/solutions-web/eligibilite" },
     ],
     next: { labelFr: "Cadrer avec une roadmap", labelEn: "Frame it with a roadmap", href: "/conseil" },
   },

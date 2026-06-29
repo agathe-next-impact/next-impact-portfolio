@@ -57,8 +57,8 @@ const OFFERS_FR: Offer[] = [
       "Dépannage WordPress dès 69 € HT",
     ],
     target: "Quand le besoin le justifie",
-    href: "/services",
-    cta: "Voir les services",
+    href: "/solutions-web",
+    cta: "Voir les solutions web",
   },
 ];
 
@@ -92,7 +92,7 @@ const OFFERS_EN: Offer[] = [
   },
   {
     subtitle: "Build",
-    title: "Services",
+    title: "Web solutions",
     price: "from €2,250 excl. VAT",
     items: [
       "Optimized WordPress, Headless + Next.js or business tool",
@@ -100,8 +100,8 @@ const OFFERS_EN: Offer[] = [
       "WordPress support from €69 excl. VAT",
     ],
     target: "When the need justifies it",
-    href: "/services",
-    cta: "See the services",
+    href: "/solutions-web",
+    cta: "See the web solutions",
   },
 ];
 
@@ -215,7 +215,7 @@ export default function HomeOffres() {
             {isEn ? "Pricing simulator →" : "Simulateur de tarifs →"}
           </Link>
           <Link
-            href="/services"
+            href="/solutions-web"
             className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
           >
             {isEn ? "Compare in detail" : "Comparer en détail"}
