@@ -70,7 +70,7 @@ const COPY: Record<Locale, Copy> = {
       "Maintenance continue de l'infrastructure",
       "Équipe technique nécessaire pour les évolutions structurelles",
     ],
-    proofsLabel: "Réalisations",
+    proofsLabel: "Études de cas",
     proofs: [
       { slug: "panorama-pub", title: "Panorama Pub", tagline: "Marketplace B2B livrée en 2 mois — admin autonome sur-mesure", imageUrl: "/img/desktop-screen-panoramapub.png" },
       { slug: "hermitage-jeu-de-piste", title: "Hermitage — Jeu de piste", tagline: "Application mobile PWA — géolocalisée, installable sans store, hors-ligne", imageUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg" },
@@ -116,7 +116,7 @@ const COPY: Record<Locale, Copy> = {
       "Ongoing infrastructure maintenance",
       "Technical team required for structural changes",
     ],
-    proofsLabel: "Selected work",
+    proofsLabel: "Case studies",
     proofs: [
       { slug: "panorama-pub", title: "Panorama Pub", tagline: "B2B marketplace shipped in 2 months — custom autonomous admin", imageUrl: "/img/desktop-screen-panoramapub.png" },
       { slug: "hermitage-jeu-de-piste", title: "Hermitage — Treasure Hunt", tagline: "Mobile PWA — geolocated, store-free install, offline", imageUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg" },

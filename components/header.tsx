@@ -8,20 +8,30 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 
-const NAV_LINKS = [
-  { key: "services",      href: "/services" },
-  { key: "caseStudies",   href: "/etudes-de-cas" },
-  { key: "tools",         href: "/outils" },
-  { key: "documentation", href: "/documentation" },
-  { key: "about",         href: "/a-propos" },
+// Le hub « Quelle techno web ? » — méga-menu : les 6 rubriques décisionnelles
+// (ancres sur /documentation) + accès aux outils et à la bibliothèque.
+const HUB_RUBRIQUES = [
+  { key: "rubChoisir",      href: "/documentation#choisir" },
+  { key: "rubIa",           href: "/documentation#ia-et-code" },
+  { key: "rubReparer",      href: "/documentation#reparer" },
+  { key: "rubAvantSigner",  href: "/documentation#avant-signer" },
+  { key: "rubOutilsMetier", href: "/documentation#outils-metier" },
+  { key: "rubSignal",       href: "/documentation#signal" },
 ] as const;
 
-// Offres « à la demande » — toujours présentes (menu header + drawer mobile).
-// L'audit (froid, gratuit) reste aussi en bouton CTA distinct pour la prominence.
-const ON_DEMAND = [
-  { key: "freeAudit",        href: "/audit-site-web",        paid: false },
-  { key: "visioConseil",     href: "/conseil",              paid: true },
-  { key: "wordpressExpress", href: "/depannage-wordpress",  paid: true },
+const HUB_LINKS = [
+  { key: "boussole",     href: "/outils/boussole" },
+  { key: "allTools",     href: "/outils" },
+  { key: "allResources", href: "/documentation" },
+] as const;
+
+// Nav principale — exprime le funnel : Conseil (décider) → Services (construire)
+// → Réalisations (preuve) → À propos. Le hub a son propre méga-menu à gauche.
+const NAV_LINKS = [
+  { key: "conseil",     href: "/conseil" },
+  { key: "services",    href: "/services" },
+  { key: "caseStudies", href: "/etudes-de-cas" },
+  { key: "about",       href: "/a-propos" },
 ] as const;
 
 export default function Header() {
@@ -43,6 +53,46 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+          {/* Méga-menu hub « Quelle techno web ? » — ouvre au survol ET au focus
+              clavier (CSS pur, 0 JS), comme l'ancien menu « À la demande ». */}
+          <div className="group relative">
+            <button
+              type="button"
+              aria-haspopup="menu"
+              className="inline-flex items-center gap-1 px-3 py-2 text-sm text-mid-gray transition-colors hover:text-foreground group-focus-within:text-foreground"
+            >
+              {t("hub")}
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 w-[min(560px,92vw)] border border-dark-gray bg-obsidian opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="grid grid-cols-2">
+                {HUB_RUBRIQUES.map((item, i) => (
+                  <Link
+                    key={item.key}
+                    href={item.href as Parameters<typeof Link>[0]["href"]}
+                    className={
+                      "border-b border-dark-gray px-4 py-3 text-sm text-mid-gray no-underline transition-colors hover:bg-jet hover:text-foreground " +
+                      (i % 2 === 0 ? "border-r" : "")
+                    }
+                  >
+                    {t(item.key as Parameters<typeof t>[0])}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex">
+                {HUB_LINKS.map((item) => (
+                  <Link
+                    key={item.key}
+                    href={item.href as Parameters<typeof Link>[0]["href"]}
+                    className="flex-1 border-r border-dark-gray px-4 py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary no-underline transition-colors last:border-r-0 hover:bg-jet hover:text-foreground"
+                  >
+                    {t(item.key as Parameters<typeof t>[0])}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {NAV_LINKS.map((item) => (
             <Link
               key={item.key}
@@ -75,38 +125,21 @@ export default function Header() {
           </div>
 
           <ThemeToggle />
-          {/* CTA principal = menu « À la demande » : audit gratuit (froid, en
-              tête) + visio conseil + dépannage (payants). Vermillon pour la
-              prominence ; ouvre au survol ET au focus clavier (CSS pur, 0 JS). */}
-          <div className="group relative">
-            <button
-              type="button"
-              aria-haspopup="menu"
-              className="inline-flex h-9 items-center gap-1.5 rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-vermilion-bright group-focus-within:bg-vermilion-bright"
-            >
-              {t("onDemand")}
-              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
-            </button>
-            <div className="invisible absolute right-0 top-full z-50 w-64 border border-dark-gray bg-obsidian opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-              {ON_DEMAND.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href as Parameters<typeof Link>[0]["href"]}
-                  className="flex items-center justify-between gap-3 border-b border-dark-gray px-4 py-3 text-sm text-mid-gray no-underline transition-colors last:border-b-0 hover:bg-jet hover:text-foreground"
-                >
-                  <span>{t(item.key as Parameters<typeof t>[0])}</span>
-                  <span
-                    className={
-                      "font-mono text-[9px] uppercase tracking-[0.1em] " +
-                      (item.paid ? "text-mid-gray" : "text-accent-secondary")
-                    }
-                  >
-                    {t(item.paid ? "paid" : "free")}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
+
+          {/* CTA à deux températures : « Réserver une visio » (tiède, secondaire)
+              + « Audit gratuit » (froid, vermillon, dominant). */}
+          <Link
+            href="/conseil"
+            className="text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+          >
+            {t("bookVisio")}
+          </Link>
+          <Link
+            href="/audit-site-web"
+            className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+          >
+            {t("freeAudit")}
+          </Link>
         </div>
 
         {/* Mobile right */}
@@ -145,6 +178,32 @@ export default function Header() {
             </div>
 
             <nav className="flex-1 overflow-y-auto">
+              {/* Hub « Quelle techno web ? » + ses rubriques */}
+              <div className="border-b border-dark-gray px-5 pb-2 pt-5 font-mono text-[9px] uppercase tracking-[0.14em] text-mid-gray">
+                {t("hub")}
+              </div>
+              {HUB_RUBRIQUES.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="block border-b border-dark-gray px-5 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+              {HUB_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="block border-b border-dark-gray px-5 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-accent-secondary no-underline transition-colors hover:text-foreground"
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+
+              {/* Nav principale */}
               {NAV_LINKS.map((item) => (
                 <Link
                   key={item.key}
@@ -153,28 +212,6 @@ export default function Header() {
                   className="block border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
                 >
                   {t(item.key as Parameters<typeof t>[0])}
-                </Link>
-              ))}
-
-              {/* À la demande — toujours présent dans le drawer */}
-              <div className="border-b border-dark-gray px-5 pb-2 pt-5 font-mono text-[9px] uppercase tracking-[0.14em] text-mid-gray">
-                {t("onDemand")}
-              </div>
-              {ON_DEMAND.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href as Parameters<typeof Link>[0]["href"]}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
-                >
-                  <span>{t(item.key as Parameters<typeof t>[0])}</span>
-                  <span
-                    className={
-                      "text-[9px] " + (item.paid ? "text-mid-gray" : "text-accent-secondary")
-                    }
-                  >
-                    {t(item.paid ? "paid" : "free")}
-                  </span>
                 </Link>
               ))}
 
@@ -189,6 +226,23 @@ export default function Header() {
                 </button>
               )}
 
+              {/* CTA à deux températures */}
+              <div className="flex flex-col gap-3 p-5">
+                <Link
+                  href="/audit-site-web"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+                >
+                  {t("freeAudit")}
+                </Link>
+                <Link
+                  href="/conseil"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  {t("bookVisio")}
+                </Link>
+              </div>
             </nav>
           </div>
         </>

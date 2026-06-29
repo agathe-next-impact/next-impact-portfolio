@@ -8,111 +8,107 @@ import { SectionHeading } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
-type Stack = {
+type Offer = {
   subtitle: string;
   title: string;
   price: string;
-  strengths: string[];
+  items: string[];
   target: string;
+  href: string;
+  cta: string;
   recommended?: boolean;
 };
 
-const STACKS_FR: Stack[] = [
+const OFFERS_FR: Offer[] = [
   {
-    subtitle: "Attirer",
-    title: "Diagnostic Techno Web & IA",
+    subtitle: "Explorer",
+    title: "Diagnostic",
     price: "gratuit",
-    strengths: ["Identifier s'il faut construire ou non", "Orienter entre WordPress, SaaS, no-code, IA ou sur-mesure"],
-    target: "Premier tri avant production",
+    items: [
+      "Diagnostic projet & audit IA de votre site",
+      "Simulateur AGEFIPH, diagnostic d'opportunité PWA",
+      "Générateur de cahier des charges",
+    ],
+    target: "Pour s'auto-évaluer, sans engagement",
+    href: "/outils",
+    cta: "Ouvrir les outils",
   },
   {
     subtitle: "Décider",
-    title: "Visio décision techno",
-    price: "180 € HT",
-    strengths: ["Trancher WordPress, no-code, IA coding, Headless ou sur-mesure", "Compte-rendu court et prochaine étape"],
-    target: "Question précise à arbitrer",
+    title: "Conseil techno web & IA",
+    price: "dès 180 € HT",
+    items: [
+      "Visio décision : trancher WordPress, no-code, IA, Headless ou sur-mesure",
+      "Second avis sur un devis, une stack ou un prototype IA",
+      "Roadmap projet web avant production",
+    ],
+    target: "Pour trancher avant d'investir",
+    href: "/conseil",
+    cta: "Voir le conseil",
     recommended: true,
-  },
-  {
-    subtitle: "Sécuriser",
-    title: "Second avis devis / stack / prototype IA",
-    price: "390 € HT",
-    strengths: ["Challenger un devis, une stack ou un prototype généré vite", "Repérer risques, dépendances et dette technique"],
-    target: "Avant de signer",
-  },
-  {
-    subtitle: "Cadrer",
-    title: "Roadmap projet web",
-    price: "dès 950 € HT",
-    strengths: ["Prioriser avant de demander à l'IA ou à un prestataire", "Feuille de route avant production"],
-    target: "Projet encore flou",
   },
   {
     subtitle: "Construire",
-    title: "Services Next Impact",
+    title: "Création de solutions web",
     price: "dès 2 250 € HT",
-    strengths: ["WordPress optimisé, Headless ou outil métier", "Construire seulement si le besoin le justifie"],
-    target: "Mise en œuvre",
-  },
-  {
-    subtitle: "Corriger",
-    title: "Dépannage WordPress",
-    price: "dès 69 € HT",
-    strengths: ["Réparer quand c'est suffisant", "Éviter de refaire trop vite avec ou sans IA"],
-    target: "Site existant en difficulté",
+    items: [
+      "WordPress optimisé, Headless + Next.js ou outil métier",
+      "Web app, PWA et applications sur-mesure",
+      "Dépannage WordPress dès 69 € HT",
+    ],
+    target: "Quand le besoin le justifie",
+    href: "/services",
+    cta: "Voir les services",
   },
 ];
 
-const STACKS_EN: Stack[] = [
+const OFFERS_EN: Offer[] = [
   {
-    subtitle: "Attract",
-    title: "Web & AI Tech diagnostic",
+    subtitle: "Explore",
+    title: "Tools",
     price: "free",
-    strengths: ["Check whether building is even needed", "Choose between WordPress, SaaS, no-code, AI or custom"],
-    target: "First triage before production",
+    items: [
+      "Project diagnostic & AI audit of your site",
+      "AGEFIPH simulator, PWA opportunity diagnostic",
+      "Specifications generator",
+    ],
+    target: "Self-assess, no commitment",
+    href: "/outils",
+    cta: "Open the tools",
   },
   {
     subtitle: "Decide",
-    title: "Tech decision call",
-    price: "€180 excl. VAT",
-    strengths: ["Choose between WordPress, no-code, AI coding, Headless or custom", "Short recap and next step"],
-    target: "One clear question to settle",
+    title: "Tech advice",
+    price: "from €180 excl. VAT",
+    items: [
+      "Decision call: settle WordPress, no-code, AI, Headless or custom",
+      "Second opinion on a quote, stack or AI prototype",
+      "Web project roadmap before production",
+    ],
+    target: "To decide before investing",
+    href: "/conseil",
+    cta: "See the advice",
     recommended: true,
   },
   {
-    subtitle: "Secure",
-    title: "Quote / stack / AI prototype second opinion",
-    price: "€390 excl. VAT",
-    strengths: ["Challenge a quote, stack or fast-generated prototype", "Spot risks, dependencies and technical debt"],
-    target: "Before signing",
-  },
-  {
-    subtitle: "Scope",
-    title: "Web project roadmap",
-    price: "from €950 excl. VAT",
-    strengths: ["Prioritize before asking AI or a provider to build", "Roadmap before production"],
-    target: "Unclear project",
-  },
-  {
     subtitle: "Build",
-    title: "Next Impact services",
+    title: "Services",
     price: "from €2,250 excl. VAT",
-    strengths: ["Optimized WordPress, Headless or business tool", "Build only when the need justifies it"],
-    target: "Implementation",
-  },
-  {
-    subtitle: "Fix",
-    title: "WordPress support",
-    price: "from €69 excl. VAT",
-    strengths: ["Fix when enough", "Avoid rebuilding too fast, with or without AI"],
-    target: "Existing site in trouble",
+    items: [
+      "Optimized WordPress, Headless + Next.js or business tool",
+      "Web apps, PWAs and custom applications",
+      "WordPress support from €69 excl. VAT",
+    ],
+    target: "When the need justifies it",
+    href: "/services",
+    cta: "See the services",
   },
 ];
 
 export default function HomeOffres() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
-  const stacks = isEn ? STACKS_EN : STACKS_FR;
+  const offers = isEn ? OFFERS_EN : OFFERS_FR;
 
   return (
     <section className="relative overflow-hidden bg-obsidian px-2.5 lg:px-0">
@@ -120,7 +116,7 @@ export default function HomeOffres() {
         {/* En-tête */}
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 04"
+            index="№ 02"
             kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
             title={
               isEn ? (
@@ -137,35 +133,40 @@ export default function HomeOffres() {
           />
         </Reveal>
 
-        {/* Bento — pleine largeur, sans gouttière */}
+        {/* 3 cartes : Outils · Conseil techno · Services (pleine largeur, sans gouttière) */}
         <Stagger className="grid md:grid-cols-3">
-          {stacks.map((stack) => (
-            <StaggerItem key={stack.title}>
-              <div
+          {offers.map((offer) => (
+            <StaggerItem
+              key={offer.title}
+              className={cn(
+                "border-b border-dark-gray md:border-b-0",
+                "md:border-r md:border-dark-gray md:last:border-r-0",
+              )}
+            >
+              <Link
+                href={offer.href as Parameters<typeof Link>[0]["href"]}
                 className={cn(
                   "group relative flex h-full flex-col p-6 transition-colors hover:bg-jet lg:p-8",
-                  "border-b border-dark-gray md:border-b-0",
-                  "md:border-r md:border-dark-gray md:[&:nth-child(3n)]:border-r-0",
-                  stack.recommended && "bg-jet",
+                  offer.recommended && "bg-jet",
                 )}
               >
-                {stack.recommended && (
+                {offer.recommended && (
                   <span className="absolute inset-x-0 top-0 h-0.5 bg-accent-secondary" aria-hidden />
                 )}
 
                 <h3 className="text-xl font-light leading-tight tracking-tight text-foreground md:text-2xl">
-                  {stack.title}
+                  {offer.title}
                 </h3>
                 <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
-                  {stack.subtitle}
+                  {offer.subtitle}
                 </div>
 
                 <div className="mt-6 border-b border-dark-gray pb-5 font-mono text-[11px] tracking-[0.08em] text-foreground">
-                  {stack.price}
+                  {offer.price}
                 </div>
 
                 <ul className="mt-6 flex flex-1 flex-col gap-2">
-                  {stack.strengths.map((s) => (
+                  {offer.items.map((s) => (
                     <li key={s} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
                       <span className="shrink-0 pt-px font-mono text-[11px] text-accent-secondary">→</span>
                       {s}
@@ -174,9 +175,14 @@ export default function HomeOffres() {
                 </ul>
 
                 <div className="mt-6 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
-                  {stack.target}
+                  {offer.target}
                 </div>
-              </div>
+
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
+                  {offer.cta}
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
             </StaggerItem>
           ))}
         </Stagger>
@@ -200,13 +206,13 @@ export default function HomeOffres() {
           </p>
         </div>
 
-        {/* Pied — liens internes (préférés aux détails) */}
+        {/* Pied — comparatif détaillé */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">
           <Link
-            href="/conseil"
+            href="/tarifs"
             className="font-mono text-[10px] tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
           >
-            {isEn ? "Tech advice offers →" : "Offres de conseil techno →"}
+            {isEn ? "Pricing simulator →" : "Simulateur de tarifs →"}
           </Link>
           <Link
             href="/services"

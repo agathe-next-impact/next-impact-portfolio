@@ -75,7 +75,7 @@ export default function CaseStudiesClient() {
                 <SectionHeading
                   index="№ 02"
                   kicker={variant.tabsLabel}
-                  title={isEn ? "The projects" : "Les réalisations"}
+                  title={isEn ? "Case studies" : "Études de cas"}
                 />
               </Reveal>
               <div className="mt-10">

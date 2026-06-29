@@ -56,15 +56,15 @@ export default function HomeClient() {
       {/* § 01b — « En bref » (TL;DR citable par les IA) */}
       <HomeTldr />
 
-      {/* § 02 — Réalisation phare + preuve sociale (preuve UI/UX) */}
-      <FeaturedRealisation />
+      {/* § 02 — Offres : 3 stacks */}
+      <HomeOffres />
       <Separator />
 
       {/* § 03 — Témoignages clients */}
       <HomeTestimonials />
 
-      {/* § 04 — Offres : 3 stacks */}
-      <HomeOffres />
+      {/* § 04 — Réalisation phare + preuve sociale (preuve UI/UX) */}
+      <FeaturedRealisation />
       <Separator />
 
       {/* § 04b — Offre d'appel : dépannage WordPress sans abonnement */}

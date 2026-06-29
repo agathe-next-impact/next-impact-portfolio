@@ -284,7 +284,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
       "Got a similar project in mind? Let's talk about your needs and goals.",
   },
   decideur: {
-    titre: "Our client work",
+    titre: "Our client case studies",
     sousTitre:
       "Real projects with measurable results: performance, SEO and conversion at the service of growth.",
     defaultTab: "headless",

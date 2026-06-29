@@ -334,7 +334,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
       "Vous avez un projet similaire ? Échangeons sur vos besoins et vos objectifs.",
   },
   decideur: {
-    titre: "Nos réalisations clients",
+    titre: "Nos études de cas clients",
     sousTitre:
       "Des projets concrets avec des résultats mesurables : performance, SEO et conversion au service de la croissance.",
     defaultTab: "headless",
@@ -357,7 +357,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudi
       "Envie de voir à quoi ressemble la gestion de contenu au quotidien ? Découvrez une démonstration en direct.",
   },
   developpeur: {
-    titre: "Réalisations techniques",
+    titre: "Études de cas techniques",
     sousTitre:
       "Sites WordPress classiques optimisés, Headless WordPress + Next.js, web apps sur-mesure et PWA mobiles. API REST, WPGraphQL, PostgreSQL. Détails techniques de chaque projet.",
     defaultTab: "headless",

@@ -1,8 +1,8 @@
 import { BentoGrid } from "@/components/documentation/bento-grid";
-import { DemoShowcase } from "@/components/documentation/demo-showcase";
 import { AllCategoriesGrid } from "@/components/documentation/cross-category-nav";
 import { DocumentationToolsSection } from "@/components/documentation/documentation-internal-links";
 import { AuditContextualBanner } from "@/components/documentation/audit-contextual-banner";
+import { HubRubriques } from "@/components/hub/hub-rubriques";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -73,14 +73,25 @@ export default async function DocumentationPage({
         url="/documentation"
         items={documentationCategories}
       />
-      <PageLayout titre={t("title")} sousTitre={t("subtitle")}>
+      <PageLayout titre={t("hubTitle")} sousTitre={t("hubSubtitle")}>
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">
+            {/* Couche 1 — décision : la Boussole + les 6 rubriques par question */}
+            <HubRubriques locale={locale} />
+
+            {/* Couche 2 — bibliothèque : contenus encyclopédiques (démotés) */}
+            <div className="mb-10 border-t border-dark-gray pt-12">
+              <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+                {t("libraryHeading")}
+              </p>
+              <h2 className="max-w-2xl text-2xl font-light tracking-tight text-foreground">
+                {t("librarySubtitle")}
+              </h2>
+            </div>
             <BentoGrid />
             <AuditContextualBanner />
             <AllCategoriesGrid />
             <DocumentationToolsSection />
-            <DemoShowcase />
           </div>
         </section>
       </PageLayout>

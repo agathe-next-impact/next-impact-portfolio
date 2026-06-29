@@ -25,7 +25,7 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    badge: "Réalisation phare — Mai 2026",
+    badge: "Étude de cas phare — Mai 2026",
     tagline: "Le 1er annuaire B2B du secteur, livré en 2 mois",
     description:
       "Premier annuaire en ligne des fournisseurs d'objets publicitaires en France. Plateforme opérationnelle en 2 mois, pensée SEO et croissance. Next.js + PostgreSQL serverless.",
@@ -39,7 +39,7 @@ const COPY: Record<Locale, Copy> = {
     imageAlt: "Panorama Pub — marketplace B2B des fournisseurs d'objets publicitaires",
   },
   en: {
-    badge: "Featured project — May 2026",
+    badge: "Featured case study — May 2026",
     tagline: "The industry's 1st B2B directory, shipped in 2 months",
     description:
       "First online directory of promotional product suppliers in France. Operational in 2 months, built for SEO and growth. Next.js + serverless PostgreSQL.",
@@ -80,7 +80,7 @@ export default function FeaturedRealisation() {
         {/* En-tête : kicker (badge) + titre + accroche & contexte */}
         <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 02"
+            index="№ 04"
             kicker={copy.badge}
             title="Panorama Pub"
             description={

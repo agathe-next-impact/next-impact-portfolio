@@ -5,10 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { getHeroVariants } from "@/lib/homepage-profiles";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import HeroVideo from "@/components/hero-video";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
+import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { WordAppear } from "@/components/visuals/word-appear";
 
 const BTN_PRIMARY =
@@ -101,9 +101,6 @@ export default function Hero() {
             >
               {variant.ctaSecondary.label}
             </Link>
-            <Link href="/depannage-wordpress" className={BTN_GHOST}>
-              {locale === "en" ? "WordPress support" : "Dépannage WordPress"}
-            </Link>
           </div>
 
           {/* Logos techno — preuve discrète */}
@@ -132,9 +129,9 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        {/* Démonstration vidéo */}
+        {/* Constellation techno — visuel héro (theme-aware, light + dark) */}
         <Reveal delay={0.16} className="relative">
-          <HeroVideo />
+          <ConstellationTechno className="rounded-sm" />
 
           {/* Badge disponible */}
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">

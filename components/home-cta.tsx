@@ -62,7 +62,7 @@ export default function HomeCta() {
                 href="/etudes-de-cas"
                 className="group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground hover:bg-jet"
               >
-                {isEn ? "See our work" : "Voir des réalisations"}
+                {isEn ? "View case studies" : "Voir les études de cas"}
                 <ArrowRight size={13} />
               </Link>
             </div>

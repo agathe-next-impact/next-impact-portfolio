@@ -9,6 +9,8 @@ import {
   BadgePercent,
   Smartphone,
   Scale,
+  Compass,
+  ScrollText,
   ArrowRight,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
@@ -27,6 +29,26 @@ interface BentoCard {
 }
 
 const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
+  "boussole": {
+    id: "boussole",
+    title: isEn ? "Web & AI Tech Compass" : "La Boussole Techno Web & IA",
+    description: isEn
+      ? "8 criteria, one recommendation: WordPress, no-code, Headless, SaaS or custom. The hub's master decision tool."
+      : "8 critères, une recommandation : WordPress, no-code, Headless, SaaS ou sur-mesure. L'outil de décision maître du hub.",
+    icon: Compass,
+    href: "/outils/boussole",
+    tag: isEn ? "New" : "Nouveau",
+  },
+  "decrypteur-devis": {
+    id: "decrypteur-devis",
+    title: isEn ? "Web quote decoder" : "Décrypteur de devis web",
+    description: isEn
+      ? "Received a quote? 9 checks, a health score and the questions to ask before you sign."
+      : "Un devis en main ? 9 vérifications, un score de santé et les questions à poser avant de signer.",
+    icon: ScrollText,
+    href: "/outils/decrypteur-devis",
+    tag: isEn ? "New" : "Nouveau",
+  },
   "determiner-offre": {
     id: "determiner-offre",
     title: isEn ? "Project diagnostic" : "Diagnostic projet",
@@ -77,10 +99,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["determiner-offre", "cahier-des-charges", "audit-ia", "audit-pwa", "simulateur-agefiph"],
-  developpeur: ["audit-pwa", "audit-ia", "determiner-offre", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["boussole", "decrypteur-devis", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["boussole", "decrypteur-devis", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["boussole", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "audit-ia", "audit-pwa", "simulateur-agefiph"],
+  developpeur: ["boussole", "audit-pwa", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {
