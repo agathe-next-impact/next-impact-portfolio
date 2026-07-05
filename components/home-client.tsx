@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
-import { WordpressExpressBanner } from "@/components/wordpress-express/wordpress-express-banner";
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 
 const Hero = dynamic(() => import("@/components/hero"), {
@@ -65,10 +64,6 @@ export default function HomeClient() {
 
       {/* § 04 — Réalisation phare + preuve sociale (preuve UI/UX) */}
       <FeaturedRealisation />
-      <Separator />
-
-      {/* § 04b — Offre d'appel : dépannage WordPress sans abonnement */}
-      <WordpressExpressBanner />
       <Separator />
 
       {/* § 05 — Méthode */}

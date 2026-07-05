@@ -172,6 +172,12 @@ const config: Config = {
         "accordion-up":   "accordion-up 0.2s ease-out",
         marquee:          "marquee 25s linear infinite",
       },
+      transitionDuration: {
+        /* Valeur nommée : le plugin tailwindcss-animate réclame aussi le
+           préfixe des durées, ce qui rend les valeurs arbitraires ambiguës.
+           Passer par l'échelle (duration-1200) lève l'ambiguïté. */
+        1200: "1200ms",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

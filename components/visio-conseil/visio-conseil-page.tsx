@@ -1,8 +1,7 @@
 "use client";
 
-// Page « Visio conseil » — clone structurel de la page dépannage
-// (components/wordpress-express/wordpress-express-page.tsx). Tokens DS Blueprint
-// uniquement, i18n inline, accessibilité préservée. DEUX conseils par sujet
+// Page « Visio conseil » — même structure que les pages offre du site. Tokens
+// DS Blueprint uniquement, i18n inline, accessibilité préservée. DEUX conseils par sujet
 // (WordPress thèmes/plugins · choix de techno), pas par durée. L'offre est
 // TIÈDE : elle vient APRÈS la preuve (l'audit gratuit), jamais en CTA froid.
 // Argument d'ancrage répété : le prix est déduit du devis projet.
@@ -18,6 +17,7 @@ import {
   Check,
 } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
@@ -26,6 +26,18 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
   const copy = isEn ? offer.en : offer.fr;
   const single = offer.tiers.length === 1;
   const cheapest = offer.tiers.reduce((a, b) => (a.value <= b.value ? a : b));
+  const ctaLabel = offer.cta
+    ? isEn
+      ? offer.cta.en
+      : offer.cta.fr
+    : isEn
+      ? "Book & pay"
+      : "Réserver et payer";
+  const ctaClass =
+    "group mt-auto flex w-full items-center justify-center gap-1.5 px-5 py-3 font-mono text-xs uppercase tracking-[0.06em] no-underline transition-colors " +
+    (offer.featured
+      ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
+      : "border border-dark-gray text-foreground hover:border-mid-gray");
 
   return (
     <div
@@ -59,9 +71,17 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
         <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
       </div>
 
-      <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
-        {isEn ? "Credited to your project quote" : "Déduit du devis projet"}
-      </p>
+      {(offer.credited || offer.recurring) && (
+        <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+          {offer.credited
+            ? isEn
+              ? "Credited to your project quote"
+              : "Déduit du devis projet"
+            : isEn
+              ? "Monthly · no time commitment"
+              : "Abonnement mensuel · sans engagement"}
+        </p>
+      )}
       <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
 
       <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">
@@ -74,20 +94,22 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
       </ul>
 
       {single ? (
-        <a
-          href={cheapest.calendlyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={
-            "group mt-auto flex w-full items-center justify-center gap-1.5 px-5 py-3 font-mono text-xs uppercase tracking-[0.06em] no-underline transition-colors " +
-            (offer.featured
-              ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
-              : "border border-dark-gray text-foreground hover:border-mid-gray")
-          }
-        >
-          {isEn ? "Book & pay" : "Réserver et payer"}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </a>
+        offer.internalCta ? (
+          <Link href={cheapest.calendlyUrl} className={ctaClass}>
+            {ctaLabel}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        ) : (
+          <a
+            href={cheapest.calendlyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={ctaClass}
+          >
+            {ctaLabel}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </a>
+        )
       ) : (
         <div className="mt-auto flex flex-col gap-2 border-t border-dark-gray pt-4">
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
@@ -146,14 +168,14 @@ export default function VisioConseilPage() {
 
   const reassurance: Array<[typeof ShieldCheck, string]> = isEn
     ? [
-        [Receipt, "Project credit available depending on the offer"],
+        [Receipt, "Decision call credited to your project quote"],
         [CalendarCheck, "Book and pay online — instant confirmation"],
         [Video, "Real video call with screen sharing — not a chatbot"],
         [FileText, "Written recap after the call"],
         [ShieldCheck, "Reschedule or cancel up to 24h before"],
       ]
     : [
-        [Receipt, "Crédit projet possible selon l'offre choisie"],
+        [Receipt, "Visio décision créditée sur votre devis projet"],
         [CalendarCheck, "Réservation et paiement en ligne — confirmation immédiate"],
         [Video, "Vraie visio avec partage d'écran — pas un chatbot"],
         [FileText, "Compte-rendu écrit après l'appel"],
@@ -184,7 +206,7 @@ export default function VisioConseilPage() {
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-24">
         <Reveal>
           <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            № 01 — {isEn ? "Advisory call · Credited to your quote" : "Visio conseil · Déduite du devis"}
+            № 01 — {isEn ? "Tech advice · From decision to direction" : "Conseil techno · De la décision au pilotage"}
           </p>
           <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {isEn
@@ -228,8 +250,8 @@ export default function VisioConseilPage() {
           title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
           description={
             isEn
-              ? "A paid advisory path for small teams that need to choose between WordPress, no-code, AI coding, SaaS, Headless, custom development, or not building at all."
-              : "Un parcours de conseil payant pour les petites structures qui doivent choisir entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure, ou ne rien construire du tout."
+              ? "A paid advisory path for small teams: decide, secure, scope, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
+              : "Un parcours de conseil payant pour les petites structures : décider, sécuriser, cadrer, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
           }
         />
         <Stagger className="mt-10 grid gap-4 md:grid-cols-2">
@@ -241,8 +263,8 @@ export default function VisioConseilPage() {
         </Stagger>
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "No subscription. Prices excl. VAT. If you start a project within 30 days, the call's price is deducted from your quote."
-            : "Sans abonnement. Prix HT. Si vous lancez un projet dans les 30 jours, le prix de la visio est déduit de votre devis."}
+            ? "Prices excl. VAT, no time commitment. Only the tech decision call is deducted from your quote if a project follows within 30 days — the second opinion and roadmap are complete deliverables, the tech direction a monthly subscription."
+            : "Prix HT, sans engagement de durée. Seule la visio décision est déduite de votre devis si un projet suit sous 30 jours — le second avis et la roadmap sont des livrables complets, la direction technique un abonnement mensuel."}
         </p>
 
         {/* Engagements — réassurance sous les offres */}

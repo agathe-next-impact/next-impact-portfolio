@@ -10,7 +10,6 @@
     "documentation": "Resources",
     "caseStudies": "Case studies",
     "contact": "Contact",
-    "wordpressExpress": "WordPress support",
     "freeAudit": "Free audit",
     "visioConseil": "Advisory call",
     "onDemand": "On demand",
@@ -49,7 +48,6 @@
     "blog": "Blog",
     "oethAdvantage": "OETH Advantage",
     "resources": "Resources",
-    "wordpressExpress": "WordPress support",
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
@@ -115,10 +113,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact — tech decision, quote, AI prototype or support",
-    "metaDescription": "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project, build if needed or request WordPress support.",
+    "metaTitle": "Contact — tech decision, quote, AI prototype or implementation",
+    "metaDescription": "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project or build if needed.",
     "title": "Contact",
-    "subtitle": "Tech decision, second opinion, roadmap, implementation or WordPress support: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Tech decision, second opinion, roadmap or implementation: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },

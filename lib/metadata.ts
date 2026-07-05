@@ -308,27 +308,25 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact — question techno, devis, prototype IA ou dépannage",
+    title: "Contact — question techno, devis, prototype IA ou mise en œuvre",
     description:
-      "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet, construire si nécessaire ou demander un dépannage WordPress.",
+      "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet ou construire si nécessaire.",
     keywords: [
       "contact conseil techno web",
       "second avis devis web",
       "prototype IA maintenable",
       "diagnostic Web IA",
-      "dépannage WordPress",
     ],
   },
   en: {
-    title: "Contact — tech question, quote, AI prototype or support",
+    title: "Contact — tech question, quote, AI prototype or implementation",
     description:
-      "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project, build if needed or request WordPress support.",
+      "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project or build if needed.",
     keywords: [
       "contact web technology advice",
       "web quote second opinion",
       "maintainable AI prototype",
       "Web AI diagnostic",
-      "WordPress support",
     ],
   },
 };

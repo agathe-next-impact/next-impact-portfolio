@@ -1,9 +1,8 @@
 "use client";
 
 // Bandeau « Visio conseil » — band pleine largeur, drop-in bas de funnel sur la
-// home, la page services, la page contact et en fin d'audit gratuit. Modèle :
-// components/wordpress-express/wordpress-express-banner.tsx. Offre TIÈDE : ne
-// jamais la placer dans un héros ni en CTA froid. Tokens DS uniquement, i18n
+// home, la page services, la page contact et en fin d'audit gratuit. Offre TIÈDE :
+// ne jamais la placer dans un héros ni en CTA froid. Tokens DS uniquement, i18n
 // inline, reduced-motion via <Reveal>.
 
 import { Link } from "@/i18n/navigation";
@@ -18,14 +17,14 @@ const COPY = {
     eyebrow: "Boussole Techno Web & IA",
     title: "L'IA peut coder vite. Mais quoi construire ?",
     subtitle:
-      "Visio décision, second avis ou roadmap : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+      "Visio décision, second avis, roadmap ou direction technique externalisée : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
     cta: "Voir le conseil techno",
   },
   en: {
     eyebrow: "Web & AI Tech Compass",
     title: "AI can code fast. But what should you build?",
     subtitle:
-      "Decision call, second opinion or roadmap: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
+      "Decision call, second opinion, roadmap or fractional tech direction: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
     cta: "See tech advice",
   },
 };

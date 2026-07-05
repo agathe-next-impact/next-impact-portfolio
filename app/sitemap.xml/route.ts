@@ -134,7 +134,6 @@ export async function GET() {
       // Page pilier WordPress Headless — cible SEO/GEO de fond, priorité haute.
       { path: "wordpress-headless", source: "app/[locale]/wordpress-headless/page.tsx", changefreq: "weekly", priority: 0.95 },
       { path: "solutions-web", source: "app/[locale]/solutions-web/page.tsx", changefreq: "weekly", priority: 0.9 },
-      { path: "depannage-wordpress", source: "app/[locale]/depannage-wordpress/page.tsx", changefreq: "monthly", priority: 0.9 },
       { path: "solutions-web/eligibilite", source: "app/[locale]/solutions-web/eligibilite/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "etudes-de-cas", source: "app/[locale]/etudes-de-cas/page.tsx", changefreq: "weekly", priority: 0.8 },
       { path: "documentation", source: "app/[locale]/documentation/page.tsx", changefreq: "weekly", priority: 0.8 },

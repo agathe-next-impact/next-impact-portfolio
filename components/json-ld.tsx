@@ -72,6 +72,7 @@ export function OrganizationJsonLd() {
       "Boussole Techno Web & IA",
       "Second avis devis, stack ou prototype IA",
       "Roadmap projet web avant production",
+      "Direction technique externalisée (abonnement mensuel)",
       "Création de sites web WordPress",
       "Création de sites WordPress Headless + Next.js",
       "Création d'applications web sur-mesure",
@@ -285,7 +286,7 @@ export function ContactPageJsonLd() {
     "@type": "ContactPage",
     name: "Contact — Next Impact Digital",
     description:
-      "Choisir la bonne techno web à l'heure de l'IA : conseil, second avis devis ou prototype IA, roadmap, mise en œuvre et dépannage WordPress.",
+      "Choisir la bonne techno web à l'heure de l'IA : conseil, second avis devis ou prototype IA, roadmap et mise en œuvre.",
     url: `${siteConfig.url}/contact`,
     mainEntity: {
       "@type": "ProfessionalService",
@@ -339,7 +340,7 @@ export function ContactPageJsonLd() {
           "@type": "CommunicateAction",
           name: "Faire relire un devis ou cadrer un projet",
           target: `${siteConfig.url}/contact`,
-          description: "Conseil techno web, second avis ou demande de mise en œuvre",
+          description: "Conseil techno web, second avis, roadmap, direction technique externalisée ou mise en œuvre",
         },
       ],
       hasOfferCatalog: {
@@ -350,7 +351,7 @@ export function ContactPageJsonLd() {
             "@type": "Offer",
             name: "Visio décision techno",
             description: "Trancher une question précise avant d'investir : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
-            price: "180",
+            price: "240",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/conseil`,
           },
@@ -366,8 +367,21 @@ export function ContactPageJsonLd() {
             "@type": "Offer",
             name: "Roadmap projet web",
             description: "Cadrer architecture, données, priorités, budget et ordre de mise en œuvre avant production.",
-            price: "950",
+            price: "1500",
             priceCurrency: "EUR",
+            url: `${siteConfig.url}/conseil`,
+          },
+          {
+            "@type": "Offer",
+            name: "Direction technique externalisée",
+            description: "Abonnement mensuel de pilotage : arbitrages, relecture de devis et roadmap tenue à jour — l'équivalent d'un directeur technique sans l'embauche.",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "750",
+              priceCurrency: "EUR",
+              unitText: "MONTH",
+              billingIncrement: 1,
+            },
             url: `${siteConfig.url}/conseil`,
           },
           {
@@ -593,6 +607,7 @@ export function HomepageJsonLd() {
           "Boussole Techno Web & IA",
           "Second avis devis, stack ou prototype IA",
           "Roadmap projet web avant production",
+          "Direction technique externalisée (abonnement mensuel)",
           "Création de sites web WordPress",
           "Création de sites WordPress Headless + Next.js",
           "Création d'applications web sur-mesure",
@@ -629,7 +644,7 @@ export function HomepageJsonLd() {
               name: "Visio décision techno",
               description:
                 "Trancher une question précise avant d'investir : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
-              price: "180",
+              price: "240",
               priceCurrency: "EUR",
               url: `${baseUrl}/conseil`,
             },
@@ -647,8 +662,22 @@ export function HomepageJsonLd() {
               name: "Roadmap projet web",
               description:
                 "Cadrer architecture, données, priorités, budget et ordre de mise en œuvre avant production.",
-              price: "950",
+              price: "1500",
               priceCurrency: "EUR",
+              url: `${baseUrl}/conseil`,
+            },
+            {
+              "@type": "Offer",
+              name: "Direction technique externalisée",
+              description:
+                "Abonnement mensuel de pilotage : arbitrages, relecture de devis et roadmap tenue à jour — l'équivalent d'un directeur technique sans l'embauche.",
+              priceSpecification: {
+                "@type": "UnitPriceSpecification",
+                price: "750",
+                priceCurrency: "EUR",
+                unitText: "MONTH",
+                billingIncrement: 1,
+              },
               url: `${baseUrl}/conseil`,
             },
             {
@@ -672,7 +701,7 @@ export function HomepageJsonLd() {
             "@type": "CommunicateAction",
             name: "Faire relire un devis ou cadrer un projet",
             target: `${baseUrl}/contact`,
-            description: "Conseil techno web, second avis ou demande de mise en œuvre",
+            description: "Conseil techno web, second avis, roadmap, direction technique externalisée ou mise en œuvre",
           },
         ],
       },

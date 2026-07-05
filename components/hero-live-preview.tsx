@@ -123,7 +123,7 @@ export default function HeroLivePreview() {
             }
             fill
             sizes="(min-width: 1024px) 520px, 100vw"
-            className="object-cover object-top transition-transform duration-[1200ms] ease-out motion-safe:group-hover:scale-[1.03]"
+            className="object-cover object-top transition-transform duration-1200 ease-out motion-safe:group-hover:scale-[1.03]"
           />
         </div>
 

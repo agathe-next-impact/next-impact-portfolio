@@ -21,6 +21,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
@@ -433,8 +434,8 @@ export default function DecrypteurDevis() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
-                ? "This is a self-check, not a legal review. A second opinion reads your actual quote line by line and tells you clearly: sign, adjust or renegotiate — credited back if a project follows."
-                : "Ceci est une auto-évaluation, pas une analyse juridique. Le second avis lit votre devis réel ligne par ligne et vous dit clairement : signer, ajuster ou renégocier — déduit d'un projet si vous le lancez."}
+                ? "This is a self-check, not a legal review. A second opinion reads your actual quote line by line and tells you clearly: sign, adjust or renegotiate — backed by a written analysis."
+                : "Ceci est une auto-évaluation, pas une analyse juridique. Le second avis lit votre devis réel ligne par ligne et vous dit clairement : signer, ajuster ou renégocier — analyse écrite à l'appui."}
             </p>
           </div>
 
@@ -453,6 +454,7 @@ export default function DecrypteurDevis() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </div>
+          <NewsletterModal source="decrypteur-devis" />
         </div>
       )}
 

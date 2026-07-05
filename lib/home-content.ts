@@ -23,7 +23,7 @@ const FR: HomeContent = {
       "Next Impact aide les petites structures à choisir la bonne techno web à l'heure où l'IA peut coder vite.",
       "La question n'est plus seulement de développer : il faut décider quoi construire, avec quelle architecture, et jusqu'où aller.",
       "La Boussole Techno Web & IA compare WordPress, no-code, IA coding, SaaS, Headless, sur-mesure ou l'option de ne rien construire.",
-      "Quand la solution est claire, Next Impact peut aussi construire, corriger ou stabiliser : WordPress, Headless, outil métier ou dépannage.",
+      "Quand la solution est claire, Next Impact peut aussi construire, corriger ou stabiliser : WordPress, Headless ou outil métier.",
     ],
   },
   faq: {
@@ -58,7 +58,7 @@ const FR: HomeContent = {
       {
         question: "Et si mon WordPress actuel a juste un problème ?",
         answer:
-          "Le dépannage WordPress reste séparé du conseil : réparer quand c'est suffisant, optimiser si la base est saine, refaire seulement quand c'est justifié.",
+          "On regarde ensemble : réparer quand c'est suffisant, optimiser si la base est saine, refaire seulement quand c'est justifié. Décrivez-moi le problème et je vous oriente.",
       },
       {
         question: "Travaillez-vous à distance ?",
@@ -76,7 +76,7 @@ const EN: HomeContent = {
       "Next Impact helps small teams choose the right web technology when AI can code fast.",
       "The question is no longer only how to develop: it is what to build, with which architecture, and how far to go.",
       "The Web & AI Tech Compass compares WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all.",
-      "Once the solution is clear, Next Impact can also build, fix or stabilize: WordPress, Headless, business tools or WordPress support.",
+      "Once the solution is clear, Next Impact can also build, fix or stabilize: WordPress, Headless or business tools.",
     ],
   },
   faq: {
@@ -111,7 +111,7 @@ const EN: HomeContent = {
       {
         question: "What if my current WordPress only has a problem?",
         answer:
-          "WordPress support stays separate from advice: fix when enough, optimize if the base is healthy, rebuild only when justified.",
+          "We look at it together: fix when enough, optimize if the base is healthy, rebuild only when justified. Describe the problem and I'll point you the right way.",
       },
       {
         question: "Do you work remotely?",

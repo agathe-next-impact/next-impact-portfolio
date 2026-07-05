@@ -2,8 +2,8 @@
 
 // Réparer ou refaire ? — outil « Réparer ou refaire » du hub. Checklist sur
 // l'état d'un site (WordPress) → score de santé /100 et verdict à 3 voies :
-// réparer / optimiser / refondre, avec une CTA adaptée (Dépannage 149 € si
-// réparable, Services/Visio si fin de vie). Doctrine : réparer quand c'est
+// réparer / optimiser / refondre, avec une CTA adaptée (contact si réparable,
+// Services/Visio si fin de vie). Doctrine : réparer quand c'est
 // suffisant, refaire seulement quand c'est justifié. Modèle : decrypteur-devis.
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -19,6 +19,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
@@ -224,17 +225,17 @@ type Tier = "reparer" | "optimiser" | "refondre";
 function getCtas(tier: Tier) {
   if (tier === "reparer")
     return {
-      primary: { fr: "Réparer dès 149 €", en: "Fix it from €149", href: "/depannage-wordpress" },
+      primary: { fr: "Réparer mon site", en: "Fix my site", href: "/contact" },
       secondary: { fr: "Auditer mon site", en: "Audit my site", href: "/audit-site-web" },
     };
   if (tier === "optimiser")
     return {
-      primary: { fr: "Optimiser mon site", en: "Optimize my site", href: "/depannage-wordpress" },
-      secondary: { fr: "Décider en visio — 180 €", en: "Decide on a call — €180", href: "/conseil" },
+      primary: { fr: "Optimiser mon site", en: "Optimize my site", href: "/contact" },
+      secondary: { fr: "Décider en visio — 240 €", en: "Decide on a call — €240", href: "/conseil" },
     };
   return {
     primary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
-    secondary: { fr: "Décider en visio — 180 €", en: "Decide on a call — €180", href: "/conseil" },
+    secondary: { fr: "Décider en visio — 240 €", en: "Decide on a call — €240", href: "/conseil" },
   };
 }
 
@@ -421,6 +422,7 @@ export default function ReparerOuRefaire() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </div>
+          <NewsletterModal source="reparer-ou-refaire" />
         </div>
       )}
 

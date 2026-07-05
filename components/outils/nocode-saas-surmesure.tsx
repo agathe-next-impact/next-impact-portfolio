@@ -12,6 +12,7 @@ import { ArrowRight, Blocks, Info, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
 
 type Family = "nocode" | "saas" | "surmesure";
@@ -40,7 +41,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 180 €", labelEn: "Validate on a call — €180", href: "/conseil" },
+    next: { labelFr: "Valider en visio — 240 €", labelEn: "Validate on a call — €240", href: "/conseil" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",
@@ -373,6 +374,7 @@ export default function NocodeSaasSurmesure() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </div>
+          <NewsletterModal source="nocode-saas-surmesure" />
         </div>
       )}
 

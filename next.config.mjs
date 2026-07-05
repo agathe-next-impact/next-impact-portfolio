@@ -134,6 +134,18 @@ const nextConfig = {
         destination: '/en/audit-site-web',
         permanent: true,
       },
+      // Offre « Dépannage WordPress » supprimée (2026-07-05). 301 vers /contact
+      // pour ne pas casser les liens de mailings / bookmarks ni perdre le SEO.
+      {
+        source: '/depannage-wordpress',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/en/depannage-wordpress',
+        destination: '/en/contact',
+        permanent: true,
+      },
       ...disabledToolRedirects,
     ]
   },

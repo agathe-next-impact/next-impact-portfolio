@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
+  CalendarClock,
   CheckCircle2,
   Globe,
   Layers,
@@ -22,8 +23,8 @@ type SubjectKey =
   | "decision-techno"
   | "second-avis"
   | "roadmap"
+  | "direction-technique"
   | "mise-en-oeuvre"
-  | "depannage-wordpress"
   | "oeth"
   | "autre";
 
@@ -37,8 +38,8 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
   "decision-techno": { icon: SearchCheck, fr: { label: "Visio décision techno", description: "Choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Tech decision call", description: "Choose between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
   "second-avis": { icon: Layers, fr: { label: "Second avis", description: "Devis, stack ou prototype IA à challenger", placeholder: "Collez les grandes lignes du devis, de la stack ou du prototype IA : objectif, techno proposée, budget, délais, points qui vous inquiètent." }, en: { label: "Second opinion", description: "Quote, stack or AI prototype to challenge", placeholder: "Share the main points of the quote, stack or AI prototype: goal, proposed technology, budget, timing and concerns." } },
   roadmap: { icon: Smartphone, fr: { label: "Roadmap projet web", description: "Cadrer architecture, données, priorités et budget avant production", placeholder: "Décrivez le projet, les utilisateurs, les fonctionnalités imaginées, les données manipulées et ce qui doit être clarifié avant de construire." }, en: { label: "Web project roadmap", description: "Scope architecture, data, priorities and budget before production", placeholder: "Describe the project, users, imagined features, handled data and what must be clarified before building." } },
+  "direction-technique": { icon: CalendarClock, fr: { label: "Direction technique externalisée", description: "Pilotage récurrent : arbitrages, relecture de devis, roadmap tenue à jour (750 €/mois)", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement mensuel vous aiderait." }, en: { label: "Fractional tech direction", description: "Recurring steering: arbitration, quote reviews, living roadmap (€750/month)", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why a monthly retainer would help." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
-  "depannage-wordpress": { icon: AlertCircle, fr: { label: "Dépannage WordPress", description: "Réparer, stabiliser ou décider s'il faut refaire", placeholder: "Indiquez l'URL, le problème rencontré, l'urgence, les accès disponibles et ce qui a déjà été tenté." }, en: { label: "WordPress support", description: "Fix, stabilize or decide whether to rebuild", placeholder: "Share the URL, the issue, urgency, available access and what has already been tried." } },
   oeth: { icon: Scale, fr: { label: "Avantage OETH", description: "Déduction AGEFIPH 30 % via sous-traitance TIH", placeholder: "Précisez votre situation : effectif, taux d'emploi TH actuel, montant de contribution AGEFIPH, projet web envisagé…" }, en: { label: "OETH benefit", description: "30% AGEFIPH deduction via TIH subcontracting", placeholder: "Tell us about your situation: workforce size, current disabled-worker employment rate, AGEFIPH contribution, web project considered…" } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
@@ -47,8 +48,8 @@ const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
   "second-avis",
   "roadmap",
+  "direction-technique",
   "mise-en-oeuvre",
-  "depannage-wordpress",
   "oeth",
   "autre",
 ];
@@ -68,6 +69,15 @@ export default function MultiSubjectContactForm() {
   const [organisation, setOrganisation] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
+
+  // Pré-sélection du sujet via ?sujet=… (deep-link depuis /conseil, /solutions-web…).
+  // Lu côté client (window) pour éviter la contrainte Suspense de useSearchParams.
+  useEffect(() => {
+    const raw = new URLSearchParams(window.location.search).get("sujet");
+    if (raw && (SUBJECT_ORDER as string[]).includes(raw)) {
+      setSubject(raw as SubjectKey);
+    }
+  }, []);
 
   const subjectConfig = subject ? SUBJECTS[subject] : null;
   const subjectCopy = useMemo(() => {
@@ -102,8 +112,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: decision, second opinion, roadmap, implementation or WordPress support."
-            : "Choisissez le sujet : décision, second avis, roadmap, mise en œuvre ou dépannage WordPress."}
+            ? "Pick the topic: decision, second opinion, roadmap or implementation."
+            : "Choisissez le sujet : décision, second avis, roadmap ou mise en œuvre."}
         </p>
       </div>
 

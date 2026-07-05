@@ -10,7 +10,6 @@
     "documentation": "Ressources",
     "caseStudies": "Études de cas",
     "contact": "Contact",
-    "wordpressExpress": "Dépannage WordPress",
     "freeAudit": "Audit gratuit",
     "visioConseil": "Visio conseil",
     "onDemand": "À la demande",
@@ -49,7 +48,6 @@
     "blog": "Blog",
     "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
-    "wordpressExpress": "Dépannage WordPress",
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
@@ -115,10 +113,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — décision techno, devis, prototype IA ou dépannage",
-    "metaDescription": "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet, construire si nécessaire ou demander un dépannage WordPress.",
+    "metaTitle": "Contact — décision techno, devis, prototype IA ou mise en œuvre",
+    "metaDescription": "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet ou construire si nécessaire.",
     "title": "Contact",
-    "subtitle": "Décision techno, second avis, roadmap, mise en œuvre ou dépannage WordPress : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Décision techno, second avis, roadmap ou mise en œuvre : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },

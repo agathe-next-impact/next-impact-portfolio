@@ -6,6 +6,13 @@ Plan d'exécution dérivé de [evolution-offre-next-impact.md](./evolution-offre
 
 Validé le 2026-06-29.
 
+> **Mise à jour 2026-07-05 — Offre « Dépannage WordPress » supprimée.** La route
+> `/depannage-wordpress` n’existe plus (**301 → `/contact`**) ; l’offre, ses
+> bannières et son entrée de nav ont été retirées. Les outils de diagnostic
+> (« Réparer ou refaire », Boussole) sont **conservés**, mais leurs CTA
+> « Réparer dès 149 € » pointent maintenant vers `/contact`. Les mentions du
+> dépannage ci-dessous sont gardées à titre d’archive du plan initial.
+
 ---
 
 ## Décisions validées
@@ -16,8 +23,9 @@ Validé le 2026-06-29.
    le link-equity SEO) plutôt que créer un nouveau slug. Les 6 rubriques en
    sous-routes `/documentation/<rubrique>`. *À confirmer avec le chantier SEO
    avant exécution ; l'alternative `/quelle-techno-web` + 301 reste possible.*
-3. **Dépannage WordPress** : nesté sous « Services » dans le header (header lean),
-   tout en gardant son accès direct `/depannage-wordpress` pour les mailings.
+3. ~~**Dépannage WordPress** : nesté sous « Services » dans le header (header lean),
+   tout en gardant son accès direct `/depannage-wordpress` pour les mailings.~~
+   *(Caduc — offre supprimée le 2026-07-05 ; `/depannage-wordpress` redirige vers `/contact`.)*
 4. **Pages Conseil manquantes** (second avis, roadmap, sparring) : la nav pointe
    en transition vers des ancres `/conseil#…` ; les pages dédiées sont créées
    ensuite.

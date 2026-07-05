@@ -69,7 +69,7 @@ const COPY: Record<
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
           { label: "Simulateur de tarifs", href: "/tarifs" },
         ],
-        next: { label: "Trancher en visio — 180 €", href: "/conseil" },
+        next: { label: "Trancher en visio — 240 €", href: "/conseil" },
       },
       {
         id: "ia-et-code",
@@ -91,9 +91,8 @@ const COPY: Record<
         links: [
           { label: "Réparer ou refaire ?", href: "/outils/reparer-ou-refaire" },
           { label: "Auditer mon site", href: "/audit-site-web" },
-          { label: "Dépannage WordPress", href: "/depannage-wordpress" },
         ],
-        next: { label: "Réparer dès 149 €", href: "/depannage-wordpress" },
+        next: { label: "Réparer mon site", href: "/contact" },
       },
       {
         id: "avant-signer",
@@ -128,7 +127,7 @@ const COPY: Record<
           { label: "La Boussole Techno Web & IA", href: "/outils/boussole" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio — 180 €", href: "/conseil" },
+        next: { label: "En parler en visio — 240 €", href: "/conseil" },
       },
     ],
   },
@@ -162,7 +161,7 @@ const COPY: Record<
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
           { label: "Pricing simulator", href: "/tarifs" },
         ],
-        next: { label: "Decide on a call — €180", href: "/conseil" },
+        next: { label: "Decide on a call — €240", href: "/conseil" },
       },
       {
         id: "ia-et-code",
@@ -184,9 +183,8 @@ const COPY: Record<
         links: [
           { label: "Repair or rebuild?", href: "/outils/reparer-ou-refaire" },
           { label: "Audit my site", href: "/audit-site-web" },
-          { label: "WordPress support", href: "/depannage-wordpress" },
         ],
-        next: { label: "Fix it from €149", href: "/depannage-wordpress" },
+        next: { label: "Fix my site", href: "/contact" },
       },
       {
         id: "avant-signer",

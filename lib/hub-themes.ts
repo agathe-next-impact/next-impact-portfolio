@@ -94,7 +94,7 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
 
 const VISIO = (fr: string, en: string): ThemePresta => ({
   name: { fr: "Visio décision techno", en: "Tech decision call" },
-  price: { fr: "180 €", en: "€180" },
+  price: { fr: "240 €", en: "€240" },
   temp: "tiede",
   blurb: { fr, en },
   cta: { fr: "Réserver une visio", en: "Book a call" },
@@ -103,7 +103,7 @@ const VISIO = (fr: string, en: string): ThemePresta => ({
 
 const ROADMAP = (temp: Temp, fr: string, en: string): ThemePresta => ({
   name: { fr: "Roadmap Techno Impact", en: "Tech Impact Roadmap" },
-  price: { fr: "dès 950 €", en: "from €950" },
+  price: { fr: "1 500 €", en: "€1,500" },
   temp,
   blurb: { fr, en },
   cta: { fr: "Cadrer avec une roadmap", en: "Frame it with a roadmap" },
@@ -476,17 +476,6 @@ const reparer: HubTheme = {
     },
   ],
   prestas: [
-    {
-      name: { fr: "Dépannage WordPress", en: "WordPress support" },
-      price: { fr: "dès 149 €", en: "from €149" },
-      temp: "chaud",
-      blurb: {
-        fr: "Un problème ciblé et identifié ? Je le corrige, sans refonte.",
-        en: "A targeted, identified problem? I fix it, no rebuild.",
-      },
-      cta: { fr: "Réparer mon site", en: "Fix my site" },
-      href: "/depannage-wordpress",
-    },
     VISIO(
       "Un doute réparer / refondre ? On tranche votre cas en une visio, créditée si vous lancez un projet.",
       "Torn between repair and rebuild? We settle your case on a call, credited if you start a project.",
@@ -507,8 +496,8 @@ const reparer: HubTheme = {
     },
   },
   keywords: {
-    fr: ["réparer ou refaire WordPress", "refonte WordPress", "site en bout de course", "dépannage WordPress"],
-    en: ["repair or rebuild WordPress", "WordPress rebuild", "site end of life", "WordPress support"],
+    fr: ["réparer ou refaire WordPress", "refonte WordPress", "site en bout de course"],
+    en: ["repair or rebuild WordPress", "WordPress rebuild", "site end of life"],
   },
 };
 

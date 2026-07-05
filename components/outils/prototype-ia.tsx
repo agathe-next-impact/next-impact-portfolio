@@ -20,6 +20,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
 
 // ok = aucun enjeu de prod sur ce point ; ko = exige un vrai build maintenable.
@@ -228,7 +229,7 @@ function getCtas(tier: 0 | 1 | 2) {
     };
   if (tier === 1)
     return {
-      primary: { fr: "Cadrer en visio — 180 €", en: "Scope on a call — €180", href: "/conseil" },
+      primary: { fr: "Cadrer en visio — 240 €", en: "Scope on a call — €240", href: "/conseil" },
       secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
     };
   return {
@@ -455,6 +456,7 @@ export default function PrototypeIa() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </div>
+          <NewsletterModal source="prototype-ia" />
         </div>
       )}
 

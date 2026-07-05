@@ -1,5 +1,15 @@
 # Évolution de l’offre Next Impact
 
+> **Mise à jour 2026-07-05 — Offre « Dépannage WordPress » SUPPRIMÉE.** L’offre de
+> dépannage (page `/depannage-wordpress`, tickets 69 / 149 / 229 €, packs) a été
+> **retirée du site** : route, composants et bannières supprimés,
+> `/depannage-wordpress` redirige en **301 vers `/contact`**, et les CTA « Réparer »
+> des outils de diagnostic pointent désormais vers `/contact`. L’étage « Corriger »
+> n’existe plus comme offre packagée — un besoin de réparation passe par le contact
+> et relève des services. Les mentions du dépannage conservées ci-dessous le sont
+> **à titre d’archive** (raisonnement d’origine) ; elles ne décrivent plus l’offre
+> en ligne.
+
 ## Nouvelle orientation stratégique
 
 Next Impact doit évoluer d’un positionnement principalement perçu comme **studio WordPress / Next.js** vers un positionnement plus différenciant :
@@ -58,7 +68,13 @@ Next Impact devient :
 
 ## Architecture de l’offre
 
-L’offre doit être organisée en cinq niveaux complémentaires.
+> **Mise à jour 2026-07-05** — grille alignée sur le site (`/conseil`) : visio
+> **240 €** (seul palier crédité), second avis **390 €** et roadmap **1 500 €**
+> désormais **non crédités** (livrables qui se suffisent), et l'étage récurrent
+> concrétisé en **Direction technique externalisée à 750 €/mois**.
+
+L’offre s’organise en niveaux complémentaires — dont un étage **récurrent** qui
+transforme le conseil ponctuel en revenu mensuel.
 
 | Niveau | Rôle | Offre | Objectif |
 |---|---|---|---|
@@ -66,8 +82,9 @@ L’offre doit être organisée en cinq niveaux complémentaires.
 | 1 | Décider | Visio décision techno | Trancher une question précise |
 | 2 | Sécuriser | Second avis techno | Challenger un devis, une stack ou une proposition |
 | 3 | Cadrer | Roadmap Techno Impact | Structurer un projet avant production |
-| 4 | Construire | Services Next Impact | Créer, refondre ou développer la solution |
-| 5 | Corriger | Dépannage WordPress | Résoudre un problème concret sur un site existant |
+| 4 | Piloter | Direction technique externalisée | Accompagnement technique récurrent (abonnement mensuel) |
+| 5 | Construire | Services Next Impact | Créer, refondre ou développer la solution |
+| ~~6~~ | ~~Corriger~~ | ~~Dépannage WordPress~~ | *Supprimée le 2026-07-05 — voir la note en tête de document* |
 
 ---
 
@@ -123,7 +140,7 @@ Offre d’entrée payante pour une question claire et limitée.
 
 ### Tarif recommandé
 
-**180 € HT**
+**240 € HT** — seul palier crédité de l'échelle de conseil.
 
 ### Format
 
@@ -140,7 +157,7 @@ Offre d’entrée payante pour une question claire et limitée.
 
 ### Crédit sur projet
 
-**100 % crédité sur un projet Next Impact signé sous 30 jours**, dans la limite de 180 € HT.
+**100 % crédité sur un projet Next Impact signé sous 30 jours**, dans la limite de 240 € HT. C'est le **seul palier crédité** — les offres suivantes sont des livrables qui se suffisent.
 
 ### Garde-fou
 
@@ -194,7 +211,7 @@ Offre de sécurisation avant signature d’un devis, d’une refonte ou d’un c
 
 ### Crédit sur projet
 
-**50 % crédité sur un projet Next Impact signé sous 30 jours**, dans la limite de 195 € HT.
+**Aucun crédit.** Le second avis est un livrable complet (analyse écrite + visio) : sa valeur est dans le rendu, pas dans un remboursement. Seule la visio décision reste créditée.
 
 ### Garde-fou
 
@@ -225,11 +242,12 @@ Offre stratégique de cadrage avant création, refonte ou développement.
 
 ### Tarif recommandé
 
+**1 500 € HT** — palier unique, **non crédité**. Produit « signature » dont le livrable renforcé justifie le prix (aucune preuve sociale requise).
+
 | Formule | Tarif HT | Usage |
 |---|---:|---|
-| Roadmap Essentielle | 950 € | Projet simple ou arbitrage structurant |
-| Roadmap Avancée | 1 500 € | Projet avec plusieurs scénarios, outils ou fonctionnalités |
-| Roadmap Sur mesure | Sur devis | Projet complexe, multi-acteurs ou plateforme métier |
+| Roadmap projet web | 1 500 € | Cadrage complet : scénarios chiffrés, architecture, backlog, budget phasé |
+| Roadmap sur mesure | Sur devis | Projet complexe, multi-acteurs ou plateforme métier |
 
 ### Format
 
@@ -240,26 +258,21 @@ Offre stratégique de cadrage avant création, refonte ou développement.
 - restitution écrite ;
 - visio de restitution.
 
-### Livrable
+### Livrable (renforcé)
 
-- contexte et objectifs ;
-- besoins prioritaires ;
-- contraintes techniques et budgétaires ;
-- scénarios possibles ;
-- recommandation principale ;
-- risques et dépendances ;
-- budget indicatif ;
-- ordre de mise en œuvre ;
+Dossier écrit + visio de restitution, prêt à briefer un prestataire :
+
+- contexte, objectifs et contraintes techniques et budgétaires ;
+- **2 à 3 scénarios techno chiffrés et comparés** (WordPress, SaaS, no-code, IA, Headless, sur-mesure) ;
+- **architecture cible et plan de données** ;
+- **backlog priorisé des fonctionnalités** ;
+- **budget par phase et ordre de mise en œuvre** ;
+- risques, dépendances et réversibilité ;
 - prochaine étape proposée.
 
 ### Crédit sur projet
 
-Recommandation : **ne pas créditer intégralement** cette offre, car elle constitue déjà un livrable stratégique.
-
-Option possible :
-
-- 300 € HT crédités sur un projet supérieur à 4 000 € HT signé sous 45 jours ;
-- pas de crédit pour les projets inférieurs à 4 000 € HT.
+**Aucun crédit.** La roadmap est un produit stratégique complet : le livrable porte le prix, indépendamment d'un projet ultérieur.
 
 ### Garde-fou
 
@@ -301,7 +314,10 @@ Cette posture renforce la crédibilité de Next Impact et réduit la pression co
 
 ---
 
-## 6. Dépannage WordPress
+## 6. Dépannage WordPress — ❌ Supprimée (2026-07-05)
+
+> Offre retirée du site. Section conservée pour archive ; un besoin de réparation
+> passe désormais par `/contact`. Voir la note en tête de document.
 
 ### Rôle
 
@@ -338,10 +354,9 @@ Le dépannage ne doit pas être mélangé avec le conseil techno.
 | Étape | Offre | Tarif HT | Fonction commerciale |
 |---|---|---:|---|
 | Attirer | Audit gratuit / diagnostic rapide | 0 € | Générer des leads qualifiés |
-| Décider | Visio décision techno | 180 € | Transformer une hésitation en décision |
+| Décider | Visio décision techno | 240 € | Transformer une hésitation en décision (seul palier crédité) |
 | Sécuriser | Second avis techno | 390 € | Éviter un mauvais devis ou mauvais choix |
-| Cadrer | Roadmap Techno Impact Essentielle | 950 € | Structurer un projet simple |
-| Cadrer | Roadmap Techno Impact Avancée | 1 500 € | Structurer un projet complexe |
+| Cadrer | Roadmap projet web | 1 500 € | Structurer un projet (livrable renforcé, non crédité) |
 | Construire | Site WordPress optimisé | À partir de 2 250 € | Produire un site simple, propre et autonome |
 | Construire | Headless WordPress + Next.js | À partir de 4 000 € | Produire un site moderne, rapide et évolutif |
 | Construire | Plateforme métier / outil sur mesure | À partir de 6 500 € | Produire une solution spécifique |
@@ -350,27 +365,31 @@ Le dépannage ne doit pas être mélangé avec le conseil techno.
 | Corriger | Urgence WordPress 24h | 229 € | Traiter un blocage prioritaire |
 | Corriger | Pack 3 heures | 330 € | Corriger ou optimiser plusieurs points |
 | Corriger | Pack 5 heures | 520 € | Stabiliser ou améliorer un site existant |
-| Accompagner | Sparring partner techno | 600 à 1 500 € / mois | Suivi récurrent, arbitrages et amélioration continue |
+| Piloter | Direction technique externalisée | 750 € / mois | Suivi récurrent, arbitrages et amélioration continue |
 
 ---
 
-## Offre récurrente optionnelle : Sparring partner techno
+## Offre récurrente : Direction technique externalisée
+
+*(anciennement « Sparring partner techno » — nom retenu sur le site : Direction technique externalisée.)*
 
 ### Rôle
 
-Créer de la récurrence auprès des clients qui ont plusieurs sujets numériques dans l’année.
+Créer de la récurrence auprès des clients qui ont plusieurs sujets numériques dans l’année. **C'est le récurrent qui rend le conseil majoritaire dans le CA.**
 
 ### Promesse
 
-> Un accompagnement mensuel pour prendre les bonnes décisions web, IA et outils numériques sans recruter ni multiplier les prestataires.
+> Un accompagnement mensuel pour prendre les bonnes décisions web, IA et outils numériques sans recruter ni multiplier les prestataires — l'équivalent d'un directeur technique, sans l'embauche.
 
 ### Tarif recommandé
 
-| Formule | Tarif HT / mois | Contenu |
-|---|---:|---|
-| Suivi léger | 600 € | 1 visio mensuelle + arbitrages ponctuels |
-| Suivi standard | 900 € | 2 visios mensuelles + priorisation + support conseil |
-| Suivi avancé | 1 500 € | Suivi renforcé, coordination prestataires, cadrage continu |
+**750 € HT / mois** — palier unique, sans engagement de durée, non crédité. Contenu :
+
+- 1 visio de pilotage par mois (60 min) + arbitrages illimités en asynchrone ;
+- relecture de devis et propositions fournisseurs au fil de l'eau ;
+- roadmap vivante : priorités, budget et prochaines étapes tenus à jour ;
+- veille ciblée (IA, sécurité, obsolescence, dette technique) ;
+- accès prioritaire à la mise en œuvre.
 
 ### Cibles
 
@@ -480,9 +499,10 @@ Titre recommandé :
 
 Offres à afficher :
 
-- Visio décision techno — 180 € HT ;
+- Visio décision techno — 240 € HT (seul palier crédité) ;
 - Second avis techno — 390 € HT ;
-- Roadmap Techno Impact — à partir de 950 € HT.
+- Roadmap projet web — 1 500 € HT (livrable renforcé) ;
+- Direction technique externalisée — 750 € HT / mois (récurrent).
 
 ---
 

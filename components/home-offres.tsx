@@ -36,11 +36,11 @@ const OFFERS_FR: Offer[] = [
   {
     subtitle: "Décider",
     title: "Conseil techno web & IA",
-    price: "dès 180 € HT",
+    price: "dès 240 € HT",
     items: [
       "Visio décision : trancher WordPress, no-code, IA, Headless ou sur-mesure",
-      "Second avis sur un devis, une stack ou un prototype IA",
-      "Roadmap projet web avant production",
+      "Second avis sur un devis, roadmap avant production",
+      "Direction technique externalisée en abonnement mensuel",
     ],
     target: "Pour trancher avant d'investir",
     href: "/conseil",
@@ -54,7 +54,6 @@ const OFFERS_FR: Offer[] = [
     items: [
       "WordPress optimisé, Headless + Next.js ou outil métier",
       "Web app, PWA et applications sur-mesure",
-      "Dépannage WordPress dès 69 € HT",
     ],
     target: "Quand le besoin le justifie",
     href: "/solutions-web",
@@ -79,11 +78,11 @@ const OFFERS_EN: Offer[] = [
   {
     subtitle: "Decide",
     title: "Tech advice",
-    price: "from €180 excl. VAT",
+    price: "from €240 excl. VAT",
     items: [
       "Decision call: settle WordPress, no-code, AI, Headless or custom",
-      "Second opinion on a quote, stack or AI prototype",
-      "Web project roadmap before production",
+      "Second opinion on a quote, roadmap before production",
+      "Fractional tech direction on a monthly subscription",
     ],
     target: "To decide before investing",
     href: "/conseil",
@@ -97,7 +96,6 @@ const OFFERS_EN: Offer[] = [
     items: [
       "Optimized WordPress, Headless + Next.js or business tool",
       "Web apps, PWAs and custom applications",
-      "WordPress support from €69 excl. VAT",
     ],
     target: "When the need justifies it",
     href: "/solutions-web",

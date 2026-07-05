@@ -13,6 +13,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal } from "@/components/ui/reveal";
+import NewsletterModal from "@/components/ui/newsletter-modal";
 
 /* ─── Familles de solution (sorties possibles) ───────────────────────────── */
 
@@ -53,9 +54,8 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       "Your site may not be at the end of the road. Before a costly rebuild, a targeted fix (performance, security, plugins, content) is often enough to unblock things.",
     links: [
       { labelFr: "Auditer mon site", labelEn: "Audit my site", href: "/audit-site-web" },
-      { labelFr: "Dépannage WordPress", labelEn: "WordPress support", href: "/depannage-wordpress" },
     ],
-    next: { labelFr: "Réparer dès 149 €", labelEn: "Fix it from €149", href: "/depannage-wordpress" },
+    next: { labelFr: "Réparer mon site", labelEn: "Fix my site", href: "/contact" },
   },
   wordpress: {
     labelFr: "WordPress optimisé",
@@ -81,7 +81,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 180 €", labelEn: "Validate on a call — €180", href: "/conseil" },
+    next: { labelFr: "Valider en visio — 240 €", labelEn: "Validate on a call — €240", href: "/conseil" },
   },
   headless: {
     labelFr: "Headless WordPress + Next.js",
@@ -445,7 +445,7 @@ export default function Boussole() {
             </Link>
             {info.next.href !== "/conseil" && (
               <Link href="/conseil" className={BTN_GHOST}>
-                {isEn ? "Book a decision call — €180" : "Réserver une visio — 180 €"}
+                {isEn ? "Book a decision call — €240" : "Réserver une visio — 240 €"}
                 <ArrowRight
                   size={13}
                   className="transition-transform group-hover:translate-x-0.5"
@@ -457,6 +457,7 @@ export default function Boussole() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </div>
+          <NewsletterModal source="boussole" />
         </div>
       )}
 
