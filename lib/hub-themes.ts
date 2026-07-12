@@ -72,6 +72,7 @@ export interface HubTheme {
   context: LocaleText; // paragraphe d'intro (parcours)
   options: ThemeOption[]; // les voies possibles
   advice: ThemeAdvice[]; // conseil minimal
+  reading?: ThemeTool[]; // articles longs rattachés au thème (pilier, guides)
   tools: ThemeTool[];
   prestas: ThemePresta[];
   meta: { title: LocaleText; description: LocaleText };
@@ -178,6 +179,20 @@ const choisir: HubTheme = {
         fr: "On ne développe spécifique que si aucun outil existant ne couvre le besoin sans contorsion. Sinon, c'est cher et lent pour rien.",
         en: "You only build custom if no existing tool covers the need without contortions. Otherwise it's expensive and slow for nothing.",
       },
+    },
+  ],
+  reading: [
+    {
+      icon: FileText,
+      name: {
+        fr: "Quelle techno pour votre site à l'heure de l'IA ?",
+        en: "Which tech for your site in the AI era?",
+      },
+      blurb: {
+        fr: "L'analyse complète : les trois voies (sur-mesure, builders IA, plateformes), cinq critères d'arbitrage et un principe de durabilité.",
+        en: "The full analysis: the three paths (custom, AI builders, platforms), five decision criteria and a durability principle.",
+      },
+      href: "/documentation/choisir/quelle-techno-ia",
     },
   ],
   tools: [

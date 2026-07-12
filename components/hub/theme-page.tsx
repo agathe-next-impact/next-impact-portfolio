@@ -9,7 +9,7 @@
 // Ajouter un thème = ajouter une entrée dans HUB_THEMES, pas toucher ce fichier.
 
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, ArrowUpRight, GitBranch, Info, Lightbulb } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, GitBranch, Info, Lightbulb } from "lucide-react";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import PageLayout from "@/components/page-layout";
@@ -35,6 +35,8 @@ export function ThemePage({ theme, locale }: { theme: HubTheme; locale: string }
     optionsLabel: isEn ? "The possible paths" : "Les voies possibles",
     adviceKicker: isEn ? "Minimal advice" : "Conseil minimal",
     adviceTitle: isEn ? "What actually tips the decision" : "Ce qui fait vraiment pencher la décision",
+    readingKicker: isEn ? "Worth reading" : "À lire",
+    readingTitle: isEn ? "Go deeper on this question" : "Approfondir la question",
     toolsKicker: isEn ? "Online tools" : "Outils en ligne",
     toolsTitle: isEn ? "Test it yourself, free" : "Testez vous-même, gratuitement",
     prestasKicker: isEn ? "Next step" : "Prochaine étape",
@@ -119,6 +121,50 @@ export function ThemePage({ theme, locale }: { theme: HubTheme; locale: string }
         </Reveal>
       </BlueprintSection>
       <Separator />
+
+      {/* 2 bis — À lire : articles longs rattachés au thème (optionnel) */}
+      {theme.reading && theme.reading.length > 0 && (
+        <>
+          <BlueprintSection innerClassName="px-6 py-14 lg:px-8 lg:py-16">
+            <Reveal className="mb-10">
+              <SectionHeading kicker={copy.readingKicker} title={copy.readingTitle} />
+            </Reveal>
+            <Stagger className="border border-dark-gray bg-obsidian">
+              {theme.reading.map((r, i) => {
+                const Icon = r.icon ?? BookOpen;
+                return (
+                  <StaggerItem
+                    key={r.href + r.name.fr}
+                    className={i < theme.reading!.length - 1 ? "border-b border-dark-gray" : ""}
+                  >
+                    <Link
+                      href={r.href as Href}
+                      className="group flex items-start gap-4 px-5 py-5 no-underline transition-colors hover:bg-jet lg:px-7"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-dark-gray bg-jet">
+                        <Icon className="h-[1.125rem] w-[1.125rem] text-vermilion" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-inter-tight text-base text-foreground">
+                          {tx(r.name, locale)}
+                        </p>
+                        <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                          {tx(r.blurb, locale)}
+                        </p>
+                      </div>
+                      <ArrowUpRight
+                        size={16}
+                        className="mt-1 shrink-0 text-mid-gray transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                      />
+                    </Link>
+                  </StaggerItem>
+                );
+              })}
+            </Stagger>
+          </BlueprintSection>
+          <Separator />
+        </>
+      )}
 
       {/* 3 — Outil(s) en ligne */}
       <BlueprintSection innerClassName="px-6 py-14 lg:px-8 lg:py-16">

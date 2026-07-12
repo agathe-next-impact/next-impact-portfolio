@@ -1027,7 +1027,7 @@ body {
 /* ── Emphase ── */
 :is(.doc-prose,.article-prose) strong {
   color: hsl(var(--foreground));
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* ── Images ── */

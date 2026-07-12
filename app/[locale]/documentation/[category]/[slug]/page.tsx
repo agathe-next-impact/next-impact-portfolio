@@ -18,7 +18,7 @@ import { RelatedArticles } from "@/components/documentation/related-articles"
 import { ArticleInternalLinks } from "@/components/documentation/documentation-internal-links"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, ArticleJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd } from "@/components/json-ld";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -28,6 +28,7 @@ const categoryLabels: Record<string, string> = {
   wordpress: "WordPress",
   "wordpress-headless": "WordPress Headless",
   blog: "Blog",
+  choisir: "Choisir sa techno",
 }
 
 function estimateReadingTime(content: string): number {
@@ -123,6 +124,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
       "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
       "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
       blog: ["wordpress-headless", "wordpress"],
+      choisir: ["wordpress-headless", "projet-site-web", "wordpress"],
     }
 
     const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []
@@ -168,6 +170,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
           proficiencyLevel={article.category === "wordpress-headless" ? "Intermediate" : undefined}
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
         />
+        {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
         <ReadingProgress />
         <ArticleReadTracker category={params.category} slug={params.slug} />
         <ScrollToTop />

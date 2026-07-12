@@ -65,6 +65,7 @@ const COPY: Record<
         title: "Choisir sa techno",
         question: "WordPress, Headless, no-code, SaaS… lequel pour mon besoin ?",
         links: [
+          { label: "Quelle techno à l'heure de l'IA ?", href: "/documentation/choisir/quelle-techno-ia" },
           { label: "Comprendre le headless", href: "/wordpress-headless" },
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
           { label: "Simulateur de tarifs", href: "/tarifs" },
@@ -157,6 +158,7 @@ const COPY: Record<
         title: "Choose your tech",
         question: "WordPress, Headless, no-code, SaaS… which fits my need?",
         links: [
+          { label: "Which tech in the AI era?", href: "/documentation/choisir/quelle-techno-ia" },
           { label: "Understanding headless", href: "/wordpress-headless" },
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
           { label: "Pricing simulator", href: "/tarifs" },

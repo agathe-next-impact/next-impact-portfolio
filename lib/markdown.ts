@@ -15,8 +15,14 @@ export interface ArticleMeta {
   isFallback?: boolean
 }
 
+export interface ArticleFaqEntry {
+  question: string
+  answer: string
+}
+
 export interface Article extends ArticleMeta {
   content: string
+  faq?: ArticleFaqEntry[]
 }
 
 const contentDirectoryFr = path.join(process.cwd(), "content")
@@ -96,6 +102,7 @@ export function getArticleBySlug(category: string, slug: string, locale?: Locale
     date: formatDate(data.date, locale),
     content,
     order: data.order,
+    faq: Array.isArray(data.faq) ? data.faq : undefined,
     isMdx,
     isFallback,
   }
