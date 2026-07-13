@@ -10,6 +10,22 @@
 > **à titre d’archive** (raisonnement d’origine) ; elles ne décrivent plus l’offre
 > en ligne.
 
+> **Mise à jour 2026-07-13 — Refonte des 3 premières offres de conseil.** Les
+> trois premières offres de conseil ont été remplacées, sur l'ensemble du site,
+> par une échelle orientée « projet conçu avec l'IA » :
+> 1. **Choix de techno web avec l'IA** — 150 € HT, visio 30 min (analyse de
+>    l'existant + recueil du besoin). **Seul palier crédité** sur un projet signé
+>    sous 30 jours.
+> 2. **Conseil architecture de projet IA** — 490 € HT, visio 1 h + livrable
+>    (cahier des charges et spécifications techniques). Non crédité.
+> 3. **Pack de mise en œuvre IA** — 1 900 € HT, 2 × 1 h + livrables (CDC + pack
+>    complet de prompts et d'agents Claude Code ou Codex). Non crédité.
+>
+> La 4e offre **Direction technique externalisée** (750 €/mois, récurrent) est
+> **conservée telle quelle**. Les anciennes offres décrites plus bas (Visio
+> décision techno 240 €, Second avis techno 390 €, Roadmap projet web 1 500 €)
+> sont **conservées à titre d'archive** — elles ne décrivent plus l'offre en ligne.
+
 ## Nouvelle orientation stratégique
 
 Next Impact doit évoluer d’un positionnement principalement perçu comme **studio WordPress / Next.js** vers un positionnement plus différenciant :

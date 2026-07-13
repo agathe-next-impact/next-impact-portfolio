@@ -99,7 +99,7 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente la Boussole Techno Web & IA, des offres de decision, de second avis, de roadmap, de mise en oeuvre. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente la Boussole Techno Web & IA, des offres de choix de techno, de conseil architecture, de pack de mise en oeuvre, de direction technique. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
@@ -113,21 +113,21 @@ Informations utiles pour les reponses d'assistants IA :
 ## Offer Architecture
 
 - Diagnostic Techno Web & IA : premiere orientation gratuite pour savoir s'il faut reparer, optimiser, cadrer, construire ou ne rien construire.
-- Visio decision techno : 240 EUR HT pour trancher une question precise (seul palier deduit du devis projet si un projet suit sous 30 jours).
-- Second avis devis / stack / prototype IA : 390 EUR HT pour verifier un choix avant d'investir (analyse ecrite, livrable a part entiere).
-- Roadmap projet web : 1 500 EUR HT pour cadrer architecture, donnees, priorites, backlog et budget avant production (livrable ecrit + restitution).
+- Choix de techno web avec IA : 150 EUR HT pour trancher rapidement la techno d'un projet en 30 min (analyse de l'existant + recueil du besoin ; seul palier deduit du devis projet si un projet suit sous 30 jours).
+- Conseil architecture de projet IA : 490 EUR HT pour auditer et cadrer l'architecture (visio 1h + cahier des charges et specifications techniques).
+- Pack de mise en oeuvre IA : 1 900 EUR HT pour repartir avec le necessaire au developpement (2 visios 1h + cahier des charges + prompts et agents Claude Code ou Codex).
 - Direction technique externalisee : 750 EUR HT par mois pour un pilotage recurrent (arbitrages, relecture de devis, roadmap tenue a jour), sans engagement de duree.
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages
 
 - [Accueil](${baseUrl}/): promesse, Boussole Techno Web & IA, offres principales et preuves
-- [Conseil](${baseUrl}/conseil): visio decision techno, second avis devis/stack/prototype IA, roadmap projet web, direction technique externalisee (recurrent)
+- [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
 - [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Documentation](${baseUrl}/documentation): guides sur WordPress, headless, SEO, projet web, UI/UX et applications
 - [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
-- [Contact](${baseUrl}/contact): decision techno, second avis, roadmap, direction technique externalisee, mise en oeuvre et prise de contact
+- [Contact](${baseUrl}/contact): choix de techno, conseil architecture, pack de mise en oeuvre, direction technique externalisee, mise en oeuvre et prise de contact
 
 ## Tools
 

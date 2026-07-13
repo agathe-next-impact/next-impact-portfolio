@@ -43,7 +43,7 @@ const FR: HomeContent = {
       {
         question: "Pouvez-vous relire un devis ou un prototype généré avec l'IA ?",
         answer:
-          "Oui. Le second avis vérifie la cohérence de la stack, le niveau de complexité, les risques de dépendance, la dette technique, les données, la sécurité, le SEO et le coût futur.",
+          "Oui. Un avis techno indépendant, en visio, vérifie la cohérence de la stack, le niveau de complexité, les risques de dépendance, la dette technique, les données, la sécurité, le SEO et le coût futur.",
       },
       {
         question: "Est-ce que Next Impact construit aussi les solutions ?",
@@ -96,7 +96,7 @@ const EN: HomeContent = {
       {
         question: "Can you review a quote or AI-generated prototype?",
         answer:
-          "Yes. The second opinion checks stack coherence, complexity level, dependency risks, technical debt, data, security, SEO and future cost.",
+          "Yes. An independent tech opinion, on a call, checks stack coherence, complexity level, dependency risks, technical debt, data, security, SEO and future cost.",
       },
       {
         question: "Does Next Impact also build the solutions?",

@@ -120,9 +120,9 @@ Next Impact is a web technology advisory and implementation offer in France led 
 ## Offer Architecture
 
 - Web & AI Tech diagnostic: first direction before building.
-- Tech decision call (€240): choose between WordPress, no-code, AI coding, SaaS, Headless or custom — the only tier credited to a project signed within 30 days.
-- Quote / stack / AI prototype second opinion (€390): challenge a proposal before signing or industrializing — standalone written deliverable.
-- Web project roadmap (€1,500): scope architecture, data, priorities, backlog and budget before production — written deliverable plus recap call.
+- Web tech choice with AI (€150): settle the right technology for a project fast, in 30 min — review of existing setup and needs; the only tier credited to a project signed within 30 days.
+- AI project architecture advice (€490): audit and scope the architecture — one-hour call plus specifications and technical requirements.
+- AI build pack (€1,900): leave with everything needed to develop — two one-hour calls plus specs and a pack of prompts and agents (Claude Code or Codex).
 - Fractional tech direction (€750/month): monthly retainer for ongoing steering — arbitration, quote reviews and a living roadmap, no time commitment.
 - Implementation: build only when the solution is clear and justified.
 - WordPress support: fix, stabilize or decide whether rebuilding is justified.

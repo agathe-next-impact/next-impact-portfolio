@@ -17,14 +17,14 @@ const COPY = {
     eyebrow: "Boussole Techno Web & IA",
     title: "L'IA peut coder vite. Mais quoi construire ?",
     subtitle:
-      "Visio décision, second avis, roadmap ou direction technique externalisée : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+      "Choix de techno, conseil architecture, pack de mise en œuvre IA ou direction technique externalisée : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
     cta: "Voir le conseil techno",
   },
   en: {
     eyebrow: "Web & AI Tech Compass",
     title: "AI can code fast. But what should you build?",
     subtitle:
-      "Decision call, second opinion, roadmap or fractional tech direction: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
+      "Tech choice call, architecture advice, AI build pack or fractional tech direction: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
     cta: "See tech advice",
   },
 };

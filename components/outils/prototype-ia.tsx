@@ -229,11 +229,11 @@ function getCtas(tier: 0 | 1 | 2) {
     };
   if (tier === 1)
     return {
-      primary: { fr: "Cadrer en visio — 240 €", en: "Scope on a call — €240", href: "/conseil" },
+      primary: { fr: "Cadrer en visio — 150 €", en: "Scope on a call — €150", href: "/conseil" },
       secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
     };
   return {
-    primary: { fr: "Cadrer avec une roadmap", en: "Frame it with a roadmap", href: "/conseil" },
+    primary: { fr: "Cadrer l'architecture", en: "Scope the architecture", href: "/conseil" },
     secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
   };
 }
@@ -430,8 +430,8 @@ export default function PrototypeIa() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
-                ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you — a call (or a roadmap) frames the move from prototype to product."
-                : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente — une visio (ou une roadmap) cadre le passage du prototype au produit."}
+                ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you — a call (or architecture advice) frames the move from prototype to product."
+                : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente — une visio (ou un conseil architecture) cadre le passage du prototype au produit."}
             </p>
           </div>
 

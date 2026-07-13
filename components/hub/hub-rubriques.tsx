@@ -70,7 +70,7 @@ const COPY: Record<
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
           { label: "Simulateur de tarifs", href: "/tarifs" },
         ],
-        next: { label: "Trancher en visio — 240 €", href: "/conseil" },
+        next: { label: "Trancher en visio — 150 €", href: "/conseil" },
       },
       {
         id: "ia-et-code",
@@ -105,7 +105,7 @@ const COPY: Record<
           { label: "Générer un cahier des charges", href: "/cahier-des-charges" },
           { label: "Simulateur de tarifs", href: "/tarifs" },
         ],
-        next: { label: "Demander un second avis", href: "/conseil" },
+        next: { label: "Un avis indépendant", href: "/conseil" },
       },
       {
         id: "outils-metier",
@@ -117,7 +117,7 @@ const COPY: Record<
           { label: "Diagnostic d'opportunité PWA", href: "/outils/audit-pwa" },
           { label: "Diagnostic projet", href: "/solutions-web/eligibilite" },
         ],
-        next: { label: "Cadrer avec une roadmap", href: "/conseil" },
+        next: { label: "Cadrer l'architecture", href: "/conseil" },
       },
       {
         id: "presence",
@@ -128,7 +128,7 @@ const COPY: Record<
           { label: "La Boussole Techno Web & IA", href: "/outils/boussole" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio — 240 €", href: "/conseil" },
+        next: { label: "En parler en visio — 150 €", href: "/conseil" },
       },
     ],
   },
@@ -163,7 +163,7 @@ const COPY: Record<
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
           { label: "Pricing simulator", href: "/tarifs" },
         ],
-        next: { label: "Decide on a call — €240", href: "/conseil" },
+        next: { label: "Decide on a call — €150", href: "/conseil" },
       },
       {
         id: "ia-et-code",
@@ -198,7 +198,7 @@ const COPY: Record<
           { label: "Generate a project brief", href: "/cahier-des-charges" },
           { label: "Pricing simulator", href: "/tarifs" },
         ],
-        next: { label: "Get a second opinion", href: "/conseil" },
+        next: { label: "Get an independent opinion", href: "/conseil" },
       },
       {
         id: "outils-metier",
@@ -210,7 +210,7 @@ const COPY: Record<
           { label: "PWA opportunity diagnostic", href: "/outils/audit-pwa" },
           { label: "Project diagnostic", href: "/solutions-web/eligibilite" },
         ],
-        next: { label: "Frame it with a roadmap", href: "/conseil" },
+        next: { label: "Scope the architecture", href: "/conseil" },
       },
       {
         id: "presence",

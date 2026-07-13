@@ -1,11 +1,11 @@
 "use client";
 
 // Décrypteur de devis web — outil « Avant de signer » du hub. Checklist sur un
-// devis reçu → score de santé /100, verdict (signer / ajuster / second avis),
+// devis reçu → score de santé /100, verdict (signer / ajuster / avis indépendant),
 // questions à poser au prestataire dérivées des points faibles, puis routage
-// vers l'offre Second avis. V1 = questionnaire structuré (couche IA possible en
-// V2). Anti-cannibalisation : l'outil repère les signaux, le second avis analyse
-// le devis ligne par ligne. Modèle : components/outils/audit-pwa.tsx.
+// vers l'offre de conseil (choix de techno). V1 = questionnaire structuré (couche
+// IA possible en V2). Anti-cannibalisation : l'outil repère les signaux, l'avis
+// indépendant applique la décision à votre cas. Modèle : components/outils/audit-pwa.tsx.
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -434,15 +434,15 @@ export default function DecrypteurDevis() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
-                ? "This is a self-check, not a legal review. A second opinion reads your actual quote line by line and tells you clearly: sign, adjust or renegotiate — backed by a written analysis."
-                : "Ceci est une auto-évaluation, pas une analyse juridique. Le second avis lit votre devis réel ligne par ligne et vous dit clairement : signer, ajuster ou renégocier — analyse écrite à l'appui."}
+                ? "This is a self-check, not a legal review. An independent tech opinion goes over your actual quote and tells you clearly: sign, adjust or renegotiate."
+                : "Ceci est une auto-évaluation, pas une analyse juridique. Un avis techno indépendant reprend votre devis réel et vous dit clairement : signer, ajuster ou renégocier."}
             </p>
           </div>
 
           {/* Prochaine étape */}
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/conseil" className={BTN_PRIMARY}>
-              {isEn ? "Get a second opinion — €390" : "Demander un second avis — 390 €"}
+              {isEn ? "Get an independent opinion — €150" : "Un avis indépendant — 150 €"}
               <ArrowRight size={14} />
             </Link>
             <Link href="/outils/boussole" className={BTN_GHOST}>

@@ -8,6 +8,7 @@ import {
   Globe,
   Layers,
   MessageCircle,
+  Package,
   Scale,
   Smartphone,
   SearchCheck,
@@ -21,8 +22,8 @@ import type { Locale } from "@/i18n/routing";
 
 type SubjectKey =
   | "decision-techno"
-  | "second-avis"
-  | "roadmap"
+  | "architecture"
+  | "pack-ia"
   | "direction-technique"
   | "mise-en-oeuvre"
   | "oeth"
@@ -35,9 +36,9 @@ interface SubjectConfig {
 }
 
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
-  "decision-techno": { icon: SearchCheck, fr: { label: "Visio décision techno", description: "Choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Tech decision call", description: "Choose between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
-  "second-avis": { icon: Layers, fr: { label: "Second avis", description: "Devis, stack ou prototype IA à challenger", placeholder: "Collez les grandes lignes du devis, de la stack ou du prototype IA : objectif, techno proposée, budget, délais, points qui vous inquiètent." }, en: { label: "Second opinion", description: "Quote, stack or AI prototype to challenge", placeholder: "Share the main points of the quote, stack or AI prototype: goal, proposed technology, budget, timing and concerns." } },
-  roadmap: { icon: Smartphone, fr: { label: "Roadmap projet web", description: "Cadrer architecture, données, priorités et budget avant production", placeholder: "Décrivez le projet, les utilisateurs, les fonctionnalités imaginées, les données manipulées et ce qui doit être clarifié avant de construire." }, en: { label: "Web project roadmap", description: "Scope architecture, data, priorities and budget before production", placeholder: "Describe the project, users, imagined features, handled data and what must be clarified before building." } },
+  "decision-techno": { icon: SearchCheck, fr: { label: "Choix de techno web avec IA", description: "Choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Web tech choice with AI", description: "Choose between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
+  architecture: { icon: Layers, fr: { label: "Conseil architecture de projet IA", description: "Cadrer l'architecture — cahier des charges et spécifications techniques", placeholder: "Décrivez le projet, les utilisateurs, les fonctionnalités imaginées et les données manipulées : je cadre l'architecture et rédige le cahier des charges." }, en: { label: "AI project architecture advice", description: "Scope the architecture — specifications and technical requirements", placeholder: "Describe the project, users, imagined features and handled data: I scope the architecture and write the specifications." } },
+  "pack-ia": { icon: Package, fr: { label: "Pack de mise en œuvre IA", description: "Specs, prompts et agents pour construire (Claude Code / Codex)", placeholder: "Décrivez le projet à développer avec l'IA (Claude Code ou Codex) : objectif, périmètre, contraintes. Je prépare specs, prompts et agents." }, en: { label: "AI build pack", description: "Specs, prompts and agents to build (Claude Code / Codex)", placeholder: "Describe the project to build with AI (Claude Code or Codex): goal, scope, constraints. I prepare specs, prompts and agents." } },
   "direction-technique": { icon: CalendarClock, fr: { label: "Direction technique externalisée", description: "Pilotage récurrent : arbitrages, relecture de devis, roadmap tenue à jour (750 €/mois)", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement mensuel vous aiderait." }, en: { label: "Fractional tech direction", description: "Recurring steering: arbitration, quote reviews, living roadmap (€750/month)", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why a monthly retainer would help." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
   oeth: { icon: Scale, fr: { label: "Avantage OETH", description: "Déduction AGEFIPH 30 % via sous-traitance TIH", placeholder: "Précisez votre situation : effectif, taux d'emploi TH actuel, montant de contribution AGEFIPH, projet web envisagé…" }, en: { label: "OETH benefit", description: "30% AGEFIPH deduction via TIH subcontracting", placeholder: "Tell us about your situation: workforce size, current disabled-worker employment rate, AGEFIPH contribution, web project considered…" } },
@@ -46,8 +47,8 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
 
 const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
-  "second-avis",
-  "roadmap",
+  "architecture",
+  "pack-ia",
   "direction-technique",
   "mise-en-oeuvre",
   "oeth",
@@ -112,8 +113,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: decision, second opinion, roadmap or implementation."
-            : "Choisissez le sujet : décision, second avis, roadmap ou mise en œuvre."}
+            ? "Pick the topic: tech choice, architecture, build pack or tech direction."
+            : "Choisissez le sujet : choix de techno, architecture, pack de mise en œuvre ou direction technique."}
         </p>
       </div>
 

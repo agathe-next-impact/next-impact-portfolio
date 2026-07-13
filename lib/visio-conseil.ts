@@ -36,115 +36,115 @@ export interface ConseilOffer {
 
 export const OFFERS: ConseilOffer[] = [
   {
-    id: "visio-decision-techno",
+    id: "choix-techno-ia",
     featured: true,
     credited: true,
     tiers: [
       {
-        duration: { fr: "60 à 75 min", en: "60 to 75 min" },
-        price: "240 €",
-        value: 240,
-        calendlyUrl: `${CALENDLY_BASE}/visio-decision-techno`,
+        duration: { fr: "30 min", en: "30 min" },
+        price: "150 €",
+        value: 150,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-un-projet-web-clone`,
       },
     ],
     fr: {
-      name: "Visio décision techno",
+      name: "Choix de techno web avec l'IA",
       tag: "Boussole",
-      tagline: "Trancher une décision web à l'heure de l'IA.",
+      tagline: "Trancher rapidement la bonne techno pour votre projet.",
       forWho:
-        "Vous hésitez entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure et vous voulez décider sans perdre des semaines à comparer.",
+        "Vous démarrez un projet et vous voulez, en 30 minutes, une reco de techno claire plutôt que des semaines de comparaison.",
       bullets: [
-        "Ce qu'il faut construire, simplifier ou ne pas construire",
-        "Recommandation principale et alternative éventuelle",
-        "Risques de maintenance, sécurité, SEO, dette technique et coût futur",
+        "Analyse express de l'existant et recueil du besoin",
+        "Recommandation de techno principale (et alternative éventuelle)",
+        "Points de vigilance : maintenance, coût, dépendance, SEO",
         "100 % crédité sur un projet signé sous 30 jours — le seul palier déduit",
       ],
     },
     en: {
-      name: "Tech decision call",
-      tag: "Entry advice",
-      tagline: "Settle a web decision in the age of AI.",
+      name: "Web tech choice with AI",
+      tag: "Compass",
+      tagline: "Settle the right technology for your project, fast.",
       forWho:
-        "You are hesitating between WordPress, no-code, AI coding, SaaS, Headless or custom and want to decide without spending weeks comparing.",
+        "You are starting a project and want, in 30 minutes, a clear technology recommendation instead of weeks of comparison.",
       bullets: [
-        "What to build, simplify or not build",
-        "Main recommendation and possible alternative",
-        "Maintenance, security, SEO, technical debt and future cost risks",
+        "Express review of your existing setup and needs",
+        "Main technology recommendation (and possible alternative)",
+        "Watch points: maintenance, cost, lock-in, SEO",
         "100% credited to a project signed within 30 days — the only deducted tier",
       ],
     },
   },
   {
-    id: "second-avis-techno",
+    id: "architecture-projet-ia",
     tiers: [
       {
-        duration: { fr: "Analyse + 60 min", en: "Review + 60 min" },
-        price: "390 €",
-        value: 390,
-        calendlyUrl: `${CALENDLY_BASE}/second-avis-techno`,
+        duration: { fr: "1 h + livrable", en: "1h + deliverable" },
+        price: "490 €",
+        value: 490,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-d-architecture-web-ia`,
       },
     ],
     fr: {
-      name: "Second avis devis / stack / prototype IA",
-      tagline: "Avant de signer, coder ou industrialiser trop vite.",
+      name: "Architecture de votre projet IA",
+      tag: "Cadrage",
+      tagline: "Auditer et cadrer l'architecture avant de produire.",
       forWho:
-        "Vous avez un devis, une proposition d'agence, une stack recommandée ou un prototype généré avec l'IA et vous voulez savoir si c'est maintenable.",
+        "Vous avez un projet plus structurant — site, appli, outil métier, automatisation IA — et vous voulez la bonne architecture et des specs claires avant de lancer la production.",
       bullets: [
-        "Points forts, vigilances et questions à poser",
-        "Risques de dépendance, surcoût, données, sécurité ou mauvais dimensionnement",
-        "Recommandation : signer, ajuster, comparer ou recadrer",
-        "Analyse écrite remise après l'appel — pas seulement un avis oral",
+        "Audit de l'existant et des contraintes du projet",
+        "Préconisations : solutions et architecture adaptées au besoin",
+        "Visio conseil d'1 heure pour arbitrer les choix",
+        "Livrable : cahier des charges et spécifications techniques",
       ],
     },
     en: {
-      name: "Quote / stack / AI prototype second opinion",
-      tagline: "Before signing, coding or industrializing too fast.",
+      name: "Your AI project architecture",
+      tag: "Scoping",
+      tagline: "Audit and scope the architecture before you build.",
       forWho:
-        "You have a quote, agency proposal, recommended stack or AI-generated prototype and want to know if it is maintainable.",
+        "You have a more structural project — site, app, business tool, AI automation — and want the right architecture and clear specs before starting production.",
       bullets: [
-        "Strengths, watch points and questions to ask",
-        "Dependency, overcost, data, security and sizing risks",
-        "Recommendation: sign, adjust, compare or rescope",
-        "Written analysis delivered after the call — not just a verbal opinion",
+        "Audit of your existing setup and project constraints",
+        "Recommendations: solutions and architecture fit to the need",
+        "One-hour advisory call to settle the choices",
+        "Deliverable: specifications and technical requirements",
       ],
     },
   },
   {
-    id: "roadmap-techno-impact",
+    id: "pack-mise-en-oeuvre-ia",
     tiers: [
       {
-        duration: { fr: "livrable complet", en: "full deliverable" },
-        price: "1 500 €",
-        value: 1500,
-        calendlyUrl: `${CALENDLY_BASE}/visio-decision-techno`,
+        duration: { fr: "2 × 1 h + pack", en: "2 × 1h + pack" },
+        price: "1 900 €",
+        value: 1900,
+        calendlyUrl: `${CALENDLY_BASE}/pack-mise-en-oeuvre-ia`,
       },
     ],
     fr: {
-      name: "Roadmap projet web",
-      tag: "Signature",
-      tagline: "Feuille de route avant IA, no-code, refonte ou outil métier.",
+      name: "Pack de mise en œuvre IA",
+      tag: "Clés en main",
+      tagline: "Tout le nécessaire pour construire le projet avec l'IA.",
       forWho:
-        "Votre projet est plus structurant et vous devez clarifier objectifs, fonctionnalités, architecture, données et investissement avant de produire.",
+        "Vous voulez développer votre projet avec Claude Code ou Codex et repartir avec un pack complet — specs, prompts et agents — prêt à produire.",
       bullets: [
-        "Questionnaire, analyse de l'existant et atelier de cadrage",
-        "2 à 3 scénarios techno chiffrés et comparés : WordPress, SaaS, no-code, IA, Headless ou sur-mesure",
-        "Architecture cible, plan de données et backlog priorisé des fonctionnalités",
-        "Budget par phase, ordre de mise en œuvre, risques, dépendances et réversibilité",
-        "Livrable écrit + visio de restitution — un dossier prêt à briefer un prestataire",
+        "Audit et préconisations sur les solutions adaptées au projet",
+        "2 visios conseil d'1 heure pour cadrer et affiner",
+        "Livrable : cahier des charges et spécifications techniques du projet",
+        "Livrable : pack complet de prompts et d'agents (Claude Code ou Codex) prêt au développement",
       ],
     },
     en: {
-      name: "Web project roadmap",
-      tag: "Signature",
-      tagline: "Roadmap before AI, no-code, redesign or a business tool.",
+      name: "AI build pack",
+      tag: "Turnkey",
+      tagline: "Everything you need to build the project with AI.",
       forWho:
-        "Your project is more structural and you need to clarify goals, features, architecture, data and investment before production.",
+        "You want to develop your project with Claude Code or Codex and leave with a complete pack — specs, prompts and agents — ready to ship.",
       bullets: [
-        "Questionnaire, existing-state review and scoping workshop",
-        "2 to 3 costed, compared tech scenarios: WordPress, SaaS, no-code, AI, Headless or custom",
-        "Target architecture, data plan and prioritized feature backlog",
-        "Budget per phase, rollout order, risks, dependencies and reversibility",
-        "Written deliverable + recap call — a dossier ready to brief any vendor",
+        "Audit and recommendations on the solutions fit to your project",
+        "Two one-hour advisory calls to scope and refine",
+        "Deliverable: project specifications and technical requirements",
+        "Deliverable: complete pack of prompts and agents (Claude Code or Codex) ready for development",
       ],
     },
   },
@@ -201,11 +201,11 @@ export const FAQ: FaqItem[] = [
   {
     fr: {
       q: "Quelle offre choisir ?",
-      a: "La visio décision techno tranche une question précise. Le second avis challenge un devis, une stack ou un prototype IA. La roadmap cadre un projet plus large avant production. La direction technique externalisée vous donne un pilotage récurrent, mois après mois.",
+      a: "Le choix de techno web tranche rapidement quelle technologie viser. Le conseil architecture cadre un projet plus structurant et vous remet un cahier des charges. Le pack de mise en œuvre y ajoute les prompts et agents pour construire avec l'IA. La direction technique externalisée vous donne un pilotage récurrent, mois après mois.",
     },
     en: {
       q: "Which offer should I choose?",
-      a: "The tech decision call settles one precise question. The second opinion challenges a quote, stack or AI prototype. The roadmap scopes a broader project before production. The fractional tech direction gives you recurring steering, month after month.",
+      a: "The web tech choice call quickly settles which technology to aim for. The architecture advice scopes a more structural project and hands you a specifications document. The build pack adds the prompts and agents to build with AI. The fractional tech direction gives you recurring steering, month after month.",
     },
   },
   {
@@ -241,11 +241,11 @@ export const FAQ: FaqItem[] = [
   {
     fr: {
       q: "Le montant est-il crédité si un projet suit ?",
-      a: "Seule la visio décision est créditée : 100 % sur un projet signé sous 30 jours. Le second avis, la roadmap et la direction technique externalisée sont des livrables à part entière — leur valeur est dans le rendu, pas dans un remboursement.",
+      a: "Seul le choix de techno web (30 min) est crédité : 100 % sur un projet signé sous 30 jours. Le conseil architecture, le pack de mise en œuvre et la direction technique externalisée sont des livrables à part entière — leur valeur est dans le rendu, pas dans un remboursement.",
     },
     en: {
       q: "Is the amount credited if a project follows?",
-      a: "Only the tech decision call is credited: 100% on a project signed within 30 days. The second opinion, the roadmap and the fractional tech direction are standalone deliverables — their value is in the output, not in a refund.",
+      a: "Only the web tech choice call (30 min) is credited: 100% on a project signed within 30 days. The architecture advice, the build pack and the fractional tech direction are standalone deliverables — their value is in the output, not in a refund.",
     },
   },
 ];

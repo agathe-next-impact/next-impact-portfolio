@@ -94,8 +94,8 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
 });
 
 const VISIO = (fr: string, en: string): ThemePresta => ({
-  name: { fr: "Visio décision techno", en: "Tech decision call" },
-  price: { fr: "240 €", en: "€240" },
+  name: { fr: "Choix de techno web", en: "Web tech choice" },
+  price: { fr: "150 €", en: "€150" },
   temp: "tiede",
   blurb: { fr, en },
   cta: { fr: "Réserver une visio", en: "Book a call" },
@@ -103,11 +103,11 @@ const VISIO = (fr: string, en: string): ThemePresta => ({
 });
 
 const ROADMAP = (temp: Temp, fr: string, en: string): ThemePresta => ({
-  name: { fr: "Roadmap Techno Impact", en: "Tech Impact Roadmap" },
-  price: { fr: "1 500 €", en: "€1,500" },
+  name: { fr: "Conseil architecture de projet IA", en: "AI project architecture advice" },
+  price: { fr: "490 €", en: "€490" },
   temp,
   blurb: { fr, en },
-  cta: { fr: "Cadrer avec une roadmap", en: "Frame it with a roadmap" },
+  cta: { fr: "Cadrer l'architecture", en: "Scope the architecture" },
   href: "/conseil",
 });
 
@@ -240,8 +240,8 @@ const choisir: HubTheme = {
     ),
     ROADMAP(
       "chaud",
-      "Projet structurant ? Une feuille de route pour choisir l'architecture et prioriser.",
-      "A structuring project? A roadmap to choose the architecture and set priorities.",
+      "Projet structurant ? Un conseil architecture pour choisir la structure et prioriser.",
+      "A structuring project? Architecture advice to choose the structure and set priorities.",
     ),
     AUDIT_GRATUIT(
       "Pas encore sûr ? Je regarde votre site et vous oriente.",
@@ -373,8 +373,8 @@ const iaEtCode: HubTheme = {
     ),
     ROADMAP(
       "chaud",
-      "Passer du proto au produit ? Une roadmap pour cadrer données, périmètre et architecture.",
-      "From prototype to product? A roadmap to frame data, scope and architecture.",
+      "Passer du proto au produit ? Un conseil architecture pour cadrer données, périmètre et structure.",
+      "From prototype to product? Architecture advice to frame data, scope and structure.",
     ),
     AUDIT_GRATUIT(
       "Une idée à challenger ? Je regarde et vous oriente.",
@@ -620,14 +620,14 @@ const avantSigner: HubTheme = {
   ],
   prestas: [
     {
-      name: { fr: "Second avis techno", en: "Tech second opinion" },
-      price: { fr: "390 €", en: "€390" },
+      name: { fr: "Choix de techno web", en: "Web tech choice" },
+      price: { fr: "150 €", en: "€150" },
       temp: "chaud",
       blurb: {
-        fr: "Un devis ou une proposition en main ? Analyse écrite + visio avant de vous engager.",
-        en: "A quote or proposal in hand? Written analysis + call before you commit.",
+        fr: "Un devis ou une proposition en main ? Un avis techno indépendant en visio avant de vous engager.",
+        en: "A quote or proposal in hand? An independent tech opinion on a call before you commit.",
       },
-      cta: { fr: "Demander un second avis", en: "Get a second opinion" },
+      cta: { fr: "Un avis indépendant", en: "Get an independent opinion" },
       href: "/conseil",
     },
     VISIO(
@@ -645,8 +645,8 @@ const avantSigner: HubTheme = {
       en: "How to read a website quote before signing?",
     },
     description: {
-      fr: "Propriété du code, postes flous, dépendance, surcoûts : les points à vérifier avant de signer un devis web, un outil pour le décrypter et le second avis pour décider.",
-      en: "Code ownership, vague items, lock-in, hidden costs: what to check before signing a web quote, a tool to decode it and the second opinion to decide.",
+      fr: "Propriété du code, postes flous, dépendance, surcoûts : les points à vérifier avant de signer un devis web, un outil pour le décrypter et un avis indépendant pour décider.",
+      en: "Code ownership, vague items, lock-in, hidden costs: what to check before signing a web quote, a tool to decode it and an independent opinion to decide.",
     },
   },
   keywords: {
@@ -771,8 +771,8 @@ const outilsMetier: HubTheme = {
     },
     ROADMAP(
       "tiede",
-      "Projet encore flou ? Une roadmap pour cadrer scénarios, fonctions et budget.",
-      "Project still fuzzy? A roadmap to frame scenarios, features and budget.",
+      "Projet encore flou ? Un conseil architecture pour cadrer scénarios, fonctions et budget.",
+      "Project still fuzzy? Architecture advice to frame scenarios, features and budget.",
     ),
     AUDIT_GRATUIT(
       "Juste explorer ? Je regarde votre cas et vous oriente.",

@@ -81,7 +81,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 240 €", labelEn: "Validate on a call — €240", href: "/conseil" },
+    next: { labelFr: "Valider en visio — 150 €", labelEn: "Validate on a call — €150", href: "/conseil" },
   },
   headless: {
     labelFr: "Headless WordPress + Next.js",
@@ -104,10 +104,10 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "If an existing tool already covers most of the need, buying it is often far cheaper than building it. The right reflex: compare before you develop.",
     links: [
-      { labelFr: "Demander un second avis", labelEn: "Get a second opinion", href: "/conseil" },
+      { labelFr: "Un avis indépendant", labelEn: "Get an independent opinion", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Sécuriser le choix — second avis", labelEn: "Secure the choice — second opinion", href: "/conseil" },
+    next: { labelFr: "Sécuriser le choix — avis indépendant", labelEn: "Secure the choice — independent opinion", href: "/conseil" },
   },
   surmesure: {
     labelFr: "Plateforme métier / sur-mesure",
@@ -120,7 +120,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Générer un cahier des charges", labelEn: "Generate a project brief", href: "/cahier-des-charges" },
       { labelFr: "Diagnostic projet", labelEn: "Project diagnostic", href: "/solutions-web/eligibilite" },
     ],
-    next: { labelFr: "Cadrer avec une roadmap", labelEn: "Frame it with a roadmap", href: "/conseil" },
+    next: { labelFr: "Cadrer l'architecture", labelEn: "Scope the architecture", href: "/conseil" },
   },
 };
 
@@ -430,7 +430,7 @@ export default function Boussole() {
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "This signal points you in a direction — it doesn't replace a decision for your exact case. A decision call applies the Compass to your real budget, data and constraints, and is credited back if a project follows."
-                : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio décision applique la Boussole à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
+                : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio de choix de techno applique la Boussole à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
             </p>
           </div>
 
@@ -445,7 +445,7 @@ export default function Boussole() {
             </Link>
             {info.next.href !== "/conseil" && (
               <Link href="/conseil" className={BTN_GHOST}>
-                {isEn ? "Book a decision call — €240" : "Réserver une visio — 240 €"}
+                {isEn ? "Book a tech choice call — €150" : "Réserver une visio — 150 €"}
                 <ArrowRight
                   size={13}
                   className="transition-transform group-hover:translate-x-0.5"

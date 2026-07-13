@@ -113,10 +113,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact — tech decision, quote, AI prototype or implementation",
-    "metaDescription": "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project or build if needed.",
+    "metaTitle": "Contact — tech choice, AI project architecture or build pack",
+    "metaDescription": "Contact Next Impact to choose a web technology, scope an AI project architecture, get a build pack or build if needed.",
     "title": "Contact",
-    "subtitle": "Tech decision, second opinion, roadmap or implementation: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Tech choice, architecture advice or build pack: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },

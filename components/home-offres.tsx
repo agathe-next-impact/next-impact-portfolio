@@ -36,11 +36,11 @@ const OFFERS_FR: Offer[] = [
   {
     subtitle: "Décider",
     title: "Conseil techno web & IA",
-    price: "dès 240 € HT",
+    price: "dès 150 € HT",
     items: [
-      "Visio décision : trancher WordPress, no-code, IA, Headless ou sur-mesure",
-      "Second avis sur un devis, roadmap avant production",
-      "Direction technique externalisée en abonnement mensuel",
+      "Choix de techno web en 30 min : WordPress, no-code, IA, Headless ou sur-mesure",
+      "Conseil architecture + cahier des charges et spécifications",
+      "Pack de prompts et agents pour construire (Claude Code / Codex)",
     ],
     target: "Pour trancher avant d'investir",
     href: "/conseil",
@@ -78,11 +78,11 @@ const OFFERS_EN: Offer[] = [
   {
     subtitle: "Decide",
     title: "Tech advice",
-    price: "from €240 excl. VAT",
+    price: "from €150 excl. VAT",
     items: [
-      "Decision call: settle WordPress, no-code, AI, Headless or custom",
-      "Second opinion on a quote, roadmap before production",
-      "Fractional tech direction on a monthly subscription",
+      "Web tech choice in 30 min: WordPress, no-code, AI, Headless or custom",
+      "Architecture advice + specifications and requirements",
+      "Pack of prompts and agents to build (Claude Code / Codex)",
     ],
     target: "To decide before investing",
     href: "/conseil",

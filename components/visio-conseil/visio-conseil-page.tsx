@@ -22,7 +22,15 @@ import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
-function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
+function OfferCard({
+  offer,
+  isEn,
+  wide = false,
+}: {
+  offer: ConseilOffer;
+  isEn: boolean;
+  wide?: boolean;
+}) {
   const copy = isEn ? offer.en : offer.fr;
   const single = offer.tiers.length === 1;
   const cheapest = offer.tiers.reduce((a, b) => (a.value <= b.value ? a : b));
@@ -39,6 +47,136 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
       ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
       : "border border-dark-gray text-foreground hover:border-mid-gray");
 
+  const tag = copy.tag ? (
+    <span className="absolute right-4 top-4 border border-vermilion px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-vermilion">
+      {copy.tag}
+    </span>
+  ) : null;
+
+  const header = (
+    <div>
+      <h3 className="pr-20 text-lg font-medium text-foreground">{copy.name}</h3>
+      <p className="mt-1 font-inter-tight text-sm text-mid-gray">{copy.tagline}</p>
+    </div>
+  );
+
+  const priceBlock = (
+    <div className="flex items-baseline gap-1">
+      {!single && (
+        <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+          {isEn ? "From" : "Dès"}
+        </span>
+      )}
+      <span className="text-2xl font-light tracking-tight text-foreground">{cheapest.price}</span>
+      {single && (
+        <span className="font-mono text-xs text-mid-gray">
+          / {isEn ? cheapest.duration.en : cheapest.duration.fr}
+        </span>
+      )}
+      <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
+    </div>
+  );
+
+  const note = (offer.credited || offer.recurring) && (
+    <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+      {offer.credited
+        ? isEn
+          ? "Credited to your project quote"
+          : "Déduit du devis projet"
+        : isEn
+          ? "Monthly · no time commitment"
+          : "Abonnement mensuel · sans engagement"}
+    </p>
+  );
+
+  const forWho = (
+    <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
+  );
+
+  const bulletItems = copy.bullets.map((b) => (
+    <li key={b} className="flex items-start gap-2.5">
+      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
+      <span className="font-inter-tight text-sm leading-snug text-mid-gray">{b}</span>
+    </li>
+  ));
+
+  const cta = single ? (
+    offer.internalCta ? (
+      <Link href={cheapest.calendlyUrl} className={ctaClass}>
+        {ctaLabel}
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+      </Link>
+    ) : (
+      <a
+        href={cheapest.calendlyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={ctaClass}
+      >
+        {ctaLabel}
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+      </a>
+    )
+  ) : (
+    <div className="mt-auto flex flex-col gap-2 border-t border-dark-gray pt-4">
+      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+        {isEn ? "Choose your duration" : "Choisissez la durée"}
+      </p>
+      {offer.tiers.map((tier) => (
+        <a
+          key={tier.calendlyUrl}
+          href={tier.calendlyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={
+            "group flex items-center justify-between gap-3 border px-4 py-3 no-underline transition-colors " +
+            (tier.featured
+              ? "border-vermilion bg-vermilion/10 hover:bg-vermilion/20"
+              : "border-dark-gray hover:border-mid-gray")
+          }
+        >
+          <span className="flex flex-col gap-0.5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground">
+              {isEn ? tier.duration.en : tier.duration.fr} · {tier.price} HT
+            </span>
+            {tier.note && (
+              <span className="font-inter-tight text-[11px] leading-snug text-accent-secondary">
+                {isEn ? tier.note.en : tier.note.fr}
+              </span>
+            )}
+          </span>
+          <span className="inline-flex flex-shrink-0 items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-mid-gray transition-colors group-hover:text-foreground">
+            {isEn ? "Book" : "Réserver"}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </a>
+      ))}
+    </div>
+  );
+
+  if (wide) {
+    return (
+      <div
+        className={
+          "relative grid gap-6 border bg-jet p-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:p-8 " +
+          (offer.featured ? "border-vermilion" : "border-dark-gray")
+        }
+      >
+        {tag}
+        <div className="flex flex-col gap-4">
+          {header}
+          {priceBlock}
+          {note}
+          {forWho}
+          {cta}
+        </div>
+        <ul className="grid content-start gap-2.5 sm:grid-cols-2 lg:border-l lg:border-dark-gray lg:pl-10">
+          {bulletItems}
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div
       className={
@@ -46,106 +184,13 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
         (offer.featured ? "border-vermilion" : "border-dark-gray")
       }
     >
-      {copy.tag && (
-        <span className="absolute right-4 top-4 border border-vermilion px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-vermilion">
-          {copy.tag}
-        </span>
-      )}
-      <div>
-        <h3 className="pr-20 text-lg font-medium text-foreground">{copy.name}</h3>
-        <p className="mt-1 font-inter-tight text-sm text-mid-gray">{copy.tagline}</p>
-      </div>
-
-      <div className="flex items-baseline gap-1">
-        {!single && (
-          <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
-            {isEn ? "From" : "Dès"}
-          </span>
-        )}
-        <span className="text-2xl font-light tracking-tight text-foreground">{cheapest.price}</span>
-        {single && (
-          <span className="font-mono text-xs text-mid-gray">
-            / {isEn ? cheapest.duration.en : cheapest.duration.fr}
-          </span>
-        )}
-        <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
-      </div>
-
-      {(offer.credited || offer.recurring) && (
-        <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
-          {offer.credited
-            ? isEn
-              ? "Credited to your project quote"
-              : "Déduit du devis projet"
-            : isEn
-              ? "Monthly · no time commitment"
-              : "Abonnement mensuel · sans engagement"}
-        </p>
-      )}
-      <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
-
-      <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">
-        {copy.bullets.map((b) => (
-          <li key={b} className="flex items-start gap-2.5">
-            <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-            <span className="font-inter-tight text-sm leading-snug text-mid-gray">{b}</span>
-          </li>
-        ))}
-      </ul>
-
-      {single ? (
-        offer.internalCta ? (
-          <Link href={cheapest.calendlyUrl} className={ctaClass}>
-            {ctaLabel}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        ) : (
-          <a
-            href={cheapest.calendlyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={ctaClass}
-          >
-            {ctaLabel}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </a>
-        )
-      ) : (
-        <div className="mt-auto flex flex-col gap-2 border-t border-dark-gray pt-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
-            {isEn ? "Choose your duration" : "Choisissez la durée"}
-          </p>
-          {offer.tiers.map((tier) => (
-            <a
-              key={tier.calendlyUrl}
-              href={tier.calendlyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={
-                "group flex items-center justify-between gap-3 border px-4 py-3 no-underline transition-colors " +
-                (tier.featured
-                  ? "border-vermilion bg-vermilion/10 hover:bg-vermilion/20"
-                  : "border-dark-gray hover:border-mid-gray")
-              }
-            >
-              <span className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground">
-                  {isEn ? tier.duration.en : tier.duration.fr} · {tier.price} HT
-                </span>
-                {tier.note && (
-                  <span className="font-inter-tight text-[11px] leading-snug text-accent-secondary">
-                    {isEn ? tier.note.en : tier.note.fr}
-                  </span>
-                )}
-              </span>
-              <span className="inline-flex flex-shrink-0 items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-mid-gray transition-colors group-hover:text-foreground">
-                {isEn ? "Book" : "Réserver"}
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </a>
-          ))}
-        </div>
-      )}
+      {tag}
+      {header}
+      {priceBlock}
+      {note}
+      {forWho}
+      <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">{bulletItems}</ul>
+      {cta}
     </div>
   );
 }
@@ -156,26 +201,26 @@ export default function VisioConseilPage() {
 
   const steps = isEn
     ? [
-        ["You choose", "Pick the level that matches your situation: decide, secure or scope before investing."],
+        ["You choose", "Pick the level that matches your situation: choose a technology, scope the architecture or leave with a build pack."],
         ["You send context", "Share the site, quote, proposal or project notes so I can prepare the useful questions."],
         ["We decide", "Video call, analysis and written recap with recommendation, risks and the advised next step."],
       ]
     : [
-        ["Vous choisissez", "Sélectionnez le niveau adapté : décider, sécuriser ou cadrer avant d'investir."],
+        ["Vous choisissez", "Sélectionnez le niveau adapté : choisir une techno, cadrer l'architecture ou repartir avec un pack de mise en œuvre."],
         ["Vous envoyez le contexte", "Partagez le site, le devis, la proposition ou les notes projet pour préparer les bonnes questions."],
         ["On décide", "Visio, analyse puis compte-rendu écrit avec recommandation, risques et prochaine étape conseillée."],
       ];
 
   const reassurance: Array<[typeof ShieldCheck, string]> = isEn
     ? [
-        [Receipt, "Decision call credited to your project quote"],
+        [Receipt, "Tech choice call credited to your project quote"],
         [CalendarCheck, "Book and pay online — instant confirmation"],
         [Video, "Real video call with screen sharing — not a chatbot"],
         [FileText, "Written recap after the call"],
         [ShieldCheck, "Reschedule or cancel up to 24h before"],
       ]
     : [
-        [Receipt, "Visio décision créditée sur votre devis projet"],
+        [Receipt, "Visio choix de techno créditée sur votre devis projet"],
         [CalendarCheck, "Réservation et paiement en ligne — confirmation immédiate"],
         [Video, "Vraie visio avec partage d'écran — pas un chatbot"],
         [FileText, "Compte-rendu écrit après l'appel"],
@@ -250,21 +295,26 @@ export default function VisioConseilPage() {
           title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
           description={
             isEn
-              ? "A paid advisory path for small teams: decide, secure, scope, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
-              : "Un parcours de conseil payant pour les petites structures : décider, sécuriser, cadrer, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
+              ? "A paid advisory path for small teams: choose a technology, scope the architecture, leave with an AI build pack, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
+              : "Un parcours de conseil payant pour les petites structures : choisir une techno, cadrer l'architecture, repartir avec un pack de mise en œuvre IA, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
           }
         />
-        <Stagger className="mt-10 grid gap-4 md:grid-cols-2">
-          {OFFERS.map((offer) => (
+        <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
+          {OFFERS.slice(0, 3).map((offer) => (
             <StaggerItem key={offer.id}>
               <OfferCard offer={offer} isEn={isEn} />
             </StaggerItem>
           ))}
         </Stagger>
+        {OFFERS[3] && (
+          <Reveal className="mt-4">
+            <OfferCard offer={OFFERS[3]} isEn={isEn} wide />
+          </Reveal>
+        )}
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Prices excl. VAT, no time commitment. Only the tech decision call is deducted from your quote if a project follows within 30 days — the second opinion and roadmap are complete deliverables, the tech direction a monthly subscription."
-            : "Prix HT, sans engagement de durée. Seule la visio décision est déduite de votre devis si un projet suit sous 30 jours — le second avis et la roadmap sont des livrables complets, la direction technique un abonnement mensuel."}
+            ? "Prices excl. VAT, no time commitment. Only the web tech choice call is deducted from your quote if a project follows within 30 days — the architecture advice and build pack are complete deliverables, the tech direction a monthly subscription."
+            : "Prix HT, sans engagement de durée. Seul le choix de techno est déduit de votre devis si un projet suit sous 30 jours — le conseil architecture et le pack de mise en œuvre sont des livrables complets, la direction technique un abonnement mensuel."}
         </p>
 
         {/* Engagements — réassurance sous les offres */}

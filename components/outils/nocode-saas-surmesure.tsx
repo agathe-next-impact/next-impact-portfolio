@@ -41,7 +41,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 240 €", labelEn: "Validate on a call — €240", href: "/conseil" },
+    next: { labelFr: "Valider en visio — 150 €", labelEn: "Validate on a call — €150", href: "/conseil" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",
@@ -51,23 +51,23 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "If an existing tool covers the essentials, buying it is often far cheaper than building it. Compare the options and check reversibility before committing.",
     links: [
-      { labelFr: "Demander un second avis", labelEn: "Get a second opinion", href: "/conseil" },
+      { labelFr: "Un avis indépendant en visio", labelEn: "An independent opinion on a call", href: "/conseil" },
       { labelFr: "Décrypter un devis reçu", labelEn: "Decode a quote you received", href: "/outils/decrypteur-devis" },
     ],
-    next: { labelFr: "Sécuriser le choix — second avis", labelEn: "Secure the choice — second opinion", href: "/conseil" },
+    next: { labelFr: "Sécuriser le choix — avis indépendant", labelEn: "Secure the choice — independent opinion", href: "/conseil" },
   },
   surmesure: {
     labelFr: "Développement sur-mesure",
     labelEn: "Custom development",
     summaryFr:
-      "Besoin spécifique, données sensibles, intégrations complexes : le sur-mesure se justifie. À cadrer précisément (roadmap) avant de construire, pour investir au bon endroit.",
+      "Besoin spécifique, données sensibles, intégrations complexes : le sur-mesure se justifie. À cadrer précisément (conseil architecture) avant de construire, pour investir au bon endroit.",
     summaryEn:
-      "Specific need, sensitive data, complex integrations: custom is justified. To be scoped precisely (roadmap) before building, so you invest in the right place.",
+      "Specific need, sensitive data, complex integrations: custom is justified. To be scoped precisely (architecture advice) before building, so you invest in the right place.",
     links: [
       { labelFr: "Générer un cahier des charges", labelEn: "Generate a project brief", href: "/cahier-des-charges" },
       { labelFr: "Diagnostic projet", labelEn: "Project diagnostic", href: "/solutions-web/eligibilite" },
     ],
-    next: { labelFr: "Cadrer avec une roadmap", labelEn: "Frame it with a roadmap", href: "/conseil" },
+    next: { labelFr: "Cadrer l'architecture", labelEn: "Scope the architecture", href: "/conseil" },
   },
 };
 
@@ -351,8 +351,8 @@ export default function NocodeSaasSurmesure() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
-                ? "This signal points you in a direction. A decision call applies it to your real budget, data and constraints — and is credited back if a project follows."
-                : "Ce signal vous oriente. Une visio décision l'applique à votre budget réel, vos données et vos contraintes — et se déduit d'un projet si vous le lancez."}
+                ? "This signal points you in a direction. A tech choice call applies it to your real budget, data and constraints — and is credited back if a project follows."
+                : "Ce signal vous oriente. Une visio de choix de techno l'applique à votre budget réel, vos données et vos contraintes — et se déduit d'un projet si vous le lancez."}
             </p>
           </div>
 

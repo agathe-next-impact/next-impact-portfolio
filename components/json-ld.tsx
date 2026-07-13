@@ -70,8 +70,8 @@ export function OrganizationJsonLd() {
     serviceType: [
       "Conseil techno web à l'heure de l'IA",
       "Boussole Techno Web & IA",
-      "Second avis devis, stack ou prototype IA",
-      "Roadmap projet web avant production",
+      "Conseil architecture de projet IA",
+      "Pack de mise en œuvre IA (prompts et agents)",
       "Direction technique externalisée (abonnement mensuel)",
       "Création de sites web WordPress",
       "Création de sites WordPress Headless + Next.js",
@@ -286,7 +286,7 @@ export function ContactPageJsonLd() {
     "@type": "ContactPage",
     name: "Contact — Next Impact Digital",
     description:
-      "Choisir la bonne techno web à l'heure de l'IA : conseil, second avis devis ou prototype IA, roadmap et mise en œuvre.",
+      "Choisir la bonne techno web à l'heure de l'IA : choix de techno, architecture de projet, pack de mise en œuvre et direction technique.",
     url: `${siteConfig.url}/contact`,
     mainEntity: {
       "@type": "ProfessionalService",
@@ -332,15 +332,15 @@ export function ContactPageJsonLd() {
       potentialAction: [
         {
           "@type": "ReserveAction",
-          name: "Réserver une visio décision techno",
-          target: "https://calendly.com/agathe-next-impact/visio-decision-techno",
+          name: "Réserver une visio choix de techno",
+          target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-un-projet-web-clone",
           description: "Visio pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure",
         },
         {
           "@type": "CommunicateAction",
           name: "Faire relire un devis ou cadrer un projet",
           target: `${siteConfig.url}/contact`,
-          description: "Conseil techno web, second avis, roadmap, direction technique externalisée ou mise en œuvre",
+          description: "Conseil techno web, architecture de projet, pack de mise en œuvre, direction technique externalisée ou mise en œuvre",
         },
       ],
       hasOfferCatalog: {
@@ -349,25 +349,25 @@ export function ContactPageJsonLd() {
         itemListElement: [
           {
             "@type": "Offer",
-            name: "Visio décision techno",
-            description: "Trancher une question précise avant d'investir : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
-            price: "240",
+            name: "Choix de techno web avec l'IA",
+            description: "Trancher rapidement la bonne techno d'un projet en 30 minutes : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+            price: "150",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/conseil`,
           },
           {
             "@type": "Offer",
-            name: "Second avis devis / stack / prototype IA",
-            description: "Challenger un devis, une stack ou un prototype généré avec l'IA avant de signer ou industrialiser.",
-            price: "390",
+            name: "Conseil architecture de projet IA",
+            description: "Auditer et cadrer l'architecture d'un projet, avec cahier des charges et spécifications techniques à la clé.",
+            price: "490",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/conseil`,
           },
           {
             "@type": "Offer",
-            name: "Roadmap projet web",
-            description: "Cadrer architecture, données, priorités, budget et ordre de mise en œuvre avant production.",
-            price: "1500",
+            name: "Pack de mise en œuvre IA",
+            description: "Repartir avec le nécessaire au développement : specs, prompts et agents (Claude Code ou Codex).",
+            price: "1900",
             priceCurrency: "EUR",
             url: `${siteConfig.url}/conseil`,
           },
@@ -605,8 +605,8 @@ export function HomepageJsonLd() {
         serviceType: [
           "Conseil techno web à l'heure de l'IA",
           "Boussole Techno Web & IA",
-          "Second avis devis, stack ou prototype IA",
-          "Roadmap projet web avant production",
+          "Conseil architecture de projet IA",
+          "Pack de mise en œuvre IA (prompts et agents)",
           "Direction technique externalisée (abonnement mensuel)",
           "Création de sites web WordPress",
           "Création de sites WordPress Headless + Next.js",
@@ -641,28 +641,28 @@ export function HomepageJsonLd() {
           itemListElement: [
             {
               "@type": "Offer",
-              name: "Visio décision techno",
+              name: "Choix de techno web avec l'IA",
               description:
-                "Trancher une question précise avant d'investir : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
-              price: "240",
+                "Trancher rapidement la bonne techno d'un projet en 30 minutes : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+              price: "150",
               priceCurrency: "EUR",
               url: `${baseUrl}/conseil`,
             },
             {
               "@type": "Offer",
-              name: "Second avis devis / stack / prototype IA",
+              name: "Conseil architecture de projet IA",
               description:
-                "Challenger un devis, une stack ou un prototype généré avec l'IA avant de signer ou industrialiser.",
-              price: "390",
+                "Auditer et cadrer l'architecture d'un projet, avec cahier des charges et spécifications techniques à la clé.",
+              price: "490",
               priceCurrency: "EUR",
               url: `${baseUrl}/conseil`,
             },
             {
               "@type": "Offer",
-              name: "Roadmap projet web",
+              name: "Pack de mise en œuvre IA",
               description:
-                "Cadrer architecture, données, priorités, budget et ordre de mise en œuvre avant production.",
-              price: "1500",
+                "Repartir avec le nécessaire au développement : specs, prompts et agents (Claude Code ou Codex).",
+              price: "1900",
               priceCurrency: "EUR",
               url: `${baseUrl}/conseil`,
             },
@@ -693,15 +693,15 @@ export function HomepageJsonLd() {
         potentialAction: [
           {
             "@type": "ReserveAction",
-            name: "Réserver une visio décision techno",
-            target: "https://calendly.com/agathe-next-impact/visio-decision-techno",
+            name: "Réserver une visio choix de techno",
+            target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-un-projet-web-clone",
             description: "Visio pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure",
           },
           {
             "@type": "CommunicateAction",
             name: "Faire relire un devis ou cadrer un projet",
             target: `${baseUrl}/contact`,
-            description: "Conseil techno web, second avis, roadmap, direction technique externalisée ou mise en œuvre",
+            description: "Conseil techno web, architecture de projet, pack de mise en œuvre, direction technique externalisée ou mise en œuvre",
           },
         ],
       },
