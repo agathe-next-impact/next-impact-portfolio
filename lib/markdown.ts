@@ -10,6 +10,8 @@ export interface ArticleMeta {
   category: string
   author: string
   date: string
+  /** Date de dernière mise à jour (frontmatter `updated`, optionnel). */
+  updated?: string
   order?: number
   isMdx?: boolean
   isFallback?: boolean
@@ -23,6 +25,9 @@ export interface ArticleFaqEntry {
 export interface Article extends ArticleMeta {
   content: string
   faq?: ArticleFaqEntry[]
+  /** Dates ISO (YYYY-MM-DD) pour le JSON-LD — indépendantes de la locale d'affichage. */
+  dateIso?: string
+  updatedIso?: string
 }
 
 const contentDirectoryFr = path.join(process.cwd(), "content")
@@ -78,6 +83,13 @@ function formatDate(date: unknown, locale?: Locale): string {
   return date as string
 }
 
+/** Date ISO (YYYY-MM-DD) pour le JSON-LD, quel que soit le format frontmatter. */
+function toIsoDate(date: unknown): string | undefined {
+  if (date instanceof Date) return date.toISOString().split("T")[0]
+  if (typeof date === "string" && date.trim()) return date
+  return undefined
+}
+
 /** Check if a file is .md or .mdx */
 function isContentFile(file: string): boolean {
   return file.endsWith(".md") || file.endsWith(".mdx")
@@ -88,8 +100,10 @@ function fileToSlug(file: string): string {
   return file.replace(/\.mdx?$/, "")
 }
 
-export function getArticleBySlug(category: string, slug: string, locale?: Locale): Article {
+export function getArticleBySlug(category: string, slug: string, locale?: Locale): Article | null {
   const { filePath, isMdx, isFallback } = resolveArticlePath(category, slug, locale)
+  // Garde : un slug inexistant doit produire un 404 propre, pas une erreur runtime.
+  if (!fs.existsSync(filePath)) return null
   const fileContents = fs.readFileSync(filePath, "utf8")
   const { data, content } = matter(fileContents)
 
@@ -100,6 +114,9 @@ export function getArticleBySlug(category: string, slug: string, locale?: Locale
     category: data.category,
     author: data.author,
     date: formatDate(data.date, locale),
+    updated: data.updated ? formatDate(data.updated, locale) : undefined,
+    dateIso: toIsoDate(data.date),
+    updatedIso: toIsoDate(data.updated),
     content,
     order: data.order,
     faq: Array.isArray(data.faq) ? data.faq : undefined,
@@ -137,6 +154,7 @@ function readArticlesIn(rootDir: string, fallback: boolean, locale?: Locale): Ma
           category: data.category,
           author: data.author,
           date: formatDate(data.date, locale),
+          updated: data.updated ? formatDate(data.updated, locale) : undefined,
           order: data.order,
           isMdx,
           isFallback: fallback,
@@ -185,6 +203,7 @@ export function getArticlesByCategory(category: string, locale?: Locale): Articl
           category: data.category,
           author: data.author,
           date: formatDate(data.date, locale),
+          updated: data.updated ? formatDate(data.updated, locale) : undefined,
           order: data.order,
           isMdx,
           isFallback: fallback,

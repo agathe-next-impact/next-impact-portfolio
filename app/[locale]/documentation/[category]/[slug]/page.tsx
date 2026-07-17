@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation"
 import { ArrowLeft, Clock, BookOpen } from "lucide-react"
+import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import type { Locale } from "@/i18n/routing"
 import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
@@ -98,9 +99,12 @@ export default async function ArticlePage(props: ArticlePageProps) {
     const t = await getTranslations({ locale: params.locale, namespace: "documentationPage" });
     const tArticle =
       params.locale === "en"
-        ? { minutes: "min read", sections: "sections", recently: "Recently" }
-        : { minutes: "min de lecture", sections: "sections", recently: "Récemment" };
+        ? { minutes: "min read", sections: "sections", recently: "Recently", updated: "Updated:" }
+        : { minutes: "min de lecture", sections: "sections", recently: "Récemment", updated: "Mis à jour :" };
     const article = getArticleBySlug(params.category, params.slug, params.locale)
+
+    // Garde : slug ou catégorie inexistants → 404 propre au lieu d'une erreur runtime.
+    if (!article) notFound()
 
     const categoryArticles = getArticlesByCategory(params.category, params.locale)
     const currentIndex = categoryArticles.findIndex((a) => a.slug === params.slug)
@@ -144,7 +148,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
 
     const relatedWithTime = allRelatedCandidates.map((a) => {
       const full = getArticleBySlug(a.category, a.slug, params.locale)
-      return { ...a, readingTime: estimateReadingTime(full.content) }
+      return { ...a, readingTime: full ? estimateReadingTime(full.content) : 1 }
     })
 
     const tableOfContents = article?.content ? generateTableOfContents(article.content) : []
@@ -165,7 +169,8 @@ export default async function ArticlePage(props: ArticlePageProps) {
           title={article.title}
           description={article.description}
           image="/img/desktop-screen-next-impact.png"
-          datePublished={typeof article.date === "string" ? article.date : new Date().toISOString()}
+          datePublished={article.dateIso || (typeof article.date === "string" ? article.date : new Date().toISOString())}
+          dateModified={article.updatedIso}
           author={article.author || "Agathe Karinthi-Martin"}
           url={`/documentation/${article.category}/${article.slug}`}
           type={article.category === "wordpress-headless" ? "TechArticle" : "Article"}
@@ -235,6 +240,14 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                     {typeof article.date === "string" ? article.date : tArticle.recently}
                   </span>
+                  {article.updated && (
+                    <>
+                      <span className="text-dark-gray" aria-hidden>·</span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                        {tArticle.updated} {article.updated}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <ShareSocial url={`/documentation/${article.category}/${article.slug}`} title={article.title} />
               </div>
