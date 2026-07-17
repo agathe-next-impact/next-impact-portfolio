@@ -28,6 +28,7 @@
     "rubAvantSigner": "Before you sign",
     "rubOutilsMetier": "Business tools",
     "rubPresence": "Presence & audience",
+    "rubEtreTrouve": "Be found in the AI era",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -277,6 +278,10 @@
     "metaNotFoundTitle": "Case study not found",
     "metaNotFoundDescription": "The requested case study does not exist.",
     "backToCaseStudies": "Back to case studies",
+    "arbitrageTitle": "The technology trade-off",
+    "arbitrageOptions": "Options considered",
+    "arbitrageDecision": "Decision",
+    "arbitrageRationale": "Why this choice",
     "projectOverview": "Project overview",
     "projectPresentation": "Project presentation",
     "objectives": "Objectives",

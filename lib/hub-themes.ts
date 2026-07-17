@@ -21,6 +21,7 @@ import {
   FlaskConical,
   GitCompare,
   Megaphone,
+  Radar,
   ScanSearch,
   ScrollText,
   Smartphone,
@@ -55,7 +56,7 @@ export type Temp = "froid" | "tiede" | "chaud";
 /** Une prestation possible en sortie de thème (la « prochaine étape »). */
 export interface ThemePresta {
   name: LocaleText;
-  price: LocaleText; // « Gratuit », « 180 € », « dès 149 € »…
+  price: LocaleText; // « Gratuit », « 150 € », « dès 6 500 € »…
   temp: Temp;
   blurb: LocaleText;
   cta: LocaleText;
@@ -926,7 +927,143 @@ const presence: HubTheme = {
   },
 };
 
-// Ordre = parcours du hub (Comprendre → Décider → Construire → Réparer → Présence).
+// ─────────────────────────────────────────────────────────────────────────────
+// 07 — Être trouvé à l'heure de l'IA (SEO + GEO — absorbe la catégorie SEO)
+// Textes provisoires sobres : le fond est correct, le rédacteur SEO/GEO affinera.
+// ─────────────────────────────────────────────────────────────────────────────
+const etreTrouve: HubTheme = {
+  slug: "etre-trouve",
+  index: "№ 07",
+  icon: Radar,
+  kicker: { fr: "Être trouvé à l'heure de l'IA", en: "Be found in the AI era" },
+  question: {
+    fr: "Mon site est-il visible quand on pose la question à ChatGPT ?",
+    en: "Is my site visible when people ask ChatGPT?",
+  },
+  intro: {
+    fr: "Vos futurs clients ne cherchent plus seulement sur Google : ils posent la question à ChatGPT, Perplexity ou aux AI Overviews. Être classé ne suffit plus — il faut être cité.",
+    en: "Your future clients no longer search only on Google: they ask ChatGPT, Perplexity or AI Overviews. Ranking is no longer enough — you need to be cited.",
+  },
+  context: {
+    fr: "Le SEO classique reste le socle : sans pages indexables, rapides et bien structurées, rien ne se passe. Mais les moteurs de réponse ajoutent une couche : ils citent les pages qui répondent clairement, avec des chiffres, des verdicts et des sections extractibles. Être trouvé aujourd'hui, c'est travailler les deux — le classement ET la citation.",
+    en: "Classic SEO remains the foundation: without indexable, fast, well-structured pages, nothing happens. But answer engines add a layer: they cite pages that answer clearly, with figures, verdicts and extractable sections. Being found today means working on both — ranking AND citation.",
+  },
+  options: [
+    {
+      label: { fr: "Consolider le SEO classique", en: "Consolidate classic SEO" },
+      detail: {
+        fr: "Indexation, structure, contenus : si le socle a des trous, c'est la priorité avant toute optimisation IA.",
+        en: "Indexing, structure, content: if the foundation has holes, fix it before any AI optimization.",
+      },
+    },
+    {
+      label: { fr: "Passer au GEO", en: "Move to GEO" },
+      detail: {
+        fr: "Le socle tient mais ChatGPT et Perplexity ne vous citent jamais : structurer vos pages pour la citation.",
+        en: "The foundation holds but ChatGPT and Perplexity never cite you: structure your pages to be citable.",
+      },
+    },
+    {
+      label: { fr: "Revoir la base technique", en: "Fix the technical base" },
+      detail: {
+        fr: "Site lent, mal crawlable ou fermé aux robots IA : la visibilité se joue d'abord dans la technique.",
+        en: "A slow, poorly crawlable site, or one closed to AI crawlers: visibility starts with the tech.",
+      },
+    },
+  ],
+  advice: [
+    {
+      point: { fr: "Le SEO n'est pas mort, il a un étage de plus", en: "SEO isn't dead, it has one more floor" },
+      detail: {
+        fr: "Les moteurs IA s'appuient sur les mêmes signaux que Google, plus quelques-uns : réponses directes, données structurées, sources citables.",
+        en: "AI engines rely on the same signals as Google, plus a few more: direct answers, structured data, citable sources.",
+      },
+    },
+    {
+      point: { fr: "Les moteurs IA citent les pages qui tranchent", en: "AI engines cite pages that take a stance" },
+      detail: {
+        fr: "Chiffres explicites, verdicts par profil, sections qui répondent seules à une question : c'est ce que ChatGPT et Perplexity reprennent.",
+        en: "Explicit figures, verdicts by profile, sections that answer a question on their own: that's what ChatGPT and Perplexity pick up.",
+      },
+    },
+    {
+      point: { fr: "Vérifiez que les robots IA peuvent entrer", en: "Check that AI crawlers can get in" },
+      detail: {
+        fr: "GPTBot, ClaudeBot, PerplexityBot : s'ils sont bloqués par votre robots.txt, vous n'existez pas pour eux.",
+        en: "GPTBot, ClaudeBot, PerplexityBot: if your robots.txt blocks them, you don't exist to them.",
+      },
+    },
+    {
+      point: { fr: "Mesurez avant d'optimiser", en: "Measure before you optimize" },
+      detail: {
+        fr: "Posez vos questions métier à ChatGPT et Perplexity : qui est cité aujourd'hui ? C'est votre point de départ, pas une opinion.",
+        en: "Ask your business questions to ChatGPT and Perplexity: who gets cited today? That's your starting point, not an opinion.",
+      },
+    },
+  ],
+  reading: [
+    {
+      icon: FileText,
+      name: { fr: "Les fondamentaux SEO", en: "SEO fundamentals" },
+      blurb: {
+        fr: "Arborescence, mots-clés, cocon sémantique et outils : le socle de référencement classique, avant la couche IA.",
+        en: "Site structure, keywords, topic clusters and tools: the classic SEO foundation, before the AI layer.",
+      },
+      href: "/documentation/seo",
+    },
+  ],
+  tools: [
+    {
+      icon: Radar,
+      name: { fr: "Votre site est-il visible dans les moteurs IA ?", en: "Is your site visible in AI engines?" },
+      blurb: {
+        fr: "Un diagnostic gratuit : votre site est-il cité, citable et accessible aux robots IA ?",
+        en: "A free diagnostic: is your site cited, citable and open to AI crawlers?",
+      },
+      href: "/outils/visibilite-ia",
+    },
+    {
+      icon: ScanSearch,
+      name: { fr: "Diagnostic Web & IA", en: "Web & AI diagnostic" },
+      blurb: {
+        fr: "Un état des lieux de votre site — performance, signaux techniques, visibilité.",
+        en: "A snapshot of your site — performance, technical signals, visibility.",
+      },
+      href: "/audit-site-web",
+    },
+  ],
+  prestas: [
+    VISIO(
+      "Une question précise sur votre visibilité SEO ou IA ? On la tranche en visio, créditée si vous lancez un projet.",
+      "A precise question about your SEO or AI visibility? We settle it on a call, credited if you start a project.",
+    ),
+    ROADMAP(
+      "chaud",
+      "Refondre votre visibilité ? Un conseil architecture pour cadrer contenu, structure et technique.",
+      "Rebuilding your visibility? Architecture advice to frame content, structure and tech.",
+    ),
+    AUDIT_GRATUIT(
+      "Pas encore sûr ? Je regarde votre site et vous dis où vous en êtes.",
+      "Not sure yet? I look at your site and tell you where you stand.",
+    ),
+  ],
+  meta: {
+    title: {
+      fr: "Mon site est-il visible dans ChatGPT et les moteurs IA ?",
+      en: "Is my site visible in ChatGPT and AI engines?",
+    },
+    description: {
+      fr: "SEO classique et GEO : comment être trouvé — et cité — par Google, ChatGPT et Perplexity. Les critères, un diagnostic gratuit et le conseil pour agir.",
+      en: "Classic SEO and GEO: how to be found — and cited — by Google, ChatGPT and Perplexity. The criteria, a free diagnostic and the advice to act.",
+    },
+  },
+  keywords: {
+    fr: ["GEO référencement IA", "être cité par ChatGPT", "visibilité moteurs IA", "SEO et IA"],
+    en: ["GEO AI search optimization", "get cited by ChatGPT", "AI engine visibility", "SEO and AI"],
+  },
+};
+
+// Ordre = parcours du hub (Comprendre → Décider → Construire → Réparer → Présence → Visibilité).
 export const HUB_THEMES: Record<string, HubTheme> = {
   choisir,
   "ia-et-code": iaEtCode,
@@ -934,6 +1071,7 @@ export const HUB_THEMES: Record<string, HubTheme> = {
   "avant-signer": avantSigner,
   "outils-metier": outilsMetier,
   presence,
+  "etre-trouve": etreTrouve,
 };
 
 export function getHubTheme(slug: string): HubTheme | undefined {

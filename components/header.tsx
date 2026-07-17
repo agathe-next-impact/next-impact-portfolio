@@ -17,6 +17,7 @@ const HUB_RUBRIQUES = [
   { key: "rubAvantSigner",  href: "/documentation/avant-signer" },
   { key: "rubOutilsMetier", href: "/documentation/outils-metier" },
   { key: "rubPresence",     href: "/documentation/presence" },
+  { key: "rubEtreTrouve",   href: "/documentation/etre-trouve" },
 ] as const;
 
 const HUB_LINKS = [

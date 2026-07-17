@@ -1,5 +1,5 @@
 // HubRubriques — couche décisionnelle du hub « Quelle techno web ? ».
-// Bandeau-méthode Boussole (8 critères) + 6 rubriques par question. Le titre de
+// Bandeau-méthode Boussole (8 critères) + 7 rubriques par question. Le titre de
 // chaque rubrique pointe vers sa page thématique /documentation/<slug> (parcours
 // 4 temps) ; les liens reprennent les outils EXISTANTS et la CTA « prochaine
 // étape » route vers l'offre. Démonstratif (décision) au premier plan ; les
@@ -15,6 +15,7 @@ import {
   ScrollText,
   Boxes,
   Megaphone,
+  Radar,
   ArrowRight,
   ArrowUpRight,
 } from "lucide-react";
@@ -130,6 +131,18 @@ const COPY: Record<
         ],
         next: { label: "En parler en visio — 150 €", href: "/conseil" },
       },
+      {
+        id: "etre-trouve",
+        icon: Radar,
+        title: "Être trouvé à l'heure de l'IA",
+        question: "Mon site est-il visible quand on pose la question à ChatGPT ?",
+        links: [
+          { label: "Visible dans les moteurs IA ?", href: "/outils/visibilite-ia" },
+          { label: "Les fondamentaux SEO", href: "/documentation/seo" },
+          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
+        ],
+        next: { label: "En parler en visio — 150 €", href: "/conseil" },
+      },
     ],
   },
   en: {
@@ -223,6 +236,18 @@ const COPY: Record<
         ],
         next: { label: "Talk it through on a call", href: "/conseil" },
       },
+      {
+        id: "etre-trouve",
+        icon: Radar,
+        title: "Be found in the AI era",
+        question: "Is my site visible when people ask ChatGPT?",
+        links: [
+          { label: "Visible in AI engines?", href: "/outils/visibilite-ia" },
+          { label: "SEO fundamentals", href: "/documentation/seo" },
+          { label: "Web & AI diagnostic", href: "/audit-site-web" },
+        ],
+        next: { label: "Talk it through on a call", href: "/conseil" },
+      },
     ],
   },
 };
@@ -269,7 +294,7 @@ export function HubRubriques({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      {/* 6 rubriques par question — bento bordé (modèle OutilsBentoGrid) */}
+      {/* 7 rubriques par question — bento bordé (modèle OutilsBentoGrid) */}
       <div className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
         {c.rubriques.map((r, i) => {
           const Icon = r.icon;
