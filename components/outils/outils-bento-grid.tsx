@@ -14,6 +14,7 @@ import {
   Wrench,
   FlaskConical,
   Blocks,
+  Radar,
   ArrowRight,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
@@ -40,6 +41,18 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       : "8 critères, une recommandation : WordPress, no-code, Headless, SaaS ou sur-mesure. L'outil de décision maître du hub.",
     icon: Compass,
     href: "/outils/boussole",
+    tag: isEn ? "New" : "Nouveau",
+  },
+  "visibilite-ia": {
+    id: "visibilite-ia",
+    title: isEn
+      ? "Is your site visible to AI engines?"
+      : "Votre site est-il visible dans les moteurs IA ?",
+    description: isEn
+      ? "ChatGPT, Perplexity, AI Overviews: 10 questions, a score on 4 axes and your priority actions to get cited."
+      : "ChatGPT, Perplexity, AI Overviews : 10 questions, un score sur 4 axes et vos actions prioritaires pour être cité.",
+    icon: Radar,
+    href: "/outils/visibilite-ia",
     tag: isEn ? "New" : "Nouveau",
   },
   "decrypteur-devis": {
@@ -132,10 +145,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["boussole", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["boussole", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["boussole", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
-  developpeur: ["boussole", "prototype-ia", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["boussole", "visibilite-ia", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["boussole", "visibilite-ia", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["boussole", "visibilite-ia", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
+  developpeur: ["boussole", "prototype-ia", "visibilite-ia", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {
