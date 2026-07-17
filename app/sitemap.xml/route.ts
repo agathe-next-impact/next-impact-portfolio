@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import { getAllSlugs } from "@/lib/case-studies-data";
+import { getHubThemeSlugs } from "@/lib/hub-themes";
 
 const baseUrl = "https://www.next-impact.digital";
 const contentRoots = ["content", path.join("content", "en")];
@@ -137,10 +138,21 @@ export async function GET() {
       { path: "solutions-web/eligibilite", source: "app/[locale]/solutions-web/eligibilite/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "etudes-de-cas", source: "app/[locale]/etudes-de-cas/page.tsx", changefreq: "weekly", priority: 0.8 },
       { path: "documentation", source: "app/[locale]/documentation/page.tsx", changefreq: "weekly", priority: 0.8 },
+      // Page offre conseil — cœur du funnel, était absente du sitemap.
+      { path: "conseil", source: "app/[locale]/conseil/page.tsx", changefreq: "monthly", priority: 0.9 },
       { path: "audit-site-web", source: "app/[locale]/audit-site-web/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "outils/simulateur-agefiph", source: "app/[locale]/outils/simulateur-agefiph/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Outils de qualification rattachés aux rubriques du hub.
+      { path: "outils/boussole", source: "app/[locale]/outils/boussole/page.tsx", changefreq: "monthly", priority: 0.7 },
+      { path: "outils/decrypteur-devis", source: "app/[locale]/outils/decrypteur-devis/page.tsx", changefreq: "monthly", priority: 0.6 },
+      { path: "outils/nocode-saas-surmesure", source: "app/[locale]/outils/nocode-saas-surmesure/page.tsx", changefreq: "monthly", priority: 0.6 },
+      { path: "outils/prototype-ia", source: "app/[locale]/outils/prototype-ia/page.tsx", changefreq: "monthly", priority: 0.6 },
+      { path: "outils/reparer-ou-refaire", source: "app/[locale]/outils/reparer-ou-refaire/page.tsx", changefreq: "monthly", priority: 0.6 },
+      // Diagnostic « visible dans les moteurs IA ? » — route convenue avec le
+      // chantier outils (vague 1) ; le lastmod tombera quand la page existera.
+      { path: "outils/visibilite-ia", source: "app/[locale]/outils/visibilite-ia/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "demo", source: "app/[locale]/demo/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "cahier-des-charges", source: "app/[locale]/cahier-des-charges/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "a-propos", source: "app/[locale]/a-propos/page.tsx", changefreq: "monthly", priority: 0.6 },
@@ -197,27 +209,47 @@ export async function GET() {
       }),
     );
 
-    const docCategoryUrls = (await getDocumentationCategories()).map((cat) =>
-      localizedUrlEntry(`documentation/${cat.slug}`, {
+    // Pages rubriques du hub « Quelle techno web ? » (segments statiques,
+    // données dans lib/hub-themes.ts) — absentes de la découverte par dossier.
+    const hubThemeSlugs = getHubThemeSlugs();
+    const themeLastmod = await pathLastmod("lib/hub-themes.ts");
+    const themeUrls = hubThemeSlugs.map((slug) =>
+      localizedUrlEntry(`documentation/${slug}`, {
         changefreq: "weekly",
-        priority: 0.7,
-        lastmod: cat.lastmod,
+        priority: 0.8,
+        lastmod: themeLastmod,
       }),
     );
 
-    const documentationUrls = (await readContentFiles("documentation")).map((doc) =>
-      localizedUrlEntry(`documentation/${doc.slug}`, {
-        changefreq: "monthly",
-        priority: 0.6,
-        lastmod: doc.lastmod,
-      }),
-    );
+    // Les catégories qui portent le même slug qu'une rubrique (ex. choisir,
+    // etre-trouve) sont déjà émises ci-dessus : on les exclut du listing dossier.
+    const docCategoryUrls = (await getDocumentationCategories())
+      .filter((cat) => !hubThemeSlugs.includes(cat.slug))
+      .map((cat) =>
+        localizedUrlEntry(`documentation/${cat.slug}`, {
+          changefreq: "weekly",
+          priority: 0.7,
+          lastmod: cat.lastmod,
+        }),
+      );
+
+    // Exclure les fichiers index.mdx : leur URL doublonnerait la page catégorie.
+    const documentationUrls = (await readContentFiles("documentation"))
+      .filter((doc) => !doc.slug.endsWith("/index"))
+      .map((doc) =>
+        localizedUrlEntry(`documentation/${doc.slug}`, {
+          changefreq: "monthly",
+          priority: 0.6,
+          lastmod: doc.lastmod,
+        }),
+      );
 
     const allUrls = [
       ...staticUrls,
       ...singleUrls,
       ...caseStudyUrls,
       ...blogUrls,
+      ...themeUrls,
       ...docCategoryUrls,
       ...documentationUrls,
     ].join("");
