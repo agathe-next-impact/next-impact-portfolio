@@ -86,10 +86,24 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
 ## Incohérences connues à corriger
 
 - Meta title du hub encore « Comprendre — WordPress Headless & Next.js » →
-  aligner sur « Quelle techno web ? … à l'heure de l'IA ».
-- Tarifs conseil : site affiche 150 € (visio) / 490 € (architecture) ; docs de
-  stratégie disent 180 € / 390 €. **Demander à Agathe de trancher** avant de
-  propager un prix dans un contenu. Ne jamais inventer un prix.
+  aligner sur « Quelle techno web ? … à l'heure de l'IA ». (À corriger en vague 1 :
+  `messages/fr.json` lignes 243-244 + pendant EN.)
+
+## Décisions actées (journal des arbitrages)
+
+- **Branche de travail (17/07/2026, décision par défaut — orchestrateur)** : le
+  chantier vit sur la branche **`posit-conseil`** (branche déployée, seule à
+  porter le hub « Quelle techno web ? » et les 6 rubriques). Le local
+  `refonte-aspect` était obsolète ; son travail en cours est sauvegardé par le
+  commit WIP `ee86e9e`. Tous les agents travaillent sur `posit-conseil`.
+- **Tarifs conseil (17/07/2026, décision par défaut — à confirmer par Agathe)** :
+  on retient **150 € (visio conseil) / 490 € (architecture)** = statu quo du
+  site live, cohérent partout (aucune occurrence réelle de 180/390 dans le
+  code — voir cartographie-contenu.md §8.7). Aucun agent n'introduit 180/390.
+  Si Agathe tranche autrement, corriger les occurrences listées dans la
+  cartographie AVANT tout nouveau contenu.
+- **Slug de la 7e rubrique** : `etre-trouve` (route
+  `/documentation/etre-trouve`), conforme à la commande d'orchestration.
 
 ## Références projet (Claude.ai, projet « Next Impact »)
 
