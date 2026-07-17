@@ -1,0 +1,101 @@
+# Contexte partagé — Fusion « Comprendre » × base de ressources IA
+
+> Ce fichier est la source de vérité du chantier. Tous les agents le lisent
+> avant d'agir. Ne pas dupliquer son contenu dans les agents : y référer.
+
+## Décision actée (17/07/2026)
+
+**Fusion mappée, pas remplacement.** La section « Comprendre » (/documentation,
+hub « Quelle techno web ? ») garde sa colonne vertébrale de rubriques de
+décision reliées aux offres payantes. La base de ressources « Créer un site web
+à l'heure de l'IA » vient l'irriguer. Une seule création structurelle : la
+7e rubrique « Être trouvé à l'heure de l'IA » (SEO + GEO).
+
+## Structure cible de la section
+
+```text
+Quelle techno web ? (hub — /documentation)
+├── Choisir sa techno              ← + F1, F2 (angle IA injecté)
+├── IA & code                      ← + clusters A et B (gros du volume nouveau)
+├── Être trouvé à l'heure de l'IA  ← NOUVELLE rubrique = cluster C (SEO, GEO, AI Overviews)
+├── Réparer ou refaire             ← + A7 (réparer un site généré par IA)
+├── Avant de signer                ← + F3 (12 questions IA à poser au prestataire)
+├── Outils métier                  ← + cluster E (chatbot, recherche sémantique, RAG, automatisation)
+└── Présence et audience           ← + cluster D (contenu IA, E-E-A-T, images IA, AI Act)
+
+Catégories existantes (Headless CMS, WordPress, SEO, Design & UI/UX,
+Marketing Digital, Projet de site web) → rétrogradées en filtres/tags,
+retirées de la navigation principale. Une seule taxonomie visible : les 7 rubriques.
+```
+
+## Mapping clusters → rubriques (source : analyse du 17/07/2026)
+
+| Cluster | Contenus | Rubrique d'accueil |
+|---|---|---|
+| A — Créer son site avec l'IA | A0 panorama générateurs IA · A1 ChatGPT/IA générative · A2 v0/Lovable/Bolt · A3 builders IA (Wix, Hostinger, Framer) · A4 site IA vs pro (comparatif) · A5 vibe coding · A6 quand l'IA suffit/piège · A7 reprendre un site généré par IA | IA & code (A7 → aussi Réparer ou refaire) |
+| B — L'IA dans la stack | B0 ce que l'IA change dans la stack · B1 WordPress et IA · B2 dev assisté par IA · B3 Next.js/Astro et moteurs génératifs · B4 dette technique du code IA · B5 maintenance à l'heure de l'IA · B6 sécurité des sites construits avec l'IA | IA & code + tags WordPress/Headless |
+| C — Visibilité moteurs IA ⭐ | C0 SEO/GEO/AEO · C1 comment ChatGPT/Perplexity choisissent leurs citations · C2 guide GEO pour PME · C3 données structurées · C4 llms.txt/robots.txt/crawlers IA · C5 AI Overviews · C6 le SEO est-il mort · C7 structurer une page citable (méthode) · C8 mesurer sa visibilité IA | **Être trouvé à l'heure de l'IA** (nouvelle) — absorbe la catégorie SEO |
+| D — Contenu, design et IA | D0 contenu IA opportunité/risque · D1 rédiger avec l'IA sans pénalité · D2 E-E-A-T · D3 images IA (droit, crédibilité) · D4 design assisté · D5 RGPD/AI Act · D6 le contenu moyen ne convertit pas | Présence et audience |
+| E — Composants IA | E0 quels composants IA ont leur place · E1 chatbot · E2 recherche sémantique · E3 personnalisation · E4 automatisation formulaires/CRM · E5 RAG/base de connaissances · E6 IA dans une web app métier | Outils métier |
+| F — Décider/cadrer | UNIQUEMENT F1 (combien coûte un site en 2026, tableaux chiffrés) et F3 (12 questions à poser au prestataire sur l'IA). F0/F2/F4/F5 : NE PAS créer — déjà couverts par Choisir sa techno / Avant de signer | F1 → Choisir sa techno · F3 → Avant de signer |
+
+## Ordre de déploiement
+
+1. **Vague 1 (prioritaire)** : rubrique « Être trouvé à l'heure de l'IA » (page
+   d'arbitrage + C1 + C2) + diagnostic « votre site est-il visible dans les
+   moteurs IA ? » + rétrogradation des catégories en tags + correction du meta
+   title du hub.
+2. **Vague 2** : A4, A6, A7 + F1.
+3. **Vague 3** : C7 + checklist GEO téléchargeable + C3/C4.
+4. **Vague 4** : F3, B0, B4.
+5. **Vague 5** : élagage du stock Headless (35 → ~15 articles consolidés,
+   redirections 301) puis clusters D et E au fil de l'eau.
+
+Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précédente
+à 100 % — mais respecter l'ordre des priorités.
+
+## Doctrine (à appliquer, pas à débattre)
+
+- Le site doit **prouver avant de demander**. Chaque rubrique = page
+  d'arbitrage + outil gratuit + escalier de CTA (outil gratuit → visio → cadrage).
+- Classer par **bénéfice/question du prospect**, jamais par techno en accroche.
+- L'angle d'entrée est la **douleur**, pas l'IA pour l'IA. Le fil rouge :
+  « que doit faire votre site, pour qui, avec quelle équipe derrière ? »
+- L'AGEFIPH/OETH est un accélérateur de fin de parcours, jamais l'argument d'entrée.
+- **Un seul contenu par intention de recherche** : vérifier l'existant avant de créer.
+- Ton : clair, pédagogique, expert sans jargon, honnête sur les limites,
+  orienté décision. Public : décideurs non techniciens (DIRCOM, dirigeants,
+  responsables com/marketing de structures 20–250 salariés).
+
+## Socle GEO obligatoire (toute page nouvelle ou refondue)
+
+1. TL;DR de 3-4 phrases citable sous le H1 (réponse directe, pas un teaser).
+2. Hiérarchie Hn propre ; chaque H2 = une sous-question réelle, section autonome extractible.
+3. FAQ en fin de page (3-7 questions) balisée `FAQPage`.
+4. Schema JSON-LD : `Article` (+ `HowTo` si méthode pas à pas), `BreadcrumbList`,
+   auteur `Person` (Agathe Karinthi-Martin) relié à `Organization` (Next Impact).
+5. Dates de publication ET de dernière mise à jour visibles.
+6. Tableaux comparatifs et chiffres explicites quand le sujet s'y prête
+   (les moteurs IA citent les pages qui donnent des chiffres et des verdicts).
+7. Verdict explicite par profil (« Pour une PME avec catalogue : non, parce que… »).
+8. Maillage minimum : rubrique parente + 1 outil + 1 offre (conseil ou service)
+   + 1 article complémentaire + 1 étude de cas si pertinente.
+9. Liens sortants vers sources primaires (Google Search Central, CNIL, textes officiels).
+10. robots.txt : GPTBot, ClaudeBot, PerplexityBot autorisés ; llms.txt à la racine.
+
+## Incohérences connues à corriger
+
+- Meta title du hub encore « Comprendre — WordPress Headless & Next.js » →
+  aligner sur « Quelle techno web ? … à l'heure de l'IA ».
+- Tarifs conseil : site affiche 150 € (visio) / 490 € (architecture) ; docs de
+  stratégie disent 180 € / 390 €. **Demander à Agathe de trancher** avant de
+  propager un prix dans un contenu. Ne jamais inventer un prix.
+
+## Références projet (Claude.ai, projet « Next Impact »)
+
+Arborescence détaillée avec requêtes cibles par cluster :
+`claude/arborescence-ressources-ia-next-impact.md` · Analyse remplacement vs
+fusion : `claude/analyse-comprendre-vs-base-ressources-ia.md` · Offre :
+`synthese-offre-next-impact.md` et `evolution-offre-next-impact.md`.
+Si un agent a besoin des requêtes cibles détaillées, demander à Agathe de
+coller l'extrait pertinent, ou consulter ces docs si le projet est accessible.
