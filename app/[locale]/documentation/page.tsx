@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from "@/components/json-ld";
+import { HUB_THEMES, tx } from "@/lib/hub-themes";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les 24 heures
@@ -27,30 +28,20 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "Headless WordPress documentation",
-            "Next.js tutorials",
-            "technical guides",
-            "developer resources",
+            "which web tech",
+            "choose web technology",
+            "web tech in the AI era",
+            "WordPress no-code Headless custom",
           ]
         : [
-            "documentation WordPress Headless",
-            "tutoriels Next.js",
-            "guides techniques",
-            "ressources développeurs",
+            "quelle techno web",
+            "choisir sa techno web",
+            "techno web à l'heure de l'IA",
+            "WordPress no-code Headless sur-mesure",
           ],
     locale,
   });
 }
-
-const documentationCategories = [
-  { name: "Marketing Digital", url: "/documentation/marketing-digital", description: "Principes et concepts de base du marketing digital." },
-  { name: "SEO", url: "/documentation/seo", description: "Guides et ressources pour maîtriser le SEO de votre site." },
-  { name: "Design & UI/UX", url: "/documentation/design-ui-ux", description: "Expériences utilisateurs engageantes et accessibles." },
-  { name: "Projet de site web", url: "/documentation/projet-site-web", description: "Préparer et mener un projet de site web de A à Z." },
-  { name: "WordPress", url: "/documentation/wordpress", description: "Bonnes pratiques et guides pour WordPress." },
-  { name: "Headless CMS", url: "/documentation/wordpress-headless", description: "Architecture headless, API REST et découplage front/back." },
-  { name: "Blog", url: "/documentation/blog", description: "Actualités et analyses sur le développement web." },
-];
 
 export default async function DocumentationPage({
   params,
@@ -64,6 +55,14 @@ export default async function DocumentationPage({
     { name: t("breadcrumbDocs"), url: "/documentation" },
   ];
 
+  // Une seule taxonomie visible : le JSON-LD du hub liste les 7 rubriques de
+  // décision (source : lib/hub-themes.ts), pas les catégories encyclopédiques.
+  const rubriqueItems = Object.values(HUB_THEMES).map((theme) => ({
+    name: tx(theme.kicker, locale),
+    url: `/documentation/${theme.slug}`,
+    description: tx(theme.meta.description, locale),
+  }));
+
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
@@ -71,7 +70,7 @@ export default async function DocumentationPage({
         name={t("metaTitle")}
         description={t("metaDescription")}
         url="/documentation"
-        items={documentationCategories}
+        items={rubriqueItems}
       />
       <PageLayout titre={t("hubTitle")} sousTitre={t("hubSubtitle")}>
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>

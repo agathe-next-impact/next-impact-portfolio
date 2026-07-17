@@ -241,8 +241,8 @@
     "breadcrumbSolutions": "Solutions"
   },
   "documentationPage": {
-    "metaTitle": "Comprendre — WordPress Headless & Next.js",
-    "metaDescription": "Le centre de ressources pour comprendre WordPress Headless et Next.js. Guides techniques, tutoriels et bonnes pratiques pour développeurs et chefs de projet.",
+    "metaTitle": "Quelle techno web ? Comprendre et choisir à l'heure de l'IA",
+    "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides — WordPress, no-code, Headless ou sur-mesure.",
     "title": "Comprendre",
     "subtitle": "Le centre de ressources pour comprendre WordPress Headless et Next.js.",
     "hubTitle": "Quelle techno web ?",
@@ -278,6 +278,10 @@
     "metaNotFoundTitle": "Étude de cas introuvable",
     "metaNotFoundDescription": "L'étude de cas demandée n'existe pas.",
     "backToCaseStudies": "Retour aux études de cas",
+    "arbitrageTitle": "L'arbitrage technologique",
+    "arbitrageOptions": "Options envisagées",
+    "arbitrageDecision": "Décision",
+    "arbitrageRationale": "Pourquoi ce choix",
     "projectOverview": "Aperçu du projet",
     "projectPresentation": "Présentation du projet",
     "objectives": "Objectifs",
