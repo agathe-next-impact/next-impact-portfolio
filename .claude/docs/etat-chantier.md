@@ -17,9 +17,13 @@
 | 1 | Rédaction C2 — `guide-geo-pme.mdx` (FAQ ×5, verdicts 3 profils, sources primaires) | redacteur-seo-geo | ✅ fait | 2026-07-17 |
 | 1 | Diagnostic « votre site est-il visible dans les moteurs IA ? » (route `/outils/visibilite-ia`, scoring 4 axes, tests OK, carte /outils) | batisseur-outils | ✅ fait | 2026-07-17 |
 | 1 | Audit de vague : **publiable sous réserve B1** (fourchette 2 000–6 000 € de C2 à arbitrer) — rapport : audit-vague-1.md | verificateur-coherence (mode 2) | ✅ fait | 2026-07-17 |
-| 2 | Verdicts mode 1 : A4, A6, A7, F1 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
-| 2 | Rédaction/màj + intégration selon verdicts | redacteur-seo-geo / architecte-fusion | ⬜ à faire | — |
-| 2 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
+| 2 | Verdicts mode 1 : A4 CRÉER (absorbe A6), A6 RENONCER, A7 CRÉER, F1 CRÉER (→ verdicts-vague-2.md) | verificateur-coherence | ✅ fait | 2026-07-18 |
+| 2 | Arbitrages Agathe : fusion A6→A4 ✓, AGEFIPH 30 % main-d'œuvre ✓ (blog corrigé), chiffres F1 = existant + découpage e-commerce par stack ✓ | orchestrateur | ✅ fait | 2026-07-18 |
+| 2 | Infra catégorie `ia-et-code` (labels, reading, renvoi reparer→A7, lien pilier→A4, llms.txt) — commits `8e9408a`…`2cdda1f` | architecte-fusion | ✅ fait | 2026-07-18 |
+| 2 | Rédaction A7 — `reprendre-un-site-genere-par-ia.mdx` (commit `c3f8226`) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 2 | Rédaction A4 — `site-genere-par-ia-vs-site-professionnel.mdx` (tableau 10 critères, verdicts 5 cas d'usage ex-A6) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 2 | Rédaction F1 — `choisir/combien-coute-un-site-web-en-2026.mdx` (100 % fourchettes publiées, e-commerce par stack) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 2 | Audit de vague : 3 bloquants + A1-A3 **corrigés le jour même** → **publiable** (rapport : audit-vague-2.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 3 | C7 + checklist GEO + C3/C4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 4 | F3, B0, B4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
@@ -32,6 +36,12 @@
   (3 emplacements). Décision actée dans contexte-fusion.md.
 - ~~A1-A4~~ corrigés le 18/07 : OAI-SearchBot ajouté (rubrique + outil),
   `updated` sur C2, lien Gartner posé, périmètre C5 consigné dans le contexte.
+- **Pages React AGEFIPH (audit vague 2, point A4) — décision Agathe attendue** :
+  `articles/attestation-deductibilite-tih-guide-entreprises` calcule une
+  déduction de 9 % du HT (30 % × 30 %), en contradiction avec la règle actée
+  « 30 % du coût main-d'œuvre » et avec l'autre page AGEFIPH. Meta title
+  d'`/avantage-oeth` également inexact. Domaine réglementaire → ne pas
+  corriger sans arbitrage.
 - Meta title du hub : variantes alternatives dans le message du commit
   `1968e8d` si un autre angle est préféré.
 - Push : jamais sans demande explicite d'Agathe (commits locaux seulement).

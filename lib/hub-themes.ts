@@ -195,6 +195,18 @@ const choisir: HubTheme = {
       },
       href: "/documentation/choisir/quelle-techno-ia",
     },
+    {
+      icon: Calculator,
+      name: {
+        fr: "Combien coûte un site web en 2026 ?",
+        en: "How much does a website cost in 2026?",
+      },
+      blurb: {
+        fr: "Les fourchettes consolidées par type de site — création, exploitation annuelle et coût total sur trois ans.",
+        en: "Consolidated price ranges by site type — build, yearly running costs and three-year total cost.",
+      },
+      href: "/documentation/choisir/combien-coute-un-site-web-en-2026",
+    },
   ],
   tools: [
     {
