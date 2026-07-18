@@ -24,7 +24,10 @@
 | 2 | Rédaction A4 — `site-genere-par-ia-vs-site-professionnel.mdx` (tableau 10 critères, verdicts 5 cas d'usage ex-A6) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 2 | Rédaction F1 — `choisir/combien-coute-un-site-web-en-2026.mdx` (100 % fourchettes publiées, e-commerce par stack) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 2 | Audit de vague : 3 bloquants + A1-A3 **corrigés le jour même** → **publiable** (rapport : audit-vague-2.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 3 | C7 + checklist GEO + C3/C4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
+| 3 | Verdicts mode 1 : C7, C3, C4 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
+| 3 | Checklist GEO téléchargeable | batisseur-outils | 🔄 en cours | 2026-07-18 |
+| 3 | Rédaction C7/C3/C4 selon verdicts | redacteur-seo-geo | ⬜ à faire | — |
+| 3 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
 | 4 | F3, B0, B4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
 
