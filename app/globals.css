@@ -1256,6 +1256,8 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
 }
 
 /* ─── Accessibilité — respect de prefers-reduced-motion ───
+   BLOC CRITIQUE — ne pas supprimer (déjà effacé une fois par un git
+   checkout) ; le kill-switch reduced-motion du site en dépend.
    Coupe transitions, animations CSS et scroll lissé pour les
    utilisateurs qui le demandent (complète framer MotionConfig). */
 @media (prefers-reduced-motion: reduce) {
@@ -1270,8 +1272,10 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
 }
 
 /* ─── Blueprint visuals — keyframes (jeux lumineux, flux, dérive) ───
-   Réinjectées (un git checkout les avait effacées). Auto-coupées par le
-   garde-fou reduced-motion ci-dessus. */
+   BLOC CRITIQUE — ne pas supprimer (déjà effacé une fois par un git
+   checkout) ; le kill-switch reduced-motion du site en dépend.
+   Réinjectées après cet effacement. Auto-coupées par le garde-fou
+   reduced-motion ci-dessus. */
 @keyframes aurora-drift-1 {
   0%   { transform: translate3d(0, 0, 0) scale(1); }
   100% { transform: translate3d(8%, 6%, 0) scale(1.18); }

@@ -21,12 +21,12 @@ import { AnimatePresence, m as motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ArrowRight, Check, Loader2, Mail, X } from "lucide-react";
 import { track } from "@/lib/track";
+import { EASE_OUT as EASE } from "@/lib/motion-tokens";
 
 const LS_SUBSCRIBED = "ni:newsletter:subscribed";
 const SS_DISMISSED = "ni:newsletter:dismissed";
 const OPEN_DELAY_MS = 1400;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Status = "idle" | "loading" | "success" | "error";
 
