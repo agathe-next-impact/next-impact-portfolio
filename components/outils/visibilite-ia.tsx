@@ -24,6 +24,7 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
 import { track } from "@/lib/track";
@@ -181,7 +182,8 @@ export default function VisibiliteIa() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
         <div
           ref={resultRef}
@@ -336,6 +338,7 @@ export default function VisibiliteIa() {
           <NewsletterModal source="visibilite-ia" />
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">

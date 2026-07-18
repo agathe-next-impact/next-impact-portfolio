@@ -14,6 +14,7 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 
 type Family = "nocode" | "saas" | "surmesure";
 
@@ -280,7 +281,8 @@ export default function NocodeSaasSurmesure() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
         <div
           ref={resultRef}
@@ -377,6 +379,7 @@ export default function NocodeSaasSurmesure() {
           <NewsletterModal source="nocode-saas-surmesure" />
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">

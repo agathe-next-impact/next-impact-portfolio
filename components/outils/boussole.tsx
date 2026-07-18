@@ -13,6 +13,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 import NewsletterModal from "@/components/ui/newsletter-modal";
 
 /* ─── Familles de solution (sorties possibles) ───────────────────────────── */
@@ -350,7 +351,8 @@ export default function Boussole() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
         <div
           ref={resultRef}
@@ -460,6 +462,7 @@ export default function Boussole() {
           <NewsletterModal source="boussole" />
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">

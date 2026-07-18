@@ -22,6 +22,7 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
 import { Reveal } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 
 // ok = aucun enjeu de prod sur ce point ; ko = exige un vrai build maintenable.
 type Status = "ok" | "warn" | "ko";
@@ -363,7 +364,8 @@ export default function PrototypeIa() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
         <div
           ref={resultRef}
@@ -459,6 +461,7 @@ export default function PrototypeIa() {
           <NewsletterModal source="prototype-ia" />
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">
