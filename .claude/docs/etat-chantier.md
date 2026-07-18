@@ -39,10 +39,10 @@
 | 4 | Audit de vague : **zéro bloquant, publiable** ; A1-A2 traités le jour même (rapport : audit-vague-4.md, commit `64c6d36`) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 5 | Plan de fusion Headless (→ plan-fusion-headless.md, commit `cc07b82`) | architecte-fusion | ✅ fait | 2026-07-18 |
 | 5 | Validation du plan : **intégral, 2 arbitrables fusionnés, tarifs harmonisés blog 2026** | Agathe | ✅ fait | 2026-07-18 |
-| 5 | Exécution structure : 301 + références internes + scories (sans supprimer les sources des fusions) | architecte-fusion | 🔄 en cours | 2026-07-18 |
-| 5 | Réécriture des 7 absorbants (socle GEO P1, tarifs 2026) | redacteur-seo-geo ×7 | 🔄 en cours | 2026-07-18 |
-| 5 | Suppression des 11 fichiers fusionnés + miroirs EN (après absorption) | orchestrateur | ⬜ à faire | — |
-| 5 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
+| 5 | Exécution structure : 301 (24 règles) + références internes (dont documentation-profiles hors plan) + scories + diagnostic harmonisé — commits `c492678`/`7c31fb5`/`2baa0ce`/`7634d95` | architecte-fusion | ✅ fait | 2026-07-18 |
+| 5 | Réécriture des 7 absorbants (socle GEO P1, tarifs 2026, stats assainies) — 7 commits | redacteur-seo-geo ×7 | ✅ fait | 2026-07-18 |
+| 5 | Suppression des 11 fusionnés + miroirs EN (22 fichiers, commit `6dd1cf9`) — build vert | orchestrateur | ✅ fait | 2026-07-18 |
+| 5 | Audit de vague : 3 bloquants (composants MDX, tableaux, tarifs 2025) + A1-A5 **corrigés le jour même** → **publiable** (rapport : audit-vague-5.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 5+ | Clusters D et E au fil de l'eau (verdicts mode 1 obligatoires) | (chaîne complète) | ⬜ à faire | — |
 
 ## Bloquants / à confirmer par Agathe

@@ -163,16 +163,12 @@ Un JWT (JSON Web Token) est un jeton signé par le serveur qui prouve l'identit�
 
 ### Quelle méthode d'authentification choisir ?
 
-<ComparisonTable
-  headers={["Application Passwords", "JWT (JSON Web Tokens)", "OAuth 2.0"]}
-  rows={[
-    { label: "Mise en place", left: "Faible — natif depuis WordPress 5.6", center: "Moyenne — plugin WordPress requis", right: "Élevée — serveur d'autorisation requis" },
-    { label: "Cas d'usage", left: "Accès serveur-à-serveur (scripts, CI/CD)", center: "Authentification utilisateur frontend-backend", right: "Intégration tierce, SSO (Single Sign-On)" },
-    { label: "Sécurité", left: "Token statique, non révocable individuellement", center: "Token à expiration, renouvelable (refresh token)", right: "Protocole standardisé avec scopes et consentement" },
-    { label: "Verdict", left: "Scripts et automatisations serveur uniquement", center: "Cas standard pour un site headless", right: "Applications multi-services ou SSO" }
-  ]}
-  highlight="center"
-/>
+| | Application Passwords | **JWT** (cas standard) | OAuth 2.0 |
+|---|---|---|---|
+| Mise en place | Faible — natif depuis WordPress 5.6 | Moyenne — plugin WordPress requis | Élevée — serveur d'autorisation requis |
+| Cas d'usage | Accès serveur-à-serveur (scripts, CI/CD) | Authentification utilisateur frontend-backend | Intégration tierce, SSO (Single Sign-On) |
+| Sécurité | Token statique, non révocable individuellement | Token à expiration, renouvelable (refresh token) | Protocole standardisé avec scopes et consentement |
+| Verdict | Scripts et automatisations serveur uniquement | Cas standard pour un site headless | Applications multi-services ou SSO |
 
 <Callout variant="developpeur" title="Application Passwords : jamais dans le navigateur">
 Les Application Passwords de WordPress sont des tokens permanents, conçus pour les scripts serveur-à-serveur (déploiement, synchronisation). Ne les utilisez jamais pour authentifier des utilisateurs finaux, et ne les stockez jamais côté client.

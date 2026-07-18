@@ -52,16 +52,13 @@ Ce qui ne change pas : WordPress exige le même environnement qu'en mode classiq
 
 **Sur ce que vous voulez — c'est la bonne nouvelle : tout hébergement PHP/MySQL convient. Le choix se fait sur le budget, le niveau de service et l'autonomie technique de l'équipe, pas sur la compatibilité.**
 
-<ComparisonTable
-  headers={["Hébergement mutualisé", "VPS / Serveur dédié", "WordPress managé"]}
-  rows={[
-    { label: "Coût mensuel (tarifs publics 2026)", left: "≈ 5-15 € HT", right: "≈ 25-60 € HT" },
-    { label: "Performance", left: "Variable, ressources partagées", right: "Élevée, ressources dédiées ou optimisées" },
-    { label: "Administration", left: "Minimale", right: "Complète (VPS) ou déléguée (managé)" },
-    { label: "Exemples", left: "o2switch, OVH", right: "Kinsta, WP Engine, DigitalOcean" },
-    { label: "Adapté pour", left: "Sites éditoriaux, back-office peu sollicité", right: "Back-office intensif, exigences de SLA, staging intégré" },
-  ]}
-/>
+| | Hébergement mutualisé | VPS / Serveur dédié | WordPress managé |
+|---|---|---|---|
+| Coût mensuel (tarifs publics 2026) | ≈ 5-15 € HT | Selon la machine, administration en sus | ≈ 25-60 € HT |
+| Performance | Variable, ressources partagées | Élevée, ressources dédiées | Élevée, optimisée WordPress |
+| Administration | Minimale | Complète, à la charge de votre équipe | Déléguée à l'hébergeur |
+| Exemples | o2switch, OVH | DigitalOcean, OVH VPS | Kinsta, WP Engine |
+| Adapté pour | Sites éditoriaux, back-office peu sollicité | Structures avec compétence système en interne | Back-office intensif, exigences de SLA, staging intégré |
 
 Trois familles, trois logiques :
 
@@ -86,7 +83,7 @@ En headless, les performances du serveur WordPress n'ont presque plus d'impact s
 </StatGrid>
 
 <ComparisonTable
-  headers={["Vercel", "Netlify", "AWS Amplify"]}
+  headers={["Vercel", "Netlify"]}
   rows={[
     { label: "Compatibilité Next.js", left: "Native et complète", right: "Bonne (quelques limitations ISR)" },
     { label: "Plan gratuit", left: "Hobby (usage non commercial)", right: "Starter (1 membre)" },
@@ -212,4 +209,4 @@ Côté budget global : l'hébergement des deux blocs pèse peu dans le coût d'e
 
 ---
 
-**Et maintenant ?** Si vous évaluez encore l'opportunité du headless pour votre organisation, [l'offre WordPress headless de Next Impact](/wordpress-headless) détaille périmètre, garanties de performance et tarifs. Pour arbitrer une architecture d'hébergement sur votre cas précis — infrastructure existante, contraintes DSI, migration en cours — une [visio conseil](/conseil) tranche la question en une heure, schéma cible à l'appui.
+**Et maintenant ?** Si vous évaluez encore l'opportunité du headless pour votre organisation, [l'offre WordPress headless de Next Impact](/wordpress-headless) détaille périmètre, garanties de performance et tarifs. Pour arbitrer une architecture d'hébergement sur votre cas précis — infrastructure existante, contraintes DSI, migration en cours — une [visio conseil](/conseil) de 30 minutes tranche la question, schéma cible à l'appui.

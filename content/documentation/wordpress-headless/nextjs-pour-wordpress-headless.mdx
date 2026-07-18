@@ -38,9 +38,9 @@ React seul est une bibliothèque d'interface : il sait afficher des composants, 
 <ArchitectureDiagram
   title="Architecture WordPress headless avec Next.js"
   layers={[
-    { name: "Navigateur", components: ["Pages React", "Composants UI", "Client-side routing"], color: "blue" },
-    { name: "Serveur Next.js", components: ["App Router", "API Routes", "SSR / SSG / ISR", "Middleware"], color: "orange" },
-    { name: "Sources de donnees", components: ["WordPress REST API", "WPGraphQL", "Base MySQL"], color: "coral" }
+    { label: "Navigateur", items: ["Pages React", "Composants UI", "Client-side routing"], color: "blue" },
+    { label: "Serveur Next.js", items: ["App Router", "API Routes", "SSR / SSG / ISR", "Middleware"], color: "orange" },
+    { label: "Sources de données", items: ["WordPress REST API", "WPGraphQL", "Base MySQL"], color: "dark" }
   ]}
 />
 
@@ -69,18 +69,14 @@ Le paysage s'est clarifié depuis 2023-2024. **Astro** s'est imposé comme l'alt
 - **ISR (Incremental Static Regeneration)** : les pages statiques sont régénérées en arrière-plan, à intervalle configuré ou sur événement. Le visiteur reçoit toujours une page statique immédiate ; la mise à jour se fait sans qu'il attende — le mécanisme dit *stale-while-revalidate*.
 - **CSR (Client-Side Rendering)**, en complément : le navigateur charge les données après coup. À réserver aux éléments sans enjeu d'indexation (commentaires, panier, favoris).
 
-<ComparisonTable
-  headers={["SSG", "ISR", "SSR", "CSR"]}
-  rows={[
-    { label: "Moment de generation", left: "Au build", center: "Au build + regeneration periodique", right: "A chaque requete", extra: "Dans le navigateur" },
-    { label: "Performance (TTFB)", left: "Optimale (CDN)", center: "Optimale (CDN + revalidation)", right: "Variable (execution serveur)", extra: "Apres chargement JS" },
-    { label: "Fraicheur du contenu", left: "Dernier build", center: "Derniere revalidation", right: "Temps reel", extra: "Temps reel" },
-    { label: "SEO", left: "Optimal", center: "Optimal", right: "Optimal", extra: "Limite (contenu genere par JS)" },
-    { label: "Cout serveur", left: "Minimal (CDN)", center: "Faible (regeneration ponctuelle)", right: "Proportionnel au trafic", extra: "Minimal (statique + API)" },
-    { label: "Cas d'usage WordPress", left: "Pages statiques, CGV, FAQ", center: "Articles, categories, pages", right: "Recherche, contenu personnalise", extra: "Commentaires, favoris, panier" }
-  ]}
-  highlight="center"
-/>
+| | SSG | **ISR** (recommandé) | SSR | CSR |
+|---|---|---|---|---|
+| Moment de génération | Au build | Au build + régénération périodique | À chaque requête | Dans le navigateur |
+| Performance (TTFB) | Optimale (CDN) | Optimale (CDN + revalidation) | Variable (exécution serveur) | Après chargement JS |
+| Fraîcheur du contenu | Dernier build | Dernière revalidation | Temps réel | Temps réel |
+| SEO | Optimal | Optimal | Optimal | Limité (contenu généré par JS) |
+| Coût serveur | Minimal (CDN) | Faible (régénération ponctuelle) | Proportionnel au trafic | Minimal (statique + API) |
+| Cas d'usage WordPress | Pages statiques, CGV, FAQ | Articles, catégories, pages | Recherche, contenu personnalisé | Commentaires, favoris, panier |
 
 <StatGrid>
   <StatCard value="~50ms" label="TTFB en SSG/ISR" description="Les pages pre-generees sont servies depuis le CDN le plus proche du visiteur" accent="blue" />
@@ -208,4 +204,4 @@ export default async function ArticlePage({ params }) {
 
 ---
 
-**Pour aller plus loin.** Les fondations de l'architecture sont posées dans [comprendre le WordPress headless](/documentation/wordpress-headless/comprendre-le-headless) ; les gains mesurables côté vitesse dans [performance et Core Web Vitals](/documentation/wordpress-headless/performance-et-core-web-vitals). Si vous évaluez ce socle pour votre propre site, l'[offre WordPress headless](/wordpress-headless) décrit ce que je livre concrètement — et une [visio conseil](/conseil) permet de valider en une heure si Next.js est le bon choix pour votre contexte, ou s'il est surdimensionné.
+**Pour aller plus loin.** Les fondations de l'architecture sont posées dans [comprendre le WordPress headless](/documentation/wordpress-headless/comprendre-le-headless) ; les gains mesurables côté vitesse dans [performance et Core Web Vitals](/documentation/wordpress-headless/performance-et-core-web-vitals). Si vous évaluez ce socle pour votre propre site, l'[offre WordPress headless](/wordpress-headless) décrit ce que je livre concrètement — et une [visio conseil](/conseil) de 30 minutes permet de valider si Next.js est le bon choix pour votre contexte, ou s'il est surdimensionné.

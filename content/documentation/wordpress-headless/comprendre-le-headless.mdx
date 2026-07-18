@@ -15,8 +15,8 @@ faq:
     answer: "Non, à condition que le front-end serve du HTML complet aux robots — ce que font le pré-rendu (SSG) et le rendu serveur (SSR) d'un framework comme Next.js. Les balises meta, le sitemap et les données structurées restent entièrement maîtrisables, souvent plus finement qu'avec un plugin SEO seul, et les Core Web Vitals y gagnent."
   - question: "Quelle est la différence entre WordPress headless et un CMS headless comme Strapi ou Contentful ?"
     answer: "Le principe d'architecture est le même : un back-office qui expose du contenu via une API, un front-end qui l'affiche. La différence est le point de départ : avec WordPress headless, vous conservez votre contenu, vos rédacteurs formés et un back-office éprouvé ; avec un CMS headless natif, vous repartez de zéro côté contenu et interface d'administration."
-  - question: "Les plugins WordPress fonctionnent-ils encore en mode headless ?"
-    answer: "Ceux qui agissent côté back-office continuent de fonctionner : champs personnalisés (ACF), SEO (les métadonnées sont exposées via l'API), formulaires côté gestion, sauvegarde, sécurité. En revanche, les plugins qui injectent de l'affichage dans les pages publiques (sliders, popups, page builders) sont remplacés par des composants du front-end."
+  - question: "Pourquoi certains plugins WordPress perdent-ils leur rôle en headless ?"
+    answer: "Parce que l'affichage public ne passe plus par WordPress : tout plugin qui injecte du rendu dans les pages (sliders, popups, page builders) est remplacé par des composants du front-end. Les plugins qui agissent côté back-office, eux, gardent leur rôle — le détail plugin par plugin est traité dans l'article sur la gestion de contenu au quotidien."
 ---
 
 *Publié en mars 2025, mis à jour en juillet 2026. Ce guide fusionne et remplace trois anciens articles d'introduction au headless.*
@@ -159,7 +159,7 @@ Vous travaillez avec une stack front-end moderne (React, Next.js, TypeScript) : 
 
 Ce guide explique le *quoi* et le *comment* ; la décision mérite son propre parcours. En résumé : **pour un site vitrine standard au budget serré, un WordPress classique bien optimisé reste le bon choix** — le headless n'y apporterait que du coût. **Pour un site où la performance impacte le chiffre d'affaires, où le design est un différenciateur, ou dont le contenu doit alimenter plusieurs canaux, le headless est l'architecture de référence en 2026.**
 
-Pour trancher sur votre cas précis, l'article [dois-je passer au headless ?](/documentation/wordpress-headless/dois-je-passer-au-headless) inclut un auto-diagnostic interactif en 5 critères. Pour voir ce que cela donne en offre concrète — WordPress conservé, front Next.js, performances garanties — la page [WordPress headless](/wordpress-headless) présente la démarche et les engagements. Et si vous préférez en parler sur votre contexte réel, une [visio conseil de 150 €](/conseil) permet de valider ou d'écarter la piste headless en une heure, sans engagement de suite.
+Pour trancher sur votre cas précis, l'article [dois-je passer au headless ?](/documentation/wordpress-headless/dois-je-passer-au-headless) inclut un auto-diagnostic interactif en 5 critères. Pour voir ce que cela donne en offre concrète — WordPress conservé, front Next.js, performances garanties — la page [WordPress headless](/wordpress-headless) présente la démarche et les engagements. Et si vous préférez en parler sur votre contexte réel, une [visio conseil de 150 €](/conseil) permet de valider ou d'écarter la piste headless en 30 minutes, sans engagement de suite.
 
 <Quiz
   question="Dans une architecture headless, où est stocké le contenu ?"
