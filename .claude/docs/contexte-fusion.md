@@ -104,6 +104,18 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
   cartographie AVANT tout nouveau contenu.
 - **Slug de la 7e rubrique** : `etre-trouve` (route
   `/documentation/etre-trouve`), conforme à la commande d'orchestration.
+- **Fourchette tarifaire GEO (18/07/2026, tranché par Agathe)** : la fourchette
+  « 2 000–6 000 € en prestation GEO » est RETIRÉE de C2 (`guide-geo-pme.mdx`).
+  Aucun contenu ne publie de fourchette de prestation GEO sans arbitrage
+  explicite ; renvoyer vers le diagnostic gratuit puis `/conseil`.
+- **Périmètre C5 (AI Overviews, à acter au verdict mode 1 de C5)** : C1
+  (`comment-chatgpt-perplexity-choisissent-leurs-sources.mdx`) contient déjà un
+  H2 court « Et Gemini et les AI Overviews ? » au niveau mécanique. C5 devra
+  partir de là (angle : spécificités AI Overviews/AI Mode, pas la mécanique
+  générale) pour éviter le doublon.
+- **C0 (SEO/GEO/AEO) rendu redondant (17/07/2026)** : la page de rubrique
+  `etre-trouve` porte les définitions SEO/GEO/AEO. Ne pas créer C0 sans
+  verdict mode 1 explicite.
 
 ## Références projet (Claude.ai, projet « Next Impact »)
 

@@ -26,12 +26,10 @@
 
 - Tarif 150/490 retenu par défaut (statu quo live). Si 180/390 préféré :
   corriger les occurrences listées en cartographie §8.7 avant tout contenu.
-- **B1 (bloque la publication de C2)** : fourchette « 2 000–6 000 € en
-  prestation GEO » non sourcée, présente 3× dans `guide-geo-pme.mdx` (dont
-  FAQPage JSON-LD) — Agathe doit valider/sourcer ou faire retirer.
-- Avertissements audit vague 1 (corrigeables après publication, A1 en
-  priorité — contradiction GPTBot/OAI-SearchBot entre C1, la rubrique et
-  l'outil) : voir audit-vague-1.md.
+- ~~B1~~ tranché par Agathe le 18/07 : fourchette 2 000–6 000 € RETIRÉE de C2
+  (3 emplacements). Décision actée dans contexte-fusion.md.
+- ~~A1-A4~~ corrigés le 18/07 : OAI-SearchBot ajouté (rubrique + outil),
+  `updated` sur C2, lien Gartner posé, périmètre C5 consigné dans le contexte.
 - Meta title du hub : variantes alternatives dans le message du commit
   `1968e8d` si un autre angle est préféré.
 - Push : jamais sans demande explicite d'Agathe (commits locaux seulement).

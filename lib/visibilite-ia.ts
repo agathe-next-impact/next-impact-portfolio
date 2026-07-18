@@ -57,8 +57,8 @@ export const QUESTIONS: Question[] = [
     axis: "acces",
     criterionFr: "Robots IA",
     criterionEn: "AI crawlers",
-    questionFr: "GPTBot, ClaudeBot, PerplexityBot… peuvent-ils lire votre site ?",
-    questionEn: "Can GPTBot, ClaudeBot, PerplexityBot read your site?",
+    questionFr: "Les robots de recherche IA (OAI-SearchBot, PerplexityBot, ClaudeBot…) peuvent-ils lire votre site ?",
+    questionEn: "Can AI search crawlers (OAI-SearchBot, PerplexityBot, ClaudeBot…) read your site?",
     weight: 12,
     options: [
       {
@@ -76,8 +76,8 @@ export const QUESTIONS: Question[] = [
         status: "warn",
         detailFr: "Point aveugle : certains hébergeurs, CDN ou plugins bloquent les robots IA sans vous le dire.",
         detailEn: "Blind spot: some hosts, CDNs or plugins block AI crawlers without telling you.",
-        recoFr: "Ouvrez votre-site.fr/robots.txt et vérifiez qu'aucune ligne ne bloque GPTBot, ClaudeBot ou PerplexityBot.",
-        recoEn: "Open yoursite.com/robots.txt and check no line blocks GPTBot, ClaudeBot or PerplexityBot.",
+        recoFr: "Ouvrez votre-site.fr/robots.txt et vérifiez qu'aucune ligne ne bloque OAI-SearchBot (le bot de ChatGPT Search), PerplexityBot, ClaudeBot ou GPTBot.",
+        recoEn: "Open yoursite.com/robots.txt and check no line blocks OAI-SearchBot (the ChatGPT Search bot), PerplexityBot, ClaudeBot or GPTBot.",
       },
       {
         value: "bloques",
