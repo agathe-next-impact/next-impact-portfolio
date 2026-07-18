@@ -75,12 +75,18 @@ export default function NewsletterModal({ source }: { source: string }) {
   }, []);
 
   // Gestion de l'ouverture : focus, verrou de scroll, Échap, focus trap léger.
+  // Invariant : le cycle ouverture/fermeture ne doit JAMAIS déplacer le scroll
+  // de la page (preventScroll sur les focus + restauration explicite de scrollY).
   useEffect(() => {
     if (!open) return;
     lastFocused.current = document.activeElement as HTMLElement | null;
     const prevOverflow = document.body.style.overflow;
+    const prevScrollY = window.scrollY;
     document.body.style.overflow = "hidden";
-    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 60);
+    const focusTimer = window.setTimeout(
+      () => inputRef.current?.focus({ preventScroll: true }),
+      60,
+    );
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -110,7 +116,14 @@ export default function NewsletterModal({ source }: { source: string }) {
       window.clearTimeout(focusTimer);
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
-      lastFocused.current?.focus?.();
+      if (window.scrollY !== prevScrollY) {
+        window.scrollTo({ top: prevScrollY, behavior: "instant" });
+      }
+      try {
+        lastFocused.current?.focus?.({ preventScroll: true });
+      } catch {
+        lastFocused.current?.focus?.();
+      }
     };
   }, [open, close]);
 
