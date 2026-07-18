@@ -37,9 +37,11 @@
 | 4 | Rédaction B0 — `ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web.mdx` (chapeau cluster B, 7 dimensions avec verdicts) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 4 | Rédaction B4 — `ia-et-code/dette-technique-du-code-genere-par-ia.mdx` (GitClear 2025, DORA 2024/2025) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 4 | Audit de vague : **zéro bloquant, publiable** ; A1-A2 traités le jour même (rapport : audit-vague-4.md, commit `64c6d36`) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 5 | Plan de fusion Headless 35→~15 (proposition, AUCUNE modification) | architecte-fusion | 🔄 en cours | 2026-07-18 |
-| 5 | Validation du plan par Agathe | Agathe | ⬜ à faire | — |
-| 5 | Exécution de l'élagage (fusions + 301) selon plan validé | architecte-fusion + redacteur-seo-geo | ⬜ à faire | — |
+| 5 | Plan de fusion Headless (→ plan-fusion-headless.md, commit `cc07b82`) | architecte-fusion | ✅ fait | 2026-07-18 |
+| 5 | Validation du plan : **intégral, 2 arbitrables fusionnés, tarifs harmonisés blog 2026** | Agathe | ✅ fait | 2026-07-18 |
+| 5 | Exécution structure : 301 + références internes + scories (sans supprimer les sources des fusions) | architecte-fusion | 🔄 en cours | 2026-07-18 |
+| 5 | Réécriture des 7 absorbants (socle GEO P1, tarifs 2026) | redacteur-seo-geo ×7 | 🔄 en cours | 2026-07-18 |
+| 5 | Suppression des 11 fichiers fusionnés + miroirs EN (après absorption) | orchestrateur | ⬜ à faire | — |
 | 5 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
 | 5+ | Clusters D et E au fil de l'eau (verdicts mode 1 obligatoires) | (chaîne complète) | ⬜ à faire | — |
 

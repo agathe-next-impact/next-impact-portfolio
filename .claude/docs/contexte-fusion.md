@@ -135,6 +135,15 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
   (`ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web`).
   Conséquence : **B2 « dev assisté par IA » est présumé fusionné dans B0** —
   ne jamais le créer sans verdict mode 1 explicite.
+- **Plan de fusion Headless validé (18/07/2026, tranché par Agathe)** : plan
+  intégral de `plan-fusion-headless.md` validé — 25 articles doc → 15 (11 URLs
+  en 301), les DEUX fusions arbitrables incluses (rendu-ssg-ssr-isr → nextjs ;
+  gestion-des-medias → performance), 9 blogs 2026 conservés, orphelin absorbé,
+  catégorie doc « blog » éteinte, scories traitées. **Tarifs headless : toute
+  occurrence survivante s'harmonise sur la référence du blog 2026 — build
+  2 250 / 4 000 / 6 500 €, exploitation 510–1 355 €/an. Les chiffres 2025
+  divergents (2 000-6 000, 3 000-10 000 headless, +30-50 % maintenance)
+  disparaissent avec les fusions.**
 - **Règle AGEFIPH/TIH (précisée le 18/07/2026, tranché par Agathe)** : la
   déduction est de **30 % du montant HT de la facture**, déduite de la
   contribution AGEFIPH annuelle (dans la limite du plafond réglementaire de
