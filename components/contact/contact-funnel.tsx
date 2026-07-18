@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m as motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { FunnelProgress } from "./funnel-progress";
 import { FunnelOption } from "./funnel-option";

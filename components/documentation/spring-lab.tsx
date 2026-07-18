@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { motion, useSpring, useMotionValue } from "framer-motion";
+import { m as motion, useSpring, useMotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { RotateCcw } from "lucide-react";
 

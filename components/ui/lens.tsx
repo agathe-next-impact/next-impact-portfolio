@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { AnimatePresence, motion, useMotionTemplate } from "framer-motion"
+import { AnimatePresence, m as motion, useMotionTemplate } from "framer-motion"
 
 interface Position {
   /** The x coordinate of the lens */

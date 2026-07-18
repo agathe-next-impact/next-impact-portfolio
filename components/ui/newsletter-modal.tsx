@@ -17,7 +17,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m as motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ArrowRight, Check, Loader2, Mail, X } from "lucide-react";
 import { track } from "@/lib/track";

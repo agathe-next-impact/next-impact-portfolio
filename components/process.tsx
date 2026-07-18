@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useLocale } from "next-intl";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { m as motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import type { Locale } from "@/i18n/routing";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { Hairline } from "@/components/visuals/hairline";

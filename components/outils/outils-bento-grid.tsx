@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, m as motion } from "framer-motion"
 import { Link } from "@/i18n/navigation"
 import {
   BotMessageSquare,
