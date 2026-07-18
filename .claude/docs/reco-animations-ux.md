@@ -71,6 +71,14 @@
 
 ## P3 — Le froid du site : orienter dans les contenus longs
 
+> **✅ Exécuté le 2026-07-18** (commits `759e5cb`, `b2a4728`).
+> `components/ui/reading-progress.tsx` (scaleX, rAF passif hors framer, 2 px
+> sous le header, reduced-motion = barre sans lissage, zéro CLS) sur les
+> articles documentation + blog — remplace l'ancienne barre en `width`.
+> TOC : hook partagé `use-active-heading.ts` (ligne d'activation à 40 %,
+> robuste au scroll remontant), `aria-current="location"`, transitions 150 ms.
+> Blog sans TOC : rien créé (périmètre respecté). Prose intacte.
+
 8. **Barre de progression de lecture** sur les articles documentation/blog
    (fine, en haut, `transform: scaleX` piloté par scroll — CSS/`useScroll`,
    coût nul en CLS). Les articles GEO sont longs ; la progression réduit
