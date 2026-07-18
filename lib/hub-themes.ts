@@ -13,13 +13,16 @@ import {
   Blocks,
   Bot,
   Boxes,
+  Braces,
   Calculator,
   ClipboardList,
   Compass,
+  FileCode2,
   FileSearch,
   FileText,
   FlaskConical,
   GitCompare,
+  ListChecks,
   Megaphone,
   Radar,
   ScanSearch,
@@ -1076,6 +1079,42 @@ const etreTrouve: HubTheme = {
       href: "/documentation/etre-trouve/guide-geo-pme",
     },
     {
+      icon: ListChecks,
+      name: {
+        fr: "Structurer une page citable par les moteurs IA",
+        en: "Structure a page AI engines can cite",
+      },
+      blurb: {
+        fr: "La méthode pas à pas : réécrire une page existante en réponse nette — ordre des étapes, format, pièges à éviter.",
+        en: "The step-by-step method: rewrite an existing page into a sharp answer — order of steps, format, pitfalls to avoid.",
+      },
+      href: "/documentation/etre-trouve/structurer-une-page-citable-par-les-moteurs-ia",
+    },
+    {
+      icon: Braces,
+      name: {
+        fr: "Données structurées : être compris des moteurs IA",
+        en: "Structured data: be understood by AI engines",
+      },
+      blurb: {
+        fr: "Quels schemas installer sur un site de PME, lesquels pèsent vraiment pour les IA, dans quel ordre — et qui peut le faire.",
+        en: "Which schemas to install on an SMB site, which ones actually matter for AI, in what order — and who can do it.",
+      },
+      href: "/documentation/etre-trouve/donnees-structurees-moteurs-ia",
+    },
+    {
+      icon: FileCode2,
+      name: {
+        fr: "llms.txt, robots.txt et crawlers IA",
+        en: "llms.txt, robots.txt and AI crawlers",
+      },
+      blurb: {
+        fr: "Qui sont les robots IA, ce que chacun fait de vos pages, et comment régler votre politique d'accès — llms.txt compris.",
+        en: "Who the AI crawlers are, what each does with your pages, and how to set your access policy — llms.txt included.",
+      },
+      href: "/documentation/etre-trouve/llms-txt-robots-txt-crawlers-ia",
+    },
+    {
       icon: FileText,
       name: { fr: "Les fondamentaux SEO", en: "SEO fundamentals" },
       blurb: {
@@ -1106,6 +1145,15 @@ const etreTrouve: HubTheme = {
         en: "A free diagnostic: is your site cited, citable and open to AI crawlers?",
       },
       href: "/outils/visibilite-ia",
+    },
+    {
+      icon: ClipboardList,
+      name: { fr: "La checklist GEO", en: "The GEO checklist" },
+      blurb: {
+        fr: "Le chantier GEO point par point, à dérouler en interne — et à télécharger pour la suivre.",
+        en: "The GEO worklist point by point, to run in-house — and to download so you can track it.",
+      },
+      href: "/outils/checklist-geo",
     },
     {
       icon: ScanSearch,
