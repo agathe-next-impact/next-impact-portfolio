@@ -8,7 +8,6 @@ import type { Locale } from "@/i18n/routing";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
-import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { WordAppear } from "@/components/visuals/word-appear";
 
 const BTN_PRIMARY =
@@ -44,8 +43,8 @@ export default function Hero() {
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">
             {locale === "en"
-              ? "Web tech advice in the age of AI"
-              : "Conseil techno web à l'heure de l'IA"}
+              ? "Before you invest — AI, agency or rebuild"
+              : "Avant d'investir — IA, agence ou refonte"}
           </span>
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
@@ -61,11 +60,11 @@ export default function Hero() {
           <p className="max-w-xl font-inter-tight text-base leading-relaxed text-foreground">
             {variant.description}
           </p>
-          {/* Réassurance — marqueurs lisibles */}
+          {/* Réassurance — marqueurs de preuve (pas d'énumération techno en accroche) */}
           <div className="mt-5 flex flex-wrap gap-2">
             {(locale === "en"
-              ? ["WordPress", "No-code", "AI coding", "Headless", "Custom"]
-              : ["WordPress", "No-code", "IA coding", "Headless", "Sur-mesure"]
+              ? ["+25 projects shipped", "PageSpeed 45 → 98", "Fixed price & timeline", "Independent advice"]
+              : ["+25 projets livrés", "PageSpeed 45 → 98", "Prix & délai fixés", "Avis indépendant"]
             ).map((chip) => (
               <span
                 key={chip}
@@ -129,9 +128,33 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        {/* Constellation techno — visuel héro (theme-aware, light + dark) */}
+        {/* Portrait — présence humaine : qui livre réellement le projet */}
         <Reveal delay={0.16} className="relative">
-          <ConstellationTechno className="rounded-sm" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-dark-gray bg-obsidian">
+            <Image
+              src="/img/contact-agathe-km.png"
+              alt={
+                locale === "en"
+                  ? "Agathe Karinthi-Martin, founder of Next Impact Digital, at her workstation"
+                  : "Agathe Karinthi-Martin, fondatrice de Next Impact Digital, à son poste de travail"
+              }
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 420px, 100vw"
+            />
+            {/* Dégradé bas pour intégrer la légende (photo toujours sombre) */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+            {/* Légende identité — preuve humaine */}
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-3 py-2.5">
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white">
+                Agathe Karinthi-Martin
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/70">
+                Next · Impact · Digital
+              </span>
+            </div>
+          </div>
 
           {/* Badge disponible */}
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">

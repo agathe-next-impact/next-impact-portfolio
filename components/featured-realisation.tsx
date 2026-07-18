@@ -80,7 +80,7 @@ export default function FeaturedRealisation() {
         {/* En-tête : kicker (badge) + titre + accroche & contexte */}
         <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 04"
+            index="№ 05"
             kicker={copy.badge}
             title="Panorama Pub"
             description={

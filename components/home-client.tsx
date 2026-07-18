@@ -55,29 +55,33 @@ export default function HomeClient() {
       {/* § 01b — « En bref » (TL;DR citable par les IA) */}
       <HomeTldr />
 
-      {/* § 02 — Offres : 3 stacks */}
+      {/* § 02 — Preuve de performance (CWV mesurés en direct) : la meilleure
+          preuve immédiate et vérifiable, remontée juste sous le hero pour
+          rassurer le prospect froid avant même de présenter l'offre. */}
+      <HomePerf index="№ 02" />
+      <Separator />
+
+      {/* § 03 — Offres : 3 stacks */}
       <HomeOffres />
       <Separator />
 
-      {/* § 03 — Témoignages clients */}
+      {/* § 04 — Témoignages clients */}
       <HomeTestimonials />
 
-      {/* § 04 — Réalisation phare + preuve sociale (preuve UI/UX) */}
+      {/* § 05 — Réalisation phare + preuve sociale (preuve UI/UX) */}
       <FeaturedRealisation />
       <Separator />
 
-      {/* § 05 — Méthode */}
+      {/* § 06 — Méthode */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
-        <Process />
+        <Process index="№ 06" />
       </BlueprintSection>
       <Separator />
 
-      {/* § 06 — Le studio (présence humaine) */}
+      {/* § 07 — Le studio (présence humaine) */}
       <HomeStudio />
-      {/* § 07 — Avantage TIH */}
+      {/* § 08 — Avantage TIH */}
       <HomeTihTeaser />
-      {/* § 08 — Preuve de performance (argument secondaire, socle technique) */}
-      <HomePerf />
       <Separator />
 
       {/* § 09 — Diagnostic de stack */}

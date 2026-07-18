@@ -65,7 +65,7 @@ export default function HomeTestimonials() {
       {/* En-tête */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
-          index="№ 03"
+          index="№ 04"
           kicker={isEn ? "Testimonials" : "Témoignages"}
           title={
             isEn ? (

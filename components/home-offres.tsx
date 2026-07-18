@@ -114,7 +114,7 @@ export default function HomeOffres() {
         {/* En-tête */}
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 02"
+            index="№ 03"
             kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
             title={
               isEn ? (

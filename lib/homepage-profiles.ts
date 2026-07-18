@@ -24,14 +24,14 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Choisir la bonne techno web",
-    subHeadline: "à l'heure de l'IA",
+    headline: "L'IA code bien.",
+    subHeadline: "L'humain décide mieux.",
     description:
-      "Next Impact aide les petites structures à choisir la bonne technologie web à l'heure du code assisté par IA. WordPress, no-code, IA coding, SaaS, Headless ou outil métier : on décide ce qui est utile, maintenable et rentable avant de produire.",
+      "Avant d'investir — dans l'IA, une agence ou une refonte — vérifiez ce dont votre site a vraiment besoin. Avis indépendant, dès 150 €.",
     valueProposition:
       "Conseil indépendant, cadrage et mise en œuvre pour éviter les outils fragiles, les stacks trop lourdes et les projets mal dimensionnés.",
-    ctaPrimary: { label: "Faire le diagnostic Web & IA", href: "/solutions-web/eligibilite" },
-    ctaSecondary: { label: "Réserver une visio décision", href: "/conseil" },
+    ctaPrimary: { label: "Voir ce qui ralentit mon site — 2 min", href: "/audit-site-web" },
+    ctaSecondary: { label: "Réserver une visio conseil", href: "/conseil" },
     auditTitle: "Quelle techno web à l'heure de l'IA ?",
     auditSubtitle: "Boussole Techno Web & IA",
     auditDescription:

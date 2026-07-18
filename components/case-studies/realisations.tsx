@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
+import { getResultHighlights } from "@/lib/case-studies-data";
 import { cn } from "@/lib/utils";
 
 // Locale-agnostic project metadata
@@ -16,6 +17,9 @@ interface ProjectMeta {
   image: string;
   link: string;
   tab: string[];
+  // Site de démonstration (pas un projet client) — signalé pour ne pas diluer
+  // la crédibilité des vraies réalisations.
+  isDemo?: boolean;
 }
 
 const PROJECTS_META: ProjectMeta[] = [
@@ -109,6 +113,7 @@ const PROJECTS_META: ProjectMeta[] = [
     image: "/img/desktop-screen-next-event.webp",
     link: "/etudes-de-cas/next-event",
     tab: ["headless"],
+    isDemo: true,
   },
   {
     id: 3,
@@ -552,6 +557,12 @@ export default function Realisations({ count, defaultTab = "headless" }: Realisa
               const content = getProjectContent(locale, project.id);
               const isExternal = project.link.startsWith("http");
               const externalProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
+              // Résultat chiffré (1er highlight de l'étude de cas) — une carte
+              // sans chiffre est une image, pas une preuve.
+              const slug = project.link.startsWith("/etudes-de-cas/")
+                ? project.link.slice("/etudes-de-cas/".length)
+                : null;
+              const highlight = slug ? getResultHighlights(locale, slug)?.[0] : undefined;
               return (
                 <StaggerItem
                   key={project.id}
@@ -568,6 +579,11 @@ export default function Realisations({ count, defaultTab = "headless" }: Realisa
                       className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
+                    {project.isDemo && (
+                      <span className="absolute right-2 top-2 z-10 border border-dark-gray bg-obsidian/85 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.14em] text-mid-gray backdrop-blur-sm">
+                        {locale === "en" ? "Demo" : "Démo"}
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col border-t border-dark-gray px-6 py-5">
                     <Link
@@ -582,6 +598,16 @@ export default function Realisations({ count, defaultTab = "headless" }: Realisa
                         {content.description}
                       </p>
                     </Link>
+                    {highlight && (
+                      <div className="mt-3.5 inline-flex w-fit items-baseline gap-2 border border-dark-gray bg-jet/50 px-2.5 py-1">
+                        <span className="font-mono text-[13px] font-semibold tracking-tight text-accent-secondary tabular-nums">
+                          {highlight.value}
+                        </span>
+                        <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray">
+                          {highlight.label}
+                        </span>
+                      </div>
+                    )}
                     <div className="mt-auto pt-4">
                       <Link
                         href={project.link}

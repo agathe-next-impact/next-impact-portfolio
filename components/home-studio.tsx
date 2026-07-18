@@ -38,7 +38,7 @@ export default function HomeStudio() {
     <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
       {/* En-tête de section */}
       <Reveal className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-        <span>№ 06</span>
+        <span>№ 07</span>
         <span className="h-px w-6 bg-accent-secondary/50" />
         <span className="text-mid-gray">{isEn ? "The studio" : "Le studio"}</span>
       </Reveal>

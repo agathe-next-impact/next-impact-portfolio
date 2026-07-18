@@ -23,6 +23,8 @@ const FADE = {
 
 const CTA_PRIMARY =
   "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+const CTA_GHOST =
+  "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 export default function CaseStudiesClient() {
   const { profileId } = useDocumentationMode();
@@ -95,28 +97,47 @@ export default function CaseStudiesClient() {
             <Reveal className="flex flex-col gap-6 border-t border-dark-gray px-6 py-14 lg:px-8 lg:py-20">
               <SectionHeading
                 index="№ 03"
-                kicker={isEn ? "Get in touch" : "Discutons"}
-                title={variant.ctaLabel}
-                description={variant.ctaDescription}
+                kicker={isEn ? "Your site" : "Votre site"}
+                title={
+                  isEn ? (
+                    <>
+                      Where does <span className="text-accent-secondary">your site</span> stand?
+                    </>
+                  ) : (
+                    <>
+                      Où en est <span className="text-accent-secondary">votre site</span> ?
+                    </>
+                  )
+                }
+                description={
+                  isEn
+                    ? "Compare it to these projects in 2 minutes — then, if it helps, let's talk."
+                    : "Comparez-le à ces projets en 2 minutes — puis, si c'est utile, on en discute."
+                }
               />
-              <div>
+              <div className="flex flex-wrap gap-3">
+                {/* Froid en primaire : un prospect qui vérifie n'est pas prêt pour
+                    un RDV — on lui donne d'abord de quoi se situer. */}
+                <Link href="/audit-site-web" className={CTA_PRIMARY}>
+                  {isEn ? "Compare my site — 2 min" : "Comparer mon site — 2 min"}
+                  <ArrowRight size={14} />
+                </Link>
+                {/* Chaud en secondaire : le RDV reste accessible pour les prêts. */}
                 {variant.ctaHref.startsWith("http") ? (
                   <a
                     href={variant.ctaHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={CTA_PRIMARY}
+                    className={CTA_GHOST}
                   >
                     {variant.ctaLabel}
-                    <ArrowRight size={14} />
                   </a>
                 ) : (
                   <Link
                     href={variant.ctaHref as Parameters<typeof Link>[0]["href"]}
-                    className={CTA_PRIMARY}
+                    className={CTA_GHOST}
                   >
                     {variant.ctaLabel}
-                    <ArrowRight size={14} />
                   </Link>
                 )}
               </div>
