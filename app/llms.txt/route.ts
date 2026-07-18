@@ -29,6 +29,7 @@ const categoryLabels: Record<string, string> = {
   choisir: "Choisir sa techno",
   "etre-trouve": "Etre trouve a l'heure de l'IA (SEO & GEO)",
   "ia-et-code": "IA & code",
+  "avant-signer": "Avant de signer",
 };
 
 // Les 7 rubriques de decision du hub « Quelle techno web ? » — la taxonomie

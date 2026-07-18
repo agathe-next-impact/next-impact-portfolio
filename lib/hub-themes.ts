@@ -378,6 +378,18 @@ const iaEtCode: HubTheme = {
       },
       href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
     },
+    {
+      icon: Braces,
+      name: {
+        fr: "La dette technique du code généré par IA",
+        en: "The technical debt of AI-generated code",
+      },
+      blurb: {
+        fr: "Duplication, dépendances, code non relu : les mécanismes de la dette du code IA — et comment la limiter avant qu'elle ne coûte.",
+        en: "Duplication, dependencies, unreviewed code: how AI-generated code builds technical debt — and how to limit it before it costs you.",
+      },
+      href: "/documentation/ia-et-code/dette-technique-du-code-genere-par-ia",
+    },
   ],
   tools: [
     {
@@ -645,6 +657,20 @@ const avantSigner: HubTheme = {
       },
     },
   ],
+  reading: [
+    {
+      icon: ListChecks,
+      name: {
+        fr: "Les 12 questions IA à poser à votre prestataire",
+        en: "The 12 AI questions to ask your web provider",
+      },
+      blurb: {
+        fr: "Votre agence ou freelance utilise l'IA ? Les 12 questions à poser avant de signer — avec les bonnes réponses et les signaux d'alarme.",
+        en: "Your agency or freelancer uses AI? The 12 questions to ask before signing — with the right answers and the red flags.",
+      },
+      href: "/documentation/avant-signer/12-questions-ia-a-poser-a-votre-prestataire",
+    },
+  ],
   tools: [
     {
       icon: FileSearch,
@@ -671,7 +697,8 @@ const avantSigner: HubTheme = {
         fr: "Le prix attendu pour votre type de projet, pour situer un devis.",
         en: "The expected price for your type of project, to gauge a quote.",
       },
-      href: "/tarifs",
+      // Héritage corrigé : /tarifs est en 301 vers /solutions-web (next.config.mjs).
+      href: "/solutions-web",
     },
   ],
   prestas: [
