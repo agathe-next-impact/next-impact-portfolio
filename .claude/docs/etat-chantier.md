@@ -24,10 +24,13 @@
 | 2 | Rédaction A4 — `site-genere-par-ia-vs-site-professionnel.mdx` (tableau 10 critères, verdicts 5 cas d'usage ex-A6) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 2 | Rédaction F1 — `choisir/combien-coute-un-site-web-en-2026.mdx` (100 % fourchettes publiées, e-commerce par stack) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 2 | Audit de vague : 3 bloquants + A1-A3 **corrigés le jour même** → **publiable** (rapport : audit-vague-2.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 3 | Verdicts mode 1 : C7, C3, C4 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
-| 3 | Checklist GEO téléchargeable | batisseur-outils | 🔄 en cours | 2026-07-18 |
-| 3 | Rédaction C7/C3/C4 selon verdicts | redacteur-seo-geo | ⬜ à faire | — |
-| 3 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
+| 3 | Verdicts mode 1 : **3 × CRÉER** + matrice des frontières (→ verdicts-vague-3.md) ; bloquant blog migration SEO (GPTBot) corrigé | verificateur-coherence + orchestrateur | ✅ fait | 2026-07-18 |
+| 3 | Rédaction C7 — `structurer-une-page-citable-par-les-moteurs-ia.mdx` (howto 8 étapes) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 3 | Intégration : HowToJsonLd + frontmatter `howto` + reading rubrique + retouches C2 (commits `ed1e013`/`2051c39`/`3e4bd4f`) | architecte-fusion | ✅ fait | 2026-07-18 |
+| 3 | Checklist GEO (`/outils/checklist-geo`, 24 actions, print-PDF, tests verts, llms.txt complété) — commits `5d1c26f`/`ae67648` | batisseur-outils | ✅ fait | 2026-07-18 |
+| 3 | Rédaction C3 — `donnees-structurees-moteurs-ia.mdx` (fait vérifié : rich results FAQ retirés mai 2026) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 3 | Rédaction C4 — `llms-txt-robots-txt-crawlers-ia.mdx` (15 robots, 3 politiques) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 3 | Audit de vague : 3 bloquants + A1-A2 **corrigés le jour même** → **publiable** (rapport : audit-vague-3.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 4 | F3, B0, B4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
 
