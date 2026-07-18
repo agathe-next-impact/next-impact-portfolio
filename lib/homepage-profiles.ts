@@ -24,14 +24,14 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Choisir la bonne techno web",
-    subHeadline: "à l'heure de l'IA",
+    headline: "Projets web :",
+    subHeadline: "Concevoir avec l'IA.",
     description:
-      "Next Impact aide les petites structures à choisir la bonne technologie web à l'heure du code assisté par IA. WordPress, no-code, IA coding, SaaS, Headless ou outil métier : on décide ce qui est utile, maintenable et rentable avant de produire.",
+      "Avant d'investir — dans l'IA, une agence ou une refonte — vérifiez ce dont votre site a vraiment besoin. Avis indépendant, dès 150 €.",
     valueProposition:
       "Conseil indépendant, cadrage et mise en œuvre pour éviter les outils fragiles, les stacks trop lourdes et les projets mal dimensionnés.",
-    ctaPrimary: { label: "Faire le diagnostic Web & IA", href: "/solutions-web/eligibilite" },
-    ctaSecondary: { label: "Réserver une visio décision", href: "/conseil" },
+    ctaPrimary: { label: "Conseil projet web avec IA", href: "/conseil" },
+    ctaSecondary: { label: "Prestations web avec IA", href: "/services" },
     auditTitle: "Quelle techno web à l'heure de l'IA ?",
     auditSubtitle: "Boussole Techno Web & IA",
     auditDescription:
@@ -109,7 +109,10 @@ export interface ServicesPageVariant {
   faqs: { question: string; answer: string }[];
 }
 
-export const SERVICES_PAGE_VARIANTS: Record<ProfileId | "default", ServicesPageVariant> = {
+export const SERVICES_PAGE_VARIANTS: Record<
+  ProfileId | "default",
+  ServicesPageVariant
+> = {
   default: {
     titre: "Du bon choix techno à la solution web mise en ligne",
     sousTitre:
@@ -321,7 +324,10 @@ export interface CaseStudiesPageVariant {
   projectHighlightLabel?: string;
 }
 
-export const CASE_STUDIES_PAGE_VARIANTS: Record<ProfileId | "default", CaseStudiesPageVariant> = {
+export const CASE_STUDIES_PAGE_VARIANTS: Record<
+  ProfileId | "default",
+  CaseStudiesPageVariant
+> = {
   default: {
     titre: "Études de cas",
     sousTitre:
@@ -388,15 +394,17 @@ export interface AboutPageVariant {
   ctaDescription: string;
 }
 
-export const ABOUT_PAGE_VARIANTS: Record<ProfileId | "default", AboutPageVariant> = {
+export const ABOUT_PAGE_VARIANTS: Record<
+  ProfileId | "default",
+  AboutPageVariant
+> = {
   default: {
     titre: "A propos",
     sousTitre:
       "Deux savoir-faire complémentaires : moderniser les sites WordPress qui en valent la peine, et bâtir des applications web et mobiles sur-mesure quand WordPress n'est plus le bon outil.",
     manifesteIntro:
       "WordPress propulse plus de 40 % du web. Pour beaucoup de projets, il reste le bon socle — quand on le modernise. Mais quand l'enjeu n'est plus éditorial mais applicatif (marketplace, plateforme métier, outil mobile, simulateur), WordPress atteint ses limites. Dans ce cas, il faut construire autre chose, avec la même promesse d'autonomie : une admin sur-mesure pour que vous gardiez la main sur vos contenus, vos données et vos utilisateurs.",
-    manifesteAccroche:
-      "Moderniser WordPress avec des technos récentes.",
+    manifesteAccroche: "Moderniser WordPress avec des technos récentes.",
     piliers: [
       {
         icon: "/icons/brand-reach-icon.svg",
@@ -605,7 +613,8 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre les gains concrets : temps de chargement divisé, coût de maintenance réduit et ROI mesurable sur votre investissement web.",
       src: "/icons/scan-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
+      ctaLink:
+        "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Pour quels objectifs ?",
@@ -631,7 +640,8 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Des indicateurs mesurables : temps de chargement, taux de conversion, positionnement SEO. L'impact direct sur votre chiffre d'affaires.",
       src: "/icons/scan-icon.svg",
       ctaText: "Voir les chiffres",
-      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
+      ctaLink:
+        "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Cas d'usage : croissance et investissement",
@@ -657,7 +667,8 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Vos pages se chargent instantanément. Vos visiteurs restent plus longtemps, interagissent plus et reviennent.",
       src: "/icons/scan-icon.svg",
       ctaText: "Comprendre les gains",
-      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
+      ctaLink:
+        "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Gérer votre contenu au quotidien",
@@ -683,7 +694,8 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Next.js, SSG/SSR/ISR, Core Web Vitals, optimisation images. Les choix techniques pour un Lighthouse à 100.",
       src: "/icons/scan-icon.svg",
       ctaText: "Explorer la stack",
-      ctaLink: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless",
+      ctaLink:
+        "/documentation/wordpress-headless/nextjs-pour-wordpress-headless",
     },
     {
       title: "Implémentation de A à Z",
@@ -718,30 +730,44 @@ function defaultOnlyVariants<T>(
   );
 }
 
-export function getHeroVariants(locale: Locale): Record<ProfileId | "default", HeroVariant> {
-  return defaultOnlyVariants(locale === "en" ? HERO_VARIANTS_EN : HERO_VARIANTS);
+export function getHeroVariants(
+  locale: Locale,
+): Record<ProfileId | "default", HeroVariant> {
+  return defaultOnlyVariants(
+    locale === "en" ? HERO_VARIANTS_EN : HERO_VARIANTS,
+  );
 }
 
 export function getServicesPageVariants(
-  locale: Locale
+  locale: Locale,
 ): Record<ProfileId | "default", ServicesPageVariant> {
-  return defaultOnlyVariants(locale === "en" ? SERVICES_PAGE_VARIANTS_EN : SERVICES_PAGE_VARIANTS);
+  return defaultOnlyVariants(
+    locale === "en" ? SERVICES_PAGE_VARIANTS_EN : SERVICES_PAGE_VARIANTS,
+  );
 }
 
 export function getCaseStudiesPageVariants(
-  locale: Locale
+  locale: Locale,
 ): Record<ProfileId | "default", CaseStudiesPageVariant> {
-  return defaultOnlyVariants(locale === "en" ? CASE_STUDIES_PAGE_VARIANTS_EN : CASE_STUDIES_PAGE_VARIANTS);
+  return defaultOnlyVariants(
+    locale === "en"
+      ? CASE_STUDIES_PAGE_VARIANTS_EN
+      : CASE_STUDIES_PAGE_VARIANTS,
+  );
 }
 
 export function getAboutPageVariants(
-  locale: Locale
+  locale: Locale,
 ): Record<ProfileId | "default", AboutPageVariant> {
-  return defaultOnlyVariants(locale === "en" ? ABOUT_PAGE_VARIANTS_EN : ABOUT_PAGE_VARIANTS);
+  return defaultOnlyVariants(
+    locale === "en" ? ABOUT_PAGE_VARIANTS_EN : ABOUT_PAGE_VARIANTS,
+  );
 }
 
 export function getExpandableCardsVariants(
-  locale: Locale
+  locale: Locale,
 ): Record<ProfileId | "default", ExpandableCardVariant[]> {
-  return defaultOnlyVariants(locale === "en" ? EXPANDABLE_CARDS_VARIANTS_EN : EXPANDABLE_CARDS_VARIANTS);
+  return defaultOnlyVariants(
+    locale === "en" ? EXPANDABLE_CARDS_VARIANTS_EN : EXPANDABLE_CARDS_VARIANTS,
+  );
 }

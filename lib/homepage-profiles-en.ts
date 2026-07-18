@@ -12,13 +12,13 @@ import type {
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
     headline: "AI can code fast.",
-    subHeadline: "You still need to know what to build.",
+    subHeadline: "A website that lasts is another matter.",
     description:
-      "Next Impact helps small teams choose the right web technology in the age of AI-assisted coding. WordPress, no-code, AI coding, SaaS, Headless or a business tool: decide what is useful, maintainable and profitable before producing.",
+      "Before you invest — in AI, an agency or a redesign — check what your site actually needs. Independent advice, from €150.",
     valueProposition:
       "Independent advice, scoping and implementation to avoid fragile tools, overbuilt stacks and poorly sized projects.",
-    ctaPrimary: { label: "Run the Web & AI diagnostic", href: "/solutions-web/eligibilite" },
-    ctaSecondary: { label: "Book a decision call", href: "/conseil" },
+    ctaPrimary: { label: "See what's slowing my site down — 2 min", href: "/audit-site-web" },
+    ctaSecondary: { label: "Book a consulting call", href: "/conseil" },
     auditTitle: "Which web technology in the age of AI?",
     auditSubtitle: "Web & AI Tech Compass",
     auditDescription:

@@ -120,7 +120,7 @@ export default function HomeOffres() {
               isEn ? (
                 <>AI can code. <span className="text-accent-secondary">It cannot decide everything.</span></>
               ) : (
-                <>L'IA peut coder. <span className="text-accent-secondary">Elle ne peut pas tout décider.</span></>
+                <>L'IA exécute. <span className="text-accent-secondary">Je vous accompagne</span> pour décider.</>
               )
             }
             description={

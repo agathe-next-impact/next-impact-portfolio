@@ -63,31 +63,29 @@ export default function HomeClient() {
       <HomeOffres />
       <Separator />
 
-      {/* § 03 — Témoignages clients */}
+      {/* § 04 — Témoignages clients */}
       <HomeTestimonials />
 
-      {/* § 04 — Réalisation phare + preuve sociale (preuve UI/UX) */}
+      {/* § 05 — Réalisation phare + preuve sociale (preuve UI/UX) */}
       <FeaturedRealisation />
       <Separator />
 
-      {/* § 05 — Méthode */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
-        <Process />
+      {/* § 06 — Méthode (masquée) */}
+      {/* <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
+        <Process index="№ 06" />
       </BlueprintSection>
-      <Separator />
+      <Separator /> */}
 
-      {/* § 06 — Le studio (présence humaine) */}
+      {/* § 07 — Le studio (présence humaine) */}
       <HomeStudio />
-      {/* § 07 — Avantage TIH */}
-      <HomeTihTeaser />
-      {/* § 08 — Preuve de performance (argument secondaire, socle technique) */}
-      <HomePerf />
+      {/* § 08 — Avantage TIH 
+      <HomeTihTeaser />*/}
       <Separator />
 
-      {/* § 09 — Diagnostic de stack */}
+      {/* § 09 — Diagnostic de stack 
       <HomeDiagnostic />
       <Separator />
-
+*/}
       {/* § 09b — Offre tiède : visio conseil payante (déduite du devis).
           Placée juste après le diagnostic : il pose une décision, la visio la
           résout. Jamais dans le héros ni en CTA froid. */}

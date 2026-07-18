@@ -122,7 +122,7 @@ export default function HomeTestimonials() {
             <span aria-hidden className="font-mono text-4xl leading-none text-accent-secondary/60">
               &ldquo;
             </span>
-            <blockquote className="mt-4 flex-1 font-inter-tight text-base leading-relaxed text-foreground md:text-lg">
+            <blockquote className="mt-4 flex-1 font-inter-tight text-base leading-relaxed text-foreground md:text-md">
               {t.quote}
             </blockquote>
             <div className="mt-8 border-t border-dark-gray pt-5">

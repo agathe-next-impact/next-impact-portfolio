@@ -15,10 +15,12 @@ const BTN_GHOST =
   "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 /**
- * HomeStudio — présence humaine : qui livre réellement le projet. Le parcours
- * (WordPress côté édition pendant 15 ans, avant 8 ans de développement) est
- * l'actif de réassurance différenciant et il prolonge l'accroche « garder
- * WordPress + front moderne ».
+ * HomeStudio — présence humaine + démarche : mener un projet web aujourd'hui,
+ * c'est aiguiller des IA différentes (gain de temps et de qualité) PUIS valider
+ * ce qui tient en production. Le parcours (WordPress côté édition 15 ans, avant
+ * 8 ans de développement) est la légitimité de validation — l'actif de
+ * réassurance différenciant. Prolonge l'accroche du hero « L'IA code bien,
+ * l'humain décide mieux ».
  */
 export default function HomeStudio() {
   const locale = useLocale() as Locale;
@@ -26,19 +28,21 @@ export default function HomeStudio() {
 
   const bullets = isEn
     ? [
-        ["User-side expertise", "15 years running WordPress on the editorial side — I know what must be preserved in your admin."],
-        ["Technical mastery", "Modernised WordPress sites and bespoke web & mobile apps when WordPress is no longer the right tool."],
+        ["Engineering & coordination", "Structuring the project and making different AIs work together — front, back and content — fast and friction-free."],
+        ["Critical tech decisions", "WordPress or Headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. AI suggests, the human decides."],
+        ["Production validation", "15 years using WordPress and 8 years building: the legitimacy to judge performance, accessibility and maintainability — exactly where AI still gets it wrong."],
       ]
     : [
-        ["L'expertise utilisateur", "15 ans à manipuler WordPress côté édition — je sais ce qu'il faut absolument préserver de votre admin."],
-        ["La maîtrise technique", "Sites WordPress modernisés et applications web & mobile sur-mesure quand WordPress n'est plus le bon outil."],
+        ["Ingénierie & coordination", "Structurer le projet et faire travailler ensemble des IA différentes — front, back et contenu — vite et sans friction."],
+        ["Choix techniques critiques", "WordPress ou Headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. L'IA propose, l'humain tranche."],
+        ["Validation en production", "15 ans d'usage WordPress et 8 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là précisément où l'IA se trompe encore."],
       ];
 
   return (
     <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
       {/* En-tête de section */}
       <Reveal className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-        <span>№ 06</span>
+        <span>№ 05</span>
         <span className="h-px w-6 bg-accent-secondary/50" />
         <span className="text-mid-gray">{isEn ? "The studio" : "Le studio"}</span>
       </Reveal>
@@ -72,21 +76,21 @@ export default function HomeStudio() {
           <h2 className="max-w-2xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
             {isEn ? (
               <>
-                I ran WordPress for 15 years{" "}
-                <span className="text-accent-secondary">before I coded it.</span>
+                Leading a web project today means{" "}
+                <span className="text-accent-secondary">orchestrating AIs — and validating.</span>
               </>
             ) : (
               <>
-                J'ai utilisé WordPress 15 ans{" "}
-                <span className="text-accent-secondary">avant de le coder.</span>
+                Une expertise technique{" "}
+                <span className="text-accent-secondary">devenue critique.</span>
               </>
             )}
           </h2>
 
           <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
-              ? "Fifteen years creating pages, managing content and debugging plugins on the editorial side — then eight years building. I know exactly what to keep from your admin, and what deserves to be rebuilt behind it."
-              : "Quinze ans à créer des pages, gérer des contenus et débugger des plugins côté éditorial — puis huit ans à développer. Je sais exactement ce qu'il faut garder de votre admin, et ce qui mérite d'être reconstruit derrière."}
+              ? "Steered well, AI delivers speed and quality. But a web project is still engineering: structuring the work, coordinating several different AIs and settling the technical choices everything else depends on — then validating what holds up in production. That's where the human is decisive."
+              : "Bien utilisée, l'IA fait gagner du temps et de la qualité. Mais mener un projet web reste un métier : Planifier, organiser, choisir les bons outils, coordonner, trancher et valider l'exécution. C'est là que l'humain n'est pas contournable."}
           </p>
 
           {/* Deux savoir-faire */}

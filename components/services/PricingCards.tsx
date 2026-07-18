@@ -59,7 +59,8 @@ function getTiers(isEn: boolean): Tier[] {
             { text: "Sécurité durcie" },
           ],
       ctaLabel: isEn ? "Pick this stack" : "Choisir cette stack",
-      ctaHref: "/contact",
+      // Froid : on route vers le diagnostic de stack, pas le contact direct.
+      ctaHref: "/solutions-web/eligibilite",
     },
     {
       slug: "forfait-headless",
@@ -90,9 +91,10 @@ function getTiers(isEn: boolean): Tier[] {
             { text: "Accompagnement stratégique" },
           ],
       ctaLabel: isEn ? "Pick this stack" : "Choisir cette stack",
-      badge: isEn ? "Most popular" : "Le plus demandé",
+      // Préconisation > popularité : c'est un conseil, pas un effet de foule.
+      badge: isEn ? "Recommended for most redesigns" : "Recommandé pour la plupart des refontes",
       highlight: true,
-      ctaHref: "/contact",
+      ctaHref: "/solutions-web/eligibilite",
     },
     {
       slug: "forfait-webapp",

@@ -29,7 +29,7 @@ export default function HomeCta() {
           {/* Left */}
           <Reveal>
             <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-              № 10 —{" "}
+              № 6 —{" "}
               <span className="text-mid-gray">
                 {isEn ? "Start your project" : "Démarrer votre projet"}
               </span>
