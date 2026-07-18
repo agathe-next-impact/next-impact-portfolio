@@ -19,7 +19,7 @@ import { RelatedArticles } from "@/components/documentation/related-articles"
 import { ArticleInternalLinks } from "@/components/documentation/documentation-internal-links"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd, HowToJsonLd } from "@/components/json-ld";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -180,6 +180,14 @@ export default async function ArticlePage(props: ArticlePageProps) {
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
         />
         {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
+        {article.howto && article.howto.length > 0 && (
+          <HowToJsonLd
+            name={article.title}
+            description={article.description}
+            steps={article.howto}
+            totalTime={article.howtoTotalTime}
+          />
+        )}
         <ReadingProgress />
         <ArticleReadTracker category={params.category} slug={params.slug} />
         <ScrollToTop />

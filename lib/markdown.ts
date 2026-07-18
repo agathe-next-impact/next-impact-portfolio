@@ -22,9 +22,27 @@ export interface ArticleFaqEntry {
   answer: string
 }
 
+/**
+ * Étape d'une méthode pas à pas (schema HowTo). Frontmatter optionnel :
+ *
+ *   howto:
+ *     - name: "Étape 1 — Vérifier l'accès"
+ *       text: "Une phrase autonome qui décrit l'action."
+ *   howtoTotalTime: "PT4H"   # optionnel, durée ISO 8601
+ *
+ * Réservé aux articles-méthode (procédure ordonnée). Sans `howto`, rien ne change.
+ */
+export interface ArticleHowToStep {
+  name: string
+  text: string
+}
+
 export interface Article extends ArticleMeta {
   content: string
   faq?: ArticleFaqEntry[]
+  howto?: ArticleHowToStep[]
+  /** Durée totale de la méthode, ISO 8601 (frontmatter `howtoTotalTime`, optionnel). */
+  howtoTotalTime?: string
   /** Dates ISO (YYYY-MM-DD) pour le JSON-LD — indépendantes de la locale d'affichage. */
   dateIso?: string
   updatedIso?: string
@@ -120,6 +138,8 @@ export function getArticleBySlug(category: string, slug: string, locale?: Locale
     content,
     order: data.order,
     faq: Array.isArray(data.faq) ? data.faq : undefined,
+    howto: Array.isArray(data.howto) ? data.howto : undefined,
+    howtoTotalTime: typeof data.howtoTotalTime === "string" ? data.howtoTotalTime : undefined,
     isMdx,
     isFallback,
   }
