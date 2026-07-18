@@ -135,12 +135,18 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
   (`ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web`).
   Conséquence : **B2 « dev assisté par IA » est présumé fusionné dans B0** —
   ne jamais le créer sans verdict mode 1 explicite.
-- **Règle AGEFIPH/TIH (18/07/2026, tranché par Agathe)** : la formulation
-  correcte est « déduction de 30 % du coût de la main-d'œuvre de la
-  prestation, plafonnée à 50 % ou 75 % de la contribution selon le taux
-  d'emploi ». Le blog `combien-coute-wordpress-headless-2026-chiffre` (qui
-  disait « 50 % du montant HT ») a été corrigé le 18/07. Tout contenu futur
-  utilise cette formulation. AGEFIPH toujours en fin de parcours.
+- **Règle AGEFIPH/TIH (précisée le 18/07/2026, tranché par Agathe)** : la
+  déduction est de **30 % du montant HT de la facture**, déduite de la
+  contribution AGEFIPH annuelle (dans la limite du plafond réglementaire de
+  50 % ou 75 % de la contribution selon le taux d'emploi). Formulation type :
+  « déduire 30 % du montant HT de la facture de votre contribution AGEFIPH ».
+  Ne JAMAIS appliquer le 30 % à une « part main-d'œuvre » elle-même partielle
+  (l'erreur des 9 % de la page attestation, corrigée le 18/07). La formulation
+  répandue « 30 % du coût de main-d'œuvre » reste valide (pour une prestation
+  de services, main-d'œuvre = montant de la facture) — inutile de la réécrire.
+  Surfaces corrigées le 18/07 : blog headless (ex-« 50 % du HT »), page
+  attestation (double 30 %), meta title avantage-oeth (objet erroné).
+  AGEFIPH toujours en fin de parcours.
 
 ## Références projet (Claude.ai, projet « Next Impact »)
 

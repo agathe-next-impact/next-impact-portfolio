@@ -17,8 +17,8 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "OETH advantage — Deduct 30% of your AGEFIPH contribution with a French TIH provider"
-        : "Avantage OETH — Déduisez 30 % de votre contribution AGEFIPH avec un prestataire TIH",
+        ? "OETH advantage — Deduct 30% of the invoice from your AGEFIPH contribution with a TIH provider"
+        : "Avantage OETH — Déduisez 30 % de la facture de votre contribution AGEFIPH avec un prestataire TIH",
     description:
       locale === "en"
         ? "Next Impact is a French TIH provider (independent worker with disability). " +

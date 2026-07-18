@@ -47,12 +47,10 @@
   (3 emplacements). Décision actée dans contexte-fusion.md.
 - ~~A1-A4~~ corrigés le 18/07 : OAI-SearchBot ajouté (rubrique + outil),
   `updated` sur C2, lien Gartner posé, périmètre C5 consigné dans le contexte.
-- **Pages React AGEFIPH (audit vague 2, point A4) — décision Agathe attendue** :
-  `articles/attestation-deductibilite-tih-guide-entreprises` calcule une
-  déduction de 9 % du HT (30 % × 30 %), en contradiction avec la règle actée
-  « 30 % du coût main-d'œuvre » et avec l'autre page AGEFIPH. Meta title
-  d'`/avantage-oeth` également inexact. Domaine réglementaire → ne pas
-  corriger sans arbitrage.
+- ~~Pages React AGEFIPH~~ tranché par Agathe le 18/07 : déduction = 30 % du
+  montant HT de la facture, déduite de la contribution. Page attestation
+  (double 30 % → 9 %) et meta title avantage-oeth corrigés. Règle précisée
+  dans contexte-fusion.md.
 - Meta title du hub : variantes alternatives dans le message du commit
   `1968e8d` si un autre angle est préféré.
 - Push : jamais sans demande explicite d'Agathe (commits locaux seulement).
