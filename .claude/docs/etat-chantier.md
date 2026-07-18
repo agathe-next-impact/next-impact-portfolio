@@ -45,6 +45,17 @@
 | 5 | Audit de vague : 3 bloquants (composants MDX, tableaux, tarifs 2025) + A1-A5 **corrigés le jour même** → **publiable** (rapport : audit-vague-5.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 5+ | Clusters D et E au fil de l'eau (verdicts mode 1 obligatoires) | (chaîne complète) | ⬜ à faire | — |
 
+## Publication
+
+- **Push effectué le 2026-07-18** (`c90c65f..fed0b69`, 5 vagues complètes) sur
+  demande d'Agathe. Au premier déploiement : vérifier en runtime le sitemap
+  (rubriques + outils présents, fusionnés absents), un échantillon de 301
+  (`pourquoi-le-headless`, `passage-wp-headless`, `/documentation/blog`) et
+  qu'un slug supprimé rend bien 404/301, pas une erreur.
+- Note : GitHub signale que le dépôt a déménagé vers
+  `agathe-next-impact/next-impact-portfolio` — mettre à jour le remote local
+  (`git remote set-url origin ...`) à l'occasion.
+
 ## Bloquants / à confirmer par Agathe
 
 - Tarif 150/490 retenu par défaut (statu quo live). Si 180/390 préféré :
