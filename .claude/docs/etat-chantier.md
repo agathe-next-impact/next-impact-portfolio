@@ -17,7 +17,9 @@
 | 1 | Rédaction C2 — `guide-geo-pme.mdx` (FAQ ×5, verdicts 3 profils, sources primaires) | redacteur-seo-geo | ✅ fait | 2026-07-17 |
 | 1 | Diagnostic « votre site est-il visible dans les moteurs IA ? » (route `/outils/visibilite-ia`, scoring 4 axes, tests OK, carte /outils) | batisseur-outils | ✅ fait | 2026-07-17 |
 | 1 | Audit de vague : **publiable sous réserve B1** (fourchette 2 000–6 000 € de C2 à arbitrer) — rapport : audit-vague-1.md | verificateur-coherence (mode 2) | ✅ fait | 2026-07-17 |
-| 2 | A4, A6, A7, F1 | (chaîne verdict→rédaction) | ⬜ à faire | — |
+| 2 | Verdicts mode 1 : A4, A6, A7, F1 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
+| 2 | Rédaction/màj + intégration selon verdicts | redacteur-seo-geo / architecte-fusion | ⬜ à faire | — |
+| 2 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
 | 3 | C7 + checklist GEO + C3/C4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 4 | F3, B0, B4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |

@@ -116,6 +116,24 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
 - **C0 (SEO/GEO/AEO) rendu redondant (17/07/2026)** : la page de rubrique
   `etre-trouve` porte les définitions SEO/GEO/AEO. Ne pas créer C0 sans
   verdict mode 1 explicite.
+- **A6 fusionné dans A4 (18/07/2026, tranché par Agathe)** : A6 n'existe pas
+  comme article ; A4 (`ia-et-code/site-genere-par-ia-vs-site-professionnel`)
+  porte la section « Quand l'IA suffit / quand c'est un piège » avec verdicts
+  par cas d'usage.
+- **Chiffres F1 (18/07/2026, tranché par Agathe)** : F1 n'introduit AUCUNE
+  fourchette de prestation nouvelle. E-commerce : traité en découpage par
+  stack/CMS (WooCommerce sur WordPress, SaaS type Shopify, headless/sur-mesure)
+  en s'appuyant sur les fourchettes déjà publiées par stack + les tarifs
+  publics des SaaS (sourcés) — pas de fourchette e-commerce globale. Coût de
+  reprise d'un site IA : qualitatif seulement (« de quelques centaines d'euros
+  pour une stabilisation à un budget de refonte si tout est à reconstruire »),
+  renvoi visio 150 €.
+- **Règle AGEFIPH/TIH (18/07/2026, tranché par Agathe)** : la formulation
+  correcte est « déduction de 30 % du coût de la main-d'œuvre de la
+  prestation, plafonnée à 50 % ou 75 % de la contribution selon le taux
+  d'emploi ». Le blog `combien-coute-wordpress-headless-2026-chiffre` (qui
+  disait « 50 % du montant HT ») a été corrigé le 18/07. Tout contenu futur
+  utilise cette formulation. AGEFIPH toujours en fin de parcours.
 
 ## Références projet (Claude.ai, projet « Next Impact »)
 
