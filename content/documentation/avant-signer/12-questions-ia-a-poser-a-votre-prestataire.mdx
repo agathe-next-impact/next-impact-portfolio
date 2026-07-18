@@ -1,0 +1,186 @@
+---
+title: "12 questions IA à poser à votre prestataire web"
+description: "Code généré, relecture, propriété, contenus IA, maintenance : les 12 questions à poser à votre agence web sur son usage de l'IA — et les réponses acceptables."
+category: avant-signer
+author: "Agathe Karinthi-Martin"
+date: "2026-07-18"
+updated: "2026-07-18"
+order: 1
+faq:
+  - question: "Faut-il fuir un prestataire qui utilise l'IA ?"
+    answer: "Non. En 2026, la quasi-totalité des agences et des freelances compétents utilisent des assistants IA, et c'est souvent à votre bénéfice : plus de vitesse sur le code répétitif, donc plus de temps sur ce qui compte. Le critère de sélection n'est pas l'usage de l'IA, c'est la transparence sur cet usage, la relecture humaine systématique et la responsabilité assumée sur ce qui est livré."
+  - question: "Un devis nettement moins cher grâce à l'IA est-il suspect ?"
+    answer: "Pas automatiquement, mais il mérite une question de plus : où passe le temps économisé ? Si la réponse est « on livre plus vite au même niveau d'exigence », c'est un bon signe. Si le prix bas s'explique par la suppression de la relecture, des tests ou de la conception, vous achetez un problème différé — la maintenance et les corrections coûteront ce que le devis n'affiche pas."
+  - question: "Comment vérifier que les réponses de mon prestataire sont sincères ?"
+    answer: "Demandez des preuves plutôt que des déclarations : un accès au dépôt de code d'un projet livré, un exemple de documentation remise à un client, la clause de propriété intellectuelle dans ses CGV. Un prestataire à l'aise avec ces questions répond en quelques minutes ; les réponses évasives ou agacées sont en elles-mêmes une information. En cas de doute sur un devis engageant, un second avis indépendant coûte moins cher qu'une refonte."
+  - question: "Faut-il faire écrire ces engagements dans le devis ou le contrat ?"
+    answer: "Oui, pour les trois qui protègent vraiment : la cession de propriété intellectuelle sur les livrables, la remise du code source et des accès, et la garantie de correction des anomalies après livraison. Une réponse orale rassurante n'engage personne ; deux lignes dans le devis, si."
+  - question: "Et si mon prestataire affirme ne pas utiliser l'IA du tout ?"
+    answer: "C'est possible, mais c'est devenu rare — et ce n'est ni un gage de qualité ni un défaut en soi. Posez alors les mêmes questions sans le mot « IA » : qui relit le code, à qui appartient-il, qui maintient le site ? Un travail entièrement manuel mais non relu, non documenté et non réversible pose exactement les mêmes problèmes qu'un code généré dans les mêmes conditions."
+---
+
+**Votre agence ou votre freelance utilise presque certainement l'IA pour produire une partie de votre site — et ce n'est pas un problème en soi : bien encadrée, elle fait gagner du temps sans sacrifier la qualité. Ce qui doit décider de votre signature, ce n'est pas « IA ou pas IA », mais trois choses : la transparence du prestataire sur son usage, la relecture humaine de ce qui est généré, et la responsabilité qu'il assume sur le résultat. Les 12 questions ci-dessous couvrent ces trois terrains — avec, pour chacune, la bonne réponse attendue et le signal d'alarme.**
+
+*Article publié le 18 juillet 2026. Les pratiques décrites (outils, usages) évoluent vite ; les principes — transparence, relecture, responsabilité — non.*
+
+Une précision avant de commencer : je travaille moi-même avec des assistants IA sur mes projets, et ce site l'assume. Cette liste n'est donc pas une chasse aux sorcières — c'est la liste des questions auxquelles un prestataire sérieux, IA ou pas, doit savoir répondre sans se troubler. Si votre interrogation porte sur le budget ou le périmètre du devis en général, c'est un autre sujet : le [guide des prix d'un site web en 2026](/documentation/choisir/combien-coute-un-site-web-en-2026) et le [décrypteur de devis](/outils/decrypteur-devis) (9 points de contrôle, hors IA) le couvrent.
+
+## Comment le code est-il produit ? (questions 1 à 4)
+
+### 1. « Utilisez-vous l'IA pour générer du code, et à quelles étapes du projet ? »
+
+Pourquoi la poser : elle teste d'abord la transparence. La réponse factuelle importe moins que la façon de répondre — c'est la question d'ouverture qui conditionne la sincérité des onze suivantes.
+
+**Bonne réponse attendue** : un « oui » précis et détendu. Par exemple : « oui, pour accélérer le code répétitif, les variantes de gabarits, les tests ; la conception, l'architecture et les décisions restent humaines. » Le prestataire sait dire *où* l'IA intervient et où elle n'intervient pas.
+
+**Signal d'alarme** : la gêne, le déni invérifiable (« jamais, tout est artisanal ») suivi d'un devis et de délais qui racontent l'inverse, ou l'inverse exact — « l'IA fait tout, c'est pour ça que c'est rapide » — sans qu'apparaisse nulle part un travail humain de conception.
+
+### 2. « Qui relit le code généré, et selon quel processus ? »
+
+Pourquoi la poser : c'est la question centrale des douze. Du code généré par IA non relu accumule silencieusement des défauts — duplication, dépendances inutiles, incohérences — qui se paieront en maintenance. Les mécanismes précis de cette [dette technique du code généré par IA](/documentation/ia-et-code/dette-technique-du-code-genere-par-ia) méritent un article entier ; ici, une seule chose compte : la relecture existe-t-elle ?
+
+**Bonne réponse attendue** : une relecture humaine systématique, nommée et outillée. « Chaque portion générée est relue par un développeur avant d'être intégrée » ; idéalement avec une revue de code (relecture formalisée du travail d'un développeur par un autre — ou par le même à froid, en solo) et des conventions écrites.
+
+**Signal d'alarme** : « l'IA se relit elle-même », « on relit si on a le temps », ou l'incompréhension de la question. Un prestataire qui ne peut pas décrire son processus de relecture n'en a pas.
+
+### 3. « Comment testez-vous ce qui est livré ? »
+
+Pourquoi la poser : la relecture attrape ce qui se voit dans le code ; les tests attrapent ce qui casse à l'usage. Un site généré vite et jamais testé peut fonctionner en démonstration et échouer sur les cas réels — formulaire mal validé, page lente, faille béante.
+
+**Bonne réponse attendue** : des tests automatisés sur les parcours critiques (ce qui rapporte : contact, achat, connexion), une vérification des performances chiffrée (Core Web Vitals, les métriques de vitesse mesurées par Google), et un passage en revue des bases de sécurité. Pas besoin d'un vocabulaire d'ingénieur : « voici ce qu'on teste, voici ce qu'on mesure » suffit.
+
+**Signal d'alarme** : « on clique partout avant la livraison » comme seule réponse. Le test manuel a sa place, mais seul, il ne protège ni des régressions ni de ce qu'on n'a pas pensé à cliquer.
+
+### 4. « Mes contenus et mes données passent-ils par des outils d'IA tiers ? »
+
+Pourquoi la poser : pour travailler, les assistants IA envoient du texte et du code vers des serveurs externes, le plus souvent hors de votre contrat. Si vos fichiers clients, vos textes confidentiels ou vos accès transitent par ces outils, vous devez le savoir — et le RGPD l'exige dès qu'il y a des données personnelles.
+
+**Bonne réponse attendue** : le prestataire sait quels outils il utilise, ce qu'il leur envoie et ce qu'il ne leur envoie jamais (données personnelles de vos clients, identifiants, informations sous NDA). Sur les données personnelles, la référence utile est la [doctrine de la CNIL sur l'intelligence artificielle](https://www.cnil.fr/fr/intelligence-artificielle) : elle existe, un professionnel sérieux en connaît au moins l'esprit.
+
+**Signal d'alarme** : « aucune idée, je n'y ai jamais réfléchi ». L'absence de réflexion sur ce point annonce la même légèreté sur le reste de la confidentialité.
+
+## À qui appartient le résultat, et pouvez-vous partir ? (questions 5 à 7)
+
+### 5. « À qui appartient le code livré, y compris les parties générées par IA ? »
+
+Pourquoi la poser : la propriété du code est le premier point de contrôle de tout devis web — l'IA y ajoute une couche : certains outils et certaines conditions d'utilisation encadrent ce que le prestataire peut céder. Sans cession écrite, vous payez un site que vous ne possédez pas.
+
+**Bonne réponse attendue** : « le code et les contenus vous sont cédés à la livraison, c'est écrit dans le devis ou les CGV » — avec, si vous la demandez, la clause exacte. Le prestataire a vérifié que ses outils IA le lui permettent.
+
+**Signal d'alarme** : « c'est notre framework propriétaire », une licence d'usage à la place d'une cession, ou un flou entretenu (« on verra ça à la fin »). La propriété se négocie avant la signature, jamais après.
+
+### 6. « Un autre prestataire pourrait-il reprendre le site demain ? »
+
+Pourquoi la poser : c'est le test de réversibilité — votre capacité à changer de prestataire sans tout refaire. L'IA aggrave le risque dans un sens précis : elle produit vite du code volumineux, et du code volumineux non documenté est illisible pour le repreneur, humain comme IA.
+
+**Bonne réponse attendue** : un dépôt Git (l'historique complet du code, standard de la profession) auquel vous avez accès, des technologies répandues nommées sans détour, une documentation d'installation, et vos accès (hébergement, domaine, services) à votre nom. Le prestataire accepte la question sans la vivre comme une défiance.
+
+**Signal d'alarme** : « personne d'autre ne pourrait s'y retrouver » présenté comme un argument de fidélité. C'est l'aveu d'une captivité — je vois régulièrement arriver des sites dans cet état, et la [reprise d'un site généré par IA](/documentation/ia-et-code/reprendre-un-site-genere-par-ia) coûte d'autant plus cher que rien n'a été prévu pour elle.
+
+### 7. « Que se passe-t-il si l'outil ou la plateforme IA que vous utilisez disparaît ou change ses conditions ? »
+
+Pourquoi la poser : certains prestataires construisent sur des plateformes de génération qui hébergent et font tourner le site chez elles. Votre site dépend alors de la survie et de la politique tarifaire d'un tiers que vous n'avez pas choisi.
+
+**Bonne réponse attendue** : « le site est exportable et déployable ailleurs ; l'outil nous sert à produire, pas à vous héberger. » Si une plateforme est structurellement dans la boucle, le prestataire le dit, en explique le pour et le contre, et documente la sortie.
+
+**Signal d'alarme** : la découverte, en creusant, que le site *vit* dans l'outil de génération sans que personne ne vous l'ait dit. La dépendance peut être un compromis acceptable ; la dépendance cachée, jamais.
+
+## Et les contenus du site ? (questions 8 et 9)
+
+### 8. « Les textes du site sont-ils rédigés par IA, et qui les relit et les assume ? »
+
+Pourquoi la poser : les modèles d'IA écrivent des textes fluides mais peuvent affirmer des choses fausses avec aplomb — sur votre métier, vos offres, vos chiffres. Un texte publié sous votre marque engage votre responsabilité, pas celle de l'outil.
+
+**Bonne réponse attendue** : le circuit est explicite : qui produit le premier jet, qui vérifie les faits, qui valide — et la validation finale vous revient. L'IA comme brouillon accélérateur, la relecture experte comme filet.
+
+**Signal d'alarme** : des textes livrés « prêts à publier » que personne n'a relus, ou génériques au point d'être interchangeables avec ceux de vos concurrents. Ce que le contenu IA implique pour votre visibilité et votre crédibilité est un sujet en soi — ici, contentez-vous d'exiger le circuit de relecture.
+
+### 9. « Utilisez-vous des images générées par IA, et me le direz-vous ? »
+
+Pourquoi la poser : les visuels générés posent des questions de droits (que pouvez-vous légalement en faire ?) et de crédibilité (des trombines d'équipe synthétiques sur une page « qui sommes-nous » peuvent se retourner contre vous). Vous devez pouvoir choisir en connaissance de cause.
+
+**Bonne réponse attendue** : une politique claire : quels usages (illustrations d'ambiance, oui ; fausses photos de votre équipe ou de vos locaux, non), quelles licences les outils utilisés accordent, et une information systématique — vous savez toujours ce qui est généré.
+
+**Signal d'alarme** : des images générées glissées dans les maquettes sans mention, ou l'incapacité à répondre sur les droits d'utilisation. Si le prestataire ne sait pas ce que sa licence permet, vous ne le savez pas non plus.
+
+## Qui est responsable après la livraison ? (questions 10 à 12)
+
+### 10. « Qui maintient le site, et qui corrige un bug issu de code généré ? »
+
+Pourquoi la poser : un bug n'a pas d'auteur qui compte — généré ou tapé à la main, c'est le même site cassé. La question vérifie que le prestataire ne fait pas de distinction : ce qu'il livre, il le maintient.
+
+**Bonne réponse attendue** : « tout le code livré est notre code ; la maintenance couvre l'ensemble, sans distinction d'origine » — avec une offre de maintenance explicite : périmètre, délais d'intervention, tarif.
+
+**Signal d'alarme** : toute réponse qui ouvre une distinction entre « notre code » et « le code de l'IA », ou l'absence pure et simple d'offre de maintenance. Un site sans maintenance prévue est un site dont la fin de vie est déjà datée.
+
+### 11. « Que couvre votre garantie si un problème vient de l'IA ? »
+
+Pourquoi la poser : c'est la traduction contractuelle de la précédente. En droit comme en pratique, la responsabilité du livrable revient au professionnel qui signe — l'outil n'est jamais une excuse. Le partage complet des responsabilités entre l'IA, le prestataire et vous est traité dans le comparatif [site généré par IA vs site professionnel](/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel) ; au moment de signer, une seule vérification suffit.
+
+**Bonne réponse attendue** : une garantie de correction des anomalies après livraison (souvent appelée garantie de parfait achèvement), écrite, avec une durée — et aucune exclusion visant le code ou le contenu générés.
+
+**Signal d'alarme** : une clause qui exclut « les dysfonctionnements liés aux outils d'intelligence artificielle » ou toute formulation approchante. C'est un transfert de risque vers vous, déguisé en modernité.
+
+### 12. « Serez-vous transparent, pendant le projet, sur ce qui est fait avec l'IA ? »
+
+Pourquoi la poser : la question 1 teste la transparence d'aujourd'hui ; celle-ci l'engage pour la durée du projet. Les pratiques évoluent en cours de route — nouveaux outils, nouveaux usages — et vous voulez rester informé sans avoir à redemander.
+
+**Bonne réponse attendue** : un engagement simple, éventuellement écrit dans le devis : « si notre façon de produire change significativement, vous le saurez ; vous pouvez nous poser la question à tout moment. » Certains prestataires publient même leur politique d'usage de l'IA — c'est un excellent signe.
+
+**Signal d'alarme** : « peu importe comment on produit, seul le résultat compte ». Le résultat compte, mais vous achetez aussi un processus — c'est lui qui détermine ce que le résultat vaudra dans trois ans.
+
+## Récapitulatif : les 12 questions et leur signal d'alarme
+
+| # | Question | Signal d'alarme en un mot |
+|---|---|---|
+| 1 | Utilisez-vous l'IA, et où ? | Le déni |
+| 2 | Qui relit le code généré ? | « Personne » |
+| 3 | Comment testez-vous ? | « On clique partout » |
+| 4 | Mes données passent-elles par des outils tiers ? | « Aucune idée » |
+| 5 | À qui appartient le code, IA comprise ? | Le flou |
+| 6 | Un autre prestataire pourrait-il reprendre ? | La captivité assumée |
+| 7 | Et si votre plateforme IA disparaît ? | La dépendance cachée |
+| 8 | Qui relit et assume les textes ? | Le « prêt à publier » |
+| 9 | Des images IA, et me le direz-vous ? | Le silence |
+| 10 | Qui corrige un bug de code généré ? | « Pas notre code » |
+| 11 | Que couvre la garantie ? | L'exclusion « IA » |
+| 12 | Resterez-vous transparent en cours de projet ? | « Peu importe le comment » |
+
+## Verdict : comment interpréter les réponses selon votre situation
+
+- **Le prestataire répond bien aux 12** : signez sereinement — qu'il utilise l'IA beaucoup, peu ou pas. Vous avez en face un professionnel qui maîtrise son processus, et c'est exactement ce que vous achetez.
+- **Une ou deux réponses flottent sur des points secondaires** (la 9, la 12) : demandez une clarification écrite dans le devis et avancez. Personne n'est parfait sur douze questions, et la bonne foi se voit à la réaction.
+- **Les réponses flanchent sur la relecture (2), la propriété (5) ou la garantie (11)** : ne signez pas en l'état. Ce sont les trois questions qui séparent une économie réelle d'un problème différé — exigez des engagements écrits ou passez votre chemin.
+- **Vous n'arrivez pas à trancher seul** : c'est précisément le cas d'usage d'un second avis. Une [visio conseil de 30 minutes](/conseil) (150 € HT, crédités si un projet démarre sous 30 jours) suffit généralement à relire un devis et les réponses obtenues, et à dire si vous pouvez signer.
+
+Et pour tout ce qui, dans le devis, ne relève pas de l'IA — postes flous, récurrent, surdimensionnement — la rubrique [Avant de signer](/documentation/avant-signer) et le [décrypteur de devis](/outils/decrypteur-devis) prennent le relais.
+
+## FAQ — prestataire web et IA : ce qu'on me demande vraiment
+
+### Faut-il fuir un prestataire qui utilise l'IA ?
+
+Non. En 2026, la quasi-totalité des agences et des freelances compétents utilisent des assistants IA, et c'est souvent à votre bénéfice : plus de vitesse sur le code répétitif, donc plus de temps sur ce qui compte. Le critère de sélection n'est pas l'usage de l'IA, c'est la transparence sur cet usage, la relecture humaine systématique et la responsabilité assumée sur ce qui est livré.
+
+### Un devis nettement moins cher grâce à l'IA est-il suspect ?
+
+Pas automatiquement, mais il mérite une question de plus : où passe le temps économisé ? Si la réponse est « on livre plus vite au même niveau d'exigence », c'est un bon signe. Si le prix bas s'explique par la suppression de la relecture, des tests ou de la conception, vous achetez un problème différé — la maintenance et les corrections coûteront ce que le devis n'affiche pas.
+
+### Comment vérifier que les réponses de mon prestataire sont sincères ?
+
+Demandez des preuves plutôt que des déclarations : un accès au dépôt de code d'un projet livré, un exemple de documentation remise à un client, la clause de propriété intellectuelle dans ses CGV. Un prestataire à l'aise avec ces questions répond en quelques minutes ; les réponses évasives ou agacées sont en elles-mêmes une information. En cas de doute sur un devis engageant, un [second avis indépendant](/conseil) coûte moins cher qu'une refonte.
+
+### Faut-il faire écrire ces engagements dans le devis ou le contrat ?
+
+Oui, pour les trois qui protègent vraiment : la cession de propriété intellectuelle sur les livrables, la remise du code source et des accès, et la garantie de correction des anomalies après livraison. Une réponse orale rassurante n'engage personne ; deux lignes dans le devis, si.
+
+### Et si mon prestataire affirme ne pas utiliser l'IA du tout ?
+
+C'est possible, mais c'est devenu rare — et ce n'est ni un gage de qualité ni un défaut en soi. Posez alors les mêmes questions sans le mot « IA » : qui relit le code, à qui appartient-il, qui maintient le site ? Un travail entièrement manuel mais non relu, non documenté et non réversible pose exactement les mêmes problèmes qu'un code généré dans les mêmes conditions.
+
+---
+
+**Un devis sur la table ?** Commencez par le [décrypteur de devis](/outils/decrypteur-devis) : 9 points de contrôle gratuits, en quelques minutes, pour un premier verdict — signer, ajuster ou demander un second avis. Si le doute persiste, ou si le montant justifie un regard indépendant, la [visio conseil](/conseil) relit avec vous le devis et les réponses à ces 12 questions — 150 € HT, crédités si un projet démarre sous 30 jours.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle utilise elle-même des assistants IA dans sa production — avec relecture systématique — et répond aux 12 questions de cet article sur simple demande. [Prendre contact](/contact).*
