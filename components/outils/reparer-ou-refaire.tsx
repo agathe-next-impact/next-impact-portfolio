@@ -20,7 +20,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
-import { Reveal } from "@/components/ui/reveal";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
@@ -337,12 +337,11 @@ export default function ReparerOuRefaire() {
       {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
       <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
-        <div
-          ref={resultRef}
-          className="flex scroll-mt-24 flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
-        >
+        <div ref={resultRef} className="scroll-mt-24 border-b border-dark-gray">
+        {/* Verdict en cascade — les blocs du résultat apparaissent en Stagger */}
+        <Stagger className="flex flex-col gap-8 px-6 py-8 lg:px-8">
           {/* Score + signal */}
-          <div className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
+          <StaggerItem className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
             <div className="relative flex items-center justify-center overflow-hidden bg-obsidian p-6">
               <div className="pointer-events-none absolute inset-0 opacity-[0.18]">
                 <Sonar />
@@ -358,10 +357,10 @@ export default function ReparerOuRefaire() {
                 {isEn ? verdict.en : verdict.fr}
               </p>
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Détail par facteur */}
-          <div>
+          <StaggerItem>
             <p className={`${LABEL_MONO} mb-4`}>
               {isEn ? "What weighs in" : "Ce qui pèse dans la balance"}
             </p>
@@ -391,20 +390,20 @@ export default function ReparerOuRefaire() {
                 </div>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Note anti-cannibalisation / doctrine */}
-          <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
+          <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "Repair when it's enough, rebuild only when it's justified. This is a self-check — an audit or a decision call confirms the diagnosis on your real site before you spend."
                 : "Réparer quand c'est suffisant, refaire seulement quand c'est justifié. Ceci est une auto-évaluation — un audit ou une visio confirme le diagnostic sur votre site réel avant d'investir."}
             </p>
-          </div>
+          </StaggerItem>
 
           {/* Prochaine étape (adaptée au verdict) */}
-          <div className="flex flex-wrap items-center gap-3">
+          <StaggerItem className="flex flex-wrap items-center gap-3">
             <Link
               href={ctas.primary.href as Parameters<typeof Link>[0]["href"]}
               className={BTN_PRIMARY}
@@ -423,8 +422,9 @@ export default function ReparerOuRefaire() {
               <RotateCcw size={13} />
               {isEn ? "Restart" : "Refaire"}
             </button>
-          </div>
+          </StaggerItem>
           <NewsletterModal source="reparer-ou-refaire" />
+        </Stagger>
         </div>
       )}
       </StepTransition>

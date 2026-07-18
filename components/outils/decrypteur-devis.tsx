@@ -22,7 +22,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
-import { Reveal } from "@/components/ui/reveal";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
@@ -348,12 +348,11 @@ export default function DecrypteurDevis() {
       {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
       <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
-        <div
-          ref={resultRef}
-          className="flex scroll-mt-24 flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
-        >
+        <div ref={resultRef} className="scroll-mt-24 border-b border-dark-gray">
+        {/* Verdict en cascade — les blocs du résultat apparaissent en Stagger */}
+        <Stagger className="flex flex-col gap-8 px-6 py-8 lg:px-8">
           {/* Score + signal */}
-          <div className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
+          <StaggerItem className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
             <div className="relative flex items-center justify-center overflow-hidden bg-obsidian p-6">
               <div className="pointer-events-none absolute inset-0 opacity-[0.18]">
                 <Sonar />
@@ -371,11 +370,11 @@ export default function DecrypteurDevis() {
                 {isEn ? verdict.en : verdict.fr}
               </p>
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Questions à poser au prestataire */}
           {questionsToAsk.length > 0 && (
-            <div>
+            <StaggerItem>
               <p className={`${LABEL_MONO} mb-4`}>
                 {isEn ? "Questions to ask the provider" : "Questions à poser au prestataire"}
               </p>
@@ -395,11 +394,11 @@ export default function DecrypteurDevis() {
                   </div>
                 ))}
               </div>
-            </div>
+            </StaggerItem>
           )}
 
           {/* Détail par facteur */}
-          <div>
+          <StaggerItem>
             <p className={`${LABEL_MONO} mb-4`}>
               {isEn ? "Vigilance factors" : "Facteurs de vigilance"}
             </p>
@@ -429,20 +428,20 @@ export default function DecrypteurDevis() {
                 </div>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Note anti-cannibalisation */}
-          <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
+          <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "This is a self-check, not a legal review. An independent tech opinion goes over your actual quote and tells you clearly: sign, adjust or renegotiate."
                 : "Ceci est une auto-évaluation, pas une analyse juridique. Un avis techno indépendant reprend votre devis réel et vous dit clairement : signer, ajuster ou renégocier."}
             </p>
-          </div>
+          </StaggerItem>
 
           {/* Prochaine étape */}
-          <div className="flex flex-wrap items-center gap-3">
+          <StaggerItem className="flex flex-wrap items-center gap-3">
             <Link href="/conseil" className={BTN_PRIMARY}>
               {isEn ? "Get an independent opinion — €150" : "Un avis indépendant — 150 €"}
               <ArrowRight size={14} />
@@ -455,8 +454,9 @@ export default function DecrypteurDevis() {
               <RotateCcw size={13} />
               {isEn ? "Restart" : "Refaire"}
             </button>
-          </div>
+          </StaggerItem>
           <NewsletterModal source="decrypteur-devis" />
+        </Stagger>
         </div>
       )}
       </StepTransition>
