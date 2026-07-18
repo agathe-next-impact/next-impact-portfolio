@@ -36,7 +36,7 @@
 | 4 | Rédaction F3 — `avant-signer/12-questions-ia-a-poser-a-votre-prestataire.mdx` | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 4 | Rédaction B0 — `ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web.mdx` (chapeau cluster B, 7 dimensions avec verdicts) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 4 | Rédaction B4 — `ia-et-code/dette-technique-du-code-genere-par-ia.mdx` (GitClear 2025, DORA 2024/2025) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
-| 4 | Audit de vague (build vert au préalable) | verificateur-coherence (mode 2) | 🔄 en cours | 2026-07-18 |
+| 4 | Audit de vague : **zéro bloquant, publiable** ; A1-A2 traités le jour même (rapport : audit-vague-4.md, commit `64c6d36`) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
 
 ## Bloquants / à confirmer par Agathe
