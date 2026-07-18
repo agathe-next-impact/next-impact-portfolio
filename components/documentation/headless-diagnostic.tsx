@@ -145,12 +145,14 @@ const STEPS: DiagnosticStep[] = [
     maxPoints: 6,
     questions: [
       {
+        // Seuils alignés sur la référence tarifaire du blog 2026
+        // (build headless : 2 250 / 4 000 / 6 500 €).
         question: "Budget disponible pour le projet",
         options: [
-          { label: "Moins de 2 000 €", points: -2 },
-          { label: "Entre 2 000 € et 4 000 €", points: 0 },
-          { label: "Entre 4 000 € et 7 500 €", points: 2 },
-          { label: "Plus de 7 500 €", points: 3 },
+          { label: "Moins de 2 250 €", points: -2 },
+          { label: "Entre 2 250 € et 4 000 €", points: 0 },
+          { label: "Entre 4 000 € et 6 500 €", points: 2 },
+          { label: "Plus de 6 500 €", points: 3 },
         ],
       },
       {
@@ -250,8 +252,10 @@ function getRecommendation(score: number): Recommendation {
       borderColor: "border-orange/30",
       articles: [
         {
-          title: "Quand utiliser WordPress headless",
-          href: "/documentation/wordpress-headless/quand-utiliser-wordpress-headless",
+          // Ex-« Quand utiliser WordPress headless » (fusionné dans l'article
+          // hôte du diagnostic) — remplacé par un critère d'arbitrage concret.
+          title: "Performance et Core Web Vitals",
+          href: "/documentation/wordpress-headless/performance-et-core-web-vitals",
         },
         {
           title: "Migration monolithique vers headless",
