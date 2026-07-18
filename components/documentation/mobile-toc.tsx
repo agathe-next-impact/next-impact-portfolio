@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { List, X } from "lucide-react";
+import { useActiveHeading } from "./use-active-heading";
 
 interface MobileTocProps {
   tableOfContents: { id: string; text: string; level: number }[];
@@ -10,36 +11,13 @@ interface MobileTocProps {
 export function MobileToc({ tableOfContents }: MobileTocProps) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [activeId, setActiveId] = useState("");
+  const activeId = useActiveHeading(tableOfContents);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    const headings = tableOfContents
-      .map((item) => document.getElementById(item.id))
-      .filter(Boolean) as HTMLElement[];
-
-    if (headings.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
-    );
-
-    headings.forEach((h) => observer.observe(h));
-    return () => observer.disconnect();
-  }, [tableOfContents]);
 
   if (tableOfContents.length === 0) return null;
 
@@ -95,7 +73,8 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
                 <a
                   href={`#${item.id}`}
                   onClick={() => setOpen(false)}
-                  className={`block border-b border-dark-gray no-underline transition-colors ${
+                  aria-current={activeId === item.id ? "location" : undefined}
+                  className={`block border-b border-dark-gray no-underline transition-colors duration-150 ${
                     item.level === 3
                       ? "py-2 pl-4 text-[0.8125rem]"
                       : "py-2 pl-2 text-[0.9375rem]"

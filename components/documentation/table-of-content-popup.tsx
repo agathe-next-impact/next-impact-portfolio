@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useActiveHeading } from "./use-active-heading";
 
 interface TableOfContentsPopupProps {
   tableOfContents: { id: string; text: string; level: number }[];
@@ -10,30 +10,7 @@ interface TableOfContentsPopupProps {
 export default function TableOfContentsPopup({
   tableOfContents,
 }: TableOfContentsPopupProps) {
-  const [activeId, setActiveId] = useState<string>("");
-
-  useEffect(() => {
-    const headings = tableOfContents
-      .map((item) => document.getElementById(item.id))
-      .filter(Boolean) as HTMLElement[];
-
-    if (headings.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
-    );
-
-    headings.forEach((h) => observer.observe(h));
-    return () => observer.disconnect();
-  }, [tableOfContents]);
+  const activeId = useActiveHeading(tableOfContents);
 
   if (tableOfContents.length === 0) return null;
 
@@ -49,8 +26,10 @@ export default function TableOfContentsPopup({
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
+                aria-current={isActive ? "location" : undefined}
                 className={cn(
-                  "block border-l-2 py-1.5 leading-tight no-underline transition-colors",
+                  // duration-150 = DUR.micro (lib/motion-tokens.ts)
+                  "block border-l-2 py-1.5 leading-tight no-underline transition-colors duration-150",
                   item.level === 3
                     ? "pl-4 text-xs"
                     : "pl-2 text-[0.8125rem]",
