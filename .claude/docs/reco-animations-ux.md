@@ -46,6 +46,15 @@
 
 ## P2 — Ajouter là où l'animation sert la doctrine « prouver avant de demander »
 
+> **✅ Exécuté le 2026-07-18** (commits `437f90d`, `fa91866`).
+> `StepTransition` créé (fade+slide 200 ms, reduced-motion OK) et intégré à la
+> transition formulaire→résultat des 6 outils (constat : pas d'étapes
+> question-par-question dans ces outils) ; verdicts en cascade généralisés.
+> Laissés tels quels, justifié : headless-diagnostic (transition directionnelle
+> spring existante), simulateur-agefiph (live, AnimatedEuro). ProofStrip animé
+> (Stagger + CountUp sur 22 et 20 ans) mais **laissé non commité** avec le
+> chantier refonte parallèle. Tests scoring verts, build vert.
+
 5. **ProofStrip (refonte) : la preuve doit accrocher l'œil.** Le nouveau
    composant est 100 % statique. Recommandé : `Stagger` sur les cellules +
    `CountUp` (existant) sur les chiffres (22 projets, scores CWV…). C'est LE
