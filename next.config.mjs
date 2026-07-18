@@ -134,6 +134,34 @@ const nextConfig = {
         destination: '/en/audit-site-web',
         permanent: true,
       },
+      // ── Élagage vague 5 : consolidation du stock WordPress headless ──
+      // 25 articles doc → 15 ; les 10 slugs fusionnés redirigent vers leur
+      // absorbant (FR + EN). Plan : .claude/docs/plan-fusion-headless.md §3.
+      ...[
+        ['pourquoi-le-headless',              'comprendre-le-headless'],
+        ['comment-fonctionne-le-headless',    'comprendre-le-headless'],
+        ['wordpress-headless-en-pratique',    'comprendre-le-headless'],
+        ['quand-utiliser-wordpress-headless', 'dois-je-passer-au-headless'],
+        ['les-technos-frontend',              'nextjs-pour-wordpress-headless'],
+        ['rendu-nextjs-ssg-ssr-isr',          'nextjs-pour-wordpress-headless'],
+        ['gestion-des-medias-headless',       'performance-et-core-web-vitals'],
+        ['preview-et-workflow-editorial',     'gerer-le-contenu'],
+        ['authentification-jwt-headless',     'securite-wordpress-headless'],
+        ['herbergement-et-mise-en-ligne',     'deploiement-vercel-nextjs'],
+      ].flatMap(([from, to]) => [
+        { source: `/documentation/wordpress-headless/${from}`,    destination: `/documentation/wordpress-headless/${to}`,    permanent: true },
+        { source: `/en/documentation/wordpress-headless/${from}`, destination: `/en/documentation/wordpress-headless/${to}`, permanent: true },
+      ]),
+      // Orphelin — règle spécifique AVANT le catch-all /documentation/blog.
+      { source: '/documentation/blog/passage-wp-headless',    destination: '/documentation/wordpress-headless/dois-je-passer-au-headless', permanent: true },
+      { source: '/en/documentation/blog/passage-wp-headless', destination: '/en/documentation/wordpress-headless/dois-je-passer-au-headless', permanent: true },
+      // Catégorie doc « blog » supprimée (collision avec le blog racine).
+      { source: '/documentation/blog',    destination: '/blog',    permanent: true },
+      { source: '/en/documentation/blog', destination: '/en/blog', permanent: true },
+      // Scorie : applications-web-mobile/index.mdx supprimé (doublon de la
+      // page de catégorie) — /index redirige vers la catégorie.
+      { source: '/documentation/applications-web-mobile/index',    destination: '/documentation/applications-web-mobile',    permanent: true },
+      { source: '/en/documentation/applications-web-mobile/index', destination: '/en/documentation/applications-web-mobile', permanent: true },
       // Offre « Dépannage WordPress » supprimée (2026-07-05). 301 vers /contact
       // pour ne pas casser les liens de mailings / bookmarks ni perdre le SEO.
       {
