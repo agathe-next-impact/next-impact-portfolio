@@ -4,6 +4,7 @@ description: "Sur-mesure, builders IA ou WordPress/no-code : les trois voies pou
 category: choisir
 author: "Agathe Karinthi-Martin"
 date: "2026-07-12"
+updated: "2026-07-18"
 order: 1
 faq:
   - question: "Une IA peut-elle vraiment créer mon site pour 20 € par mois ?"
@@ -56,7 +57,7 @@ C'est le bon choix pour valider un marché : une page pour tester une offre, une
 
 Le piège commence quand le prototype devient, par glissement, le site officiel. Le code généré fonctionne, mais personne ne le comprend — pas même vous. Première panne, première mise à jour de sécurité, premier besoin d'évolution : vous découvrez que vous êtes propriétaire d'un objet que seul l'outil qui l'a produit sait modifier, et que cet outil change de comportement à chaque version.
 
-Le coût réel de l'AI-build n'est pas l'abonnement : c'est votre temps passé à réparer, puis le devis du professionnel qui devra souvent tout reprendre. J'ai vu des « sites à 20 € par mois » coûter finalement plus cher qu'un site construit proprement dès le départ.
+Le coût réel de l'AI-build n'est pas l'abonnement : c'est votre temps passé à réparer, puis le devis du professionnel qui devra souvent tout reprendre. J'ai vu des « sites à 20 € par mois » coûter finalement plus cher qu'un site construit proprement dès le départ. Pour peser cette voie cas par cas, le comparatif [site généré par IA vs site professionnel](/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel) détaille où l'IA suffit et où elle devient un piège.
 
 ### Le « buy » : WordPress et le no-code
 
