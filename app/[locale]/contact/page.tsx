@@ -86,6 +86,20 @@ export default async function ContactPage({
             <ContactDirectInfo />
           </Reveal>
         </div>
+        {/* Réassurance au moment de l'engagement : un verbatim client court,
+            orienté conseil (source : recommandation LinkedIn, Senza Nature). */}
+        <div className="border-t border-dark-gray px-6 py-6 lg:px-8">
+          <blockquote className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="font-inter-tight text-sm italic leading-relaxed text-mid-gray">
+              {locale === "en"
+                ? "“Highly professional, fast and a great teacher — and excellent advice too! Our site is in good hands.”"
+                : "« Très pro, rapide et pédagogue, elle est aussi de très bon conseil ! Notre site est entre de bonnes mains. »"}
+            </p>
+            <footer className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+              — Laura Schorestene, {locale === "en" ? "Founder, Senza Nature" : "Fondatrice, Senza Nature"}
+            </footer>
+          </blockquote>
+        </div>
       </BlueprintSection>
 
       {/* Pas prêt pour un projet, juste une décision à trancher → visio conseil. */}

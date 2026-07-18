@@ -101,7 +101,9 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
           <span>{index}</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
-          <span className="text-mid-gray">{isEn ? "Method · 5 phases" : "Méthode · 5 phases"}</span>
+          <span className="text-mid-gray">
+            {isEn ? "The Blueprint Method · 5 phases" : "Méthode Blueprint · 5 phases"}
+          </span>
         </div>
         <h2 className="max-w-3xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
           {isEn ? (
@@ -110,6 +112,13 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
             <>Du brief à la <span className="text-accent-secondary">mise en ligne</span></>
           )}
         </h2>
+        {/* Argument anti-risque : les livrables par phase existent déjà dans les
+            données — on l'explicite comme garantie de sortie à chaque étape. */}
+        <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+          {isEn
+            ? "Each phase ends with a deliverable you keep — scoping document, mockups, staging site, performance report. If we stop there, you leave with it."
+            : "Chaque phase se termine par un livrable que vous gardez — cadrage, maquettes, site en staging, rapport de performance. Si on s'arrête là, vous repartez avec."}
+        </p>
       </Reveal>
 
       {/* Étapes — filet vertical tracé au scroll */}

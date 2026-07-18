@@ -223,6 +223,49 @@ export default async function CaseStudyPage({
                 defaultResults={caseStudy.results}
               />
 
+              {/* L'arbitrage technologique — preuve de conseil : options sur la
+                  table, décision, raison. Affiché uniquement si renseigné. */}
+              {caseStudy.arbitrage && (
+                <Reveal>
+                  <div className="mt-10 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 p-6">
+                    <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                      {t("arbitrageTitle")}
+                    </div>
+                    <div className="mb-4">
+                      <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                        {t("arbitrageOptions")}
+                      </div>
+                      <ul className="flex flex-col gap-1.5">
+                        {caseStudy.arbitrage.consideredOptions.map((option) => (
+                          <li
+                            key={option}
+                            className="font-inter-tight text-sm leading-relaxed text-mid-gray"
+                          >
+                            — {option}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="mb-4">
+                      <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                        {t("arbitrageDecision")}
+                      </div>
+                      <p className="font-inter-tight text-sm font-medium leading-relaxed text-foreground">
+                        {caseStudy.arbitrage.decision}
+                      </p>
+                    </div>
+                    <div>
+                      <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                        {t("arbitrageRationale")}
+                      </div>
+                      <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                        {caseStudy.arbitrage.rationale}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              )}
+
               {/* Témoignage client */}
               {caseStudy.testimonial && (
                 <Reveal>

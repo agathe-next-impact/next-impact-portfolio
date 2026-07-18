@@ -12,6 +12,7 @@ import {
 } from "@/components/json-ld";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
+import { ProofStrip } from "@/components/proof-strip";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les 24h — page evergreen.
@@ -311,6 +312,9 @@ export default async function WordPressHeadlessPillarPage({
             </div>
           </Reveal>
         </BlueprintSection>
+
+        {/* Bande de preuve chiffrée — crédibilise la page avant le contenu. */}
+        <ProofStrip />
 
         <Separator />
 

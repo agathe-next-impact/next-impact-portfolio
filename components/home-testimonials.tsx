@@ -13,7 +13,9 @@ type Testimonial = {
   role: string;
 };
 
-// Verbatim, repris des études de cas (lib/case-studies-data.ts).
+// Verbatim — recommandations LinkedIn et études de cas (lib/case-studies-data.ts).
+// Sélection orientée « qualité du conseil » (pas seulement la réalisation) :
+// c'est ce qui rassure un décideur qui achète un accompagnement, pas un livrable.
 const FR: Testimonial[] = [
   {
     quote:
@@ -23,9 +25,21 @@ const FR: Testimonial[] = [
   },
   {
     quote:
+      "Son écoute est impeccable et c'est un plaisir de savoir qu'avec elle les choses seront faites, conformes aux briefs et aux instructions, sans détours ou complexités. Elle est également de très bon conseil dans son domaine et se montre réellement impliquée dans la problématique client. Vivement recommandée.",
+    author: "Serge Parienti",
+    role: "Président fondateur, SUNEIDO",
+  },
+  {
+    quote:
       "Du professionnalisme, un réel esprit d'initiative, le sens du conseil et une réactivité totale ! Ajouter un bon état d'esprit d'une personne qui n'hésite pas à « dépasser » la charge de travail et sa fonction pour améliorer la qualité de la prestation.",
     author: "Luc Poigniez",
     role: "Fondateur, Agence Créaclic",
+  },
+  {
+    quote:
+      "Agathe est très pro, réactive et se met à la portée du client même sur les sujets techniques, je recommande !",
+    author: "Benoit Huberd",
+    role: "Fondateur, Panorama Pub",
   },
 ];
 
@@ -38,9 +52,21 @@ const EN: Testimonial[] = [
   },
   {
     quote:
+      "Her attentiveness is impeccable, and it's a pleasure knowing that with her, things get done — true to the brief, without detours or needless complexity. She also gives excellent advice in her field and is genuinely invested in the client's problem. Highly recommended.",
+    author: "Serge Parienti",
+    role: "Founding President, SUNEIDO",
+  },
+  {
+    quote:
       "Professionalism, real initiative, sharp judgement and complete responsiveness! Add to that the right mindset — someone who doesn't hesitate to go beyond the workload and the brief to raise the quality of the deliverable.",
     author: "Luc Poigniez",
     role: "Founder, Agence Créaclic",
+  },
+  {
+    quote:
+      "Agathe is highly professional, responsive, and makes technical topics accessible to the client — I recommend her!",
+    author: "Benoit Huberd",
+    role: "Founder, Panorama Pub",
   },
 ];
 
@@ -91,7 +117,7 @@ export default function HomeTestimonials() {
         {testimonials.map((t) => (
           <StaggerItem
             key={t.author}
-            className="flex h-full flex-col border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 lg:p-10"
+            className="flex h-full flex-col border-b border-dark-gray p-6 last:border-b-0 md:border-r md:[&:nth-child(2n)]:border-r-0 md:[&:nth-last-child(-n+2)]:border-b-0 lg:p-10"
           >
             <span aria-hidden className="font-mono text-4xl leading-none text-accent-secondary/60">
               &ldquo;

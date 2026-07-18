@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
+import { ProofStrip } from "@/components/proof-strip";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 
@@ -54,6 +55,9 @@ export default function HomeClient() {
 
       {/* § 01b — « En bref » (TL;DR citable par les IA) */}
       <HomeTldr />
+
+      {/* § 01c — Bande de preuve chiffrée (chaque chiffre vérifiable au clic) */}
+      <ProofStrip />
 
       {/* § 02 — Offres : 3 stacks */}
       <HomeOffres />

@@ -7,6 +7,7 @@ import { getServicesPageVariants } from "@/lib/homepage-profiles"
 import { BlueprintSection } from "@/components/aspect/section"
 import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner"
+import { ProofStrip } from "@/components/proof-strip"
 import { Link } from "@/i18n/navigation"
 import { ArrowRight } from "lucide-react"
 import type { Locale } from "@/i18n/routing"
@@ -89,6 +90,8 @@ export default async function ServicesPage({
         }))}
       />
       <ServicesClient />
+      {/* Bande de preuve chiffrée — rassure avant l'engagement tarifaire. */}
+      <ProofStrip />
       {/* Maillage SEO/GEO : ancre exacte vers la page pilier WordPress Headless. */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-10 lg:px-8 lg:py-12">
         <Link

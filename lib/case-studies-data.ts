@@ -34,6 +34,17 @@ export interface CaseStudyContent {
   detailedDescription: string;
   objectives: string[];
   results: string[];
+  /**
+   * L'arbitrage technologique — ce qui transforme une fiche portfolio en preuve
+   * de conseil : quelles options étaient sur la table, laquelle a été retenue
+   * et pourquoi. À remplir uniquement avec les faits réels du projet (pas de
+   * reconstruction a posteriori) ; la section ne s'affiche que si présent.
+   */
+  arbitrage?: {
+    consideredOptions: string[];
+    decision: string;
+    rationale: string;
+  };
   testimonial?: {
     content: string;
     author: string;
@@ -422,6 +433,22 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Progression et scores persistés localement, fonctionnement hors-ligne",
       "Visiteurs des séjours engagés dans la découverte active du domaine",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Application native iOS/Android publiée sur les stores",
+        "Site web mobile classique consulté dans le navigateur",
+        "Progressive Web App (PWA) installable sans store",
+      ],
+      decision: "PWA Next.js, installable d'un tap depuis le navigateur, sans serveur dédié.",
+      rationale:
+        "Le natif imposait le coût et les délais de publication sur deux stores pour un usage événementiel ; le site web classique ne tenait pas le mode plein écran ni le hors-ligne en forêt. La PWA offre l'installation immédiate, la géolocalisation native et la persistance locale (LocalStorage / IndexedDB) — la partie continue même sans réseau.",
+    },
+    testimonial: {
+      content:
+        "Merci à Agathe pour son travail sérieux et créatif pour la création d'un jeu de piste sur le site du Tiers-Lieux l'Hermitage. C'était un plaisir de co-créer ce jeu de piste avec Agathe. Réactive, à l'écoute et très efficace dans nos échanges. Premier test avec 120 personnes.",
+      author: "Charlotte Bourez",
+      position: "Gérante du café associatif, L'Hermitage",
+    },
     galleryAlt: "Application mobile de jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
     tags: ["ESS", "App mobile", "PWA", "Géolocalisation", "Gamification", "Hors-ligne"],
     duration: "4 semaines",
@@ -459,6 +486,22 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Interface d'administration inchangée pour les rédacteurs",
       "Récupération de tout le contenu existant du site WordPress",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Refonte du thème WordPress classique (PHP)",
+        "Réécriture complète hors WordPress (autre CMS ou sur-mesure)",
+        "Migration vers WordPress headless : WordPress conservé en back-end, front Next.js",
+      ],
+      decision: "WordPress headless — WordPress conservé pour la rédaction, Next.js pour le rendu public.",
+      rationale:
+        "La rédaction maîtrisait l'admin WordPress et le site portait des années de contenu : en sortir aurait coûté une migration éditoriale complète et une re-formation de l'équipe. Une refonte de thème classique ne pouvait pas atteindre les performances visées. Le headless a permis les deux : interface d'administration inchangée, contenu intégralement conservé, et un score PageSpeed passé de 56 à 98.",
+    },
+    testimonial: {
+      content:
+        "Agathe a confirmé ses compétences sur WordPress Headless pour réaliser une refonte complète du site internet commedesfous.com avec une interface utilisateur compatible sur PC comme sur smartphone. Un design impeccable, une ergonomie sans comparaison, une vitesse d'affichage performante. Agathe est très à l'écoute, réactive et pointilleuse. Je recommande vivement.",
+      author: "Joan Sidawy",
+      position: "Architecte & Community Manager, Comme des Fous",
+    },
     galleryAlt: "Comme des fous",
     tags: ["Média", "WordPress", "Headless", "Next.js"],
     duration: "2 mois",
@@ -520,6 +563,22 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Architecture pensée pour le SEO et la croissance : prête à monter en charge",
       "Mise en ligne en 2 mois, du concept à la production",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Annuaire sur WordPress + plugin directory",
+        "Solution no-code (type Webflow + base externe)",
+        "Application sur-mesure Next.js + PostgreSQL",
+      ],
+      decision: "Application sur-mesure Next.js + PostgreSQL avec back-office dédié.",
+      rationale:
+        "Un annuaire destiné à absorber des milliers de fiches et des fonctionnalités produit (espaces fournisseurs, mise en relation) dépasse ce qu'un plugin WordPress ou une stack no-code tiennent sans dette : requêtes structurées, recherche performante et SEO programmatique exigeaient une base relationnelle et un rendu contrôlé. Le sur-mesure posait la fondation évolutive dès le lancement — livré en 2 mois.",
+    },
+    testimonial: {
+      content:
+        "Agathe est très pro, réactive et se met à la portée du client même sur les sujets techniques, je recommande !",
+      author: "Benoit Huberd",
+      position: "Fondateur, Panorama Pub",
+    },
     galleryAlt: "Annuaire en ligne Panorama Pub",
     tags: ["PME", "Annuaire B2B", "Marketplace", "Lancement produit"],
     duration: "2 mois",
@@ -684,6 +743,12 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Stabilisation du site avec une réduction significative des bugs",
       "Amélioration de la vitesse de chargement du site",
     ],
+    testimonial: {
+      content:
+        "Nous travaillons exclusivement avec Agathe depuis plusieurs mois. Très pro, rapide et pédagogue, elle est aussi de très bon conseil ! Notre site est entre de bonnes mains, et nous la recommandons vivement !",
+      author: "Laura Schorestene",
+      position: "Fondatrice, Senza Nature",
+    },
     galleryAlt: "Page d'accueil du site Senza Nature",
     tags: ["Ecommerce", "Woocommerce", "WordPress"],
     duration: "depuis 2024",
@@ -892,6 +957,22 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Progress and scores persisted locally, offline operation",
       "Retreat visitors actively engaged in exploring the estate",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Native iOS/Android app published on the stores",
+        "Classic mobile website used in the browser",
+        "Progressive Web App (PWA), installable without stores",
+      ],
+      decision: "Next.js PWA, installable in one tap from the browser, no dedicated server.",
+      rationale:
+        "Native meant the cost and delays of publishing on two stores for an event-driven use case; a classic website couldn't deliver full-screen mode or offline play deep in the forest. The PWA provides instant installation, native geolocation and local persistence (LocalStorage / IndexedDB) — the game keeps running without network.",
+    },
+    testimonial: {
+      content:
+        "Thank you Agathe for the serious, creative work on the treasure hunt for the Tiers-Lieu L'Hermitage site. Co-creating this game with her was a pleasure — responsive, attentive and very efficient throughout. First test run with 120 people.",
+      author: "Charlotte Bourez",
+      position: "Community café manager, L'Hermitage",
+    },
     galleryAlt: "Mobile treasure hunt application for the Tiers Lieu L'Hermitage woodland estate",
     tags: ["Social economy", "Mobile app", "PWA", "Geolocation", "Gamification", "Offline"],
     duration: "4 weeks",
@@ -929,6 +1010,22 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Editors' admin interface unchanged",
       "All existing WordPress content preserved",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Rebuilding the classic WordPress (PHP) theme",
+        "Full rewrite off WordPress (another CMS or custom build)",
+        "Migrating to headless WordPress: WordPress kept as back-end, Next.js front",
+      ],
+      decision: "Headless WordPress — WordPress kept for the editorial team, Next.js for the public site.",
+      rationale:
+        "The editorial team knew the WordPress admin inside out and the site carried years of content: leaving WordPress meant a full editorial migration and retraining. A classic theme rebuild couldn't reach the performance targets. Headless delivered both: admin unchanged, all content preserved, and a PageSpeed score up from 56 to 98.",
+    },
+    testimonial: {
+      content:
+        "Agathe confirmed her Headless WordPress skills with a complete rebuild of commedesfous.com, with a user interface that works as well on desktop as on smartphone. Impeccable design, unmatched ergonomics, fast page loads. Agathe is attentive, responsive and meticulous. I highly recommend her.",
+      author: "Joan Sidawy",
+      position: "Architect & Community Manager, Comme des Fous",
+    },
     galleryAlt: "Comme des Fous",
     tags: ["Media", "WordPress", "Headless", "Next.js"],
     duration: "2 months",
@@ -990,6 +1087,22 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Architecture built for SEO and growth, ready to scale",
       "Live in 2 months, from concept to production",
     ],
+    arbitrage: {
+      consideredOptions: [
+        "Directory on WordPress + a directory plugin",
+        "No-code stack (Webflow-style + external database)",
+        "Custom Next.js + PostgreSQL application",
+      ],
+      decision: "Custom Next.js + PostgreSQL application with a dedicated back-office.",
+      rationale:
+        "A directory built to absorb thousands of entries and product features (supplier accounts, lead routing) outgrows what a WordPress plugin or a no-code stack can hold without debt: structured queries, high-performance search and programmatic SEO required a relational database and full rendering control. The custom build laid a scalable foundation from day one — shipped in 2 months.",
+    },
+    testimonial: {
+      content:
+        "Agathe is highly professional, responsive, and makes technical topics accessible to the client — I recommend her!",
+      author: "Benoit Huberd",
+      position: "Founder, Panorama Pub",
+    },
     galleryAlt: "Panorama Pub online directory",
     tags: ["SMB", "B2B directory", "Marketplace", "Product launch"],
     duration: "2 months",
@@ -1154,6 +1267,12 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Site stabilized with significantly fewer bugs",
       "Improved page load speed",
     ],
+    testimonial: {
+      content:
+        "We have been working exclusively with Agathe for several months. Highly professional, fast and a great teacher — and excellent advice too! Our site is in good hands, and we highly recommend her.",
+      author: "Laura Schorestene",
+      position: "Founder, Senza Nature",
+    },
     galleryAlt: "Senza Nature homepage",
     tags: ["E-commerce", "Woocommerce", "WordPress"],
     duration: "since 2024",
