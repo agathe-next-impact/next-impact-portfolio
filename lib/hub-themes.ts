@@ -338,6 +338,32 @@ const iaEtCode: HubTheme = {
       },
     },
   ],
+  reading: [
+    {
+      icon: GitCompare,
+      name: {
+        fr: "Site généré par IA vs site professionnel",
+        en: "AI-generated site vs professional site",
+      },
+      blurb: {
+        fr: "Le comparatif : ce que vaut un site généré par IA face à un site fait par un professionnel, avec des verdicts par cas d'usage.",
+        en: "The comparison: how an AI-generated site stacks up against one built by a professional, with verdicts by use case.",
+      },
+      href: "/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel",
+    },
+    {
+      icon: Wrench,
+      name: {
+        fr: "Reprendre un site généré par IA",
+        en: "Taking over an AI-generated site",
+      },
+      blurb: {
+        fr: "Votre site v0, Lovable ou Bolt pose problème : réparer, reprendre ou reconstruire — et qui peut le faire.",
+        en: "Your v0, Lovable or Bolt site is in trouble: repair, take over or rebuild — and who can do it.",
+      },
+      href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
+    },
+  ],
   tools: [
     {
       icon: FlaskConical,
@@ -469,6 +495,20 @@ const reparer: HubTheme = {
         fr: "Un rafraîchissement ciblé suffit souvent. La refonte complète ne se justifie que si la technique doit suivre aussi.",
         en: "A targeted refresh is often enough. A full rebuild is only justified if the tech must follow too.",
       },
+    },
+  ],
+  reading: [
+    {
+      icon: Bot,
+      name: {
+        fr: "Votre site n'est pas un WordPress mais un site généré par IA ?",
+        en: "Your site isn't a WordPress but an AI-generated site?",
+      },
+      blurb: {
+        fr: "Le cas v0, Lovable, Bolt & co suit une autre logique que le WordPress : réparer, reprendre ou reconstruire — le guide dédié.",
+        en: "The v0, Lovable, Bolt & co case follows a different logic than WordPress: repair, take over or rebuild — the dedicated guide.",
+      },
+      href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
     },
   ],
   tools: [
