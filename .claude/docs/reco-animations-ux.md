@@ -17,6 +17,13 @@
 
 ## P1 — Retirer avant d'ajouter (perf = UX ; le site est sa propre démo)
 
+> **✅ Exécuté le 2026-07-18** (commits `aad2bea`, `ccc4e76`, `936a522`).
+> Mesuré : **-35,7 ko brut / ~-7,7 ko gzip sur toutes les pages**. 4 fichiers
+> morts supprimés, 2 libs Lottie désinstallées, LazyMotion strict sur 46
+> fichiers, tokens `lib/motion-tokens.ts`, filets posés. Restes signalés :
+> `ogl` + `components/ui/threads.tsx` (non monté, candidat à suppression) ;
+> `conseil/expand-cards.tsx` non migré (non monté, no-touch).
+
 1. **Supprimer les deux libs Lottie mortes** (`lottie-react`,
    `@lottiefiles/react-lottie-player`) et leur code non monté
    (`components/ui/feature-carousel.tsx`, `components/tools.tsx`,
