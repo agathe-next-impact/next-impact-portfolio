@@ -6,6 +6,7 @@ import { getBlogPost, getBlogPosts } from "@/lib/blog"
 import { BlogLayout } from "@/components/blog/BlogLayout"
 import { ArticleCallout } from "@/components/articles/ArticleCallout"
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
+import { ReadingProgress } from "@/components/ui/reading-progress"
 
 function slugify(text: string): string {
   return text
@@ -118,6 +119,7 @@ export default async function BlogPostPage({
 
   return (
     <>
+      <ReadingProgress />
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ArticleJsonLd
         title={post.title}
