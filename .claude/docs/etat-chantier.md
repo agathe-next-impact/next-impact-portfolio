@@ -31,7 +31,9 @@
 | 3 | Rédaction C3 — `donnees-structurees-moteurs-ia.mdx` (fait vérifié : rich results FAQ retirés mai 2026) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 3 | Rédaction C4 — `llms-txt-robots-txt-crawlers-ia.mdx` (15 robots, 3 politiques) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 3 | Audit de vague : 3 bloquants + A1-A2 **corrigés le jour même** → **publiable** (rapport : audit-vague-3.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 4 | F3, B0, B4 | (chaîne verdict→rédaction) | ⬜ à faire | — |
+| 4 | Verdicts mode 1 : F3, B0, B4 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
+| 4 | Rédaction selon verdicts | redacteur-seo-geo | ⬜ à faire | — |
+| 4 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
 
 ## Bloquants / à confirmer par Agathe

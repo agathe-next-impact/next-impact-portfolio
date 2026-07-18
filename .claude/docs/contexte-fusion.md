@@ -128,6 +128,13 @@ Cadence : ~2 articles/mois. Ne jamais bloquer une vague pour finir la précéden
   reprise d'un site IA : qualitatif seulement (« de quelques centaines d'euros
   pour une stabilisation à un budget de refonte si tout est à reconstruire »),
   renvoi visio 150 €.
+- **B0 recentré décideur (18/07/2026, tranché par Agathe)** : B0 n'est pas le
+  panorama-stack du mapping (RENONCÉ — doublon de la rubrique ia-et-code et
+  parapluie sur B1-B6) mais l'article-chapeau du cluster B angle décideur :
+  « Ce que l'IA change (vraiment) dans la création d'un site web en 2026 »
+  (`ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web`).
+  Conséquence : **B2 « dev assisté par IA » est présumé fusionné dans B0** —
+  ne jamais le créer sans verdict mode 1 explicite.
 - **Règle AGEFIPH/TIH (18/07/2026, tranché par Agathe)** : la formulation
   correcte est « déduction de 30 % du coût de la main-d'œuvre de la
   prestation, plafonnée à 50 % ou 75 % de la contribution selon le taux

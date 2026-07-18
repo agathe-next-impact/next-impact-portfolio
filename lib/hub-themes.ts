@@ -379,6 +379,18 @@ const iaEtCode: HubTheme = {
       href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
     },
     {
+      icon: FileText,
+      name: {
+        fr: "Ce que l'IA change dans la création d'un site web",
+        en: "What AI really changes in website creation",
+      },
+      blurb: {
+        fr: "Délais, prix, qualité, pratiques des prestataires : l'état des lieux 2026, dimension par dimension — et ce qui ne change pas.",
+        en: "Timelines, prices, quality, provider practices: the 2026 picture, dimension by dimension — and what doesn't change.",
+      },
+      href: "/documentation/ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web",
+    },
+    {
       icon: Braces,
       name: {
         fr: "La dette technique du code généré par IA",
