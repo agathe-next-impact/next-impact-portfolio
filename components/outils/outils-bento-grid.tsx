@@ -15,6 +15,7 @@ import {
   FlaskConical,
   Blocks,
   Radar,
+  ClipboardCheck,
   ArrowRight,
 } from "lucide-react"
 import { useDocumentationMode } from "@/contexts/documentation-mode-context"
@@ -53,6 +54,16 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
       : "ChatGPT, Perplexity, AI Overviews : 10 questions, un score sur 4 axes et vos actions prioritaires pour être cité.",
     icon: Radar,
     href: "/outils/visibilite-ia",
+    tag: isEn ? "New" : "Nouveau",
+  },
+  "checklist-geo": {
+    id: "checklist-geo",
+    title: isEn ? "The GEO checklist" : "La checklist GEO",
+    description: isEn
+      ? "24 concrete actions to get cited by AI engines, across 4 priorities: crawler access, answer pages, markup, authority. Checkable and downloadable."
+      : "24 actions concrètes pour être cité par les moteurs IA, sur 4 chantiers : accès des robots, pages-réponses, balisage, autorité. Cochable et téléchargeable.",
+    icon: ClipboardCheck,
+    href: "/outils/checklist-geo",
     tag: isEn ? "New" : "Nouveau",
   },
   "decrypteur-devis": {
@@ -145,10 +156,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["boussole", "visibilite-ia", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["boussole", "visibilite-ia", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["boussole", "visibilite-ia", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
-  developpeur: ["boussole", "prototype-ia", "visibilite-ia", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["boussole", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["boussole", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["boussole", "visibilite-ia", "checklist-geo", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
+  developpeur: ["boussole", "prototype-ia", "visibilite-ia", "checklist-geo", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {

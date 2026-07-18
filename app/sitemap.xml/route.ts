@@ -153,6 +153,8 @@ export async function GET() {
       // Diagnostic « visible dans les moteurs IA ? » — route convenue avec le
       // chantier outils (vague 1) ; le lastmod tombera quand la page existera.
       { path: "outils/visibilite-ia", source: "app/[locale]/outils/visibilite-ia/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Checklist GEO — pendant actionnable du diagnostic (chantier outils, vague 3).
+      { path: "outils/checklist-geo", source: "app/[locale]/outils/checklist-geo/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "demo", source: "app/[locale]/demo/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "cahier-des-charges", source: "app/[locale]/cahier-des-charges/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "a-propos", source: "app/[locale]/a-propos/page.tsx", changefreq: "monthly", priority: 0.6 },

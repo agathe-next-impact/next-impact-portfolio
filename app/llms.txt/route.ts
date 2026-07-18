@@ -151,6 +151,8 @@ ${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): $
 ## Tools
 
 - [Diagnostic Web & IA](${baseUrl}/audit-site-web): premiere orientation avant de construire
+- [Diagnostic visibilite IA](${baseUrl}/outils/visibilite-ia): votre site est-il visible dans les moteurs IA ? Score sur 4 axes et actions prioritaires
+- [Checklist GEO](${baseUrl}/outils/checklist-geo): 24 actions concretes pour etre cite par les moteurs IA, cochable et telechargeable
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
 - [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
 - [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web
