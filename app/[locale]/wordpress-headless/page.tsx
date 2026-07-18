@@ -164,34 +164,36 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
 
 function getSiloLinks(isEn: boolean): Array<{ title: string; href: string }> {
   const base = "/documentation/wordpress-headless";
+  // Silo refondu sur les 15 articles conservés après l'élagage vague 5
+  // (pourquoi/quand/rendu/preview fusionnés dans leurs absorbants).
   if (isEn) {
     return [
       { title: "What is headless?", href: `${base}/comprendre-le-headless` },
-      { title: "Why go headless?", href: `${base}/pourquoi-le-headless` },
-      { title: "When to use headless WordPress", href: `${base}/quand-utiliser-wordpress-headless` },
+      { title: "Should I go headless?", href: `${base}/dois-je-passer-au-headless` },
+      { title: "Next.js for headless WordPress", href: `${base}/nextjs-pour-wordpress-headless` },
       { title: "How a headless site is built", href: `${base}/comment-creer-un-headless` },
+      { title: "WordPress REST API", href: `${base}/api-rest-wordpress` },
       { title: "WPGraphQL guide", href: `${base}/wpgraphql` },
-      { title: "Next.js rendering: SSG, SSR, ISR", href: `${base}/rendu-nextjs-ssg-ssr-isr` },
       { title: "Core Web Vitals on headless", href: `${base}/performance-et-core-web-vitals` },
       { title: "Security on headless WordPress", href: `${base}/securite-wordpress-headless` },
       { title: "Migrating from monolithic", href: `${base}/migration-monolithique-vers-headless` },
       { title: "Vercel deployment", href: `${base}/deploiement-vercel-nextjs` },
-      { title: "Preview and editorial workflow", href: `${base}/preview-et-workflow-editorial` },
+      { title: "Managing content day to day", href: `${base}/gerer-le-contenu` },
       { title: "Headless SEO architecture", href: `${base}/seo-pour-architecture-headless` },
     ];
   }
   return [
     { title: "Comprendre le headless", href: `${base}/comprendre-le-headless` },
-    { title: "Pourquoi passer au headless ?", href: `${base}/pourquoi-le-headless` },
-    { title: "Quand utiliser WordPress headless ?", href: `${base}/quand-utiliser-wordpress-headless` },
+    { title: "Dois-je passer au headless ?", href: `${base}/dois-je-passer-au-headless` },
+    { title: "Next.js pour WordPress headless", href: `${base}/nextjs-pour-wordpress-headless` },
     { title: "Comment se construit un site headless", href: `${base}/comment-creer-un-headless` },
+    { title: "API REST WordPress", href: `${base}/api-rest-wordpress` },
     { title: "Guide WPGraphQL", href: `${base}/wpgraphql` },
-    { title: "Rendu Next.js : SSG, SSR, ISR", href: `${base}/rendu-nextjs-ssg-ssr-isr` },
     { title: "Core Web Vitals en headless", href: `${base}/performance-et-core-web-vitals` },
     { title: "Sécurité du WordPress headless", href: `${base}/securite-wordpress-headless` },
     { title: "Migrer depuis un WordPress monolithique", href: `${base}/migration-monolithique-vers-headless` },
     { title: "Déploiement sur Vercel", href: `${base}/deploiement-vercel-nextjs` },
-    { title: "Preview et workflow éditorial", href: `${base}/preview-et-workflow-editorial` },
+    { title: "Gérer le contenu au quotidien", href: `${base}/gerer-le-contenu` },
     { title: "SEO pour architecture headless", href: `${base}/seo-pour-architecture-headless` },
   ];
 }

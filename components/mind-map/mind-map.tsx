@@ -124,7 +124,7 @@ const MIND_MAP_DATA_FR: NodeData = {
           color: "#3B82F6",
           iconKey: "layers",
           children: [
-            { id: "content-hub", label: "WordPress gère le contenu", color: "#60A5FA", iconKey: "server", href: "/documentation/wordpress-headless/wordpress-headless-en-pratique" },
+            { id: "content-hub", label: "WordPress gère le contenu", color: "#60A5FA", iconKey: "server", href: "/documentation/wordpress-headless/comprendre-le-headless" },
             { id: "api", label: "L'API expose les données", color: "#60A5FA", iconKey: "code2", href: "/documentation/wordpress-headless/wpgraphql" },
             { id: "frontend-indep", label: "Next.js affiche le site", color: "#60A5FA", iconKey: "monitor", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
           ],
@@ -135,7 +135,7 @@ const MIND_MAP_DATA_FR: NodeData = {
           color: "#10B981",
           iconKey: "gauge",
           children: [
-            { id: "ssg-isr", label: "Pages pré-rendues, chargement instantané", color: "#34D399", iconKey: "sparkles", href: "/documentation/wordpress-headless/rendu-nextjs-ssg-ssr-isr" },
+            { id: "ssg-isr", label: "Pages pré-rendues, chargement instantané", color: "#34D399", iconKey: "sparkles", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "cwv", label: "Scores Lighthouse proches de 100", color: "#34D399", iconKey: "gauge", href: "/documentation/wordpress-headless/performance-et-core-web-vitals" },
             { id: "edge-cdn", label: "Contenu distribué via CDN mondial", color: "#34D399", iconKey: "globe", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
           ],
@@ -146,7 +146,7 @@ const MIND_MAP_DATA_FR: NodeData = {
           color: "#8B5CF6",
           iconKey: "eye",
           children: [
-            { id: "spa", label: "Transitions sans rechargement de page", color: "#A78BFA", iconKey: "zap", href: "/documentation/wordpress-headless/les-technos-frontend" },
+            { id: "spa", label: "Transitions sans rechargement de page", color: "#A78BFA", iconKey: "zap", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "skeleton", label: "Interfaces perçues comme immédiates", color: "#A78BFA", iconKey: "layers", href: "/documentation/design-ui-ux/ux" },
             { id: "micro-interactions", label: "Animations React natives et fluides", color: "#A78BFA", iconKey: "sparkles", href: "/documentation/design-ui-ux/definir-son-ux" },
           ],
@@ -170,7 +170,7 @@ const MIND_MAP_DATA_FR: NodeData = {
           children: [
             { id: "frameworks", label: "React et TypeScript en standard", color: "#FBBF24", iconKey: "code2", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "git-ci", label: "Déploiement automatisé via CI/CD", color: "#FBBF24", iconKey: "gitbranch", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
-            { id: "talents", label: "Stack qui attire les meilleurs talents", color: "#FBBF24", iconKey: "users", href: "/documentation/wordpress-headless/pourquoi-le-headless" },
+            { id: "talents", label: "Stack qui attire les meilleurs talents", color: "#FBBF24", iconKey: "users", href: "/documentation/wordpress-headless/comprendre-le-headless" },
           ],
         },
       ],
@@ -182,7 +182,7 @@ const MIND_MAP_DATA_FR: NodeData = {
       iconKey: "pencil",
       children: [
         { id: "gutenberg-acf", label: "ACF structure, Gutenberg édite", color: "#A78BFA", iconKey: "folderCog", href: "/documentation/wordpress-headless/custom-post-types-et-acf" },
-        { id: "live-preview", label: "Prévisualisation instantanée du rendu", color: "#A78BFA", iconKey: "scanEye", href: "/documentation/wordpress-headless/preview-et-workflow-editorial" },
+        { id: "live-preview", label: "Prévisualisation instantanée du rendu", color: "#A78BFA", iconKey: "scanEye", href: "/documentation/wordpress-headless/gerer-le-contenu" },
         { id: "multi-canal", label: "Un contenu, plusieurs canaux de diffusion", color: "#A78BFA", iconKey: "refresh", href: "/documentation/wordpress-headless/comprendre-le-headless" },
       ],
     },
@@ -194,7 +194,7 @@ const MIND_MAP_DATA_FR: NodeData = {
       children: [
         { id: "complexite", label: "Expertise frontend indispensable", color: "#F87171", iconKey: "alert", href: "/documentation/wordpress-headless/comment-creer-un-headless" },
         { id: "investissement", label: "Budget initial 2 à 3× supérieur", color: "#F87171", iconKey: "dollar", href: "/documentation/wordpress-headless/dois-je-passer-au-headless" },
-        { id: "maintenance", label: "Deux environnements à maintenir", color: "#F87171", iconKey: "refresh", href: "/documentation/wordpress-headless/herbergement-et-mise-en-ligne" },
+        { id: "maintenance", label: "Deux environnements à maintenir", color: "#F87171", iconKey: "refresh", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
         { id: "plugins", label: "Certains plugins WP incompatibles", color: "#F87171", iconKey: "puzzle", href: "/documentation/wordpress/les-plugins" },
       ],
     },
@@ -226,7 +226,7 @@ const MIND_MAP_DATA_EN: NodeData = {
           color: "#3B82F6",
           iconKey: "layers",
           children: [
-            { id: "content-hub", label: "WordPress handles content", color: "#60A5FA", iconKey: "server", href: "/documentation/wordpress-headless/wordpress-headless-en-pratique" },
+            { id: "content-hub", label: "WordPress handles content", color: "#60A5FA", iconKey: "server", href: "/documentation/wordpress-headless/comprendre-le-headless" },
             { id: "api", label: "The API exposes the data", color: "#60A5FA", iconKey: "code2", href: "/documentation/wordpress-headless/wpgraphql" },
             { id: "frontend-indep", label: "Next.js renders the site", color: "#60A5FA", iconKey: "monitor", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
           ],
@@ -237,7 +237,7 @@ const MIND_MAP_DATA_EN: NodeData = {
           color: "#10B981",
           iconKey: "gauge",
           children: [
-            { id: "ssg-isr", label: "Pre-rendered pages, instant load", color: "#34D399", iconKey: "sparkles", href: "/documentation/wordpress-headless/rendu-nextjs-ssg-ssr-isr" },
+            { id: "ssg-isr", label: "Pre-rendered pages, instant load", color: "#34D399", iconKey: "sparkles", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "cwv", label: "Lighthouse scores near 100", color: "#34D399", iconKey: "gauge", href: "/documentation/wordpress-headless/performance-et-core-web-vitals" },
             { id: "edge-cdn", label: "Content served via global CDN", color: "#34D399", iconKey: "globe", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
           ],
@@ -248,7 +248,7 @@ const MIND_MAP_DATA_EN: NodeData = {
           color: "#8B5CF6",
           iconKey: "eye",
           children: [
-            { id: "spa", label: "Page transitions without reloads", color: "#A78BFA", iconKey: "zap", href: "/documentation/wordpress-headless/les-technos-frontend" },
+            { id: "spa", label: "Page transitions without reloads", color: "#A78BFA", iconKey: "zap", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "skeleton", label: "Interfaces that feel instant", color: "#A78BFA", iconKey: "layers", href: "/documentation/design-ui-ux/ux" },
             { id: "micro-interactions", label: "Smooth native React animations", color: "#A78BFA", iconKey: "sparkles", href: "/documentation/design-ui-ux/definir-son-ux" },
           ],
@@ -272,7 +272,7 @@ const MIND_MAP_DATA_EN: NodeData = {
           children: [
             { id: "frameworks", label: "React and TypeScript by default", color: "#FBBF24", iconKey: "code2", href: "/documentation/wordpress-headless/nextjs-pour-wordpress-headless" },
             { id: "git-ci", label: "Automated CI/CD deployment", color: "#FBBF24", iconKey: "gitbranch", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
-            { id: "talents", label: "Stack that attracts top talent", color: "#FBBF24", iconKey: "users", href: "/documentation/wordpress-headless/pourquoi-le-headless" },
+            { id: "talents", label: "Stack that attracts top talent", color: "#FBBF24", iconKey: "users", href: "/documentation/wordpress-headless/comprendre-le-headless" },
           ],
         },
       ],
@@ -284,7 +284,7 @@ const MIND_MAP_DATA_EN: NodeData = {
       iconKey: "pencil",
       children: [
         { id: "gutenberg-acf", label: "ACF structures, Gutenberg edits", color: "#A78BFA", iconKey: "folderCog", href: "/documentation/wordpress-headless/custom-post-types-et-acf" },
-        { id: "live-preview", label: "Instant rendering preview", color: "#A78BFA", iconKey: "scanEye", href: "/documentation/wordpress-headless/preview-et-workflow-editorial" },
+        { id: "live-preview", label: "Instant rendering preview", color: "#A78BFA", iconKey: "scanEye", href: "/documentation/wordpress-headless/gerer-le-contenu" },
         { id: "multi-canal", label: "One content, multiple delivery channels", color: "#A78BFA", iconKey: "refresh", href: "/documentation/wordpress-headless/comprendre-le-headless" },
       ],
     },
@@ -296,7 +296,7 @@ const MIND_MAP_DATA_EN: NodeData = {
       children: [
         { id: "complexite", label: "Front-end expertise required", color: "#F87171", iconKey: "alert", href: "/documentation/wordpress-headless/comment-creer-un-headless" },
         { id: "investissement", label: "Initial budget 2 to 3× higher", color: "#F87171", iconKey: "dollar", href: "/documentation/wordpress-headless/dois-je-passer-au-headless" },
-        { id: "maintenance", label: "Two environments to maintain", color: "#F87171", iconKey: "refresh", href: "/documentation/wordpress-headless/herbergement-et-mise-en-ligne" },
+        { id: "maintenance", label: "Two environments to maintain", color: "#F87171", iconKey: "refresh", href: "/documentation/wordpress-headless/deploiement-vercel-nextjs" },
         { id: "plugins", label: "Some WP plugins are incompatible", color: "#F87171", iconKey: "puzzle", href: "/documentation/wordpress/les-plugins" },
       ],
     },

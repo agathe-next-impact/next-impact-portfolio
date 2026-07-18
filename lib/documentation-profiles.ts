@@ -99,33 +99,23 @@ const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
   "marketing-digital/presence-sur-les-reseaux-sociaux":    ["decideur", "utilisateur"],
   "marketing-digital/definir-sa-strategie-de-medias-sociaux": ["decideur", "utilisateur"],
 
-  // ── Headless CMS (25) ────────────────────────────────────────────────────
+  // ── Headless CMS (15 — après élagage vague 5) ────────────────────────────
   // Fondations
   "wordpress-headless/comprendre-le-headless":              ["decideur", "developpeur"],
-  "wordpress-headless/pourquoi-le-headless":                ["decideur", "developpeur"],
-  "wordpress-headless/comment-fonctionne-le-headless":      ["developpeur"],
   "wordpress-headless/dois-je-passer-au-headless":          ["decideur"],
-  "wordpress-headless/quand-utiliser-wordpress-headless":   ["decideur", "developpeur"],
   // Backend WordPress
-  "wordpress-headless/wordpress-headless-en-pratique":      ["developpeur"],
   "wordpress-headless/api-rest-wordpress":                  ["developpeur"],
   "wordpress-headless/wpgraphql":                           ["developpeur"],
   "wordpress-headless/custom-post-types-et-acf":            ["developpeur", "utilisateur"],
   // Frontend Next.js
-  "wordpress-headless/les-technos-frontend":                ["developpeur"],
   "wordpress-headless/nextjs-pour-wordpress-headless":      ["developpeur"],
-  "wordpress-headless/rendu-nextjs-ssg-ssr-isr":            ["developpeur"],
-  "wordpress-headless/gestion-des-medias-headless":         ["developpeur", "utilisateur"],
   // Opérations
   "wordpress-headless/gerer-le-contenu":                    ["utilisateur", "developpeur"],
-  "wordpress-headless/preview-et-workflow-editorial":       ["utilisateur", "developpeur"],
-  "wordpress-headless/authentification-jwt-headless":       ["developpeur"],
   "wordpress-headless/securite-wordpress-headless":         ["developpeur", "decideur"],
   // Performance & SEO
   "wordpress-headless/performance-et-core-web-vitals":      ["developpeur", "decideur"],
   "wordpress-headless/seo-pour-architecture-headless":      ["developpeur", "utilisateur"],
   // Déploiement & Migration
-  "wordpress-headless/herbergement-et-mise-en-ligne":       ["developpeur"],
   "wordpress-headless/deploiement-vercel-nextjs":           ["developpeur"],
   "wordpress-headless/migration-monolithique-vers-headless": ["decideur", "developpeur"],
   "wordpress-headless/comment-creer-un-headless":           ["developpeur", "utilisateur"],
@@ -157,9 +147,6 @@ const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
   "seo/definir-l-arborescence":                    ["utilisateur", "developpeur"],
   "seo/mots-cles-et-cocon-semantique":             ["utilisateur", "developpeur"],
   "seo/outils-seo":                                ["developpeur"],
-
-  // ── Blog (1) ─────────────────────────────────────────────────────────────
-  "blog/passage-wp-headless":                      ["decideur", "developpeur"],
 };
 
 // ─── Parcours guidés (5 articles clés par profil) ───────────────────────────
@@ -173,9 +160,9 @@ export const JOURNEYS: Record<ProfileId, JourneyStep[]> = {
       description: "Cadrer votre projet avant de lancer quoi que ce soit.",
     },
     {
-      slug: "pourquoi-le-headless",
+      slug: "comprendre-le-headless",
       category: "wordpress-headless",
-      title: "Pourquoi le headless ?",
+      title: "Comprendre le headless",
       description: "L'avantage stratégique du découplage front/back.",
     },
     {
@@ -211,16 +198,16 @@ export const JOURNEYS: Record<ProfileId, JourneyStep[]> = {
       description: "L'interface d'administration reste identique.",
     },
     {
-      slug: "preview-et-workflow-editorial",
+      slug: "custom-post-types-et-acf",
       category: "wordpress-headless",
-      title: "Prévisualisation et workflow",
-      description: "Prévisualiser et publier en mode headless.",
+      title: "Structurer le contenu : CPT et ACF",
+      description: "Des champs structurés pour publier sans casse.",
     },
     {
-      slug: "gestion-des-medias-headless",
+      slug: "performance-et-core-web-vitals",
       category: "wordpress-headless",
-      title: "Gestion des médias",
-      description: "Images, vidéos et fichiers en headless.",
+      title: "Performance et Core Web Vitals",
+      description: "Un site rapide pour vos visiteurs, médias compris.",
     },
     {
       slug: "penser-seo-en-amont",
@@ -249,10 +236,10 @@ export const JOURNEYS: Record<ProfileId, JourneyStep[]> = {
       description: "Configurer Next.js et connecter l'API WordPress.",
     },
     {
-      slug: "rendu-nextjs-ssg-ssr-isr",
+      slug: "securite-wordpress-headless",
       category: "wordpress-headless",
-      title: "SSG, SSR et ISR avec Next.js",
-      description: "Choisir la bonne stratégie de rendu par page.",
+      title: "Sécuriser le WordPress headless",
+      description: "Surface d'attaque réduite, authentification, JWT.",
     },
     {
       slug: "deploiement-vercel-nextjs",
