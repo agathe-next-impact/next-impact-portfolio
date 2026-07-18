@@ -119,7 +119,7 @@ export default function Tools() {
       title: "Tarifs courants selon projet et prestataire ?",
       lottie: "/img/simulateur-tarifs.webp",
       ctaText: "Simulateur",
-      ctaLink: "/tarifs",
+      ctaLink: "/solutions-web",
       content: `
       <p>
         Simulateur en ligne et gratuit qui calcule instantanément le coût précis
@@ -185,7 +185,7 @@ export function PriceQuizCard() {
       title: "Tarifs courants selon projet et prestataire ?",
       lottie: "/img/simulateur-tarifs.webp",
       ctaText: "Simulateur",
-      ctaLink: "/tarifs",
+      ctaLink: "/solutions-web",
       content: `
       <p>
         Simulateur en ligne et gratuit qui calcule instantanément le coût précis

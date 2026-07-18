@@ -146,7 +146,7 @@ const PROFILE_TOOLS_FR: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/tarifs",
+      href: "/solutions-web",
       title: "Simulateur de tarifs",
       description: "Estimez le budget adapté à votre projet.",
       icon: Calculator,
@@ -234,7 +234,7 @@ const PROFILE_TOOLS_EN: Record<ProfileId | "default", ToolLink[]> = {
       color: "text-coral",
     },
     {
-      href: "/tarifs",
+      href: "/solutions-web",
       title: "Pricing simulator",
       description: "Estimate the budget that fits your project.",
       icon: Calculator,

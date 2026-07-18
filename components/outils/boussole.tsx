@@ -66,7 +66,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       "For a showcase or content site where you stay in control day to day, a well-configured WordPress is unbeatable on editorial autonomy and time-to-value.",
     links: [
       { labelFr: "Comprendre le headless (pour comparer)", labelEn: "Understand headless (to compare)", href: "/wordpress-headless" },
-      { labelFr: "Simulateur de tarifs", labelEn: "Pricing simulator", href: "/tarifs" },
+      { labelFr: "Simulateur de tarifs", labelEn: "Pricing simulator", href: "/solutions-web" },
     ],
     next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
   },

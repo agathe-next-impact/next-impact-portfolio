@@ -31,9 +31,12 @@
 | 3 | Rédaction C3 — `donnees-structurees-moteurs-ia.mdx` (fait vérifié : rich results FAQ retirés mai 2026) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 3 | Rédaction C4 — `llms-txt-robots-txt-crawlers-ia.mdx` (15 robots, 3 politiques) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
 | 3 | Audit de vague : 3 bloquants + A1-A2 **corrigés le jour même** → **publiable** (rapport : audit-vague-3.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 4 | Verdicts mode 1 : F3, B0, B4 | verificateur-coherence | 🔄 en cours | 2026-07-18 |
-| 4 | Rédaction selon verdicts | redacteur-seo-geo | ⬜ à faire | — |
-| 4 | Audit de vague | verificateur-coherence (mode 2) | ⬜ à faire | — |
+| 4 | Verdicts mode 1 : F3 CRÉER, B4 CRÉER, B0 CRÉER recentré décideur (arbitré par Agathe ; B2 présumé fusionné) — verdicts-vague-4.md | verificateur-coherence + Agathe | ✅ fait | 2026-07-18 |
+| 4 | Infra : dossier avant-signer + labels + reading (F3, B4, B0) + correction lien /tarifs — commits `2ab462e`/`6367827` | architecte-fusion + orchestrateur | ✅ fait | 2026-07-18 |
+| 4 | Rédaction F3 — `avant-signer/12-questions-ia-a-poser-a-votre-prestataire.mdx` | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 4 | Rédaction B0 — `ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web.mdx` (chapeau cluster B, 7 dimensions avec verdicts) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 4 | Rédaction B4 — `ia-et-code/dette-technique-du-code-genere-par-ia.mdx` (GitClear 2025, DORA 2024/2025) | redacteur-seo-geo | ✅ fait | 2026-07-18 |
+| 4 | Audit de vague (build vert au préalable) | verificateur-coherence (mode 2) | 🔄 en cours | 2026-07-18 |
 | 5 | Élagage Headless 35→~15 (plan soumis à Agathe AVANT modification) | architecte-fusion | ⬜ à faire | — |
 
 ## Bloquants / à confirmer par Agathe

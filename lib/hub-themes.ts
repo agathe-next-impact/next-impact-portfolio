@@ -246,7 +246,7 @@ const choisir: HubTheme = {
         fr: "Une fourchette de budget indicative selon le type de site et les fonctionnalités.",
         en: "An indicative budget range by site type and features.",
       },
-      href: "/tarifs",
+      href: "/solutions-web",
     },
   ],
   prestas: [
