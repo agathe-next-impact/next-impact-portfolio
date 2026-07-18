@@ -31,6 +31,7 @@ const categoryLabels: Record<string, string> = {
   blog: "Blog",
   choisir: "Choisir sa techno",
   "etre-trouve": "Être trouvé à l'heure de l'IA",
+  "ia-et-code": "IA & code",
 }
 
 function estimateReadingTime(content: string): number {
@@ -131,6 +132,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
       blog: ["wordpress-headless", "wordpress"],
       choisir: ["wordpress-headless", "projet-site-web", "wordpress"],
       "etre-trouve": ["seo", "marketing-digital", "wordpress-headless"],
+      "ia-et-code": ["etre-trouve", "wordpress-headless", "applications-web-mobile"],
     }
 
     const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []
