@@ -41,10 +41,6 @@ const categoryInfo: Record<string, { title: string; description: string }> = {
     title: "WordPress Headless",
     description: "Architecture headless, API REST et découplage front/back.",
   },
-  blog: {
-    title: "Blog",
-    description: "Les dernières actualités et analyses.",
-  },
 }
 
 export async function generateMetadata(props: { params: Promise<{ category: string; locale: Locale }> }): Promise<Metadata> {

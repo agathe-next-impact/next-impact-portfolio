@@ -6,13 +6,7 @@ import React, { useCallback, useEffect, useState, type JSX } from "react"
 import Image from "next/image"
 import Autoplay from "embla-carousel-autoplay"
 import { ChevronRight } from "lucide-react"
-import {
-  AnimatePresence,
-  MotionProps,
-  Variants,
-  motion,
-  useAnimation,
-} from "framer-motion"
+import { AnimatePresence, MotionProps, Variants, m as motion, useAnimation } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 import {

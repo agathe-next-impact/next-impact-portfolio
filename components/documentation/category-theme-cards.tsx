@@ -27,6 +27,8 @@ interface Article {
 /* ─── Thèmes par catégorie ───────────────────────────────────────────────── */
 
 const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
+  // Groupes refondus sur les 15 articles conservés après l'élagage vague 5
+  // (plan : .claude/docs/plan-fusion-headless.md).
   "wordpress-headless": [
     {
       icon: "/icons/layers-icon.svg",
@@ -34,10 +36,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       description: "Comprendre l'architecture headless et décider",
       slugs: [
         "comprendre-le-headless",
-        "pourquoi-le-headless",
-        "comment-fonctionne-le-headless",
         "dois-je-passer-au-headless",
-        "quand-utiliser-wordpress-headless",
       ],
     },
     {
@@ -45,7 +44,6 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       title: "Backend & API",
       description: "WordPress comme backend, REST et GraphQL",
       slugs: [
-        "wordpress-headless-en-pratique",
         "api-rest-wordpress",
         "wpgraphql",
         "custom-post-types-et-acf",
@@ -54,24 +52,19 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
     {
       icon: "/icons/code-icon.svg",
       title: "Frontend Next.js",
-      description: "Développer avec Next.js et React",
+      description: "Développer avec Next.js, viser un Lighthouse à 100",
       slugs: [
-        "les-technos-frontend",
         "nextjs-pour-wordpress-headless",
-        "rendu-nextjs-ssg-ssr-isr",
-        "gestion-des-medias-headless",
+        "performance-et-core-web-vitals",
       ],
     },
     {
       icon: "/icons/shield-icon.svg",
       title: "Production",
-      description: "Sécurité, performance et workflows éditoriaux",
+      description: "Contenu au quotidien, sécurité et SEO",
       slugs: [
         "gerer-le-contenu",
-        "preview-et-workflow-editorial",
-        "authentification-jwt-headless",
         "securite-wordpress-headless",
-        "performance-et-core-web-vitals",
         "seo-pour-architecture-headless",
       ],
     },
@@ -80,7 +73,6 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       title: "Déploiement",
       description: "Mise en ligne, migration et cas avancés",
       slugs: [
-        "herbergement-et-mise-en-ligne",
         "deploiement-vercel-nextjs",
         "migration-monolithique-vers-headless",
         "comment-creer-un-headless",
@@ -259,38 +251,7 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
   ],
-  blog: [
-    {
-      icon: "/icons/migration-icon.svg",
-      title: "Migration",
-      description: "Passer au WordPress headless",
-      slugs: ["passage-wp-headless"],
-    },
-    {
-      icon: "/icons/analytics-icon.svg",
-      title: "Analyses",
-      description: "Retours d'expérience et tendances",
-      slugs: ["passage-wp-headless"],
-    },
-    {
-      icon: "/icons/code-icon.svg",
-      title: "Technique",
-      description: "Aspects techniques du headless",
-      slugs: ["passage-wp-headless"],
-    },
-    {
-      icon: "/icons/scale-icon.svg",
-      title: "Décision",
-      description: "Aide à la prise de décision",
-      slugs: ["passage-wp-headless"],
-    },
-    {
-      icon: "/icons/growth-icon.svg",
-      title: "Stratégie",
-      description: "Approche stratégique du web moderne",
-      slugs: ["passage-wp-headless"],
-    },
-  ],
+  // Catégorie doc « blog » éteinte (vague 5) : /documentation/blog → 301 /blog.
 };
 
 /* ─── Composant principal ────────────────────────────────────────────────── */

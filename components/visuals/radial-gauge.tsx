@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { DUR, EASE_OUT } from "@/lib/motion-tokens";
 
 /**
  * RadialGauge — anneau fin qui se trace au scroll (pathLength), avec un point
@@ -40,7 +41,7 @@ export function RadialGauge({
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: v / 100 }}
             viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: DUR.chart, ease: EASE_OUT }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">

@@ -278,6 +278,40 @@ export function FAQJsonLd({
 }
 
 /**
+ * Données structurées pour une méthode pas à pas (schema HowTo).
+ * À réserver aux articles qui décrivent une vraie procédure ordonnée
+ * (frontmatter `howto` — voir lib/markdown.ts pour le format attendu).
+ * `totalTime` : durée ISO 8601 (ex. "PT4H" = 4 heures), optionnelle.
+ */
+export function HowToJsonLd({
+  name,
+  description,
+  steps,
+  totalTime,
+}: {
+  name: string;
+  description?: string;
+  steps: Array<{ name: string; text: string }>;
+  totalTime?: string;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    ...(description ? { description } : {}),
+    ...(totalTime ? { totalTime } : {}),
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
  * Données structurées pour une page de contact
  */
 export function ContactPageJsonLd() {

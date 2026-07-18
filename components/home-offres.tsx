@@ -207,7 +207,7 @@ export default function HomeOffres() {
         {/* Pied — comparatif détaillé */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">
           <Link
-            href="/tarifs"
+            href="/solutions-web"
             className="font-mono text-[10px] tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
           >
             {isEn ? "Pricing simulator →" : "Simulateur de tarifs →"}

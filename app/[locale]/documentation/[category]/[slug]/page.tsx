@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation"
 import { ArrowLeft, Clock, BookOpen } from "lucide-react"
+import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import type { Locale } from "@/i18n/routing"
 import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
@@ -9,7 +10,7 @@ import { getArticleBySlug, getArticlesByCategory } from "@/lib/markdown"
 import TableOfContentsPopup from "@/components/documentation/table-of-content-popup"
 import ShareSocial from "@/components/share-social"
 import { ArticleReadTracker } from "@/components/documentation/article-read-tracker"
-import { ReadingProgress } from "@/components/documentation/reading-progress"
+import { ReadingProgress } from "@/components/ui/reading-progress"
 import { ArticleNavigation } from "@/components/documentation/article-navigation"
 import { ScrollToTop } from "@/components/documentation/scroll-to-top"
 import { MobileToc } from "@/components/documentation/mobile-toc"
@@ -18,7 +19,7 @@ import { RelatedArticles } from "@/components/documentation/related-articles"
 import { ArticleInternalLinks } from "@/components/documentation/documentation-internal-links"
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd, HowToJsonLd } from "@/components/json-ld";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -27,8 +28,10 @@ const categoryLabels: Record<string, string> = {
   "projet-site-web": "Projet de site web",
   wordpress: "WordPress",
   "wordpress-headless": "WordPress Headless",
-  blog: "Blog",
   choisir: "Choisir sa techno",
+  "etre-trouve": "Être trouvé à l'heure de l'IA",
+  "ia-et-code": "IA & code",
+  "avant-signer": "Avant de signer",
 }
 
 function estimateReadingTime(content: string): number {
@@ -97,9 +100,12 @@ export default async function ArticlePage(props: ArticlePageProps) {
     const t = await getTranslations({ locale: params.locale, namespace: "documentationPage" });
     const tArticle =
       params.locale === "en"
-        ? { minutes: "min read", sections: "sections", recently: "Recently" }
-        : { minutes: "min de lecture", sections: "sections", recently: "Récemment" };
+        ? { minutes: "min read", sections: "sections", recently: "Recently", updated: "Updated:" }
+        : { minutes: "min de lecture", sections: "sections", recently: "Récemment", updated: "Mis à jour :" };
     const article = getArticleBySlug(params.category, params.slug, params.locale)
+
+    // Garde : slug ou catégorie inexistants → 404 propre au lieu d'une erreur runtime.
+    if (!article) notFound()
 
     const categoryArticles = getArticlesByCategory(params.category, params.locale)
     const currentIndex = categoryArticles.findIndex((a) => a.slug === params.slug)
@@ -123,8 +129,10 @@ export default async function ArticlePage(props: ArticlePageProps) {
       "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
       "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
       "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
-      blog: ["wordpress-headless", "wordpress"],
       choisir: ["wordpress-headless", "projet-site-web", "wordpress"],
+      "etre-trouve": ["seo", "marketing-digital", "wordpress-headless"],
+      "ia-et-code": ["etre-trouve", "wordpress-headless", "applications-web-mobile"],
+      "avant-signer": ["choisir", "ia-et-code", "projet-site-web"],
     }
 
     const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []
@@ -142,7 +150,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
 
     const relatedWithTime = allRelatedCandidates.map((a) => {
       const full = getArticleBySlug(a.category, a.slug, params.locale)
-      return { ...a, readingTime: estimateReadingTime(full.content) }
+      return { ...a, readingTime: full ? estimateReadingTime(full.content) : 1 }
     })
 
     const tableOfContents = article?.content ? generateTableOfContents(article.content) : []
@@ -163,7 +171,8 @@ export default async function ArticlePage(props: ArticlePageProps) {
           title={article.title}
           description={article.description}
           image="/img/desktop-screen-next-impact.png"
-          datePublished={typeof article.date === "string" ? article.date : new Date().toISOString()}
+          datePublished={article.dateIso || (typeof article.date === "string" ? article.date : new Date().toISOString())}
+          dateModified={article.updatedIso}
           author={article.author || "Agathe Karinthi-Martin"}
           url={`/documentation/${article.category}/${article.slug}`}
           type={article.category === "wordpress-headless" ? "TechArticle" : "Article"}
@@ -171,6 +180,14 @@ export default async function ArticlePage(props: ArticlePageProps) {
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
         />
         {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
+        {article.howto && article.howto.length > 0 && (
+          <HowToJsonLd
+            name={article.title}
+            description={article.description}
+            steps={article.howto}
+            totalTime={article.howtoTotalTime}
+          />
+        )}
         <ReadingProgress />
         <ArticleReadTracker category={params.category} slug={params.slug} />
         <ScrollToTop />
@@ -233,6 +250,14 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                     {typeof article.date === "string" ? article.date : tArticle.recently}
                   </span>
+                  {article.updated && (
+                    <>
+                      <span className="text-dark-gray" aria-hidden>·</span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                        {tArticle.updated} {article.updated}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <ShareSocial url={`/documentation/${article.category}/${article.slug}`} title={article.title} />
               </div>

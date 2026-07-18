@@ -82,7 +82,7 @@ export default function ArticleAttestationTIH() {
                 <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--ink-2)" }}>
                   Lorsqu&apos;une entreprise sous-traite une prestation à un
                   TIH (Travailleur Indépendant Handicapé), elle peut déduire
-                  30% du coût de main-d&apos;œuvre de sa contribution AGEFIPH.
+                  30% du montant HT de la facture de sa contribution AGEFIPH.
                   Mais pour que cette déduction soit valide, elle doit être
                   justifiée par une{" "}
                   <strong style={{ color: "var(--ink)" }}>
@@ -113,7 +113,7 @@ export default function ArticleAttestationTIH() {
                   {[
                     "L'identité du prestataire et son statut TIH (RQTH + Entreprise Individuelle)",
                     "Le montant total HT des prestations réalisées sur la période",
-                    "Le montant de la part main-d'œuvre déductible (30% du HT pour les prestations intellectuelles)",
+                    "Le montant déductible (30% du montant HT de la facture)",
                     "La période concernée (année civile)",
                     "La conformité avec l'article D.5212-7 du Code du travail",
                   ].map((item, i) => (
@@ -244,12 +244,8 @@ export default function ArticleAttestationTIH() {
                       value: "Cumul des factures sur la période",
                     },
                     {
-                      label: "Part main-d'œuvre",
-                      value: "30% du montant HT (prestations intellectuelles)",
-                    },
-                    {
                       label: "Montant déductible",
-                      value: "30% de la part main-d'œuvre, conformément à l'article L.5212-10-1",
+                      value: "30% du montant HT de la facture, conformément à l'article L.5212-10-1",
                     },
                     {
                       label: "Base légale",

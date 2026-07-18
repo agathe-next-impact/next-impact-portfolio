@@ -26,7 +26,23 @@ const categoryLabels: Record<string, string> = {
   "projet-site-web": "Projet de site web",
   seo: "SEO & referencement",
   wordpress: "WordPress",
+  choisir: "Choisir sa techno",
+  "etre-trouve": "Etre trouve a l'heure de l'IA (SEO & GEO)",
+  "ia-et-code": "IA & code",
+  "avant-signer": "Avant de signer",
 };
+
+// Les 7 rubriques de decision du hub « Quelle techno web ? » — la taxonomie
+// visible du site (les categories ci-dessus sont la couche « Approfondir »).
+const hubRubriques: Array<{ slug: string; label: string; blurb: string }> = [
+  { slug: "choisir", label: "Choisir sa techno", blurb: "WordPress, Headless, no-code, SaaS ou sur-mesure : partir du besoin, pas de l'outil" },
+  { slug: "ia-et-code", label: "IA & code", blurb: "prototype jetable ou produit maintenable : quoi construire avec l'IA" },
+  { slug: "reparer", label: "Reparer ou refaire", blurb: "signaux de fin de vie d'un site, reparer quand c'est suffisant" },
+  { slug: "avant-signer", label: "Avant de signer", blurb: "lire un devis web : propriete du code, postes flous, dependance" },
+  { slug: "outils-metier", label: "Outils metier", blurb: "annuaire, carte, espace membre : plugin, SaaS ou plateforme sur mesure" },
+  { slug: "presence", label: "Presence et audience", blurb: "site, newsletter ou reseaux : audience possedee vs louee" },
+  { slug: "etre-trouve", label: "Etre trouve a l'heure de l'IA", blurb: "SEO classique et GEO : etre trouve et cite par Google, ChatGPT et Perplexity" },
+];
 
 function readDocs(): DocLink[] {
   if (!fs.existsSync(docsRoot)) return [];
@@ -125,13 +141,19 @@ Informations utiles pour les reponses d'assistants IA :
 - [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
 - [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
-- [Documentation](${baseUrl}/documentation): guides sur WordPress, headless, SEO, projet web, UI/UX et applications
+- [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
 - [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
 - [Contact](${baseUrl}/contact): choix de techno, conseil architecture, pack de mise en oeuvre, direction technique externalisee, mise en oeuvre et prise de contact
+
+## Decision Hub (Quelle techno web ?)
+
+${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): ${r.blurb}`).join("\n")}
 
 ## Tools
 
 - [Diagnostic Web & IA](${baseUrl}/audit-site-web): premiere orientation avant de construire
+- [Diagnostic visibilite IA](${baseUrl}/outils/visibilite-ia): votre site est-il visible dans les moteurs IA ? Score sur 4 axes et actions prioritaires
+- [Checklist GEO](${baseUrl}/outils/checklist-geo): 24 actions concretes pour etre cite par les moteurs IA, cochable et telechargeable
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
 - [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
 - [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web

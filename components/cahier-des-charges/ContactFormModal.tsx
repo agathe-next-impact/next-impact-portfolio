@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";

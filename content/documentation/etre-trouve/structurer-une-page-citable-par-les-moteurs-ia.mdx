@@ -1,0 +1,169 @@
+---
+title: "Structurer une page citable par les moteurs IA : la méthode"
+description: "8 étapes concrètes pour réécrire une page et la rendre citable par ChatGPT, Perplexity ou Gemini : réponse en tête, sections autonomes, FAQ, balisage, dates."
+category: etre-trouve
+author: "Agathe Karinthi-Martin"
+date: "2026-07-18"
+updated: "2026-07-18"
+order: 3
+howto:
+  - name: "Choisir la question que la page doit trancher"
+    text: "Une page = une question, formulée avec les mots de vos prospects. Si votre page répond à trois questions, découpez-la en trois pages ; si elle n'en tranche aucune, c'est une plaquette, pas une source citable."
+  - name: "Écrire la réponse en tête de page"
+    text: "Rédigez un résumé de 3 à 4 phrases placé directement sous le titre, qui répond réellement à la question — chiffres et verdict compris. Il doit pouvoir être repris tel quel par un moteur IA sans rien perdre de son sens."
+  - name: "Découper le corps en sous-questions autonomes"
+    text: "Chaque titre de section (H2) reformule une sous-question réelle, et chaque section y répond de façon complète, lisible isolément, en commençant par la réponse avant de la développer."
+  - name: "Donner des chiffres, des définitions et des verdicts"
+    text: "Remplacez les généralités par des chiffres sourcés, des définitions en une phrase et des positions explicites (« dans ce cas : non, parce que… »). Ce sont ces éléments-là que les moteurs génératifs extraient et attribuent."
+  - name: "Ajouter une FAQ reprenant les vraies questions"
+    text: "Terminez la page par 3 à 7 questions que vos clients posent réellement (au téléphone, en rendez-vous, dans les suggestions de recherche), avec des réponses autonomes de 2 à 4 phrases."
+  - name: "Baliser la page en données structurées"
+    text: "Déclarez en langage machine ce que la page contient (article, FAQ, auteur, dates) via des données structurées Schema.org. La structure éditoriale est à votre portée ; le balisage se délègue en quelques heures à votre prestataire."
+  - name: "Afficher les dates et tenir la page à jour"
+    text: "Affichez la date de publication et la date de dernière mise à jour, puis fixez une cadence de révision (tous les 2 à 3 mois pour les sujets qui bougent). Les moteurs IA favorisent le contenu daté et frais."
+  - name: "Tester la page avec sa question cible"
+    text: "Posez la question de la page à ChatGPT et Perplexity quelques semaines après publication et notez si votre site apparaît dans les sources citées. C'est le seul verdict qui compte."
+faq:
+  - question: "Faut-il réécrire toutes les pages du site avec cette méthode ?"
+    answer: "Non. Appliquez-la d'abord à vos 5 à 10 pages stratégiques : offres, expertises, questions d'avant-achat. Une vitrine gagne au GEO par la netteté de quelques pages, pas par le volume. La priorisation de ces pages selon votre profil est traitée dans le guide GEO pour PME."
+  - question: "Répondre dès les premières lignes ne tue-t-il pas la lecture ?"
+    answer: "Non, c'est l'inverse. Un lecteur pressé obtient sa réponse et vous en sait gré ; un lecteur engagé continue pour comprendre le pourquoi et les nuances. Ce que vous perdez, c'est le suspense artificiel — qui ne convertit personne et empêche les moteurs IA de vous citer."
+  - question: "Cette structure pénalise-t-elle mon référencement Google classique ?"
+    answer: "Non. Google indique qu'aucun format spécial n'est requis pour ses fonctionnalités IA et que les fondamentaux du référencement restent les mêmes. Une page qui répond nettement à une question, bien structurée et balisée, coche à la fois les cases du SEO classique et celles des moteurs génératifs."
+  - question: "Faut-il être rédacteur professionnel pour appliquer la méthode ?"
+    answer: "Non. La matière première est votre connaissance des questions clients, pas le style. La personne qui répond aux prospects au quotidien est mieux placée qu'une agence pour écrire ces réponses ; la méthode sert justement à canaliser cette connaissance dans un format que les moteurs IA savent reprendre."
+  - question: "La méthode fonctionne-t-elle sur WordPress ou faut-il un site moderne ?"
+    answer: "Elle fonctionne sur n'importe quel CMS : les étapes 1 à 5 et 7 sont purement éditoriales. Seul le balisage (étape 6) dépend de votre plateforme — sur WordPress, une extension SEO sérieuse ou quelques heures de prestation suffisent. La technologie ne bloque que si le site est très lent ou illisible sans JavaScript."
+---
+
+*Article rédigé le 18 juillet 2026. Sujet volatil : les moteurs génératifs évoluent vite, ce contenu est revu tous les 2 à 3 mois.*
+
+**Pour qu'une page soit citée par ChatGPT, Perplexity ou Gemini, elle doit être construite comme une réponse, pas comme une présentation : une seule question par page, la réponse complète dès les premières lignes, chaque section qui traite une sous-question de façon autonome, des chiffres et des verdicts explicites plutôt que des généralités. La méthode tient en 8 étapes, dont 6 sont purement éditoriales et à la portée de la personne qui connaît le mieux vos clients : vous. Comptez le balisage et les dates en plus, puis un test simple : poser la question de la page aux assistants IA et regarder qui est cité.**
+
+Cette page applique sa propre méthode — réponse en tête, une sous-question par section, FAQ issue de vraies questions, dates affichées, balisage. Elle est sa propre démonstration : chaque consigne ci-dessous est observable dans la page qui la donne.
+
+## Pourquoi ce format précis, et pas un autre ?
+
+**Parce que les moteurs génératifs ne citent pas des sites, ils citent des passages : des blocs de texte qui répondent à une question précise et peuvent être repris tels quels, avec attribution.** Une page dont la réponse est diluée sur quinze paragraphes oblige le modèle à recoller des fragments — il préfère la page du concurrent qui a formulé la réponse en quatre phrases. La mécanique complète (crawl, sélection, citation) est détaillée dans [comment ChatGPT et Perplexity choisissent leurs sources](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources) ; retenez ici le principe : **être trouvable est une affaire de SEO, être citable est une affaire de format**.
+
+Cet article est le zoom exécution du [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme), qui pose le cadre : qui est concerné, dans quel ordre mener les chantiers, avec quelles priorités selon votre profil. Ici, on prend UNE page et on la réécrit, étape par étape.
+
+**Prérequis avant de toucher au texte** : vérifiez que les robots des moteurs IA peuvent lire votre site — accès, indexation et fichiers `robots.txt`/`llms.txt` sont traités dans [llms.txt, robots.txt et crawlers IA](/documentation/etre-trouve/llms-txt-robots-txt-crawlers-ia), et le [diagnostic visibilité IA](/outils/visibilite-ia) le vérifie gratuitement en 10 questions. Réécrire une page que les robots ne lisent pas, c'est repeindre une pièce sans fenêtre.
+
+## Étape 1 — Quelle question votre page doit-elle trancher ?
+
+**Une page citable répond à une question, une seule, formulée avec les mots de vos prospects — pas avec les vôtres.** « Nos prestations d'accompagnement digital » n'est pas une question ; « combien coûte la refonte d'un site vitrine ? » en est une.
+
+Concrètement : listez les questions qu'on vous pose avant de signer (téléphone, premiers rendez-vous, e-mails de prospects), complétez avec les suggestions des moteurs (« Autres questions posées » de Google, questions reformulées par ChatGPT) et affectez **une question par page**. Deux pièges symétriques :
+
+- **La page qui répond à trois questions** : découpez-la. Un moteur IA extrait des passages ; une page fourre-tout produit trois demi-réponses non citables au lieu d'une réponse nette.
+- **La page qui n'en tranche aucune** : « notre savoir-faire », « nos valeurs »… Ces pages ont un rôle (rassurer un prospect déjà là), mais aucune chance d'être citées. N'y dépensez pas cette méthode.
+
+Le titre de la page (H1) reprend la question, telle quelle ou à peine reformulée. C'est lui qui déclare aux moteurs — et aux lecteurs — ce que la page tranche.
+
+## Étape 2 — Comment écrire la réponse en tête de page ?
+
+**Placez sous le titre un résumé de 3 à 4 phrases qui répond réellement — le TL;DR — au lieu d'annoncer que la page va répondre.** TL;DR (*too long; didn't read*) : le paragraphe de tête qui donne la réponse complète à qui ne lira que lui.
+
+Le test est simple : **si un moteur IA reprenait ce paragraphe mot pour mot, l'utilisateur aurait-il sa réponse ?** « Dans cet article, nous verrons les critères à prendre en compte… » échoue au test. « Comptez entre X et Y pour ce type de projet ; le premier critère est Z ; dans tel cas, l'option A est la bonne » le réussit.
+
+Trois règles d'écriture :
+
+1. **Répondez, chiffres et verdict compris** — gardez les nuances pour le corps, pas la conclusion.
+2. **Faites des phrases autoportantes** : pas de « comme vu plus haut », pas de pronom dont la référence est ailleurs. Chaque phrase doit survivre à l'extraction.
+3. **Assumez l'affirmation.** Les formulations franches et sourcées sont précisément ce que l'étude fondatrice du GEO (Princeton, KDD 2024 — présentée dans [l'article sur la mécanique de sélection](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources)) mesure comme les plus reprises : jusqu'à +30 à 40 % de visibilité dans les réponses génératives.
+
+## Étape 3 — Comment découper le corps en sections autonomes ?
+
+**Chaque titre de section (H2) reformule une sous-question réelle, et la section y répond entièrement, comme si le lecteur arrivait directement dessus.** C'est le changement le plus structurant de la méthode : vous n'écrivez plus un texte qui se lit du début à la fin, vous écrivez une série de réponses extractibles.
+
+En pratique :
+
+- **Titres en questions** (« Combien de temps dure la migration ? ») ou en réponses nettes (« La migration dure 2 à 4 semaines ») — jamais en étiquettes vagues (« Notre approche »).
+- **Réponse d'abord, développement ensuite** : ouvrez chaque section par la phrase qui la résume, en gras si votre mise en page le permet, puis déroulez le pourquoi.
+- **Sections autonomes** : un passage cité par Perplexity arrive seul, sans le reste de la page. Redonnez le contexte minimal en une phrase plutôt que de renvoyer « au paragraphe précédent ».
+- **Définissez chaque terme technique en une phrase**, à sa première apparition. Les définitions propres sont parmi les passages les plus cités — c'est une réponse toute faite à « qu'est-ce que X ? ».
+
+## Étape 4 — Quels chiffres, définitions et verdicts inclure ?
+
+**Les moteurs génératifs extraient ce qui est précis : un chiffre sourcé, une définition, un verdict conditionnel — pas « des délais raisonnables » ni « une solution adaptée à vos besoins ».** À chaque relecture de section, traquez les généralités et remplacez-les :
+
+| Au lieu de… | Écrivez… |
+|---|---|
+| « Des délais maîtrisés » | « 3 à 6 semaines pour un site vitrine de 10 pages » |
+| « Une solution performante » | « Page affichée en moins de 2 secondes, mesurée sur les Core Web Vitals » |
+| « Cela dépend de votre projet » | « Pour une vitrine : non. Pour un site à fort contenu : oui, parce que… » |
+| « De nombreux clients satisfaits » | « 12 sites migrés depuis 2024, zéro perte de positionnement mesurée » |
+
+Deux garde-fous : **ne publiez que des chiffres que vous pouvez sourcer** (vos mesures, vos tarifs publics, une étude liée) — un chiffre inventé se retrouve cité hors de votre contrôle ; et **assumez les verdicts, y compris ceux qui ne vous arrangent pas**. « Dans ce cas, vous n'avez pas besoin de nous » est une phrase que les moteurs IA reprennent volontiers, et qui crédibilise tout le reste de la page.
+
+## Étape 5 — Comment construire la FAQ de fin de page ?
+
+**Terminez par 3 à 7 questions réellement posées par vos clients, avec des réponses autonomes de 2 à 4 phrases — pas une FAQ d'apparat qui reformule vos arguments commerciaux.** La source des questions est décisive : reprenez les formulations entendues au téléphone et lues dans les e-mails, vérifiez-les contre les « Autres questions posées » de Google. Si personne ne pose la question, elle n'a rien à faire dans la FAQ.
+
+Chaque réponse suit la règle de l'étape 2 en miniature : autoportante, affirmative, citable seule. La FAQ joue un double rôle : elle capte les variantes de la question principale (celles qui méritaient une réponse, pas une page entière), et elle constitue le bloc le plus facilement extractible de la page — question posée, réponse donnée, format que les moteurs IA reprennent tel quel.
+
+## Étape 6 — Faut-il baliser la page, et comment ?
+
+**Oui, en dernier : les données structurées (le balisage Schema.org qui décrit votre page en langage machine — son type, son auteur, ses dates, sa FAQ) confirment aux moteurs ce que votre structure éditoriale leur montre déjà.** C'est une étape courte à décider et semi-technique à exécuter : la structure des étapes 1 à 5 est votre travail, le balisage se délègue en quelques heures à votre prestataire ou se règle via une extension sérieuse. Quels types de balisage installer, lesquels pèsent réellement pour les moteurs IA et dans quel ordre de priorité : c'est l'objet de l'article dédié [données structurées pour les moteurs IA](/documentation/etre-trouve/donnees-structurees-moteurs-ia).
+
+## Étape 7 — Pourquoi afficher les dates et tenir la page à jour ?
+
+**Parce que les moteurs IA favorisent le contenu daté et frais, et qu'une page sans date est invérifiable — donc moins citable.** Affichez la date de publication ET la date de dernière mise à jour, visiblement, en tête ou en pied de page. Puis fixez une cadence de révision selon la volatilité du sujet : tous les 2 à 3 mois pour ce qui bouge (outils, prix, IA, réglementation), une fois par an pour le reste. Une mise à jour honnête change quelque chose — un chiffre actualisé, une section révisée, une position ajustée — pas seulement la date. Les pages « evergreen » jamais retouchées perdent progressivement du terrain face aux pages entretenues, sur un web où la fraîcheur est un signal de sélection.
+
+## Étape 8 — Comment vérifier que la page est devenue citable ?
+
+**Posez la question de la page à ChatGPT et Perplexity quelques semaines après publication, et regardez si votre site figure dans les sources citées** — c'est le test le plus direct, à refaire chaque mois sur vos pages stratégiques ; le [diagnostic visibilité IA](/outils/visibilite-ia) automatise ce premier état des lieux.
+
+## Quel format prioritaire selon le type de page ?
+
+**La méthode s'applique partout, mais l'étape décisive n'est pas la même selon ce que la page est.**
+
+| Type de page | La question à trancher | L'étape décisive | Le piège fréquent |
+|---|---|---|---|
+| **Page d'offre** | « Que faites-vous, pour qui, à quel prix, avec quelles limites ? » | Étape 4 : chiffres et verdicts (prix affichés, délais, cas où l'offre ne convient pas) | Rester en plaquette : promesses sans un seul chiffre |
+| **Article ou guide** | Une question d'avant-achat (« comment choisir… », « combien coûte… ») | Étapes 2 et 3 : TL;DR net et sections autonomes | Le teaser (« nous allons voir… ») qui repousse la réponse |
+| **Page FAQ / support** | Les variantes des questions clients | Étape 5 : vraies formulations, réponses autoportantes | Les questions inventées par le marketing, que personne ne pose |
+| **Étude de cas** | « Qu'avez-vous obtenu, mesuré comment ? » | Étape 4 : résultats chiffrés, avant/après | Le récit auto-congratulant sans une seule mesure |
+
+> **Ce que je constate en projet.** Cette page — et toute la rubrique qui l'entoure — applique la méthode qu'elle décrit : c'est mon banc d'essai permanent. Sur les sites que j'opère, les pages construites en réponses structurées et balisées ressortent nettement plus souvent dans les réponses des moteurs IA que les pages équivalentes en format plaquette ; j'ai publié [le détail chiffré de ces observations](/blog/wordpress-headless-en-2026-ce-qui-a-change), relevé sur mes logs de production.
+
+## Ce que cette méthode ne fera pas
+
+**Trois limites, à connaître avant d'y investir du temps.** Elle ne compense pas un site inaccessible : pages lentes, contenu invisible sans JavaScript ou robots bloqués éliminent votre page avant même que son format ne soit examiné — d'où le prérequis technique posé en tête. Elle ne fabrique pas de notoriété : un domaine que personne ne mentionne ailleurs sur le web reste désavantagé face à un concurrent cité par la presse ou les annuaires professionnels, même à format égal — ce chantier d'autorité externe est traité dans le [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme). Et elle ne remplace pas la substance : la structure rend citable une expertise réelle, elle ne rend pas expert un contenu creux. Si vous n'avez rien de précis à affirmer sur un sujet, la page n'est pas à structurer — elle est à ne pas écrire.
+
+## FAQ — structurer une page pour les moteurs IA
+
+### Faut-il réécrire toutes les pages du site avec cette méthode ?
+
+Non. Appliquez-la d'abord à vos 5 à 10 pages stratégiques : offres, expertises, questions d'avant-achat. Une vitrine gagne au GEO par la netteté de quelques pages, pas par le volume. La priorisation de ces pages selon votre profil est traitée dans le [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme).
+
+### Répondre dès les premières lignes ne tue-t-il pas la lecture ?
+
+Non, c'est l'inverse. Un lecteur pressé obtient sa réponse et vous en sait gré ; un lecteur engagé continue pour comprendre le pourquoi et les nuances. Ce que vous perdez, c'est le suspense artificiel — qui ne convertit personne et empêche les moteurs IA de vous citer.
+
+### Cette structure pénalise-t-elle mon référencement Google classique ?
+
+Non. Google indique dans [sa documentation officielle](https://developers.google.com/search/docs/appearance/ai-features) qu'aucun format spécial n'est requis pour ses fonctionnalités IA et que les fondamentaux du référencement restent les mêmes. Une page qui répond nettement à une question, bien structurée et balisée, coche à la fois les cases du SEO classique et celles des moteurs génératifs.
+
+### Faut-il être rédacteur professionnel pour appliquer la méthode ?
+
+Non. La matière première est votre connaissance des questions clients, pas le style. La personne qui répond aux prospects au quotidien est mieux placée qu'une agence pour écrire ces réponses ; la méthode sert justement à canaliser cette connaissance dans un format que les moteurs IA savent reprendre.
+
+### La méthode fonctionne-t-elle sur WordPress ou faut-il un site moderne ?
+
+Elle fonctionne sur n'importe quel CMS : les étapes 1 à 5 et 7 sont purement éditoriales. Seul le balisage (étape 6) dépend de votre plateforme — sur WordPress, une extension SEO sérieuse ou quelques heures de prestation suffisent. La technologie ne bloque que si le site est très lent ou illisible sans JavaScript — auquel cas la question relève de la rubrique [Être trouvé à l'heure de l'IA](/documentation/etre-trouve), côté arbitrage technique.
+
+---
+
+**Prêt à réécrire votre première page ?** La [checklist GEO](/outils/checklist-geo) reprend ces 8 étapes en points vérifiables, page par page — c'est le compagnon d'exécution de cet article, gratuit. Si vous butez sur un cas particulier, une [visio conseil de 30 minutes](/conseil) (150 € HT) tranche vos priorités sur pièces ; et pour transformer la méthode en plan d'action sur l'ensemble de vos pages stratégiques, le [cadrage](/conseil) (490 € HT) s'en charge.
+
+## Sources
+
+- Aggarwal, Murahari et al., [*GEO: Generative Engine Optimization*](https://arxiv.org/abs/2311.09735) (Princeton, IIT Delhi — KDD 2024) : les pages ajoutant réponses nettes, statistiques et sources gagnent jusqu'à +30 à 40 % de visibilité dans les moteurs génératifs. Lecture commentée dans [comment ChatGPT et Perplexity choisissent leurs sources](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources).
+- Google Search Central, [*AI features and your website*](https://developers.google.com/search/docs/appearance/ai-features) : aucun format ni balisage spécial requis pour les fonctionnalités IA de Google ; les prérequis sont ceux de la recherche classique.
+- Google Search Central Blog, [*Top ways to ensure your content performs well in Google's AI experiences on Search*](https://developers.google.com/search/blog/2025/05/succeeding-in-ai-search) (mai 2025) : recommandations éditoriales officielles, convergentes avec la méthode décrite ici.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle applique la méthode de cet article sur ses propres pages et suit son effet sur les logs et les citations IA des sites qu'elle opère. [Prendre contact](/contact).*

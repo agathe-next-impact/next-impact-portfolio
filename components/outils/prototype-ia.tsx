@@ -21,7 +21,8 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
-import { Reveal } from "@/components/ui/reveal";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 
 // ok = aucun enjeu de prod sur ce point ; ko = exige un vrai build maintenable.
 type Status = "ok" | "warn" | "ko";
@@ -363,14 +364,14 @@ export default function PrototypeIa() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
-        <div
-          ref={resultRef}
-          className="flex scroll-mt-24 flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
-        >
+        <div ref={resultRef} className="scroll-mt-24 border-b border-dark-gray">
+        {/* Verdict en cascade — les blocs du résultat apparaissent en Stagger */}
+        <Stagger className="flex flex-col gap-8 px-6 py-8 lg:px-8">
           {/* Verdict + échelle 3 paliers */}
-          <div className="border border-dark-gray bg-obsidian p-6 lg:p-8">
+          <StaggerItem className="border border-dark-gray bg-obsidian p-6 lg:p-8">
             <p className={LABEL_MONO}>{isEn ? "Verdict" : "Verdict"}</p>
             <h3 className={`mt-3 text-2xl font-light tracking-tight ${verdict.toneClass}`}>
               {isEn ? verdict.titleEn : verdict.titleFr}
@@ -390,10 +391,10 @@ export default function PrototypeIa() {
             <p className={`mt-6 font-inter-tight text-[15px] leading-relaxed ${verdict.toneClass}`}>
               {isEn ? verdict.en : verdict.fr}
             </p>
-          </div>
+          </StaggerItem>
 
           {/* Détail par facteur */}
-          <div>
+          <StaggerItem>
             <p className={`${LABEL_MONO} mb-4`}>
               {isEn ? "What raises the bar" : "Ce qui relève l'exigence"}
             </p>
@@ -423,20 +424,20 @@ export default function PrototypeIa() {
                 </div>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Note anti-cannibalisation */}
-          <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
+          <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you — a call (or architecture advice) frames the move from prototype to product."
                 : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente — une visio (ou un conseil architecture) cadre le passage du prototype au produit."}
             </p>
-          </div>
+          </StaggerItem>
 
           {/* Prochaine étape (adaptée au verdict) */}
-          <div className="flex flex-wrap items-center gap-3">
+          <StaggerItem className="flex flex-wrap items-center gap-3">
             <Link
               href={ctas.primary.href as Parameters<typeof Link>[0]["href"]}
               className={BTN_PRIMARY}
@@ -455,10 +456,12 @@ export default function PrototypeIa() {
               <RotateCcw size={13} />
               {isEn ? "Restart" : "Refaire"}
             </button>
-          </div>
+          </StaggerItem>
           <NewsletterModal source="prototype-ia" />
+        </Stagger>
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">

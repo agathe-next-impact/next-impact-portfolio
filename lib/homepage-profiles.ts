@@ -605,7 +605,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre les gains concrets : temps de chargement divisé, coût de maintenance réduit et ROI mesurable sur votre investissement web.",
       src: "/icons/scan-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "Pour quels objectifs ?",
@@ -613,7 +613,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Découvrez si votre projet correspond : pic de trafic à absorber, éco-conception, multi-sites, portail client ou application métier.",
       src: "/icons/analytics-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/wordpress-headless/quand-utiliser-wordpress-headless",
+      ctaLink: "/documentation/wordpress-headless/dois-je-passer-au-headless",
     },
   ],
   decideur: [
@@ -623,7 +623,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Comprendre comment le découplage frontend/backend se traduit en avantage concurrentiel pour votre entreprise.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "ROI et performance business",
@@ -649,7 +649,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Pas de nouvel outil à apprendre. Vous continuez à gérer votre contenu dans WordPress, exactement comme avant — en mieux.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "En savoir plus",
-      ctaLink: "/documentation/wordpress-headless/gerer-le-contenu",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "Un site plus rapide pour vos visiteurs",
@@ -665,7 +665,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "Prévisualisation, gestion des médias, workflow éditorial : tout ce dont vous avez besoin pour publier sereinement.",
       src: "/icons/analytics-icon.svg",
       ctaText: "Voir le workflow",
-      ctaLink: "/documentation/wordpress-headless/preview-et-workflow-editorial",
+      ctaLink: "/documentation/wordpress-headless/gerer-le-contenu",
     },
   ],
   developpeur: [
@@ -675,7 +675,7 @@ export const EXPANDABLE_CARDS_VARIANTS: Record<
         "API REST / GraphQL en backend, React en frontend. Comprendre la séparation des responsabilités et le data fetching.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "Voir l'architecture",
-      ctaLink: "/documentation/wordpress-headless/comment-fonctionne-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "Stack technique et performance",

@@ -50,7 +50,10 @@
       "PowerShell(Rename-Item -Path 'content\\\\documentation\\\\headless-cms' -NewName 'wordpress-headless')",
       "PowerShell(Rename-Item -Path 'content\\\\en\\\\documentation\\\\headless-cms' -NewName 'wordpress-headless')",
       "PowerShell(\"OK\")",
-      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime, @{n='CPU\\(s\\)';e={[math]::Round\\($_.CPU,1\\)}} | Format-Table -AutoSize)"
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime, @{n='CPU\\(s\\)';e={[math]::Round\\($_.CPU,1\\)}} | Format-Table -AutoSize)",
+      "Bash(python *)",
+      "WebFetch(domain:www.next-impact.digital)",
+      "PowerShell(git *)"
     ],
     "additionalDirectories": [
       "c:\\DEV\\next-impact-portfolio\\app\\[locale]\\audit-site-ia",

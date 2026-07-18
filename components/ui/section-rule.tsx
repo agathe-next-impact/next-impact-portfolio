@@ -7,7 +7,7 @@
  * prefers-reduced-motion → filet plein, immédiat.
  */
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m as motion, useReducedMotion } from "framer-motion";
 import * as React from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;

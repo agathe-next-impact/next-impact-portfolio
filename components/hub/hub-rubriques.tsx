@@ -1,5 +1,5 @@
 // HubRubriques — couche décisionnelle du hub « Quelle techno web ? ».
-// Bandeau-méthode Boussole (8 critères) + 6 rubriques par question. Le titre de
+// Bandeau-méthode Boussole (8 critères) + 7 rubriques par question. Le titre de
 // chaque rubrique pointe vers sa page thématique /documentation/<slug> (parcours
 // 4 temps) ; les liens reprennent les outils EXISTANTS et la CTA « prochaine
 // étape » route vers l'offre. Démonstratif (décision) au premier plan ; les
@@ -15,6 +15,7 @@ import {
   ScrollText,
   Boxes,
   Megaphone,
+  Radar,
   ArrowRight,
   ArrowUpRight,
 } from "lucide-react";
@@ -68,7 +69,7 @@ const COPY: Record<
           { label: "Quelle techno à l'heure de l'IA ?", href: "/documentation/choisir/quelle-techno-ia" },
           { label: "Comprendre le headless", href: "/wordpress-headless" },
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
-          { label: "Simulateur de tarifs", href: "/tarifs" },
+          { label: "Simulateur de tarifs", href: "/solutions-web" },
         ],
         next: { label: "Trancher en visio — 150 €", href: "/conseil" },
       },
@@ -103,7 +104,7 @@ const COPY: Record<
         links: [
           { label: "Décrypter mon devis", href: "/outils/decrypteur-devis" },
           { label: "Générer un cahier des charges", href: "/cahier-des-charges" },
-          { label: "Simulateur de tarifs", href: "/tarifs" },
+          { label: "Simulateur de tarifs", href: "/solutions-web" },
         ],
         next: { label: "Un avis indépendant", href: "/conseil" },
       },
@@ -126,6 +127,18 @@ const COPY: Record<
         question: "Site, newsletter, LinkedIn : où investir ?",
         links: [
           { label: "La Boussole Techno Web & IA", href: "/outils/boussole" },
+          { label: "Diagnostic Web & IA", href: "/audit-site-web" },
+        ],
+        next: { label: "En parler en visio — 150 €", href: "/conseil" },
+      },
+      {
+        id: "etre-trouve",
+        icon: Radar,
+        title: "Être trouvé à l'heure de l'IA",
+        question: "Mon site est-il visible quand on pose la question à ChatGPT ?",
+        links: [
+          { label: "Visible dans les moteurs IA ?", href: "/outils/visibilite-ia" },
+          { label: "Les fondamentaux SEO", href: "/documentation/seo" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
         next: { label: "En parler en visio — 150 €", href: "/conseil" },
@@ -161,7 +174,7 @@ const COPY: Record<
           { label: "Which tech in the AI era?", href: "/documentation/choisir/quelle-techno-ia" },
           { label: "Understanding headless", href: "/wordpress-headless" },
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
-          { label: "Pricing simulator", href: "/tarifs" },
+          { label: "Pricing simulator", href: "/solutions-web" },
         ],
         next: { label: "Decide on a call — €150", href: "/conseil" },
       },
@@ -196,7 +209,7 @@ const COPY: Record<
         links: [
           { label: "Decode my quote", href: "/outils/decrypteur-devis" },
           { label: "Generate a project brief", href: "/cahier-des-charges" },
-          { label: "Pricing simulator", href: "/tarifs" },
+          { label: "Pricing simulator", href: "/solutions-web" },
         ],
         next: { label: "Get an independent opinion", href: "/conseil" },
       },
@@ -219,6 +232,18 @@ const COPY: Record<
         question: "Site, newsletter, LinkedIn: where to invest?",
         links: [
           { label: "The Web & AI Tech Compass", href: "/outils/boussole" },
+          { label: "Web & AI diagnostic", href: "/audit-site-web" },
+        ],
+        next: { label: "Talk it through on a call", href: "/conseil" },
+      },
+      {
+        id: "etre-trouve",
+        icon: Radar,
+        title: "Be found in the AI era",
+        question: "Is my site visible when people ask ChatGPT?",
+        links: [
+          { label: "Visible in AI engines?", href: "/outils/visibilite-ia" },
+          { label: "SEO fundamentals", href: "/documentation/seo" },
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
         ],
         next: { label: "Talk it through on a call", href: "/conseil" },
@@ -269,7 +294,7 @@ export function HubRubriques({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      {/* 6 rubriques par question — bento bordé (modèle OutilsBentoGrid) */}
+      {/* 7 rubriques par question — bento bordé (modèle OutilsBentoGrid) */}
       <div className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
         {c.rubriques.map((r, i) => {
           const Icon = r.icon;

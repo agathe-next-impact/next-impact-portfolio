@@ -45,6 +45,14 @@ User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
 
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+
 User-agent: anthropic-ai
 Allow: /
 Disallow: /api/
@@ -70,6 +78,10 @@ Allow: /
 Disallow: /api/
 
 User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+
+User-agent: CCBot
 Allow: /
 Disallow: /api/
 

@@ -104,7 +104,6 @@ const RELATED_CATEGORIES: Record<string, string[]> = {
   "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
   "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
   "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
-  blog: ["wordpress-headless", "wordpress"],
 };
 
 /* ─── Carte de catégorie (cellule SpotlightCard) ──────────────────────────── */

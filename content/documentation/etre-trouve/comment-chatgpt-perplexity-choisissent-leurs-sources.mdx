@@ -1,0 +1,141 @@
+---
+title: "Comment ChatGPT et Perplexity choisissent leurs sources"
+description: "Crawlers, index, critères de sélection : la mécanique qui décide si votre site est cité par ChatGPT, Perplexity ou Gemini — et pourquoi il ne l'est pas."
+category: etre-trouve
+author: "Agathe Karinthi-Martin"
+date: "2026-07-17"
+updated: "2026-07-17"
+order: 1
+faq:
+  - question: "Comment savoir si mon site est cité par ChatGPT ou Perplexity ?"
+    answer: "Posez aux assistants les questions que vos clients posent (« quel prestataire pour… », « comment choisir… ») et regardez quelles sources ils citent. Faites-le sur plusieurs formulations et plusieurs jours, car les réponses varient. Le diagnostic gratuit de visibilité IA de ce site automatise ce premier état des lieux."
+  - question: "Faut-il autoriser ou bloquer les robots des IA sur mon site ?"
+    answer: "Si vous voulez être cité, il faut les autoriser : un site qui bloque OAI-SearchBot ou PerplexityBot est simplement absent des réponses. Bloquer GPTBot (le robot d'entraînement d'OpenAI) est un choix distinct, qui n'empêche pas d'apparaître dans ChatGPT Search. C'est une décision éditoriale, pas technique : que voulez-vous que les IA fassent de votre contenu ?"
+  - question: "Être bien référencé sur Google suffit-il pour être cité par les IA ?"
+    answer: "C'est un prérequis, pas une garantie. Les moteurs IA s'appuient sur des index de recherche classiques pour trouver les candidats, donc un site invisible dans Google l'est aussi dans leurs réponses. Mais la sélection finale ajoute ses propres critères : réponses directes extractibles, chiffres sourcés, rapidité, fraîcheur."
+  - question: "Pourquoi mon concurrent est-il cité et pas moi ?"
+    answer: "Dans la grande majorité des cas que j'examine, la cause est l'une de ces trois : ses pages répondent à des questions précises quand les vôtres décrivent une offre ; son site est plus rapide et plus lisible pour les robots ; ou il est davantage mentionné ailleurs sur le web, ce qui construit sa notoriété auprès des modèles. Un diagnostic page par page permet de trancher."
+  - question: "Combien de temps faut-il pour apparaître dans les réponses des IA ?"
+    answer: "Il n'y a pas de délai garanti. Perplexity, qui recrawle fréquemment et favorise le contenu frais, peut citer une page en quelques jours ou semaines ; ChatGPT Search est plus lent à intégrer de nouvelles sources, car la notoriété du domaine y pèse davantage. Comptez un travail de fond sur plusieurs mois, pas une astuce à effet immédiat."
+---
+
+**ChatGPT, Perplexity et Gemini ne citent pas les sites « au mérite » : ils appliquent une mécanique en trois temps — crawl, sélection, citation — dont chaque étape peut éliminer votre site. Pour être cité, une page doit d'abord être accessible à leurs robots, ensuite figurer dans l'index de recherche qu'ils interrogent, enfin contenir une réponse assez nette et sourcée pour être reprise telle quelle. Les critères démontrés expérimentalement sont peu nombreux : réponses directes extractibles, statistiques et sources citées dans la page (jusqu'à +30 à 40 % de visibilité selon l'étude fondatrice de Princeton), fraîcheur et notoriété du domaine. Le reste relève de l'observation — dont la mienne, sur les logs de mes propres sites.**
+
+*Article publié le 17 juillet 2026. Sujet volatil : le comportement des moteurs IA évolue vite, ce contenu est revu tous les 2 à 3 mois.*
+
+## Que se passe-t-il entre votre site et une réponse d'IA ?
+
+**Une réponse d'assistant IA qui cite des sources est le résultat d'un pipeline en trois étapes, et votre site peut être éliminé à chacune d'elles.**
+
+1. **Le crawl** : des robots (crawlers) parcourent le web et alimentent un index, c'est-à-dire une copie organisée des pages, interrogeable en une fraction de seconde. Si vos pages leur sont inaccessibles — bloquées, trop lentes, illisibles — vous êtes éliminé ici, quoi que vous fassiez ensuite.
+2. **La sélection** : quand un utilisateur pose une question, le moteur interroge cet index et retient une poignée de pages candidates, comme un moteur de recherche classique.
+3. **La citation** : le modèle génère sa réponse à partir de ces candidates et décide lesquelles citer. C'est le principe du RAG (*Retrieval-Augmented Generation*) : le modèle ne répond pas de mémoire, il s'appuie sur des documents récupérés à l'instant et les attribue.
+
+La conséquence pratique est contre-intuitive : **être « trouvable » et être « citable » sont deux batailles distinctes**. Un site peut passer la sélection (bon SEO) et perdre à la citation, parce qu'aucun de ses paragraphes ne constitue une réponse autoportante que le modèle peut reprendre et attribuer proprement.
+
+## Comment ChatGPT choisit-il ses sources ?
+
+**OpenAI opère trois robots distincts, et un seul compte pour être cité dans ChatGPT Search : OAI-SearchBot.** C'est documenté dans [la page officielle des crawlers OpenAI](https://developers.openai.com/api/docs/bots) :
+
+- **GPTBot** collecte du contenu pour *entraîner* les futurs modèles. Le bloquer est un choix légitime, qui ne vous retire pas des résultats de recherche.
+- **OAI-SearchBot** alimente l'index qui sert ChatGPT Search — c'est lui qui détermine si vous pouvez apparaître comme source citée.
+- **ChatGPT-User** visite une page à la demande d'un utilisateur (quand quelqu'un colle votre URL dans une conversation, par exemple).
+
+Pour la sélection elle-même, [OpenAI documente peu de choses](https://help.openai.com/en/articles/9237897-chatgpt-search) : ChatGPT Search s'appuie sur des fournisseurs de recherche tiers et sur son propre index, sans publier de critères de classement. Ce qui suit relève donc de l'observation convergente des études tierces, pas de la documentation officielle :
+
+- **La notoriété du domaine pèse lourd.** ChatGPT cite majoritairement des sites déjà établis et souvent mentionnés ailleurs sur le web ; un site récent et isolé a peu de chances, même avec un excellent contenu.
+- **L'extractibilité décide de la citation.** Les pages citées contiennent des blocs de texte qui répondent à une question précise en quelques phrases, sans obliger le modèle à recoller cinq fragments.
+- **L'accessibilité est un filtre binaire.** Contenu derrière un paywall, une connexion, ou rendu uniquement par JavaScript lourd : chances de citation quasi nulles.
+- **La fraîcheur compte**, surtout pour les questions où la réponse évolue (prix, outils, réglementation) — un contenu daté et mis à jour part avec un avantage.
+
+## Comment Perplexity choisit-il ses citations ?
+
+**Perplexity est le plus transparent des trois : c'est un moteur de réponse construit explicitement sur la citation, avec son propre index et ses règles publiées.** [Sa documentation officielle](https://docs.perplexity.ai/guides/bots) décrit deux robots : **PerplexityBot**, qui alimente l'index de recherche (et n'est pas utilisé pour entraîner des modèles), et **Perplexity-User**, qui visite une page quand un utilisateur le demande.
+
+Chaque réponse affiche ses sources numérotées — typiquement entre trois et huit. Ce que les études et mes propres tests montrent sur la sélection :
+
+- **Perplexity privilégie le contenu frais.** Il recrawle fréquemment et favorise nettement les pages récentes ou récemment mises à jour, davantage que ChatGPT.
+- **Il cite plus volontiers les sites spécialisés.** Là où ChatGPT concentre ses citations sur les grands domaines établis, Perplexity reprend régulièrement des sites de niche qui apportent une information unique — c'est le moteur le plus accessible pour une PME experte de son sujet.
+- **Il favorise les pages qui citent leurs propres sources.** Une page avec des chiffres attribués (étude, statistique publique, documentation officielle) est plus facile à vérifier et à attribuer — donc plus souvent retenue.
+- **L'extractibilité, encore.** Perplexity construit sa réponse en assemblant des passages ; une page dont chaque section répond à une sous-question précise lui fournit exactement la matière qu'il cherche.
+
+## Et Gemini et les AI Overviews de Google ?
+
+**Google joue une partition différente : Gemini et les AI Overviews (les résumés IA en haut des résultats de recherche) s'appuient directement sur l'index et le classement de Google.** La position officielle, publiée sur [Google Search Central](https://developers.google.com/search/docs/appearance/ai-features), tient en deux points : il n'existe aucun balisage spécial pour apparaître dans les réponses IA, et les fondamentaux du référencement classique restent le prérequis. Autrement dit : chez Google, le SEO *est* la porte d'entrée du GEO. Le fonctionnement détaillé des AI Overviews et leur impact sur le trafic méritent un traitement à part — ici, retenez simplement que le travail décrit dans cet article sert les trois moteurs à la fois.
+
+## Quels critères sont prouvés, lesquels sont seulement observés ?
+
+**Distinguer ce qui est démontré de ce qui est supposé évite de dépenser son budget sur des recettes magiques.** L'étude fondatrice du domaine — [« GEO: Generative Engine Optimization »](https://arxiv.org/abs/2311.09735) (Princeton, IIT Delhi et al., publiée à KDD 2024) — a testé neuf tactiques sur 10 000 requêtes : ajouter des citations de sources, des statistiques et des citations textuelles améliore la visibilité d'une page dans les réponses génératives de 30 à 40 % ; les recettes héritées du vieux SEO (bourrage de mots-clés) ne font rien, voire nuisent.
+
+| Critère | Statut | Source |
+|---|---|---|
+| Robots IA autorisés, page accessible en HTML lisible | Documenté | Docs officielles [OpenAI](https://developers.openai.com/api/docs/bots) et [Perplexity](https://docs.perplexity.ai/guides/bots) |
+| Réponses directes, sections extractibles | Démontré expérimentalement | [Étude GEO, Princeton](https://arxiv.org/abs/2311.09735) |
+| Statistiques et sources citées dans la page (+30 à 40 %) | Démontré expérimentalement | [Étude GEO, Princeton](https://arxiv.org/abs/2311.09735) |
+| Présence dans l'index de recherche sous-jacent (SEO) | Documenté (Google), convergent ailleurs | [Google Search Central](https://developers.google.com/search/docs/appearance/ai-features) |
+| Rapidité serveur, fréquence de crawl | Observé (logs de production) | [Mon relevé de juin 2026](/blog/wordpress-headless-en-2026-ce-qui-a-change) |
+| Données structurées corrélées aux citations | Observé (logs de production) | [Mon relevé de juin 2026](/blog/wordpress-headless-en-2026-ce-qui-a-change) |
+| Notoriété du domaine, mentions externes | Observé (études tierces convergentes) | Non documenté par les éditeurs |
+| Fraîcheur du contenu | Observé, cohérent entre études | Non documenté précisément |
+
+> **Ce que je constate en projet.** Sur les logs de mes sites en production, le changement de 2025 à 2026 est net : les robots IA ne crawlent plus tout, ils trient — ils abandonnent les pages lentes, espacent leurs visites sur les sites paresseux, et les pages balisées en données structurées ressortent nettement plus souvent dans les réponses. J'ai publié les seuils et les chiffres exacts de ce relevé dans [WordPress headless en 2026 : ce qui a changé](/blog/wordpress-headless-en-2026-ce-qui-a-change).
+
+## Pourquoi votre site n'apparaît-il pas dans ChatGPT ? Les cinq causes fréquentes
+
+**Quand un site est absent des réponses IA, la cause est presque toujours l'une de ces cinq — dans cet ordre de fréquence.**
+
+1. **Les robots IA sont bloqués sans que vous le sachiez.** Pare-feu, CDN ou plugin de sécurité configurés par défaut pour rejeter les bots : vérifier que votre robots.txt (le fichier qui indique aux robots ce qu'ils peuvent visiter) autorise OAI-SearchBot et PerplexityBot est la première vérification, et elle prend cinq minutes.
+2. **Le contenu n'existe pas pour un robot.** Pages construites entièrement en JavaScript côté navigateur, textes dans des images, site trop lent : le robot repart avant d'avoir lu.
+3. **Aucune page ne répond à une question.** Un site-plaquette (« nos valeurs », « notre savoir-faire ») ne contient rien de citable : les moteurs IA citent des réponses, pas des présentations.
+4. **Le site est absent de l'index sous-jacent.** Les moteurs IA partent d'une recherche classique ; un site mal référencé dans Google et Bing n'atteint jamais l'étape de sélection.
+5. **Personne ne vous mentionne.** La notoriété se construit hors de votre site : annuaires professionnels, presse spécialisée, interventions citées. Un domaine que le web ne mentionne jamais reste invisible pour les modèles, même bien construit.
+
+## Verdict : devez-vous vous en préoccuper, selon votre profil ?
+
+**La réponse honnête n'est pas la même pour tout le monde.**
+
+- **Commerce ou artisan local** : non, pas en priorité. Vos clients vous cherchent sur Google et Google Maps ; le référencement local classique reste votre levier principal, et il nourrira les réponses IA de Google par ricochet.
+- **PME B2B à cycle de décision long (conseil, industrie, services)** : oui, c'est le profil le plus concerné. Vos prospects posent désormais aux assistants les questions qu'ils posaient à Google (« quel prestataire pour… », « combien coûte… ») — être la source citée à ce moment-là, c'est entrer dans la liste courte avant même le premier contact.
+- **E-commerce** : partiellement. Les fiches produits sont rarement citées ; ce sont vos contenus de conseil et de comparaison qui peuvent l'être. Si vous n'en produisez pas, le GEO ne vous concernera pas.
+- **Structure experte d'une niche (fédération, cabinet spécialisé, éditeur métier)** : opportunité réelle, surtout via Perplexity, qui cite volontiers les sources spécialisées uniques. C'est le cas où un « petit » site peut battre les grands.
+
+Dans tous les cas, la mécanique décrite ici ne dit que *pourquoi* une page est citée. Le *comment s'y prendre*, avec des priorités et un budget de PME, est l'objet du [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme). Et si votre question est en amont — « SEO, GEO, par où commencer ? » — la rubrique [Être trouvé à l'heure de l'IA](/documentation/etre-trouve) arbitre ce choix.
+
+## FAQ — être cité par les moteurs IA
+
+### Comment savoir si mon site est cité par ChatGPT ou Perplexity ?
+
+Posez aux assistants les questions que vos clients posent (« quel prestataire pour… », « comment choisir… ») et regardez quelles sources ils citent. Faites-le sur plusieurs formulations et plusieurs jours, car les réponses varient d'une session à l'autre. Le [diagnostic gratuit de visibilité IA](/outils/visibilite-ia) automatise ce premier état des lieux.
+
+### Faut-il autoriser ou bloquer les robots des IA sur mon site ?
+
+Si vous voulez être cité, il faut les autoriser : un site qui bloque OAI-SearchBot ou PerplexityBot est simplement absent des réponses. Bloquer GPTBot (le robot d'entraînement d'OpenAI) est un choix distinct, qui n'empêche pas d'apparaître dans ChatGPT Search. C'est une décision éditoriale avant d'être technique : que voulez-vous que les IA fassent de votre contenu ?
+
+### Être bien référencé sur Google suffit-il pour être cité par les IA ?
+
+C'est un prérequis, pas une garantie. Les moteurs IA s'appuient sur des index de recherche classiques pour trouver leurs candidats : un site invisible dans Google l'est aussi dans leurs réponses. Mais la sélection finale ajoute ses propres critères — réponses directes extractibles, chiffres sourcés, rapidité, fraîcheur — qu'un bon classement Google ne garantit pas.
+
+### Pourquoi mon concurrent est-il cité et pas moi ?
+
+Dans la grande majorité des cas que j'examine, la cause est l'une de ces trois : ses pages répondent à des questions précises quand les vôtres décrivent une offre ; son site est plus rapide et plus lisible pour les robots ; ou il est davantage mentionné ailleurs sur le web, ce qui construit sa notoriété auprès des modèles. Un diagnostic page par page permet de trancher entre les trois.
+
+### Combien de temps faut-il pour apparaître dans les réponses des IA ?
+
+Il n'y a pas de délai garanti. Perplexity, qui recrawle fréquemment et favorise le contenu frais, peut citer une page en quelques jours ou semaines ; ChatGPT Search est plus lent à intégrer de nouvelles sources, car la notoriété du domaine y pèse davantage. Comptez un travail de fond sur plusieurs mois, pas une astuce à effet immédiat.
+
+---
+
+**Où en est votre site ?** Le [diagnostic de visibilité IA](/outils/visibilite-ia) vous donne un premier état des lieux gratuit en quelques minutes. Pour passer de la mécanique à l'action, le [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme) déroule les priorités. Et si vous voulez trancher votre cas précis avec moi, la [visio conseil](/conseil) fait le tour de votre situation en 30 minutes — 150 € HT, crédités si un projet démarre sous 30 jours.
+
+## Sources
+
+- OpenAI, [*Overview of OpenAI crawlers*](https://developers.openai.com/api/docs/bots) : rôles respectifs de GPTBot, OAI-SearchBot et ChatGPT-User.
+- OpenAI Help Center, [*ChatGPT Search*](https://help.openai.com/en/articles/9237897-chatgpt-search) : fonctionnement de la recherche et des citations.
+- Perplexity, [*Perplexity's crawlers*](https://docs.perplexity.ai/guides/bots) : PerplexityBot, Perplexity-User et robots.txt.
+- Aggarwal, Murahari et al., [*GEO: Generative Engine Optimization*](https://arxiv.org/abs/2311.09735) (Princeton, IIT Delhi — KDD 2024) : +30 à 40 % de visibilité pour les pages ajoutant sources, statistiques et citations.
+- Google Search Central, [*AI features and your website*](https://developers.google.com/search/docs/appearance/ai-features) : pas de balisage spécifique, le référencement classique reste le prérequis.
+- Next Impact, [*WordPress headless en 2026 : ce qui a changé*](/blog/wordpress-headless-en-2026-ce-qui-a-change) : observations chiffrées sur le tri opéré par les bots IA (logs de production, juin 2026).
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle conçoit des sites mesurés sur leurs performances réelles (Core Web Vitals) et suit depuis 2025 le comportement des robots IA sur les sites qu'elle opère. [Prendre contact](/contact).*

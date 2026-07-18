@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Video, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";

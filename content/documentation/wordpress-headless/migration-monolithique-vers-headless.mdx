@@ -11,6 +11,8 @@ order: 22
   Migrer d'un WordPress classique vers le headless ne touche pas la base de contenu : on conserve la même installation WordPress, les mêmes articles, les mêmes éditeurs. On ajoute par-dessus un front-end Next.js qui consomme l'API, puis on bascule progressivement le DNS ou un reverse-proxy une fois le nouveau front validé. Le site reste accessible et indexé pendant toute la migration.
 </TldrCallout>
 
+*Ce guide couvre la migration technique de bout en bout (audit → API → front → bascule). Le volet référencement — ne rien perdre côté Google pendant la bascule — a sa propre checklist : [migrer un WordPress vers headless sans casser le SEO](/blog/migrer-wordpress-vers-headless-sans-casser-seo).*
+
 ## Évaluer la faisabilité de la migration
 
 Avant de migrer un site WordPress classique vers une architecture headless, il faut évaluer si le projet est adapté à cette transition. Tous les sites ne bénéficient pas du découplage, et certaines configurations rendent la migration plus coûteuse que le gain attendu.

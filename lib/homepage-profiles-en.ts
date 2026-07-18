@@ -538,7 +538,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "Understand the concrete gains: load times cut in half, lower maintenance cost, and measurable ROI on your web investment.",
       src: "/icons/scan-icon.svg",
       ctaText: "Learn more",
-      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/performance-et-core-web-vitals",
     },
     {
       title: "What goals does it fit?",
@@ -546,7 +546,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "See if your project matches: traffic spikes to absorb, eco-design, multisite, customer portal or business application.",
       src: "/icons/analytics-icon.svg",
       ctaText: "Learn more",
-      ctaLink: "/documentation/wordpress-headless/quand-utiliser-wordpress-headless",
+      ctaLink: "/documentation/wordpress-headless/dois-je-passer-au-headless",
     },
   ],
   decideur: [
@@ -556,7 +556,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "Understand how decoupling frontend and backend translates into a competitive advantage for your business.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "Learn more",
-      ctaLink: "/documentation/wordpress-headless/pourquoi-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "ROI and business performance",
@@ -582,7 +582,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "No new tool to learn. You keep managing your content in WordPress, exactly as before — only better.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "Learn more",
-      ctaLink: "/documentation/wordpress-headless/gerer-le-contenu",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "A faster site for your visitors",
@@ -598,7 +598,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "Preview, media library, editorial workflow: everything you need to publish with confidence.",
       src: "/icons/analytics-icon.svg",
       ctaText: "See the workflow",
-      ctaLink: "/documentation/wordpress-headless/preview-et-workflow-editorial",
+      ctaLink: "/documentation/wordpress-headless/gerer-le-contenu",
     },
   ],
   developpeur: [
@@ -608,7 +608,7 @@ export const EXPANDABLE_CARDS_VARIANTS_EN: Record<
         "REST / GraphQL API on the backend, React on the frontend. Understand the separation of concerns and data fetching.",
       src: "/icons/desktop-headless-icon.svg",
       ctaText: "View architecture",
-      ctaLink: "/documentation/wordpress-headless/comment-fonctionne-le-headless",
+      ctaLink: "/documentation/wordpress-headless/comprendre-le-headless",
     },
     {
       title: "Stack and performance",

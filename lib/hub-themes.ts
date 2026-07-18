@@ -13,14 +13,18 @@ import {
   Blocks,
   Bot,
   Boxes,
+  Braces,
   Calculator,
   ClipboardList,
   Compass,
+  FileCode2,
   FileSearch,
   FileText,
   FlaskConical,
   GitCompare,
+  ListChecks,
   Megaphone,
+  Radar,
   ScanSearch,
   ScrollText,
   Smartphone,
@@ -55,7 +59,7 @@ export type Temp = "froid" | "tiede" | "chaud";
 /** Une prestation possible en sortie de thème (la « prochaine étape »). */
 export interface ThemePresta {
   name: LocaleText;
-  price: LocaleText; // « Gratuit », « 180 € », « dès 149 € »…
+  price: LocaleText; // « Gratuit », « 150 € », « dès 6 500 € »…
   temp: Temp;
   blurb: LocaleText;
   cta: LocaleText;
@@ -194,6 +198,18 @@ const choisir: HubTheme = {
       },
       href: "/documentation/choisir/quelle-techno-ia",
     },
+    {
+      icon: Calculator,
+      name: {
+        fr: "Combien coûte un site web en 2026 ?",
+        en: "How much does a website cost in 2026?",
+      },
+      blurb: {
+        fr: "Les fourchettes consolidées par type de site — création, exploitation annuelle et coût total sur trois ans.",
+        en: "Consolidated price ranges by site type — build, yearly running costs and three-year total cost.",
+      },
+      href: "/documentation/choisir/combien-coute-un-site-web-en-2026",
+    },
   ],
   tools: [
     {
@@ -230,7 +246,7 @@ const choisir: HubTheme = {
         fr: "Une fourchette de budget indicative selon le type de site et les fonctionnalités.",
         en: "An indicative budget range by site type and features.",
       },
-      href: "/tarifs",
+      href: "/solutions-web",
     },
   ],
   prestas: [
@@ -335,6 +351,56 @@ const iaEtCode: HubTheme = {
         fr: "Une fonctionnalité IA ne se justifie que si elle résout un vrai problème pour CE besoin. Sinon, c'est un gadget coûteux.",
         en: "An AI feature is only justified if it solves a real problem for THIS need. Otherwise it's an expensive gimmick.",
       },
+    },
+  ],
+  reading: [
+    {
+      icon: GitCompare,
+      name: {
+        fr: "Site généré par IA vs site professionnel",
+        en: "AI-generated site vs professional site",
+      },
+      blurb: {
+        fr: "Le comparatif : ce que vaut un site généré par IA face à un site fait par un professionnel, avec des verdicts par cas d'usage.",
+        en: "The comparison: how an AI-generated site stacks up against one built by a professional, with verdicts by use case.",
+      },
+      href: "/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel",
+    },
+    {
+      icon: Wrench,
+      name: {
+        fr: "Reprendre un site généré par IA",
+        en: "Taking over an AI-generated site",
+      },
+      blurb: {
+        fr: "Votre site v0, Lovable ou Bolt pose problème : réparer, reprendre ou reconstruire — et qui peut le faire.",
+        en: "Your v0, Lovable or Bolt site is in trouble: repair, take over or rebuild — and who can do it.",
+      },
+      href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
+    },
+    {
+      icon: FileText,
+      name: {
+        fr: "Ce que l'IA change dans la création d'un site web",
+        en: "What AI really changes in website creation",
+      },
+      blurb: {
+        fr: "Délais, prix, qualité, pratiques des prestataires : l'état des lieux 2026, dimension par dimension — et ce qui ne change pas.",
+        en: "Timelines, prices, quality, provider practices: the 2026 picture, dimension by dimension — and what doesn't change.",
+      },
+      href: "/documentation/ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web",
+    },
+    {
+      icon: Braces,
+      name: {
+        fr: "La dette technique du code généré par IA",
+        en: "The technical debt of AI-generated code",
+      },
+      blurb: {
+        fr: "Duplication, dépendances, code non relu : les mécanismes de la dette du code IA — et comment la limiter avant qu'elle ne coûte.",
+        en: "Duplication, dependencies, unreviewed code: how AI-generated code builds technical debt — and how to limit it before it costs you.",
+      },
+      href: "/documentation/ia-et-code/dette-technique-du-code-genere-par-ia",
     },
   ],
   tools: [
@@ -470,6 +536,20 @@ const reparer: HubTheme = {
       },
     },
   ],
+  reading: [
+    {
+      icon: Bot,
+      name: {
+        fr: "Votre site n'est pas un WordPress mais un site généré par IA ?",
+        en: "Your site isn't a WordPress but an AI-generated site?",
+      },
+      blurb: {
+        fr: "Le cas v0, Lovable, Bolt & co suit une autre logique que le WordPress : réparer, reprendre ou reconstruire — le guide dédié.",
+        en: "The v0, Lovable, Bolt & co case follows a different logic than WordPress: repair, take over or rebuild — the dedicated guide.",
+      },
+      href: "/documentation/ia-et-code/reprendre-un-site-genere-par-ia",
+    },
+  ],
   tools: [
     {
       icon: Activity,
@@ -589,6 +669,20 @@ const avantSigner: HubTheme = {
       },
     },
   ],
+  reading: [
+    {
+      icon: ListChecks,
+      name: {
+        fr: "Les 12 questions IA à poser à votre prestataire",
+        en: "The 12 AI questions to ask your web provider",
+      },
+      blurb: {
+        fr: "Votre agence ou freelance utilise l'IA ? Les 12 questions à poser avant de signer — avec les bonnes réponses et les signaux d'alarme.",
+        en: "Your agency or freelancer uses AI? The 12 questions to ask before signing — with the right answers and the red flags.",
+      },
+      href: "/documentation/avant-signer/12-questions-ia-a-poser-a-votre-prestataire",
+    },
+  ],
   tools: [
     {
       icon: FileSearch,
@@ -615,7 +709,8 @@ const avantSigner: HubTheme = {
         fr: "Le prix attendu pour votre type de projet, pour situer un devis.",
         en: "The expected price for your type of project, to gauge a quote.",
       },
-      href: "/tarifs",
+      // Héritage corrigé : /tarifs est en 301 vers /solutions-web (next.config.mjs).
+      href: "/solutions-web",
     },
   ],
   prestas: [
@@ -926,7 +1021,221 @@ const presence: HubTheme = {
   },
 };
 
-// Ordre = parcours du hub (Comprendre → Décider → Construire → Réparer → Présence).
+// ─────────────────────────────────────────────────────────────────────────────
+// 07 — Être trouvé à l'heure de l'IA (SEO + GEO — absorbe la catégorie SEO)
+// Textes provisoires sobres : le fond est correct, le rédacteur SEO/GEO affinera.
+// ─────────────────────────────────────────────────────────────────────────────
+const etreTrouve: HubTheme = {
+  slug: "etre-trouve",
+  index: "№ 07",
+  icon: Radar,
+  kicker: { fr: "Être trouvé à l'heure de l'IA", en: "Be found in the AI era" },
+  question: {
+    fr: "Comment être visible dans ChatGPT et les moteurs IA ?",
+    en: "How do I get visible in ChatGPT and AI engines?",
+  },
+  intro: {
+    fr: "Vos futurs clients ne cherchent plus seulement sur Google : ils posent leur question à ChatGPT, Perplexity ou aux AI Overviews. Être classé ne suffit plus — il faut être cité.",
+    en: "Your future clients no longer search only on Google: they ask ChatGPT, Perplexity or AI Overviews. Ranking is no longer enough — you need to be cited.",
+  },
+  context: {
+    fr: "Trois sigles, une définition chacun. Le SEO (Search Engine Optimization) vise le classement dans les résultats de Google. Le GEO (Generative Engine Optimization) vise la citation dans les réponses générées par ChatGPT, Perplexity ou les AI Overviews — l'AEO (Answer Engine Optimization) en est le quasi-synonyme. Faut-il choisir entre les deux ? Non : en 2026, les moteurs IA s'appuient d'abord sur des pages bien indexées, rapides et bien structurées. Le SEO reste le socle, le GEO est l'étage au-dessus — on les travaille dans cet ordre.",
+    en: "Three acronyms, one definition each. SEO (Search Engine Optimization) targets ranking in Google's results. GEO (Generative Engine Optimization) targets being cited in answers generated by ChatGPT, Perplexity or AI Overviews — AEO (Answer Engine Optimization) is its near-synonym. Do you have to pick one? No: in 2026, AI engines still rely on well-indexed, fast, well-structured pages. SEO remains the foundation, GEO is the floor above — you work on them in that order.",
+  },
+  options: [
+    {
+      label: { fr: "D'abord consolider le SEO", en: "Consolidate SEO first" },
+      detail: {
+        fr: "Pages mal indexées, structure floue, contenus minces : tant que le socle a des trous, aucune optimisation IA ne les compensera.",
+        en: "Poorly indexed pages, fuzzy structure, thin content: as long as the foundation has holes, no AI optimization will compensate.",
+      },
+    },
+    {
+      label: { fr: "Ajouter la couche GEO", en: "Add the GEO layer" },
+      detail: {
+        fr: "Le socle tient mais ChatGPT et Perplexity ne vous citent jamais : réponses directes, chiffres, sections extractibles — rendre vos pages citables.",
+        en: "The foundation holds but ChatGPT and Perplexity never cite you: direct answers, figures, extractable sections — make your pages citable.",
+      },
+    },
+    {
+      label: { fr: "Revoir la base technique", en: "Fix the technical base" },
+      detail: {
+        fr: "Site lent, mal crawlable ou fermé aux robots IA : la visibilité se joue avant le contenu. Et si la question devient un choix de techno, c'est un autre arbitrage.",
+        en: "A slow, poorly crawlable site, or one closed to AI crawlers: visibility is decided before the content. And if the question becomes a tech choice, that's a different decision.",
+      },
+    },
+  ],
+  advice: [
+    {
+      point: { fr: "SEO ou GEO n'est pas un choix, c'est un ordre", en: "SEO vs GEO isn't a choice, it's an order" },
+      detail: {
+        fr: "Les moteurs IA puisent dans les mêmes index et signaux que le SEO classique. Sans socle, pas de citation ; avec un socle propre, le GEO est un effort raisonnable.",
+        en: "AI engines draw on the same indexes and signals as classic SEO. No foundation, no citation; with a clean foundation, GEO is a reasonable effort.",
+      },
+    },
+    {
+      point: { fr: "Les moteurs IA citent les pages qui tranchent", en: "AI engines cite pages that take a stance" },
+      detail: {
+        fr: "Réponse directe sous le titre, chiffres explicites, verdicts par profil, sections autonomes : c'est ce que ChatGPT et Perplexity reprennent — pas les pages qui tournent autour.",
+        en: "A direct answer under the title, explicit figures, verdicts by profile, self-contained sections: that's what ChatGPT and Perplexity pick up — not pages that circle the question.",
+      },
+    },
+    {
+      point: { fr: "Vérifiez que les robots IA peuvent entrer", en: "Check that AI crawlers can get in" },
+      detail: {
+        fr: "Si votre robots.txt bloque les robots de recherche IA (OAI-SearchBot pour ChatGPT Search, PerplexityBot…), vous n'existez pas dans leurs réponses. GPTBot et ClaudeBot, eux, servent à l'entraînement : autre décision.",
+        en: "If your robots.txt blocks AI search crawlers (OAI-SearchBot for ChatGPT Search, PerplexityBot…), you don't exist in their answers. GPTBot and ClaudeBot serve model training: a separate decision.",
+      },
+    },
+    {
+      point: { fr: "Mesurez avant d'optimiser", en: "Measure before you optimize" },
+      detail: {
+        fr: "Posez vos questions métier à ChatGPT et Perplexity : qui est cité aujourd'hui ? C'est votre point de départ, pas une opinion.",
+        en: "Ask your business questions to ChatGPT and Perplexity: who gets cited today? That's your starting point, not an opinion.",
+      },
+    },
+  ],
+  reading: [
+    {
+      icon: FileSearch,
+      name: {
+        fr: "Comment ChatGPT et Perplexity choisissent leurs sources",
+        en: "How ChatGPT and Perplexity choose their sources",
+      },
+      blurb: {
+        fr: "La mécanique de la citation : ce que les robots IA font de vos pages, et les critères observables qui font qu'une page est reprise dans une réponse.",
+        en: "The mechanics of citation: what AI crawlers do with your pages, and the observable criteria that get a page quoted in an answer.",
+      },
+      href: "/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources",
+    },
+    {
+      icon: ScrollText,
+      name: { fr: "Le guide GEO pour les PME", en: "The GEO guide for SMBs" },
+      blurb: {
+        fr: "Le plan d'action : quoi optimiser, dans quel ordre, avec quels moyens — et des verdicts par profil (vitrine, lead-gen, e-commerce).",
+        en: "The action plan: what to optimize, in what order, with what resources — with verdicts by profile (brochure site, lead-gen, e-commerce).",
+      },
+      href: "/documentation/etre-trouve/guide-geo-pme",
+    },
+    {
+      icon: ListChecks,
+      name: {
+        fr: "Structurer une page citable par les moteurs IA",
+        en: "Structure a page AI engines can cite",
+      },
+      blurb: {
+        fr: "La méthode pas à pas : réécrire une page existante en réponse nette — ordre des étapes, format, pièges à éviter.",
+        en: "The step-by-step method: rewrite an existing page into a sharp answer — order of steps, format, pitfalls to avoid.",
+      },
+      href: "/documentation/etre-trouve/structurer-une-page-citable-par-les-moteurs-ia",
+    },
+    {
+      icon: Braces,
+      name: {
+        fr: "Données structurées : être compris des moteurs IA",
+        en: "Structured data: be understood by AI engines",
+      },
+      blurb: {
+        fr: "Quels schemas installer sur un site de PME, lesquels pèsent vraiment pour les IA, dans quel ordre — et qui peut le faire.",
+        en: "Which schemas to install on an SMB site, which ones actually matter for AI, in what order — and who can do it.",
+      },
+      href: "/documentation/etre-trouve/donnees-structurees-moteurs-ia",
+    },
+    {
+      icon: FileCode2,
+      name: {
+        fr: "llms.txt, robots.txt et crawlers IA",
+        en: "llms.txt, robots.txt and AI crawlers",
+      },
+      blurb: {
+        fr: "Qui sont les robots IA, ce que chacun fait de vos pages, et comment régler votre politique d'accès — llms.txt compris.",
+        en: "Who the AI crawlers are, what each does with your pages, and how to set your access policy — llms.txt included.",
+      },
+      href: "/documentation/etre-trouve/llms-txt-robots-txt-crawlers-ia",
+    },
+    {
+      icon: FileText,
+      name: { fr: "Les fondamentaux SEO", en: "SEO fundamentals" },
+      blurb: {
+        fr: "Arborescence, mots-clés, cocon sémantique et outils : le socle de référencement classique, avant la couche IA.",
+        en: "Site structure, keywords, topic clusters and tools: the classic SEO foundation, before the AI layer.",
+      },
+      href: "/documentation/seo",
+    },
+    {
+      icon: GitCompare,
+      name: {
+        fr: "Quelle techno pour votre site à l'heure de l'IA ?",
+        en: "Which tech for your site in the AI era?",
+      },
+      blurb: {
+        fr: "Si votre question est en réalité un choix d'outil ou de refonte : l'arbitrage techno se fait là, pas ici.",
+        en: "If your question is really a tool or rebuild choice: the tech decision happens there, not here.",
+      },
+      href: "/documentation/choisir/quelle-techno-ia",
+    },
+  ],
+  tools: [
+    {
+      icon: Radar,
+      name: { fr: "Votre site est-il visible dans les moteurs IA ?", en: "Is your site visible in AI engines?" },
+      blurb: {
+        fr: "Un diagnostic gratuit : votre site est-il cité, citable et accessible aux robots IA ?",
+        en: "A free diagnostic: is your site cited, citable and open to AI crawlers?",
+      },
+      href: "/outils/visibilite-ia",
+    },
+    {
+      icon: ClipboardList,
+      name: { fr: "La checklist GEO", en: "The GEO checklist" },
+      blurb: {
+        fr: "Le chantier GEO point par point, à dérouler en interne — et à télécharger pour la suivre.",
+        en: "The GEO worklist point by point, to run in-house — and to download so you can track it.",
+      },
+      href: "/outils/checklist-geo",
+    },
+    {
+      icon: ScanSearch,
+      name: { fr: "Diagnostic Web & IA", en: "Web & AI diagnostic" },
+      blurb: {
+        fr: "Un état des lieux de votre site — performance, signaux techniques, visibilité.",
+        en: "A snapshot of your site — performance, technical signals, visibility.",
+      },
+      href: "/audit-site-web",
+    },
+  ],
+  prestas: [
+    VISIO(
+      "Une question précise — SEO, GEO, par quoi commencer ? On la tranche en visio, créditée si vous lancez un projet.",
+      "A precise question — SEO, GEO, where to start? We settle it on a call, credited if you start a project.",
+    ),
+    ROADMAP(
+      "chaud",
+      "Visibilité à rebâtir ? Un conseil architecture pour cadrer contenu, structure, technique et priorités GEO.",
+      "Visibility to rebuild? Architecture advice to frame content, structure, tech and GEO priorities.",
+    ),
+    AUDIT_GRATUIT(
+      "Pas encore sûr ? Je regarde votre site et vous dis où vous en êtes.",
+      "Not sure yet? I look at your site and tell you where you stand.",
+    ),
+  ],
+  meta: {
+    title: {
+      fr: "Être visible dans ChatGPT : SEO, GEO ou les deux ?",
+      en: "Visible in ChatGPT: SEO, GEO or both?",
+    },
+    description: {
+      fr: "Référencement IA : ce qui fait qu'un site est cité par ChatGPT, Perplexity et les AI Overviews, et par où commencer. Diagnostic gratuit inclus.",
+      en: "AI search visibility: what gets a site cited by ChatGPT, Perplexity and AI Overviews, and where to start. Free diagnostic included.",
+    },
+  },
+  keywords: {
+    fr: ["être visible dans ChatGPT", "référencement IA", "SEO ou GEO", "comment apparaître dans les réponses des IA"],
+    en: ["be visible in ChatGPT", "AI search optimization", "SEO vs GEO", "appear in AI answers"],
+  },
+};
+
+// Ordre = parcours du hub (Comprendre → Décider → Construire → Réparer → Présence → Visibilité).
 export const HUB_THEMES: Record<string, HubTheme> = {
   choisir,
   "ia-et-code": iaEtCode,
@@ -934,6 +1243,7 @@ export const HUB_THEMES: Record<string, HubTheme> = {
   "avant-signer": avantSigner,
   "outils-metier": outilsMetier,
   presence,
+  "etre-trouve": etreTrouve,
 };
 
 export function getHubTheme(slug: string): HubTheme | undefined {

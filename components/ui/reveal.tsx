@@ -14,10 +14,11 @@
  * - prefers-reduced-motion → rendu en état final, zéro mouvement.
  */
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { m as motion, useReducedMotion, type Variants } from "framer-motion";
 import * as React from "react";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { DUR, EASE_OUT as EASE } from "@/lib/motion-tokens";
+
 const VIEWPORT = { once: true, margin: "-12% 0px" } as const;
 
 type Tag = keyof React.JSX.IntrinsicElements;
@@ -41,7 +42,7 @@ export function Reveal({
   as = "div",
   delay = 0,
   y = 12,
-  duration = 0.5,
+  duration = DUR.reveal,
   once = true,
   className,
   style,
@@ -142,7 +143,7 @@ export function StaggerItem({
   children,
   as = "div",
   y = 12,
-  duration = 0.5,
+  duration = DUR.reveal,
   className,
   style,
 }: StaggerItemProps) {

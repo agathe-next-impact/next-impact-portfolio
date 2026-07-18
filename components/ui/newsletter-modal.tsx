@@ -17,16 +17,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m as motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ArrowRight, Check, Loader2, Mail, X } from "lucide-react";
 import { track } from "@/lib/track";
+import { EASE_OUT as EASE } from "@/lib/motion-tokens";
 
 const LS_SUBSCRIBED = "ni:newsletter:subscribed";
 const SS_DISMISSED = "ni:newsletter:dismissed";
 const OPEN_DELAY_MS = 1400;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -75,12 +75,18 @@ export default function NewsletterModal({ source }: { source: string }) {
   }, []);
 
   // Gestion de l'ouverture : focus, verrou de scroll, Échap, focus trap léger.
+  // Invariant : le cycle ouverture/fermeture ne doit JAMAIS déplacer le scroll
+  // de la page (preventScroll sur les focus + restauration explicite de scrollY).
   useEffect(() => {
     if (!open) return;
     lastFocused.current = document.activeElement as HTMLElement | null;
     const prevOverflow = document.body.style.overflow;
+    const prevScrollY = window.scrollY;
     document.body.style.overflow = "hidden";
-    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 60);
+    const focusTimer = window.setTimeout(
+      () => inputRef.current?.focus({ preventScroll: true }),
+      60,
+    );
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -110,7 +116,14 @@ export default function NewsletterModal({ source }: { source: string }) {
       window.clearTimeout(focusTimer);
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
-      lastFocused.current?.focus?.();
+      if (window.scrollY !== prevScrollY) {
+        window.scrollTo({ top: prevScrollY, behavior: "instant" });
+      }
+      try {
+        lastFocused.current?.focus?.({ preventScroll: true });
+      } catch {
+        lastFocused.current?.focus?.();
+      }
     };
   }, [open, close]);
 

@@ -13,7 +13,8 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import NewsletterModal from "@/components/ui/newsletter-modal";
-import { Reveal } from "@/components/ui/reveal";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { StepTransition } from "@/components/ui/step-transition";
 
 type Family = "nocode" | "saas" | "surmesure";
 
@@ -280,13 +281,13 @@ export default function NocodeSaasSurmesure() {
         </div>
       </div>
 
-      {/* Résultat */}
+      {/* Résultat — transition d'étape standard (fade + slide 8 px) */}
+      <StepTransition stepKey={submitted ? "resultat" : "formulaire"}>
       {submitted && (
-        <div
-          ref={resultRef}
-          className="flex scroll-mt-24 flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
-        >
-          <div className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[3fr_2fr]">
+        <div ref={resultRef} className="scroll-mt-24 border-b border-dark-gray">
+        {/* Verdict en cascade — les blocs du résultat apparaissent en Stagger */}
+        <Stagger className="flex flex-col gap-8 px-6 py-8 lg:px-8">
+          <StaggerItem className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[3fr_2fr]">
             <div className="flex flex-col justify-center bg-obsidian p-6 lg:p-8">
               <p className={LABEL_MONO}>{isEn ? "Recommended" : "Recommandé"}</p>
               <h3 className="mt-3 text-2xl font-light tracking-tight text-accent-secondary">
@@ -319,10 +320,10 @@ export default function NocodeSaasSurmesure() {
                 })}
               </div>
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Par où commencer */}
-          <div>
+          <StaggerItem>
             <p className={`${LABEL_MONO} mb-4`}>{isEn ? "Where to start" : "Par où commencer"}</p>
             <div className="border border-dark-gray">
               {info.links.map((l, i) => (
@@ -344,20 +345,20 @@ export default function NocodeSaasSurmesure() {
                 </Link>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Note anti-cannibalisation */}
-          <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
+          <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
                 ? "This signal points you in a direction. A tech choice call applies it to your real budget, data and constraints — and is credited back if a project follows."
                 : "Ce signal vous oriente. Une visio de choix de techno l'applique à votre budget réel, vos données et vos contraintes — et se déduit d'un projet si vous le lancez."}
             </p>
-          </div>
+          </StaggerItem>
 
           {/* Prochaine étape */}
-          <div className="flex flex-wrap items-center gap-3">
+          <StaggerItem className="flex flex-wrap items-center gap-3">
             <Link
               href={info.next.href as Parameters<typeof Link>[0]["href"]}
               className={BTN_PRIMARY}
@@ -373,10 +374,12 @@ export default function NocodeSaasSurmesure() {
               <RotateCcw size={13} />
               {isEn ? "Restart" : "Refaire"}
             </button>
-          </div>
+          </StaggerItem>
           <NewsletterModal source="nocode-saas-surmesure" />
+        </Stagger>
         </div>
       )}
+      </StepTransition>
 
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="px-6 py-8 lg:px-8">

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";

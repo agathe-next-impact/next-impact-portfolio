@@ -1,0 +1,161 @@
+---
+title: "Données structurées : être compris des moteurs IA"
+description: "Quels schemas installer sur un site de PME, lesquels comptent vraiment pour Google et les moteurs IA, dans quel ordre, et qui peut les poser."
+category: etre-trouve
+author: "Agathe Karinthi-Martin"
+date: "2026-07-18"
+updated: "2026-07-18"
+order: 4
+faq:
+  - question: "Les données structurées sont-elles obligatoires pour être cité par ChatGPT ou Perplexity ?"
+    answer: "Non. Aucun moteur IA ne documente d'exigence de balisage, et Google indique explicitement qu'aucun balisage spécial n'est requis pour ses fonctionnalités IA. Les données structurées sont un plus documenté pour la compréhension machine de vos pages, et un facteur observé — pas garanti — de meilleure reprise dans les réponses IA. Le contenu en réponses nettes passe avant."
+  - question: "JSON-LD, microdonnées, RDFa : quel format choisir ?"
+    answer: "JSON-LD, sans hésiter. C'est le format recommandé par Google : un petit bloc de texte ajouté dans le code de la page, séparé du contenu visible, donc facile à poser et à maintenir sans toucher à votre mise en page. Les autres formats (microdonnées, RDFa) fonctionnent mais s'entremêlent au HTML — plus fragiles à chaque refonte."
+  - question: "Mon plugin SEO WordPress (Yoast, Rank Math) suffit-il ?"
+    answer: "Pour le socle, oui : Organization, Article, BreadcrumbList et l'auteur sont générés automatiquement par les grands plugins SEO une fois leurs réglages remplis. Vérifiez-les plutôt que de les réinstaller. En revanche, les schemas métier (Service, Product détaillé, FAQPage sur mesure) demandent souvent une configuration manuelle ou une intervention de prestataire."
+  - question: "Combien coûte le balisage d'un site de PME ?"
+    answer: "Comptez une à deux journées de travail pour un site vitrine ou lead-gen : audit de l'existant, réglage du plugin ou pose des blocs JSON-LD sur les gabarits de pages, vérification dans les outils de test. Sur WordPress avec un bon plugin SEO, une partie est déjà faite. Le devis dépend surtout de l'état du socle — d'où l'intérêt de commencer par un diagnostic gratuit."
+  - question: "Un balisage incorrect peut-il pénaliser mon site ?"
+    answer: "Un balisage simplement erroné (champ manquant, syntaxe cassée) est ignoré, sans pénalité. En revanche, un balisage mensonger — faux avis, contenu balisé invisible pour le visiteur, type de schema sans rapport avec la page — peut valoir une action manuelle de Google qui prive le site de tout résultat enrichi. La règle est simple : ne déclarez en langage machine que ce que la page montre réellement."
+---
+
+*Sujet volatil : le traitement du balisage par les moteurs évolue vite. Cet article, rédigé le 18 juillet 2026, est revu tous les 2 à 3 mois.*
+
+**Les données structurées sont des étiquettes normalisées (le vocabulaire [Schema.org](https://schema.org/)) ajoutées au code de vos pages pour déclarer en langage machine qui vous êtes, ce que vous publiez et ce que vous vendez. Soyons clairs sur ce qu'elles font : Google documente leur usage pour comprendre les pages et déclencher des résultats enrichis, mais aucun moteur IA n'en exige — et sur mes sites en production, je les observe corrélées à de meilleures citations IA, sans que ce soit garanti. Pour une PME, l'essentiel tient en quatre schemas prioritaires — Organization ou LocalBusiness, Article avec auteur, BreadcrumbList, puis Service ou Product — posés en une à deux journées, souvent par un simple plugin sur WordPress.**
+
+## Que sont les données structurées, en langage clair ?
+
+**Les données structurées sont la fiche d'identité machine de chaque page : là où un humain déduit du contexte que « Next Impact » est une entreprise et « 490 € » un prix, un robot a besoin qu'on le lui déclare explicitement.**
+
+Le vocabulaire commun s'appelle [Schema.org](https://schema.org/) : un dictionnaire de types (« Organization », « Article », « Product »…) maintenu conjointement par les grands moteurs de recherche depuis 2011. Le format d'écriture recommandé par Google est le **JSON-LD** : un petit bloc de texte inséré dans le code de la page, invisible pour le visiteur, lisible d'un bloc par les robots. Voici à quoi ressemble la déclaration d'identité d'une entreprise — c'est tout, et c'est illustratif, pas un tutoriel :
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Votre Entreprise",
+  "url": "https://www.votre-site.fr",
+  "logo": "https://www.votre-site.fr/logo.png",
+  "contactPoint": { "@type": "ContactPoint", "email": "contact@votre-site.fr" }
+}
+```
+
+Ce que ça change : [Google documente](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data) l'usage des données structurées pour **comprendre le contenu des pages** et pour activer des affichages enrichis dans les résultats (fiche d'entreprise, fil d'Ariane, notes d'avis…). C'est la fonction établie, indépendante de toute considération IA.
+
+## Les données structurées servent-elles vraiment pour les moteurs IA ?
+
+**Réponse honnête en trois temps : rien d'exigé, un rôle documenté pour la compréhension, une corrélation observée pour les citations.**
+
+1. **Rien d'exigé.** Google l'écrit noir sur blanc : [aucun balisage spécial n'est requis](https://developers.google.com/search/docs/appearance/ai-features) pour apparaître dans AI Overviews ou AI Mode — c'est la seule phrase à retenir sur le sujet, et ce site l'a déjà publiée dans [le guide GEO](/documentation/etre-trouve/guide-geo-pme). OpenAI et Perplexity ne documentent aucune exigence de schema non plus.
+2. **Un rôle documenté en amont.** Les moteurs IA sélectionnent leurs sources dans des index de recherche classiques — c'est la mécanique décrite dans [comment ChatGPT et Perplexity choisissent leurs sources](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources). Or ces index utilisent les données structurées pour lever les ambiguïtés : une page dont l'auteur, la date de mise à jour et le sujet sont déclarés proprement est plus facile à classer, donc à retrouver au bon moment.
+3. **Une corrélation observée, pas une garantie.** Sur les sites que je maintiens, les pages balisées ressortent plus souvent dans les réponses des moteurs IA que leurs équivalentes non balisées — j'ai publié [ces observations de terrain](/blog/wordpress-headless-en-2026-ce-qui-a-change). C'est un constat de logs de production, cohérent d'un site à l'autre, mais ce n'est ni une causalité prouvée ni une promesse.
+
+> **Ce que je constate en projet.** Quand j'audite un site absent des réponses IA, le balisage manquant n'est presque jamais la cause première — ce sont les pages qui ne répondent à aucune question qui éliminent le site bien avant. Mais sur les sites dont le contenu est déjà en réponses nettes, le balisage est l'un des rares écarts restants entre les pages citées et les autres dans [mes relevés](/blog/wordpress-headless-en-2026-ce-qui-a-change). D'où la règle que j'applique partout : structure éditoriale d'abord, balisage ensuite.
+
+Le verdict pratique : les données structurées sont un chantier **à faible coût et à bénéfice documenté côté Google**, avec un bonus plausible côté moteurs IA. On les fait — après le contenu, jamais à la place. La méthode pour transformer une page en réponse citable est l'objet de [structurer une page citable par les moteurs IA](/documentation/etre-trouve/structurer-une-page-citable-par-les-moteurs-ia) ; ici, on traite ce que la page déclare une fois qu'elle est bien écrite.
+
+## Quels schemas installer sur un site de PME, dans quel ordre ?
+
+**Une PME n'a pas besoin des 800 types de Schema.org : quatre à six schemas couvrent l'essentiel, et l'ordre compte.**
+
+| Priorité | Schema | Ce qu'il déclare | Qui le pose |
+|---|---|---|---|
+| 1 | `Organization` (ou `LocalBusiness` si vous recevez du public) | Qui vous êtes : nom légal, logo, coordonnées, réseaux — la référence que tout le reste cite | Plugin SEO sur WordPress ; natif chez la plupart des builders ; développeur en headless |
+| 2 | `Article` + auteur `Person` | Qui a écrit quoi, publié et mis à jour quand — le socle de crédibilité de vos contenus | Plugin SEO (automatique une fois configuré) |
+| 3 | `BreadcrumbList` | La position de la page dans votre site (fil d'Ariane) | Thème ou plugin, souvent déjà en place — à vérifier plutôt qu'à créer |
+| 4 | `Service` ou `Product` | Ce que vous vendez : nature, prix, disponibilité, avis (priorité 2 pour un e-commerce) | Plugin e-commerce (WooCommerce le fait) ou prestataire |
+| 5 | `FAQPage` | Vos questions-réponses en langage machine | Plugin ou prestataire — voir le cas particulier ci-dessous |
+| 6 | `Review` / `AggregateRating` | Des avis clients **authentiques** uniquement | Plugin d'avis ou prestataire — jamais à la main sur des avis invérifiables |
+
+Deux repères pour arbitrer. D'abord, la moitié de cette liste est probablement **déjà en place** si votre site tourne sous WordPress avec un plugin SEO configuré : la première étape est un audit de l'existant, pas une installation. Ensuite, l'effort total reste modeste — une à deux journées pour un site vitrine, réglages et vérification compris, cohérent avec le [tableau des chantiers du guide GEO](/documentation/etre-trouve/guide-geo-pme).
+
+## FAQPage et HowTo sont-ils encore utiles en 2026 ?
+
+**C'est la question piège de l'année : Google a cessé d'afficher les résultats enrichis FAQ le 7 mai 2026 — et le balisage FAQPage reste pourtant pertinent, pour une autre raison que celle qu'on croit.**
+
+Les faits, sourcés au [journal des mises à jour de Google Search Central](https://developers.google.com/search/updates) : les résultats enrichis HowTo ont disparu de la recherche Google dès septembre 2023 ; les résultats enrichis FAQ, restreints depuis août 2023 aux sites gouvernementaux et de santé, ont été **entièrement retirés en mai 2026**. Si un prestataire vous vend aujourd'hui du balisage FAQPage « pour gagner des positions enrichies dans Google », il a deux ans de retard.
+
+Pourquoi le conserver, alors ? Parce que l'affichage enrichi n'a jamais été sa seule fonction. Un bloc `FAQPage` reste une déclaration machine parfaitement lisible de vos questions-réponses — le type de contenu le plus proche du format des réponses d'assistants IA — et le type reste valide chez [Schema.org](https://schema.org/FAQPage). Coût marginal quasi nul quand la FAQ éditoriale existe déjà, aucun risque, bénéfice possible côté compréhension machine : ce site continue de baliser ses FAQ, en toute connaissance de cause. Ce qui ne change pas, en revanche : une FAQ balisée ne vaut que si les questions sont celles que vos clients posent réellement — c'est un sujet d'écriture, traité dans [la méthode de la page citable](/documentation/etre-trouve/structurer-une-page-citable-par-les-moteurs-ia), pas un sujet de balisage.
+
+## Qui pose le balisage, selon votre site ?
+
+**La réponse dépend presque entièrement de votre stack — voici le verdict pour les trois cas de figure.**
+
+### Sur un WordPress classique
+
+Verdict : **vous n'avez probablement besoin de personne pour le socle**. Yoast SEO et Rank Math génèrent automatiquement `Organization`, `Article`, `BreadcrumbList` et l'auteur, à condition que leurs réglages (identité de l'entreprise, logo, profils sociaux) soient réellement remplis — c'est là que la plupart des sites pèchent. Une demi-journée de vérification et de complétion suffit souvent. Le recours au prestataire se justifie pour les schemas métier : `Service` détaillé, `Product` au-delà du standard WooCommerce, ou un balisage sur mesure multi-gabarits.
+
+### Sur un site headless ou sur mesure
+
+Verdict : **c'est une tâche de développeur, courte si elle est prévue, agaçante si elle est oubliée**. Il n'y a pas de plugin qui balise à votre place : chaque type de schema est un petit composant à intégrer aux gabarits de pages, alimenté par vos contenus. La bonne nouvelle : le contrôle est total, chaque champ est programmable, et c'est fait une fois pour toutes au niveau du gabarit. L'implémentation concrète (composants JSON-LD, métadonnées, sitemap) est détaillée dans [SEO technique pour architecture headless](/documentation/wordpress-headless/seo-pour-architecture-headless) — c'est l'article compagnon de celui-ci, côté développeur.
+
+### Sur un builder ou un SaaS (Wix, Squarespace, Webflow, Shopify…)
+
+Verdict : **le socle est généralement posé d'office, le sur mesure dépend de la plateforme**. Ces outils génèrent automatiquement les schemas de base (identité, produits chez Shopify), ce qui est confortable ; en contrepartie, ajouter un type non prévu ou corriger un champ est parfois impossible ou réservé aux forfaits supérieurs. Avant de payer une prestation de balisage sur builder, vérifiez que la plateforme permet réellement d'injecter du JSON-LD personnalisé — sinon l'argent est perdu d'avance.
+
+## Comment vérifier ce qui est en place sur votre site ?
+
+**Dix minutes et deux outils gratuits suffisent pour savoir où vous en êtes — faites-le avant tout devis.**
+
+- Le [test des résultats enrichis de Google](https://search.google.com/test/rich-results) : collez l'URL d'une page, il liste les schemas détectés et signale les erreurs, du point de vue de Google.
+- Le [validateur Schema.org](https://validator.schema.org/) : même exercice, mais pour l'ensemble du vocabulaire — utile pour les types que Google n'affiche plus (comme `FAQPage`) et qu'un balisage propre déclare quand même.
+- Dans la Google Search Console, l'onglet « Améliorations » recense les schemas détectés sur tout le site et leurs erreurs au fil de l'eau.
+
+Testez trois pages : l'accueil, une page d'offre, un article. Si les trois ressortent vides, le chantier est devant vous ; si elles ressortent balisées avec des erreurs, une demi-journée de correction vaut mieux qu'une prestation complète.
+
+## Les pièges qui coûtent cher
+
+**Le balisage a ses règles, publiées par Google — les ignorer peut coûter plus que l'absence de balisage.**
+
+- **Le balisage mensonger.** Faux avis, notes inventées, contenu balisé qui n'apparaît pas sur la page : les [politiques de Google sur les données structurées](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) l'interdisent explicitement, et la sanction est une **action manuelle** qui prive tout le site de résultats enrichis. Ne déclarez que ce que la page montre.
+- **Le schema hors sujet.** Baliser une page de services en `Product` pour « avoir le prix affiché », ou tout marquer `FAQPage` : le balisage doit représenter le contenu réel de la page, pas ce que vous aimeriez qu'elle soit.
+- **Baliser avant d'écrire.** Un JSON-LD impeccable sur une page qui ne répond à aucune question ne produit rien : le balisage décrit, il ne crée pas la valeur. Structure éditoriale d'abord ([la méthode est ici](/documentation/etre-trouve/structurer-une-page-citable-par-les-moteurs-ia)), balisage ensuite.
+- **Payer pour ce qui existe déjà.** Sur WordPress, une prestation « données structurées » qui réinstalle ce que votre plugin SEO fait déjà est une journée facturée pour rien. Exigez un audit de l'existant en préalable.
+- **L'incohérence entre pages.** Deux noms d'entreprise différents, des adresses qui divergent entre le schema et le pied de page : les machines recoupent, et l'incohérence dilue la confiance au lieu de la construire.
+
+## Les questions à vous poser avant de lancer le chantier
+
+1. Mes pages clés répondent-elles déjà à des questions précises — ou est-ce le chantier à faire avant celui-ci ?
+2. Que détecte le [test de Google](https://search.google.com/test/rich-results) sur mes trois pages principales aujourd'hui ?
+3. Mon plugin SEO (ou ma plateforme) est-il configuré à fond, ou juste installé ?
+4. Ai-je des schemas métier à poser (services, produits, avis authentiques) qui justifient une intervention extérieure ?
+5. Qui maintiendra la cohérence de ces déclarations à la prochaine refonte ?
+
+## FAQ — données structurées et moteurs IA
+
+### Les données structurées sont-elles obligatoires pour être cité par ChatGPT ou Perplexity ?
+
+Non. Aucun moteur IA ne documente d'exigence de balisage, et Google indique explicitement qu'[aucun balisage spécial n'est requis](https://developers.google.com/search/docs/appearance/ai-features) pour ses fonctionnalités IA. Les données structurées sont un plus documenté pour la compréhension machine de vos pages, et un facteur observé — pas garanti — de meilleure reprise dans les réponses IA. Le contenu en réponses nettes passe avant.
+
+### JSON-LD, microdonnées, RDFa : quel format choisir ?
+
+JSON-LD, sans hésiter. C'est le format recommandé par Google : un petit bloc de texte ajouté dans le code de la page, séparé du contenu visible, donc facile à poser et à maintenir sans toucher à votre mise en page. Les autres formats (microdonnées, RDFa) fonctionnent mais s'entremêlent au HTML — plus fragiles à chaque refonte.
+
+### Mon plugin SEO WordPress (Yoast, Rank Math) suffit-il ?
+
+Pour le socle, oui : Organization, Article, BreadcrumbList et l'auteur sont générés automatiquement par les grands plugins SEO une fois leurs réglages remplis. Vérifiez-les plutôt que de les réinstaller. En revanche, les schemas métier (Service, Product détaillé, FAQPage sur mesure) demandent souvent une configuration manuelle ou une intervention de prestataire.
+
+### Combien coûte le balisage d'un site de PME ?
+
+Comptez une à deux journées de travail pour un site vitrine ou lead-gen : audit de l'existant, réglage du plugin ou pose des blocs JSON-LD sur les gabarits de pages, vérification dans les outils de test. Sur WordPress avec un bon plugin SEO, une partie est déjà faite. Le devis dépend surtout de l'état du socle — d'où l'intérêt de commencer par un diagnostic gratuit.
+
+### Un balisage incorrect peut-il pénaliser mon site ?
+
+Un balisage simplement erroné (champ manquant, syntaxe cassée) est ignoré, sans pénalité. En revanche, un balisage mensonger — faux avis, contenu balisé invisible pour le visiteur, type de schema sans rapport avec la page — peut valoir une [action manuelle de Google](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) qui prive le site de tout résultat enrichi. La règle est simple : ne déclarez en langage machine que ce que la page montre réellement.
+
+---
+
+**Et maintenant ?** Le balisage n'est qu'un des chantiers de la visibilité IA — la rubrique [Être trouvé à l'heure de l'IA](/documentation/etre-trouve) les remet dans l'ordre. La [checklist GEO](/outils/checklist-geo) récapitule ce chantier parmi les autres, point par point, et le [diagnostic visibilité IA](/outils/visibilite-ia) situe gratuitement votre site en 10 questions. Si l'audit de votre balisage soulève des questions propres à votre stack, une [visio conseil de 30 minutes](/conseil) (150 € HT) les tranche ; et pour transformer l'ensemble — contenu, structure, balisage — en plan d'action chiffré, le [cadrage](/conseil) (490 € HT) est fait pour ça.
+
+## Sources
+
+- Schema.org, [vocabulaire officiel](https://schema.org/) : définitions des types `Organization`, `Article`, `FAQPage` et les autres.
+- Google Search Central, [*Introduction to structured data*](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data) : rôle des données structurées dans la compréhension des pages, JSON-LD recommandé.
+- Google Search Central, [*Structured data general policies*](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) : pratiques interdites (balisage invisible, trompeur, hors sujet) et actions manuelles.
+- Google Search Central, [*AI features and your website*](https://developers.google.com/search/docs/appearance/ai-features) : aucun balisage spécial requis pour AI Overviews et AI Mode.
+- Google Search Central, [journal des mises à jour](https://developers.google.com/search/updates) : retrait des résultats enrichis FAQ (mai 2026) après leur restriction d'août 2023 ; retrait de HowTo (2023).
+- Next Impact, [*WordPress headless en 2026 : ce qui a changé*](/blog/wordpress-headless-en-2026-ce-qui-a-change) : observations de production sur la corrélation balisage / citations IA.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle conçoit des sites mesurés sur leurs performances réelles (Core Web Vitals) et suit depuis 2025 le comportement des robots IA sur les sites qu'elle opère. [Prendre contact](/contact).*
