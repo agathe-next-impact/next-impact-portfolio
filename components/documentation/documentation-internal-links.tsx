@@ -378,11 +378,6 @@ function buildCategoryTools(isEn: boolean): Record<string, ToolLink[]> {
       TOOL_LINKS[0],
       { ...SERVICE_LINKS[2], description: t("Launch your project.", "Lancez votre projet.") },
     ],
-    blog: [
-      TOOL_LINKS[0],
-      { ...SERVICE_LINKS[1], description: t("Our projects in detail.", "Nos projets en détail.") },
-      { ...SERVICE_LINKS[2], description: t("Let's discuss your project.", "Discutons de votre projet.") },
-    ],
   };
 }
 
