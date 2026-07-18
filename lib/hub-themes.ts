@@ -1044,8 +1044,8 @@ const etreTrouve: HubTheme = {
     {
       point: { fr: "Vérifiez que les robots IA peuvent entrer", en: "Check that AI crawlers can get in" },
       detail: {
-        fr: "OAI-SearchBot (ChatGPT Search), PerplexityBot, ClaudeBot, GPTBot : si votre robots.txt bloque ces robots de recherche IA, vous n'existez pas pour eux.",
-        en: "OAI-SearchBot (ChatGPT Search), PerplexityBot, ClaudeBot, GPTBot: if your robots.txt blocks these AI search crawlers, you don't exist to them.",
+        fr: "Si votre robots.txt bloque les robots de recherche IA (OAI-SearchBot pour ChatGPT Search, PerplexityBot…), vous n'existez pas dans leurs réponses. GPTBot et ClaudeBot, eux, servent à l'entraînement : autre décision.",
+        en: "If your robots.txt blocks AI search crawlers (OAI-SearchBot for ChatGPT Search, PerplexityBot…), you don't exist in their answers. GPTBot and ClaudeBot serve model training: a separate decision.",
       },
     },
     {

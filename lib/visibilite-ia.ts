@@ -57,8 +57,8 @@ export const QUESTIONS: Question[] = [
     axis: "acces",
     criterionFr: "Robots IA",
     criterionEn: "AI crawlers",
-    questionFr: "Les robots de recherche IA (OAI-SearchBot, PerplexityBot, ClaudeBot…) peuvent-ils lire votre site ?",
-    questionEn: "Can AI search crawlers (OAI-SearchBot, PerplexityBot, ClaudeBot…) read your site?",
+    questionFr: "Les robots de recherche IA (OAI-SearchBot, PerplexityBot…) peuvent-ils lire votre site ?",
+    questionEn: "Can AI search crawlers (OAI-SearchBot, PerplexityBot…) read your site?",
     weight: 12,
     options: [
       {

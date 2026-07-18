@@ -56,7 +56,7 @@ The sitemap is the contract with Google. Three common pitfalls:
 - **Listing 404 or 301 URLs in the sitemap.** Google considers this a low-quality signal.
 - **Not declaring the sitemap in `robots.txt`** with `Sitemap: https://domain.tld/sitemap.xml`.
 
-On the `robots.txt` side, explicitly allow new AI bots (GPTBot, PerplexityBot, ClaudeBot) or block them — but do it consciously. Blocking GPTBot removes your site from ChatGPT Search results.
+On the `robots.txt` side, explicitly allow AI search crawlers (OAI-SearchBot, PerplexityBot, ClaudeBot, GPTBot) or block them — but do it consciously. Mind the nuance: GPTBot is used for model training, while OAI-SearchBot is the one powering ChatGPT Search — blocking one does not have the same effect as blocking the other.
 
 ## Step 4 — Schema.org structured data
 

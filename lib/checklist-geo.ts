@@ -86,8 +86,8 @@ export const ITEMS: ChecklistItem[] = [
       "Ouvrez votre-site.fr/robots.txt et vérifiez qu'aucune ligne ne bloque OAI-SearchBot, PerplexityBot, ClaudeBot ou GPTBot.",
     actionEn:
       "Open yoursite.com/robots.txt and check no line blocks OAI-SearchBot, PerplexityBot, ClaudeBot or GPTBot.",
-    whyFr: "Un moteur IA qui ne peut pas lire vos pages ne vous citera jamais.",
-    whyEn: "An AI engine that can't read your pages will never cite you.",
+    whyFr: "Un robot de recherche IA (OAI-SearchBot, PerplexityBot) bloqué = invisible dans ses réponses ; GPTBot et ClaudeBot ne servent qu'à l'entraînement, les bloquer n'affecte pas votre visibilité.",
+    whyEn: "A blocked AI search crawler (OAI-SearchBot, PerplexityBot) = invisible in its answers; GPTBot and ClaudeBot only serve training, blocking them doesn't affect your visibility.",
     level: "interne",
   },
   {
@@ -141,8 +141,8 @@ export const ITEMS: ChecklistItem[] = [
       "Ajoutez un fichier llms.txt à la racine : quelques lignes qui présentent le site et listent vos pages clés.",
     actionEn:
       "Add an llms.txt file at the root: a few lines introducing the site and listing your key pages.",
-    whyFr: "Standard récent : un signal d'avance qui guide les modèles IA vers vos contenus.",
-    whyEn: "A recent standard: an early signal that guides AI models to your content.",
+    whyFr: "Proposition récente (llmstxt.org), adoption non confirmée par les moteurs : 30 minutes, aucun risque — un pari à coût nul, pas un levier.",
+    whyEn: "A recent proposal (llmstxt.org), adoption unconfirmed by the engines: 30 minutes, zero risk — a no-cost bet, not a lever.",
     level: "interne",
   },
 
