@@ -223,9 +223,9 @@ const CONTENT_FR: Record<number, ProjectContent> = {
   },
   25: {
     title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
+    alt: "La Petite Vitrine — catalogue de landing pages générées par IA",
     description:
-      "Service packagé de mise en ligne de mini-sites par métier pour indépendants et TPE.",
+      "Catalogue de landing pages générées par IA pour indépendants et TPE — ce qu'on achète est ce qu'on voit.",
   },
   24: {
     title: "Peer to Peer",
@@ -363,9 +363,9 @@ const CONTENT_EN: Record<number, ProjectContent> = {
   },
   25: {
     title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — go-live service for small profession-based sites",
+    alt: "La Petite Vitrine — catalogue of AI-generated landing pages",
     description:
-      "A packaged go-live service for small profession-based sites, for freelancers and very small businesses.",
+      "A catalogue of AI-generated landing pages for freelancers and very small businesses — what you buy is what you see.",
   },
   24: {
     title: "Peer to Peer",

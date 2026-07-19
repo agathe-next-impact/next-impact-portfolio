@@ -359,22 +359,33 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
     description:
-      "Conception de La Petite Vitrine, un service packagé de mise en ligne pour indépendants, TPE et artisans : des modèles pensés par métier, intégrés avec votre contenu et publiés après validation, avec hébergement et maintenance gérés.",
-    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. On part d'un modèle adapté à la profession (santé, commerce, services, bien-être, loisirs), j'y intègre le contenu du client, et le site est mis en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nSous le capot, c'est une application Next.js (React, TypeScript, Tailwind) : un catalogue de modèles thématiques, un pipeline d'export et de publication des sites, et un stockage des contenus sur Vercel Blob. L'hébergement et la maintenance sont gérés de bout en bout — le client n'a rien à installer ni à administrer. RGPD par défaut : aucune publicité, aucun traceur.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
+      "Conception de La Petite Vitrine, une offre de vitrine simple et efficace fondée sur un catalogue de landing pages générées avec l'IA : le client choisit un site fini et fonctionnel — ce qu'on achète est ce qu'on voit —, j'y intègre son contenu, et le site part en ligne avec hébergement et maintenance gérés.",
+    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. Dans les deux cas, le même angle mort : on paie avant de savoir à quoi ressemblera le résultat. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré, où l'on voit le site fini avant d'acheter.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. Le principe commercial tient en une phrase : ce qu'on achète est ce qu'on voit. Le catalogue ne montre pas des maquettes mais des landing pages finies et fonctionnelles, générées avec l'IA puis auditées ; le client navigue, choisit celle qui ressemble à son métier (santé, commerce, services, bien-être, loisirs), j'y intègre son contenu, et le site part en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nLe choix de techno découle du modèle économique : pour vendre la mise en ligne 650 € et l'abonnement 14 €/mois, chaque site doit coûter presque rien à produire, héberger et maintenir. Ni un WordPress par client (une instance à maintenir et sécuriser par site), ni un constructeur no-code (un abonnement par site, des contenus enfermés) ne tenaient cette équation. J'ai donc développé une plateforme Next.js (React, TypeScript, Tailwind) organisée autour d'un contrat simple : chaque thème du catalogue est une preview statique autonome alimentée par un contenu JSON, et les sites clients sont livrés en export statique — rapides, sûrs, quasi gratuits à héberger. Les contenus édités vivent sur Vercel Blob (le filesystem serverless est éphémère). RGPD par défaut : aucune publicité, aucun traceur.\n\nC'est l'IA qui rend ce modèle possible : produire à la main une cinquantaine de landing pages finies et consultables — dont 12 actives au lancement — serait invendable à ce prix. La génération est pour autant tout sauf improvisée : le développement s'appuie sur Claude Code, encadré par une constitution de projet (architecture, contrats, règles de sécurité) et dix agents spécialisés — intégration de thèmes, audits de sécurité, de performance et d'UI/UX, tests fonctionnels Playwright, cohérence contenu ↔ schéma ↔ DOM. Aucun thème n'est publié sans passer les scripts d'audit qui servent de gates. L'IA génère et accélère ; l'architecture, les contrats et les critères de qualité restent des décisions humaines — c'est ce qui rend le produit maintenable.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
     objectives: [
-      "Offrir aux indépendants et TPE une présence en ligne professionnelle, sans la complexité d'un site sur-mesure ni le bricolage d'un éditeur DIY",
-      "Industrialiser la création de mini-sites par métier à partir de modèles prêts à publier",
+      "Supprimer le risque d'achat d'un site web : choisir un site fini et fonctionnel, pas une promesse — ce qu'on achète est ce qu'on voit",
+      "Construire avec l'IA un catalogue de landing pages par métier, finies et consultables, à coût marginal quasi nul",
       "Prendre en charge tout le cycle : intégration du contenu, mise en ligne, hébergement et maintenance",
       "Garantir un cadre clair : prix fixe, RGPD, sans publicité ni traceur",
     ],
     results: [
       "Offre packagée et lisible : 650 € HT la mise en ligne, dès 14 € HT/mois hébergement et maintenance",
-      "Plateforme Next.js avec catalogue de modèles par métier et pipeline de publication",
-      "Sites livrés clés en main, sans installation ni administration côté client",
+      "Catalogue d'une cinquantaine de landing pages générées par IA (12 actives au lancement), intégrées et auditées via une chaîne d'agents",
+      "Sites livrés en export statique : rapides, sûrs, sans installation ni administration côté client",
       "Programme pilote de 10 projets (santé mentale et artisans) pour documenter le service",
     ],
-    galleryAlt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
-    tags: ["Indépendants", "TPE", "Produit", "Web App", "Next.js"],
+    arbitrage: {
+      consideredOptions: [
+        "Un WordPress (ou multisite) par client, avec thème personnalisé",
+        "Constructeur no-code (Wix, Webflow…) et un abonnement par site",
+        "Plateforme sur-mesure Next.js : catalogue de thèmes + export statique",
+      ],
+      decision:
+        "Plateforme Next.js sur-mesure — catalogue de thèmes en previews statiques autonomes, contenus JSON sur Vercel Blob, sites clients livrés en export statique.",
+      rationale:
+        "Le modèle à 650 € + 14 €/mois exige un coût marginal par site proche de zéro. Un CMS par client, c'est autant d'instances à maintenir et sécuriser ; le no-code facture par site et enferme les contenus. L'export statique livre des sites rapides et sûrs, sans rien à administrer, et le contrat « preview autonome + contenu JSON » a un double effet : il permet d'intégrer des landing pages de toute origine, et il fait du catalogue une vitrine de sites réellement finis — c'est lui qui rend possible le « ce qu'on achète est ce qu'on voit ». Production industrialisée par des agents IA (Claude Code) sous scripts d'audit obligatoires.",
+    },
+    galleryAlt: "La Petite Vitrine — catalogue de landing pages générées par IA, ce qu'on achète est ce qu'on voit",
+    tags: ["Indépendants", "TPE", "Produit", "IA", "Web App", "Next.js"],
     duration: "À compléter",
   },
   "peer-to-peer": {
@@ -883,22 +894,33 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
     description:
-      "Built La Petite Vitrine, a packaged go-live service for freelancers, very small businesses and artisans: profession-specific templates, filled with your content and published after validation, with hosting and maintenance handled.",
-    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. La Petite Vitrine was born from that gap — to offer a third path, simple and guided.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. We start from a template suited to the profession (health, retail, services, wellness, leisure), I integrate the client's content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nUnder the hood it's a Next.js application (React, TypeScript, Tailwind): a catalogue of themed templates, an export-and-publish pipeline for the sites, and content stored on Vercel Blob. Hosting and maintenance are handled end to end — the client has nothing to install or administer. GDPR by default: no advertising, no trackers.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
+      "Built La Petite Vitrine, a simple, effective showcase-site offer based on a catalogue of AI-generated landing pages: clients pick a finished, working site — what you buy is what you see —, I integrate their content, and it goes live with hosting and maintenance handled.",
+    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. Both share the same blind spot: you pay before knowing what the result will look like. La Petite Vitrine was born from that gap — to offer a third path, simple and guided, where you see the finished site before you buy.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. The business principle fits in one sentence: what you buy is what you see. The catalogue doesn't show mock-ups but finished, working landing pages, generated with AI and then audited; the client browses, picks the one that fits their profession (health, retail, services, wellness, leisure), I integrate their content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nThe tech choice follows the business model: to sell a €650 go-live and a €14/month subscription, each site has to cost next to nothing to produce, host and maintain. Neither one WordPress per client (an instance to maintain and secure for every site) nor a no-code builder (a subscription per site, locked-in content) could hold that equation. So I built a custom Next.js platform (React, TypeScript, Tailwind) around one simple contract: every theme in the catalogue is a self-contained static preview fed by JSON content, and client sites ship as static exports — fast, secure, nearly free to host. Edited content lives on Vercel Blob (the serverless filesystem is ephemeral). GDPR by default: no advertising, no trackers.\n\nAI is what makes this model possible: hand-building about fifty finished, browsable landing pages — 12 active at launch — could never sell at this price. Yet the generation is anything but improvised: development relies on Claude Code, framed by a project constitution (architecture, contracts, security rules) and ten specialized agents — theme integration, security, performance and UI/UX audits, Playwright functional tests, content ↔ schema ↔ DOM consistency. No theme ships without passing the audit scripts that act as gates. AI generates and accelerates; the architecture, the contracts and the quality bar remain human decisions — that is what keeps the product maintainable.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
     objectives: [
-      "Give freelancers and very small businesses a professional online presence, without the complexity of a custom build or the hassle of a DIY builder",
-      "Industrialize the creation of small profession-based sites from ready-to-publish templates",
+      "Remove the risk from buying a website: pick a finished, working site, not a promise — what you buy is what you see",
+      "Build with AI a catalogue of finished, browsable profession-based landing pages, at near-zero marginal cost",
       "Own the whole cycle: content integration, go-live, hosting and maintenance",
       "Guarantee a clear framework: fixed price, GDPR, no advertising or trackers",
     ],
     results: [
       "Clear, packaged offer: €650 excl. VAT to go live, from €14 excl. VAT/month for hosting and maintenance",
-      "Next.js platform with a profession-based template catalogue and a publishing pipeline",
-      "Turnkey sites delivered, with no installation or admin on the client's side",
+      "A catalogue of about fifty AI-generated landing pages (12 active at launch), integrated and audited through an agent pipeline",
+      "Sites shipped as static exports: fast, secure, with no installation or admin on the client's side",
       "Pilot programme of 10 projects (mental health and artisans) to document the service",
     ],
-    galleryAlt: "La Petite Vitrine — go-live service for small profession-based sites",
-    tags: ["Freelancers", "Small business", "Product", "Web App", "Next.js"],
+    arbitrage: {
+      consideredOptions: [
+        "One WordPress (or multisite) per client, with a customized theme",
+        "No-code builder (Wix, Webflow…) with a subscription per site",
+        "Custom Next.js platform: theme catalogue + static export",
+      ],
+      decision:
+        "Custom Next.js platform — theme catalogue as self-contained static previews, JSON content on Vercel Blob, client sites shipped as static exports.",
+      rationale:
+        "The €650 + €14/month model demands a near-zero marginal cost per site. One CMS per client means as many instances to maintain and secure; no-code charges per site and locks the content in. Static exports ship fast, secure sites with nothing to administer, and the “self-contained preview + JSON content” contract works twice over: it makes landing pages from any origin integrable, and it turns the catalogue into a showcase of genuinely finished sites — it is what makes “what you buy is what you see” possible. Production industrialized by AI agents (Claude Code) under mandatory audit scripts.",
+    },
+    galleryAlt: "La Petite Vitrine — catalogue of AI-generated landing pages, what you buy is what you see",
+    tags: ["Freelancers", "Small business", "Product", "AI", "Web App", "Next.js"],
     duration: "TBD",
   },
   "peer-to-peer": {

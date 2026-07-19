@@ -25,32 +25,32 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    badge: "Étude de cas phare — Mai 2026",
-    tagline: "Le 1er annuaire B2B du secteur, livré en 2 mois",
+    badge: "Étude de cas phare — Juin 2026",
+    tagline: "Un catalogue de landing pages générées par IA — ce qu'on achète est ce qu'on voit",
     description:
-      "Premier annuaire en ligne des fournisseurs d'objets publicitaires en France. Plateforme opérationnelle en 2 mois, pensée SEO et croissance. Next.js + PostgreSQL serverless.",
+      "Une offre de vitrine simple et efficace : le client choisit un site fini et fonctionnel dans un catalogue d'une cinquantaine de modèles par métier, son contenu est intégré, le site part en ligne. Prix fixe, hébergement et maintenance gérés, RGPD par défaut. Next.js + Vercel.",
     stats: [
-      { value: "1ᵉʳ",    label: "Annuaire du secteur en France" },
-      { value: "2 mois", label: "Du concept à la production" },
-      { value: "B2B",    label: "Sourcing fournisseurs simplifié" },
+      { value: "650 €",     label: "Mise en ligne à prix fixe (HT), intégration comprise" },
+      { value: "14 €/mois", label: "Hébergement & maintenance gérés (HT)" },
+      { value: "10",        label: "Sites pilotes — santé & artisanat" },
     ],
     ctaPrimary: "Voir l'étude de cas",
     ctaSecondary: "Discuter d'un projet similaire",
-    imageAlt: "Panorama Pub — marketplace B2B des fournisseurs d'objets publicitaires",
+    imageAlt: "La Petite Vitrine — service packagé de mise en ligne pour indépendants, TPE et artisans",
   },
   en: {
-    badge: "Featured case study — May 2026",
-    tagline: "The industry's 1st B2B directory, shipped in 2 months",
+    badge: "Featured case study — June 2026",
+    tagline: "A catalogue of AI-generated landing pages — what you buy is what you see",
     description:
-      "First online directory of promotional product suppliers in France. Operational in 2 months, built for SEO and growth. Next.js + serverless PostgreSQL.",
+      "A simple, effective showcase-site offer: clients pick a finished, working site from a catalogue of about fifty profession-based templates, their content is integrated, and it goes live. Fixed price, hosting and maintenance handled, GDPR by default. Next.js + Vercel.",
     stats: [
-      { value: "1st",      label: "Industry directory in France" },
-      { value: "2 months", label: "From concept to production" },
-      { value: "B2B",      label: "Streamlined supplier sourcing" },
+      { value: "€650",   label: "Fixed-price go-live (excl. VAT), integration included" },
+      { value: "€14/mo", label: "Hosting & maintenance handled (excl. VAT)" },
+      { value: "10",     label: "Pilot sites — health & artisans" },
     ],
     ctaPrimary: "View the case study",
     ctaSecondary: "Discuss a similar project",
-    imageAlt: "Panorama Pub — B2B marketplace for promotional product suppliers",
+    imageAlt: "La Petite Vitrine — packaged go-live service for freelancers and small businesses",
   },
 };
 
@@ -82,7 +82,7 @@ export default function FeaturedRealisation() {
           <SectionHeading
             index="№ 04"
             kicker={copy.badge}
-            title="Panorama Pub"
+            title="La Petite Vitrine"
             description={
               <>
                 <span className="block font-medium text-foreground">{copy.tagline}</span>
@@ -97,9 +97,9 @@ export default function FeaturedRealisation() {
           <div className="rounded-md bg-overlay-gray p-2 md:p-4">
             <div className="overflow-hidden rounded-sm">
               <YoutubePlayer
-                videoId="9fMaBL1amYk"
+                videoId="lAtVrN9Xh_8"
                 title={copy.imageAlt}
-                label="Panorama Pub"
+                label="La Petite Vitrine"
               />
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function FeaturedRealisation() {
 
         {/* CTA */}
         <div className="flex flex-wrap gap-3 border-b border-dark-gray px-6 py-8 lg:px-8">
-          <Link href="/etudes-de-cas/panorama-pub" className={BTN_PRIMARY}>
+          <Link href="/etudes-de-cas/la-petite-vitrine" className={BTN_PRIMARY}>
             {copy.ctaPrimary}
           </Link>
           <Link href="/contact" className={BTN_GHOST}>
