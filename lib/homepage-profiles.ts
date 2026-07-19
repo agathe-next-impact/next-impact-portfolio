@@ -24,7 +24,7 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Projets web :",
+    headline: "Projet web :",
     subHeadline: "Concevoir avec l'IA.",
     description:
       "Avant d'investir — dans l'IA, une agence ou une refonte — vérifiez ce dont votre site a vraiment besoin. Avis indépendant, dès 150 €.",
