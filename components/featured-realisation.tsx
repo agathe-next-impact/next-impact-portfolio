@@ -100,6 +100,7 @@ export default function FeaturedRealisation() {
                 videoId="lAtVrN9Xh_8"
                 title={copy.imageAlt}
                 label="La Petite Vitrine"
+                firstFrame
               />
             </div>
           </div>

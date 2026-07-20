@@ -482,31 +482,64 @@ export function PersonJsonLd({
   const data = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": `${siteConfig.url}/#person`,
     name: name,
     jobTitle: jobTitle,
     description: description,
     url: url,
     image: image,
+    knowsLanguage: ["fr", "en"],
     worksFor: {
       "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
       name: siteConfig.name,
     },
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: "Université Paul-Valéry Montpellier 3",
+    },
+    // Parcours pluridisciplinaire (technique · business · marketing · design) +
+    // socle académique : signaux d'expertise (E-E-A-T) lisibles par les moteurs IA.
     knowsAbout: [
-      "WordPress",
+      "Développement web",
       "Conseil techno web",
-      "IA coding",
-      "No-code",
-      "SaaS",
       "Architecture web",
+      "Gestion de projet web",
+      "Marketing digital",
+      "Design web",
+      "Stratégie business web",
+      "WordPress",
       "WordPress Headless",
       "Next.js",
       "React",
       "TypeScript",
+      "PostgreSQL",
       "Headless CMS",
       "WPGraphQL",
+      "IA coding",
+      "No-code",
+      "SaaS",
+      "Cybernétique",
       "OETH",
       "TIH",
     ],
+    sameAs: [
+      "https://www.linkedin.com/in/agat-dev/",
+      "https://github.com/agat-dev",
+    ],
+    // Citation presse indépendante et autoritaire (E-E-A-T / GEO).
+    subjectOf: {
+      "@type": "NewsArticle",
+      headline:
+        "WordPress Headless : comment les PME peuvent moderniser leur site sans tout reconstruire, avec Next Impact Digital",
+      url: "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512",
+      datePublished: "2026-05-12",
+      publisher: {
+        "@type": "NewsMediaOrganization",
+        name: "Le Figaro",
+        url: "https://www.lefigaro.fr",
+      },
+    },
   };
 
   return <JsonLd data={data} />;

@@ -382,54 +382,110 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "About Next Impact — web technology advice in the age of AI",
-    "metaDescription": "Agathe Karinthi-Martin helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom.",
+    "metaTitle": "About — Agathe Karinthi-Martin, multidisciplinary web technology advice | Next Impact",
+    "metaDescription": "Agathe Karinthi-Martin approaches every web project from four angles — technical, business, marketing, design. 25 years of practice helping teams of 20 to 250 people choose the right technology.",
     "breadcrumbHome": "Home",
     "breadcrumbAbout": "About",
+    "hero": {
+      "kicker": "The person behind Next Impact",
+      "title": "About",
+      "lead": "Agathe Karinthi-Martin — <em>technique, business, marketing, design</em>. I've practised the web from all four angles: that's what changes the way I advise you — I understand your project as a whole, not just its code.",
+      "subtext": "I help organizations of 20 to 250 people decide what to build, with which technology, and how far to go — modernized WordPress, Headless, or a custom application. And once the decision is made, I build it.",
+      "imageAlt": "Agathe Karinthi-Martin, founder of Next Impact"
+    },
     "journey": {
       "label": "The journey",
       "title": "From WordPress field experience to the Web & AI Tech Compass",
-      "subtitle": "Twenty years using, fixing, scoping and building web solutions — with one belief: the right technology depends on the need, not the trend.",
-      "step1": {
-        "year": "2005 — On the ground",
-        "title": "Fifteen years using WordPress before coding for it",
-        "description": "Set aside a passion for software development to dive into digital communications. For fifteen years, used WordPress daily: building pages, managing content, configuring themes, debugging plugins. Lived from the inside what works — and especially what frustrates editorial teams using this tool.",
-        "imageAlt": "Next Impact community engagement"
+      "subtitle": "Twenty-five years practising the web from every angle — code and strategy, marketing and design. One constant belief: the right technology depends on the need, not the trend.",
+      "fondations": {
+        "year": "2000 – 2020 — The full picture",
+        "title": "The web project as a whole: design it, run it, sustain it",
+        "description": "Learning web development as the dynamic web emerged — PHP, MySQL, relational databases — and building sites pro bono for the nonprofit ecosystem. Then, for fifteen years, steering the web project from the editorial side: communications officer in the nonprofit sector, WordPress every day — designing pages, managing content, setting priorities, configuring themes, debugging plugins. Twenty years embracing the web project as a whole — code, use, management — and knowing what makes, or breaks, a project."
       },
-      "step2": {
+      "theorie": {
+        "year": "2012 – 2015 — The theoretical detour",
+        "title": "Thinking the machine before reprogramming it",
+        "description": "A research master's in information and communication sciences (Montpellier 3) and a series of works on cybernetics and Norbert Wiener: a dissertation and an essay on cybernetics as a societal paradigm, a working paper on <hal>Wiener's pragmatic thinking in the face of technology</hal> (HAL, 2014), a journal article on <magma>the cybernetic myth and the risk society</magma> (M@gm@, 2015). The conclusion back then hasn't shifted since: technology opens up alternatives; it is human choices that make society.",
+        "note": "(Work published under the name Agathe Martin.)"
+      },
+      "code": {
         "year": "2020 — Back to code",
-        "title": "From WordPress customization to bespoke development",
-        "description": "Up against the limits of off-the-shelf themes and plugins, returned to coding. First case by case to fix specific friction, then structurally: custom themes, bespoke WordPress plugins, API integrations. A full-stack WordPress expertise, built out of necessity.",
-        "imageAlt": "Next Impact back to code"
+        "title": "From WordPress customization to modern development",
+        "description": "Back to code out of necessity: PHP/MySQL rediscovered, custom WordPress themes and plugins, API integrations. Then broadening the stack at the pace of real project needs: JavaScript and its frameworks (React, Next.js, Astro), PostgreSQL, and headless CMSs — headless WordPress, Payload, Strapi. A full-stack expertise built project after project, not in a bootcamp."
       },
-      "step3": {
+      "today": {
         "year": "Today — Next Impact",
         "title": "A Web & AI compass, not one default technology",
-        "imageAlt": "Today at Next Impact",
-        "items": {
-          "user": {
-            "label": "User expertise:",
-            "text": "15 years using WordPress as an editor — to understand what absolutely has to be preserved in its admin."
-          },
-          "tech": {
-            "label": "Technical mastery:",
-            "text": "Two complementary skills — choosing the right complexity level, then building or fixing when the solution is clear."
-          },
-          "ai": {
-            "label": "AI acceleration:",
-            "text": "AI accelerates production, but increases the need for scoping: architecture, data, maintenance, security and business coherence."
-          }
+        "user": {
+          "label": "Field expertise:",
+          "text": "15 years running web projects on the editorial side, to know exactly what must be preserved in the admin."
         },
-        "figaroMention": "An approach featured in <lien>Le Figaro</lien>, on Headless WordPress modernization for SME websites."
+        "tech": {
+          "label": "Technical mastery:",
+          "text": "25 years of systems, from PHP/MySQL foundations to Next.js/PostgreSQL/headless stacks — choosing the right level of complexity, then steering the build."
+        },
+        "theory": {
+          "label": "The theoretical thread:",
+          "text": "the human-machine relationship, thought through and published back in 2012 — the ground for a clear-eyed view today of what AI can, and cannot, do."
+        }
       }
     },
-    "citationByline": "— Agathe Karinthi-Martin, Founder of Next Impact",
-    "metrics": {
+    "manifesto": {
+      "label": "The manifesto",
+      "title": "AI hasn't replaced advice. It has made it critical.",
+      "chapo": "Choosing a technology is the faithful translation of the real world into a digital solution.",
+      "chapoByline": "— Agathe Karinthi-Martin, founder of Next Impact",
+      "intro": "AI is the best intern we've ever had: committed, fast, structured, rigorous, tireless. But an intern, however brilliant, doesn't decide the strategy. The quality of what it produces depends entirely on the quality of whoever frames it.",
+      "ecarts": {
+        "title": "AI widens gaps, it doesn't close them",
+        "description": "In a given field, a novice gets basic results from AI — sometimes wrong, without being able to tell. An expert multiplies theirs. The gap in results between the two doesn't shrink with AI: it explodes.",
+        "item1": "AI amplifies skill, it doesn't substitute for it",
+        "item2": "Without domain expertise, the plausible error is impossible to catch",
+        "item3": "The more AI progresses, the more expert framing is worth"
+      },
+      "decision": {
+        "title": "The decision is never delegated",
+        "description": "Delegating the decision to AI means losing the thread of your own strategy — and no longer being able to follow it, or defend it. A decision commits you: it must remain justifiable and defensible before your leadership, your teams, your clients. Yet AI optimizes the plausible, not the true: it produces false answers with confidence whenever it judges them more probable.",
+        "item1": "AI proposes, the human arbitrates",
+        "item2": "Every architecture choice stays explainable in business language",
+        "item3": "Responsibility isn't subcontracted to a model"
+      },
+      "multiplicateur": {
+        "title": "The multiplier: expert + AI",
+        "description": "Combining expert guidance with AI changes everything: very high-quality results, obtained faster, and projects of a complexity previously out of reach for a small team. This is the heart of my practice: I hold the project ownership with you, AI runs the build.",
+        "item1": "You: the vision and the decision (project ownership)",
+        "item2": "Me: the framing, the architecture, the quality control",
+        "item3": "AI: an exceptional build lead — never a decision-maker"
+      }
+    },
+    "proofs": {
       "label": "In numbers",
-      "title": "Proof through commitment",
-      "yearsCommitment": "years of community engagement",
-      "yearsDevelopment": "years of development",
-      "projectsDelivered": "web projects delivered"
+      "title": "In numbers",
+      "figaro": {
+        "text": "An approach noticed by <lien>Le Figaro</lien>: the Headless modernization of SME WordPress sites, without rebuilding everything.",
+        "cta": "Read the article"
+      },
+      "metrics": {
+        "pratique": "years of web practice",
+        "wordpress": "years using WordPress",
+        "projets": "web projects delivered",
+        "projetsCta": "See the case studies"
+      }
+    },
+    "tih": {
+      "text": "Next Impact is a French <strong>TIH</strong> provider: for organizations of 20 employees or more subject to the OETH, 30% of the labour cost is deductible from your AGEFIPH contribution.",
+      "cta": "Understand the OETH benefit"
+    },
+    "ctaFinal": {
+      "label": "What now?",
+      "title": "What now?",
+      "coldTag": "Free diagnostic · 2 min",
+      "coldTitle": "See what's slowing your site down in 2 min",
+      "coldDescription": "Free diagnostic, no commitment, no sales email behind it.",
+      "coldCta": "Run the diagnostic",
+      "warmTag": "Book a call",
+      "warmTitle": "Discuss your project",
+      "warmCta": "Book a call"
     }
   },
   "expandableCards": {
