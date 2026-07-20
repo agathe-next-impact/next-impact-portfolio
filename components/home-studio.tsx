@@ -20,7 +20,7 @@ const BTN_GHOST =
  * conseil, elle l'a rendu critique. Les 3 points reprennent les 3 piliers du
  * manifeste (l'IA amplifie sans remplacer · la décision ne se délègue pas ·
  * expert + IA en multiplicateur) et les ancrent dans la légitimité personnelle
- * (15 ans d'usage WordPress, 8 ans de développement). Prolonge l'accroche du hero.
+ * (15 ans d'usage WordPress, 6 ans de développement). Prolonge l'accroche du hero.
  */
 export default function HomeStudio() {
   const locale = useLocale() as Locale;
@@ -28,14 +28,14 @@ export default function HomeStudio() {
 
   const bullets = isEn
     ? [
-        ["AI amplifies, it doesn't replace", "An amplifier of skill, not a substitute: without domain expertise, the plausible error slips through. That's where 25 years of systems practice weigh in."],
+        ["AI amplifies, it doesn't replace", "An amplifier of skill, not a substitute: without domain expertise, the plausible error slips through. That's where 20 years of systems practice weigh in."],
         ["The decision isn't delegated", "WordPress or Headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. AI proposes, the human decides."],
-        ["I frame it, AI runs it", "15 years using WordPress and 8 years building: the legitimacy to judge performance, accessibility and maintainability — where AI still gets it wrong. I hold the project ownership, AI runs the build."],
+        ["I frame it, AI runs it", "15 years using WordPress and 6 years building: the legitimacy to judge performance, accessibility and maintainability — where AI still gets it wrong. I hold the project ownership, AI runs the build."],
       ]
     : [
-        ["L'IA amplifie, elle ne remplace pas", "Un amplificateur de compétence, pas un substitut : sans expertise du domaine, l'erreur plausible passe inaperçue. C'est là que 25 ans de pratique des systèmes pèsent."],
+        ["L'IA amplifie, elle ne remplace pas", "Un amplificateur de compétence, pas un substitut : sans expertise du domaine, l'erreur plausible passe inaperçue. C'est là que 20 ans de pratique des systèmes pèsent."],
         ["La décision ne se délègue pas", "WordPress ou Headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. L'IA propose, l'humain tranche."],
-        ["Je cadre, l'IA exécute", "15 ans d'usage WordPress et 8 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là où l'IA se trompe encore. Je tiens la maîtrise d'ouvrage, l'IA tient le chantier."],
+        ["Je cadre, l'IA exécute", "15 ans d'usage WordPress et 6 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là où l'IA se trompe encore. Je tiens la maîtrise d'ouvrage, l'IA tient le chantier."],
       ];
 
   return (

@@ -251,8 +251,8 @@
     "breadcrumbDocs": "Comprendre"
   },
   "blogPage": {
-    "metaTitle": "Quelle techno web à l'heure de l'IA ? | Next Impact",
-    "metaDescription": "Conseils, comparatifs et retours d'expérience pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure."
+    "metaTitle": "Blog Web & IA — retours d'expérience, comparatifs et coûts | Next Impact",
+    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure — coûts réels et pièges à éviter."
   },
   "articlesPage": {
     "metaTitle": "Articles & comparatifs Web, IA et architecture | Next Impact",
@@ -383,7 +383,7 @@
   },
   "aboutPage": {
     "metaTitle": "À propos — Agathe Karinthi-Martin, conseil techno web pluridisciplinaire | Next Impact",
-    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles — technique, business, marketing, design. 25 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
+    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles — technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "hero": {
@@ -396,11 +396,11 @@
     "journey": {
       "label": "Le parcours",
       "title": "Du terrain WordPress à la boussole techno Web & IA",
-      "subtitle": "Vingt-cinq ans à pratiquer le web sous tous ses angles — le code et la stratégie, le marketing et le design. Une conviction constante : la bonne techno dépend du besoin, pas de la mode.",
+      "subtitle": "Vingt ans à pratiquer le web sous tous ses angles — le code et la stratégie, le marketing et le design. Une conviction constante : la bonne techno dépend du besoin, pas de la mode.",
       "fondations": {
         "year": "2000 – 2020 — La vision d'ensemble",
         "title": "Le projet web dans sa globalité : concevoir, gérer, faire vivre",
-        "description": "Apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Puis, quinze ans durant, piloter le projet web côté édition : chargée de communication en association, WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins. Vingt ans à embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et à savoir ce qui fait, ou défait, un projet."
+        "description": "Apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Puis, quinze ans durant, piloter le projet web côté édition : chargée de communication en association, WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins. Embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et savoir ce qui fait, ou défait, un projet."
       },
       "theorie": {
         "year": "2012 – 2015 — Le détour théorique",
@@ -422,7 +422,7 @@
         },
         "tech": {
           "label": "La maîtrise technique :",
-          "text": "25 ans de systèmes, des fondations PHP/MySQL aux stacks Next.js/PostgreSQL/headless — choisir le bon niveau de complexité, puis piloter la construction."
+          "text": "20 ans de systèmes, des fondations PHP/MySQL aux stacks Next.js/PostgreSQL/headless — choisir le bon niveau de complexité, puis piloter la construction."
         },
         "theory": {
           "label": "Le fil rouge théorique :",

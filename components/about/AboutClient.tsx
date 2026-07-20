@@ -113,7 +113,7 @@ export default function AboutClient() {
     href?: string;
     cta?: string;
   }[] = [
-    { end: 25, label: t("proofs.metrics.pratique"), meter: 100 },
+    { end: 20, label: t("proofs.metrics.pratique"), meter: 100 },
     { end: 15, label: t("proofs.metrics.wordpress"), meter: 80 },
     {
       end: 25,

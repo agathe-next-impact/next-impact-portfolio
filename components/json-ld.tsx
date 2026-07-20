@@ -565,7 +565,7 @@ export function HomepageJsonLd() {
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
-        dateModified: "2026-06-15",
+        dateModified: "2026-07-18",
         speakable: {
           "@type": "SpeakableSpecification",
           cssSelector: ["h1", ".home-tldr"],

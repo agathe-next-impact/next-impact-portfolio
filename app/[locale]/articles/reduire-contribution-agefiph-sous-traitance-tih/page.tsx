@@ -28,7 +28,7 @@ export async function generateMetadata({
     ],
     type: "article",
     publishedTime: "2025-03-01",
-    modifiedTime: "2025-06-01",
+    modifiedTime: "2026-07-18",
     locale,
   });
 }
@@ -43,6 +43,22 @@ export default function ArticleReduireAgefiph() {
     },
   ];
 
+  // Source unique de la FAQ : alimente le schéma FAQPage ET la section visible
+  // (politique Google : le schéma FAQ doit correspondre à un contenu affiché).
+  const faqItems = [
+    {
+      question:
+        "Comment la sous-traitance TIH réduit-elle ma contribution AGEFIPH ?",
+      answer:
+        "30% du coût de main-d'œuvre des prestations facturées par un TIH est déductible de votre contribution annuelle AGEFIPH, dans la limite de 50% ou 75% de la contribution brute selon votre taux d'emploi TH.",
+    },
+    {
+      question: "Quel est le barème AGEFIPH 2025 ?",
+      answer:
+        "20-249 salariés : 4 752€/TH manquant. 250-749 salariés : 5 940€/TH manquant. 750+ salariés : 7 128€/TH manquant.",
+    },
+  ];
+
   return (
     <main className="light article-page">
       <ArticleJsonLd
@@ -50,26 +66,12 @@ export default function ArticleReduireAgefiph() {
         description="Guide complet pour les RH et DAF : réduisez votre contribution AGEFIPH en sous-traitant vos projets numériques à un prestataire TIH. Barème 2025, calcul et attestation."
         image="/img/desktop-screen-next-impact.png"
         datePublished="2025-03-01"
-        dateModified="2025-06-01"
+        dateModified="2026-07-18"
         author="Agathe Karinthi-Martin"
         url="/articles/reduire-contribution-agefiph-sous-traitance-tih"
       />
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <FAQJsonLd
-        questions={[
-          {
-            question:
-              "Comment la sous-traitance TIH réduit-elle ma contribution AGEFIPH ?",
-            answer:
-              "30% du coût de main-d'œuvre des prestations facturées par un TIH est déductible de votre contribution annuelle AGEFIPH, dans la limite de 50% ou 75% de la contribution brute selon votre taux d'emploi TH.",
-          },
-          {
-            question: "Quel est le barème AGEFIPH 2025 ?",
-            answer:
-              "20-249 salariés : 4 752€/TH manquant. 250-749 salariés : 5 940€/TH manquant. 750+ salariés : 7 128€/TH manquant.",
-          },
-        ]}
-      />
+      <FAQJsonLd questions={faqItems} />
 
       <PageLayout
         titre="Comment réduire sa contribution AGEFIPH ?"
@@ -504,6 +506,29 @@ export default function ArticleReduireAgefiph() {
                       <ArrowRight size={15} strokeWidth={1.5} />
                     </button>
                   </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ visible — reflète le schéma FAQPage (schéma = contenu affiché) */}
+          <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2 className="ni-serif" style={{ fontSize: "clamp(22px, 2.5vw, 36px)", lineHeight: 1.1, marginBottom: 24, color: "var(--ink)" }}>
+                  Questions fréquentes
+                </h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                  {faqItems.map((f, i) => (
+                    <div key={i} style={{ borderTop: i > 0 ? "1px solid var(--rule)" : "none", paddingTop: i > 0 ? 20 : 0 }}>
+                      <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--ink)", marginBottom: 8 }}>
+                        {f.question}
+                      </h3>
+                      <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--ink-2)" }}>
+                        {f.answer}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

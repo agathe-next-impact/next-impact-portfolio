@@ -251,8 +251,8 @@
     "breadcrumbDocs": "Learn"
   },
   "blogPage": {
-    "metaTitle": "Which web technology in the age of AI? | Next Impact",
-    "metaDescription": "Advice, comparisons and lessons learned to choose between WordPress, no-code, AI coding, SaaS, Headless or custom."
+    "metaTitle": "Web & AI blog — field lessons, comparisons and costs | Next Impact",
+    "metaDescription": "Data-backed field lessons and comparisons to choose your web technology in the age of AI: WordPress, Headless, no-code, SaaS or custom — real costs and pitfalls to avoid."
   },
   "articlesPage": {
     "metaTitle": "Web, AI and architecture articles & comparisons | Next Impact",
@@ -383,7 +383,7 @@
   },
   "aboutPage": {
     "metaTitle": "About — Agathe Karinthi-Martin, multidisciplinary web technology advice | Next Impact",
-    "metaDescription": "Agathe Karinthi-Martin approaches every web project from four angles — technical, business, marketing, design. 25 years of practice helping teams of 20 to 250 people choose the right technology.",
+    "metaDescription": "Agathe Karinthi-Martin approaches every web project from four angles — technical, business, marketing, design. 20 years of practice helping teams of 20 to 250 people choose the right technology.",
     "breadcrumbHome": "Home",
     "breadcrumbAbout": "About",
     "hero": {
@@ -396,11 +396,11 @@
     "journey": {
       "label": "The journey",
       "title": "From WordPress field experience to the Web & AI Tech Compass",
-      "subtitle": "Twenty-five years practising the web from every angle — code and strategy, marketing and design. One constant belief: the right technology depends on the need, not the trend.",
+      "subtitle": "Twenty years practising the web from every angle — code and strategy, marketing and design. One constant belief: the right technology depends on the need, not the trend.",
       "fondations": {
         "year": "2000 – 2020 — The full picture",
         "title": "The web project as a whole: design it, run it, sustain it",
-        "description": "Learning web development as the dynamic web emerged — PHP, MySQL, relational databases — and building sites pro bono for the nonprofit ecosystem. Then, for fifteen years, steering the web project from the editorial side: communications officer in the nonprofit sector, WordPress every day — designing pages, managing content, setting priorities, configuring themes, debugging plugins. Twenty years embracing the web project as a whole — code, use, management — and knowing what makes, or breaks, a project."
+        "description": "Learning web development as the dynamic web emerged — PHP, MySQL, relational databases — and building sites pro bono for the nonprofit ecosystem. Then, for fifteen years, steering the web project from the editorial side: communications officer in the nonprofit sector, WordPress every day — designing pages, managing content, setting priorities, configuring themes, debugging plugins. Embracing the web project as a whole — code, use, management — and knowing what makes, or breaks, a project."
       },
       "theorie": {
         "year": "2012 – 2015 — The theoretical detour",
@@ -422,7 +422,7 @@
         },
         "tech": {
           "label": "Technical mastery:",
-          "text": "25 years of systems, from PHP/MySQL foundations to Next.js/PostgreSQL/headless stacks — choosing the right level of complexity, then steering the build."
+          "text": "20 years of systems, from PHP/MySQL foundations to Next.js/PostgreSQL/headless stacks — choosing the right level of complexity, then steering the build."
         },
         "theory": {
           "label": "The theoretical thread:",

@@ -1,9 +1,8 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { generatePageMetadata } from "@/lib/metadata"
-import { ServiceJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
+import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import ServicesClient from "@/components/services/ServicesClient"
-import { getServicesPageVariants } from "@/lib/homepage-profiles"
 import { BlueprintSection } from "@/components/aspect/section"
 import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner"
@@ -59,7 +58,6 @@ export default async function ServicesPage({
 }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "servicesPage" })
-  const faqs = getServicesPageVariants(locale).default.faqs
 
   const breadcrumbItems = [
     { name: t("breadcrumbHome"), url: "/" },
@@ -83,12 +81,9 @@ export default async function ServicesPage({
         serviceType={locale === "en" ? "Web development" : "Développement web"}
         url="/solutions-web"
       />
-      <FAQJsonLd
-        questions={faqs.map(faq => ({
-          question: faq.question,
-          answer: faq.answer,
-        }))}
-      />
+      {/* La FAQ visible et son schéma FAQPage sont portés par ServicesClient →
+          ServicesFAQ → FaqSchema (profile-aware, schéma = contenu affiché). Pas
+          de FAQJsonLd ici : cela créerait un second FAQPage divergent du visible. */}
       <ServicesClient />
       {/* Bande de preuve chiffrée — rassure avant l'engagement tarifaire. */}
       <ProofStrip />

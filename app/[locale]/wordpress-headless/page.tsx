@@ -698,8 +698,8 @@ export default async function WordPressHeadlessPillarPage({
             }
             description={
               isEn
-                ? "Twenty-five in-depth articles covering every facet, free."
-                : "Vingt-cinq articles approfondis couvrant chaque facette, en libre accès."
+                ? "Fifteen in-depth articles covering every facet, free."
+                : "Quinze articles approfondis couvrant chaque facette, en libre accès."
             }
           />
           <ul className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
