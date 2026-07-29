@@ -446,8 +446,8 @@ export default function DecrypteurDevis() {
               {isEn ? "Get an independent opinion — €150" : "Un avis indépendant — 150 €"}
               <ArrowRight size={14} />
             </Link>
-            <Link href="/outils/boussole" className={BTN_GHOST}>
-              {isEn ? "No quote yet? The Compass" : "Pas encore de devis ? La Boussole"}
+            <Link href="/outils/selecteur-techno" className={BTN_GHOST}>
+              {isEn ? "No quote yet? The tech selector" : "Pas encore de devis ? Le Sélecteur techno"}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <button type="button" onClick={reset} className={BTN_GHOST}>

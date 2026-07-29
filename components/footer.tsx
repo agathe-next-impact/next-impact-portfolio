@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { href: "/etudes-de-cas",       key: "caseStudies" },
   { href: "/documentation",       key: "documentation" },
   { href: "/blog",                key: "blog" },
-  { href: "/avantage-oeth",       key: "oethAdvantage" },
   { href: "/a-propos",            key: "about" },
   { href: "/mentions-legales",    key: "legalNotice" },
   { href: "/confidentialite",     key: "privacy" },

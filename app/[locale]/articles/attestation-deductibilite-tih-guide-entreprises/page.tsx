@@ -36,7 +36,7 @@ export async function generateMetadata({
 export default function ArticleAttestationTIH() {
   const breadcrumbItems = [
     { name: "Accueil", url: "/" },
-    { name: "Avantage OETH", url: "/avantage-oeth" },
+    { name: "Articles", url: "/articles" },
     {
       name: "Attestation de déductibilité TIH",
       url: "/articles/attestation-deductibilite-tih-guide-entreprises",
@@ -377,8 +377,8 @@ export default function ArticleAttestationTIH() {
 
                 {/* CTAs */}
                 <div style={{ display: "flex", gap: 12, marginTop: 40, flexWrap: "wrap" }}>
-                  <Link href="/avantage-oeth" className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                    Simuler mon économie
+                  <Link href="/a-propos" className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    En savoir plus sur le statut TIH
                     <ArrowRight style={{ width: 16, height: 16 }} />
                   </Link>
                   <Link href="/contact" className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>

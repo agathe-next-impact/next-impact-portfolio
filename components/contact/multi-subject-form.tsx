@@ -9,7 +9,6 @@ import {
   Layers,
   MessageCircle,
   Package,
-  Scale,
   Smartphone,
   SearchCheck,
   Loader2,
@@ -26,7 +25,6 @@ type SubjectKey =
   | "pack-ia"
   | "direction-technique"
   | "mise-en-oeuvre"
-  | "oeth"
   | "autre";
 
 interface SubjectConfig {
@@ -41,7 +39,6 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
   "pack-ia": { icon: Package, fr: { label: "Pack de mise en œuvre IA", description: "Specs, prompts et agents pour construire (Claude Code / Codex)", placeholder: "Décrivez le projet à développer avec l'IA (Claude Code ou Codex) : objectif, périmètre, contraintes. Je prépare specs, prompts et agents." }, en: { label: "AI build pack", description: "Specs, prompts and agents to build (Claude Code / Codex)", placeholder: "Describe the project to build with AI (Claude Code or Codex): goal, scope, constraints. I prepare specs, prompts and agents." } },
   "direction-technique": { icon: CalendarClock, fr: { label: "Direction technique externalisée", description: "Pilotage récurrent : arbitrages, relecture de devis, roadmap tenue à jour (750 €/mois)", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement mensuel vous aiderait." }, en: { label: "Fractional tech direction", description: "Recurring steering: arbitration, quote reviews, living roadmap (€750/month)", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why a monthly retainer would help." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
-  oeth: { icon: Scale, fr: { label: "Avantage OETH", description: "Déduction AGEFIPH 30 % via sous-traitance TIH", placeholder: "Précisez votre situation : effectif, taux d'emploi TH actuel, montant de contribution AGEFIPH, projet web envisagé…" }, en: { label: "OETH benefit", description: "30% AGEFIPH deduction via TIH subcontracting", placeholder: "Tell us about your situation: workforce size, current disabled-worker employment rate, AGEFIPH contribution, web project considered…" } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
 
@@ -51,7 +48,6 @@ const SUBJECT_ORDER: SubjectKey[] = [
   "pack-ia",
   "direction-technique",
   "mise-en-oeuvre",
-  "oeth",
   "autre",
 ];
 

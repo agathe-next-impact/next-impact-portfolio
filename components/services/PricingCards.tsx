@@ -22,7 +22,6 @@ type Tier = {
   included: { text: string }[];
   ctaLabel: string;
   badge?: string;
-  oeth?: { title: string; text: string; cta: string };
   ctaHref: string;
   ctaExternal?: boolean;
   highlight?: boolean;
@@ -125,13 +124,6 @@ function getTiers(isEn: boolean): Tier[] {
             { text: "Support prioritaire 12 mois" },
           ],
       ctaLabel: isEn ? "Discuss my project" : "Discuter de mon projet",
-      oeth: {
-        title: isEn ? "OETH tax advantage" : "Avantage fiscal OETH",
-        text: isEn
-          ? "TIH provider: 30% of labor cost deductible from your AGEFIPH contribution."
-          : "Prestataire TIH : 30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
-        cta: isEn ? "Simulate my savings" : "Simuler mon économie",
-      },
       ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
       ctaExternal: true,
     },
@@ -250,23 +242,6 @@ export function PricingCards() {
                   </div>
                 ))}
 
-                {tier.oeth && (
-                  <div className="border-t border-dark-gray py-5">
-                    <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
-                      {tier.oeth.title}
-                    </div>
-                    <p className="mb-2.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
-                      {tier.oeth.text}
-                    </p>
-                    <Link
-                      href="/avantage-oeth"
-                      className="group/oeth inline-flex items-center gap-1.5 font-mono text-[11px] text-accent-secondary transition-colors hover:text-foreground"
-                    >
-                      {tier.oeth.cta}
-                      <ArrowRight size={11} className="transition-transform group-hover/oeth:translate-x-0.5" />
-                    </Link>
-                  </div>
-                )}
               </div>
 
               {/* CTA */}

@@ -64,7 +64,7 @@ export default async function ConseilPage({
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ServiceJsonLd
-        name={isEn ? "Web & AI technology advice" : "Boussole Techno Web & IA"}
+        name={isEn ? "Web & AI technology advice" : "Sélecteur techno web & IA"}
         description={
           isEn
             ? "Independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom development before building."

@@ -58,21 +58,20 @@ export const siteConfig = {
   title: "Next Impact",
   description:
     "Conseil techno web à l'heure de l'IA pour les petites structures. " +
-    "L'IA peut coder vite : Next Impact aide à choisir quoi construire, avec quelle technologie, et jusqu'où aller. " +
-    "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
+    "L'IA peut coder vite : Next Impact aide à choisir quoi construire, avec quelle technologie, et jusqu'où aller.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact — Boussole Techno Web & IA — Prestataire TIH",
+    alt: "Next Impact — Sélecteur techno web & IA",
   },
   creator: "Agathe Karinthi-Martin",
   keywords: [
     "WordPress",
     "Conseil techno web",
-    "Boussole Techno Web IA",
+    "Sélecteur techno web IA",
     "IA coding",
     "No-code",
     "SaaS",
@@ -89,11 +88,6 @@ export const siteConfig = {
     "Marketplace",
     "PostgreSQL",
     "CMS Headless",
-    "TIH",
-    "OETH",
-    "AGEFIPH",
-    "prestataire TIH",
-    "déduction AGEFIPH",
   ],
   authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
 };
@@ -246,32 +240,28 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Next Impact — Conseil techno web à l'heure de l'IA",
     description:
-      "L'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure. " +
-      "Prestataire TIH : 30 % du coût de main-d'œuvre déductible de votre contribution AGEFIPH.",
+      "L'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
     keywords: [
       "conseil techno web IA",
-      "Boussole Techno Web IA",
+      "Sélecteur techno web IA",
       "choisir technologie web",
       "IA coding ou no-code",
       "second avis devis web",
       "prototype IA maintenable",
-      "prestataire TIH développement web",
       "Next Impact",
     ],
   },
   en: {
     title: "Next Impact — Web technology advice in the age of AI",
     description:
-      "AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom. " +
-      "French TIH provider: 30% of labour cost deductible from your AGEFIPH contribution.",
+      "AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom.",
     keywords: [
       "web technology advice AI",
-      "Web AI Tech Compass",
+      "web AI tech selector",
       "choose web technology",
       "AI coding or no-code",
       "web quote second opinion",
       "maintainable AI prototype",
-      "French TIH provider web development",
       "Next Impact",
     ],
   },
@@ -279,26 +269,26 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Services — construire utile après la Boussole Techno Web & IA",
+    title: "Services — construire utile après le Sélecteur techno web & IA",
     description:
       "Mise en œuvre Next Impact après décision : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €. Construire seulement quand c'est le bon choix.",
     keywords: [
       "mise en œuvre après cadrage",
       "construction site après conseil",
-      "Boussole Techno Web IA",
+      "Sélecteur techno web IA",
       "création site WordPress optimisé",
       "web app sur-mesure",
       "outil métier sur-mesure",
     ],
   },
   en: {
-    title: "Services — build what helps after the Web & AI Tech Compass",
+    title: "Services — build what helps after the web & AI tech selector",
     description:
       "Next Impact implementation after a clear decision: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500. Build only when it is the right choice.",
     keywords: [
       "implementation after scoping",
       "build after tech advice",
-      "Web AI Tech Compass",
+      "web AI tech selector",
       "optimized WordPress build",
       "custom web app",
       "custom business tool",
@@ -460,24 +450,6 @@ export const pageMetadata = {
       locale,
     });
   },
-
-  simulateurTarifs: (locale: Locale = routing.defaultLocale): Metadata =>
-    generatePageMetadata({
-      title:
-        locale === "en"
-          ? "Pricing simulator — WordPress project estimate"
-          : "Simulateur de tarifs — Estimation projet WordPress",
-      description:
-        locale === "en"
-          ? "Estimate the cost of your WordPress or Headless project in a few clicks. Free simulator for an instant price range."
-          : "Estimez le coût de votre projet WordPress ou Headless en quelques clics. Simulateur gratuit pour obtenir une fourchette de prix instantanée.",
-      path: "/outils/simulateur-agefiph",
-      keywords:
-        locale === "en"
-          ? ["price simulator", "Headless WordPress pricing", "site cost"]
-          : ["simulateur prix", "tarifs WordPress Headless", "coût site web"],
-      locale,
-    }),
 
   brief: (locale: Locale = routing.defaultLocale): Metadata =>
     generatePageMetadata({

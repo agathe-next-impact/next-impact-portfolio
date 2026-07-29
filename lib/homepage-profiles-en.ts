@@ -28,7 +28,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
     headline: "Your digital project,",
     subHeadline: "a growth engine",
     description:
-      "From a brochure site to a custom business platform: an investment that pays back. Measurable ROI, transverse OETH deduction, controlled time-to-market.",
+      "From a brochure site to a custom business platform: an investment that pays back. Measurable ROI, controlled time-to-market.",
     valueProposition:
       "Performance, SEO, conversion and management autonomy: measurable results, whatever path you pick.",
     ctaPrimary: { label: "Free project diagnostic", href: "#audit" },

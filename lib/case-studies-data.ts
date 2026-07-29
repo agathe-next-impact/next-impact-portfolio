@@ -80,18 +80,6 @@ const META: CaseStudyMeta[] = [
     youtubeVideoId: "ash0Q83Z9gQ",
   },
   {
-    id: "21",
-    slug: "la-petite-vitrine",
-    clientType: "independant",
-    clientName: "La Petite Vitrine",
-    imageUrl: "",
-    galleryUrl: "/img/desktop-screen-lapetitevitrine.jpg",
-    date: { month: 6, year: 2026 },
-    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel Blob", "Vercel"],
-    website: "https://lapetitevitrine.com",
-    youtubeVideoId: "lAtVrN9Xh_8",
-  },
-  {
     id: "20",
     slug: "peer-to-peer",
     clientType: "ess",
@@ -355,27 +343,6 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     galleryAlt: "Site vitrine d'Arguin Marine, location de bateaux sur le Bassin d'Arcachon",
     tags: ["PME", "Nautisme", "Site vitrine", "WordPress"],
     duration: "3 semaines",
-  },
-  "la-petite-vitrine": {
-    title: "La Petite Vitrine",
-    description:
-      "Conception de La Petite Vitrine, un service packagé de mise en ligne pour indépendants, TPE et artisans : des modèles pensés par métier, intégrés avec votre contenu et publiés après validation, avec hébergement et maintenance gérés.",
-    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. On part d'un modèle adapté à la profession (santé, commerce, services, bien-être, loisirs), j'y intègre le contenu du client, et le site est mis en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nSous le capot, c'est une application Next.js (React, TypeScript, Tailwind) : un catalogue de modèles thématiques, un pipeline d'export et de publication des sites, et un stockage des contenus sur Vercel Blob. L'hébergement et la maintenance sont gérés de bout en bout — le client n'a rien à installer ni à administrer. RGPD par défaut : aucune publicité, aucun traceur.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
-    objectives: [
-      "Offrir aux indépendants et TPE une présence en ligne professionnelle, sans la complexité d'un site sur-mesure ni le bricolage d'un éditeur DIY",
-      "Industrialiser la création de mini-sites par métier à partir de modèles prêts à publier",
-      "Prendre en charge tout le cycle : intégration du contenu, mise en ligne, hébergement et maintenance",
-      "Garantir un cadre clair : prix fixe, RGPD, sans publicité ni traceur",
-    ],
-    results: [
-      "Offre packagée et lisible : 650 € HT la mise en ligne, dès 14 € HT/mois hébergement et maintenance",
-      "Plateforme Next.js avec catalogue de modèles par métier et pipeline de publication",
-      "Sites livrés clés en main, sans installation ni administration côté client",
-      "Programme pilote de 10 projets (santé mentale et artisans) pour documenter le service",
-    ],
-    galleryAlt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
-    tags: ["Indépendants", "TPE", "Produit", "Web App", "Next.js"],
-    duration: "À compléter",
   },
   "peer-to-peer": {
     title: "Peer to Peer",
@@ -880,27 +847,6 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     tags: ["SMB", "Boating", "Brochure site", "WordPress"],
     duration: "TBD",
   },
-  "la-petite-vitrine": {
-    title: "La Petite Vitrine",
-    description:
-      "Built La Petite Vitrine, a packaged go-live service for freelancers, very small businesses and artisans: profession-specific templates, filled with your content and published after validation, with hosting and maintenance handled.",
-    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. La Petite Vitrine was born from that gap — to offer a third path, simple and guided.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. We start from a template suited to the profession (health, retail, services, wellness, leisure), I integrate the client's content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nUnder the hood it's a Next.js application (React, TypeScript, Tailwind): a catalogue of themed templates, an export-and-publish pipeline for the sites, and content stored on Vercel Blob. Hosting and maintenance are handled end to end — the client has nothing to install or administer. GDPR by default: no advertising, no trackers.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
-    objectives: [
-      "Give freelancers and very small businesses a professional online presence, without the complexity of a custom build or the hassle of a DIY builder",
-      "Industrialize the creation of small profession-based sites from ready-to-publish templates",
-      "Own the whole cycle: content integration, go-live, hosting and maintenance",
-      "Guarantee a clear framework: fixed price, GDPR, no advertising or trackers",
-    ],
-    results: [
-      "Clear, packaged offer: €650 excl. VAT to go live, from €14 excl. VAT/month for hosting and maintenance",
-      "Next.js platform with a profession-based template catalogue and a publishing pipeline",
-      "Turnkey sites delivered, with no installation or admin on the client's side",
-      "Pilot programme of 10 projects (mental health and artisans) to document the service",
-    ],
-    galleryAlt: "La Petite Vitrine — go-live service for small profession-based sites",
-    tags: ["Freelancers", "Small business", "Product", "Web App", "Next.js"],
-    duration: "TBD",
-  },
   "peer-to-peer": {
     title: "Peer to Peer",
     description:
@@ -1387,11 +1333,6 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
     { value: "WordPress", label: "Site simple à administrer" },
     { value: "Arcachon", label: "Location de bateaux haut de gamme" },
   ],
-  "la-petite-vitrine": [
-    { value: "+10", label: "Templates déployables" },
-    { value: "-1 mois", label: "de développement" },
-    { value: "GEO", label: "Optimisé" },
-  ],
   "peer-to-peer": [
     { value: "14", label: "Outils en accès libre" },
     { value: "100%", label: "Local — aucune donnée envoyée" },
@@ -1499,11 +1440,6 @@ const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
     { value: "Brochure", label: "Turnkey online presence" },
     { value: "WordPress", label: "Easy for the client to manage" },
     { value: "Arcachon", label: "High-end boat rental" },
-  ],
-  "la-petite-vitrine": [
-    { value: "€650", label: "Site live, integration included" },
-    { value: "€14/mo", label: "Hosting & maintenance handled" },
-    { value: "GDPR", label: "No ads, no trackers" },
   ],
   "peer-to-peer": [
     { value: "14", label: "Freely accessible tools" },

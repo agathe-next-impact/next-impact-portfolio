@@ -31,13 +31,6 @@ const PROJECTS_META: ProjectMeta[] = [
     tab: ["wordpress"],
   },
   {
-    id: 25,
-    type: "webapp",
-    image: "/img/desktop-screen-lapetitevitrine.jpg",
-    link: "/etudes-de-cas/la-petite-vitrine",
-    tab: ["webapp"],
-  },
-  {
     id: 24,
     type: "webapp",
     image: "/img/desktop-screen-peertopeer.jpg",
@@ -221,12 +214,6 @@ const CONTENT_FR: Record<number, ProjectContent> = {
     description:
       "Vitrine WordPress d'un service de location de bateaux haut de gamme sur le Bassin d'Arcachon.",
   },
-  25: {
-    title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
-    description:
-      "Service packagé de mise en ligne de mini-sites par métier pour indépendants et TPE.",
-  },
   24: {
     title: "Peer to Peer",
     alt: "Plateforme Peer to Peer d'auto-observation en santé mentale",
@@ -253,7 +240,7 @@ const CONTENT_FR: Record<number, ProjectContent> = {
   },
   20: {
     title: "Artisan Coiffeur",
-    alt: "Landing artisan coiffeur — La Petite Vitrine",
+    alt: "Landing artisan coiffeur",
     description:
       "Salon de coiffure moderne à Paris proposant des services de coiffure professionnels.",
   },
@@ -361,12 +348,6 @@ const CONTENT_EN: Record<number, ProjectContent> = {
     description:
       "WordPress brochure site for a high-end boat-rental service on the Arcachon Basin.",
   },
-  25: {
-    title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — go-live service for small profession-based sites",
-    description:
-      "A packaged go-live service for small profession-based sites, for freelancers and very small businesses.",
-  },
   24: {
     title: "Peer to Peer",
     alt: "Peer to Peer mental-health self-observation platform",
@@ -393,7 +374,7 @@ const CONTENT_EN: Record<number, ProjectContent> = {
   },
   20: {
     title: "Artisan Coiffeur",
-    alt: "Artisan hairdresser landing — La Petite Vitrine",
+    alt: "Artisan hairdresser landing",
     description:
       "A modern Paris hair salon offering professional hairdressing services.",
   },

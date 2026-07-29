@@ -21,7 +21,7 @@ const HUB_RUBRIQUES = [
 ] as const;
 
 const HUB_LINKS = [
-  { key: "boussole",     href: "/outils/boussole" },
+  { key: "selecteurTechno", href: "/outils/selecteur-techno" },
   { key: "allTools",     href: "/outils" },
   { key: "allResources", href: "/documentation" },
 ] as const;

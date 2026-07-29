@@ -24,18 +24,16 @@ export async function generateMetadata({
       locale === "en"
         ? [
             "free website audit",
-            "AGEFIPH simulator",
+            "web & AI tech selector",
             "PWA opportunity diagnostic",
             "specifications generator",
-            "TIH provider",
             "headless migration",
           ]
         : [
             "audit site web gratuit",
-            "simulateur AGEFIPH",
+            "sélecteur techno web IA",
             "diagnostic opportunité PWA",
             "cahier des charges",
-            "prestataire TIH",
             "migration headless",
           ],
     locale,

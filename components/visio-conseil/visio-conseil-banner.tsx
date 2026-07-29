@@ -14,7 +14,7 @@ import { Reveal } from "@/components/ui/reveal";
 
 const COPY = {
   fr: {
-    eyebrow: "Boussole Techno Web & IA",
+    eyebrow: "Sélecteur techno web & IA",
     title: "L'IA peut coder vite. Mais quoi construire ?",
     subtitle:
       "Choix de techno, conseil architecture, pack de mise en œuvre IA ou direction technique externalisée : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
-import Boussole from "@/components/outils/boussole";
+import SelecteurTechno from "@/components/outils/selecteur-techno";
 import PageLayout from "@/components/page-layout";
 import { BlueprintSection } from "@/components/aspect/section";
 import { Link } from "@/i18n/navigation";
@@ -19,13 +19,13 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "Web & AI Tech Compass - Which web tech should you choose?"
-        : "Boussole Techno Web & IA - Quelle techno web choisir ?",
+        ? "Web & AI tech selector - Which web tech should you choose?"
+        : "Sélecteur techno web & IA - Quelle techno web choisir ?",
     description:
       locale === "en"
         ? "8 criteria to find your solution family: repair, WordPress, no-code, Headless, SaaS or custom. A neutral decision tool, then the right next step for your case."
         : "8 critères pour trouver votre famille de solution : réparer, WordPress, no-code, Headless, SaaS ou sur-mesure. Un outil de décision neutre, puis la bonne prochaine étape.",
-    path: "/outils/boussole",
+    path: "/outils/selecteur-techno",
     keywords:
       locale === "en"
         ? [
@@ -46,7 +46,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function BoussolePage({
+export default async function SelecteurTechnoPage({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
@@ -58,8 +58,8 @@ export default async function BoussolePage({
     { name: isEn ? "Home" : "Accueil", url: "/" },
     { name: isEn ? "Tools" : "Outils", url: "/outils" },
     {
-      name: isEn ? "Tech Compass" : "Boussole Techno",
-      url: "/outils/boussole",
+      name: isEn ? "Tech selector" : "Sélecteur techno",
+      url: "/outils/selecteur-techno",
     },
   ];
 
@@ -67,7 +67,7 @@ export default async function BoussolePage({
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <PageLayout
-        titre={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
+        titre={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
         sousTitre={
           isEn
             ? "WordPress, no-code, Headless, SaaS or custom? Eight criteria, one recommendation — and the right next step for your case."
@@ -88,7 +88,7 @@ export default async function BoussolePage({
             />
             {isEn ? "Back to tools" : "Retour aux outils"}
           </Link>
-          <Boussole />
+          <SelecteurTechno />
         </BlueprintSection>
       </PageLayout>
     </>

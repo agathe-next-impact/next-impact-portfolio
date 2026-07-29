@@ -4,13 +4,12 @@
   },
   "nav": {
     "services": "Solutions web",
-    "oethAdvantage": "Avantage OETH",
     "demo": "Démo",
     "tools": "Outils en ligne",
     "documentation": "Ressources",
     "caseStudies": "Études de cas",
     "contact": "Contact",
-    "freeAudit": "Diagnostic 2 min",
+    "freeAudit": "Pré-diagnostic express (2 min)",
     "visioConseil": "Visio conseil",
     "onDemand": "À la demande",
     "free": "Gratuit",
@@ -19,7 +18,7 @@
     "hub": "Quelle techno web ?",
     "conseil": "Conseil",
     "bookVisio": "Réserver une visio",
-    "boussole": "La Boussole",
+    "selecteurTechno": "Le Sélecteur techno",
     "allTools": "Tous les outils",
     "allResources": "Toutes les ressources",
     "rubChoisir": "Choisir sa techno",
@@ -47,19 +46,16 @@
     "caseStudies": "Études de cas",
     "documentation": "Documentation",
     "blog": "Blog",
-    "oethAdvantage": "Avantage OETH",
     "resources": "Ressources",
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
     "tools": "Tous les outils",
-    "agefiphSimulator": "Simulateur AGEFIPH (TIH)",
     "startWebApp": "Démarrer une application web",
     "partners": "Partenaires",
     "referralPartners": "Apporteurs d'affaires",
     "whiteLabelAgencies": "Agences & studios",
     "copyright": "© {year} Next Impact Digital — Tous droits réservés",
-    "tihMention": "EI Agathe Karinthi-Martin — Prestataire TIH (Travailleur Indépendant Handicapé) — Attestation OETH disponible",
     "figaroMention": "Vu dans <lien>Le Figaro</lien> — mai 2026",
     "certificationAlt": "Certification"
   },
@@ -107,7 +103,6 @@
   "hero": {
     "available": "Disponible",
     "experience": "20 ans d'expérience digitale dont 6 en développement",
-    "tihMention": "Prestataire TIH — Déduction AGEFIPH",
     "auditTimer": "en 2 minutes",
     "wordpressLogoAlt": "Logo WordPress",
     "nextjsLogoAlt": "Logo Next.js",
@@ -179,7 +174,6 @@
       "available": "Disponible",
       "experience": "20 ans d'expérience digitale dont 6 en développement",
       "wpHeadlessDev": "Conseil techno web & mise en œuvre",
-      "tih": "Prestataire TIH",
       "company": "Next Impact Digital",
       "owner": "EI Agathe Karinthi-Martin",
       "address": "4 rue du centre, 15400 Trizac"
@@ -196,14 +190,14 @@
     "breadcrumbSpecs": "Cahier des charges"
   },
   "toolsPage": {
-    "metaTitle": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
-    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer une décision web : diagnostic Web & IA, simulateur AGEFIPH, opportunité PWA et cahier des charges.",
+    "metaTitle": "Boîte à outils — Sélecteur techno web & IA et cadrage",
+    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer une décision web : diagnostic Web & IA, sélecteur techno, opportunité PWA et cahier des charges.",
     "title": "Boîte à outils",
     "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
     "breadcrumbHome": "Accueil",
     "breadcrumbTools": "Outils",
     "backToTools": "Retour aux outils",
-    "collectionName": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
+    "collectionName": "Boîte à outils — Sélecteur techno web & IA et cadrage",
     "collectionDescription": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter."
   },
   "benchmarkingPage": {
@@ -331,7 +325,7 @@
   },
   "servicesPage": {
     "metaTitle": "Solutions web — construire utile à l'heure de l'IA",
-    "metaDescription": "Après la Boussole Techno Web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
+    "metaDescription": "Après le Sélecteur techno web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Solutions web & Tarifs",
     "calculateGain": {
@@ -388,7 +382,7 @@
     "breadcrumbAbout": "À propos",
     "journey": {
       "label": "Le parcours",
-      "title": "Du terrain WordPress à la boussole techno Web & IA",
+      "title": "Du terrain WordPress au sélecteur techno web & IA",
       "subtitle": "Vingt ans à utiliser, réparer, cadrer puis construire des solutions web — avec une conviction : la bonne techno dépend du besoin, pas de la mode.",
       "step1": {
         "year": "2005 — Le terrain",
@@ -404,7 +398,7 @@
       },
       "step3": {
         "year": "Aujourd'hui — Next Impact",
-        "title": "Une boussole Web & IA, pas une techno par défaut",
+        "title": "Un sélecteur web & IA, pas une techno par défaut",
         "imageAlt": "Aujourd'hui chez Next Impact",
         "items": {
           "user": {

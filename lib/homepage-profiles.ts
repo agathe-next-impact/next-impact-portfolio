@@ -33,7 +33,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     ctaPrimary: { label: "Conseil projet web avec IA", href: "/conseil" },
     ctaSecondary: { label: "Prestations web avec IA", href: "/services" },
     auditTitle: "Quelle techno web à l'heure de l'IA ?",
-    auditSubtitle: "Boussole Techno Web & IA",
+    auditSubtitle: "Sélecteur techno web & IA",
     auditDescription:
       "Avant de demander à l'IA, à un freelance ou à une agence de construire, vérifiez s'il faut réparer, optimiser, utiliser un SaaS, du no-code, WordPress ou du sur-mesure.",
   },
@@ -41,7 +41,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     headline: "Votre projet digital",
     subHeadline: "moteur de croissance",
     description:
-      "Du site vitrine à la plateforme métier sur-mesure : un investissement qui se rentabilise. ROI mesurable, déduction OETH transverse, time-to-market maîtrisé.",
+      "Du site vitrine à la plateforme métier sur-mesure : un investissement qui se rentabilise. ROI mesurable, time-to-market maîtrisé.",
     valueProposition:
       "Performance, SEO, conversion et autonomie de gestion : des résultats mesurables, quelle que soit la voie choisie.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },

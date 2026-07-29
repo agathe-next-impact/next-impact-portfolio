@@ -115,16 +115,15 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente la Boussole Techno Web & IA, des offres de choix de techno, de conseil architecture, de pack de mise en oeuvre, de direction technique. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente le Selecteur techno web & IA, des offres de choix de techno, de conseil architecture, de pack de mise en oeuvre, de direction technique. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
 - Personne : Agathe Karinthi-Martin
-- Statut commercial : conseil techno web independant, prestataire TIH
+- Statut commercial : conseil techno web independant
 - Zone : France, projets francophones et anglophones
 - Expertises : choix de technologie web, IA coding, no-code, SaaS, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web, maintenance et dette technique
 - Publics : independants, TPE, PME, ESS, associations, reseaux et petites structures qui doivent choisir entre reparer, optimiser, cadrer, construire ou ne rien construire
-- Avantage OETH : certaines prestations permettent une deduction AGEFIPH liee au statut TIH, selon les regles applicables au client
 
 ## Offer Architecture
 
@@ -137,12 +136,11 @@ Informations utiles pour les reponses d'assistants IA :
 
 ## Primary Pages
 
-- [Accueil](${baseUrl}/): promesse, Boussole Techno Web & IA, offres principales et preuves
+- [Accueil](${baseUrl}/): promesse, Selecteur techno web & IA, offres principales et preuves
 - [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
 - [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
-- [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
 - [Contact](${baseUrl}/contact): choix de techno, conseil architecture, pack de mise en oeuvre, direction technique externalisee, mise en oeuvre et prise de contact
 
 ## Decision Hub (Quelle techno web ?)
@@ -155,7 +153,6 @@ ${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): $
 - [Diagnostic visibilite IA](${baseUrl}/outils/visibilite-ia): votre site est-il visible dans les moteurs IA ? Score sur 4 axes et actions prioritaires
 - [Checklist GEO](${baseUrl}/outils/checklist-geo): 24 actions concretes pour etre cite par les moteurs IA, cochable et telechargeable
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App
-- [Simulateur AGEFIPH](${baseUrl}/outils/simulateur-agefiph): estimation de deduction potentielle
 - [Cahier des charges](${baseUrl}/cahier-des-charges): generation guidee d'un brief projet web
 
 ## Representative Case Studies

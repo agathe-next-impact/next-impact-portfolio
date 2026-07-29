@@ -36,7 +36,7 @@ export async function generateMetadata({
             "contact conseil techno web",
             "second avis prototype IA",
             "relecture devis web",
-            "Boussole Techno Web IA",
+            "Sélecteur techno web IA",
             "roadmap projet web",
           ],
     locale,

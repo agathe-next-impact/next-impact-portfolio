@@ -23,7 +23,7 @@ const caseStudyItems = [
   { name: "Séjours à L'Hermitage", url: "https://sejours.hermitagelelab.com/", description: "Landing de séjours dans un Tiers Lieu rural" },
   { name: "Mariage Nicolas & Cécile", url: "https://www.nicocecile23mai2026.fr/", description: "Landing de mariage Nicolas et Cécile" },
   { name: "Mariage Agathe & Alain", url: "https://www.mariage-agathe-et-alain.fun/", description: "Landing de mariage Agathe et Alain" },
-  { name: "Artisan Coiffeur", url: "https://artisan-coiffeur.lapetitevitrine.com/", description: "Landing artisan coiffeur — La Petite Vitrine" },
+  { name: "Artisan Coiffeur", url: "https://artisan-coiffeur.lapetitevitrine.com/", description: "Landing artisan coiffeur" },
   { name: "Café citoyen", url: "/etudes-de-cas/cafe-citoyen", description: "Site vitrine du Café citoyen" },
   { name: "Comme des fous - Jeux en ligne", url: "/etudes-de-cas/comme-des-fous-jeux", description: "Jeux en ligne du média participatif Comme des fous" },
   { name: "Comme des fous", url: "/etudes-de-cas/comme-des-fous", description: "Site du média participatif Comme des fous" },

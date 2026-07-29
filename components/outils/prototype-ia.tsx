@@ -226,7 +226,7 @@ function getCtas(tier: 0 | 1 | 2) {
   if (tier === 0)
     return {
       primary: { fr: "En parler en visio", en: "Talk it through on a call", href: "/conseil" },
-      secondary: { fr: "Choisir avec la Boussole", en: "Choose with the Compass", href: "/outils/boussole" },
+      secondary: { fr: "Choisir avec le Sélecteur", en: "Choose with the selector", href: "/outils/selecteur-techno" },
     };
   if (tier === 1)
     return {

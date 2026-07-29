@@ -27,10 +27,6 @@ type Copy = {
   limits: string[];
   proofsLabel: string;
   proofs: { slug: string; title: string; tagline: string; imageUrl: string }[];
-  oethBadge: string;
-  oethTitle: string;
-  oethDescription: string;
-  oethCta: string;
   ctaPrimary: string;
 };
 
@@ -75,10 +71,6 @@ const COPY: Record<Locale, Copy> = {
       { slug: "panorama-pub", title: "Panorama Pub", tagline: "Marketplace B2B livrée en 2 mois — admin autonome sur-mesure", imageUrl: "/img/desktop-screen-panoramapub.png" },
       { slug: "hermitage-jeu-de-piste", title: "Hermitage — Jeu de piste", tagline: "Application mobile PWA — géolocalisée, installable sans store, hors-ligne", imageUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg" },
     ],
-    oethBadge: "Avantage OETH applicable",
-    oethTitle: "Déduction AGEFIPH transverse",
-    oethDescription: "Toute prestation Next Impact ouvre droit à la déduction AGEFIPH (30 % du coût de main-d'œuvre) — site WordPress, site Headless, web app ou application mobile.",
-    oethCta: "Simuler mon économie",
     ctaPrimary: "Discuter de mon projet",
   },
   en: {
@@ -121,10 +113,6 @@ const COPY: Record<Locale, Copy> = {
       { slug: "panorama-pub", title: "Panorama Pub", tagline: "B2B marketplace shipped in 2 months — custom autonomous admin", imageUrl: "/img/desktop-screen-panoramapub.png" },
       { slug: "hermitage-jeu-de-piste", title: "Hermitage — Treasure Hunt", tagline: "Mobile PWA — geolocated, store-free install, offline", imageUrl: "/img/mobile-screen-jeu-de-piste-hermitage.jpg" },
     ],
-    oethBadge: "OETH benefit applicable",
-    oethTitle: "Transverse AGEFIPH deduction",
-    oethDescription: "Every Next Impact engagement qualifies for the AGEFIPH deduction (30 % of labor cost) — WordPress site, Headless site, web app or mobile application.",
-    oethCta: "Simulate my savings",
     ctaPrimary: "Discuss my project",
   },
 };
@@ -265,29 +253,7 @@ export default function AppsSection() {
         </div>
       </div>
 
-      {/* Bandeau OETH + CTA */}
       <div className="flex flex-col gap-8 px-6 py-12 lg:px-8 lg:py-16">
-        <Reveal className="grid items-center gap-6 border border-dark-gray bg-jet p-6 md:grid-cols-[auto_1fr_auto] md:gap-8 md:p-8">
-          <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
-            {copy.oethBadge}
-          </div>
-          <div>
-            <p className="mb-1 font-light tracking-tight text-foreground">
-              {copy.oethTitle}
-            </p>
-            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
-              {copy.oethDescription}
-            </p>
-          </div>
-          <Link
-            href="/avantage-oeth"
-            className="group inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian"
-          >
-            {copy.oethCta}
-            <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        </Reveal>
-
         <Reveal>
           <a
             href="https://calendar.app.google/RwZqaabSR5aDMnk46"

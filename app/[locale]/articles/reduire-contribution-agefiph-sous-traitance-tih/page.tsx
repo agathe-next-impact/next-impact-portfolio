@@ -36,7 +36,7 @@ export async function generateMetadata({
 export default function ArticleReduireAgefiph() {
   const breadcrumbItems = [
     { name: "Accueil", url: "/" },
-    { name: "Avantage OETH", url: "/avantage-oeth" },
+    { name: "Articles", url: "/articles" },
     {
       name: "Réduire sa contribution AGEFIPH",
       url: "/articles/reduire-contribution-agefiph-sous-traitance-tih",
@@ -492,9 +492,9 @@ export default function ArticleReduireAgefiph() {
 
                 {/* CTAs */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-                  <Link href="/avantage-oeth">
+                  <Link href="/a-propos">
                     <button className="btn primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                      Simuler mon économie
+                      En savoir plus sur le statut TIH
                       <ArrowRight size={15} strokeWidth={1.5} />
                     </button>
                   </Link>

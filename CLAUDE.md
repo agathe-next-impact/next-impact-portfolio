@@ -3,6 +3,12 @@
 Constitution du dépôt. Lue à chaque session Claude Code. Source de vérité sur le
 contexte et les règles de travail pour ce site.
 
+> **Chantier en cours** : l'évolution du site (pivot « bras droit IA », lots
+> 0/A/B/C/D) est gouvernée par
+> `.claude/docs/directives-claude-code-next-impact.md` (cadrage v3.1). En cas de
+> conflit avec la doctrine ci-dessous (notamment sur l'AGEFIPH), les directives
+> v3.1 priment. Journal des décisions : `docs/decisions.md`.
+
 ## Ce qu'est ce projet
 
 La vitrine **next-impact.digital** — studio web solo (EI Agathe Karinthi-Martin),

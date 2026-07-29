@@ -48,7 +48,7 @@ const LAYOUT_META = {
     title: 'Next Impact — Conseil techno web à l\'heure de l\'IA',
     description:
       'L\'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu\'où aller.',
-    ogTitle: 'Next Impact — Boussole Techno Web & IA',
+    ogTitle: 'Next Impact — Sélecteur techno web & IA',
     ogDescription:
       'Conseil techno web pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant d\'investir.',
     ogLocale: 'fr_FR',
@@ -92,7 +92,7 @@ export async function generateMetadata({
     description: m.description,
     keywords: [
       'conseil techno web',
-      'Boussole Techno Web IA',
+      'Sélecteur techno web IA',
       'IA coding',
       'no-code',
       'SaaS',

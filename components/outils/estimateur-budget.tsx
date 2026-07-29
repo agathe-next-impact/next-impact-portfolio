@@ -514,8 +514,8 @@ export default function EstimateurBudget() {
                 }}
               >
                 {isEn
-                  ? "Indicative estimate based on real Next Impact projects. A precise scoping (1-3 days) is needed to lock in budget and timeline. OETH benefit: TIH-eligible companies can deduct up to 30% of labor cost from their AGEFIPH contribution."
-                  : "Estimation indicative basée sur les projets réels Next Impact. Un cadrage précis (1-3 jours) est nécessaire pour figer budget et délai. Avantage OETH : les entreprises éligibles TIH peuvent déduire jusqu'à 30 % du coût main-d'œuvre de leur contribution AGEFIPH."}
+                  ? "Indicative estimate based on real Next Impact projects. A precise scoping (1-3 days) is needed to lock in budget and timeline."
+                  : "Estimation indicative basée sur les projets réels Next Impact. Un cadrage précis (1-3 jours) est nécessaire pour figer budget et délai."}
               </p>
             </div>
 
@@ -524,12 +524,6 @@ export default function EstimateurBudget() {
               <Link href="/contact" style={{ flex: "1 1 auto" }}>
                 <button type="button" className="btn primary" style={{ width: "100%" }}>
                   {isEn ? "Discuss this estimate" : "Discuter de cette estimation"}
-                  <ArrowRight style={{ display: "inline", marginLeft: 8, width: 14, height: 14, verticalAlign: "middle" }} />
-                </button>
-              </Link>
-              <Link href="/outils/simulateur-agefiph" style={{ flex: "1 1 auto" }}>
-                <button type="button" className="btn" style={{ width: "100%" }}>
-                  {isEn ? "Calculate AGEFIPH deduction" : "Calculer la déduction AGEFIPH"}
                   <ArrowRight style={{ display: "inline", marginLeft: 8, width: 14, height: 14, verticalAlign: "middle" }} />
                 </button>
               </Link>
