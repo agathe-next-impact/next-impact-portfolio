@@ -28,7 +28,7 @@ export async function generateMetadata({
     ],
     type: "article",
     publishedTime: "2025-03-01",
-    modifiedTime: "2025-06-01",
+    modifiedTime: "2026-07-18",
     locale,
   });
 }
@@ -43,6 +43,21 @@ export default function ArticleAttestationTIH() {
     },
   ];
 
+  // Source unique de la FAQ : alimente le schéma FAQPage ET la section visible
+  // (politique Google : le schéma FAQ doit correspondre à un contenu affiché).
+  const faqItems = [
+    {
+      question: "Qu'est-ce qu'une attestation de déductibilité TIH ?",
+      answer:
+        "C'est un document officiel délivré par le prestataire TIH, conforme à l'article D.5212-7 du Code du travail, qui certifie le montant des prestations réalisées et le montant déductible de la contribution AGEFIPH.",
+    },
+    {
+      question: "Comment intégrer l'attestation à ma déclaration OETH ?",
+      answer:
+        "L'attestation est jointe à votre déclaration annuelle OETH transmise à l'URSSAF via la DSN (Déclaration Sociale Nominative). Elle justifie le montant de la déduction demandée.",
+    },
+  ];
+
   return (
     <main className="light article-page">
       <ArticleJsonLd
@@ -50,25 +65,12 @@ export default function ArticleAttestationTIH() {
         description="Tout savoir sur l'attestation de déductibilité TIH : qui la délivre, quelles informations elle contient, comment l'intégrer à votre déclaration OETH auprès de l'URSSAF."
         image="/img/desktop-screen-next-impact.png"
         datePublished="2025-03-01"
-        dateModified="2025-06-01"
+        dateModified="2026-07-18"
         author="Agathe Karinthi-Martin"
         url="/articles/attestation-deductibilite-tih-guide-entreprises"
       />
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <FAQJsonLd
-        questions={[
-          {
-            question: "Qu'est-ce qu'une attestation de déductibilité TIH ?",
-            answer:
-              "C'est un document officiel délivré par le prestataire TIH, conforme à l'article D.5212-7 du Code du travail, qui certifie le montant des prestations réalisées et le montant déductible de la contribution AGEFIPH.",
-          },
-          {
-            question: "Comment intégrer l'attestation à ma déclaration OETH ?",
-            answer:
-              "L'attestation est jointe à votre déclaration annuelle OETH transmise à l'URSSAF via la DSN (Déclaration Sociale Nominative). Elle justifie le montant de la déduction demandée.",
-          },
-        ]}
-      />
+      <FAQJsonLd questions={faqItems} />
 
       <PageLayout
         titre="Attestation de déductibilité TIH"
@@ -385,6 +387,29 @@ export default function ArticleAttestationTIH() {
                     Demander un devis
                     <ArrowRight style={{ width: 16, height: 16 }} />
                   </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ visible — reflète le schéma FAQPage (schéma = contenu affiché) */}
+          <section className="s" style={{ borderTop: "1px solid var(--rule)", background: "var(--paper-2)" }}>
+            <div className="container">
+              <div style={{ maxWidth: 720 }}>
+                <h2 className="ni-serif" style={{ fontSize: 26, fontWeight: 500, color: "var(--ink)", marginBottom: 24 }}>
+                  Questions fréquentes
+                </h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                  {faqItems.map((f, i) => (
+                    <div key={i} style={{ borderTop: i > 0 ? "1px solid var(--rule)" : "none", paddingTop: i > 0 ? 20 : 0 }}>
+                      <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--ink)", marginBottom: 8 }}>
+                        {f.question}
+                      </h3>
+                      <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--ink-2)" }}>
+                        {f.answer}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

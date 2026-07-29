@@ -12,6 +12,13 @@ type YoutubePlayerProps = {
   className?: string;
   compact?: boolean;
   label?: string;
+  /**
+   * Affiche une capture du début de la vidéo (frames auto YouTube `…1.jpg`)
+   * au lieu de la vignette officielle (`…default.jpg`).
+   */
+  firstFrame?: boolean;
+  /** Image locale exacte (ex. /img/poster-x.webp) — prioritaire sur YouTube. */
+  posterSrc?: string;
 };
 
 export function getYoutubeId(url: string): string | null {
@@ -35,6 +42,10 @@ export function getYoutubeId(url: string): string | null {
 // hqdefault, qui est toujours disponible.
 const THUMBNAIL_QUALITIES = ["maxresdefault", "sddefault", "hqdefault"] as const;
 
+// Variante « première image » : captures automatiques tirées du début de la vidéo
+// (`…1.jpg`), au lieu de la vignette officielle. Mêmes règles de fallback.
+const FIRST_FRAME_QUALITIES = ["maxres1", "sd1", "hq1", "mq1"] as const;
+
 export function YoutubePlayer({
   url,
   videoId,
@@ -43,6 +54,8 @@ export function YoutubePlayer({
   className,
   compact = false,
   label = "Demo video",
+  firstFrame = false,
+  posterSrc,
 }: YoutubePlayerProps) {
   const [loaded, setLoaded] = useState(false);
   const [qualityIndex, setQualityIndex] = useState(0);
@@ -51,9 +64,14 @@ export function YoutubePlayer({
   if (!id) return null;
 
   const isShort = aspect === "short";
-  const thumbnailUrl = `https://img.youtube.com/vi/${id}/${THUMBNAIL_QUALITIES[qualityIndex]}.jpg`;
-  const downgradeThumbnail = () =>
-    setQualityIndex((index) => Math.min(index + 1, THUMBNAIL_QUALITIES.length - 1));
+  const qualities: readonly string[] = firstFrame ? FIRST_FRAME_QUALITIES : THUMBNAIL_QUALITIES;
+  const thumbnailUrl =
+    posterSrc ?? `https://img.youtube.com/vi/${id}/${qualities[qualityIndex]}.jpg`;
+  // Le fallback de qualité ne concerne que les miniatures YouTube, pas un poster local.
+  const downgradeThumbnail = () => {
+    if (posterSrc) return;
+    setQualityIndex((index) => Math.min(index + 1, qualities.length - 1));
+  };
   const embedUrl = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
 
   return (

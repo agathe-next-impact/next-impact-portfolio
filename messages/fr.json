@@ -245,8 +245,8 @@
     "breadcrumbDocs": "Comprendre"
   },
   "blogPage": {
-    "metaTitle": "Quelle techno web à l'heure de l'IA ? | Next Impact",
-    "metaDescription": "Conseils, comparatifs et retours d'expérience pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure."
+    "metaTitle": "Blog Web & IA — retours d'expérience, comparatifs et coûts | Next Impact",
+    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure — coûts réels et pièges à éviter."
   },
   "articlesPage": {
     "metaTitle": "Articles & comparatifs Web, IA et architecture | Next Impact",
@@ -376,54 +376,110 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "À propos de Next Impact — conseil techno web à l'heure de l'IA",
-    "metaDescription": "Agathe Karinthi-Martin aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+    "metaTitle": "À propos — Agathe Karinthi-Martin, conseil techno web pluridisciplinaire | Next Impact",
+    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles — technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
+    "hero": {
+      "kicker": "La personne derrière Next Impact",
+      "title": "À propos",
+      "lead": "Agathe Karinthi-Martin — <em>technique, business, marketing, design</em>. J'ai pratiqué le web sous ces quatre angles : c'est ce qui change la façon dont je vous conseille — je comprends votre projet dans sa globalité, pas seulement son code.",
+      "subtext": "J'aide les structures de 20 à 250 salariés à décider quoi construire, avec quelle techno, et jusqu'où aller — WordPress modernisé, Headless, ou application sur-mesure. Et quand la décision est prise, je construis.",
+      "imageAlt": "Agathe Karinthi-Martin, fondatrice de Next Impact"
+    },
     "journey": {
       "label": "Le parcours",
       "title": "Du terrain WordPress au sélecteur techno web & IA",
-      "subtitle": "Vingt ans à utiliser, réparer, cadrer puis construire des solutions web — avec une conviction : la bonne techno dépend du besoin, pas de la mode.",
-      "step1": {
-        "year": "2005 — Le terrain",
-        "title": "Quinze ans à utiliser WordPress avant de le coder",
-        "description": "Mettre de côté une passion pour le développement informatique pour plonger dans la communication digitale. Pendant 15 ans, utiliser WordPress au quotidien : créer des pages, gérer des contenus, configurer des thèmes, débugger des plugins. Vivre de l'intérieur ce qui marche — et surtout ce qui frustre les équipes éditoriales sur cet outil.",
-        "imageAlt": "Engagement associatif de Next Impact"
+      "subtitle": "Vingt ans à pratiquer le web sous tous ses angles — le code et la stratégie, le marketing et le design. Une conviction constante : la bonne techno dépend du besoin, pas de la mode.",
+      "fondations": {
+        "year": "2000 – 2020 — La vision d'ensemble",
+        "title": "Le projet web dans sa globalité : concevoir, gérer, faire vivre",
+        "description": "Apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Puis, quinze ans durant, piloter le projet web côté édition : chargée de communication en association, WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins. Embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et savoir ce qui fait, ou défait, un projet."
       },
-      "step2": {
+      "theorie": {
+        "year": "2012 – 2015 — Le détour théorique",
+        "title": "Penser la machine avant de la reprogrammer",
+        "description": "Un master recherche en sciences de l'information et de la communication (Montpellier 3) et une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
+        "note": "(Travaux publiés sous le nom Agathe Martin.)"
+      },
+      "code": {
         "year": "2020 — Le retour au code",
-        "title": "De la personnalisation WordPress au développement sur-mesure",
-        "description": "Face aux limites des thèmes et plugins du marché, repasser au code. D'abord au coup par coup pour résoudre des frictions précises, puis de façon structurelle : thèmes custom, plugins WordPress sur-mesure, intégrations API. Une expertise WordPress full-stack, construite par la nécessité.",
-        "imageAlt": "Retour au code de Next Impact"
+        "title": "De la customisation WordPress au développement moderne",
+        "description": "Repasser au code par nécessité : PHP/MySQL retrouvés, thèmes et plugins WordPress sur-mesure, intégrations API. Puis élargir la stack au rythme des besoins réels des projets : JavaScript et ses frameworks (React, Next.js, Astro), PostgreSQL, et les CMS headless — WordPress headless, Payload, Strapi. Une expertise full-stack construite projet après projet, pas en bootcamp."
       },
-      "step3": {
+      "today": {
         "year": "Aujourd'hui — Next Impact",
         "title": "Un sélecteur web & IA, pas une techno par défaut",
-        "imageAlt": "Aujourd'hui chez Next Impact",
-        "items": {
-          "user": {
-            "label": "L'expertise utilisateur :",
-            "text": "15 ans à manipuler WordPress côté édition pour comprendre ce qu'il faut absolument préserver de son admin."
-          },
-          "tech": {
-            "label": "La maîtrise technique :",
-            "text": "Deux savoir-faire complémentaires — choisir le bon niveau de complexité, puis construire ou corriger quand la solution est claire."
-          },
-          "ai": {
-            "label": "L'accélération par l'IA :",
-            "text": "L'IA accélère la production, mais renforce le besoin de cadrage : architecture, données, maintenance, sécurité et cohérence business."
-          }
+        "user": {
+          "label": "L'expertise du terrain :",
+          "text": "15 ans à mener des projets web côté édition, pour savoir ce qu'il faut absolument préserver de l'admin."
         },
-        "figaroMention": "Une approche évoquée dans <lien>Le Figaro</lien>, sur la modernisation Headless des sites WordPress de PME."
+        "tech": {
+          "label": "La maîtrise technique :",
+          "text": "20 ans de systèmes, des fondations PHP/MySQL aux stacks Next.js/PostgreSQL/headless — choisir le bon niveau de complexité, puis piloter la construction."
+        },
+        "theory": {
+          "label": "Le fil rouge théorique :",
+          "text": "la relation humain-machine, pensée et publiée dès 2012 — ce qui fonde aujourd'hui un regard non naïf sur ce que l'IA peut, et ne peut pas, faire."
+        }
       }
     },
-    "citationByline": "— Agathe Karinthi-Martin, Fondatrice de Next Impact",
-    "metrics": {
+    "manifesto": {
+      "label": "Le manifeste",
+      "title": "L'IA n'a pas remplacé le conseil. Elle l'a rendu critique.",
+      "chapo": "Le choix d'une techno, c'est la traduction fidèle du monde réel en solution digitale.",
+      "chapoByline": "— Agathe Karinthi-Martin, fondatrice de Next Impact",
+      "intro": "L'IA est le meilleur stagiaire qu'on ait jamais eu : investi, rapide, structuré, rigoureux, infatigable. Mais un stagiaire, même brillant, ne décide pas de la stratégie. La qualité de ce qu'il produit dépend entièrement de la qualité de celui qui le cadre.",
+      "ecarts": {
+        "title": "L'IA creuse les écarts, elle ne les comble pas",
+        "description": "Dans un domaine donné, un néophyte obtient de l'IA des résultats basiques — parfois faux, sans pouvoir s'en apercevoir. Un expert, lui, démultiplie les siens. L'écart de résultats entre les deux ne se réduit pas avec l'IA : il explose.",
+        "item1": "L'IA est un amplificateur de compétence, pas un substitut",
+        "item2": "Sans expertise du domaine, impossible de détecter l'erreur plausible",
+        "item3": "Plus l'IA progresse, plus le cadrage expert prend de la valeur"
+      },
+      "decision": {
+        "title": "La décision ne se délègue jamais",
+        "description": "Déléguer la décision à l'IA, c'est perdre le fil de sa propre stratégie — et ne plus être capable de la suivre, ni de la défendre. Une décision engage : elle doit rester justifiable et assumable devant votre direction, vos équipes, vos clients. Or l'IA optimise le vraisemblable, pas le vrai : elle produit avec aplomb des réponses fausses quand elle les juge plus probables.",
+        "item1": "L'IA propose, l'humain arbitre",
+        "item2": "Chaque choix d'architecture reste explicable en langage métier",
+        "item3": "La responsabilité ne se sous-traite pas à un modèle"
+      },
+      "multiplicateur": {
+        "title": "Le multiplicateur : expert + IA",
+        "description": "La combinaison d'un accompagnement expert et de l'IA change la donne : des résultats de très haute qualité, obtenus plus vite, et des projets d'une complexité auparavant hors de portée pour une petite structure. C'est le cœur de ma pratique : je tiens la maîtrise d'ouvrage avec vous, l'IA tient le chantier.",
+        "item1": "Vous : la vision et la décision (maîtrise d'ouvrage)",
+        "item2": "Moi : le cadrage, l'architecture, le contrôle qualité",
+        "item3": "L'IA : un maître d'œuvre d'exception — jamais un décideur"
+      }
+    },
+    "proofs": {
       "label": "En chiffres",
-      "title": "Preuve par l'engagement",
-      "yearsCommitment": "ans d'engagement",
-      "yearsDevelopment": "ans de développement",
-      "projectsDelivered": "projets web livrés"
+      "title": "En chiffres",
+      "figaro": {
+        "text": "Une approche remarquée par <lien>Le Figaro</lien> : la modernisation Headless des sites WordPress de PME, sans tout reconstruire.",
+        "cta": "Lire l'article"
+      },
+      "metrics": {
+        "pratique": "ans de pratique du web",
+        "wordpress": "ans d'usage WordPress",
+        "projets": "projets web livrés",
+        "projetsCta": "Voir les études de cas"
+      }
+    },
+    "tih": {
+      "text": "Next Impact est un prestataire <strong>TIH</strong> : pour les structures de 20 salariés et plus assujetties à l'OETH, 30 % du coût de main-d'œuvre est déductible de la contribution AGEFIPH.",
+      "cta": "Comprendre l'avantage OETH"
+    },
+    "ctaFinal": {
+      "label": "Et maintenant ?",
+      "title": "Et maintenant ?",
+      "coldTag": "Diagnostic gratuit · 2 min",
+      "coldTitle": "Voyez ce qui ralentit votre site en 2 min",
+      "coldDescription": "Diagnostic gratuit, sans engagement, sans email commercial derrière.",
+      "coldCta": "Lancer le diagnostic",
+      "warmTag": "Rendez-vous",
+      "warmTitle": "Discuter de votre projet",
+      "warmCta": "Prendre rendez-vous"
     }
   },
   "expandableCards": {

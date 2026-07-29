@@ -28,7 +28,7 @@ const FR: HomeContent = {
   },
   faq: {
     kicker: "FAQ",
-    title: "Les questions qu'on me pose le plus",
+    title: "Les questions qui se posent",
     items: [
       {
         question: "Pourquoi payer du conseil si l'IA peut coder ?",

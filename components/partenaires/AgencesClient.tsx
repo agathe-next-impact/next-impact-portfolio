@@ -83,7 +83,7 @@ const GAINS = [
   },
   {
     title: "Double culture WordPress + web moderne",
-    body: "15 ans d'usage WordPress côté édition, 8 ans de développement. Je comprends vos contraintes et celles de votre client.",
+    body: "15 ans d'usage WordPress côté édition, 6 ans de développement. Je comprends vos contraintes et celles de votre client.",
   },
 ];
 

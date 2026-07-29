@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
 import AboutClient from "@/components/about/AboutClient";
-import { BreadcrumbJsonLd, PersonJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, FAQJsonLd, PersonJsonLd } from "@/components/json-ld";
+import { getAboutContent } from "@/lib/about-content";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -22,6 +23,9 @@ export async function generateMetadata({
             "about Next Impact",
             "Agathe Karinthi-Martin",
             "web technology advice",
+            "multidisciplinary web background",
+            "technical business marketing design",
+            "holistic web project vision",
             "AI coding",
             "web AI tech selector",
             "technology choice",
@@ -32,6 +36,9 @@ export async function generateMetadata({
             "à propos Next Impact",
             "Agathe Karinthi-Martin",
             "conseil techno web",
+            "parcours pluridisciplinaire web",
+            "technique business marketing design",
+            "vision globale projet web",
             "IA coding",
             "Sélecteur techno web IA",
             "choix technologie",
@@ -53,11 +60,13 @@ export default async function AProposPage({
     { name: t("breadcrumbHome"), url: "/" },
     { name: t("breadcrumbAbout"), url: "/a-propos" },
   ];
+  const about = getAboutContent(locale);
 
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <PersonJsonLd />
+      <FAQJsonLd questions={about.faq.items} />
       <AboutClient />
     </>
   );

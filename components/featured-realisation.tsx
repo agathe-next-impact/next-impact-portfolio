@@ -26,31 +26,31 @@ type Copy = {
 const COPY: Record<Locale, Copy> = {
   fr: {
     badge: "Étude de cas phare — Mai 2026",
-    tagline: "Le 1er annuaire B2B du secteur, livré en 2 mois",
+    tagline: "Marketplace B2B livrée en 2 mois — admin autonome sur-mesure",
     description:
-      "Premier annuaire en ligne des fournisseurs d'objets publicitaires en France. Plateforme opérationnelle en 2 mois, pensée SEO et croissance. Next.js + PostgreSQL serverless.",
+      "Le premier annuaire en ligne des fournisseurs d'objets publicitaires : catalogue structuré, sourcing fournisseurs simplifié et interface d'administration autonome pour le client. Next.js + PostgreSQL, du concept à la mise en ligne en deux mois.",
     stats: [
-      { value: "1ᵉʳ",    label: "Annuaire du secteur en France" },
-      { value: "2 mois", label: "Du concept à la production" },
+      { value: "1er",    label: "Annuaire du secteur en France" },
+      { value: "2 mois", label: "Du concept à la mise en ligne" },
       { value: "B2B",    label: "Sourcing fournisseurs simplifié" },
     ],
     ctaPrimary: "Voir l'étude de cas",
     ctaSecondary: "Discuter d'un projet similaire",
-    imageAlt: "Panorama Pub — marketplace B2B des fournisseurs d'objets publicitaires",
+    imageAlt: "Panorama Pub — premier annuaire en ligne des fournisseurs d'objets publicitaires",
   },
   en: {
     badge: "Featured case study — May 2026",
-    tagline: "The industry's 1st B2B directory, shipped in 2 months",
+    tagline: "B2B marketplace shipped in 2 months — custom autonomous admin",
     description:
-      "First online directory of promotional product suppliers in France. Operational in 2 months, built for SEO and growth. Next.js + serverless PostgreSQL.",
+      "The first online directory of promotional-products suppliers in France: a structured catalogue, simplified supplier sourcing and an autonomous admin interface for the client. Next.js + PostgreSQL, from concept to launch in two months.",
     stats: [
       { value: "1st",      label: "Industry directory in France" },
-      { value: "2 months", label: "From concept to production" },
-      { value: "B2B",      label: "Streamlined supplier sourcing" },
+      { value: "2 months", label: "From concept to launch" },
+      { value: "B2B",      label: "Simplified supplier sourcing" },
     ],
     ctaPrimary: "View the case study",
     ctaSecondary: "Discuss a similar project",
-    imageAlt: "Panorama Pub — B2B marketplace for promotional product suppliers",
+    imageAlt: "Panorama Pub — first online directory of promotional-products suppliers",
   },
 };
 
@@ -100,6 +100,7 @@ export default function FeaturedRealisation() {
                 videoId="9fMaBL1amYk"
                 title={copy.imageAlt}
                 label="Panorama Pub"
+                firstFrame
               />
             </div>
           </div>

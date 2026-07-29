@@ -35,7 +35,7 @@ const OFFERS_FR: Offer[] = [
   },
   {
     subtitle: "Décider",
-    title: "Conseil techno web & IA",
+    title: "Conseil web & IA",
     price: "dès 150 € HT",
     items: [
       "Choix de techno web en 30 min : WordPress, no-code, IA, Headless ou sur-mesure",
@@ -49,7 +49,7 @@ const OFFERS_FR: Offer[] = [
   },
   {
     subtitle: "Construire",
-    title: "Création de solutions web",
+    title: "Prestations web",
     price: "dès 2 250 € HT",
     items: [
       "WordPress optimisé, Headless + Next.js ou outil métier",
@@ -120,7 +120,7 @@ export default function HomeOffres() {
               isEn ? (
                 <>AI can code. <span className="text-accent-secondary">It cannot decide everything.</span></>
               ) : (
-                <>L'IA exécute. <span className="text-accent-secondary">Je vous accompagne</span> pour décider.</>
+                <>Accompagner <span className="text-accent-secondary">votre projet web</span> à l'heure de l'IA.</>
               )
             }
             description={
@@ -152,14 +152,28 @@ export default function HomeOffres() {
                   <span className="absolute inset-x-0 top-0 h-0.5 bg-accent-secondary" aria-hidden />
                 )}
 
-                <h3 className="text-xl font-light leading-tight tracking-tight text-foreground md:text-2xl">
-                  {offer.title}
-                </h3>
-                <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                {/* Repères d'angle « blueprint » — micro-anim au survol : deux
+                    crochets vermillon (calage type dessin technique) qui se
+                    recentrent dans les angles. Vocabulaire distinct du reste de la
+                    page (reveal translateY, typewriter, sweep). Opacity + léger
+                    recentrage, mouvement en motion-safe uniquement. */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-1.5 top-1.5 h-2.5 w-2.5 border-l border-t border-accent-secondary opacity-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-safe:-translate-x-1 motion-safe:-translate-y-1 motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-reduce:transition-none"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-1.5 right-1.5 h-2.5 w-2.5 border-b border-r border-accent-secondary opacity-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-safe:translate-x-1 motion-safe:translate-y-1 motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-reduce:transition-none"
+                />
+
+                <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
                   {offer.subtitle}
                 </div>
+                <h3 className="mt-2 text-2xl font-normal leading-tight tracking-tight text-foreground md:text-3xl">
+                  {offer.title}
+                </h3>
 
-                <div className="mt-6 border-b border-dark-gray pb-5 font-mono text-[11px] tracking-[0.08em] text-foreground">
+                <div className="mt-6 border-b border-dark-gray pb-5 text-xl font-light font-mono leading-none tracking-tight text-foreground lg:text-2xl">
                   {offer.price}
                 </div>
 

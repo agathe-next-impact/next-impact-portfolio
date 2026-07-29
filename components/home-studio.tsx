@@ -15,12 +15,12 @@ const BTN_GHOST =
   "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 /**
- * HomeStudio — présence humaine + démarche : mener un projet web aujourd'hui,
- * c'est aiguiller des IA différentes (gain de temps et de qualité) PUIS valider
- * ce qui tient en production. Le parcours (WordPress côté édition 15 ans, avant
- * 8 ans de développement) est la légitimité de validation — l'actif de
- * réassurance différenciant. Prolonge l'accroche du hero « L'IA code bien,
- * l'humain décide mieux ».
+ * HomeStudio — présence humaine + conviction : la section « à propos » de la home,
+ * axée sur le manifeste (voir /a-propos §03). Thèse : l'IA n'a pas remplacé le
+ * conseil, elle l'a rendu critique. Les 3 points reprennent les 3 piliers du
+ * manifeste (l'IA amplifie sans remplacer · la décision ne se délègue pas ·
+ * expert + IA en multiplicateur) et les ancrent dans la légitimité personnelle
+ * (15 ans d'usage WordPress, 6 ans de développement). Prolonge l'accroche du hero.
  */
 export default function HomeStudio() {
   const locale = useLocale() as Locale;
@@ -28,14 +28,14 @@ export default function HomeStudio() {
 
   const bullets = isEn
     ? [
-        ["Engineering & coordination", "Structuring the project and making different AIs work together — front, back and content — fast and friction-free."],
-        ["Critical tech decisions", "WordPress or Headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. AI suggests, the human decides."],
-        ["Production validation", "15 years using WordPress and 8 years building: the legitimacy to judge performance, accessibility and maintainability — exactly where AI still gets it wrong."],
+        ["AI amplifies, it doesn't replace", "An amplifier of skill, not a substitute: without domain expertise, the plausible error slips through. That's where 20 years of systems practice weigh in."],
+        ["The decision isn't delegated", "WordPress or Headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. AI proposes, the human decides."],
+        ["I frame it, AI runs it", "15 years using WordPress and 6 years building: the legitimacy to judge performance, accessibility and maintainability — where AI still gets it wrong. I hold the project ownership, AI runs the build."],
       ]
     : [
-        ["Ingénierie & coordination", "Structurer le projet et faire travailler ensemble des IA différentes — front, back et contenu — vite et sans friction."],
-        ["Choix techniques critiques", "WordPress ou Headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. L'IA propose, l'humain tranche."],
-        ["Validation en production", "15 ans d'usage WordPress et 8 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là précisément où l'IA se trompe encore."],
+        ["L'IA amplifie, elle ne remplace pas", "Un amplificateur de compétence, pas un substitut : sans expertise du domaine, l'erreur plausible passe inaperçue. C'est là que 20 ans de pratique des systèmes pèsent."],
+        ["La décision ne se délègue pas", "WordPress ou Headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. L'IA propose, l'humain tranche."],
+        ["Je cadre, l'IA exécute", "15 ans d'usage WordPress et 6 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là où l'IA se trompe encore. Je tiens la maîtrise d'ouvrage, l'IA tient le chantier."],
       ];
 
   return (
@@ -76,21 +76,21 @@ export default function HomeStudio() {
           <h2 className="max-w-2xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
             {isEn ? (
               <>
-                Leading a web project today means{" "}
-                <span className="text-accent-secondary">orchestrating AIs — and validating.</span>
+                {"AI hasn't replaced advice. "}
+                <span className="text-accent-secondary">It has made it critical.</span>
               </>
             ) : (
               <>
-                Une expertise technique{" "}
-                <span className="text-accent-secondary">devenue critique.</span>
+                {"L'IA n'a pas remplacé le conseil. "}
+                <span className="text-accent-secondary">Elle l&apos;a rendu critique.</span>
               </>
             )}
           </h2>
 
           <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
-              ? "Steered well, AI delivers speed and quality. But a web project is still engineering: structuring the work, coordinating several different AIs and settling the technical choices everything else depends on — then validating what holds up in production. That's where the human is decisive."
-              : "Bien utilisée, l'IA fait gagner du temps et de la qualité. Mais mener un projet web reste un métier : Planifier, organiser, choisir les bons outils, coordonner, trancher et valider l'exécution. C'est là que l'humain n'est pas contournable."}
+              ? "AI is the best intern we've ever had: fast, structured, tireless. But an intern, however brilliant, doesn't decide the strategy. Leading a web project is still a craft — scoping the work, arbitrating the architecture, settling the choices that commit you for years, then validating what holds up in production. That's where the human is not optional."
+              : "L'IA est le meilleur stagiaire qu'on ait jamais eu : rapide, structuré, infatigable. Mais un stagiaire, même brillant, ne décide pas de la stratégie. Mener un projet web reste un métier — cadrer, arbitrer l'architecture, trancher les choix qui engagent des années, puis valider ce qui tient en production. C'est là que l'humain n'est pas contournable."}
           </p>
 
           {/* Deux savoir-faire */}
