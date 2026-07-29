@@ -1,10 +1,7 @@
 "use client";
 
-import type { Metadata } from 'next'
 import Header from '@/components/header'
 import './globals.css'
-import Script from "next/script";
-import { Particles } from "@/components/magicui/particles";
 import Footer from '@/components/footer';
 
 
@@ -45,18 +42,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-      <Particles
-        className="absolute inset-0 z-0 h-screen w-full mx-auto"
-        quantity={150}
-        ease={50}
-        color={"#E0C035"}
-        refresh
-      />      
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 left-0 h-[500px] w-[50vw] rounded-full bg-gradient-to-r from-pink-200 to-blue-200 opacity-30 blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 h-[400px] w-[50vw] rounded-full bg-gradient-to-r from-blue-200 to-pink-200 opacity-30 blur-3xl"></div>
-          </div>
-        <Header />
+        <div className="fixed inset-0 z-0">
+        <img src="/bg/chipset-tech-background-light.svg" alt="" className="w-full h-full object-cover opacity-20" />
+        </div>
+        <Header />   
         {children}
         <Footer />
         </body>

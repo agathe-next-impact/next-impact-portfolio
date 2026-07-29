@@ -12,45 +12,71 @@ export default function Hero() {
   const grokSectionScale = useTransform(scrollY, [0, 400], [0.8, 1]);
 
   return (
-    <section className="h-full relative pb-24 pt-8 md:pb-24 overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute top-0 right-0 -z-10 w-96 h-96 bg-brand-500/20 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-0 left-0 -z-10 w-80 h-80 bg-brand-700/30 rounded-full blur-[100px]"></div> 
-
-      <div className="h-[75vh] container flex flex-col lg:flex-row justify-between lg:justify-evenly items-center gap-12 lg:gap-24">
+    <section className="h-full relative pt-12 pb-24 md:pt-24 md:pb-24 overflow-hidden">
 
         {/* Text Content */}
-        <div className="flex flex-col space-y-8 lg:col-span-7">
+        <div className="flex flex-col lg:col-span-7 bg-white/5 p-8 rounded-xl shadow-lg backdrop-blur-sm">
           <span className="w-max inline-flex items-center px-3 py-1 text-xs font-googletexte font-medium uppercase rounded-full bg-white text-mediumblue/60 tracking-wider">
             services et conseil
           </span>
 
-            <h1 className="tracking-tighter">
-            <div className="text-2xl md:text-3xl lg:text-4xl text-regularblue font-googletexte">Développeuse</div>
-            <div className="mt-4 text-3xl md:text-4xl lg:text-5xl text-regularblue font-googletitre font-medium">Next.js & WordPress</div> 
-            </h1>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-googletitre leading-tight tracking-tighter">
+            Développeuse
+            <div className="mt-2 font-googletitre md:text-5xl text-4xl text-mediumblue font-medium">
+              WordPress Headless
+            </div>
+          </h1>
+          <div className="mt-4 flex gap-8">
+            <Image
+              src="/img/logo-wordpress-small.png"
+              alt="Logo WordPress"
+              width={36}
+              height={36}
+              className="object-contain"
+            />
+            <Image
+              src="/img/logo-astro.png"
+              alt="Logo Astro"
+              width={100}
+              height={48}
+              className="object-contain"
+            />
+            <Image
+              src="/img/logo-nextjs.png"
+              alt="Logo Next.js"
+              width={100}
+              height={48}
+              className="object-contain"
+            />
+          </div>
 
-          <p className="font-googletexte text-2xl text-regularblue/70 max-w-xl">
-            Pour un site web moderne et performant en conservant la simplicité de
-            WordPress
+          <p className="mt-16 font-googletexte text-xl text-regularblue max-w-xl">
+            Pour un WordPress ultra-rapide, moderne et flexible grâce au headless CMS.
           </p>
-          
-          {/* Logos Section */}
-          <Logos className="mt-40 mx-0 grid gap-8" />
-{/*
-          <div className="flex flex-col sm:flex-row gap-5 pt-4">
-            <Link href="/#grok-search-form" className="group">
+
+          <div className="mt-4 flex flex-col sm:flex-row gap-5">
+            <Link href="/services/wordpress" className="group">
               <Button
                 size="lg"
-                className="relative overflow-hidden rounded-full text-lg font-googletitre border-blue-100/40"
+                variant="outline"
+                className="relative overflow-hidden rounded-full text-md font-googletitre text-white/90 bg-regularblue border-blue-100/40 hover:bg-regularblue/90 hover:text-white/80"
               >
-                Choisir le headless ?
-                <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                <BorderBeamEffect />
+                WordPress
+              </Button>
+            </Link>
+            <Link href="/services/headless" className="group">
+              <Button
+                size="lg"
+                variant="outline"
+                className="relative overflow-hidden rounded-full text-md font-googletitre text-white/90 bg-regularblue border-blue-100/40 hover:bg-regularblue/90 hover:text-white/80"
+              >
+                Headless
+              <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+
               </Button>
             </Link>
           </div>
-        */}
+
         </div>
 
 
@@ -60,7 +86,7 @@ export default function Hero() {
             {/* Placeholder for profile image - replace with actual image */}
             <div className="bg-gradient-to-br from-brand-400/80 to-brand-600/80 w-full h-full flex items-center justify-center">
               <Image
-                src="/img/avatar.png" // Replace with your image path
+                src="/img/agathe.png" // Replace with your image path
                 alt="Profile"
                 className="bg-white object-cover w-full h-full rounded-xl"
                 width={500} // Adjust width as needed

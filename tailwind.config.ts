@@ -48,6 +48,9 @@ const config: Config = {
 			lightblue: '#719ED9',
 			extralightblue: '#D0DCF2',
 			white: '#FFFFFF',
+			orange: '#F29F05',
+			coral: '#FF6B6B',
+			lightyellow: '#F2E57E',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

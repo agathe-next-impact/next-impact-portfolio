@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { Button } from './ui/button'
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu as MenuIcon, X as CloseIcon, List } from "lucide-react"
-import { ChevronDown, ArrowRightIcon } from "lucide-react"
+import { Menu as MenuIcon, X as CloseIcon, PhoneIcon, MailIcon, CalendarIcon } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -291,19 +291,23 @@ export default function Header() {
           <NavBar />
         </div>
 
-        <div className='md:basis-1/6 md:flex justify-end hidden'>
-
-
-        <Button
-          className="w-fit md:flex gap-1 rounded-full px-4 py-2 bg-pink-600 text-white hover:bg-pink-600/80 hover:text-white transition-all duration-300"
-          variant="outline"
-          asChild
-        >
-          <a href="mailto:agathe@next-impact.digital">
-            Contactez-moi
-            <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </a>
-        </Button> 
+        <div className='md:basis-1/6 md:flex justify-end items-end hidden'>
+          <div className="flex items-center gap-4 pr-4">
+            <Link
+              href="tel:0673981638">
+                <PhoneIcon className="text-regularblue" />
+            </Link>
+            <Link
+            href="mailto:agathe@next-impact.digital"
+            >
+              <MailIcon className="text-regularblue" />
+            </Link>
+            <Link
+              href="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
+            >
+              <CalendarIcon className="text-regularblue" />
+            </Link>
+          </div>
 
         </div>
       </div>

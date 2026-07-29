@@ -37,15 +37,16 @@ const features = [
   return (
     <>
     <div className="container py-16 px-0">
+    <h2 className="text-5xl font-medium text-center mb-2 text-regularblue">Pourquoi passer en Headless ?</h2>
+      <p className="text-regularblue/80 text-lg max-w-3xl mx-auto">
+        En combinant la puissance de WordPress avec des technologies front-end modernes, j'offre des solutions web qui allient facilité d'utilisation, performance et design attractif.
+      </p>
+      
 
-
-    <div className="mx-auto">
+    <div className="mt-16 mx-auto">
       <div className="grid lg:grid-cols-2 gap-12 items-start">
         {/* Features List */}
         <div className="space-y-4">
-          <h4 className="text-3xl mb-6 text-center text-regularblue">
-            Détails des solutions
-          </h4>
           <div className="space-y-2">
             {features.map((feature) => (
               <button

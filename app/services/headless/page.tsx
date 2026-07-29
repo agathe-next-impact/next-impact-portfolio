@@ -26,6 +26,7 @@ import { DecisionHelper } from "@/components/decision-helper";
 import { ApplicationsTabs } from "@/components/applications-tabs";
 import { FeaturesTabs } from "@/components/services/features";
 import { Metadata } from "next";
+import Advantages from "@/components/advantages";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -54,6 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ApplicationsHeadless() {
+  {/*
   const applications = [
     {
       key: "intranet",
@@ -77,6 +79,7 @@ export default function ApplicationsHeadless() {
       examples: ["Site à fort trafic", "Site avec enjeu d'image"],
     },
   ];
+  
   const features = [
     {
       title: "Intégrations Système Avancées",
@@ -128,6 +131,8 @@ export default function ApplicationsHeadless() {
     },
   ];
 
+  */}
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -177,28 +182,9 @@ export default function ApplicationsHeadless() {
             Des solutions techniques avancées pour des besoins spécifiques
           </p>
         </div>
-        <ApplicationsTabs applications={applications} />
+        <Advantages />
       </section>
 
-      {/* Technical Services */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[1700px] left-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-pink-200 to-blue-200 opacity-20 blur-3xl"></div>
-        <div className="absolute top-[2200px] right-0 h-[300px] w-[50vw] rounded-full bg-gradient-to-r from-blue-200 to-pink-200 opacity-10 blur-3xl"></div>
-      </div>
-      <section className="pt-16" id="services">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-medium text-regularblue mb-4">
-              Services techniques détaillés
-            </h2>
-            <p className="text-lg text-regularblue/80">
-              Une expertise technique complète pour votre projet
-            </p>
-          </div>
-
-          <FeaturesTabs features={features} />
-        </div>
-      </section>
 
       {/* Case Studies */}
       <div className="absolute inset-0 -z-10">
