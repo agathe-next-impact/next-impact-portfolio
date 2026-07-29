@@ -10,7 +10,7 @@ export default function TechnicalComparison() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse bg-white rounded-lg shadow-sm">
+            <table className="w-full border-collapse bg-white rounded-lg ">
               <thead>
                 <tr className="border-b bg-slate-50">
                   <th className="text-left p-4 font-semibold">Critère</th>

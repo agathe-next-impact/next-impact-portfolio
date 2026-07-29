@@ -1,0 +1,116 @@
+---
+title: "Headless WordPress vs Astro, Nuxt, SvelteKit: pick the right tool"
+slug: "wordpress-headless-vs-astro-nuxt-sveltekit"
+date: "2026-06-24"
+author: "Agathe Karinthi-Martin"
+excerpt: "Headless WordPress isn't always the right choice against Astro, Nuxt or SvelteKit. Honest decision matrix on 5 criteria, with cases where I recommend something else."
+tags: ["Headless WordPress", "Astro", "Nuxt", "SvelteKit", "Comparison"]
+readingTime: 9
+---
+
+## The right tool depends on the editorial profile, not the trend
+
+Headless WordPress is often presented as the default solution for a modern front-end. That's not accurate. Astro, Nuxt and SvelteKit cover cases where WordPress in the back-end would be oversized or counterproductive. I've shipped projects in all four stacks over the past 18 months. Here's the decision matrix I actually use, and the cases where I advise against headless WordPress.
+
+## The 4 stacks compared
+
+For context: headless WordPress = WordPress in the back-end + a front-end in Next.js, Nuxt, SvelteKit or Astro. Astro/Nuxt/SvelteKit can also be used standalone (with Markdown/MDX content, or with another CMS like Sanity, Strapi, Payload).
+
+| Stack | Back-end | Front-end | Typical profile |
+|---|---|---|---|
+| Headless WordPress | WordPress | Next.js / Nuxt / Astro | Editorial site with non-tech team |
+| Standalone Astro | Markdown files or Sanity | Astro | Marketing site / tech blog |
+| Nuxt + Strapi/Payload | Strapi or Payload CMS | Nuxt 4 | Vue web app with structured content |
+| SvelteKit + headless CMS | Sanity / Contentful | SvelteKit 2 | Very fast site, Svelte team |
+
+## Criterion 1 — Editorial maturity
+
+This is the most underestimated criterion by technical teams.
+
+| Stack | Editorial maturity | Detail |
+|---|---|---|
+| Headless WordPress | Excellent | 20 years of refinement, media library, workflows, roles |
+| Astro + Sanity | Good | Sanity Studio is very good, but requires training |
+| Nuxt + Strapi/Payload | Average | Strapi correct, Payload better in 2026 |
+| SvelteKit + Sanity | Good | Identical to Astro on this aspect |
+
+If your editorial team has more than 3 non-technical people who publish regularly, WordPress remains the standard. No headless CMS has the finesse of WordPress's media library nor its extension ecosystem (bookings, ticketing, calendar, forms).
+
+## Criterion 2 — Plugin / extension ecosystem
+
+| Need | WordPress | Astro | Nuxt | SvelteKit |
+|---|---|---|---|---|
+| Advanced contact form | Native plugin | To develop | To develop | To develop |
+| E-commerce | WooCommerce | Snipcart / Shopify API | Nuxt Commerce | To integrate |
+| Members / customer area | Native plugin | To develop | Nuxt module | To develop |
+| Multilingual | Polylang / WPML | Native Astro i18n | Nuxt i18n module | Inlang |
+| Advanced SEO | Yoast / Rank Math | Basic @astrojs/seo | Nuxt SEO module | To develop |
+
+If the project needs more than 3 "WordPress business" features (members, ticketing, complex forms, e-commerce), headless WordPress wins. If the project is a blog, marketing site or documentation, Astro is lighter and cheaper to operate.
+
+## Criterion 3 — Front-end learning curve
+
+Important if you need to train a team or find providers.
+
+- **Next.js (React)**: moderate curve, huge ecosystem, many developers on the market.
+- **Nuxt (Vue)**: gentle curve for those coming from Vue, active Vue community.
+- **Astro**: minimal curve, HTML-like syntax. The easiest to pick up for an integrator developer.
+- **SvelteKit**: pleasant curve, but smaller community. Finding a replacement takes longer.
+
+On 100 front-end developers in 2026, the React/Next ecosystem remains the majority. Vue/Nuxt follows. Astro is growing strongly. Svelte remains a minority.
+
+## Criterion 4 — Annual operating cost
+
+For an SMB site of 50 pages, 15,000 visits/month:
+
+| Stack | Back-end hosting | Front-end hosting | Total annual cost |
+|---|---|---|---|
+| Headless WordPress + Next.js | €8/month (managed WP) | $0 to $20/month (Vercel) | ~€200 to €350/year |
+| Astro + Sanity | — | €0/month (Vercel Hobby) | ~€100/year (Sanity free tier) |
+| Nuxt + Payload | €8/month (Payload self-host) | $20/month (Vercel) | ~€330/year |
+| SvelteKit + Sanity | — | €0/month | ~€100/year (Sanity free tier) |
+
+Astro and SvelteKit with a free SaaS CMS are unbeatable for small editorial sites. Beyond 100,000 visits/month or 100 Sanity documents, SaaS rates become significant and WordPress becomes more predictable.
+
+## Criterion 5 — Community and longevity
+
+Often-overlooked criterion in Anglo-Saxon benchmarks. A publicly funded project or a less mobile client needs a stack maintainable by providers at 5 or 10 years.
+
+- **WordPress**: ~40% of the global web, huge community, tens of thousands of providers.
+- **Next.js / React**: market standard, dense ecosystem.
+- **Vue / Nuxt**: strong presence (Nuxt was created by French developers).
+- **Astro**: emerging community, growing rapidly.
+- **Svelte / SvelteKit**: active but small community. Risk of single provider.
+
+## When I advise against headless WordPress
+
+Concrete cases observed on my projects where Astro or Nuxt were the best choice:
+
+- **Startup tech blog, 2 developer writers, Markdown content**: standalone Astro. No need for WordPress overhead. Build in 8 seconds, free hosting on Cloudflare Pages.
+- **SaaS marketing site, 12 pages, rarely modified content**: Astro + minimal headless CMS (or even MDX). Lighthouse 100 everywhere, annual cost under €50.
+- **Vue web app with business back-office, structured content (product catalog, technical sheets)**: Nuxt + Payload. WordPress would have been a poorly suited tool for the data model.
+- **Product documentation, 80 technical pages, Git-versioned Markdown content**: Astro Starlight or Nextra. The Git workflow is better for developers than the WordPress admin.
+
+Cases where headless WordPress remains the best choice:
+
+- Editorial media with 3+ non-technical writers and 10+ articles/month.
+- Association or institutional site with business needs (ticketing, memberships, forms).
+- Existing site to migrate (300+ historical articles to keep without re-entry).
+- Team already trained on WordPress that cannot absorb a new tool.
+
+## Final decision matrix
+
+| Situation | Recommendation |
+|---|---|
+| Editorial site &gt; 5 articles/month, non-tech team | Headless WordPress |
+| Dev team tech blog | Astro + MDX |
+| SaaS marketing site &lt; 20 pages | Astro + light CMS |
+| Vue app with structured content | Nuxt + Payload |
+| Association site with business needs | Headless WordPress |
+| Product documentation | Astro Starlight |
+| Extreme performance site, Svelte team | SvelteKit + Sanity |
+| Migration of existing WordPress 300+ pages | Headless WordPress |
+
+## Conclusion
+
+Headless WordPress is an excellent choice when the editorial team and business needs justify it. For a tech blog, a short marketing site, or a structured-content app, Astro or Nuxt are often more relevant and cheaper. To dig into the headless WordPress case specifically, see the [Headless WordPress page](/wordpress-headless).

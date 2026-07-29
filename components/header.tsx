@@ -1,316 +1,253 @@
-"use client"
+"use client";
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from './ui/button'
-import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu as MenuIcon, X as CloseIcon, PhoneIcon, MailIcon, CalendarIcon } from "lucide-react"
-import { ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+import * as React from "react";
+import { X as CloseIcon, Menu as MenuIcon, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useDocumentationMode } from "@/contexts/documentation-mode-context";
+import { PROFILES } from "@/lib/documentation-profiles";
 
-export function NavBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
+// Le hub « Quelle techno web ? » — méga-menu : les 6 pages thématiques
+// (parcours 4 temps) + accès aux outils et à la bibliothèque.
+const HUB_RUBRIQUES = [
+  { key: "rubChoisir",      href: "/documentation/choisir" },
+  { key: "rubIa",           href: "/documentation/ia-et-code" },
+  { key: "rubReparer",      href: "/documentation/reparer" },
+  { key: "rubAvantSigner",  href: "/documentation/avant-signer" },
+  { key: "rubOutilsMetier", href: "/documentation/outils-metier" },
+  { key: "rubPresence",     href: "/documentation/presence" },
+  { key: "rubEtreTrouve",   href: "/documentation/etre-trouve" },
+] as const;
 
-  // Ferme le menu mobile lors d'un clic sur un lien
-  const handleMenuClick = () => {
-    setMobileOpen(false);
-    setOpenSubMenu(null);
-  };
+const HUB_LINKS = [
+  { key: "boussole",     href: "/outils/boussole" },
+  { key: "allTools",     href: "/outils" },
+  { key: "allResources", href: "/documentation" },
+] as const;
 
-  // Gestion ouverture/fermeture des sous-menus
-  const handleToggleSubMenu = (key: string) => {
-    setOpenSubMenu((prev) => (prev === key ? null : key));
-  };
-
-  return (
-    <>
-      {/* Desktop */}
-      <nav className="hidden md:flex">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="/" className='font-googletitre text-regularblue text-lg font-medium px-6'>Accueil</Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className='font-googletitre text-regularblue text-lg'>Services</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
-                    <NavigationMenuLink asChild>
-                      <a
-                        className="flex h-full w-full select-none gap-8 flex-col justify-end rounded-md bg-gradient-to-b from-lightblue/10 to-lightblue/10 p-6 no-underline outline-none focus:shadow-md"
-                        href="/"
-                      >
-                        <Image src="/img/logo-small.png" alt="Logo Next Impact Digital" width={48} height={48} />
-                        <p className="text-sm leading-tight">
-                          Des services de création et refonte de sites web conçus avec et pour vous.
-                        </p>
-                      </a>
-                    </NavigationMenuLink>
-                  </li>
-                  <ListItem href="/services/wordpress" title="Sites web WordPress" className='h-22'>
-                    <p className='text-xs text-regularblue/70'>Sites vitrines, institutionnels, d'information</p>
-                  </ListItem>
-                  <ListItem href="/services/headless" title="Sites web WP Headless" className='h-22'>
-                    <p className='text-xs text-regularblue/70'>Intranet, Connexion à des applications tierces internes ou externes</p>
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/etudes-de-cas" className='font-googletitre text-regularblue text-lg font-medium px-2'>Réalisations</Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className='font-googletitre text-regularblue text-lg'>Outils</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="flex lg:flex-row flex-col p-6 md:w-[500px] lg:w-[600px] gap-3">
-                  <li className="lg:basis-1/3">
-                    <NavigationMenuLink asChild>
-                      <a
-                        className="flex h-full w-full select-none gap-8 flex-col justify-end rounded-md bg-gradient-to-b from-lightblue/10 to-lightblue/10 p-6 no-underline outline-none focus:shadow-md"
-                        href="/"
-                      >
-                        <Image src="/img/logo-small.png" alt="Logo Next Impact Digital" width={48} height={48} />
-                        <p className="text-sm leading-tight">
-                          Des outils en ligne pour vous aider à décider et à formaliser votre projet web.
-                        </p>
-                      </a>
-                    </NavigationMenuLink>
-                  </li>
-                  <div className='lg:basis-2/3'>
-                    <ListItem href="/cms-headless" title="WordPress ou Headless ? Décider" className='h-22'>
-                      <p className='text-xs text-regularblue/70'>Quiz pour vous aider à choisir le CMS le plus adapté à votre projet.</p>
-                    </ListItem>
-                    <ListItem href="/simulateur-tarifs" title="Simulateur de budget" className='h-22'>
-                      <p className='text-xs text-regularblue/70'>Outil interactif pour estimer le budget de votre projet web.</p>
-                    </ListItem>
-                    <ListItem href="/cahier-des-charges" title="Générateur de cahier des charges" className='h-22'>
-                      <p className='text-xs text-regularblue/70'>Outil interactif pour vous guider dans la rédaction d'un cahier des charges.</p>
-                    </ListItem>
-                  </div>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </nav>
-
-      {/* Mobile */}
-      <nav className="flex w-full md:hidden items-center justify-end">
-        <button
-          className="p-2 rounded-md"
-          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-          onClick={() => setMobileOpen((open) => !open)}
-        >
-          {mobileOpen ? (
-            <CloseIcon className="w-10 h-10 text-regularblue" />
-          ) : (
-            <MenuIcon className="w-10 h-10 text-regularblue" />
-          )}
-        </button>
-        <AnimatePresence>
-          {mobileOpen && (
-            <>
-              <motion.div
-                key="overlay"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 z-40 bg-black/40"
-                onClick={handleMenuClick}
-              />
-              <motion.div
-                key="mobile-menu"
-                initial={{ x: -300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="fixed top-0 left-0 z-50 h-full w-full bg-white shadow-lg"
-              >
-                <div className="flex items-center justify-between px-6 py-2 border-b">
-                  <Image
-                    src="/img/logo-small.png"
-                    alt="Next Impact Digital"
-                    width={40}
-                    height={40}
-                    className="mr-2"
-                  />
-                  <button
-                    className="p-2 rounded-md focus:outline-none"
-                    aria-label="Fermer le menu"
-                    onClick={handleMenuClick}
-                  >
-                    <CloseIcon className="w-10 h-10 text-regularblue" />
-                  </button>
-                </div>
-                <div className="p-4 space-y-0">
-                  <MobileMenuLink href="/" onClick={handleMenuClick}>Accueil</MobileMenuLink>
-                  {/* Services sous-menu */}
-                  <div>
-                    <button
-                      className={cn(
-                        "w-full text-left py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
-                        openSubMenu === "services" && "bg-lightblue/10"
-                      )}
-                      onClick={() => handleToggleSubMenu("services")}
-                      aria-expanded={openSubMenu === "services"}
-                    >
-                      Services
-                      <span className={cn("transition-transform", openSubMenu === "services" ? "rotate-180" : "")}>
-                        <ChevronDown className="inline w-5 h-5 ml-2" />
-                      </span>
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {openSubMenu === "services" && (
-                        <motion.div
-                          key="services-sub"
-                          initial={{ y: -20, opacity: 0, height: 0 }}
-                          animate={{ y: 0, opacity: 1, height: "auto" }}
-                          exit={{ y: -20, opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="pl-4 overflow-hidden"
-                        >
-                          <MobileMenuLink href="/services/wordpress" onClick={handleMenuClick} className="pl-4">WordPress</MobileMenuLink>
-                          <MobileMenuLink href="/services/headless" onClick={handleMenuClick} className="pl-4">WordPress Headless</MobileMenuLink>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    <MobileMenuLink href="/etudes-de-cas" onClick={handleMenuClick}>Réalisations</MobileMenuLink>
-
-                    <button
-                      className={cn(
-                        "w-full text-left py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition cursor-pointer select-none flex items-center justify-between",
-                        openSubMenu === "ressources" && "bg-lightblue/10"
-                      )}
-                      onClick={() => handleToggleSubMenu("ressources")}
-                      aria-expanded={openSubMenu === "ressources"}
-                    >
-                      Ressources
-                      <span className={cn("transition-transform", openSubMenu === "ressources" ? "rotate-180" : "")}>
-                        <ChevronDown className="inline w-5 h-5 ml-2" />
-                      </span>
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {openSubMenu === "ressources" && (
-                        <motion.div
-                          key="ressources-sub"
-                          initial={{ y: -20, opacity: 0, height: 0 }}
-                          animate={{ y: 0, opacity: 1, height: "auto" }}
-                          exit={{ y: -20, opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="pl-4 overflow-hidden"
-                        >
-                          <MobileMenuLink href="/cms-headless" onClick={handleMenuClick} className="pl-4">WordPress CMS ou Headless ?</MobileMenuLink>
-                          <MobileMenuLink href="/simulateur-tarifs" onClick={handleMenuClick} className="pl-4">Simulateur du budget</MobileMenuLink>
-                          <MobileMenuLink href="/cahier-des-charges" onClick={handleMenuClick} className="pl-4">Générateur de cahier des charges</MobileMenuLink>
-                          <MobileMenuLink href="/documentation" onClick={handleMenuClick} className="pl-4">Documentation & Blog</MobileMenuLink>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </nav>
-    </>
-  );
-}
-
-const MobileMenuLink = ({
-  href,
-  children,
-  onClick,
-  className,
-}: {
-  href: string
-  children: React.ReactNode
-  onClick?: () => void
-  className?: string
-}) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={cn(
-      "block py-3 px-4 rounded-md text-regularblue font-medium text-lg hover:bg-lightblue/10 transition",
-      className
-    )}
-  >
-    {children}
-  </Link>
-)
-
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a"> & { title: string }
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-lightblue/10 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-lg font-regular text-regularblue leading-none">{title}</div>
-          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  )
-})
-ListItem.displayName = "ListItem"
+// Nav principale — exprime le funnel : Conseil (décider) → Services (construire)
+// → Réalisations (preuve) → À propos. Le hub a son propre méga-menu à gauche.
+const NAV_LINKS = [
+  { key: "conseil",     href: "/conseil" },
+  { key: "services",    href: "/solutions-web" },
+  { key: "caseStudies", href: "/etudes-de-cas" },
+  { key: "about",       href: "/a-propos" },
+] as const;
 
 export default function Header() {
-  return (
-    <header className="border-b top-0 z-50 shadow-sm sticky bg-white">
-      <div className="container flex h-16 items-center justify-between px-2">
-        <div className='basis-1/6 pt-2 md:pl-0 pl-4'>
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <Image src="/img/logo-small.png" alt="Next Impact Digital" width={40} height={40} />
-          </Link>
-        </div>
-        <div className='basis-4/6 flex lg:justify-center justify-start'>
-          <NavBar />
-        </div>
+  const t = useTranslations("nav");
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { profileId, clearProfile } = useDocumentationMode();
 
-        <div className='md:basis-1/6 md:flex justify-end items-end hidden'>
-          <div className="flex items-center gap-4 pr-4">
-            <Link
-              href="tel:0673981638">
-                <PhoneIcon className="text-regularblue" />
-            </Link>
-            <Link
-            href="mailto:agathe@next-impact.digital"
+  return (
+    <header className="sticky top-0 z-50 bg-obsidian px-2.5 lg:px-0">
+      <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between border border-x-dark-gray border-b border-b-dark-gray border-t-0 px-5 lg:px-6">
+        {/* Logotype */}
+        <Link
+          href="/"
+          className="flex shrink-0 items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-foreground no-underline"
+        >
+          <span className="text-[10px] text-vermilion">◼</span>
+          NEXT IMPACT
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+          {/* Méga-menu hub « Quelle techno web ? » — ouvre au survol ET au focus
+              clavier (CSS pur, 0 JS), comme l'ancien menu « À la demande ». */}
+          <div className="group relative">
+            <button
+              type="button"
+              aria-haspopup="menu"
+              className="inline-flex items-center gap-1 px-3 py-2 text-sm text-mid-gray transition-colors hover:text-foreground group-focus-within:text-foreground"
             >
-              <MailIcon className="text-regularblue" />
-            </Link>
-            <Link
-              href="https://calendar.app.google/HuwRpoVGoKBj2PkX8"
-            >
-              <CalendarIcon className="text-regularblue" />
-            </Link>
+              {t("hub")}
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 w-[min(560px,92vw)] border border-dark-gray bg-obsidian opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="grid grid-cols-2">
+                {HUB_RUBRIQUES.map((item, i) => (
+                  <Link
+                    key={item.key}
+                    href={item.href as Parameters<typeof Link>[0]["href"]}
+                    className={
+                      "border-b border-dark-gray px-4 py-3 text-sm text-mid-gray no-underline transition-colors hover:bg-jet hover:text-foreground " +
+                      (i % 2 === 0 ? "border-r" : "")
+                    }
+                  >
+                    {t(item.key as Parameters<typeof t>[0])}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex">
+                {HUB_LINKS.map((item) => (
+                  <Link
+                    key={item.key}
+                    href={item.href as Parameters<typeof Link>[0]["href"]}
+                    className="flex-1 border-r border-dark-gray px-4 py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary no-underline transition-colors last:border-r-0 hover:bg-jet hover:text-foreground"
+                  >
+                    {t(item.key as Parameters<typeof t>[0])}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
 
+          {NAV_LINKS.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href as Parameters<typeof Link>[0]["href"]}
+              className="px-3 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+            >
+              {t(item.key as Parameters<typeof t>[0])}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Desktop right */}
+        <div className="hidden items-center gap-3 lg:flex">
+          {/* Profile tag — visible only when a profile is active */}
+          <div
+            className="overflow-hidden whitespace-nowrap transition-all duration-200"
+            style={{ maxWidth: profileId ? 160 : 0, opacity: profileId ? 1 : 0 }}
+          >
+            <span className="inline-flex items-center gap-2 border-l-2 border-vermilion pl-2 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              {profileId && PROFILES[profileId].label}
+              <button
+                type="button"
+                onClick={clearProfile}
+                aria-label="Réinitialiser le profil"
+                className="flex items-center text-mid-gray transition-colors hover:text-foreground"
+              >
+                <CloseIcon size={10} strokeWidth={2} />
+              </button>
+            </span>
+          </div>
+
+          <ThemeToggle />
+
+          {/* CTA à deux températures : « Réserver une visio » (tiède, secondaire)
+              + « Audit gratuit » (froid, vermillon, dominant). */}
+          <Link
+            href="/conseil"
+            className="text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+          >
+            {t("bookVisio")}
+          </Link>
+          <Link
+            href="/audit-site-web"
+            className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+          >
+            {t("freeAudit")}
+          </Link>
+        </div>
+
+        {/* Mobile right */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(true)}
+            aria-label={t("openMenu")}
+            className="flex h-9 w-9 items-center justify-center rounded-sm border border-dark-gray text-foreground transition-colors hover:bg-ebony"
+          >
+            <MenuIcon className="h-[18px] w-[18px]" />
+          </button>
         </div>
       </div>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[48] bg-black/60"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="fixed bottom-0 left-0 top-0 z-[49] flex w-[min(320px,85vw)] flex-col border-r border-dark-gray bg-obsidian">
+            <div className="flex h-16 items-center justify-between border-b border-dark-gray px-5">
+              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground">
+                <span className="text-[9px] text-vermilion">◼</span>
+                NEXT IMPACT
+              </span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label={t("closeMenu")}
+                className="flex items-center text-foreground"
+              >
+                <CloseIcon className="h-[18px] w-[18px]" />
+              </button>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto">
+              {/* Hub « Quelle techno web ? » + ses rubriques */}
+              <div className="border-b border-dark-gray px-5 pb-2 pt-5 font-mono text-[9px] uppercase tracking-[0.14em] text-mid-gray">
+                {t("hub")}
+              </div>
+              {HUB_RUBRIQUES.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="block border-b border-dark-gray px-5 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+              {HUB_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="block border-b border-dark-gray px-5 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-accent-secondary no-underline transition-colors hover:text-foreground"
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+
+              {/* Nav principale */}
+              {NAV_LINKS.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href as Parameters<typeof Link>[0]["href"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="block border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  {t(item.key as Parameters<typeof t>[0])}
+                </Link>
+              ))}
+
+              {profileId && (
+                <button
+                  type="button"
+                  onClick={() => { clearProfile(); setMobileOpen(false); }}
+                  className="flex w-full items-center justify-between border-b border-l-2 border-dark-gray border-l-vermilion px-5 py-3 text-left font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-foreground"
+                >
+                  <span>{PROFILES[profileId].label}</span>
+                  <CloseIcon size={10} strokeWidth={2} />
+                </button>
+              )}
+
+              {/* CTA à deux températures */}
+              <div className="flex flex-col gap-3 p-5">
+                <Link
+                  href="/audit-site-web"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+                >
+                  {t("freeAudit")}
+                </Link>
+                <Link
+                  href="/conseil"
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                >
+                  {t("bookVisio")}
+                </Link>
+              </div>
+            </nav>
+          </div>
+        </>
+      )}
     </header>
-  )
+  );
 }

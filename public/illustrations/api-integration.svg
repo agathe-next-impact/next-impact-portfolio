@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="apiGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#719ED9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Central API hub -->
+  <circle cx="200" cy="150" r="40" fill="url(#apiGrad1)"/>
+  <text x="200" y="155" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">API</text>
+  
+  <!-- Connected services -->
+  <g id="service1">
+    <circle cx="80" cy="80" r="25" fill="#719ED9" opacity="0.8"/>
+    <rect x="70" y="75" width="20" height="3" fill="#FFFFFF"/>
+    <rect x="70" y="81" width="15" height="2" fill="#D0DCF2"/>
+    <line x1="105" y1="95" x2="165" y2="130" stroke="#F29F05" stroke-width="2" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <g id="service2">
+    <circle cx="320" cy="80" r="25" fill="#719ED9" opacity="0.8"/>
+    <rect x="310" y="75" width="20" height="3" fill="#FFFFFF"/>
+    <rect x="310" y="81" width="15" height="2" fill="#D0DCF2"/>
+    <line x1="295" y1="95" x2="235" y2="130" stroke="#F29F05" stroke-width="2" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <g id="service3">
+    <circle cx="80" cy="220" r="25" fill="#719ED9" opacity="0.8"/>
+    <rect x="70" y="215" width="20" height="3" fill="#FFFFFF"/>
+    <rect x="70" y="221" width="15" height="2" fill="#D0DCF2"/>
+    <line x1="105" y1="205" x2="165" y2="170" stroke="#F29F05" stroke-width="2" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" begin="0.6s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <g id="service4">
+    <circle cx="320" cy="220" r="25" fill="#719ED9" opacity="0.8"/>
+    <rect x="310" y="215" width="20" height="3" fill="#FFFFFF"/>
+    <rect x="310" y="221" width="15" height="2" fill="#D0DCF2"/>
+    <line x1="295" y1="205" x2="235" y2="170" stroke="#F29F05" stroke-width="2" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" begin="0.9s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Data packets -->
+  <circle cx="135" cy="112" r="4" fill="#FF6B6B">
+    <animateMotion path="M 0 0 L 30 18" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="265" cy="112" r="4" fill="#FF6B6B">
+    <animateMotion path="M 0 0 L -30 18" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+  </circle>
+</svg>

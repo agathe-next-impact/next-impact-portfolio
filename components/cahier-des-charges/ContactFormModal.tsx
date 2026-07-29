@@ -1,42 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { generatePDFBlob } from "@/lib/pdf-generator";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { createPortal } from "react-dom";
+import { AnimatePresence, m as motion } from "framer-motion";
+import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
+import type { Locale } from "@/i18n/routing";
 
 type ContactFormModalProps = {
   formData: Record<string, any>;
   onClose: () => void;
 };
 
-// Fonction dédiée pour envoyer le PDF et les infos du formulaire
-async function sendContactFormWithPdf({
+async function sendContactForm({
   nom,
   email,
   message,
   formData,
+  locale,
 }: {
   nom: string;
   email: string;
   message: string;
   formData: Record<string, any>;
+  locale: string;
 }) {
-  const pdfBlob = await generatePDFBlob(formData);
-  if (!(pdfBlob instanceof Blob)) {
-    throw new Error("La génération du PDF a échoué.");
-  }
-
-  // Convertit le Blob PDF en base64 pur
-  const pdfBase64 = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(pdfBlob);
-  });
-
-  // Envoie la requête à l'API
   const res = await fetch("/api/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -44,7 +33,9 @@ async function sendContactFormWithPdf({
       name: nom,
       email,
       message,
-      pdfBase64,
+      formData,
+      type: "cahier-des-charges",
+      locale,
     }),
   });
 
@@ -54,15 +45,19 @@ async function sendContactFormWithPdf({
   }
 }
 
+const fieldClass =
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary disabled:opacity-60";
+
+const labelClass =
+  "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+
 export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fields, setFields] = useState({
-    nom: "",
-    email: "",
-    message: "",
-  });
+  const [fields, setFields] = useState({ nom: "", email: "", message: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
@@ -72,110 +67,125 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
     e.preventDefault();
     setSending(true);
     setError(null);
-
     try {
-      await sendContactFormWithPdf({
-        nom: fields.nom,
-        email: fields.email,
-        message: fields.message,
-        formData,
-      });
+      await sendContactForm({ nom: fields.nom, email: fields.email, message: fields.message, formData, locale });
       setSent(true);
-    } catch (err) {
-      setError("Erreur lors de l'envoi. Merci de réessayer.");
+    } catch {
+      setError(isEn ? "Sending failed. Please try again." : "Erreur lors de l'envoi. Merci de réessayer.");
     } finally {
       setSending(false);
     }
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       <motion.div
         key="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian/80 p-4 backdrop-blur-sm"
         onClick={onClose}
       >
-        <motion.div
-          key="modal-content"
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="bg-white rounded-xl shadow-xl max-w-md w-full p-8 relative"
+        <div
+          className="relative w-full max-w-[480px] border border-dark-gray border-t-2 border-t-accent-secondary bg-jet p-8"
           onClick={(e) => e.stopPropagation()}
         >
           <button
-            className="absolute top-3 right-3 text-regularblue hover:text-mediumblue text-xl"
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label={isEn ? "Close" : "Fermer"}
             type="button"
+            className="absolute right-4 top-4 flex items-center text-mid-gray transition-colors hover:text-foreground"
           >
-            ×
+            <X size={18} />
           </button>
+
           {sent ? (
-            <div className="text-center space-y-4 py-8">
-              <div className="text-2xl text-regularblue font-googletitre font-bold">Merci !</div>
-              <div className="text-regularblue">Votre demande a bien été envoyée.</div>
+            <div className="py-8 text-center">
+              <CheckCircle2 size={40} className="mx-auto mb-4 text-accent-secondary" />
+              <h2 className="mb-2 text-2xl font-light tracking-tight text-foreground">
+                {isEn ? "Thank you!" : "Merci !"}
+              </h2>
+              <p className="mb-6 font-inter-tight text-sm text-mid-gray">
+                {isEn ? "Your request has been sent." : "Votre demande a bien été envoyée."}
+              </p>
               <button
-                className="mt-4 px-6 py-2 bg-regularblue text-white rounded hover:bg-mediumblue"
                 onClick={onClose}
+                className="border border-dark-gray bg-obsidian px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
               >
-                Fermer
+                {isEn ? "Close" : "Fermer"}
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <h2 className="text-xl font-bold text-regularblue mb-2">Demander le devis pour ce cahier des charges</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
-                <label className="block text-sm text-mediumblue mb-1">Votre nom</label>
-                <Input
-                  type="text"
-                  name="nom"
-                  value={fields.nom}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded px-3 py-2"
-                  disabled={sending}
-                />
+                <h2 className="mb-1 text-2xl font-light tracking-tight text-foreground">
+                  {isEn ? "Request a quote" : "Demander un devis"}
+                </h2>
+                <p className="font-inter-tight text-[13px] text-mid-gray">
+                  {isEn
+                    ? "Your specifications document will be attached automatically"
+                    : "Votre cahier des charges sera joint automatiquement"}
+                </p>
               </div>
+
               <div>
-                <label className="block text-sm text-mediumblue mb-1">Votre email</label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={fields.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded px-3 py-2"
-                  disabled={sending}
-                />
+                <label className={labelClass}>
+                  {isEn ? "Your name" : "Votre nom"}
+                </label>
+                <input type="text" name="nom" value={fields.nom} onChange={handleChange} required className={fieldClass}
+                  placeholder={isEn ? "Jane Doe" : "Jean Dupont"} disabled={sending} />
               </div>
+
               <div>
-                <label className="block text-sm text-mediumblue mb-1">Message (optionnel)</label>
-                <Textarea
-                  name="message"
-                  value={fields.message}
-                  onChange={handleChange}
-                  className="w-full border rounded px-3 py-2"
-                  rows={3}
-                  disabled={sending}
-                />
+                <label className={labelClass}>
+                  {isEn ? "Your email" : "Votre email"}
+                </label>
+                <input type="email" name="email" value={fields.email} onChange={handleChange} required className={fieldClass}
+                  placeholder={isEn ? "jane@example.com" : "jean@exemple.com"} disabled={sending} />
               </div>
-              {error && <div className="text-red-600 text-sm">{error}</div>}
+
+              <div>
+                <label className={labelClass}>
+                  {isEn ? "Message" : "Message"}{" "}
+                  <span className="text-mid-gray/70">
+                    {isEn ? "(optional)" : "(optionnel)"}
+                  </span>
+                </label>
+                <textarea name="message" value={fields.message} onChange={handleChange}
+                  className={cn(fieldClass, "min-h-[80px] resize-y")}
+                  placeholder={isEn ? "Project details..." : "Des précisions sur votre projet..."}
+                  rows={3} disabled={sending} />
+              </div>
+
+              {error && (
+                <div className="border border-vermilion/60 border-l-2 border-l-vermilion bg-obsidian px-3 py-2.5 font-inter-tight text-[13px] text-vermilion">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="bg-regularblue hover:bg-regularblue/80 text-white text-sm font-semibold px-4 py-2 rounded-full transition"
                 disabled={sending}
+                className="inline-flex items-center justify-center gap-2 border border-charcoal bg-vermilion px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {sending ? "Envoi en cours..." : "Envoyer"}
+                {sending ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    {isEn ? "Sending…" : "Envoi en cours..."}
+                  </>
+                ) : (
+                  <>
+                    <Send size={14} />
+                    {isEn ? "Send request" : "Envoyer la demande"}
+                  </>
+                )}
               </button>
             </form>
           )}
-        </motion.div>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

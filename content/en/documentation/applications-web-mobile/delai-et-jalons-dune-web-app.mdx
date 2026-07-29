@@ -1,0 +1,218 @@
+---
+title: "Web app lead time and milestones: from concept to launch"
+description: "Standard phasing of an applicative project (scoping, MVP, V1, evolutions), illustrated by Panorama Pub delivered in 2 months. What takes time, what can be sped up."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 8
+---
+
+## "How long before we're online?"
+
+It's the second most frequent question after budget. And the honest answer is: **it depends on your scope**, but we can outline realistic ranges.
+
+This article describes the standard phasing of a web app project, milestone by milestone, with indicative durations and the concrete example of Panorama Pub (B2B marketplace delivered in 2 months).
+
+## The standard phasing
+
+<FlowDiagram
+  nodes={[
+    { label: "Scoping", description: "Define WHAT we build", icon: "📝" },
+    { label: "Design", description: "Define WHAT IT LOOKS LIKE", icon: "🎨" },
+    { label: "MVP Dev", description: "Build the core", icon: "🛠️" },
+    { label: "QA", description: "Test with the client", icon: "✅" },
+    { label: "Launch", description: "Deploy to production", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Phase 1 — Scoping (1 to 4 weeks)
+
+### What we do
+
+- User and business needs interviews (1-3 sessions)
+- Functional perimeter definition (MVP, future evolutions)
+- Data modeling (entities, relations, rules)
+- Wireframes of key screens (low fidelity, just to validate the journey)
+- Detailed estimate of planning and costs
+- Risk identification (complex integrations, external dependencies)
+
+### Duration by complexity
+
+- **Small project** (simple web app, 1-2 roles): 3-5 days
+- **Medium project** (marketplace, business platform): 1-2 weeks
+- **Complex project** (multi-role, multiple integrations): 2-4 weeks
+
+### The trap to avoid
+
+Skipping scoping "to save time". It's **the best way to lose 3-5 times more time in dev**. A poorly scoped screen costs 3-10× more to redo than to think through up front.
+
+## Phase 2 — Design (2 to 6 weeks)
+
+### What we do
+
+- Visual identity (if not existing): palette, typography, tone
+- Design system: reusable components, inter-screen consistency
+- High-fidelity design of key screens
+- Interactive prototype (Figma) to validate the journey
+- Responsive (mobile, tablet, desktop)
+- Accessibility validation (contrasts, structure)
+
+### Duration by complexity
+
+- **Small project**: 1-2 weeks (with a simple design system)
+- **Medium project**: 2-3 weeks (design system + 15-25 screens)
+- **Complex project**: 4-6 weeks (multi-role, dashboards, varied states)
+
+### Optimization
+
+- If you already have a visual identity (charter, design system), we save 30-50% of design time
+- If you accept a "functional" design based on proven components (shadcn/ui, for example) rather than visual creation from scratch, we save 40-60%
+- If you want a very distinctive "signature" design, expect the opposite: +20-40%
+
+## Phase 3 — MVP development (3 to 16 weeks)
+
+### What we do
+
+- Project setup (Next.js, PostgreSQL database, Vercel hosting, CI/CD)
+- Authentication (accounts, sessions, roles)
+- Database schema
+- Front pages (public + logged-in screens)
+- API and business logic
+- Autonomous admin (data and user management)
+- Third-party integrations (payment, email, etc.)
+- Automated tests
+- Technical documentation
+
+### Duration by complexity
+
+- **Small project** (3-5 entities, 10-15 screens): 3-6 weeks
+- **Medium project** (5-10 entities, 25-40 screens, simple marketplace): 6-10 weeks
+- **Complex project** (10+ entities, 50+ screens, multi-role): 12-20 weeks
+
+### What slows down dev
+
+- **Delayed decisions**: "We'll see later if we want X or Y" → blocks progress
+- **Third-party integrations**: poorly documented APIs, capricious test environments
+- **Mid-dev design back-and-forth**: modifying an already-coded screen takes 3-5× more time
+- **Slow reviews**: if each demo takes 1 week before feedback, we lose 1 week out of 4
+
+## Phase 4 — Client QA (1 to 3 weeks)
+
+### What we do
+
+- MVP demo to client
+- Client tests, formulates remarks
+- Fixes and adjustments
+- User testing plan (if applicable)
+- Final scope validation
+
+### Duration
+
+- 1 week for a simple, well-prepared project
+- 2 weeks for a medium project
+- 3+ weeks for a complex project with pilot users
+
+### Tip
+
+Preparing a **test list** during the dev phase makes QA much faster and more thorough. We systematically check each case rather than discovering at random.
+
+## Phase 5 — Launch (a few days)
+
+### What we do
+
+- Initial data migration (if applicable)
+- Domain switchover to production
+- Final checks (SEO, security, performance)
+- Client onboarding on the admin
+- User documentation
+- Monitoring and alerting plan
+
+### Duration
+
+- 2-3 days for a classic deployment
+- 1-2 weeks if complex data migration from an existing system
+
+## Phase 6 — Post-launch stabilization (4 to 8 weeks)
+
+Often forgotten, **it's the critical phase**. Once online, real users surface bugs and friction that no scoping could anticipate.
+
+### What we do
+
+- Quick fixes for reported bugs
+- Small UX adjustments (labels, journeys)
+- Performance optimizations based on real traffic
+- Fine-grained monitoring setup
+
+### Budget
+
+Plan 10-15% of initial budget for this stabilization phase.
+
+## Concrete example: Panorama Pub in 2 months
+
+| Phase | Duration | Detail |
+|---|---|---|
+| Scoping | 1 week | Data model, MVP perimeter, wireframes |
+| Design | 1.5 weeks | Design system + main screens (directory, listing, search, admin) |
+| MVP dev | 5 weeks | Next.js + serverless PostgreSQL stack, autonomous admin, email integration |
+| QA | 1 week | Tests, fixes, client validation |
+| Launch | 2 days | Domain, SSL, monitoring |
+
+**Total: 8.5 weeks** from concept to production.
+
+What enabled this timeline:
+
+- Tight MVP perimeter (focus on directory and search, no secondary features)
+- Data model validated early
+- Responsive client back-and-forth (replies within 24-48h)
+- Proven design system (custom shadcn/ui) instead of design from scratch
+- Mastered stack (Next.js + serverless PostgreSQL, Vercel deployment)
+
+## Factors that lengthen a project
+
+### × 1.5
+
+- Multiple user roles with fine permissions
+- Non-trivial third-party integrations (1-2 max)
+- Complex business workflows
+
+### × 2
+
+- Multi-tenant (multiple organizations share the platform)
+- Internationalization from the start (i18n)
+- Mobile-first with enriched PWA
+- Data migration from an existing system
+
+### × 3 and beyond
+
+- Internal social networks (timeline, messaging, real-time notifications)
+- Large-scale moderation
+- Advanced analytics reporting (OLAP cubes, complex exports)
+- Multiple integrations with legacy systems
+
+## Acceleration levers
+
+### Reduce scope
+
+By far the most powerful lever. Don't do 100% of what you imagine, do 60% with excellence and launch.
+
+> Panorama Pub could have had, in V1: a supplier area, a matchmaking system, editorial content. We did a directory with a solid admin. The other blocks come next, based on a product already live and real users.
+
+### Reuse rather than create
+
+- Existing design system (shadcn/ui, headlessui) rather than creation
+- Proven components for authentication, payment, email
+- Database schemas inspired by known patterns
+
+### Fast client decisions
+
+A project moving at 100% speed on dev but 50% on client decisions goes at 50%.
+
+## Going further
+
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+- [Case study — Panorama Pub delivered in 2 months](/etudes-de-cas/panorama-pub)
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app)
+
+To scope your project: [run the diagnostic](/contact). Lead time estimate within 48h.

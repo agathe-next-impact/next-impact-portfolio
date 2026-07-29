@@ -1,0 +1,157 @@
+---
+title: "Quand WordPress n'est plus le bon outil"
+description: "Les 4 limites concrètes de WordPress face à un projet applicatif — illustrées par des cas réels. Et pourquoi forcer le CMS au-delà de ces limites coûte plus cher qu'un sur-mesure."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 3
+---
+
+## Le préambule honnête
+
+WordPress propulse plus de 40 % du web. C'est, pour une raison simple, **un outil exceptionnel** pour la gestion de contenus éditoriaux : 20 ans de maturité, un écosystème de plugins immense, une communauté massive, un coût d'entrée très faible. Pour un site vitrine, un blog éditorial, un média ou même un petit e-commerce, le débat ne se pose pas — WordPress est souvent la bonne réponse.
+
+Mais WordPress n'a pas été conçu pour porter une **logique applicative complexe**. À force d'ajouter des plugins, de bricoler, d'empiler des extensions premium pour faire ce qu'un framework moderne fait nativement, on arrive à un système :
+
+- Fragile (la moindre mise à jour casse quelque chose)
+- Lent (chaque plugin ajoute de la latence)
+- Coûteux à maintenir (licences premium qui s'empilent)
+- Difficile à faire évoluer (la dette technique freine chaque nouvelle fonctionnalité)
+
+Cet article identifie les 4 limites au-delà desquelles WordPress devient un fardeau, et propose pour chacune un point de bascule vers une web app sur-mesure.
+
+## Limite 1 — La logique métier complexe
+
+### Le symptôme
+
+Vous voulez un workflow de validation à 4 étapes avec rôles, notifications par email à chaque transition, états visibles dans un tableau de bord. Vous regardez les plugins WordPress disponibles. Vous trouvez :
+
+- Un plugin gratuit qui fait 60 % de ce que vous voulez, mais mal
+- Un plugin premium à 200 €/an qui fait 90 %, mais avec une UI datée et des limites bizarres
+- Un combo de 3 plugins qui fait 100 % mais doit être configuré avec une précision chirurgicale
+
+Au bout du compte vous payez 600 €/an de licences, vous avez une UI cassée, et la moindre évolution coûte des heures de configuration manuelle.
+
+### Le diagnostic
+
+WordPress est un **CMS éditorial** : pensé pour publier des articles, des pages, des médias. La logique métier (workflows, calculs, validations multi-étapes) y est greffée a posteriori. À l'inverse, dans une web app sur-mesure :
+
+- Le workflow est codé directement dans la logique métier
+- Les notifications, états et permissions font partie du modèle
+- L'UI est conçue pour le workflow, pas pour le contournement d'un CMS
+
+### Point de bascule
+
+Si vous identifiez **plus de 3 plugins premium** indispensables pour porter votre logique métier, vous payez déjà l'équivalent annuel d'un cadrage applicatif sur 5 ans — sans en avoir la robustesse.
+
+## Limite 2 — Le modèle de données métier
+
+### Le symptôme
+
+Vous voulez stocker des entités structurées : produits avec 30 champs, contrats avec parties et avenants, projets avec phases et livrables, candidatures avec pièces jointes et statuts. Vous regardez les Custom Post Types et ACF Pro.
+
+ACF Pro fait des miracles pour modéliser de la donnée structurée dans WordPress. C'est vraiment bien — pour un site éditorial enrichi. Mais dès que :
+
+- Vous avez besoin de **relations complexes** (un projet a plusieurs phases, chaque phase a plusieurs livrables, chaque livrable a un fournisseur, etc.)
+- Vous voulez **requêter** sur ces relations (montre-moi tous les projets dont au moins une phase a du retard)
+- Vous avez besoin **d'intégrité** (impossible de supprimer un client qui a des contrats actifs)
+
+…ACF montre ses limites. WordPress stocke tout dans une table `wp_postmeta` en clé-valeur. Les jointures complexes sont lentes, les requêtes deviennent fragiles, l'intégrité référentielle est inexistante.
+
+### Le diagnostic
+
+WordPress n'a pas de **schéma de données métier**. C'est un CMS, pas une base de données. Une web app sur-mesure utilise PostgreSQL (ou équivalent) avec :
+
+- Un schéma typé pour chaque entité métier
+- Des relations explicites entre entités (foreign keys)
+- Des index sur les colonnes requêtées fréquemment
+- Une intégrité référentielle garantie par la base elle-même
+
+> Sur un projet récent, la requête "lister les fournisseurs ayant au moins une fiche active dans la région X avec une certification Y" prenait 4 secondes sur WordPress + ACF. Réécrite sur PostgreSQL avec les bons index : 18 millisecondes.
+
+### Point de bascule
+
+Si votre modèle de données métier a plus de 6-7 entités avec des relations entre elles, et que vous voulez requêter dessus de manière non triviale, WordPress va vous coûter plus cher (en performance, en bugs, en frustration) qu'un sur-mesure.
+
+## Limite 3 — Les comptes utilisateurs avancés
+
+### Le symptôme
+
+Vous voulez :
+
+- Plusieurs rôles avec des permissions fines (un client voit ses propres projets, un commercial voit ceux de ses clients, un admin voit tout)
+- Un onboarding personnalisé selon le profil
+- Des données utilisateur qui pilotent l'interface (l'utilisateur connecté voit son dashboard avec SES données)
+- Une intégration SSO (Google Workspace, Azure AD, ou autre)
+
+WordPress a une notion de **rôles** (administrateur, éditeur, contributeur, abonné). C'est rigide, conçu pour une logique éditoriale. Les plugins comme Members ou User Role Editor permettent d'aller plus loin, mais on tombe vite dans le bricolage permission par permission.
+
+### Le diagnostic
+
+Sur une web app, la **gestion des utilisateurs et des permissions** est un pilier fondamental, pas une option à activer. Elle est conçue dès le début pour le projet :
+
+- Modèle de rôles spécifique au métier
+- Permissions au niveau des entités, pas seulement des actions
+- Authentification flexible (email/password, magic link, SSO, OAuth)
+- Session management, refresh tokens, sécurité by design
+
+### Point de bascule
+
+Si vous avez plus de 3 rôles distincts ET que vous avez besoin de permissions au niveau des données (pas seulement des actions), WordPress devient un casse-tête. Une web app le fait nativement.
+
+## Limite 4 — La performance applicative
+
+### Le symptôme
+
+Votre site WordPress tourne bien quand il fait du contenu. Mais dès que vous ajoutez :
+
+- Un dashboard qui charge 200 fiches simultanément
+- Un moteur de recherche avec filtres dynamiques
+- Une vue qui croise plusieurs entités
+
+…tout ralentit. Vous ajoutez un cache (W3 Total Cache, WP Rocket), ça aide pour les pages publiques, mais pas pour les pages connectées qui sont par nature non-cachables. Vous bricolez des index MySQL, vous optimisez les requêtes ACF, et vous restez avec un temps de réponse de 2-4 secondes quand le standard moderne attend 200 ms.
+
+### Le diagnostic
+
+WordPress est un **moteur de rendu de pages**. À chaque requête, il charge le framework PHP, exécute les hooks, requête la base, applique les filtres, génère la page. C'est lourd. Pour du contenu cachable, ça passe. Pour de l'applicatif (pages personnalisées par utilisateur, requêtes complexes en temps réel), ça plafonne vite.
+
+Une web app moderne (Next.js + PostgreSQL serverless) :
+
+- Sert des pages pré-générées quand c'est possible (SSG, ISR)
+- Sert des pages personnalisées en SSR avec une latence < 200 ms
+- Utilise une base de données conçue pour les requêtes complexes
+- Évite tout le poids du framework PHP/WordPress sur les pages applicatives
+
+### Point de bascule
+
+Si vos pages applicatives (connectées, personnalisées, croisées) prennent plus d'1 seconde à charger malgré le cache, vous avez atteint le plafond technique de WordPress pour ce type d'usage.
+
+## La règle décisionnelle simplifiée
+
+Faites-vous principalement de **l'édition de contenu** ? → WordPress (classique ou Headless).
+
+Faites-vous principalement de **la manipulation de données métier** (créer, modifier, requêter, croiser) ? → Web app sur-mesure.
+
+Les deux ? → Site Headless WordPress + Next.js, avec une zone applicative sur-mesure pour la partie métier. C'est exactement le profil de l'étude de cas [Comme des Fous Jeux](/etudes-de-cas/comme-des-fous-jeux) : un média Headless avec une extension applicative pour les jeux interactifs.
+
+## Forcer WordPress au-delà de ces limites : la vraie facture
+
+On me dit souvent : "Mais on peut tout faire avec WordPress." C'est techniquement vrai. C'est économiquement faux.
+
+Forcer WordPress à porter une logique applicative complexe coûte typiquement :
+
+- **Licences premium** : 600 à 2 000 €/an de plugins indispensables
+- **Maintenance accrue** : chaque mise à jour WordPress casse un plugin sur deux
+- **Performance dégradée** : optimisations permanentes pour rester sous les 3 secondes
+- **Sécurité** : multiplication des surfaces d'attaque via les plugins
+- **Dette technique** : plus le projet vieillit, plus une fonctionnalité simple devient compliquée à ajouter
+
+Sur 3 ans, le surcoût d'un WordPress "forcé" face à une web app sur-mesure se situe souvent **entre 60 % et 200 %** — pour un résultat technique inférieur.
+
+## Pour aller plus loin
+
+- [Site web ou web app : comment choisir ?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir) — Le test des 5 questions
+- [Anatomie d'une web app sur-mesure](/documentation/applications-web-mobile/anatomie-dune-web-app) — Comment c'est construit
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) — Les fourchettes par typologie
+
+Vous hésitez encore ? [Lancez le diagnostic projet](/contact) — réponse sous 24h, sans engagement.

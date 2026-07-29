@@ -1,6 +1,15 @@
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { sendMail } from "@/lib/sendMail";
+import {
+  EMAIL,
+  emailButton,
+  emailDivider,
+  emailH1,
+  emailKicker,
+  emailKvTable,
+  emailLayout,
+  emailLead,
+  emailParagraph,
+} from "@/lib/email-template";
 
 export async function POST(req: Request) {
   try {
@@ -13,61 +22,108 @@ export async function POST(req: Request) {
       contenu,
       pages,
       calendlyLink,
+      locale,
     } = await req.json();
+    const isEn = locale === "en";
 
     const userEmail = contact?.email;
     const adminEmail = "agathe@next-impact.digital"; // Adresse fixe
 
-    const list = (items: any) => (Array.isArray(items) ? items.join(', ') : 'Non précisé');
+    const list = (items: any) =>
+      Array.isArray(items) ? items.join(", ") : isEn ? "Not specified" : "Non précisé";
 
-    const clientHtml = `
-      <h2>Merci pour votre demande ✨</h2>
-      <p>Voici un récapitulatif de votre projet :</p>
-      <ul>
-        <li><strong>Structure :</strong> ${structure}</li>
-        <li><strong>Objectifs :</strong> ${list(objectifs)}</li>
-        <li><strong>Souhait d’autonomie :</strong> ${autonomie}</li>
-        <li><strong>Contenu existant :</strong> ${contenu}</li>
-        <li><strong>Pages souhaitées :</strong> ${list(pages)}</li>
-        <li><strong>Estimation :</strong> à partir de <strong>${estimation} € TTC</strong></li>
-      </ul>
-      <p>🗓️ Vous pouvez directement planifier un appel avec nous ici :<br/>
-      <a href="${calendlyLink}" target="_blank">${calendlyLink}</a></p>
-      <p>À très vite,<br/><strong>L’équipe Next Impact Digital</strong></p>
-    `;
+    const strong = (s: string) => `<strong style="color:${EMAIL.fg};">${s}</strong>`;
 
-    const adminHtml = `
-      <h2>Nouvelle estimation reçue</h2>
-      <p><strong>Email du client :</strong> ${userEmail}</p>
-      <ul>
-        <li><strong>Structure :</strong> ${structure}</li>
-        <li><strong>Objectifs :</strong> ${list(objectifs)}</li>
-        <li><strong>Autonomie :</strong> ${autonomie}</li>
-        <li><strong>Contenu :</strong> ${contenu}</li>
-        <li><strong>Pages :</strong> ${list(pages)}</li>
-        <li><strong>Téléphone :</strong> ${contact?.phone || 'Non renseigné'}</li>
-        <li><strong>Estimation :</strong> ${estimation} € TTC</li>
-      </ul>
-    `;
+    // ─── Email client — locale-aware ─────────────────────────────────────────
+    const clientContent =
+      emailKicker("№ 01", isEn ? "Estimate" : "Estimation") +
+      emailH1(isEn ? "Thank you for your request" : "Merci pour votre demande") +
+      emailLead(isEn ? "Here is a summary of your project:" : "Voici un récapitulatif de votre projet :") +
+      emailKvTable(
+        isEn
+          ? [
+              ["Organization", structure],
+              ["Objectives", list(objectifs)],
+              ["Autonomy needs", autonomie],
+              ["Existing content", contenu],
+              ["Pages requested", list(pages)],
+              ["Estimate", `from ${strong(`${estimation} € incl. tax`)}`],
+            ]
+          : [
+              ["Structure", structure],
+              ["Objectifs", list(objectifs)],
+              ["Souhait d'autonomie", autonomie],
+              ["Contenu existant", contenu],
+              ["Pages souhaitées", list(pages)],
+              ["Estimation", `à partir de ${strong(`${estimation} € TTC`)}`],
+            ],
+      ) +
+      emailDivider() +
+      emailParagraph(
+        isEn
+          ? "You can book a call with us directly:"
+          : "Vous pouvez directement planifier un appel avec nous :",
+      ) +
+      `<div>${emailButton(calendlyLink, isEn ? "Book a call" : "Planifier un appel")}</div>`;
 
-    await Promise.all([
-      resend.emails.send({
-        from: "Next Impact <agathe@next-impact.digital>", // Adresse fixe
-        to: userEmail,
-        subject: 'Votre estimation personnalisée – Next Impact Digital',
-        html: clientHtml,
-      }),
-      resend.emails.send({
-        from: "Next Impact <agathe@next-impact.digital>", // Adresse fixe
-        to: adminEmail,
-        subject: `Nouvelle estimation reçue de ${userEmail}`,
-        html: adminHtml,
-      }),
-    ]);
+    const clientHtml = emailLayout({
+      contentHtml: clientContent,
+      locale,
+      preheader: isEn
+        ? "Your personalized estimate — Next Impact Digital"
+        : "Votre estimation personnalisée — Next Impact Digital",
+    });
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    // ─── Email admin (interne, FR) ───────────────────────────────────────────
+    const adminContent =
+      emailKicker("№ ADMIN", "Estimation") +
+      emailH1("Nouvelle estimation reçue") +
+      emailKvTable([
+        ["Email client", `<a href="mailto:${userEmail}" style="color:${EMAIL.accent2};text-decoration:none;">${userEmail}</a>`],
+        ["Structure", structure],
+        ["Objectifs", list(objectifs)],
+        ["Autonomie", autonomie],
+        ["Contenu", contenu],
+        ["Pages", list(pages)],
+        ["Téléphone", contact?.phone || "Non renseigné"],
+        ["Estimation", `${estimation} € TTC`],
+      ]);
+
+    const adminHtml = emailLayout({
+      contentHtml: adminContent,
+      preheader: `Estimation — ${userEmail}`,
+    });
+
+    try {
+      await Promise.all([
+        sendMail({
+          to: userEmail,
+          subject: isEn
+            ? "Your personalized estimate – Next Impact Digital"
+            : "Votre estimation personnalisée – Next Impact Digital",
+          html: clientHtml,
+        }),
+        sendMail({
+          to: adminEmail,
+          subject: `Nouvelle estimation reçue de ${userEmail}`,
+          html: adminHtml,
+        }),
+      ]);
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    } catch (error) {
+      console.error("Erreur envoi estimation mail:", error);
+      return new Response(
+        JSON.stringify({
+          error: isEn ? "Error sending emails." : "Erreur lors de l'envoi des e-mails.",
+        }),
+        { status: 500 },
+      );
+    }
   } catch (error) {
-    console.error('Erreur envoi estimation Resend:', error);
-    return new Response(JSON.stringify({ error: 'Erreur lors de l’envoi des e-mails.' }), { status: 500 });
+    console.error("Erreur traitement estimation:", error);
+    return new Response(
+      JSON.stringify({ error: "Erreur lors du traitement de la demande." }),
+      { status: 500 },
+    );
   }
 }

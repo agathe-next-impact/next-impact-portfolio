@@ -1,0 +1,91 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deployment Pipeline Illustration -->
+  <defs>
+    <linearGradient id="pipelineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#719ED9;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <filter id="pipelineGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#020F59"/>
+  
+  <!-- Pipeline Flow -->
+  <path d="M 100 300 L 700 300" stroke="#719ED9" stroke-width="3" fill="none" opacity="0.3"/>
+  
+  <!-- Stage 1: Code -->
+  <g transform="translate(100, 250)">
+    <rect x="-40" y="-40" width="80" height="80" rx="8" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <path d="M -20 -10 L -10 0 L -20 10 M 0 -10 L 10 0 L 0 10 M 20 -10 L 10 0 L 20 10" stroke="#719ED9" stroke-width="2" fill="none"/>
+    <circle cx="0" cy="0" r="50" fill="none" stroke="#F29F05" stroke-width="2" opacity="0.3">
+      <animate attributeName="r" values="50;55;50" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Arrow 1 -->
+  <path d="M 180 300 L 250 300" stroke="url(#pipelineGrad)" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <circle cx="180" cy="300" r="3" fill="#F29F05">
+    <animate attributeName="cx" values="180;250;180" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Stage 2: Build -->
+  <g transform="translate(300, 250)">
+    <rect x="-40" y="-40" width="80" height="80" rx="8" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <rect x="-15" y="-20" width="30" height="40" fill="none" stroke="#719ED9" stroke-width="2"/>
+    <rect x="-10" y="-15" width="20" height="10" fill="#719ED9" opacity="0.6"/>
+    <rect x="-10" y="-3" width="20" height="10" fill="#719ED9" opacity="0.4"/>
+    <rect x="-10" y="9" width="20" height="10" fill="#719ED9" opacity="0.2">
+      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Arrow 2 -->
+  <path d="M 380 300 L 450 300" stroke="url(#pipelineGrad)" stroke-width="2" fill="none"/>
+  <circle cx="380" cy="300" r="3" fill="#F29F05">
+    <animate attributeName="cx" values="380;450;380" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Stage 3: Test -->
+  <g transform="translate(500, 250)">
+    <rect x="-40" y="-40" width="80" height="80" rx="8" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#719ED9" stroke-width="2"/>
+    <path d="M -8 0 L -3 8 L 8 -8" stroke="#719ED9" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <animate attributeName="opacity" values="0;1;1;1" dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Arrow 3 -->
+  <path d="M 580 300 L 650 300" stroke="url(#pipelineGrad)" stroke-width="2" fill="none"/>
+  <circle cx="580" cy="300" r="3" fill="#F29F05">
+    <animate attributeName="cx" values="580;650;580" dur="3s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Stage 4: Deploy -->
+  <g transform="translate(700, 250)">
+    <rect x="-40" y="-40" width="80" height="80" rx="8" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <path d="M -15 -10 L 0 -20 L 15 -10 L 15 15 L -15 15 Z" fill="none" stroke="#719ED9" stroke-width="2"/>
+    <path d="M -8 0 L 8 0 M 0 -5 L 0 10" stroke="#F29F05" stroke-width="2">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Connection lines -->
+  <path d="M 300 210 Q 400 150 500 210" stroke="#719ED9" stroke-width="1" fill="none" opacity="0.2" stroke-dasharray="5,5">
+    <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+  </path>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#719ED9"/>
+    </marker>
+  </defs>
+</svg>

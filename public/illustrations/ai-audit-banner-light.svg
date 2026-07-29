@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <!-- Gradients for light mode -->
+    <linearGradient id="brainGradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#021373;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="chartGradientLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F29F05;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F29F05;stop-opacity:0.3" />
+    </linearGradient>
+
+    <linearGradient id="glowGradientLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#1F54BF;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#1F54BF;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+
+  <!-- AI Brain Core (left side) -->
+  <g id="ai-brain">
+    <path d="M 150 200 Q 120 150 150 100 Q 180 80 200 100 Q 220 80 240 100 Q 270 150 240 200 Q 270 250 240 280 Q 220 300 200 280 Q 180 300 150 280 Q 120 250 150 200 Z" 
+          fill="url(#brainGradientLight)" opacity="0.15" stroke="#1F54BF" stroke-width="2"/>
+    
+    <!-- Neural network nodes -->
+    <circle cx="150" cy="130" r="6" fill="#021373">
+      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="190" cy="120" r="6" fill="#021373">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="230" cy="130" r="6" fill="#021373">
+      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="170" cy="170" r="6" fill="#F29F05">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="210" cy="170" r="6" fill="#F29F05">
+      <animate attributeName="opacity" values="1;0.6;1" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="150" cy="220" r="6" fill="#021373">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="190" cy="230" r="6" fill="#021373">
+      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="230" cy="220" r="6" fill="#021373">
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Neural connections -->
+    <line x1="150" y1="130" x2="170" y2="170" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="190" y1="120" x2="170" y2="170" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="190" y1="120" x2="210" y2="170" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="230" y1="130" x2="210" y2="170" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="170" y1="170" x2="150" y2="220" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="170" y1="170" x2="190" y2="230" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="210" y1="170" x2="190" y2="230" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+    <line x1="210" y1="170" x2="230" y2="220" stroke="#1F54BF" stroke-width="1.5" opacity="0.4"/>
+
+    <!-- AI Chip icon -->
+    <rect x="175" y="255" width="30" height="30" rx="3" fill="#FFFFFF" stroke="#1F54BF" stroke-width="2"/>
+    <circle cx="190" cy="270" r="6" fill="#F29F05">
+      <animate attributeName="r" values="6;7;6" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="175" y1="260" x2="168" y2="260" stroke="#1F54BF" stroke-width="2"/>
+    <line x1="175" y1="270" x2="168" y2="270" stroke="#1F54BF" stroke-width="2"/>
+    <line x1="175" y1="280" x2="168" y2="280" stroke="#1F54BF" stroke-width="2"/>
+    <line x1="205" y1="260" x2="212" y2="260" stroke="#1F54BF" stroke-width="2"/>
+    <line x1="205" y1="270" x2="212" y2="270" stroke="#1F54BF" stroke-width="2"/>
+    <line x1="205" y1="280" x2="212" y2="280" stroke="#1F54BF" stroke-width="2"/>
+  </g>
+
+  <!-- Data Flow (center) -->
+  <g id="data-flow">
+    <circle cx="300" cy="180" r="4" fill="#F29F05">
+      <animateMotion path="M 0 0 L 200 0" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="200" r="4" fill="#1F54BF">
+      <animateMotion path="M 0 0 L 200 0" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="220" r="4" fill="#FF6B6B">
+      <animateMotion path="M 0 0 L 200 0" dur="3s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+
+    <path d="M 280 200 L 480 200" stroke="#1F54BF" stroke-width="2" stroke-dasharray="5,5" opacity="0.3"/>
+    <polygon points="480,200 470,195 470,205" fill="#1F54BF" opacity="0.5"/>
+
+    <line x1="350" y1="120" x2="350" y2="280" stroke="url(#glowGradientLight)" stroke-width="40" opacity="0.2">
+      <animate attributeName="x1" values="280;480;280" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="280;480;280" dur="4s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Business Analytics Dashboard (right side) -->
+  <g id="business-dashboard">
+    <rect x="520" y="100" width="240" height="200" rx="12" fill="#D0DCF2" opacity="0.3" stroke="#1F54BF" stroke-width="2"/>
+    
+    <!-- ROI Chart -->
+    <g id="roi-chart">
+      <text x="540" y="125" fill="#021373" font-size="12" font-weight="600">ROI Projection</text>
+      
+      <rect x="540" y="145" width="20" height="50" fill="url(#chartGradientLight)" rx="2">
+        <animate attributeName="height" values="30;50;30" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="165;145;165" dur="3s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="570" y="135" width="20" height="60" fill="url(#chartGradientLight)" rx="2">
+        <animate attributeName="height" values="40;60;40" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="155;135;155" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="600" y="125" width="20" height="70" fill="url(#chartGradientLight)" rx="2">
+        <animate attributeName="height" values="50;70;50" dur="3s" begin="0.6s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="145;125;145" dur="3s" begin="0.6s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="630" y="110" width="20" height="85" fill="url(#chartGradientLight)" rx="2">
+        <animate attributeName="height" values="65;85;65" dur="3s" begin="0.9s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="130;110;130" dur="3s" begin="0.9s" repeatCount="indefinite"/>
+      </rect>
+      
+      <path d="M 540 195 L 650 140" stroke="#F29F05" stroke-width="2" stroke-dasharray="3,3"/>
+      <polygon points="650,140 645,145 648,150" fill="#F29F05"/>
+    </g>
+
+    <!-- Performance Metrics -->
+    <g id="metrics">
+      <text x="680" y="125" fill="#021373" font-size="12" font-weight="600">Performance</text>
+      
+      <circle cx="720" cy="160" r="25" fill="none" stroke="#D0DCF2" stroke-width="4"/>
+      <circle cx="720" cy="160" r="25" fill="none" stroke="#F29F05" stroke-width="4" 
+              stroke-dasharray="120" stroke-dashoffset="30" transform="rotate(-90 720 160)">
+        <animate attributeName="stroke-dashoffset" values="30;10;30" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <text x="720" y="165" fill="#F29F05" font-size="14" font-weight="700" text-anchor="middle">↑</text>
+    </g>
+
+    <!-- Cost Optimization -->
+    <g id="cost-optimization">
+      <text x="540" y="225" fill="#021373" font-size="12" font-weight="600">Cost Efficiency</text>
+      
+      <circle cx="580" cy="260" r="20" fill="none" stroke="#1F54BF" stroke-width="8" 
+              stroke-dasharray="80 120" transform="rotate(-90 580 260)"/>
+      <circle cx="580" cy="260" r="20" fill="none" stroke="#F29F05" stroke-width="8" 
+              stroke-dasharray="40 120" stroke-dashoffset="-80" transform="rotate(-90 580 260)"/>
+      <circle cx="580" cy="260" r="20" fill="none" stroke="#719ED9" stroke-width="8" 
+              stroke-dasharray="20 120" stroke-dashoffset="-120" transform="rotate(-90 580 260)"/>
+      
+      <circle cx="640" cy="260" r="18" fill="#1F54BF" opacity="0.2"/>
+      <path d="M 632 260 L 638 266 L 648 254" stroke="#F29F05" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- Target/Recommendation indicator -->
+    <g id="recommendation">
+      <circle cx="720" cy="260" r="18" fill="none" stroke="#FF6B6B" stroke-width="2"/>
+      <circle cx="720" cy="260" r="12" fill="none" stroke="#FF6B6B" stroke-width="2"/>
+      <circle cx="720" cy="260" r="4" fill="#FF6B6B">
+        <animate attributeName="r" values="4;6;4" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- Decorative elements -->
+  <g id="decorative">
+    <path d="M 100 80 L 80 80 L 80 100" stroke="#1F54BF" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M 780 80 L 800 80 L 800 100" stroke="#1F54BF" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M 100 320 L 80 320 L 80 300" stroke="#1F54BF" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M 780 320 L 800 320 L 800 300" stroke="#1F54BF" stroke-width="2" fill="none" opacity="0.3"/>
+
+    <circle cx="120" cy="350" r="3" fill="#1F54BF" opacity="0.5">
+      <animate attributeName="cy" values="350;320;350" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="750" cy="50" r="3" fill="#F29F05" opacity="0.5">
+      <animate attributeName="cy" values="50;80;50" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

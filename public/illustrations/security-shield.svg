@@ -1,0 +1,94 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Security Shield Illustration -->
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#021373;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <filter id="securityGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#020F59"/>
+  
+  <!-- Protection rings -->
+  <g transform="translate(400, 300)">
+    <circle cx="0" cy="0" r="180" fill="none" stroke="#1F54BF" stroke-width="1" opacity="0.2" stroke-dasharray="5,5">
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="20s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="220" fill="none" stroke="#719ED9" stroke-width="1" opacity="0.15" stroke-dasharray="8,8">
+      <animateTransform attributeName="transform" type="rotate" from="360 0 0" to="0 0 0" dur="25s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="260" fill="none" stroke="#1F54BF" stroke-width="1" opacity="0.1" stroke-dasharray="10,10">
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="30s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Main shield -->
+  <g transform="translate(400, 280)">
+    <path d="M 0 -120 Q -80 -100 -80 0 Q -80 80 0 140 Q 80 80 80 0 Q 80 -100 0 -120 Z" fill="url(#shieldGrad)" stroke="#719ED9" stroke-width="3" filter="url(#securityGlow)"/>
+    
+    <!-- Shield pattern -->
+    <path d="M 0 -110 L 0 130" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    <path d="M -70 -20 L 70 -20" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    <path d="M -65 20 L 65 20" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    <path d="M -55 60 L 55 60" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Lock icon -->
+    <g transform="translate(0, 10)">
+      <rect x="-20" y="0" width="40" height="35" rx="5" fill="#021373" stroke="#F29F05" stroke-width="2"/>
+      <path d="M -15 0 L -15 -15 Q -15 -30 0 -30 Q 15 -30 15 -15 L 15 0" fill="none" stroke="#F29F05" stroke-width="2"/>
+      <circle cx="0" cy="17" r="6" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Pulse effect -->
+    <circle cx="0" cy="10" r="50" fill="none" stroke="#F29F05" stroke-width="2" opacity="0">
+      <animate attributeName="r" values="50;100;150" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.2;0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Security nodes -->
+  <g opacity="0.6">
+    <circle cx="250" cy="200" r="5" fill="#719ED9">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="250" y1="200" x2="330" y2="220" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    
+    <circle cx="550" cy="200" r="5" fill="#719ED9">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="550" y1="200" x2="470" y2="220" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    
+    <circle cx="250" cy="400" r="5" fill="#719ED9">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="250" y1="400" x2="330" y2="380" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+    
+    <circle cx="550" cy="400" r="5" fill="#719ED9">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="550" y1="400" x2="470" y2="380" stroke="#719ED9" stroke-width="1" opacity="0.3"/>
+  </g>
+  
+  <!-- Checkmarks floating -->
+  <g opacity="0.4">
+    <path d="M 150 480 L 155 488 L 165 475" stroke="#F29F05" stroke-width="2" fill="none" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-500; 0,0" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 630 520 L 635 528 L 645 515" stroke="#F29F05" stroke-width="2" fill="none" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-500; 0,0" dur="6s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="6s" begin="1s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

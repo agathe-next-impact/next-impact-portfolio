@@ -1,0 +1,146 @@
+---
+title: Keywords and semantic cocoon
+description: Understanding keywords and the semantic cocoon for SEO
+category: seo
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+Keyword research and structuring content into a semantic cocoon are two complementary mechanisms of organic search. The first determines the queries on which a site can rank. The second organizes internal linking in a way that concentrates thematic relevance and PageRank on strategic pages. Mastering these two levers helps improve organic positioning sustainably.
+
+## What are keywords in SEO?
+
+A keyword (or target query) is the term or phrase that a user types into a search engine. Google's algorithm compares this query to the indexed content to display the most relevant results. Optimizing a site for the right keywords means aligning its content with the queries actually formulated by the target audience.
+
+### The importance of keywords
+
+Search engines use natural language processing (NLP) and semantic models (such as BERT or MUM at Google) to associate page content with user queries. The keyword remains the basic signal: it tells the engine the topic the page covers. Precise keyword targeting increases the match rate between content and search intent, which improves CTR (click-through rate) in the SERPs (search engine results pages).
+
+### How keywords work
+
+During the crawl, Googlebot analyzes the textual content of each page and identifies recurring terms and their semantic context. The algorithm then evaluates the page's relevance for a given query by cross-referencing several signals: presence of the keyword in strategic tags (title, H1, meta description), natural density in the body text, and overall semantic consistency of the content with the query's lexical field.
+
+## The different types of keywords
+
+An effective keyword strategy is based on understanding the different categories of queries, classified by volume, specificity and intent.
+
+### 1.  Generic keywords (short tail)
+
+These are short queries, made up of one or two terms (e.g. "shoes", "marketing"). They generate high search volume but face strong competition and low conversion rates, as the search intent remains ambiguous.
+
+ Advantage:  Significant potential traffic volume.
+
+ Limitation:  High ranking difficulty (high Keyword Difficulty) and low traffic qualification.
+
+### 2.  Long tail keywords
+
+These are phrases of 3 or more words, targeting a precise intent (e.g. "women's running shoes size 39"). Individually they represent a low search volume, but collectively they account for around 70% of total organic traffic.
+
+ Advantage:  Reduced competition, higher conversion rate thanks to qualified search intent.
+
+ Limitation:  Low individual volume, requiring the production of a large number of contents.
+
+### 3.  Transactional keywords
+
+They signal a buying or action intent (e.g. "buy cheap smartphone", "plumber quote Paris"). These queries are at the bottom of the conversion funnel and target users ready to take action.
+
+### 4.  Informational keywords
+
+They correspond to a knowledge search (e.g. "how to plant a rosebush", "what is SEO"). These queries are at the top of the conversion funnel and serve to capture an audience in the discovery phase.
+
+<Callout variant="developpeur" title="Technical keyword integration">
+Place the main keyword in HTML tags with strong weight: `<title>`, `<meta name="description">`, `<h1>` to `<h3>`, and the `alt` attributes of images. In frameworks like Next.js, these tags are managed through the Metadata API (`metadata.ts` file or `generateMetadata` property). Make sure that server-side rendering (SSR) or static generation (SSG) includes these tags in the initial HTML sent to Googlebot, as content injected only client-side may not be indexed.
+</Callout>
+
+## What is a semantic cocoon?
+
+The semantic cocoon is a method for structuring internal linking conceptualized by Laurent Bourrelly. The principle: organize a site's pages into thematic clusters connected by contextual internal links, so as to concentrate semantic relevance and PageRank on a target page (the pillar page).
+
+Specifically, a cocoon consists of three levels: a parent page (pillar page targeting a generic high-volume keyword), intermediate pillar pages (targeting subtopics) and satellite pages (detailed articles targeting long-tail keywords). Internal links follow a downward logic (parent to pillars, pillars to satellites) and an upward logic (satellites to pillars, pillars to parent), creating a bidirectional PageRank flow that reinforces the entire cluster.
+
+<ArchitectureDiagram
+  title="Structure of a semantic cocoon"
+  layers={[
+    { label: "Parent page", items: ["Main topic (e.g. Recipes for weight loss)"], color: "blue" },
+    { label: "Pillar pages", items: ["Subtopic A (Recipes < 300 cal)", "Subtopic B (Healthy desserts)", "Subtopic C (Quick meals)"], color: "orange" },
+    { label: "Satellite pages", items: ["Detailed article 1", "Detailed article 2", "Detailed article 3", "Detailed article 4", "Detailed article 5", "Detailed article 6"], color: "dark" }
+  ]}
+/>
+
+### Concrete example
+
+For a cooking blog, the parent page targets the query "recipes for weight loss" (high volume, strong competition). The pillar pages target subtopics: "recipes under 300 calories", "healthy desserts", "quick and light meals". Each pillar page links back to the parent page (upward link) and to its satellite pages (downward link). The satellite pages cover very specific topics ("quinoa salad recipe under 200 calories") and link back to their pillar page.
+
+## Why is the semantic cocoon important for SEO?
+
+### 1.  Better understanding by search engines
+
+Contextual internal linking helps Googlebot identify semantic relationships between pages. The algorithm detects that the pages in the cluster cover the same lexical field and assigns thematic authority (topical authority) to the entire cocoon. This improves rankings on competitive queries, where the site's overall thematic relevance is a ranking factor.
+
+### 2.  Concentration of internal PageRank
+
+Internal links pass PageRank from one page to another. In a cocoon, PageRank circulates within the cluster instead of dispersing to unrelated pages. The parent page, which receives links from all the pages in the cocoon, accumulates higher internal PageRank, increasing its ranking potential.
+
+### 3.  Improved engagement metrics
+
+Coherent thematic navigation increases the number of pages viewed per session and the average session duration. A user reading a satellite article naturally finds links to other related content, which reduces the bounce rate.
+
+## How to create a semantic cocoon?
+
+Setting up a semantic cocoon follows a methodical process in five steps.
+
+<StepByStep>
+<Step number={1} title="Identify the main topic">
+Select the target query for the parent page. It must correspond to a generic keyword with high search volume and relevant to your business. Example: "remote work" for a professional advice site.
+</Step>
+
+<Step number={2} title="Develop subtopics">
+Use a keyword research tool (Semrush, Ahrefs, Google Keyword Planner) to identify related subtopics. Group them by semantic clustering (automatic grouping of keywords sharing the same search intent). Example: "tools for remote work", "organizing your day while remote working", "home office ergonomics".
+</Step>
+
+<Step number={3} title="Write optimized content">
+Each page in the cocoon must target a specific keyword and cover its lexical field exhaustively. Use semantic optimization tools (YourTextGuru, Surfer SEO) to verify that the content covers the terms expected by the algorithm for the targeted query.
+</Step>
+
+<Step number={4} title="Set up internal linking">
+Insert contextual internal links (integrated into the body text, on descriptive anchors) between the cocoon's pages. Respect the hierarchical logic: downward links from the parent page to the pillar pages, upward links from satellite pages to their pillar page. Avoid links between pages of the same level belonging to different cocoons, so as not to dilute thematic relevance.
+</Step>
+
+<Step number={5} title="Update and expand the cocoon">
+Regularly add new satellite pages to cover emerging queries identified through Google Search Console (Performance > Queries tab). Refresh existing content to maintain its freshness, a ranking factor for time-sensitive queries.
+</Step>
+</StepByStep>
+
+<Callout variant="developpeur" title="Programmatic internal linking">
+On large sites (100+ pages), automate internal link generation. A script can analyze tags, categories and lexical fields of articles to suggest or automatically insert relevant links. Headless CMSs (Strapi, Sanity, Contentful) allow modeling content relationships directly in the data schema, via "reference" or "relation" type fields. On the Next.js side, these relationships can feed contextual navigation components (related articles, dynamic breadcrumbs).
+</Callout>
+
+## Tools to create a semantic cocoon
+
+-  Semrush  : Keyword research, competitive analysis, keyword clustering by search intent and rank tracking. Its database of 26 billion keywords helps identify subtopic opportunities.
+-  Screaming Frog  : Site crawler that maps the internal link structure, identifies orphan pages and measures crawl depth. Essential for auditing the linking of an existing cocoon.
+-  YourTextGuru  : Semantic optimization tool that analyzes the expected lexical field for a given query and assigns a semantic coverage score to the content written.
+-  Google Keyword Planner  : Free Google Ads tool providing monthly search volumes and competition estimates. Useful for the initial keyword research phase, but data is aggregated by ranges (unlike paid tools that provide precise volumes).
+
+## SEO evolution: keywords and semantic cocoon
+
+Google's algorithm is evolving toward an increasingly fine semantic understanding. The BERT (2019) and MUM (2021) updates have strengthened the engine's ability to interpret the context of a query rather than limiting itself to lexical matching. In practice, Google now evaluates a site's thematic coverage (topical authority) as much as the relevance of an individual page.
+
+The semantic cocoon directly addresses this logic: by structuring content into thematic clusters and connecting pages through contextual internal links, it demonstrates to the algorithm in-depth expertise on a given subject. Combining rigorous keyword research (targeting by search intent, coverage of long-tail queries) with a semantic cocoon architecture is the most effective method to acquire and maintain organic positions in a competitive environment.
+
+### Next step
+
+To set up a semantic cocoon, start by auditing the existing internal link structure with Screaming Frog, identify the thematic clusters to create through intent-based keyword research, then plan content production by prioritizing pillar pages before satellite pages.
+
+<Quiz
+  question="What is the main role of internal links in a semantic cocoon?"
+  options={[
+    "Increase the number of pages on the site",
+    "Connect content together to concentrate PageRank and thematic relevance on strategic pages",
+    "Replace keywords in the content",
+    "Improve only the loading speed of the site"
+  ]}
+  answer={1}
+  explanation="The internal links of a semantic cocoon serve two functions: they pass PageRank to pillar pages (concentration of authority) and they signal to Googlebot the semantic relationships between pages in the cluster (strengthening topical authority). This dual mechanism improves the ranking of the entire cocoon on targeted queries."
+/>

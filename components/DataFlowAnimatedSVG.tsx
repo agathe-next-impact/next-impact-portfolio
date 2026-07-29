@@ -1,0 +1,62 @@
+import React from "react";
+
+export default function DataFlowAnimatedSVG() {
+  return (
+    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+      {/* Background */}
+      <rect width="600" height="400" fill="#0e0e0c00" />
+      {/* Central Hub */}
+      <g id="central-hub">
+        <circle cx="300" cy="200" r="60" fill="#0e0e0c" opacity="0.8">
+          <animate attributeName="r" values="60;65;60" dur="3s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="300" cy="200" r="45" fill="#d83a1a" opacity="0.9" />
+        <circle cx="300" cy="200" r="30" fill="rgba(14,14,12,0.3)" opacity="0.7">
+          <animate attributeName="r" values="30;35;30" dur="2s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      {/* Orbiting nodes */}
+      <g id="node-1">
+        <circle cx="450" cy="200" r="25" fill="#F29F05" opacity="0.8">
+          <animateTransform attributeName="transform" type="rotate" from="0 300 200" to="360 300 200" dur="10s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      <g id="node-2">
+        <circle cx="375" cy="100" r="20" fill="rgba(14,14,12,0.3)" opacity="0.8">
+          <animateTransform attributeName="transform" type="rotate" from="90 300 200" to="450 300 200" dur="10s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      <g id="node-3">
+        <circle cx="225" cy="100" r="20" fill="#F7F8F9" opacity="0.8">
+          <animateTransform attributeName="transform" type="rotate" from="180 300 200" to="540 300 200" dur="10s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      <g id="node-4">
+        <circle cx="150" cy="200" r="25" fill="#FF6B6B" opacity="0.8">
+          <animateTransform attributeName="transform" type="rotate" from="270 300 200" to="630 300 200" dur="10s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      {/* Connection lines */}
+      <line x1="300" y1="200" x2="450" y2="200" stroke="#F29F05" stroke-width="2" opacity="0.4">
+        <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite" />
+      </line>
+      {/* Data packets */}
+      <circle r="4" fill="#F29F05">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 450,200" />
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
+      </circle>
+      <circle r="4" fill="rgba(14,14,12,0.3)">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 375,100" begin="0.5s" />
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="0.5s" />
+      </circle>
+      <circle r="4" fill="#F7F8F9">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 225,100" begin="1s" />
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s" />
+      </circle>
+      <circle r="4" fill="#FF6B6B">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M 300,200 L 150,200" begin="1.5s" />
+        <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1.5s" />
+      </circle>
+    </svg>
+  );
+}

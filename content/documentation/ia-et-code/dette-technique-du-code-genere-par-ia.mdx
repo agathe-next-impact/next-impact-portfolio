@@ -1,0 +1,131 @@
+---
+title: "La dette technique du code généré par IA, expliquée"
+description: "Le code écrit avec l'IA crée-t-il de la dette technique ? Les mécanismes, les chiffres (GitClear, DORA) et les garde-fous à exiger avant qu'il soit trop tard."
+category: ia-et-code
+author: "Agathe Karinthi-Martin"
+date: "2026-07-18"
+updated: "2026-07-18"
+order: 4
+faq:
+  - question: "Le code généré par IA est-il de moins bonne qualité que le code humain ?"
+    answer: "Pas ligne à ligne : une IA écrit du code standard souvent plus propre qu'un développeur pressé. La différence se joue à l'échelle du projet : l'IA optimise la réponse immédiate, pas la cohérence d'ensemble. Sans pilotage humain, elle duplique au lieu de réutiliser et empile au lieu d'organiser — c'est cette dérive structurelle, pas la qualité de chaque ligne, qui fabrique la dette."
+  - question: "La dette technique se voit-elle sur le site fini ?"
+    answer: "Non, et c'est tout le problème : un site chargé de dette s'affiche et fonctionne exactement comme un site sain. Elle devient visible à la première demande d'évolution — délais qui s'allongent, devis qui gonflent, corrections qui cassent autre chose. C'est pourquoi elle s'évalue en regardant le code et les pratiques de l'équipe, jamais l'écran."
+  - question: "Faut-il interdire l'IA à son équipe ou à son prestataire pour éviter la dette ?"
+    answer: "Non — ce serait à la fois inefficace et intenable en 2026, où l'essentiel des développeurs travaille avec l'IA. La recherche DORA montre que l'IA amplifie les pratiques existantes : une équipe qui relit, teste et livre par petits lots produit plus et mieux avec l'IA ; une équipe sans garde-fous produit surtout de la dette plus vite. La bonne exigence porte sur les pratiques, pas sur l'outil."
+  - question: "Comment savoir si un projet en cours accumule de la dette ?"
+    answer: "Trois signaux ne trompent pas, et aucun n'exige de lire le code : les petites modifications prennent de plus en plus de temps, les corrections provoquent régulièrement des régressions ailleurs, et l'équipe hésite à toucher certaines parties du projet. Si vous commanditez le développement, poser la question « combien de temps pour ajouter un champ à ce formulaire ? » à six mois d'intervalle est un excellent thermomètre."
+  - question: "Un développeur expérimenté qui utilise l'IA produit-il aussi de la dette ?"
+    answer: "Il en produit s'il abandonne ses garde-fous, pas parce qu'il utilise l'IA. L'expérience joue précisément là : savoir ce qu'il faut imposer à l'outil (architecture, conventions) et ce qu'il faut vérifier derrière lui (relecture, tests). Le risque réel de 2026 n'est pas le senior outillé, c'est le projet où plus personne ne relit parce que « l'IA s'en occupe »."
+---
+
+**Oui, le code généré par IA crée davantage de dette technique par défaut — c'est mesuré, pas supposé. Les analyses de GitClear sur 211 millions de lignes de code montrent que le copier-coller a dépassé le refactoring pour la première fois en 2024, et la recherche DORA de Google associe l'adoption de l'IA à une baisse estimée de 7,2 % de la stabilité de livraison. Les mécanismes sont connus : duplication au lieu de réutilisation, code jamais relu, absence d'architecture et de tests, régénérations successives. Et les garde-fous aussi : architecture décidée avant la génération, relecture humaine systématique, tests automatisés, livraisons par petits lots — des pratiques qui s'exigent d'une équipe comme d'un prestataire.**
+
+*Article publié le 18 juillet 2026. Les chiffres cités proviennent des recherches GitClear et Google DORA les plus récentes ; les mécanismes décrits, eux, sont structurels.*
+
+Vous faites — ou allez faire — développer un site ou une application par une équipe qui travaille avec l'IA. C'est aujourd'hui le cas général : la question n'est plus « votre prestataire utilise-t-il l'IA ? » mais « qu'a-t-il mis en place pour que ça ne vous coûte pas cher dans deux ans ? ». Cet article de la rubrique [IA & code](/documentation/ia-et-code) explique ce qui se joue sous le capot, chiffres à l'appui, et ce que vous êtes en droit d'exiger. (Si votre site généré par IA pose *déjà* problème, votre sujet est curatif, pas préventif : direction [reprendre un site généré par IA](/documentation/ia-et-code/reprendre-un-site-genere-par-ia).)
+
+## C'est quoi, la dette technique, en langage décideur ?
+
+**La dette technique est l'écart entre le code tel qu'il est et le code tel qu'il devrait être pour évoluer sereinement — un écart qui, comme une dette financière, produit des intérêts.**
+
+L'image vient du monde bancaire et elle est exacte : à chaque raccourci pris pour livrer plus vite — code dupliqué au lieu d'être organisé, vérification remise à plus tard — on emprunte du temps. Les intérêts se paient à chaque modification suivante : ce qui aurait pris une heure sur un code sain en prend trois, puis cinq, parce qu'il faut d'abord comprendre le désordre avant d'y toucher. Point capital pour un commanditaire : **la dette est invisible sur le site fini**. Un site endetté s'affiche parfaitement ; il ne révèle son état qu'à la première demande d'évolution — c'est-à-dire au moment où changer de prestataire ou de socle coûte le plus cher.
+
+La dette n'est pas une faute morale : toute équipe en prend, et en prendre délibérément peut être un choix rationnel (on y revient plus bas). Le problème de l'ère IA est ailleurs : on n'a jamais pu en accumuler autant, aussi vite, avec aussi peu de signaux d'alerte.
+
+## Pourquoi le code généré par IA produit-il plus de dette par défaut ?
+
+**Parce qu'une IA optimise la réponse immédiate à la demande immédiate — et que la dette naît précisément de l'accumulation de réponses immédiates sans vision d'ensemble. Cinq mécanismes se combinent, et les deux premiers sont désormais mesurés à grande échelle.**
+
+**1. La duplication remplace la réutilisation.** Un développeur qui rencontre deux fois le même besoin écrit une fonction et la réutilise ; une IA sollicitée deux fois génère deux fois le code. À l'échelle d'un projet, cela produit des copies presque identiques qu'il faudra corriger une par une — en n'en oubliant aucune. La recherche [GitClear 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research), menée sur 211 millions de lignes de code modifiées entre 2020 et 2024, mesure le phénomène : la part de lignes copiées-collées est passée de 8,3 % à 12,3 % des modifications, et la fréquence des blocs dupliqués de cinq lignes ou plus a été multipliée par huit sur la seule année 2024.
+
+**2. Le refactoring s'effondre.** Le refactoring — le travail de réorganisation du code existant pour le garder simple, sans changer ce qu'il fait — est l'entretien qui empêche la dette de s'accumuler. GitClear observe que les lignes déplacées ou réorganisées sont tombées de 25 % des modifications en 2021 à moins de 10 % en 2024 : **2024 est la première année où les équipes ont davantage copié-collé que rangé**. Un code qu'on ne range plus est un code qui ne fait que grossir.
+
+**3. Le code généré n'est pas relu.** La relecture (revue de code : un humain vérifie le travail avant qu'il rejoigne le projet) est le premier filtre anti-dette — et c'est lui que la vitesse de génération met sous pression. Quand l'IA produit en une heure ce qu'un développeur écrivait en trois jours, la tentation est d'accepter en bloc. Le [rapport DORA 2024 de Google](https://dora.dev/research/2024/dora-report/) chiffre la conséquence systémique : une hausse de 25 % de l'adoption de l'IA y est associée à une baisse estimée de 7,2 % de la stabilité de livraison — non parce que le code généré serait mauvais en soi, mais parce que les équipes livrent des lots plus gros, moins vérifiés, dont les défauts se découvrent en production. L'[édition 2025](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) confirme : les gains de débit sont désormais au rendez-vous, mais la relation négative avec la stabilité persiste.
+
+**4. L'architecture et les tests n'existent que si on les impose.** Une IA à qui l'on demande une fonctionnalité livre la fonctionnalité — pas le plan d'ensemble qui décide où elle doit vivre, ni les tests automatisés (des programmes qui revérifient à chaque modification que tout fonctionne encore) qui permettront d'y retoucher sans peur. Or ces deux-là sont exactement ce qui distingue un projet maintenable d'un empilement : ils ne sont jamais dans la demande du client, donc jamais dans la réponse de l'outil, sauf si l'équipe les exige.
+
+**5. Les régénérations successives effacent l'histoire.** Face à un bug, régénérer est plus tentant que comprendre. Chaque régénération remplace du code par du code différent, parfois massivement — c'est le churn, la part de code réécrite peu après avoir été produite, que GitClear voit également augmenter. Résultat : les corrections passées peuvent silencieusement disparaître, et plus personne — humain ou IA — ne sait pourquoi le code est comme il est.
+
+Un mot sur la sécurité, qui est un cousin direct de la dette : le code généré non relu est aussi du code dont les failles ne sont pas vues — un angle mort documenté, traité avec l'étude de Stanford à l'appui dans [le comparatif site IA vs site professionnel](/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel).
+
+## Qu'est-ce que ça coûte, concrètement, à terme ?
+
+**La dette ne se paie pas en une fois : elle transforme chaque décision future en décision plus chère, plus lente et plus risquée.**
+
+- **Chaque évolution coûte plus que la précédente.** Sur un code dupliqué et non organisé, ajouter un champ, connecter un outil ou changer un parcours suppose de retrouver toutes les copies concernées et de retester ce que rien ne reteste automatiquement. Les délais s'allongent, les devis gonflent, et personne ne peut vous expliquer pourquoi « un petit changement » coûte si cher — la raison est dans le code, pas dans la mauvaise volonté.
+- **Les régressions deviennent la norme.** Corriger ici casse là-bas : c'est la signature d'un code sans tests ni structure, et c'est exactement l'instabilité que DORA mesure à l'échelle du secteur.
+- **Vous devenez captif.** D'abord du premier auteur — seul à peu près capable de naviguer dans le labyrinthe —, puis de l'inertie : au bout d'un moment, plus personne n'ose toucher à rien, et le site se fige.
+- **Au bout du chemin, la reconstruction.** Quand les intérêts de la dette dépassent la valeur du code, on ne rembourse plus : on repart sur une base saine en conservant les acquis. L'ordre de grandeur est qualitatif par nature — de quelques journées de stabilisation à un budget de refonte complet selon l'état du code — et c'est un arbitrage qui se fait sur audit, [détaillé dans le guide de reprise](/documentation/ia-et-code/reprendre-un-site-genere-par-ia).
+
+## Comment limiter la dette quand on développe avec l'IA ?
+
+**Chaque mécanisme de dette a son garde-fou connu. Aucun n'est nouveau — c'est l'hygiène du développement professionnel — mais l'IA les fait passer du statut de bonne pratique à celui de condition de survie.**
+
+| Mécanisme de dette | Garde-fou qui fonctionne |
+|---|---|
+| Duplication au lieu de réutilisation | **Conventions et architecture décidées avant la génération** : l'IA reçoit des règles (où va quoi, ce qui existe déjà) au lieu de partir de zéro à chaque demande |
+| Effondrement du refactoring | **Temps de rangement planifié** : le refactoring est budgété comme une tâche normale, pas espéré sur le temps libre |
+| Code accepté sans lecture | **Relecture humaine systématique** : aucun code généré ne rejoint le projet sans qu'un développeur l'ait lu et compris — le volume généré ne change pas la règle |
+| Absence de tests | **Tests automatisés exigés avec chaque fonctionnalité** : c'est eux qui rendent les modifications futures rapides et sûres, et l'IA sait d'ailleurs aider à les écrire |
+| Régénérations qui effacent l'histoire | **Petits lots et historique de versions** : on corrige plutôt qu'on ne régénère, on livre petit, et chaque changement est traçable |
+
+Le message transversal de la recherche DORA 2025 tient en une phrase utile aux décideurs : **l'IA n'améliore pas une équipe, elle amplifie ce qu'elle est déjà**. Une équipe qui relit, teste et livre par petits lots devient plus productive avec l'IA ; une équipe qui ne le faisait pas produit sa dette à la vitesse de la machine. L'outil est neutre ; les pratiques ne le sont pas.
+
+## Vous ne codez pas : que devez-vous exiger de votre prestataire ou de votre équipe ?
+
+**Vous n'avez pas besoin de lire le code pour vous protéger — vous avez besoin de vérifier que les garde-fous ci-dessus existent, et c'est une conversation de commanditaire, pas de technicien.**
+
+Concrètement, trois exigences contractualisables : que tout code généré soit **relu par un humain qui en répond** (et savoir qui), que le projet soit livré **avec ses tests** et non « testable plus tard », et qu'une **documentation d'architecture** existe — la preuve qu'un plan a précédé la génération. Un prestataire sérieux répond à ces trois points sans se vexer ; c'est même souvent l'occasion pour lui de valoriser un travail invisible. Celui qui élude, ou qui répond « pas besoin, l'IA gère », vous décrit exactement le projet endetté de la section précédente. La liste complète des questions à poser — avec, pour chacune, la bonne réponse attendue et le signal d'alarme — fait l'objet d'un guide dédié : [les 12 questions IA à poser à votre prestataire](/documentation/avant-signer/12-questions-ia-a-poser-a-votre-prestataire).
+
+> **Ce que je constate en projet.** J'utilise l'IA pour produire du code tous les jours, et le partage entre ce que je garde et ce que je jette est devenu très net : je garde ce qui a été généré *dans* une architecture décidée avant, je jette ce qui a été généré *à la place* d'une architecture. La relecture n'est pas la partie lente de mon travail, c'en est le cœur — c'est elle que mes clients paient, pas la frappe. Et sur les reprises de sites générés qui arrivent chez moi, le point commun n'est jamais l'outil utilisé : c'est qu'à aucun moment quelqu'un n'a été chargé de dire non au code qui arrivait.
+
+## Quand la dette technique est-elle un choix acceptable ?
+
+**Quand elle est assumée et datée : un prototype conçu pour apprendre, pas pour durer, a le droit d'être endetté — c'est même son intérêt économique.**
+
+Générer vite et sale pour tester une idée, montrer une maquette, valider un marché : la dette contractée là ne sera jamais remboursée, parce que le code sera jeté une fois la leçon apprise. C'est un usage rationnel de l'IA, défendu partout sur ce site. La dette ne devient toxique que dans le glissement : le prototype qui, faute de décision explicite, devient le site officiel — et dont la dette, elle, devient bien réelle. Si vous êtes dans cette zone grise, le test [Prototype jetable ou maintenable ?](/outils/prototype-ia) tranche votre cas en neuf questions, gratuitement.
+
+## Verdict selon votre profil
+
+**Le risque de dette ne dépend pas de l'outil d'IA : il dépend de qui pilote, et avec quels garde-fous.**
+
+- **Équipe interne avec développeurs** : le levier est managérial. Adoptez l'IA franchement, mais sanctuarisez la relecture, les tests et le temps de refactoring dans les plannings — c'est là que la pression « on va plus vite maintenant » fait ses dégâts. Mesurez la stabilité (régressions, temps des petites évolutions), pas seulement la vélocité.
+- **Vous faites appel à une agence ou un freelance** : votre protection tient dans les exigences posées avant signature — relecture nommée, tests livrés, architecture documentée — et dans votre droit de reposer la question en cours de projet. [Le guide des 12 questions](/documentation/avant-signer/12-questions-ia-a-poser-a-votre-prestataire) vous arme pour cette conversation.
+- **Solo-fondateur qui vibe-code son produit** : soyez lucide sur le contrat que vous passez avec vous-même. Tant que c'est un prototype, la dette est votre alliée : foncez. Le jour où de vrais utilisateurs, de vraies données ou de vrais revenus arrivent, la dette change de nature — c'est le moment de faire auditer et stabiliser, pas d'ajouter un étage. Le basculement se décide, il ne se subit pas.
+
+## FAQ — dette technique et code généré par IA
+
+### Le code généré par IA est-il de moins bonne qualité que le code humain ?
+
+Pas ligne à ligne : une IA écrit du code standard souvent plus propre qu'un développeur pressé. La différence se joue à l'échelle du projet : l'IA optimise la réponse immédiate, pas la cohérence d'ensemble. Sans pilotage humain, elle duplique au lieu de réutiliser et empile au lieu d'organiser — c'est cette dérive structurelle, mesurée par GitClear, qui fabrique la dette, pas la qualité de chaque ligne.
+
+### La dette technique se voit-elle sur le site fini ?
+
+Non, et c'est tout le problème : un site chargé de dette s'affiche et fonctionne exactement comme un site sain. Elle devient visible à la première demande d'évolution — délais qui s'allongent, devis qui gonflent, corrections qui cassent autre chose. C'est pourquoi elle s'évalue en regardant le code et les pratiques de l'équipe, jamais l'écran.
+
+### Faut-il interdire l'IA à son équipe ou à son prestataire pour éviter la dette ?
+
+Non — ce serait à la fois inefficace et intenable en 2026, où l'essentiel des développeurs travaille avec l'IA. La recherche DORA montre que l'IA amplifie les pratiques existantes : une équipe qui relit, teste et livre par petits lots produit plus et mieux avec l'IA ; une équipe sans garde-fous produit surtout de la dette plus vite. La bonne exigence porte sur les pratiques, pas sur l'outil.
+
+### Comment savoir si un projet en cours accumule de la dette ?
+
+Trois signaux ne trompent pas, et aucun n'exige de lire le code : les petites modifications prennent de plus en plus de temps, les corrections provoquent régulièrement des régressions ailleurs, et l'équipe hésite à toucher certaines parties du projet. Si vous commanditez le développement, poser la question « combien de temps pour ajouter un champ à ce formulaire ? » à six mois d'intervalle est un excellent thermomètre.
+
+### Un développeur expérimenté qui utilise l'IA produit-il aussi de la dette ?
+
+Il en produit s'il abandonne ses garde-fous, pas parce qu'il utilise l'IA. L'expérience joue précisément là : savoir ce qu'il faut imposer à l'outil (architecture, conventions) et ce qu'il faut vérifier derrière lui (relecture, tests). Le risque réel de 2026 n'est pas le senior outillé — c'est le projet où plus personne ne relit parce que « l'IA s'en occupe ».
+
+---
+
+**Où en êtes-vous ?** Si votre projet est un prototype généré et que vous hésitez sur son avenir, le test [Prototype jetable ou maintenable ?](/outils/prototype-ia) vous situe gratuitement en neuf questions. Pour trancher votre cas de vive voix — projet à lancer, équipe à cadrer, prestataire à challenger — la [visio conseil](/conseil) fait le tour en 30 minutes (150 € HT, crédités si un projet démarre sous 30 jours) ; et si votre projet mérite un plan avant la première ligne générée, le [cadrage architecture](/conseil) (490 € HT) pose précisément les garde-fous décrits ici, avant qu'ils ne coûtent cher.
+
+## Sources
+
+- GitClear, [*AI Copilot Code Quality: 2025 Data Suggests 4x Growth in Code Clones*](https://www.gitclear.com/ai_assistant_code_quality_2025_research) : analyse de 211 millions de lignes modifiées (2020–2024) — copier-coller de 8,3 % à 12,3 % des lignes modifiées, refactoring de 25 % à moins de 10 %, blocs dupliqués multipliés par huit en 2024.
+- Google Cloud / DORA, [*Accelerate State of DevOps Report 2024*](https://dora.dev/research/2024/dora-report/) : une hausse de 25 % de l'adoption de l'IA est associée à une baisse estimée de 7,2 % de la stabilité de livraison et de 1,5 % du débit.
+- Google Cloud, [*Announcing the 2025 DORA Report*](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) : l'IA comme amplificateur des pratiques existantes ; relation redevenue positive avec le débit, toujours négative avec la stabilité de livraison.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle utilise l'IA comme outil de production au quotidien — avec relecture systématique — et reprend des projets web existants après audit. [Prendre contact](/contact).*

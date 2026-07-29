@@ -1,0 +1,172 @@
+---
+title: How to define your site architecture
+description: How to define your site architecture for SEO?
+category: seo
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+A website's architecture directly determines its ability to be crawled, indexed and ranked by search engines. A well-designed architecture improves the crawl budget (the number of pages Googlebot explores during each visit), facilitates internal PageRank distribution and reduces bounce rates by making navigation predictable for the user.
+
+This article details the structure of an SEO-oriented site architecture: hierarchy principles, planning steps, implementation best practices on WordPress, and concrete examples of effective architectures.
+
+---
+
+## What is a website architecture and why does it matter?
+
+The site architecture (or information architecture) refers to the hierarchical organization of a site's pages. It breaks down into levels: the homepage (level 0), main sections (level 1), subsections (level 2) and final content pages (level 3+). Each additional level increases crawl depth, meaning the number of clicks required for Googlebot to reach a given page.
+
+<FlowDiagram
+  nodes={[
+    { label: "Home", description: "Homepage (level 0)", icon: "🏠" },
+    { label: "Main sections", description: "Services, Blog, About...", icon: "🌿" },
+    { label: "Subsections", description: "Categories and subpages", icon: "🍃" },
+    { label: "Specific pages", description: "Articles, product pages...", icon: "📄" }
+  ]}
+  direction="vertical"
+  accent="blue"
+/>
+
+### Why is site architecture essential?
+
+-  Clear navigation for users
+
+A predictable structure reduces the number of clicks required to reach information. This lowers the bounce rate and increases average session duration, two behavioral signals that Google takes into account in its ranking algorithm.
+
+-  Search engine optimization (SEO)
+
+Googlebot follows internal links to discover a site's pages. A flat, logical architecture ensures all pages receive internal PageRank (the value passed from page to page through links) and are crawled regularly. Conversely, an overly deep structure isolates certain pages from the crawl flow.
+
+-  Simplified maintenance
+
+A consistent architecture makes it easier to add new content without creating orphan pages (pages with no internal links pointing to them), which are invisible to indexing robots.
+
+<Callout variant="tip" title="Direct SEO impact">
+Each level of depth dilutes the PageRank passed from the homepage. Strategic pages (conversion pages, landing pages, pillar pages) must remain accessible within 3 clicks maximum from the homepage to retain sufficient SEO weight and be crawled frequently.
+</Callout>
+
+A well-managed architecture is therefore the technical foundation on which your content strategy and organic traffic acquisition rest.
+
+---
+
+## Planning: how to design your WordPress site architecture
+
+Before any implementation in WordPress, the planning phase determines the quality of the final architecture. Here are the steps to follow.
+
+<StepByStep>
+<Step number={1} title="Define your goals">
+Identify the site's business objectives: e-commerce, lead generation, editorial content publishing. Each objective involves different page types (product pages, landing pages, blog posts) and therefore a specific structure.
+</Step>
+
+<Step number={2} title="Inventory your content">
+List all the content to be published: institutional pages, articles, product pages, case studies. Classify them by search intent (informational, transactional, navigational) to determine their place in the hierarchy.
+</Step>
+
+<Step number={3} title="Group content by themes">
+Organize content into thematic silos (groups of pages dealing with the same topic). These silos correspond to the main sections of the site (e.g. "Services", "Blog", "Contact"). Thematic siloing strengthens the semantic relevance of each section in the eyes of search engines.
+</Step>
+
+<Step number={4} title="Create a visual plan">
+Use diagram tools (Lucidchart, Whimsical, or a simple spreadsheet) to represent the architecture as a flowchart. Verify that each page is accessible within 3 levels maximum and that no orphan pages exist.
+</Step>
+
+<Step number={5} title="Reduce depth">
+Limit the number of hierarchical levels. A 3-level architecture (home > section > page) is recommended for most sites. Each additional level reduces the crawl frequency and PageRank passed to the affected pages.
+</Step>
+</StepByStep>
+
+This planning phase prevents costly redesigns after launch and guarantees a solid technical foundation for SEO.
+
+---
+
+## Best practices for WordPress site architecture
+
+### 1.  Keep it simple and intuitive
+
+The 3-click rule states that any page must be accessible from the homepage in 3 clicks maximum. This rule has a dual impact: it improves user experience and ensures Googlebot reaches the entire site during each crawl.
+
+<Callout variant="tip" title="The 3-click rule">
+Beyond ergonomics, this rule has a direct impact on technical SEO. Pages located more than 3 levels deep receive less internal PageRank and are crawled less frequently by Googlebot, which delays their indexing and reduces their ranking potential.
+</Callout>
+
+### 2.  Use a clear menu
+
+The main navigation menu is the primary vector for distributing internal PageRank: each link in the menu passes SEO value to the targeted pages. Limit the menu to 5-7 main entries to avoid dilution and group pages into semantically coherent categories.
+
+### 3.  Create user-friendly URLs
+
+URLs should be readable, short and contain the page's main keyword (e.g. `your-site.com/web-design-services`). Enable the "Post name" permalink structure in WordPress. Avoid dynamic parameters (`?id=123`) that hurt readability and can generate duplicate content.
+
+### 4.  Add a search function
+
+An internal search engine allows users to access the desired content directly, reducing the number of pages viewed without engagement (pogo-sticking). On sites with high page volumes (100+), this is an essential complement to the main navigation.
+
+### 5.  Optimize for mobile
+
+Since the switch to Mobile-First Indexing, Google uses the mobile version of the site for indexing and ranking. Verify that the architecture remains navigable on small screens: functional hamburger menus, clickable area sizes compliant with recommendations (48x48 px minimum), and optimized mobile loading time.
+
+---
+
+## Implementing your architecture in WordPress
+
+Once planning is complete, implementation in WordPress follows a structured process.
+
+### Steps:
+
+1.  Create the main pages
+
+Add the main pages (Home, About, Blog, Contact) via the "Pages" tab of the dashboard. Set the static homepage in Settings > Reading to control the crawl entry point.
+
+1.  Organize categories and subcategories
+
+Create WordPress categories that mirror your architecture. Each category generates an archive URL that will be indexed: make sure it contains optimized introductory text and is not set to `noindex` by default.
+
+1.  Design a navigation menu
+
+In Appearance > Menus, structure pages and categories in the main menu. Order items by SEO priority: pages targeting keywords with higher search volume should appear first.
+
+1.  Configure your URLs (permalinks)
+
+In Settings > Permalinks, enable the "Post name" structure (`/%postname%/`). Avoid structures including the date (`/%year%/%monthnum%/`) which unnecessarily increase URL depth.
+
+1.  Customize with a plugin if needed
+
+Page builders (Elementor, Beaver Builder) allow you to customize templates without touching the code. However, make sure the plugins used don't generate superfluous HTML markup that would weigh down the DOM and degrade Core Web Vitals (LCP, CLS in particular).
+
+---
+
+## Examples of website architectures
+
+Here are three architecture examples adapted to common site typologies.
+
+<FlowDiagram
+  nodes={[
+    { label: "Home", description: "Photographer's homepage", icon: "📷" },
+    { label: "Portfolio", description: "Photo galleries", icon: "🖼️" },
+    { label: "Services", description: "Services offered", icon: "💼" },
+    { label: "About", description: "Introduction", icon: "👤" },
+    { label: "Contact", description: "Contact form", icon: "✉️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+-  Freelance photographer site  : Home > Portfolio > Services > About > Contact — Flat 2-level architecture, suited to showcase sites with few pages.
+-  Online fashion store  : Home > New arrivals > Women > Men > Accessories > Blog > Contact — 3-level architecture with product categories, where each category contains subcategories and product pages.
+-  Editorial blog  : Blog > Travel > Lifestyle > Technology > About > Contact — Architecture organized in thematic silos, where each category forms a semantic cocoon connecting articles together through internal linking.
+
+---
+
+## Summary: site architecture as an SEO lever
+
+Defining the architecture of a WordPress site is a decisive step for organic search. It determines internal PageRank distribution, page crawl frequency and the site's ability to rank for targeted queries.
+
+Key principles to remember: limit depth to 3 levels, organize content into thematic silos, structure URLs with target keywords, and verify there are no orphan pages. The architecture must be planned before development, because a structural overhaul after launch involves mass 301 redirects and a risk of ranking loss.
+
+<Quiz
+  question="What is the maximum number of clicks a user should need to reach any page on your site?"
+  options={["1 click", "3 clicks", "5 clicks", "7 clicks"]}
+  answer={1}
+  explanation="The 3-click rule is a standard in UX and technical SEO. Beyond 3 levels of depth, pages receive less internal PageRank, are crawled less frequently by Googlebot and see their ranking potential decrease. This rule applies both to user navigation and internal link structure."
+/>

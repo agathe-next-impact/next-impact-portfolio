@@ -1,0 +1,96 @@
+---
+title: "Map sur WordPress : sortir de Google Maps"
+slug: "map-wordpress-sortir-google-map-headless"
+date: "2026-05-28"
+author: "Agathe Karinthi-Martin"
+excerpt: "Ajouter une carte interactive à un site WordPress est faisable, mais le vrai arbitrage porte sur l'architecture : plugin classique ou front Headless Next.js."
+tags: ["WordPress", "Headless", "Cartographie", "Next.js"]
+readingTime: 5
+---
+
+## Introduction
+
+"On peut ajouter une belle carte interactive à notre site ?"
+
+Oui, mais...
+
+La question revient chaque mois sous une forme ou une autre : une carte de vos points de vente, un sélecteur de zone de livraison, une recherche "près de chez moi". Vous avez vu ça ailleurs, c'est fluide, c'est moderne, et vous vous demandez si votre site peut faire pareil.
+
+La vraie réponse ne porte pas sur la carte. Elle porte sur votre architecture. Ce qui est faisable, et à quel coût, dépend entièrement de la techno en place.
+
+<div className="article-media">
+  <img
+    src="/img/map-wordpress-google-map-headless.png"
+    alt="Arbitrage entre carte WordPress classique et carte Headless Next.js"
+  />
+</div>
+
+## 01 · L'Arbitrage du mois
+
+**WordPress classique : faisable, par plugin.** WP Go Maps, un Leaflet via shortcode, ou un simple iframe Google Maps couvrent l'essentiel : afficher des adresses, quelques marqueurs, un zoom. C'est installé en quelques clics, sans toucher au code.
+
+La limite : vous restez dans les options du plugin. Personnalisation visuelle bornée, performance souvent moyenne, et dépendance aux mises à jour du plugin. Parfait pour "voici nos bureaux". Insuffisant dès que la carte devient un outil.
+
+[Voir WP Go Maps sur WordPress.org](https://wordpress.org/plugins/wp-google-maps)
+
+**Approche Headless, WordPress + Next.js : faisable, sur-mesure.** Comme le front est en Next.js, vous avez accès à tout l'écosystème des composants cartographiques modernes, par exemple MapCN, une collection gratuite et open-source de composants de cartes pensés justement pour cet environnement.
+
+La carte devient un vrai élément de votre site : design libre, interactions riches, performance maîtrisée, et aucune dépendance à un plugin tiers. C'est plus de travail au départ, mais c'est un actif que vous possédez.
+
+<div className="article-video">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    preload="metadata"
+    poster="/img/map-wordpress-headless-video-poster.png"
+    aria-label="Démonstration d'une carte interactive en architecture WordPress Headless"
+  >
+    <source src="/map-capture.mp4" type="video/mp4" />
+  </video>
+</div>
+
+La règle de décision : ne choisissez pas la techno pour la carte. Demandez-vous d'abord ce que la carte doit faire.
+
+Afficher une adresse ? Un plugin sur votre WordPress actuel suffit, ne changez rien.
+
+La carte est-elle au coeur de l'expérience : recherche géographique, parcours interactif, données qui bougent ? Alors le vrai sujet n'est plus la carte, c'est : votre site mérite-t-il un front découplé. La carte n'est que le révélateur du besoin.
+
+## 02 · Le Tableau de bord techno
+
+| Ce que la carte doit faire | WordPress classique | WordPress Headless avec Next.js |
+| --- | --- | --- |
+| Afficher quelques adresses | Plugin WordPress | Possible, mais pas nécessaire |
+| Carte personnalisée, design sur-mesure | Limité par le plugin | Composant Headless |
+| Recherche géo, filtres, interactions riches | Faisable, souvent bricolé | Natif dans le front |
+
+## 03 · Le Chiffre qui tranche
+
+Une carte vectorielle moderne, rendue côté front avec une technologie comme MapLibre, peut se charger en moins d'une seconde. À l'inverse, un plugin cartographique lourd peut ajouter 2 à 4 secondes au chargement d'une page.
+
+Ce que ça signifie pour vous : sur un site où la carte est centrale, le "faisable par plugin" a un coût caché en performance, donc en SEO et en taux de rebond. Le faisable n'est pas toujours le souhaitable.
+
+## 04 · La Ressource du mois
+
+Avant tout devis "carte interactive", identifiez d'abord la techno de votre site : c'est elle qui fixe ce qui est faisable et à quel prix.
+
+Petit outil décisionnel : Diagnostic stack / projet.
+
+## 05 · Q&R Décideur
+
+**Question reçue : "On veut une carte interactive sympa. Faut-il refaire le site ?"**
+
+Pas pour une carte, non.
+
+Si c'est un besoin isolé, un bon plugin sur votre WordPress actuel fait le travail pour une fraction du prix d'une refonte.
+
+Refaire le site en Headless ne se justifie que si plusieurs besoins butent sur la même limite : la carte, mais aussi l'interactivité, la performance, les intégrations.
+
+Quand trois ou quatre "faisable mais bricolé" s'accumulent, ce n'est plus la carte le problème, c'est l'architecture. C'est à ce moment-là qu'on en parle, pas avant.
+
+---
+
+Quelle techno pour mon site web ? Par Agathe Karinthi-Martin / Next Impact Digital.
+
+La lettre des décideurs qui doivent choisir la bonne technologie web, sans devenir développeur.

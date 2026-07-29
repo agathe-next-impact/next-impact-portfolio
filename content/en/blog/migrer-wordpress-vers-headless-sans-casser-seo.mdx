@@ -1,0 +1,120 @@
+---
+title: "Migrating WordPress to headless without breaking SEO: the checklist"
+slug: "migrer-wordpress-vers-headless-sans-casser-seo"
+date: "2026-06-24"
+author: "Agathe Karinthi-Martin"
+excerpt: "Migrate WordPress to headless without losing Google rankings: URL audit checklist, 301 redirects, sitemap, schema. What can break and how to avoid it."
+tags: ["Headless WordPress", "SEO", "Migration", "Checklist"]
+readingTime: 9
+---
+
+## The real risk of a poorly prepared headless migration
+
+Migrating WordPress to headless without breaking SEO is possible, but requires an exhaustive URL inventory before switching over. I've seen two sites lose 40% of their organic traffic within three weeks after a migration done without mapping the existing URLs. The Next.js code was flawless, the deployment too. No one had listed the 320 required redirects. Here's the checklist I use on every migration project.
+
+## Step 1 — Complete audit of existing URLs
+
+Before any Next.js code, I list **all** URLs indexed by Google. Not just articles: archive pages, tags, categories, attachments, RSS feeds, author pages.
+
+Sources to cross-reference:
+
+- **Google Search Console**: export the "Indexed Pages" report over 16 months.
+- **Current sitemap.xml**: available at `/sitemap.xml` or `/sitemap_index.xml` (Yoast/Rank Math).
+- **Screaming Frog or Sitebulb crawl**: full domain pass, unlimited depth.
+- **Server logs**: 30 days of Apache or Nginx logs to spot orphan URLs still being visited.
+
+Produce a single CSV file with: current URL, HTTP status, Search Console impressions over 12 months, average position, current title.
+
+On an SMB site with 80 pages visible in the admin, the real inventory brings back on average 280 to 450 indexed URLs. That's the gap that kills sloppy migrations.
+
+## Step 2 — Exhaustive 301 mapping
+
+For each inventoried URL, decide:
+
+- **URL kept**: same path on the new site, no action.
+- **URL modified**: create a 301 redirect to the new URL.
+- **High-SEO-value URL removed**: find a relevant replacement URL and 301 to it.
+- **Low-value URL removed**: leave as 410 (Gone) — tells Google the removal is intentional.
+
+| What can break | How to avoid it |
+|---|---|
+| `/category/xxx/` URLs not redirected | List all Yoast/Rank Math archives and decide on a target scheme |
+| `?p=123` URLs (ID permalinks) | Verify no external link still points to them; 301 to slug |
+| `/?attachment_id=` attachments | Systematic 410 except special cases (PDFs, downloadable media) |
+| `/feed/` RSS feeds | Keep on new site, same URL, same format |
+| `/page/2/` pagination | Reproduce the same logic on the Next.js front |
+| URLs with unencoded accents | Test UTF-8 encoding in redirects, otherwise 404 |
+| URLs with inconsistent trailing slash | Pick a convention (with or without) and enforce it on the Next.js side |
+
+Redirects are managed in `next.config.js` (up to about 1,000 entries) or in edge middleware beyond that. For a site with 300+ URLs, I prefer a dedicated JSON file imported by the middleware.
+
+## Step 3 — Sitemap.xml and robots.txt
+
+The sitemap is the contract with Google. Three common pitfalls:
+
+- **Forgetting to generate a dynamic sitemap on the new site.** Next.js has a `sitemap.ts` file convention that automates this since version 13.3.
+- **Listing 404 or 301 URLs in the sitemap.** Google considers this a low-quality signal.
+- **Not declaring the sitemap in `robots.txt`** with `Sitemap: https://domain.tld/sitemap.xml`.
+
+On the `robots.txt` side, explicitly allow AI search crawlers (OAI-SearchBot, PerplexityBot, ClaudeBot, GPTBot) or block them — but do it consciously. Mind the nuance: GPTBot is used for model training, while OAI-SearchBot is the one powering ChatGPT Search — blocking one does not have the same effect as blocking the other.
+
+## Step 4 — Schema.org structured data
+
+This step is often neglected by front-end developers. On classic WordPress, SEO plugins (Yoast, Rank Math) automatically inject JSON-LD for `Article`, `Organization`, `BreadcrumbList`, `FAQPage`.
+
+On Next.js, nothing is automatic. You have to:
+
+- Rebuild JSON-LD manually on the server side (`generateMetadata` or inline component).
+- Verify each page type (article, page, archive, listing) with Google's Schema Markup Validator.
+- Particularly polish `FAQPage` and `HowTo` — these are the types most cited by AI search in 2026.
+
+On the sites I've migrated, rich result loss during the first 3 weeks post-switch was systematic when JSON-LD hadn't been rebuilt from day one.
+
+## Step 5 — Metadata preserved
+
+The inventory must include, for each kept URL:
+
+- Current title tag
+- Current meta description
+- Open Graph (image, title, description)
+- Twitter Card
+- Canonical
+- Hreflang if multilingual site
+
+On Next.js, `generateMetadata` must reproduce this data **identically** for kept URLs. Any variation, even minor (a missing " | My site" suffix), can lose 10 to 20% of impressions while Google re-indexes.
+
+## Step 6 — Pre-switch testing (D-7)
+
+One week before the DNS switch, I run the new site on a subdomain like `preview.domain.tld` (protected by `noindex` and basic auth to prevent crawling).
+
+The testing checklist:
+
+- [ ] 100 priority URLs (top traffic) tested manually, equivalent content.
+- [ ] 100 301 redirects tested with curl or Screaming Frog.
+- [ ] Sitemap accessible and valid (W3C validator).
+- [ ] JSON-LD valid on one page of each template (article, page, listing, archive).
+- [ ] Mobile Lighthouse &gt; 90 on home page and 2 typical articles.
+- [ ] 404 and 410 error pages tested (content and HTTP code).
+- [ ] Search Console monitoring plan ready (indexing error report to watch at D+3, D+7, D+30).
+
+## Step 7 — DNS switch and first 72h
+
+Drop DNS TTL to 300 seconds 48h before the operation. On D-day:
+
+1. DNS switch.
+2. Submit the new sitemap in Search Console.
+3. Request reindexing of the 20 priority URLs via the "URL Inspection" tool.
+4. Enable uptime monitoring on 50 distributed URLs.
+5. Watch the Search Console "Coverage" report every 12h for 7 days.
+
+Expected 404 error spike in the 24 to 48h post-switch, while Googlebot re-crawls. If redirects are well done, the spike subsides in 5 to 10 days. If organic traffic drops by more than 15% at D+14, there's a redirect or schema issue to investigate.
+
+## When NOT to do a headless migration
+
+If your site has fewer than 30 indexed pages and organic traffic under 1,000 visits/month, the SEO migration effort can exceed the benefit. An optimized WordPress (cache, CDN, WebP images, well-configured SEO plugin) will achieve similar results at a fraction of the cost.
+
+Another case where I advise against: a site whose Google positions are fragile (positions 8 to 15 on commercial queries). A poorly executed migration can drop these positions to 30th place, and recovery takes 3 to 6 months. If SEO is your only acquisition channel, secure first, migrate later.
+
+## Conclusion
+
+Migrating WordPress to headless without breaking SEO rests on three pillars: exhaustive URL inventory, gap-free 301 mapping, JSON-LD rebuilt from day one. The Next.js code is the easy part. For an overview of the architecture, see the [Headless WordPress page](/wordpress-headless).

@@ -1,0 +1,185 @@
+---
+title: "Comptes utilisateurs et sécurité dans une web app"
+description: "Authentification (sessions, JWT), rôles, RGPD, surface d'attaque réduite — sans surenchère technique. Ce qu'un commanditaire de web app doit comprendre."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 12
+---
+
+## Pourquoi ce sujet ne peut pas être délégué entièrement
+
+La sécurité d'une web app, et particulièrement de la gestion des comptes utilisateurs, est souvent considérée comme un sujet "technique" délégué entièrement au prestataire. C'est une erreur.
+
+En tant que commanditaire, vous n'avez pas besoin de savoir coder une fonction d'authentification, mais vous devez comprendre les concepts clés pour :
+
+- **Valider** les choix d'architecture proposés
+- **Auditer** ce qui est livré (et ne pas être otage technique)
+- **Anticiper** les implications RGPD et de conformité
+- **Réagir** correctement en cas d'incident
+
+Cet article fait le tour des notions essentielles, sans entrer dans le code.
+
+## L'authentification — les 4 modèles courants
+
+### 1. Email + mot de passe
+
+Le modèle classique. L'utilisateur saisit son email et un mot de passe. Le serveur vérifie.
+
+**Avantages** : familier, fonctionne partout, pas de dépendance tierce.
+
+**Inconvénients** : les mots de passe sont l'un des principaux vecteurs de fuite de données. Doit être implémenté avec rigueur : hashage du mot de passe (bcrypt, Argon2), pas de stockage en clair, vérification de la complexité, rate limiting sur les tentatives de connexion.
+
+**À demander à votre prestataire** : "Comment sont stockés les mots de passe ? Quel algorithme de hashage ?" Réponse attendue : bcrypt ou Argon2id, jamais "chiffré" (un mot de passe ne se chiffre pas, il se hash).
+
+### 2. Magic link (lien dans l'email)
+
+L'utilisateur saisit son email. Il reçoit un lien temporaire. Il clique, il est connecté. Pas de mot de passe à gérer.
+
+**Avantages** : pas de mot de passe à mémoriser, donc pas de risque de mot de passe faible ou réutilisé. UX simple.
+
+**Inconvénients** : nécessite une délivrabilité email impeccable. Frustrant si l'utilisateur n'a pas un accès facile à sa boîte mail.
+
+**Quand l'utiliser** : applications utilisées occasionnellement (par exemple : tableau de bord client), ou avec une clientèle peu technique.
+
+### 3. SSO (Single Sign-On) — Google, Microsoft, etc.
+
+L'utilisateur clique "Se connecter avec Google". Pas de mot de passe à gérer, l'authentification est déléguée au géant.
+
+**Avantages** : friction de connexion minimale, sécurité déléguée à un acteur compétent, attractif pour les comptes pro (Google Workspace, Microsoft 365).
+
+**Inconvénients** : dépendance à un tiers, problèmes RGPD selon le contexte (transfert de données), pas toujours pertinent pour des particuliers.
+
+**Quand l'utiliser** : applications B2B où l'utilisateur a déjà un compte Google ou Microsoft pro.
+
+### 4. WebAuthn / passkey
+
+L'utilisateur s'authentifie avec une empreinte digitale, Face ID, ou une clé physique (YubiKey). Pas de mot de passe.
+
+**Avantages** : le futur de l'authentification. Très sécurisé, très simple côté utilisateur.
+
+**Inconvénients** : encore en adoption, complexe à implémenter, nécessite du support sur plusieurs OS et navigateurs.
+
+**Quand l'utiliser** : projets premium, applications très sensibles, ou en seconde authentification.
+
+## Les sessions — comment l'utilisateur reste connecté
+
+Une fois authentifié, comment le serveur sait-il que c'est toujours vous à chaque clic ? Deux modèles :
+
+### Sessions stockées côté serveur
+
+Un identifiant de session est stocké dans un cookie. À chaque requête, le serveur vérifie l'identifiant dans sa base de sessions.
+
+**Avantages** : on peut révoquer une session instantanément (utile pour "Se déconnecter de tous les appareils").
+
+**Inconvénients** : nécessite un stockage de sessions côté serveur.
+
+### Tokens JWT (JSON Web Tokens)
+
+Un jeton signé est stocké côté navigateur. Il contient l'identité de l'utilisateur et est valable pendant une durée définie.
+
+**Avantages** : pas de stockage de sessions côté serveur, donc plus simple à scaler.
+
+**Inconvénients** : difficile de révoquer un token avant son expiration. À utiliser avec parcimonie et durée courte (15-60 min, avec un refresh token côté serveur).
+
+> Dans la grande majorité des web apps, le modèle "session côté serveur" reste le plus sain. Les JWT sont utiles surtout pour les API publiques ou les architectures distribuées. Pour une web app classique, demander "session" est généralement la bonne réponse.
+
+## Les rôles et permissions
+
+### Le modèle classique RBAC (Role-Based Access Control)
+
+Chaque utilisateur a un ou plusieurs rôles (admin, modérateur, client, contributeur). Chaque action ou écran requiert un rôle minimum.
+
+**Bien pour** : la majorité des projets. Simple à comprendre, à modéliser, à maintenir.
+
+### Le modèle plus fin ABAC (Attribute-Based)
+
+Les permissions ne sont pas seulement basées sur le rôle, mais aussi sur des attributs de la donnée. Exemple : "Un commercial peut modifier les clients de son secteur, pas ceux d'un autre commercial."
+
+**Bien pour** : applications complexes avec des permissions au niveau ligne (multi-tenancy, organisation hiérarchique, partage granulaire).
+
+### Le point critique à ne pas négliger
+
+**Les permissions doivent être vérifiées côté serveur**, pas seulement côté front. Cacher un bouton "Supprimer" dans l'interface n'empêche pas un utilisateur malveillant d'appeler directement l'API correspondante. Toute API doit elle-même vérifier que l'appelant a le droit d'effectuer l'action.
+
+C'est une **erreur fréquente** qu'il faut absolument vérifier sur tout projet livré.
+
+## La sécurité du quotidien — 7 mesures à vérifier
+
+1. **HTTPS partout** : pas de page non HTTPS sur un site avec comptes. Aujourd'hui, c'est le standard absolu.
+2. **Mots de passe hashés** (bcrypt / Argon2id) : jamais en clair, jamais "chiffrés" symétriquement.
+3. **Rate limiting** sur les routes sensibles : pas plus de 5 tentatives de connexion par minute par IP, par exemple.
+4. **CSP (Content Security Policy)** : entête HTTP qui empêche l'exécution de scripts non autorisés. Bonne défense contre XSS.
+5. **Pas de données sensibles dans les URLs** : un token de réinitialisation ne devrait pas apparaître dans l'historique du navigateur.
+6. **Logs d'accès** aux fonctions admin et aux données sensibles : si quelqu'un fait n'importe quoi, on doit pouvoir le tracer.
+7. **Mise à jour régulière des dépendances** : un projet Next.js a des dizaines de dépendances. Un audit hebdomadaire (avec un outil type Dependabot ou Snyk) attrape les vulnérabilités connues.
+
+## Les bonnes questions à poser à votre prestataire
+
+Pour valider l'approche sécurité sans devenir développeur :
+
+1. "Comment sont stockés les mots de passe ?" → Réponse attendue : bcrypt ou Argon2id.
+2. "Comment gère-t-on les sessions ? Combien de temps durent-elles ?" → Sessions serveur avec expiration raisonnable (typiquement 7-30 jours avec activité, 24h en idle).
+3. "Y a-t-il du rate limiting sur les routes sensibles ?" → Oui pour login, mot de passe oublié, création de compte.
+4. "Toutes les actions privilégiées sont-elles vérifiées côté serveur ?" → Oui (et c'est un point d'audit non négociable).
+5. "Comment sont chiffrées les communications ?" → HTTPS partout, certificats valides (Let's Encrypt suffit).
+6. "Comment sont gérées les fuites de mots de passe ?" → Vérification contre haveibeenpwned au moment du choix du mot de passe.
+7. "Comment sont gérés les logs et alertes en cas d'activité suspecte ?" → Logs centralisés (Sentry, Vercel, etc.) + alertes sur tentatives anormales.
+
+## RGPD — l'essentiel sans le bla-bla
+
+Une web app qui gère des comptes utilisateurs collecte de la donnée personnelle. Conformité minimum :
+
+### 1. Information claire
+
+- Politique de confidentialité accessible et compréhensible
+- Information au moment de la collecte (formulaire d'inscription : "Vos données sont utilisées pour…")
+- Mention dans les emails transactionnels
+
+### 2. Consentement explicite quand nécessaire
+
+- Pas de cases pré-cochées
+- Consentement séparé pour la newsletter / les emails marketing
+- Pas de consentement global "j'accepte tout" obligatoire
+
+### 3. Droits utilisateurs faciles à exercer
+
+- **Droit d'accès** : l'utilisateur peut télécharger ses données depuis son espace personnel
+- **Droit de rectification** : modification de ses informations
+- **Droit à l'effacement** : suppression de son compte (avec anonymisation des contenus restants si nécessaire)
+- **Droit de portabilité** : export structuré (JSON, CSV)
+
+### 4. Minimisation des données
+
+Ne collecter que ce qui est nécessaire. Si vous n'avez pas besoin de la date de naissance, ne la demandez pas.
+
+### 5. Sécurité technique
+
+- Hébergement en Europe (ou dans un pays avec accord d'adéquation)
+- Sauvegardes chiffrées
+- Accès aux données restreint (pas tout le monde dans l'équipe ne doit pouvoir consulter les fiches utilisateurs)
+
+### 6. Sous-traitants et registres
+
+- Tenir un registre des traitements (RGPD article 30)
+- Avoir signé un DPA (data processing agreement) avec chaque sous-traitant qui traite des données pour vous (hébergeur, email transactionnel, analytics, etc.)
+
+## La surface d'attaque réduite d'une web app moderne
+
+Comparé à un WordPress classique exposé sur Internet, une web app Next.js moderne a une **surface d'attaque significativement réduite** :
+
+- Pas d'admin WordPress public (/wp-admin), qui est la cible de 90 % des attaques automatisées
+- Pas de plugins tiers (donc pas de faille zero-day dans un plugin)
+- Pas de PHP exposé
+- Code TypeScript typé qui élimine une grosse classe de bugs
+- Authentification implémentée dans le code de l'application (vous savez ce qu'elle fait)
+
+Concrètement : sur un projet bien fait, **les attaques de masse ne fonctionnent pas**. Vous restez exposé aux attaques ciblées (sociales, ingénierie inverse, etc.) mais ces dernières sont bien plus rares et nécessitent une intention spécifique.
+
+## Pour aller plus loin
+
+- [Anatomie d'une web app sur-mesure](/documentation/applications-web-mobile/anatomie-dune-web-app)
+- [Quand WordPress n'est plus le bon outil](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) (la section sécurité)
+- [Sécurité WordPress Headless](/documentation/wordpress-headless/securite-wordpress-headless) (pour comparer avec l'approche Headless)
+
+Vous avez un projet avec des enjeux de sécurité ou de conformité ? [Lancez le diagnostic](/contact) — j'établis un cadrage explicite des exigences avant tout chiffrage.

@@ -1,0 +1,124 @@
+---
+title: Le cahier des charges
+description: Les principales choses à savoir pour rédiger son cahier des charges de projet de site web
+category: projet-site-web
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+Lors de la creation ou la refonte d'un site web, le cahier des charges est le premier livrable a produire. Ce document formalise les exigences fonctionnelles et techniques du projet, et sert de referentiel contractuel entre les parties prenantes (client, chef de projet, equipe de developpement, prestataires). Cet article detaille le role du cahier des charges, son contenu, et la methode pour le rediger de maniere structuree.
+
+## Pourquoi un cahier des charges est-il important ?
+
+Le cahier des charges -- aussi designe sous le terme "specifications fonctionnelles" -- est le document de reference qui decrit l'ensemble des exigences d'un projet web. Il couvre le perimetre fonctionnel (ce que le site doit faire), les contraintes techniques (comment il doit le faire), ainsi que les conditions de realisation (budget, planning, ressources). Toutes les parties prenantes s'y referent tout au long du cycle de vie du projet.
+
+<HighlightBox title="Pourquoi un cahier des charges est indispensable" accent="blue">
+
+- **Cadrage du perimetre :** Le cahier des charges delimite precisement le perimetre du projet (aussi appele "scope"), ce qui reduit le risque de derives fonctionnelles (scope creep) et aligne les attentes de toutes les parties.
+- **Centralisation des exigences :** Il regroupe dans un document unique les objectifs, les specifications fonctionnelles, les contraintes techniques et les criteres d'acceptation, ce qui garantit une coherence d'ensemble.
+- **Anticipation des risques :** En identifiant les contraintes techniques, les dependances et les points de complexite en phase amont, le cahier des charges permet de mettre en place des actions preventives avant le demarrage du developpement.
+- **Reference commune :** Qu'il s'agisse d'une equipe interne ou d'un prestataire externe, le cahier des charges constitue le referentiel partage qui evite les ambiguites et les interpretations divergentes.
+
+</HighlightBox>
+
+## Les elements cles d'un cahier des charges pour un site web
+
+Un cahier des charges efficace couvre l'ensemble des dimensions du projet. Voici les sections essentielles a structurer.
+
+<StepByStep>
+<Step number={1} title="Objectifs du projet">
+
+Formulez les objectifs du site en termes mesurables, en les liant aux indicateurs cles de performance (KPI) qui permettront d'evaluer le succes du projet. Par exemple :
+
+- **Objectif principal :** Augmenter le taux de conversion des visiteurs en abonnes newsletter de 15 % sur 6 mois.
+- **Objectifs secondaires :** Reduire le taux de rebond de 10 %, augmenter le panier moyen via le module e-commerce.
+
+</Step>
+<Step number={2} title="Public cible">
+
+Definissez les segments d'utilisateurs vises a travers des personas -- des profils types detaillant les caracteristiques demographiques, les comportements en ligne et les besoins fonctionnels de chaque groupe cible.
+
+Elements a documenter :
+
+- Donnees demographiques : tranche d'age, localisation geographique, secteur d'activite.
+- Besoins fonctionnels : acces rapide a l'information, parcours d'achat simplifie, compatibilite mobile.
+
+Cette analyse oriente directement les choix d'ergonomie (UX), d'architecture de l'information et de strategie de contenu.
+
+</Step>
+<Step number={3} title="Specifications fonctionnelles">
+
+Listez de maniere exhaustive les fonctionnalites attendues, en precisant pour chacune les regles de gestion et les criteres d'acceptation. Exemples :
+
+- Formulaire de contact avec validation cote client et cote serveur, notification par e-mail a l'administrateur.
+- Systeme de reservation en ligne avec gestion des creneaux et confirmation automatique.
+- Integration d'un outil de marketing automation (Mailchimp, Brevo) ou d'un CRM (HubSpot, Salesforce).
+
+Chaque fonctionnalite doit etre decrite avec suffisamment de detail pour que l'equipe technique puisse l'estimer et la developper sans ambiguite.
+
+</Step>
+<Step number={4} title="Specifications techniques">
+
+Documentez les contraintes et choix techniques qui encadrent la realisation :
+
+- Hebergement : serveur mutualise, dedie, ou infrastructure cloud (AWS, OVH Cloud).
+- Compatibilite : responsive design conforme aux standards W3C, support des navigateurs cibles (Chrome, Firefox, Safari, Edge).
+- Stack technique : CMS (WordPress, Drupal), framework (Next.js, Laravel), langage(s) de programmation.
+
+Ces specifications permettent a l'equipe de developpement d'evaluer la faisabilite technique et d'estimer la charge de travail (en jours-homme ou en story points selon la methodologie utilisee).
+
+</Step>
+<Step number={5} title="Design et experience utilisateur (UX)">
+
+Definissez les exigences en matiere d'interface utilisateur (UI) et d'experience utilisateur (UX) :
+
+- Charte graphique : palette de couleurs, typographies, iconographie, guide de style.
+- Principes d'ergonomie : hierarchie visuelle, architecture de navigation, accessibilite (conformite RGAA ou WCAG).
+
+Un design structure et une UX optimisee ont un impact direct et mesurable sur les taux de conversion et de retention des utilisateurs.
+
+</Step>
+<Step number={6} title="Budget et calendrier">
+
+Definissez l'enveloppe budgetaire et le planning previsionnel en identifiant les jalons cles (milestones) du projet :
+
+- **Budget :** Ventilation par poste (design, developpement, hebergement, SEO, maintenance). Prevoyez une marge pour aleas (generalement 10 a 15 % du budget total).
+- **Calendrier :** Planning avec jalons de validation : kickoff, livraison des maquettes, recette fonctionnelle (UAT), mise en production, periode de garantie.
+
+</Step>
+</StepByStep>
+
+## Conseils pratiques pour rediger un cahier des charges efficace
+
+<Callout variant="tip" title="Privilegiez la precision et la concision">
+Un cahier des charges doit etre suffisamment detaille pour eliminer les ambiguites, tout en restant lisible. Utilisez des formulations factuelles, des listes structurees, et des criteres d'acceptation verifiables pour chaque exigence.
+</Callout>
+
+### Impliquez toutes les parties prenantes
+
+Organisez des ateliers de cadrage (workshops) avec les differents profils concernes : direction, marketing, equipe technique, utilisateurs finaux. Cette demarche collaborative garantit que le cahier des charges couvre l'ensemble des besoins et contraintes du projet.
+
+<Callout variant="tip" title="Appuyez-vous sur des referentiels existants">
+Utilisez des templates de cahier des charges eprouves ou des frameworks de specification (comme le standard IEEE 830 pour les specifications logicielles) pour structurer votre document. Cela accelere la redaction et reduit le risque d'oubli.
+</Callout>
+
+### Revisez et mettez a jour le document
+
+Le cahier des charges est un document vivant. Dans une approche Agile, il evolue au fil des sprints et des retours utilisateurs. Mettez en place un processus de gestion des changements (change request) pour tracer et valider chaque modification du perimetre initial.
+
+## Quelles sont les prochaines etapes ?
+
+Une fois le cahier des charges finalise et valide par l'ensemble des parties prenantes, il devient le document de reference pour toute la duree du projet. Il sert de base a l'estimation des charges, a la planification des sprints ou des phases de realisation, et au suivi de l'avancement. Transmettez-le a votre equipe ou a vos prestataires pour lancer officiellement la phase de conception.
+
+<Quiz
+  question="Quel est le role principal d'un cahier des charges dans un projet web ?"
+  options={[
+    "Remplacer le travail du developpeur",
+    "Formaliser les exigences fonctionnelles et techniques et servir de referentiel pour planifier, concevoir, developper et livrer le site",
+    "Uniquement definir le budget du projet",
+    "Creer le design graphique du site"
+  ]}
+  answer={1}
+  explanation="Le cahier des charges formalise l'ensemble des exigences fonctionnelles et techniques du projet. Il sert de referentiel contractuel entre les parties prenantes et encadre toutes les phases du cycle de vie du projet, de la planification a la livraison."
+/>

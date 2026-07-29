@@ -1,0 +1,209 @@
+---
+title: "Migrating from a SaaS to a custom web app"
+description: "When and how to leave a SaaS to regain control of your data and business logic. Criteria, steps, traps, real-world feedback."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 13
+---
+
+## The signal it's time to consider migration
+
+For the first years, a SaaS is generally an excellent choice: low initial cost, quick setup, ready-made features. Then comes a moment, often around year 2-3, when **several signals converge**:
+
+- "Our SaaS costs €18k/year and only covers 60% of our needs now"
+- "We have 4 different tools doing what should be unified"
+- "Every month I spend 2 days hacking exports / imports / Zapiers"
+- "The editor will never ship the feature we need"
+- "When we grow, the SaaS cost scales linearly and hurts"
+
+If you recognize 2 or 3 of these signals, it's probably time to evaluate a migration to custom.
+
+## The 5-minute ROI test
+
+Do this quick calculation:
+
+| Item | Annual |
+|---|---|
+| Direct SaaS cost (licenses) | A |
+| Complementary SaaS hacked around it | B |
+| Time lost on workarounds (est. in days × internal day rate) | C |
+| Lost revenue from missing features | D |
+| **Total annual "true cost" of SaaS** | **A + B + C + D** |
+
+Compare with:
+
+- Year 1 custom cost: initial cost + maintenance
+- Year 2+ custom cost: maintenance only
+
+If the "true cost" of SaaS exceeds 1.5× the annualized custom cost (over 5 years), migration deserves serious scoping.
+
+> **Numeric example**: SaaS at €12k/year + €25k/year of lost time (40 days × €625/day) = €37k/year. Custom: €40k initial + €8k/year maintenance. ROI: 1.5 years. Over 5 years: €185k saved.
+
+## The 5 decision criteria
+
+### 1. Business need stability
+
+If your business changes every 6 months, **don't invest in custom** now — redoing a custom every 18 months costs more. Stay in SaaS, pay for flexibility.
+
+If your business is stable and your processes are proven over 2-3 years, custom locks your know-how in a mastered tool.
+
+### 2. Current volume and growth
+
+- Low volume + slow growth → stay in SaaS, pay for flexibility
+- Moderate volume + strong growth → custom becomes relevant
+- High volume → custom mechanically profitable (SaaS scales in cost with volume)
+
+### 3. Specificity
+
+How many **workarounds** do you put in place in your SaaS to make your business work? The more, the more the SaaS rubs you the wrong way. If you have 5+ Zapiers, 3 custom fields used in weird ways, 2 monthly manual exports — you've clearly outgrown the SaaS scope.
+
+### 4. Data volume
+
+Migrating 500 records to a new platform is trivial. Migrating 50,000 records with 10 years of history demands a migration project in itself.
+
+If you have a lot of data but it's **well-structured and exportable**, migration remains reasonable. If it's scattered, poorly tagged, partly in the SaaS and partly elsewhere: plan a cleanup budget before migration.
+
+### 5. Network effect and integrations
+
+How many other tools are **connected** to your SaaS? The more there are, the more migration requires rebuilding bridges.
+
+If your SaaS is isolated (input/output only via manual exports), easy migration. If your SaaS is at the center of an ecosystem of 5 interconnected tools, plan a progressive migration over 6-12 months.
+
+## The 6 steps of a successful migration
+
+### Step 1 — Audit of current SaaS
+
+Exhaustively list:
+
+- All **features used** (and those **unused** — you'll be surprised)
+- All **data stored** (entities, volumes, quality)
+- All **integrations** (inputs and outputs)
+- All **users and roles**
+- All **workarounds** in place
+
+Duration: 1-3 days depending on complexity.
+
+### Step 2 — Target scope definition
+
+The trap: wanting to reproduce 100% of the SaaS identically. **Bad reflex**. Migration is an opportunity to:
+
+- **Keep** what works
+- **Improve** what was rubbing
+- **Remove** what nobody used
+- **Add** what was missing
+
+The target scope is typically **70-85% of the original SaaS + 15-30% specific to your business**.
+
+Duration: 1-2 weeks.
+
+### Step 3 — Technical and budgetary scoping
+
+Like a new project scoping, but **enriched** by knowledge of existing data:
+
+- Precise data model (sometimes inspired by SaaS model, sometimes rethought)
+- Existing data migration plan
+- Cutover strategy (big bang or progressive?)
+- User training plan
+
+Duration: 2-4 weeks depending on complexity.
+
+### Step 4 — Development
+
+Standard for a web app, with **one specificity**: the existing data import phase is generally more time-consuming than a development from scratch. Count +20-40% time on modules affected by migration.
+
+Duration: depending on scope. 2-6 months for most projects.
+
+### Step 5 — Data migration and cutover
+
+**The most critical phase.** Several strategies:
+
+#### "Big bang" strategy
+
+On day D, everything switches over. The SaaS is shut down, the new system is used.
+
+- **Advantages**: no dual maintenance, fast transition
+- **Disadvantages**: if something malfunctions, immediate impact. Plan a rollback strategy.
+- **When to use**: small volumes, small teams, very well-tested custom.
+
+#### Progressive strategy
+
+For 1-3 months, SaaS and custom coexist. We migrate by module or by user.
+
+- **Advantages**: reduced risk, old and new flows can coexist
+- **Disadvantages**: temporary dual maintenance, increased complexity
+- **When to use**: important projects, larger teams, independent modules
+
+#### Sustainable hybrid strategy
+
+Keep SaaS for some functions, custom for differentiating functions.
+
+- **Advantages**: don't redo what works in SaaS, focus on differentiation
+- **Disadvantages**: permanent integration between the two systems
+- **When to use**: when 70% of the SaaS is satisfying, and 30% is central to your business.
+
+### Step 6 — Training and adoption
+
+Often underestimated. A new tool, even better than the previous one, demands **3 to 8 weeks of full adoption** by teams.
+
+Measures that help:
+
+- Documentation accessible directly in the app (tooltips, contextual help)
+- Training sessions by user group (admin, operational, etc.)
+- An identified internal point of contact for day-to-day questions
+- Tracking friction points during the first weeks, with quick adjustments
+
+## Frequent traps
+
+### 1. The forgotten feature
+
+"We had forgotten that 3 people used X in the SaaS." Discovered after cutover. Mitigation: exhaustive audit, validated by main users.
+
+### 2. Undocumented data
+
+"What was this column for? Nobody knows." Mitigation: clean up **before** migration, and accept losing what's no longer relevant.
+
+### 3. The "like before"
+
+Users resist change if the interface is too different. Find the right balance: don't reproduce the SaaS interface identically (then why migrate?), but don't reinvent everything either.
+
+### 4. Underestimated training
+
+A perfect custom abandoned because teams refuse to adapt: that's the most painful failure. Budget change management (1-3 weeks of client-side mobilization).
+
+### 5. Premature cutover
+
+Migrating while functional gaps remain = rollback. Better to delay cutover by a month and have a ready product.
+
+## When NOT to migrate
+
+A few situations where staying in SaaS is the right decision:
+
+- Your processes are still changing a lot
+- The SaaS covers 90% of your needs and the missing 10% isn't critical
+- Your internal technical team is overloaded and can't pilot a migration
+- Your activity doesn't generate the ROI to amortize a custom (low volume, low margin)
+- You don't have the financial stability to absorb a significant initial investment
+
+In these cases, **strengthening the SaaS** (cleaner workarounds, automation scripts, internal training) is probably more relevant.
+
+## The special case — leaving a SaaS that's closing
+
+Sometimes the decision is made for you: your SaaS is closing, changing its model, raising prices massively, or being acquired by an actor that sabotages it. In this case, migration is **forced**.
+
+Measures to take early:
+
+1. **Immediately export** all your data (don't wait for the subscription to end)
+2. **Document** your current processes (maybe in-house the SaaS was doing things you took for granted)
+3. **Scope** the target fast but without excessive haste
+4. **Communicate** clearly to teams — forced transition creates more friction than chosen transition
+
+In this context, custom can be a good answer — but also another SaaS, depending on budget and timing.
+
+## Going further
+
+- [Custom business platform vs generic SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas)
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+- [Web app lead time and milestones](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app)
+
+You're evaluating a migration from a SaaS? [Run the diagnostic](/contact) — initial scoping will give you a clear cost and timeline range within 48h.

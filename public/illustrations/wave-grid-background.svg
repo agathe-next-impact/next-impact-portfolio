@@ -1,0 +1,109 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#020F59;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#021373;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Masque pour effet de perspective -->
+    <mask id="perspectiveMask">
+      <rect width="1200" height="800" fill="white"/>
+      <linearGradient id="maskGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:white;stop-opacity:0.3" />
+        <stop offset="100%" style="stop-color:white;stop-opacity:1" />
+      </linearGradient>
+    </mask>
+  </defs>
+  
+  <rect width="1200" height="800" fill="url(#bgGradient)"/>
+  
+  <!-- Lignes ondulées avec effet de perspective -->
+  <g opacity="0.15" stroke="#D0DCF2" stroke-width="1.5" fill="none" mask="url(#perspectiveMask)">
+    <!-- Lignes horizontales ondulées -->
+    <path d="M 0 100 Q 300 90 600 100 T 1200 100">
+      <animate attributeName="d" 
+        values="M 0 100 Q 300 90 600 100 T 1200 100;
+                M 0 100 Q 300 110 600 100 T 1200 100;
+                M 0 100 Q 300 90 600 100 T 1200 100"
+        dur="8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 180 Q 300 170 600 180 T 1200 180">
+      <animate attributeName="d" 
+        values="M 0 180 Q 300 170 600 180 T 1200 180;
+                M 0 180 Q 300 190 600 180 T 1200 180;
+                M 0 180 Q 300 170 600 180 T 1200 180"
+        dur="7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 260 Q 300 250 600 260 T 1200 260">
+      <animate attributeName="d" 
+        values="M 0 260 Q 300 250 600 260 T 1200 260;
+                M 0 260 Q 300 270 600 260 T 1200 260;
+                M 0 260 Q 300 250 600 260 T 1200 260"
+        dur="9s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 340 Q 300 330 600 340 T 1200 340">
+      <animate attributeName="d" 
+        values="M 0 340 Q 300 330 600 340 T 1200 340;
+                M 0 340 Q 300 350 600 340 T 1200 340;
+                M 0 340 Q 300 330 600 340 T 1200 340"
+        dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 420 Q 300 410 600 420 T 1200 420">
+      <animate attributeName="d" 
+        values="M 0 420 Q 300 410 600 420 T 1200 420;
+                M 0 420 Q 300 430 600 420 T 1200 420;
+                M 0 420 Q 300 410 600 420 T 1200 420"
+        dur="10s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 500 Q 300 490 600 500 T 1200 500">
+      <animate attributeName="d" 
+        values="M 0 500 Q 300 490 600 500 T 1200 500;
+                M 0 500 Q 300 510 600 500 T 1200 500;
+                M 0 500 Q 300 490 600 500 T 1200 500"
+        dur="7.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 580 Q 300 570 600 580 T 1200 580">
+      <animate attributeName="d" 
+        values="M 0 580 Q 300 570 600 580 T 1200 580;
+                M 0 580 Q 300 590 600 580 T 1200 580;
+                M 0 580 Q 300 570 600 580 T 1200 580"
+        dur="8.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 660 Q 300 650 600 660 T 1200 660">
+      <animate attributeName="d" 
+        values="M 0 660 Q 300 650 600 660 T 1200 660;
+                M 0 660 Q 300 670 600 660 T 1200 660;
+                M 0 660 Q 300 650 600 660 T 1200 660"
+        dur="9.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 0 740 Q 300 730 600 740 T 1200 740">
+      <animate attributeName="d" 
+        values="M 0 740 Q 300 730 600 740 T 1200 740;
+                M 0 740 Q 300 750 600 740 T 1200 740;
+                M 0 740 Q 300 730 600 740 T 1200 740"
+        dur="11s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Lignes verticales ondulées avec perspective -->
+    <path d="M 150 0 Q 145 200 150 400 T 150 800" opacity="0.6"/>
+    <path d="M 300 0 Q 295 200 300 400 T 300 800" opacity="0.7"/>
+    <path d="M 450 0 Q 445 200 450 400 T 450 800" opacity="0.8"/>
+    <path d="M 600 0 Q 595 200 600 400 T 600 800" opacity="0.9"/>
+    <path d="M 750 0 Q 745 200 750 400 T 750 800" opacity="0.8"/>
+    <path d="M 900 0 Q 895 200 900 400 T 900 800" opacity="0.7"/>
+    <path d="M 1050 0 Q 1045 200 1050 400 T 1050 800" opacity="0.6"/>
+  </g>
+  
+  <!-- Points lumineux animés -->
+  <g>
+    <circle cx="400" cy="150" r="3" fill="#719ED9" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="800" cy="300" r="3" fill="#F29F05" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="450" r="3" fill="#719ED9" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

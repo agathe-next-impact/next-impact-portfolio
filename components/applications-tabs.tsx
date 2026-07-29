@@ -1,98 +1,113 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { useState } from "react"
+import Image from "next/image"
 
 type Application = {
-  key: string;
-  image: string;
-  title: string;
-  description: string;
-  examples: string[];
-};
+  key: string
+  image: string
+  title: string
+  description: string
+  examples: string[]
+}
 
 type ApplicationsTabsProps = {
-  applications: Application[];
-};
+  applications: Application[]
+}
 
 export function ApplicationsTabs({ applications }: ApplicationsTabsProps) {
-  const [tab, setTab] = useState(applications[0]?.key ?? "");
+  const [active, setActive] = useState(applications[0]?.key ?? "")
+  const current = applications.find((a) => a.key === active) ?? applications[0]
 
   return (
-    <Tabs value={tab} onValueChange={setTab}>
-      <div className="flex justify-center mb-12">
-        <TabsList className="bg-white p-1 rounded-full flex flex-wrap gap-2">
-          {applications.map((app) => (
-            <TabsTrigger
-              key={app.key}
-              value={app.key}
-              className="rounded-full px-6 py-2 font-medium data-[state=active]:bg-background/10"
-            >
-              {app.title}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </div>
-      <div style={{ minHeight: 340, position: "relative" }}>
-        {applications.map((app) => (
-          <TabsContent
+    <div>
+      <div
+        style={{
+          display: "flex",
+          borderTop: "1px solid var(--ink)",
+          borderBottom: "1px solid var(--rule)",
+          marginBottom: 32,
+          overflowX: "auto",
+        }}
+      >
+        {applications.map((app, i) => (
+          <button
             key={app.key}
-            value={app.key}
-            className="mt-0 absolute left-0 top-0 w-full h-[340px] flex items-center justify-center"
+            onClick={() => setActive(app.key)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "12px 20px",
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: active === app.key ? "var(--ink)" : "var(--muted-color)",
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              borderBottom: active === app.key ? "2px solid var(--accent-color)" : "2px solid transparent",
+              marginBottom: -1,
+              transition: "color 0.15s",
+              whiteSpace: "nowrap",
+            }}
           >
-            <AnimatePresence mode="wait">
-              {tab === app.key && (
-                <motion.div
-                  key={app.key}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -24 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
-                  layout
-                  className="h-full flex items-center justify-center"
-                >
-                  <Card className="w-10/12 flex md:flex-row flex-col rounded-2xl mx-auto md:h-[300px] h-[550px]">
-                    <div className="md:w-1/2 w-full lg:block md:h-full h-52">
-                      <Image
-                        src={app.image}
-                        alt={app.title}
-                        className="h-full w-full object-cover object-left-top rounded-tl-2xl md:rounded-bl-2xl"
-                        width={500}
-                        height={300}
-                      />
-                    </div>
-                    <div className="flex flex-col justify-between h-full">
-                      <CardHeader>
-                        <CardTitle className="text-3xl text-regularblue font-googletitre font-medium">
-                          {app.title}
-                        </CardTitle>
-                        <CardDescription className="text-regularblue">
-                          {app.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-full flex md:flex-row flex-col items-start gap-4 pl-2">
-                          {app.examples.map((example) => (
-                            <div
-                              key={example}
-                              className="w-max font-googletitre text-regularblue bg-lightblue/10 px-3 py-1 rounded-full"
-                            >
-                              {example}
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </div>
-                  </Card>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </TabsContent>
+            <span style={{ color: active === app.key ? "var(--accent-color)" : "var(--muted-color)", fontSize: 10 }}>
+              0{i + 1}
+            </span>
+            {app.title}
+          </button>
         ))}
       </div>
-    </Tabs>
-  );
+
+      {current && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid var(--rule)" }}>
+          <div style={{ overflow: "hidden", aspectRatio: "4/3" }}>
+            <Image
+              src={current.image}
+              alt={current.title}
+              width={600}
+              height={450}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top left", display: "block" }}
+            />
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid var(--rule)",
+              padding: "32px 28px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <h3 className="ni-serif" style={{ fontSize: 26, marginBottom: 12 }}>
+                {current.title}
+              </h3>
+              <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6 }}>{current.description}</p>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
+              {current.examples.map((ex) => (
+                <span
+                  key={ex}
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    border: "1px solid var(--rule-strong)",
+                    padding: "3px 10px",
+                    color: "var(--ink-2)",
+                  }}
+                >
+                  {ex}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }

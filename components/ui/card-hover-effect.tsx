@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "framer-motion";
 
 import { useState, ReactNode } from "react";
 
@@ -74,7 +74,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full p-4 bg-white overflow-hidden rounded-2xl shadow relative z-20",
+        "rounded-2xl h-full w-full p-4 bg-white overflow-hidden rounded-2xl relative z-20",
         className
       )}
     >

@@ -1,0 +1,513 @@
+{
+  "common": {
+    "siteName": "Next Impact"
+  },
+  "nav": {
+    "services": "Solutions web",
+    "oethAdvantage": "Avantage OETH",
+    "demo": "Démo",
+    "tools": "Outils en ligne",
+    "documentation": "Ressources",
+    "caseStudies": "Études de cas",
+    "contact": "Contact",
+    "freeAudit": "Diagnostic 2 min",
+    "visioConseil": "Visio conseil",
+    "onDemand": "À la demande",
+    "free": "Gratuit",
+    "paid": "Payant",
+    "about": "À propos",
+    "hub": "Quelle techno web ?",
+    "conseil": "Conseil",
+    "bookVisio": "Réserver une visio",
+    "boussole": "La Boussole",
+    "allTools": "Tous les outils",
+    "allResources": "Toutes les ressources",
+    "rubChoisir": "Choisir sa techno",
+    "rubIa": "IA & code",
+    "rubReparer": "Réparer ou refaire",
+    "rubAvantSigner": "Avant de signer",
+    "rubOutilsMetier": "Outils métier",
+    "rubPresence": "Présence et audience",
+    "rubEtreTrouve": "Être trouvé à l'heure de l'IA",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "footer": {
+    "contactQuestion": "Une question ? Contactez-moi directement.",
+    "availability": "Disponible · Réponse sous 24h",
+    "company": "Next Impact Digital",
+    "owner": "EI Agathe Karinthi-Martin",
+    "address": "4 rue du centre, 15400 Trizac",
+    "usefulLinks": "Liens utiles",
+    "legalNotice": "Mentions légales",
+    "privacy": "Confidentialité",
+    "updated": "Mis à jour : juin 2026",
+    "about": "À propos",
+    "services": "Solutions web",
+    "caseStudies": "Études de cas",
+    "documentation": "Documentation",
+    "blog": "Blog",
+    "oethAdvantage": "Avantage OETH",
+    "resources": "Ressources",
+    "freeAiAudit": "Diagnostic Web & IA",
+    "wordpressHeadlessPillar": "WordPress Headless",
+    "visioConseil": "Visio conseil",
+    "tools": "Tous les outils",
+    "agefiphSimulator": "Simulateur AGEFIPH (TIH)",
+    "startWebApp": "Démarrer une application web",
+    "partners": "Partenaires",
+    "referralPartners": "Apporteurs d'affaires",
+    "whiteLabelAgencies": "Agences & studios",
+    "copyright": "© {year} Next Impact Digital — Tous droits réservés",
+    "tihMention": "EI Agathe Karinthi-Martin — Prestataire TIH (Travailleur Indépendant Handicapé) — Attestation OETH disponible",
+    "figaroMention": "Vu dans <lien>Le Figaro</lien> — mai 2026",
+    "certificationAlt": "Certification"
+  },
+  "floatingContact": {
+    "openLabel": "Ouvrir les moyens de contact",
+    "closeLabel": "Fermer les moyens de contact",
+    "title": "Comment me contacter ?",
+    "subtitle": "Choisissez le canal qui vous convient — réponse sous 24h.",
+    "phone": "Téléphone",
+    "video": "Visio",
+    "videoDescription": "Réserver un appel de 15 min",
+    "email": "E-mail",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "S'abonner sur Substack",
+    "ariaLabel": "Moyens de contact",
+    "srLabel": "Contact"
+  },
+  "localeSwitcher": {
+    "label": "Changer de langue",
+    "switchTo": "Basculer en {target}",
+    "fr": "Français",
+    "en": "English"
+  },
+  "themeToggle": {
+    "toLight": "Activer le mode clair",
+    "toDark": "Activer le mode sombre"
+  },
+  "profileSwitcher": {
+    "defaultLabel": "Votre profil",
+    "resetProfile": "Réinitialiser le profil",
+    "customizeExperience": "Personnalisez votre expérience :",
+    "decideur": {
+      "label": "Décideur",
+      "description": "Dirigeants, chefs de projet, ESS — Comprendre le « pourquoi » pour décider."
+    },
+    "utilisateur": {
+      "label": "Utilisateur",
+      "description": "Content managers, marketing — Maîtriser le « comment » au quotidien."
+    },
+    "developpeur": {
+      "label": "Développeur",
+      "description": "Devs, freelances, techniques — Implémenter avec les bonnes technos."
+    }
+  },
+  "hero": {
+    "available": "Disponible",
+    "experience": "20 ans d'expérience digitale dont 6 en développement",
+    "tihMention": "Prestataire TIH — Déduction AGEFIPH",
+    "auditTimer": "en 2 minutes",
+    "wordpressLogoAlt": "Logo WordPress",
+    "nextjsLogoAlt": "Logo Next.js",
+    "profileImageAlt": "Photo de profil"
+  },
+  "contactPage": {
+    "metaTitle": "Contact — choix de techno, architecture projet ou mise en œuvre IA",
+    "metaDescription": "Contactez Next Impact pour choisir une techno web, cadrer l'architecture d'un projet IA, obtenir un pack de mise en œuvre ou construire si nécessaire.",
+    "title": "Contact",
+    "subtitle": "Choix de techno, conseil architecture ou pack de mise en œuvre : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbContact": "Contact"
+  },
+  "legalNoticePage": {
+    "metaTitle": "Mentions légales et RGPD",
+    "metaDescription": "Mentions légales, conditions générales d'utilisation et politique de protection des données personnelles (RGPD) du site Next Impact.",
+    "title": "Mentions légales et RGPD",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbLegal": "Mentions légales",
+    "intro": ""
+  },
+  "ctaSection": {
+    "audit": {
+      "badge": "Diagnostic Web & IA",
+      "title": "Avant de construire, choisissez la bonne voie",
+      "subtitleStart": "Recevez un",
+      "subtitleHighlight": "rapport complet avec des recommandations personnalisées",
+      "subtitleEnd": "— gratuit, sans engagement.",
+      "pillPerformance": "Performance ↑",
+      "pillRoi": "Projection ROI",
+      "pillCost": "Maîtrise des coûts",
+      "ctaLabel": "Lancer mon diagnostic",
+      "footer": "Gratuit · Rapport en 5 minutes · Sans engagement"
+    },
+    "conversion": {
+      "badge": "Questionnaire interactif",
+      "title": "Déterminez le bon niveau de complexité",
+      "promiseStart": "Obtenez une estimation personnalisée pour",
+      "promiseHighlight": "la bonne option entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure",
+      "promiseEnd": ".",
+      "secondary": "Répondez à quelques questions pour recevoir une offre adaptée à votre profil et votre budget.",
+      "ctaLabel": "Clarifier mon projet",
+      "footer": "Disponible · Réponse sous 24h · 20 ans d'expérience digitale dont 6 en développement"
+    },
+    "roi": {
+      "badge": "Simulateur gratuit",
+      "title": "Calculez votre ROI",
+      "promiseStart": "Mesurez le",
+      "promiseHighlight": "manque à gagner dû à un site lent",
+      "promiseEnd": "et comparez l'intérêt d'optimiser, réparer, refondre ou ne rien construire.",
+      "secondary": "Résultats instantanés basés sur vos données réelles de trafic et de conversion.",
+      "ctaLabel": "Simuler mon ROI",
+      "footer": "Gratuit · Résultats instantanés · Sans engagement"
+    },
+    "benchmarking": {
+      "badge": "Outil gratuit",
+      "title": "Comparez vos performances",
+      "promiseStart": "Mesurez les",
+      "promiseHighlight": "performances réelles de votre site face à vos concurrents",
+      "promiseEnd": "via Google PageSpeed.",
+      "secondary": "Audit Core Web Vitals et analyse concurrentielle en quelques secondes.",
+      "ctaLabel": "Lancer le benchmarking",
+      "footer": "Gratuit · Analyse Core Web Vitals · Sans engagement"
+    },
+    "reassurance": {
+      "directContact": "Contact direct",
+      "title": "Parlons de votre projet",
+      "subtitle": "Pas besoin de tester ? Contactez-moi directement.",
+      "available": "Disponible",
+      "experience": "20 ans d'expérience digitale dont 6 en développement",
+      "wpHeadlessDev": "Conseil techno web & mise en œuvre",
+      "tih": "Prestataire TIH",
+      "company": "Next Impact Digital",
+      "owner": "EI Agathe Karinthi-Martin",
+      "address": "4 rue du centre, 15400 Trizac"
+    },
+    "secondaryCTAHelper": "Pas encore prêt ? Commencez par un outil gratuit"
+  },
+  "specsPage": {
+    "metaTitle": "Générateur de cahier des charges",
+    "metaDescription": "Remplissez le formulaire pour obtenir votre cahier des charges complet et personnalisé. Outil gratuit pour structurer votre projet de site web.",
+    "title": "Générateur de cahier des charges",
+    "subtitle": "Remplissez le formulaire pour obtenir votre cahier des charges complet et personnalisé.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbTools": "Outils",
+    "breadcrumbSpecs": "Cahier des charges"
+  },
+  "toolsPage": {
+    "metaTitle": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
+    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer une décision web : diagnostic Web & IA, simulateur AGEFIPH, opportunité PWA et cahier des charges.",
+    "title": "Boîte à outils",
+    "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbTools": "Outils",
+    "backToTools": "Retour aux outils",
+    "collectionName": "Boîte à outils — Boussole Web & IA, AGEFIPH & cadrage",
+    "collectionDescription": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter."
+  },
+  "benchmarkingPage": {
+    "metaTitle": "Benchmarking concurrentiel — Comparez votre site aux leaders",
+    "metaDescription": "Mesurez les performances réelles de votre site face à vos concurrents directs via Google PageSpeed. Audit Core Web Vitals et analyse concurrentielle gratuite.",
+    "title": "Benchmarking concurrentiel",
+    "subtitle": "Mesurez les performances réelles de votre site face à vos concurrents directs via Google PageSpeed.",
+    "breadcrumbBenchmarking": "Benchmarking"
+  },
+  "roiSimulatorPage": {
+    "metaTitle": "Simulateur de ROI — Performance web & migration headless",
+    "metaDescription": "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires générés par une migration headless.",
+    "title": "Simulateur de ROI — Performance web",
+    "subtitle": "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires générés par une migration headless.",
+    "breadcrumbRoi": "Simulateur de ROI"
+  },
+  "auditPage": {
+    "metaTitle": "Diagnostic Web & IA gratuit — une première orientation en 2 minutes",
+    "metaDescription": "Avant de construire avec l'IA, du no-code, WordPress ou du sur-mesure, obtenez une première orientation : réparer, optimiser, cadrer, refondre ou ne rien construire.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbAudit": "Audit de site"
+  },
+  "demoPage": {
+    "metaTitle": "Démos — Sites web, web apps et applications mobiles",
+    "metaDescription": "Découvrez en vidéo les réalisations Next Impact : marketplace B2B Next.js + PostgreSQL (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js (média, plateforme citoyenne, billetterie).",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbDemo": "Démo"
+  },
+  "solutionsPage": {
+    "metaTitle": "Solutions Web & IA — choisir avant de construire",
+    "metaDescription": "Comparez les options utiles selon votre besoin : WordPress, no-code, IA coding, SaaS, Headless, outil métier ou absence de développement.",
+    "title": "Solutions Web & IA",
+    "subtitle": "Choisissez le bon niveau de complexité avant d'investir.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbSolutions": "Solutions"
+  },
+  "documentationPage": {
+    "metaTitle": "Quelle techno web ? Comprendre et choisir à l'heure de l'IA",
+    "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides — WordPress, no-code, Headless ou sur-mesure.",
+    "title": "Comprendre",
+    "subtitle": "Le centre de ressources pour comprendre WordPress Headless et Next.js.",
+    "hubTitle": "Quelle techno web ?",
+    "hubSubtitle": "Le centre de décision pour choisir la bonne technologie web à l'heure de l'IA — comprendre vos options avant de construire, refaire, réparer ou acheter.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbDocs": "Comprendre"
+  },
+  "blogPage": {
+    "metaTitle": "Blog Web & IA — retours d'expérience, comparatifs et coûts | Next Impact",
+    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure — coûts réels et pièges à éviter."
+  },
+  "articlesPage": {
+    "metaTitle": "Articles & comparatifs Web, IA et architecture | Next Impact",
+    "metaDescription": "Analyses pour décider quoi construire à l'heure de l'IA : architecture, maintenabilité, coût futur, WordPress, no-code, Headless et sur-mesure."
+  },
+  "realisations": {
+    "tabs": {
+      "landing": "Landing",
+      "webapp": "Web App",
+      "headless": "WordPress Headless",
+      "wordpress": "WordPress"
+    },
+    "viewProject": "Voir le projet",
+    "visitLanding": "Visiter le site"
+  },
+  "caseStudiesPage": {
+    "breadcrumbHome": "Accueil",
+    "breadcrumbCaseStudies": "Études de cas",
+    "collectionName": "Études de cas — décisions techno et réalisations",
+    "collectionDescription": "Découvrez des projets où la techno a été choisie selon le besoin : WordPress, Headless, PWA, outil métier ou solution légère."
+  },
+  "caseStudyDetail": {
+    "metaNotFoundTitle": "Étude de cas introuvable",
+    "metaNotFoundDescription": "L'étude de cas demandée n'existe pas.",
+    "backToCaseStudies": "Retour aux études de cas",
+    "arbitrageTitle": "L'arbitrage technologique",
+    "arbitrageOptions": "Options envisagées",
+    "arbitrageDecision": "Décision",
+    "arbitrageRationale": "Pourquoi ce choix",
+    "projectOverview": "Aperçu du projet",
+    "projectPresentation": "Présentation du projet",
+    "objectives": "Objectifs",
+    "results": "Résultats",
+    "testimonial": "Témoignage client",
+    "projectInfo": "Informations du projet",
+    "client": "Client",
+    "deliveryDate": "Date de réalisation",
+    "duration": "Durée du projet",
+    "technologies": "Technologies utilisées",
+    "tags": "Tags",
+    "website": "Site web",
+    "similarProjects": "Projets similaires",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbCaseStudies": "Études de cas",
+    "articleTitlePrefix": "Etude de cas",
+    "articleTitleSuffix": "Next Impact",
+    "months": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ],
+    "clientTypes": {
+      "grande-entreprise": "Grande entreprise",
+      "pme": "PME",
+      "association": "Association",
+      "ess": "ESS",
+      "institutionnel": "Institutionnel",
+      "groupement": "Groupement",
+      "independant": "Indépendant"
+    },
+    "cta": {
+      "default": "Discuter de votre projet",
+      "decideur": "Évaluer mon projet",
+      "utilisateur": "Discuter de votre projet",
+      "developpeur": "Voir la documentation"
+    }
+  },
+  "servicesPage": {
+    "metaTitle": "Solutions web — construire utile à l'heure de l'IA",
+    "metaDescription": "Après la Boussole Techno Web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbServices": "Solutions web & Tarifs",
+    "calculateGain": {
+      "title": "Calculez votre gain",
+      "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",
+      "ctaLabel": "Simuler mon ROI",
+      "iconAlt": "Calculer"
+    },
+    "stackMethod": {
+      "label": "Méthode & Transparence",
+      "title": "Comment je choisis le bon niveau de complexité",
+      "scope": {
+        "title": "Périmètre fonctionnel",
+        "description": "Site, outil interne, annuaire, automatisation : chaque besoin ne mérite pas le même niveau de technique.",
+        "iconAlt": "Périmètre"
+      },
+      "volume": {
+        "title": "Volumétrie & trafic",
+        "description": "Trafic, contenus, données et dépendances indiquent s'il faut rester simple ou investir dans une architecture dédiée.",
+        "iconAlt": "Volumétrie"
+      },
+      "scalability": {
+        "title": "Évolutivité visée",
+        "description": "SaaS, no-code, WordPress, IA coding, Headless ou sur-mesure : le bon palier dépend du coût futur.",
+        "iconAlt": "Évolutivité"
+      }
+    },
+    "budgetCardsAlt": {
+      "left": "Impact",
+      "right": "Résultat"
+    },
+    "shortcuts": {
+      "tools": {
+        "title": "Outils",
+        "description": "Diagnostics et simulateurs pour choisir avant de construire.",
+        "iconAlt": "Outils"
+      },
+      "demo": {
+        "title": "Démo",
+        "description": "Découvrez des cas concrets : Headless, PWA, outil métier ou solution légère.",
+        "iconAlt": "Démo"
+      },
+      "stack": {
+        "title": "Choisissez votre voie",
+        "description": "Répondez à quelques questions pour identifier s'il faut réparer, cadrer, construire ou simplifier.",
+        "iconAlt": "Stack"
+      }
+    }
+  },
+  "aboutPage": {
+    "metaTitle": "À propos — Agathe Karinthi-Martin, conseil techno web pluridisciplinaire | Next Impact",
+    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles — technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbAbout": "À propos",
+    "hero": {
+      "kicker": "La personne derrière Next Impact",
+      "title": "À propos",
+      "lead": "Agathe Karinthi-Martin — <em>technique, business, marketing, design</em>. J'ai pratiqué le web sous ces quatre angles : c'est ce qui change la façon dont je vous conseille — je comprends votre projet dans sa globalité, pas seulement son code.",
+      "subtext": "J'aide les structures de 20 à 250 salariés à décider quoi construire, avec quelle techno, et jusqu'où aller — WordPress modernisé, Headless, ou application sur-mesure. Et quand la décision est prise, je construis.",
+      "imageAlt": "Agathe Karinthi-Martin, fondatrice de Next Impact"
+    },
+    "journey": {
+      "label": "Le parcours",
+      "title": "Du terrain WordPress à la boussole techno Web & IA",
+      "subtitle": "Vingt ans à pratiquer le web sous tous ses angles — le code et la stratégie, le marketing et le design. Une conviction constante : la bonne techno dépend du besoin, pas de la mode.",
+      "fondations": {
+        "year": "2000 – 2020 — La vision d'ensemble",
+        "title": "Le projet web dans sa globalité : concevoir, gérer, faire vivre",
+        "description": "Apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Puis, quinze ans durant, piloter le projet web côté édition : chargée de communication en association, WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins. Embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et savoir ce qui fait, ou défait, un projet."
+      },
+      "theorie": {
+        "year": "2012 – 2015 — Le détour théorique",
+        "title": "Penser la machine avant de la reprogrammer",
+        "description": "Un master recherche en sciences de l'information et de la communication (Montpellier 3) et une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
+        "note": "(Travaux publiés sous le nom Agathe Martin.)"
+      },
+      "code": {
+        "year": "2020 — Le retour au code",
+        "title": "De la customisation WordPress au développement moderne",
+        "description": "Repasser au code par nécessité : PHP/MySQL retrouvés, thèmes et plugins WordPress sur-mesure, intégrations API. Puis élargir la stack au rythme des besoins réels des projets : JavaScript et ses frameworks (React, Next.js, Astro), PostgreSQL, et les CMS headless — WordPress headless, Payload, Strapi. Une expertise full-stack construite projet après projet, pas en bootcamp."
+      },
+      "today": {
+        "year": "Aujourd'hui — Next Impact",
+        "title": "Une boussole Web & IA, pas une techno par défaut",
+        "user": {
+          "label": "L'expertise du terrain :",
+          "text": "15 ans à mener des projets web côté édition, pour savoir ce qu'il faut absolument préserver de l'admin."
+        },
+        "tech": {
+          "label": "La maîtrise technique :",
+          "text": "20 ans de systèmes, des fondations PHP/MySQL aux stacks Next.js/PostgreSQL/headless — choisir le bon niveau de complexité, puis piloter la construction."
+        },
+        "theory": {
+          "label": "Le fil rouge théorique :",
+          "text": "la relation humain-machine, pensée et publiée dès 2012 — ce qui fonde aujourd'hui un regard non naïf sur ce que l'IA peut, et ne peut pas, faire."
+        }
+      }
+    },
+    "manifesto": {
+      "label": "Le manifeste",
+      "title": "L'IA n'a pas remplacé le conseil. Elle l'a rendu critique.",
+      "chapo": "Le choix d'une techno, c'est la traduction fidèle du monde réel en solution digitale.",
+      "chapoByline": "— Agathe Karinthi-Martin, fondatrice de Next Impact",
+      "intro": "L'IA est le meilleur stagiaire qu'on ait jamais eu : investi, rapide, structuré, rigoureux, infatigable. Mais un stagiaire, même brillant, ne décide pas de la stratégie. La qualité de ce qu'il produit dépend entièrement de la qualité de celui qui le cadre.",
+      "ecarts": {
+        "title": "L'IA creuse les écarts, elle ne les comble pas",
+        "description": "Dans un domaine donné, un néophyte obtient de l'IA des résultats basiques — parfois faux, sans pouvoir s'en apercevoir. Un expert, lui, démultiplie les siens. L'écart de résultats entre les deux ne se réduit pas avec l'IA : il explose.",
+        "item1": "L'IA est un amplificateur de compétence, pas un substitut",
+        "item2": "Sans expertise du domaine, impossible de détecter l'erreur plausible",
+        "item3": "Plus l'IA progresse, plus le cadrage expert prend de la valeur"
+      },
+      "decision": {
+        "title": "La décision ne se délègue jamais",
+        "description": "Déléguer la décision à l'IA, c'est perdre le fil de sa propre stratégie — et ne plus être capable de la suivre, ni de la défendre. Une décision engage : elle doit rester justifiable et assumable devant votre direction, vos équipes, vos clients. Or l'IA optimise le vraisemblable, pas le vrai : elle produit avec aplomb des réponses fausses quand elle les juge plus probables.",
+        "item1": "L'IA propose, l'humain arbitre",
+        "item2": "Chaque choix d'architecture reste explicable en langage métier",
+        "item3": "La responsabilité ne se sous-traite pas à un modèle"
+      },
+      "multiplicateur": {
+        "title": "Le multiplicateur : expert + IA",
+        "description": "La combinaison d'un accompagnement expert et de l'IA change la donne : des résultats de très haute qualité, obtenus plus vite, et des projets d'une complexité auparavant hors de portée pour une petite structure. C'est le cœur de ma pratique : je tiens la maîtrise d'ouvrage avec vous, l'IA tient le chantier.",
+        "item1": "Vous : la vision et la décision (maîtrise d'ouvrage)",
+        "item2": "Moi : le cadrage, l'architecture, le contrôle qualité",
+        "item3": "L'IA : un maître d'œuvre d'exception — jamais un décideur"
+      }
+    },
+    "proofs": {
+      "label": "En chiffres",
+      "title": "En chiffres",
+      "figaro": {
+        "text": "Une approche remarquée par <lien>Le Figaro</lien> : la modernisation Headless des sites WordPress de PME, sans tout reconstruire.",
+        "cta": "Lire l'article"
+      },
+      "metrics": {
+        "pratique": "ans de pratique du web",
+        "wordpress": "ans d'usage WordPress",
+        "projets": "projets web livrés",
+        "projetsCta": "Voir les études de cas"
+      }
+    },
+    "tih": {
+      "text": "Next Impact est un prestataire <strong>TIH</strong> : pour les structures de 20 salariés et plus assujetties à l'OETH, 30 % du coût de main-d'œuvre est déductible de la contribution AGEFIPH.",
+      "cta": "Comprendre l'avantage OETH"
+    },
+    "ctaFinal": {
+      "label": "Et maintenant ?",
+      "title": "Et maintenant ?",
+      "coldTag": "Diagnostic gratuit · 2 min",
+      "coldTitle": "Voyez ce qui ralentit votre site en 2 min",
+      "coldDescription": "Diagnostic gratuit, sans engagement, sans email commercial derrière.",
+      "coldCta": "Lancer le diagnostic",
+      "warmTag": "Rendez-vous",
+      "warmTitle": "Discuter de votre projet",
+      "warmCta": "Prendre rendez-vous"
+    }
+  },
+  "expandableCards": {
+    "default": {
+      "title": "WordPress Headless :",
+      "subtitle": "quelques explications ?",
+      "tagline": "Un site combinant performance et le back-office le plus utilisé."
+    },
+    "decideur": {
+      "title": "WordPress Headless :",
+      "subtitle": "quel impact pour votre business ?",
+      "tagline": "Comprendre les gains stratégiques concrets pour votre organisation."
+    },
+    "utilisateur": {
+      "title": "WordPress Headless :",
+      "subtitle": "qu'est-ce qui change pour vous ?",
+      "tagline": "Tout ce que vous devez savoir pour gérer votre contenu sereinement."
+    },
+    "developpeur": {
+      "title": "WordPress Headless :",
+      "subtitle": "sous le capot",
+      "tagline": "Architecture, stack technique et bonnes pratiques d'implémentation."
+    }
+  }
+}

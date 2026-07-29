@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Gradient definitions -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#020F59;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#021373;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F54BF;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="glowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#719ED9;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#719ED9;stop-opacity:0" />
+    </radialGradient>
+    
+    <radialGradient id="glowYellow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#F29F05;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#F29F05;stop-opacity:0" />
+    </radialGradient>
+    
+    <radialGradient id="glowRed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#FF6B6B;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Filter for glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Pulse animation -->
+    <animate id="pulse1" attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
+    <animate id="pulse2" attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite" />
+    <animate id="pulse3" attributeName="opacity" values="0.4;0.9;0.4" dur="3.5s" repeatCount="indefinite" />
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#bgGradient)"/>
+  
+  <!-- Replaced organic blob shapes with geometric chipset patterns -->
+  <g opacity="0.08">
+    <!-- Geometric chipset zones -->
+    <rect x="150" y="200" width="500" height="350" rx="20" fill="#719ED9" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.3;0.5;0.3" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    
+    <polygon points="1150,150 1750,200 1700,550 1100,500" fill="#1F54BF" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.4;0.6;0.4" dur="10s" repeatCount="indefinite"/>
+    </polygon>
+    
+    <rect x="700" y="650" width="600" height="300" rx="25" fill="#719ED9" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.35;0.55;0.35" dur="9s" repeatCount="indefinite"/>
+    </rect>
+    
+    <!-- Additional geometric patterns -->
+    <rect x="50" y="700" width="300" height="250" rx="15" fill="#021373" opacity="0.5"/>
+    <rect x="1500" y="750" width="350" height="280" rx="18" fill="#1F54BF" opacity="0.4"/>
+  </g>
+  
+  <!-- Circuit lines -->
+  <g stroke="#719ED9" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round">
+    <!-- Horizontal circuits -->
+    <path d="M 100,250 L 400,250 L 420,270 L 600,270">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 800,400 L 1100,400 L 1120,420 L 1400,420">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 300,600 L 600,600 L 620,620 L 900,620">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="3.5s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Vertical circuits -->
+    <path d="M 500,100 L 500,350 L 520,370 L 520,550">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 1200,150 L 1200,400 L 1220,420 L 1220,650">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 1600,300 L 1600,550 L 1580,570 L 1580,800">
+      <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="3.8s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Diagonal circuit line -->
+    <path d="M 200,800 L 450,800 L 470,780 L 700,550 L 720,550 L 950,550" stroke="#F29F05">
+      <animate attributeName="stroke-dasharray" from="0,1200" to="1200,0" dur="4.5s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Complex path circuit -->
+    <path d="M 1500,200 L 1500,450 L 1480,470 L 1300,470 L 1280,490 L 1280,700" stroke="#719ED9">
+      <animate attributeName="stroke-dasharray" from="0,1200" to="1200,0" dur="4.2s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- L-shaped circuit -->
+    <path d="M 100,500 L 350,500 L 370,520 L 370,850 L 390,870 L 650,870" stroke="#FF6B6B" stroke-width="2.5">
+      <animate attributeName="stroke-dasharray" from="0,1200" to="1200,0" dur="3.8s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Connection nodes (chipset components) -->
+  <g>
+    <!-- Large chip nodes -->
+    <g transform="translate(450, 350)">
+      <rect x="-30" y="-30" width="60" height="60" rx="8" fill="#021373" stroke="#719ED9" stroke-width="2"/>
+      <circle r="40" fill="url(#glowBlue)" opacity="0.3">
+        <animate attributeName="r" values="35;45;35" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="-20" y="-20" width="40" height="40" rx="4" fill="#1F54BF"/>
+      <circle cx="-8" cy="-8" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="8" cy="-8" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-8" cy="8" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="8" cy="8" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <g transform="translate(1300, 450)">
+      <rect x="-35" y="-35" width="70" height="70" rx="10" fill="#021373" stroke="#719ED9" stroke-width="2"/>
+      <circle r="45" fill="url(#glowYellow)" opacity="0.3">
+        <animate attributeName="r" values="40;50;40" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="-25" y="-25" width="50" height="50" rx="6" fill="#1F54BF"/>
+      <circle r="12" fill="#F29F05" opacity="0.8">
+        <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <g transform="translate(900, 750)">
+      <rect x="-28" y="-28" width="56" height="56" rx="8" fill="#021373" stroke="#FF6B6B" stroke-width="2"/>
+      <circle r="38" fill="url(#glowRed)" opacity="0.3">
+        <animate attributeName="r" values="33;43;33" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="-18" y="-18" width="36" height="36" rx="4" fill="#1F54BF"/>
+      <line x1="-10" y1="0" x2="10" y2="0" stroke="#FF6B6B" stroke-width="2">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="1.8s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="-10" x2="0" y2="10" stroke="#FF6B6B" stroke-width="2">
+        <animate attributeName="opacity" values="1;0.5;1" dur="1.8s" repeatCount="indefinite"/>
+      </line>
+    </g>
+    
+    <!-- Small connection points -->
+    <circle cx="300" cy="250" r="6" fill="#719ED9" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="270" r="6" fill="#F29F05" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1000" cy="400" r="6" fill="#719ED9" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1400" cy="420" r="6" fill="#FF6B6B" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="200" r="6" fill="#F29F05" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="520" cy="500" r="6" fill="#719ED9" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1200" cy="300" r="6" fill="#FF6B6B" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1220" cy="600" r="6" fill="#F29F05" opacity="0.8">
+      <animate attributeName="r" values="5;8;5" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Micro components -->
+    <rect x="380" y="240" width="8" height="8" rx="2" fill="#D0DCF2" opacity="0.6"/>
+    <rect x="950" y="390" width="8" height="8" rx="2" fill="#D0DCF2" opacity="0.6"/>
+    <rect x="490" y="180" width="8" height="8" rx="2" fill="#D0DCF2" opacity="0.6"/>
+    <rect x="1190" y="280" width="8" height="8" rx="2" fill="#D0DCF2" opacity="0.6"/>
+  </g>
+  
+  <!-- Data flow particles -->
+  <g>
+    <circle r="3" fill="#F29F05" opacity="0.9">
+      <animateMotion dur="4s" repeatCount="indefinite" path="M 100,250 L 400,250 L 420,270 L 600,270"/>
+    </circle>
+    <circle r="3" fill="#719ED9" opacity="0.9">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M 800,400 L 1100,400 L 1120,420 L 1400,420"/>
+    </circle>
+    <circle r="3" fill="#FF6B6B" opacity="0.9">
+      <animateMotion dur="5s" repeatCount="indefinite" path="M 500,100 L 500,350 L 520,370 L 520,550"/>
+    </circle>
+    <circle r="3" fill="#F29F05" opacity="0.9">
+      <animateMotion dur="3.5s" repeatCount="indefinite" path="M 1200,150 L 1200,400 L 1220,420 L 1220,650"/>
+    </circle>
+    
+    <!-- Adding 4 new data flow particles -->
+    <circle r="3" fill="#719ED9" opacity="0.9">
+      <animateMotion dur="4.5s" repeatCount="indefinite" path="M 200,800 L 450,800 L 470,780 L 700,550 L 720,550 L 950,550"/>
+    </circle>
+    <circle r="3" fill="#F29F05" opacity="0.9">
+      <animateMotion dur="4.2s" repeatCount="indefinite" path="M 1500,200 L 1500,450 L 1480,470 L 1300,470 L 1280,490 L 1280,700"/>
+    </circle>
+    <circle r="3" fill="#FF6B6B" opacity="0.9">
+      <animateMotion dur="3.8s" repeatCount="indefinite" path="M 100,500 L 350,500 L 370,520 L 370,850 L 390,870 L 650,870"/>
+    </circle>
+    <circle r="2.5" fill="#D0DCF2" opacity="0.8">
+      <animateMotion dur="3.2s" repeatCount="indefinite" path="M 300,600 L 600,600 L 620,620 L 900,620"/>
+    </circle>
+  </g>
+  
+  <!-- Grid overlay -->
+  <g stroke="#719ED9" stroke-width="0.5" opacity="0.1">
+    <path d="M 0,0 L 1920,0 L 1920,1080 L 0,1080 Z" fill="none"/>
+    <line x1="0" y1="270" x2="1920" y2="270"/>
+    <line x1="0" y1="540" x2="1920" y2="540"/>
+    <line x1="0" y1="810" x2="1920" y2="810"/>
+    <line x1="480" y1="0" x2="480" y2="1080"/>
+    <line x1="960" y1="0" x2="960" y2="1080"/>
+    <line x1="1440" y1="0" x2="1440" y2="1080"/>
+  </g>
+</svg>

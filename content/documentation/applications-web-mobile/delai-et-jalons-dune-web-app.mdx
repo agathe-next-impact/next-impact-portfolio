@@ -1,0 +1,218 @@
+---
+title: "Délai et jalons d'une web app : du concept à la mise en ligne"
+description: "Phasage type d'un projet applicatif (cadrage, MVP, V1, évolutions), illustré par Panorama Pub livré en 2 mois. Ce qui prend du temps, ce qu'on peut accélérer."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 8
+---
+
+## "Combien de temps avant qu'on soit en ligne ?"
+
+C'est la deuxième question la plus fréquente après le budget. Et la réponse honnête est : **ça dépend de votre périmètre**, mais on peut tracer des fourchettes réalistes.
+
+Cet article décrit le phasage type d'un projet web app, jalon par jalon, avec des durées indicatives et l'exemple concret de Panorama Pub (marketplace B2B livrée en 2 mois).
+
+## Le phasage type
+
+<FlowDiagram
+  nodes={[
+    { label: "Cadrage", description: "Définir QUOI on construit", icon: "📝" },
+    { label: "Design", description: "Définir À QUOI ÇA RESSEMBLE", icon: "🎨" },
+    { label: "Dev MVP", description: "Construire le cœur", icon: "🛠️" },
+    { label: "Recette", description: "Tester avec le client", icon: "✅" },
+    { label: "Mise en ligne", description: "Déployer en production", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Phase 1 — Cadrage (1 à 4 semaines)
+
+### Ce qu'on fait
+
+- Entretiens utilisateurs et besoins métier (1-3 entretiens)
+- Définition du périmètre fonctionnel (le MVP, les évolutions futures)
+- Modélisation des données (entités, relations, règles)
+- Wireframes des écrans clés (basse fidélité, juste pour valider le parcours)
+- Estimation détaillée du planning et des coûts
+- Identification des risques (intégrations complexes, dépendances externes)
+
+### Durée selon la complexité
+
+- **Petit projet** (web app simple, 1-2 rôles) : 3-5 jours
+- **Projet moyen** (marketplace, plateforme métier) : 1-2 semaines
+- **Projet complexe** (multi-rôles, intégrations multiples) : 2-4 semaines
+
+### Le piège à éviter
+
+Sauter le cadrage "pour gagner du temps". C'est **le meilleur moyen de perdre 3-5 fois plus de temps en dev**. Un écran mal cadré coûte 3-10× plus cher à refaire qu'à bien penser.
+
+## Phase 2 — Design (2 à 6 semaines)
+
+### Ce qu'on fait
+
+- Identité visuelle (si pas existante) : palette, typographie, ton
+- Design system : composants réutilisables, cohérence inter-écrans
+- Design des écrans clés en haute fidélité
+- Prototype interactif (Figma) pour valider le parcours
+- Responsive (mobile, tablette, desktop)
+- Validation accessibilité (contrastes, structure)
+
+### Durée selon la complexité
+
+- **Petit projet** : 1-2 semaines (avec un design system simple)
+- **Projet moyen** : 2-3 semaines (design system + 15-25 écrans)
+- **Projet complexe** : 4-6 semaines (multi-rôles, dashboards, états variés)
+
+### Optimisation
+
+- Si vous avez déjà une identité visuelle (charte, design system), on gagne 30-50 % du temps de design
+- Si vous acceptez un design "fonctionnel" basé sur des composants éprouvés (shadcn/ui, par exemple) plutôt qu'une création visuelle from scratch, on gagne 40-60 %
+- Si vous voulez un design "signature" très distinctif, prévoir l'inverse : +20-40 %
+
+## Phase 3 — Développement MVP (3 à 16 semaines)
+
+### Ce qu'on fait
+
+- Setup du projet (Next.js, base PostgreSQL, hébergement Vercel, CI/CD)
+- Authentification (comptes, sessions, rôles)
+- Schéma de base de données
+- Pages front (écrans publics + connectés)
+- API et logique métier
+- Admin autonome (gestion des données et utilisateurs)
+- Intégrations tierces (paiement, email, etc.)
+- Tests automatisés
+- Documentation technique
+
+### Durée selon la complexité
+
+- **Petit projet** (3-5 entités, 10-15 écrans) : 3-6 semaines
+- **Projet moyen** (5-10 entités, 25-40 écrans, marketplace simple) : 6-10 semaines
+- **Projet complexe** (10+ entités, 50+ écrans, multi-rôles) : 12-20 semaines
+
+### Ce qui ralentit le dev
+
+- **Décisions retardées** : "On verra plus tard si on veut X ou Y" → bloque l'avancement
+- **Intégrations tierces** : APIs mal documentées, environnements de test capricieux
+- **Aller-retours design en cours de dev** : modifier un écran déjà codé prend 3-5× plus de temps
+- **Revues lentes** : si chaque démo prend 1 semaine avant retour, on perd 1 semaine sur 4
+
+## Phase 4 — Recette client (1 à 3 semaines)
+
+### Ce qu'on fait
+
+- Démo de la version MVP au client
+- Le client teste, formule des remarques
+- Correctifs et ajustements
+- Plan de tests utilisateurs (si applicable)
+- Validation finale du périmètre livré
+
+### Durée
+
+- 1 semaine pour un projet simple bien préparé
+- 2 semaines pour un projet moyen
+- 3+ semaines pour un projet complexe avec utilisateurs pilotes
+
+### Tip
+
+Préparer une **liste de tests** pendant la phase de dev permet à la recette d'être beaucoup plus rapide et complète. On vérifie systématiquement chaque cas plutôt que de découvrir au hasard.
+
+## Phase 5 — Mise en ligne (quelques jours)
+
+### Ce qu'on fait
+
+- Migration des données initiales (si applicable)
+- Bascule du domaine vers la production
+- Vérifications finales (SEO, sécurité, performance)
+- Onboarding du client sur l'admin
+- Documentation utilisateur
+- Plan de monitoring et d'alerte
+
+### Durée
+
+- 2-3 jours pour un déploiement classique
+- 1-2 semaines si migration de données complexe depuis un système existant
+
+## Phase 6 — Stabilisation post-lancement (4 à 8 semaines)
+
+Souvent oubliée, **c'est la phase critique**. Une fois en ligne, les vrais utilisateurs remontent des bugs et des frictions qu'aucun cadrage ne pouvait anticiper.
+
+### Ce qu'on fait
+
+- Corrections rapides des bugs remontés
+- Petits ajustements UX (libellés, parcours)
+- Optimisations de performance basées sur le trafic réel
+- Mise en place du monitoring fin
+
+### Budget
+
+Prévoir 10-15 % du budget initial pour cette phase de stabilisation.
+
+## Exemple concret : Panorama Pub en 2 mois
+
+| Phase | Durée | Détail |
+|---|---|---|
+| Cadrage | 1 semaine | Modèle de données, périmètre MVP, wireframes |
+| Design | 1,5 semaine | Design system + écrans principaux (annuaire, fiche, recherche, admin) |
+| Dev MVP | 5 semaines | Stack Next.js + PostgreSQL serverless, admin autonome, intégration email |
+| Recette | 1 semaine | Tests, corrections, validation client |
+| Mise en ligne | 2 jours | Domaine, SSL, monitoring |
+
+**Total : 8,5 semaines** du concept à la production.
+
+Ce qui a permis de tenir ce délai :
+
+- Périmètre MVP serré (focus sur l'annuaire et la recherche, pas de fonctionnalités secondaires)
+- Modèle de données validé tôt
+- Aller-retours client réactifs (réponses sous 24-48h)
+- Design system éprouvé (shadcn/ui customisé) au lieu d'un design from scratch
+- Stack maîtrisée (Next.js + PostgreSQL serverless, déploiement Vercel)
+
+## Les facteurs qui rallongent un projet
+
+### × 1,5
+
+- Plusieurs rôles utilisateurs avec permissions fines
+- Intégrations tierces non triviales (1-2 max)
+- Workflows métier complexes
+
+### × 2
+
+- Multi-tenant (plusieurs organisations partagent la plateforme)
+- Internationalisation dès le départ (i18n)
+- Mobile-first avec PWA enrichie
+- Migration de données depuis un système existant
+
+### × 3 et au-delà
+
+- Réseaux sociaux internes (timeline, messagerie, notifications temps réel)
+- Modération à grande échelle
+- Reporting analytique avancé (cubes OLAP, exports complexes)
+- Intégrations multiples avec systèmes legacy
+
+## Les leviers d'accélération
+
+### Réduire le scope
+
+C'est de loin le levier le plus puissant. Ne pas faire 100 % de ce qu'on imagine, faire 60 % avec excellence et lancer.
+
+> Panorama Pub aurait pu avoir, en V1 : un espace fournisseur, un système de mise en relation, des contenus éditoriaux. On a fait un annuaire avec une admin solide. Les autres briques arrivent ensuite, sur la base d'un produit déjà en ligne et d'utilisateurs réels.
+
+### Réutiliser plutôt que créer
+
+- Design system existant (shadcn/ui, headlessui) plutôt qu'une création
+- Composants éprouvés pour authentification, paiement, email
+- Schémas de base de données inspirés de patterns connus
+
+### Décisions rapides côté client
+
+Un projet qui avance à 100 % de vitesse côté dev mais 50 % côté décisions client va à 50 %.
+
+## Pour aller plus loin
+
+- [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+- [Étude de cas — Panorama Pub livré en 2 mois](/etudes-de-cas/panorama-pub)
+- [Anatomie d'une web app sur-mesure](/documentation/applications-web-mobile/anatomie-dune-web-app)
+
+Pour un cadrage de votre projet : [lancez le diagnostic](/contact). Estimation de délai sous 48h.

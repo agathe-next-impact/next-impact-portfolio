@@ -1,10 +1,276 @@
+/* Utilitaire pour forcer la suppression du scroll horizontal */
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Swiss Design Tokens ─────────────────────────────── */
+:root {
+  /* Palette */
+  --paper:        #ffffff;
+  --paper-2:      #F7F8F9;
+  --ink:          #0e0e0c;
+  --ink-2:        #2a2a26;
+  --muted-color:  rgba(14, 14, 12, 0.55);
+  --rule:         rgba(14, 14, 12, 0.18);
+  --rule-strong:  rgba(14, 14, 12, 0.42);
+  --accent-color: #d83a1a;
+
+  /* Typography */
+  --serif: var(--font-serif);
+  --sans:  var(--font-sans);
+  --mono:  var(--font-mono);
+
+  /* Layout */
+  --gutter:       32px;
+  --container-w:  1200px;
 }
+
+/* ─── Shadcn/Tailwind Bridge ─────────────────────────── */
+@layer base {
+  :root {
+    --background:            0 0% 100%;
+    --foreground:            45 5% 5%;
+    --card:                  0 0% 100%;
+    --card-foreground:       45 5% 5%;
+    --popover:               0 0% 100%;
+    --popover-foreground:    45 5% 5%;
+    --primary:               45 5% 5%;
+    --primary-foreground:    0 0% 100%;
+    --secondary:             40 10% 91%;
+    --secondary-foreground:  45 5% 5%;
+    --muted:                 40 10% 91%;
+    --muted-foreground:      45 5% 45%;
+    --accent:                40 10% 91%;
+    --accent-foreground:     45 5% 5%;
+    --destructive:           9 75% 47%;
+    --destructive-foreground: 0 0% 98%;
+    --border:                45 5% 5% / 0.18;
+    --input:                 40 10% 89%;
+    --ring:                  45 5% 5%;
+    --radius:                0rem;
+    --sidebar-background:    0 0% 98%;
+    --sidebar-foreground:    240 5.3% 26.1%;
+    --sidebar-primary:       240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent:        240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border:        220 13% 91%;
+    --sidebar-ring:          217.2 91.2% 59.8%;
+  }
+}
+
+/* ─── Base ────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: var(--sans, 'Geist', Arial, Helvetica, sans-serif);
+    font-size: 15px;
+    line-height: 1.5;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--accent-color);
+    color: var(--paper);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Layout ──────────────────────────────────────────── */
+.container {
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+section.s {
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+section.s:first-of-type {
+  border-top: none;
+}
+
+/* ─── Section Header ──────────────────────────────────── */
+.sec-head {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  gap: 0 24px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+.sec-no {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent-color);
+}
+.sec-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+  text-align: right;
+}
+
+/* ─── Typography helpers ──────────────────────────────── */
+.ni-serif {
+  font-family: var(--serif);
+}
+.ni-mono {
+  font-family: var(--mono);
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 44px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn.primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--paper);
+}
+.btn.primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ─── Cards ───────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--rule);
+  padding: 24px;
+  background: var(--paper);
+}
+
+/* ─── Cap Row (feature list) ──────────────────────────── */
+.cap-row {
+  display: grid;
+  grid-template-columns: 56px 1.6fr 2fr 1fr;
+  gap: 0 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.cap-row:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+/* ─── Ordered Steps ───────────────────────────────────── */
+ol.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+ol.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--rule);
+}
+ol.steps li:first-child {
+  border-top: 1px solid var(--rule);
+}
+ol.steps li::before {
+  content: "0" counter(step);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent-color);
+  padding-top: 3px;
+}
+ol.steps li h4 {
+  font-family: var(--serif);
+  font-size: 18px;
+  margin: 0 0 6px;
+}
+ol.steps li p {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── Quote / Testimonial ─────────────────────────────── */
+.quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* ─── Label / tag ─────────────────────────────────────── */
+.label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  padding: 2px 8px;
+  color: var(--muted-color);
+}
+
+/* ─── Status dot ──────────────────────────────────────── */
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-color);
+}
+
+/* ─── Hover row interaction ───────────────────────────── */
+.hover-row:hover {
+  background: var(--paper-2);
+}
+
+/* ─── Annotation ──────────────────────────────────────── */
+.annot {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted-color);
+}
+
+/* ─── Utilities ───────────────────────────────────────── */
+.u-rule-top    { border-top: 1px solid var(--rule); }
+.u-rule-bottom { border-bottom: 1px solid var(--rule); }
+.u-pt-section  { padding-top: 80px; }
+.u-pb-section  { padding-bottom: 80px; }
 
 @layer utilities {
   .text-balance {
@@ -12,83 +278,12 @@ body {
   }
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* ─── Responsive ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  :root { --gutter: 20px; }
+  section.s { padding: 56px 0; }
+  .sec-head { grid-template-columns: 48px 1fr; gap: 0 16px; }
+  .sec-meta { display: none; }
+  .cap-row { grid-template-columns: 48px 1fr; }
+  ol.steps li { grid-template-columns: 48px 1fr; }
 }

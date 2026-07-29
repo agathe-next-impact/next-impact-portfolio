@@ -1,0 +1,133 @@
+---
+title: Think SEO from the start
+description: Why think about SEO at the start of the project?
+category: seo
+author: Next Impact
+date: "2025-03-15"
+order: 1
+---
+
+SEO optimization from the design phase determines the site's ability to acquire qualified organic traffic. A site launched without an SEO strategy accumulates technical debt (unsuitable URL structure, lack of semantic markup, no internal linking) that requires costly redesign afterward.
+
+This article details the reasons why SEO must be integrated into the initial specifications of a WordPress site, the technical elements to configure before launch, and the tools that facilitate this integration.
+
+<Callout variant="decideur" title="SEO: an investment, not an expense">
+Integrating SEO from the design phase reduces the overall cost of the project. Paid advertising (SEA) generates traffic only for the duration of the campaign: traffic drops to zero as soon as the budget stops. SEO, once optimizations are in place, continues to generate organic traffic for months, with a per-visitor acquisition cost that decreases over time. SEO ROI is measured via the ratio of organic traffic acquired / initial investment in optimization.
+</Callout>
+
+## Why SEO is essential for WordPress sites?
+
+### 1. Increase visibility and organic traffic
+
+An optimized site ranks for the queries its target audience formulates on Google. According to BrightEdge data, organic traffic represents on average 53% of a website's total traffic. Not optimizing for search means giving up this acquisition source, the largest and least expensive in the medium term.
+
+### 2. A decreasing acquisition cost
+
+SEA (Google Ads, Meta Ads) operates on a cost-per-click (CPC) model: each visitor has a direct and recurring cost. SEO is based on an initial investment (technical optimization, content production, internal linking) whose return increases over time. A well-ranked article continues to generate traffic for 12 to 24 months without further intervention.
+
+### 3. Acquisition of qualified traffic
+
+SEO targets users who actively formulate a query related to your offering. This traffic with explicit intent has a higher conversion rate than traffic from social media or display, because the user is already actively searching.
+
+<FlowDiagram
+  nodes={[
+    { label: "Design", description: "Integrate SEO from the specifications stage", icon: "📋" },
+    { label: "Structure", description: "Site architecture and internal linking", icon: "🏗️" },
+    { label: "Content", description: "Keyword research and optimized writing", icon: "✍️" },
+    { label: "Technical", description: "Performance, mobile, indexing", icon: "⚙️" },
+    { label: "Launch", description: "Tracking and continuous optimization", icon: "🚀" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+## Key SEO elements to consider when creating a site:
+
+The SEO optimizations to integrate from development split into four categories: content, mobile, architecture and performance.
+
+### 1. Keyword research and integration
+
+Keyword research identifies the queries your target audience types into Google. For each keyword, you evaluate monthly search volume, Keyword Difficulty (competition score) and search intent (informational, transactional, navigational). The selected keywords must be integrated into:
+
+- The `<title>` and `<h1>` tags (one main keyword per page)
+- The `<h2>` and `<h3>` subheadings (secondary keywords and semantic variations)
+- The `<meta name="description">` tags (to optimize CTR in the SERPs)
+
+### 2. Mobile-friendly design (Mobile-First Indexing)
+
+Since March 2021, Google exclusively uses the mobile version of a site for indexing and ranking (Mobile-First Indexing). A non-responsive WordPress theme leads to ranking degradation, regardless of content quality. Verify mobile compatibility through Google's Mobile-Friendly test and the "Mobile Usability" tab of Google Search Console.
+
+### 3. Site structure and navigation
+
+The site architecture determines Googlebot's ability to crawl and index all pages. Elements to configure:
+
+- A navigation menu structured in thematic silos (groups of pages by topic)
+- WordPress categories matching the targeted keyword clusters
+- Contextual internal linking (links in the body text, on descriptive anchors) connecting pages within the same silo
+
+### 4. Image and media optimization
+
+Unoptimized images degrade Core Web Vitals, particularly LCP (Largest Contentful Paint, which measures the display time of the largest visible element). For each image:
+
+- Compress in WebP or AVIF format (25 to 50% reduction compared to JPEG)
+- Set the `width` and `height` attributes to avoid CLS (Cumulative Layout Shift, layout shift during loading)
+- Fill in the `alt` attribute with a precise description including the page's keyword when relevant
+
+<HighlightBox title="The 4 SEO dimensions to integrate from the design phase" accent="blue">
+
+1. **Keywords**: Carry out keyword research before content writing. Assign a main keyword and 2-3 secondary keywords to each page.
+2. **Mobile-First**: Select a responsive theme and verify the mobile rendering of each template with Google's Mobile-Friendly test.
+3. **Architecture**: Design the architecture in thematic silos, with a maximum depth of 3 levels and consistent internal linking between pages of the same silo.
+4. **Performance**: Optimize Core Web Vitals (LCP < 2.5s, FID < 100ms, CLS < 0.1) through image compression, caching and minimization of blocking JavaScript.
+
+</HighlightBox>
+
+## Tools and extensions to improve SEO on WordPress
+
+WordPress has an ecosystem of plugins that automate part of the SEO optimizations.
+
+### 1. Yoast SEO
+
+The most installed SEO plugin on WordPress (13+ million active installations). Yoast manages meta tags (title, description), generates the XML sitemap, allows configuring indexing directives by content type (noindex on author archives, for example) and provides real-time on-page analysis (keyword presence, readability, internal linking).
+
+### 2. Rank Math
+
+Alternative to Yoast with advanced features included in the free version: structured data management (Schema.org) through a visual interface, 301/302 redirects, integrated keyword rank tracking and multilingual support.
+
+### 3. Smush
+
+Image compression plugin that automatically converts files to WebP, applies lossy or lossless compression and enables lazy loading (deferred loading of off-screen images). The direct impact is improved LCP and reduced total page weight.
+
+### 4. Google Analytics and Search Console
+
+Google Search Console provides indexing data (indexed pages, crawl errors, coverage), queries generating impressions and clicks, and alerts on technical issues (Core Web Vitals, mobile usability). Google Analytics measures user behavior (page views, session duration, bounce rate, conversions). These two tools must be configured before site launch to have data from the first day of indexing.
+
+<Callout variant="decideur" title="Cost of post-launch SEO correction">
+Fixing SEO issues after launch costs on average 3 to 5 times more than integrating them from the design phase. Reasons: redesign of the architecture involving mass 301 redirects (risk of PageRank loss), rewriting content to target the right keywords, and technical correction (URLs, markup, performance). A site launched with a correct SEO foundation starts acquiring organic traffic from initial indexing, while an unoptimized site may need 6 to 12 months before generating significant traffic.
+</Callout>
+
+## Summary
+
+Integrating SEO from the design phase of a WordPress site is not optional: it determines the site's ability to acquire organic traffic sustainably. The four priority areas are keyword research, mobile compatibility (Mobile-First Indexing), thematic silo architecture and Core Web Vitals optimization.
+
+<HighlightBox title="What to remember" accent="orange">
+
+- SEO integrated from the design phase reduces the total project cost and accelerates organic traffic acquisition.
+- Organic traffic represents on average **53% of total traffic** of a website (source: BrightEdge).
+- Optimized content continues to generate traffic for **12 to 24 months** without additional cost.
+- WordPress plugins (Yoast SEO, Rank Math, Smush) automate basic technical optimizations.
+- **Google Search Console and Analytics** must be configured before launch to have data from day 1.
+
+</HighlightBox>
+
+<Quiz
+  question="What is the main advantage of SEO over paid advertising?"
+  options={[
+    "SEO generates more clicks immediately",
+    "SEO is free and requires no effort",
+    "SEO generates traffic sustainably without recurring cost per visitor",
+    "SEO works only on Google"
+  ]}
+  answer={2}
+  explanation="SEA (paid advertising) operates on a cost-per-click model: traffic stops as soon as the budget is depleted. SEO is based on an initial investment (technical optimization, content production) whose return increases over time. Well-ranked content continues to generate organic traffic for months without additional cost per visitor, which gradually reduces the acquisition cost."
+/>

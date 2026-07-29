@@ -1,0 +1,121 @@
+---
+title: "App mobile : faut-il vraiment passer par les stores ?"
+slug: "app-mobile-pwa-site-classique-stores"
+date: "2026-06-01"
+author: "Agathe Karinthi-Martin"
+excerpt: "Avant de budgéter une application native, vérifiez si une PWA WordPress peut couvrir l'essentiel : accès immédiat, plein écran, géolocalisation et usage terrain sans passage par les stores."
+tags: ["PWA", "Application mobile", "WordPress", "Décision techno"]
+readingTime: 7
+---
+
+## Introduction
+
+Quelqu'un vous a dit qu'il vous fallait "une app".
+
+Et dans votre tête, "app" égale App Store, Google Play, développement à 20 000 euros, validation Apple et mises à jour qui prennent des semaines.
+
+Avant d'engager ce budget, une question : votre besoin justifie-t-il vraiment de passer par les stores, ou existe-t-il une voie qui vous donne l'essentiel d'une app sans aucune de ces contraintes ?
+
+Cette voie existe depuis dix ans. Elle s'appelle la PWA, et elle est faite pour les acteurs de terrain.
+
+## 01 · L'Arbitrage du mois
+
+Une application mobile native, c'est ce que vous téléchargez depuis l'App Store ou Google Play. Elle est développée spécifiquement pour iPhone et pour Android, deux chantiers distincts, donc deux budgets. Elle s'installe sur le téléphone et peut exploiter à fond le matériel : appareil photo, capteurs, Bluetooth, fonctionnement hors-ligne complet.
+
+C'est puissant. C'est aussi cher, souvent 15 000 euros et bien au-delà, long, avec 3 à 6 mois de délai, et soumis au bon vouloir des stores. Chaque mise à jour repasse par une validation, et Apple comme Google prélèvent leur part sur ce qui s'y vend.
+
+À l'opposé, le site web classique s'ouvre dans un navigateur. Aucun téléchargement, mais aucune des sensations d'une app : pas d'icône sur l'écran d'accueil, pas de mode hors-ligne, et une forte dépendance à une bonne connexion. C'est un vrai problème dès qu'on quitte la ville.
+
+Entre les deux, il y a la PWA, Progressive Web App, ou application web progressive. C'est un site web, accessible par une simple adresse, mais conçu pour se comporter comme une application sur mobile.
+
+Le visiteur l'ajoute à son écran d'accueil d'un geste, avec votre logo, comme une vraie app. Elle s'ouvre en plein écran, sans la barre du navigateur. Elle peut envoyer des notifications, utiliser la géolocalisation, et, point décisif pour le terrain, continuer de fonctionner quand la connexion est mauvaise ou coupée, parce qu'elle garde en mémoire ce dont l'utilisateur a besoin.
+
+Le tout sans passer par aucun store, sans téléchargement lourd, sans validation Apple ou Google.
+
+<div className="article-video">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/_kt_wA4zT68?rel=0"
+    title="Application mobile PWA pour le jeu de piste de l'Hermitage"
+    loading="lazy"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowFullScreen
+  />
+</div>
+
+Un exemple concret : le jeu de piste du Tiers-lieu rural de l'Hermitage, accessible sur [jeu-de-piste.hermitagelelab.com](https://jeu-de-piste.hermitagelelab.com/), est un parcours de découverte interactif dans la forêt de Laigue.
+
+Pensez au contexte réel : un visiteur, dans un domaine patrimonial et forestier, suit un jeu de piste sur son téléphone. Le jeu se fait en équipes, avec un vainqueur selon le temps et les erreurs.
+
+Lui demander de télécharger une app native depuis un store, en extérieur, avec le réseau qui flanche sous les arbres, avant même de commencer ? C'est perdre une partie des participants sur le parking.
+
+Là, c'est une PWA : un QR code sur un panneau d'accueil, un geste, et le jeu démarre. Plein écran, géolocalisé, et capable de tenir même quand la 4G disparaît entre deux clairières.
+
+C'est exactement le besoin terrain pour lequel la PWA bat l'app native à plate couture : zéro téléchargement, zéro store, et un budget de l'ordre de deux tiers inférieur à celui d'une application native.
+
+La règle de décision que j'applique en avant-projet tient en moins de 10 questions, et c'est précisément le diagnostic PWA disponible sur le site.
+
+[Faites le test pour votre projet](/outils/audit-pwa)
+
+Ce n'est que sur les dernières questions que l'app native revient dans la discussion. Deux cas la justifient vraiment.
+
+D'abord, les fonctions natives profondes : usage intensif de capteurs, Bluetooth avec des objets connectés, traitement vidéo lourd, fonctionnement hors-ligne total et permanent.
+
+Ensuite, la présence obligatoire en store : si vos utilisateurs cherchent votre service dans l'App Store, comme pour un produit grand public ou un jeu commercial, ou si un partenaire institutionnel l'exige.
+
+Hors de ces cas, le store est une contrainte que vous vous imposez sans bénéfice réel.
+
+Et le point qui change votre équation budgétaire : une PWA se construit par-dessus un WordPress.
+
+Vous gérez vos contenus, fiches lieux, étapes du parcours, points d'intérêt, énigmes ou actualités, dans une interface que votre équipe connaît déjà. Un front-end moderne vient l'habiller pour offrir l'expérience "app" sur mobile.
+
+Pas de nouvel outil à apprendre, pas de double développement iPhone et Android.
+
+## 02 · Le Tableau de bord techno
+
+App native vs PWA avec WordPress en back-office vs site classique, pour un usage terrain.
+
+| Critère | App native | PWA WordPress | Site classique |
+| --- | --- | --- | --- |
+| Coût de départ | 15 000 euros + | Dès 5 000 euros | Dès 2 250 euros |
+| Accès sans téléchargement | Non | Excellent | Excellent |
+| Hors-ligne / mauvaise connexion | Excellent | Très bon | Non |
+| Géolocalisation | Excellent | Très bon | Limité |
+| Icône écran d'accueil + plein écran | Excellent | Très bon | Non |
+| Dépendance aux stores | Forte | Aucune | Aucune |
+| Délai de livraison | 3 à 6 mois | 8 semaines + | 3 à 5 semaines |
+
+Lecture : pour un parcours, une visite, un événement ou une intervention, la PWA récupère l'essentiel : géolocalisation, hors-ligne, installation, plein écran, sans le coût, le délai, ni la dépendance aux stores.
+
+Le jeu de piste de l'Hermitage en est l'illustration directe. L'app native ne se justifie que si une contrainte matérielle forte ou une présence store obligatoire entre en jeu.
+
+## 03 · Le Chiffre qui tranche
+
+Zéro.
+
+C'est le nombre de validations Apple ou Google à attendre pour lancer le jeu de piste de l'Hermitage en scannant un QR code à l'entrée du parcours.
+
+Pour une app native, comptez plusieurs dizaines de mégaoctets à télécharger et plusieurs jours de validation à chaque mise à jour.
+
+Sur le terrain, devant un site naturel, à l'accueil d'un festival, ou au moment où un usager découvre votre service, cette friction du téléchargement est précisément ce qui transforme un utilisateur potentiel en utilisateur perdu.
+
+## 04 · La Ressource du mois
+
+Avant de budgéter une app, vérifiez si vous en avez réellement besoin.
+
+Le diagnostic PWA gratuit vous pose les bonnes questions : usage mobile, récurrence, contexte terrain, connexion, fonctions du téléphone, présence en store. Il vous oriente vers la solution la plus simple qui réponde à votre besoin.
+
+[Diagnostic PWA gratuit](/outils/audit-pwa) · 1 minute · sans engagement
+
+## 05 · Q&R Décideur
+
+**Question reçue : "On crée un parcours de découverte sur notre site naturel. Une app native nous semblait incontournable pour la carte et les étapes. C'est surdimensionné ?"**
+
+Dans la quasi-totalité des cas, oui.
+
+Un parcours de découverte, c'est un usage intense mais ponctuel : le visiteur le suit une fois, sur place, en extérieur. C'est exactement le profil où le téléchargement d'une app native devient un frein rédhibitoire.
+
+C'est précisément le choix fait pour le jeu de piste de l'Hermitage en forêt de Laigue : une PWA qui donne la carte géolocalisée, les étapes, le plein écran et le fonctionnement malgré une connexion forestière capricieuse. Le tout accessible par un simple QR code, sans rien installer.
+
+La règle générale : plus l'usage est ponctuel, en extérieur ou découvert sur place, plus la friction du store coûte cher, et plus la PWA est le bon choix.
+
+L'app native se justifie quand l'utilisateur revient quotidiennement et cherche votre produit dans le store, ce qui n'est presque jamais le cas d'un parcours ou d'une visite.

@@ -1,0 +1,212 @@
+---
+title: "Héberger et déployer un site WordPress headless en 2026"
+description: "Backend WordPress, frontend Next.js sur Vercel, CDN, CI/CD : où héberger chaque bloc, à quels tarifs publics, et quelle option selon votre profil de site."
+category: wordpress-headless
+author: "Agathe Karinthi-Martin"
+date: "2025-05-15"
+updated: "2026-07-18"
+order: 21
+faq:
+  - question: "Peut-on héberger le frontend et WordPress chez le même hébergeur ?"
+    answer: "Techniquement oui (un VPS peut faire tourner Node.js et PHP), mais c'est rarement une bonne idée : on perd le CDN mondial, les preview deployments et le rollback instantané des plateformes spécialisées, pour économiser une somme faible voire nulle — le plan d'entrée de Vercel ou Netlify est gratuit. La séparation des deux blocs est précisément ce qui rend l'architecture headless robuste. L'exception : une DSI qui impose une infrastructure interne existante."
+  - question: "Le plan gratuit de Vercel suffit-il pour un site professionnel ?"
+    answer: "Non : les conditions d'utilisation du plan Hobby le réservent aux usages personnels et non commerciaux. Pour un site d'entreprise, le plan Pro (20 $/mois par membre, 1 To de bande passante inclus) est le point de départ. C'est un coût faible au regard de ce qu'il remplace : CDN mondial, certificats SSL, CI/CD et monitoring sont inclus."
+  - question: "Faut-il un serveur WordPress puissant pour un site headless ?"
+    answer: "Moins qu'en WordPress classique. Le trafic public est absorbé par le CDN et les pages pré-générées : le serveur WordPress ne sert plus que le back-office et les requêtes API (au build et lors des revalidations). Un hébergement mutualisé de qualité suffit à beaucoup de sites éditoriaux ; on monte en gamme pour le confort du back-office et les sauvegardes managées, pas pour encaisser le trafic."
+  - question: "Que se passe-t-il si le serveur WordPress tombe en panne ?"
+    answer: "Le site public reste en ligne : les pages statiques déjà générées continuent d'être servies par le CDN du frontend. Ce qui devient indisponible, c'est le back-office (impossible de publier ou modifier du contenu) et les éventuelles fonctions dynamiques qui interrogent l'API en direct (recherche, formulaires connectés). C'est une résilience structurelle qu'un WordPress classique n'a pas : chez lui, panne serveur = site hors ligne."
+  - question: "Vercel est-il obligatoire pour héberger un frontend Next.js ?"
+    answer: "Non. Next.js se déploie aussi sur Netlify, Cloudflare, AWS Amplify ou un serveur Node.js auto-hébergé. Vercel offre simplement l'intégration la plus complète (ISR, middleware, optimisation d'images natifs) parce que c'est l'éditeur du framework. Si votre organisation a déjà une infrastructure cloud outillée, la rejoindre peut être le bon choix ; sinon, Vercel ou Netlify restent la voie la plus courte vers une mise en ligne fiable."
+---
+
+**Un site WordPress headless s'héberge en deux blocs indépendants : le backend WordPress sur un hébergement PHP/MySQL classique ou managé (de ~7 € à ~60 € HT/mois selon la gamme, aux tarifs publics 2026), et le frontend Next.js sur une plateforme à CDN intégré comme Vercel (gratuit en prototype, 20 $/mois par membre en production). La mise en ligne est automatisée : chaque push Git déclenche un build et un déploiement, et un webhook WordPress met à jour les pages statiques sans redéployer le site. Pour la majorité des structures de 20 à 250 salariés, la combinaison hébergeur mutualisé ou managé + Vercel Pro couvre le besoin.**
+
+*Article publié le 15 mai 2025, mis à jour le 18 juillet 2026 (tarifs publics vérifiés, alternatives et verdicts par profil ajoutés).*
+
+Vous avez compris [ce qu'est une architecture headless](/documentation/wordpress-headless/comprendre-le-headless) et ce que [Next.js apporte comme frontend](/documentation/wordpress-headless/nextjs-pour-wordpress-headless) ; reste la question très concrète que pose tout décideur avant de signer : où tout cela vit-il, qui met en ligne, et combien coûte l'infrastructure ? Ce guide couvre les deux hébergements, le rôle du CDN, le pipeline de déploiement et les verdicts par profil.
+
+## Pourquoi deux hébergements au lieu d'un ?
+
+**Parce qu'en headless, le site public et l'outil de gestion de contenu sont deux applications distinctes, chacune hébergée sur une infrastructure optimisée pour son rôle — et c'est un avantage, pas une complication.**
+
+Le frontend Next.js est déployé sur une plateforme spécialisée dans les applications JavaScript (Vercel, Netlify, Cloudflare), qui intègre nativement CDN, HTTPS et déploiement continu. WordPress, lui, reste sur un hébergement PHP/MySQL tout à fait classique : mêmes hébergeurs, mêmes offres, même maintenance qu'aujourd'hui. Les deux blocs communiquent par HTTPS via l'API et évoluent indépendamment.
+
+<ArchitectureDiagram
+  title="Infrastructure de déploiement headless"
+  layers={[
+    { label: "CDN / Edge Network", items: ["Distribution mondiale", "Cache statique", "Protection DDoS", "Certificat SSL"], color: "dark" },
+    { label: "Frontend — Vercel", items: ["Next.js (SSR + SSG)", "Fonctions Serverless", "Preview Deployments", "Analytics"], color: "blue" },
+    { label: "API", items: ["REST API / WPGraphQL", "Webhooks ISR", "Authentification"], color: "orange" },
+    { label: "Backend — WordPress", items: ["Hébergement PHP managé", "Base de données MySQL", "Médias (CDN images)", "Back-office"], color: "dark" },
+  ]}
+/>
+
+Cette séparation change deux choses côté backend :
+
+- **La charge chute.** Le serveur WordPress ne reçoit plus le trafic public — absorbé par le CDN et les pages pré-générées — mais uniquement les requêtes API, au moment du build et lors des revalidations. Un serveur modeste suffit là où un WordPress classique exigerait de la puissance.
+- **La surface d'attaque se réduit.** Le back-office peut être placé sur un sous-domaine dédié, voire restreint par IP ou VPN : le public n'a jamais besoin d'y accéder. C'est l'un des piliers détaillés dans [sécuriser un WordPress headless](/documentation/wordpress-headless/securite-wordpress-headless).
+
+Ce qui ne change pas : WordPress exige le même environnement qu'en mode classique (PHP 8+, MySQL/MariaDB, HTTPS), et sa maintenance (mises à jour, sauvegardes) reste identique.
+
+## Où héberger le backend WordPress ?
+
+**Sur ce que vous voulez — c'est la bonne nouvelle : tout hébergement PHP/MySQL convient. Le choix se fait sur le budget, le niveau de service et l'autonomie technique de l'équipe, pas sur la compatibilité.**
+
+| | Hébergement mutualisé | VPS / Serveur dédié | WordPress managé |
+|---|---|---|---|
+| Coût mensuel (tarifs publics 2026) | ≈ 5-15 € HT | Selon la machine, administration en sus | ≈ 25-60 € HT |
+| Performance | Variable, ressources partagées | Élevée, ressources dédiées | Élevée, optimisée WordPress |
+| Administration | Minimale | Complète, à la charge de votre équipe | Déléguée à l'hébergeur |
+| Exemples | o2switch, OVH | DigitalOcean, OVH VPS | Kinsta, WP Engine |
+| Adapté pour | Sites éditoriaux, back-office peu sollicité | Structures avec compétence système en interne | Back-office intensif, exigences de SLA, staging intégré |
+
+Trois familles, trois logiques :
+
+- **Mutualisé** (à partir d'environ 7 € HT/mois chez [o2switch](https://www.o2switch.fr/comparatif-des-offres-dhebergement-web/), gammes équivalentes chez OVH) : coût minimal, hébergeurs français familiers. En headless, ses limites classiques de performance publique disparaissent puisque le public ne touche plus ce serveur — c'est l'option la plus sous-estimée.
+- **VPS / serveur dédié** : contrôle total de la configuration, mais administration système à la charge de votre équipe. À réserver aux structures qui ont cette compétence en interne.
+- **WordPress managé** (Kinsta, WP Engine — comptez 25 à 60 € HT/mois d'après leurs grilles publiques) : sauvegardes quotidiennes, environnements de staging, support expert WordPress. On paie la tranquillité opérationnelle, pas la vitesse du site public.
+
+Configuration minimale dans tous les cas : PHP 8.0+, MySQL 5.7+/MariaDB 10.3+, certificat SSL (Let's Encrypt suffit), 2 Go de RAM pour un back-office fluide.
+
+<Callout variant="decideur" title="Ce qui change dans l'arbitrage par rapport à un WordPress classique">
+En headless, les performances du serveur WordPress n'ont presque plus d'impact sur l'expérience des visiteurs : les pages sont pré-générées ou mises en cache côté frontend. Payer un hébergement premium pour « accélérer le site » n'a donc plus de sens — on monte en gamme uniquement pour le confort éditorial (back-office réactif), les sauvegardes managées et le support. C'est un déplacement de budget, pas un surcoût.
+</Callout>
+
+## Où déployer le frontend Next.js ?
+
+**Vercel est le choix par défaut — c'est la plateforme de l'éditeur de Next.js, avec une compatibilité native complète (ISR, middleware, optimisation d'images). Netlify et Cloudflare sont des alternatives crédibles ; le cloud générique ne se justifie qu'avec une équipe DevOps.**
+
+<StatGrid>
+  <StatCard value="~100" label="points de présence CDN" description="Réseau mondial de distribution pour des temps de réponse minimaux" accent="blue" />
+  <StatCard value="1 push" label="= 1 déploiement" description="Chaque push Git déclenche un build et une mise en ligne automatiques" accent="orange" />
+  <StatCard value="100%" label="de compatibilité Next.js" description="ISR, Server Components, Middleware, Image Optimization natifs" accent="coral" />
+</StatGrid>
+
+<ComparisonTable
+  headers={["Vercel", "Netlify"]}
+  rows={[
+    { label: "Compatibilité Next.js", left: "Native et complète", right: "Bonne (quelques limitations ISR)" },
+    { label: "Plan gratuit", left: "Hobby (usage non commercial)", right: "Starter (1 membre)" },
+    { label: "Edge Functions", left: "Oui (Middleware natif)", right: "Oui" },
+    { label: "Preview Deployments", left: "Automatique par PR", right: "Automatique par PR" },
+    { label: "Écosystème", left: "Intégration Next.js native", right: "Plus généraliste" },
+  ]}
+/>
+
+Côté tarifs publics ([vercel.com/pricing](https://vercel.com/pricing), juillet 2026) : le plan Hobby est gratuit mais réservé aux usages non commerciaux — un prototype, oui ; le site de votre entreprise, non. Le plan Pro coûte **20 $/mois par membre** avec 1 To de bande passante inclus, ce qui couvre très largement un site vitrine ou éditorial. Netlify et Cloudflare Pages ont des grilles comparables. Les sites à très fort trafic ou à exigences contractuelles (SLA) relèvent des plans Enterprise, sur devis.
+
+Reste le **cloud générique** (AWS, Google Cloud, OVH Public Cloud, DigitalOcean) : contrôle total et intégration à une infrastructure existante, au prix d'une configuration manuelle et de compétences DevOps. Pertinent si votre DSI a déjà cet outillage ; contre-productif sinon.
+
+## À quoi sert le CDN dans cette architecture ?
+
+**Le CDN (Content Delivery Network) est un réseau de serveurs répartis dans le monde qui servent une copie de vos pages depuis le point le plus proche de chaque visiteur. C'est lui qui rend un site headless rapide partout, et il est inclus dans les plateformes frontend — aucune configuration à prévoir.**
+
+Concrètement : les fichiers du site (HTML pré-généré, CSS, JavaScript, images) sont répliqués sur des dizaines de « points de présence ». Quand un visiteur charge une page, le DNS le route vers le serveur le plus proche de chez lui, et le cache est invalidé automatiquement à chaque déploiement.
+
+<StatGrid>
+  <StatCard value="~50 ms" label="avec CDN (visiteur distant)" description="Un visiteur à New York est servi par le point de présence local, comme un visiteur parisien" accent="blue" />
+  <StatCard value="~500 ms" label="sans CDN (visiteur distant)" description="Le même visiteur doit atteindre le serveur d'origine à Paris, latence transatlantique comprise" accent="coral" />
+  <StatCard value="×10" label="de latence en moins" description="Le CDN égalise les temps de réponse quelle que soit la localisation du visiteur" accent="orange" />
+</StatGrid>
+
+Deux précisions utiles à la décision :
+
+- **Vous n'avez pas de CDN à acheter.** Vercel, Netlify et Cloudflare Pages l'intègrent nativement ; les hébergeurs WordPress managés en ajoutent un pour les médias. Un Cloudflare devant le tout reste possible (protection DDoS renforcée) mais n'est pas un prérequis.
+- **Le CDN sert la latence réseau ; le poids des pages reste votre affaire.** Les deux leviers se cumulent — le second est traité dans [performance et Core Web Vitals](/documentation/wordpress-headless/performance-et-core-web-vitals).
+
+## Comment se passe la mise en ligne, concrètement ?
+
+**En quatre étapes, sans FTP ni intervention serveur : on connecte le dépôt Git à Vercel, on renseigne les variables d'environnement, on déploie, puis on branche le domaine. Comptez une demi-journée pour une première mise en production propre, DNS compris.**
+
+<StepByStep>
+  <Step number={1} title="Créer un compte Vercel et importer le dépôt">
+    Connectez-vous sur vercel.com avec votre compte GitHub, GitLab ou Bitbucket, puis importez le dépôt contenant l'application Next.js. Vercel détecte le framework et configure seul les paramètres de build (`next build`, Node.js 20+).
+  </Step>
+  <Step number={2} title="Configurer les variables d'environnement">
+    C'est le lien entre les deux blocs : l'URL de l'API WordPress et les secrets sont renseignés dans Settings &gt; Environment Variables, définissables par environnement (Production, Preview, Development). Ces valeurs sont chiffrées et jamais exposées dans le code.
+  </Step>
+  <Step number={3} title="Lancer le premier déploiement">
+    Vercel installe les dépendances, exécute le build et publie le résultat sur son réseau CDN. L'URL de production est disponible immédiatement ; chaque déploiement suivant est déclenché par un simple push Git.
+  </Step>
+  <Step number={4} title="Brancher le domaine personnalisé">
+    Ajoutez votre domaine dans Settings &gt; Domains et pointez les DNS chez votre registrar (un enregistrement CNAME pour `www`). Le certificat SSL est généré et renouvelé automatiquement.
+  </Step>
+</StepByStep>
+
+```bash
+# Variables d'environnement typiques d'un frontend headless
+WORDPRESS_API_URL=https://admin.votre-site.fr/wp-json
+WORDPRESS_AUTH_TOKEN=token_secret_pour_endpoints_protégés
+REVALIDATION_SECRET=secret_partagé_pour_webhooks_isr
+NEXT_PUBLIC_SITE_URL=https://www.votre-site.fr
+```
+
+<Callout variant="developpeur" title="Variables serveur vs variables client">
+Les variables préfixées `NEXT_PUBLIC_` sont incluses dans le JavaScript envoyé au navigateur : n'y stockez jamais de secrets. Les variables sans préfixe restent côté serveur (Server Components, Route Handlers, fonctions serverless).
+</Callout>
+
+<Callout variant="tip" title="Séparez les domaines">
+Utilisez un sous-domaine dédié pour chaque bloc : `www.votre-site.fr` pour le frontend, `admin.votre-site.fr` pour le back-office WordPress. L'architecture est lisible, les certificats et règles DNS se gèrent indépendamment, et l'accès admin peut être restreint sans toucher au site public.
+</Callout>
+
+## Comment fonctionnent les mises à jour au quotidien ?
+
+**Deux circuits indépendants : le code se déploie automatiquement via Git (CI/CD), et le contenu se met à jour via un webhook WordPress qui régénère uniquement les pages concernées (On-Demand ISR) — sans redéployer le site, sans intervention technique des rédacteurs.**
+
+**Circuit code.** Un push sur la branche principale déclenche un déploiement en production ; un push sur toute autre branche ou une pull request génère un *preview deployment* — une URL unique où vérifier visuellement les modifications avant de les fusionner, le cas échéant branchée sur un WordPress de staging. Le rollback vers un déploiement précédent est instantané. Fini le FTP et ses transferts manuels non tracés : chaque mise en ligne est versionnée et réversible.
+
+**Circuit contenu.** L'ISR (Incremental Static Regeneration) permet de régénérer des pages statiques individuelles à la demande. Quand un rédacteur publie ou modifie un contenu, WordPress notifie le frontend, qui revalide les pages concernées :
+
+```typescript
+// app/api/revalidate/route.ts — côté Next.js
+export async function POST(request: NextRequest) {
+  const secret = request.headers.get('x-revalidation-secret');
+  if (secret !== process.env.REVALIDATION_SECRET) {
+    return NextResponse.json({ message: 'Invalid secret' }, { status: 401 });
+  }
+  const { post_type, slug } = await request.json();
+  revalidatePath(post_type === 'post' ? `/articles/${slug}` : `/${slug}`);
+  return NextResponse.json({ revalidated: true });
+}
+```
+
+```php
+// functions.php — côté WordPress : notifier le frontend à la publication
+add_action('save_post', function ($post_id) {
+  $post = get_post($post_id);
+  if ($post->post_status !== 'publish') return;
+  wp_remote_post('https://www.votre-site.fr/api/revalidate', [
+    'headers' => ['x-revalidation-secret' => REVALIDATION_SECRET],
+    'body' => json_encode(['post_type' => $post->post_type, 'slug' => $post->post_name]),
+  ]);
+});
+```
+
+Pour le suivi en production, Vercel intègre analytics, Speed Insights (Core Web Vitals mesurés sur données terrain : LCP, CLS, INP) et logs serverless — de quoi vérifier en continu que les performances promises sont tenues.
+
+## Quel hébergement pour quel profil de site ?
+
+**Le verdict dépend moins du trafic que de votre équipe et de vos contraintes internes. En 2026, voici ce que je recommande selon les cas :**
+
+- **Site vitrine ou éditorial, structure 20-250 salariés sans équipe technique dédiée** (le cas général) : hébergeur mutualisé français pour WordPress (~7-15 € HT/mois) + Vercel Pro pour le frontend (20 $/mois). Simple, résilient, et le back-office reste sur un environnement familier.
+- **Back-office intensif ou exigence de continuité éditoriale** (rédaction quotidienne, e-commerce headless) : WordPress managé (Kinsta, WP Engine) pour les sauvegardes, le staging et le support + Vercel Pro. On paie le service, pas la puissance.
+- **Organisation avec DSI et infrastructure cloud existante** : intégrer le frontend à l'infra en place (AWS, GCP, OVH Public Cloud) peut primer sur le confort de Vercel — à condition d'assumer la configuration et l'astreinte. Sinon, Vercel Pro reste défendable même avec une DSI.
+- **Trafic très élevé ou SLA contractuel** : plans Enterprise (Vercel, Netlify) et WordPress managé haut de gamme, sur devis. À ce niveau, l'arbitrage se fait sur audit, pas sur catalogue.
+
+Côté budget global : l'hébergement des deux blocs pèse peu dans le coût d'exploitation d'un site headless — l'essentiel est ailleurs (maintenance, évolutions). Les chiffres complets, poste par poste, sont dans [combien coûte un WordPress headless en 2026](/blog/combien-coute-wordpress-headless-2026-chiffre).
+
+<Quiz
+  question="Qu'est-ce que l'On-Demand ISR permet de faire dans un site headless ?"
+  options={[
+    "Reconstruire l'intégralité du site à chaque modification de contenu",
+    "Mettre à jour des pages statiques individuelles sans redéployer le site entier",
+    "Générer les pages côté client dans le navigateur du visiteur",
+    "Remplacer le cache du navigateur à chaque visite"
+  ]}
+  answer={1}
+  explanation="L'ISR à la demande (On-Demand ISR) permet de revalider des pages statiques spécifiques lorsqu'un contenu est modifié dans WordPress. Un webhook déclenche la revalidation uniquement des pages concernées, sans nécessiter un redéploiement complet du site. Cela combine les avantages du rendu statique (performance, SEO) avec la fraîcheur du contenu dynamique."
+/>
+
+---
+
+**Et maintenant ?** Si vous évaluez encore l'opportunité du headless pour votre organisation, [l'offre WordPress headless de Next Impact](/wordpress-headless) détaille périmètre, garanties de performance et tarifs. Pour arbitrer une architecture d'hébergement sur votre cas précis — infrastructure existante, contraintes DSI, migration en cours — une [visio conseil](/conseil) de 30 minutes tranche la question, schéma cible à l'appui.

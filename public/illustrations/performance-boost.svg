@@ -1,0 +1,86 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Performance Boost Illustration -->
+  <defs>
+    <linearGradient id="speedGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#F29F05;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#020F59"/>
+  
+  <!-- Speed lines -->
+  <g opacity="0.3">
+    <line x1="100" y1="200" x2="300" y2="200" stroke="#719ED9" stroke-width="2">
+      <animate attributeName="x1" values="100;600;100" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="300;800;300" dur="2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="120" y1="250" x2="280" y2="250" stroke="#719ED9" stroke-width="2">
+      <animate attributeName="x1" values="120;620;120" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="280;780;280" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="80" y1="300" x2="320" y2="300" stroke="#719ED9" stroke-width="2">
+      <animate attributeName="x1" values="80;580;80" dur="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="320;820;320" dur="1.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="140" y1="350" x2="260" y2="350" stroke="#719ED9" stroke-width="2">
+      <animate attributeName="x1" values="140;640;140" dur="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="260;760;260" dur="2.2s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Central rocket/boost icon -->
+  <g transform="translate(550, 300)">
+    <!-- Rocket body -->
+    <path d="M 0 -60 L 20 0 L 10 40 L -10 40 L -20 0 Z" fill="url(#speedGrad)" stroke="#719ED9" stroke-width="2"/>
+    <!-- Window -->
+    <circle cx="0" cy="-20" r="8" fill="#D0DCF2" opacity="0.8"/>
+    <!-- Flames -->
+    <path d="M -10 40 Q -15 55 -8 70 Q 0 60 0 70 Q 0 60 8 70 Q 15 55 10 40" fill="#F29F05" opacity="0.8">
+      <animate attributeName="d" values="M -10 40 Q -15 55 -8 70 Q 0 60 0 70 Q 0 60 8 70 Q 15 55 10 40;M -10 40 Q -18 60 -8 75 Q 0 65 0 75 Q 0 65 8 75 Q 18 60 10 40;M -10 40 Q -15 55 -8 70 Q 0 60 0 70 Q 0 60 8 70 Q 15 55 10 40" dur="0.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M -5 45 Q -8 58 -3 68 Q 0 62 0 68" fill="#FF6B6B" opacity="0.6">
+      <animate attributeName="d" values="M -5 45 Q -8 58 -3 68 Q 0 62 0 68;M -5 45 Q -10 62 -3 73 Q 0 67 0 73;M -5 45 Q -8 58 -3 68 Q 0 62 0 68" dur="0.5s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Glow effect -->
+    <circle cx="0" cy="-30" r="80" fill="none" stroke="#F29F05" stroke-width="2" opacity="0.2">
+      <animate attributeName="r" values="80;90;80" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.05;0.2" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Speed indicator bars -->
+  <g transform="translate(200, 450)">
+    <rect x="0" y="0" width="80" height="20" rx="10" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <rect x="5" y="5" width="70" height="10" rx="5" fill="#F29F05" opacity="0.8">
+      <animate attributeName="width" values="0;70;70" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="90" y="15" fill="#D0DCF2" font-size="14" font-family="Arial">Fast</text>
+  </g>
+  
+  <g transform="translate(400, 450)">
+    <rect x="0" y="0" width="120" height="20" rx="10" fill="#021373" stroke="#1F54BF" stroke-width="2"/>
+    <rect x="5" y="5" width="110" height="10" rx="5" fill="#F29F05" opacity="0.8">
+      <animate attributeName="width" values="0;110;110" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+    </rect>
+    <text x="130" y="15" fill="#D0DCF2" font-size="14" font-family="Arial">Faster</text>
+  </g>
+  
+  <!-- Particles -->
+  <g opacity="0.6">
+    <circle cx="150" cy="180" r="3" fill="#F29F05">
+      <animate attributeName="cx" values="150;700;150" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="180" cy="280" r="2" fill="#719ED9">
+      <animate attributeName="cx" values="180;730;180" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="380" r="3" fill="#F29F05">
+      <animate attributeName="cx" values="200;750;200" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

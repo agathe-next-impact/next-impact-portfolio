@@ -1,0 +1,120 @@
+---
+title: "Migrer un WordPress vers headless sans casser le SEO : la checklist"
+slug: "migrer-wordpress-vers-headless-sans-casser-seo"
+date: "2026-06-24"
+author: "Agathe Karinthi-Martin"
+excerpt: "Migrer WordPress vers headless sans perdre de positions Google : checklist d'audit URLs, redirections 301, sitemap, schema. Ce qui peut casser et comment l'éviter."
+tags: ["WordPress Headless", "SEO", "Migration", "Checklist"]
+readingTime: 9
+---
+
+## Le risque vrai d'une migration headless mal préparée
+
+Migrer un WordPress vers headless sans casser le SEO est possible, mais demande un inventaire URL exhaustif avant la bascule. J'ai vu deux sites perdre 40 % de leur trafic organique en trois semaines suite à une migration faite sans cartographier les URLs existantes. Le code Next.js était impeccable, le déploiement aussi. Personne n'avait listé les 320 redirections nécessaires. Voici la checklist que j'utilise sur chaque projet de migration — pour la démarche technique complète (audit, API, front, bascule), voir le [guide de migration pas à pas](/documentation/wordpress-headless/migration-monolithique-vers-headless).
+
+## Étape 1 — Audit complet des URLs existantes
+
+Avant toute ligne de code Next.js, je liste **toutes** les URLs indexées par Google. Pas seulement les articles : les pages d'archive, les tags, les catégories, les pièces jointes, les flux RSS, les pages d'auteur.
+
+Sources à croiser :
+
+- **Google Search Console** : export du rapport "Pages indexées" sur 16 mois.
+- **Sitemap.xml actuel** : récupérable sur `/sitemap.xml` ou `/sitemap_index.xml` (Yoast/Rank Math).
+- **Crawl Screaming Frog ou Sitebulb** : passage complet du domaine, profondeur illimitée.
+- **Logs serveur** : 30 jours de logs Apache ou Nginx pour repérer les URLs orphelines encore visitées.
+
+Sortir un fichier CSV unique avec : URL actuelle, code HTTP, nombre d'impressions Search Console sur 12 mois, position moyenne, titre actuel.
+
+Sur un site PME de 80 pages visibles dans l'admin, l'inventaire réel ramène en moyenne 280 à 450 URLs indexées. C'est l'écart qui tue les migrations bâclées.
+
+## Étape 2 — Mapping 301 exhaustif
+
+Pour chaque URL inventoriée, décider :
+
+- **URL conservée** : même chemin sur le nouveau site, aucune action.
+- **URL modifiée** : créer une redirection 301 vers la nouvelle URL.
+- **URL supprimée à forte valeur SEO** : trouver une URL de remplacement pertinente et faire un 301.
+- **URL supprimée sans valeur** : laisser en 410 (Gone) — informe Google que la suppression est volontaire.
+
+| Ce qui peut casser | Comment l'éviter |
+|---|---|
+| URLs `/category/xxx/` non redirigées | Lister toutes les archives Yoast/Rank Math et décider d'un schéma cible |
+| URLs `?p=123` (permaliens par ID) | Vérifier qu'aucun lien externe ne pointe encore vers elles ; 301 vers le slug |
+| Pièces jointes `/?attachment_id=` | 410 systématique sauf cas particulier (PDF, médias téléchargeables) |
+| Flux RSS `/feed/` | À conserver sur le nouveau site, même URL, même format |
+| Pagination `/page/2/` | Reproduire la même logique sur le front Next.js |
+| URLs avec accents non encodés | Tester l'encodage UTF-8 dans les redirections, sinon 404 |
+| URLs avec trailing slash incohérent | Choisir une convention (avec ou sans) et la forcer côté Next.js |
+
+Les redirections se gèrent dans `next.config.js` (jusqu'à environ 1 000 entrées) ou en edge middleware au-delà. Pour un site de 300+ URLs, je préfère un fichier JSON dédié importé par le middleware.
+
+## Étape 3 — Sitemap.xml et robots.txt
+
+Le sitemap est le contrat avec Google. Trois pièges courants :
+
+- **Oublier de générer un sitemap dynamique sur le nouveau site.** Next.js a un convention de fichier `sitemap.ts` qui automatise ça depuis la version 13.3.
+- **Lister des URLs en 404 ou 301 dans le sitemap.** Google considère ça comme un signal de faible qualité.
+- **Ne pas déclarer le sitemap dans `robots.txt`** avec `Sitemap: https://domaine.tld/sitemap.xml`.
+
+Côté `robots.txt`, autoriser explicitement les robots de recherche IA (OAI-SearchBot, PerplexityBot, ClaudeBot, GPTBot) ou les bloquer — mais le faire en conscience. Attention à la nuance : GPTBot sert à l'entraînement des modèles, tandis que c'est OAI-SearchBot qui alimente ChatGPT Search — bloquer l'un n'a pas le même effet que bloquer l'autre.
+
+## Étape 4 — Données structurées Schema.org
+
+C'est l'étape souvent négligée par les développeurs front-end. Sur un WordPress classique, les plugins SEO (Yoast, Rank Math) injectent automatiquement du JSON-LD `Article`, `Organization`, `BreadcrumbList`, `FAQPage`.
+
+Sur Next.js, rien n'est automatique. Il faut :
+
+- Reconstituer manuellement le JSON-LD côté serveur (`generateMetadata` ou composant inline).
+- Vérifier chaque type de page (article, page, archive, listing) avec le test Schema Markup Validator de Google.
+- Particulièrement soigner `FAQPage` et `HowTo` — ce sont les types les plus cités par les AI search en 2026.
+
+Sur les sites que j'ai migrés, la perte de rich results pendant les 3 premières semaines post-bascule était systématique quand le JSON-LD n'avait pas été reconstitué dès le jour J.
+
+## Étape 5 — Métadonnées préservées
+
+L'inventaire doit inclure, pour chaque URL conservée :
+
+- Title tag actuel
+- Meta description actuelle
+- Open Graph (image, titre, description)
+- Twitter Card
+- Canonical
+- Hreflang si site multilingue
+
+Sur Next.js, le `generateMetadata` doit reproduire **à l'identique** ces données pour les URLs conservées. Toute variation, même mineure (ajout d'un suffixe " | Mon site" oublié) peut faire perdre 10 à 20 % d'impressions le temps que Google ré-indexe.
+
+## Étape 6 — Recette pré-bascule (J-7)
+
+Une semaine avant la bascule DNS, je fais tourner le nouveau site sur un sous-domaine type `preview.domaine.tld` (protégé par `noindex` et basic auth pour ne pas être crawlé).
+
+La check-list de recette :
+
+- [ ] 100 URLs prioritaires (top trafic) testées manuellement, contenu équivalent.
+- [ ] 100 redirections 301 testées avec curl ou Screaming Frog.
+- [ ] Sitemap accessible et valide (validateur W3C).
+- [ ] JSON-LD valide sur 1 page de chaque template (article, page, listing, archive).
+- [ ] Lighthouse mobile &gt; 90 sur la page d'accueil et 2 articles types.
+- [ ] Pages d'erreur 404 et 410 testées (contenu et code HTTP).
+- [ ] Plan de monitoring Search Console prêt (rapport d'erreurs d'indexation à surveiller J+3, J+7, J+30).
+
+## Étape 7 — Bascule DNS et premières 72h
+
+Bascule TTL DNS à 300 secondes 48h avant l'opération. Le jour J :
+
+1. Bascule DNS.
+2. Soumettre le nouveau sitemap dans Search Console.
+3. Demander une réindexation des 20 URLs prioritaires via l'outil "Inspection d'URL".
+4. Activer le monitoring d'uptime sur 50 URLs réparties.
+5. Surveiller le rapport "Couverture" de Search Console toutes les 12h pendant 7 jours.
+
+Pic d'erreurs 404 attendu dans les 24 à 48h post-bascule, le temps que Googlebot re-crawle. Si les redirections sont bien faites, le pic redescend en 5 à 10 jours. Si le trafic organique baisse de plus de 15 % à J+14, il y a un problème de redirection ou de schema à investiguer.
+
+## Quand ne PAS faire de migration headless
+
+Si votre site a moins de 30 pages indexées et un trafic organique inférieur à 1 000 visites/mois, l'effort de migration SEO peut dépasser le bénéfice. Un WordPress optimisé (cache, CDN, images WebP, plugin SEO bien configuré) atteindra des résultats proches pour une fraction du coût.
+
+Autre cas où je déconseille : un site dont les positions Google sont fragiles (positions 8 à 15 sur des requêtes commerciales). Une migration mal exécutée peut faire chuter ces positions en 30e place, et la récupération prend 3 à 6 mois. Si le SEO est votre seul canal d'acquisition, sécurisez d'abord, migrez ensuite.
+
+## Conclusion
+
+Migrer un WordPress vers headless sans casser le SEO repose sur trois piliers : inventaire URL exhaustif, mapping 301 sans trou, JSON-LD reconstitué dès le jour J. Le code Next.js est la partie facile. Pour une vue d'ensemble de l'architecture, voir la page [WordPress headless](/wordpress-headless).

@@ -1,0 +1,151 @@
+---
+title: "Custom business platform vs generic SaaS"
+description: "When to invest in custom rather than a market SaaS — criteria, ROI, independence. An honest decision grid, no dogma."
+category: applications-web-mobile
+author: Next Impact
+date: "2026-05-14"
+order: 10
+---
+
+## The false opposition
+
+There's no universal answer between SaaS and custom. The two approaches are **complementary**: most companies use a dozen SaaS daily (email, CRM, payroll, accounting, e-signature) and that's excellent. That said, some business bricks deserve custom development because they **carry the differentiation** of the company.
+
+This article helps identify which bricks belong to SaaS and which deserve custom.
+
+## The basic rule — differentiator or commodity?
+
+The central question: **is this business process differentiating for your activity, or is it a commodity shared by all players in your sector?**
+
+### Commodity → SaaS
+
+Accounting, payroll, generic HR, email marketing, standard CRM, e-signature, helpdesk: these are **identical processes from one company to another**. A proven SaaS does better and cheaper than any custom build.
+
+Buying Sage or QuickBooks for payroll doesn't make you less competitive — all companies in your sector have the same kind of solution.
+
+### Differentiation → custom (often)
+
+Your own business logic, your specific way of managing clients or projects, your production process, your specific client relationship: that's what **makes the difference vs your competitors**. It's rarely well-served by generic SaaS.
+
+Wanting to handle a specific workflow with a generic SaaS leads to two frequent outcomes:
+
+1. You bend to SaaS constraints and lose specificity (and value)
+2. You hack with custom fields, jury-rigged integrations, hourly Zapier scripts — and inherit a fragile gas plant
+
+## The 5-criteria grid
+
+### Criterion 1 — Volume of users and transactions
+
+**SaaS advantaged**: low volume (few users, few hundred transactions/month). Custom cost is disproportionate.
+
+**Custom advantaged**: high volume (hundreds of users, thousands/millions of transactions). SaaS fees scale quickly (often per user or transaction) and custom becomes economically viable.
+
+### Criterion 2 — Process specificity
+
+**SaaS advantaged**: standard process, identical to what all your competitors do.
+
+**Custom advantaged**: unique process, which constitutes your know-how or competitive edge.
+
+### Criterion 3 — Integration with the rest of the IT system
+
+**SaaS advantaged**: limited integration needs, or standard integrations via documented APIs.
+
+**Custom advantaged**: strong interactions with other bricks of your system, data flowing in real time between modules, complex dependencies.
+
+### Criterion 4 — Data ownership and sensitivity
+
+**SaaS advantaged**: standardized data, low sensitivity, compliance covered by SaaS.
+
+**Custom advantaged**: strategic data (your client base, catalog, algorithm), sovereignty matters, specific regulatory compliance.
+
+### Criterion 5 — Predictable evolution
+
+**SaaS advantaged**: stable need or evolution within the editor's roadmap.
+
+**Custom advantaged**: frequent, sometimes unpredictable evolutions, that don't depend on a third-party editor's calendar.
+
+## The 4 typical cases
+
+### Case 1 — SaaS is the obvious choice
+
+An SME needs a CRM to track prospects and clients. Modest volume, standard process, important but well-served data. → HubSpot, Pipedrive, Salesforce depending on size. Custom is absurd.
+
+### Case 2 — Custom is the obvious choice
+
+An SME has a production process with very specific business rules, multiple stakeholders, complex temporal dependencies, and 50+ projects managed in parallel. Market ERPs cost €50-200k/year in licenses, require 6-12 months of configuration, and never cover 100% of the specific need. → Custom: €60-120k initial, €12-18k/year maintenance, covers 100% of needs and evolves with the activity.
+
+### Case 3 — Relevant hybrid
+
+A marketplace uses custom for its core business (directory, matchmaking, moderation) and **plugs** SaaS for commodity functions: Stripe for payment, SendGrid for transactional email, Mixpanel for analytics. **It's the healthiest configuration**: custom where there's differentiation, SaaS where there's commodity.
+
+### Case 4 — Migration from a stifling SaaS
+
+A company has used for 3 years a SaaS that no longer covers 30% of its needs. Annual cost: €12k. Cost of workarounds (Zapier, in-house scripts, manual re-entry): €25k/year of lost time. Migration to custom: €40k initial. ROI: 2 years. → Often profitable, but to be validated precisely.
+
+## SaaS traps
+
+### 1. Price dependency
+
+A SaaS that costs €50/user/month for 10 users (€6k/year) costs €60k/year for 100 users. If your activity scales, your SaaS cost follows — often linearly, no amortization.
+
+### 2. Vendor lock-in
+
+Your data lives at the editor's. Exiting is never trivial: limited exports, proprietary formats, features not reproducible elsewhere. The more you're committed, the more expensive it is to leave.
+
+### 3. The editor's pace
+
+A feature critical for you may never arrive — or arrive in 3 years. You don't control the roadmap.
+
+### 4. Imposed evolutions
+
+The editor can change its interface, pricing, model, sometimes even close the product. You take what comes.
+
+## Custom traps
+
+### 1. Initial over-investment
+
+Building custom what already exists in SaaS costs more for a worse result. Never redo what exists and is well-done elsewhere.
+
+### 2. Underestimated maintenance
+
+Custom demands ongoing maintenance. Budget 15-25% of initial cost per year. Otherwise, the product drifts and loses value.
+
+### 3. Vendor dependency
+
+If you have **only one vendor** who knows your code, you have a breaking point. Mitigation: clean and documented code, access to your Git repo, training an internal reference person or choosing a vendor whose work you can audit.
+
+### 4. Over-specification
+
+Wanting to cover EVERYTHING in V1 explodes budgets and timelines. Better an MVP at €30k that ships in 3 months and evolves, than a dreamed project at €150k that ships in 18 months and is already obsolete.
+
+## The practical rule
+
+| Type of need | Reflex |
+|---|---|
+| Accounting, payroll, tax | SaaS always |
+| Generic CRM | SaaS in 90% of cases |
+| Email marketing, newsletter | SaaS (Brevo, MailerLite, ConvertKit) |
+| Helpdesk, customer support | SaaS (Crisp, Intercom, HelpScout) |
+| Analytics, A/B testing | SaaS (Plausible, Posthog, Mixpanel) |
+| Document management | SaaS most often (Notion, Confluence) |
+| **Specific business platform** | **Custom** |
+| **Marketplace, directory** | **Custom** |
+| **Critical internal tool** | **Custom if volume + specificity** |
+| **Client area / portal** | **Custom if differentiating** |
+| **Configurator, simulator, quote** | **Custom if proprietary logic** |
+
+## Recommended strategy for the majority
+
+1. **Everything that's commodity → SaaS** (10 to 15 SaaS total in an SME, that's normal)
+2. **The differentiating core business → custom** (1 to 3 bricks depending on company size)
+3. **The two communicate via clean integrations** (webhooks, API, sometimes a light middleware)
+
+It's the configuration of **all companies that have a high-performing product platform**: custom where it matters, SaaS everywhere else.
+
+## Going further
+
+- [Anatomy of a custom web app](/documentation/applications-web-mobile/anatomie-dune-web-app)
+- [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure)
+- [Migrating from a SaaS to a custom web app](/documentation/applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure)
+
+Evaluating custom relevance for a specific need? [Let's discuss](/contact) — I'll orient you honestly, including toward a SaaS if it's the best option.

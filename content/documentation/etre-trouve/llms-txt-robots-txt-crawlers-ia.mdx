@@ -1,0 +1,209 @@
+---
+title: "llms.txt, robots.txt : que faire des robots IA sur votre site ?"
+description: "GPTBot, OAI-SearchBot, PerplexityBot… qui sont les robots IA, comment régler votre robots.txt, et faut-il un llms.txt ? Réponses nettes, sans jargon."
+category: etre-trouve
+author: "Agathe Karinthi-Martin"
+date: "2026-07-18"
+updated: "2026-07-18"
+order: 5
+faq:
+  - question: "Bloquer GPTBot fait-il disparaître mon site de ChatGPT ?"
+    answer: "Non. GPTBot ne sert qu'à collecter du contenu pour entraîner les futurs modèles d'OpenAI. C'est OAI-SearchBot qui alimente l'index de ChatGPT Search : tant qu'il est autorisé, votre site peut apparaître comme source citée. Bloquer l'un n'a aucun effet sur l'autre — ce sont deux décisions distinctes."
+  - question: "Le llms.txt est-il obligatoire ou utilisé par Google ?"
+    answer: "Ni l'un ni l'autre. C'est une proposition communautaire (llmstxt.org), pas un standard : ni Google ni OpenAI n'ont confirmé le consommer, et John Mueller (Google) a déclaré en 2025 qu'aucun système d'IA ne l'utilisait alors. Il coûte 30 minutes et ne présente aucun risque, mais n'en attendez pas un levier de visibilité."
+  - question: "Les robots IA respectent-ils vraiment le robots.txt ?"
+    answer: "Les principaux éditeurs (OpenAI, Anthropic, Perplexity, Google, Apple) documentent officiellement que leurs robots le respectent. Mais robots.txt est une convention, pas une serrure : certains robots, comme Bytespider (ByteDance), ont la réputation de l'ignorer. Pour un blocage réellement contraignant, il faut agir au niveau du serveur ou du CDN."
+  - question: "Comment savoir si un robot IA visite réellement mon site ?"
+    answer: "Dans les logs de votre serveur : chaque robot se présente sous son propre nom (user-agent), donc on voit précisément qui visite quoi et à quelle fréquence. C'est aussi le seul moyen de détecter un blocage silencieux par le pare-feu ou le CDN : un robot autorisé dans robots.txt mais absent des logs depuis des semaines est un signal d'alerte."
+  - question: "Faut-il bloquer les robots IA pour protéger son contenu ?"
+    answer: "C'est un choix éditorial, pas une fatalité technique. Vous pouvez refuser l'entraînement des modèles (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended) tout en restant présent dans les recherches IA (OAI-SearchBot, PerplexityBot) : les deux réglages sont indépendants. Bloquer les robots de recherche IA, en revanche, revient à renoncer à être cité."
+---
+
+**Trois fichiers et réglages décident de ce que les IA peuvent faire de votre site : le robots.txt (le fichier qui dit aux robots ce qu'ils ont le droit de visiter), la configuration de votre CDN ou pare-feu (qui peut bloquer en silence ce que robots.txt autorise), et éventuellement un llms.txt (un sommaire du site proposé aux IA — utile en théorie, à l'adoption non confirmée). La décision clé est de comprendre qu'il n'y a pas « les robots IA » mais trois familles : les robots d'entraînement (GPTBot, ClaudeBot…), les robots de recherche (OAI-SearchBot, PerplexityBot…) et les robots d'accès à la demande (ChatGPT-User…). Bloquer GPTBot n'empêche pas d'apparaître dans ChatGPT Search : ce sont deux décisions distinctes. Ce guide donne le tableau complet des robots 2026, les directives robots.txt à écrire, et un verdict honnête sur le llms.txt.**
+
+*Article publié le 18 juillet 2026. Sujet volatil : la liste des robots IA et leurs règles évoluent vite, ce contenu est revu tous les 2 à 3 mois.*
+
+## Qui sont les robots IA qui visitent votre site ?
+
+**Chaque éditeur d'IA opère plusieurs robots (crawlers), chacun avec un rôle précis — et c'est le rôle, pas la marque, qui détermine ce que vous risquez ou gagnez à le bloquer.** Un robot se reconnaît à son *user-agent* : le nom sous lequel il se présente à votre serveur, et que vous utilisez dans robots.txt pour l'autoriser ou le refuser.
+
+Voici le tableau de référence, établi à partir des documentations officielles (liées en fin d'article) :
+
+| Robot (user-agent) | Opérateur | Sert à | Effet si vous le bloquez |
+|---|---|---|---|
+| **GPTBot** | OpenAI | Entraînement des futurs modèles | Vos contenus sortent des données d'entraînement. Aucun effet sur ChatGPT Search. |
+| **OAI-SearchBot** | OpenAI | Index de ChatGPT Search | Vous disparaissez des sources citées par ChatGPT Search. |
+| **ChatGPT-User** | OpenAI | Visite d'une page à la demande d'un utilisateur | ChatGPT ne peut plus ouvrir vos pages quand un utilisateur les mentionne. |
+| **ClaudeBot** | Anthropic | Entraînement des modèles Claude | Exclusion des données d'entraînement. N'affecte ni la recherche ni l'accès à la demande. |
+| **Claude-SearchBot** | Anthropic | Résultats de recherche de Claude | Absent des résultats de recherche de Claude. |
+| **Claude-User** | Anthropic | Visite à la demande d'un utilisateur | Claude ne peut plus consulter vos pages en conversation. |
+| **PerplexityBot** | Perplexity | Index de recherche Perplexity (pas d'entraînement) | Absent des réponses et citations de Perplexity. |
+| **Perplexity-User** | Perplexity | Visite à la demande d'un utilisateur | Perplexity ne peut plus ouvrir vos pages sur demande. |
+| **Googlebot** | Google | Google Search — y compris les fonctionnalités IA | Vous sortez de Google tout court. À ne bloquer jamais, sauf cas très particulier. |
+| **Google-Extended** | Google | Jeton de contrôle : entraînement de Gemini | Vos contenus sortent de l'entraînement Gemini. Aucun effet sur Google Search ni sur les AI Overviews, qui dépendent de Googlebot. |
+| **Applebot** | Apple | Siri, Spotlight, recherche Safari | Absent des fonctions de recherche Apple. |
+| **Applebot-Extended** | Apple | Jeton de contrôle : entraînement Apple Intelligence | Hors entraînement Apple ; vous restez dans les résultats de recherche Apple. |
+| **CCBot** | Common Crawl | Corpus ouvert utilisé par de nombreux laboratoires pour l'entraînement | Vos contenus sortent des futurs jeux de données dérivés de Common Crawl. |
+| **Meta-ExternalAgent** | Meta | Entraînement des modèles et amélioration des produits Meta | Exclusion de la collecte Meta. |
+| **Bytespider** | ByteDance (TikTok) | Entraînement | Théoriquement exclu — mais ce robot a la réputation de ne pas toujours respecter robots.txt. |
+
+Deux remarques d'usage. D'abord, **Google-Extended et Applebot-Extended ne sont pas des robots qui visitent votre site** : ce sont des jetons de contrôle, lus dans votre robots.txt pour décider de l'usage des données déjà collectées par Googlebot et Applebot. Ensuite, la liste s'allonge régulièrement — d'où la note de révision en tête d'article.
+
+Ce tableau dit *qui peut lire* votre site. Comment ces moteurs choisissent ensuite ce qu'ils citent — la mécanique crawl, sélection, citation — est l'objet de l'article [Comment ChatGPT et Perplexity choisissent leurs sources](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources).
+
+## Entraînement, recherche, accès à la demande : les trois décisions à prendre
+
+**La confusion la plus coûteuse en 2026 est de traiter « les robots IA » comme un bloc. Il y a en réalité trois questions indépendantes, et vous pouvez répondre oui à l'une et non à l'autre.**
+
+1. **Acceptez-vous que vos contenus entraînent les futurs modèles ?** C'est le rôle de GPTBot, ClaudeBot, CCBot, Meta-ExternalAgent, et des jetons Google-Extended et Applebot-Extended. Refuser est un choix légitime — protection éditoriale, position de principe — et **sans aucun coût de visibilité** : ces robots n'alimentent pas les résultats de recherche.
+2. **Voulez-vous apparaître dans les recherches et réponses des IA ?** C'est le rôle d'OAI-SearchBot, PerplexityBot, Claude-SearchBot — et de Googlebot pour les fonctionnalités IA de Google. Les bloquer, c'est renoncer à être cité quand un prospect pose sa question à un assistant. Pour la quasi-totalité des entreprises qui vivent d'être trouvées, la réponse est oui.
+3. **Acceptez-vous qu'un assistant consulte une page à la demande d'un utilisateur ?** C'est le rôle de ChatGPT-User, Claude-User, Perplexity-User. Bloquer ces robots signifie qu'un prospect qui colle votre URL dans ChatGPT pour « résumer cette offre » obtiendra… une erreur. Il y a rarement une bonne raison de le faire.
+
+La conséquence pratique, actée noir sur blanc dans [la documentation OpenAI](https://developers.openai.com/api/docs/bots) : **bloquer GPTBot n'empêche pas d'apparaître dans ChatGPT Search**, et autoriser OAI-SearchBot n'autorise pas l'entraînement. Anthropic documente [la même indépendance entre ses trois robots](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler). Toute politique d'accès sérieuse se formule donc en trois lignes : entraînement (oui/non), recherche (oui/non), accès à la demande (oui/non).
+
+## Comment écrire son robots.txt vis-à-vis des robots IA ?
+
+**Le robots.txt est un fichier texte placé à la racine du site (`votresite.fr/robots.txt`) qui indique à chaque robot ce qu'il peut visiter. Règle de base : ce qui n'est pas interdit est autorisé.** Un site sans directive spécifique est donc déjà ouvert aux robots IA — la question n'est pas « comment s'ouvrir » mais « que veut-on fermer, en conscience ».
+
+Politique 1 — **tout ouvert, sauf les zones techniques** (la politique de ce site) :
+
+```text
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://votresite.fr/sitemap.xml
+```
+
+Politique 2 — **refuser l'entraînement, rester visible dans les recherches IA** :
+
+```text
+# Entraînement : non
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# Recherche et accès à la demande : oui (aucune directive nécessaire,
+# l'absence de règle vaut autorisation)
+```
+
+Trois points de vigilance :
+
+- **Chaque bloc `User-agent` est indépendant.** Un robot applique le bloc qui porte son nom, sinon le bloc `*`. Une faute de frappe dans le nom (« GPT-Bot » au lieu de « GPTBot ») rend la directive muette.
+- **robots.txt est une convention, pas une serrure.** Les éditeurs cités documentent le respect du fichier ; un acteur peu scrupuleux peut l'ignorer. Un blocage réellement contraignant se fait au niveau du serveur ou du CDN.
+- **Ne bloquez jamais Googlebot pour « bloquer l'IA de Google »** : c'est Google-Extended qui contrôle l'entraînement de Gemini. Bloquer Googlebot vous sort de Google Search — AI Overviews compris, mais aussi tout le reste.
+
+Vous pouvez consulter [le robots.txt de ce site](https://www.next-impact.digital/robots.txt) : il applique la politique 1, avec chaque robot IA nommé explicitement pour rendre la politique lisible.
+
+## Le piège du CDN et du pare-feu : bloqué sans le savoir
+
+**Le cas le plus fréquent que rencontrent les PME n'est pas un mauvais robots.txt : c'est un robots.txt correct contredit par une couche de sécurité qui bloque les robots IA en silence.** Un CDN (réseau de diffusion de contenu, comme Cloudflare) ou un pare-feu applicatif filtre le trafic *avant* que votre site ne réponde — et ses règles anti-bots classent souvent les crawlers IA comme indésirables, sans que rien n'apparaisse côté site.
+
+Le phénomène a changé d'échelle en 2025 : [Cloudflare bloque désormais les robots IA par défaut pour les nouveaux domaines](https://blog.cloudflare.com/content-independence-day-ai-options/), le propriétaire devant explicitement choisir de les autoriser. Beaucoup de plugins de sécurité WordPress et de pare-feu d'hébergeurs appliquent des listes similaires. Résultat : des sites entiers persuadés d'être ouverts — leur robots.txt le dit — mais invisibles pour OAI-SearchBot ou PerplexityBot, qui reçoivent une erreur 403 avant même de lire le fichier.
+
+La vérification tient en deux gestes :
+
+1. **Vérifier la configuration du CDN/pare-feu** : chercher les réglages « AI crawlers », « bot fight mode » ou équivalents, et aligner leur politique sur vos trois décisions (entraînement / recherche / accès à la demande) — pas sur un blocage global par défaut.
+2. **Contrôler les logs serveur** : chaque robot se présente sous son user-agent ; un robot autorisé dans robots.txt mais absent des logs depuis des semaines est le symptôme typique d'un blocage en amont.
+
+> **Ce que je constate en projet.** C'est dans les logs de mes sites en production que je suis le comportement réel des robots IA — chaque robot du tableau y apparaît sous son propre nom, à son propre rythme. Mon relevé de juin 2026 montre qu'ils trient de plus en plus : ils espacent leurs visites sur les sites lents et délaissent les pages qui leur résistent. Les chiffres et seuils exacts sont publiés dans [WordPress headless en 2026 : ce qui a changé](/blog/wordpress-headless-en-2026-ce-qui-a-change). La leçon d'accès est simple : autoriser un robot ne suffit pas, encore faut-il que rien ne le refoule en chemin — et seuls les logs le prouvent.
+
+Si vous migrez d'architecture, la vérification des accès robots fait partie des étapes SEO à ne pas sauter — elle est détaillée dans [Migrer WordPress vers le headless sans casser son SEO](/blog/migrer-wordpress-vers-headless-sans-casser-seo).
+
+## Le llms.txt : qu'est-ce que c'est, et faut-il en créer un ?
+
+**Le llms.txt est une proposition communautaire ([llmstxt.org](https://llmstxt.org/), lancée fin 2024) : un fichier au format markdown, placé à la racine du site, qui résume ce que le site est et liste ses pages importantes — un sommaire conçu pour être lu par des modèles de langage plutôt que par des humains.** À la différence du robots.txt, il ne donne ni ne retire aucun droit : robots.txt dit *qui peut lire*, llms.txt propose *quoi lire en priorité*.
+
+L'honnêteté oblige à dire ce que peu d'articles sur le sujet disent : **l'adoption n'est confirmée par aucun grand éditeur d'IA.** Ni Google ni OpenAI n'ont annoncé consommer ce fichier, et John Mueller (Google) a été explicite en juin 2025 : [« aucun système d'IA n'utilise actuellement llms.txt »](https://www.seroundtable.com/google-ai-llms-txt-39607.html), une réalité vérifiable dans les logs serveur de chacun. La situation peut évoluer — c'est précisément le genre de point que la note de révision de cet article couvre — mais en juillet 2026, présenter le llms.txt comme un levier de visibilité serait vous mentir.
+
+Mon verdict tient en une phrase : **à faire, parce que c'est 30 minutes sans aucun risque — mais n'en attendez pas un levier.** C'est une assurance à coût quasi nul sur un standard qui *pourrait* prendre, pas une action de visibilité. Si votre budget d'effort est limité, les pages qui répondent aux questions de vos clients passent loin devant — c'est l'objet du [guide GEO pour PME](/documentation/etre-trouve/guide-geo-pme).
+
+Concrètement, un llms.txt suit une structure simple : un titre, un paragraphe de présentation, puis des listes de liens commentés par section. Ce site applique sa propre recommandation — [next-impact.digital/llms.txt](https://www.next-impact.digital/llms.txt) — avec ce squelette :
+
+```text
+# Next Impact
+
+> Conseil techno web à l'heure de l'IA. [présentation en 2 phrases]
+
+## Summary
+[qui, quoi, pour qui — les faits qu'un assistant doit restituer correctement]
+
+## Primary Pages
+- [Accueil](https://…): promesse et offres principales
+- [Conseil](https://…): les prestations et leurs prix
+…
+
+## Documentation
+- [chaque guide important](https://…): sa promesse en une ligne
+```
+
+Le contenu du fichier est du texte factuel : identité, offres, pages clés, chacune décrite en une ligne. Si un assistant le lit un jour, il y trouvera les faits exacts à restituer — c'est tout l'enjeu.
+
+## Verdict par profil : que bloquer, que laisser ouvert ?
+
+**La bonne politique dépend de ce que votre contenu vaut et de ce qu'il vous rapporte.**
+
+- **Site vitrine de PME (services, B2B, artisan)** : tout ouvrir, y compris l'entraînement. Votre enjeu est d'être trouvé et cité ; vos pages n'ont pas de valeur de licence, et chaque canal où un prospect peut vous découvrir compte. Vérifiez surtout le piège CDN — c'est votre risque principal, pas votre robots.txt.
+- **Éditeur de contenu (média, blog expert, organisme de formation)** : ouvrir la recherche et l'accès à la demande, et trancher l'entraînement en conscience. Si votre contenu original est votre actif, refuser GPTBot, ClaudeBot, CCBot et les jetons Extended est défendable — sans coût de visibilité. Si votre modèle vit de la notoriété, l'ouverture totale reste cohérente.
+- **E-commerce** : ouvrir la recherche (vos contenus de conseil et de comparaison peuvent être cités — rarement les fiches produits), ouvrir l'accès à la demande (un assistant qui consulte une fiche à la demande d'un client est un vendeur de plus), et arbitrer l'entraînement librement : l'impact est marginal dans les deux sens.
+
+Dans les trois cas, la décision se prend en trois lignes — entraînement, recherche, accès à la demande — puis se vérifie dans les logs. Si vous ne savez pas où vous en êtes, le [diagnostic de visibilité IA](/outils/visibilite-ia) inclut précisément la question des robots et vous donne un premier état des lieux gratuit.
+
+## FAQ — robots IA, robots.txt et llms.txt
+
+### Bloquer GPTBot fait-il disparaître mon site de ChatGPT ?
+
+Non. GPTBot ne sert qu'à collecter du contenu pour entraîner les futurs modèles d'OpenAI. C'est OAI-SearchBot qui alimente l'index de ChatGPT Search : tant qu'il est autorisé, votre site peut apparaître comme source citée. Bloquer l'un n'a aucun effet sur l'autre — ce sont deux décisions distinctes, [documentées par OpenAI](https://developers.openai.com/api/docs/bots).
+
+### Le llms.txt est-il obligatoire ou utilisé par Google ?
+
+Ni l'un ni l'autre. C'est une proposition communautaire ([llmstxt.org](https://llmstxt.org/)), pas un standard : ni Google ni OpenAI n'ont confirmé le consommer, et John Mueller (Google) a déclaré en 2025 qu'aucun système d'IA ne l'utilisait alors. Il coûte 30 minutes et ne présente aucun risque, mais n'en attendez pas un levier de visibilité.
+
+### Les robots IA respectent-ils vraiment le robots.txt ?
+
+Les principaux éditeurs (OpenAI, Anthropic, Perplexity, Google, Apple) documentent officiellement que leurs robots le respectent. Mais robots.txt est une convention, pas une serrure : certains robots, comme Bytespider (ByteDance), ont la réputation de l'ignorer. Pour un blocage réellement contraignant, il faut agir au niveau du serveur ou du CDN.
+
+### Comment savoir si un robot IA visite réellement mon site ?
+
+Dans les logs de votre serveur : chaque robot se présente sous son propre nom (user-agent), donc on voit précisément qui visite quoi et à quelle fréquence. C'est aussi le seul moyen de détecter un blocage silencieux par le pare-feu ou le CDN : un robot autorisé dans robots.txt mais absent des logs depuis des semaines est un signal d'alerte.
+
+### Faut-il bloquer les robots IA pour protéger son contenu ?
+
+C'est un choix éditorial, pas une fatalité technique. Vous pouvez refuser l'entraînement des modèles (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended) tout en restant présent dans les recherches IA (OAI-SearchBot, PerplexityBot) : les deux réglages sont indépendants. Bloquer les robots de recherche IA, en revanche, revient à renoncer à être cité.
+
+---
+
+**Et maintenant ?** Le [diagnostic de visibilité IA](/outils/visibilite-ia) vérifie gratuitement, en quelques minutes, si votre site est ouvert aux bons robots — c'est le premier réflexe. La [checklist GEO](/outils/checklist-geo) reprend ces vérifications d'accès parmi les actions à cocher. Et si vous voulez trancher votre politique d'accès avec moi — que bloquer, que laisser, comment le vérifier chez votre hébergeur —, la [visio conseil](/conseil) règle la question en 30 minutes : 150 € HT, crédités si un projet démarre sous 30 jours.
+
+Pour comprendre ce que les moteurs font *ensuite* de vos pages — comment ils sélectionnent et citent leurs sources —, lisez [Comment ChatGPT et Perplexity choisissent leurs sources](/documentation/etre-trouve/comment-chatgpt-perplexity-choisissent-leurs-sources). Et pour la vue d'ensemble SEO + GEO, la rubrique [Être trouvé à l'heure de l'IA](/documentation/etre-trouve) arbitre par où commencer.
+
+## Sources
+
+- OpenAI, [*Overview of OpenAI crawlers*](https://developers.openai.com/api/docs/bots) : rôles respectifs de GPTBot, OAI-SearchBot et ChatGPT-User.
+- Anthropic, [*Does Anthropic crawl data from the web?*](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) : ClaudeBot, Claude-SearchBot, Claude-User et leur indépendance mutuelle.
+- Perplexity, [*Perplexity's crawlers*](https://docs.perplexity.ai/guides/bots) : PerplexityBot, Perplexity-User et robots.txt.
+- Google, [*Google's common crawlers*](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) : Googlebot, Google-Extended et leur périmètre.
+- Apple, [*About Applebot*](https://support.apple.com/en-us/119829) : Applebot, Applebot-Extended et l'opt-out d'entraînement.
+- Common Crawl, [*CCBot*](https://commoncrawl.org/ccbot) : le corpus ouvert et son robot.
+- Meta, [*Meta web crawlers*](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers) : Meta-ExternalAgent et les robots Meta.
+- llmstxt.org, [*The /llms.txt file*](https://llmstxt.org/) : la proposition d'origine et son format.
+- Search Engine Roundtable, [*Google Says No AI System Currently Uses LLMs.txt*](https://www.seroundtable.com/google-ai-llms-txt-39607.html) : la déclaration de John Mueller, juin 2025.
+- Cloudflare, [*Your site, your rules: new AI traffic options*](https://blog.cloudflare.com/content-independence-day-ai-options/) : blocage des robots IA par défaut pour les nouveaux domaines, juillet 2025.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle conçoit des sites mesurés sur leurs performances réelles (Core Web Vitals) et suit depuis 2025 le comportement des robots IA sur les sites qu'elle opère. [Prendre contact](/contact).*

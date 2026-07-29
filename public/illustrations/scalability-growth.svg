@@ -1,0 +1,95 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Scalability Growth Illustration -->
+  <defs>
+    <linearGradient id="growthGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#1F54BF;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#719ED9;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#F29F05;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#020F59"/>
+  
+  <!-- Grid -->
+  <g opacity="0.1">
+    <line x1="0" y1="500" x2="800" y2="500" stroke="#719ED9" stroke-width="1"/>
+    <line x1="0" y1="400" x2="800" y2="400" stroke="#719ED9" stroke-width="1"/>
+    <line x1="0" y1="300" x2="800" y2="300" stroke="#719ED9" stroke-width="1"/>
+    <line x1="0" y1="200" x2="800" y2="200" stroke="#719ED9" stroke-width="1"/>
+    <line x1="0" y1="100" x2="800" y2="100" stroke="#719ED9" stroke-width="1"/>
+    
+    <line x1="150" y1="50" x2="150" y2="550" stroke="#719ED9" stroke-width="1"/>
+    <line x1="300" y1="50" x2="300" y2="550" stroke="#719ED9" stroke-width="1"/>
+    <line x1="450" y1="50" x2="450" y2="550" stroke="#719ED9" stroke-width="1"/>
+    <line x1="600" y1="50" x2="600" y2="550" stroke="#719ED9" stroke-width="1"/>
+  </g>
+  
+  <!-- Growing bars -->
+  <g>
+    <rect x="120" y="450" width="60" height="50" fill="#1F54BF" opacity="0.8">
+      <animate attributeName="height" values="50;50;80" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="450;450;420" dur="4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="270" y="400" width="60" height="100" fill="#1F54BF" opacity="0.8">
+      <animate attributeName="height" values="100;100;150" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="400;400;350" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="420" y="320" width="60" height="180" fill="#719ED9" opacity="0.8">
+      <animate attributeName="height" values="180;180;250" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="320;320;250" dur="4s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="570" y="200" width="60" height="300" fill="#F29F05" opacity="0.8">
+      <animate attributeName="height" values="300;300;380" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="200;200;120" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Growth line -->
+  <path d="M 150 475 L 300 425 L 450 305 L 600 150" stroke="#F29F05" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round" stroke-linejoin="round">
+    <animate attributeName="d" values="M 150 475 L 300 425 L 450 305 L 600 150;M 150 460 L 300 375 L 450 230 L 600 80;M 150 475 L 300 425 L 450 305 L 600 150" dur="4s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Data points -->
+  <circle cx="150" cy="475" r="6" fill="#1F54BF" stroke="#D0DCF2" stroke-width="2">
+    <animate attributeName="cy" values="475;460;475" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="300" cy="425" r="6" fill="#1F54BF" stroke="#D0DCF2" stroke-width="2">
+    <animate attributeName="cy" values="425;375;425" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="450" cy="305" r="6" fill="#719ED9" stroke="#D0DCF2" stroke-width="2">
+    <animate attributeName="cy" values="305;230;305" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="600" cy="150" r="6" fill="#F29F05" stroke="#D0DCF2" stroke-width="2">
+    <animate attributeName="cy" values="150;80;150" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Upward arrows -->
+  <g opacity="0.5">
+    <path d="M 180 380 L 180 340 L 170 350 M 180 340 L 190 350" stroke="#719ED9" stroke-width="2" fill="none">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-400; 0,0" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 380 320 L 380 280 L 370 290 M 380 280 L 390 290" stroke="#719ED9" stroke-width="2" fill="none">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-400; 0,0" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 530 240 L 530 200 L 520 210 M 530 200 L 540 210" stroke="#F29F05" stroke-width="2" fill="none">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-400; 0,0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Cloud servers expanding -->
+  <g transform="translate(680, 100)">
+    <ellipse cx="0" cy="-20" rx="25" ry="15" fill="#021373" stroke="#719ED9" stroke-width="2" opacity="0.8"/>
+    <ellipse cx="-15" cy="-10" rx="20" ry="12" fill="#021373" stroke="#719ED9" stroke-width="2" opacity="0.8"/>
+    <ellipse cx="15" cy="-10" rx="20" ry="12" fill="#021373" stroke="#719ED9" stroke-width="2" opacity="0.8"/>
+    <ellipse cx="0" cy="0" rx="35" ry="15" fill="#021373" stroke="#719ED9" stroke-width="2" opacity="0.8"/>
+    
+    <circle cx="0" cy="-10" r="50" fill="none" stroke="#F29F05" stroke-width="1" opacity="0.3">
+      <animate attributeName="r" values="50;70;50" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

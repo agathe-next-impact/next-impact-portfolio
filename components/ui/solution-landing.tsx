@@ -1,55 +1,53 @@
-import Image from 'next/image';
-import { CheckCircle } from 'lucide-react';
-import { title } from 'process';
+import Image from "next/image"
 
 interface SolutionLandingProps {
-    title?: string;
-    subtitle?: string;
-    imageUrl?: string;
-    features?: string[];
+  title?: string
+  subtitle?: string
+  imageUrl?: string
+  features?: string[]
 }
 
-export default function SolutionLanding({
-    title,
-    subtitle,
-    imageUrl,
-    features,
-    }: SolutionLandingProps
-) {
-    return (
-    <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-medium text-regularblue mb-4">
+export default function SolutionLanding({ title, subtitle, imageUrl, features }: SolutionLandingProps) {
+  return (
+    <section className="s">
+      <div className="container">
+        <div className="sec-head">
+          <div className="sec-no">№ 02</div>
+          <h2
+            className="ni-serif"
+            style={{ fontSize: "clamp(28px, 3.5vw, 52px)", lineHeight: 1.1, margin: 0 }}
+          >
             {title}
           </h2>
-          <p className="text-lg text-regularblue/80">
-            {subtitle}
-          </p>
+          <div className="sec-meta">Solution</div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div>
-            <Image
-                src={imageUrl || '/images/motivation-landing.jpg'}
-                alt={title}
-                width={600}
-                height={400}
-                className="w-full h-auto rounded-lg shadow-lg mb-8"
-            />
-        </div>
-        <div className="max-w-2xl mx-auto">
-        {features && features.length > 0 && (
-            <ul className="mt-6 space-y-6 text-mediumblue text-lg">
-                {features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-regularblue" />
-                        {feature}
-                    </li>
-                ))}
-            </ul>
+        {subtitle && (
+          <p style={{ fontSize: 14, color: "var(--ink-2)", marginBottom: 40 }}>{subtitle}</p>
         )}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid var(--rule)" }}>
+          <div style={{ overflow: "hidden" }}>
+            <Image
+              src={imageUrl || "/img/placeholder.jpg"}
+              alt={title || "Solution"}
+              width={600}
+              height={400}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
+            />
+          </div>
+          <div style={{ borderLeft: "1px solid var(--rule)", padding: "32px 28px", display: "flex", alignItems: "center" }}>
+            {features && features.length > 0 && (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+                {features.map((f, i) => (
+                  <li key={i} style={{ fontSize: 14, color: "var(--ink-2)", display: "flex", gap: 10 }}>
+                    <span style={{ color: "var(--ink-2)", flexShrink: 0 }}>→</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-        </div>
-      </section>
-    );
-    }
+      </div>
+    </section>
+  )
+}

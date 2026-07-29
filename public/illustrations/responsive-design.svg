@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Desktop -->
+  <rect x="40" y="60" width="140" height="90" rx="4" fill="#1F54BF" opacity="0.2"/>
+  <rect x="45" y="65" width="130" height="70" fill="#719ED9" opacity="0.3"/>
+  <line x1="50" y1="72" x2="100" y2="72" stroke="#1F54BF" stroke-width="2"/>
+  <line x1="50" y1="80" x2="120" y2="80" stroke="#719ED9" stroke-width="1.5"/>
+  <line x1="50" y1="88" x2="90" y2="88" stroke="#719ED9" stroke-width="1.5"/>
+  <rect x="90" y="150" width="40" height="3" rx="1" fill="#1F54BF"/>
+  <path d="M 60 153 L 160 153 L 170 165 L 50 165 Z" fill="#719ED9" opacity="0.3"/>
+  
+  <!-- Tablet -->
+  <rect x="150" y="90" width="80" height="110" rx="4" fill="#1F54BF" opacity="0.2"/>
+  <rect x="155" y="100" width="70" height="90" fill="#719ED9" opacity="0.3"/>
+  <line x1="160" y1="107" x2="190" y2="107" stroke="#1F54BF" stroke-width="1.5"/>
+  <line x1="160" y1="115" x2="210" y2="115" stroke="#719ED9" stroke-width="1"/>
+  <line x1="160" y1="123" x2="200" y2="123" stroke="#719ED9" stroke-width="1"/>
+  <circle cx="190" cy="195" r="3" fill="#719ED9"/>
+  
+  <!-- Mobile -->
+  <rect x="260" y="110" width="60" height="100" rx="4" fill="#1F54BF" opacity="0.2"/>
+  <rect x="265" y="120" width="50" height="80" fill="#719ED9" opacity="0.3"/>
+  <line x1="270" y1="127" x2="290" y2="127" stroke="#1F54BF" stroke-width="1.5"/>
+  <line x1="270" y1="135" x2="305" y2="135" stroke="#719ED9" stroke-width="1"/>
+  <line x1="270" y1="143" x2="295" y2="143" stroke="#719ED9" stroke-width="1"/>
+  <circle cx="290" cy="205" r="2.5" fill="#719ED9"/>
+  
+  <!-- Connection arrows -->
+  <path d="M 180 105 L 155 100" stroke="#F29F05" stroke-width="2" marker-end="url(#arrowOrange)" opacity="0.7">
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 225 130 L 265 140" stroke="#F29F05" stroke-width="2" marker-end="url(#arrowOrange)" opacity="0.7">
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Cloud sync icon -->
+  <ellipse cx="200" cy="50" rx="20" ry="12" fill="#719ED9" opacity="0.6"/>
+  <ellipse cx="188" cy="50" rx="15" ry="10" fill="#719ED9" opacity="0.6"/>
+  <ellipse cx="210" cy="50" rx="12" ry="8" fill="#719ED9" opacity="0.6"/>
+  <path d="M 195 58 L 195 65 M 191 61 L 195 65 L 199 61" stroke="#F29F05" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+  
+  <defs>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#F29F05" />
+    </marker>
+  </defs>
+</svg>

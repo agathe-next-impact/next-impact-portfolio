@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionTemplate } from "motion/react";
+import { m as motion, useMotionTemplate } from "framer-motion";
 import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -120,7 +120,7 @@ export function MagicCard({
             strokeWidth={1}
             mask={`url(#${maskId})`}
             style={{
-              filter: mouse.inside ? `drop-shadow(0 0 0px ${gradientFrom})` : "none",
+              filter: mouse.inside ? `(0 0 0px ${gradientFrom})` : "none",
               opacity: borderOpacity,
               transition: "opacity 0.8s cubic-bezier(.4,0,.2,1), filter 0.5s",
             }}

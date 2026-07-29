@@ -1,121 +1,120 @@
-
 "use client"
 
 import { useState } from "react"
 import Image from "next/image"
-import { ChevronRight } from "lucide-react"
-import { cn } from "@/lib/utils"
 
-
-export default function Advantages() {
-
-const features = [
+const FEATURES = [
   {
     id: "analytics",
     title: "Admin de WordPress",
     description: "En conservant WordPress comme outil d'administration, votre site web reste facilement administrable.",
-    image: "/img/desktop-screen-wordpress.jpg?height=400&width=600",
+    image: "/img/desktop-screen-wordpress.jpg",
+    no: "01",
   },
   {
     id: "automation",
     title: "Interface au design moderne",
-    description: "Des front-end adaptés aux exigeances du web moderne et de vos visiteurs développées sur-mesure avec les dernières technologies.",
-    image: "/img/beautiful-ui.jpg?height=400&width=600",
+    description: "Des front-end adaptés aux exigences du web moderne et de vos visiteurs développées sur-mesure avec les dernières technologies.",
+    image: "/img/beautiful-ui.jpg",
+    no: "02",
   },
   {
     id: "collaboration",
     title: "Fonctionnalités puissantes",
-    description: "Des fonctionnalités développées sur vos besoins ni plus ni moins.",
-    image: "/img/functionnalities.jpg?height=400&width=600",
+    description: "Des fonctionnalités développées sur vos besoins, ni plus ni moins.",
+    image: "/img/functionnalities.jpg",
+    no: "03",
   },
 ]
-   
-  const [selectedFeature, setSelectedFeature] = useState(features[0].id)
 
-  const currentFeature = features.find((feature) => feature.id === selectedFeature) || features[0]
- 
+export default function Advantages() {
+  const [selected, setSelected] = useState(FEATURES[0].id)
+  const current = FEATURES.find((f) => f.id === selected) ?? FEATURES[0]
+
   return (
-    <>
-    <div className="container py-16 px-0">
-    <h2 className="text-5xl font-medium text-center mb-2 text-regularblue">Pourquoi passer en Headless ?</h2>
-      <p className="text-regularblue/80 text-lg max-w-3xl mx-auto">
-        En combinant la puissance de WordPress avec des technologies front-end modernes, j'offre des solutions web qui allient facilité d'utilisation, performance et design attractif.
-      </p>
-      
-
-    <div className="mt-16 mx-auto">
-      <div className="grid lg:grid-cols-2 gap-12 items-start">
-        {/* Features List */}
-        <div className="space-y-4">
-          <div className="space-y-2">
-            {features.map((feature) => (
-              <button
-                key={feature.id}
-                onClick={() => setSelectedFeature(feature.id)}
-                className={cn(
-                  "w-full text-left p-4 rounded-lg border transition-all duration-200 group",
-                  selectedFeature === feature.id
-                    ? "bg-white/60 border-regularblue/20"
-                    : "bg-white/50 border-border hover:bg-white/40",
-                )}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
+      <div>
+        {FEATURES.map((feature) => (
+          <button
+            key={feature.id}
+            onClick={() => setSelected(feature.id)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              display: "grid",
+              gridTemplateColumns: "40px 1fr 16px",
+              gap: 16,
+              padding: selected === feature.id ? "20px 0 20px 16px" : "20px 0",
+              borderBottom: "1px solid var(--rule)",
+              borderLeft: selected === feature.id ? "3px solid var(--accent-color)" : "3px solid transparent",
+              background: selected === feature.id ? "var(--paper-2)" : "transparent",
+              cursor: "pointer",
+              transition: "all 0.15s",
+              boxSizing: "border-box",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                color: selected === feature.id ? "var(--accent-color)" : "var(--muted-color)",
+                letterSpacing: "0.08em",
+                paddingTop: 2,
+              }}
+            >
+              {feature.no}
+            </span>
+            <div>
+              <div
+                className="ni-serif"
+                style={{
+                  fontSize: 18,
+                  marginBottom: 4,
+                  color: "var(--ink)",
+                }}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3
-                      className={cn(
-                        "font-medium text-2xl mb-2 transition-colors",
-                        selectedFeature === feature.id ? "text-mediumblue" : "text-regularblue group-hover:text-foreground",
-                      )}
-                    >
-                      {feature.title}
-                    </h3>
-                    <p
-                      className={cn(
-                        "text-sm transition-colors",
-                        selectedFeature === feature.id
-                          ? "text-mediumblue"
-                          : "text-mediumblue/80 group-hover:text-mediumblue",
-                      )}
-                    >
-                      {feature.description}
-                    </p>
-                  </div>
-                  <ChevronRight
-                    className={cn(
-                      "h-5 w-5 transition-all duration-200 ml-4 flex-shrink-0",
-                      selectedFeature === feature.id
-                        ? "text-regularblue rotate-360"
-                        : "text-regularblue/80 group-hover:text-regularblue group-hover:translate-x-1",
-                    )}
-                  />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Feature Image */}
-        <div className="lg:sticky lg:top-8">
-          <div className="relative aspect-[3/2] rounded-xl overflow-hidden bg-muted border shadow-lg">
-            <Image
-              src={currentFeature.image || "/placeholder.svg"}
-              alt={currentFeature.title}
-              fill
-              className="object-cover object-left transition-opacity duration-300"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4">
-                <h4 className="font-medium text-regularblue mb-1">{currentFeature.title}</h4>
-                <p className="text-sm text-regularblue/80">{currentFeature.description}</p>
+                {feature.title}
               </div>
+              <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5, margin: 0 }}>
+                {feature.description}
+              </p>
             </div>
-          </div>
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: 14,
+                color: "var(--accent-color)",
+                alignSelf: "center",
+                opacity: selected === feature.id ? 1 : 0,
+              }}
+            >
+              →
+            </span>
+          </button>
+        ))}
+        <div style={{ borderBottom: "1px solid var(--rule)" }} />
+      </div>
+
+      <div style={{ position: "sticky", top: 80 }}>
+        <div style={{ aspectRatio: "4/3", overflow: "hidden", borderTop: "1px solid var(--rule)" }}>
+          <Image
+            src={current.image}
+            alt={current.title}
+            width={600}
+            height={450}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top left", display: "block" }}
+          />
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid var(--rule)",
+            padding: "16px 0",
+          }}
+        >
+          <div className="ni-serif" style={{ fontSize: 16, marginBottom: 4 }}>{current.title}</div>
+          <p style={{ fontSize: 13, color: "var(--ink-2)", margin: 0 }}>{current.description}</p>
         </div>
       </div>
     </div>
-            </div>
-    </>
-  );
+  )
 }

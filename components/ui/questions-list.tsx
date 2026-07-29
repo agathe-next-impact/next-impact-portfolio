@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 interface QuestionsListProps {
@@ -33,7 +33,7 @@ export default function Question({
             <div className='col-span-1 flex flex-row gap-4 relative'>
                 <div>
                     <div
-                        className='flex gap-4 relative items-center justify-center bg-white rounded-lg shadow-sm p-4 transition-all duration-300 ease-in-out'
+                        className='flex gap-4 relative items-center justify-center bg-white rounded-lg p-4 transition-all duration-300 ease-in-out'
                         onClick={() => {
                             setShowResources((prev) => !prev); // Bascule l'état
                         }}
@@ -66,7 +66,7 @@ export default function Question({
                                 : { height: 0, opacity: 0, translateY: -20 }
                         }
                         transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="absolute left-0 top-full w-full flex flex-col justify-between bg-white rounded-lg shadow-sm p-2 overflow-hidden z-10"
+                        className="absolute left-0 top-full w-full flex flex-col justify-between bg-white rounded-lg p-2 overflow-hidden z-10"
                     >
                         <div className="h-full p-4 flex flex-col items-center justify-between">
                             <h3 className="text-xl font-bold text-center text-regularblue mb-2">

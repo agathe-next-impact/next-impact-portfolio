@@ -2,14 +2,469 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Importation de la police Open Sans depuis Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+/* ─── Design Tokens « Blueprint » (dérivés aspect) ─────────
+   Sémantique theme-aware : obsidian = fond · dark-gray = traits ·
+   jet = panneau alt · mid-gray = texte atténué · accent (indigo) =
+   structure · accent-2 (indigo clair / jaune) = ponctuation.
+   Les anciens tokens « Suisse » (paper/ink/rule/accent-color) sont
+   remappés sur les tokens blueprint pour rester compatibles. */
+:root {
+  /* Tokens blueprint */
+  --obsidian:       0 0% 2%;
+  --jet:            240 10% 4%;
+  --dark-gray:      0 0% 14%;
+  --mid-gray:       0 0% 62%;
+  --overlay-gray:   0 0% 20% / 0.27;
+  --ebony:          251 14% 15%;
+  --charcoal:       0 0% 21%;
+  --accent:         231 96% 23%;
+  --accent-2:       223 80% 70%;
+  --accent-champagne: 220 45% 86%;
+  --accent-deep:    231 96% 23%;
+  --accent-soft:    231 96% 23% / 0.14;
+  --vermilion:        231 96% 23%;
+  --vermilion-bright: 231 90% 33%;
+  --vermilion-soft:   231 96% 23% / 0.14;
+
+  /* Compat « Suisse » (clair par défaut, surchargé en .dark ci-dessous) */
+  --paper:        #ffffff;
+  --paper-2:      #F7F8F9;
+  --ink:          #0e0e0c;
+  --ink-2:        #2a2a26;
+  --muted-color:  rgba(14, 14, 12, 0.55);
+  --rule:         rgba(14, 14, 12, 0.18);
+  --rule-strong:  rgba(14, 14, 12, 0.42);
+  --accent-color: hsl(var(--accent));
+  --serif:        var(--font-sans);
+  --sans:         var(--font-sans);
+  --mono:         var(--font-mono);
+  --gutter:       32px;
+  --container-w:  1200px;
+}
+
+/* Mode sombre (défaut next-themes) : compat « Suisse » remappée sur blueprint. */
+:root,
+.dark {
+  --paper:        hsl(var(--obsidian));
+  --paper-2:      hsl(var(--jet));
+  --ink:          #ffffff;
+  --ink-2:        #cccccc;
+  --muted-color:  hsl(var(--mid-gray));
+  --rule:         hsl(var(--dark-gray));
+  --rule-strong:  #4d4d4d;
+}
+
+/* Bascule claire : tokens blueprint + compat « Suisse » en valeurs claires. */
+.light {
+  --obsidian:       0 0% 98%;
+  --jet:            240 10% 96%;
+  --dark-gray:      0 0% 86%;
+  --mid-gray:       0 0% 49%;
+  --overlay-gray:   0 0% 80% / 0.27;
+  --ebony:          251 14% 85%;
+  --charcoal:       0 0% 79%;
+  --accent:         231 96% 23%;
+  --accent-2:       223 72% 48%;
+  --accent-champagne: 220 35% 72%;
+  --accent-deep:    231 96% 23%;
+  --accent-soft:    231 96% 23% / 0.12;
+  --vermilion:        231 96% 23%;
+  --vermilion-bright: 231 90% 33%;
+  --vermilion-soft:   231 96% 23% / 0.12;
+  --paper:        #ffffff;
+  --paper-2:      #F7F8F9;
+  --ink:          #0e0e0c;
+  --ink-2:        #2a2a26;
+  --muted-color:  rgba(14, 14, 12, 0.55);
+  --rule:         rgba(14, 14, 12, 0.18);
+  --rule-strong:  rgba(14, 14, 12, 0.42);
+}
+
+/* ─── Swiss Layout ────────────────────────────────────── */
+.container {
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+section.s {
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+}
+section.s:first-of-type {
+  border-top: none;
+}
+
+/* ─── Section Header ──────────────────────────────────── */
+.sec-head {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  gap: 0 24px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+.sec-no {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.sec-meta {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-color);
+  text-align: right;
+}
+
+/* ─── Typography helpers ──────────────────────────────── */
+.ni-serif { font-family: var(--serif, Georgia, serif); }
+.ni-mono  { font-family: var(--mono, monospace); }
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 44px;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn.primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--paper);
+}
+.btn.primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ─── Micro-interactions « Édition Suisse » ───────────────
+   Sobres, ≤ 200 ms, opacity/transform uniquement. */
+
+/* Nudge de la flèche au survol d'un lien/bouton (global, sans markup). */
+.lucide-arrow-right,
+.lucide-arrow-up-right,
+.lucide-move-right {
+  transition: transform 0.18s ease;
+}
+a:hover .lucide-arrow-right,
+a:hover .lucide-arrow-up-right,
+a:hover .lucide-move-right,
+button:hover .lucide-arrow-right,
+.btn:hover .lucide-arrow-right {
+  transform: translateX(3px);
+}
+
+/* Hover de carte de grille — tint paper-2, sans scale ni ombre. */
+.ni-card {
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.ni-card:hover {
+  background: var(--paper-2);
+}
+/* Variante carte à bord complet (grilles hairline) : le filet se renforce
+   et la carte passe au-dessus pour révéler ses 4 côtés. */
+.ni-card--bordered {
+  position: relative;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.ni-card--bordered:hover {
+  border-color: var(--rule-strong);
+  z-index: 1;
+}
+
+/* Souligné qui se déploie de gauche à droite, sans décalage de mise en page. */
+.ni-link {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: left 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition: background-size 0.2s ease;
+}
+.ni-link:hover,
+.ni-link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ─── Ordered Steps ───────────────────────────────────── */
+ol.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+ol.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--rule);
+}
+ol.steps li:first-child {
+  border-top: 1px solid var(--rule);
+}
+ol.steps li::before {
+  content: "0" counter(step);
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  padding-top: 3px;
+}
+ol.steps li h4 {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 18px;
+  margin: 0 0 6px;
+}
+ol.steps li p {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ─── Cap Row ─────────────────────────────────────────── */
+.cap-row {
+  display: grid;
+  grid-template-columns: 56px 1.6fr 2fr 1fr;
+  gap: 0 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.cap-row:first-child { border-top: 1px solid var(--rule); }
+
+/* ─── Quote ───────────────────────────────────────────── */
+.quote {
+  font-family: var(--serif, Georgia, serif);
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1.5;
+}
+
+/* ─── Labels / Tags ───────────────────────────────────── */
+.label {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  padding: 2px 8px;
+  color: var(--muted-color);
+}
+
+/* ─── Tab selector active state ───────────────────────── */
+.tab-sel-active {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+}
+.tab-sel-active span {
+  color: #ffffff !important;
+}
+
+/* ─── Hover row ───────────────────────────────────────── */
+.hover-row:hover { background: var(--paper-2); }
+
+/* ─── Annot ───────────────────────────────────────────── */
+.annot {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted-color);
+}
+
+
+/* ─── Utilities ───────────────────────────────────────── */
+.u-rule-top    { border-top: 1px solid var(--rule); }
+.u-rule-bottom { border-bottom: 1px solid var(--rule); }
+.u-pt-section  { padding-top: 80px; }
+.u-pb-section  { padding-bottom: 80px; }
+
+/* ─── Responsive ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  :root { --gutter: 20px; }
+  section.s { padding: 56px 0; }
+  .sec-head { grid-template-columns: 48px 1fr; gap: 0 16px; }
+  .sec-meta { display: none; }
+  .cap-row { grid-template-columns: 48px 1fr; }
+  ol.steps li { grid-template-columns: 48px 1fr; }
+
+  /* Article reading area: tighter horizontal padding on small screens
+     (the .container already adds 20px gutter, so 40px inner padding
+     left only ~270px for text on a 390px viewport). */
+  .light.article-text,
+  .light .article-text {
+    padding: 1.5rem 1rem !important;
+  }
+  /* …but only the outer wrapper — preserve the inner MarkdownContent /
+     MdxContent wrapper's zero-padding so we don't get double padding. */
+  .light.article-text .article-text,
+  .light .article-text .article-text {
+    padding: 0 !important;
+  }
+
+  /* HeadlessExplainer tabs and similar tab strips: shrink padding so
+     labels like "Classique" / "Headless" / "Web App" fit on mobile. */
+  [role="tablist"] button[role="tab"] {
+    padding: 12px 8px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.06em !important;
+  }
+}
+
+/* Responsive guardrail for legacy inline grids used across public pages.
+   React serialises inline styles without a space after the colon
+   (`grid-template-columns:1fr 1fr`), so we duplicate every selector
+   in both the spaced and unspaced forms to catch hand-written CSS too. */
+@media (max-width: 900px) {
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1.2fr 1fr"],
+  [style*="grid-template-columns:1.2fr 1fr"],
+  [style*="grid-template-columns: 1.4fr 1fr"],
+  [style*="grid-template-columns:1.4fr 1fr"],
+  [style*="grid-template-columns: 1fr 1.6fr"],
+  [style*="grid-template-columns:1fr 1.6fr"],
+  [style*="grid-template-columns: 1fr 2fr"],
+  [style*="grid-template-columns:1fr 2fr"],
+  [style*="grid-template-columns: 3fr 2fr"],
+  [style*="grid-template-columns:3fr 2fr"],
+  [style*="grid-template-columns: 1fr 320px"],
+  [style*="grid-template-columns:1fr 320px"],
+  [style*="grid-template-columns: 1fr auto"],
+  [style*="grid-template-columns:1fr auto"],
+  [style*="grid-template-columns: auto 1fr auto"],
+  [style*="grid-template-columns:auto 1fr auto"],
+  [style*="grid-template-columns: 56px 1fr auto"],
+  [style*="grid-template-columns:56px 1fr auto"],
+  [style*="grid-template-columns: 80px 1fr 24px"],
+  [style*="grid-template-columns:80px 1fr 24px"],
+  [style*="grid-template-columns: 120px 1fr 280px"],
+  [style*="grid-template-columns:120px 1fr 280px"],
+  [style*="grid-template-columns: repeat(2, 1fr)"],
+  [style*="grid-template-columns:repeat(2,1fr)"],
+  [style*="grid-template-columns: repeat(3, 1fr)"],
+  [style*="grid-template-columns:repeat(3,1fr)"],
+  [style*="grid-template-columns: repeat(4, 1fr)"],
+  [style*="grid-template-columns:repeat(4,1fr)"],
+  [style*="grid-template-columns: repeat(5, 1fr)"],
+  [style*="grid-template-columns:repeat(5,1fr)"],
+  [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="border-right: 1px solid var(--rule)"],
+  [style*="border-right:1px solid var(--rule)"] {
+    border-right: 0 !important;
+  }
+
+  [style*="border-left: 1px solid var(--rule)"],
+  [style*="border-left:1px solid var(--rule)"] {
+    border-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .scroll-to-top-btn { bottom: 4.5rem !important; }
+}
+
+@media (max-width: 640px) {
+  .bento-card-big   { min-height: 12rem !important; }
+  .bento-card-small { min-height: 7rem  !important; }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    min-height: 44px;
+    height: auto;
+    justify-content: center;
+    padding: 10px 16px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  a,
+  span,
+  button {
+    overflow-wrap: anywhere;
+  }
+
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* ─── Legacy overrides (keep for existing blue-themed pages) ── */
+/* Suppression globale de l'outline sur les champs de formulaire au focus, active et focus-visible */
+input:focus, input:active, input:focus-visible,
+textarea:focus, textarea:active, textarea:focus-visible,
+select:focus, select:active, select:focus-visible,
+button:focus, button:active, button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 html, body {
-  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+/* Force fixed background on mobile (iOS Safari fix) */
+html {
+  height: -webkit-fill-available;
+}
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+  font-family: var(--sans, sans-serif);
+  font-size: 15px;
+  line-height: 1.5;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
 }
 
 @layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
   .text-balance {
     text-wrap: balance;
   }
@@ -36,7 +491,12 @@ html, body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 220.13, 72.07%, 43.53%;
+    /* Format ESPACE obligatoire : Tailwind génère `hsl(var(--foreground) / <alpha>)`
+       pour les utilitaires d'opacité (text-foreground/90). Une valeur en virgules
+       cassait l'alpha → couleur ignorée → texte délavé/illisible dans l'état
+       fallback (SSR / avant hydratation du thème). Sombre, cohérent avec ce bloc
+       :root clair (surfaces blanches, --card-foreground 0 0% 3.9%). */
+    --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -51,7 +511,9 @@ html, body {
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 218.82, 56.67%, 88.24%, 0.2;
+    /* Format ESPACE (cf. --foreground) : une valeur en virgules cassait
+       l'alpha des utilitaires de bordure dans l'état fallback. */
+    --border: 218.82 56.67% 88.24%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --chart-1: 12 76% 61%;
@@ -59,7 +521,7 @@ html, body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -74,30 +536,31 @@ html, body {
     --lightblue: #719ED9;
     --extralightblue: #D0DCF2;
     --white: #FFFFFF;
-    --orange: #E68415;
-    --rose: #C22D8B;
-
+    --complementary1: #F29F05;
+    --complementary2: #021373;
+    --complementary3: #F2E57E;
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    /* Surfaces alignées sur le langage blueprint (obsidian / jet / ebony / dark-gray) */
+    --background: 0 0% 2%;                /* obsidian */
+    --foreground: 0 0% 100%;
+    --card: 240 10% 4%;                   /* jet */
+    --card-foreground: 0 0% 100%;
+    --popover: 240 10% 4%;                /* jet */
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 2%;        /* obsidian */
+    --secondary: 251 14% 15%;             /* ebony */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 10% 4%;                  /* jet */
+    --muted-foreground: 0 0% 62%;         /* mid-gray (remonté de 51% pour lisibilité dark) */
+    --accent: 251 14% 15%;                /* ebony */
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 0 0% 14%;                   /* dark-gray */
+    --input: 0 0% 21%;                    /* charcoal */
+    --ring: 7 78% 48%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -112,6 +575,37 @@ html, body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* theme-system: light mode tokens (shadcn) — Swiss palette */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5.5%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 5.5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 5.5%;
+    --primary: 0 0% 5.5%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 5.5%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 5.5%;
+    --accent: 0 0% 92%;
+    --accent-foreground: 0 0% 5.5%;
+    --destructive: 10 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 5.5%;
+    --input: 0 0% 5.5%;
+    --ring: 0 0% 5.5%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 5.5%;
+    --sidebar-primary: 0 0% 5.5%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 0% 5.5%;
+    --sidebar-border: 0 0% 5.5%;
+    --sidebar-ring: 0 0% 5.5%;
+  }
 }
 
 @layer base {
@@ -119,7 +613,9 @@ html, body {
     @apply border-border;
   }
   body {
-    @apply text-regularblue;
+    /* Couleur de texte de base theme-aware (foreground), pas un bleu fixe legacy.
+       En .light, surchargé plus bas par `.light body { color: var(--ink) }`. */
+    color: hsl(var(--foreground));
   }
   h1, h2, h3, h4, h5, h6, a {
     @apply font-normal py-1 font-googletitre;
@@ -134,7 +630,7 @@ html, body {
     line-height: 1.35;
   }
   h3 {
-    @apply text-2xl pt-6 pb-2;
+    @apply text-xl pt-6 pb-2 text-mediumblue;
     line-height: 1.4;
   }
   h4 {
@@ -150,14 +646,15 @@ html, body {
     line-height: 1.5;
   }
   p, span, li, input, textarea, label {
-    @apply font-googletexte font-normal text-mediumblue;
+    /* Hériter la couleur du parent (theme-aware) plutôt que d'imposer un bleu Suisse fixe :
+       les éléments nus suivent ainsi le thème, les composants gardent la main via leurs
+       classes utilitaires, et la prose (.doc-prose/.article-prose) via ses propres règles. */
+    @apply font-googletexte font-normal;
+    color: inherit;
     line-height: 1.7;
   }
   a {
     @apply text-regularblue no-underline;
-  }
-  a:hover {
-    @apply text-regularblue/80 no-underline;
   }
   .container {
     @apply mx-auto px-4;
@@ -165,5 +662,674 @@ html, body {
   .google-titre {
     font-family: 'Quicksand', sans-serif;
   }
+  #gemini-search-result h1 {
+    @apply text-mediumblue text-4xl pt-4 pb-2;
+    line-height: 1.4;
+      }
+  #gemini-search-result h2, #gemini-search-result h3 {
+    @apply text-mediumblue text-3xl;
+    line-height: 1.35;
+  }
+  #gemini-search-result p {
+    @apply text-mediumblue text-base;
+    line-height: 1.7;
+  }
+  .prose h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  .prose h1 {
+    @apply text-2xl md:text-3xl;
+  }
+  .prose code {
+    @apply text-regularblue font-googletexte;
+  }
+  .prose li {
+    @apply text-mediumblue/80;
+  }
+  .mentions-legales h2 {
+    @apply text-3xl;
+  }
+  /* ── Article text – base ── */
+  .article-text {
+    @apply font-googletexte leading-relaxed;
+  }
+
+  /* ── Paragraphs ── */
+  .article-text p {
+    @apply text-white/80 text-base mb-6;
+    line-height: 1.8;
+  }
+  .article-text > p:first-child {
+    @apply text-lg text-white/90 font-medium;
+    line-height: 1.75;
+  }
+
+  /* ── List items base ── */
+  .article-text li {
+    @apply text-white/80;
+    line-height: 1.75;
+  }
+
+  /* ── Headings ── */
+  .article-text h1, .article-text h2, .article-text h3, .article-text h4 {
+    @apply text-white/80 font-googletitre;
+  }
+  .article-text h1 {
+    @apply text-3xl font-medium mb-4 mt-8;
+  }
+  .article-text h2 {
+    @apply text-2xl font-medium mb-4 mt-6 pl-4 border-l-4 border-coral/60 py-1;
+  }
+  .article-text h3 {
+    @apply text-xl font-medium mb-3 mt-8 relative pl-5;
+  }
+  .article-text h3::before {
+    content: "—";
+    @apply absolute left-0 text-coral/50 font-bold;
+  }
+
+  /* ── Unordered lists ── */
+  .article-text ul, .article-text ol {
+    @apply mb-6 pl-6 space-y-2.5;
+  }
+  .article-text ul {
+    list-style-type: none;
+  }
+  .article-text ul li {
+    @apply relative pl-6;
+  }
+  .article-text ul li::before {
+    content: "›";
+    @apply absolute left-0 top-0 text-coral/70 text-lg font-bold;
+  }
+
+  /* ── Ordered lists ── */
+  .article-text ol {
+    list-style-type: none;
+    counter-reset: article-counter;
+  }
+  .article-text ol li {
+    @apply relative pl-8;
+    counter-increment: article-counter;
+  }
+  .article-text ol li::before {
+    content: counter(article-counter);
+    @apply absolute left-0 top-0.5 w-5 h-5 rounded-full bg-coral/15 text-coral text-xs font-bold flex items-center justify-center;
+  }
+
+  /* ── Blockquotes ── */
+  .article-text blockquote {
+    @apply relative border-l-4 border-lightyellow/40 bg-gradient-to-r from-lightyellow/5 to-transparent rounded-r-2xl pl-10 pr-5 py-5 my-8 italic;
+  }
+  .article-text blockquote::before {
+    content: "\201C";
+    @apply absolute left-3 -top-2 text-4xl text-lightyellow/25 font-serif;
+  }
+  .article-text blockquote p {
+    @apply text-white/70 mb-0 text-base;
+  }
+
+  /* ── Inline code ── */
+  .article-text code {
+    @apply text-lightyellow bg-lightyellow/10 rounded-md px-1.5 py-0.5 text-sm font-mono;
+  }
+
+  /* ── Code blocks ── */
+  .article-text pre {
+    @apply relative rounded-2xl bg-darkblue text-extralightblue/80 p-5 my-8 overflow-x-auto text-sm leading-relaxed;
+  }
+  .article-text pre::before {
+    content: "CODE";
+    @apply absolute top-3 right-4 text-[10px] tracking-widest text-lightblue/30 font-mono uppercase;
+  }
+  .article-text pre code {
+    @apply bg-transparent p-0 text-inherit rounded-none;
+  }
+
+  /* ── Links ── */
+  .article-text a {
+    @apply text-lightyellow underline underline-offset-4 decoration-lightyellow/30 hover:decoration-lightyellow/80 transition-all duration-200;
+  }
+
+  /* ── Strong / bold ── */
+  .article-text strong {
+    @apply text-white font-semibold;
+  }
+
+  /* ── Images ── */
+  .article-text img {
+    @apply rounded-2xl my-8 
+  }
+
+  /* ── Horizontal rules (section separators) ── */
+  .article-text hr {
+    @apply my-12 border-none h-px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--complementary1) 20%,
+      var(--complementary2) 50%,
+      var(--complementary1) 80%,
+      transparent 100%
+    );
+    opacity: 0.3;
+  }
+
+  /* ── Tables ── */
+  .article-text table {
+    @apply w-full my-8 text-sm border-collapse rounded-xl overflow-hidden;
+  }
+  .article-text th {
+    @apply bg-orange/10 text-white font-semibold text-left px-4 py-3 border-b-2 border-orange/20 text-xs uppercase tracking-wider;
+  }
+  .article-text td {
+    @apply px-4 py-3 border-b border-white/10 text-white/70;
+  }
+  .article-text tr:nth-child(even) td {
+    @apply bg-white/[0.02];
+  }
+  .article-text tr:hover td {
+    @apply bg-white/5;
+  }
+
+  /* ── Override article-text styles inside diagnostic ── */
+  .article-text .diagnostic-dark h3,
+  .article-text .diagnostic-dark h4 {
+    @apply text-white border-none pl-0;
+  }
+  .article-text .diagnostic-dark h3::before {
+    content: none;
+  }
+  .article-text .diagnostic-dark p,
+  .article-text .diagnostic-dark span,
+  .article-text .diagnostic-dark li {
+    @apply text-white/70;
+  }
+  .article-text .diagnostic-dark a {
+    @apply text-white/70 no-underline;
+  }
+  /* Theme-aware : blanc en mode sombre (identique à avant), sombre en mode clair.
+     `text-white` figé rendait TOUS les <li> du site invisibles en mode clair
+     (cartes, listes d'articles…) en écrasant la couleur héritée du <ul>. */
+  li {
+    @apply text-foreground/80;
+  }
+}
+
+/* ===========================================================================
+   PROSE « Blueprint » — gabarit d'article (obsidian, theme-aware)
+   Portée partagée : `.doc-prose` (documentation, MdxContent / MarkdownContent)
+   et `.article-prose` (gabarit d'article, ArticleLayout). Mêmes règles via
+   :is() — la spécificité reste celle d'une classe simple.
+   Tokens sémantiques (hsl(var(--…))) → fonctionne en sombre ET en clair.
+   =========================================================================== */
+:is(.doc-prose,.article-prose) {
+  font-family: var(--font-inter-tight), var(--font-sans), sans-serif;
+  color: hsl(var(--mid-gray));
+  line-height: 1.75;
+  max-width: 68ch;
+}
+
+/* ── Paragraphes ── */
+:is(.doc-prose,.article-prose) p {
+  color: hsl(var(--mid-gray));
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+:is(.doc-prose,.article-prose) > p:first-child {
+  color: hsl(var(--foreground));
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+/* ── Titres (Figtree, fins) ── */
+:is(.doc-prose,.article-prose) h1,
+:is(.doc-prose,.article-prose) h2,
+:is(.doc-prose,.article-prose) h3,
+:is(.doc-prose,.article-prose) h4 {
+  font-family: var(--font-sans), Figtree, sans-serif;
+  font-weight: 300;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.01em;
+}
+:is(.doc-prose,.article-prose) h1 {
+  font-size: 1.875rem;
+  margin: 2rem 0 1rem;
+}
+:is(.doc-prose,.article-prose) h2 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+  padding-left: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-left: 2px solid hsl(var(--accent-2));
+}
+:is(.doc-prose,.article-prose) h3 {
+  font-size: 1.25rem;
+  margin: 2rem 0 0.75rem;
+  position: relative;
+  padding-left: 1.25rem;
+}
+:is(.doc-prose,.article-prose) h3::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: hsl(var(--accent-2));
+}
+
+/* ── Listes ── */
+:is(.doc-prose,.article-prose) ul,
+:is(.doc-prose,.article-prose) ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+:is(.doc-prose,.article-prose) ul {
+  list-style-type: none;
+}
+:is(.doc-prose,.article-prose) li {
+  color: hsl(var(--mid-gray));
+  line-height: 1.75;
+  margin-bottom: 0.625rem;
+}
+:is(.doc-prose,.article-prose) ul li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+:is(.doc-prose,.article-prose) ul li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: hsl(var(--accent-2));
+}
+:is(.doc-prose,.article-prose) ol {
+  list-style-type: none;
+  counter-reset: doc-counter;
+}
+:is(.doc-prose,.article-prose) ol li {
+  position: relative;
+  padding-left: 2rem;
+  counter-increment: doc-counter;
+}
+:is(.doc-prose,.article-prose) ol li::before {
+  content: counter(doc-counter);
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono), monospace;
+  color: hsl(var(--accent-2));
+  background-color: hsl(var(--accent-2) / 0.12);
+}
+
+/* ── Citations ── */
+:is(.doc-prose,.article-prose) blockquote {
+  border-left: 2px solid hsl(var(--accent-2));
+  background: hsl(var(--jet));
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+}
+:is(.doc-prose,.article-prose) blockquote p {
+  color: hsl(var(--foreground) / 0.85);
+  margin-bottom: 0;
+}
+
+/* ── Code ── */
+:is(.doc-prose,.article-prose) code {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875rem;
+  color: hsl(var(--accent-2));
+  background-color: hsl(var(--jet));
+  border: 1px solid hsl(var(--dark-gray));
+  padding: 0.1rem 0.375rem;
+}
+:is(.doc-prose,.article-prose) pre {
+  font-family: var(--font-mono), monospace;
+  background-color: hsl(var(--jet));
+  border: 1px solid hsl(var(--dark-gray));
+  color: hsl(var(--foreground) / 0.85);
+  padding: 1.25rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+:is(.doc-prose,.article-prose) pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* ── Liens ── */
+:is(.doc-prose,.article-prose) a {
+  color: hsl(var(--accent-2));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: hsl(var(--accent-2) / 0.4);
+  transition: text-decoration-color 0.2s;
+}
+:is(.doc-prose,.article-prose) a:hover {
+  text-decoration-color: hsl(var(--accent-2) / 0.9);
+}
+
+/* ── Emphase ── */
+:is(.doc-prose,.article-prose) strong {
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+
+/* ── Images ── */
+:is(.doc-prose,.article-prose) img {
+  margin: 2rem 0;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Filets ── */
+:is(.doc-prose,.article-prose) hr {
+  margin: 3rem 0;
+  border: none;
+  height: 1px;
+  background: hsl(var(--dark-gray));
+}
+
+/* ── Tableaux ── */
+:is(.doc-prose,.article-prose) table {
+  width: 100%;
+  margin: 2rem 0;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+:is(.doc-prose,.article-prose) th {
+  background-color: hsl(var(--jet));
+  color: hsl(var(--foreground));
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--dark-gray));
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+:is(.doc-prose,.article-prose) td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--dark-gray));
+  color: hsl(var(--mid-gray));
+}
+:is(.doc-prose,.article-prose) tr:hover td {
+  background-color: hsl(var(--jet));
+}
+
+/* ===========================================================================
+   theme-system: LIGHT MODE OVERRIDES
+   Surcharge des classes hard-codées sans toucher au dark mode.
+   Sélecteurs d'attribut pour capter les variantes d'opacité (bg-darkblue/40).
+   =========================================================================== */
+
+.light body { color: var(--ink); background-color: var(--paper); }
+
+.article-page {
+  background: var(--paper);
+  color: var(--ink);
+}
+.article-page section.s {
+  background: var(--paper);
+}
+.article-page h1,
+.article-page h2,
+.article-page h3,
+.article-page h4,
+.article-page p,
+.article-page span,
+.article-page li {
+  color: var(--ink);
+}
+.article-page [data-article-content] {
+  background: var(--paper) !important;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.article-page [data-article-content] img,
+.article-page [data-article-content] video,
+.article-page [data-article-content] iframe,
+.article-page [data-article-content] .article-media,
+.article-page [data-article-content] .article-video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+.article-page [data-article-content] img,
+.article-page [data-article-content] video {
+  height: auto;
+  object-fit: contain;
+}
+.article-page [data-article-content] .article-media,
+.article-page [data-article-content] .article-video {
+  position: relative;
+  margin: 2rem 0;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.article-page [data-article-content] .article-video {
+  aspect-ratio: 16 / 9;
+}
+.article-page [data-article-content] .article-video > iframe,
+.article-page [data-article-content] .article-video > video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+.article-page [data-article-content] > iframe {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 2rem 0;
+  border: 0;
+}
+.article-page .label {
+  background: var(--paper);
+  color: var(--muted-color) !important;
+  border-color: var(--rule);
+}
+.article-page .annot,
+.article-page a:not(.btn) {
+  color: var(--muted-color);
+}
+
+/* --- .article-text (MDX) : ink palette ---
+   The `.light .article-text X` descendant selectors only matched when
+   `.light` was on an *ancestor*. Some pages (blog, articles) put both
+   classes on the same element, so the descendant form silently failed
+   and text stayed white-on-paper. Each rule below is duplicated with
+   `.light.article-text` (compound, same element) to cover both cases. */
+.light .article-text,
+.light .article-text p,
+.light .article-text li,
+.light .article-text h1,
+.light .article-text h2,
+.light .article-text h3,
+.light .article-text h4,
+.light.article-text,
+.light.article-text p,
+.light.article-text li,
+.light.article-text h1,
+.light.article-text h2,
+.light.article-text h3,
+.light.article-text h4 { color: var(--ink) !important; }
+.light .article-text > p:first-child,
+.light.article-text > p:first-child { color: var(--ink) !important; }
+.light .article-text strong,
+.light.article-text strong { color: var(--ink) !important; }
+.light .article-text blockquote p,
+.light.article-text blockquote p { color: var(--ink-2) !important; }
+.light .article-text pre,
+.light.article-text pre {
+  background-color: var(--paper-2) !important;
+  color: var(--ink) !important;
+}
+.light .article-text code,
+.light.article-text code { color: var(--ink) !important; background-color: rgba(14, 14, 12, 0.06) !important; }
+.light .article-text a,
+.light.article-text a    { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
+.light .article-text th,
+.light.article-text th   { color: var(--ink) !important; background-color: var(--paper-2) !important; }
+.light .article-text td,
+.light.article-text td   { color: var(--ink-2) !important; border-color: var(--rule) !important; }
+.light .article-text tr:nth-child(even) td,
+.light.article-text tr:nth-child(even) td { background-color: rgba(14, 14, 12, 0.03) !important; }
+.light .article-text tr:hover td,
+.light.article-text tr:hover td { background-color: var(--paper-2) !important; }
+.light .article-text h2,
+.light.article-text h2 { border-left-color: var(--rule-strong) !important; }
+.light .article-text blockquote,
+.light.article-text blockquote { border-left-color: var(--rule-strong) !important; background: var(--paper-2) !important; }
+.light .article-text ul li::before,
+.light.article-text ul li::before { color: var(--accent-color) !important; }
+/* Ordered lists: use native decimal numbering in light mode (respects HTML start attribute) */
+.light .article-text ol,
+.light.article-text ol { list-style-type: decimal !important; padding-left: 1.5rem !important; }
+.light .article-text ol li,
+.light.article-text ol li { padding-left: 0.25rem !important; counter-increment: none !important; }
+.light .article-text ol li::before,
+.light.article-text ol li::before { display: none !important; }
+.light .article-text .diagnostic-dark h3,
+.light .article-text .diagnostic-dark h4,
+.light .article-text .diagnostic-dark p,
+.light .article-text .diagnostic-dark span,
+.light .article-text .diagnostic-dark li,
+.light .article-text .diagnostic-dark a,
+.light.article-text .diagnostic-dark h3,
+.light.article-text .diagnostic-dark h4,
+.light.article-text .diagnostic-dark p,
+.light.article-text .diagnostic-dark span,
+.light.article-text .diagnostic-dark li,
+.light.article-text .diagnostic-dark a { color: var(--ink) !important; }
+
+/* --- .mentions-legales --- */
+.light .mentions-legales,
+.light .mentions-legales h2,
+.light .mentions-legales h3,
+.light .mentions-legales h4,
+.light .mentions-legales strong,
+.light .mentions-legales b { color: var(--ink) !important; }
+.light .mentions-legales p,
+.light .mentions-legales li { color: var(--ink-2) !important; }
+.light .mentions-legales a { color: var(--accent-color) !important; text-decoration-color: rgba(216, 58, 26, 0.4) !important; }
+
+/* === CTA coral/orange : texte blanc forcé (light + dark) ===
+   Sélecteurs ^= / " " pour ne matcher que bg-coral standalone, pas hover:bg-coral/10 etc.
+   (sinon on capture des CTA "outline" type bg-transparent + hover:bg-coral). */
+button[class^="bg-coral"], button[class*=" bg-coral"],
+button[class^="bg-orange"], button[class*=" bg-orange"],
+a[class^="bg-coral"],      a[class*=" bg-coral"],
+a[class^="bg-orange"],     a[class*=" bg-orange"] {
+  color: #FFFFFF !important;
+}
+button[class^="bg-coral"] *, button[class*=" bg-coral"] *,
+button[class^="bg-orange"] *, button[class*=" bg-orange"] *,
+a[class^="bg-coral"] *,      a[class*=" bg-coral"] *,
+a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
+  color: #FFFFFF !important;
+}
+.light button[class^="bg-coral"], .light button[class*=" bg-coral"],
+.light button[class^="bg-orange"], .light button[class*=" bg-orange"],
+.light a[class^="bg-coral"],      .light a[class*=" bg-coral"],
+.light a[class^="bg-orange"],     .light a[class*=" bg-orange"],
+.light button[class^="bg-coral"] *, .light button[class*=" bg-coral"] *,
+.light button[class^="bg-orange"] *, .light button[class*=" bg-orange"] *,
+.light a[class^="bg-coral"] *,      .light a[class*=" bg-coral"] *,
+.light a[class^="bg-orange"] *,     .light a[class*=" bg-orange"] * {
+  color: #FFFFFF !important;
+}
+
+/* ─── Accessibilité — respect de prefers-reduced-motion ───
+   BLOC CRITIQUE — ne pas supprimer (déjà effacé une fois par un git
+   checkout) ; le kill-switch reduced-motion du site en dépend.
+   Coupe transitions, animations CSS et scroll lissé pour les
+   utilisateurs qui le demandent (complète framer MotionConfig). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Blueprint visuals — keyframes (jeux lumineux, flux, dérive) ───
+   BLOC CRITIQUE — ne pas supprimer (déjà effacé une fois par un git
+   checkout) ; le kill-switch reduced-motion du site en dépend.
+   Réinjectées après cet effacement. Auto-coupées par le garde-fou
+   reduced-motion ci-dessus. */
+@keyframes aurora-drift-1 {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(8%, 6%, 0) scale(1.18); }
+}
+@keyframes aurora-drift-2 {
+  0%   { transform: translate3d(0, 0, 0) scale(1.12); }
+  100% { transform: translate3d(-7%, -8%, 0) scale(1); }
+}
+@keyframes grid-sweep {
+  0%   { transform: translateY(-120%); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(340%); opacity: 0; }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes dash-flow { to { stroke-dashoffset: -1000; } }
+@keyframes shimmer-x {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+.animate-aurora-1   { animation: aurora-drift-1 19s ease-in-out infinite alternate; will-change: transform; }
+.animate-aurora-2   { animation: aurora-drift-2 23s ease-in-out infinite alternate; will-change: transform; }
+.animate-grid-sweep { animation: grid-sweep 7s ease-in-out infinite; }
+.animate-float-y    { animation: float-y 6s ease-in-out infinite; }
+.animate-dash-flow  { animation: dash-flow 18s linear infinite; }
+.animate-shimmer-x  { animation: shimmer-x 2.6s ease-in-out infinite; }
+
+/* Épure « Serenity » : tracé de ligne fin + pulsation d'opacité douce. */
+@keyframes draw-in {
+  from { stroke-dashoffset: 1000; opacity: 0; }
+  60%  { opacity: 0.4; }
+  to   { stroke-dashoffset: 0; opacity: 0.4; }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.18; }
+  50%      { opacity: 0.5; }
+}
+.animate-draw-in   { stroke-dasharray: 1000; animation: draw-in 2.6s ease-out forwards; }
+.animate-pulse-soft { animation: pulse-soft 3.6s ease-in-out infinite; }
+
+/* Impulsion de lumière le long d'un câble (artifact Fiber). */
+@keyframes fiber-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -4060; } }
+.animate-fiber-flow { animation: fiber-flow 4s linear infinite; }
+
+/* Masques de fondu (marquees, grilles, cartes). */
+.mask-fade-y {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+}
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 

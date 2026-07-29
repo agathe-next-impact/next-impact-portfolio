@@ -1,36 +1,38 @@
-import React from 'react';
-import Image from 'next/image';
-import { MagicCard } from '../magicui/magic-card';
-import { title } from 'process';
+import React from 'react'
+import Image from 'next/image'
 
 interface CardProps {
-    imageUrl: string;
-    title: string;
-    text: string;
+  imageUrl: string
+  title: string
+  text: string
 }
 
 const LandingCard: React.FC<CardProps> = ({ imageUrl, title, text }) => {
-    return (
-        <div className="relative flex basis-2/5 flex-col rounded-2xl bg-white bg-clip-border border border-from-lightblue border-to-pink-400 shadow-lg shadow-blue-gray-500/40 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-            <div className="relative mx-4 -mt-6 h-60 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                <Image
-                    src={imageUrl}
-                    alt="Card Image"
-                    width={320}
-                    height={240}
-                    className="h-full w-full object-cover object-top"
-                />
-            </div>
-            <div className="pb-3 px-4">
-                <h3 className="block font-googletitre text-xl font-medium text-regularblue">
-                    {title}
-                </h3>
-                <p className="text-mediumblue font-light">
-                    {text}
-                </p>
-            </div>
-        </div>
-    );
+  return (
+    <div
+      style={{
+        borderTop: "1px solid var(--rule)",
+        paddingTop: 24,
+        paddingBottom: 24,
+      }}
+    >
+      <div style={{ overflow: "hidden", marginBottom: 16, aspectRatio: "16/9" }}>
+        <Image
+          src={imageUrl}
+          alt={title}
+          width={480}
+          height={270}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
+        />
+      </div>
+      <h3 className="ni-serif" style={{ fontSize: 18, marginBottom: 8, margin: "0 0 8px" }}>
+        {title}
+      </h3>
+      <p style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
+        {text}
+      </p>
+    </div>
+  )
 }
 
-export default LandingCard;
+export default LandingCard

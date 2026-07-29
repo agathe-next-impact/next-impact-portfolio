@@ -1,0 +1,120 @@
+---
+title: "PWA plutôt qu'application native : pourquoi une app santé n'a pas besoin des stores"
+slug: "pwa-application-sante-stores-peer-to-peer"
+date: "2026-06-12"
+author: "Agathe Karinthi-Martin"
+excerpt: "Étude de cas Peer to Peer (santé mentale) : pourquoi une PWA répond mieux qu'une app native aux projets associatifs, sensibles ou gratuits — et quand le natif reste justifié."
+tags: ["PWA", "Application mobile", "Santé mentale", "Décision techno"]
+readingTime: 8
+---
+
+## Introduction
+
+« Il nous faudrait une appli. »
+
+Si vous portez un projet associatif, culturel, santé ou territorial, vous avez probablement déjà prononcé cette phrase. Ou on vous l'a soufflée en réunion. Une appli, ça fait sérieux. Ça fait moderne. Ça se télécharge, ça a une icône sur l'écran d'accueil, ça envoie des notifications.
+
+Le problème, c'est que cette phrase déclenche presque toujours le même réflexe : direction l'App Store et Google Play. Et là, le devis triple, le calendrier double, et le projet meurt parfois avant d'avoir commencé.
+
+Voici un contre-exemple : [Peer to Peer](https://peer-to-peer.fr/), une plateforme gratuite d'outils d'auto-observation et de soutien au rétablissement en santé mentale. Questionnaires, parcours guidés, carnets. Sans compte, sans donnée envoyée, tout reste dans le navigateur.
+
+Elle s'installe sur un téléphone. Elle s'ouvre en plein écran. Elle a son icône. Et elle n'existe sur aucun store.
+
+C'est une PWA : une Progressive Web App. Et c'est de ce choix-là que je veux parler aujourd'hui.
+
+## Une PWA, c'est quoi, sans jargon ?
+
+Une PWA est un site web qui se comporte comme une application. Concrètement, quand vous visitez le site depuis votre téléphone, vous pouvez l'ajouter à votre écran d'accueil. Elle s'ouvre alors sans barre d'adresse, en plein écran, avec sa propre icône. Elle peut fonctionner hors connexion, mémoriser des choses localement, et — sous conditions — envoyer des notifications.
+
+Pour la personne qui l'utilise, la différence avec une « vraie » application est souvent invisible.
+
+Pour celle qui la finance et la maintient, la différence est énorme.
+
+## Pourquoi Peer to Peer ne pouvait pas être une app native
+
+Pour Peer to Peer, trois contraintes étaient non négociables.
+
+### 1. La plateforme est gratuite
+
+Pas de revenus, juste des contributions libres. Une application native, c'est au minimum un développement iOS et un développement Android (ou un framework hybride, qui a ses propres coûts), deux processus de publication, deux cycles de validation, des comptes développeur payants. Pour un projet sans modèle économique, c'est rédhibitoire avant même la première ligne de code.
+
+### 2. Le sujet est sensible
+
+On parle de santé mentale. Principe d'architecture numéro un : **aucune donnée ne quitte l'appareil**. Or passer par les stores aurait poussé dans la direction inverse (comptes utilisateurs, conditions des plateformes, mécaniques d'engagement). Le web, lui, me laissait construire exactement le niveau de confidentialité que je voulais : pas de compte, pas de serveur qui collecte, des saisies qui vivent le temps d'une session.
+
+### 3. L'accès doit être sans friction
+
+Une personne en difficulté qui cherche un outil d'auto-observation ne doit pas avoir à télécharger 80 Mo, créer un compte et accepter des CGU. Elle clique sur un lien, elle est dedans.
+
+Un lien se partage par SMS, dans un mail, sur une affiche en QR code, par un pair-aidant en entretien. Essayez de faire ça avec une app native : « télécharge l'app, attends, crée un compte… ». Résultat : vous avez perdu la moitié des gens en route.
+
+<Callout type="success">
+La PWA n'était pas un choix par défaut ou par économie. C'était le choix **aligné avec le projet** — son éthique, son modèle économique et son public.
+</Callout>
+
+## Ce que les stores vous coûtent vraiment
+
+Parlons franchement de ce qu'implique le passage par l'App Store et Google Play, parce que c'est rarement dit aux porteurs de projet.
+
+| Poste                              | App native (stores)                       | PWA                                |
+|------------------------------------|-------------------------------------------|------------------------------------|
+| Développement initial              | iOS + Android (ou hybride lourd)          | Une seule base web                 |
+| Compte développeur                 | Apple ~99 €/an, Google ~25 € à vie        | Aucun                              |
+| Commission sur ventes              | 15–30 %                                   | 0 %                                |
+| Cycle de validation                | Plusieurs jours, refus possibles          | Aucun — déploiement direct         |
+| Mise à jour                        | Soumise à revue, propagée selon l'OS      | En ligne instantanément            |
+| Référencement Google               | Invisible (seule la fiche store existe)   | Chaque page est indexable          |
+| Dépendance plateforme              | Forte (règles révocables)                 | Aucune                             |
+
+Il y a aussi un coût plus sournois : **la dépendance**. Votre projet vit sur le terrain de quelqu'un d'autre, selon ses règles, révocables.
+
+Avec une PWA, une mise à jour, c'est un déploiement web. Elle est en ligne pour tout le monde, instantanément, sans validation de personne. Quand je corrige un outil sur Peer to Peer un mardi soir, il est à jour chez tous les utilisateurs le mardi soir.
+
+<Callout type="info">
+Bonus que les apps natives n'auront jamais : une PWA est référençable sur Google. Chaque outil de Peer to Peer est une page web indexable. Une app native est invisible des moteurs de recherche — votre seule vitrine, c'est la fiche du store.
+</Callout>
+
+## Soyons honnêtes : ce qu'une PWA ne fait pas (ou mal)
+
+La PWA n'est pas une solution universelle.
+
+- **Notifications push inégales.** Sur Android, ça fonctionne bien. Sur iPhone, c'est possible depuis quelques années, mais uniquement si la personne a d'abord installé la PWA sur son écran d'accueil — une étape que peu d'utilisateurs font spontanément. Si votre modèle repose sur la réactivation par notifications, c'est un vrai point de vigilance.
+- **L'installation demande un geste.** « Ajouter à l'écran d'accueil » n'est pas encore un réflexe grand public, surtout sur iOS où le parcours est moins guidé. Il faut accompagner ce geste dans l'interface.
+- **Capacités matérielles limitées.** Bluetooth avancé, capteurs spécifiques, intégrations profondes avec le système restent hors de portée. Si votre app doit dialoguer avec un objet connecté ou tourner intensivement en arrière-plan, le natif garde l'avantage.
+- **Pas de vitrine store.** Pour certains publics, « être sur l'App Store » est un gage de sérieux, et le store est un canal de découverte. Une PWA doit construire sa visibilité ailleurs : SEO, partenaires, terrain, bouche-à-oreille.
+
+## Alors, quand choisir quoi ?
+
+La **PWA** est probablement le bon choix si :
+
+- votre projet repose sur des contenus, des formulaires, des parcours, une carte, un catalogue ou des outils interactifs ;
+- votre budget ne permet pas de maintenir deux applications ;
+- l'accès sans friction compte plus que les notifications ;
+- vous voulez garder le contrôle de vos mises à jour et de votre distribution.
+
+L'**application native** se justifie si :
+
+- vous dépendez de capacités matérielles pointues ;
+- vous avez besoin de notifications critiques sur iOS ;
+- vous avez un usage intensif hors-ligne avec synchronisation complexe ;
+- la présence sur les stores est en soi un enjeu stratégique pour votre public.
+
+<Callout type="warning">
+Dans le doute ? **Commencez par la PWA.** C'est l'option réversible : si le projet décolle et que le natif devient nécessaire, vous aurez validé les usages avec un investissement maîtrisé. L'inverse — partir du natif pour redescendre vers le web — coûte beaucoup plus cher.
+</Callout>
+
+## En résumé
+
+La question n'a jamais été « PWA ou native, laquelle est la meilleure ? ». La question est : **que doit faire votre application, pour qui, avec quel budget de départ, et quelle équipe pour la faire vivre ?**
+
+Avant de choisir une techno, choisissons ce que le projet doit vraiment faire.
+
+Vous vous demandez si une PWA correspond à votre projet ? [Faites le diagnostic techno en 2 minutes](/audit-site-web), ou écrivez-moi directement avec votre projet — je vous donne un premier avis.
+
+[Peer to Peer](https://peer-to-peer.fr/) est en ligne sur peer-to-peer.fr — gratuit, sans compte, et vos données restent chez vous.
+
+## Pour aller plus loin
+
+- [App mobile : faut-il vraiment passer par les stores ?](/blog/app-mobile-pwa-site-classique-stores)
+- [WordPress Headless vs classique : comparatif complet 2026](/blog/wordpress-headless-vs-classique-2026)
+- [Quelle techno pour un média en ligne en 2026 ?](/blog/quelle-techno-media-en-ligne-2026)

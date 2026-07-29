@@ -1,0 +1,281 @@
+---
+title: "Sécurité d'un WordPress headless : admin, API, sessions"
+description: "Ce que l'architecture headless règle en sécurité, ce qu'elle ne règle pas, et comment protéger le back-office, l'API et les sessions utilisateur (JWT)."
+category: wordpress-headless
+author: "Agathe Karinthi-Martin"
+date: "2025-05-15"
+updated: "2026-07-18"
+order: 17
+faq:
+  - question: "Un WordPress headless est-il automatiquement plus sécurisé ?"
+    answer: "Non. L'architecture headless réduit mécaniquement la surface d'attaque — plus de thème PHP public, back-office isolable — mais elle ne dispense d'aucune mesure de base : mises à jour de WordPress et des plugins, restriction d'accès à l'admin, API limitée aux endpoints nécessaires. Un WordPress headless jamais mis à jour reste un WordPress vulnérable."
+  - question: "Faut-il encore un plugin de sécurité type Wordfence en headless ?"
+    answer: "Partiellement. Les protections les plus efficaces se déplacent au niveau du serveur et du CDN (restriction IP, rate limiting, WAF), où un plugin PHP ne peut pas rivaliser. Les plugins restent utiles pour la 2FA et la limitation des tentatives de connexion. Un plugin de firewall applicatif complet fait double emploi si le back-office n'est plus public."
+  - question: "Comment gérer un espace membre ou des utilisateurs connectés en headless ?"
+    answer: "Avec des jetons JWT : l'utilisateur s'identifie via le frontend, WordPress retourne un token signé à durée de vie limitée, et Next.js le stocke dans un cookie httpOnly sécurisé. Les cookies de session PHP classiques ne fonctionnent plus, car le front et le back vivent sur des domaines différents."
+  - question: "Où stocker le token d'authentification côté navigateur ?"
+    answer: "Dans un cookie httpOnly avec les attributs secure et sameSite — jamais dans le localStorage en production. Le localStorage est lisible par tout script exécuté sur la page : en cas d'attaque XSS, le token peut être volé et la session usurpée. Un cookie httpOnly est inaccessible au JavaScript client."
+  - question: "Qui doit appliquer ces mesures : moi ou mon prestataire ?"
+    answer: "L'essentiel relève du prestataire et de l'hébergeur au moment du build : restriction d'accès, en-têtes de sécurité, CORS, gestion des secrets. Côté client, il reste deux responsabilités durables : maintenir les mises à jour (ou déléguer la maintenance) et imposer la 2FA à tous les comptes éditeurs. Exigez que ces mesures figurent noir sur blanc dans le devis."
+---
+
+<TldrCallout>
+  Sécuriser un WordPress headless repose sur quatre chantiers : isoler le back-office sur un sous-domaine non public (par exemple `admin.monsite.fr` restreint par IP ou VPN), n'exposer que les endpoints API nécessaires (lecture publique, écriture authentifiée), gérer les sessions utilisateur par jetons JWT stockés en cookie httpOnly, et placer le frontend Next.js derrière un CDN avec en-têtes de sécurité (CSP, HSTS). La surface d'attaque diminue mécaniquement — mais les mises à jour et la protection de l'admin restent indispensables.
+</TldrCallout>
+
+## Un WordPress headless est-il plus sûr qu'un WordPress classique ?
+
+**Oui, structurellement : en mode headless, le thème PHP et les plugins ne sont plus exposés au public, et seule l'API (REST ou GraphQL) reste accessible. Le nombre de vecteurs d'attaque diminue donc mécaniquement — sans pour autant dispenser de sécuriser chaque couche.**
+
+En architecture traditionnelle, WordPress expose simultanément son back-office, ses thèmes PHP et ses plugins au public. En mode headless — dont [le fonctionnement est détaillé dans le guide de référence](/documentation/wordpress-headless/comprendre-le-headless) — le thème WordPress n'est plus accessible aux visiteurs : le frontend est une application Next.js séparée, servie par un CDN.
+
+<ComparisonTable
+  headers={["WordPress traditionnel", "WordPress headless"]}
+  highlight="right"
+  rows={[
+    { label: "Surface d'attaque", left: "Thème, plugins frontend, admin, API", right: "API uniquement (REST ou GraphQL)" },
+    { label: "Accès admin", left: "Accessible publiquement via /wp-admin", right: "Restreint par IP ou VPN" },
+    { label: "Injection via thème", left: "Possible (failles XSS dans les templates PHP)", right: "Impossible (aucun thème public actif)" },
+    { label: "Exposition serveur", left: "PHP, MySQL et WordPress sur le même serveur public", right: "WordPress isolé, frontend sur un CDN séparé" },
+  ]}
+/>
+
+## Ce que le headless règle — et ce qu'il ne règle pas
+
+**Verdict honnête : le headless supprime des catégories entières d'attaques, mais il n'est pas un bouclier magique. Ce qui reste exposé doit être durci comme sur n'importe quel WordPress.**
+
+Ce que l'architecture règle par construction :
+
+- **Les failles de thèmes et de page builders** : aucun template PHP n'est exécuté face au public.
+- **Le défaçage du site visible** : le frontend est un build statique ou serveur, régénérable en minutes.
+- **L'exposition directe du serveur WordPress** : il peut vivre sur un sous-domaine filtré, voire hors ligne entre deux builds pour un site entièrement statique.
+
+Ce qu'elle ne règle pas :
+
+- **Les vulnérabilités de WordPress et de ses plugins** : un core ou un plugin non mis à jour reste exploitable via l'API ou l'admin.
+- **La protection du back-office** : `/wp-admin` existe toujours ; s'il reste public, il reste attaquable (force brute, credential stuffing).
+- **La sécurité applicative du frontend** : dépendances npm vulnérables, secrets mal gérés, en-têtes absents — ces risques sont nouveaux par rapport à un WordPress classique.
+- **L'authentification des utilisateurs finaux** : un espace membre demande un mécanisme dédié (voir la section sur les sessions plus bas), là où un WordPress monolithique l'avait « gratuitement ».
+
+## Comment protéger le back-office WordPress ?
+
+**La mesure la plus rentable : rendre `/wp-admin` inaccessible depuis l'Internet public. En headless, plus rien ne justifie qu'il soit ouvert à tous.**
+
+<StepByStep>
+  <Step number={1} title="Restreindre les IP autorisées sur wp-admin">
+    Configurez votre serveur web (Nginx ou Apache) pour n'autoriser que les adresses IP de votre équipe ou de votre VPN. Toute tentative d'accès depuis une IP non autorisée reçoit une erreur 403.
+  </Step>
+  <Step number={2} title="Activer l'authentification 2FA">
+    Installez un plugin 2FA (WP 2FA, Two Factor Authentication) pour tous les comptes ayant le rôle éditeur ou supérieur. Privilégiez les applications TOTP (Google Authenticator, Authy) aux codes par SMS. Cette mesure neutralise force brute et mots de passe compromis.
+  </Step>
+  <Step number={3} title="Limiter les tentatives de connexion">
+    Installez Limit Login Attempts Reloaded avec un seuil de 3 tentatives avant blocage de 15 minutes, puis blocage progressif.
+  </Step>
+  <Step number={4} title="Désactiver XML-RPC">
+    Le protocole XML-RPC est un vecteur d'attaque par force brute et DDoS. En mode headless, il n'a aucune utilité : désactivez-le.
+  </Step>
+</StepByStep>
+
+Les restrictions serveur correspondantes tiennent en quelques lignes :
+
+```nginx
+# Nginx — restreindre wp-admin par IP et bloquer xmlrpc.php
+location ~ ^/(wp-admin|wp-login\.php) {
+  allow 203.0.113.10;    # IP du bureau
+  allow 198.51.100.0/24; # plage VPN
+  deny all;
+}
+location = /xmlrpc.php { deny all; }
+```
+
+Complétez par le durcissement de `wp-config.php` et la suppression des informations de version exposées dans le HTML :
+
+```php
+// wp-config.php — durcissement
+define('DISALLOW_FILE_EDIT', true);  // pas d'éditeur de fichiers dans l'admin
+define('FORCE_SSL_ADMIN', true);     // HTTPS obligatoire pour l'admin
+define('WP_DEBUG', false);           // pas de debug en production
+
+// functions.php — masquer la version de WordPress
+remove_action('wp_head', 'wp_generator');
+add_filter('the_generator', '__return_empty_string');
+```
+
+## Comment sécuriser l'API entre WordPress et le frontend ?
+
+**Le principe directeur : lecture publique limitée aux endpoints réellement utilisés par le frontend, écriture toujours authentifiée, le tout sous rate limiting et CORS restrictif.**
+
+L'API REST de WordPress est partiellement publique par défaut : les endpoints de lecture (articles, pages) sont accessibles sans authentification — c'est nécessaire au frontend. En revanche, trois protections s'imposent :
+
+**Rate limiting.** Limitez le nombre de requêtes API par IP pour empêcher la surcharge du serveur et l'extraction massive de données :
+
+```nginx
+# Nginx — rate limiting sur l'API REST
+limit_req_zone $binary_remote_addr zone=api:10m rate=30r/m;
+location /wp-json/ {
+  limit_req zone=api burst=10 nodelay;
+  proxy_pass http://wordpress_backend;
+}
+```
+
+**CORS restrictif.** Les en-têtes CORS (Cross-Origin Resource Sharing) contrôlent quels domaines peuvent interroger l'API depuis un navigateur. N'autorisez que les domaines de votre frontend — jamais `Access-Control-Allow-Origin: *` dès lors que des cookies d'authentification circulent :
+
+```php
+// functions.php — CORS limité au frontend
+add_action('rest_api_init', function () {
+  remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
+  add_filter('rest_pre_serve_request', function ($value) {
+    $allowed = ['https://www.monsite.fr', 'https://staging.monsite.fr'];
+    $origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if (in_array($origin, $allowed)) {
+      header("Access-Control-Allow-Origin: $origin");
+      header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+      header('Access-Control-Allow-Headers: Authorization, Content-Type');
+      header('Access-Control-Allow-Credentials: true');
+    }
+    return $value;
+  });
+});
+```
+
+**Réduction des endpoints exposés.** Désactivez ou filtrez les routes non utilisées (liste des utilisateurs, réglages) via `rest_authentication_errors` ou un plugin dédié : moins l'API en dit, moins elle offre de prise.
+
+<Callout variant="tip" title="Clé API pour le frontend">
+Pour les endpoints publics, une clé API transmise dans un en-tête personnalisé (`X-API-Key`) n'est pas un mécanisme de sécurité fort — elle est visible dans le code client — mais elle filtre les requêtes non légitimes et facilite le rate limiting par client.
+</Callout>
+
+## Comment gérer l'authentification et les sessions utilisateur ?
+
+**En headless, les cookies de session PHP ne fonctionnent plus : front et back vivent sur des domaines distincts. La pratique standard est l'échange de jetons JWT signés, stockés côté Next.js dans un cookie httpOnly sécurisé.**
+
+Un JWT (JSON Web Token) est un jeton signé par le serveur qui prouve l'identité de l'utilisateur : celui-ci envoie ses identifiants une fois, WordPress retourne un token à durée de vie limitée, et le frontend joint ce token à chaque requête authentifiée.
+
+<FlowDiagram
+  nodes={[
+    { label: "Utilisateur", description: "Saisit ses identifiants sur le frontend Next.js", icon: "👤" },
+    { label: "Frontend Next.js", description: "Transmet les identifiants à l'API WordPress", icon: "🖥️" },
+    { label: "WordPress API", description: "Vérifie les identifiants et retourne un token JWT signé", icon: "🔐" },
+    { label: "Session", description: "Le token est stocké dans un cookie httpOnly sécurisé", icon: "🍪" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+### Quelle méthode d'authentification choisir ?
+
+| | Application Passwords | **JWT** (cas standard) | OAuth 2.0 |
+|---|---|---|---|
+| Mise en place | Faible — natif depuis WordPress 5.6 | Moyenne — plugin WordPress requis | Élevée — serveur d'autorisation requis |
+| Cas d'usage | Accès serveur-à-serveur (scripts, CI/CD) | Authentification utilisateur frontend-backend | Intégration tierce, SSO (Single Sign-On) |
+| Sécurité | Token statique, non révocable individuellement | Token à expiration, renouvelable (refresh token) | Protocole standardisé avec scopes et consentement |
+| Verdict | Scripts et automatisations serveur uniquement | Cas standard pour un site headless | Applications multi-services ou SSO |
+
+<Callout variant="developpeur" title="Application Passwords : jamais dans le navigateur">
+Les Application Passwords de WordPress sont des tokens permanents, conçus pour les scripts serveur-à-serveur (déploiement, synchronisation). Ne les utilisez jamais pour authentifier des utilisateurs finaux, et ne les stockez jamais côté client.
+</Callout>
+
+### Le principe d'implémentation, en trois mouvements
+
+Côté WordPress, un plugin (par exemple **JWT Authentication for WP-API**) expose un endpoint de connexion, signé par une clé secrète déclarée dans `wp-config.php` :
+
+```php
+// wp-config.php — clé de signature des tokens (64 caractères minimum,
+// différente par environnement)
+define('JWT_AUTH_SECRET_KEY', 'chaine-aleatoire-de-64-caracteres-minimum');
+```
+
+Côté Next.js, une route API sert d'intermédiaire : elle transmet les identifiants à WordPress, puis stocke le token retourné dans un cookie inaccessible au JavaScript client :
+
+```typescript
+// app/api/auth/login/route.ts — l'essentiel
+const data = await wpRes.json(); // token retourné par WordPress
+cookies().set('auth_token', data.token, {
+  httpOnly: true,                                  // invisible au JS client
+  secure: true,                                    // HTTPS uniquement
+  sameSite: 'lax',
+  maxAge: 60 * 60 * 24 * 7,
+});
+```
+
+Enfin, le middleware Next.js protège les routes privées : toute requête vers `/compte` ou `/espace-membre` sans cookie valide est redirigée vers la page de connexion, et chaque vérification de permission s'effectue côté serveur en interrogeant WordPress avec le token (`Authorization: Bearer …`). Ne faites jamais confiance aux données du token lues côté client.
+
+### Où stocker le token : cookie httpOnly ou localStorage ?
+
+**Verdict sans ambiguïté : cookie httpOnly en production, toujours.** Le localStorage est lisible par tout script exécuté sur la page ; en cas d'attaque XSS (injection de code malveillant), le token peut être exfiltré et la session usurpée. Un cookie httpOnly est inaccessible au JavaScript client, ce qui élimine ce vecteur — en contrepartie d'une protection anti-CSRF à prévoir pour les requêtes d'écriture (l'attribut `sameSite` en couvre l'essentiel).
+
+<HighlightBox title="Checklist sessions : les 5 règles" accent="coral">
+
+1. **HTTPS partout** : un token transmis en HTTP est interceptable.
+2. **Cookie `httpOnly` + `secure` + `sameSite`** : jamais de localStorage en production.
+3. **Expiration courte** : 15 minutes à 1 heure pour le token d'accès, refresh token de quelques jours pour renouveler la session.
+4. **Clé secrète forte et par environnement** : 64 caractères minimum, jamais réutilisée entre production et staging.
+5. **Validation côté serveur** : toute vérification de rôle ou de permission se fait sur le serveur, jamais dans le navigateur.
+
+</HighlightBox>
+
+## Comment durcir le frontend Next.js ?
+
+**Le frontend introduit ses propres risques — dépendances npm, secrets, en-têtes — qui n'existaient pas sur un WordPress classique. Trois mesures les couvrent.**
+
+**En-têtes de sécurité.** Le fichier `next.config.js` applique des en-têtes HTTP à toutes les réponses :
+
+```javascript
+// next.config.js — en-têtes de sécurité
+const securityHeaders = [
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Content-Security-Policy',
+    value: "default-src 'self'; img-src 'self' https://admin.monsite.fr data:;" },
+  { key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload' },
+];
+module.exports = {
+  async headers() {
+    return [{ source: '/(.*)', headers: securityHeaders }];
+  },
+};
+```
+
+**Gestion des secrets.** Aucun secret dans le code versionné : clés API, tokens et secrets de revalidation vivent dans des variables d'environnement. Côté Next.js, les variables préfixées `NEXT_PUBLIC_` sont exposées au navigateur — les secrets doivent utiliser des variables **sans** ce préfixe, accessibles uniquement côté serveur.
+
+**Audit des dépendances.** Intégrez `npm audit` au pipeline CI/CD et activez GitHub Dependabot ou Snyk : ces outils détectent les vulnérabilités des dépendances et proposent les mises à jour via pull requests.
+
+## Quelle protection périmétrique : HTTPS, CDN et anti-DDoS ?
+
+**Le chiffrement TLS est obligatoire sur les deux couches, et la protection DDoS est largement fournie par la plateforme d'hébergement du frontend.**
+
+- **Frontend** : certificat et protection DDoS gérés nativement par Vercel ou Netlify — [le détail du déploiement est traité ici](/documentation/wordpress-headless/deploiement-vercel-nextjs).
+- **Backend WordPress** : certificat Let's Encrypt ou fourni par l'hébergeur, redirection HTTP → HTTPS, et un CDN type Cloudflare en frontal (rate limiting, WAF).
+
+<ArchitectureDiagram
+  title="Architecture sécurisée WordPress headless"
+  layers={[
+    { label: "Protection périmétrique", items: ["CDN / Cloudflare", "Protection DDoS", "Rate limiting", "WAF"], color: "dark" },
+    { label: "Backend WordPress", items: ["IP whitelisting", "2FA", "XML-RPC désactivé", "wp-config durci"], color: "blue" },
+    { label: "Couche API", items: ["CORS restreint", "Authentification JWT", "Rate limiting API", "HTTPS"], color: "orange" },
+    { label: "Frontend Next.js", items: ["En-têtes CSP", "Secrets en variables d'env.", "Audit npm", "HTTPS"], color: "dark" },
+  ]}
+/>
+
+## Qui fait quoi : votre prestataire, votre hébergeur, vous ?
+
+**L'essentiel de ces mesures se met en place une fois, au moment du build, par le prestataire. Ce qui reste durablement de votre côté : les mises à jour et la discipline des comptes.**
+
+- **Prestataire (au build)** : restriction d'accès à l'admin, configuration API et CORS, authentification JWT si espace membre, en-têtes de sécurité, gestion des secrets. Exigez que ces points figurent explicitement dans le devis — c'est ce que couvre [l'offre WordPress headless](/wordpress-headless).
+- **Hébergeur / plateforme** : HTTPS, DDoS, CDN — natif chez Vercel et Netlify côté frontend.
+- **Vous (en continu)** : mises à jour de WordPress et des plugins (ou contrat de maintenance qui les couvre), 2FA imposée à tous les comptes éditeurs, revue des accès quand un collaborateur part.
+
+En cas de doute sur l'architecture à retenir ou sur le sérieux d'une proposition reçue, [une visio conseil](/conseil) permet de trancher sur pièces, sans engagement de refonte.
+
+<Quiz
+  question="En architecture headless, pourquoi est-il recommandé de désactiver XML-RPC sur WordPress ?"
+  options={[
+    "Parce que XML-RPC est nécessaire uniquement pour l'API GraphQL",
+    "Parce que XML-RPC est un vecteur d'attaque par force brute et DDoS, inutile en mode headless",
+    "Parce que XML-RPC ralentit les performances de l'API REST",
+    "Parce que XML-RPC est incompatible avec Next.js"
+  ]}
+  answer={1}
+  explanation="Le protocole XML-RPC permet des connexions distantes à WordPress (publication via des clients externes, pingbacks). En architecture headless, le frontend communique via l'API REST ou GraphQL, rendant XML-RPC inutile. Or, ce protocole est fréquemment exploité pour des attaques par force brute (tentatives de connexion multiples dans une seule requête) et pour des attaques DDoS par amplification de pingback. Le désactiver supprime ces vecteurs d'attaque sans aucun impact fonctionnel."
+/>

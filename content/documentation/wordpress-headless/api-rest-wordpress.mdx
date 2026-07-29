@@ -1,0 +1,311 @@
+---
+title: "L'API REST WordPress"
+description: "Endpoints, requêtes et authentification de l'API REST native de WordPress pour une architecture headless."
+category: wordpress-headless
+author: Next Impact
+date: "2025-05-15"
+order: 7
+---
+
+<TldrCallout>
+  L'API REST WordPress est intégrée nativement depuis la version 4.7 (décembre 2016). Elle expose le contenu sous forme d'endpoints HTTP renvoyant du JSON (`/wp-json/wp/v2/posts`, `/pages`, `/media`…) et constitue, avec WPGraphQL, l'une des deux passerelles standard d'un WordPress headless. Les opérations de lecture sont publiques par défaut, l'écriture exige une authentification.
+</TldrCallout>
+
+## Qu'est-ce que l'API REST WordPress ?
+
+Depuis la version 4.7 (décembre 2016), WordPress intègre nativement une API REST. Cette API expose le contenu de la base de données sous forme d'endpoints HTTP qui retournent des données au format JSON. Tout client capable d'envoyer des requêtes HTTP (navigateur, application mobile, serveur Node.js) peut consommer ces données sans dépendre du système de thèmes PHP.
+
+L'API REST suit les conventions du protocole HTTP : chaque ressource possède une URL stable, et les opérations CRUD (Create, Read, Update, Delete) correspondent aux méthodes HTTP standard.
+
+<FlowDiagram
+  nodes={[
+    { label: "Client HTTP", description: "fetch, curl, Axios, ou tout autre client", icon: "📡" },
+    { label: "API REST WordPress", description: "/wp-json/wp/v2/ — routeur JSON", icon: "🔄" },
+    { label: "Base de données MySQL", description: "Stockage du contenu WordPress", icon: "🗄️" }
+  ]}
+  direction="horizontal"
+  accent="blue"
+/>
+
+Le point d'entrée de l'API est accessible à l'adresse `https://votre-site.com/wp-json/wp/v2/`. Cette URL racine retourne la liste de toutes les routes disponibles.
+
+## Les endpoints principaux
+
+L'API REST organise les contenus WordPress en ressources, chacune accessible via un endpoint dédié.
+
+<ComparisonTable
+  headers={["Endpoint", "Description"]}
+  rows={[
+    { label: "Posts", left: "/wp-json/wp/v2/posts", right: "Articles du blog" },
+    { label: "Pages", left: "/wp-json/wp/v2/pages", right: "Pages statiques" },
+    { label: "Media", left: "/wp-json/wp/v2/media", right: "Images, vidéos et fichiers" },
+    { label: "Categories", left: "/wp-json/wp/v2/categories", right: "Taxonomie catégories" },
+    { label: "Tags", left: "/wp-json/wp/v2/tags", right: "Taxonomie étiquettes" },
+    { label: "Users", left: "/wp-json/wp/v2/users", right: "Comptes utilisateurs" },
+    { label: "Comments", left: "/wp-json/wp/v2/comments", right: "Commentaires" },
+    { label: "Taxonomies", left: "/wp-json/wp/v2/taxonomies", right: "Liste des taxonomies enregistrées" }
+  ]}
+/>
+
+Chaque endpoint supporte l'accès à une collection (liste) ou à une ressource individuelle identifiée par son ID. Par exemple, `/wp-json/wp/v2/posts/42` retourne l'article dont l'ID est 42.
+
+## Effectuer des requêtes : les méthodes HTTP
+
+### GET — Lecture de données
+
+La méthode GET récupère du contenu sans le modifier. C'est la requête la plus courante en architecture headless.
+
+```bash
+# Récupérer les 10 derniers articles
+curl https://votre-site.com/wp-json/wp/v2/posts
+
+# Récupérer un article spécifique par son ID
+curl https://votre-site.com/wp-json/wp/v2/posts/42
+
+# Récupérer les pages
+curl https://votre-site.com/wp-json/wp/v2/pages
+```
+
+En JavaScript avec `fetch` (côté Next.js) :
+
+```javascript
+// Récupérer les articles avec les données embarquées
+const response = await fetch(
+  'https://votre-site.com/wp-json/wp/v2/posts?_embed&per_page=12'
+);
+const posts = await response.json();
+```
+
+### POST — Création de contenu
+
+La méthode POST crée une nouvelle ressource. Elle nécessite une authentification.
+
+```javascript
+const response = await fetch('https://votre-site.com/wp-json/wp/v2/posts', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic ' + btoa('username:application_password')
+  },
+  body: JSON.stringify({
+    title: 'Nouvel article',
+    content: '<p>Contenu de l\'article.</p>',
+    status: 'draft'
+  })
+});
+```
+
+### PUT / PATCH — Modification
+
+PUT remplace entièrement une ressource. PATCH modifie uniquement les champs spécifiés.
+
+```bash
+# Modifier le titre d'un article existant
+curl -X PATCH https://votre-site.com/wp-json/wp/v2/posts/42 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk" \
+  -d '{"title": "Titre modifié"}'
+```
+
+### DELETE — Suppression
+
+```bash
+# Mettre un article à la corbeille
+curl -X DELETE https://votre-site.com/wp-json/wp/v2/posts/42 \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk"
+
+# Suppression définitive (bypass de la corbeille)
+curl -X DELETE "https://votre-site.com/wp-json/wp/v2/posts/42?force=true" \
+  -H "Authorization: Basic dXNlcm5hbWU6YXBwX3Bhc3N3b3Jk"
+```
+
+## Paramètres de requête essentiels
+
+Les requêtes GET acceptent des paramètres qui permettent de filtrer, trier et optimiser les réponses.
+
+| Paramètre | Fonction | Exemple |
+|-----------|----------|---------|
+| `per_page` | Nombre de résultats par page (max 100) | `?per_page=20` |
+| `page` | Numéro de la page de résultats | `?page=2` |
+| `_embed` | Inclut les données liées (auteur, image, termes) | `?_embed` |
+| `_fields` | Limite les champs retournés | `?_fields=id,title,slug` |
+| `search` | Recherche textuelle | `?search=headless` |
+| `orderby` | Critère de tri (date, title, id) | `?orderby=title` |
+| `order` | Direction du tri (asc, desc) | `?order=asc` |
+| `categories` | Filtrage par ID de catégorie | `?categories=5` |
+| `slug` | Récupérer par slug | `?slug=mon-article` |
+| `status` | Statut de publication (nécessite auth) | `?status=draft` |
+
+<Callout variant="tip" title="Optimisez vos requêtes avec _fields">
+Le paramètre `_fields` réduit la taille de la réponse JSON en ne retournant que les champs nécessaires. Pour une page de listing, utilisez `?_fields=id,title,slug,excerpt,date,_links` au lieu de récupérer l'intégralité des données de chaque article.
+</Callout>
+
+## Pagination
+
+L'API REST utilise un système de pagination basé sur les en-têtes HTTP. Chaque réponse paginée inclut deux en-têtes :
+
+- `X-WP-Total` : nombre total de ressources correspondant à la requête
+- `X-WP-TotalPages` : nombre total de pages
+
+```javascript
+async function fetchPaginatedPosts(page = 1, perPage = 10) {
+  const response = await fetch(
+    `https://votre-site.com/wp-json/wp/v2/posts?per_page=${perPage}&page=${page}`
+  );
+
+  const posts = await response.json();
+  const totalPosts = parseInt(response.headers.get('X-WP-Total'));
+  const totalPages = parseInt(response.headers.get('X-WP-TotalPages'));
+
+  return { posts, totalPosts, totalPages, currentPage: page };
+}
+```
+
+## Authentification
+
+Les requêtes en lecture (GET) sur du contenu publié ne nécessitent pas d'authentification. En revanche, la création, la modification et la suppression de contenu requièrent une identification.
+
+### Application Passwords (recommandé)
+
+Depuis WordPress 5.6, les mots de passe d'application permettent une authentification HTTP Basic sécurisée. Chaque mot de passe est lié à un utilisateur et peut être révoqué individuellement.
+
+<StepByStep>
+  <Step number={1} title="Générer un mot de passe d'application">
+    Dans le back-office WordPress, accédez à Utilisateurs > Votre profil. Dans la section "Mots de passe d'application", saisissez un nom (par exemple "Frontend Next.js") et cliquez sur "Ajouter un mot de passe d'application".
+  </Step>
+  <Step number={2} title="Stocker le mot de passe">
+    WordPress affiche le mot de passe une seule fois. Copiez-le et stockez-le dans une variable d'environnement côté serveur (fichier `.env.local` de votre projet Next.js). Ne le commitez jamais dans le dépôt Git.
+  </Step>
+  <Step number={3} title="Utiliser le mot de passe dans les requêtes">
+    Encodez le couple `identifiant:mot_de_passe` en Base64 et transmettez-le dans l'en-tête Authorization de vos requêtes.
+  </Step>
+</StepByStep>
+
+```javascript
+// .env.local
+// WP_APP_USER=admin
+// WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
+
+const credentials = Buffer.from(
+  `${process.env.WP_APP_USER}:${process.env.WP_APP_PASSWORD}`
+).toString('base64');
+
+const response = await fetch('https://votre-site.com/wp-json/wp/v2/posts', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Basic ${credentials}`
+  },
+  body: JSON.stringify({ title: 'Article créé via l\'API', status: 'draft' })
+});
+```
+
+<Callout variant="warning" title="Sécurité des identifiants">
+Les mots de passe d'application ne doivent jamais être exposés côté client (navigateur). Dans une architecture Next.js, les requêtes authentifiées doivent transiter par les Route Handlers ou les fonctions serveur (`getServerSideProps`, Server Components) pour que les identifiants restent côté serveur.
+</Callout>
+
+### JWT (JSON Web Tokens)
+
+Le plugin JWT Authentication for WP REST API permet une authentification par jetons. Le client envoie ses identifiants une première fois pour obtenir un token, puis utilise ce token dans les requêtes suivantes.
+
+```javascript
+// Étape 1 : obtenir un token
+const tokenResponse = await fetch('https://votre-site.com/wp-json/jwt-auth/v1/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username: 'admin', password: 'mot_de_passe' })
+});
+const { token } = await tokenResponse.json();
+
+// Étape 2 : utiliser le token
+const response = await fetch('https://votre-site.com/wp-json/wp/v2/posts', {
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+```
+
+## Créer des endpoints personnalisés
+
+La fonction `register_rest_route()` permet d'ajouter des endpoints sur mesure pour exposer des données spécifiques ou implémenter une logique métier.
+
+```php
+// Dans functions.php ou un plugin personnalisé
+add_action('rest_api_init', function () {
+  register_rest_route('monsite/v1', '/projets-recents', [
+    'methods'  => 'GET',
+    'callback' => 'get_projets_recents',
+    'permission_callback' => '__return_true',
+    'args' => [
+      'nombre' => [
+        'default' => 6,
+        'sanitize_callback' => 'absint',
+      ],
+    ],
+  ]);
+});
+
+function get_projets_recents($request) {
+  $nombre = $request->get_param('nombre');
+  $query = new WP_Query([
+    'post_type'      => 'projet',
+    'posts_per_page' => $nombre,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+  ]);
+
+  $projets = [];
+  foreach ($query->posts as $post) {
+    $projets[] = [
+      'id'    => $post->ID,
+      'title' => $post->post_title,
+      'slug'  => $post->post_name,
+      'image' => get_the_post_thumbnail_url($post->ID, 'large'),
+      'date'  => $post->post_date,
+    ];
+  }
+
+  return new WP_REST_Response($projets, 200);
+}
+```
+
+L'endpoint est ensuite accessible à `https://votre-site.com/wp-json/monsite/v1/projets-recents?nombre=3`.
+
+## Gestion des erreurs
+
+L'API REST retourne des codes HTTP standards et des objets d'erreur JSON structurés.
+
+| Code | Signification | Cause fréquente |
+|------|--------------|-----------------|
+| 200 | Succès | Requête traitée correctement |
+| 201 | Créé | Ressource créée avec succès (POST) |
+| 400 | Requête invalide | Paramètres manquants ou mal formés |
+| 401 | Non autorisé | Authentification absente ou invalide |
+| 403 | Interdit | Permissions insuffisantes |
+| 404 | Non trouvé | Endpoint ou ressource inexistant |
+| 500 | Erreur serveur | Erreur PHP côté WordPress |
+
+```javascript
+async function safeFetch(url) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const error = await response.json();
+    console.error(`Erreur ${response.status}: ${error.message}`);
+    console.error(`Code: ${error.code}`);
+    return null;
+  }
+
+  return response.json();
+}
+```
+
+<Quiz
+  question="Quel paramètre permet de réduire la taille de la réponse JSON en ne retournant que certains champs ?"
+  options={[
+    "_embed",
+    "_fields",
+    "per_page",
+    "filter"
+  ]}
+  answer={1}
+  explanation="Le paramètre _fields permet de spécifier exactement quels champs inclure dans la réponse JSON. Par exemple, ?_fields=id,title,slug ne retournera que ces trois champs pour chaque ressource, ce qui réduit significativement la taille de la réponse et améliore les performances réseau."
+/>

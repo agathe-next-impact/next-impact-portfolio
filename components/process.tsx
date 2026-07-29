@@ -1,105 +1,188 @@
 "use client";
 
-import React, { useRef } from "react";
-import { CDCCard } from "@/components/tools";
+import { useRef } from "react";
+import { useLocale } from "next-intl";
+import { m as motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import type { Locale } from "@/i18n/routing";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { Hairline } from "@/components/visuals/hairline";
 
-export default function Process() {
+type Phase = {
+  title: string;
+  duration: string;
+  description: string;
+  deliverable: string;
+};
 
-  const timelineRef = useRef<HTMLDivElement>(null);
+const PHASES_FR: Phase[] = [
+  {
+    title: "Analyse & cadrage",
+    duration: "1 semaine",
+    description: "Audit de l'existant, besoins, choix de la stack (Classique / Headless / Web App).",
+    deliverable: "Document de cadrage + recommandation stack",
+  },
+  {
+    title: "Conception & validation",
+    duration: "1–2 semaines",
+    description: "Wireframes, maquettes haute-fidélité, charte si besoin — validées avant développement.",
+    deliverable: "Maquettes validées + charte typographique",
+  },
+  {
+    title: "Développement",
+    duration: "3–5 semaines",
+    description: "Intégration Next.js ou thème WordPress, backend, fonctionnalités métier. Staging continu.",
+    deliverable: "Site fonctionnel en environnement staging",
+  },
+  {
+    title: "Optimisation & tests",
+    duration: "1 semaine",
+    description: "Core Web Vitals (> 90), SEO technique, accessibilité WCAG, tests multi-navigateurs.",
+    deliverable: "Rapport Core Web Vitals + checklist SEO",
+  },
+  {
+    title: "Mise en ligne & suivi",
+    duration: "1 semaine",
+    description: "Mise en production, DNS, redirections 301. Support inclus 30 jours.",
+    deliverable: "Site en ligne + accès livrés + 30 j de support",
+  },
+];
 
-    return (
-        <section className="container mx-auto px-4 py-24">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-medium text-regularblue mb-4">
-              Méthode éprouvée en 5 étapes
-            </h2>
-            <p className="text-lg text-regularblue/80">
-              Un processus rodé pour votre réussite
-            </p>
-          </div>
-          <CDCCard />
+const PHASES_EN: Phase[] = [
+  {
+    title: "Analysis & scoping",
+    duration: "1 week",
+    description: "Audit, requirements, stack choice (Classic / Headless / Web App).",
+    deliverable: "Scoping document + stack recommendation",
+  },
+  {
+    title: "Design & validation",
+    duration: "1–2 weeks",
+    description: "Wireframes, high-fidelity mockups, brand guidelines if needed — signed off before any build.",
+    deliverable: "Validated mockups + type guidelines",
+  },
+  {
+    title: "Development",
+    duration: "3–5 weeks",
+    description: "Next.js or custom WordPress, backend, business features. Continuous staging for review.",
+    deliverable: "Functional site in staging environment",
+  },
+  {
+    title: "Optimization & testing",
+    duration: "1 week",
+    description: "Core Web Vitals (> 90), technical SEO, WCAG accessibility, cross-browser testing.",
+    deliverable: "Core Web Vitals report + SEO checklist",
+  },
+  {
+    title: "Go-live & follow-up",
+    duration: "1 week",
+    description: "Go-live, DNS, 301 redirects. 30-day support included.",
+    deliverable: "Live site + credentials delivered + 30-day support",
+  },
+];
 
-          <div className="relative max-w-4xl mx-auto" ref={timelineRef}>
-            {/* Ligne centrale dégradée */}
-            <div
-              className="absolute left-1/2 top-0 w-[1px] -translate-x-1/2 rounded-full pointer-events-none"
-              style={{
-                height: "100%",
-                background:
-                  "linear-gradient(to bottom, #f9a8d4 0%, #60a5fa 100%)", // pink-300 -> blue-300
-              }}
-            />
-            <ol className="relative z-10 grid md:grid-cols-1 gap-0">
-              {[
-                {
-                  step: "1",
-                  title: "Analyse & Cadrage",
-                  duration: "1 semaine",
-                  description: "Audit de l'existant et définition des besoins",
-                },
-                {
-                  step: "2",
-                  title: "Conception & Validation",
-                  duration: "2 semaines",
-                  description: "Wireframes, maquettes et validation",
-                },
-                {
-                  step: "3",
-                  title: "Développement",
-                  duration: "3-4 semaines",
-                  description: "Développement et intégration",
-                },
-                {
-                  step: "4",
-                  title: "Optimisation & Tests",
-                  duration: "1 semaine",
-                  description: "Performance, SEO et formation équipes",
-                },
-                {
-                  step: "5",
-                  title: "Mise en Ligne",
-                  duration: "1 semaine",
-                  description: "Migration, tests et support",
-                },
-              ].map((phase, index, arr) => (
-                <li
-                  key={index}
-                  className="relative flex md:items-center py-8 group"
-                >
-                  {/* Point de timeline */}
-                  <div className="absolute left-1/2 -translate-x-1/2 z-10">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center font-googletitre text-lg text-regularblue">
-                      {phase.step}
-                    </div>
-                  </div>
-                  {/* Contenu */}
-                  <div
-                    className={`w-full md:pt-0 pt-4 md:w-1/2 px-8 ${
-                      index % 2 === 0
-                        ? "ml-auto text-left"
-                        : "mr-auto text-left"
-                    }`}
-                  >
-                    <div className="bg-white rounded-2xl border border-pink-300/30 p-6">
-                      <div className="flex md:flex-row flex-col items-center gap-2 mb-2">
-                        <span className="text-lg font-googletitre font-medium text-regularblue">
-                          {phase.title}
-                        </span>
-                        <span className="ml-2 text-xs px-2 py-1 rounded-full bg-lightblue/20 text-regularblue font-medium">
-                          {phase.duration}
-                        </span>
-                      </div>
-                      <p className="text-sm text-mediumblue md:text-left text-center">
-                        {phase.description}
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+export default function Process({ index = "№ 05" }: { index?: string }) {
+  const locale = useLocale() as Locale;
+  const isEn = locale === "en";
+  const phases = isEn ? PHASES_EN : PHASES_FR;
 
+  const reduce = useReducedMotion();
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: stepsRef,
+    offset: ["start 80%", "end 65%"],
+  });
+  // Le filet vertical se trace au fil du défilement de la liste des phases.
+  const railHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
-        </section>
-    );
+  return (
+    <>
+      {/* En-tête de section */}
+      <Reveal className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <span>{index}</span>
+          <span className="h-px w-6 bg-accent-secondary/50" />
+          <span className="text-mid-gray">
+            {isEn ? "The Blueprint Method · 5 phases" : "Méthode Blueprint · 5 phases"}
+          </span>
+        </div>
+        <h2 className="max-w-3xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
+          {isEn ? (
+            <>From brief to <span className="text-accent-secondary">go-live</span></>
+          ) : (
+            <>Du brief à la <span className="text-accent-secondary">mise en ligne</span></>
+          )}
+        </h2>
+        {/* Argument anti-risque : les livrables par phase existent déjà dans les
+            données — on l'explicite comme garantie de sortie à chaque étape. */}
+        <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+          {isEn
+            ? "Each phase ends with a deliverable you keep — scoping document, mockups, staging site, performance report. If we stop there, you leave with it."
+            : "Chaque phase se termine par un livrable que vous gardez — cadrage, maquettes, site en staging, rapport de performance. Si on s'arrête là, vous repartez avec."}
+        </p>
+      </Reveal>
+
+      {/* Étapes — filet vertical tracé au scroll */}
+      <div ref={stepsRef} className="relative mt-10 border-t border-dark-gray">
+        {/* Filet vertical entre numéro et contenu */}
+        <div
+          aria-hidden
+          className="absolute bottom-0 left-14 top-0 w-px bg-dark-gray"
+        >
+          <motion.div
+            className="absolute left-0 top-0 w-px bg-vermilion"
+            style={{ height: reduce ? "100%" : railHeight }}
+          />
+        </div>
+
+        <Stagger>
+          {phases.map((phase, i) => (
+            <StaggerItem
+              key={phase.title}
+              className="grid grid-cols-[56px_1fr_auto] items-start gap-x-6 border-b border-dark-gray py-7"
+            >
+              {/* Numéro mono accent */}
+              <div className="pt-[3px] font-mono text-[11px] tracking-[0.08em] text-accent-secondary">
+                {String(i + 1).padStart(2, "0")}
+              </div>
+
+              {/* Contenu principal */}
+              <div>
+                <h3 className="mb-2 font-light tracking-tight text-foreground text-lg">
+                  {phase.title}
+                </h3>
+                <p className="mb-3 max-w-[520px] font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  {phase.description}
+                </p>
+                <p className="font-mono text-[10px] tracking-[0.06em] text-mid-gray">
+                  ↳ {phase.deliverable}
+                </p>
+              </div>
+
+              {/* Durée */}
+              <div className="whitespace-nowrap pt-[3px] font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                {phase.duration}
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </div>
+
+      {/* Synthèse */}
+      <Reveal className="mt-6 flex flex-col gap-4">
+        <Hairline />
+        <div className="flex flex-wrap items-center justify-between gap-6 pt-1">
+          <p className="font-inter-tight text-sm italic text-mid-gray">
+            {isEn
+              ? "6 to 10 weeks total, depending on stack and complexity."
+              : "6 à 10 semaines au total, selon la stack et la complexité."}
+          </p>
+          <span className="whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            {isEn
+              ? "Classic: 6 w · Headless: 8 w · Web app: 10 w"
+              : "Classique : 6 s · Headless : 8 s · Web app : 10 s"}
+          </span>
+        </div>
+      </Reveal>
+    </>
+  );
 }

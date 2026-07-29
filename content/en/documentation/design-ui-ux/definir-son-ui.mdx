@@ -1,0 +1,163 @@
+---
+title: How do you build your UI?
+description: How do you build your user interface - UI?
+category: design-ui-ux
+author: Next Impact
+date: "2025-03-15"
+order: 2
+---
+
+The user interface (UI) refers to all the visual and interactive elements through which a user interacts with a digital product: website, mobile application or software. UI quality directly influences ease of use, conversion rate and the perception of the product's reliability. This article covers the fundamental principles of UI design, the role of user research, the design steps and methods for measuring performance.
+
+---
+
+## Understanding the key elements of UI design
+
+An effective user interface rests on five fundamental principles which, combined, produce a coherent and functional experience.
+
+### 1. Visual consistency
+
+Visual consistency reduces the user's cognitive load and makes it easier to learn the interface. It is reflected in:
+
+-  Typography: limit font families to two or three, with usage rules defined for each hierarchical level (heading, body, caption).
+-  Colors: apply a defined palette with assigned roles (primary, secondary, accent, error, success colors).
+-  Icons and visuals: use a uniform icon set (same style, same line weight, same construction grid).
+
+### 2. Intuitive navigation
+
+Information architecture must allow the user to reach their goal with as few steps as possible. This means structured menus, visible call-to-action buttons (CTAs) and a visual hierarchy that guides the eye along a logical path.
+
+### 3. Accessibility
+
+Accessibility ensures that the interface is usable by all users, including those with disabilities. WCAG (Web Content Accessibility Guidelines) criteria define the standards to follow: minimum contrast ratios (4.5:1 for body text, AA level), full keyboard navigation, text alternatives for images (alt attribute), and semantic HTML structure.
+
+### 4. Integrating micro-interactions
+
+Micro-interactions are visual or animated responses triggered by a user action (button hover, form validation, content loading). They provide immediate feedback, confirm that the action has been registered and improve the perceived fluidity of the interface.
+
+### 5. Technical performance
+
+Loading time and interface responsiveness directly affect user experience. Core Web Vitals metrics (LCP, FID, CLS) measure, respectively, the display time of the main content, the response delay to the first interaction and the visual stability of the page. A high-performance UI should target an LCP under 2.5 seconds.
+
+<ComparisonTable
+  headers={["Good UI", "Bad UI"]}
+  rows={[
+    { label: "Navigation", left: "Clear menus, logical hierarchy, breadcrumbs", right: "Hidden menus, confusing structure, no markers" },
+    { label: "Consistency", left: "Uniform colors, fonts and buttons", right: "Different styles on each page" },
+    { label: "Accessibility", left: "Strong contrasts, keyboard navigation, alt text", right: "Unreadable text, no keyboard support" },
+    { label: "Performance", left: "Fast loading, smooth animations", right: "Slow pages, jerky interactions" },
+    { label: "Feedback", left: "Micro-interactions, clear loading states", right: "No visual feedback after an action" },
+    { label: "Mobile", left: "Responsive, suitable touch zones (48px minimum)", right: "Not suitable, buttons too small" }
+  ]}
+  highlight="left"
+/>
+
+<Callout variant="utilisateur" title="The hallmark of a successful UI: transparency">
+An effective UI goes unnoticed: the user reaches their goal without friction. If a user has to look for a button or hesitate over the path to take, the visual hierarchy and information architecture need to be reworked. Always validate your choices with real user testing, not just with the internal team.
+</Callout>
+
+---
+
+## The importance of user research in UI design
+
+### Know users before designing
+
+User research (UX research) provides the data needed to make design decisions based on real behaviors, not assumptions. Every interface element must address an identified need.
+
+The data to collect includes:
+
+-  User behaviors: analyze journeys, entry points and interaction zones using analytics tools and heatmaps (heat maps that visualize the most clicked or hovered areas).
+-  Functional expectations: identify the priority tasks users seek to accomplish.
+-  Friction points: spot obstacles, journey abandonments and sources of confusion in existing or competing interfaces.
+
+### Essential user research methods
+
+-  Surveys and questionnaires: collect quantitative data on the preferences and needs of potential users.
+-  One-on-one interviews: gain in-depth qualitative insights into users' motivations, frustrations and mental models.
+-  User testing (usability testing): observe users performing defined tasks on the interface to identify ergonomic and comprehension issues.
+
+---
+
+## Step-by-step guide to defining your UI
+
+Here's the structured process for designing a user interface:
+
+<StepByStep>
+<Step number={1} title="Define the interface objectives">
+
+Formalize measurable goals the interface should achieve: increase the conversion rate of a purchase funnel, reduce the time to access information, improve the completion rate of a form. These objectives will guide all design decisions.
+
+</Step>
+<Step number={2} title="Model user journeys">
+
+Create user flows (user-journey diagrams) that represent the paths the user takes to accomplish their goals. Identify critical steps, decision points and possible exits. Minimize the number of steps required for each main task.
+
+</Step>
+<Step number={3} title="Produce wireframes">
+
+The wireframe is a structural diagram that defines the layout of elements on each screen, without graphic treatment. It allows you to validate information architecture and content hierarchy before investing time in visual design. Figma and Adobe XD are the reference tools for this step.
+
+</Step>
+<Step number={4} title="Apply the visual identity">
+
+Integrate the brand's style guide into the interface: color palette, typography, logo and graphic elements. This step transforms the wireframe into a high-fidelity mockup and ensures consistency between the interface and the brand's overall identity.
+
+</Step>
+<Step number={5} title="Test and iterate">
+
+Produce an interactive prototype and submit it to user testing with a representative panel of the target audience. Measure task completion rates, identify friction points and iterate (modify then retest) until the goals defined in step 1 are met.
+
+</Step>
+</StepByStep>
+
+<Callout variant="utilisateur" title="The 5-second test">
+Show a screen to a user for 5 seconds, then ask them to identify the page's main objective and the priority action button. If the user can't identify them, the visual hierarchy (sizes, contrasts, positioning) needs to be reworked. This quick protocol validates the effectiveness of visual composition.
+</Callout>
+
+---
+
+## Tools and resources for effective UI design
+
+Here are the tools suited to the various stages of UI design:
+
+-  Figma: collaborative design tool with component management, design variables (design tokens) and built-in prototyping.
+-  Adobe XD: prototyping tool integrated with the Adobe ecosystem, with advanced animation features.
+-  Sketch: vector design tool for macOS, with an extensive plugin ecosystem.
+-  Hotjar: behavioral analysis tool offering heatmaps, session recordings and in-app surveys.
+
+To deepen UI design skills, specialized courses are available on platforms like Coursera, Udemy or Interaction Design Foundation.
+
+---
+
+## Measuring and improving your UI's performance
+
+### Key indicators to monitor
+
+To objectively evaluate an interface's effectiveness, focus on the following metrics:
+
+-  Conversion rate: proportion of users who accomplish the main objective (purchase, signup, contact request).
+-  Session duration: time spent on the interface, to be interpreted contextually (a long duration is positive on a media site, negative in a purchase funnel).
+-  Bounce rate: proportion of users leaving the site after a single page. A high rate on an entry page may indicate a relevance or legibility issue.
+-  User feedback: qualitative data collected through post-interaction surveys or in-app feedback tools.
+
+### Continuous improvement
+
+UI design follows an iterative cycle: measure, analyze, adjust, retest. Each iteration builds on the data of the previous one to refine the interface. A/B tests (comparing two variants of the same screen across user samples) make it possible to validate improvement hypotheses with statistical data.
+
+---
+
+## Future directions for UI design
+
+The integration of artificial intelligence in design tools and in interfaces themselves is transforming UI design practice. Real-time personalization, conversational interfaces and recommendation systems based on user behavior represent today's evolution axes. To keep your interfaces relevant, invest in technology watch and gradually integrate these capabilities into your design process.
+
+<Quiz
+  question="Which element is NOT a fundamental pillar of a good UI?"
+  options={[
+    "Visual consistency (typography, colors, icons)",
+    "Intuitive navigation with visible CTAs",
+    "Using the maximum number of different colors and fonts",
+    "Accessibility for all users"
+  ]}
+  answer={2}
+  explanation="Multiplying colors and fonts is the opposite of visual consistency, which is a fundamental pillar of UI. A good interface limits type families to 2-3, uses a defined color palette with assigned roles and maintains visual uniformity across all screens."
+/>

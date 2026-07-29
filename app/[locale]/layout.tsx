@@ -1,0 +1,213 @@
+import type { Metadata } from 'next'
+import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { Figtree, Inter_Tight, Geist_Mono } from 'next/font/google'
+import Header from '@/components/header'
+import '../globals.css'
+import Footer from '@/components/footer'
+import { MetadataDebugger } from '@/components/metadata-debugger'
+import { OrganizationJsonLd } from '@/components/json-ld'
+import { ConsentManager } from '@/components/consent-manager'
+import { DocumentationModeProvider } from '@/contexts/documentation-mode-context'
+import { FloatingContact } from '@/components/floating-contact'
+import { ThemeProvider } from '@/components/theme-provider'
+import { MotionProvider } from '@/components/motion-provider'
+import { routing } from '@/i18n/routing'
+
+// Typographie « Blueprint / aspect » : Figtree (titres + UI + corps par défaut),
+// Inter Tight (paragraphes de contenu via .font-inter-tight), Geist Mono (labels).
+const figtree = Figtree({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const interTight = Inter_Tight({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  variable: '--font-inter-tight',
+  display: 'swap',
+})
+
+const geistMono = Geist_Mono({
+  weight: ['300', '400', '500'],
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
+const SITE_URL = 'https://www.next-impact.digital'
+
+// Valeurs par défaut (fallback) du site, déclinées par locale.
+// Chaque page surcharge ces métadonnées via generatePageMetadata ;
+// ce bloc sert de repli cohérent pour toute page qui ne le ferait pas.
+const LAYOUT_META = {
+  fr: {
+    title: 'Next Impact — Conseil techno web à l\'heure de l\'IA',
+    description:
+      'L\'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu\'où aller.',
+    ogTitle: 'Next Impact — Boussole Techno Web & IA',
+    ogDescription:
+      'Conseil techno web pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant d\'investir.',
+    ogLocale: 'fr_FR',
+    altOgLocale: 'en_US',
+  },
+  en: {
+    title: 'Next Impact — Web technology advice in the age of AI',
+    description:
+      'AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go.',
+    ogTitle: 'Next Impact — Web & AI Tech Compass',
+    ogDescription:
+      'Web technology advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom before investing.',
+    ogLocale: 'en_US',
+    altOgLocale: 'fr_FR',
+  },
+} as const
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const isEn = locale === 'en'
+  const m = isEn ? LAYOUT_META.en : LAYOUT_META.fr
+  const canonical = isEn ? '/en' : '/'
+  const ogUrl = isEn ? `${SITE_URL}/en` : SITE_URL
+
+  // Image OpenGraph générée à la volée (/og.png) à partir du titre/description.
+  const ogImageUrl = `${SITE_URL}/og.png?${new URLSearchParams({
+    title: m.ogTitle,
+    desc: m.ogDescription,
+  }).toString()}`
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: m.title,
+      template: '%s | Next Impact',
+    },
+    description: m.description,
+    keywords: [
+      'conseil techno web',
+      'Boussole Techno Web IA',
+      'IA coding',
+      'no-code',
+      'SaaS',
+      'choix architecture web',
+      'WordPress Headless',
+      'Next.js',
+      'web app sur-mesure',
+      'React',
+      'TypeScript',
+    ],
+    authors: [{ name: 'Agathe Karinthi-Martin', url: SITE_URL }],
+    creator: 'Agathe Karinthi-Martin',
+    publisher: 'Next Impact',
+    icons: {
+      icon: '/logo-carre-bleu.png',
+      apple: '/logo-carre-bleu.png',
+    },
+    openGraph: {
+      type: 'website',
+      locale: m.ogLocale,
+      alternateLocale: [m.altOgLocale],
+      siteName: 'Next Impact',
+      title: m.ogTitle,
+      description: m.ogDescription,
+      url: ogUrl,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: m.ogTitle,
+          type: 'image/png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: m.ogTitle,
+      description: m.ogDescription,
+      images: [
+        {
+          url: ogImageUrl,
+          alt: m.ogTitle,
+        },
+      ],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    alternates: {
+      canonical,
+      languages: {
+        'fr-FR': '/',
+        'en-US': '/en',
+        'x-default': '/',
+      },
+    },
+  }
+}
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
+
+// N'autoriser que les locales connues (fr / en). Toute autre valeur de segment
+// — typiquement le scan de bots vers /aa.php, /ads.txt, etc. que le middleware
+// next-intl laisse passer car le chemin contient un point — renvoie un 404 net
+// au niveau du routing, AVANT generateMetadata/rendu. Évite le 500
+// « Cannot read properties of undefined » quand HOME_BY_LOCALE[locale] est undefined.
+export const dynamicParams = false
+
+export default async function RootLayout({
+  children,
+  params,
+}: Readonly<{
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}>) {
+  const { locale } = await params
+  if (!hasLocale(routing.locales, locale)) {
+    notFound()
+  }
+  setRequestLocale(locale)
+
+  return (
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`scroll-smooth ${figtree.variable} ${interTight.variable} ${geistMono.variable}`}
+    >
+      <body>
+        <OrganizationJsonLd />
+        <NextIntlClientProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-v2" themes={['light', 'dark']} disableTransitionOnChange>
+            <DocumentationModeProvider>
+              <MotionProvider>
+                <Header />
+                {children}
+                <Footer />
+                <FloatingContact />
+                <ConsentManager />
+                <MetadataDebugger />
+              </MotionProvider>
+            </DocumentationModeProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  )
+}

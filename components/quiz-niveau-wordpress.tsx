@@ -16,7 +16,7 @@ const results = {
       "Formation équipe incluse",
       "Architecture évolutive",
     ],
-    cta: "/services/wordpress",
+    cta: "/solutions-web",
     badgeClass: "professionnel",
   },
   avance: {
@@ -32,7 +32,7 @@ const results = {
       "Multi-sites si besoin",
       "Architecture headless-ready",
     ],
-    cta: "/services/wordpress",
+    cta: "/solutions-web",
     badgeClass: "avance",
   },
   headless: {
@@ -48,7 +48,7 @@ const results = {
       "Technologies future-proof",
       "Support premium inclus",
     ],
-    cta: "/services/headless",
+    cta: "/solutions-web",
     badgeClass: "headless",
   },
 };
@@ -301,7 +301,7 @@ export default function QuizNiveauWordpress() {
                 Découvrir {result.title}
               </a>
               <a
-                href="https://calendly.com/agat-dev/brief-de-creation-de-site-web-wordpress"
+                href="https://calendar.app.google/CiBQuqFLNu3vJwSc7"
                 className="text-sm font-googletitre rounded-full bg-white px-4 py-2 text-regularblue border border-regularblue"
               >
                 Rendez-vous conseil gratuit

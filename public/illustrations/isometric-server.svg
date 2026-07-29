@@ -1,0 +1,80 @@
+<svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="500" fill="#020F59"/>
+  
+  <!-- Server Stack -->
+  <g id="server-stack">
+    <!-- Server 1 (Top) -->
+    <g id="server-1">
+      <path d="M 100 150 L 200 100 L 300 150 L 200 200 Z" fill="#719ED9" opacity="0.9"/>
+      <path d="M 200 200 L 300 150 L 300 190 L 200 240 Z" fill="#1F54BF" opacity="0.95"/>
+      <path d="M 100 150 L 200 200 L 200 240 L 100 190 Z" fill="#D0DCF2" opacity="0.8"/>
+      
+      <!-- LED indicators -->
+      <circle cx="180" cy="165" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="195" cy="172" r="3" fill="#FF6B6B">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Server 2 -->
+    <g id="server-2">
+      <path d="M 100 210 L 200 160 L 300 210 L 200 260 Z" fill="#719ED9" opacity="0.85"/>
+      <path d="M 200 260 L 300 210 L 300 250 L 200 300 Z" fill="#1F54BF" opacity="0.9"/>
+      <path d="M 100 210 L 200 260 L 200 300 L 100 250 Z" fill="#D0DCF2" opacity="0.75"/>
+      
+      <circle cx="180" cy="225" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="195" cy="232" r="3" fill="#FF6B6B">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Server 3 -->
+    <g id="server-3">
+      <path d="M 100 270 L 200 220 L 300 270 L 200 320 Z" fill="#719ED9" opacity="0.8"/>
+      <path d="M 200 320 L 300 270 L 300 310 L 200 360 Z" fill="#1F54BF" opacity="0.85"/>
+      <path d="M 100 270 L 200 320 L 200 360 L 100 310 Z" fill="#D0DCF2" opacity="0.7"/>
+      
+      <circle cx="180" cy="285" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="195" cy="292" r="3" fill="#FF6B6B">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Server 4 (Bottom) -->
+    <g id="server-4">
+      <path d="M 100 330 L 200 280 L 300 330 L 200 380 Z" fill="#719ED9" opacity="0.75"/>
+      <path d="M 200 380 L 300 330 L 300 370 L 200 420 Z" fill="#1F54BF" opacity="0.8"/>
+      <path d="M 100 330 L 200 380 L 200 420 L 100 370 Z" fill="#D0DCF2" opacity="0.65"/>
+      
+      <circle cx="180" cy="345" r="3" fill="#F29F05">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="195" cy="352" r="3" fill="#FF6B6B">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+  
+  <!-- Data flow upward -->
+  <g id="data-flow-up">
+    <circle r="3" fill="#F29F05">
+      <animateMotion dur="4s" repeatCount="indefinite" path="M 200,420 L 200,100"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#719ED9">
+      <animateMotion dur="4s" repeatCount="indefinite" path="M 200,420 L 200,100" begin="1s"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+    <circle r="3" fill="#D0DCF2">
+      <animateMotion dur="4s" repeatCount="indefinite" path="M 200,420 L 200,100" begin="2s"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+  </g>
+</svg>

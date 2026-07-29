@@ -1,0 +1,74 @@
+<svg width="700" height="500" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="700" height="500" fill="#020F59"/>
+  
+  <!-- Connection lines -->
+  <g id="connections" opacity="0.3">
+    <line x1="100" y1="100" x2="300" y2="150" stroke="#719ED9" stroke-width="2"/>
+    <line x1="300" y1="150" x2="500" y2="100" stroke="#719ED9" stroke-width="2"/>
+    <line x1="100" y1="100" x2="150" y2="300" stroke="#719ED9" stroke-width="2"/>
+    <line x1="500" y1="100" x2="550" y2="300" stroke="#719ED9" stroke-width="2"/>
+    <line x1="150" y1="300" x2="350" y2="400" stroke="#719ED9" stroke-width="2"/>
+    <line x1="550" y1="300" x2="350" y2="400" stroke="#719ED9" stroke-width="2"/>
+    <line x1="300" y1="150" x2="350" y2="400" stroke="#719ED9" stroke-width="2"/>
+  </g>
+  
+  <!-- Nodes -->
+  <g id="node-1">
+    <circle cx="100" cy="100" r="35" fill="#1F54BF" opacity="0.8">
+      <animate attributeName="r" values="35;40;35" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="100" r="20" fill="#F29F05" opacity="0.9"/>
+  </g>
+  
+  <g id="node-2">
+    <circle cx="300" cy="150" r="45" fill="#021373" opacity="0.8">
+      <animate attributeName="r" values="45;50;45" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="150" r="28" fill="#719ED9" opacity="0.9"/>
+  </g>
+  
+  <g id="node-3">
+    <circle cx="500" cy="100" r="35" fill="#1F54BF" opacity="0.8">
+      <animate attributeName="r" values="35;40;35" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="100" r="20" fill="#FF6B6B" opacity="0.9"/>
+  </g>
+  
+  <g id="node-4">
+    <circle cx="150" cy="300" r="30" fill="#021373" opacity="0.8">
+      <animate attributeName="r" values="30;35;30" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="150" cy="300" r="18" fill="#D0DCF2" opacity="0.9"/>
+  </g>
+  
+  <g id="node-5">
+    <circle cx="550" cy="300" r="30" fill="#021373" opacity="0.8">
+      <animate attributeName="r" values="30;35;30" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="550" cy="300" r="18" fill="#F29F05" opacity="0.9"/>
+  </g>
+  
+  <g id="node-6">
+    <circle cx="350" cy="400" r="40" fill="#1F54BF" opacity="0.8">
+      <animate attributeName="r" values="40;45;40" dur="3.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="350" cy="400" r="25" fill="#719ED9" opacity="0.9"/>
+  </g>
+  
+  <!-- Animated data packets -->
+  <circle r="5" fill="#F29F05">
+    <animateMotion dur="4s" repeatCount="indefinite" path="M 100,100 L 300,150 L 350,400"/>
+    <animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle r="5" fill="#719ED9">
+    <animateMotion dur="5s" repeatCount="indefinite" path="M 500,100 L 300,150 L 350,400" begin="1s"/>
+    <animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="1s"/>
+  </circle>
+  
+  <circle r="5" fill="#D0DCF2">
+    <animateMotion dur="4.5s" repeatCount="indefinite" path="M 150,300 L 350,400 L 550,300" begin="0.5s"/>
+    <animate attributeName="opacity" values="0;1;1;0" dur="4.5s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+</svg>
