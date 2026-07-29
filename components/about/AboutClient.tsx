@@ -394,17 +394,32 @@ export default function AboutClient() {
       >
         <Reveal className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
-            {t.rich("tih.text", {
-              strong: (chunks) => (
-                <strong className="font-medium text-foreground">{chunks}</strong>
-              ),
-            })}
+            {/* Copy inlinée (pas dans messages/*.json) : les messages next-intl sont
+                sérialisés dans le payload de TOUTES les pages, or la mention TIH ne
+                doit apparaître que sur /a-propos (acceptation Lot A, directives v3.1). */}
+            {locale === "en" ? (
+              <>
+                Next Impact is a French{" "}
+                <strong className="font-medium text-foreground">TIH</strong>{" "}
+                provider: for organizations of 20 employees or more subject to
+                the OETH, 30% of the labour cost is deductible from your AGEFIPH
+                contribution.
+              </>
+            ) : (
+              <>
+                Next Impact est un prestataire{" "}
+                <strong className="font-medium text-foreground">TIH</strong>{" "}
+                : pour les structures de 20 salariés et plus assujetties à
+                l&apos;OETH, 30&nbsp;% du coût de main-d&apos;œuvre est
+                déductible de la contribution AGEFIPH.
+              </>
+            )}
           </p>
           <Link
             href={"/articles/reduire-contribution-agefiph-sous-traitance-tih" as LinkHref}
             className="group inline-flex shrink-0 items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
           >
-            {t("tih.cta")}
+            {locale === "en" ? "Understand the OETH benefit" : "Comprendre l'avantage OETH"}
             <ArrowRight
               size={13}
               className="transition-transform group-hover:translate-x-0.5"
