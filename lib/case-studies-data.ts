@@ -121,11 +121,11 @@ const META: CaseStudyMeta[] = [
     clientType: "ess",
     clientName: "Peer to Peer",
     imageUrl: "",
-    galleryUrl: "/img/desktop-screen-peertopeer.jpg",
+    galleryUrl: "/img/desktop_screen_peertopeer.png",
     date: { month: 6, year: 2026 },
     technologies: ["Next.js", "React", "TypeScript", "Stockage local (navigateur)", "Tailwind CSS", "Vercel"],
     website: "https://peer-to-peer.fr",
-    youtubeVideoId: "VAB_u0kvR64",
+    youtubeVideoId: "Z8vLl6sLPiI",
   },
   {
     id: "19",

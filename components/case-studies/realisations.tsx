@@ -54,7 +54,7 @@ const PROJECTS_META: ProjectMeta[] = [
   {
     id: 24,
     type: "webapp",
-    image: "/img/desktop-screen-peertopeer.jpg",
+    image: "/img/desktop_screen_peertopeer.png",
     link: "/etudes-de-cas/peer-to-peer",
     tab: ["webapp"],
   },
