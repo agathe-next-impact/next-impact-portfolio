@@ -56,3 +56,14 @@ dédiés au sujet, listés dans la table 301 validée.
 6. Clé de navigation i18n `nav.boussole` renommée `nav.selecteurTechno` ;
    clés footer devenues sans usage (`oethAdvantage`, `agefiphSimulator`,
    `tihMention`, `hero.tihMention`) supprimées des deux locales.
+
+## ADR-006 — 2026-07-30 — Réintégration de l'étude de cas La Petite Vitrine
+
+Sur demande explicite d'Agathe, l'étude de cas « La Petite Vitrine »
+(dépubliée par le Lot A, commit 548023c) est restaurée à l'identique depuis
+git : données FR/EN (`lib/case-studies-data.ts`), carte de la grille
+(`components/case-studies/realisations.tsx`), image
+`public/img/desktop-screen-lapetitevitrine.jpg`. Les 301
+`/etudes-de-cas/la-petite-vitrine → /solutions-web` (FR + EN) sont retirées
+de `next.config.mjs`. La mention retirée des alt/descriptions d'Artisan
+Coiffeur (ADR-005 §4) n'est pas rétablie.

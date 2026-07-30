@@ -25,38 +25,39 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    badge: "Étude de cas phare — Mai 2026",
-    tagline: "Marketplace B2B livrée en 2 mois — admin autonome sur-mesure",
+    badge: "Étude de cas phare — 2026",
+    tagline: "La plateforme nationale du networking livrée en 3 mois — annuaire, agenda, carte et paiement en ligne",
     description:
-      "Le premier annuaire en ligne des fournisseurs d'objets publicitaires : catalogue structuré, sourcing fournisseurs simplifié et interface d'administration autonome pour le client. Next.js + PostgreSQL, du concept à la mise en ligne en deux mois.",
+      "Réseauteurs rassemble les professionnels, les événements et les réseaux d'affaires français (BNI, CJD, Rotary…) : annuaire filtrable, carte interactive, badges d'assiduité et abonnement freemium via Stripe. Next.js + Payload CMS, du concept à la mise en ligne en trois mois.",
     stats: [
-      { value: "1er",    label: "Annuaire du secteur en France" },
-      { value: "2 mois", label: "Du concept à la mise en ligne" },
-      { value: "B2B",    label: "Sourcing fournisseurs simplifié" },
+      { value: "3 mois",       label: "Du concept à la mise en ligne" },
+      { value: "1 plateforme", label: "Tous les réseaux d'affaires réunis" },
+      { value: "Freemium",     label: "Abonnement en ligne via Stripe" },
     ],
     ctaPrimary: "Voir l'étude de cas",
     ctaSecondary: "Discuter d'un projet similaire",
-    imageAlt: "Panorama Pub — premier annuaire en ligne des fournisseurs d'objets publicitaires",
+    imageAlt: "Réseauteurs — la plateforme nationale du networking : annuaire, agenda et carte interactive",
   },
   en: {
-    badge: "Featured case study — May 2026",
-    tagline: "B2B marketplace shipped in 2 months — custom autonomous admin",
+    badge: "Featured case study — 2026",
+    tagline: "France's national networking platform shipped in 3 months — directory, agenda, map and online payment",
     description:
-      "The first online directory of promotional-products suppliers in France: a structured catalogue, simplified supplier sourcing and an autonomous admin interface for the client. Next.js + PostgreSQL, from concept to launch in two months.",
+      "Réseauteurs brings French professionals, events and business networks (BNI, CJD, Rotary…) together: a filterable directory, an interactive map, attendance badges and a freemium subscription via Stripe. Next.js + Payload CMS, from concept to launch in three months.",
     stats: [
-      { value: "1st",      label: "Industry directory in France" },
-      { value: "2 months", label: "From concept to launch" },
-      { value: "B2B",      label: "Simplified supplier sourcing" },
+      { value: "3 months",   label: "From concept to launch" },
+      { value: "1 platform", label: "All business networks in one place" },
+      { value: "Freemium",   label: "Online subscription via Stripe" },
     ],
     ctaPrimary: "View the case study",
     ctaSecondary: "Discuss a similar project",
-    imageAlt: "Panorama Pub — first online directory of promotional-products suppliers",
+    imageAlt: "Réseauteurs — France's national networking platform: directory, agenda and interactive map",
   },
 };
 
 // Clients réels (cf. études de cas) — roster typographique, lisible sur fond sombre
 // quel que soit le format des logos d'origine.
 const CLIENTS = [
+  "Réseauteurs",
   "Panorama Pub",
   "Proditec",
   "Sowee",
@@ -82,7 +83,7 @@ export default function FeaturedRealisation() {
           <SectionHeading
             index="№ 04"
             kicker={copy.badge}
-            title="Panorama Pub"
+            title="Réseauteurs"
             description={
               <>
                 <span className="block font-medium text-foreground">{copy.tagline}</span>
@@ -97,9 +98,9 @@ export default function FeaturedRealisation() {
           <div className="rounded-md bg-overlay-gray p-2 md:p-4">
             <div className="overflow-hidden rounded-sm">
               <YoutubePlayer
-                videoId="9fMaBL1amYk"
+                videoId="chOmQ0W3QX0"
                 title={copy.imageAlt}
-                label="Panorama Pub"
+                label="Réseauteurs"
                 firstFrame
               />
             </div>
@@ -125,7 +126,7 @@ export default function FeaturedRealisation() {
 
         {/* CTA */}
         <div className="flex flex-wrap gap-3 border-b border-dark-gray px-6 py-8 lg:px-8">
-          <Link href="/etudes-de-cas/panorama-pub" className={BTN_PRIMARY}>
+          <Link href="/etudes-de-cas/reseauteurs" className={BTN_PRIMARY}>
             {copy.ctaPrimary}
           </Link>
           <Link href="/contact" className={BTN_GHOST}>

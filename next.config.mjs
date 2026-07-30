@@ -182,9 +182,6 @@ const nextConfig = {
       { source: '/en/avantage-oeth', destination: '/en/a-propos', permanent: true },
       { source: '/outils/simulateur-agefiph',    destination: '/outils',    permanent: true },
       { source: '/en/outils/simulateur-agefiph', destination: '/en/outils', permanent: true },
-      // Suppression de l'offre La Petite Vitrine.
-      { source: '/etudes-de-cas/la-petite-vitrine',    destination: '/solutions-web',    permanent: true },
-      { source: '/en/etudes-de-cas/la-petite-vitrine', destination: '/en/solutions-web', permanent: true },
       // Renommage de l'outil : Boussole → Sélecteur techno web & IA.
       { source: '/outils/boussole',    destination: '/outils/selecteur-techno',    permanent: true },
       { source: '/en/outils/boussole', destination: '/en/outils/selecteur-techno', permanent: true },
