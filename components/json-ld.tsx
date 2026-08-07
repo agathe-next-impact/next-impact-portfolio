@@ -144,6 +144,7 @@ export function ArticleJsonLd({
   type = "Article",
   proficiencyLevel,
   dependencies,
+  inLanguage,
 }: {
   title: string;
   description: string;
@@ -155,6 +156,8 @@ export function ArticleJsonLd({
   type?: "Article" | "TechArticle";
   proficiencyLevel?: "Beginner" | "Intermediate" | "Expert";
   dependencies?: string;
+  /** Locale du contenu (« fr-FR », « en »…) — consolide le graphe multilingue. */
+  inLanguage?: string;
 }) {
   const data = {
     "@context": "https://schema.org",
@@ -166,10 +169,14 @@ export function ArticleJsonLd({
     image: image.startsWith("http") ? image : `${siteConfig.url}${image}`,
     datePublished: datePublished,
     dateModified: dateModified || datePublished,
+    ...(inLanguage ? { inLanguage } : {}),
+    // Référence le nœud Person partagé du site (@id commun) plutôt qu'un doublon
+    // anonyme : c'est ce qui consolide le graphe d'entités auteur ↔ organisation.
     author: {
       "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
       name: author,
-      url: siteConfig.url,
+      url: `${siteConfig.url}/a-propos`,
     },
     publisher: {
       "@type": "Organization",

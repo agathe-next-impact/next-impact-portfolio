@@ -2,10 +2,15 @@
 title: "Reprendre un site généré par IA : réparer ou reconstruire ?"
 description: "Site v0, Lovable, Bolt ou builder IA qui coince ? Ce qui se répare, ce qui se récupère, et quand reconstruire — sans perdre vos contenus ni votre domaine."
 category: ia-et-code
+rubrique: reparer
 author: "Agathe Karinthi-Martin"
 date: "2026-07-18"
-updated: "2026-07-18"
+dateModified: "2026-08-07"
 order: 2
+enBref:
+  - "Un site généré par IA (v0, Lovable, Bolt, ChatGPT ou un builder comme Wix et Framer) qui tombe en panne, résiste à toute évolution ou reste invisible se traite de trois façons : réparation ponctuelle, reprise et stabilisation par un développeur, ou reconstruction en conservant les acquis — contenus, domaine, parcours validés."
+  - "Le facteur qui décide entre les trois n'est pas la gravité de la panne, c'est la récupérabilité : un code exportable et lisible se reprend, un site enfermé dans un builder sans export se reconstruit."
+  - "Avant tout devis, trois vérifications s'imposent : à qui appartient le domaine, le code peut-il sortir de l'outil, et le site expose-t-il des données sensibles."
 faq:
   - question: "Un développeur acceptera-t-il de reprendre du code généré par IA ?"
     answer: "Oui, à une condition : qu'il puisse auditer le code avant de s'engager. Un professionnel sérieux ne promet jamais de « tout réparer » sans avoir regardé ; il commence par un état des lieux, puis vous dit ce qui est reprenable et ce qui ne l'est pas. Méfiez-vous de celui qui s'engage sans avoir vu le code — et de celui qui décrète d'office qu'il faut tout refaire."
@@ -21,11 +26,9 @@ faq:
     answer: "Non — un WordPress, même modifié à coups de plugins ou de snippets générés par IA, reste un WordPress : son écosystème de reprise est mature et l'arbitrage réparer/refaire y obéit à ses propres règles. Ce cas est traité dans la rubrique Réparer ou refaire de ce site."
 ---
 
-**Un site généré par IA (v0, Lovable, Bolt, ChatGPT ou un builder comme Wix et Framer) qui tombe en panne, résiste à toute évolution ou reste invisible se traite de trois façons : réparation ponctuelle, reprise et stabilisation par un développeur, ou reconstruction en conservant les acquis — contenus, domaine, parcours validés. Le facteur qui décide entre les trois n'est pas la gravité de la panne, c'est la récupérabilité : un code exportable et lisible se reprend, un site enfermé dans un builder sans export se reconstruit. Avant tout devis, trois vérifications s'imposent : à qui appartient le domaine, le code peut-il sortir de l'outil, et le site expose-t-il des données sensibles.**
-
 *Article publié le 18 juillet 2026. Les outils cités évoluent vite ; la démarche, elle, reste valable.*
 
-Vous avez créé — ou fait créer — un site avec un outil d'IA, et il pose maintenant un problème que l'outil ne résout pas. Vous n'êtes ni un cas isolé ni un cas désespéré : c'est le scénario de reprise le plus courant de 2026, et il a des issues connues. Cet article — de la rubrique [IA & code](/documentation/ia-et-code) — les passe en revue pour que vous arriviez devant un professionnel en sachant quoi demander. (Si votre question est en amont — « un site généré par IA vaut-il un site de professionnel ? » — elle a [son propre comparatif](/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel).)
+Vous avez créé — ou fait créer — un site avec un outil d'IA, et il pose maintenant un problème que l'outil ne résout pas. Vous n'êtes ni un cas isolé ni un cas désespéré : c'est le scénario de reprise le plus courant de 2026, et il a des issues connues. Cet article — de la rubrique [Réparer ou refaire](/documentation/reparer) — les passe en revue pour que vous arriviez devant un professionnel en sachant quoi demander. (Si votre question est en amont — « un site généré par IA vaut-il un site de professionnel ? » — elle a [son propre comparatif](/documentation/ia-et-code/site-genere-par-ia-vs-site-professionnel).)
 
 ## Pourquoi les sites générés par IA finissent-ils par poser problème ?
 
@@ -41,11 +44,15 @@ Vous avez créé — ou fait créer — un site avec un outil d'IA, et il pose m
 
 **Tout dépend de la famille d'outil qui l'a généré — c'est la première question qu'un professionnel vous posera, avant même de parler du problème.**
 
+<DataTable caption="Ce que vous récupérez de votre site selon la famille d'outil qui l'a généré">
+
 | Famille d'outils | Ce que vous récupérez | Ce qui reste bloqué |
 |---|---|---|
 | **Code fourni par un assistant** (ChatGPT, Claude…) collé chez un hébergeur | Tout : les fichiers sont chez vous | Rien — mais la qualité du code est très variable |
 | **Générateurs d'applications** (v0, Lovable, Bolt) | Le code, exportable vers un dépôt GitHub (un espace de stockage de code standard) ou en archive — [Lovable le documente officiellement](https://docs.lovable.dev/integrations/github) | Les services connectés (base de données, comptes utilisateurs) demandent une reprise séparée |
 | **Builders IA fermés** (Wix ADI, Hostinger, Framer…) | Vos textes et images (souvent à la main), et le domaine s'il est à votre nom | Le code : [Wix documente qu'un site Wix ne peut être exporté ni hébergé ailleurs](https://support.wix.com/en/article/exporting-or-embedding-your-wix-site-elsewhere), et Framer ne propose pas d'export du site en code |
+
+</DataTable>
 
 La ligne de fracture est nette : **avec du code exportable, les trois issues ci-dessous sont ouvertes ; sans export, seule la reconstruction l'est** — et elle est moins douloureuse qu'on ne le croit, parce que l'essentiel de la valeur (contenus, domaine, structure validée) se récupère quand même. C'est exactement le principe de réversibilité détaillé dans [Quelle techno pour votre site à l'heure de l'IA ?](/documentation/choisir/quelle-techno-ia) : investir dans ce qui survit à l'outil.
 
@@ -123,16 +130,8 @@ On garde presque toujours quelque chose : les contenus, le domaine, la structure
 
 Non — un WordPress, même modifié à coups de plugins ou de code généré par IA, reste un WordPress : son écosystème de reprise est mature et l'arbitrage réparer/refaire y obéit à ses propres règles. Votre cas est traité dans la rubrique [Réparer ou refaire](/documentation/reparer).
 
----
-
-**Par où commencer ?** Si votre site est un prototype généré, le test [Prototype jetable ou maintenable ?](/outils/prototype-ia) vous donne un premier verdict gratuit en neuf questions. Pour un état des lieux complet — code, sécurité, visibilité — le [diagnostic Web & IA](/audit-site-web) établit le réel. Et pour trancher votre cas avec moi, la [visio conseil](/conseil) fait le tour de votre situation en 30 minutes — 150 € HT, crédités si un projet démarre sous 30 jours.
-
 ## Sources
 
 - Lovable, [*Sync your Lovable project with GitHub*](https://docs.lovable.dev/integrations/github) : export et synchronisation du code d'un projet Lovable vers un dépôt GitHub.
 - Wix Help Center, [*Exporting or Embedding Your Wix Site Elsewhere*](https://support.wix.com/en/article/exporting-or-embedding-your-wix-site-elsewhere) : impossibilité d'exporter un site Wix pour l'héberger ailleurs.
 - Next Impact, [*Quelle techno pour votre site à l'heure de l'IA ?*](/documentation/choisir/quelle-techno-ia) : le principe de réversibilité et les cinq critères d'arbitrage.
-
----
-
-*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle utilise l'IA comme outil de production au quotidien et reprend des projets web existants après audit. [Prendre contact](/contact).*

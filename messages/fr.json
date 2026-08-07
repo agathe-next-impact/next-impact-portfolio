@@ -22,6 +22,10 @@
     "boussole": "La Boussole",
     "allTools": "Tous les outils",
     "allResources": "Toutes les ressources",
+    "resources": "Ressources",
+    "groupByQuestion": "Par question",
+    "groupTools": "Outils",
+    "allDocumentation": "Toute la documentation",
     "rubChoisir": "Choisir sa techno",
     "rubIa": "IA & code",
     "rubReparer": "Réparer ou refaire",
@@ -243,12 +247,10 @@
   "documentationPage": {
     "metaTitle": "Quelle techno web ? Comprendre et choisir à l'heure de l'IA",
     "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides — WordPress, no-code, Headless ou sur-mesure.",
-    "title": "Comprendre",
-    "subtitle": "Le centre de ressources pour comprendre WordPress Headless et Next.js.",
     "hubTitle": "Quelle techno web ?",
     "hubSubtitle": "Le centre de décision pour choisir la bonne technologie web à l'heure de l'IA — comprendre vos options avant de construire, refaire, réparer ou acheter.",
     "breadcrumbHome": "Accueil",
-    "breadcrumbDocs": "Comprendre"
+    "breadcrumbDocs": "Documentation"
   },
   "blogPage": {
     "metaTitle": "Blog Web & IA — retours d'expérience, comparatifs et coûts | Next Impact",

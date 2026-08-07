@@ -142,6 +142,7 @@ Informations utiles pour les reponses d'assistants IA :
 - [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
+- [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements — auteur des contenus du site
 - [Avantage OETH](${baseUrl}/avantage-oeth): explication de la deduction OETH/AGEFIPH avec un prestataire TIH
 - [Contact](${baseUrl}/contact): choix de techno, conseil architecture, pack de mise en oeuvre, direction technique externalisee, mise en oeuvre et prise de contact
 
@@ -151,7 +152,13 @@ ${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): $
 
 ## Tools
 
+- [Tous les outils](${baseUrl}/outils): les outils de decision gratuits, sans inscription
 - [Diagnostic Web & IA](${baseUrl}/audit-site-web): premiere orientation avant de construire
+- [Boussole techno](${baseUrl}/outils/boussole): quelle technologie pour votre projet — WordPress, headless, no-code, SaaS ou sur-mesure
+- [Reparer ou refaire ?](${baseUrl}/outils/reparer-ou-refaire): 9 verifications, un score de sante sur 100 et un verdict reparer / optimiser / refondre
+- [Prototype IA : jetable ou maintenable ?](${baseUrl}/outils/prototype-ia): un prototype genere par IA tiendra-t-il en production
+- [Decrypteur de devis](${baseUrl}/outils/decrypteur-devis): lire un devis web — propriete du code, postes flous, dependance au prestataire
+- [No-code, SaaS ou sur-mesure ?](${baseUrl}/outils/nocode-saas-surmesure): arbitrage d'outil metier selon le besoin reel
 - [Diagnostic visibilite IA](${baseUrl}/outils/visibilite-ia): votre site est-il visible dans les moteurs IA ? Score sur 4 axes et actions prioritaires
 - [Checklist GEO](${baseUrl}/outils/checklist-geo): 24 actions concretes pour etre cite par les moteurs IA, cochable et telechargeable
 - [Audit PWA](${baseUrl}/outils/audit-pwa): diagnostic du potentiel Progressive Web App

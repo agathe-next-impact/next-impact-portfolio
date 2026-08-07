@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:docs && next build",
+    "check:docs": "node scripts/check-documentation-contract.mjs --strict",
     "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",

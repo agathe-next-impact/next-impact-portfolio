@@ -8,6 +8,7 @@
 // collections) — opacity + translateY, viewport once, reduced-motion respecté.
 // Ajouter un thème = ajouter une entrée dans HUB_THEMES, pas toucher ce fichier.
 
+import type React from "react";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, ArrowUpRight, BookOpen, GitBranch, Info, Lightbulb } from "lucide-react";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
@@ -28,7 +29,16 @@ const TEMP: Record<Temp, { border: string; chip: string; fr: string; en: string 
 
 type Href = Parameters<typeof Link>[0]["href"];
 
-export function ThemePage({ theme, locale }: { theme: HubTheme; locale: string }) {
+export function ThemePage({
+  theme,
+  locale,
+  breadcrumb,
+}: {
+  theme: HubTheme;
+  locale: string;
+  /** Fil d'Ariane visible, fourni par la route (même source que le JSON-LD). */
+  breadcrumb?: React.ReactNode;
+}) {
   const isEn = locale === "en";
 
   const copy = {
@@ -51,6 +61,7 @@ export function ThemePage({ theme, locale }: { theme: HubTheme; locale: string }
       titre={tx(theme.question, locale)}
       sousTitre={tx(theme.intro, locale)}
       secNo={theme.index}
+      breadcrumb={breadcrumb}
     >
       {/* 1 — Intro : le contexte + les voies possibles */}
       <BlueprintSection innerClassName="px-6 py-14 lg:px-8 lg:py-16">

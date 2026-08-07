@@ -1,7 +1,10 @@
 import React from "react";
 import { compileMDX } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+import { slugifyHeading } from "@/lib/toc";
 import { Callout } from "./mdx/callout";
 import { ComparisonTable } from "./mdx/comparison-table";
+import { DataTable } from "./mdx/data-table";
 import { StepByStep, Step } from "./mdx/step-by-step";
 import { StatCard, StatGrid } from "./mdx/stat-card";
 import { VideoInline } from "./mdx/video-inline";
@@ -10,13 +13,8 @@ import { FlowDiagram, ArchitectureDiagram, HighlightBox } from "./mdx/infographi
 import { HeadlessDiagnostic } from "./headless-diagnostic";
 import { TldrCallout } from "./tldr-callout";
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\wÀ-ÖØ-öø-ÿ-]/g, "");
-}
+// Slug partagé avec le sommaire (lib/toc.ts) — ne pas réimplémenter ici.
+const slugify = slugifyHeading;
 
 function extractText(children: React.ReactNode): string {
   if (typeof children === "string") return children;
@@ -50,6 +48,7 @@ const mdxComponents = {
   h3: MdxH3,
   Callout,
   ComparisonTable,
+  DataTable,
   StepByStep,
   Step,
   StatCard,
@@ -71,6 +70,14 @@ export async function MdxContent({ source }: MdxContentProps) {
   const { content } = await compileMDX({
     source,
     components: mdxComponents,
+    // MDX seul ne connaît pas les tableaux markdown : sans remark-gfm, un
+    // comparatif écrit en `| … |` sortait en texte brut avec ses barres.
+    // Les moteurs de réponse reprennent les tableaux HTML — pas ce texte-là.
+    options: {
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+      },
+    },
   });
 
   return (

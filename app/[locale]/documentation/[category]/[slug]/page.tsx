@@ -20,6 +20,14 @@ import { ArticleInternalLinks } from "@/components/documentation/documentation-i
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd, HowToJsonLd } from "@/components/json-ld";
+import { DocBreadcrumb, toCrumbs } from "@/components/documentation/doc-breadcrumb";
+import { ArticleEnBref } from "@/components/documentation/article-en-bref";
+import { ArticleTocInline } from "@/components/documentation/article-toc-inline";
+import { ArticleKeyFigures } from "@/components/documentation/article-key-figures";
+import { ArticleAuthorCard } from "@/components/documentation/article-author-card";
+import { ArticleCta } from "@/components/documentation/article-cta";
+import { getRubrique, rubriqueHref, rx } from "@/lib/documentation-rubriques";
+import { generateTableOfContents } from "@/lib/toc";
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
@@ -37,6 +45,17 @@ const categoryLabels: Record<string, string> = {
 function estimateReadingTime(content: string): number {
   const words = content.trim().split(/\s+/).length
   return Math.max(1, Math.ceil(words / 200))
+}
+
+/** « Mis à jour : juillet 2026 » — mois + année, jamais codé en dur. */
+function formatMonthYear(iso: string | undefined, locale: Locale): string | null {
+  if (!iso) return null
+  const parsed = new Date(iso)
+  if (Number.isNaN(parsed.getTime())) return null
+  return parsed.toLocaleDateString(locale === "en" ? "en-US" : "fr-FR", {
+    year: "numeric",
+    month: "long",
+  })
 }
 
 export async function generateMetadata(props: { params: Promise<{ category: string; slug: string; locale: Locale }> }): Promise<Metadata> {
@@ -68,32 +87,6 @@ interface ArticlePageProps {
   }>
 }
 
-
-export function generateTableOfContents(content: string) {
-  if (!content || typeof content !== "string") {
-    return [];
-  }
-
-  const toc: { id: string; text: string; level: number }[] = [];
-  const headingRegex = /^(#{2,6})\s+(.*)$/gm;
-  let match;
-
-  while ((match = headingRegex.exec(content)) !== null) {
-    const [_, hashes, text] = match;
-    const level = hashes.length;
-    const id = text
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^\wÀ-ÖØ-öø-ÿ-]/g, "");
-
-    if (level === 2 || level === 3) {
-      toc.push({ id, text, level });
-    }
-  }
-
-  return toc;
-}
 
 export default async function ArticlePage(props: ArticlePageProps) {
     const params = await props.params;
@@ -157,10 +150,25 @@ export default async function ArticlePage(props: ArticlePageProps) {
     const readingTime = article?.content ? estimateReadingTime(article.content) : 0
     const categoryLabel = categoryLabels[article.category] || article.category.charAt(0).toUpperCase() + article.category.slice(1).replace(/-/g, " ")
 
+    // ── Gabarit « GEO-ready » ─────────────────────────────────────────────────
+    // Un article n'y bascule que s'il respecte le contrat de contenu (rubrique +
+    // enBref + dateModified — voir content/documentation/README.md). Les autres
+    // gardent le rendu historique : la migration se fait par lots.
+    const rubrique = article.isGeoReady ? getRubrique(article.rubrique ?? "") : undefined;
+    const isGeoReady = Boolean(rubrique);
+    const updatedMonthYear = formatMonthYear(article.updatedIso, params.locale);
+
+    // Le 3e niveau du fil d'Ariane suit la taxonomie visible : la rubrique quand
+    // l'article en déclare une, la catégorie de contenu sinon.
+    const parentName = rubrique ? rx(rubrique.label, params.locale) : categoryLabel;
+    const parentUrl = rubrique
+      ? rubriqueHref(rubrique.slug)
+      : `/documentation/${params.category}`;
+
     const breadcrumbItems = [
       { name: t("breadcrumbHome"), url: "/" },
       { name: t("breadcrumbDocs"), url: "/documentation" },
-      { name: categoryLabel, url: `/documentation/${params.category}` },
+      { name: parentName, url: parentUrl },
       { name: article.title, url: `/documentation/${params.category}/${params.slug}` },
     ];
 
@@ -178,6 +186,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
           type={article.category === "wordpress-headless" ? "TechArticle" : "Article"}
           proficiencyLevel={article.category === "wordpress-headless" ? "Intermediate" : undefined}
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
+          inLanguage={params.locale === "en" ? "en-US" : "fr-FR"}
         />
         {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
         {article.howto && article.howto.length > 0 && (
@@ -195,30 +204,35 @@ export default async function ArticlePage(props: ArticlePageProps) {
         <TranslationFallbackBanner show={article.isFallback} />
         <section className="bg-obsidian">
           <div className="container">
-            {/* Breadcrumb */}
-            <div className="mb-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="/documentation"
-                className="inline-flex items-center gap-1.5 text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {t("breadcrumbDocs")}
-              </Link>
-              <span className="text-dark-gray" aria-hidden>·</span>
-              <Link
-                href={`/documentation/${article.category}` as never}
-                className="text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
-              >
-                {categoryLabel}
-              </Link>
-            </div>
+            {/* Breadcrumb — 4 niveaux visibles sur le gabarit, miroir exact du
+                BreadcrumbList JSON-LD. Rendu historique sinon. */}
+            {isGeoReady ? (
+              <DocBreadcrumb items={toCrumbs(breadcrumbItems)} />
+            ) : (
+              <div className="mb-8 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/documentation"
+                  className="inline-flex items-center gap-1.5 text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  {t("breadcrumbDocs")}
+                </Link>
+                <span className="text-dark-gray" aria-hidden>·</span>
+                <Link
+                  href={`/documentation/${article.category}` as never}
+                  className="text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
+                >
+                  {categoryLabel}
+                </Link>
+              </div>
+            )}
 
             {/* Article header */}
             <div className="mb-10 border-t-2 border-foreground pt-10">
               {/* Meta row */}
               <div className="mb-4 flex flex-wrap items-center gap-4">
                 <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
-                  {categoryLabel}
+                  {rubrique ? rx(rubrique.label, params.locale) : categoryLabel}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-mid-gray">
                   <Clock className="h-3 w-3" />
@@ -250,11 +264,13 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                     {typeof article.date === "string" ? article.date : tArticle.recently}
                   </span>
-                  {article.updated && (
+                  {/* Date de mise à jour — mois + année sur le gabarit, toujours
+                      alimentée par le front matter, jamais codée en dur. */}
+                  {(isGeoReady ? updatedMonthYear : article.updated) && (
                     <>
                       <span className="text-dark-gray" aria-hidden>·</span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
-                        {tArticle.updated} {article.updated}
+                        {tArticle.updated} {isGeoReady ? updatedMonthYear : article.updated}
                       </span>
                     </>
                   )}
@@ -273,12 +289,31 @@ export default async function ArticlePage(props: ArticlePageProps) {
               <div id="article-body" className="col-span-1 flex flex-col gap-8 lg:col-span-3">
                 {/* Reading area */}
                 <div className="w-full border border-dark-gray bg-jet p-6 md:p-10">
+                  {/* « En bref » + sommaire ancré : rendus AVANT le corps et côté
+                      serveur — c'est ce que les moteurs IA extraient en premier. */}
+                  {isGeoReady && article.enBref && (
+                    <ArticleEnBref lines={article.enBref} locale={params.locale} />
+                  )}
+                  {isGeoReady && (
+                    <ArticleTocInline entries={tableOfContents} locale={params.locale} />
+                  )}
                   {article.isMdx ? (
                     <MdxContent source={article.content} />
                   ) : (
                     <MarkdownContent content={article.content} />
                   )}
                 </div>
+
+                {/* Chiffres clés (optionnel — contenu éditorial) */}
+                {isGeoReady && article.keyFigures && (
+                  <ArticleKeyFigures figures={article.keyFigures} locale={params.locale} />
+                )}
+
+                {/* Encart auteur — composant unique partagé */}
+                {isGeoReady && <ArticleAuthorCard locale={params.locale} />}
+
+                {/* Un seul CTA de sortie, contextuel à la rubrique */}
+                {rubrique && <ArticleCta rubrique={rubrique.slug} locale={params.locale} />}
 
                 {/* Next in journey (profile-aware) */}
                 <ArticleNavigation category={params.category} slug={params.slug} />
@@ -292,8 +327,9 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   categoryLabels={categoryLabels}
                 />
 
-                {/* Liens internes vers outils et services */}
-                <ArticleInternalLinks category={params.category} />
+                {/* Liens internes vers outils et services — remplacés par le CTA
+                    unique sur le gabarit (la doc prouve, elle ne vend pas). */}
+                {!isGeoReady && <ArticleInternalLinks category={params.category} />}
               </div>
             </div>
           </div>

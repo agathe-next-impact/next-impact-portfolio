@@ -137,8 +137,10 @@ export default function Footer() {
           </span>
           <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
           <LocaleSwitcher />
+          {/* `#__next` était un reliquat du Pages Router : l'élément n'existe
+              plus, le lien ne remontait nulle part. */}
           <a
-            href="#__next"
+            href="#top"
             className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
             ↑ HAUT DE PAGE

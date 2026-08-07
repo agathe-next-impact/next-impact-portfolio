@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
 import type { Locale } from "@/i18n/routing"
+import { isRubriqueSlug, type RubriqueSlug } from "@/lib/documentation-rubriques"
 
 export interface ArticleMeta {
   slug: string
@@ -10,7 +11,7 @@ export interface ArticleMeta {
   category: string
   author: string
   date: string
-  /** Date de dernière mise à jour (frontmatter `updated`, optionnel). */
+  /** Date de dernière mise à jour (frontmatter `dateModified`, alias legacy `updated`). */
   updated?: string
   order?: number
   isMdx?: boolean
@@ -37,6 +38,21 @@ export interface ArticleHowToStep {
   text: string
 }
 
+/**
+ * Chiffre clé optionnel du gabarit GEO. Les valeurs sont un travail ÉDITORIAL :
+ * le gabarit prévoit l'emplacement, il n'invente jamais le chiffre.
+ *
+ *   keyFigures:
+ *     - value: "45 → 98"
+ *       label: "Score PageSpeed mobile après refonte"
+ *       source: "Mesure Lighthouse, projet X, mars 2026"
+ */
+export interface ArticleKeyFigure {
+  value: string
+  label: string
+  source?: string
+}
+
 export interface Article extends ArticleMeta {
   content: string
   faq?: ArticleFaqEntry[]
@@ -46,6 +62,14 @@ export interface Article extends ArticleMeta {
   /** Dates ISO (YYYY-MM-DD) pour le JSON-LD — indépendantes de la locale d'affichage. */
   dateIso?: string
   updatedIso?: string
+  // ── Contrat de contenu « GEO-ready » (voir content/documentation/README.md) ──
+  /** Réponse autonome en 3–4 phrases, extractible telle quelle par un LLM. */
+  enBref?: string[]
+  /** Rubrique éditoriale (enum des 7) — pilote le fil d'Ariane et le CTA. */
+  rubrique?: RubriqueSlug
+  keyFigures?: ArticleKeyFigure[]
+  /** Vrai quand l'article respecte le contrat et doit être rendu par le gabarit. */
+  isGeoReady?: boolean
 }
 
 const contentDirectoryFr = path.join(process.cwd(), "content")
@@ -118,12 +142,86 @@ function fileToSlug(file: string): string {
   return file.replace(/\.mdx?$/, "")
 }
 
+/**
+ * `enBref` accepte une chaîne (un paragraphe) ou une liste de phrases.
+ * Normalisé en tableau de phrases autonomes, dans les deux cas.
+ */
+function normalizeEnBref(value: unknown): string[] | undefined {
+  if (typeof value === "string") {
+    const trimmed = value.trim()
+    return trimmed ? [trimmed] : undefined
+  }
+  if (Array.isArray(value)) {
+    const lines = value
+      .filter((line): line is string => typeof line === "string")
+      .map((line) => line.trim())
+      .filter(Boolean)
+    return lines.length ? lines : undefined
+  }
+  return undefined
+}
+
+function normalizeKeyFigures(value: unknown): ArticleKeyFigure[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  const figures = value.filter(
+    (f): f is ArticleKeyFigure =>
+      Boolean(f) && typeof f.value === "string" && typeof f.label === "string",
+  )
+  return figures.length ? figures : undefined
+}
+
+// Un article déjà signalé ne l'est plus : le build rend N pages par article
+// (locales, prerender), on ne veut qu'une ligne par fichier.
+const reportedContractIssues = new Set<string>()
+
+/**
+ * Contrôle du contrat de contenu au build (voir content/documentation/README.md).
+ *
+ * - `rubrique` déclarée mais `enBref` ou `dateModified` manquant → l'article a
+ *   opté pour le gabarit sans le respecter : avertissement explicite et sortie
+ *   du gabarit (rendu legacy) plutôt qu'une page à moitié conforme.
+ * - `rubrique` absente → article non encore migré : rien (migration par lots).
+ */
+function checkContentContract(
+  ref: string,
+  fields: { rubrique: unknown; enBref?: string[]; dateModifiedIso?: string },
+): boolean {
+  if (!fields.rubrique) return false
+
+  const missing: string[] = []
+  if (!isRubriqueSlug(fields.rubrique)) missing.push("`rubrique` hors des 7 valeurs autorisées")
+  if (!fields.enBref) missing.push("`enBref` (obligatoire)")
+  if (!fields.dateModifiedIso) missing.push("`dateModified` (obligatoire)")
+
+  if (!missing.length) return true
+
+  if (!reportedContractIssues.has(ref)) {
+    reportedContractIssues.add(ref)
+    console.warn(
+      `[doc-contract] ${ref} : gabarit GEO désactivé — ${missing.join(", ")}. ` +
+        `Voir content/documentation/README.md`,
+    )
+  }
+  return false
+}
+
 export function getArticleBySlug(category: string, slug: string, locale?: Locale): Article | null {
   const { filePath, isMdx, isFallback } = resolveArticlePath(category, slug, locale)
   // Garde : un slug inexistant doit produire un 404 propre, pas une erreur runtime.
   if (!fs.existsSync(filePath)) return null
   const fileContents = fs.readFileSync(filePath, "utf8")
   const { data, content } = matter(fileContents)
+
+  // `dateModified` est le champ canonique du contrat ; `updated` reste accepté
+  // pour les articles antérieurs au gabarit.
+  const rawDateModified = data.dateModified ?? data.updated
+  const dateModifiedIso = toIsoDate(rawDateModified)
+  const enBref = normalizeEnBref(data.enBref)
+  const isGeoReady = checkContentContract(`${category}/${slug}`, {
+    rubrique: data.rubrique,
+    enBref,
+    dateModifiedIso,
+  })
 
   return {
     slug,
@@ -132,14 +230,18 @@ export function getArticleBySlug(category: string, slug: string, locale?: Locale
     category: data.category,
     author: data.author,
     date: formatDate(data.date, locale),
-    updated: data.updated ? formatDate(data.updated, locale) : undefined,
+    updated: rawDateModified ? formatDate(rawDateModified, locale) : undefined,
     dateIso: toIsoDate(data.date),
-    updatedIso: toIsoDate(data.updated),
+    updatedIso: dateModifiedIso,
     content,
     order: data.order,
     faq: Array.isArray(data.faq) ? data.faq : undefined,
     howto: Array.isArray(data.howto) ? data.howto : undefined,
     howtoTotalTime: typeof data.howtoTotalTime === "string" ? data.howtoTotalTime : undefined,
+    enBref,
+    rubrique: isRubriqueSlug(data.rubrique) ? data.rubrique : undefined,
+    keyFigures: normalizeKeyFigures(data.keyFigures),
+    isGeoReady,
     isMdx,
     isFallback,
   }
@@ -174,7 +276,9 @@ function readArticlesIn(rootDir: string, fallback: boolean, locale?: Locale): Ma
           category: data.category,
           author: data.author,
           date: formatDate(data.date, locale),
-          updated: data.updated ? formatDate(data.updated, locale) : undefined,
+          updated: (data.dateModified ?? data.updated)
+            ? formatDate(data.dateModified ?? data.updated, locale)
+            : undefined,
           order: data.order,
           isMdx,
           isFallback: fallback,
@@ -223,7 +327,9 @@ export function getArticlesByCategory(category: string, locale?: Locale): Articl
           category: data.category,
           author: data.author,
           date: formatDate(data.date, locale),
-          updated: data.updated ? formatDate(data.updated, locale) : undefined,
+          updated: (data.dateModified ?? data.updated)
+            ? formatDate(data.dateModified ?? data.updated, locale)
+            : undefined,
           order: data.order,
           isMdx,
           isFallback: fallback,

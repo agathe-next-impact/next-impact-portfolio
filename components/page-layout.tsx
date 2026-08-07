@@ -11,6 +11,8 @@ interface PageLayoutProps {
   sousTitre?: string
   children?: React.ReactNode
   secNo?: string
+  /** Fil d'Ariane rendu en tête de héros, au-dessus du kicker. */
+  breadcrumb?: React.ReactNode
   /** Contenu rendu DANS le héros, sous le sous-titre (ex. champ de recherche). */
   headerSlot?: React.ReactNode
   /** Décor de fond du héros (transmis à BlueprintSection). */
@@ -35,6 +37,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   sousTitre,
   children,
   secNo = "№ 01",
+  breadcrumb,
   headerSlot,
   backdrop,
   ticks,
@@ -46,6 +49,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       backdrop={backdrop}
       innerClassName="px-6 py-16 lg:px-8 lg:py-24"
     >
+      {breadcrumb}
       <Reveal className="flex flex-col gap-5">
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
           <span>{secNo}</span>

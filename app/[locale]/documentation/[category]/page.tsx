@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { notFound } from "next/navigation"
 
 import { getArticlesByCategory, getAllCategories } from "@/lib/markdown"
@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { DocBreadcrumb, toCrumbs } from "@/components/documentation/doc-breadcrumb";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les 24 heures
@@ -100,23 +101,8 @@ export default async function CategoryPage(props: CategoryPageProps) {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <section className="s">
         <div className="container">
-          {/* Back link */}
-          <div style={{ marginBottom: "2rem" }}>
-            <Link
-              href="/documentation"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.375rem",
-                fontSize: "0.8125rem",
-                color: "var(--muted-color)",
-                textDecoration: "none",
-              }}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              {t("breadcrumbDocs")}
-            </Link>
-          </div>
+          {/* Fil d'Ariane visible — miroir du BreadcrumbList ci-dessus */}
+          <DocBreadcrumb items={toCrumbs(breadcrumbItems)} />
 
           {/* Section header */}
           <div className="sec-head" style={{ marginBottom: "2.5rem" }}>

@@ -8,6 +8,7 @@ import { ThemePage } from "@/components/hub/theme-page";
 import { getHubTheme, tx } from "@/lib/hub-themes";
 import { generatePageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { DocBreadcrumb, toCrumbs } from "@/components/documentation/doc-breadcrumb";
 import type { Locale } from "@/i18n/routing";
 
 type Params = Promise<{ locale: Locale }>;
@@ -42,7 +43,11 @@ export async function ThemeRoute({ slug, params }: { slug: string; params: Param
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <ThemePage theme={theme} locale={locale} />
+      <ThemePage
+        theme={theme}
+        locale={locale}
+        breadcrumb={<DocBreadcrumb items={toCrumbs(breadcrumbItems)} className="mb-6" />}
+      />
     </main>
   );
 }

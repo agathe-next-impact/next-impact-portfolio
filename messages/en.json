@@ -22,6 +22,10 @@
     "boussole": "The Compass",
     "allTools": "All tools",
     "allResources": "All resources",
+    "resources": "Resources",
+    "groupByQuestion": "By question",
+    "groupTools": "Tools",
+    "allDocumentation": "All documentation",
     "rubChoisir": "Choose your tech",
     "rubIa": "AI & code",
     "rubReparer": "Repair or rebuild",
@@ -243,12 +247,10 @@
   "documentationPage": {
     "metaTitle": "Which web tech? Understand and choose in the AI era",
     "metaDescription": "The decision hub to choose your web technology in the age of AI: 7 question-driven sections, free tools and guides — WordPress, no-code, Headless or custom.",
-    "title": "Learn",
-    "subtitle": "The resource center to understand Headless WordPress and Next.js.",
     "hubTitle": "Which web tech?",
     "hubSubtitle": "The decision hub to choose the right web technology in the age of AI — understand your options before you build, rebuild, fix or buy.",
     "breadcrumbHome": "Home",
-    "breadcrumbDocs": "Learn"
+    "breadcrumbDocs": "Documentation"
   },
   "blogPage": {
     "metaTitle": "Web & AI blog — field lessons, comparisons and costs | Next Impact",
