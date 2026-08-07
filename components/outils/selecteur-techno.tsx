@@ -1,6 +1,6 @@
 "use client";
 
-// La Boussole Techno Web & IA — outil maître (aiguilleur) du hub. 8 critères
+// Le Sélecteur techno web & IA — outil maître (aiguilleur) du hub. 8 critères
 // (besoin, usage, autonomie, budget, maintenance, données, évolutivité,
 // time-to-value) → une famille recommandée parmi 6, puis routage vers l'outil
 // spécialisé et l'offre adaptée. Anti-cannibalisation : l'outil donne le signal,
@@ -265,7 +265,7 @@ const BTN_GHOST =
 const LABEL_MONO =
   "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
 
-export default function Boussole() {
+export default function SelecteurTechno() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const [state, setState] = useState<Record<string, string>>(INITIAL);
@@ -319,7 +319,7 @@ export default function Boussole() {
     try {
       (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.(
         "event",
-        "boussole_result",
+        "selecteur_techno_result",
         { family: winner }
       );
     } catch {
@@ -341,7 +341,7 @@ export default function Boussole() {
         </div>
         <div>
           <p className={LABEL_MONO}>
-            {isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
+            {isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
           </p>
           <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
             {isEn
@@ -430,8 +430,8 @@ export default function Boussole() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
               {isEn
-                ? "This signal points you in a direction — it doesn't replace a decision for your exact case. A decision call applies the Compass to your real budget, data and constraints, and is credited back if a project follows."
-                : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio de choix de techno applique la Boussole à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
+                ? "This signal points you in a direction — it doesn't replace a decision for your exact case. A decision call applies the selector to your real budget, data and constraints, and is credited back if a project follows."
+                : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio de choix de techno applique le Sélecteur à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
             </p>
           </StaggerItem>
 
@@ -458,7 +458,7 @@ export default function Boussole() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </StaggerItem>
-          <NewsletterModal source="boussole" />
+          <NewsletterModal source="selecteur-techno" />
         </Stagger>
         </div>
       )}

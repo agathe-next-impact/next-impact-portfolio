@@ -75,7 +75,7 @@ export default async function DocumentationPage({
       <PageLayout titre={t("hubTitle")} sousTitre={t("hubSubtitle")}>
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">
-            {/* Couche 1 — décision : la Boussole + les 6 rubriques par question */}
+            {/* Couche 1 — décision : le Sélecteur + les 6 rubriques par question */}
             <HubRubriques locale={locale} />
 
             {/* Couche 2 — bibliothèque : contenus encyclopédiques (démotés) */}

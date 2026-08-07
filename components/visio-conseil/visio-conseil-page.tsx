@@ -268,7 +268,7 @@ export default function VisioConseilPage() {
               href="#conseils"
               className="group inline-flex h-11 items-center gap-2 border border-vermilion bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
             >
-              {isEn ? "Book the compass call" : "Réserver la boussole"}
+              {isEn ? "Book the tech-selector call" : "Réserver la visio sélecteur"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
@@ -291,7 +291,7 @@ export default function VisioConseilPage() {
       <BlueprintSection id="conseils" tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 02"
-          kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
+          kicker={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
           title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
           description={
             isEn

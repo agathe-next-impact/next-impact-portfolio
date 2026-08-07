@@ -68,6 +68,30 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 
 const META: CaseStudyMeta[] = [
   {
+    id: "24",
+    slug: "hermitage-ecolise",
+    clientType: "ess",
+    clientName: "Tiers Lieu L'Hermitage",
+    imageUrl: "/img/logo-hermitage.webp",
+    galleryUrl: "/img/desktop_screen_ecolise_hermitage.png",
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de mise en ligne
+    technologies: ["Next.js", "Tailwind CSS", "Vercel"],
+    website: "https://ecolise.hermitagelelab.com/",
+    youtubeVideoId: "xci9bnEGgzg",
+  },
+  {
+    id: "23",
+    youtubeVideoId: "chOmQ0W3QX0",
+    slug: "reseauteurs",
+    clientType: "pme", // TODO(Agathe): confirmer le type de client (pme / independant)
+    clientName: "Réseauteurs",
+    imageUrl: "",
+    galleryUrl: "/img/desktop_screen_reseauteurs.png",
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de mise en ligne
+    technologies: ["Next.js", "Payload CMS", "TypeScript", "Stripe", "Cartographie OpenStreetMap", "Vercel"],
+    website: "https://www.reseauteurs.com",
+  },
+  {
     id: "22",
     slug: "arguin-marine",
     clientType: "pme",
@@ -97,11 +121,11 @@ const META: CaseStudyMeta[] = [
     clientType: "ess",
     clientName: "Peer to Peer",
     imageUrl: "",
-    galleryUrl: "/img/desktop-screen-peertopeer.jpg",
+    galleryUrl: "/img/desktop_screen_peertopeer.png",
     date: { month: 6, year: 2026 },
     technologies: ["Next.js", "React", "TypeScript", "Stockage local (navigateur)", "Tailwind CSS", "Vercel"],
     website: "https://peer-to-peer.fr",
-    youtubeVideoId: "VAB_u0kvR64",
+    youtubeVideoId: "Z8vLl6sLPiI",
   },
   {
     id: "19",
@@ -335,6 +359,52 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  "hermitage-ecolise": {
+    title: "L'Hermitage — Démonstrateur européen ECOLISE",
+    description:
+      "Création du site one-page qui annonce la sélection de L'Hermitage parmi les 15 Démonstrateurs européens du Regenerative Communities Fund d'ECOLISE : un récit clair, des chiffres concrets et un parcours qui mène du terrain à la prise de contact.",
+    detailedDescription: `Fin 2025, ECOLISE — le réseau européen des initiatives citoyennes pour le climat — a retenu quinze lieux dans cinq pays, parmi près de 70 candidatures, pour devenir les démonstrateurs de son Regenerative Communities Fund, cofinancé par l'Union européenne (programme DEAR). L'Hermitage, tiers-lieu rural de 30 hectares à Autrêches dans l'Oise, est l'un d'eux. Ce mandat européen méritait mieux qu'un communiqué : il fallait un site dédié, capable d'expliquer l'engagement à des publics très différents — habitants du territoire, collectivités, entreprises, chercheurs et les quatorze autres lieux du réseau.\n\nJ'ai conçu et développé un site one-page avec Next.js et Tailwind CSS, construit comme un récit : l'engagement européen (qui est ECOLISE, ce qu'est un démonstrateur, le chemin « de Bruxelles à Autrêches »), la boussole 3Zéro — zéro exclusion, zéro carbone, zéro pauvreté —, la mission en trois gestes (expérimenter, partager, inspirer), le laboratoire vivant, puis les six chantiers ouverts : hospitalité, coopération, agroécologie, forêt, innovation sociale et formation. Chaque chantier est adossé à un chiffre concret du lieu — 100+ couchages, 100 sociétaires de la coopérative, 22 hectares de forêt en gestion raisonnée — pour rester fidèle à l'esprit du lieu : prouver par le terrain, pas par le discours.\n\nCôté technique, la page est entièrement pré-rendue et servie statiquement depuis Vercel : navigation par ancres, images optimisées et préchargées, métadonnées SEO et Open Graph soignées. Les mentions obligatoires du cofinancement européen (projet Funding Fairer Futures, programme DEAR) sont intégrées conformément aux exigences du fonds.\n\nLe site s'insère dans l'écosystème web de L'Hermitage que je fais grandir projet après projet — site principal, jeu de piste, landing séjours — et referme le parcours sur trois appels à l'action gradués : visiter le lieu, organiser un séminaire, construire un partenariat.`,
+    objectives: [
+      "Annoncer la sélection de L'Hermitage parmi les 15 Démonstrateurs européens d'ECOLISE avec un site dédié",
+      "Rendre lisible un dispositif européen complexe (fonds, réseau, boussole 3Zéro) pour des publics variés",
+      "Présenter les six chantiers d'expérimentation du lieu, chacun adossé à un chiffre concret",
+      "Orienter les visiteurs vers l'action : visite, séminaire, partenariat, contact",
+      "Livrer une page légère et rapide, cohérente avec l'écosystème de sites déjà en place",
+    ],
+    results: [
+      "Site one-page en ligne sur un sous-domaine dédié de l'écosystème L'Hermitage",
+      "Un récit complet : engagement européen, boussole 3Zéro, mission, laboratoire vivant et six chantiers",
+      "Page entièrement pré-rendue et servie statiquement depuis le CDN Vercel",
+      "Mentions du cofinancement européen (programme DEAR) intégrées conformément aux obligations du fonds",
+      "Trois appels à l'action gradués : visiter, organiser un séminaire, construire un partenariat",
+    ],
+    galleryAlt: "Site one-page du démonstrateur européen ECOLISE de L'Hermitage",
+    tags: ["ESS", "Tiers-lieu", "One-page", "Next.js", "Europe"],
+    duration: "1 semaine",
+  },
+  reseauteurs: {
+    title: "Réseauteurs",
+    description:
+      "Développement de Réseauteurs, la plateforme nationale du networking : un annuaire, un agenda et une carte interactive qui rassemblent les professionnels, les événements et les réseaux d'affaires français en un seul endroit.",
+    detailedDescription: `Le networking professionnel français est éclaté entre des dizaines de réseaux d'affaires — BNI, CJD, Dynabuy, Rotary, CPME… — chacun avec ses membres, ses agendas et ses formats. Pour un professionnel qui veut réseauter, impossible d'avoir une vue d'ensemble : qui est actif près de chez moi, quels événements ont lieu cette semaine, quels réseaux méritent le détour ? Réseauteurs est né de ce constat, avec un parti pris assumé : « Réseauteurs ne remplace aucun réseau — il les rassemble. »\n\nJ'ai développé la plateforme sur-mesure de bout en bout avec Next.js et Payload CMS : un annuaire des réseauteurs filtrable par ville, secteur et réseau ; un agenda des événements (afterworks, petits-déjeuners, conférences) ; et une carte interactive qui géolocalise professionnels et rendez-vous partout en France, sur fonds OpenStreetMap avec géocodage via l'API Adresse de data.gouv.fr.\n\nAu-delà de la consultation, Réseauteurs est un vrai produit avec son modèle économique : comptes membres gratuits, système de badges d'assiduité (Bronze, Argent, Gold, Platinum) pour gamifier la participation aux événements, et abonnement payant Réseauteur+ — souscrit et réglé en ligne via Stripe — qui débloque la création d'événements et de réseaux locaux.\n\nLe tout repose sur une fondation pensée pour durer : rendu Next.js optimisé pour le SEO et la performance, back-office Payload pour administrer les contenus en autonomie, en-têtes de sécurité stricts (CSP, HSTS) et hébergement Vercel. La plateforme est en ligne et prête à fédérer la communauté des réseauteurs français.`,
+    objectives: [
+      "Rassembler professionnels, événements et réseaux d'affaires français sur une plateforme unique",
+      "Donner une visibilité géographique au networking : annuaire filtrable et carte interactive",
+      "Encourager l'assiduité aux événements par un système de badges",
+      "Monétiser la plateforme avec un abonnement en ligne débloquant la création d'événements et de réseaux",
+      "Poser une fondation technique évolutive, performante et sécurisée",
+    ],
+    results: [
+      "Plateforme complète en ligne : annuaire, agenda, carte, comptes membres et paiement",
+      "Annuaire des réseauteurs filtrable par ville, secteur et réseau",
+      "Carte interactive des professionnels et des événements partout en France",
+      "Gamification opérationnelle : badges Bronze, Argent, Gold et Platinum selon l'assiduité",
+      "Modèle freemium fonctionnel : abonnement Réseauteur+ payé en ligne via Stripe",
+    ],
+    galleryAlt: "Plateforme Réseauteurs : annuaire, agenda et carte du networking professionnel",
+    tags: ["Plateforme", "Networking B2B", "Next.js", "Payload CMS", "Stripe"],
+    duration: "3 mois",
+  },
   "arguin-marine": {
     title: "Arguin Marine",
     description:
@@ -359,34 +429,23 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
     description:
-      "Conception de La Petite Vitrine, une offre de vitrine simple et efficace fondée sur un catalogue de landing pages générées avec l'IA : le client choisit un site fini et fonctionnel — ce qu'on achète est ce qu'on voit —, j'y intègre son contenu, et le site part en ligne avec hébergement et maintenance gérés.",
-    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. Dans les deux cas, le même angle mort : on paie avant de savoir à quoi ressemblera le résultat. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré, où l'on voit le site fini avant d'acheter.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. Le principe commercial tient en une phrase : ce qu'on achète est ce qu'on voit. Le catalogue ne montre pas des maquettes mais des landing pages finies et fonctionnelles, générées avec l'IA puis auditées ; le client navigue, choisit celle qui ressemble à son métier (santé, commerce, services, bien-être, loisirs), j'y intègre son contenu, et le site part en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nLe choix de techno découle du modèle économique : pour vendre la mise en ligne 650 € et l'abonnement 14 €/mois, chaque site doit coûter presque rien à produire, héberger et maintenir. Ni un WordPress par client (une instance à maintenir et sécuriser par site), ni un constructeur no-code (un abonnement par site, des contenus enfermés) ne tenaient cette équation. J'ai donc développé une plateforme Next.js (React, TypeScript, Tailwind) organisée autour d'un contrat simple : chaque thème du catalogue est une preview statique autonome alimentée par un contenu JSON, et les sites clients sont livrés en export statique — rapides, sûrs, quasi gratuits à héberger. Les contenus édités vivent sur Vercel Blob (le filesystem serverless est éphémère). RGPD par défaut : aucune publicité, aucun traceur.\n\nC'est l'IA qui rend ce modèle possible : produire à la main une cinquantaine de landing pages finies et consultables — dont 12 actives au lancement — serait invendable à ce prix. La génération est pour autant tout sauf improvisée : le développement s'appuie sur Claude Code, encadré par une constitution de projet (architecture, contrats, règles de sécurité) et dix agents spécialisés — intégration de thèmes, audits de sécurité, de performance et d'UI/UX, tests fonctionnels Playwright, cohérence contenu ↔ schéma ↔ DOM. Aucun thème n'est publié sans passer les scripts d'audit qui servent de gates. L'IA génère et accélère ; l'architecture, les contrats et les critères de qualité restent des décisions humaines — c'est ce qui rend le produit maintenable.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
+      "Conception de La Petite Vitrine, un service packagé de mise en ligne pour indépendants, TPE et artisans : des modèles pensés par métier, intégrés avec votre contenu et publiés après validation, avec hébergement et maintenance gérés.",
+    detailedDescription: `Les indépendants, petites structures et artisans ont besoin d'une présence en ligne nette et professionnelle, mais se retrouvent coincés entre deux extrêmes : le site sur-mesure, trop long et trop cher, et l'éditeur DIY, chronophage et vite bâclé. La Petite Vitrine est née de ce constat — offrir un troisième chemin, simple et encadré.\n\nJ'ai conçu et développé La Petite Vitrine, une plateforme qui industrialise la création de mini-sites par métier. On part d'un modèle adapté à la profession (santé, commerce, services, bien-être, loisirs), j'y intègre le contenu du client, et le site est mis en ligne après validation. Chaque site suit une structure claire et éprouvée : présentation, offre, infos pratiques, contact, mentions légales.\n\nSous le capot, c'est une application Next.js (React, TypeScript, Tailwind) : un catalogue de modèles thématiques, un pipeline d'export et de publication des sites, et un stockage des contenus sur Vercel Blob. L'hébergement et la maintenance sont gérés de bout en bout — le client n'a rien à installer ni à administrer. RGPD par défaut : aucune publicité, aucun traceur.\n\nLe résultat est une offre lisible et sans surprise : 650 € HT pour la mise en ligne (intégration comprise), puis dès 14 € HT/mois pour l'hébergement et la maintenance, avec paiement après cadrage. Un programme pilote de 10 projets (5 cabinets en santé mentale, 5 ateliers d'artisans) documente le service avec de vrais exemples exploitables plutôt qu'avec des visuels promotionnels.`,
     objectives: [
-      "Supprimer le risque d'achat d'un site web : choisir un site fini et fonctionnel, pas une promesse — ce qu'on achète est ce qu'on voit",
-      "Construire avec l'IA un catalogue de landing pages par métier, finies et consultables, à coût marginal quasi nul",
+      "Offrir aux indépendants et TPE une présence en ligne professionnelle, sans la complexité d'un site sur-mesure ni le bricolage d'un éditeur DIY",
+      "Industrialiser la création de mini-sites par métier à partir de modèles prêts à publier",
       "Prendre en charge tout le cycle : intégration du contenu, mise en ligne, hébergement et maintenance",
       "Garantir un cadre clair : prix fixe, RGPD, sans publicité ni traceur",
     ],
     results: [
       "Offre packagée et lisible : 650 € HT la mise en ligne, dès 14 € HT/mois hébergement et maintenance",
-      "Catalogue d'une cinquantaine de landing pages générées par IA (12 actives au lancement), intégrées et auditées via une chaîne d'agents",
-      "Sites livrés en export statique : rapides, sûrs, sans installation ni administration côté client",
+      "Plateforme Next.js avec catalogue de modèles par métier et pipeline de publication",
+      "Sites livrés clés en main, sans installation ni administration côté client",
       "Programme pilote de 10 projets (santé mentale et artisans) pour documenter le service",
     ],
-    arbitrage: {
-      consideredOptions: [
-        "Un WordPress (ou multisite) par client, avec thème personnalisé",
-        "Constructeur no-code (Wix, Webflow…) et un abonnement par site",
-        "Plateforme sur-mesure Next.js : catalogue de thèmes + export statique",
-      ],
-      decision:
-        "Plateforme Next.js sur-mesure — catalogue de thèmes en previews statiques autonomes, contenus JSON sur Vercel Blob, sites clients livrés en export statique.",
-      rationale:
-        "Le modèle à 650 € + 14 €/mois exige un coût marginal par site proche de zéro. Un CMS par client, c'est autant d'instances à maintenir et sécuriser ; le no-code facture par site et enferme les contenus. L'export statique livre des sites rapides et sûrs, sans rien à administrer, et le contrat « preview autonome + contenu JSON » a un double effet : il permet d'intégrer des landing pages de toute origine, et il fait du catalogue une vitrine de sites réellement finis — c'est lui qui rend possible le « ce qu'on achète est ce qu'on voit ». Production industrialisée par des agents IA (Claude Code) sous scripts d'audit obligatoires.",
-    },
-    galleryAlt: "La Petite Vitrine — catalogue de landing pages générées par IA, ce qu'on achète est ce qu'on voit",
-    tags: ["Indépendants", "TPE", "Produit", "IA", "Web App", "Next.js"],
-    duration: "À compléter",
+    galleryAlt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
+    tags: ["Indépendants", "TPE", "Produit", "Web App", "Next.js"],
+    duration: "3 mois",
   },
   "peer-to-peer": {
     title: "Peer to Peer",
@@ -870,6 +929,52 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "hermitage-ecolise": {
+    title: "L'Hermitage — ECOLISE European Demonstrator",
+    description:
+      "Built the one-page site announcing L'Hermitage's selection as one of the 15 European Demonstrators of ECOLISE's Regenerative Communities Fund: a clear narrative, concrete figures and a journey leading from the field to first contact.",
+    detailedDescription: `In late 2025, ECOLISE — the European network of community-led initiatives on climate — selected fifteen places across five countries, out of nearly 70 applications, to become the demonstrators of its Regenerative Communities Fund, co-funded by the European Union (DEAR programme). L'Hermitage, a 30-hectare rural third place in Autrêches in the Oise, is one of them. That European mandate deserved more than a press release: it needed a dedicated site able to explain the commitment to very different audiences — local residents, public authorities, companies, researchers and the fourteen other places in the network.\n\nI designed and built a one-page site with Next.js and Tailwind CSS, structured as a narrative: the European commitment (who ECOLISE is, what a demonstrator is, the journey "from Brussels to Autrêches"), the 3Zero compass — zero exclusion, zero carbon, zero poverty —, the mission in three moves (experiment, share, inspire), the living laboratory, and then the six open worksites: hospitality, cooperation, agroecology, forest, social innovation and training. Each worksite is backed by a concrete figure from the place — 100+ beds, 100 cooperative members, 22 hectares of sustainably managed forest — staying true to the spirit of the place: proof through the field, not through rhetoric.\n\nOn the technical side, the page is fully prerendered and served statically from Vercel: anchor-based navigation, optimized and preloaded images, careful SEO and Open Graph metadata. The mandatory European co-funding notices (Funding Fairer Futures project, DEAR programme) are included in line with the fund's requirements.\n\nThe site slots into L'Hermitage's web ecosystem, which I've been growing project after project — main site, treasure hunt, retreats landing page — and closes the journey with three graded calls to action: visit the place, organise an offsite, build a partnership.`,
+    objectives: [
+      "Announce L'Hermitage's selection as one of ECOLISE's 15 European Demonstrators with a dedicated site",
+      "Make a complex European scheme (fund, network, 3Zero compass) legible for varied audiences",
+      "Showcase the six experimentation worksites, each backed by a concrete figure",
+      "Steer visitors toward action: a visit, an offsite, a partnership, contact",
+      "Deliver a light, fast page consistent with the existing ecosystem of sites",
+    ],
+    results: [
+      "One-page site live on a dedicated subdomain of the L'Hermitage ecosystem",
+      "A complete narrative: European commitment, 3Zero compass, mission, living laboratory and six worksites",
+      "Page fully prerendered and served statically from the Vercel CDN",
+      "European co-funding notices (DEAR programme) included in line with the fund's obligations",
+      "Three graded calls to action: visit, organise an offsite, build a partnership",
+    ],
+    galleryAlt: "One-page site of L'Hermitage's ECOLISE European Demonstrator",
+    tags: ["Social economy", "Third place", "One-page", "Next.js", "Europe"],
+    duration: "1 week",
+  },
+  reseauteurs: {
+    title: "Réseauteurs",
+    description:
+      "Built Réseauteurs, France's national networking platform: a directory, an agenda and an interactive map bringing French professionals, events and business networks together in one place.",
+    detailedDescription: `Professional networking in France is scattered across dozens of business networks — BNI, CJD, Dynabuy, Rotary, CPME… — each with its own members, agendas and formats. For a professional who wants to network, there's no way to get the full picture: who's active near me, which events are happening this week, which networks are worth the trip? Réseauteurs was born from that observation, with a clear stance: "Réseauteurs doesn't replace any network — it brings them together."\n\nI built the custom platform end to end with Next.js and Payload CMS: a directory of networkers filterable by city, sector and network; an events agenda (afterworks, breakfasts, conferences); and an interactive map that geolocates professionals and meetups across France, on OpenStreetMap tiles with geocoding via the data.gouv.fr Address API.\n\nBeyond browsing, Réseauteurs is a real product with its own business model: free member accounts, an attendance badge system (Bronze, Silver, Gold, Platinum) to gamify event participation, and a paid Réseauteur+ subscription — purchased and paid online via Stripe — that unlocks creating events and local networks.\n\nIt all rests on a foundation built to last: Next.js rendering optimized for SEO and performance, a Payload back-office for autonomous content management, strict security headers (CSP, HSTS) and Vercel hosting. The platform is live and ready to bring the French networking community together.`,
+    objectives: [
+      "Bring French professionals, events and business networks together on a single platform",
+      "Give networking geographic visibility: a filterable directory and an interactive map",
+      "Encourage event attendance through a badge system",
+      "Monetise the platform with an online subscription unlocking event and network creation",
+      "Lay a scalable, high-performance and secure technical foundation",
+    ],
+    results: [
+      "Complete platform live: directory, agenda, map, member accounts and payment",
+      "Networker directory filterable by city, sector and network",
+      "Interactive map of professionals and events across France",
+      "Gamification in production: Bronze, Silver, Gold and Platinum attendance badges",
+      "Working freemium model: Réseauteur+ subscription paid online via Stripe",
+    ],
+    galleryAlt: "Réseauteurs platform: directory, agenda and map of professional networking",
+    tags: ["Platform", "B2B networking", "Next.js", "Payload CMS", "Stripe"],
+    duration: "3 months",
+  },
   "arguin-marine": {
     title: "Arguin Marine",
     description:
@@ -894,34 +999,23 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
     description:
-      "Built La Petite Vitrine, a simple, effective showcase-site offer based on a catalogue of AI-generated landing pages: clients pick a finished, working site — what you buy is what you see —, I integrate their content, and it goes live with hosting and maintenance handled.",
-    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. Both share the same blind spot: you pay before knowing what the result will look like. La Petite Vitrine was born from that gap — to offer a third path, simple and guided, where you see the finished site before you buy.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. The business principle fits in one sentence: what you buy is what you see. The catalogue doesn't show mock-ups but finished, working landing pages, generated with AI and then audited; the client browses, picks the one that fits their profession (health, retail, services, wellness, leisure), I integrate their content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nThe tech choice follows the business model: to sell a €650 go-live and a €14/month subscription, each site has to cost next to nothing to produce, host and maintain. Neither one WordPress per client (an instance to maintain and secure for every site) nor a no-code builder (a subscription per site, locked-in content) could hold that equation. So I built a custom Next.js platform (React, TypeScript, Tailwind) around one simple contract: every theme in the catalogue is a self-contained static preview fed by JSON content, and client sites ship as static exports — fast, secure, nearly free to host. Edited content lives on Vercel Blob (the serverless filesystem is ephemeral). GDPR by default: no advertising, no trackers.\n\nAI is what makes this model possible: hand-building about fifty finished, browsable landing pages — 12 active at launch — could never sell at this price. Yet the generation is anything but improvised: development relies on Claude Code, framed by a project constitution (architecture, contracts, security rules) and ten specialized agents — theme integration, security, performance and UI/UX audits, Playwright functional tests, content ↔ schema ↔ DOM consistency. No theme ships without passing the audit scripts that act as gates. AI generates and accelerates; the architecture, the contracts and the quality bar remain human decisions — that is what keeps the product maintainable.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
+      "Built La Petite Vitrine, a packaged go-live service for freelancers, very small businesses and artisans: profession-specific templates, filled with your content and published after validation, with hosting and maintenance handled.",
+    detailedDescription: `Freelancers, small outfits and artisans need a clean, professional online presence — but they get stuck between two extremes: the custom-built site, too slow and too expensive, and the DIY builder, time-consuming and quickly botched. La Petite Vitrine was born from that gap — to offer a third path, simple and guided.\n\nI designed and built La Petite Vitrine, a platform that industrializes the creation of small profession-based sites. We start from a template suited to the profession (health, retail, services, wellness, leisure), I integrate the client's content, and the site goes live after validation. Every site follows a clear, proven structure: introduction, offering, practical info, contact, legal notices.\n\nUnder the hood it's a Next.js application (React, TypeScript, Tailwind): a catalogue of themed templates, an export-and-publish pipeline for the sites, and content stored on Vercel Blob. Hosting and maintenance are handled end to end — the client has nothing to install or administer. GDPR by default: no advertising, no trackers.\n\nThe result is a clear, no-surprise offer: €650 excl. VAT to go live (integration included), then from €14 excl. VAT/month for hosting and maintenance, with payment after scoping. A pilot programme of 10 projects (5 mental-health practices, 5 artisan workshops) documents the service with real, usable examples rather than promotional mock-ups.`,
     objectives: [
-      "Remove the risk from buying a website: pick a finished, working site, not a promise — what you buy is what you see",
-      "Build with AI a catalogue of finished, browsable profession-based landing pages, at near-zero marginal cost",
+      "Give freelancers and very small businesses a professional online presence, without the complexity of a custom build or the hassle of a DIY builder",
+      "Industrialize the creation of small profession-based sites from ready-to-publish templates",
       "Own the whole cycle: content integration, go-live, hosting and maintenance",
       "Guarantee a clear framework: fixed price, GDPR, no advertising or trackers",
     ],
     results: [
       "Clear, packaged offer: €650 excl. VAT to go live, from €14 excl. VAT/month for hosting and maintenance",
-      "A catalogue of about fifty AI-generated landing pages (12 active at launch), integrated and audited through an agent pipeline",
-      "Sites shipped as static exports: fast, secure, with no installation or admin on the client's side",
+      "Next.js platform with a profession-based template catalogue and a publishing pipeline",
+      "Turnkey sites delivered, with no installation or admin on the client's side",
       "Pilot programme of 10 projects (mental health and artisans) to document the service",
     ],
-    arbitrage: {
-      consideredOptions: [
-        "One WordPress (or multisite) per client, with a customized theme",
-        "No-code builder (Wix, Webflow…) with a subscription per site",
-        "Custom Next.js platform: theme catalogue + static export",
-      ],
-      decision:
-        "Custom Next.js platform — theme catalogue as self-contained static previews, JSON content on Vercel Blob, client sites shipped as static exports.",
-      rationale:
-        "The €650 + €14/month model demands a near-zero marginal cost per site. One CMS per client means as many instances to maintain and secure; no-code charges per site and locks the content in. Static exports ship fast, secure sites with nothing to administer, and the “self-contained preview + JSON content” contract works twice over: it makes landing pages from any origin integrable, and it turns the catalogue into a showcase of genuinely finished sites — it is what makes “what you buy is what you see” possible. Production industrialized by AI agents (Claude Code) under mandatory audit scripts.",
-    },
-    galleryAlt: "La Petite Vitrine — catalogue of AI-generated landing pages, what you buy is what you see",
-    tags: ["Freelancers", "Small business", "Product", "AI", "Web App", "Next.js"],
-    duration: "TBD",
+    galleryAlt: "La Petite Vitrine — go-live service for small profession-based sites",
+    tags: ["Freelancers", "Small business", "Product", "Web App", "Next.js"],
+    duration: "3 months",
   },
   "peer-to-peer": {
     title: "Peer to Peer",
@@ -1404,6 +1498,18 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  // TODO(Agathe): remplacer par des chiffres projet réels si disponibles (PageSpeed, délai…)
+  "hermitage-ecolise": [
+    { value: "1 des 15", label: "Démonstrateurs européens ECOLISE" },
+    { value: "6 chantiers", label: "Expérimentations mises en récit" },
+    { value: "100%", label: "Page pré-rendue, servie en statique" },
+  ],
+  // TODO(Agathe): remplacer par des chiffres réels si disponibles (PageSpeed, membres, délai…)
+  reseauteurs: [
+    { value: "3 mois", label: "Du concept à la mise en ligne" },
+    { value: "1 plateforme", label: "Tous les réseaux d'affaires réunis" },
+    { value: "Freemium", label: "Abonnement en ligne via Stripe" },
+  ],
   "arguin-marine": [
     { value: "Vitrine", label: "Présence en ligne clé en main" },
     { value: "WordPress", label: "Site simple à administrer" },
@@ -1517,6 +1623,18 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  // TODO(Agathe): replace with real project figures if available (PageSpeed, delivery time…)
+  "hermitage-ecolise": [
+    { value: "1 of 15", label: "ECOLISE European Demonstrators" },
+    { value: "6 worksites", label: "Experiments turned into a narrative" },
+    { value: "100%", label: "Prerendered, statically served page" },
+  ],
+  // TODO(Agathe): replace with real figures if available (PageSpeed, members, delivery time…)
+  reseauteurs: [
+    { value: "3 months", label: "From concept to launch" },
+    { value: "1 platform", label: "All business networks in one place" },
+    { value: "Freemium", label: "Online subscription via Stripe" },
+  ],
   "arguin-marine": [
     { value: "Brochure", label: "Turnkey online presence" },
     { value: "WordPress", label: "Easy for the client to manage" },

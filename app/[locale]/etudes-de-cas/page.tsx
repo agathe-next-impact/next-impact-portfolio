@@ -27,7 +27,7 @@ const externalLandings = [
   { name: "Séjours à L'Hermitage", url: "https://sejours.hermitagelelab.com/", fr: "Landing de séjours dans un Tiers Lieu rural", en: "Landing page for stays at a rural third place" },
   { name: "Mariage Nicolas & Cécile", url: "https://www.nicocecile23mai2026.fr/", fr: "Landing de mariage Nicolas et Cécile", en: "Wedding landing page for Nicolas & Cécile" },
   { name: "Mariage Agathe & Alain", url: "https://www.mariage-agathe-et-alain.fun/", fr: "Landing de mariage Agathe et Alain", en: "Wedding landing page for Agathe & Alain" },
-  { name: "Artisan Coiffeur", url: "https://artisan-coiffeur.lapetitevitrine.com/", fr: "Landing artisan coiffeur — La Petite Vitrine", en: "Hairdresser landing page — La Petite Vitrine" },
+  { name: "Artisan Coiffeur", url: "https://artisan-coiffeur.lapetitevitrine.com/", fr: "Landing artisan coiffeur", en: "Hairdresser landing page" },
 ];
 
 export default async function CaseStudiesPage({

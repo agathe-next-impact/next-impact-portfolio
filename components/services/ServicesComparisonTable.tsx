@@ -27,7 +27,6 @@ export function ServicesComparisonTable() {
         { feature: "Specific API integrations", pack1: false, pack2: false, pack3: true },
         { feature: "Support", pack1: "Training", pack2: "Strategic", pack3: "Priority" },
         { feature: "Maintenance", pack1: false, pack2: "3 months", pack3: "12 months" },
-        { feature: "OETH attestation (TIH)", pack1: true, pack2: true, pack3: "Optimized for OETH deduction" },
       ]
     : [
         { feature: "Design", pack1: "Éco-conçu", pack2: "Personnalisé", pack3: "Sur-mesure total" },
@@ -40,7 +39,6 @@ export function ServicesComparisonTable() {
         { feature: "Intégrations API spécifiques", pack1: false, pack2: false, pack3: true },
         { feature: "Accompagnement", pack1: "Formation", pack2: "Stratégique", pack3: "Prioritaire" },
         { feature: "Support", pack1: false, pack2: "3 mois", pack3: "12 mois" },
-        { feature: "Attestation OETH (TIH)", pack1: true, pack2: true, pack3: "Optimisé pour la déduction OETH" },
       ];
 
   const renderCell = (val: boolean | string) =>

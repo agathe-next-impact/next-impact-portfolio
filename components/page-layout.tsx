@@ -23,7 +23,7 @@ interface PageLayoutProps {
 
 /**
  * PageLayout — en-tête de héros + enveloppe des pages secondaires (outils, audit,
- * cahier-des-charges, avantage-oeth, etc.). Réhabillé en bande « blueprint » :
+ * cahier-des-charges, etc.). Réhabillé en bande « blueprint » :
  * kicker mono (`№` + libellé court) → titre Figtree `font-light` (apparition mot
  * à mot) → sous-titre `font-inter-tight text-mid-gray`. Les rails verticaux se
  * prolongent dans `children` via le `<Separator/>` qui suit le héros.

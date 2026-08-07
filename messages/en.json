@@ -4,13 +4,12 @@
   },
   "nav": {
     "services": "Web solutions",
-    "oethAdvantage": "OETH Advantage",
     "demo": "Demo",
     "tools": "Online Tools",
     "documentation": "Resources",
     "caseStudies": "Case studies",
     "contact": "Contact",
-    "freeAudit": "2-min diagnostic",
+    "freeAudit": "Express pre-diagnostic (2 min)",
     "visioConseil": "Advisory call",
     "onDemand": "On demand",
     "free": "Free",
@@ -19,7 +18,7 @@
     "hub": "Which web tech?",
     "conseil": "Advisory",
     "bookVisio": "Book a call",
-    "boussole": "The Compass",
+    "selecteurTechno": "The tech selector",
     "allTools": "All tools",
     "allResources": "All resources",
     "resources": "Resources",
@@ -51,19 +50,16 @@
     "caseStudies": "Case studies",
     "documentation": "Documentation",
     "blog": "Blog",
-    "oethAdvantage": "OETH Advantage",
-    "resources": "Resources",
+    "resources":"Resources",
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
     "tools": "All tools",
-    "agefiphSimulator": "AGEFIPH simulator (TIH)",
     "startWebApp": "Start a web application",
     "partners": "Partners",
     "referralPartners": "Referral partners",
     "whiteLabelAgencies": "Agencies & studios",
     "copyright": "© {year} Next Impact Digital — All rights reserved",
-    "tihMention": "EI Agathe Karinthi-Martin — TIH provider (Independent Worker with Disability, French scheme) — OETH attestation available",
     "figaroMention": "As seen in <lien>Le Figaro</lien> — May 2026",
     "certificationAlt": "Certification"
   },
@@ -111,7 +107,6 @@
   "hero": {
     "available": "Available",
     "experience": "20 years of digital experience, 6 in development",
-    "tihMention": "TIH provider — AGEFIPH deduction",
     "auditTimer": "in 2 minutes",
     "wordpressLogoAlt": "WordPress logo",
     "nextjsLogoAlt": "Next.js logo",
@@ -183,7 +178,6 @@
       "available": "Available",
       "experience": "20 years of digital experience, 6 in development",
       "wpHeadlessDev": "Web technology advice & implementation",
-      "tih": "TIH provider",
       "company": "Next Impact Digital",
       "owner": "EI Agathe Karinthi-Martin",
       "address": "4 rue du centre, 15400 Trizac, France"
@@ -200,14 +194,14 @@
     "breadcrumbSpecs": "Specifications"
   },
   "toolsPage": {
-    "metaTitle": "Toolbox — Web & AI Compass, AGEFIPH & scoping",
-    "metaDescription": "Free tools to evaluate, scope and prepare a web decision: Web & AI diagnostic, AGEFIPH simulator, PWA opportunity and project specifications.",
+    "metaTitle": "Toolbox — web & AI tech selector and scoping",
+    "metaDescription": "Free tools to evaluate, scope and prepare a web decision: Web & AI diagnostic, tech selector, PWA opportunity and project specifications.",
     "title": "Toolbox",
     "subtitle": "Free tools to decide what to build, what to simplify and what to avoid.",
     "breadcrumbHome": "Home",
     "breadcrumbTools": "Tools",
     "backToTools": "Back to tools",
-    "collectionName": "Toolbox — Web & AI Compass, AGEFIPH & scoping",
+    "collectionName": "Toolbox — web & AI tech selector and scoping",
     "collectionDescription": "Free tools to decide what to build, what to simplify and what to avoid."
   },
   "benchmarkingPage": {
@@ -333,7 +327,7 @@
   },
   "servicesPage": {
     "metaTitle": "Web solutions — build what helps in the age of AI",
-    "metaDescription": "After the Web & AI Tech Compass, Next Impact builds only when it is the right choice: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500.",
+    "metaDescription": "After the web & AI tech selector, Next Impact builds only when it is the right choice: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500.",
     "breadcrumbHome": "Home",
     "breadcrumbServices": "Web solutions & Pricing",
     "calculateGain": {
@@ -397,7 +391,7 @@
     },
     "journey": {
       "label": "The journey",
-      "title": "From WordPress field experience to the Web & AI Tech Compass",
+      "title": "From WordPress field experience to the web & AI tech selector",
       "subtitle": "Twenty years practising the web from every angle — code and strategy, marketing and design. One constant belief: the right technology depends on the need, not the trend.",
       "fondations": {
         "year": "2000 – 2020 — The full picture",
@@ -417,7 +411,7 @@
       },
       "today": {
         "year": "Today — Next Impact",
-        "title": "A Web & AI compass, not one default technology",
+        "title": "A web & AI selector, not one default technology",
         "user": {
           "label": "Field expertise:",
           "text": "15 years running web projects on the editorial side, to know exactly what must be preserved in the admin."
@@ -473,10 +467,6 @@
         "projets": "web projects delivered",
         "projetsCta": "See the case studies"
       }
-    },
-    "tih": {
-      "text": "Next Impact is a French <strong>TIH</strong> provider: for organizations of 20 employees or more subject to the OETH, 30% of the labour cost is deductible from your AGEFIPH contribution.",
-      "cta": "Understand the OETH benefit"
     },
     "ctaFinal": {
       "label": "What now?",

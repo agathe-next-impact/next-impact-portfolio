@@ -8,7 +8,6 @@ import {
   FileText,
   BadgePercent,
   Smartphone,
-  Scale,
   Compass,
   ScrollText,
   Wrench,
@@ -34,14 +33,14 @@ interface BentoCard {
 }
 
 const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
-  "boussole": {
-    id: "boussole",
-    title: isEn ? "Web & AI Tech Compass" : "La Boussole Techno Web & IA",
+  "selecteur-techno": {
+    id: "selecteur-techno",
+    title: isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA",
     description: isEn
       ? "8 criteria, one recommendation: WordPress, no-code, Headless, SaaS or custom. The hub's master decision tool."
       : "8 critères, une recommandation : WordPress, no-code, Headless, SaaS ou sur-mesure. L'outil de décision maître du hub.",
     icon: Compass,
-    href: "/outils/boussole",
+    href: "/outils/selecteur-techno",
     tag: isEn ? "New" : "Nouveau",
   },
   "visibilite-ia": {
@@ -124,16 +123,6 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     icon: FileText,
     href: "/cahier-des-charges",
   },
-  "simulateur-agefiph": {
-    id: "simulateur-agefiph",
-    title: isEn ? "AGEFIPH simulator (OETH)" : "Simulateur AGEFIPH (OETH)",
-    description: isEn
-      ? "Calculate the 30% AGEFIPH deduction applicable to your project. TIH provider."
-      : "Calculez la déduction AGEFIPH de 30 % applicable à votre projet. Prestataire TIH.",
-    icon: Scale,
-    href: "/outils/simulateur-agefiph",
-    tag: isEn ? "New" : "Nouveau",
-  },
   "audit-ia": {
     id: "audit-ia",
     title: isEn ? "Should I migrate to Headless WordPress?" : "Faut-il migrer en WordPress Headless ?",
@@ -156,10 +145,10 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
 })
 
 const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["boussole", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["boussole", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "simulateur-agefiph", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["boussole", "visibilite-ia", "checklist-geo", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa", "simulateur-agefiph"],
-  developpeur: ["boussole", "prototype-ia", "visibilite-ia", "checklist-geo", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "simulateur-agefiph", "cahier-des-charges"],
+  decideur:    ["selecteur-techno", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "audit-ia", "cahier-des-charges", "audit-pwa"],
+  default:     ["selecteur-techno", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "audit-ia", "audit-pwa", "cahier-des-charges"],
+  utilisateur: ["selecteur-techno", "visibilite-ia", "checklist-geo", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa"],
+  developpeur: ["selecteur-techno", "prototype-ia", "visibilite-ia", "checklist-geo", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "cahier-des-charges"],
 }
 
 export default function OutilsBentoGrid() {

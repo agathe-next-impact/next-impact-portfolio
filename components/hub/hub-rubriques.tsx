@@ -1,5 +1,5 @@
 // HubRubriques — couche décisionnelle du hub « Quelle techno web ? ».
-// Bandeau-méthode Boussole (8 critères) + 7 rubriques par question. Le titre de
+// Bandeau-méthode Sélecteur (8 critères) + 7 rubriques par question. Le titre de
 // chaque rubrique pointe vers sa page thématique /documentation/<slug> (parcours
 // 4 temps) ; les liens reprennent les outils EXISTANTS et la CTA « prochaine
 // étape » route vers l'offre. Démonstratif (décision) au premier plan ; les
@@ -35,15 +35,15 @@ interface Rubrique {
 const COPY: Record<
   "fr" | "en",
   {
-    boussole: { eyebrow: string; title: string; subtitle: string; criteria: string[]; cta: string };
+    selecteur: { eyebrow: string; title: string; subtitle: string; criteria: string[]; cta: string };
     rubriqueLabel: string;
     rubriques: Rubrique[];
   }
 > = {
   fr: {
-    boussole: {
+    selecteur: {
       eyebrow: "La méthode",
-      title: "La Boussole Techno Web & IA",
+      title: "Le Sélecteur techno web & IA",
       subtitle:
         "On ne part pas de l'outil, mais du besoin. Huit critères pour trancher entre WordPress, no-code, Headless, SaaS, IA ou sur-mesure.",
       criteria: [
@@ -56,7 +56,7 @@ const COPY: Record<
         "Évolutivité",
         "Time-to-value",
       ],
-      cta: "Lancer la Boussole",
+      cta: "Lancer le Sélecteur",
     },
     rubriqueLabel: "Rubrique",
     rubriques: [
@@ -126,7 +126,7 @@ const COPY: Record<
         title: "Présence et audience",
         question: "Site, newsletter, LinkedIn : où investir ?",
         links: [
-          { label: "La Boussole Techno Web & IA", href: "/outils/boussole" },
+          { label: "Le Sélecteur techno web & IA", href: "/outils/selecteur-techno" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
         next: { label: "En parler en visio — 150 €", href: "/conseil" },
@@ -146,9 +146,9 @@ const COPY: Record<
     ],
   },
   en: {
-    boussole: {
+    selecteur: {
       eyebrow: "The method",
-      title: "The Web & AI Tech Compass",
+      title: "The web & AI tech selector",
       subtitle:
         "Start from the need, not the tool. Eight criteria to choose between WordPress, no-code, Headless, SaaS, AI or custom.",
       criteria: [
@@ -161,7 +161,7 @@ const COPY: Record<
         "Scalability",
         "Time-to-value",
       ],
-      cta: "Launch the Compass",
+      cta: "Launch the selector",
     },
     rubriqueLabel: "Section",
     rubriques: [
@@ -231,7 +231,7 @@ const COPY: Record<
         title: "Presence & audience",
         question: "Site, newsletter, LinkedIn: where to invest?",
         links: [
-          { label: "The Web & AI Tech Compass", href: "/outils/boussole" },
+          { label: "The web & AI tech selector", href: "/outils/selecteur-techno" },
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
         ],
         next: { label: "Talk it through on a call", href: "/conseil" },
@@ -257,7 +257,7 @@ export function HubRubriques({ locale }: { locale: Locale }) {
 
   return (
     <div className="mb-16">
-      {/* Bandeau-méthode Boussole */}
+      {/* Bandeau-méthode Sélecteur */}
       <div className="mb-10 border border-dark-gray bg-jet/40 p-7 lg:p-8">
         <div className="flex flex-wrap items-start gap-6">
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border border-dark-gray bg-obsidian">
@@ -265,16 +265,16 @@ export function HubRubriques({ locale }: { locale: Locale }) {
           </div>
           <div className="min-w-[14rem] flex-1">
             <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
-              {c.boussole.eyebrow}
+              {c.selecteur.eyebrow}
             </p>
             <h2 className="mb-2 text-xl font-light tracking-tight text-foreground">
-              {c.boussole.title}
+              {c.selecteur.title}
             </h2>
             <p className="mb-4 max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
-              {c.boussole.subtitle}
+              {c.selecteur.subtitle}
             </p>
             <ul className="mb-6 flex flex-wrap gap-2">
-              {c.boussole.criteria.map((x) => (
+              {c.selecteur.criteria.map((x) => (
                 <li
                   key={x}
                   className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
@@ -284,10 +284,10 @@ export function HubRubriques({ locale }: { locale: Locale }) {
               ))}
             </ul>
             <Link
-              href="/outils/boussole"
+              href="/outils/selecteur-techno"
               className="group inline-flex items-center gap-2 border border-charcoal bg-vermilion px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
             >
-              {c.boussole.cta}
+              {c.selecteur.cta}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

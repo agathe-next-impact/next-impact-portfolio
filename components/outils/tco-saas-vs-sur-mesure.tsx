@@ -472,8 +472,8 @@ export default function TcoSaasVsSurMesure() {
               }}
             >
               {isEn
-                ? "Indicative comparison. A real migration evaluation also considers non-financial factors: vendor lock-in, regulatory specificity, business agility, team autonomy. OETH-eligible companies can deduct up to 30% of custom labor cost from their AGEFIPH contribution."
-                : "Comparaison indicative. Une vraie évaluation de migration considère aussi des facteurs non financiers : dépendance vendeur, spécificité réglementaire, agilité métier, autonomie d'équipe. Les entreprises éligibles OETH peuvent déduire jusqu'à 30 % du coût main-d'œuvre sur-mesure de leur contribution AGEFIPH."}
+                ? "Indicative comparison. A real migration evaluation also considers non-financial factors: vendor lock-in, regulatory specificity, business agility, team autonomy."
+                : "Comparaison indicative. Une vraie évaluation de migration considère aussi des facteurs non financiers : dépendance vendeur, spécificité réglementaire, agilité métier, autonomie d'équipe."}
             </p>
 
             {/* CTAs */}

@@ -15,7 +15,6 @@ export default function HomeCta() {
 
   const stats = [
     { value: "6–10", label: isEn ? "weeks avg." : "semaines moy." },
-    { value: "TIH", label: isEn ? "AGEFIPH −30 %" : "AGEFIPH −30 %" },
     { value: "> 90", label: "Core Web Vitals" },
   ];
 

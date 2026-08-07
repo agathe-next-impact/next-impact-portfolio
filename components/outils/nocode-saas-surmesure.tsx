@@ -4,8 +4,8 @@
 // métier). Recommandateur focalisé sur l'axe build / buy / no-code : 8 critères
 // (spécificité, existant, budget, autonomie, données, volume, intégrations,
 // time-to-value) → une famille parmi 3 + classement + aiguilleur. Pour la
-// question plus large (WordPress, Headless, réparer…), renvoie à la Boussole.
-// Modèle : components/outils/boussole.tsx.
+// question plus large (WordPress, Headless, réparer…), renvoie au Sélecteur techno.
+// Modèle : components/outils/selecteur-techno.tsx.
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Blocks, Info, RotateCcw } from "lucide-react";
@@ -366,8 +366,8 @@ export default function NocodeSaasSurmesure() {
               {isEn ? info.next.labelEn : info.next.labelFr}
               <ArrowRight size={14} />
             </Link>
-            <Link href="/outils/boussole" className={BTN_GHOST}>
-              {isEn ? "Broader question? The Compass" : "Question plus large ? La Boussole"}
+            <Link href="/outils/selecteur-techno" className={BTN_GHOST}>
+              {isEn ? "Broader question? The tech selector" : "Question plus large ? Le Sélecteur techno"}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <button type="button" onClick={reset} className={BTN_GHOST}>

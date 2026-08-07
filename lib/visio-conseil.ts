@@ -49,7 +49,7 @@ export const OFFERS: ConseilOffer[] = [
     ],
     fr: {
       name: "Choix de techno web avec l'IA",
-      tag: "Boussole",
+      tag: "Sélecteur techno",
       tagline: "Trancher rapidement la bonne techno pour votre projet.",
       forWho:
         "Vous démarrez un projet et vous voulez, en 30 minutes, une reco de techno claire plutôt que des semaines de comparaison.",

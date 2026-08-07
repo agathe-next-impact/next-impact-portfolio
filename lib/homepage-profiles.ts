@@ -33,7 +33,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     ctaPrimary: { label: "Conseil projet web avec IA", href: "/conseil" },
     ctaSecondary: { label: "Prestations web avec IA", href: "/services" },
     auditTitle: "Quelle techno web à l'heure de l'IA ?",
-    auditSubtitle: "Boussole Techno Web & IA",
+    auditSubtitle: "Sélecteur techno web & IA",
     auditDescription:
       "Avant de demander à l'IA, à un freelance ou à une agence de construire, vérifiez s'il faut réparer, optimiser, utiliser un SaaS, du no-code, WordPress ou du sur-mesure.",
   },
@@ -41,7 +41,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
     headline: "Votre projet digital",
     subHeadline: "moteur de croissance",
     description:
-      "Du site vitrine à la plateforme métier sur-mesure : un investissement qui se rentabilise. ROI mesurable, déduction OETH transverse, time-to-market maîtrisé.",
+      "Du site vitrine à la plateforme métier sur-mesure : un investissement qui se rentabilise. ROI mesurable, time-to-market maîtrisé.",
     valueProposition:
       "Performance, SEO, conversion et autonomie de gestion : des résultats mesurables, quelle que soit la voie choisie.",
     ctaPrimary: { label: "Diagnostic projet gratuit", href: "#audit" },
@@ -332,7 +332,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Études de cas",
     sousTitre:
       "Découvrez les réalisations Next Impact : sites WordPress, sites Headless WordPress + Next.js, web apps sur-mesure et applications mobiles PWA — pour divers secteurs d'activité.",
-    defaultTab: "headless",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par famille",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -343,7 +343,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Nos études de cas clients",
     sousTitre:
       "Des projets concrets avec des résultats mesurables : performance, SEO et conversion au service de la croissance.",
-    defaultTab: "headless",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par secteur",
     ctaLabel: "Évaluer mon projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -355,7 +355,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Des sites simples et performants",
     sousTitre:
       "Des sites que leurs propriétaires gèrent au quotidien avec WordPress — simplement, sans compétence technique.",
-    defaultTab: "headless",
+    defaultTab: "webapp",
     tabsLabel: "Explorer les projets",
     ctaLabel: "Voir une démo",
     ctaHref: "/demo",
@@ -366,7 +366,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Études de cas techniques",
     sousTitre:
       "Sites WordPress classiques optimisés, Headless WordPress + Next.js, web apps sur-mesure et PWA mobiles. API REST, WPGraphQL, PostgreSQL. Détails techniques de chaque projet.",
-    defaultTab: "headless",
+    defaultTab: "webapp",
     tabsLabel: "Filtrer par architecture",
     ctaLabel: "Explorer la documentation",
     ctaHref: "/documentation",

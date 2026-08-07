@@ -214,12 +214,12 @@ const choisir: HubTheme = {
   tools: [
     {
       icon: Compass,
-      name: { fr: "La Boussole Techno Web & IA", en: "The Web & AI Tech Compass" },
+      name: { fr: "Sélecteur techno web & IA", en: "The web & AI tech selector" },
       blurb: {
         fr: "8 critères → la famille de techno la plus adaptée à votre besoin.",
         en: "8 criteria → the tech family that best fits your need.",
       },
-      href: "/outils/boussole",
+      href: "/outils/selecteur-techno",
     },
     {
       icon: GitCompare,
@@ -424,12 +424,12 @@ const iaEtCode: HubTheme = {
     },
     {
       icon: Compass,
-      name: { fr: "La Boussole Techno Web & IA", en: "The Web & AI Tech Compass" },
+      name: { fr: "Sélecteur techno web & IA", en: "The web & AI tech selector" },
       blurb: {
         fr: "Repartir du besoin avant de générer : la famille de solution adaptée.",
         en: "Start from the need before generating: the solution family that fits.",
       },
-      href: "/outils/boussole",
+      href: "/outils/selecteur-techno",
     },
   ],
   prestas: [
@@ -967,12 +967,12 @@ const presence: HubTheme = {
   tools: [
     {
       icon: Compass,
-      name: { fr: "La Boussole Techno Web & IA", en: "The Web & AI Tech Compass" },
+      name: { fr: "Sélecteur techno web & IA", en: "The web & AI tech selector" },
       blurb: {
         fr: "Du besoin à la solution : où votre présence en ligne doit-elle s'ancrer ?",
         en: "From need to solution: where should your online presence anchor?",
       },
-      href: "/outils/boussole",
+      href: "/outils/selecteur-techno",
     },
     {
       icon: ScanSearch,

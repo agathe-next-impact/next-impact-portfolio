@@ -26,7 +26,7 @@ const OFFERS_FR: Offer[] = [
     price: "gratuit",
     items: [
       "Diagnostic projet & audit IA de votre site",
-      "Simulateur AGEFIPH, diagnostic d'opportunité PWA",
+      "Sélecteur techno, diagnostic d'opportunité PWA",
       "Générateur de cahier des charges",
     ],
     target: "Pour s'auto-évaluer, sans engagement",
@@ -68,7 +68,7 @@ const OFFERS_EN: Offer[] = [
     price: "free",
     items: [
       "Project diagnostic & AI audit of your site",
-      "AGEFIPH simulator, PWA opportunity diagnostic",
+      "Tech selector, PWA opportunity diagnostic",
       "Specifications generator",
     ],
     target: "Self-assess, no commitment",
@@ -115,7 +115,7 @@ export default function HomeOffres() {
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
             index="№ 02"
-            kicker={isEn ? "Web & AI Tech Compass" : "Boussole Techno Web & IA"}
+            kicker={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
             title={
               isEn ? (
                 <>AI can code. <span className="text-accent-secondary">It cannot decide everything.</span></>

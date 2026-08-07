@@ -24,6 +24,20 @@ interface ProjectMeta {
 
 const PROJECTS_META: ProjectMeta[] = [
   {
+    id: 28,
+    type: "landing",
+    image: "/img/desktop_screen_ecolise_hermitage.png",
+    link: "/etudes-de-cas/hermitage-ecolise",
+    tab: ["landing"],
+  },
+  {
+    id: 27,
+    type: "webapp",
+    image: "/img/desktop_screen_reseauteurs.png",
+    link: "/etudes-de-cas/reseauteurs",
+    tab: ["webapp"],
+  },
+  {
     id: 26,
     type: "wordpress",
     image: "/img/desktop-screen-arguinmarine.jpg",
@@ -40,7 +54,7 @@ const PROJECTS_META: ProjectMeta[] = [
   {
     id: 24,
     type: "webapp",
-    image: "/img/desktop-screen-peertopeer.jpg",
+    image: "/img/desktop_screen_peertopeer.png",
     link: "/etudes-de-cas/peer-to-peer",
     tab: ["webapp"],
   },
@@ -215,6 +229,18 @@ interface ProjectContent {
 }
 
 const CONTENT_FR: Record<number, ProjectContent> = {
+  28: {
+    title: "L'Hermitage — Démonstrateur ECOLISE",
+    alt: "Site one-page du démonstrateur européen ECOLISE de L'Hermitage",
+    description:
+      "One-page Next.js annonçant la sélection de L'Hermitage parmi les 15 Démonstrateurs européens du réseau ECOLISE.",
+  },
+  27: {
+    title: "Réseauteurs",
+    alt: "Plateforme Réseauteurs, annuaire et carte du networking professionnel",
+    description:
+      "La plateforme nationale du networking : annuaire, agenda et carte des réseaux d'affaires français.",
+  },
   26: {
     title: "Arguin Marine",
     alt: "Site vitrine d'Arguin Marine, location de bateaux sur le Bassin d'Arcachon",
@@ -223,9 +249,9 @@ const CONTENT_FR: Record<number, ProjectContent> = {
   },
   25: {
     title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — catalogue de landing pages générées par IA",
+    alt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
     description:
-      "Catalogue de landing pages générées par IA pour indépendants et TPE — ce qu'on achète est ce qu'on voit.",
+      "Service packagé de mise en ligne de mini-sites par métier pour indépendants et TPE.",
   },
   24: {
     title: "Peer to Peer",
@@ -253,7 +279,7 @@ const CONTENT_FR: Record<number, ProjectContent> = {
   },
   20: {
     title: "Artisan Coiffeur",
-    alt: "Landing artisan coiffeur — La Petite Vitrine",
+    alt: "Landing artisan coiffeur",
     description:
       "Salon de coiffure moderne à Paris proposant des services de coiffure professionnels.",
   },
@@ -355,6 +381,18 @@ const CONTENT_FR: Record<number, ProjectContent> = {
 };
 
 const CONTENT_EN: Record<number, ProjectContent> = {
+  28: {
+    title: "L'Hermitage — ECOLISE Demonstrator",
+    alt: "One-page site of L'Hermitage's ECOLISE European Demonstrator",
+    description:
+      "Next.js one-page announcing L'Hermitage's selection as one of the ECOLISE network's 15 European Demonstrators.",
+  },
+  27: {
+    title: "Réseauteurs",
+    alt: "Réseauteurs platform — directory and map of professional networking",
+    description:
+      "France's national networking platform: directory, agenda and map of business networks.",
+  },
   26: {
     title: "Arguin Marine",
     alt: "Arguin Marine brochure site, boat rental on the Arcachon Basin",
@@ -363,9 +401,9 @@ const CONTENT_EN: Record<number, ProjectContent> = {
   },
   25: {
     title: "La Petite Vitrine",
-    alt: "La Petite Vitrine — catalogue of AI-generated landing pages",
+    alt: "La Petite Vitrine — go-live service for small profession-based sites",
     description:
-      "A catalogue of AI-generated landing pages for freelancers and very small businesses — what you buy is what you see.",
+      "A packaged go-live service for small profession-based sites, for freelancers and very small businesses.",
   },
   24: {
     title: "Peer to Peer",
@@ -393,7 +431,7 @@ const CONTENT_EN: Record<number, ProjectContent> = {
   },
   20: {
     title: "Artisan Coiffeur",
-    alt: "Artisan hairdresser landing — La Petite Vitrine",
+    alt: "Artisan hairdresser landing",
     description:
       "A modern Paris hair salon offering professional hairdressing services.",
   },

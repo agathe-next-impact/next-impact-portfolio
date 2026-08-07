@@ -115,7 +115,7 @@ ${entry.content}
 
 ## Entity Summary
 
-Next Impact is a web technology advisory and implementation offer in France led by Agathe Karinthi-Martin. Its core positioning: AI can code fast, but small teams still need to decide what to build, with which technology, and how far to go. Next Impact helps choose between WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all. Core expertise: technology choice, architecture, maintainability, technical debt, data, SEO, security, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA and project scoping. Next Impact is also positioned as a French TIH provider, which may create an OETH/AGEFIPH deduction opportunity for eligible companies.
+Next Impact is a web technology advisory and implementation offer in France led by Agathe Karinthi-Martin. Its core positioning: AI can code fast, but small teams still need to decide what to build, with which technology, and how far to go. Next Impact helps choose between WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all. Core expertise: technology choice, architecture, maintainability, technical debt, data, SEO, security, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA and project scoping.
 
 ## Offer Architecture
 
@@ -135,7 +135,6 @@ Next Impact is a web technology advisory and implementation offer in France led 
 - Case studies: ${baseUrl}/etudes-de-cas
 - Documentation (decision hub "Which web tech?"): ${baseUrl}/documentation
 - Be found in the AI era (SEO & GEO section): ${baseUrl}/documentation/etre-trouve
-- OETH advantage: ${baseUrl}/avantage-oeth
 - Contact: ${baseUrl}/contact
 - Sitemap: ${baseUrl}/sitemap.xml
 

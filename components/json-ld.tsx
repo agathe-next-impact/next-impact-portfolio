@@ -38,7 +38,7 @@ export function OrganizationJsonLd() {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
       name: "Agathe Karinthi-Martin",
-      jobTitle: "Conseil techno web à l'heure de l'IA — Prestataire TIH",
+      jobTitle: "Conseil techno web à l'heure de l'IA",
       url: "https://www.linkedin.com/in/agat-dev/",
     },
     telephone: "+33673981638",
@@ -69,7 +69,7 @@ export function OrganizationJsonLd() {
     },
     serviceType: [
       "Conseil techno web à l'heure de l'IA",
-      "Boussole Techno Web & IA",
+      "Sélecteur techno web & IA",
       "Conseil architecture de projet IA",
       "Pack de mise en œuvre IA (prompts et agents)",
       "Direction technique externalisée (abonnement mensuel)",
@@ -80,7 +80,6 @@ export function OrganizationJsonLd() {
       "Migration WordPress vers Headless",
       "Audit de site web",
       "Développement Next.js",
-      "Prestation TIH déductible AGEFIPH",
     ],
     priceRange: "€€",
     knowsAbout: [
@@ -98,9 +97,6 @@ export function OrganizationJsonLd() {
       "PostgreSQL",
       "PWA",
       "Application web sur-mesure",
-      "OETH",
-      "TIH",
-      "AGEFIPH",
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
@@ -386,7 +382,7 @@ export function ContactPageJsonLd() {
       ],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
-        name: "Boussole Techno Web & IA",
+        name: "Sélecteur techno web & IA",
         itemListElement: [
           {
             "@type": "Offer",
@@ -475,7 +471,7 @@ export function WebsiteJsonLd() {
  */
 export function PersonJsonLd({
   name = "Agathe Karinthi-Martin",
-  jobTitle = "Conseil techno web à l'heure de l'IA — Prestataire TIH",
+  jobTitle = "Conseil techno web à l'heure de l'IA",
   description = siteConfig.description,
   url = siteConfig.url,
   image = `${siteConfig.url}${siteConfig.ogImage}`,
@@ -527,8 +523,6 @@ export function PersonJsonLd({
       "No-code",
       "SaaS",
       "Cybernétique",
-      "OETH",
-      "TIH",
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
@@ -584,7 +578,7 @@ export function HomepageJsonLd() {
         "@type": "Person",
         "@id": `${baseUrl}/#person`,
         name: "Agathe Karinthi-Martin",
-        jobTitle: "Conseil techno web à l'heure de l'IA — Prestataire TIH",
+        jobTitle: "Conseil techno web à l'heure de l'IA",
         description: siteConfig.description,
         url: baseUrl,
         image: `${baseUrl}${siteConfig.ogImage}`,
@@ -617,8 +611,6 @@ export function HomepageJsonLd() {
           "Application mobile",
           "SEO",
           "API REST",
-          "OETH",
-          "TIH",
         ],
         sameAs: [
           "https://www.linkedin.com/in/agat-dev/",
@@ -678,7 +670,7 @@ export function HomepageJsonLd() {
         },
         serviceType: [
           "Conseil techno web à l'heure de l'IA",
-          "Boussole Techno Web & IA",
+          "Sélecteur techno web & IA",
           "Conseil architecture de projet IA",
           "Pack de mise en œuvre IA (prompts et agents)",
           "Direction technique externalisée (abonnement mensuel)",
@@ -689,7 +681,6 @@ export function HomepageJsonLd() {
           "Migration WordPress vers Headless",
           "Audit de site web",
           "Développement Next.js",
-          "Prestation TIH déductible AGEFIPH",
         ],
         knowsAbout: [
           "WordPress",
@@ -705,13 +696,10 @@ export function HomepageJsonLd() {
           "TypeScript",
           "PostgreSQL",
           "PWA",
-          "OETH",
-          "TIH",
-          "AGEFIPH",
         ],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Boussole Techno Web & IA",
+          name: "Sélecteur techno web & IA",
           itemListElement: [
             {
               "@type": "Offer",

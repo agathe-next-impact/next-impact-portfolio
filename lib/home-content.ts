@@ -22,7 +22,7 @@ const FR: HomeContent = {
     lines: [
       "Next Impact aide les petites structures à choisir la bonne techno web à l'heure où l'IA peut coder vite.",
       "La question n'est plus seulement de développer : il faut décider quoi construire, avec quelle architecture, et jusqu'où aller.",
-      "La Boussole Techno Web & IA compare WordPress, no-code, IA coding, SaaS, Headless, sur-mesure ou l'option de ne rien construire.",
+      "Le Sélecteur techno web & IA compare WordPress, no-code, IA coding, SaaS, Headless, sur-mesure ou l'option de ne rien construire.",
       "Quand la solution est claire, Next Impact peut aussi construire, corriger ou stabiliser : WordPress, Headless ou outil métier.",
     ],
   },
@@ -36,7 +36,7 @@ const FR: HomeContent = {
           "Parce que l'IA facilite la production de code, mais ne remplace pas le choix d'architecture, la priorisation, la sécurité, le SEO, la maintenance ni la cohérence business. Une mauvaise décision peut coûter plus cher qu'un bon cadrage.",
       },
       {
-        question: "Qu'est-ce que la Boussole Techno Web & IA ?",
+        question: "Qu'est-ce que le Sélecteur techno web & IA ?",
         answer:
           "C'est une offre de conseil pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure. Elle aide à décider ce qu'il faut construire, simplifier, réparer ou ne pas construire.",
       },
@@ -75,7 +75,7 @@ const EN: HomeContent = {
     lines: [
       "Next Impact helps small teams choose the right web technology when AI can code fast.",
       "The question is no longer only how to develop: it is what to build, with which architecture, and how far to go.",
-      "The Web & AI Tech Compass compares WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all.",
+      "The web & AI tech selector compares WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all.",
       "Once the solution is clear, Next Impact can also build, fix or stabilize: WordPress, Headless or business tools.",
     ],
   },
@@ -89,7 +89,7 @@ const EN: HomeContent = {
           "Because AI makes code production easier, but it does not replace architecture choices, prioritization, security, SEO, maintenance or business coherence. A bad decision can cost more than good scoping.",
       },
       {
-        question: "What is the Web & AI Tech Compass?",
+        question: "What is the web & AI tech selector?",
         answer:
           "It is an advisory offer to choose between WordPress, no-code, AI coding, SaaS, Headless or custom development. It helps decide what to build, simplify, fix or not build.",
       },

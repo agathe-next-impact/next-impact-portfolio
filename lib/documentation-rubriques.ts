@@ -57,10 +57,8 @@ const RUBRIQUES: Record<RubriqueSlug, Rubrique> = {
       en: "Now settle it for your own case",
     },
     cta: {
-      // NB : la directive nommait « /outils/selecteur-techno ». L'outil réel du
-      // site est La Boussole ; on ne renomme aucune route.
-      label: { fr: "Lancer la Boussole techno", en: "Run the tech Compass" },
-      href: "/outils/boussole",
+      label: { fr: "Lancer le Sélecteur techno", en: "Run the tech Selector" },
+      href: "/outils/selecteur-techno",
       note: { fr: "Gratuit · sans inscription", en: "Free · no signup" },
     },
   },

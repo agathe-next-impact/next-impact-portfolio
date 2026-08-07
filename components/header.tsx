@@ -30,8 +30,8 @@ const RESOURCE_GROUPS = [
   {
     labelKey: "groupTools",
     items: [
-      { key: "boussole", href: "/outils/boussole" },
-      { key: "allTools", href: "/outils" },
+      { key: "selecteurTechno", href: "/outils/selecteur-techno" },
+      { key: "allTools",        href: "/outils" },
     ],
   },
 ] as const;

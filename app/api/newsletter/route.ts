@@ -13,7 +13,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Libellés lisibles des outils source (pour la notif admin).
 const SOURCE_LABELS: Record<string, string> = {
-  boussole: "Boussole Techno Web & IA",
+  "selecteur-techno": "Sélecteur techno web & IA",
   "reparer-ou-refaire": "Réparer ou refaire",
   "nocode-saas-surmesure": "No-code / SaaS / sur-mesure",
   "prototype-ia": "Prototype IA : jetable ou produit ?",

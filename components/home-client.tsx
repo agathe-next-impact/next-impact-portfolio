@@ -31,10 +31,6 @@ const HomeStudio = dynamic(() => import("./home-studio"), {
   loading: () => <div style={{ minHeight: 500 }} />,
 });
 
-const HomeTihTeaser = dynamic(() => import("./home-tih-teaser"), {
-  loading: () => <div style={{ minHeight: 120 }} />,
-});
-
 const HomePerf = dynamic(() => import("./home-perf"), {
   loading: () => <div style={{ minHeight: 400 }} />,
 });
@@ -78,8 +74,6 @@ export default function HomeClient() {
 
       {/* § 07 — Le studio (présence humaine) */}
       <HomeStudio />
-      {/* § 08 — Avantage TIH 
-      <HomeTihTeaser />*/}
       <Separator />
 
       {/* § 09 — Diagnostic de stack 

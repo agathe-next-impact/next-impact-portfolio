@@ -15,7 +15,6 @@ import {
   CircleDot,
   Award,
   Clock,
-  BadgePercent,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────
@@ -233,7 +232,6 @@ export function BlocReassurance() {
           { icon: CircleDot, label: t("available") },
           { icon: Clock, label: t("experience") },
           { icon: Award, label: t("wpHeadlessDev") },
-          { icon: BadgePercent, label: t("tih") },
         ].map(({ icon: Icon, label }) => (
           <span
             key={label}

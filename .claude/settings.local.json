@@ -89,11 +89,42 @@
       "WebFetch(domain:next-event.fr)",
       "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/fr.json','utf8'\\)\\); console.log\\('fr.json OK'\\)\")",
       "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('messages/en.json','utf8'\\)\\); console.log\\('en.json OK'\\)\")",
-      "Bash(cd \"c:/dev/next-impact-portfolio\" && npm run build > /tmp/build_ni.log 2>&1; echo \"EXIT=$?\"; echo \"=== compiled/generated lines ===\"; grep -iE \"Compiled successfully|Generating static|✓ Compiled|Failed to compile|error\" /tmp/build_ni.log | head -20)"
+      "Bash(cd \"c:/dev/next-impact-portfolio\" && npm run build > /tmp/build_ni.log 2>&1; echo \"EXIT=$?\"; echo \"=== compiled/generated lines ===\"; grep -iE \"Compiled successfully|Generating static|✓ Compiled|Failed to compile|error\" /tmp/build_ni.log | head -20)",
+      "Bash(awk *)",
+      "Bash(sed -i *)",
+      "Bash(echo \"EXIT:$?\")",
+      "PowerShell(git merge-base --is-ancestor origin/posit-conseil master; echo \"posit-conseil dans master: $?\"; git merge-base --is-ancestor 104c92a master; echo \"ancien origin/master dans master: $?\"; git merge-base --is-ancestor b2f8f41 master; echo \"ancien master local dans master: $?\"; git rev-list --count master..origin/posit-conseil)",
+      "PowerShell(foreach \\($c in @\\(\"7633709\",\"47b8461\",\"47a7de1\",\"6ce895c\"\\)\\) { $inMaster = git merge-base --is-ancestor $c origin/master; $m=$?; $inLotA = git merge-base --is-ancestor $c origin/lot-a-depublication; $l=$?; \"$c \\($\\(git log -1 --format=%s $c\\)\\) : origin/master=$m origin/lot-a-depublication=$l\" })",
+      "WebFetch(domain:www.reseauteurs.com)",
+      "Bash(curl -s -I https://www.reseauteurs.com/)",
+      "Bash(curl -s https://www.reseauteurs.com/)",
+      "Bash(grep -o -E '\\(_next/static[^\"]{0,60}|__NEXT_DATA__|next-head|wp-content|vercel\\)')",
+      "Bash(echo \"exit-grep: $?\")",
+      "Bash(git -C /c/DEV/next-impact-portfolio stash list)",
+      "Bash(git -C /c/DEV/next-impact-portfolio status --short)",
+      "WebFetch(domain:ecolise.hermitagelelab.com)",
+      "Bash(curl -sI https://ecolise.hermitagelelab.com/)",
+      "Bash(curl -s https://ecolise.hermitagelelab.com/)",
+      "Bash(curl -s https://ecolise.hermitagelelab.com/sitemap.xml)",
+      "Bash(curl -s https://ecolise.hermitagelelab.com/robots.txt)",
+      "Bash(curl -s \"https://ecolise.hermitagelelab.com/_next/static/chunks/0f7v~y0yiw~3k.css?dpl=dpl_63CjpJ42g221Vq1bjSpeui3seAtN\")",
+      "Bash(curl -s \"https://ecolise.hermitagelelab.com/_next/static/chunks/0s6kfldfvt0m9.css?dpl=dpl_63CjpJ42g221Vq1bjSpeui3seAtN\")",
+      "Bash(grep -o -E '\\(candidatures?[^<\"]{0,60}|[0-9]+ pays|démonstrateurs?[^<\"]{0,80}|20 pays|[Uu]nion européenne[^<\"]{0,60}|DEAR|3 ?[Zz]éro[^<\"]{0,60}|[Hh]ospitalité|[Aa]groécologie|[Ff]orêt|[Ii]nnovation sociale|[Ff]ormation|[Cc]oopération\\)' 'C:\\\\Users\\\\agath\\\\.claude\\\\projects\\\\c--DEV-next-impact-portfolio\\\\4c949867-059c-441f-a3fe-fb49985e8c34\\\\tool-results\\\\b34rnz7kz.txt')",
+      "Bash(grep -o -E \".{0,60}\\(candidature|Démonstrateur|DEAR|éro carbone|hectare|2025|2026|Expérimenter|pays|sociétaires\\).{0,80}\")",
+      "Bash(curl -s https://ecolise.hermitagelelab.com/ -o 'C:\\\\Users\\\\agath\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--DEV-next-impact-portfolio\\\\4c949867-059c-441f-a3fe-fb49985e8c34\\\\scratchpad/home.html')",
+      "Bash(sed -E 's/<\\(script|style\\)[^>]*>[^<]*<\\\\/\\(script|style\\)>/ /g; s/<[^>]*>/ /g' 'C:\\\\Users\\\\agath\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--DEV-next-impact-portfolio\\\\4c949867-059c-441f-a3fe-fb49985e8c34\\\\scratchpad/home.html')",
+      "Bash(echo \"exit-filter:$?\")",
+      "PowerShell($out = npx tsc --noEmit 2>$null; $all = \\($out | Measure-Object -Line\\).Lines; $mine = \\($out | Select-String -Pattern \"case-studies-data|realisations\\\\.tsx|featured-realisation\"\\).Count; \"total error lines: $all\"; \"in modified files: $mine\")",
+      "PowerShell(git log --oneline --all -20 -S \"petite\" -i -- lib/case-studies-data.ts components/case-studies/realisations.tsx)",
+      "PowerShell(git log --all --oneline -S \"petite-vitrine\" -i)",
+      "PowerShell(git show \"548023c^:lib/case-studies-data.ts\" > \"$env:TEMP\\\\old-data.ts\"; git show \"548023c^:components/case-studies/realisations.tsx\" > \"$env:TEMP\\\\old-realisations.tsx\"; git show 548023c --stat | Select-String -Pattern \"lapetitevitrine|petite\")",
+      "Bash(git checkout *)",
+      "PowerShell($out = npx tsc --noEmit 2>$null; $all = \\($out | Measure-Object -Line\\).Lines; $mine = \\($out | Select-String -Pattern \"case-studies-data|realisations\\\\.tsx|homepage-profiles|CaseStudiesClient\"\\).Count; \"total error lines: $all\"; \"in modified files: $mine\")"
     ],
     "additionalDirectories": [
       "c:\\DEV\\next-impact-portfolio\\app\\[locale]\\audit-site-ia",
-      "C:\\DEV\\next-impact-portfolio\\app\\[locale]\\audit-site-ia"
+      "C:\\DEV\\next-impact-portfolio\\app\\[locale]\\audit-site-ia",
+      "C:\\Users\\agath\\.claude\\projects\\c--DEV-next-impact-portfolio\\4c949867-059c-441f-a3fe-fb49985e8c34\\tool-results"
     ]
   }
 }

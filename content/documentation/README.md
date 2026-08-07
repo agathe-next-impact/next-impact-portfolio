@@ -109,7 +109,7 @@ prouve, elle ne vend pas — c'est sa crédibilité qui la rend citable.
 
 | Rubrique | CTA | Cible |
 |---|---|---|
-| `choisir` | Lancer la Boussole techno | `/outils/boussole` |
+| `choisir` | Lancer le Sélecteur techno | `/outils/selecteur-techno` |
 | `ia-et-code` | Prototype IA : jetable ou maintenable ? | `/outils/prototype-ia` |
 | `reparer` | Auditer mon site (gratuit, 2 min) | `/audit-site-web` |
 | `avant-signer` | Décrypter mon devis + avis indépendant 150 € | `/outils/decrypteur-devis` puis `/conseil` |

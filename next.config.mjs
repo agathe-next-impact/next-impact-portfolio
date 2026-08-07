@@ -174,6 +174,17 @@ const nextConfig = {
         destination: '/en/contact',
         permanent: true,
       },
+      // ── Lot A — vague de dépublication unique (directives v3.1, docs/decisions.md) ──
+      // Retrait AGEFIPH : la page d'offre rejoint /a-propos (seule page où une
+      // ligne factuelle TIH peut subsister) ; le simulateur rejoint /outils
+      // (équivalent le plus proche, ADR-004).
+      { source: '/avantage-oeth',    destination: '/a-propos',    permanent: true },
+      { source: '/en/avantage-oeth', destination: '/en/a-propos', permanent: true },
+      { source: '/outils/simulateur-agefiph',    destination: '/outils',    permanent: true },
+      { source: '/en/outils/simulateur-agefiph', destination: '/en/outils', permanent: true },
+      // Renommage de l'outil : Boussole → Sélecteur techno web & IA.
+      { source: '/outils/boussole',    destination: '/outils/selecteur-techno',    permanent: true },
+      { source: '/en/outils/boussole', destination: '/en/outils/selecteur-techno', permanent: true },
       ...disabledToolRedirects,
     ]
   },

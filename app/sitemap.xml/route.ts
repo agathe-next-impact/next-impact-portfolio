@@ -143,9 +143,8 @@ export async function GET() {
       { path: "audit-site-web", source: "app/[locale]/audit-site-web/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
-      { path: "outils/simulateur-agefiph", source: "app/[locale]/outils/simulateur-agefiph/page.tsx", changefreq: "monthly", priority: 0.7 },
       // Outils de qualification rattachés aux rubriques du hub.
-      { path: "outils/boussole", source: "app/[locale]/outils/boussole/page.tsx", changefreq: "monthly", priority: 0.7 },
+      { path: "outils/selecteur-techno", source: "app/[locale]/outils/selecteur-techno/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/decrypteur-devis", source: "app/[locale]/outils/decrypteur-devis/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "outils/nocode-saas-surmesure", source: "app/[locale]/outils/nocode-saas-surmesure/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "outils/prototype-ia", source: "app/[locale]/outils/prototype-ia/page.tsx", changefreq: "monthly", priority: 0.6 },
@@ -159,7 +158,6 @@ export async function GET() {
       { path: "cahier-des-charges", source: "app/[locale]/cahier-des-charges/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "a-propos", source: "app/[locale]/a-propos/page.tsx", changefreq: "monthly", priority: 0.6 },
       { path: "contact", source: "app/[locale]/contact/page.tsx", changefreq: "monthly", priority: 0.6 },
-      { path: "avantage-oeth", source: "app/[locale]/avantage-oeth/page.tsx", changefreq: "weekly", priority: 0.8 },
       { path: "blog", source: "app/[locale]/blog/page.tsx", changefreq: "weekly", priority: 0.7 },
       { path: "articles", source: "app/[locale]/articles/page.tsx", changefreq: "monthly", priority: 0.6 },
     ] as const;

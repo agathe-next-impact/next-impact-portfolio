@@ -25,38 +25,39 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   fr: {
-    badge: "Étude de cas phare — Juin 2026",
-    tagline: "Un catalogue de landing pages générées par IA — ce qu'on achète est ce qu'on voit",
+    badge: "Étude de cas phare — 2026",
+    tagline: "La plateforme nationale du networking livrée en 3 mois — annuaire, agenda, carte et paiement en ligne",
     description:
-      "Une offre de vitrine simple et efficace : le client choisit un site fini et fonctionnel dans un catalogue d'une cinquantaine de modèles par métier, son contenu est intégré, le site part en ligne. Prix fixe, hébergement et maintenance gérés, RGPD par défaut. Next.js + Vercel.",
+      "Réseauteurs rassemble les professionnels, les événements et les réseaux d'affaires français (BNI, CJD, Rotary…) : annuaire filtrable, carte interactive, badges d'assiduité et abonnement freemium via Stripe. Next.js + Payload CMS, du concept à la mise en ligne en trois mois.",
     stats: [
-      { value: "650 €",     label: "Mise en ligne à prix fixe (HT), intégration comprise" },
-      { value: "14 €/mois", label: "Hébergement & maintenance gérés (HT)" },
-      { value: "10",        label: "Sites pilotes — santé & artisanat" },
+      { value: "3 mois",       label: "Du concept à la mise en ligne" },
+      { value: "1 plateforme", label: "Tous les réseaux d'affaires réunis" },
+      { value: "Freemium",     label: "Abonnement en ligne via Stripe" },
     ],
     ctaPrimary: "Voir l'étude de cas",
     ctaSecondary: "Discuter d'un projet similaire",
-    imageAlt: "La Petite Vitrine — service packagé de mise en ligne pour indépendants, TPE et artisans",
+    imageAlt: "Réseauteurs — la plateforme nationale du networking : annuaire, agenda et carte interactive",
   },
   en: {
-    badge: "Featured case study — June 2026",
-    tagline: "A catalogue of AI-generated landing pages — what you buy is what you see",
+    badge: "Featured case study — 2026",
+    tagline: "France's national networking platform shipped in 3 months — directory, agenda, map and online payment",
     description:
-      "A simple, effective showcase-site offer: clients pick a finished, working site from a catalogue of about fifty profession-based templates, their content is integrated, and it goes live. Fixed price, hosting and maintenance handled, GDPR by default. Next.js + Vercel.",
+      "Réseauteurs brings French professionals, events and business networks (BNI, CJD, Rotary…) together: a filterable directory, an interactive map, attendance badges and a freemium subscription via Stripe. Next.js + Payload CMS, from concept to launch in three months.",
     stats: [
-      { value: "€650",   label: "Fixed-price go-live (excl. VAT), integration included" },
-      { value: "€14/mo", label: "Hosting & maintenance handled (excl. VAT)" },
-      { value: "10",     label: "Pilot sites — health & artisans" },
+      { value: "3 months",   label: "From concept to launch" },
+      { value: "1 platform", label: "All business networks in one place" },
+      { value: "Freemium",   label: "Online subscription via Stripe" },
     ],
     ctaPrimary: "View the case study",
     ctaSecondary: "Discuss a similar project",
-    imageAlt: "La Petite Vitrine — packaged go-live service for freelancers and small businesses",
+    imageAlt: "Réseauteurs — France's national networking platform: directory, agenda and interactive map",
   },
 };
 
 // Clients réels (cf. études de cas) — roster typographique, lisible sur fond sombre
 // quel que soit le format des logos d'origine.
 const CLIENTS = [
+  "Réseauteurs",
   "Panorama Pub",
   "Proditec",
   "Sowee",
@@ -82,7 +83,7 @@ export default function FeaturedRealisation() {
           <SectionHeading
             index="№ 04"
             kicker={copy.badge}
-            title="La Petite Vitrine"
+            title="Réseauteurs"
             description={
               <>
                 <span className="block font-medium text-foreground">{copy.tagline}</span>
@@ -97,9 +98,9 @@ export default function FeaturedRealisation() {
           <div className="rounded-md bg-overlay-gray p-2 md:p-4">
             <div className="overflow-hidden rounded-sm">
               <YoutubePlayer
-                videoId="lAtVrN9Xh_8"
+                videoId="chOmQ0W3QX0"
                 title={copy.imageAlt}
-                label="La Petite Vitrine"
+                label="Réseauteurs"
                 firstFrame
               />
             </div>
@@ -125,7 +126,7 @@ export default function FeaturedRealisation() {
 
         {/* CTA */}
         <div className="flex flex-wrap gap-3 border-b border-dark-gray px-6 py-8 lg:px-8">
-          <Link href="/etudes-de-cas/la-petite-vitrine" className={BTN_PRIMARY}>
+          <Link href="/etudes-de-cas/reseauteurs" className={BTN_PRIMARY}>
             {copy.ctaPrimary}
           </Link>
           <Link href="/contact" className={BTN_GHOST}>
