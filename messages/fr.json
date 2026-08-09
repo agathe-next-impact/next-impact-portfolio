@@ -325,6 +325,7 @@
     },
     "cta": {
       "cold": "Pré-diagnostic express (2 min)",
+      "coldConseil": "Demander un diagnostic",
       "warm": {
         "site-wordpress": "Discuter d'une refonte WordPress",
         "site-headless": "Discuter d'un passage en Headless",

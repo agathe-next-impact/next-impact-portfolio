@@ -13,9 +13,14 @@ const BTN_GHOST =
 const CALENDAR_URL = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
 /**
- * CTA de fin de fiche à deux températures : froid identique partout
- * (pré-diagnostic → audit), chaud fonction de la famille du cas (→ RDV).
- * Froid en primaire : un prospect qui vérifie n'est pas prêt pour un RDV.
+ * CTA de fin de fiche à deux températures : froid (diagnostic), chaud fonction
+ * de la famille du cas (→ RDV). Froid en primaire : un prospect qui vérifie
+ * n'est pas prêt pour un RDV.
+ *
+ * Exception ia-automatisation : un diagnostic de site web n'a aucun sens pour
+ * un cas d'agent IA — le froid mène à l'offre conseil. Le libellé change avec
+ * la destination : /conseil n'est pas un outil de 2 minutes, promettre « 2 min »
+ * là-dessus serait une promesse cassée.
  */
 export default async function CaseStudyCTA({
   famille,
@@ -25,11 +30,12 @@ export default async function CaseStudyCTA({
   locale: Locale;
 }) {
   const t = await getTranslations({ locale, namespace: "caseStudyDetail.cta" });
+  const isAutomation = famille === "ia-automatisation";
 
   return (
     <div className="flex flex-col gap-2.5">
-      <Link href="/audit-site-web" className={BTN_PRIMARY}>
-        {t("cold")} <ArrowRight size={13} />
+      <Link href={isAutomation ? "/conseil" : "/audit-site-web"} className={BTN_PRIMARY}>
+        {t(isAutomation ? "coldConseil" : "cold")} <ArrowRight size={13} />
       </Link>
       <a
         href={CALENDAR_URL}

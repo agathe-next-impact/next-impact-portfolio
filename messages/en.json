@@ -325,6 +325,7 @@
     },
     "cta": {
       "cold": "Express pre-audit (2 min)",
+      "coldConseil": "Request a diagnosis",
       "warm": {
         "site-wordpress": "Discuss a WordPress redesign",
         "site-headless": "Discuss going Headless",
