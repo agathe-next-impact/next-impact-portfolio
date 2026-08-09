@@ -16,6 +16,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import PageLayout from "@/components/page-layout";
 import type { HubTheme, Temp } from "@/lib/hub-themes";
 import { tx } from "@/lib/hub-themes";
+import { ConseilModalOnRead } from "@/components/documentation/conseil-modal-on-read";
 
 const LABEL_MONO =
   "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
@@ -265,6 +266,12 @@ export function ThemePage({
           })}
         </Stagger>
       </BlueprintSection>
+
+      {/* Rubrique d'arbitrage techno uniquement : les autres rubriques ne
+          posent pas la question que tranche la visio à 150 €. */}
+      {theme.slug === "choisir" && (
+        <ConseilModalOnRead source="documentation/choisir" />
+      )}
     </PageLayout>
   );
 }

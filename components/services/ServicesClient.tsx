@@ -16,6 +16,8 @@ import { getServicesPageVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import ConseilModal from "@/components/ui/conseil-modal";
+import { useSeen } from "@/components/ui/use-seen";
 import { WordAppear } from "@/components/visuals/word-appear";
 import { SignalPaths } from "@/components/visuals/signal-paths";
 
@@ -25,6 +27,7 @@ const BTN_GHOST =
   "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
 
 export default function ServicesClient() {
+  const [pricingRef, pricingSeen] = useSeen<HTMLDivElement>();
   const { profileId } = useDocumentationMode();
   const locale = useLocale() as Locale;
   const servicesVariants = getServicesPageVariants(locale);
@@ -149,6 +152,13 @@ export default function ServicesClient() {
 
       {/* § 05 — Tableau comparatif */}
       <ServicesComparisonTable />
+
+      {/* Le visiteur a vu les prix et le comparatif : c'est le moment où se joue
+          l'arbitrage entre trois paliers séparés par plusieurs milliers d'euros.
+          La visio à 150 €, seul palier crédité, est l'assurance contre le
+          mauvais choix — d'où l'armement de la popup ici et pas plus haut. */}
+      <div ref={pricingRef} aria-hidden="true" className="h-px w-full" />
+      <ConseilModal source="solutions-web" armed={pricingSeen} />
 
       <Separator />
 

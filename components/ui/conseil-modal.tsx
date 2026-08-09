@@ -31,9 +31,32 @@ import { EASE_OUT as EASE } from "@/lib/motion-tokens";
 import { OFFERS } from "@/lib/visio-conseil";
 
 const LS_BOOKED = "ni:conseil:booked";
-const SS_DISMISSED = "ni:conseil:dismissed";
+const LS_DISMISS_COUNT = "ni:conseil:dismissCount";
+const SS_AUTO_SHOWN = "ni:conseil:autoShown";
 const OPEN_DELAY_MS = 1400;
 const OPEN_EVENT = "ni:conseil:open";
+
+/**
+ * Plafond global, tous supports confondus : la popup vit maintenant sur
+ * plusieurs surfaces (outils, tarifs, diagnostic, contenus de décision). Sans
+ * compteur partagé, un même visiteur la reverrait à chaque page — utile
+ * devient harcelant. Une seule ouverture automatique par session, et plus
+ * aucune après MAX_DISMISSALS refus. Le déclenchement manuel reste exempté :
+ * c'est le visiteur qui le provoque.
+ */
+const MAX_DISMISSALS = 3;
+
+function autoOpenAllowed(): boolean {
+  try {
+    if (localStorage.getItem(LS_BOOKED) === "1") return false;
+    if (sessionStorage.getItem(SS_AUTO_SHOWN) === "1") return false;
+    const dismissed = Number(localStorage.getItem(LS_DISMISS_COUNT) ?? "0");
+    if (Number.isFinite(dismissed) && dismissed >= MAX_DISMISSALS) return false;
+  } catch {
+    /* stockage indisponible → on autorise plutôt que de bloquer */
+  }
+  return true;
+}
 
 /** Offre d'entrée de la gamme conseil — le seul palier crédité. */
 const OFFER = OFFERS.find((o) => o.id === "choix-techno-ia");
@@ -87,16 +110,18 @@ export default function ConseilModal({
     return () => window.removeEventListener(OPEN_EVENT, onOpen);
   }, [source]);
 
-  // Ouverture différée, une seule fois, sauf si déjà réservé / fermé cette session.
+  // Ouverture automatique différée, sous plafond global. `armed` est piloté par
+  // la surface : résultat d'outil affiché, grille tarifaire dépassée, article lu.
   useEffect(() => {
     if (typeof window === "undefined" || !armed) return;
-    try {
-      if (localStorage.getItem(LS_BOOKED) === "1") return;
-      if (sessionStorage.getItem(SS_DISMISSED) === "1") return;
-    } catch {
-      /* stockage indisponible → on tente quand même l'ouverture */
-    }
+    if (!autoOpenAllowed()) return;
     const t = window.setTimeout(() => {
+      if (!autoOpenAllowed()) return;
+      try {
+        sessionStorage.setItem(SS_AUTO_SHOWN, "1");
+      } catch {
+        /* noop */
+      }
       setOpen(true);
       track("conseil_modal_shown", { source, trigger: "auto" });
     }, OPEN_DELAY_MS);
@@ -106,7 +131,12 @@ export default function ConseilModal({
   const close = useCallback((persist: "dismiss" | "none") => {
     if (persist === "dismiss") {
       try {
-        sessionStorage.setItem(SS_DISMISSED, "1");
+        const n = Number(localStorage.getItem(LS_DISMISS_COUNT) ?? "0");
+        localStorage.setItem(
+          LS_DISMISS_COUNT,
+          String((Number.isFinite(n) ? n : 0) + 1),
+        );
+        sessionStorage.setItem(SS_AUTO_SHOWN, "1");
       } catch {
         /* noop */
       }
@@ -188,7 +218,7 @@ export default function ConseilModal({
         kicker: `Advisory call · ${price}`,
         title: "Still unsure about the tech? Settle it in 30 minutes.",
         subtitle:
-          "You have just used a tool. To go all the way, book the Web tech choice with AI: a clear recommendation for your project, plus the watch points on maintenance, cost and lock-in.",
+          "Before committing a budget, book the Web tech choice with AI: a clear recommendation for your project, plus the watch points on maintenance, cost and lock-in.",
         cta: `Book — ${price}`,
         fineprint: `${duration} video call · 100% credited to a project signed within 30 days`,
         secondary: "See the advisory offers",
@@ -198,7 +228,7 @@ export default function ConseilModal({
         kicker: `Visio conseil · ${price}`,
         title: "Un doute sur la techno ? Tranchez en 30 minutes.",
         subtitle:
-          "Vous venez d'utiliser un outil. Pour aller au bout, réservez le Choix de techno web avec l'IA : une recommandation claire pour votre projet, et les points de vigilance sur la maintenance, le coût et la dépendance.",
+          "Avant d'engager un budget, réservez le Choix de techno web avec l'IA : une recommandation claire pour votre projet, et les points de vigilance sur la maintenance, le coût et la dépendance.",
         cta: `Réserver — ${price}`,
         fineprint: `${duration} en visio · 100 % crédité sur un projet signé sous 30 jours`,
         secondary: "Voir les offres de conseil",

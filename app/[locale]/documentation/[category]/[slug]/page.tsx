@@ -26,6 +26,7 @@ import { ArticleTocInline } from "@/components/documentation/article-toc-inline"
 import { ArticleKeyFigures } from "@/components/documentation/article-key-figures";
 import { ArticleAuthorCard } from "@/components/documentation/article-author-card";
 import { ArticleCta } from "@/components/documentation/article-cta";
+import { ConseilModalOnRead } from "@/components/documentation/conseil-modal-on-read";
 import { getRubrique, rubriqueHref, rx } from "@/lib/documentation-rubriques";
 import { generateTableOfContents } from "@/lib/toc";
 
@@ -314,6 +315,13 @@ export default async function ArticlePage(props: ArticlePageProps) {
 
                 {/* Un seul CTA de sortie, contextuel à la rubrique */}
                 {rubrique && <ArticleCta rubrique={rubrique.slug} locale={params.locale} />}
+
+                {/* Contenus de décision uniquement : le lecteur arrivé ici a
+                    investi du temps sur une question de choix de techno —
+                    c'est exactement ce que tranche la visio à 150 €. */}
+                {params.category === "choisir" && (
+                  <ConseilModalOnRead source={`documentation/${params.category}/${params.slug}`} />
+                )}
 
                 {/* Next in journey (profile-aware) */}
                 <ArticleNavigation category={params.category} slug={params.slug} />
