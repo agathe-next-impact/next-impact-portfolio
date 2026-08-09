@@ -640,7 +640,7 @@ const META: CaseStudyMeta[] = [
     // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
     galleryUrl: "/img/logo-hermitage.webp",
     date: { month: null, year: null },
-    technologies: ["[À COMPLÉTER — stack réelle : agent + envoi mail]"],
+    technologies: ["[À COMPLÉTER — stack réelle : agents de recherche, vérification registre, format de livraison]"],
   },
   {
     id: "26",
@@ -660,7 +660,7 @@ const META: CaseStudyMeta[] = [
     // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
     galleryUrl: "/logo-carre-bleu.png",
     date: { month: null, year: null },
-    technologies: ["[À COMPLÉTER — stack réelle : agent + envoi mail]"],
+    technologies: ["[À COMPLÉTER — stack réelle : agents de recherche, vérification registre, format de livraison]"],
   },
 ];
 
@@ -1255,76 +1255,99 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
   // ─── Gabarits automatisation (chantier D2) — brouillons, rien d'inventé :
   // tout ce qui n'est pas fourni par la cliente reste [À COMPLÉTER].
   "hermitage-veille": {
-    title: "[À COMPLÉTER — L'Hermitage : lettre de veille par agent IA]",
+    title: "L'Hermitage — Veille sectorielle et concurrentielle sur le séjour d'entreprise",
     description:
-      "Une info triée qui arrive, pas une info à aller chercher : [À COMPLÉTER — périmètre de la veille en une phrase].",
-    detailedDescription: `[À COMPLÉTER — Contexte : qui est la structure, pourquoi la veille compte pour elle.]\n\n[À COMPLÉTER — Avant : temps perdu à chercher l'information ou info ratée, conséquences concrètes.]`,
+      "Une veille sur le secteur des tiers-lieux doublée d'une cartographie de cinquante concurrents du séjour sur mesure en lieu patrimonial, classés par type d'offre, avec identification des niches selon le marché et la concurrence.",
+    detailedDescription: `L'Hermitage est un tiers-lieu rural de 30 hectares à Autrêches, dans l'Oise, porté par une coopérative et retenu parmi les quinze Démonstrateurs européens du réseau ECOLISE. Une part de son équilibre économique repose sur l'accueil de groupes : séminaires d'entreprise, séjours d'équipe, résidences. Or ce revenu dépend de deux marchés qui bougent vite et dans des directions différentes — celui des tiers-lieux, avec ses financements publics et ses modèles économiques fragiles, et celui du séminaire d'entreprise, avec ses budgets sous contrainte et ses exigences RSE croissantes.\n\nAvant, l'information arrivait par bribes : une conversation, un article partagé, un appel d'offres découvert trop tard. Personne dans l'équipe n'avait le temps de tenir une veille structurée, et surtout personne ne savait répondre précisément à la question qui compte quand on perd un dossier : contre qui étions-nous mis en concurrence, et sur quel critère avons-nous perdu ?\n\nJ'ai mis en place un dispositif d'agents IA à deux étages. Le premier assure une veille sectorielle continue sur les tiers-lieux — financements, dispositifs publics, modèles économiques, signaux de fragilité et de fermeture. Le second a produit une cartographie concurrentielle approfondie du séjour d'entreprise en lieu patrimonial : cinquante acteurs identifiés et classés par type d'offre, depuis l'opérateur intégré qui industrialise le séminaire résidentiel jusqu'au monument privatisable sans prestation, en passant par les éco-lieux qui racontent la même histoire d'impact que L'Hermitage.\n\nLa règle de travail était la même que sur toutes mes missions de veille : chaque lieu est vérifié à sa source, chaque capacité et chaque tarif sont relevés là où ils sont publiés, et ce qui relève de la déduction est signalé comme tel. Les acteurs invérifiables sont écartés plutôt que gonflés au comptage, et les zones d'ombre sont listées comme telles en fin de document.`,
     objectives: [
-      "[À COMPLÉTER — Le besoin : une info triée qui arrive, pas une info à aller chercher]",
-      "[À COMPLÉTER — besoin secondaire]",
+      "Savoir contre qui L'Hermitage est réellement mis en concurrence quand une entreprise cherche un lieu de séminaire",
+      "Classer ces concurrents par type d'offre plutôt que par simple proximité géographique",
+      "Identifier les niches défendables en croisant l'état du marché et la densité concurrentielle",
+      "Suivre en continu un secteur des tiers-lieux dont les financements et les modèles évoluent vite",
+      "Remplacer une information reçue par hasard par une information triée qui arrive",
     ],
     results: [
-      "[À COMPLÉTER — nombre de sources couvertes]",
-      "[À COMPLÉTER — fréquence d'envoi de la lettre]",
-      "[À COMPLÉTER — délai de mise en place]",
-      "[À COMPLÉTER — temps hebdomadaire économisé (estimation honnête)]",
-      "[À COMPLÉTER — taux de lecture, si disponible]",
+      "50 concurrents identifiés et classés par type d'offre, de l'opérateur intégré au lieu patrimonial nu",
+      "Niches identifiées par croisement du niveau de maturité du marché et de la densité concurrentielle",
+      "Veille sectorielle continue sur les tiers-lieux : financements publics, modèles économiques, signaux de fragilité",
+      "Écart de lisibilité mis en évidence : la quasi-totalité des concurrents publient capacité et tarifs, L'Hermitage ne publie ni l'un ni l'autre",
+      "Prix d'ancrage du segment documenté à partir des grilles publiques des concurrents de la zone",
+      "Positionnement RSE objectivé : les concurrents ont soit le récit, soit la certification opposable au service achats, rarement les deux",
+      "Concurrent n°1 identifié hors du panel des lieux : les entreprises elles-mêmes, qui tenaient 80 % de leurs événements dans leurs propres locaux en 2025 contre 57 % un an plus tôt",
+      "Tendance de fond confirmée en faveur du positionnement : les châteaux et demeures de caractère sont passés d'environ 20 % à 58 % des lieux retenus en dix ans",
+      "Signal sectoriel capté à temps : le retrait de l'État du financement des tiers-lieux en 2026, alors que ce secteur tire en moyenne 43 % de son chiffre d'affaires de subventions publiques",
     ],
     arbitrage: {
       consideredOptions: [
-        "Agent IA sur mesure",
-        "Outil de veille SaaS",
-        "Veille manuelle",
-        "Newsletters existantes",
+        "Agent IA de veille sur mesure",
+        "Agence de conseil en tourisme d'affaires",
+        "Abonnement à une revue sectorielle",
+        "Veille manuelle par l'équipe",
       ],
-      decision: "[À COMPLÉTER — pourquoi l'agent IA sur mesure]",
-      rationale: "[À COMPLÉTER — démonstration « IA utile, pas gadget »]",
+      decision:
+        "Un dispositif d'agents IA associant une veille sectorielle récurrente sur les tiers-lieux et une cartographie concurrentielle approfondie du séjour d'entreprise en lieu patrimonial.",
+      rationale:
+        "Une revue sectorielle informe sur un secteur mais ne dit jamais contre qui on perd un dossier. Une agence livre une étude datée du jour de sa remise, pour un budget sans rapport avec celui d'un tiers-lieu associatif. Et la veille manuelle suppose du temps que l'équipe n'a pas. L'agent produit la cartographie en quelques heures, cite chacune de ses sources, et se relance quand le marché bouge : la valeur n'est pas le rapport, c'est la capacité à le refaire.",
     },
     solution:
-      "[À COMPLÉTER — La solution : sources surveillées, tri et synthèse par l'agent, lettre de veille envoyée par mail à la fréquence choisie.]",
+      "Des agents de recherche spécialisés, lancés en parallèle sur chaque famille de concurrents — opérateurs intégrés du séminaire résidentiel, monuments et domaines patrimoniaux privatisables, éco-lieux et lieux à impact, hôtellerie de château, plateformes d'intermédiation — puis un agent dédié au contexte sectoriel des tiers-lieux et du tourisme d'affaires. Chaque lieu retenu est vérifié sur ses propres pages : capacité en couchages et en salles, prestations intégrées, tarifs publiés, exploitant, et revendication environnementale ou sociale. Les résultats sont consolidés en un document unique : la carte des concurrents par type d'offre, la lecture des niches, et la liste explicite de ce qui n'a pas pu être vérifié.",
     testimonial: {
       content: "[À COMPLÉTER — citation client]",
       author: "[À COMPLÉTER]",
       position: "[À COMPLÉTER]",
     },
-    galleryAlt: "[À COMPLÉTER — extrait visuel de la lettre de veille reçue par mail]",
-    tags: ["IA", "Automatisation", "Veille"],
+    galleryAlt:
+      "Extrait de la veille concurrentielle L'Hermitage : les concurrents du séjour d'entreprise classés par type d'offre",
+    tags: ["IA", "Automatisation", "Veille", "Tiers-lieu"],
+    cardTitle: "L'Hermitage — Veille concurrentielle par agents IA",
+    cardDescription:
+      "Veille sectorielle sur les tiers-lieux et cartographie de 50 concurrents du séjour d'entreprise en lieu patrimonial, par type d'offre.",
   },
   "urban-pousses-veille": {
-    title: "[À COMPLÉTER — Urban Pousses : lettre de veille par agent IA]",
+    title: "Urban Pousses — Veille concurrentielle et arbitrage de niches par agents IA",
     description:
-      "Une info triée qui arrive, pas une info à aller chercher : [À COMPLÉTER — périmètre de la veille en une phrase].",
-    detailedDescription: `[À COMPLÉTER — Contexte : qui est la structure, pourquoi la veille compte pour elle.]\n\n[À COMPLÉTER — Avant : temps perdu à chercher l'information ou info ratée, conséquences concrètes.]`,
+      "Trente concurrents cartographiés en cinq types d'offres, huit niches comparées sur quatre critères et une recommandation stratégique, pour un producteur de micro-pousses de l'Oise — chaque acteur vérifié au registre des entreprises.",
+    detailedDescription: `Urban Pousses cultive des micro-pousses en intérieur dans l'Oise et les vend à des chefs, des collectivités et des distributeurs régionaux. C'est un métier de niche, et cette niche a une particularité gênante : elle n'existe dans aucune statistique publique. Ni Agreste, ni FranceAgriMer, ni les notes de conjoncture ne recensent la micro-pousse. Les seuls chiffres de marché disponibles proviennent de cabinets d'études privés qui se recopient entre eux et affichent le même taux de croissance d'une édition à l'autre sur des bases différentes.\n\nRésultat : un producteur avance sans savoir qui produit quoi, à quelle distance, à quel prix, et surtout sans savoir lesquelles de ses idées de développement sont réalistes. Faut-il vendre des graines ? Former d'autres producteurs ? Vendre des containers clés en main ? Viser les cantines ? Chacune de ces questions vaut un investissement, et aucune n'avait de réponse documentée.\n\nJ'ai monté un dispositif de cinq agents de recherche lancés en parallèle, chacun sur un segment du marché : les producteurs de micro-pousses en circuit régional, les acteurs de l'agriculture indoor à l'échelle industrielle, les fournisseurs d'équipements et de savoir-faire, le grand public et la distribution, et enfin le contexte de marché et les tendances. Chaque entreprise citée est vérifiée à l'annuaire des entreprises — forme juridique, date de création, effectif, état d'activité — et chaque affirmation est marquée comme lue à la source ou déduite.\n\nCe protocole a produit deux découvertes que personne n'aurait trouvées en surveillant des mots-clés. D'abord, le marché n'est pas concurrentiel mais constitué de quasi-monopoles régionaux, parce que le produit ne voyage pas : presque tous les producteurs vérifiés livrent uniquement leur bassin. Ensuite, l'Oise, la Somme et l'Aisne sont un trou blanc — aucun producteur de micro-pousses actif n'y a été identifié, contrôle croisé fait sur l'annuaire des maraîchers du département. La question stratégique n'était donc pas « comment se différencier », mais « comment occuper un territoire déjà vide avant qu'il ne se referme ».`,
     objectives: [
-      "[À COMPLÉTER — Le besoin : une info triée qui arrive, pas une info à aller chercher]",
-      "[À COMPLÉTER — besoin secondaire]",
+      "Savoir qui sont les concurrents réels, à quelle distance et sur quel positionnement",
+      "Distinguer la menace immédiate de la menace structurelle, et le concurrent du canal de vente",
+      "Évaluer honnêtement quelles pistes de diversification sont accessibles et lesquelles sont des pièges",
+      "Disposer d'une recommandation d'offre, de positionnement et de conquête commerciale, pas d'un rapport de veille",
+      "Remplacer une information cherchée au coup par coup par une information triée qui arrive",
     ],
     results: [
-      "[À COMPLÉTER — nombre de sources couvertes]",
-      "[À COMPLÉTER — fréquence d'envoi de la lettre]",
-      "[À COMPLÉTER — délai de mise en place]",
-      "[À COMPLÉTER — temps hebdomadaire économisé (estimation honnête)]",
-      "[À COMPLÉTER — taux de lecture, si disponible]",
+      "30 concurrents cartographiés en 5 types d'offres, chacun situé par sa proximité concurrentielle réelle et non par sa seule distance",
+      "8 niches comparées sur 4 critères : maturité, accessibilité pour l'entreprise, tendance à trois ans et concurrents en place",
+      "Une recommandation en 3 volets : stratégie d'offre, stratégie concurrentielle et séquence commerciale",
+      "Constat structurant : aucun producteur de micro-pousses actif identifié dans l'Oise, la Somme et l'Aisne",
+      "Six liquidations vérifiées au registre en quatre ans sur ce marché, dont deux à moins de 100 km du site de production",
+      "Une piste de diversification écartée sur pièces : cinq acteurs de l'équipement clé en main ont disparu entre 2022 et 2026",
     ],
     arbitrage: {
       consideredOptions: [
-        "Agent IA sur mesure",
-        "Outil de veille SaaS",
-        "Veille manuelle",
-        "Newsletters existantes",
+        "Agent IA de veille et d'analyse sur mesure",
+        "Cabinet d'études ou mission d'école de commerce",
+        "Outil de veille SaaS par mots-clés",
+        "Veille manuelle par le dirigeant",
       ],
-      decision: "[À COMPLÉTER — pourquoi l'agent IA sur mesure]",
-      rationale: "[À COMPLÉTER — démonstration « IA utile, pas gadget »]",
+      decision:
+        "Un dispositif d'agents IA spécialisés par segment de marché, lancés en parallèle, avec vérification systématique de chaque acteur au registre des entreprises.",
+      rationale:
+        "Un outil SaaS surveille des mots-clés : il aurait remonté des articles, pas une carte de marché, et n'aurait jamais vu que trois départements sont vides — une absence ne déclenche aucune alerte. Un cabinet facture plusieurs milliers d'euros une étude figée le jour de sa remise. La veille manuelle coûte au dirigeant le temps qu'il passe déjà en production. L'agent construit la carte en quelques heures, cite chacune de ses sources, écarte ce qu'il ne peut pas vérifier, et se relance quand le marché bouge. La valeur n'est pas le document, c'est la capacité à le refaire.",
     },
     solution:
-      "[À COMPLÉTER — La solution : sources surveillées, tri et synthèse par l'agent, lettre de veille envoyée par mail à la fréquence choisie.]",
+      "Cinq agents de recherche lancés en parallèle, un par segment de marché, avec une consigne commune et non négociable : ne citer que des entreprises réelles et vérifiables, distinguer systématiquement le fait lu à la source de la déduction, et signaler les données manquantes comme manquantes plutôt que les combler par des estimations. Chaque acteur est recoupé avec l'annuaire des entreprises pour confirmer son existence et son état d'activité — ce qui a permis d'écarter plusieurs concurrents apparents dont l'activité avait cessé, et d'en requalifier d'autres qui ne produisaient pas ce qu'ils semblaient produire. Le livrable consolide la cartographie par type d'offre, le tableau comparatif des niches, la recommandation, et la liste explicite des points restés invérifiés.",
     testimonial: {
       content: "[À COMPLÉTER — citation client]",
       author: "[À COMPLÉTER]",
       position: "[À COMPLÉTER]",
     },
-    galleryAlt: "[À COMPLÉTER — extrait visuel de la lettre de veille reçue par mail]",
-    tags: ["IA", "Automatisation", "Veille"],
+    galleryAlt:
+      "Extrait de l'étude Urban Pousses : cartographie des concurrents par type d'offre et comparatif des niches",
+    tags: ["IA", "Automatisation", "Veille", "Étude de marché"],
+    cardTitle: "Urban Pousses — Veille concurrentielle par agents IA",
+    cardDescription:
+      "30 concurrents cartographiés en 5 types d'offres, 8 niches comparées et une recommandation stratégique pour un producteur de micro-pousses.",
   },
 };
 
@@ -1917,76 +1940,99 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
   // ─── Automation drafts (chantier D2) — nothing invented: everything not
   // provided by the client stays [TO COMPLETE].
   "hermitage-veille": {
-    title: "[TO COMPLETE — L'Hermitage: AI-agent monitoring newsletter]",
+    title: "L'Hermitage — Sector and competitive intelligence on corporate stays",
     description:
-      "Curated information that arrives, instead of information you have to chase: [TO COMPLETE — scope of the monitoring in one sentence].",
-    detailedDescription: `[TO COMPLETE — Context: who the organisation is, why monitoring matters to them.]\n\n[TO COMPLETE — Before: time lost chasing information or missed news, concrete consequences.]`,
+      "Ongoing intelligence on the third-places sector, paired with a map of fifty competitors in the bespoke corporate stay market in heritage venues, sorted by offer type, with niches identified against market and competition.",
+    detailedDescription: `L'Hermitage is a 30-hectare rural third place in Autrêches, in the Oise, run as a cooperative and selected as one of the fifteen European Demonstrators of the ECOLISE network. Part of its economic balance rests on hosting groups: corporate offsites, team stays, residencies. That revenue depends on two markets moving fast and in different directions — the third-places sector, with its public funding and fragile business models, and the corporate events market, with its squeezed budgets and rising sustainability requirements.\n\nBefore, information arrived in fragments: a conversation, a shared article, a call for tenders discovered too late. Nobody on the team had time to run structured intelligence, and more importantly nobody could precisely answer the question that matters when you lose a deal: who were we actually competing against, and on which criterion did we lose?\n\nI set up a two-tier AI-agent system. The first runs continuous sector intelligence on third places — funding, public schemes, business models, signs of fragility and closure. The second produced a deep competitive map of the corporate stay market in heritage venues: fifty players identified and sorted by offer type, from the integrated operator that has industrialised the residential offsite to the bare heritage monument rented without services, by way of the eco-venues telling the same impact story as L'Hermitage.\n\nThe working rule was the same as on all my intelligence assignments: every venue is verified at source, every capacity and every rate is recorded where it is published, and anything inferred is flagged as such. Unverifiable players are dropped rather than padding the count, and grey areas are listed as such at the end of the document.`,
     objectives: [
-      "[TO COMPLETE — The need: curated information that arrives, not information to chase]",
-      "[TO COMPLETE — secondary need]",
+      "Establish who L'Hermitage is genuinely benchmarked against when a company looks for an offsite venue",
+      "Sort those competitors by offer type rather than by geographic proximity alone",
+      "Identify defensible niches by crossing market maturity with competitive density",
+      "Keep track of a third-places sector whose funding and business models are shifting fast",
+      "Replace information received by chance with curated information that arrives",
     ],
     results: [
-      "[TO COMPLETE — number of sources covered]",
-      "[TO COMPLETE — newsletter frequency]",
-      "[TO COMPLETE — setup time]",
-      "[TO COMPLETE — estimated weekly time saved (honest estimate)]",
-      "[TO COMPLETE — read rate, if available]",
+      "50 competitors identified and sorted by offer type, from integrated operators to bare heritage venues",
+      "Niches identified by crossing market maturity with competitive density",
+      "Continuous sector intelligence on third places: public funding, business models, signs of fragility",
+      "Visibility gap surfaced: nearly all competitors publish capacity and rates, L'Hermitage publishes neither",
+      "Segment anchor price documented from competitors' own published rate cards",
+      "Sustainability positioning made concrete: competitors have either the story or the certification procurement can act on, rarely both",
+      "Number-one competitor identified outside the venue panel: companies themselves, which held 80 % of their events on their own premises in 2025, against 57 % a year earlier",
+      "Underlying trend confirmed in favour of the positioning: châteaux and character properties went from roughly 20 % to 58 % of venues chosen over ten years",
+      "Sector signal caught in time: the French state withdrawing from third-place funding in 2026, in a sector that draws on average 43 % of its revenue from public subsidies",
     ],
     arbitrage: {
       consideredOptions: [
-        "Custom AI agent",
-        "SaaS monitoring tool",
-        "Manual monitoring",
-        "Existing newsletters",
+        "Custom AI intelligence agent",
+        "Business-tourism consultancy",
+        "Trade-press subscription",
+        "Manual monitoring by the team",
       ],
-      decision: "[TO COMPLETE — why the custom AI agent]",
-      rationale: "[TO COMPLETE — proof of “useful AI, not a gimmick”]",
+      decision:
+        "An AI-agent system combining recurring sector intelligence on third places with a deep competitive map of the corporate stay market in heritage venues.",
+      rationale:
+        "Trade press informs you about a sector but never tells you who you lost a deal to. A consultancy delivers a study dated the day it is handed over, for a budget unrelated to that of a non-profit third place. And manual monitoring assumes time the team does not have. The agent produces the map in a few hours, cites every source, and can be re-run when the market moves: the value is not the report, it is the ability to redo it.",
     },
     solution:
-      "[TO COMPLETE — The solution: monitored sources, agent-driven curation and synthesis, monitoring newsletter sent by email at the chosen frequency.]",
+      "Specialised research agents launched in parallel on each competitor family — integrated residential-offsite operators, heritage monuments and estates available for private hire, eco-venues and impact-led places, château hotels, booking platforms — then a dedicated agent on the sector context of third places and business tourism. Every venue kept is verified on its own pages: bed and room capacity, bundled services, published rates, operator, and any environmental or social claim. Results are consolidated into a single document: the competitor map by offer type, the reading of the niches, and an explicit list of what could not be verified.",
     testimonial: {
       content: "[TO COMPLETE — client quote]",
       author: "[TO COMPLETE]",
       position: "[TO COMPLETE]",
     },
-    galleryAlt: "[TO COMPLETE — visual excerpt of the newsletter received by email]",
-    tags: ["AI", "Automation", "Monitoring"],
+    galleryAlt:
+      "Excerpt from L'Hermitage competitive intelligence: corporate stay competitors sorted by offer type",
+    tags: ["AI", "Automation", "Monitoring", "Third place"],
+    cardTitle: "L'Hermitage — Competitive intelligence by AI agents",
+    cardDescription:
+      "Sector intelligence on third places and a map of 50 competitors in the corporate stay market in heritage venues, by offer type.",
   },
   "urban-pousses-veille": {
-    title: "[TO COMPLETE — Urban Pousses: AI-agent monitoring newsletter]",
+    title: "Urban Pousses — Competitive intelligence and niche arbitration by AI agents",
     description:
-      "Curated information that arrives, instead of information you have to chase: [TO COMPLETE — scope of the monitoring in one sentence].",
-    detailedDescription: `[TO COMPLETE — Context: who the organisation is, why monitoring matters to them.]\n\n[TO COMPLETE — Before: time lost chasing information or missed news, concrete consequences.]`,
+      "Thirty competitors mapped across five offer types, eight niches compared on four criteria and a strategic recommendation, for a microgreens grower in the Oise — every player verified against the French company register.",
+    detailedDescription: `Urban Pousses grows microgreens indoors in the Oise and sells them to chefs, local authorities and regional distributors. It is a niche business, and that niche has an awkward feature: it exists in no public statistics. Neither Agreste, nor FranceAgriMer, nor the market bulletins track microgreens. The only market figures available come from private research firms that copy one another and publish the same growth rate from one edition to the next on different baselines.\n\nThe result is a grower operating blind — with no view of who produces what, how far away, at what price, and above all no way to tell which of their growth ideas are realistic. Should they sell seeds? Train other growers? Sell turnkey containers? Go after school canteens? Each of those questions represents an investment, and none of them had a documented answer.\n\nI built a system of five research agents launched in parallel, each on one market segment: regional microgreens growers, industrial-scale indoor farming players, equipment and know-how suppliers, consumer market and distribution, and finally market context and trends. Every company cited is verified against the public company register — legal form, incorporation date, headcount, trading status — and every statement is flagged as either read at source or inferred.\n\nThat protocol produced two findings no keyword monitor would ever have surfaced. First, the market is not competitive but made up of regional near-monopolies, because the product does not travel: almost every verified grower delivers to its own catchment area only. Second, the Oise, the Somme and the Aisne are a blank spot — no active microgreens grower was identified there, cross-checked against the county's own directory of market gardeners. The strategic question was therefore not "how do we differentiate" but "how do we occupy an already empty territory before it closes".`,
     objectives: [
-      "[TO COMPLETE — The need: curated information that arrives, not information to chase]",
-      "[TO COMPLETE — secondary need]",
+      "Establish who the real competitors are, how far away and on what positioning",
+      "Separate the immediate threat from the structural one, and the competitor from the sales channel",
+      "Assess honestly which diversification paths are accessible and which are traps",
+      "Produce a recommendation on offer, positioning and commercial sequence — not a monitoring report",
+      "Replace information hunted down case by case with curated information that arrives",
     ],
     results: [
-      "[TO COMPLETE — number of sources covered]",
-      "[TO COMPLETE — newsletter frequency]",
-      "[TO COMPLETE — setup time]",
-      "[TO COMPLETE — estimated weekly time saved (honest estimate)]",
-      "[TO COMPLETE — read rate, if available]",
+      "30 competitors mapped across 5 offer types, each placed by real competitive proximity rather than distance alone",
+      "8 niches compared on 4 criteria: maturity, accessibility for the business, three-year trend and incumbent competitors",
+      "A recommendation in 3 parts: offer strategy, competitive strategy and commercial sequence",
+      "Structural finding: no active microgreens grower identified across the Oise, the Somme and the Aisne",
+      "Six liquidations verified on the register in four years in this market, two of them within 100 km of the production site",
+      "One diversification path ruled out on evidence: five turnkey-equipment players disappeared between 2022 and 2026",
     ],
     arbitrage: {
       consideredOptions: [
-        "Custom AI agent",
-        "SaaS monitoring tool",
-        "Manual monitoring",
-        "Existing newsletters",
+        "Custom AI intelligence and analysis agent",
+        "Consultancy or business-school assignment",
+        "Keyword-based SaaS monitoring tool",
+        "Manual monitoring by the owner",
       ],
-      decision: "[TO COMPLETE — why the custom AI agent]",
-      rationale: "[TO COMPLETE — proof of “useful AI, not a gimmick”]",
+      decision:
+        "A system of AI agents specialised by market segment, launched in parallel, with systematic verification of every player against the public company register.",
+      rationale:
+        "A SaaS tool monitors keywords: it would have returned articles, not a market map, and it would never have spotted that three counties are empty — an absence triggers no alert. A consultancy charges several thousand euros for a study frozen on the day it is delivered. Manual monitoring costs the owner the time already spent in production. The agent builds the map in a few hours, cites every source, discards what it cannot verify, and can be re-run when the market moves. The value is not the document, it is the ability to redo it.",
     },
     solution:
-      "[TO COMPLETE — The solution: monitored sources, agent-driven curation and synthesis, monitoring newsletter sent by email at the chosen frequency.]",
+      "Five research agents launched in parallel, one per market segment, under a shared and non-negotiable brief: cite only real, verifiable companies, systematically separate what was read at source from what was inferred, and report missing data as missing rather than filling it with estimates. Every player is cross-checked against the public company register to confirm existence and trading status — which allowed several apparent competitors to be dropped because they had ceased trading, and others to be reclassified because they did not produce what they seemed to. The deliverable consolidates the map by offer type, the niche comparison table, the recommendation, and an explicit list of the points left unverified.",
     testimonial: {
       content: "[TO COMPLETE — client quote]",
       author: "[TO COMPLETE]",
       position: "[TO COMPLETE]",
     },
-    galleryAlt: "[TO COMPLETE — visual excerpt of the newsletter received by email]",
-    tags: ["AI", "Automation", "Monitoring"],
+    galleryAlt:
+      "Excerpt from the Urban Pousses study: competitor map by offer type and niche comparison",
+    tags: ["AI", "Automation", "Monitoring", "Market research"],
+    cardTitle: "Urban Pousses — Competitive intelligence by AI agents",
+    cardDescription:
+      "30 competitors mapped across 5 offer types, 8 niches compared and a strategic recommendation for a microgreens grower.",
   },
 };
 
