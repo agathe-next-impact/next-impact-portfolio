@@ -613,15 +613,14 @@ const META: CaseStudyMeta[] = [
     date: { month: 8, year: 2024 },
     technologies: ["WordPress", "PHP", "Plugin custom"],
   },
-  // ─── Brouillons « IA & automatisation » (chantier D — DIRECTIVES-ETUDES-DE-CAS) ──
-  // Tant que statut = "brouillon" : invisibles partout (liste, filtres, compteurs,
-  // sitemap, llms, HTML). Prévisualisables uniquement en dev sur /etudes-de-cas/[slug].
-  // À la publication : passer statut en "publie" et remplacer les [À COMPLÉTER].
+  // ─── Catégorie « Agents IA » (chantier D — DIRECTIVES-ETUDES-DE-CAS) ────────────
+  // Publiées : elles font apparaître l'onglet « Agents IA » dans la liste.
+  // Le mécanisme brouillon reste disponible (statut: "brouillon" + includeDrafts).
   {
     id: "25",
     slug: "hermitage-veille",
     famille: "agents-ia",
-    statut: "brouillon",
+    statut: "publie",
     featured: null,
     offreConstruction: null,
     offreConseil: "pack-ia",
@@ -632,26 +631,25 @@ const META: CaseStudyMeta[] = [
     clientName: "Tiers Lieu L'Hermitage",
     imageUrl: "/img/logo-hermitage.webp",
     galleryUrl: "/img/logo-hermitage.webp",
-    date: { month: null, year: null },
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de réalisation
     technologies: ["Claude Code", "Google Workspace"],
   },
   {
     id: "26",
     slug: "urban-pousses-veille",
     famille: "agents-ia",
-    statut: "brouillon",
+    statut: "publie",
     featured: null,
     offreConstruction: null,
     offreConseil: "pack-ia",
     budgetIndicatif: null,
     delai: null,
     clientId: "urban-pousses",
-    // [À COMPLÉTER] — type de structure à confirmer à la publication.
-    clientType: "ess",
+    clientType: "pme",
     clientName: "Urban Pousses",
     imageUrl: "/img/logo_urbanpousses.webp",
     galleryUrl: "/img/logo_urbanpousses.webp",
-    date: { month: null, year: null },
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de réalisation
     technologies: ["Claude Cowork", "Notion"],
   },
 ];
