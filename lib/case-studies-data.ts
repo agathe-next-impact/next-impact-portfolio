@@ -230,7 +230,7 @@ const META: CaseStudyMeta[] = [
     slug: "panorama-pub",
     famille: "plateforme",
     statut: "publie",
-    featured: null,
+    featured: 6,
     offreConstruction: "plateforme",
     offreConseil: null,
     budgetIndicatif: null,
