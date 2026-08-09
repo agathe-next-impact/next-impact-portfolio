@@ -33,12 +33,35 @@ import { OFFERS } from "@/lib/visio-conseil";
 const LS_BOOKED = "ni:conseil:booked";
 const SS_DISMISSED = "ni:conseil:dismissed";
 const OPEN_DELAY_MS = 1400;
+const OPEN_EVENT = "ni:conseil:open";
 
 /** Offre d'entrée de la gamme conseil — le seul palier crédité. */
 const OFFER = OFFERS.find((o) => o.id === "choix-techno-ia");
 const TIER = OFFER?.tiers[0];
 
-export default function ConseilModal({ source }: { source: string }) {
+/**
+ * Ouverture impérative, depuis n'importe où (ex. bouton « Refaire » d'un outil).
+ * Contrairement à l'ouverture automatique, elle ignore la dédup : un clic
+ * explicite doit toujours produire un effet visible.
+ */
+export function openConseilModal() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(OPEN_EVENT));
+}
+
+export default function ConseilModal({
+  source,
+  /**
+   * Arme l'ouverture automatique différée. Passer l'état « un résultat existe »
+   * de l'outil : la popup peut ainsi être montée en permanence (pour survivre au
+   * reset du bouton « Refaire ») sans s'ouvrir avant qu'il y ait quelque chose à
+   * montrer.
+   */
+  armed = true,
+}: {
+  source: string;
+  armed?: boolean;
+}) {
   const locale = useLocale();
   const isEn = locale === "en";
   const reduce = useReducedMotion();
@@ -53,9 +76,20 @@ export default function ConseilModal({ source }: { source: string }) {
   // Portail dispo côté client uniquement.
   useEffect(() => setMounted(true), []);
 
-  // Ouverture différée, une seule fois, sauf si déjà réservé / fermé cette session.
+  // Ouverture impérative : toujours honorée, dédup ignorée.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const onOpen = () => {
+      setOpen(true);
+      track("conseil_modal_shown", { source, trigger: "manual" });
+    };
+    window.addEventListener(OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_EVENT, onOpen);
+  }, [source]);
+
+  // Ouverture différée, une seule fois, sauf si déjà réservé / fermé cette session.
+  useEffect(() => {
+    if (typeof window === "undefined" || !armed) return;
     try {
       if (localStorage.getItem(LS_BOOKED) === "1") return;
       if (sessionStorage.getItem(SS_DISMISSED) === "1") return;
@@ -64,10 +98,10 @@ export default function ConseilModal({ source }: { source: string }) {
     }
     const t = window.setTimeout(() => {
       setOpen(true);
-      track("conseil_modal_shown", { source });
+      track("conseil_modal_shown", { source, trigger: "auto" });
     }, OPEN_DELAY_MS);
     return () => window.clearTimeout(t);
-  }, [source]);
+  }, [source, armed]);
 
   const close = useCallback((persist: "dismiss" | "none") => {
     if (persist === "dismiss") {

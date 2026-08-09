@@ -12,7 +12,7 @@ import { ArrowRight, Blocks, Info, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import ConseilModal from "@/components/ui/conseil-modal";
+import ConseilModal, { openConseilModal } from "@/components/ui/conseil-modal";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 
@@ -370,12 +370,18 @@ export default function NocodeSaasSurmesure() {
               {isEn ? "Broader question? The tech selector" : "Question plus large ? Le Sélecteur techno"}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <button type="button" onClick={reset} className={BTN_GHOST}>
+            <button
+              type="button"
+              onClick={() => {
+                reset();
+                openConseilModal();
+              }}
+              className={BTN_GHOST}
+            >
               <RotateCcw size={13} />
               {isEn ? "Restart" : "Refaire"}
             </button>
           </StaggerItem>
-          <ConseilModal source="nocode-saas-surmesure" />
         </Stagger>
         </div>
       )}
@@ -421,6 +427,8 @@ export default function NocodeSaasSurmesure() {
           <ArrowRight size={14} />
         </button>
       </form>
+      {/* Montee a la racine : elle doit survivre au reset du bouton « Refaire ». */}
+      <ConseilModal source="nocode-saas-surmesure" armed={submitted} />
     </Reveal>
   );
 }
