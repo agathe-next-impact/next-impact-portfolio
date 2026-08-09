@@ -2111,6 +2111,8 @@ export function formatDelai(delai: Delai, locale: Locale): string {
 export interface CaseStudyCard {
   slug: string;
   famille: FamilleKey;
+  /** Rang dans la vue par défaut « Sélection » de la liste ; null = absent. */
+  featured: number | null;
   link: string;
   image: string;
   alt: string;
@@ -2127,6 +2129,7 @@ export function getCaseStudyCards(locale: Locale): CaseStudyCard[] {
     return {
       slug: meta.slug,
       famille: meta.famille,
+      featured: meta.featured,
       link: `/etudes-de-cas/${meta.slug}`,
       image: meta.cardImageUrl ?? meta.galleryUrl,
       alt: c.cardAlt ?? c.galleryAlt,

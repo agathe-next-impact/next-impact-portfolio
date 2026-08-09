@@ -10,19 +10,36 @@ import { FAMILLE_ORDER } from "@/lib/case-studies-data";
 import type { CaseStudyCard, FamilleKey } from "@/lib/case-studies-data";
 import { cn } from "@/lib/utils";
 
+/** « selection » = vue par défaut : les cas `featured`, toutes familles confondues. */
+export type RealisationsTab = FamilleKey | "selection";
+
 interface RealisationsProps {
   /** Cartes calculées côté serveur (getCaseStudyCards) — cas publiés uniquement. */
   cards: CaseStudyCard[];
-  defaultTab?: FamilleKey;
+  defaultTab?: RealisationsTab;
 }
 
-export default function Realisations({ cards, defaultTab = "site-headless" }: RealisationsProps) {
-  const [activeTab, setActiveTab] = useState<FamilleKey>(defaultTab);
+export default function Realisations({ cards, defaultTab = "selection" }: RealisationsProps) {
   const t = useTranslations("realisations");
   const locale = useLocale();
 
-  // Onglets et compteurs dérivés des données : une famille sans cas publié est masquée.
-  const tabs = FAMILLE_ORDER.filter((famille) => cards.some((c) => c.famille === famille));
+  // Vue par défaut « Sélection » : cas featured triés par rang croissant.
+  const featuredCards = cards
+    .filter((c) => c.featured !== null)
+    .sort((a, b) => (a.featured as number) - (b.featured as number));
+
+  // Onglets et compteurs dérivés des données : une famille sans cas publié est
+  // masquée, la sélection n'apparaît que si des cas featured existent.
+  const tabs: RealisationsTab[] = [
+    ...(featuredCards.length > 0 ? (["selection"] as const) : []),
+    ...FAMILLE_ORDER.filter((famille) => cards.some((c) => c.famille === famille)),
+  ];
+  const [activeTab, setActiveTab] = useState<RealisationsTab>(
+    tabs.includes(defaultTab) ? defaultTab : tabs[0],
+  );
+
+  const cardsFor = (tab: RealisationsTab): CaseStudyCard[] =>
+    tab === "selection" ? featuredCards : cards.filter((c) => c.famille === tab);
 
   return (
     <section id="realisations">
@@ -30,7 +47,7 @@ export default function Realisations({ cards, defaultTab = "site-headless" }: Re
       <div className="mb-12 flex border border-dark-gray">
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
-          const projectCount = cards.filter((c) => c.famille === tab).length;
+          const projectCount = cardsFor(tab).length;
           return (
             <button
               key={tab}
@@ -66,8 +83,7 @@ export default function Realisations({ cards, defaultTab = "site-headless" }: Re
               activeTab !== tab && "hidden",
             )}
           >
-            {cards
-              .filter((card) => card.famille === tab)
+            {cardsFor(tab)
               .map((card) => (
                 <StaggerItem
                   key={card.slug}

@@ -142,6 +142,30 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
                   </Link>
                 )}
               </div>
+              {/* Sortie latérale pour l'indécis techno : la visio Sélecteur (/conseil). */}
+              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                {isEn ? (
+                  <>
+                    Still unsure about the tech?{" "}
+                    <Link
+                      href="/conseil"
+                      className="text-accent-secondary underline underline-offset-4 transition-colors hover:text-foreground"
+                    >
+                      That&apos;s exactly what the Selector call is for.
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    Vous hésitez encore sur la techno ?{" "}
+                    <Link
+                      href="/conseil"
+                      className="text-accent-secondary underline underline-offset-4 transition-colors hover:text-foreground"
+                    >
+                      C&apos;est exactement l&apos;objet de la visio Sélecteur.
+                    </Link>
+                  </>
+                )}
+              </p>
             </Reveal>
           </BlueprintSection>
         </motion.div>

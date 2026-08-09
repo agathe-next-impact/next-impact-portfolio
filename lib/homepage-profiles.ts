@@ -317,7 +317,8 @@ export const SERVICES_PAGE_VARIANTS: Record<
 export interface CaseStudiesPageVariant {
   titre: string;
   sousTitre: string;
-  defaultTab: FamilleKey;
+  /** « selection » = vue par défaut featured (voir Realisations). */
+  defaultTab: FamilleKey | "selection";
   tabsLabel: string;
   ctaLabel: string;
   ctaHref: string;
@@ -330,10 +331,10 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
   CaseStudiesPageVariant
 > = {
   default: {
-    titre: "Études de cas",
+    titre: "Des projets livrés, des choix expliqués",
     sousTitre:
-      "Découvrez les réalisations Next Impact : sites WordPress, sites Headless WordPress + Next.js, web apps sur-mesure et applications mobiles PWA — pour divers secteurs d'activité.",
-    defaultTab: "plateforme",
+      "Chaque projet raconte une décision : pourquoi cette techno, ce budget, ce délai — et ce que ça a donné.",
+    defaultTab: "selection",
     tabsLabel: "Filtrer par famille",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",

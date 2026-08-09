@@ -256,6 +256,7 @@
   },
   "realisations": {
     "tabs": {
+      "selection": "Selected work",
       "site-wordpress": "WordPress sites & redesigns",
       "site-headless": "Headless site (WordPress + Next.js)",
       "plateforme": "Platforms, directories & business tools",

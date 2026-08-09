@@ -273,10 +273,10 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
 
 export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseStudiesPageVariant> = {
   default: {
-    titre: "Case studies",
+    titre: "Projects delivered, choices explained",
     sousTitre:
-      "Discover the Next Impact projects: WordPress sites, Headless WordPress + Next.js sites, custom web apps and mobile PWAs — across various industries.",
-    defaultTab: "site-headless",
+      "Each project tells a decision: why this tech, this budget, this timeline — and what it delivered.",
+    defaultTab: "selection",
     tabsLabel: "Filter by family",
     ctaLabel: "Discuss your project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",

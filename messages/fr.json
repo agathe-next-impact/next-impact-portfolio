@@ -256,6 +256,7 @@
   },
   "realisations": {
     "tabs": {
+      "selection": "Sélection",
       "site-wordpress": "Refonte & site WordPress",
       "site-headless": "Site Headless (WordPress + Next.js)",
       "plateforme": "Plateforme, annuaire & outil métier",

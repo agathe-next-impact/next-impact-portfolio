@@ -323,29 +323,27 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Études de cas — Sites web, web apps et applications mobiles",
+    title: "Études de cas — Des projets livrés, des choix expliqués",
     description:
-      "Découvrez les projets réalisés : sites WordPress, sites Headless, web apps sur-mesure (marketplace, plateforme métier) et applications mobiles (PWA). " +
-      "Résultats concrets en performance, design et conversion.",
+      "Sites WordPress, sites Headless, plateformes métier et outils terrain : chaque étude de cas explique la décision — pourquoi cette techno, ce budget, ce délai — et les résultats mesurés.",
     keywords: [
+      "études de cas site web",
       "portfolio site web",
       "réalisations Next.js",
-      "web app marketplace",
-      "application mobile PWA",
-      "études de cas",
+      "choix techno projet web",
+      "refonte WordPress résultats",
     ],
   },
   en: {
-    title: "Case studies — Websites, web apps and mobile applications",
+    title: "Case studies — Projects delivered, choices explained",
     description:
-      "Selected projects: WordPress sites, Headless sites, custom web apps (marketplace, business platforms) and mobile applications (PWA). " +
-      "Concrete results in performance, design and conversion.",
+      "WordPress sites, Headless sites, business platforms and field tools: each case study explains the decision — why this tech, this budget, this timeline — and the measured results.",
     keywords: [
+      "website case studies",
       "website portfolio",
       "Next.js work",
-      "marketplace web app",
-      "mobile PWA application",
-      "case studies",
+      "web project tech choice",
+      "WordPress redesign results",
     ],
   },
 };
