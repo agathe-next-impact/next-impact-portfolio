@@ -19,10 +19,14 @@ export type Year = number | null;
  * « un site » ou « une app », pas « du Headless ». La techno reste expliquée
  * dans l'arbitrage de chaque fiche.
  */
-export type FamilleKey = "vitrine" | "app-web-mobile" | "agents-ia";
+export type FamilleKey = "sites-institutionnels" | "app-web-mobile" | "automatisations";
 
 /** Ordre canonique des familles dans la liste ; une famille sans cas publié est masquée. */
-export const FAMILLE_ORDER: FamilleKey[] = ["vitrine", "app-web-mobile", "agents-ia"];
+export const FAMILLE_ORDER: FamilleKey[] = [
+  "sites-institutionnels",
+  "app-web-mobile",
+  "automatisations",
+];
 
 export type OffreConstructionKey = "wordpress" | "headless" | "plateforme" | "composant";
 
@@ -122,7 +126,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "24",
     slug: "hermitage-ecolise",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: 6,
     offreConstruction: "plateforme",
@@ -162,7 +166,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "22",
     slug: "arguin-marine",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -242,7 +246,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "17",
     slug: "cafe-citoyen",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: 4,
     offreConstruction: "headless",
@@ -303,7 +307,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "15",
     slug: "comme-des-fous",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: 5,
     offreConstruction: "headless",
@@ -345,7 +349,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "0",
     slug: "les-etats-generaux-communaux",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -366,7 +370,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "1",
     slug: "proditec",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -386,7 +390,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "2",
     slug: "doleances",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -407,7 +411,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "4",
     slug: "sowee",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -434,7 +438,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "5",
     slug: "salon-de-la-carrosserie",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -455,7 +459,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "6",
     slug: "hermitage",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -475,7 +479,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "7",
     slug: "erp-services",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -494,7 +498,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "8",
     slug: "senza-nature",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -514,7 +518,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "9",
     slug: "wagner-hamisky",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -535,7 +539,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "10",
     slug: "mediatico",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -556,7 +560,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "11",
     slug: "infralliance",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -577,7 +581,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "12",
     slug: "connexion-plus",
-    famille: "vitrine",
+    famille: "sites-institutionnels",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -613,13 +617,13 @@ const META: CaseStudyMeta[] = [
     date: { month: 8, year: 2024 },
     technologies: ["WordPress", "PHP", "Plugin custom"],
   },
-  // ─── Catégorie « Agents IA » (chantier D — DIRECTIVES-ETUDES-DE-CAS) ────────────
-  // Publiées : elles font apparaître l'onglet « Agents IA » dans la liste.
+  // ─── Catégorie « Automatisations » (chantier D — DIRECTIVES-ETUDES-DE-CAS) ────────────
+  // Publiées : elles font apparaître l'onglet « Automatisations » dans la liste.
   // Le mécanisme brouillon reste disponible (statut: "brouillon" + includeDrafts).
   {
     id: "25",
     slug: "hermitage-veille",
-    famille: "agents-ia",
+    famille: "automatisations",
     statut: "publie",
     featured: null,
     offreConstruction: null,
@@ -637,7 +641,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "26",
     slug: "urban-pousses-veille",
-    famille: "agents-ia",
+    famille: "automatisations",
     statut: "publie",
     featured: null,
     offreConstruction: null,

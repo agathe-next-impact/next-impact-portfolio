@@ -257,9 +257,9 @@
   "realisations": {
     "tabs": {
       "selection": "Sélection",
-      "vitrine": "Vitrine",
+      "sites-institutionnels": "Sites institutionnels",
       "app-web-mobile": "App web et mobile",
-      "agents-ia": "Agents IA"
+      "automatisations": "Automatisations"
     },
     "viewProject": "Voir le projet"
   },
@@ -325,9 +325,9 @@
       "cold": "Pré-diagnostic express (2 min)",
       "coldConseil": "Demander un diagnostic",
       "warm": {
-        "vitrine": "Discuter de la refonte de votre site",
+        "sites-institutionnels": "Discuter de la refonte de votre site",
         "app-web-mobile": "Démarrer votre app web ou mobile",
-        "agents-ia": "Mettre en place votre agent IA"
+        "automatisations": "Mettre en place votre agent IA"
       }
     },
     "decisionPath": {

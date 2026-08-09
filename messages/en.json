@@ -50,7 +50,7 @@
     "caseStudies": "Case studies",
     "documentation": "Documentation",
     "blog": "Blog",
-    "resources":"Resources",
+    "resources": "Resources",
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
@@ -257,9 +257,9 @@
   "realisations": {
     "tabs": {
       "selection": "Selected work",
-      "vitrine": "Websites",
+      "sites-institutionnels": "Institutional websites",
       "app-web-mobile": "Web & mobile apps",
-      "agents-ia": "AI agents"
+      "automatisations": "Automations"
     },
     "viewProject": "View project"
   },
@@ -325,9 +325,9 @@
       "cold": "Express pre-audit (2 min)",
       "coldConseil": "Request a diagnosis",
       "warm": {
-        "vitrine": "Discuss your website redesign",
+        "sites-institutionnels": "Discuss your website redesign",
         "app-web-mobile": "Start your web or mobile app",
-        "agents-ia": "Set up your AI agent"
+        "automatisations": "Set up your AI agent"
       }
     },
     "decisionPath": {
