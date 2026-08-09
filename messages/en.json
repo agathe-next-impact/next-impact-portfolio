@@ -9,7 +9,7 @@
     "documentation": "Resources",
     "caseStudies": "Case studies",
     "contact": "Contact",
-    "freeAudit": "Express pre-diagnostic (2 min)",
+    "freeAudit": "Web pre-diagnostic in 2 min",
     "visioConseil": "Advisory call",
     "onDemand": "On demand",
     "free": "Free",
@@ -322,7 +322,7 @@
       "independant": "Freelancer"
     },
     "cta": {
-      "cold": "Express pre-audit (2 min)",
+      "cold": "Web pre-diagnostic in 2 min",
       "coldConseil": "Request a diagnosis",
       "warm": {
         "sites-institutionnels": "Discuss your website redesign",

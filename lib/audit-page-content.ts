@@ -151,7 +151,7 @@ export interface AuditPageContent {
 
 const AUDIT_PAGE_FR: AuditPageContent = {
   hero: {
-    title: "Diagnostic en 2 min",
+    title: "Pré-diagnostic web en 2 min",
     subtitle:
       "Analysez votre site selon 4 axes — performance, SEO, accessibilité et conversion — puis recevez une recommandation concrète : optimiser l'existant, refondre sous WordPress, passer en Headless WordPress + Next.js, ou cadrer une application métier.",
     ctaPrimary: "Analyser mon site",
@@ -379,7 +379,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
 
 const AUDIT_PAGE_EN: AuditPageContent = {
   hero: {
-    title: "2-minute diagnosis",
+    title: "Web pre-diagnostic in 2 min",
     subtitle:
       "Analyze your site across 4 axes — performance, SEO, accessibility and conversion — then get a concrete recommendation: optimize what you have, rebuild on WordPress, move to Headless WordPress + Next.js, or scope a business application.",
     ctaPrimary: "Analyze my site",
