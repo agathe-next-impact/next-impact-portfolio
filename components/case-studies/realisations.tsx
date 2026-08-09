@@ -54,13 +54,17 @@ export default function Realisations({ cards, defaultTab = "site-headless" }: Re
         })}
       </div>
 
-      {/* Grille de réalisations — cellules jointives bordées */}
-      {tabs.map((tab) =>
-        activeTab === tab ? (
+      {/* Grille de réalisations — cellules jointives bordées.
+          Toutes les familles sont rendues côté serveur (les 24 cartes publiées
+          sont dans le HTML initial, SEO) ; le filtre n'est qu'un masquage CSS. */}
+      {tabs.map((tab) => (
           <Stagger
             key={tab}
             stagger={0.04}
-            className="grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3"
+            className={cn(
+              "grid grid-cols-1 border-l border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3",
+              activeTab !== tab && "hidden",
+            )}
           >
             {cards
               .filter((card) => card.famille === tab)
@@ -120,8 +124,7 @@ export default function Realisations({ cards, defaultTab = "site-headless" }: Re
                 </StaggerItem>
               ))}
           </Stagger>
-        ) : null
-      )}
+      ))}
     </section>
   );
 }
