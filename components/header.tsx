@@ -287,10 +287,10 @@ export default function Header() {
             {t("bookVisio")}
           </Link>
           <Link
-            href="/audit-site-web"
+            href="/outils/selecteur-techno"
             className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
           >
-            {t("freeAudit")}
+            {t("mainCta")}
           </Link>
         </div>
 
@@ -411,11 +411,11 @@ export default function Header() {
               {/* CTA à deux températures */}
               <div className="flex flex-col gap-3 p-5">
                 <Link
-                  href="/audit-site-web"
+                  href="/outils/selecteur-techno"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex h-11 items-center justify-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
                 >
-                  {t("freeAudit")}
+                  {t("mainCta")}
                 </Link>
                 <Link
                   href="/conseil"

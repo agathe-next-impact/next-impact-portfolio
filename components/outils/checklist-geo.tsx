@@ -22,7 +22,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 import { Reveal } from "@/components/ui/reveal";
 import { track } from "@/lib/track";
 import {
@@ -364,7 +364,7 @@ export default function ChecklistGeo() {
             <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
-        {engaged && <NewsletterModal source="checklist-geo" />}
+        {engaged && <ConseilModal source="checklist-geo" />}
       </div>
     </Reveal>
   );

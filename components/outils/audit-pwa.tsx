@@ -12,7 +12,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal } from "@/components/ui/reveal";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
 import { Sonar } from "@/components/visuals/sonar";
 
@@ -332,7 +332,7 @@ export default function AuditPwa() {
           ref={resultRef}
           className="flex flex-col gap-8 border-b border-dark-gray px-6 py-8 lg:px-8"
         >
-          <NewsletterModal source="audit-pwa" />
+          <ConseilModal source="audit-pwa" />
           {/* Score + signal de décision */}
           <div className="grid gap-px overflow-hidden border border-dark-gray bg-dark-gray md:grid-cols-[1fr_2fr]">
             {/* Carte score avec jauge + fond sonar discret */}

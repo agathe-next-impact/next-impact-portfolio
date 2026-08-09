@@ -14,7 +14,7 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 
 /* ─── Familles de solution (sorties possibles) ───────────────────────────── */
 
@@ -458,7 +458,7 @@ export default function SelecteurTechno() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </StaggerItem>
-          <NewsletterModal source="selecteur-techno" />
+          <ConseilModal source="selecteur-techno" />
         </Stagger>
         </div>
       )}

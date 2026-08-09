@@ -12,7 +12,7 @@ import { ArrowRight, Blocks, Info, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 
@@ -375,7 +375,7 @@ export default function NocodeSaasSurmesure() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </StaggerItem>
-          <NewsletterModal source="nocode-saas-surmesure" />
+          <ConseilModal source="nocode-saas-surmesure" />
         </Stagger>
         </div>
       )}

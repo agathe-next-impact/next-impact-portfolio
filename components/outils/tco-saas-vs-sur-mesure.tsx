@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 
 function formatEuro(value: number, locale: Locale): string {
   return new Intl.NumberFormat(locale === "en" ? "en-US" : "fr-FR", {
@@ -262,7 +262,7 @@ export default function TcoSaasVsSurMesure() {
               gap: "24px",
             }}
           >
-            <NewsletterModal source="tco-saas-vs-sur-mesure" />
+            <ConseilModal source="tco-saas-vs-sur-mesure" />
             {/* TCO label */}
             <span
               style={{

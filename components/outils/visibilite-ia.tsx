@@ -22,7 +22,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import NewsletterModal from "@/components/ui/newsletter-modal";
+import ConseilModal from "@/components/ui/conseil-modal";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
@@ -334,7 +334,7 @@ export default function VisibiliteIa() {
               {isEn ? "Restart" : "Refaire"}
             </button>
           </StaggerItem>
-          <NewsletterModal source="visibilite-ia" />
+          <ConseilModal source="visibilite-ia" />
         </Stagger>
         </div>
       )}
