@@ -1,53 +1,44 @@
-"use client";
-
-import { useDocumentationMode } from "@/contexts/documentation-mode-context";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import type { FamilleKey } from "@/lib/case-studies-data";
+import type { Locale } from "@/i18n/routing";
 
 const BTN_PRIMARY =
-  "group inline-flex w-full items-center justify-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "group inline-flex w-full items-center justify-center gap-2 border border-charcoal bg-vermilion px-5 py-3 text-center font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+const BTN_GHOST =
+  "group inline-flex w-full items-center justify-center gap-2 border border-dark-gray px-5 py-3 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
-const CTA_TARGETS = {
-  default: {
-    href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
-    external: true,
-    labelKey: "default" as const,
-  },
-  decideur: {
-    href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
-    external: true,
-    labelKey: "decideur" as const,
-  },
-  utilisateur: {
-    href: "https://calendar.app.google/RwZqaabSR5aDMnk46",
-    external: true,
-    labelKey: "utilisateur" as const,
-  },
-  developpeur: {
-    href: "/documentation",
-    external: false,
-    labelKey: "developpeur" as const,
-  },
-} as const;
+/** Lien de prise de RDV existant — ne pas créer de nouvelle destination. */
+const CALENDAR_URL = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
-export default function CaseStudyCTA() {
-  const { profileId } = useDocumentationMode();
-  const t = useTranslations("caseStudyDetail.cta");
-  const cta = profileId ? CTA_TARGETS[profileId] : CTA_TARGETS.default;
+/**
+ * CTA de fin de fiche à deux températures : froid identique partout
+ * (pré-diagnostic → audit), chaud fonction de la famille du cas (→ RDV).
+ * Froid en primaire : un prospect qui vérifie n'est pas prêt pour un RDV.
+ */
+export default async function CaseStudyCTA({
+  famille,
+  locale,
+}: {
+  famille: FamilleKey;
+  locale: Locale;
+}) {
+  const t = await getTranslations({ locale, namespace: "caseStudyDetail.cta" });
 
-  return cta.external ? (
-    <a
-      href={cta.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={BTN_PRIMARY}
-    >
-      {t(cta.labelKey)} <ArrowRight size={13} />
-    </a>
-  ) : (
-    <Link href={cta.href as any} className={BTN_PRIMARY}>
-      {t(cta.labelKey)} <ArrowRight size={13} />
-    </Link>
+  return (
+    <div className="flex flex-col gap-2.5">
+      <Link href="/audit-site-web" className={BTN_PRIMARY}>
+        {t("cold")} <ArrowRight size={13} />
+      </Link>
+      <a
+        href={CALENDAR_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={BTN_GHOST}
+      >
+        {t(`warm.${famille}`)} <ArrowRight size={13} />
+      </a>
+    </div>
   );
 }

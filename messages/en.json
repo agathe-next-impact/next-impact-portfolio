@@ -256,13 +256,13 @@
   },
   "realisations": {
     "tabs": {
-      "landing": "Landing",
-      "webapp": "Web App",
-      "headless": "Headless WordPress",
-      "wordpress": "WordPress"
+      "site-wordpress": "WordPress sites & redesigns",
+      "site-headless": "Headless site (WordPress + Next.js)",
+      "plateforme": "Platforms, directories & business tools",
+      "outil-terrain": "Field tools & PWA",
+      "ia-automatisation": "AI & automation"
     },
-    "viewProject": "View project",
-    "visitLanding": "Visit site"
+    "viewProject": "View project"
   },
   "caseStudiesPage": {
     "breadcrumbHome": "Home",
@@ -319,10 +319,40 @@
       "independant": "Freelancer"
     },
     "cta": {
-      "default": "Discuss your project",
-      "decideur": "Evaluate my project",
-      "utilisateur": "Discuss your project",
-      "developpeur": "See documentation"
+      "cold": "Express pre-audit (2 min)",
+      "warm": {
+        "site-wordpress": "Discuss a WordPress redesign",
+        "site-headless": "Discuss going Headless",
+        "plateforme": "Start a business platform",
+        "outil-terrain": "Build your field tool",
+        "ia-automatisation": "Set up your AI agent"
+      }
+    },
+    "decisionPath": {
+      "title": "The decision path",
+      "stepNeed": "The need",
+      "stepArbitrage": "The trade-off",
+      "stepBuild": "The build",
+      "arbitrageFallback": "Choosing the right approach before building.",
+      "conseilLink": {
+        "selecteur-techno": "This trade-off is exactly what the Tech compass call covers ({price})",
+        "architecture-ia": "This trade-off is what the AI project architecture session covers ({price})",
+        "pack-ia": "This trade-off is what the AI build pack covers ({price})",
+        "direction-technique": "This kind of trade-off is what fractional tech direction handles ({price}/month)"
+      },
+      "constructionLine": {
+        "wordpress": "A WordPress site the team can manage in-house.",
+        "headless": "A modern front end (Next.js) plugged into WordPress.",
+        "plateforme": "A business platform built from scratch.",
+        "composant": "A custom component integrated into the existing site."
+      },
+      "constructionLink": "See this offer on Web solutions",
+      "budgetLine": "A project like this: {budget} · {delai}"
+    },
+    "clientHistory": {
+      "title": "Client history",
+      "hook": "{client} has been working with Next Impact since {year} — {count} projects delivered",
+      "hookNoYear": "{client} works with Next Impact — {count} projects delivered"
     }
   },
   "servicesPage": {

@@ -1,5 +1,8 @@
 # CLAUDE.md — Projet vitrine Next Impact Digital
 
+> PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
+> ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.
+
 Constitution du dépôt. Lue à chaque session Claude Code. Source de vérité sur le
 contexte et les règles de travail pour ce site.
 

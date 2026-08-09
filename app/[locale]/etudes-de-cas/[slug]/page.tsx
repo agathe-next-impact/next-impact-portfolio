@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
+import CaseStudyDecisionPath from "@/components/case-studies/CaseStudyDecisionPath";
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
 import { YoutubePlayer } from "@/components/youtube-player";
 import { BlueprintSection } from "@/components/aspect/section";
@@ -12,6 +13,7 @@ import { Metadata } from "next";
 import { generateArticleMetadata } from "@/lib/metadata";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import {
+  formatDelai,
   getAllSlugs,
   getCaseStudies,
   getCaseStudy,
@@ -87,6 +89,19 @@ export default async function CaseStudyPage({
   }
 
   const similarCaseStudies = getSimilarCaseStudies(allCaseStudies, caseStudy);
+
+  // Historique client : les cas publiés partageant le même clientId.
+  // S'il y en a plusieurs, ce bloc remplace « Projets similaires ».
+  const clientProjects = caseStudy.clientId
+    ? allCaseStudies.filter((s) => s.clientId === caseStudy.clientId)
+    : [];
+  const hasClientHistory = clientProjects.length >= 2;
+  const otherClientProjects = clientProjects.filter((s) => s.id !== caseStudy.id);
+  const clientYears = clientProjects
+    .map((s) => s.date.year)
+    .filter((y): y is number => y !== null);
+  const clientSince = clientYears.length ? Math.min(...clientYears) : null;
+
   const resultHighlights = getResultHighlights(locale, caseStudy.slug);
   const monthsRaw = t.raw("months") as string[];
   const clientTypeLabel = t(`clientTypes.${caseStudy.clientType}`);
@@ -266,6 +281,10 @@ export default async function CaseStudyPage({
                 </Reveal>
               )}
 
+              {/* Le chemin de décision — besoin → arbitrage → construction,
+                  relié aux offres /conseil et /solutions-web quand renseigné. */}
+              <CaseStudyDecisionPath caseStudy={caseStudy} locale={locale} />
+
               {/* Témoignage client */}
               {caseStudy.testimonial && (
                 <Reveal>
@@ -291,6 +310,54 @@ export default async function CaseStudyPage({
                       </div>
                     </footer>
                   </blockquote>
+                </Reveal>
+              )}
+
+              {/* Historique client — un client qui revient est une preuve plus
+                  forte qu'une similarité de tags : remplace « Projets similaires ». */}
+              {hasClientHistory && (
+                <Reveal>
+                  <div className="mt-10 border border-dark-gray">
+                    <div className="border-b border-dark-gray px-6 py-4">
+                      <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                        {t("clientHistory.title")}
+                      </div>
+                      <p className="font-inter-tight text-sm leading-relaxed text-foreground">
+                        {clientSince !== null
+                          ? t("clientHistory.hook", {
+                              client: caseStudy.clientName,
+                              year: String(clientSince),
+                              count: String(clientProjects.length),
+                            })
+                          : t("clientHistory.hookNoYear", {
+                              client: caseStudy.clientName,
+                              count: String(clientProjects.length),
+                            })}
+                      </p>
+                    </div>
+                    {otherClientProjects.map((project) => (
+                      <Link
+                        key={project.id}
+                        href={`/etudes-de-cas/${project.slug}`}
+                        className="group flex items-center justify-between gap-4 px-6 py-4 no-underline transition-colors hover:bg-jet/40 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-dark-gray"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate text-[15px] font-light tracking-tight text-foreground">
+                            {project.title}
+                          </span>
+                          {project.date.year && (
+                            <span className="font-mono text-[10px] text-mid-gray">
+                              {project.date.year}
+                            </span>
+                          )}
+                        </span>
+                        <ArrowRight
+                          size={12}
+                          className="shrink-0 text-accent-secondary transition-transform duration-200 group-hover:translate-x-0.5"
+                        />
+                      </Link>
+                    ))}
+                  </div>
                 </Reveal>
               )}
             </div>
@@ -328,7 +395,7 @@ export default async function CaseStudyPage({
                   {t("duration")}
                 </div>
                 <div className="text-[15px] font-medium text-foreground">
-                  {caseStudy.duration}
+                  {formatDelai(caseStudy.delai, locale)}
                 </div>
               </div>
 
@@ -383,15 +450,16 @@ export default async function CaseStudyPage({
                 </div>
               )}
 
-              {/* CTA */}
+              {/* CTA à deux températures : froid (audit) + chaud (RDV par famille) */}
               <div className="mt-2">
-                <CaseStudyCTA />
+                <CaseStudyCTA famille={caseStudy.famille} locale={locale} />
               </div>
             </aside>
           </div>
         </BlueprintSection>
 
-        {/* Projets similaires */}
+        {/* Projets similaires — remplacé par l'historique client quand il existe */}
+        {!hasClientHistory && (
         <BlueprintSection tone="jet">
           <Reveal>
             <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
@@ -427,6 +495,7 @@ export default async function CaseStudyPage({
             </div>
           </Reveal>
         </BlueprintSection>
+        )}
       </main>
     </>
   );

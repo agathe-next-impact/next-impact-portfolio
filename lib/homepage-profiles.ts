@@ -1,4 +1,5 @@
 import type { ProfileId } from "@/lib/documentation-profiles";
+import type { FamilleKey } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import {
   HERO_VARIANTS_EN,
@@ -316,7 +317,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
 export interface CaseStudiesPageVariant {
   titre: string;
   sousTitre: string;
-  defaultTab: string;
+  defaultTab: FamilleKey;
   tabsLabel: string;
   ctaLabel: string;
   ctaHref: string;
@@ -332,7 +333,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Études de cas",
     sousTitre:
       "Découvrez les réalisations Next Impact : sites WordPress, sites Headless WordPress + Next.js, web apps sur-mesure et applications mobiles PWA — pour divers secteurs d'activité.",
-    defaultTab: "webapp",
+    defaultTab: "plateforme",
     tabsLabel: "Filtrer par famille",
     ctaLabel: "Discuter de votre projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -343,7 +344,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Nos études de cas clients",
     sousTitre:
       "Des projets concrets avec des résultats mesurables : performance, SEO et conversion au service de la croissance.",
-    defaultTab: "webapp",
+    defaultTab: "plateforme",
     tabsLabel: "Filtrer par secteur",
     ctaLabel: "Évaluer mon projet",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -355,7 +356,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Des sites simples et performants",
     sousTitre:
       "Des sites que leurs propriétaires gèrent au quotidien avec WordPress — simplement, sans compétence technique.",
-    defaultTab: "webapp",
+    defaultTab: "plateforme",
     tabsLabel: "Explorer les projets",
     ctaLabel: "Voir une démo",
     ctaHref: "/demo",
@@ -366,7 +367,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
     titre: "Études de cas techniques",
     sousTitre:
       "Sites WordPress classiques optimisés, Headless WordPress + Next.js, web apps sur-mesure et PWA mobiles. API REST, WPGraphQL, PostgreSQL. Détails techniques de chaque projet.",
-    defaultTab: "webapp",
+    defaultTab: "plateforme",
     tabsLabel: "Filtrer par architecture",
     ctaLabel: "Explorer la documentation",
     ctaHref: "/documentation",

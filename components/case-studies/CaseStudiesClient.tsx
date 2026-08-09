@@ -7,6 +7,7 @@ import Realisations from "@/components/case-studies/realisations";
 import { useLocale } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
+import type { CaseStudyCard } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
@@ -26,7 +27,7 @@ const CTA_PRIMARY =
 const CTA_GHOST =
   "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
-export default function CaseStudiesClient() {
+export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] }) {
   const { profileId } = useDocumentationMode();
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
@@ -81,7 +82,7 @@ export default function CaseStudiesClient() {
                 />
               </Reveal>
               <div className="mt-10">
-                <Realisations count={30} defaultTab={variant.defaultTab} />
+                <Realisations cards={cards} defaultTab={variant.defaultTab} />
               </div>
             </div>
           </BlueprintSection>

@@ -276,7 +276,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Case studies",
     sousTitre:
       "Discover the Next Impact projects: WordPress sites, Headless WordPress + Next.js sites, custom web apps and mobile PWAs — across various industries.",
-    defaultTab: "headless",
+    defaultTab: "site-headless",
     tabsLabel: "Filter by family",
     ctaLabel: "Discuss your project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -287,7 +287,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Our client case studies",
     sousTitre:
       "Real projects with measurable results: performance, SEO and conversion at the service of growth.",
-    defaultTab: "headless",
+    defaultTab: "site-headless",
     tabsLabel: "Filter by industry",
     ctaLabel: "Evaluate my project",
     ctaHref: "https://calendar.app.google/RwZqaabSR5aDMnk46",
@@ -299,7 +299,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Simple, high-performance sites",
     sousTitre:
       "Sites their owners run day to day with WordPress — simply, without any technical skills.",
-    defaultTab: "headless",
+    defaultTab: "site-headless",
     tabsLabel: "Browse projects",
     ctaLabel: "See a demo",
     ctaHref: "/demo",
@@ -310,7 +310,7 @@ export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseSt
     titre: "Technical case studies",
     sousTitre:
       "Optimized classic WordPress sites, Headless WordPress + Next.js, custom web apps and mobile PWAs. REST API, WPGraphQL, PostgreSQL. Technical details for every project.",
-    defaultTab: "headless",
+    defaultTab: "site-headless",
     tabsLabel: "Filter by architecture",
     ctaLabel: "Explore documentation",
     ctaHref: "/documentation",

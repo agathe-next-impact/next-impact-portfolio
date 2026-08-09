@@ -256,13 +256,13 @@
   },
   "realisations": {
     "tabs": {
-      "landing": "Landing",
-      "webapp": "Web App",
-      "headless": "WordPress Headless",
-      "wordpress": "WordPress"
+      "site-wordpress": "Refonte & site WordPress",
+      "site-headless": "Site Headless (WordPress + Next.js)",
+      "plateforme": "Plateforme, annuaire & outil métier",
+      "outil-terrain": "Outil terrain & PWA",
+      "ia-automatisation": "IA & automatisation"
     },
-    "viewProject": "Voir le projet",
-    "visitLanding": "Visiter le site"
+    "viewProject": "Voir le projet"
   },
   "caseStudiesPage": {
     "breadcrumbHome": "Accueil",
@@ -319,10 +319,40 @@
       "independant": "Indépendant"
     },
     "cta": {
-      "default": "Discuter de votre projet",
-      "decideur": "Évaluer mon projet",
-      "utilisateur": "Discuter de votre projet",
-      "developpeur": "Voir la documentation"
+      "cold": "Pré-diagnostic express (2 min)",
+      "warm": {
+        "site-wordpress": "Discuter d'une refonte WordPress",
+        "site-headless": "Discuter d'un passage en Headless",
+        "plateforme": "Démarrer une plateforme métier",
+        "outil-terrain": "Créer votre outil terrain",
+        "ia-automatisation": "Mettre en place votre agent IA"
+      }
+    },
+    "decisionPath": {
+      "title": "Le chemin de décision",
+      "stepNeed": "Le besoin",
+      "stepArbitrage": "L'arbitrage",
+      "stepBuild": "La construction",
+      "arbitrageFallback": "Choisir la bonne approche avant de construire.",
+      "conseilLink": {
+        "selecteur-techno": "Cet arbitrage, c'est l'objet de la visio Sélecteur techno ({price})",
+        "architecture-ia": "Cet arbitrage, c'est l'objet de la visio Architecture de projet IA ({price})",
+        "pack-ia": "Cet arbitrage, c'est l'objet du Pack de mise en œuvre IA ({price})",
+        "direction-technique": "Cet arbitrage, c'est le quotidien d'une Direction technique externalisée ({price}/mois)"
+      },
+      "constructionLine": {
+        "wordpress": "Un site WordPress, administrable en interne.",
+        "headless": "Un front moderne (Next.js) branché sur WordPress.",
+        "plateforme": "Une plateforme métier développée sur-mesure.",
+        "composant": "Un composant sur-mesure intégré au site existant."
+      },
+      "constructionLink": "Voir cette offre sur Solutions web",
+      "budgetLine": "Projet de ce type : {budget} · {delai}"
+    },
+    "clientHistory": {
+      "title": "Historique client",
+      "hook": "{client} travaille avec Next Impact depuis {year} — {count} projets livrés",
+      "hookNoYear": "{client} travaille avec Next Impact — {count} projets livrés"
     }
   },
   "servicesPage": {

@@ -14,9 +14,57 @@ export type ClientTypeKey =
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
 export type Year = number | null;
 
+export type FamilleKey =
+  | "site-wordpress"
+  | "site-headless"
+  | "plateforme"
+  | "outil-terrain"
+  | "ia-automatisation";
+
+/** Ordre canonique des familles dans la liste ; une famille sans cas publié est masquée. */
+export const FAMILLE_ORDER: FamilleKey[] = [
+  "site-wordpress",
+  "site-headless",
+  "plateforme",
+  "outil-terrain",
+  "ia-automatisation",
+];
+
+export type OffreConstructionKey = "wordpress" | "headless" | "plateforme" | "composant";
+
+export type OffreConseilKey =
+  | "selecteur-techno"
+  | "architecture-ia"
+  | "pack-ia"
+  | "direction-technique";
+
+export type StatutKey = "publie" | "brouillon";
+
+/** Délai de réalisation normalisé, locale-agnostique — affiché via formatDelai. */
+export type Delai =
+  | { value: number; unit: "jours" | "semaines" | "mois" }
+  | { depuis: number };
+
 export interface CaseStudyMeta {
   id: string;
   slug: string;
+  /** Une seule famille par cas — pilote les onglets et compteurs de la liste. */
+  famille: FamilleKey;
+  /** Un brouillon n'est jamais rendu : ni liste, ni fiche, ni sitemap, ni flux. */
+  statut: StatutKey;
+  /** Rang dans la vue par défaut de la liste ; null = absent de cette vue. */
+  featured: number | null;
+  offreConstruction: OffreConstructionKey | null;
+  offreConseil: OffreConseilKey | null;
+  /** Affiché tel quel (ex. « à partir de 4 000 € »), jamais calculé ; null = masqué. */
+  budgetIndicatif: string | null;
+  delai: Delai;
+  /** Identifiant commun aux fiches d'un même client (ex. "hermitage"). */
+  clientId: string | null;
+  /** Variante optimisée pour la carte de liste ; fallback sur galleryUrl. */
+  cardImageUrl?: string;
+  /** Site de démonstration (pas un projet client). */
+  isDemo?: boolean;
   clientType: ClientTypeKey;
   clientName: string;
   imageUrl: string;
@@ -52,7 +100,10 @@ export interface CaseStudyContent {
   };
   galleryAlt: string;
   tags: string[];
-  duration: string;
+  /** Textes de la carte de liste quand ils diffèrent de ceux de la fiche (fallback title/description/galleryAlt). */
+  cardTitle?: string;
+  cardDescription?: string;
+  cardAlt?: string;
 }
 
 export interface ResultHighlight {
@@ -70,6 +121,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "24",
     slug: "hermitage-ecolise",
+    famille: "outil-terrain",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 1, unit: "semaines" },
+    clientId: "hermitage",
     clientType: "ess",
     clientName: "Tiers Lieu L'Hermitage",
     imageUrl: "/img/logo-hermitage.webp",
@@ -83,6 +142,14 @@ const META: CaseStudyMeta[] = [
     id: "23",
     youtubeVideoId: "chOmQ0W3QX0",
     slug: "reseauteurs",
+    famille: "plateforme",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "mois" },
+    clientId: null,
     clientType: "pme", // TODO(Agathe): confirmer le type de client (pme / independant)
     clientName: "Réseauteurs",
     imageUrl: "",
@@ -94,6 +161,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "22",
     slug: "arguin-marine",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
     clientType: "pme",
     clientName: "Arguin Marine",
     imageUrl: "",
@@ -106,6 +181,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "21",
     slug: "la-petite-vitrine",
+    famille: "plateforme",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "mois" },
+    clientId: null,
     clientType: "independant",
     clientName: "La Petite Vitrine",
     imageUrl: "",
@@ -118,6 +201,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "20",
     slug: "peer-to-peer",
+    famille: "plateforme",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 1, unit: "mois" },
+    clientId: null,
     clientType: "ess",
     clientName: "Peer to Peer",
     imageUrl: "",
@@ -130,6 +221,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "19",
     slug: "panorama-pub",
+    famille: "plateforme",
+    statut: "publie",
+    featured: 3,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 2, unit: "mois" },
+    clientId: null,
     clientType: "pme",
     clientName: "Panorama Pub",
     imageUrl: "/img/desktop-screen-panoramapub.png",
@@ -142,6 +241,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "17",
     slug: "cafe-citoyen",
+    famille: "site-headless",
+    statut: "publie",
+    featured: 2,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
     clientType: "association",
     clientName: "Café citoyen d'Auger-Saint-Vincent",
     imageUrl: "/img/desktop-screen-cafe-citoyen.png",
@@ -154,6 +261,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "18",
     slug: "hermitage-jeu-de-piste",
+    famille: "outil-terrain",
+    statut: "publie",
+    featured: 4,
+    offreConstruction: "plateforme",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 4, unit: "semaines" },
+    clientId: "hermitage",
     clientType: "ess",
     clientName: "Tiers Lieu L'Hermitage",
     imageUrl: "/img/logo-hermitage.webp",
@@ -167,6 +282,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "16",
     slug: "comme-des-fous-jeux",
+    famille: "site-headless",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 15, unit: "jours" },
+    clientId: "comme-des-fous",
     clientType: "association",
     clientName: "Comme des fous",
     imageUrl: "",
@@ -179,6 +302,14 @@ const META: CaseStudyMeta[] = [
   {
     id: "15",
     slug: "comme-des-fous",
+    famille: "site-headless",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 2, unit: "mois" },
+    clientId: "comme-des-fous",
     clientType: "pme",
     clientName: "Comme des fous",
     imageUrl: "",
@@ -191,6 +322,16 @@ const META: CaseStudyMeta[] = [
   {
     id: "3",
     slug: "next-event",
+    famille: "site-headless",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-next-event.webp",
+    isDemo: true,
     clientType: "pme",
     clientName: "Next Event",
     imageUrl: "/img/desktop-screen-next-event.jpg",
@@ -203,6 +344,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "0",
     slug: "les-etats-generaux-communaux",
+    famille: "site-headless",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 4, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-egc.webp",
     clientType: "association",
     clientName: "Les Etats Généraux Communaux",
     imageUrl: "/img/logo-egc.png",
@@ -215,6 +365,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "1",
     slug: "proditec",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: 1,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 1, unit: "mois" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-proditec.webp",
     clientType: "pme",
     clientName: "Proditec",
     imageUrl: "/img/logo-proditec.webp",
@@ -226,6 +385,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "2",
     slug: "doleances",
+    famille: "site-headless",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "headless",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 2, unit: "mois" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-lesdoleances.webp",
     clientType: "association",
     clientName: "Association Les Doléances",
     imageUrl: "",
@@ -238,6 +406,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "4",
     slug: "sowee",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 5, unit: "jours" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-sowee.webp",
     clientType: "grande-entreprise",
     clientName: "Sowee",
     imageUrl: "/img/logo-sowee.svg",
@@ -256,6 +433,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "5",
     slug: "salon-de-la-carrosserie",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 15, unit: "jours" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-salondelacarrosserie.webp",
     clientType: "pme",
     clientName: "Salon de la Carrosserie",
     imageUrl: "/img/logo-salondelacarrosserie.webp",
@@ -268,6 +454,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "6",
     slug: "hermitage",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 1, unit: "mois" },
+    clientId: "hermitage",
+    cardImageUrl: "/img/desktop-screen-hermitage.webp",
     clientType: "ess",
     clientName: "L'Hermitage",
     imageUrl: "/img/logo-hermitage.webp",
@@ -279,6 +474,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "7",
     slug: "erp-services",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: 5,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 2, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-erp-services.webp",
     clientType: "pme",
     clientName: "ERP Services",
     imageUrl: "/img/logo-erp-services.webp",
@@ -289,6 +493,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "8",
     slug: "senza-nature",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { depuis: 2024 },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-senza-nature.webp",
     clientType: "pme",
     clientName: "Senza Nature",
     imageUrl: "/img/logo-senza-nature.png",
@@ -300,6 +513,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "9",
     slug: "wagner-hamisky",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-wagner-hamisky.webp",
     clientType: "pme",
     clientName: "Wagner Hamisky",
     imageUrl: "/img/logo-wagner-hamisky.jpeg",
@@ -312,6 +534,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "10",
     slug: "mediatico",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 4, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-mediatico.webp",
     clientType: "ess",
     clientName: "Mediatico",
     imageUrl: "/img/logo-mediatico.png",
@@ -324,6 +555,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "11",
     slug: "infralliance",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 2, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-infralliance.webp",
     clientType: "groupement",
     clientName: "Infralliance",
     imageUrl: "/img/logo-infralliance.png",
@@ -336,6 +576,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "12",
     slug: "connexion-plus",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 4, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-gem-connexion.webp",
     clientType: "ess",
     clientName: "GEM Connexion",
     imageUrl: "/img/logo-connexion-plus.jpg",
@@ -347,6 +596,15 @@ const META: CaseStudyMeta[] = [
   {
     id: "13",
     slug: "sdevo",
+    famille: "site-wordpress",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
+    cardImageUrl: "/img/desktop-screen-sdevo.webp",
     clientType: "institutionnel",
     clientName: "SDEVO",
     imageUrl: "/img/logo-sdevo.png",
@@ -380,7 +638,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Site one-page du démonstrateur européen ECOLISE de L'Hermitage",
     tags: ["ESS", "Tiers-lieu", "One-page", "Next.js", "Europe"],
-    duration: "1 semaine",
+    cardTitle: "L'Hermitage — Démonstrateur ECOLISE",
+    cardDescription: "One-page Next.js annonçant la sélection de L'Hermitage parmi les 15 Démonstrateurs européens du réseau ECOLISE.",
   },
   reseauteurs: {
     title: "Réseauteurs",
@@ -403,7 +662,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Plateforme Réseauteurs : annuaire, agenda et carte du networking professionnel",
     tags: ["Plateforme", "Networking B2B", "Next.js", "Payload CMS", "Stripe"],
-    duration: "3 mois",
+    cardDescription: "La plateforme nationale du networking : annuaire, agenda et carte des réseaux d'affaires français.",
+    cardAlt: "Plateforme Réseauteurs, annuaire et carte du networking professionnel",
   },
   "arguin-marine": {
     title: "Arguin Marine",
@@ -424,7 +684,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Site vitrine d'Arguin Marine, location de bateaux sur le Bassin d'Arcachon",
     tags: ["PME", "Nautisme", "Site vitrine", "WordPress"],
-    duration: "3 semaines",
+    cardDescription: "Vitrine WordPress d'un service de location de bateaux haut de gamme sur le Bassin d'Arcachon.",
   },
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
@@ -445,7 +705,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "La Petite Vitrine — service de mise en ligne de mini-sites par métier",
     tags: ["Indépendants", "TPE", "Produit", "Web App", "Next.js"],
-    duration: "3 mois",
+    cardDescription: "Service packagé de mise en ligne de mini-sites par métier pour indépendants et TPE.",
   },
   "peer-to-peer": {
     title: "Peer to Peer",
@@ -466,7 +726,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Plateforme Peer to Peer d'auto-observation en santé mentale",
     tags: ["Impact", "Santé mentale", "Web App", "Local-first", "Next.js"],
-    duration: "1 mois",
+    cardDescription: "Plateforme libre d'auto-observation en santé mentale, 100 % locale et sans compte.",
   },
   "cafe-citoyen": {
     title: "Café citoyen",
@@ -485,7 +745,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Café citoyen",
     tags: ["Association", "WordPress", "Headless", "Next.js"],
-    duration: "3 semaines",
+    cardDescription: "Site vitrine du Café citoyen",
+    cardAlt: "Site vitrine du Café citoyen",
   },
   "hermitage-jeu-de-piste": {
     title: "L'hermitage - Jeu de piste",
@@ -521,7 +782,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Application mobile de jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
     tags: ["ESS", "App mobile", "PWA", "Géolocalisation", "Gamification", "Hors-ligne"],
-    duration: "4 semaines",
+    cardDescription: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
+    cardAlt: "Jeu de piste du domaine forestier du Tiers Lieu L'Hermitage",
   },
   "comme-des-fous-jeux": {
     title: "Comme des fous - Jeux en ligne",
@@ -539,7 +801,6 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Jeux en ligne du média Comme des fous",
     tags: ["Média", "WordPress", "Headless", "Next.js"],
-    duration: "15 jours",
   },
   "comme-des-fous": {
     title: "Comme des fous",
@@ -574,7 +835,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Comme des fous",
     tags: ["Média", "WordPress", "Headless", "Next.js"],
-    duration: "2 mois",
+    cardTitle: "Comme des fous - Media WordPress Headless",
+    cardAlt: "Site du média Comme des fous",
   },
   "next-event": {
     title: "Next Event - Démo WordPress Headless",
@@ -593,7 +855,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Next Event",
     tags: ["Evénementiel", "WordPress", "Headless", "Next.js"],
-    duration: "3 semaines",
+    cardAlt: "Site de démonstration Next Event",
   },
   "les-etats-generaux-communaux": {
     title: "Les Etats Généraux Communaux",
@@ -612,7 +874,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Les Etats Généraux Communaux",
     tags: ["Association", "WordPress", "Headless", "Next.js"],
-    duration: "4 semaines",
+    cardAlt: "Site vitrine des Etats Généraux Communaux",
   },
   "panorama-pub": {
     title: "Panorama Pub",
@@ -651,7 +913,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Annuaire en ligne Panorama Pub",
     tags: ["PME", "Annuaire B2B", "Marketplace", "Lancement produit"],
-    duration: "2 mois",
+    cardDescription: "Premier annuaire en ligne des fournisseurs d'objets publicitaires",
+    cardAlt: "Annuaire Panorama Pub - fournisseurs d'objets publicitaires",
   },
   proditec: {
     title: "Proditec",
@@ -676,7 +939,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Page d'accueil du site Proditec",
     tags: ["Corporate", "WordPress", "Polylang"],
-    duration: "1 mois",
+    cardDescription: "Site corporate multilingue",
+    cardAlt: "Site corporate Proditec",
   },
   doleances: {
     title: "Association des Doléances",
@@ -696,7 +960,9 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Les Doléances",
     tags: ["WordPress", "Next.js", "Association"],
-    duration: "2 mois",
+    cardTitle: "Les Doléances",
+    cardDescription: "Vitrine des Doléances de 2018-2019",
+    cardAlt: "Vitrine des Doléances",
   },
   sowee: {
     title: "Sowee",
@@ -717,7 +983,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Interface de la section blog Sowee",
     tags: ["WordPress", "Blog", "Thème custom"],
-    duration: "5 jours",
+    cardDescription: "Section blog de Sowee",
+    cardAlt: "Section blog de Sowee",
   },
   "salon-de-la-carrosserie": {
     title: "Salon de la Carrosserie 2024",
@@ -745,7 +1012,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Page d'accueil du site Salon de la Carrosserie",
     tags: ["WordPress", "Evénementiel", "Espace membres"],
-    duration: "15 jours",
+    cardDescription: "Site vitrine du Salon de la Carrosserie 2024",
+    cardAlt: "Site vitrine du Salon de la Carrosserie 2024",
   },
   hermitage: {
     title: "Tiers Lieu L'Hermitage",
@@ -774,7 +1042,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Page d'accueil du site Tiers Lieu L'Hermitage",
     tags: ["Refonte", "Impact", "WordPress"],
-    duration: "1 mois",
+    cardDescription: "Site vitrine du Tiers Lieu L'Hermitage",
+    cardAlt: "Site vitrine du Tiers Lieu L'Hermitage",
   },
   "erp-services": {
     title: "ERP Services",
@@ -796,7 +1065,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page de service du site ERP Services",
     tags: ["WordPress", "Site vitrine", "Refonte"],
-    duration: "2 semaines",
+    cardDescription: "Site vitrine d'ERP Services",
+    cardAlt: "Site vitrine d'ERP Services",
   },
   "senza-nature": {
     title: "Senza Nature",
@@ -821,7 +1091,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Page d'accueil du site Senza Nature",
     tags: ["Ecommerce", "Woocommerce", "WordPress"],
-    duration: "depuis 2024",
+    cardDescription: "Site ecommerce Senza Nature",
+    cardAlt: "Site ecommerce Senza Nature",
   },
   "wagner-hamisky": {
     title: "Wagner Hamisky",
@@ -842,7 +1113,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Wagner Hamisky",
     tags: ["WordPress", "Galerie d'art", "Site vitrine"],
-    duration: "3 semaines",
+    cardDescription: "Site vitrine de la galerie Wagner Hamisky",
+    cardAlt: "Site vitrine Wagner Hamisky",
   },
   mediatico: {
     title: "Mediatico",
@@ -862,7 +1134,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Mediatico",
     tags: ["WordPress", "Media en ligne", "Full Site Editing"],
-    duration: "4 semaines",
+    cardDescription: "Site vitrine de Mediatico",
+    cardAlt: "Site vitrine de Mediatico",
   },
   infralliance: {
     title: "Infralliance",
@@ -882,7 +1155,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site Connexion Plus",
     tags: ["WordPress", "Advanced Custom Fields", "Elementor Pro"],
-    duration: "2 semaines",
+    cardDescription: "Site vitrine d'Infralliance",
+    cardAlt: "Site vitrine d'Infralliance",
   },
   "connexion-plus": {
     title: "GEM Connexion",
@@ -902,7 +1176,9 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page d'accueil du site GEM Connexion",
     tags: ["WordPress", "Site vitrine", "Association"],
-    duration: "4 semaines",
+    cardTitle: "Connexion Plus",
+    cardDescription: "Site vitrine Connexion Plus",
+    cardAlt: "Connexion Plus - Développeur WordPress Freelance",
   },
   sdevo: {
     title: "SDEVO",
@@ -922,7 +1198,9 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Page de gestion des subventions du SDEVO",
     tags: ["WordPress", "Plugin custom", "Gestion des subventions"],
-    duration: "3 semaines",
+    cardTitle: "Syndicat départemental d'énergie du Val d'Oise",
+    cardDescription: "Plugin de gestion des subventions SDEVO",
+    cardAlt: "Plugin de gestion des subventions SDEVO",
   },
 };
 
@@ -950,7 +1228,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "One-page site of L'Hermitage's ECOLISE European Demonstrator",
     tags: ["Social economy", "Third place", "One-page", "Next.js", "Europe"],
-    duration: "1 week",
+    cardTitle: "L'Hermitage — ECOLISE Demonstrator",
+    cardDescription: "Next.js one-page announcing L'Hermitage's selection as one of the ECOLISE network's 15 European Demonstrators.",
   },
   reseauteurs: {
     title: "Réseauteurs",
@@ -973,7 +1252,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Réseauteurs platform: directory, agenda and map of professional networking",
     tags: ["Platform", "B2B networking", "Next.js", "Payload CMS", "Stripe"],
-    duration: "3 months",
+    cardDescription: "France's national networking platform: directory, agenda and map of business networks.",
+    cardAlt: "Réseauteurs platform — directory and map of professional networking",
   },
   "arguin-marine": {
     title: "Arguin Marine",
@@ -994,7 +1274,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Arguin Marine brochure site, boat rental on the Arcachon Basin",
     tags: ["SMB", "Boating", "Brochure site", "WordPress"],
-    duration: "TBD",
+    cardDescription: "WordPress brochure site for a high-end boat-rental service on the Arcachon Basin.",
   },
   "la-petite-vitrine": {
     title: "La Petite Vitrine",
@@ -1015,7 +1295,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "La Petite Vitrine — go-live service for small profession-based sites",
     tags: ["Freelancers", "Small business", "Product", "Web App", "Next.js"],
-    duration: "3 months",
+    cardDescription: "A packaged go-live service for small profession-based sites, for freelancers and very small businesses.",
   },
   "peer-to-peer": {
     title: "Peer to Peer",
@@ -1036,7 +1316,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Peer to Peer mental-health self-observation platform",
     tags: ["Impact", "Mental health", "Web App", "Local-first", "Next.js"],
-    duration: "TBD",
+    cardDescription: "A free, fully local mental-health self-observation platform — no account required.",
   },
   "cafe-citoyen": {
     title: "Café Citoyen",
@@ -1055,7 +1335,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Café Citoyen homepage",
     tags: ["Non-profit", "WordPress", "Headless", "Next.js"],
-    duration: "3 weeks",
+    cardDescription: "Café Citoyen brochure site",
+    cardAlt: "Café Citoyen brochure site",
   },
   "hermitage-jeu-de-piste": {
     title: "L'Hermitage – Treasure Hunt",
@@ -1091,7 +1372,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Mobile treasure hunt application for the Tiers Lieu L'Hermitage woodland estate",
     tags: ["Social economy", "Mobile app", "PWA", "Geolocation", "Gamification", "Offline"],
-    duration: "4 weeks",
+    cardDescription: "Treasure hunt across the Tiers Lieu L'Hermitage woodland estate",
+    cardAlt: "Treasure hunt across the Tiers Lieu L'Hermitage woodland estate",
   },
   "comme-des-fous-jeux": {
     title: "Comme des Fous – Online Games",
@@ -1109,7 +1391,6 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Online games on the Comme des Fous media outlet",
     tags: ["Media", "WordPress", "Headless", "Next.js"],
-    duration: "15 days",
   },
   "comme-des-fous": {
     title: "Comme des Fous",
@@ -1144,7 +1425,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Comme des Fous",
     tags: ["Media", "WordPress", "Headless", "Next.js"],
-    duration: "2 months",
+    cardTitle: "Comme des Fous – Headless WordPress Media",
+    cardAlt: "The website of the Comme des Fous media outlet",
   },
   "next-event": {
     title: "Next Event – Headless WordPress Demo",
@@ -1163,7 +1445,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Next Event homepage",
     tags: ["Events", "WordPress", "Headless", "Next.js"],
-    duration: "3 weeks",
+    cardAlt: "Next Event demo site",
   },
   "les-etats-generaux-communaux": {
     title: "Les Etats Généraux Communaux",
@@ -1182,7 +1464,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Les Etats Généraux Communaux homepage",
     tags: ["Non-profit", "WordPress", "Headless", "Next.js"],
-    duration: "4 weeks",
+    cardAlt: "Brochure site for Les Etats Généraux Communaux",
   },
   "panorama-pub": {
     title: "Panorama Pub",
@@ -1221,7 +1503,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Panorama Pub online directory",
     tags: ["SMB", "B2B directory", "Marketplace", "Product launch"],
-    duration: "2 months",
+    cardDescription: "The first online directory of promotional-products suppliers",
+    cardAlt: "Panorama Pub directory — promotional-products suppliers",
   },
   proditec: {
     title: "Proditec",
@@ -1246,7 +1529,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Proditec homepage",
     tags: ["Corporate", "WordPress", "Polylang"],
-    duration: "1 month",
+    cardDescription: "Multilingual corporate site",
+    cardAlt: "Proditec corporate site",
   },
   doleances: {
     title: "Les Doléances",
@@ -1266,7 +1550,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Les Doléances homepage",
     tags: ["WordPress", "Next.js", "Non-profit"],
-    duration: "2 months",
+    cardDescription: "Showcase for the citizens' grievances of 2018-2019",
+    cardAlt: "Showcase for the Doléances",
   },
   sowee: {
     title: "Sowee",
@@ -1287,7 +1572,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Sowee blog section interface",
     tags: ["WordPress", "Blog", "Custom theme"],
-    duration: "5 days",
+    cardDescription: "Sowee blog section",
+    cardAlt: "Sowee blog section",
   },
   "salon-de-la-carrosserie": {
     title: "Salon de la Carrosserie 2024",
@@ -1315,7 +1601,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Salon de la Carrosserie homepage",
     tags: ["WordPress", "Events", "Members area"],
-    duration: "15 days",
+    cardDescription: "Salon de la Carrosserie 2024 brochure site",
+    cardAlt: "Salon de la Carrosserie 2024 brochure site",
   },
   hermitage: {
     title: "Tiers Lieu L'Hermitage",
@@ -1344,7 +1631,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Tiers Lieu L'Hermitage homepage",
     tags: ["Rebuild", "Impact", "WordPress"],
-    duration: "1 month",
+    cardDescription: "Tiers Lieu L'Hermitage brochure site",
+    cardAlt: "Tiers Lieu L'Hermitage brochure site",
   },
   "erp-services": {
     title: "ERP Services",
@@ -1366,7 +1654,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "ERP Services service page",
     tags: ["WordPress", "Brochure site", "Rebuild"],
-    duration: "2 weeks",
+    cardDescription: "ERP Services brochure site",
+    cardAlt: "ERP Services brochure site",
   },
   "senza-nature": {
     title: "Senza Nature",
@@ -1391,7 +1680,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     galleryAlt: "Senza Nature homepage",
     tags: ["E-commerce", "Woocommerce", "WordPress"],
-    duration: "since 2024",
+    cardDescription: "Senza Nature e-commerce site",
+    cardAlt: "Senza Nature e-commerce site",
   },
   "wagner-hamisky": {
     title: "Wagner Hamisky",
@@ -1411,7 +1701,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Wagner Hamisky homepage",
     tags: ["WordPress", "Art gallery", "Brochure site"],
-    duration: "3 weeks",
+    cardDescription: "Brochure site for the Wagner Hamisky gallery",
+    cardAlt: "Wagner Hamisky brochure site",
   },
   mediatico: {
     title: "Mediatico",
@@ -1431,7 +1722,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Mediatico homepage",
     tags: ["WordPress", "Online media", "Full Site Editing"],
-    duration: "4 weeks",
+    cardDescription: "Mediatico brochure site",
+    cardAlt: "Mediatico brochure site",
   },
   infralliance: {
     title: "Infralliance",
@@ -1451,7 +1743,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "Connexion Plus homepage",
     tags: ["WordPress", "Advanced Custom Fields", "Elementor Pro"],
-    duration: "2 weeks",
+    cardDescription: "Infralliance brochure site",
+    cardAlt: "Infralliance brochure site",
   },
   "connexion-plus": {
     title: "GEM Connexion",
@@ -1471,7 +1764,9 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "GEM Connexion homepage",
     tags: ["WordPress", "Brochure site", "Non-profit"],
-    duration: "4 weeks",
+    cardTitle: "Connexion Plus",
+    cardDescription: "Connexion Plus brochure site",
+    cardAlt: "Connexion Plus — freelance WordPress developer",
   },
   sdevo: {
     title: "SDEVO",
@@ -1491,7 +1786,9 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     ],
     galleryAlt: "SDEVO grant-management page",
     tags: ["WordPress", "Custom plugin", "Grant management"],
-    duration: "3 weeks",
+    cardTitle: "Syndicat départemental d'énergie du Val d'Oise",
+    cardDescription: "SDEVO grant-management plugin",
+    cardAlt: "SDEVO grant-management plugin",
   },
 };
 
@@ -1753,9 +2050,21 @@ function pickContent(locale: Locale): Record<string, CaseStudyContent> {
   return locale === "en" ? CONTENT_EN : CONTENT_FR;
 }
 
-export function getCaseStudies(locale: Locale): CaseStudy[] {
+export interface CaseStudyQueryOptions {
+  /** Inclure les brouillons (previews du chantier D). Défaut : false. */
+  includeDrafts?: boolean;
+}
+
+function visibleMeta(options?: CaseStudyQueryOptions): CaseStudyMeta[] {
+  return options?.includeDrafts ? META : META.filter((m) => m.statut === "publie");
+}
+
+export function getCaseStudies(
+  locale: Locale,
+  options?: CaseStudyQueryOptions,
+): CaseStudy[] {
   const content = pickContent(locale);
-  return META.map((meta) => {
+  return visibleMeta(options).map((meta) => {
     const c = content[meta.slug] ?? CONTENT_FR[meta.slug];
     return {
       ...meta,
@@ -1765,8 +2074,12 @@ export function getCaseStudies(locale: Locale): CaseStudy[] {
   });
 }
 
-export function getCaseStudy(locale: Locale, slug: string): CaseStudy | undefined {
-  return getCaseStudies(locale).find((s) => s.slug === slug);
+export function getCaseStudy(
+  locale: Locale,
+  slug: string,
+  options?: CaseStudyQueryOptions,
+): CaseStudy | undefined {
+  return getCaseStudies(locale, options).find((s) => s.slug === slug);
 }
 
 export function getResultHighlights(
@@ -1777,6 +2090,50 @@ export function getResultHighlights(
   return map[slug];
 }
 
-export function getAllSlugs(): string[] {
-  return META.map((m) => m.slug);
+export function getAllSlugs(options?: CaseStudyQueryOptions): string[] {
+  return visibleMeta(options).map((m) => m.slug);
+}
+
+export function formatDelai(delai: Delai, locale: Locale): string {
+  if ("depuis" in delai) {
+    return locale === "en" ? `since ${delai.depuis}` : `depuis ${delai.depuis}`;
+  }
+  const { value, unit } = delai;
+  if (locale === "en") {
+    const units = { jours: "day", semaines: "week", mois: "month" } as const;
+    return `${value} ${units[unit]}${value > 1 ? "s" : ""}`;
+  }
+  const singulier = { jours: "jour", semaines: "semaine", mois: "mois" } as const;
+  return value > 1 && unit !== "mois" ? `${value} ${unit}` : `${value} ${singulier[unit]}`;
+}
+
+/** Projection légère pour les cartes de la liste — cas publiés uniquement. */
+export interface CaseStudyCard {
+  slug: string;
+  famille: FamilleKey;
+  link: string;
+  image: string;
+  alt: string;
+  title: string;
+  description: string;
+  isDemo: boolean;
+  highlight?: ResultHighlight;
+}
+
+export function getCaseStudyCards(locale: Locale): CaseStudyCard[] {
+  const content = pickContent(locale);
+  return visibleMeta().map((meta) => {
+    const c = content[meta.slug] ?? CONTENT_FR[meta.slug];
+    return {
+      slug: meta.slug,
+      famille: meta.famille,
+      link: `/etudes-de-cas/${meta.slug}`,
+      image: meta.cardImageUrl ?? meta.galleryUrl,
+      alt: c.cardAlt ?? c.galleryAlt,
+      title: c.cardTitle ?? c.title,
+      description: c.cardDescription ?? c.description,
+      isDemo: meta.isDemo ?? false,
+      highlight: getResultHighlights(locale, meta.slug)?.[0],
+    };
+  });
 }
