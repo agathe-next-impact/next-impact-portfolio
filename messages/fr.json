@@ -257,11 +257,9 @@
   "realisations": {
     "tabs": {
       "selection": "Sélection",
-      "site-wordpress": "Refonte & site WordPress",
-      "site-headless": "Site Headless (WordPress + Next.js)",
-      "plateforme": "Plateforme, annuaire & outil métier",
-      "outil-terrain": "Outil terrain & PWA",
-      "ia-automatisation": "IA & automatisation"
+      "vitrine": "Vitrine",
+      "app-web-mobile": "App web et mobile",
+      "agents-ia": "Agents IA"
     },
     "viewProject": "Voir le projet"
   },
@@ -327,11 +325,9 @@
       "cold": "Pré-diagnostic express (2 min)",
       "coldConseil": "Demander un diagnostic",
       "warm": {
-        "site-wordpress": "Discuter d'une refonte WordPress",
-        "site-headless": "Discuter d'un passage en Headless",
-        "plateforme": "Démarrer une plateforme métier",
-        "outil-terrain": "Créer votre outil terrain",
-        "ia-automatisation": "Mettre en place votre agent IA"
+        "vitrine": "Discuter de la refonte de votre site",
+        "app-web-mobile": "Démarrer votre app web ou mobile",
+        "agents-ia": "Mettre en place votre agent IA"
       }
     },
     "decisionPath": {

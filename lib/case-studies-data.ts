@@ -14,21 +14,15 @@ export type ClientTypeKey =
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
 export type Year = number | null;
 
-export type FamilleKey =
-  | "site-wordpress"
-  | "site-headless"
-  | "plateforme"
-  | "outil-terrain"
-  | "ia-automatisation";
+/**
+ * Catégories orientées bénéfice, jamais techno : un prospect froid cherche
+ * « un site » ou « une app », pas « du Headless ». La techno reste expliquée
+ * dans l'arbitrage de chaque fiche.
+ */
+export type FamilleKey = "vitrine" | "app-web-mobile" | "agents-ia";
 
 /** Ordre canonique des familles dans la liste ; une famille sans cas publié est masquée. */
-export const FAMILLE_ORDER: FamilleKey[] = [
-  "site-wordpress",
-  "site-headless",
-  "plateforme",
-  "outil-terrain",
-  "ia-automatisation",
-];
+export const FAMILLE_ORDER: FamilleKey[] = ["vitrine", "app-web-mobile", "agents-ia"];
 
 export type OffreConstructionKey = "wordpress" | "headless" | "plateforme" | "composant";
 
@@ -128,9 +122,9 @@ const META: CaseStudyMeta[] = [
   {
     id: "24",
     slug: "hermitage-ecolise",
-    famille: "outil-terrain",
+    famille: "vitrine",
     statut: "publie",
-    featured: 3,
+    featured: 6,
     offreConstruction: "plateforme",
     offreConseil: null,
     budgetIndicatif: null,
@@ -149,7 +143,7 @@ const META: CaseStudyMeta[] = [
     id: "23",
     youtubeVideoId: "chOmQ0W3QX0",
     slug: "reseauteurs",
-    famille: "plateforme",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: 1,
     offreConstruction: "plateforme",
@@ -168,7 +162,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "22",
     slug: "arguin-marine",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -188,9 +182,9 @@ const META: CaseStudyMeta[] = [
   {
     id: "21",
     slug: "la-petite-vitrine",
-    famille: "plateforme",
+    famille: "app-web-mobile",
     statut: "publie",
-    featured: 5,
+    featured: 2,
     offreConstruction: "plateforme",
     offreConseil: null,
     budgetIndicatif: null,
@@ -208,7 +202,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "20",
     slug: "peer-to-peer",
-    famille: "plateforme",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: null,
     offreConstruction: "plateforme",
@@ -228,9 +222,9 @@ const META: CaseStudyMeta[] = [
   {
     id: "19",
     slug: "panorama-pub",
-    famille: "plateforme",
+    famille: "app-web-mobile",
     statut: "publie",
-    featured: 6,
+    featured: 3,
     offreConstruction: "plateforme",
     offreConseil: null,
     budgetIndicatif: null,
@@ -248,9 +242,9 @@ const META: CaseStudyMeta[] = [
   {
     id: "17",
     slug: "cafe-citoyen",
-    famille: "site-headless",
+    famille: "vitrine",
     statut: "publie",
-    featured: 2,
+    featured: 4,
     offreConstruction: "headless",
     offreConseil: null,
     budgetIndicatif: null,
@@ -268,7 +262,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "18",
     slug: "hermitage-jeu-de-piste",
-    famille: "outil-terrain",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: null,
     offreConstruction: "plateforme",
@@ -289,7 +283,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "16",
     slug: "comme-des-fous-jeux",
-    famille: "site-headless",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -309,9 +303,9 @@ const META: CaseStudyMeta[] = [
   {
     id: "15",
     slug: "comme-des-fous",
-    famille: "site-headless",
+    famille: "vitrine",
     statut: "publie",
-    featured: 4,
+    featured: 5,
     offreConstruction: "headless",
     offreConseil: null,
     budgetIndicatif: null,
@@ -329,7 +323,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "3",
     slug: "next-event",
-    famille: "site-headless",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -351,7 +345,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "0",
     slug: "les-etats-generaux-communaux",
-    famille: "site-headless",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -372,7 +366,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "1",
     slug: "proditec",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -392,7 +386,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "2",
     slug: "doleances",
-    famille: "site-headless",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "headless",
@@ -413,7 +407,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "4",
     slug: "sowee",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -440,7 +434,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "5",
     slug: "salon-de-la-carrosserie",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -461,7 +455,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "6",
     slug: "hermitage",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -481,7 +475,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "7",
     slug: "erp-services",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -500,7 +494,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "8",
     slug: "senza-nature",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -520,7 +514,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "9",
     slug: "wagner-hamisky",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -541,7 +535,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "10",
     slug: "mediatico",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -562,7 +556,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "11",
     slug: "infralliance",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -583,7 +577,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "12",
     slug: "connexion-plus",
-    famille: "site-wordpress",
+    famille: "vitrine",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -603,7 +597,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "13",
     slug: "sdevo",
-    famille: "site-wordpress",
+    famille: "app-web-mobile",
     statut: "publie",
     featured: null,
     offreConstruction: "wordpress",
@@ -626,7 +620,7 @@ const META: CaseStudyMeta[] = [
   {
     id: "25",
     slug: "hermitage-veille",
-    famille: "ia-automatisation",
+    famille: "agents-ia",
     statut: "brouillon",
     featured: null,
     offreConstruction: null,
@@ -637,15 +631,14 @@ const META: CaseStudyMeta[] = [
     clientType: "ess",
     clientName: "Tiers Lieu L'Hermitage",
     imageUrl: "/img/logo-hermitage.webp",
-    // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
     galleryUrl: "/img/logo-hermitage.webp",
     date: { month: null, year: null },
-    technologies: ["[À COMPLÉTER — stack réelle : agents de recherche, vérification registre, format de livraison]"],
+    technologies: ["Claude Code", "Google Workspace"],
   },
   {
     id: "26",
     slug: "urban-pousses-veille",
-    famille: "ia-automatisation",
+    famille: "agents-ia",
     statut: "brouillon",
     featured: null,
     offreConstruction: null,
@@ -656,11 +649,10 @@ const META: CaseStudyMeta[] = [
     // [À COMPLÉTER] — type de structure à confirmer à la publication.
     clientType: "ess",
     clientName: "Urban Pousses",
-    imageUrl: "/logo-carre-bleu.png",
-    // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
-    galleryUrl: "/logo-carre-bleu.png",
+    imageUrl: "/img/logo_urbanpousses.webp",
+    galleryUrl: "/img/logo_urbanpousses.webp",
     date: { month: null, year: null },
-    technologies: ["[À COMPLÉTER — stack réelle : agents de recherche, vérification registre, format de livraison]"],
+    technologies: ["Claude Cowork", "Notion"],
   },
 ];
 
@@ -1084,12 +1076,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Stabilisation du site avec une réduction significative des bugs",
       "Hausse des performances du site avec gain de 30pt sur le score PageSpeed",
     ],
-    testimonial: {
-      content:
-        "Agathe est une remarquable professionnelle, très compétente sur les questions techniques, la veille quant à l'évolution des technologies, et systèmes. Egalement capable de donner des conseils stratégiques, sur le fond et la forme des contenus, Agathe est très attentive aux besoins exprimés, en amont comme dans la réalisation des missions convenues, elle est très réactive pendant l'exécution des missions. Je recommande sans réserves.",
-      author: "Jean Karinthi",
-      position: "Fondateur, Tiers Lieu L'Hermitage",
-    },
+    // Citation de Jean Karinthi portée au niveau du client (CLIENT_TESTIMONIALS_FR) :
+    // elle vaut pour toutes les fiches L'Hermitage, pas seulement celle-ci.
     galleryAlt: "Page d'accueil du site Tiers Lieu L'Hermitage",
     tags: ["Refonte", "Impact", "WordPress"],
     cardDescription: "Site vitrine du Tiers Lieu L'Hermitage",
@@ -1291,13 +1279,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     solution:
       "Des agents de recherche spécialisés, lancés en parallèle sur chaque famille de concurrents — opérateurs intégrés du séminaire résidentiel, monuments et domaines patrimoniaux privatisables, éco-lieux et lieux à impact, hôtellerie de château, plateformes d'intermédiation — puis un agent dédié au contexte sectoriel des tiers-lieux et du tourisme d'affaires. Chaque lieu retenu est vérifié sur ses propres pages : capacité en couchages et en salles, prestations intégrées, tarifs publiés, exploitant, et revendication environnementale ou sociale. Les résultats sont consolidés en un document unique : la carte des concurrents par type d'offre, la lecture des niches, et la liste explicite de ce qui n'a pas pu être vérifié.",
-    testimonial: {
-      content: "[À COMPLÉTER — citation client]",
-      author: "[À COMPLÉTER]",
-      position: "[À COMPLÉTER]",
-    },
     galleryAlt:
-      "Extrait de la veille concurrentielle L'Hermitage : les concurrents du séjour d'entreprise classés par type d'offre",
+      "Logo du Tiers Lieu L'Hermitage, tiers-lieu rural de l'Oise",
     tags: ["IA", "Automatisation", "Veille", "Tiers-lieu"],
     cardTitle: "L'Hermitage — Veille concurrentielle par agents IA",
     cardDescription:
@@ -1337,13 +1320,8 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     },
     solution:
       "Cinq agents de recherche lancés en parallèle, un par segment de marché, avec une consigne commune et non négociable : ne citer que des entreprises réelles et vérifiables, distinguer systématiquement le fait lu à la source de la déduction, et signaler les données manquantes comme manquantes plutôt que les combler par des estimations. Chaque acteur est recoupé avec l'annuaire des entreprises pour confirmer son existence et son état d'activité — ce qui a permis d'écarter plusieurs concurrents apparents dont l'activité avait cessé, et d'en requalifier d'autres qui ne produisaient pas ce qu'ils semblaient produire. Le livrable consolide la cartographie par type d'offre, le tableau comparatif des niches, la recommandation, et la liste explicite des points restés invérifiés.",
-    testimonial: {
-      content: "[À COMPLÉTER — citation client]",
-      author: "[À COMPLÉTER]",
-      position: "[À COMPLÉTER]",
-    },
     galleryAlt:
-      "Extrait de l'étude Urban Pousses : cartographie des concurrents par type d'offre et comparatif des niches",
+      "Logo Urban Pousses, producteur de micro-pousses dans l'Oise",
     tags: ["IA", "Automatisation", "Veille", "Étude de marché"],
     cardTitle: "Urban Pousses — Veille concurrentielle par agents IA",
     cardDescription:
@@ -1770,12 +1748,8 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Site stabilized with significantly fewer bugs",
       "Performance gains: +30 points on PageSpeed score",
     ],
-    testimonial: {
-      content:
-        "Agathe is an outstanding professional, highly skilled on technical matters and on tracking the evolution of technologies and systems. Equally able to give strategic advice on both the substance and the form of content, Agathe is very attentive to the needs expressed — both up front and during delivery — and is very responsive throughout. I recommend her without reservation.",
-      author: "Jean Karinthi",
-      position: "Founder, Tiers Lieu L'Hermitage",
-    },
+    // See CLIENT_TESTIMONIALS_EN: Jean Karinthi's quote now covers every
+    // L'Hermitage case study, not just this one.
     galleryAlt: "Tiers Lieu L'Hermitage homepage",
     tags: ["Rebuild", "Impact", "WordPress"],
     cardDescription: "Tiers Lieu L'Hermitage brochure site",
@@ -1976,13 +1950,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     solution:
       "Specialised research agents launched in parallel on each competitor family — integrated residential-offsite operators, heritage monuments and estates available for private hire, eco-venues and impact-led places, château hotels, booking platforms — then a dedicated agent on the sector context of third places and business tourism. Every venue kept is verified on its own pages: bed and room capacity, bundled services, published rates, operator, and any environmental or social claim. Results are consolidated into a single document: the competitor map by offer type, the reading of the niches, and an explicit list of what could not be verified.",
-    testimonial: {
-      content: "[TO COMPLETE — client quote]",
-      author: "[TO COMPLETE]",
-      position: "[TO COMPLETE]",
-    },
-    galleryAlt:
-      "Excerpt from L'Hermitage competitive intelligence: corporate stay competitors sorted by offer type",
+    galleryAlt: "Tiers Lieu L'Hermitage logo, a rural third place in the Oise",
     tags: ["AI", "Automation", "Monitoring", "Third place"],
     cardTitle: "L'Hermitage — Competitive intelligence by AI agents",
     cardDescription:
@@ -2022,19 +1990,50 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     },
     solution:
       "Five research agents launched in parallel, one per market segment, under a shared and non-negotiable brief: cite only real, verifiable companies, systematically separate what was read at source from what was inferred, and report missing data as missing rather than filling it with estimates. Every player is cross-checked against the public company register to confirm existence and trading status — which allowed several apparent competitors to be dropped because they had ceased trading, and others to be reclassified because they did not produce what they seemed to. The deliverable consolidates the map by offer type, the niche comparison table, the recommendation, and an explicit list of the points left unverified.",
-    testimonial: {
-      content: "[TO COMPLETE — client quote]",
-      author: "[TO COMPLETE]",
-      position: "[TO COMPLETE]",
-    },
-    galleryAlt:
-      "Excerpt from the Urban Pousses study: competitor map by offer type and niche comparison",
+    galleryAlt: "Urban Pousses logo, microgreens grower in the Oise",
     tags: ["AI", "Automation", "Monitoring", "Market research"],
     cardTitle: "Urban Pousses — Competitive intelligence by AI agents",
     cardDescription:
       "30 competitors mapped across 5 offer types, 8 niches compared and a strategic recommendation for a microgreens grower.",
   },
 };
+
+// ─── Témoignages au niveau du client ───────────────────────────────────────
+
+/**
+ * Une recommandation qui porte sur le travail en général, et non sur un projet
+ * précis, vaut pour toutes les fiches du même client. Elle sert de repli quand
+ * une fiche n'a pas de citation propre ; une citation spécifique au projet,
+ * quand elle existe, reste prioritaire (elle en dit toujours plus).
+ */
+type Testimonial = NonNullable<CaseStudyContent["testimonial"]>;
+
+const CLIENT_TESTIMONIALS_FR: Record<string, Testimonial> = {
+  hermitage: {
+    content:
+      "Agathe est une remarquable professionnelle, très compétente sur les questions techniques, la veille quant à l'évolution des technologies, et systèmes. Egalement capable de donner des conseils stratégiques, sur le fond et la forme des contenus, Agathe est très attentive aux besoins exprimés, en amont comme dans la réalisation des missions convenues, elle est très réactive pendant l'exécution des missions. Je recommande sans réserves.",
+    author: "Jean Karinthi",
+    position: "Fondateur, Tiers Lieu L'Hermitage",
+  },
+};
+
+const CLIENT_TESTIMONIALS_EN: Record<string, Testimonial> = {
+  hermitage: {
+    content:
+      "Agathe is an outstanding professional, highly skilled on technical matters and on tracking the evolution of technologies and systems. Equally able to give strategic advice on both the substance and the form of content, Agathe is very attentive to the needs expressed — both up front and during delivery — and is very responsive throughout. I recommend her without reservation.",
+    author: "Jean Karinthi",
+    position: "Founder, Tiers Lieu L'Hermitage",
+  },
+};
+
+function getClientTestimonial(
+  locale: Locale,
+  clientId: string | null,
+): Testimonial | undefined {
+  if (!clientId) return undefined;
+  const map = locale === "en" ? CLIENT_TESTIMONIALS_EN : CLIENT_TESTIMONIALS_FR;
+  return map[clientId] ?? CLIENT_TESTIMONIALS_FR[clientId];
+}
 
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
@@ -2313,6 +2312,8 @@ export function getCaseStudies(
     return {
       ...meta,
       ...c,
+      // Citation propre au projet si elle existe, sinon celle du client.
+      testimonial: c.testimonial ?? getClientTestimonial(locale, meta.clientId),
       gallery: { url: meta.galleryUrl, alt: c.galleryAlt },
     };
   });

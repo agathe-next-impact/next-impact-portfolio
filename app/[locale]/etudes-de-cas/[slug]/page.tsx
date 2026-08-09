@@ -238,7 +238,7 @@ export default async function CaseStudyPage({
               )}
 
               {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil ;
-                  titres de sections transposés pour la famille ia-automatisation) */}
+                  titres de sections transposés pour la famille agents-ia) */}
               <CaseStudyProfileContent
                 slug={caseStudy.slug}
                 locale={locale}

@@ -32,7 +32,7 @@ export default function CaseStudyProfileContent({
 
   // Gabarit automatisation (chantier D2) : mêmes composants, sections renommées
   // — Contexte / Le besoin / Résultats chiffrés.
-  const isAutomation = famille === "ia-automatisation";
+  const isAutomation = famille === "agents-ia";
 
   const overrides = getCaseStudyProfileOverrides(locale);
   const override =

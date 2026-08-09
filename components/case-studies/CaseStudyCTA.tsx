@@ -17,7 +17,7 @@ const CALENDAR_URL = "https://calendar.app.google/RwZqaabSR5aDMnk46";
  * de la famille du cas (→ RDV). Froid en primaire : un prospect qui vérifie
  * n'est pas prêt pour un RDV.
  *
- * Exception ia-automatisation : un diagnostic de site web n'a aucun sens pour
+ * Exception agents-ia : un diagnostic de site web n'a aucun sens pour
  * un cas d'agent IA — le froid mène à l'offre conseil. Le libellé change avec
  * la destination : /conseil n'est pas un outil de 2 minutes, promettre « 2 min »
  * là-dessus serait une promesse cassée.
@@ -30,7 +30,7 @@ export default async function CaseStudyCTA({
   locale: Locale;
 }) {
   const t = await getTranslations({ locale, namespace: "caseStudyDetail.cta" });
-  const isAutomation = famille === "ia-automatisation";
+  const isAutomation = famille === "agents-ia";
 
   return (
     <div className="flex flex-col gap-2.5">
