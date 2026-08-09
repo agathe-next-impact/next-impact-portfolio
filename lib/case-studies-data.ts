@@ -58,7 +58,8 @@ export interface CaseStudyMeta {
   offreConseil: OffreConseilKey | null;
   /** Affiché tel quel (ex. « à partir de 4 000 € »), jamais calculé ; null = masqué. */
   budgetIndicatif: string | null;
-  delai: Delai;
+  /** null = non communiqué (brouillons en attente de données) : la durée est masquée. */
+  delai: Delai | null;
   /** Identifiant commun aux fiches d'un même client (ex. "hermitage"). */
   clientId: string | null;
   /** Variante optimisée pour la carte de liste ; fallback sur galleryUrl. */
@@ -93,6 +94,12 @@ export interface CaseStudyContent {
     decision: string;
     rationale: string;
   };
+  /**
+   * « La solution » — section du gabarit automatisation (famille
+   * ia-automatisation) : sources surveillées, tri/synthèse par l'agent,
+   * lettre de veille envoyée par mail. Affichée uniquement si présente.
+   */
+  solution?: string;
   testimonial?: {
     content: string;
     author: string;
@@ -611,6 +618,49 @@ const META: CaseStudyMeta[] = [
     galleryUrl: "/img/desktop-screen-sdevo.png",
     date: { month: 8, year: 2024 },
     technologies: ["WordPress", "PHP", "Plugin custom"],
+  },
+  // ─── Brouillons « IA & automatisation » (chantier D — DIRECTIVES-ETUDES-DE-CAS) ──
+  // Tant que statut = "brouillon" : invisibles partout (liste, filtres, compteurs,
+  // sitemap, llms, HTML). Prévisualisables uniquement en dev sur /etudes-de-cas/[slug].
+  // À la publication : passer statut en "publie" et remplacer les [À COMPLÉTER].
+  {
+    id: "25",
+    slug: "hermitage-veille",
+    famille: "ia-automatisation",
+    statut: "brouillon",
+    featured: null,
+    offreConstruction: null,
+    offreConseil: "pack-ia",
+    budgetIndicatif: null,
+    delai: null,
+    clientId: "hermitage",
+    clientType: "ess",
+    clientName: "Tiers Lieu L'Hermitage",
+    imageUrl: "/img/logo-hermitage.webp",
+    // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
+    galleryUrl: "/img/logo-hermitage.webp",
+    date: { month: null, year: null },
+    technologies: ["[À COMPLÉTER — stack réelle : agent + envoi mail]"],
+  },
+  {
+    id: "26",
+    slug: "urban-pousses-veille",
+    famille: "ia-automatisation",
+    statut: "brouillon",
+    featured: null,
+    offreConstruction: null,
+    offreConseil: "pack-ia",
+    budgetIndicatif: null,
+    delai: null,
+    clientId: "urban-pousses",
+    // [À COMPLÉTER] — type de structure à confirmer à la publication.
+    clientType: "ess",
+    clientName: "Urban Pousses",
+    imageUrl: "/logo-carre-bleu.png",
+    // [À COMPLÉTER] — extrait visuel de la lettre de veille reçue par mail.
+    galleryUrl: "/logo-carre-bleu.png",
+    date: { month: null, year: null },
+    technologies: ["[À COMPLÉTER — stack réelle : agent + envoi mail]"],
   },
 ];
 
@@ -1202,6 +1252,80 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
     cardDescription: "Plugin de gestion des subventions SDEVO",
     cardAlt: "Plugin de gestion des subventions SDEVO",
   },
+  // ─── Gabarits automatisation (chantier D2) — brouillons, rien d'inventé :
+  // tout ce qui n'est pas fourni par la cliente reste [À COMPLÉTER].
+  "hermitage-veille": {
+    title: "[À COMPLÉTER — L'Hermitage : lettre de veille par agent IA]",
+    description:
+      "Une info triée qui arrive, pas une info à aller chercher : [À COMPLÉTER — périmètre de la veille en une phrase].",
+    detailedDescription: `[À COMPLÉTER — Contexte : qui est la structure, pourquoi la veille compte pour elle.]\n\n[À COMPLÉTER — Avant : temps perdu à chercher l'information ou info ratée, conséquences concrètes.]`,
+    objectives: [
+      "[À COMPLÉTER — Le besoin : une info triée qui arrive, pas une info à aller chercher]",
+      "[À COMPLÉTER — besoin secondaire]",
+    ],
+    results: [
+      "[À COMPLÉTER — nombre de sources couvertes]",
+      "[À COMPLÉTER — fréquence d'envoi de la lettre]",
+      "[À COMPLÉTER — délai de mise en place]",
+      "[À COMPLÉTER — temps hebdomadaire économisé (estimation honnête)]",
+      "[À COMPLÉTER — taux de lecture, si disponible]",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Agent IA sur mesure",
+        "Outil de veille SaaS",
+        "Veille manuelle",
+        "Newsletters existantes",
+      ],
+      decision: "[À COMPLÉTER — pourquoi l'agent IA sur mesure]",
+      rationale: "[À COMPLÉTER — démonstration « IA utile, pas gadget »]",
+    },
+    solution:
+      "[À COMPLÉTER — La solution : sources surveillées, tri et synthèse par l'agent, lettre de veille envoyée par mail à la fréquence choisie.]",
+    testimonial: {
+      content: "[À COMPLÉTER — citation client]",
+      author: "[À COMPLÉTER]",
+      position: "[À COMPLÉTER]",
+    },
+    galleryAlt: "[À COMPLÉTER — extrait visuel de la lettre de veille reçue par mail]",
+    tags: ["IA", "Automatisation", "Veille"],
+  },
+  "urban-pousses-veille": {
+    title: "[À COMPLÉTER — Urban Pousses : lettre de veille par agent IA]",
+    description:
+      "Une info triée qui arrive, pas une info à aller chercher : [À COMPLÉTER — périmètre de la veille en une phrase].",
+    detailedDescription: `[À COMPLÉTER — Contexte : qui est la structure, pourquoi la veille compte pour elle.]\n\n[À COMPLÉTER — Avant : temps perdu à chercher l'information ou info ratée, conséquences concrètes.]`,
+    objectives: [
+      "[À COMPLÉTER — Le besoin : une info triée qui arrive, pas une info à aller chercher]",
+      "[À COMPLÉTER — besoin secondaire]",
+    ],
+    results: [
+      "[À COMPLÉTER — nombre de sources couvertes]",
+      "[À COMPLÉTER — fréquence d'envoi de la lettre]",
+      "[À COMPLÉTER — délai de mise en place]",
+      "[À COMPLÉTER — temps hebdomadaire économisé (estimation honnête)]",
+      "[À COMPLÉTER — taux de lecture, si disponible]",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Agent IA sur mesure",
+        "Outil de veille SaaS",
+        "Veille manuelle",
+        "Newsletters existantes",
+      ],
+      decision: "[À COMPLÉTER — pourquoi l'agent IA sur mesure]",
+      rationale: "[À COMPLÉTER — démonstration « IA utile, pas gadget »]",
+    },
+    solution:
+      "[À COMPLÉTER — La solution : sources surveillées, tri et synthèse par l'agent, lettre de veille envoyée par mail à la fréquence choisie.]",
+    testimonial: {
+      content: "[À COMPLÉTER — citation client]",
+      author: "[À COMPLÉTER]",
+      position: "[À COMPLÉTER]",
+    },
+    galleryAlt: "[À COMPLÉTER — extrait visuel de la lettre de veille reçue par mail]",
+    tags: ["IA", "Automatisation", "Veille"],
+  },
 };
 
 // ─── English content ───────────────────────────────────────────────────────
@@ -1789,6 +1913,80 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
     cardTitle: "Syndicat départemental d'énergie du Val d'Oise",
     cardDescription: "SDEVO grant-management plugin",
     cardAlt: "SDEVO grant-management plugin",
+  },
+  // ─── Automation drafts (chantier D2) — nothing invented: everything not
+  // provided by the client stays [TO COMPLETE].
+  "hermitage-veille": {
+    title: "[TO COMPLETE — L'Hermitage: AI-agent monitoring newsletter]",
+    description:
+      "Curated information that arrives, instead of information you have to chase: [TO COMPLETE — scope of the monitoring in one sentence].",
+    detailedDescription: `[TO COMPLETE — Context: who the organisation is, why monitoring matters to them.]\n\n[TO COMPLETE — Before: time lost chasing information or missed news, concrete consequences.]`,
+    objectives: [
+      "[TO COMPLETE — The need: curated information that arrives, not information to chase]",
+      "[TO COMPLETE — secondary need]",
+    ],
+    results: [
+      "[TO COMPLETE — number of sources covered]",
+      "[TO COMPLETE — newsletter frequency]",
+      "[TO COMPLETE — setup time]",
+      "[TO COMPLETE — estimated weekly time saved (honest estimate)]",
+      "[TO COMPLETE — read rate, if available]",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Custom AI agent",
+        "SaaS monitoring tool",
+        "Manual monitoring",
+        "Existing newsletters",
+      ],
+      decision: "[TO COMPLETE — why the custom AI agent]",
+      rationale: "[TO COMPLETE — proof of “useful AI, not a gimmick”]",
+    },
+    solution:
+      "[TO COMPLETE — The solution: monitored sources, agent-driven curation and synthesis, monitoring newsletter sent by email at the chosen frequency.]",
+    testimonial: {
+      content: "[TO COMPLETE — client quote]",
+      author: "[TO COMPLETE]",
+      position: "[TO COMPLETE]",
+    },
+    galleryAlt: "[TO COMPLETE — visual excerpt of the newsletter received by email]",
+    tags: ["AI", "Automation", "Monitoring"],
+  },
+  "urban-pousses-veille": {
+    title: "[TO COMPLETE — Urban Pousses: AI-agent monitoring newsletter]",
+    description:
+      "Curated information that arrives, instead of information you have to chase: [TO COMPLETE — scope of the monitoring in one sentence].",
+    detailedDescription: `[TO COMPLETE — Context: who the organisation is, why monitoring matters to them.]\n\n[TO COMPLETE — Before: time lost chasing information or missed news, concrete consequences.]`,
+    objectives: [
+      "[TO COMPLETE — The need: curated information that arrives, not information to chase]",
+      "[TO COMPLETE — secondary need]",
+    ],
+    results: [
+      "[TO COMPLETE — number of sources covered]",
+      "[TO COMPLETE — newsletter frequency]",
+      "[TO COMPLETE — setup time]",
+      "[TO COMPLETE — estimated weekly time saved (honest estimate)]",
+      "[TO COMPLETE — read rate, if available]",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Custom AI agent",
+        "SaaS monitoring tool",
+        "Manual monitoring",
+        "Existing newsletters",
+      ],
+      decision: "[TO COMPLETE — why the custom AI agent]",
+      rationale: "[TO COMPLETE — proof of “useful AI, not a gimmick”]",
+    },
+    solution:
+      "[TO COMPLETE — The solution: monitored sources, agent-driven curation and synthesis, monitoring newsletter sent by email at the chosen frequency.]",
+    testimonial: {
+      content: "[TO COMPLETE — client quote]",
+      author: "[TO COMPLETE]",
+      position: "[TO COMPLETE]",
+    },
+    galleryAlt: "[TO COMPLETE — visual excerpt of the newsletter received by email]",
+    tags: ["AI", "Automation", "Monitoring"],
   },
 };
 

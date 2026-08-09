@@ -25,13 +25,17 @@ import type { Locale } from "@/i18n/routing";
 // Revalidate toutes les 6 heures
 export const revalidate = 21600;
 
+// Les brouillons (statut ≠ publie) ne sont prévisualisables qu'en dev :
+// en production ils restent introuvables (404), hors sitemap et hors liste.
+const PREVIEW_DRAFTS = process.env.NODE_ENV === "development";
+
 // meta données dynamiques pour la page d'étude de cas
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await props.params;
   const t = await getTranslations({ locale, namespace: "caseStudyDetail" });
-  const caseStudy = getCaseStudy(locale, slug);
+  const caseStudy = getCaseStudy(locale, slug, { includeDrafts: PREVIEW_DRAFTS });
   if (!caseStudy) {
     return {
       title: t("metaNotFoundTitle"),
@@ -69,9 +73,11 @@ function getSimilarCaseStudies(
     .slice(0, limit);
 }
 
-// Fonction pour générer les chemins statiques
+// Fonction pour générer les chemins statiques.
+// dynamicParams = false (layout [locale]) : en production, seuls les slugs
+// publiés existent — les brouillons font 404 ; en dev ils sont prévisualisables.
 export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  return getAllSlugs({ includeDrafts: PREVIEW_DRAFTS }).map((slug) => ({ slug }));
 }
 
 export default async function CaseStudyPage({
@@ -81,8 +87,11 @@ export default async function CaseStudyPage({
 }) {
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "caseStudyDetail" });
+  // Listes annexes (similaires, historique) : cas publiés uniquement, même en dev.
   const allCaseStudies = getCaseStudies(locale);
-  const caseStudy = allCaseStudies.find((study) => study.slug === slug);
+  const caseStudy =
+    allCaseStudies.find((study) => study.slug === slug) ??
+    (PREVIEW_DRAFTS ? getCaseStudy(locale, slug, { includeDrafts: true }) : undefined);
 
   if (!caseStudy) {
     notFound();
@@ -228,10 +237,12 @@ export default async function CaseStudyPage({
                 </Reveal>
               )}
 
-              {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil) */}
+              {/* Présentation du projet + Objectifs + Résultats (adaptatif par profil ;
+                  titres de sections transposés pour la famille ia-automatisation) */}
               <CaseStudyProfileContent
                 slug={caseStudy.slug}
                 locale={locale}
+                famille={caseStudy.famille}
                 defaultDescription={caseStudy.description}
                 defaultDetailedDescription={caseStudy.detailedDescription}
                 defaultObjectives={caseStudy.objectives}
@@ -278,6 +289,28 @@ export default async function CaseStudyPage({
                       </p>
                     </div>
                   </div>
+                </Reveal>
+              )}
+
+              {/* La solution — section du gabarit automatisation (sources
+                  surveillées, tri/synthèse, lettre par mail). Masquée si absente. */}
+              {caseStudy.solution && (
+                <Reveal>
+                  <section className="mt-10">
+                    <h2 className="mb-5 text-2xl font-light leading-tight tracking-tight text-foreground md:text-3xl">
+                      {t("solutionTitle")}
+                    </h2>
+                    <div className="font-inter-tight">
+                      {caseStudy.solution.split("\n\n").map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className="mb-4 text-[15px] leading-relaxed text-mid-gray"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </section>
                 </Reveal>
               )}
 
@@ -389,15 +422,17 @@ export default async function CaseStudyPage({
                 </div>
               </div>
 
-              {/* Durée */}
-              <div className="mb-4 border-b border-dark-gray pb-4">
-                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
-                  {t("duration")}
+              {/* Durée — masquée tant que la donnée n'est pas fournie (brouillons) */}
+              {caseStudy.delai && (
+                <div className="mb-4 border-b border-dark-gray pb-4">
+                  <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                    {t("duration")}
+                  </div>
+                  <div className="text-[15px] font-medium text-foreground">
+                    {formatDelai(caseStudy.delai, locale)}
+                  </div>
                 </div>
-                <div className="text-[15px] font-medium text-foreground">
-                  {formatDelai(caseStudy.delai, locale)}
-                </div>
-              </div>
+              )}
 
               {/* Technologies */}
               <div className="mb-4 border-b border-dark-gray pb-4">

@@ -281,8 +281,12 @@
     "arbitrageRationale": "Why this choice",
     "projectOverview": "Project overview",
     "projectPresentation": "Project presentation",
+    "projectContext": "Context",
     "objectives": "Objectives",
+    "theNeed": "The need",
     "results": "Results",
+    "resultsFigures": "Measured results",
+    "solutionTitle": "The solution",
     "testimonial": "Client testimonial",
     "projectInfo": "Project information",
     "client": "Client",
@@ -348,7 +352,8 @@
         "composant": "A custom component integrated into the existing site."
       },
       "constructionLink": "See this offer on Web solutions",
-      "budgetLine": "A project like this: {budget} · {delai}"
+      "budgetLine": "A project like this: {budget} · {delai}",
+      "budgetLineNoDelai": "A project like this: {budget}"
     },
     "clientHistory": {
       "title": "Client history",

@@ -44,10 +44,12 @@ export default async function CaseStudyDecisionPath({
     : undefined;
 
   const budgetText = budgetIndicatif
-    ? t("budgetLine", {
-        budget: budgetIndicatif,
-        delai: formatDelai(caseStudy.delai, locale),
-      })
+    ? caseStudy.delai
+      ? t("budgetLine", {
+          budget: budgetIndicatif,
+          delai: formatDelai(caseStudy.delai, locale),
+        })
+      : t("budgetLineNoDelai", { budget: budgetIndicatif })
     : null;
 
   const steps = [

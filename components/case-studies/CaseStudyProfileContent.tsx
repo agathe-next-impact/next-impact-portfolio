@@ -5,11 +5,13 @@ import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getCaseStudyProfileOverrides } from "@/lib/case-studies-profiles";
+import type { FamilleKey } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 
 interface CaseStudyProfileContentProps {
   slug: string;
   locale: Locale;
+  famille: FamilleKey;
   defaultDescription: string;
   defaultDetailedDescription: string;
   defaultObjectives: string[];
@@ -19,6 +21,7 @@ interface CaseStudyProfileContentProps {
 export default function CaseStudyProfileContent({
   slug,
   locale,
+  famille,
   defaultDescription,
   defaultDetailedDescription,
   defaultObjectives,
@@ -26,6 +29,10 @@ export default function CaseStudyProfileContent({
 }: CaseStudyProfileContentProps) {
   const { profileId } = useDocumentationMode();
   const t = useTranslations("caseStudyDetail");
+
+  // Gabarit automatisation (chantier D2) : mêmes composants, sections renommées
+  // — Contexte / Le besoin / Résultats chiffrés.
+  const isAutomation = famille === "ia-automatisation";
 
   const overrides = getCaseStudyProfileOverrides(locale);
   const override =
@@ -51,7 +58,7 @@ export default function CaseStudyProfileContent({
         {/* Présentation du projet */}
         <section>
           <h2 className="mb-5 text-2xl font-light leading-tight tracking-tight text-foreground md:text-3xl">
-            {t("projectPresentation")}
+            {t(isAutomation ? "projectContext" : "projectPresentation")}
           </h2>
           <div className="font-inter-tight">
             {detailedDescription.split("\n\n").map((paragraph, index) => (
@@ -69,7 +76,7 @@ export default function CaseStudyProfileContent({
         <section className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
           <div>
             <h2 className="mb-5 text-xl font-light tracking-tight text-foreground md:text-2xl">
-              {t("objectives")}
+              {t(isAutomation ? "theNeed" : "objectives")}
             </h2>
             <ul className="m-0 list-none p-0">
               {objectives.map((objective, index) => (
@@ -91,7 +98,7 @@ export default function CaseStudyProfileContent({
           </div>
           <div>
             <h2 className="mb-5 text-xl font-light tracking-tight text-foreground md:text-2xl">
-              {t("results")}
+              {t(isAutomation ? "resultsFigures" : "results")}
             </h2>
             <ul className="m-0 list-none p-0">
               {results.map((result, index) => (

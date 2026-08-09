@@ -281,8 +281,12 @@
     "arbitrageRationale": "Pourquoi ce choix",
     "projectOverview": "Aperçu du projet",
     "projectPresentation": "Présentation du projet",
+    "projectContext": "Contexte",
     "objectives": "Objectifs",
+    "theNeed": "Le besoin",
     "results": "Résultats",
+    "resultsFigures": "Résultats chiffrés",
+    "solutionTitle": "La solution",
     "testimonial": "Témoignage client",
     "projectInfo": "Informations du projet",
     "client": "Client",
@@ -348,7 +352,8 @@
         "composant": "Un composant sur-mesure intégré au site existant."
       },
       "constructionLink": "Voir cette offre sur Solutions web",
-      "budgetLine": "Projet de ce type : {budget} · {delai}"
+      "budgetLine": "Projet de ce type : {budget} · {delai}",
+      "budgetLineNoDelai": "Projet de ce type : {budget}"
     },
     "clientHistory": {
       "title": "Historique client",
