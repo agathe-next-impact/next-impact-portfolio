@@ -72,7 +72,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Build only when it is the right choice.",
+    titre: "Web solutions",
     sousTitre:
       "WordPress, Headless WordPress + Next.js or a custom business tool: these services are not imposed stacks, but possible answers after a clear Web & AI decision.",
     carouselLabel: "Why Next Impact?",
@@ -273,7 +273,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
 
 export const CASE_STUDIES_PAGE_VARIANTS_EN: Record<ProfileId | "default", CaseStudiesPageVariant> = {
   default: {
-    titre: "Projects delivered, choices explained",
+    titre: "Case studies",
     sousTitre:
       "Each project tells a decision: why this tech, this budget, this timeline — and what it delivered.",
     defaultTab: "selection",

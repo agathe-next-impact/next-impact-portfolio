@@ -115,7 +115,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
   ServicesPageVariant
 > = {
   default: {
-    titre: "Du bon choix techno à la solution web mise en ligne",
+    titre: "Solutions web",
     sousTitre:
       "WordPress, Headless WordPress + Next.js ou outil métier sur mesure : ces services ne sont pas des choix imposés, mais des réponses possibles après une décision Web & IA claire.",
     carouselLabel: "Pourquoi Next Impact ?",
@@ -331,7 +331,7 @@ export const CASE_STUDIES_PAGE_VARIANTS: Record<
   CaseStudiesPageVariant
 > = {
   default: {
-    titre: "Des projets livrés, des choix expliqués",
+    titre: "Études de cas",
     sousTitre:
       "Chaque projet raconte une décision : pourquoi cette techno, ce budget, ce délai — et ce que ça a donné.",
     defaultTab: "selection",
