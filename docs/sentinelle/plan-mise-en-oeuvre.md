@@ -269,7 +269,7 @@ comme client.
   sans CMS sous nginx/PHP. La définition de fini du pack (un seul client
   WordPress) ne prouvait rien de l'agnosticité ; celle-ci si.
 
-### Phase 4 — Admin, envoi et newsletter bimensuelle (~3 j)
+### Phase 4 — Admin, envoi et newsletter bimensuelle (~3 j) · **faite**
 
 Le prompt du pack, plus :
 
@@ -897,11 +897,100 @@ Deux constats à emporter en phase 4 :
   Elle est prouvée par test unitaire, et la vérification en base confirme
   l'invariant : zéro alerte rouge fondée sur une version non certaine.
 
+### Lot 3 — phase 4 faite (2026-08-15)
+
+Admin de validation, gabarits d'e-mail, newsletter bimensuelle. `npm test` vert
+(242 tests, 20 fichiers), build vert, isolation vérifiée — et, comme au lot 2,
+tout a été confronté à la vraie base, à la vraie API et au vrai SMTP.
+
+**L'admin, `/admin/sentinelle`.** Mot de passe unique, cookie httpOnly portant
+une expiration signée (HMAC, clé = le mot de passe) : le secret ne voyage jamais,
+une session expire d'elle-même, et changer le mot de passe ferme toutes les
+sessions sans rien stocker en base. Garde dans un layout serveur, et
+**revérification dans chaque action serveur** — une action serveur est une URL
+publique, le layout ne protège que l'affichage. Il n'existe pas de compteur
+d'essais fiable en serverless (même constat qu'au E5) : la protection est la
+longueur du secret, imposée à 16 caractères, et l'admin refuse de s'ouvrir
+en-deçà plutôt que de protéger à moitié.
+
+**La file est groupée par composant, pas par alerte.** C'est la conséquence
+directe du constat du lot 2 : vingt-neuf alertes sur le même paquet npm ne se
+relisent pas une par une. Un client par ligne (rouges, prêtes, sans texte,
+ancienneté), puis un dossier client où chaque composant porte sa propre décision
+— dont « écarter les vingt-neuf » en un geste.
+
+**Le contenu relu est du JSON dans `final_text`.** Écart assumé au nom de la
+colonne : le gabarit d'e-mail a besoin de champs séparés (verdict, titre, corps,
+ce que ça change, action, faisable seul, effort). Un paragraphe unique aurait
+obligé soit à appauvrir l'e-mail, soit à redécouper du texte à l'envoi —
+c'est-à-dire à deviner. La lecture accepte les deux vocabulaires (snake_case du
+prompt, camelCase du modèle TypeScript) parce que le même formulaire s'amorce
+depuis `generated_text` et se relit depuis `final_text` ; un texte libre écrit à
+la main n'est pas perdu, il atterrit dans le corps.
+
+**Les gabarits sont en React Email**, rendus en HTML **et** en texte depuis le
+même arbre : les deux ne peuvent pas diverger, et un e-mail sans partie texte
+part avec un score de spam plus élevé. Kit visuel propre au produit
+(`emails/theme.ts`), copie assumée de l'identité du site — jamais un import de
+`lib/email-template.ts`. L'aperçu de l'admin est le rendu réel, dans une iframe
+`sandbox`.
+
+**La newsletter est bimensuelle et à moitié écrite par la machine, à moitié
+pas.** Les blocs 1, 2 et 5 (état du site, delta depuis le numéro précédent,
+radar des fins de support) s'assemblent depuis la base **sans modèle** : ce sont
+des faits, les faire réécrire n'ajouterait qu'un risque d'invention. Les blocs 3
+et 4 sont rédigés par Claude, avec le même garde-fou de code qu'une alerte — un
+numéro qui nomme une technologie absente de la fiche est refusé.
+
+Trois décisions prises en cours de route :
+
+1. **Le radar ne retient une échéance que si la version du client est dans la
+   plage.** Sans ce contrôle, un client en PHP 8.3 lirait chaque quinzaine que
+   PHP 8.1 arrive en fin de vie : vrai, mais pas pour lui. C'est le même piège
+   que celui du matching, et il se reteste ici.
+2. **Un numéro déjà écrit n'est jamais réécrit**, même en brouillon. Le rejeu du
+   cron ne doit pas effacer une relecture en cours ; refaire un numéro est un
+   geste conscient, pas un effet de bord.
+3. **`final_html` est figé à la validation et c'est lui qui part.** Le numéro
+   est daté par sa période (le 1er ou le 15) et non par l'instant d'expédition :
+   le rendu est donc déterministe, et ce qui a été relu est exactement ce qui a
+   été envoyé. C'est aussi la pièce qu'un litige exhumerait.
+
+**Vérifié en réel, et pas seulement en tests** : quatre numéros fabriqués pour
+les quatre clients du seed, les quatre avec leurs blocs rédigés acceptés par le
+garde-fou ; seconde passe → 0 créé, 4 déjà en place (idempotence). Le radar a
+produit une échéance juste (PHP 8.2, fin de correctifs au 31/12/2026, 137 jours)
+et zéro pour les clients qui ne sont pas sur cette branche. Puis les deux cycles
+complets, adresse d'un client de démonstration basculée le temps de l'envoi vers
+le compte SMTP lui-même, puis restaurée :
+
+- alerte : envoi refusé avant validation → validation → envoi accepté par Gmail
+  (`messageId` rendu) → second envoi refusé, statut `sent` ;
+- numéro : mêmes refus, HTML figé de 8 885 caractères, envoi réel, second envoi
+  refusé.
+
+Deux corrections nées de cette vérification :
+
+- `isAnonymizedEmail` disait « fiche anonymisée par la purge » à propos des
+  fiches de démonstration, qui vivent sur le même domaine `.invalid` sans avoir
+  jamais été purgées. Le préfixe `efface-` compte désormais autant que le
+  domaine, et une adresse en `.invalid` a son propre refus. Une explication
+  fausse envoie chercher un bug là où il n'y en a pas.
+- Les adresses de démonstration sont refusées **avant** l'appel SMTP : un envoi
+  qui part chercher un serveur pour un domaine réservé par la RFC 2606
+  ressemblerait à une panne.
+
+Ce qui reste hors de ce lot, volontairement : l'alias `veille@` et DKIM (gestes
+Google Workspace, côté Agathe — l'envoi part aujourd'hui sous l'adresse du
+compte authentifié), et le lien vers l'admin depuis le site (elle n'a rien à
+faire dans une navigation publique ; l'URL se connaît).
+
 ### Prochaine étape
 
-Lot 3 — phase 4 (admin de validation, gabarits d'e-mail, newsletter). Séquence
-complète en §11. Prérequis externes à lancer maintenant : DKIM et alias
-`veille@` (voir « En parallèle, hors code »).
+Lot 4 — phase 5 (onboarding post-paiement, espace client, lancement). Séquence
+complète en §11. `MAGIC_LINK_SECRET` reste à générer. Prérequis externes
+inchangés : DKIM et alias `veille@` (voir « En parallèle, hors code »), qui
+conditionnent l'identité d'expédition mais plus le fait d'envoyer.
 
 ---
 
@@ -921,8 +1010,8 @@ Trois principes de séquencement, qui expliquent l'ordre choisi :
 | --- | --- | --- | --- |
 | 0 | Appliquer la migration Neon — **fait le 2026-08-15** | ½ j | — |
 | 1 | Phase 2 bis — dette de la phase 2 | ½ j | 0 ✔ |
-| 2 | Phase 3 — collecteurs, matching, rédaction | 4 j | 0, 1 |
-| 3 | Phase 4 — admin, envoi, newsletter | 2,5 j | 2, alias d'envoi |
+| 2 | Phase 3 — collecteurs, matching, rédaction — **fait le 2026-08-15** | 4 j | 0, 1 |
+| 3 | Phase 4 — admin, envoi, newsletter — **fait le 2026-08-15** | 2,5 j | 2 ✔ |
 | 4 | Phase 5 — onboarding, espace client, lancement | 2 j | 3, décision de tarif |
 | 5 | Mise en production | ½ j | 4 |
 
@@ -979,14 +1068,17 @@ Le seed des quatre clients (WordPress, Drupal, Next.js + npm, site sans CMS)
 n'est pas un accessoire de test : c'est lui qui prouve l'agnosticité. À écrire
 au début de 2b, pas à la fin du lot.
 
-### Lot 3 — Phase 4 (2,5 j)
+### Lot 3 — Phase 4 (2,5 j) · **fait**
 
-Inchangé, moins le transport d'e-mail. Ordre : admin d'abord (sans elle, rien ne
-peut partir — règle 4), gabarits ensuite, newsletter en dernier.
+Compte rendu et décisions : §10, « Lot 3 — phase 4 faite ». L'ordre prévu a été
+tenu : admin d'abord (sans elle, rien ne peut partir — règle 4), gabarits
+ensuite, newsletter en dernier.
 
-Prérequis externe à lancer **maintenant** : DKIM activé dans la console Google
-Workspace et alias `veille@next-impact.digital` vérifié en « Envoyer en tant
-que ». Sans l'alias, Gmail réécrit l'expéditeur sans prévenir.
+Le prérequis externe **n'a pas bloqué le lot et reste à faire** : DKIM activé
+dans la console Google Workspace et alias `veille@next-impact.digital` vérifié
+en « Envoyer en tant que ». Sans l'alias, Gmail réécrit l'expéditeur sans
+prévenir — les envois vérifiés le 2026-08-15 sont donc partis sous l'adresse du
+compte authentifié, ce qui est acceptable en test et pas en production.
 
 ### Lot 4 — Phase 5 (2 j)
 
@@ -1009,8 +1101,8 @@ Le lot qu'on oublie systématiquement, et qui ne se découvre qu'en le faisant :
 
 | À faire | Pour quel lot | Qui |
 | --- | --- | --- |
-| Activer DKIM (console Workspace) | 3 | Agathe |
-| Créer et vérifier l'alias `veille@` | 3 | Agathe |
+| Activer DKIM (console Workspace) | 5 — avant le premier envoi réel à un client | Agathe |
+| Créer et vérifier l'alias `veille@` | 5 — idem, puis renseigner `SENTINELLE_MAIL_FROM` | Agathe |
 | Trancher le tarif (voir ci-dessous) | 4 | Agathe |
 | Décider du régime des clés Stripe | 0 | Agathe |
 | Clé WPScan (facultative) | 2c | Agathe |

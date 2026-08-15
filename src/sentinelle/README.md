@@ -55,11 +55,28 @@ de l'extraction, c'est une ligne à changer.
 | `inngest/` | client, catalogue d'événements, fonctions de fond | 1 ✔ |
 | `scanner/` | détection passive, agnostique (moteur + empreintes) | 2 ✔ |
 | `retention/` | politique de conservation et purge | 2 |
-| `newsletter/` | période des numéros (le 1er et le 15) | 1 ✔ |
+| `newsletter/` | période, blocs du numéro, fabrication bimensuelle | 1 ✔ / 4 ✔ |
 | `billing/` | abonnement via Payment Link Stripe + webhook | ✔ (portail client en 5) |
-| `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 |
-| `redaction/` | appel API Claude, garde zod sur la sortie | 3 |
-| `emails/` | transport SMTP Google ✔ ; gabarits React Email | 4 |
+| `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 ✔ |
+| `redaction/` | appel API Claude, garde zod sur la sortie | 3 ✔ |
+| `emails/` | transport SMTP Google, gabarits React Email, rendu HTML + texte | 4 ✔ |
+| `admin/` | session, file de validation, cycle draft → validated → sent | 4 ✔ |
+
+`admin/` mérite une note : `session.ts` et `content.ts` sont **purs et testés**
+(signature de jeton, contrat de contenu), `queue.ts` et `actions.ts` touchent la
+base, et la glue Next — cookies, redirections, formulaires — vit dans
+`app/(sentinelle)/admin/`. La règle 4 (« aucune alerte ne part sans validation
+humaine ») est implémentée dans `actions.ts` sous forme de refus, pas de
+consigne : on ne valide pas un contenu incomplet, on n'envoie que ce qui est
+`validated`, jamais deux fois, jamais à une fiche résiliée, effacée ou de
+démonstration.
+
+Deux points à ne pas « harmoniser » :
+
+- **Chaque action serveur revérifie la session.** Une action serveur est une URL
+  publique ; la garde du layout protège l'affichage, pas l'exécution.
+- **Le statut `sent` s'écrit après l'envoi**, jamais avant. Un doublon visible
+  dans la file vaut mieux qu'une alerte marquée envoyée que personne n'a reçue.
 
 ## Commandes
 

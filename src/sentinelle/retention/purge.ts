@@ -98,9 +98,34 @@ export async function purgeScans(now: Date): Promise<Partial<PurgeReport>> {
   };
 }
 
+/**
+ * Domaine réservé aux fiches effacées.
+ *
+ * `.invalid` est réservé par la RFC 2606 : aucune adresse de ce domaine ne peut
+ * exister, donc rien ne peut y être envoyé par accident. C'est ce qui permet à
+ * l'envoi (`admin/actions.ts`) de refuser une fiche anonymisée sans se demander
+ * si l'adresse est « vraie ».
+ */
+export const ANONYMOUS_EMAIL_DOMAIN = "sentinelle.invalid";
+
+/** Préfixe des adresses écrites par la purge. */
+const ANONYMOUS_PREFIX = "efface-";
+
 /** Identité de remplacement d'un client effacé — unique, et visiblement factice. */
 export function anonymousEmail(clientId: string): string {
-  return `efface-${clientId}@sentinelle.invalid`;
+  return `${ANONYMOUS_PREFIX}${clientId}@${ANONYMOUS_EMAIL_DOMAIN}`;
+}
+
+/**
+ * Cette adresse est-elle celle d'une fiche effacée ?
+ *
+ * Le préfixe compte autant que le domaine : les fiches de démonstration du seed
+ * vivent sur le même domaine `.invalid` sans avoir été effacées, et leur
+ * refuser un envoi en invoquant la purge donnerait une explication fausse.
+ */
+export function isAnonymizedEmail(email: string): boolean {
+  const value = email.trim().toLowerCase();
+  return value.startsWith(ANONYMOUS_PREFIX) && value.endsWith(`@${ANONYMOUS_EMAIL_DOMAIN}`);
 }
 
 /**

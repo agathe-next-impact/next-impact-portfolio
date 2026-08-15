@@ -188,7 +188,14 @@ fondée sur une version de confiance moyenne**.
 
 ---
 
-## Phase 4 — Admin de validation, envoi, newsletter (~3 j)
+## Phase 4 — Admin de validation, envoi, newsletter · **faite** (2026-08-15)
+
+Compte rendu et décisions : plan §10, « Lot 3 — phase 4 faite ». La commande
+d'origine est conservée ci-dessous ; deux points en diffèrent à l'arrivée et
+sont expliqués dans le plan : le contenu relu est stocké en JSON dans
+`final_text` (le gabarit a besoin de champs séparés), et la file est groupée par
+composant et non par alerte.
+
 
 1. **Admin** `app/(sentinelle)/admin/sentinelle` : protection par
    `SENTINELLE_ADMIN_PASSWORD` en cookie httpOnly, vérifiée dans un layout

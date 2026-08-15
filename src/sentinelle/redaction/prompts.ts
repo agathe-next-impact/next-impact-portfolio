@@ -15,34 +15,46 @@ import path from "node:path";
 // lectures disque.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const SYSTEM_PROMPT_PATH = path.join(
-  "src",
-  "sentinelle",
-  "redaction",
-  "verdict-system-prompt.md",
-);
+export const PROMPT_DIR = path.join("src", "sentinelle", "redaction");
 
-let cached: string | undefined;
+export const VERDICT_PROMPT = "verdict-system-prompt.md";
+/** Blocs rédigés de la newsletter bimensuelle (phase 4). */
+export const NEWSLETTER_PROMPT = "newsletter-system-prompt.md";
+
+export const SYSTEM_PROMPT_PATH = path.join(PROMPT_DIR, VERDICT_PROMPT);
+
+const cache = new Map<string, string>();
 
 /**
- * Prompt système, sans son préambule.
+ * Charge un prompt système, sans son préambule.
  *
  * Le fichier commence par une note destinée aux humains qui le maintiennent
  * (où il vit, pourquoi). Elle n'a rien à faire dans le contexte du modèle :
  * tout ce qui précède la première ligne `---` est retiré.
+ *
+ * Tous les prompts vivent dans ce dossier, et `outputFileTracingIncludes`
+ * embarque `redaction/*.md` : un prompt rangé ailleurs serait absent du
+ * déploiement Vercel, et l'erreur ne se verrait qu'en production.
  */
-export function systemPrompt(): string {
-  if (cached) return cached;
+export function loadPrompt(filename: string): string {
+  const memo = cache.get(filename);
+  if (memo) return memo;
 
-  const raw = readFileSync(path.join(process.cwd(), SYSTEM_PROMPT_PATH), "utf8");
+  const raw = readFileSync(path.join(process.cwd(), PROMPT_DIR, filename), "utf8");
   const separator = raw.indexOf("\n---\n");
   const body = separator === -1 ? raw : raw.slice(separator + 5);
 
-  cached = body.trim();
-  return cached;
+  const prompt = body.trim();
+  cache.set(filename, prompt);
+  return prompt;
+}
+
+/** Prompt de rédaction d'une alerte. */
+export function systemPrompt(): string {
+  return loadPrompt(VERDICT_PROMPT);
 }
 
 /** Pour les tests, qui ont besoin de relire un fichier modifié. */
 export function resetPromptCache(): void {
-  cached = undefined;
+  cache.clear();
 }

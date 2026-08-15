@@ -64,20 +64,23 @@ function escape(value: string): string {
 }
 
 /**
- * Technologies nommées dans le texte alors qu'elles ne sont pas au contexte.
+ * Technologies nommées dans le texte alors qu'elles ne sont pas autorisées.
  *
  * Le vocabulaire de référence est le catalogue d'empreintes du scanner : c'est
  * la liste des technologies que le produit sait nommer, donc celles qu'un
  * modèle est susceptible d'inventer. Le contrôle est volontairement strict —
  * un faux positif ne fait que renvoyer la rédaction à plus tard, un faux
  * négatif envoie au client une alerte sur un composant qu'il n'a pas.
+ *
+ * La version générique sert aussi à la newsletter, où l'ensemble autorisé n'est
+ * pas un composant mais tout le stack du client.
  */
-export function citedOutsideContext(text: string, context: RedactionContext): string[] {
-  const allowed = new Set(allowedNames(context));
+export function citedOutside(text: string, allowed: string[]): string[] {
+  const permitted = new Set(allowed.map((name) => name.toLowerCase()));
   const found: string[] = [];
 
   for (const print of FINGERPRINTS) {
-    if (allowed.has(print.label.toLowerCase())) continue;
+    if (permitted.has(print.label.toLowerCase())) continue;
 
     // Bornes de mot des deux côtés : « Vue.js » ne doit pas se déclencher sur
     // « la vue », ni « React » sur « réaction ».
@@ -86,6 +89,11 @@ export function citedOutsideContext(text: string, context: RedactionContext): st
   }
 
   return found;
+}
+
+/** Même contrôle, borné au contexte d'une alerte. */
+export function citedOutsideContext(text: string, context: RedactionContext): string[] {
+  return citedOutside(text, allowedNames(context));
 }
 
 export interface GuardOutcome {

@@ -21,6 +21,8 @@ export {
 
 export {
   anonymousEmail,
+  isAnonymizedEmail,
+  ANONYMOUS_EMAIL_DOMAIN,
   deleteAllDataFor,
   EMPTY_REPORT,
   isEmptyReport,

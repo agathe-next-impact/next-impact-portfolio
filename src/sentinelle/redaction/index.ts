@@ -22,13 +22,22 @@ export {
 
 export {
   allowedNames,
+  citedOutside,
   citedOutsideContext,
   guardDraft,
   redIsJustified,
   type GuardOutcome,
 } from "./guards";
 
-export { resetPromptCache, systemPrompt, SYSTEM_PROMPT_PATH } from "./prompts";
+export {
+  loadPrompt,
+  resetPromptCache,
+  systemPrompt,
+  NEWSLETTER_PROMPT,
+  PROMPT_DIR,
+  SYSTEM_PROMPT_PATH,
+  VERDICT_PROMPT,
+} from "./prompts";
 
 export {
   DraftSchema,
