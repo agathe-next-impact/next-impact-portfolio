@@ -121,15 +121,30 @@ export function wordCount(lettre: Lettre): number {
 /**
  * Vocabulaire que la lettre a le droit d'employer en parlant du site.
  *
- * La fiche du client, plus ce que le dossier a réellement rapporté. Le second
- * ensemble n'est pas un affaiblissement : un nom présent dans le dossier a été
- * trouvé dans une source ouverte pendant la collecte, il n'a pas été inventé à
- * la rédaction.
+ * Trois sources, et la troisième a été ajoutée après un faux positif en réel :
+ *
+ *  · **la fiche du client** — ce qu'il a ;
+ *  · **les faits et observations du dossier** — un nom trouvé dans une source
+ *    ouverte pendant la collecte n'a pas été inventé à la rédaction ;
+ *  · **les publics et le contexte du client** — et c'est le point qui manquait.
+ *    Le 2026-08-15, un numéro a été refusé parce qu'il écrivait « WordPress » à
+ *    propos d'un site sous Next.js. Le mot était pourtant juste : le dossier
+ *    décrivait ses publics comme « des dirigeants au parc WordPress
+ *    vieillissant ». Un garde-fou qui refuse à un studio de parler du parc de
+ *    ses clients ne protège plus rien, il empêche d'écrire.
  */
-export function allowedVocabulary(ficheNames: string[], dossier: Dossier): string[] {
+export function allowedVocabulary(
+  ficheNames: string[],
+  dossier: Dossier,
+  clientContext = "",
+): string[] {
   const dossierText = [
     ...dossier.faits.flatMap((fait) => [fait.enonce, fait.famille, ...fait.toucheFiche]),
     ...dossier.observations.map((observation) => `${observation.sujet} ${observation.constat}`),
+    ...dossier.publics.map(
+      (public_) => `${public_.nom} ${public_.cherche} ${public_.attenduDuSite} ${public_.niveauDeReponse}`,
+    ),
+    clientContext,
   ].join("\n");
 
   // `citedOutside` rend les technologies du catalogue présentes dans un texte
@@ -139,7 +154,7 @@ export function allowedVocabulary(ficheNames: string[], dossier: Dossier): strin
 
 export function guardLettre(
   lettre: Lettre,
-  input: { dossier: Dossier; ficheNames: string[]; quiet: boolean },
+  input: { dossier: Dossier; ficheNames: string[]; quiet: boolean; clientContext?: string },
 ): LettreGuardOutcome {
   const violations: string[] = [];
   const warnings: string[] = [];
@@ -165,7 +180,10 @@ export function guardLettre(
   }
 
   // ── Régime 2 : vocabulaire, sur ce qui est dit du site ──────────────────
-  const invented = citedOutside(siteText(lettre), allowedVocabulary(input.ficheNames, input.dossier));
+  const invented = citedOutside(
+    siteText(lettre),
+    allowedVocabulary(input.ficheNames, input.dossier, input.clientContext ?? ""),
+  );
   if (invented.length > 0) {
     violations.push(
       `technologies attribuées au site hors fiche et hors dossier : ${invented.join(", ")}`,

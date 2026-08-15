@@ -166,7 +166,19 @@ export type Dossier = z.infer<typeof DossierSchema>;
 
 // ─── Lettre (passe 2) ─────────────────────────────────────────────────────
 
-export const LETTRE_JSON_SCHEMA = object(
+// La lettre se demande en **trois appels**, pas en un.
+//
+// Constaté en réel le 2026-08-15 : le schéma complet fait répondre 400 à l'API —
+// « The compiled grammar is too large ». La sortie structurée compile le schéma
+// en grammaire, et celle d'une lettre à douze axes, quatre blocs de tendances et
+// une synthèse en six parties dépasse ce que le compilateur accepte.
+//
+// Le découpage suit les étapes du prompt (3, 4, 5) plutôt qu'une coupe
+// arbitraire, et il a un effet de bord utile : chaque appel a sa propre marge de
+// `max_tokens`, là où une lettre entière en un jet frôlait le plafond.
+
+/** Étape 3 — l'ouverture et les douze axes. */
+export const LETTRE_AXES_SCHEMA = object(
   {
     titre: str,
     ligneContexte: str,
@@ -189,6 +201,13 @@ export const LETTRE_JSON_SCHEMA = object(
         ["numero", "nom", "question", "analyse", "statut", "horizon"],
       ),
     ),
+  },
+  ["titre", "ligneContexte", "chapeau", "siteEnUnePhrase", "axes"],
+);
+
+/** Étape 4 — les tendances, qualifiées pour ce site. */
+export const LETTRE_TENDANCES_SCHEMA = object(
+  {
     tendances: object(
       {
         duMois: arrayOf(
@@ -225,6 +244,13 @@ export const LETTRE_JSON_SCHEMA = object(
       },
       ["duMois", "marche", "signauxDeDemande", "deFond", "ceQuiNeChangePas"],
     ),
+  },
+  ["tendances"],
+);
+
+/** Étape 5 — la synthèse, l'échéancier, les questions et les sources. */
+export const LETTRE_SYNTHESE_SCHEMA = object(
+  {
     synthese: object(
       {
         actions: arrayOf(
@@ -299,21 +325,17 @@ export const LETTRE_JSON_SCHEMA = object(
       description: "Jamais envoyé au client. Lu par la personne qui relit.",
     },
   },
-  [
-    "titre",
-    "ligneContexte",
-    "chapeau",
-    "siteEnUnePhrase",
-    "axes",
-    "tendances",
-    "synthese",
-    "echeancier",
-    "questions",
-    "sources",
-    "ligneCloture",
-    "notesDeProduction",
-  ],
+  ["synthese", "echeancier", "questions", "sources", "ligneCloture", "notesDeProduction"],
 );
+
+// Les trois morceaux, dans l'ordre des appels. Le type de chaque partie se
+// dérive du schéma zod complet : une divergence entre les deux serait une erreur
+// de compilation, pas une surprise à l'exécution.
+export const LETTRE_PARTS = [
+  { key: "axes", schema: LETTRE_AXES_SCHEMA },
+  { key: "tendances", schema: LETTRE_TENDANCES_SCHEMA },
+  { key: "synthese", schema: LETTRE_SYNTHESE_SCHEMA },
+] as const;
 
 export const LettreSchema = z.object({
   titre: z.string(),

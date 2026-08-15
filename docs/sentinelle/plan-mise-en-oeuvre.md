@@ -1136,22 +1136,65 @@ plus. Deux moteurs de numéro cohabitant, une prochaine session en aurait choisi
 un au hasard. `newsletter/` garde ce qu'il est seul à savoir produire : la
 cadence du 1er et du 15, et le constaté (fiche suivie, alertes envoyées, radar).
 
-**Trois points de vigilance, à surveiller plutôt qu'à trancher maintenant :**
+### Ce que la première fabrication réelle a appris (2026-08-15)
 
-- **Le coût.** Chaque numéro fait ses propres recherches ; à l'échelle de
-  quelques abonnés c'est marginal, à vingt abonnés c'est le poste principal du
-  produit. Le chiffre réel est mesuré à chaque fabrication et stocké dans
-  l'encart de production (`consommation`) : c'est lui qu'il faudra regarder avant
-  d'ouvrir les inscriptions, pas une estimation.
-- **La durée.** `maxDuration` est passé de 60 à 300 s sur la route Inngest — le
-  maximum d'un plan Vercel Pro. Une fabrication complète s'en approche. Si elle
-  dépasse, le geste suivant n'est pas de raccourcir la recherche mais de passer
-  la collecte sur l'**API Batches** : pour un numéro bimensuel la latence n'a
-  aucune importance, et le coût y est divisé par deux.
-- **La relecture.** Une lettre de 3 000 à 4 500 mots deux fois par mois et par
-  client, c'est un ordre de grandeur au-dessus des deux blocs d'avant. Le §11
-  notait déjà que la relecture, et non la technique, borne le nombre de clients
-  servables ; cette refonte resserre cette borne.
+Un numéro complet a été fabriqué contre les vraies API, sur next-impact.digital.
+Trois résultats, dont deux ont imposé une correction immédiate.
+
+**1. Le schéma complet de la lettre ne compile pas.** L'API répond
+`400 — The compiled grammar is too large`. La sortie structurée compile le schéma
+en grammaire, et celle d'une lettre à douze axes dépasse ce qu'elle accepte. La
+rédaction se fait donc en **trois appels** (axes, tendances, synthèse), suivant
+les étapes du prompt. Le brief est mis en cache entre les trois. Ce n'est pas un
+contournement : chaque appel a aussi sa propre marge de `max_tokens`, là où la
+lettre entière frôlait le plafond.
+
+**2. Le garde-fou de vocabulaire produisait un faux positif.** Un numéro a été
+refusé parce qu'il écrivait « WordPress » à propos d'un site sous Next.js. Le mot
+était juste : le dossier décrivait les publics du site comme « des dirigeants au
+parc WordPress vieillissant ». Le vocabulaire autorisé ignorait `dossier.publics`
+et le contexte client. Corrigé — un garde-fou qui interdit à un studio de parler
+du parc de ses clients n'protège plus rien, il empêche d'écrire.
+
+**3. Les chiffres réels, qui remplacent mes estimations.** Ils sont mesurés et
+stockés dans l'encart de production de chaque numéro (`consommation`) :
+
+| Mesure | Valeur constatée | Ce que j'avais estimé |
+| --- | --- | --- |
+| Durée d'un numéro | **22 min** (1 325 s) — dont ~17 de collecte | « quelques minutes » |
+| Coût d'un numéro | **≈ 8 $** | 1,50 à 2,50 $ |
+| Jetons d'entrée | **1,43 million** | — |
+| Recherches / lectures | 18 / 8 | 10 à 30 / 8 |
+| Longueur de la lettre | **6 975 mots** | cible 3 000 à 4 500 |
+
+Le poste dominant est le million et demi de jetons d'entrée : dans une boucle
+d'outils, l'historique — résultats de recherche et pages lues — est renvoyé et
+refacturé à chaque tour. Ce n'est pas un défaut d'implémentation, c'est le coût
+de la recherche par client.
+
+**Ce que ces chiffres impliquent, sans détour :**
+
+- **≈ 16 $ par mois et par client** (deux numéros) sur un abonnement à 19 €.
+  L'arbitrage « recherche par client » a été pris en connaissance d'un ordre de
+  grandeur qui s'est révélé quatre fois trop bas. À rouvrir avant d'ouvrir les
+  inscriptions, avec ce chiffre-là et non une estimation.
+- **22 minutes ne tiennent dans aucun `maxDuration`.** Il est passé de 60 à
+  300 s (maximum d'un plan Vercel Pro), et c'est toujours quatre fois trop peu.
+  **La collecte doit passer sur l'API Batches** : pour un numéro bimensuel la
+  latence n'a aucune importance, et le coût y est divisé par deux. Ce n'était
+  qu'un repli dans mes notes ; c'est le chemin.
+- **La lettre est 55 % plus longue que sa cible.** Le garde-fou le signale sans
+  bloquer. C'est du réglage de prompt, pas un défaut de structure — mais 7 000
+  mots deux fois par mois et par client déplacent encore la borne de relecture
+  que le §11 identifiait déjà comme la vraie limite du nombre d'abonnés.
+
+**Ce qui a été vérifié bon**, sur la même fabrication : la collecte a rendu un
+dossier structuré valide (10 faits datés et sourcés, 20 observations statuées),
+la lettre écrite tient ses douze axes avec des statuts justes, ses trois
+scénarios portent chacun une condition de déclenchement observable, et la
+déontologie est respectée à la lettre — l'axe sécurité écrit « la version
+réellement déployée n'est pas vérifiable depuis l'extérieur » au lieu d'affirmer
+la faille.
 
 ### Prochaine étape
 

@@ -217,6 +217,7 @@ export async function validateDigest(
       dossier: issue.dossier,
       ficheNames: issue.constate.health.components.map((component) => component.label),
       quiet: false,
+      clientContext: issue.dossier.publics.map((public_) => public_.nom).join(" "),
     });
     if (!garde.ok) return refuse(`Refusé : ${garde.violations.join(" · ")}`);
   }
