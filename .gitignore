@@ -18,6 +18,9 @@ yarn-error.log*
 
 # env files
 .env*
+# ...sauf le modèle, qui doit être versionné et tenu à jour
+# (docs/sentinelle/CLAUDE.md, « Conventions »). Il ne contient aucun secret.
+!.env.example
 
 # vercel
 .vercel

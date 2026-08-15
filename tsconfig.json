@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@sentinelle/*": [
+        "./src/sentinelle/*"
       ]
     }
   },

@@ -1,0 +1,73 @@
+# src/sentinelle — produit Sentinelle
+
+Code du produit de veille par abonnement, isolé du site vitrine pour pouvoir
+être extrait en sous-domaine sans réécriture.
+
+Spécifications : `docs/sentinelle/` (CLAUDE.md, specs/, prompts/).
+Plan d'exécution et écarts constatés : `docs/sentinelle/plan-mise-en-oeuvre.md`.
+
+## Règle d'isolation
+
+La dépendance est **à sens unique** :
+
+- Sentinelle **peut** importer le design system du site (c'est demandé par la
+  spec de la phase 2 : réutiliser l'existant, mode sombre compris).
+- Le site vitrine ne doit **jamais** importer `@sentinelle/*`. Cette règle est
+  vérifiée mécaniquement par `npm run check:sentinelle`, branché sur le build.
+
+Imports vitrine autorisés, tenus à jour ici pour que le coût d'extraction reste
+visible :
+
+| Import | Utilisé par | À l'extraction |
+| --- | --- | --- |
+| `@/components/theme-provider` | `app/(sentinelle)/layout.tsx` | à copier (une trentaine de lignes autour de next-themes) |
+| `app/globals.css` | `app/(sentinelle)/layout.tsx` | à copier (tokens du design system Blueprint) |
+| `@/components/ui/*` | pages produit (phase 2+) | à copier, ou à extraire en paquet partagé |
+
+Ce qui n'est **jamais** partagé : `lib/sendMail.ts` et `lib/email-template.ts`.
+Sentinelle envoie via Resend + React Email sur son propre sous-domaine ; la
+coexistence des deux piles d'e-mail est volontaire (voir plan §2, E7).
+
+## Alias
+
+`@sentinelle/*` → `src/sentinelle/*` (déclaré dans `tsconfig.json` et
+`vitest.config.mts`). Tous les imports internes passent par cet alias : le jour
+de l'extraction, c'est une ligne à changer.
+
+## Modules
+
+| Dossier | Rôle | Phase |
+| --- | --- | --- |
+| `db/` | schéma Drizzle, connexion Neon, migrations | 1 ✔ |
+| `matching/` | comparaison de versions, croisement intel × stack | 1 ✔ (versions) / 3 |
+| `inngest/` | client, catalogue d'événements, fonctions de fond | 1 ✔ |
+| `scanner/` | détection passive d'un site public | 2 |
+| `retention/` | politique de conservation et purge | 2 |
+| `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 |
+| `redaction/` | appel API Claude, garde zod sur la sortie | 3 |
+| `emails/` | gabarits React Email, envoi Resend | 4 |
+| `billing/` | Stripe : checkout, portail, webhooks | 5 |
+
+## Commandes
+
+```sh
+npm test                    # typecheck du périmètre Sentinelle + vitest
+npm run test:watch          # vitest en watch
+npm run typecheck:sentinelle
+npm run check:sentinelle    # garde-fou d'isolation
+npm run db:generate         # génère une migration depuis le schéma
+npm run db:migrate          # applique les migrations (DATABASE_URL requise)
+npm run db:studio           # explorateur de base Drizzle
+npx inngest-cli@latest dev  # serveur Inngest local
+```
+
+## Deux règles à ne pas contourner
+
+**En cas de doute, on n'alerte pas.** `matching/versions.ts` renvoie « non
+affecté » dès qu'une version est inconnue ou une plage illisible. Un faux
+négatif se rattrape au digest mensuel ; une fausse alerte rouge coûte un client.
+
+**L'unicité est dans le moteur, pas dans le code.** `alert_client_intel` et
+`intel_source_external` sont des index uniques : ils garantissent qu'un client
+n'est alerté qu'une fois par fait, même si le code applicatif se trompe. Ne pas
+les retirer pour « simplifier une insertion ».

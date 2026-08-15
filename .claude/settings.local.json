@@ -119,7 +119,9 @@
       "PowerShell(git log --all --oneline -S \"petite-vitrine\" -i)",
       "PowerShell(git show \"548023c^:lib/case-studies-data.ts\" > \"$env:TEMP\\\\old-data.ts\"; git show \"548023c^:components/case-studies/realisations.tsx\" > \"$env:TEMP\\\\old-realisations.tsx\"; git show 548023c --stat | Select-String -Pattern \"lapetitevitrine|petite\")",
       "Bash(git checkout *)",
-      "PowerShell($out = npx tsc --noEmit 2>$null; $all = \\($out | Measure-Object -Line\\).Lines; $mine = \\($out | Select-String -Pattern \"case-studies-data|realisations\\\\.tsx|homepage-profiles|CaseStudiesClient\"\\).Count; \"total error lines: $all\"; \"in modified files: $mine\")"
+      "PowerShell($out = npx tsc --noEmit 2>$null; $all = \\($out | Measure-Object -Line\\).Lines; $mine = \\($out | Select-String -Pattern \"case-studies-data|realisations\\\\.tsx|homepage-profiles|CaseStudiesClient\"\\).Count; \"total error lines: $all\"; \"in modified files: $mine\")",
+      "Skill(claude-api)",
+      "Bash(npm -v)"
     ],
     "additionalDirectories": [
       "c:\\DEV\\next-impact-portfolio\\app\\[locale]\\audit-site-ia",

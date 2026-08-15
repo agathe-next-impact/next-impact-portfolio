@@ -1,0 +1,22 @@
+{
+  // Périmètre Sentinelle uniquement.
+  //
+  // Le build Next tourne avec `typescript.ignoreBuildErrors: true` et le code
+  // vitrine porte des erreurs de types antérieures à ce chantier (14 au
+  // 2026-08-15) : un `tsc --noEmit` sur tout le repo est donc rouge et
+  // inutilisable comme garde-fou.
+  //
+  // Ce projet-ci doit rester vert. Il est branché sur `npm test`.
+  // Assainir la vitrine est un chantier distinct, à ouvrir séparément.
+  "extends": "./tsconfig.json",
+  "include": [
+    "next-env.d.ts",
+    "src/sentinelle/**/*.ts",
+    "src/sentinelle/**/*.tsx",
+    "app/(sentinelle)/**/*.ts",
+    "app/(sentinelle)/**/*.tsx",
+    "app/api/sentinelle/**/*.ts",
+    "drizzle.config.ts"
+  ],
+  "exclude": ["node_modules", ".next"]
+}

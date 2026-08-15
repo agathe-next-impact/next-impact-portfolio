@@ -3,6 +3,13 @@
 > PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
 > ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.
 
+> PRIORITAIRE : pour tout travail sur **Sentinelle** (produit de veille par
+> abonnement : `src/sentinelle/`, `app/(sentinelle)/`, `app/api/sentinelle/`),
+> lire et suivre `docs/sentinelle/CLAUDE.md` — ses six règles d'architecture
+> priment sur le présent fichier. Plan d'exécution et écarts constatés :
+> `docs/sentinelle/plan-mise-en-oeuvre.md`. Sentinelle n'est PAS la vitrine :
+> aucun code vitrine ne doit importer `@sentinelle/*`.
+
 Constitution du dépôt. Lue à chaque session Claude Code. Source de vérité sur le
 contexte et les règles de travail pour ce site.
 
