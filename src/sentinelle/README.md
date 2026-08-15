@@ -23,10 +23,22 @@ visible :
 | `@/components/theme-provider` | `app/(sentinelle)/layout.tsx` | à copier (une trentaine de lignes autour de next-themes) |
 | `app/globals.css` | `app/(sentinelle)/layout.tsx` | à copier (tokens du design system Blueprint) |
 | `@/components/ui/*` | pages produit (phase 2+) | à copier, ou à extraire en paquet partagé |
+| `@/lib/sentinelle-offer` | `billing/offer.ts` | à déplacer dans `billing/` — la page marketing restera côté vitrine |
+
+Ce dernier mérite une explication : les faits publics de l'offre (montant,
+libellé, URL du Payment Link) vivent côté vitrine **exprès**. La page `/sentinelle`
+est une page marketing, elle ne peut pas importer le code du produit sans violer
+la règle ci-dessus. La dépendance est donc inversée : c'est `billing/offer.ts`
+qui lit `lib/sentinelle-offer.ts`. Résultat, le montant affiché sur la page et
+celui vérifié par le webhook ne peuvent pas diverger.
 
 Ce qui n'est **jamais** partagé : `lib/sendMail.ts` et `lib/email-template.ts`.
-Sentinelle envoie via Resend + React Email sur son propre sous-domaine ; la
-coexistence des deux piles d'e-mail est volontaire (voir plan §2, E7).
+Sentinelle envoie par le même fournisseur que la vitrine — SMTP Google — mais
+avec son propre transport (`emails/`), ses propres variables
+`SENTINELLE_SMTP_*` et **aucun repli** sur les `NODEMAILER_*`. Un repli
+silencieux ferait partir la veille sous l'identité du site le jour d'un oubli
+de variable. La coexistence des deux piles est volontaire (voir plan §2, E7, et
+§10 pour la bascule Resend → Google du 2026-08-15).
 
 ## Alias
 
@@ -41,12 +53,13 @@ de l'extraction, c'est une ligne à changer.
 | `db/` | schéma Drizzle, connexion Neon, migrations | 1 ✔ |
 | `matching/` | comparaison de versions, croisement intel × stack | 1 ✔ (versions) / 3 |
 | `inngest/` | client, catalogue d'événements, fonctions de fond | 1 ✔ |
-| `scanner/` | détection passive d'un site public | 2 |
+| `scanner/` | détection passive, agnostique (moteur + empreintes) | 2 ✔ |
 | `retention/` | politique de conservation et purge | 2 |
+| `newsletter/` | période des numéros (le 1er et le 15) | 1 ✔ |
+| `billing/` | abonnement via Payment Link Stripe + webhook | ✔ (portail client en 5) |
 | `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 |
 | `redaction/` | appel API Claude, garde zod sur la sortie | 3 |
-| `emails/` | gabarits React Email, envoi Resend | 4 |
-| `billing/` | Stripe : checkout, portail, webhooks | 5 |
+| `emails/` | transport SMTP Google ✔ ; gabarits React Email | 4 |
 
 ## Commandes
 
@@ -55,11 +68,37 @@ npm test                    # typecheck du périmètre Sentinelle + vitest
 npm run test:watch          # vitest en watch
 npm run typecheck:sentinelle
 npm run check:sentinelle    # garde-fou d'isolation
+npm run check:mail          # authentification SMTP Google, sans rien envoyer
 npm run db:generate         # génère une migration depuis le schéma
 npm run db:migrate          # applique les migrations (DATABASE_URL requise)
 npm run db:studio           # explorateur de base Drizzle
-npx inngest-cli@latest dev  # serveur Inngest local
+
+# Serveur Inngest local. L'URL est obligatoire : nos fonctions ne sont pas sur
+# la route par défaut. Et `INNGEST_DEV=1` doit être dans .env.local, sinon le
+# SDK v4 part en mode cloud et n'envoie rien.
+npx inngest-cli@latest dev -u http://localhost:3000/api/sentinelle/inngest
 ```
+
+## Ajouter une technologie à la veille
+
+`src/sentinelle/scanner/fingerprints.ts` est un fichier de **données**. Pour
+qu'une nouvelle technologie soit détectée puis surveillée, il n'y a pas de code
+à écrire :
+
+```ts
+{
+  slug: "matomo",            // identifiant dans son écosystème
+  label: "Matomo",           // ce que lit le client
+  type: "analytics",         // nature — voir stackItemTypeEnum
+  ecosystem: "npm",          // où chercher ses failles ; null = pas de veille
+  signals: [{ on: "html", match: /matomo\.js/i, confidence: "high" }],
+}
+```
+
+Deux règles de rédaction, parce qu'une fausse détection devient une fausse
+alerte : `confidence: "high"` est réservé aux signatures qu'une autre techno ne
+peut pas produire par accident, et une version n'est capturée que si la source
+la donne vraiment — `version: null` vaut mieux qu'un numéro inventé.
 
 ## Deux règles à ne pas contourner
 

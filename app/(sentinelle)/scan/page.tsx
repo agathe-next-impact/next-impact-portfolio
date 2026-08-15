@@ -1,25 +1,24 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
+import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
+import { ScanForm } from "./scan-form";
 
 export const metadata: Metadata = {
-  title: 'Sentinelle — analyse de site',
-}
+  title: "Sentinelle — analyser mon site",
+};
 
-// Page d'atterrissage du scanner public. Contenu réel en phase 2
-// (formulaire d'URL, analyse, rapport, capture d'e-mail).
-// Elle existe dès la phase 0 pour valider la cohabitation des deux root
-// layouts et l'exclusion du middleware next-intl.
 export default function ScanPage() {
   return (
-    <main className="mx-auto max-w-2xl px-6 py-24">
-      <p className="font-mono text-xs uppercase tracking-widest text-foreground/50">
-        № 00 — Sentinelle
-      </p>
-      <h1 className="mt-4 font-sans text-3xl font-light tracking-tight text-foreground">
-        Analyse de site
-      </h1>
-      <p className="mt-4 text-foreground/70">
-        Le scanner arrive en phase 2. Cette page valide la structure des routes.
-      </p>
+    <main>
+      <BlueprintSection ticks innerClassName="px-6 py-16 lg:px-12 lg:py-24">
+        <SectionHeading
+          index="№ 00"
+          kicker="Sentinelle"
+          title="Qu'est-ce qui tourne sur votre site ?"
+          description="Deux minutes pour savoir de quoi votre site est fait : CMS, extensions, serveur, bibliothèques. C'est le point de départ de toute surveillance — on ne peut pas veiller sur ce qu'on ne connaît pas."
+        />
+
+        <ScanForm />
+      </BlueprintSection>
     </main>
-  )
+  );
 }

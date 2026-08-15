@@ -37,7 +37,12 @@ reste statique et performant.
 - Next.js App Router (version du repo existant) + TypeScript strict
 - Postgres via **Neon** + **Drizzle ORM** (pas de Prisma)
 - Tâches de fond : **Inngest** (crons + steps + retries)
-- Emails : **Resend** + **React Email** (gabarits = composants versionnés)
+- Emails : **SMTP Google** (nodemailer, transport propre au produit) + gabarits
+  **React Email** rendus en HTML (gabarits = composants versionnés).
+  Écart assumé au pack, décidé le 2026-08-15 : Resend est abandonné, le compte
+  Google qui sert déjà au site envoie aussi la veille. L'isolation, elle, ne
+  bouge pas — `src/sentinelle/emails/` a ses propres variables
+  (`SENTINELLE_SMTP_*`) et n'appelle jamais `lib/sendMail.ts`.
 - Paiement : **Stripe** (Checkout + customer portal + webhooks)
 - Validation runtime : **zod** sur toutes les entrées externes (API, webhooks, réponses LLM)
 - Pas de nouvelle lib UI : réutiliser le design system du site existant
@@ -60,7 +65,7 @@ définition de fini en fin de chaque prompt).
 - Phase 1 : fondations (DB, schéma, structure de dossiers)
 - Phase 2 : scanner public + page de scan + capture email
 - Phase 3 : collecteurs + matching + rédaction LLM
-- Phase 4 : admin de validation + envoi Resend
+- Phase 4 : admin de validation + envoi (SMTP Google)
 - Phase 5 : Stripe + onboarding + espace client minimal
 
 ## Fichiers de référence

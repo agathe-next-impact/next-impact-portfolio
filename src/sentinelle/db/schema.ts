@@ -32,14 +32,39 @@ import {
 
 // ─── Enums ────────────────────────────────────────────────────────────────
 
-export const planEnum = pgEnum("plan", ["surveillance", "conseil"]); // 29 / 79
+// Offre à palier unique : Sentinelle 19 €/mois, newsletter bimensuelle (deux
+// envois par mois) + alertes au fil de l'eau. Remplace la grille 29 €/79 € de
+// specs/architecture.md (décision du 2026-08-15).
+//
+// La colonne `plan` est conservée bien qu'elle n'ait qu'une valeur : elle est
+// le point d'accroche documenté du modèle et ajouter une valeur plus tard est
+// un simple ALTER TYPE. En revanche, tant qu'il n'y a qu'un palier, aucun code
+// ne doit brancher dessus — ce serait du code mort.
+export const planEnum = pgEnum("plan", ["veille"]);
+// Taxonomie volontairement agnostique : la veille doit pouvoir suivre n'importe
+// quelle technologie, pas seulement WordPress. Le pack d'origine typait
+// « wp_core / wp_plugin / wp_theme / php / frontend » ; ces valeurs disaient à
+// la fois la NATURE du composant et son écosystème, ce qui interdisait de
+// surveiller un module Drupal, un paquet npm ou un serveur nginx.
+//
+// La nature vit désormais ici, l'écosystème dans la colonne `ecosystem`
+// (« wordpress », « npm », « packagist », « drupal », « endoflife »…). C'est ce
+// couple qui dit à un collecteur où chercher : un `cms_plugin` d'écosystème
+// `wordpress` se cherche chez WPScan, une `js_library` d'écosystème `npm` chez
+// OSV. Ajouter une technologie = ajouter une empreinte et, au besoin, un
+// écosystème — jamais refondre le modèle (règle 6 du CLAUDE.md).
 export const stackItemTypeEnum = pgEnum("stack_item_type", [
-  "wp_core",
-  "wp_plugin",
-  "wp_theme",
-  "php",
-  "hosting",
-  "frontend",
+  "cms", // WordPress, Drupal, Shopify, Ghost…
+  "cms_plugin", // extension d'un CMS
+  "cms_theme",
+  "framework", // Next.js, Nuxt, Laravel, Symfony…
+  "js_library", // jQuery, Bootstrap, Alpine…
+  "runtime", // PHP, Node
+  "server", // nginx, Apache, LiteSpeed…
+  "hosting", // OVH, o2switch, Vercel, Netlify…
+  "cdn", // Cloudflare, Fastly, Akamai…
+  "ecommerce", // WooCommerce, PrestaShop, Magento…
+  "analytics", // GA4, Matomo, Plausible…
   "saas", // cercle 2 — présent dès le départ, non exploité au MVP
   "competitor_url", // cercle 3 — idem
 ]);
@@ -92,7 +117,7 @@ export const clients = pgTable("clients", {
   siteUrl: text("site_url").notNull(),
   sector: text("sector"), // contexte pour la rédaction LLM
   notes: text("notes"), // mémoire libre (échanges, contexte)
-  plan: planEnum("plan").notNull().default("surveillance"),
+  plan: planEnum("plan").notNull().default("veille"),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   active: boolean("active").notNull().default(true),
@@ -107,9 +132,15 @@ export const stackItems = pgTable(
       .notNull()
       .references(() => clients.id, { onDelete: "cascade" }),
     type: stackItemTypeEnum("type").notNull(),
-    // Identifiant canonique du composant : slug wordpress.org pour les plugins
-    // ("contact-form-7"), "wordpress" pour le core, "php", nom du SaaS,
-    // URL pour competitor_url. C'est LA clé de jointure avec intel_items.
+    // Écosystème d'où vient l'identifiant, et donc base de vulnérabilités à
+    // interroger : "wordpress", "npm", "packagist", "drupal", "endoflife"…
+    // Null quand le composant n'est suivi par aucun catalogue (un hébergeur,
+    // par exemple) : il reste affiché dans la fiche, sans veille automatique.
+    ecosystem: text("ecosystem"),
+    // Identifiant canonique DANS cet écosystème : slug wordpress.org pour un
+    // plugin ("contact-form-7"), nom npm ("jquery"), produit endoflife.date
+    // ("php"). Avec `type` et `ecosystem`, c'est la clé de jointure avec
+    // intel_items.
     slug: text("slug").notNull(),
     label: text("label").notNull(), // nom affichable ("Contact Form 7")
     version: text("version"), // version courante connue — nullable
@@ -138,6 +169,9 @@ export const intelItems = pgTable(
     // Ciblage : quel composant est concerné
     targetSlug: text("target_slug").notNull(),
     targetType: stackItemTypeEnum("target_type").notNull(),
+    // Même rôle que sur stack_items : c'est ce qui permet de ne pas confondre
+    // le paquet npm « wordpress » avec le CMS du même nom.
+    targetEcosystem: text("target_ecosystem"),
     affectedRange: text("affected_range"), // ex. "< 6.7.0" — null si N/A
     fixedIn: text("fixed_in"),
     severity: text("severity"), // low|medium|high|critical — si dispo
@@ -187,7 +221,13 @@ export const alerts = pgTable(
   ],
 );
 
-// ─── Digests mensuels ────────────────────────────────────────────────────
+// ─── Newsletter bimensuelle ──────────────────────────────────────────────
+//
+// Deux envois par mois, pas un. La spec d'origine prévoyait un digest mensuel
+// avec une période au format "2026-08" ; l'index unique (clientId, period)
+// aurait alors rejeté le second envoi du mois — l'erreur serait apparue en
+// production, au 15 du mois, sur un client payant.
+// Format retenu : "2026-08-1" et "2026-08-2".
 
 export const digests = pgTable(
   "digests",
@@ -196,7 +236,8 @@ export const digests = pgTable(
     clientId: uuid("client_id")
       .notNull()
       .references(() => clients.id, { onDelete: "cascade" }),
-    period: text("period").notNull(), // "2026-08"
+    // "AAAA-MM-N" où N vaut 1 (envoi du 1er) ou 2 (envoi du 15).
+    period: text("period").notNull(),
     status: alertStatusEnum("status").notNull().default("draft"),
     blocks: jsonb("blocks").notNull(), // { health, delta, watch, reco, radar }
     finalHtml: text("final_html"),

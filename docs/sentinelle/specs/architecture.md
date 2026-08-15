@@ -26,7 +26,7 @@
 │                                            ▼                │
 │                          admin validation ──▶ emails/       │
 │                                              (React Email   │
-│                                               + Resend)     │
+│                                            + SMTP Google)   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -72,7 +72,8 @@ src/
     emails/
       AlertEmail.tsx           # gabarit React Email
       DigestEmail.tsx
-      send.ts                  # wrapper Resend
+      config.ts                # lecture des SENTINELLE_SMTP_* (pure, testée)
+      send.ts                  # transport SMTP Google + sendSentinelleMail()
     billing/
       stripe.ts                # checkout, portal, webhook handlers
     inngest/
@@ -103,21 +104,37 @@ drizzle.config.ts
 3. Pour chaque draft : `generateAlertText()` appelle l'API Claude avec le
    contexte borné → texte + verdict proposés, validés par zod, stockés
 4. L'admin liste les drafts ; validation humaine → statut validated
-5. Envoi Resend → statut sent, horodaté
+5. Envoi SMTP Google → statut sent, horodaté
 
-### Flux 3 — Digest mensuel
-1. Cron Inngest mensuel : pour chaque client actif, assemblage des blocs
-   1/2/5 depuis la base (état du stack, delta du mois, radar) — sans LLM
-2. Blocs 3/4 (veille contextualisée, reco du mois) : génération LLM en draft
+### Flux 3 — Newsletter bimensuelle
+1. Cron Inngest deux fois par mois (le 1er et le 15) : pour chaque client actif,
+   assemblage des blocs 1/2/5 depuis la base (état du stack, delta depuis le
+   numéro précédent, radar) — sans LLM
+2. Blocs 3/4 (veille contextualisée, reco du numéro) : génération LLM en draft
 3. Relecture/édition dans l'admin → envoi
+
+   La relecture humaine reste obligatoire (règle 4) : à 24 numéros par an et par
+   client, c'est elle qui borne le nombre de clients servables, pas la technique.
 
 ## Décisions verrouillées
 
 - **Pas d'envoi automatique** au MVP (règle 4 du CLAUDE.md)
 - **Polling simple** pour le scan (pas de websockets — inutile à ce stade)
 - **Magic link** pour l'espace client (pas de mots de passe) — phase 5
-- **Domaine d'envoi** : sous-domaine dédié (ex. sentinelle.next-impact.digital)
-  avec SPF/DKIM propres — configuré dans Resend, documenté dans le README
-- Palier 29 € : alerts sécurité/obsolescence + digest court (blocs 1-2)
-  Palier 79 € : + veille contextualisée + reco du mois (blocs 3-4)
-  Le palier vit sur `clients.plan` et filtre la génération, pas le matching.
+- **Envoi par SMTP Google** (décision du 2026-08-15, remplace Resend et le
+  sous-domaine dédié) : Gmail n'expédie que sous le compte authentifié ou un
+  alias « Envoyer en tant que » vérifié, donc `veille@next-impact.digital` et
+  non `sentinelle.next-impact.digital`. DKIM à activer dans la console
+  Workspace. Transport et variables propres au produit — voir plan §10
+- **Offre à palier unique — 19 €/mois** (décision du 2026-08-15, remplace la
+  grille 29 €/79 € ci-dessous) : alertes sécurité/obsolescence au fil de l'eau
+  + **newsletter bimensuelle**, deux envois par mois (le 1er et le 15), tous
+  blocs compris. `clients.plan` ne porte plus qu'une valeur (`veille`) et ne
+  filtre donc plus rien : ne pas écrire de branchement dessus tant qu'il n'y a
+  qu'un palier.
+  Conséquence sur le modèle : `digests.period` passe de `"2026-08"` à
+  `"2026-08-1"` / `"2026-08-2"`, sans quoi l'index unique
+  `(clientId, period)` rejetterait le second envoi du mois. Le calcul de cette
+  clé vit dans `src/sentinelle/newsletter/period.ts`, testé.
+  ~~Palier 29 € : alerts sécurité/obsolescence + digest court (blocs 1-2).
+  Palier 79 € : + veille contextualisée + reco du mois (blocs 3-4).~~ Abandonné.

@@ -1,4 +1,22 @@
-// Gabarits React Email + envoi Resend — phase 4. Ne jamais utiliser lib/sendMail.ts du site vitrine.
-// Module vide : implémenté à la phase indiquée, pas avant.
+// Envoi d'e-mails Sentinelle — SMTP Google, transport propre au produit.
+// Ne jamais utiliser lib/sendMail.ts ni lib/email-template.ts du site vitrine.
+//
+// Le transport existe dès maintenant ; les gabarits (alerte, newsletter) et le
+// cycle draft → validated → sent arrivent en phase 4.
+export {
+  DEFAULT_FROM_NAME,
+  DEFAULT_SMTP_HOST,
+  DEFAULT_SMTP_PORT,
+  formatAddress,
+  resolveMailConfig,
+  type MailConfig,
+  type MailEnv,
+} from "./config";
 
-export {};
+export {
+  resetMailTransport,
+  sendSentinelleMail,
+  verifyMailTransport,
+  type MailTransport,
+  type SentinelleMail,
+} from "./send";

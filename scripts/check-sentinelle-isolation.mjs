@@ -21,6 +21,13 @@ const ALLOWED_PREFIXES = [
   path.join("app", "api", "sentinelle"),
 ];
 
+const DEV_TOOLING = new Set([
+  path.join("scripts", "check-sentinelle-isolation.mjs"),
+  path.join("scripts", "check-sentinelle-mail.mjs"),
+  "drizzle.config.ts",
+  "vitest.config.mts",
+]);
+
 const SKIP_DIRS = new Set([
   "node_modules",
   ".next",
@@ -58,8 +65,10 @@ const violations = [];
 for (const file of walk(root)) {
   const relative = path.relative(root, file);
   if (ALLOWED_PREFIXES.some((prefix) => relative.startsWith(prefix))) continue;
-  if (relative === path.join("scripts", "check-sentinelle-isolation.mjs")) continue;
-  if (relative === "drizzle.config.ts" || relative === "vitest.config.mts") continue;
+  // Outillage de développement : ces fichiers ne partent dans aucun bundle et
+  // ne s'exécutent jamais dans le rendu du site. Ils ont le droit de viser le
+  // périmètre Sentinelle ; la liste reste nominative pour qu'elle ne dérive pas.
+  if (DEV_TOOLING.has(relative)) continue;
 
   const source = fs.readFileSync(file, "utf8");
   for (const match of source.matchAll(IMPORT_PATTERN)) {

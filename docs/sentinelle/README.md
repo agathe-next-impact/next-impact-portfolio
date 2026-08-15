@@ -22,8 +22,10 @@ prompts/
 1. Copie `CLAUDE.md`, `specs/` et `prompts/` à la racine du repo du site
    (si un CLAUDE.md existe déjà, fusionne — la section "Règles NON
    NÉGOCIABLES" doit rester intacte).
-2. Prépare les comptes : Neon (base), Inngest, Resend (+ sous-domaine d'envoi
-   avec SPF/DKIM), Stripe (2 prix récurrents en mode test), WPScan (clé API).
+2. Prépare les comptes : Neon (base), Inngest, Stripe (prix récurrent en mode
+   test), WPScan (clé API). Pour l'envoi d'e-mails, pas de compte à ouvrir :
+   SMTP Google avec un mot de passe d'application (décision du 2026-08-15,
+   voir plan §10 — Resend est abandonné).
 3. Ouvre le repo dans Claude Code et exécute les prompts de `prompts/phases.md`
    phase par phase. Ne passe à la suivante qu'après avoir vérifié la
    "définition de fini" de la phase en cours — c'est toi qui valides, pas
@@ -45,8 +47,8 @@ prompts/
 
 Phases 1-2 : ~1 semaine · Phase 3 : ~1 semaine · Phases 4-5 : ~1 semaine,
 en solo avec Claude Code, incluant tests et recette. Coûts de fonctionnement
-au lancement : < 50 €/mois (Neon et Inngest gratuits, Resend ~0-20 €,
-WPScan ~30 €).
+au lancement : < 50 €/mois (Neon et Inngest gratuits, envoi d'e-mails compris
+dans le Google Workspace déjà payé, WPScan ~30 €).
 
 ## Après le build
 

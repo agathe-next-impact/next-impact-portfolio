@@ -1,8 +1,8 @@
 CREATE TYPE "public"."alert_status" AS ENUM('draft', 'validated', 'sent', 'dismissed', 'resolved');--> statement-breakpoint
 CREATE TYPE "public"."intel_kind" AS ENUM('vulnerability', 'release', 'eol', 'changelog', 'page_diff');--> statement-breakpoint
-CREATE TYPE "public"."plan" AS ENUM('surveillance', 'conseil');--> statement-breakpoint
+CREATE TYPE "public"."plan" AS ENUM('veille');--> statement-breakpoint
 CREATE TYPE "public"."stack_item_source" AS ENUM('scanned', 'declared');--> statement-breakpoint
-CREATE TYPE "public"."stack_item_type" AS ENUM('wp_core', 'wp_plugin', 'wp_theme', 'php', 'hosting', 'frontend', 'saas', 'competitor_url');--> statement-breakpoint
+CREATE TYPE "public"."stack_item_type" AS ENUM('cms', 'cms_plugin', 'cms_theme', 'framework', 'js_library', 'runtime', 'server', 'hosting', 'cdn', 'ecommerce', 'analytics', 'saas', 'competitor_url');--> statement-breakpoint
 CREATE TYPE "public"."verdict" AS ENUM('green', 'orange', 'red', 'info');--> statement-breakpoint
 CREATE TABLE "alerts" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE "clients" (
 	"site_url" text NOT NULL,
 	"sector" text,
 	"notes" text,
-	"plan" "plan" DEFAULT 'surveillance' NOT NULL,
+	"plan" "plan" DEFAULT 'veille' NOT NULL,
 	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
 	"active" boolean DEFAULT true NOT NULL,
@@ -53,6 +53,7 @@ CREATE TABLE "intel_items" (
 	"external_id" text NOT NULL,
 	"target_slug" text NOT NULL,
 	"target_type" "stack_item_type" NOT NULL,
+	"target_ecosystem" text,
 	"affected_range" text,
 	"fixed_in" text,
 	"severity" text,
@@ -77,6 +78,7 @@ CREATE TABLE "stack_items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"client_id" uuid NOT NULL,
 	"type" "stack_item_type" NOT NULL,
+	"ecosystem" text,
 	"slug" text NOT NULL,
 	"label" text NOT NULL,
 	"version" text,

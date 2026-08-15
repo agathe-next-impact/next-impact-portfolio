@@ -1,5 +1,29 @@
 # Modèle de données — schéma Drizzle de référence
 
+> **Partiellement périmé depuis le 2026-08-15. La référence est désormais
+> `src/sentinelle/db/schema.ts`**, qui documente ses écarts en tête de fichier.
+> Ce document reste utile pour les intentions et la requête de matching de
+> référence, pas pour les types.
+>
+> Trois écarts à connaître avant de lire :
+>
+> 1. **`stackItemTypeEnum` a changé de nature.** La taxonomie ci-dessous
+>    (`wp_core`, `wp_plugin`, `wp_theme`, `php`, `frontend`) mélangeait la
+>    nature d'un composant et son écosystème, ce qui interdisait de surveiller
+>    un module Drupal, un paquet npm ou un serveur nginx. La nature vit
+>    maintenant dans l'enum (`cms`, `cms_plugin`, `framework`, `runtime`,
+>    `server`…), l'écosystème dans une colonne `ecosystem` portée par
+>    `stack_items` **et** `intel_items`. C'est ce couple qui dit à un collecteur
+>    où chercher.
+> 2. **`planEnum` n'a plus qu'une valeur** (`veille`) : palier unique à 19 €/mois.
+>    Aucun code ne doit brancher dessus tant qu'il en est ainsi.
+> 3. **`digests.period`** vaut `"2026-08-1"` / `"2026-08-2"` et non `"2026-08"` :
+>    deux envois par mois, l'index unique `(clientId, period)` rejetterait le
+>    second.
+>
+> S'y ajoutent les trois écarts déjà documentés dans `schema.ts` : `ipHash` et
+> `userAgent` sur `scans`, `onDelete: cascade`, index de lecture.
+
 Le schéma ci-dessous est la référence à implémenter dans
 `src/sentinelle/db/schema.ts`. Les commentaires font partie de la spec.
 

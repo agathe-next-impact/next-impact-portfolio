@@ -125,12 +125,16 @@ corréler `generatedText` / `finalText` à une version de prompt.
 ### E7 — Deux stacks d'e-mail dans le même repo
 
 Le site envoie via `nodemailer` + `lib/email-template.ts` (kit Blueprint) ;
-Sentinelle doit envoyer via Resend + React Email sur un sous-domaine dédié.
+Sentinelle devait envoyer via Resend + React Email sur un sous-domaine dédié.
 
-C'est **volontaire et cohérent avec l'isolation** — mais à assumer et à écrire
-dans la doc, sinon une future session « harmonisera » les deux et cassera
-l'extraction. Règle : `lib/sendMail.ts` ne sert jamais à Sentinelle,
-`@sentinelle/emails/send` ne sert jamais à la vitrine.
+**Révisé le 2026-08-15 : Resend est abandonné, Sentinelle envoie par SMTP
+Google**, comme la vitrine (voir §10, « Envoi d'e-mails par SMTP Google »). Ce
+n'est plus le fournisseur qui sépare les deux piles, c'est le transport et les
+variables — et cette séparation reste **volontaire et cohérente avec
+l'isolation**. À assumer et à écrire dans la doc, sinon une future session
+« harmonisera » les deux et cassera l'extraction. Règle inchangée :
+`lib/sendMail.ts` ne sert jamais à Sentinelle, `@sentinelle/emails` ne sert
+jamais à la vitrine, et aucune variable de l'un ne sert de repli à l'autre.
 
 ---
 
@@ -167,7 +171,9 @@ logique produit.
    React 19 / Node 26 — surtout `inngest` (à installer et à faire répondre
    avant de construire quoi que ce soit dessus).
 6. Comptes à ouvrir en parallèle (côté Agathe, hors code) : Neon, Inngest,
-   Resend + sous-domaine d'envoi avec SPF/DKIM, Stripe en mode test, WPScan.
+   Stripe en mode test, WPScan. **L'envoi d'e-mails ne demande plus de compte**
+   depuis la bascule sur SMTP Google : un mot de passe d'application suffit
+   (voir §10).
 
 **Fini quand** : le site build et s'affiche à l'identique, une route Sentinelle
 vide répond, `npm run typecheck` et `npm run test` existent et passent.
@@ -218,22 +224,52 @@ Le prompt du pack, plus :
 Fini : scan de bout en bout sur 2 vrais sites WordPress, rapport affiché, e-mail
 en base, aucune régression Lighthouse sur la home.
 
-### Phase 3 — Collecteurs, matching, rédaction (~4 j)
+### Phase 2 bis — dette de la phase 2 (½ j)
 
-Le prompt du pack, plus :
+Ajoutée à la révision du 2026-08-15 : cinq points laissés ouverts par la phase 2,
+détaillés dans `prompts/phases.md`. Deux sont visibles par un client (la note du
+rapport qui nie le CMS qu'elle vient d'afficher, `isWordPress` qui nomme une
+technologie dans un modèle agnostique), trois engagent juridiquement (module de
+rétention vide, `/confidentialite` sans section Sentinelle alors que la capture
+d'e-mail est en service, `robots.txt` sans exclusion).
 
+### Phase 3 — Collecteurs agnostiques, matching, rédaction (~4 j)
+
+**C'est la phase qui porte la promesse « toute technologie ».** Le scan est
+agnostique depuis la phase 2 ; les trois collecteurs du pack (WPScan, Wordfence,
+api.wordpress.org) ne le sont pas. En l'état, un abonné Shopify ou Next.js
+paierait 19 €/mois sans jamais rien recevoir — pire que de ne pas le prendre
+comme client.
+
+- **Routage par écosystème** : le couple `(type, ecosystem)` d'un `stack_item`
+  dit quel collecteur interroger. Un écosystème sans collecteur ne produit rien
+  et le journalise ; ce n'est pas une erreur.
+- **`endoflife.ts` en premier** : gratuit, sans clé, couvre PHP, Node, nginx,
+  Apache, WordPress, Drupal, Laravel, Symfony, Django, Angular, Vue, jQuery. La
+  source qui produira le plus d'alertes utiles, et la seule qui serve un client
+  dont le site n'a pas de CMS.
+- **`osv.ts`** : OSV.dev, gratuit, sans clé, vulnérabilités par écosystème de
+  paquets (npm, Packagist, PyPI), là où WPScan s'arrête.
+- **`wpscan.ts`** : WordPress seul, avec le repli Wordfence.
 - Chaque collecteur en step Inngest distinct (retry indépendant), idempotence
   garantie par l'index `(source, external_id)` et testée par un double run.
+- **Matching** : jointure sur `(type, ecosystem, slug)` et non sur le seul slug,
+  sans quoi deux technologies homonymes de deux écosystèmes se croiseraient.
+  Nouvelle règle rendue possible par la phase 2 : **pas de verdict rouge si
+  `versionConfidence` n'est pas `high`**. Une version probable peut produire un
+  orange « à vérifier », jamais un rouge.
 - Couche rédaction : SDK `@anthropic-ai/sdk`, **sortie structurée** plutôt que
   « réponds en JSON » (voir §6) — le guard zod reste, mais pour les règles
   métier (ex. `red` seulement si version dans la plage **et** sévérité
   high/critical), pas pour le parsing.
 - Journalisation du couple prompt/version + `generatedText` : c'est la donnée
   qui fera évoluer le prompt.
-- Seed de développement (`scripts/seed-sentinelle.ts`) : 1 client fictif,
-  3 `stack_items` dont un vulnérable connu — c'est la définition de fini du pack.
+- Seed de développement (`scripts/seed-sentinelle.ts`) : **quatre** clients de
+  stacks différentes — WordPress, Drupal, Next.js avec dépendances npm, site
+  sans CMS sous nginx/PHP. La définition de fini du pack (un seul client
+  WordPress) ne prouvait rien de l'agnosticité ; celle-ci si.
 
-### Phase 4 — Admin et envoi (~3 j)
+### Phase 4 — Admin, envoi et newsletter bimensuelle (~3 j)
 
 Le prompt du pack, plus :
 
@@ -241,20 +277,31 @@ Le prompt du pack, plus :
   niveau d'un layout serveur du groupe admin (pas d'un composant client), et
   `noindex`.
 - Rendu des e-mails prévisualisé dans l'admin via `@react-email/render`.
-- Domaine d'envoi : `sentinelle.next-impact.digital`, `reply-to` vers
-  l'adresse d'Agathe, SPF/DKIM vérifiés avant le premier envoi réel.
+- Envoi par SMTP Google : le transport existe déjà
+  (`@sentinelle/emails`, `sendSentinelleMail`), il reste à écrire les gabarits.
+  Adresse d'expédition = un alias Workspace vérifié en « Envoyer en tant que »
+  (`veille@next-impact.digital`), pas un sous-domaine : Gmail n'expédie que
+  sous une adresse qu'il connaît. DKIM à activer dans la console Workspace
+  avant le premier envoi réel — il ne l'est pas par défaut.
 - Garde-fou : impossible de passer `validated → sent` sans `finalText` non vide.
+- **Newsletter bimensuelle et non digest mensuel** : cron le 1er et le 15, clé
+  de période fournie par `newsletter/period.ts`. Palier unique, donc tous les
+  blocs pour tout le monde — aucun branchement sur `plan`, ce serait du code
+  mort.
 
-### Phase 5 — Stripe et onboarding (~3 j)
+### Phase 5 — Onboarding et espace client (~2 j, révisé)
 
-Le prompt du pack, plus :
+Le paiement est **déjà fait** : Payment Link Stripe, webhook vérifié, adresse du
+site collectée par champ personnalisé obligatoire. La phase 5 du pack décrivait
+une session Checkout créée depuis le rapport de scan : abandonnée. Reste l'aval.
 
-- Webhook : `runtime = "nodejs"`, `dynamic = "force-dynamic"`, corps brut via
-  `await req.text()`, vérification de signature obligatoire, idempotence par
-  `event.id` (table ou contrainte d'unicité) — Stripe rejoue.
+- Onboarding post-paiement : complétion de fiche → `stack_items` de source
+  `declared`. C'est ce qui fait passer la surveillance de « 50 à 70 % des
+  composants » à « exacte » — la promesse faite sur la page d'offre.
 - Magic link : token signé (HMAC + expiration 15 min), stocké haché.
-- CTA du rapport de scan branché sur le Checkout réel (fin du placeholder posé
-  en phase 2).
+- CTA du rapport de scan branché sur le Payment Link, scanId en paramètre.
+- Lancement de `/sentinelle` : `AVANT_LANCEMENT` à `false`, entrée au sitemap,
+  décision sur la navigation. Les trois gestes ensemble.
 
 ---
 
@@ -311,13 +358,20 @@ méritent des tests vitest au même titre que `versions.ts`.
 
 ## 8. Estimation
 
-Phase 0 : ½ j · Phase 1 : 2 j · Phase 2 : 3 j · Phase 3 : 4 j · Phase 4 : 3 j ·
-Phase 5 : 3 j — soit **≈ 15,5 jours** de travail effectif, recette comprise.
-C'est plus large que les « 3 semaines » du pack parce que j'y compte les
-écarts du §2 et la recette réelle entre chaque phase.
+Révisée le 2026-08-15, phases 0 à 2 étant faites : **≈ 10 jours** restants. Le
+découpage en lots, les dépendances et les définitions de fini sont en §11, qui
+fait foi — cette section n'en garde que le total. La phase 5 perd un jour (le
+paiement est déjà en place), la phase 4 une demi-journée (le transport d'e-mail
+est écrit), la phase 2 bis en ajoute une demie et la mise en production, souvent
+oubliée, une autre.
 
-Coûts de fonctionnement au lancement : Neon et Inngest gratuits, Resend 0–20 €,
-WPScan ~30 €, Anthropic quelques euros → objectif < 50 €/mois tenu.
+Coûts de fonctionnement au lancement : Neon et Inngest gratuits, envoi d'e-mails
+**0 €** (compris dans le Google Workspace déjà payé — 2 000 destinataires/jour,
+très au-dessus du besoin), Anthropic quelques euros. **WPScan ~30 € n'est plus une dépense obligatoire** :
+endoflife.date et OSV.dev sont gratuits et sans clé, et couvrent tout le parc
+non-WordPress. WPScan reste souhaitable pour la profondeur sur les extensions
+WordPress, mais le produit tient sans lui dès le lancement — objectif
+< 50 €/mois largement tenu.
 
 ---
 
@@ -382,7 +436,7 @@ Livrable côté légal, en phase 2 (dès la capture d'e-mail, pas en phase 5) : 
 section Sentinelle dans `/confidentialite` — finalités (diagnostic à la demande,
 surveillance contractuelle), base légale (mesure précontractuelle pour le scan,
 exécution du contrat pour la surveillance), sous-traitants (Neon, Inngest,
-Resend, Anthropic, Stripe) et le tableau de durées ci-dessus.
+Google, Anthropic, Stripe) et le tableau de durées ci-dessus.
 
 ---
 
@@ -440,8 +494,394 @@ Resend, Anthropic, Stripe) et le tableau de durées ci-dessus.
 `DATABASE_URL` dans `.env.local`, puis `npm run db:migrate`. C'est la seule
 étape qui dépend d'un compte externe.
 
+### Changement d'offre — palier unique 19 € (2026-08-15)
+
+> Écrit d'abord à 9 €, puis **arrêté à 19 €/mois** le même jour : c'est le tarif
+> que portent `lib/sentinelle-offer.ts` et le Payment Link Stripe. Ce document a
+> été aligné sur eux, et non l'inverse.
+
+La grille 29 €/79 € est abandonnée au profit d'**un seul tarif à 19 €/mois** :
+alertes au fil de l'eau + **newsletter bimensuelle**, deux envois par mois.
+Appliqué : `planEnum` réduit à `veille`, migration régénérée (elle n'avait pas
+encore été appliquée, donc aucun `ALTER TYPE` à porter), `.env.example` ramené à
+un seul prix Stripe, `specs/architecture.md` mis à jour.
+
+Conséquence trouvée à cette occasion : `digests.period` valait `"2026-08"` et
+l'index unique `(clientId, period)` **aurait rejeté le second envoi du mois**.
+Le format devient `"2026-08-1"` / `"2026-08-2"`, calculé par
+`src/sentinelle/newsletter/period.ts` (12 tests). Le calcul se fait en heure de
+Paris et non en UTC : un cron du 1er à 07:00 Paris tombe encore la veille en UTC
+une partie de l'année, ce qui aurait rangé un numéro sur deux sous la mauvaise
+clé.
+
+Point de vigilance économique, à surveiller plutôt qu'à trancher maintenant : la
+relecture humaine étant obligatoire (règle 4), 24 numéros par an et par client
+font de son temps — et non de la technique — la borne du nombre de clients
+servables. À 19 € pour 24 numéros au lieu de 29 € pour 12, le rapport
+relecture/euro est multiplié par trois par rapport au modèle du pack.
+
+### Page d'offre `/sentinelle` (2026-08-15)
+
+Créée dans la vitrine (`app/[locale]/sentinelle/page.tsx`), pas dans le groupe
+produit : c'est une page de vente, elle a besoin du header, du footer, de l'i18n
+et du SEO du site. Composant serveur, sans JavaScript client, pour ne rien
+coûter aux Core Web Vitals.
+
+Structure : douleur → ce que vous recevez (deux choses) → pourquoi l'alerte est
+lisible → 19 €/mois → limites énoncées avant. CTA à deux températures.
+
+**En noindex tant que le produit n'est pas livrable** (drapeau `AVANT_LANCEMENT`
+en tête de fichier) : le scanner arrive en phase 2 et le paiement en phase 5,
+envoyer des prospects vers un parcours qui n'aboutit pas coûterait plus que ça
+ne rapporte. Le CTA pointe donc vers `/contact` en attendant. Les trois gestes
+de lancement (drapeau, sitemap, navigation) sont listés dans le fichier.
+
+Non fait volontairement : aucun lien depuis le header ou la home — cela
+toucherait des surfaces marketing existantes, ce que la règle 1 du pack réserve
+à une demande explicite.
+
+### Abonnement par Payment Link Stripe (2026-08-15)
+
+Fait, en avance sur la phase 5 du pack et par un chemin plus court : au lieu
+d'un tunnel Checkout codé sur mesure, l'abonnement passe par un **Payment Link**
+— la page de paiement hébergée par Stripe, créée dans le tableau de bord. Stripe
+Link (paiement en un clic) y apparaît automatiquement comme moyen de paiement.
+
+- `billing/offer.ts` — montant, libellé, résolution de l'URL du Payment Link.
+- `billing/subscription.ts` — traduction d'une session de paiement en fiche
+  client. Pur, sans SDK ni base : 15 tests.
+- `billing/store.ts` — upsert sur `clients.email`. **L'idempotence des rejeux
+  Stripe ne repose sur aucun compteur applicatif** : c'est la contrainte
+  d'unicité qui la garantit. Une valeur vide venant de Stripe n'écrase jamais
+  une adresse de site déjà renseignée.
+- `billing/stripe.ts` + `app/api/sentinelle/stripe/webhook/route.ts` —
+  vérification de signature obligatoire, corps brut (`req.text()`), codes de
+  retour choisis pour piloter les nouvelles tentatives de Stripe : 400 sur
+  signature invalide (ne jamais retenter), 500 sur échec d'écriture (retenter),
+  200 sur événement non géré (sinon Stripe boucle indéfiniment).
+- Vérifié : une requête sans signature, ou avec une signature forgée, reçoit un
+  400 et n'écrit rien.
+
+Règle de conception : **un paiement encaissé produit toujours une fiche**. Une
+donnée manquante devient un avertissement journalisé, jamais un rejet — perdre
+la trace d'un client qui a payé est le pire résultat possible. Seule l'absence
+d'adresse e-mail fait exception : sans elle, la fiche n'a pas de clé.
+
+Deux gestes côté tableau de bord Stripe, sans quoi le code ne sert à rien :
+
+1. créer le Payment Link sur un prix récurrent de 19 €/mois, **avec un champ
+   personnalisé obligatoire de clé `site_url`** — sans lui on encaisse un
+   abonnement sans savoir quel site surveiller ;
+2. déclarer le webhook vers `/api/sentinelle/stripe/webhook` en écoutant
+   `checkout.session.completed` et `customer.subscription.deleted`, puis coller
+   le secret dans `STRIPE_WEBHOOK_SECRET`.
+
+Point d'isolation résolu au passage : la page `/sentinelle` est une page
+marketing et ne peut pas importer le code du produit sans violer la règle 2.
+Les faits publics de l'offre vivent donc dans `lib/sentinelle-offer.ts`, dont
+`billing/offer.ts` dépend — dépendance inversée, dans le sens autorisé. Le
+montant affiché et le montant vérifié par le webhook ne peuvent pas diverger.
+
+Hors périmètre de ce lot : la fabrication et l'envoi des numéros (phase 4), le
+portail client Stripe et l'espace abonné (phase 5), l'e-mail de bienvenue.
+Aujourd'hui, un paiement crée une fiche cliente — rien ne part encore.
+
+### Phase 2 — scanner public, techno-agnostique (2026-08-15)
+
+Le pack décrivait un scanner WordPress-first. La consigne — « la veille doit
+être techno agnostique et capable de toutes les détecter » — a déplacé
+l'architecture : **détecter une technologie ne doit plus demander d'écrire du
+code**.
+
+- `scanner/detect.ts` — moteur générique et pur. Il ne connaît aucune
+  technologie : il applique des empreintes à une observation de page.
+- `scanner/fingerprints.ts` — **des données, pas du code**. 45 empreintes
+  couvrant CMS (WordPress, Drupal, Joomla, TYPO3, SPIP, Ghost, Craft, Shopify,
+  Wix, Squarespace, Webflow), e-commerce, méta-frameworks (Next, Nuxt,
+  SvelteKit, Remix, Astro, Gatsby, Angular), frameworks serveur, serveurs web,
+  runtimes, hébergeurs, CDN, bibliothèques JS et mesure d'audience. Ajouter une
+  techno = trois lignes.
+- `scanner/detectors/wordpress.ts` — la seule exception assumée : WordPress a
+  droit à un détecteur profond (extensions et thème énumérés) parce que c'est le
+  parc surveillé en priorité. Il n'impose rien au moteur.
+
+**Conséquence sur le modèle de données** : la taxonomie du pack
+(`wp_core / wp_plugin / wp_theme / php / frontend`) mélangeait la nature d'un
+composant et son écosystème, ce qui interdisait de surveiller un module Drupal
+ou un paquet npm. La nature vit désormais dans `stackItemTypeEnum` (générique),
+l'écosystème dans une colonne `ecosystem` présente sur `stack_items` **et**
+`intel_items`. C'est ce couple qui dira à un collecteur où chercher : WPScan
+pour `wordpress`, OSV pour `npm`/`packagist`, endoflife.date pour un runtime.
+Migration régénérée (toujours pas appliquée, donc sans coût).
+
+Reste du lot : rate limit par empreinte d'IP (compté en base, pas en mémoire —
+en serverless un compteur applicatif ne compte rien), fonction Inngest
+`scan-async`, routes POST/GET/PATCH, pages `/scan` et `/scan/[id]` avec
+interrogation toutes les 1,5 s, capture d'e-mail et limites affichées.
+
+**Deux bugs trouvés en confrontant le scanner au vrai web**, tous deux invisibles
+sur les fixtures et tous deux porteurs de fausses alertes en phase 3 :
+
+1. `?ver=1785161844` sur wordpress.org est un horodatage de purge de cache, pas
+   une version. Il était rapporté tel quel et aurait été comparé à des plages
+   affectées.
+2. Plus grave : le `?ver=` était cherché dans la source entière — donc dans tout
+   le HTML — si bien que **tous les composants d'une page héritaient de la
+   première version rencontrée**. Sur wordpress.org, thème et extensions
+   portaient la version de Gutenberg. Chaque composant aurait été confronté aux
+   plages affectées avec la version d'un autre.
+
+Les deux sont corrigés, chacun avec son test de non-régression. Vérifié ensuite
+sur quatre sites réels : next-impact.digital (Next.js/Vercel), wordpress.org
+(WordPress 7.2 + extensions), drupal.org (Drupal 10 + Apache), prestashop.com
+(WordPress + Nuxt + deux CDN).
+
+Choix de conception à retenir : `DetectedComponent` distingue `confidence` (le
+composant est-il là ?) de `versionConfidence` (la version est-elle sûre ?). Ce
+sont deux questions différentes, et c'est la seconde que le matching devra
+consulter avant de fonder une alerte rouge sur une comparaison de plage.
+
+### Révision de la planification (2026-08-15)
+
+`prompts/phases.md` a été réécrit. Les prompts d'origine étaient périmés sur
+trois points : produit WordPress-first, deux paliers tarifaires, paiement par
+session Checkout. Ils décrivaient aussi les phases 1 et 2 comme à faire.
+
+Ce qui change dans l'exécution, par ordre d'importance :
+
+1. **La phase 3 devient la phase de l'agnosticité.** Trois collecteurs routés
+   par écosystème au lieu de trois collecteurs WordPress. `endoflife.ts` passe
+   en premier — c'est la source la plus rentable et la seule qui serve un client
+   sans CMS.
+2. **Une phase 2 bis apparaît** pour solder cinq points ouverts, dont deux
+   visibles par un client et trois à portée juridique.
+3. **La définition de fini de la phase 3 change de nature** : quatre clients de
+   stacks différentes au lieu d'un client WordPress. Une définition de fini qui
+   ne teste qu'un WordPress ne prouve rien d'une promesse « toute technologie ».
+4. La phase 5 se réduit à l'onboarding et à l'espace client.
+
+État vérifié le 2026-08-15 : `npm test` vert (83 tests, 5 fichiers), typecheck
+Sentinelle propre, scanner confronté à neuf sites réels de stacks différentes.
+**La base Neon est joignable mais vide** — la migration n'a jamais été
+appliquée, et c'est le seul blocage total : toute route qui touche la base
+répond 500. Voir la phase 1 pour le correctif `drizzle.config.ts`.
+
+### Envoi d'e-mails par SMTP Google (2026-08-15)
+
+Resend est abandonné avant d'avoir servi. La vitrine envoyait déjà par
+`smtp.gmail.com` (compte Workspace `agathe@next-impact.digital`, mot de passe
+d'application) ; Sentinelle fait désormais de même. Trois raisons : un
+fournisseur de moins à administrer, zéro coût marginal, et un domaine dont la
+réputation d'envoi est déjà établie plutôt qu'un sous-domaine neuf à chauffer.
+
+Ce que la bascule ne change pas — et c'est le point à ne pas perdre : les deux
+piles restent séparées. `src/sentinelle/emails/` a son propre transport, ses
+propres variables `SENTINELLE_SMTP_*` et **aucun repli** sur les `NODEMAILER_*`
+de la vitrine. Un repli silencieux ferait partir la veille sous l'identité du
+site le jour d'un oubli de variable ; une erreur qui nomme la variable manquante
+vaut mieux. Le jour de l'extraction en sous-domaine, `emails/` part tel quel.
+
+- `emails/config.ts` — lecture d'environnement pure et testée (`resolveMailConfig`).
+- `emails/send.ts` — transport paresseux, `sendSentinelleMail`, plus
+  `verifyMailTransport()` qui authentifie sans envoyer : dix secondes après une
+  rotation de mot de passe, au lieu de le découvrir sur une alerte client.
+- 17 tests, `npm test` vert (100 tests). Authentification vérifiée en réel
+  contre `smtp.gmail.com:465`.
+
+Trois contraintes propres à Google, écrites dans `emails/config.ts` pour
+qu'elles ne se redécouvrent pas :
+
+1. Le mot de passe est un **mot de passe d'application** de 16 caractères
+   (validation en deux étapes requise), pas celui du compte. Google l'affiche
+   par groupes de quatre — les espaces collés font échouer l'authentification,
+   `resolveMailConfig` les retire.
+2. **Gmail réécrit l'en-tête From** s'il ne correspond pas au compte
+   authentifié ou à un alias « Envoyer en tant que » vérifié. D'où
+   `SENTINELLE_MAIL_FROM` laissé vide en local : l'alias `veille@` doit exister
+   côté Google avant qu'on l'écrive ici. Le sous-domaine
+   `sentinelle.next-impact.digital` prévu par le pack n'a plus lieu d'être.
+3. Quota : 2 000 destinataires/jour en Workspace. Large pour des alertes et deux
+   numéros par mois, mais ce n'est pas illimité — à revoir si le nombre d'abonnés
+   dépasse quelques centaines, la même architecture pouvant alors pointer sur un
+   relais SMTP transactionnel sans changer une ligne d'appelant.
+
+Reste à faire quand la phase 4 arrivera : activer DKIM pour le domaine dans la
+console Workspace (il ne l'est pas par défaut), créer et vérifier l'alias
+`veille@next-impact.digital`, et renseigner les `SENTINELLE_SMTP_*` sur Vercel.
+La dépendance `resend` reste dans `package.json`, désormais inutilisée.
+
+### Lot 0 — migration appliquée, chaîne complète vérifiée (2026-08-15)
+
+La base n'est plus vide : 6 tables, 6 enums, 9 index — dont les uniques qui
+portent l'idempotence (`alert_client_intel`, `intel_source_external`,
+`digest_client_period`, `clients_email_unique`).
+
+`drizzle.config.ts` : `process.loadEnvFile(".env.local")` sous `try/catch` et
+bascule sur `DATABASE_URL_UNPOOLED`, avec repli sur `DATABASE_URL`. Le repli
+compte pour la CI et Vercel, qui passent les variables autrement.
+
+**Vérification de bout en bout** : `POST /api/sentinelle/scan` sur drupal.org →
+step Inngest → `status: done` en moins de deux secondes, deux composants
+détectés (Drupal 10 en confiance haute, Apache HTTP Server sans version),
+`ipHash` de 64 caractères et `userAgent` en base. C'est la première fois que la
+chaîne tourne entière.
+
+Deux problèmes trouvés à cette occasion, tous deux invisibles en tests :
+
+1. **Inngest v4 ne devine plus le mode développement.** Sans `INNGEST_DEV=1`,
+   le SDK part en mode cloud : la route d'enregistrement répond 500 en boucle et
+   `inngest.send()` échoue faute de clé. Le pack, écrit pour la v3, ne pouvait
+   pas le prévoir. Variable ajoutée à `.env.local` et à `.env.example`, avec la
+   consigne de ne jamais la définir en production.
+2. **Un envoi d'événement raté laissait un scan fantôme.** La ligne est écrite
+   avant la mise en file ; l'échec de `inngest.send()` remontait à l'appelant
+   sans toucher la ligne, qui restait `pending` pour toujours — et le front
+   interrogeait dans le vide. `app/api/sentinelle/scan/route.ts` ferme désormais
+   la ligne en `failed` avec un message honnête. Vérifié en coupant le serveur
+   Inngest : la route répond 500 et la ligne est en `failed`, plus en `pending`.
+
+Confirmé au passage, en conditions réelles et post-migration : le rapport de
+drupal.org affiche « Drupal 10 » puis, deux lignes plus bas, « Ce site n'utilise
+pas de CMS détecté publiquement ». C'est le point 1 de la phase 2 bis, qui reste
+donc bien la prochaine étape.
+
 ### Prochaine étape
 
-Phase 2 — scanner public. Décision à confirmer avant de commencer : scan
-synchrone (sans Inngest ni polling) ou asynchrone comme prévu au pack. Le
-premier fait gagner deux jours et reste compatible avec la base.
+Lot 1 — phase 2 bis. Séquence complète en §11.
+
+---
+
+## 11. Séquence de la suite (arrêtée le 2026-08-15)
+
+Trois principes de séquencement, qui expliquent l'ordre choisi :
+
+1. **Rien ne se teste tant que la base est vide.** Le lot 0 passe donc avant
+   tout, y compris avant les corrections de la phase 2 bis.
+2. **Chaque lot laisse le produit dans un état vérifiable en conditions
+   réelles**, pas seulement en tests unitaires. Un lot fini se constate.
+3. **Les prérequis externes se lancent maintenant, pas au début du lot qui en
+   dépend** (DKIM, alias d'envoi, décisions de tarif). Ils prennent du temps
+   humain, pas du temps de développement : les mettre en parallèle est gratuit.
+
+| Lot | Contenu | Durée | Bloqué par |
+| --- | --- | --- | --- |
+| 0 | Appliquer la migration Neon — **fait le 2026-08-15** | ½ j | — |
+| 1 | Phase 2 bis — dette de la phase 2 | ½ j | 0 ✔ |
+| 2 | Phase 3 — collecteurs, matching, rédaction | 4 j | 0, 1 |
+| 3 | Phase 4 — admin, envoi, newsletter | 2,5 j | 2, alias d'envoi |
+| 4 | Phase 5 — onboarding, espace client, lancement | 2 j | 3, décision de tarif |
+| 5 | Mise en production | ½ j | 4 |
+
+**≈ 10 jours.** La phase 4 perd une demi-journée : le transport d'e-mail est
+écrit et vérifié depuis la bascule sur SMTP Google.
+
+### Lot 0 — Appliquer la migration (½ j) · **fait**
+
+Compte rendu et trouvailles : §10, « Lot 0 — migration appliquée ». Le reste de
+cette section est conservé comme trace de ce qui était prévu.
+
+Constat du jour : la base Neon répond mais ne contient **aucune table**. Toute
+route qui la touche répond 500 — scan, webhook Stripe, tout.
+
+- `drizzle.config.ts` : `process.loadEnvFile(".env.local")` sous `try/catch` en
+  tête (drizzle-kit charge `.env`, jamais `.env.local`) et bascule sur
+  `DATABASE_URL_UNPOOLED` (le pooler Neon est en mode transaction, il ne
+  convient pas au DDL).
+- `npm run db:migrate`.
+
+**Fini quand** : les 6 tables existent, et un scan réel parcourt la chaîne
+complète — POST `/api/sentinelle/scan` → step Inngest local → `/scan/[id]`
+affiche le rapport → la ligne est en base avec son `ipHash`. C'est la première
+fois que le produit tournera de bout en bout ; prévoir de la marge pour ce qui
+se révélera à cette occasion.
+
+### Lot 1 — Phase 2 bis (½ j)
+
+Les cinq points de `prompts/phases.md`, inchangés sauf un : la section
+`/confidentialite` liste désormais **Google** comme sous-traitant d'envoi, pas
+Resend. Ordre conseillé à l'intérieur du lot : `platform` d'abord (il touche le
+type partagé), la note du rapport ensuite, puis rétention, légal, robots.
+
+### Lot 2 — Phase 3 (4 j), en quatre sous-lots livrables
+
+Découpé pour qu'un arrêt en cours de route laisse quelque chose d'utile.
+
+| Sous-lot | Contenu | Fini quand |
+| --- | --- | --- |
+| 2a | routeur par écosystème + `endoflife.ts` + cron `collect-daily` | des `intel_items` réels en base, sans aucun client |
+| 2b | matching intel × stack | des `alerts` en draft sur le seed, zéro rouge sur une version de confiance moyenne |
+| 2c | `osv.ts`, puis `wpscan.ts` / `releases.ts` | double run sans doublon (idempotence prouvée) |
+| 2d | rédaction Claude | texte généré sur une alerte réelle, deux garde-fous testés |
+
+Deux points d'infrastructure à ne pas oublier dans 2d, sans quoi ça ne marche
+qu'en local : le prompt système vit dans `src/sentinelle/redaction/`, et
+`next.config.mjs` n'a **pas encore** d'`outputFileTracingIncludes` — à ajouter
+pour la route Inngest.
+
+`ANTHROPIC_API_KEY` est renseignée depuis le 2026-08-15 : 2d n'a plus de
+prérequis externe. Reste à installer `@anthropic-ai/sdk`.
+
+Le seed des quatre clients (WordPress, Drupal, Next.js + npm, site sans CMS)
+n'est pas un accessoire de test : c'est lui qui prouve l'agnosticité. À écrire
+au début de 2b, pas à la fin du lot.
+
+### Lot 3 — Phase 4 (2,5 j)
+
+Inchangé, moins le transport d'e-mail. Ordre : admin d'abord (sans elle, rien ne
+peut partir — règle 4), gabarits ensuite, newsletter en dernier.
+
+Prérequis externe à lancer **maintenant** : DKIM activé dans la console Google
+Workspace et alias `veille@next-impact.digital` vérifié en « Envoyer en tant
+que ». Sans l'alias, Gmail réécrit l'expéditeur sans prévenir.
+
+### Lot 4 — Phase 5 (2 j)
+
+Inchangé. `MAGIC_LINK_SECRET` reste à générer. Le lancement (drapeau
+`AVANT_LANCEMENT`, sitemap, navigation) se fait en un seul geste, en fin de lot.
+
+### Lot 5 — Mise en production (½ j)
+
+Le lot qu'on oublie systématiquement, et qui ne se découvre qu'en le faisant :
+
+- toutes les variables d'environnement sur Vercel (base, Inngest, Anthropic,
+  SMTP Google, Stripe, admin, magic link) ;
+- application Inngest enregistrée en production, `INNGEST_SIGNING_KEY` et
+  `INNGEST_EVENT_KEY` renseignées, crons visibles dans le tableau de bord ;
+- webhook Stripe de production pointé sur l'URL déployée ;
+- `npm run check:mail` depuis l'environnement de production ;
+- un envoi réel de bout en bout vers une adresse de test.
+
+### En parallèle, hors code
+
+| À faire | Pour quel lot | Qui |
+| --- | --- | --- |
+| Activer DKIM (console Workspace) | 3 | Agathe |
+| Créer et vérifier l'alias `veille@` | 3 | Agathe |
+| Trancher le tarif (voir ci-dessous) | 4 | Agathe |
+| Décider du régime des clés Stripe | 0 | Agathe |
+| Clé WPScan (facultative) | 2c | Agathe |
+
+### Trois décisions à trancher avant le lot 2
+
+**Le tarif : tranché à 19 €/mois** (2026-08-15). C'était déjà la valeur de
+`lib/sentinelle-offer.ts` — qui fait autorité et alimente la page comme le
+webhook — et celle du Payment Link Stripe ; ce sont les documents qui portaient
+encore 9 €, ils ont été alignés. Plus rien à décider ici.
+
+**Les clés Stripe de `.env.local` sont des clés de production** (`rk_live_`,
+secret de webhook live), alors que le plan prévoyait le mode test. Un
+développement local branché sur la production peut créer de vrais abonnements.
+Recommandation : clés test en local, clés live sur Vercel uniquement.
+
+**La relecture humaine borne le nombre de clients**, pas la technique
+(règle 4, 24 numéros par an et par client). Ce n'est pas un obstacle au
+lancement, mais c'est la variable à surveiller dès les premiers abonnés : à
+19 € pour 24 numéros, chaque euro encaissé coûte trois fois plus de relecture
+que dans le modèle du pack (29 € pour 12 numéros).
+
+### Ce qui reste volontairement hors plan
+
+L'assainissement des 14 erreurs de types du code vitrine (chantier distinct,
+voir E4), l'ajout de Sentinelle à la navigation du site (règle 1 : surface
+marketing, demande explicite requise), et le stockage du prompt système en base
+pour l'éditer depuis l'admin (évolution phase 4+, pas un prérequis).

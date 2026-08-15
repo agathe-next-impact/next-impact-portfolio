@@ -7,6 +7,7 @@
     "build": "npm run check:docs && npm run check:sentinelle && next build",
     "check:docs": "node scripts/check-documentation-contract.mjs --strict",
     "check:sentinelle": "node scripts/check-sentinelle-isolation.mjs",
+    "check:mail": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-sentinelle-mail.mjs",
     "test": "npm run typecheck:sentinelle && vitest run",
     "test:watch": "vitest",
     "typecheck:sentinelle": "tsc --noEmit -p tsconfig.sentinelle.json",
@@ -87,6 +88,7 @@
     "remark-gfm": "^4.0.1",
     "resend": "^4.5.2",
     "sonner": "^1.7.1",
+    "stripe": "^22.5.0",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.24.1"
   },

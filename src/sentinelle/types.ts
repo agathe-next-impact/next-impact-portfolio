@@ -45,9 +45,20 @@ export interface DetectedComponent {
   /** Slug canonique — même contrat que `stackItems.slug`. */
   slug: string;
   label: string;
+  /** Écosystème de veille — même contrat que `stackItems.ecosystem`. */
+  ecosystem: string | null;
   version: string | null;
+  /** Confiance dans la PRÉSENCE du composant. */
   confidence: Confidence;
-  /** D'où vient la détection : « meta generator », « /wp-json/ »… (audit). */
+  /**
+   * Confiance dans la VERSION, qui n'est pas la même chose : un `?ver=` peut
+   * porter la version du site plutôt que celle du composant (specs/scanner.md).
+   * C'est ce champ, et non `confidence`, que le matching doit consulter avant
+   * de fonder une alerte rouge sur une comparaison de plage.
+   * Null quand aucune version n'a été trouvée.
+   */
+  versionConfidence: Confidence | null;
+  /** D'où vient la détection : « meta generator », « en-tête server »… (audit). */
   evidence?: string;
 }
 

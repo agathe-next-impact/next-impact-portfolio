@@ -1,5 +1,5 @@
 {
-  "id": "a797dbe6-c9ad-43f3-84eb-3c35b62170be",
+  "id": "ebb6d068-071f-4845-9aa9-cf2b9822d155",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -230,7 +230,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'surveillance'"
+          "default": "'veille'"
         },
         "stripe_customer_id": {
           "name": "stripe_customer_id",
@@ -418,6 +418,12 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "target_ecosystem": {
+          "name": "target_ecosystem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "affected_range": {
           "name": "affected_range",
@@ -624,6 +630,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "ecosystem": {
+          "name": "ecosystem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "slug": {
           "name": "slug",
           "type": "text",
@@ -775,8 +787,7 @@
       "name": "plan",
       "schema": "public",
       "values": [
-        "surveillance",
-        "conseil"
+        "veille"
       ]
     },
     "public.stack_item_source": {
@@ -791,12 +802,17 @@
       "name": "stack_item_type",
       "schema": "public",
       "values": [
-        "wp_core",
-        "wp_plugin",
-        "wp_theme",
-        "php",
+        "cms",
+        "cms_plugin",
+        "cms_theme",
+        "framework",
+        "js_library",
+        "runtime",
+        "server",
         "hosting",
-        "frontend",
+        "cdn",
+        "ecommerce",
+        "analytics",
         "saas",
         "competitor_url"
       ]
