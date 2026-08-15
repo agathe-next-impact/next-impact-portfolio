@@ -1,0 +1,1 @@
+ALTER TABLE "clients" ADD COLUMN "deactivated_at" timestamp;

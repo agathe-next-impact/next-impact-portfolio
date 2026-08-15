@@ -5,6 +5,7 @@ import { detect } from "./detect";
 import { FINGERPRINTS } from "./fingerprints";
 import { createBudget, fetchPage, type Budget } from "./fetch";
 import { detectWordPressComponents } from "./detectors/wordpress";
+import { buildNotes, detectPlatform } from "./platform";
 import type { PageEvidence } from "./types";
 
 export { detect } from "./detect";
@@ -12,6 +13,15 @@ export { buildEvidence } from "./evidence";
 export { FINGERPRINTS } from "./fingerprints";
 export { ALLOWED_PATHS, REQUEST_BUDGET, USER_AGENT, createBudget } from "./fetch";
 export { detectWordPressComponents } from "./detectors/wordpress";
+export {
+  buildNotes,
+  detectPlatform,
+  NOTE_DECLARATIF,
+  NOTE_PUBLIC,
+  NOTE_VERSIONS,
+  NOTE_WORDPRESS,
+  noteAutrePlateforme,
+} from "./platform";
 export type { Fingerprint, PageEvidence, Signal } from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -21,12 +31,6 @@ export type { Fingerprint, PageEvidence, Signal } from "./types";
 // plus deux requêtes de confirmation quand le CMS le justifie. Le reste est du
 // calcul pur.
 // ─────────────────────────────────────────────────────────────────────────────
-
-/** Limites énoncées dans le rapport — la spec impose de les dire, pas de les taire. */
-const NOTE_PUBLIC = "Analyse fondée sur les seuls éléments publics de votre site : le code servi aux visiteurs et les en-têtes HTTP. Aucun test d'intrusion, aucune tentative d'accès.";
-const NOTE_PARTIEL = "Seuls les composants chargés côté public sont détectables — en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation.";
-const NOTE_VERSIONS = "Certaines versions sont déduites des adresses de fichiers : elles sont indiquées comme telles et confirmées à l'activation.";
-const NOTE_NON_CMS = "Ce site n'utilise pas de CMS détecté publiquement. La surveillance repose alors sur une fiche déclarative, remplie avec vous.";
 
 function ordered(components: DetectedComponent[]): DetectedComponent[] {
   // Ordre de lecture pour le rapport : la plateforme d'abord, les détails après.
@@ -113,14 +117,17 @@ export async function scanSite(rawUrl: string): Promise<ScanOutcome> {
   const evidence: PageEvidence = buildEvidence(home.response);
   let components = detect(evidence, FINGERPRINTS);
 
+  // Exception assumée de la phase 2 : WordPress est le seul CMS dont les
+  // composants internes se lisent depuis l'extérieur, et il pèse assez lourd
+  // dans le parc pour mériter deux requêtes de confirmation. Ce n'est pas une
+  // hypothèse sur la plateforme, c'est un détecteur en plus quand elle est là.
   const wordpress = components.find((component) => component.slug === "wordpress");
-  const isWordPress = Boolean(wordpress);
 
-  if (isWordPress) {
+  if (wordpress) {
     components = merge(components, detectWordPressComponents(evidence));
 
     const confirmation = await confirmWordPress(evidence.finalUrl || url, budget, wordpress);
-    if (wordpress && confirmation.version && !wordpress.version) {
+    if (confirmation.version && !wordpress.version) {
       wordpress.version = confirmation.version;
       wordpress.versionConfidence = "high";
       wordpress.evidence = [wordpress.evidence, confirmation.evidence]
@@ -129,20 +136,13 @@ export async function scanSite(rawUrl: string): Promise<ScanOutcome> {
     }
   }
 
-  const notes = [NOTE_PUBLIC];
-  if (isWordPress) notes.push(NOTE_PARTIEL);
-  else notes.push(NOTE_NON_CMS);
-  if (components.some((component) => component.versionConfidence === "medium")) {
-    notes.push(NOTE_VERSIONS);
-  }
-
   return {
     ok: true,
     result: {
       url,
-      isWordPress,
+      platform: detectPlatform(components),
       components: ordered(components),
-      notes,
+      notes: buildNotes(components),
       scannedAt: new Date().toISOString(),
     },
   };

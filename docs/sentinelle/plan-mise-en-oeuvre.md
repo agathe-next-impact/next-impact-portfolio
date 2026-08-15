@@ -745,9 +745,68 @@ drupal.org affiche « Drupal 10 » puis, deux lignes plus bas, « Ce site n'util
 pas de CMS détecté publiquement ». C'est le point 1 de la phase 2 bis, qui reste
 donc bien la prochaine étape.
 
+### Lot 1 — phase 2 bis soldée (2026-08-15)
+
+Les cinq points sont faits. `npm test` vert (125 tests, 9 fichiers), build vert.
+
+1. **`platform: string | null` remplace `isWordPress`** dans `ScanResult`. La
+   dérivation vit dans `scanner/platform.ts` : CMS d'abord, boutique ensuite,
+   méta-framework à défaut. Un site Next.js répond donc « next » et non « pas de
+   plateforme ». Le détecteur profond WordPress reste branché sur la présence du
+   composant, pas sur un booléen de modèle.
+2. **La note du rapport a trois cas** et non deux, dans le même fichier et testée
+   sur fixtures : WordPress (énumération partielle), autre CMS ou boutique
+   (« les composants internes de Drupal… ne sont pas visibles publiquement »),
+   ni l'un ni l'autre (fiche déclarative). Le test de non-régression porte
+   explicitement sur Drupal et Shopify — le bug constaté sur drupal.org.
+3. **Rétention implémentée.** `retention/policy.ts` porte les durées et les
+   décisions (pures, horloge injectée, 15 tests) ; `retention/purge.ts` exécute
+   et journalise ; le cron `retention-daily` tourne à 03 h 00 Europe/Paris, un
+   step par catégorie. Le SQL ne décide de rien : il présélectionne, la
+   politique tranche, la suppression se fait par liste d'identifiants — ce qui
+   rend le journal exact.
+4. **Section 8 de `/confidentialite`** : les deux traitements (diagnostic à la
+   demande, surveillance contractuelle), leurs bases légales, les cinq
+   sous-traitants, le tableau des durées, l'effacement effectif sous sept jours
+   et le fait que le modèle ne reçoit jamais nom ni e-mail.
+5. **`robots.txt`** exclut `/scan`, `/admin` et `/espace` pour tous les robots,
+   sans exception. Le fichier était vingt blocs recopiés à la main ; il est
+   désormais composé, ce qui garantit qu'aucun agent n'oublie une exclusion.
+
+Deux décisions prises en cours de route, toutes deux imposées par le réel :
+
+**`clients.deactivated_at` ajoutée** (migration `0001`, appliquée sur Neon).
+Sans elle, « effacement à J+3 mois » n'était pas implémentable : `active: false`
+dit qu'un abonnement s'est arrêté, jamais quand. Le webhook Stripe l'écrit à la
+résiliation, l'upsert la remet à NULL au réabonnement — sans quoi la purge
+effacerait dans trois mois les données d'un client qui vient de repayer.
+
+**Le §9 se contredisait** : « clients supprimés à +3 mois » et « textes d'alertes
+conservés à +12 mois » ne peuvent pas être vrais ensemble, les alertes étant en
+cascade sur le client. Résolution retenue, qui tient les deux promesses : à
++3 mois le stack est supprimé et la fiche **anonymisée** (e-mail, nom, société,
+adresse, identifiants Stripe effacés, la ligne survit) ; à +12 mois les textes
+d'alertes et de numéros sont purgés. Ne restent alors que verdicts et dates, qui
+ne désignent plus personne — la métrique anonyme que le §9 conserve sans limite.
+
+Vérifié en réel contre Neon, horloge avancée de 48 h : deux scans du jour,
+empreinte d'IP et user-agent effacés, tout le reste à zéro. `robots.txt` rendu
+et relu.
+
+Deux points laissés ouverts sciemment :
+
+- **Les tokens de magic link ne sont pas décrits dans `/confidentialite`.** La
+  fonctionnalité n'existe pas (phase 5) ; une page légale ne décrit pas un
+  traitement qui n'a pas lieu. À ajouter avec l'espace client.
+- **Les colonnes de date sont des `timestamp` sans fuseau.** Postgres y écrit
+  l'heure du serveur (UTC sur Neon, Europe/Paris en local) : les seuils de
+  rétention peuvent donc glisser d'une à deux heures en développement. Sans
+  conséquence sur des durées qui se comptent en jours, mais c'est une bascule en
+  `timestamptz` à faire un jour, avant que d'autres colonnes ne s'y ajoutent.
+
 ### Prochaine étape
 
-Lot 1 — phase 2 bis. Séquence complète en §11.
+Lot 2 — phase 3, en quatre sous-lots. Séquence complète en §11.
 
 ---
 

@@ -121,6 +121,10 @@ export const clients = pgTable("clients", {
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   active: boolean("active").notNull().default(true),
+  // Date de résiliation. Sans elle, « effacement à J+3 mois » (§9 du plan) n'est
+  // pas implémentable : `active: false` dit qu'un abonnement s'est arrêté, pas
+  // quand. Remise à NULL en cas de réabonnement.
+  deactivatedAt: timestamp("deactivated_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

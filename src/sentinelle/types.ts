@@ -65,8 +65,15 @@ export interface DetectedComponent {
 /** Résultat sérialisé dans `scans.result`. */
 export interface ScanResult {
   url: string;
-  /** Le site tourne-t-il sous WordPress ? Faux → parcours déclaratif. */
-  isWordPress: boolean;
+  /**
+   * Plateforme reconnue : slug du CMS, de la boutique ou du méta-framework
+   * détecté (« wordpress », « drupal », « shopify », « next »…), `null` quand
+   * rien de structurant n'a été reconnu — le parcours devient déclaratif.
+   *
+   * Remplace l'ancien `isWordPress: boolean`, qui était le seul endroit du
+   * modèle à nommer une technologie en dur (règle 6 du CLAUDE.md).
+   */
+  platform: string | null;
   components: DetectedComponent[];
   /** Limites à afficher honnêtement dans le rapport (specs/scanner.md). */
   notes: string[];

@@ -28,6 +28,9 @@ export async function upsertSubscriber(client: NewClient) {
       target: clients.email,
       set: {
         active: true,
+        // Réabonnement : la date de résiliation s'efface, sans quoi la purge de
+        // rétention effacerait dans trois mois les données d'un client payant.
+        deactivatedAt: null,
         plan: "veille",
         stripeCustomerId: sql`coalesce(excluded.stripe_customer_id, ${clients.stripeCustomerId})`,
         stripeSubscriptionId: sql`coalesce(excluded.stripe_subscription_id, ${clients.stripeSubscriptionId})`,
@@ -49,10 +52,12 @@ export async function upsertSubscriber(client: NewClient) {
  * effacement à J+3 mois (fenêtre de réactivation), pas à la seconde où Stripe
  * annonce la fin de l'abonnement.
  */
-export async function deactivateSubscription(subscriptionId: string) {
+export async function deactivateSubscription(subscriptionId: string, at: Date = new Date()) {
   const rows = await db()
     .update(clients)
-    .set({ active: false })
+    // La date, et pas seulement le drapeau : c'est elle qui fait courir les
+    // délais d'effacement (retention/policy.ts).
+    .set({ active: false, deactivatedAt: at })
     .where(eq(clients.stripeSubscriptionId, subscriptionId))
     .returning({ id: clients.id, email: clients.email });
 

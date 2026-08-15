@@ -57,7 +57,10 @@ connexion (protection anti-bot) — rendu comme un résultat, pas comme un plant
 
 ---
 
-## Phase 2 bis — Dette de la phase 2 (½ j, à solder avant la 3)
+## Phase 2 bis — Dette de la phase 2 · **faite** (2026-08-15)
+
+Compte rendu, décisions et points laissés ouverts : plan §10, « Lot 1 — phase
+2 bis soldée ». Le détail ci-dessous est conservé comme trace de la commande.
 
 Cinq points laissés ouverts. Les deux premiers sont visibles par un client, les
 trois suivants engagent juridiquement.

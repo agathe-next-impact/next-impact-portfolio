@@ -153,9 +153,9 @@ export default async function SentinellePage({
           kicker="Sentinelle"
           title={
             <>
-              Votre site vieillit{" "}
+              Votre lettre de veille{" "}
               <em className="font-normal not-italic text-accent-secondary">
-                sans vous prévenir
+                personnalisée
               </em>
             </>
           }
