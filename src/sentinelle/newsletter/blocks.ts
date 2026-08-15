@@ -178,33 +178,3 @@ export function assembleBlocks(input: {
     radar: input.radar,
   };
 }
-
-/**
- * Ce qui manque pour qu'un numéro puisse être validé.
- *
- * Les deux blocs rédigés, et eux seuls : les trois blocs factuels peuvent être
- * vides (un premier numéro d'un client sans historique l'est presque), mais un
- * numéro sans une ligne écrite n'est pas une lettre — c'est un relevé.
- */
-export function missingForIssue(blocks: NewsletterBlocks): string[] {
-  const missing: string[] = [];
-  if (blocks.watch.trim() === "") missing.push("la veille du moment");
-  if (blocks.reco.trim() === "") missing.push("la recommandation");
-  return missing;
-}
-
-/**
- * Un numéro sans rien de neuf reste un numéro.
- *
- * L'abonnement paie une surveillance, pas des nouvelles : « rien à signaler,
- * voici pourquoi » est un livrable, et c'est même le plus rassurant. Cette
- * fonction ne sert donc pas à supprimer un envoi, mais à choisir le ton — et à
- * savoir, côté admin, ce qui demandera le plus de relecture.
- */
-export function isQuietIssue(blocks: NewsletterBlocks): boolean {
-  return (
-    blocks.delta.alerts.length === 0 &&
-    blocks.delta.newComponents.length === 0 &&
-    blocks.radar.length === 0
-  );
-}

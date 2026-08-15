@@ -2,8 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import { renderAlertEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail } from "@sentinelle/emails";
-import { isAnonymizedEmail } from "@sentinelle/retention";
+import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
 import type { AlertStatus, DraftedAlert } from "@sentinelle/types";
 import { initialContent, missingForValidation, serializeAlertContent } from "./content";
 
@@ -203,16 +202,11 @@ export async function sendAlert(
   if (!alert.clientActive) {
     return refuse("Abonnement résilié : aucun envoi.");
   }
-  if (isAnonymizedEmail(alert.clientEmail)) {
-    return refuse("Fiche anonymisée par la purge : plus d'adresse de destination.");
-  }
-  // `.invalid` est réservé par la RFC 2606 : aucune adresse de ce domaine
-  // n'existe. C'est ce qu'utilisent les fiches de démonstration du seed — leur
-  // envoi ne doit pas partir chercher un serveur SMTP pour rien, ni ressembler
-  // à une panne quand il échouera.
-  if (/\.invalid$/i.test(alert.clientEmail.trim())) {
-    return refuse("Adresse de démonstration (.invalid) : aucun envoi possible.");
-  }
+  // Fiche effacée par la purge, ou adresse de démonstration en `.invalid`
+  // (RFC 2606) : la règle est partagée par tous les envois du produit, elle vit
+  // dans `emails/send.ts`.
+  const injoignable = undeliverableReason(alert.clientEmail);
+  if (injoignable) return refuse(injoignable);
 
   const content = initialContent(alert);
   const manques = missingForValidation(content);

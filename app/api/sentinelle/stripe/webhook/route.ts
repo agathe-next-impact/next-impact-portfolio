@@ -6,6 +6,7 @@ import {
   verifyWebhook,
   type CheckoutSessionLike,
 } from "@sentinelle/billing";
+import { clientSubscribed, inngest } from "@sentinelle/inngest";
 
 // Runtime Node et corps brut : la vérification de signature Stripe porte sur les
 // octets exacts du corps. Toute désérialisation préalable (req.json()) casse la
@@ -54,6 +55,20 @@ export async function POST(req: Request) {
           console.warn(`[sentinelle] abonné ${row?.email ?? outcome.client.email} — ${warning}`);
         }
         console.info(`[sentinelle] abonnement enregistré : ${row?.email ?? "?"}`);
+
+        // Suite du parcours (fiche amorcée, e-mail de bienvenue) : hors de la
+        // requête webhook, qui doit rendre la main vite. Si la mise en file
+        // échoue, on répond 500 pour que Stripe retente — l'upsert ci-dessus
+        // est idempotent, et un abonné sans message d'accueil est pire qu'un
+        // événement rejoué.
+        if (row) {
+          await inngest.send(
+            clientSubscribed.create({
+              clientId: row.id,
+              ...(outcome.scanId ? { scanId: outcome.scanId } : {}),
+            }),
+          );
+        }
         break;
       }
 

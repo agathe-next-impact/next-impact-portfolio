@@ -50,6 +50,13 @@ export const RETENTION = {
   intelRaw: { months: 24 },
 } as const satisfies Record<string, Duration>;
 
+// Un poste du §9 ne figure volontairement pas dans ce tableau : **les jetons de
+// connexion**. Leur durée de vie (quinze minutes) est portée par le jeton
+// lui-même, écrite en base ligne par ligne dans `magic_links.expires_at`, et
+// leur suppression est d'abord un effet de leur usage. Leur donner une durée
+// ici ferait exister deux échéances pour la même chose, et un jour elles
+// divergeraient. Le balayage des jetons échus est dans `purge.ts`.
+
 /**
  * Recule une date d'une durée.
  *

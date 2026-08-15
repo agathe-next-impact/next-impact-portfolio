@@ -3,6 +3,7 @@ import {
   isEmptyReport,
   purgeCancelledClients,
   purgeIntelRaw,
+  purgeMagicLinks,
   purgeScans,
   purgeWrittenTexts,
 } from "@sentinelle/retention";
@@ -40,8 +41,9 @@ export const retentionDaily = inngest.createFunction(
     );
     const texts = await step.run("purge-written-texts", async () => purgeWrittenTexts(now));
     const intel = await step.run("purge-intel-raw", async () => purgeIntelRaw(now));
+    const links = await step.run("purge-magic-links", async () => purgeMagicLinks(now));
 
-    const report = { ...EMPTY_REPORT, ...scans, ...clients, ...texts, ...intel };
+    const report = { ...EMPTY_REPORT, ...scans, ...clients, ...texts, ...intel, ...links };
 
     if (isEmptyReport(report)) {
       console.info("[sentinelle] rétention : rien à purger");

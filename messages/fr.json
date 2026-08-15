@@ -17,6 +17,7 @@
     "about": "À propos",
     "hub": "Quelle techno web ?",
     "conseil": "Conseil",
+    "veille": "Veille",
     "bookVisio": "Réserver une visio",
     "selecteurTechno": "Le Sélecteur techno",
     "allTools": "Tous les outils",
@@ -54,6 +55,7 @@
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
+    "veille": "Veille techno",
     "tools": "Tous les outils",
     "startWebApp": "Démarrer une application web",
     "partners": "Partenaires",
@@ -61,7 +63,8 @@
     "whiteLabelAgencies": "Agences & studios",
     "copyright": "© {year} Next Impact Digital — Tous droits réservés",
     "figaroMention": "Vu dans <lien>Le Figaro</lien> — mai 2026",
-    "certificationAlt": "Certification"
+    "certificationAlt": "Certification",
+    "subscriberArea": "Espace abonné"
   },
   "floatingContact": {
     "openLabel": "Ouvrir les moyens de contact",
@@ -429,12 +432,12 @@
       "fondations": {
         "year": "2000 – 2020 — La vision d'ensemble",
         "title": "Le projet web dans sa globalité : concevoir, gérer, faire vivre",
-        "description": "Apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Puis, quinze ans durant, piloter le projet web côté édition : chargée de communication en association, WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins. Embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et savoir ce qui fait, ou défait, un projet."
+        "description": "Une passionnée de technos avant d'en faire un métier : apprendre le développement web dès l'apparition du web dynamique — PHP, MySQL, bases de données relationnelles — et créer bénévolement des sites pour l'écosystème associatif. Côté métier, débuter en support technique, au contact des problèmes réels des utilisateurs, puis quinze ans comme chargée de communication numérique en association : WordPress au quotidien — concevoir des pages, gérer des contenus, arbitrer des priorités, configurer des thèmes, débugger des plugins — avec, en filigrane constant, l'envie d'essayer les derniers outils. Embrasser le projet web dans sa globalité — le code, l'usage, la gestion — et savoir ce qui fait, ou défait, un projet."
       },
       "theorie": {
-        "year": "2012 – 2015 — Le détour théorique",
-        "title": "Penser la machine avant de la reprogrammer",
-        "description": "Un master recherche en sciences de l'information et de la communication (Montpellier 3) et une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
+        "year": "2012 – 2015 — La veille comme discipline",
+        "title": "Apprendre à surveiller la techno — et à la penser",
+        "description": "Un master Veille technologique et innovation (Montpellier 3) — la surveillance des évolutions techniques comme discipline à part entière — prolongé par une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
         "note": "(Travaux publiés sous le nom Agathe Martin.)"
       },
       "code": {

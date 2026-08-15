@@ -166,6 +166,10 @@ export async function GET() {
       // `vous-etes` est volontairement `noindex` (robots.index=false) → exclu du sitemap.
       { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", source: "app/[locale]/articles/reduire-contribution-agefiph-sous-traitance-tih/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "articles/attestation-deductibilite-tih-guide-entreprises", source: "app/[locale]/articles/attestation-deductibilite-tih-guide-entreprises/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Pages d'offre veille — FR uniquement (locale EN en noindex), donc sans
+      // alternates hreflang.
+      { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
+      { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
     ] as const;
 
     const staticUrls = await Promise.all(

@@ -1,6 +1,7 @@
 import { and, eq, inArray, lt, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, digests, intelItems, scans, stackItems } from "@sentinelle/db/schema";
+import { purgeExpiredMagicLinks } from "@sentinelle/access/store";
 import {
   anonymizableAlerts,
   cutoffs,
@@ -37,6 +38,7 @@ export interface PurgeReport {
   alertTextsPurged: number;
   digestTextsPurged: number;
   intelRawPurged: number;
+  magicLinksPurged: number;
 }
 
 export const EMPTY_REPORT: PurgeReport = {
@@ -48,6 +50,7 @@ export const EMPTY_REPORT: PurgeReport = {
   alertTextsPurged: 0,
   digestTextsPurged: 0,
   intelRawPurged: 0,
+  magicLinksPurged: 0,
 };
 
 /**
@@ -282,6 +285,21 @@ export async function deleteAllDataFor(
   return { scans: removedScans.length, clients: removedClients.length };
 }
 
+/**
+ * Jetons de connexion échus ou déjà servis.
+ *
+ * La politique annonce quinze minutes et une suppression à l'usage. La seconde
+ * moitié est tenue par la consommation elle-même (la ligne disparaît) ; la
+ * première a besoin de ce balayage, sans quoi les liens jamais cliqués
+ * resteraient indéfiniment — inoffensifs, mais contraires à ce qui est écrit
+ * sur la page de confidentialité.
+ */
+export async function purgeMagicLinks(now: Date): Promise<Partial<PurgeReport>> {
+  // La règle de sélection vit dans `@sentinelle/access` avec le reste du cycle
+  // de vie d'un jeton : la rétention l'appelle, elle ne la réécrit pas.
+  return { magicLinksPurged: await purgeExpiredMagicLinks(now) };
+}
+
 /** Passe complète, dans l'ordre. Utilisée par le cron `retention-daily`. */
 export async function runRetention(now: Date = new Date()): Promise<PurgeReport> {
   return {
@@ -290,6 +308,7 @@ export async function runRetention(now: Date = new Date()): Promise<PurgeReport>
     ...(await purgeCancelledClients(now)),
     ...(await purgeWrittenTexts(now)),
     ...(await purgeIntelRaw(now)),
+    ...(await purgeMagicLinks(now)),
   };
 }
 

@@ -1,3 +1,4 @@
+import { onClientSubscribed } from "./client-subscribed";
 import { collectDaily } from "./collect-daily";
 import { healthcheck } from "./healthcheck";
 import { newsletterBuild } from "./newsletter-build";
@@ -11,4 +12,5 @@ export const functions = [
   retentionDaily,
   collectDaily,
   newsletterBuild,
+  onClientSubscribed,
 ];

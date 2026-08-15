@@ -2,9 +2,15 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { clients, digests } from "@sentinelle/db/schema";
 import { renderNewsletterEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail } from "@sentinelle/emails";
-import { missingForIssue, type NewsletterBlocks } from "@sentinelle/newsletter/blocks";
-import { isAnonymizedEmail } from "@sentinelle/retention";
+import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
+import {
+  missingForIssue,
+  parseIssue,
+  type IssueContent,
+  type Lettre,
+} from "@sentinelle/lettre";
+import { LettreSchema } from "@sentinelle/lettre/schema";
+import { guardLettre } from "@sentinelle/lettre/guards";
 import type { AlertStatus } from "@sentinelle/types";
 import type { ActionResult } from "./actions";
 
@@ -35,8 +41,10 @@ export interface DigestSummary {
   active: boolean;
   sentAt: Date | null;
   createdAt: Date;
-  /** Les deux blocs rédigés sont-ils écrits ? */
+  /** La lettre est-elle écrite ? Un numéro sans lettre n'est pas relisible. */
   written: boolean;
+  /** Signalements du garde-fou laissés par la fabrication. */
+  signalements: number;
 }
 
 export async function listDigests(limit = 60): Promise<DigestSummary[]> {
@@ -59,7 +67,7 @@ export async function listDigests(limit = 60): Promise<DigestSummary[]> {
     .limit(limit);
 
   return rows.map((row) => {
-    const blocks = row.blocks as NewsletterBlocks;
+    const issue = parseIssue(row.blocks);
     return {
       id: row.id,
       period: row.period,
@@ -70,7 +78,8 @@ export async function listDigests(limit = 60): Promise<DigestSummary[]> {
       active: row.active,
       sentAt: row.sentAt,
       createdAt: row.createdAt,
-      written: missingForIssue(blocks).length === 0,
+      written: issue ? missingForIssue(issue).length === 0 : false,
+      signalements: issue?.production.signalements.length ?? 0,
     };
   });
 }
@@ -79,7 +88,7 @@ export interface DigestDetail {
   id: string;
   period: string;
   status: AlertStatus;
-  blocks: NewsletterBlocks;
+  issue: IssueContent | null;
   finalHtml: string | null;
   sentAt: Date | null;
   client: { id: string; name: string; company: string | null; email: string; siteUrl: string; active: boolean };
@@ -112,7 +121,7 @@ export async function getDigestDetail(digestId: string): Promise<DigestDetail | 
     id: row.id,
     period: row.period,
     status: row.status,
-    blocks: row.blocks as NewsletterBlocks,
+    issue: parseIssue(row.blocks),
     finalHtml: row.finalHtml,
     sentAt: row.sentAt,
     client: {
@@ -133,28 +142,54 @@ async function loadEditable(digestId: string) {
   if (detail.status !== "draft" && detail.status !== "validated") {
     return { error: "Numéro clos." as const };
   }
-  return { detail };
+  if (!detail.issue) return { error: "Numéro sans contenu exploitable." as const };
+  return { detail, issue: detail.issue };
 }
 
-/** Enregistre les deux blocs rédigés. Les blocs factuels ne s'éditent pas. */
-export async function saveDigestBlocks(
+/**
+ * Relit une lettre corrigée à la main.
+ *
+ * Le texte saisi passe par le même schéma que la sortie du modèle : une
+ * correction humaine peut casser la structure aussi sûrement qu'un modèle, et un
+ * numéro à onze axes n'est pas un numéro. Les garde-fous de sourçage sont
+ * réappliqués eux aussi — coller une URL trouvée ailleurs pendant la relecture
+ * est exactement le geste qu'ils sont là pour attraper.
+ */
+export function parseLettreDraft(raw: string): { ok: true; lettre: Lettre } | { ok: false; reason: string } {
+  let payload: unknown;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    return { ok: false, reason: "Le contenu n'est pas un JSON valide." };
+  }
+
+  const parsed = LettreSchema.safeParse(payload);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    return {
+      ok: false,
+      reason: `Structure invalide : ${issue?.path.join(".") ?? "?"} — ${issue?.message ?? ""}`,
+    };
+  }
+
+  return { ok: true, lettre: parsed.data };
+}
+
+/** Enregistre la lettre relue. Le constaté et le dossier ne s'éditent pas. */
+export async function saveDigestLettre(
   digestId: string,
-  written: { watch: string; reco: string },
+  lettre: Lettre,
 ): Promise<ActionResult> {
   const loaded = await loadEditable(digestId);
   if (loaded.error) return refuse(loaded.error);
 
-  const blocks: NewsletterBlocks = {
-    ...loaded.detail.blocks,
-    watch: written.watch.trim(),
-    reco: written.reco.trim(),
-  };
+  const issue: IssueContent = { ...loaded.issue, lettre };
 
   await db()
     .update(digests)
     // Le HTML validé redevient nul : il ne correspondrait plus au contenu, et un
     // aperçu périmé est pire qu'une absence d'aperçu.
-    .set({ blocks, status: "draft", finalHtml: null })
+    .set({ blocks: issue, status: "draft", finalHtml: null })
     .where(eq(digests.id, digestId));
 
   return { ok: true };
@@ -163,23 +198,38 @@ export async function saveDigestBlocks(
 /** Valide un numéro : le HTML est figé, il devient envoyable. */
 export async function validateDigest(
   digestId: string,
-  written?: { watch: string; reco: string },
+  lettre?: Lettre,
 ): Promise<ActionResult> {
   const loaded = await loadEditable(digestId);
   if (loaded.error) return refuse(loaded.error);
 
-  const blocks: NewsletterBlocks = written
-    ? { ...loaded.detail.blocks, watch: written.watch.trim(), reco: written.reco.trim() }
-    : loaded.detail.blocks;
+  const issue: IssueContent = lettre ? { ...loaded.issue, lettre } : loaded.issue;
 
-  const manques = missingForIssue(blocks);
+  const manques = missingForIssue(issue);
   if (manques.length > 0) return refuse(`Il manque ${manques.join(", ")}.`);
+  if (!issue.lettre) return refuse("Il manque la lettre elle-même.");
 
-  const mail = await renderNewsletterEmail({ blocks, siteUrl: loaded.detail.client.siteUrl });
+  // Le garde-fou repasse sur la version relue, et il est bloquant : une source
+  // ajoutée à la main qui ne figure pas au dossier ne doit pas devenir
+  // envoyable parce qu'un humain l'a tapée.
+  if (issue.dossier) {
+    const garde = guardLettre(issue.lettre, {
+      dossier: issue.dossier,
+      ficheNames: issue.constate.health.components.map((component) => component.label),
+      quiet: false,
+    });
+    if (!garde.ok) return refuse(`Refusé : ${garde.violations.join(" · ")}`);
+  }
+
+  const mail = await renderNewsletterEmail({
+    lettre: issue.lettre,
+    siteUrl: loaded.detail.client.siteUrl,
+    issueDate: new Date(issue.constate.issueDate),
+  });
 
   await db()
     .update(digests)
-    .set({ blocks, status: "validated", finalHtml: mail.html })
+    .set({ blocks: issue, status: "validated", finalHtml: mail.html })
     .where(eq(digests.id, digestId));
 
   return { ok: true };
@@ -212,16 +262,14 @@ export async function sendDigest(
   }
   if (!detail.finalHtml) return refuse("Aucun rendu validé : revalidez le numéro.");
   if (!detail.client.active) return refuse("Abonnement résilié : aucun envoi.");
-  if (isAnonymizedEmail(detail.client.email)) {
-    return refuse("Fiche anonymisée par la purge : plus d'adresse de destination.");
-  }
-  if (/\.invalid$/i.test(detail.client.email.trim())) {
-    return refuse("Adresse de démonstration (.invalid) : aucun envoi possible.");
-  }
+  if (!detail.issue?.lettre) return refuse("Numéro sans lettre : rien à envoyer.");
+  const injoignable = undeliverableReason(detail.client.email);
+  if (injoignable) return refuse(injoignable);
 
   const mail = await renderNewsletterEmail({
-    blocks: detail.blocks,
+    lettre: detail.issue.lettre,
     siteUrl: detail.client.siteUrl,
+    issueDate: new Date(detail.issue.constate.issueDate),
   });
 
   const { messageId } = await sendSentinelleMail({

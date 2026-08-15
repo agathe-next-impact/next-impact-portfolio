@@ -23,6 +23,20 @@ reste statique et performant.
 3. **Le LLM ne connaît rien, il reçoit tout.** La couche rédaction (API Claude)
    ne doit jamais pouvoir affirmer un fait absent de son contexte d'entrée.
    Le matching intel × stack est du code SQL/TypeScript déterministe, pas du LLM.
+
+   > **La lettre de veille respecte cette règle en la découpant en deux, et non
+   > en l'assouplissant.** Le numéro bimensuel a besoin d'actualité extérieure :
+   > une seule passe qui chercherait et écrirait dans le même geste rendrait la
+   > règle invérifiable. D'où deux passes (`src/sentinelle/lettre/`) — une
+   > **collecte** qui a des outils web mais n'écrit rien, et une **rédaction**
+   > qui écrit mais n'a aucun outil et ne reçoit que le dossier collecté. Entre
+   > les deux, `lettre/guards.ts` vérifie mécaniquement le sourçage. La rédaction
+   > reste donc bien un modèle qui ne connaît rien et reçoit tout ; ce qu'il
+   > reçoit a simplement été collecté et vérifié une étape plus tôt.
+   >
+   > Ce que le code ne peut pas vérifier, et qu'il ne faut pas croire vérifié :
+   > l'**attribution**. « Votre site utilise Drupal » et « Drupal progresse »
+   > emploient le même mot ; seule la relecture humaine (règle 4) les distingue.
 4. **Aucune alerte ne part sans validation humaine.** Statut obligatoire :
    draft → validated → sent. L'envoi automatique direct est interdit au MVP.
 5. **Scan passif uniquement.** Le scanner ne lit que les éléments publics

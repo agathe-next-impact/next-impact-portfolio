@@ -182,7 +182,19 @@ export default async function PrivacyPolicy({
             supprimé à la résiliation dans le délai indiqué ci-dessous.
           </p>
 
-          <h3>8.3 Sous-traitants propres à Sentinelle</h3>
+          <h3>8.3 Accès à votre espace abonné</h3>
+          <p>
+            L'espace abonné n'utilise <strong>pas de mot de passe</strong> : vous demandez
+            un lien de connexion, il vous est envoyé à l'adresse de votre abonnement. Ce
+            lien est valable <strong>quinze minutes</strong>, ne fonctionne{" "}
+            <strong>qu'une seule fois</strong>, et n'est pas conservé tel quel : seule une
+            empreinte irréversible est stockée, supprimée dès que le lien a servi ou qu'il
+            a expiré. Une fois connecté, un cookie technique garde votre session ouverte
+            30 jours ; il ne sert qu'à ça et ne mesure rien.{" "}
+            <strong>Base légale</strong> : exécution du contrat.
+          </p>
+
+          <h3>8.4 Sous-traitants propres à Sentinelle</h3>
           <p>
             <strong>Neon</strong> (base de données, UE), <strong>Inngest</strong>{" "}
             (exécution des tâches planifiées), <strong>Google</strong> (envoi des e-mails
@@ -195,7 +207,7 @@ export default async function PrivacyPolicy({
             Sentinelle, elle reste chez Stripe.
           </p>
 
-          <h3>8.4 Durées de conservation</h3>
+          <h3>8.5 Durées de conservation</h3>
           <ul>
             <li>Empreinte d'IP et navigateur d'une analyse : <strong>24 heures</strong>.</li>
             <li>
@@ -218,6 +230,10 @@ export default async function PrivacyPolicy({
               Textes des alertes et des lettres d'information : <strong>12 mois</strong>{" "}
               après la résiliation, comme preuve de la prestation rendue, puis effacement.
               Ne subsistent alors que des données sans lien avec une personne.
+            </li>
+            <li>
+              Liens de connexion à l'espace abonné : <strong>15 minutes</strong>, stockés
+              sous forme d'empreinte, supprimés dès l'usage.
             </li>
             <li>Facturation : <strong>10 ans</strong>, chez Stripe (obligation comptable).</li>
           </ul>

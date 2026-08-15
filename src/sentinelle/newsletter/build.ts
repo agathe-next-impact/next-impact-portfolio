@@ -1,6 +1,6 @@
 import { and, eq, gte, isNotNull, lt, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { alerts, clients, digests, intelItems, stackItems } from "@sentinelle/db/schema";
+import { alerts, digests, intelItems, stackItems } from "@sentinelle/db/schema";
 import { initialContent } from "@sentinelle/admin/content";
 import type { Verdict } from "@sentinelle/types";
 import {
@@ -12,42 +12,20 @@ import {
   type NewsletterBlocks,
   type RadarCandidate,
 } from "./blocks";
-import { draftNewsletterBlocks } from "./draft";
-import { formatNewsletterPeriod, newsletterPeriodAt, type NewsletterPeriod } from "./period";
+import { type NewsletterPeriod } from "./period";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Fabrication des numéros — le 1er et le 15.
+// Le constaté d'un numéro : ce que Sentinelle sait déjà du site.
 //
-// Un numéro par client actif et par période. L'index unique `(client_id,
-// period)` porte l'idempotence : le cron peut être rejoué, il ne fabriquera pas
-// un second numéro d'août.
+// La fabrication elle-même a déménagé dans `@sentinelle/lettre` le jour où le
+// numéro est devenu une lettre de veille. Ce qui reste ici est ce que ce module
+// est seul à savoir produire : la fiche suivie, les alertes réellement envoyées
+// sur la période, et le radar des fins de support déjà confrontées à la version
+// du client.
 //
-// **Un numéro déjà écrit n'est jamais réécrit**, même en brouillon. Le rejeu ne
-// doit pas effacer une relecture en cours — et si un numéro doit être refait, le
-// geste conscient est de le supprimer, pas de laisser un cron l'écraser.
-//
-// Tout est écrit en `draft` : la règle 4 vaut pour les numéros comme pour les
-// alertes.
+// C'est la matière que la lettre reçoit comme acquise. Elle ne la recollecte
+// pas, et elle n'a pas le droit de la contredire.
 // ─────────────────────────────────────────────────────────────────────────────
-
-export interface BuildReport {
-  period: string;
-  /** Clients actifs examinés. */
-  clients: number;
-  /** Numéros créés — les périodes déjà couvertes ne comptent pas. */
-  created: number;
-  /** Numéros dont les deux blocs rédigés ont été écrits par le modèle. */
-  drafted: number;
-  /** Raisons pour lesquelles un numéro est parti sans blocs rédigés. */
-  failures: Record<string, number>;
-  skipped: number;
-}
-
-interface ClientRow {
-  id: string;
-  sector: string | null;
-  notes: string | null;
-}
 
 /** Composants suivis, avec le compte d'alertes ouvertes de chacun. */
 async function loadComponents(clientId: string): Promise<{
@@ -170,19 +148,26 @@ async function hasPreviousIssue(clientId: string): Promise<boolean> {
   return Boolean(row);
 }
 
-/** Assemble le numéro d'un client, blocs rédigés compris. */
-export async function buildIssueFor(
-  client: ClientRow,
+/**
+ * Le constaté d'un client pour une période : sa fiche, ce qui lui a été envoyé,
+ * son radar.
+ *
+ * Extrait de `buildIssueFor` parce que la lettre de veille s'en sert aussi — et
+ * s'en sert comme socle : ce sont les seuls faits du numéro qui ne viennent ni
+ * d'une recherche ni d'un modèle. Les recalculer ailleurs les ferait diverger.
+ */
+export async function loadConstate(
+  clientId: string,
   period: NewsletterPeriod,
   now: Date,
-): Promise<{ blocks: NewsletterBlocks; drafted: boolean; failure?: string }> {
+): Promise<{ blocks: NewsletterBlocks; names: string[] }> {
   const window = periodWindow(period);
   const [{ lines, names }, sentAlerts, newComponents, candidates, previous] = await Promise.all([
-    loadComponents(client.id),
-    loadSentAlerts(client.id, window.from, window.to),
-    loadNewComponents(client.id, window.from, window.to),
-    loadRadarCandidates(client.id),
-    hasPreviousIssue(client.id),
+    loadComponents(clientId),
+    loadSentAlerts(clientId, window.from, window.to),
+    loadNewComponents(clientId, window.from, window.to),
+    loadRadarCandidates(clientId),
+    hasPreviousIssue(clientId),
   ]);
 
   const blocks = assembleBlocks({
@@ -194,83 +179,5 @@ export async function buildIssueFor(
     isFirstIssue: !previous,
   });
 
-  const outcome = await draftNewsletterBlocks({
-    sector: client.sector,
-    notes: client.notes,
-    blocks,
-    allowedNames: names,
-  });
-
-  if (!outcome.ok) {
-    return { blocks, drafted: false, failure: outcome.reason };
-  }
-
-  return { blocks: { ...blocks, watch: outcome.watch, reco: outcome.reco }, drafted: true };
-}
-
-/**
- * Fabrique les numéros de la période courante.
- *
- * Palier unique : tous les blocs pour tout le monde. Aucun branchement sur
- * `plan` — ce serait du code mort, et un code mort sur une colonne de facturation
- * est le genre de chose qu'on croit vraie deux ans plus tard.
- */
-export async function runNewsletterBuild(now: Date = new Date()): Promise<BuildReport> {
-  const period = newsletterPeriodAt(now);
-  const key = formatNewsletterPeriod(period);
-
-  const actifs: ClientRow[] = await db()
-    .select({ id: clients.id, sector: clients.sector, notes: clients.notes })
-    .from(clients)
-    .where(eq(clients.active, true));
-
-  const report: BuildReport = {
-    period: key,
-    clients: actifs.length,
-    created: 0,
-    drafted: 0,
-    failures: {},
-    skipped: 0,
-  };
-
-  for (const client of actifs) {
-    const [existant] = await db()
-      .select({ id: digests.id })
-      .from(digests)
-      .where(and(eq(digests.clientId, client.id), eq(digests.period, key)))
-      .limit(1);
-
-    if (existant) {
-      report.skipped++;
-      continue;
-    }
-
-    const issue = await buildIssueFor(client, period, now);
-
-    if (issue.failure) {
-      report.failures[issue.failure] = (report.failures[issue.failure] ?? 0) + 1;
-      console.warn(`[sentinelle] numéro ${key} sans blocs rédigés (${client.id}) — ${issue.failure}`);
-    }
-
-    const inserted = await db()
-      .insert(digests)
-      .values({ clientId: client.id, period: key, status: "draft", blocks: issue.blocks })
-      // Le rejeu ne réécrit rien : l'unicité est dans le moteur, pas dans le code.
-      .onConflictDoNothing({ target: [digests.clientId, digests.period] })
-      .returning({ id: digests.id });
-
-    if (inserted.length > 0) {
-      report.created++;
-      if (issue.drafted) report.drafted++;
-    } else {
-      report.skipped++;
-    }
-  }
-
-  console.info(
-    `[sentinelle] numéros ${key} : ${report.created} créés (${report.drafted} rédigés), ` +
-      `${report.skipped} déjà en place`,
-  );
-
-  return report;
+  return { blocks, names };
 }

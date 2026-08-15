@@ -797,7 +797,8 @@ Deux points laissés ouverts sciemment :
 
 - **Les tokens de magic link ne sont pas décrits dans `/confidentialite`.** La
   fonctionnalité n'existe pas (phase 5) ; une page légale ne décrit pas un
-  traitement qui n'a pas lieu. À ajouter avec l'espace client.
+  traitement qui n'a pas lieu. À ajouter avec l'espace client. — *Fait au lot 4 :
+  section 8.3 (« Accès à votre espace abonné ») et ligne au tableau des durées.*
 - **Les colonnes de date sont des `timestamp` sans fuseau.** Postgres y écrit
   l'heure du serveur (UTC sur Neon, Europe/Paris en local) : les seuils de
   rétention peuvent donc glisser d'une à deux heures en développement. Sans
@@ -985,12 +986,179 @@ Google Workspace, côté Agathe — l'envoi part aujourd'hui sous l'adresse du
 compte authentifié), et le lien vers l'admin depuis le site (elle n'a rien à
 faire dans une navigation publique ; l'URL se connaît).
 
+### Lot 4 — phase 5 faite (2026-08-15)
+
+Onboarding post-paiement, espace client, lancement. `npm test` vert (277 tests,
+23 fichiers), build vert, isolation vérifiée — et, comme aux lots précédents,
+tout a été confronté à la vraie base, au vrai SMTP et à la vraie file Inngest.
+
+**Le webhook ne fait plus qu'écrire la fiche.** Tout l'aval — amorcer le stack,
+souhaiter la bienvenue — part dans un événement `sentinelle/client.subscribed`
+traité par une fonction Inngest. Deux raisons : un scan de site prend des
+secondes que Stripe ne donne pas, et un envoi d'e-mail qui échoue ne doit pas
+faire retenter un paiement. La page de retour de paiement émet le **même**
+événement : la fonction est idempotente, et ce doublon de chemin couvre le cas
+où le webhook n'est pas configuré — un abonné qui a payé ne dépend donc pas d'un
+réglage de tableau de bord.
+
+**Le CTA du rapport porte l'identifiant du scan** (`client_reference_id`, seul
+paramètre que Stripe fait voyager jusqu'au webhook). À l'ouverture de
+l'abonnement, la fiche est amorcée avec ce que le client vient de lire à
+l'écran, plutôt qu'avec une seconde analyse faite deux minutes plus tard — qui
+pourrait dire autre chose et donner l'impression d'un produit qui hésite. Sans
+scan d'origine, la fonction analyse le site elle-même ; un site qui refuse
+l'analyse donne une fiche déclarative, pas une erreur.
+
+**L'espace client n'a pas de mot de passe.** Un lien de connexion valable quinze
+minutes, à usage unique, dont seule l'empreinte SHA-256 est stockée. Le jeton
+porte l'identifiant du client et son expiration, signés : un lien forgé ou
+périmé est rejeté **sans toucher la base**. L'usage unique, lui, est garanti par
+la base — la suppression conditionnelle de la ligne fait office de verrou entre
+deux instances serverless.
+
+Quatre décisions prises en cours de route :
+
+1. **Le lien n'est pas consommé à l'affichage, mais au clic.** Les passerelles
+   de sécurité des messageries ouvrent les liens d'un e-mail avant leur
+   destinataire pour les vérifier : un jeton à usage unique consommé par un
+   `GET` serait brûlé avant d'avoir servi, et l'abonné lirait « ce lien a déjà
+   servi » sans avoir rien cliqué. Un bouton coûte un geste et supprime toute
+   cette classe de pannes. Vérifié en réel : après chargement de la page de
+   connexion, le jeton était toujours consommable.
+2. **Le retour de paiement ouvre une session, mais seulement deux heures.**
+   L'identifiant de session Stripe traîne dans un historique de navigation ; il
+   ne doit pas valoir clé d'accès permanente. Au-delà, la page renvoie vers le
+   lien de connexion classique.
+3. **Le déclaré ne se fait jamais écraser par le détecté.** La règle est dans le
+   `setWhere` de l'upsert, donc en SQL, pas dans une précaution d'appelant. Un
+   client qui corrige une version doit voir sa correction tenir au prochain
+   scan, sans quoi il ne la fera pas deux fois. C'est l'invariant qui a été le
+   plus explicitement testé, en base réelle.
+4. **Ce qui n'est pas surveillable est dit comme tel.** Un composant déclaré
+   qu'aucun catalogue public ne couvre (un hébergeur, un module maison) est
+   affiché mais annoncé sans veille automatique — dans la fiche, dans le message
+   de confirmation et dans l'e-mail de bienvenue. La question est posée au
+   catalogue de collecte, pas déduite de la présence d'un écosystème : annoncer
+   « 14 composants surveillés » quand trois ne sont interrogeables nulle part
+   serait la première promesse non tenue du produit.
+
+**L'e-mail de bienvenue est le seul du produit à partir sans relecture.** La
+règle 4 porte sur ce que le produit **affirme** d'un site ; un accusé de
+réception qui compte des composants et donne un lien n'affirme rien qui puisse
+être faux, et le faire attendre ferait patienter quelqu'un qui vient de payer.
+Il ne part qu'une fois : la marque est posée **avant** l'envoi par une écriture
+conditionnelle (deux rejeux simultanés ne peuvent pas gagner tous les deux) et
+relâchée si l'envoi échoue — sans quoi une panne SMTP passagère priverait
+définitivement un abonné de son message d'accueil.
+
+**Vérifié en réel, et pas seulement en tests.** Une fiche jetable créée sur Neon
+a servi à éprouver trente points : import de scan idempotent, correction de
+version par le client qui survit à un rescan, retrait d'une ligne déclarée qui
+n'emporte pas les lignes détectées, jeton consommé une fois puis refusé, jeton
+falsifié refusé sur la signature, jeton périmé refusé, plafond de trois liens
+par quart d'heure, session refusée sous un autre secret, bienvenue refusée avant
+tout appel SMTP sur une adresse de démonstration. Puis la chaîne entière : scan
+réel de wordpress.org (sept composants, six couverts par une source), e-mail de
+bienvenue **réellement expédié** par Gmail, rejeu refusé ; et le parcours
+complet par la file — événement émis, drupal.org analysé, deux composants
+importés, bienvenue partie, le tout en moins de deux secondes. Enfin les routes
+en HTTP : `/espace/fiche` sans session redirige (307), avec session affiche la
+fiche, un jeton falsifié affiche un refus lisible.
+
+**Le lancement était déjà fait** (drapeau `AVANT_LANCEMENT` à `false`, entrée au
+sitemap, page `/veille` et navigation) et n'appartenait donc plus à ce lot.
+
+Ce qui reste hors de ce lot, volontairement : le portail Stripe doit être activé
+une fois dans le tableau de bord (le code le demande, la configuration est un
+geste humain), et le Payment Link a besoin de sa page de retour
+(`/espace/bienvenue?session_id={CHECKOUT_SESSION_ID}`) — les deux sont listés
+dans « En parallèle, hors code ».
+
+### Refonte de la lettre bimensuelle (2026-08-15)
+
+Le numéro change de nature. Il n'est plus un relevé de surveillance — cinq blocs
+dont deux rédigés — mais une **lettre de consultant** : douze axes croisant
+l'observation du site et l'actualité de la période, des tendances qualifiées
+pour ce site-là, trois scénarios commandés par une configuration
+d'opportunités et de menaces, une méthode de calcul de retour et une fenêtre de
+décision datée. Le prompt de référence est fourni par Agathe ; il est repris
+presque tel quel, découpé en deux prompts système dans
+`src/sentinelle/redaction/`.
+
+**Ce qui a rendu la refonte possible sans toucher à la règle 3.** Une lettre de
+veille a besoin d'actualité extérieure ; une seule passe qui chercherait et
+écrirait dans le même geste rendrait la règle invérifiable. D'où deux passes :
+
+| Passe | Outils | Écrit | Ce qui la borne |
+| --- | --- | --- | --- |
+| collecte | recherche et lecture web (`max_uses` : 30 et 8) | rien | le budget, côté serveur |
+| rédaction | aucun | la lettre | le dossier collecté, et lui seul |
+
+La rédaction reste donc un modèle qui ne connaît rien et reçoit tout. Ce qu'il
+reçoit a simplement été collecté et vérifié une étape plus tôt.
+
+**Le garde-fou a changé de forme, et il le fallait.** Celui des alertes refuse
+tout texte nommant une technologie hors fiche. Appliqué ici, il aurait refusé
+**chaque** numéro : « où va chaque famille de solutions » nomme forcément des
+technologies que le client n'a pas. Il devient donc deux régimes — vocabulaire
+borné sur ce qui est affirmé **du site**, sourçage obligatoire sur ce qui relève
+du **marché** (aucune URL hors dossier, aucune source sans date). S'y ajoute ce
+qu'une sortie structurée ne sait pas exprimer : douze axes et pas onze, trois
+scénarios, trois questions, un horizon derrière chaque « agir ».
+
+**Ce que le code ne vérifie pas, et qu'il ne faut pas croire vérifié :**
+l'attribution. « Votre site utilise Drupal » et « Drupal progresse » emploient le
+même mot ; seule la relecture les distingue. C'est écrit dans `lettre/guards.ts`
+plutôt que sous-entendu, parce qu'un garde-fou qu'on croit plus fort qu'il n'est
+est pire qu'un garde-fou absent.
+
+Quatre décisions prises en cours de route :
+
+1. **Recherche par client, pas mutualisée.** Arbitrage d'Agathe, lecture
+   littérale du prompt : chaque numéro fait ses propres recherches, et la
+   personnalisation commence à la collecte. Le coût est celui de ce choix (voir
+   le point de vigilance ci-dessous) ; une passe mutualisée aurait divisé la
+   facture par dix mais aussi la finesse de la collecte.
+2. **`pause_turn` est une pause, pas une erreur.** Une boucle d'outils serveur
+   s'arrête au bout de dix itérations et attend qu'on lui rende la main. Avec un
+   budget de trente recherches, on la rencontre à chaque numéro : sans reprise,
+   la collecte rendrait un dossier vide sans qu'aucune erreur ne soit levée.
+3. **Un step Inngest par client.** Chaque step est une invocation HTTP distincte,
+   donc son propre `maxDuration`. Vingt clients dans un seul step ne verraient
+   jamais le vingtième.
+4. **Le dossier est conservé à côté de la lettre**, dans `digests.blocks`. Une
+   lettre sans son dossier n'est plus vérifiable six mois plus tard, seulement
+   croyable.
+
+**L'ancien moteur de numéro a été retiré**, pas laissé à côté : `newsletter/draft.ts`,
+`buildIssueFor`, `runNewsletterBuild` et le prompt de la newsletter n'existent
+plus. Deux moteurs de numéro cohabitant, une prochaine session en aurait choisi
+un au hasard. `newsletter/` garde ce qu'il est seul à savoir produire : la
+cadence du 1er et du 15, et le constaté (fiche suivie, alertes envoyées, radar).
+
+**Trois points de vigilance, à surveiller plutôt qu'à trancher maintenant :**
+
+- **Le coût.** Chaque numéro fait ses propres recherches ; à l'échelle de
+  quelques abonnés c'est marginal, à vingt abonnés c'est le poste principal du
+  produit. Le chiffre réel est mesuré à chaque fabrication et stocké dans
+  l'encart de production (`consommation`) : c'est lui qu'il faudra regarder avant
+  d'ouvrir les inscriptions, pas une estimation.
+- **La durée.** `maxDuration` est passé de 60 à 300 s sur la route Inngest — le
+  maximum d'un plan Vercel Pro. Une fabrication complète s'en approche. Si elle
+  dépasse, le geste suivant n'est pas de raccourcir la recherche mais de passer
+  la collecte sur l'**API Batches** : pour un numéro bimensuel la latence n'a
+  aucune importance, et le coût y est divisé par deux.
+- **La relecture.** Une lettre de 3 000 à 4 500 mots deux fois par mois et par
+  client, c'est un ordre de grandeur au-dessus des deux blocs d'avant. Le §11
+  notait déjà que la relecture, et non la technique, borne le nombre de clients
+  servables ; cette refonte resserre cette borne.
+
 ### Prochaine étape
 
-Lot 4 — phase 5 (onboarding post-paiement, espace client, lancement). Séquence
-complète en §11. `MAGIC_LINK_SECRET` reste à générer. Prérequis externes
-inchangés : DKIM et alias `veille@` (voir « En parallèle, hors code »), qui
-conditionnent l'identité d'expédition mais plus le fait d'envoyer.
+Lot 5 — mise en production. Séquence complète en §11. `MAGIC_LINK_SECRET` est
+générée en local et reste à renseigner sur Vercel. Prérequis externes inchangés :
+DKIM et alias `veille@`, qui conditionnent l'identité d'expédition mais plus le
+fait d'envoyer.
 
 ---
 
@@ -1012,8 +1180,8 @@ Trois principes de séquencement, qui expliquent l'ordre choisi :
 | 1 | Phase 2 bis — dette de la phase 2 | ½ j | 0 ✔ |
 | 2 | Phase 3 — collecteurs, matching, rédaction — **fait le 2026-08-15** | 4 j | 0, 1 |
 | 3 | Phase 4 — admin, envoi, newsletter — **fait le 2026-08-15** | 2,5 j | 2 ✔ |
-| 4 | Phase 5 — onboarding, espace client, lancement | 2 j | 3, décision de tarif |
-| 5 | Mise en production | ½ j | 4 |
+| 4 | Phase 5 — onboarding, espace client, lancement — **fait le 2026-08-15** | 2 j | 3 ✔ |
+| 5 | Mise en production | ½ j | 4 ✔ |
 
 **≈ 10 jours.** La phase 4 perd une demi-journée : le transport d'e-mail est
 écrit et vérifié depuis la bascule sur SMTP Google.
@@ -1080,10 +1248,17 @@ en « Envoyer en tant que ». Sans l'alias, Gmail réécrit l'expéditeur sans
 prévenir — les envois vérifiés le 2026-08-15 sont donc partis sous l'adresse du
 compte authentifié, ce qui est acceptable en test et pas en production.
 
-### Lot 4 — Phase 5 (2 j)
+### Lot 4 — Phase 5 (2 j) · **fait**
 
-Inchangé. `MAGIC_LINK_SECRET` reste à générer. Le lancement (drapeau
-`AVANT_LANCEMENT`, sitemap, navigation) se fait en un seul geste, en fin de lot.
+Compte rendu et décisions : §10, « Lot 4 — phase 5 faite ». Deux écarts au prévu,
+tous deux expliqués là-bas : le lancement (drapeau `AVANT_LANCEMENT`, sitemap,
+navigation) avait déjà été fait avec la page `/veille` et n'appartenait donc plus
+à ce lot ; et le parcours post-paiement passe par un événement Inngest plutôt que
+par le webhook lui-même, ce qui le rend rejouable et indépendant de Stripe.
+
+`MAGIC_LINK_SECRET` est générée en local. Deux gestes restent côté tableau de
+bord, listés dans « En parallèle, hors code » : la page de retour du Payment Link
+et l'activation du portail de facturation.
 
 ### Lot 5 — Mise en production (½ j)
 
@@ -1103,7 +1278,9 @@ Le lot qu'on oublie systématiquement, et qui ne se découvre qu'en le faisant :
 | --- | --- | --- |
 | Activer DKIM (console Workspace) | 5 — avant le premier envoi réel à un client | Agathe |
 | Créer et vérifier l'alias `veille@` | 5 — idem, puis renseigner `SENTINELLE_MAIL_FROM` | Agathe |
-| Trancher le tarif (voir ci-dessous) | 4 | Agathe |
+| Page de retour du Payment Link → `/espace/bienvenue?session_id={CHECKOUT_SESSION_ID}` | 5 | Agathe |
+| Activer le portail de facturation Stripe (une case dans le tableau de bord) | 5 | Agathe |
+| Trancher le tarif — **fait** (19 €/mois) | 4 ✔ | Agathe |
 | Décider du régime des clés Stripe | 0 | Agathe |
 | Clé WPScan (facultative) | 2c | Agathe |
 

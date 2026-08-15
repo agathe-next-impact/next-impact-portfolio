@@ -50,6 +50,7 @@ const RESOURCE_HREFS = [
 const NAV_BEFORE = [
   { key: "conseil",     href: "/conseil" },
   { key: "services",    href: "/solutions-web" },
+  { key: "veille",      href: "/veille" },
   { key: "caseStudies", href: "/etudes-de-cas" },
 ] as const;
 
@@ -279,7 +280,7 @@ export default function Header() {
           <ThemeToggle />
 
           {/* CTA à deux températures : « Réserver une visio » (tiède, secondaire)
-              + « Diagnostic 2 min » (froid, vermillon, dominant). */}
+              + « Choisir ma techno » (dominant, vermillon) → /contact. */}
           <Link
             href="/conseil"
             className="text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
@@ -287,7 +288,7 @@ export default function Header() {
             {t("bookVisio")}
           </Link>
           <Link
-            href="/outils/selecteur-techno"
+            href="/contact"
             className="inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
           >
             {t("mainCta")}
@@ -411,7 +412,7 @@ export default function Header() {
               {/* CTA à deux températures */}
               <div className="flex flex-col gap-3 p-5">
                 <Link
-                  href="/outils/selecteur-techno"
+                  href="/contact"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex h-11 items-center justify-center rounded-sm bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
                 >

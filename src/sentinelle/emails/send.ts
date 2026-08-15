@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { isAnonymizedEmail } from "@sentinelle/retention/purge";
 import { resolveMailConfig, type MailConfig } from "./config";
 
 // Transport d'envoi Sentinelle. Volontairement distinct de `lib/sendMail.ts` :
@@ -35,6 +36,32 @@ export type MailTransport = {
   }): Promise<{ messageId?: string }>;
   verify?(): Promise<unknown>;
 };
+
+/**
+ * Raison de ne rien envoyer à cette adresse, ou `null` si elle est joignable.
+ *
+ * Deux cas, et ils ne se confondent pas : une fiche effacée par la purge n'a
+ * plus d'adresse du tout, une adresse de démonstration en `.invalid` (RFC 2606)
+ * n'a jamais pu en avoir. Le refus se fait **avant** l'appel SMTP : un envoi qui
+ * part chercher un serveur pour un domaine réservé ressemble à une panne.
+ *
+ * Une seule implémentation pour tous les envois du produit — alertes, numéros,
+ * bienvenue, liens de connexion. Trois copies de cette règle finiraient par
+ * diverger, et la divergence se découvrirait un jour d'envoi réel.
+ */
+export function undeliverableReason(email: string): string | null {
+  const value = email.trim();
+
+  if (!value) return "Aucune adresse de destination.";
+  if (isAnonymizedEmail(value)) {
+    return "Fiche anonymisée par la purge : plus d'adresse de destination.";
+  }
+  if (/\.invalid$/i.test(value)) {
+    return "Adresse de démonstration (.invalid) : aucun envoi possible.";
+  }
+
+  return null;
+}
 
 type Deps = { transport?: MailTransport; config?: MailConfig };
 

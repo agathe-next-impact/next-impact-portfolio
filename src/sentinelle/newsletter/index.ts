@@ -1,15 +1,20 @@
-// Newsletter bimensuelle (deux envois par mois) — palier unique à 19 €.
+// Cadence et faits internes de la lettre bimensuelle (deux envois par mois).
 //
-// `blocks.ts` assemble les trois blocs factuels (état, delta, radar) sans
-// modèle ; `draft.ts` écrit les deux blocs rédigés ; `build.ts` fabrique un
-// numéro par client actif, en brouillon. La relecture et l'envoi vivent dans
-// `admin/digests.ts` — règle 4.
+// Ce module ne fabrique plus les numéros : depuis la refonte en lettre de veille,
+// c'est `@sentinelle/lettre` qui les écrit, en deux passes. Il reste ici ce dont
+// la lettre a besoin et qui n'appartient qu'à Sentinelle :
+//
+//   `period.ts` — la cadence du 1er et du 15, et sa clé de période ;
+//   `blocks.ts` — le constaté : fiche suivie, alertes envoyées, radar des fins
+//                  de support, tous déjà vérifiés contre la version du client ;
+//   `build.ts`  — `loadConstate`, qui l'assemble pour un client et une période.
+//
+// Ce sont les seuls faits d'un numéro qui ne viennent ni d'une recherche ni d'un
+// modèle. La lettre les reçoit comme acquis et n'a pas le droit de les contredire.
 export {
   assembleBlocks,
   buildRadar,
   daysBetween,
-  isQuietIssue,
-  missingForIssue,
   periodStart,
   periodWindow,
   RADAR_MONTHS,
@@ -20,15 +25,7 @@ export {
   type RadarEntry,
 } from "./blocks";
 
-export {
-  draftNewsletterBlocks,
-  renderNewsletterContext,
-  DEFAULT_MODEL,
-  type NewsletterContext,
-  type NewsletterDraftOutcome,
-} from "./draft";
-
-export { buildIssueFor, runNewsletterBuild, type BuildReport } from "./build";
+export { loadConstate } from "./build";
 
 export {
   NEWSLETTER_TIMEZONE,

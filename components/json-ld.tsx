@@ -523,6 +523,7 @@ export function PersonJsonLd({
       "No-code",
       "SaaS",
       "Cybernétique",
+      "Veille technologique",
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",

@@ -30,6 +30,28 @@ export function normalizeSiteUrl(input: string | null | undefined): string | nul
 }
 
 /**
+ * Racine absolue du produit, pour les liens qui partent par e-mail.
+ *
+ * Un lien de connexion ne peut pas être relatif : il est cliqué depuis une boîte
+ * e-mail, pas depuis le site. L'ordre de résolution répond à trois contextes —
+ * une variable explicite (production, préproduction), l'URL que Vercel injecte
+ * dans une préversion, et le repli local. Le domaine de production n'est jamais
+ * un repli silencieux en développement : un lien vers next-impact.digital reçu
+ * pendant un test enverrait tester la production.
+ */
+export function sentinelleBaseUrl(
+  env: Record<string, string | undefined> = process.env,
+): string {
+  const explicit = env.SENTINELLE_BASE_URL?.trim();
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const vercel = env.VERCEL_PROJECT_PRODUCTION_URL?.trim() || env.VERCEL_URL?.trim();
+  if (vercel) return `https://${vercel.replace(/^https?:\/\//, "").replace(/\/$/, "")}`;
+
+  return "http://localhost:3000";
+}
+
+/**
  * Le scan public ne doit pas servir à sonder un réseau interne : on refuse les
  * hôtes qui ne sont pas des domaines publics. Garde-fou contre l'usage du
  * scanner comme relais de requêtes (SSRF).

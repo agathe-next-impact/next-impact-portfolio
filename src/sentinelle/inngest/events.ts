@@ -29,3 +29,18 @@ export const scanRequested = eventType("sentinelle/scan.requested", {
     url: z.string().url(),
   }),
 });
+
+/**
+ * Un abonnement vient d'être encaissé (phase 5).
+ *
+ * Émis par le webhook Stripe, jamais par une page : le retour du navigateur
+ * après paiement n'est pas garanti (onglet fermé, redirection perdue), le
+ * webhook si. `scanId` est présent quand le parcours est passé par le rapport
+ * public — c'est lui qui amorce la fiche sans refaire d'analyse.
+ */
+export const clientSubscribed = eventType("sentinelle/client.subscribed", {
+  schema: z.object({
+    clientId: z.string().uuid(),
+    scanId: z.string().uuid().optional(),
+  }),
+});

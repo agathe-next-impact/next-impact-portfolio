@@ -3,8 +3,6 @@ import {
   assembleBlocks,
   buildRadar,
   daysBetween,
-  isQuietIssue,
-  missingForIssue,
   periodStart,
   periodWindow,
   type RadarCandidate,
@@ -125,53 +123,5 @@ describe("assembleBlocks", () => {
   it("est sérialisable tel quel — la colonne est du jsonb", () => {
     const blocks = assembleBlocks(base);
     expect(JSON.parse(JSON.stringify(blocks))).toEqual(blocks);
-  });
-});
-
-describe("missingForIssue", () => {
-  const blocks = assembleBlocks({
-    period: PERIODE,
-    components: [],
-    sentAlerts: [],
-    newComponents: [],
-    radar: [],
-    isFirstIssue: true,
-  });
-
-  it("refuse un numéro dont les deux blocs rédigés sont vides", () => {
-    expect(missingForIssue(blocks)).toEqual(["la veille du moment", "la recommandation"]);
-  });
-
-  it("laisse passer un numéro rédigé, même sans aucun fait à raconter", () => {
-    expect(
-      missingForIssue({ ...blocks, watch: "Quinzaine calme.", reco: "Ne rien faire." }),
-    ).toEqual([]);
-  });
-});
-
-describe("isQuietIssue", () => {
-  const blocks = assembleBlocks({
-    period: PERIODE,
-    components: [{ label: "PHP", version: "8.1.20", type: "runtime", openAlerts: 0 }],
-    sentAlerts: [],
-    newComponents: [],
-    radar: [],
-    isFirstIssue: false,
-  });
-
-  it("reconnaît un numéro sans rien de neuf", () => {
-    expect(isQuietIssue(blocks)).toBe(true);
-  });
-
-  it("ne l'est plus dès qu'une alerte est partie", () => {
-    expect(
-      isQuietIssue({
-        ...blocks,
-        delta: {
-          ...blocks.delta,
-          alerts: [{ title: "PHP 7.4", verdict: "orange", at: "2026-08-10T09:00:00.000Z" }],
-        },
-      }),
-    ).toBe(false);
   });
 });

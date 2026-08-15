@@ -134,6 +134,24 @@ export const styles = {
     textDecoration: "underline",
   } satisfies CSSProperties,
 
+  /**
+   * Bouton d'action. Un lien mis en forme, jamais un `<button>` : les clients
+   * mail n'exécutent rien, et un bouton sans formulaire n'y est pas cliquable.
+   * `display: inline-block` et un padding généreux — Outlook ignore les hauteurs
+   * de ligne, la zone cliquable vient du padding.
+   */
+  button: {
+    backgroundColor: COLORS.accent,
+    color: COLORS.bg,
+    display: "inline-block",
+    fontFamily: FONTS.mono,
+    fontSize: "12px",
+    letterSpacing: "0.14em",
+    padding: "14px 26px",
+    textDecoration: "none",
+    textTransform: "uppercase",
+  } satisfies CSSProperties,
+
   footer: {
     color: COLORS.faint,
     fontFamily: FONTS.body,

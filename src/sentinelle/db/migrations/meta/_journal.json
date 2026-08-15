@@ -15,6 +15,13 @@
       "when": 1786799099572,
       "tag": "0001_smiling_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786806357810,
+      "tag": "0002_optimal_rafael_vega",
+      "breakpoints": true
     }
   ]
 }

@@ -7,7 +7,8 @@ import {
   dismissComponent,
   reopenAlert,
   saveAlertContent,
-  saveDigestBlocks,
+  parseLettreDraft,
+  saveDigestLettre,
   sendAlert,
   sendDigest,
   validateAlert,
@@ -124,18 +125,17 @@ export async function rouvrirAlerte(formData: FormData): Promise<void> {
 
 // ─── Numéros de la lettre bimensuelle ────────────────────────────────────────
 
-function lireBlocs(formData: FormData): { watch: string; reco: string } {
-  return {
-    watch: String(formData.get("watch") ?? ""),
-    reco: String(formData.get("reco") ?? ""),
-  };
-}
-
 export async function enregistrerNumero(formData: FormData): Promise<void> {
   await requireSession();
 
   const id = String(formData.get("digestId"));
-  const resultat = await saveDigestBlocks(id, lireBlocs(formData));
+  const lue = parseLettreDraft(String(formData.get("lettre") ?? ""));
+  if (!lue.ok) {
+    retour(`/admin/sentinelle/numeros/${id}`, { ok: false, reason: lue.reason }, "");
+    return;
+  }
+
+  const resultat = await saveDigestLettre(id, lue.lettre);
 
   retour(`/admin/sentinelle/numeros/${id}`, resultat, "Numéro enregistré.");
 }
@@ -144,7 +144,13 @@ export async function validerNumero(formData: FormData): Promise<void> {
   await requireSession();
 
   const id = String(formData.get("digestId"));
-  const resultat = await validateDigest(id, lireBlocs(formData));
+  const lue = parseLettreDraft(String(formData.get("lettre") ?? ""));
+  if (!lue.ok) {
+    retour(`/admin/sentinelle/numeros/${id}`, { ok: false, reason: lue.reason }, "");
+    return;
+  }
+
+  const resultat = await validateDigest(id, lue.lettre);
 
   retour(
     `/admin/sentinelle/numeros/${id}`,

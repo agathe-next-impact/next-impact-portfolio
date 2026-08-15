@@ -1,26 +1,56 @@
-import { Hr, Section, Text } from "@react-email/components";
-import type { NewsletterBlocks } from "@sentinelle/newsletter/blocks";
+import { Hr, Link, Section, Text } from "@react-email/components";
+import type { Lettre } from "@sentinelle/lettre/schema";
 import { Layout } from "./Layout";
 import { COLORS, FONTS, styles } from "./theme";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Gabarit d'un numéro de la lettre bimensuelle.
+// Gabarit d'un numéro de la lettre de veille.
 //
-// Cinq blocs, dans l'ordre de lecture : ce que vous avez → ce qui a changé →
-// ce que ça dit → ce que je recommande → ce qui arrive. Les trois premiers et le
-// dernier sont des faits ; seuls « la veille » et « la recommandation » sont
-// rédigés — et relus.
+// Onze parties, dans l'ordre du prompt de rédaction : titre → méthode → chapeau
+// → le site en une phrase → les douze axes → les tendances → la synthèse →
+// l'échéancier → les trois questions → les sources → le périmètre.
 //
-// Un numéro calme reste un numéro : le bloc « ce qui a changé » affiche
-// explicitement « rien depuis le dernier envoi » plutôt que de disparaître.
-// C'est ce que l'abonnement finance, et le taire donnerait l'impression que
-// personne n'a regardé.
+// Deux choses ne sont jamais rendues ici, et c'est délibéré :
+//
+//  · **l'encart de production** (hypothèses, points à confirmer, consommation) —
+//    il est écrit pour la personne qui relit, pas pour le client ;
+//  · **le dossier de collecte** — la lettre en porte les sources, pas la matière
+//    brute.
+//
+// La lettre est longue par construction (3 000 à 4 500 mots). Gmail tronque un
+// e-mail au-delà d'environ 102 Ko et affiche « message tronqué » : c'est la
+// limite à surveiller si les numéros s'allongent encore. Le rendu figé à la
+// validation est mesuré à l'envoi et le poids apparaît dans l'admin.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface NewsletterEmailProps {
-  blocks: NewsletterBlocks;
+  lettre: Lettre;
   siteUrl?: string | null;
+  /** Date de parution — celle de la période, jamais celle de l'expédition. */
+  issueDate: Date;
 }
+
+const STATUT_STYLE: Record<Lettre["axes"][number]["statut"], { label: string; color: string }> = {
+  agir: { label: "Agir", color: "#ff8a7a" },
+  surveiller: { label: "Surveiller", color: "#f5c451" },
+  nonConcerne: { label: "Non concerné", color: "#7fd8a4" },
+};
+
+const SENS_LABEL: Record<Lettre["tendances"]["duMois"][number]["sens"], string> = {
+  opportunite: "Opportunité",
+  menace: "Menace",
+  "les-deux": "Opportunité et menace",
+};
+
+const TRAJECTOIRE_LABEL: Record<
+  Lettre["tendances"]["marche"][number]["trajectoire"],
+  string
+> = {
+  hausse: "↗ en hausse",
+  stable: "→ stable",
+  baisse: "↘ en baisse",
+  incertain: "? incertain",
+};
 
 function paragraphes(texte: string): string[] {
   return texte
@@ -29,142 +59,316 @@ function paragraphes(texte: string): string[] {
     .filter(Boolean);
 }
 
-function jourFr(iso: string): string {
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Europe/Paris",
-  }).format(new Date(iso));
+function Prose({ texte }: { texte: string }) {
+  return (
+    <>
+      {paragraphes(texte).map((paragraph, index) => (
+        <Text key={index} style={styles.paragraph}>
+          {paragraph}
+        </Text>
+      ))}
+    </>
+  );
 }
 
-export function NewsletterEmail({ blocks, siteUrl }: NewsletterEmailProps) {
-  const issue = new Date(blocks.issueDate);
-  const rienDeNeuf =
-    blocks.delta.alerts.length === 0 && blocks.delta.newComponents.length === 0;
+function Partie({ numero, titre }: { numero: string; titre: string }) {
+  return (
+    <Text style={{ ...styles.label, color: COLORS.accent, margin: "0 0 16px" }}>
+      {numero} · {titre}
+    </Text>
+  );
+}
+
+export function NewsletterEmail({ lettre, siteUrl, issueDate }: NewsletterEmailProps) {
+  const aAgir = lettre.axes.filter((axe) => axe.statut === "agir").length;
 
   return (
     <Layout
       preview={
-        rienDeNeuf
-          ? "Rien à signaler depuis le dernier numéro."
-          : `${blocks.delta.alerts.length} alerte(s) envoyée(s) depuis le dernier numéro.`
+        aAgir > 0
+          ? `${aAgir} point(s) à traiter ce mois-ci. ${lettre.synthese.actions[0]?.action ?? ""}`
+          : "Rien à traiter ce mois-ci — voici pourquoi."
       }
-      kicker={`Numéro du ${jourFr(blocks.issueDate)}`}
-      sentAt={issue}
+      kicker="Lettre de veille"
+      sentAt={issueDate}
       siteUrl={siteUrl}
     >
       <Section style={styles.section}>
-        <Text style={styles.label}>1 · Votre site, tel qu'il est suivi</Text>
-        {blocks.health.components.map((component) => (
-          <Text key={component.label} style={{ ...styles.muted, margin: "0 0 4px" }}>
-            <span style={{ color: COLORS.fgSoft }}>{component.label}</span>
-            {component.version ? ` ${component.version}` : " — version inconnue"}
-            {component.openAlerts > 0 ? ` · ${component.openAlerts} point(s) ouvert(s)` : ""}
+        <Text style={styles.h1}>{lettre.titre}</Text>
+        <Text style={{ ...styles.footer, fontStyle: "italic", margin: "0 0 20px" }}>
+          {lettre.ligneContexte}
+        </Text>
+        <Prose texte={lettre.chapeau} />
+      </Section>
+
+      <Hr style={styles.rule} />
+
+      <Section style={styles.section}>
+        <Text style={styles.label}>Votre site en une phrase</Text>
+        <Section style={styles.panel}>
+          <Text
+            style={{
+              ...styles.paragraph,
+              color: COLORS.fg,
+              fontFamily: FONTS.title,
+              fontSize: "17px",
+              margin: 0,
+            }}
+          >
+            {lettre.siteEnUnePhrase}
           </Text>
+        </Section>
+      </Section>
+
+      <Hr style={styles.rule} />
+
+      <Section style={styles.section}>
+        <Partie numero="Première partie" titre="Votre site lu par les douze axes" />
+
+        {lettre.axes.map((axe) => {
+          const statut = STATUT_STYLE[axe.statut];
+          return (
+            <Section key={axe.numero} style={{ margin: "0 0 26px" }}>
+              <Text style={{ ...styles.label, margin: "0 0 6px" }}>
+                Axe {axe.numero} · {axe.nom}
+              </Text>
+              <Text
+                style={{
+                  ...styles.muted,
+                  fontStyle: "italic",
+                  color: COLORS.fgSoft,
+                  margin: "0 0 10px",
+                }}
+              >
+                {axe.question}
+              </Text>
+              <Prose texte={axe.analyse} />
+              <Text style={{ ...styles.muted, color: statut.color, margin: 0 }}>
+                ● {statut.label}
+                {axe.horizon.trim() !== "" ? ` — ${axe.horizon}` : ""}
+              </Text>
+            </Section>
+          );
+        })}
+      </Section>
+
+      <Hr style={styles.rule} />
+
+      <Section style={styles.section}>
+        <Partie numero="Deuxième partie" titre="Tendances : opportunités et menaces" />
+
+        <Text style={styles.label}>Les tendances du mois</Text>
+        {lettre.tendances.duMois.map((tendance, index) => (
+          <Section key={index} style={{ margin: "0 0 16px" }}>
+            <Text style={{ ...styles.paragraph, color: COLORS.fg, margin: "0 0 4px" }}>
+              {tendance.tendance}
+            </Text>
+            <Text style={{ ...styles.footer, margin: "0 0 4px" }}>{tendance.faitDate}</Text>
+            <Text style={{ ...styles.muted, margin: 0 }}>
+              <span style={{ color: COLORS.accent }}>{SENS_LABEL[tendance.sens]}</span> —{" "}
+              {tendance.pourCeSite}
+            </Text>
+          </Section>
         ))}
-        {blocks.health.components.length === 0 && (
-          <Text style={{ ...styles.muted, margin: 0 }}>
-            Aucun composant suivi pour l'instant — la fiche reste à compléter.
-          </Text>
+
+        <Hr style={{ ...styles.rule, margin: "20px 0" }} />
+
+        <Text style={styles.label}>Le marché des solutions : où va chaque famille</Text>
+        {lettre.tendances.marche.map((famille, index) => (
+          <Section key={index} style={{ margin: "0 0 14px" }}>
+            <Text style={{ ...styles.paragraph, color: COLORS.fg, margin: "0 0 2px" }}>
+              {famille.famille} · {TRAJECTOIRE_LABEL[famille.trajectoire]}
+            </Text>
+            <Text style={{ ...styles.footer, margin: "0 0 4px" }}>{famille.mouvement}</Text>
+            <Text style={{ ...styles.muted, margin: 0 }}>{famille.lecture}</Text>
+          </Section>
+        ))}
+
+        {lettre.tendances.signauxDeDemande.length > 0 && (
+          <>
+            <Text style={{ ...styles.label, margin: "20px 0 8px" }}>Signaux de demande</Text>
+            {lettre.tendances.signauxDeDemande.map((signal, index) => (
+              <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
+                {signal}
+              </Text>
+            ))}
+          </>
         )}
-        {blocks.health.withoutVersion > 0 && (
-          <Text style={{ ...styles.footer, margin: "12px 0 0" }}>
-            {blocks.health.withoutVersion} composant(s) sans version connue : la
-            surveillance y est partielle tant que la version n'est pas renseignée.
-          </Text>
+
+        <Hr style={{ ...styles.rule, margin: "20px 0" }} />
+
+        <Text style={styles.label}>Les tendances de fond</Text>
+        {lettre.tendances.deFond.map((fond, index) => (
+          <Section key={index} style={{ margin: "0 0 14px" }}>
+            <Text style={{ ...styles.paragraph, color: COLORS.fg, margin: "0 0 2px" }}>
+              {fond.mouvement}
+            </Text>
+            <Text style={{ ...styles.footer, margin: "0 0 4px" }}>{fond.faitDate}</Text>
+            <Text style={{ ...styles.muted, margin: 0 }}>{fond.qualification}</Text>
+          </Section>
+        ))}
+
+        {lettre.tendances.ceQuiNeChangePas.length > 0 && (
+          <>
+            <Text style={{ ...styles.label, margin: "20px 0 8px" }}>Ce qui ne change pas</Text>
+            {lettre.tendances.ceQuiNeChangePas.map((invariant, index) => (
+              <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
+                {invariant}
+              </Text>
+            ))}
+          </>
         )}
       </Section>
 
       <Hr style={styles.rule} />
 
       <Section style={styles.section}>
-        <Text style={styles.label}>
-          2 · Ce qui a changé
-          {blocks.delta.since ? ` depuis le ${jourFr(blocks.delta.since)}` : ""}
-        </Text>
+        <Partie numero="Troisième partie" titre="Synthèse : actions, scénarios, décision" />
 
-        {blocks.delta.alerts.map((alert) => (
-          <Text key={`${alert.at}-${alert.title}`} style={{ ...styles.paragraph, margin: "0 0 8px" }}>
-            {alert.title}
-          </Text>
-        ))}
-
-        {blocks.delta.newComponents.length > 0 && (
-          <Text style={{ ...styles.muted, margin: "12px 0 0" }}>
-            Nouveaux composants détectés :{" "}
-            {blocks.delta.newComponents
-              .map((component) =>
-                component.version ? `${component.label} ${component.version}` : component.label,
-              )
-              .join(", ")}
-            .
-          </Text>
-        )}
-
-        {rienDeNeuf && (
-          <Text style={{ ...styles.paragraph, margin: 0 }}>
-            Rien depuis le dernier numéro : aucune alerte n'a eu à vous être
-            envoyée, et aucun composant nouveau n'est apparu.
-          </Text>
-        )}
-      </Section>
-
-      {blocks.watch.trim() !== "" && (
-        <>
-          <Hr style={styles.rule} />
-          <Section style={styles.section}>
-            <Text style={styles.label}>3 · La veille du moment</Text>
-            {paragraphes(blocks.watch).map((paragraph, index) => (
-              <Text key={index} style={styles.paragraph}>
-                {paragraph}
-              </Text>
-            ))}
-          </Section>
-        </>
-      )}
-
-      {blocks.reco.trim() !== "" && (
-        <>
-          <Hr style={styles.rule} />
-          <Section style={styles.section}>
-            <Text style={styles.label}>4 · La recommandation du numéro</Text>
-            <Section style={styles.panel}>
-              <Text
-                style={{
-                  ...styles.paragraph,
-                  color: COLORS.fg,
-                  fontFamily: FONTS.title,
-                  fontSize: "17px",
-                  margin: 0,
-                }}
-              >
-                {blocks.reco}
-              </Text>
-            </Section>
-          </Section>
-        </>
-      )}
-
-      {blocks.radar.length > 0 && (
-        <>
-          <Hr style={styles.rule} />
-          <Section style={styles.section}>
-            <Text style={styles.label}>5 · Radar · fins de support à six mois</Text>
-            {blocks.radar.map((entry) => (
-              <Text key={`${entry.label}-${entry.endsOn}`} style={{ ...styles.muted, margin: "0 0 6px" }}>
-                <span style={{ color: COLORS.fgSoft }}>{entry.label}</span>
-                {entry.version ? ` ${entry.version}` : ""} — jusqu'au {jourFr(entry.endsOn)} (
-                {entry.daysLeft} jours)
-              </Text>
-            ))}
-            <Text style={{ ...styles.footer, margin: "12px 0 0" }}>
-              Rien à faire dans l'immédiat : ces échéances sont annoncées pour
-              qu'elles ne vous surprennent pas.
+        <Text style={styles.label}>Ce qui compte ce mois-ci</Text>
+        {lettre.synthese.actions.map((action, index) => (
+          <Section key={index} style={{ ...styles.panel, margin: "0 0 12px" }}>
+            <Text
+              style={{
+                ...styles.paragraph,
+                color: COLORS.fg,
+                fontFamily: FONTS.title,
+                fontSize: "16px",
+                margin: "0 0 6px",
+              }}
+            >
+              {action.action}
+            </Text>
+            <Text style={{ ...styles.muted, margin: 0 }}>
+              <span style={{ color: COLORS.accent }}>{action.horizon}</span> — {action.pourquoi}
             </Text>
           </Section>
+        ))}
+        {lettre.synthese.reste.trim() !== "" && (
+          <Text style={{ ...styles.muted, margin: "8px 0 0" }}>{lettre.synthese.reste}</Text>
+        )}
+
+        <Text style={{ ...styles.label, margin: "24px 0 8px" }}>Trois scénarios</Text>
+        {lettre.synthese.scenarios.map((scenario, index) => (
+          <Section key={index} style={{ margin: "0 0 20px" }}>
+            <Text style={{ ...styles.paragraph, color: COLORS.fg, margin: "0 0 6px" }}>
+              {scenario.nom}
+            </Text>
+            <Text style={{ ...styles.muted, margin: "0 0 4px" }}>
+              Ce qui le commande : {scenario.commandePar}
+            </Text>
+            <Text style={{ ...styles.muted, margin: "0 0 4px" }}>
+              Ce qui l&apos;appuie : {scenario.faitsDeMarche}
+            </Text>
+            <Text style={{ ...styles.muted, margin: "0 0 4px" }}>
+              Axes couverts : {scenario.axesCouverts}
+            </Text>
+            <Text style={{ ...styles.muted, margin: "0 0 4px" }}>
+              Ordre de coût : {scenario.ordreDeCout} — retour attendu : {scenario.retourAttendu}
+            </Text>
+            <Text style={{ ...styles.muted, color: COLORS.accent, margin: 0 }}>
+              On y va si : {scenario.conditionDeDeclenchement}
+            </Text>
+          </Section>
+        ))}
+
+        {lettre.synthese.aDifferer.length > 0 && (
+          <>
+            <Text style={{ ...styles.label, margin: "20px 0 8px" }}>À différer</Text>
+            {lettre.synthese.aDifferer.map((choix, index) => (
+              <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
+                {choix.choix} — {choix.raison}
+              </Text>
+            ))}
+          </>
+        )}
+
+        <Text style={{ ...styles.label, margin: "24px 0 8px" }}>
+          Budget et retour sur investissement — la méthode
+        </Text>
+        <Text style={styles.paragraph}>{lettre.synthese.budget.coutTroisACinqAns}</Text>
+        {lettre.synthese.budget.indicateurs.map((indicateur, index) => (
+          <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
+            {indicateur}
+          </Text>
+        ))}
+        <Text style={styles.paragraph}>{lettre.synthese.budget.pointDEquilibre}</Text>
+        <Text style={{ ...styles.muted, margin: 0 }}>
+          {lettre.synthese.budget.siPasDeChiffres}
+        </Text>
+
+        <Text style={{ ...styles.label, margin: "24px 0 8px" }}>Comment décider</Text>
+        {lettre.synthese.commentDecider.map((entree, index) => (
+          <Text key={index} style={{ ...styles.muted, margin: "0 0 8px" }}>
+            <span style={{ color: COLORS.fgSoft }}>{entree.entree}</span> — {entree.ceQuElleTeste}
+            {entree.date.trim() !== "" ? ` (${entree.date})` : ""}
+          </Text>
+        ))}
+      </Section>
+
+      {lettre.echeancier.length > 0 && (
+        <>
+          <Hr style={styles.rule} />
+          <Section style={styles.section}>
+            <Text style={styles.label}>Échéancier à six mois</Text>
+            {lettre.echeancier.map((entree, index) => (
+              <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
+                <span style={{ color: COLORS.fgSoft }}>{entree.date}</span> — {entree.echeance}{" "}
+                <span style={{ color: COLORS.faint }}>(axe {entree.axe})</span>
+              </Text>
+            ))}
+          </Section>
         </>
       )}
+
+      {lettre.questions.length > 0 && (
+        <>
+          <Hr style={styles.rule} />
+          <Section style={styles.section}>
+            <Text style={styles.label}>Trois questions à poser à votre prestataire</Text>
+            {lettre.questions.map((question, index) => (
+              <Text key={index} style={{ ...styles.paragraph, margin: "0 0 10px" }}>
+                {index + 1}. {question.question}{" "}
+                <span style={{ color: COLORS.faint }}>
+                  (axe{question.axes.length > 1 ? "s" : ""} {question.axes.join(", ")})
+                </span>
+              </Text>
+            ))}
+          </Section>
+        </>
+      )}
+
+      {lettre.sources.length > 0 && (
+        <>
+          <Hr style={styles.rule} />
+          <Section style={styles.section}>
+            <Text style={styles.label}>Sources</Text>
+            {lettre.sources.map((groupe, index) => (
+              <Section key={index} style={{ margin: "0 0 14px" }}>
+                <Text style={{ ...styles.muted, color: COLORS.fgSoft, margin: "0 0 4px" }}>
+                  {groupe.theme}
+                </Text>
+                {groupe.faits.map((fait, faitIndex) => (
+                  <Text key={faitIndex} style={{ ...styles.footer, margin: "0 0 4px" }}>
+                    {fait.enonce} — {fait.date} —{" "}
+                    <Link href={fait.source} style={styles.link}>
+                      {fait.source}
+                    </Link>
+                  </Text>
+                ))}
+              </Section>
+            ))}
+          </Section>
+        </>
+      )}
+
+      <Hr style={styles.rule} />
+
+      <Section style={styles.section}>
+        <Text style={{ ...styles.footer, fontStyle: "italic", margin: 0 }}>
+          {lettre.ligneCloture}
+        </Text>
+      </Section>
     </Layout>
   );
 }

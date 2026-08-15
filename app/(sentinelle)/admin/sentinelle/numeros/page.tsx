@@ -79,6 +79,14 @@ export default async function DigestsPage({
                     <span className={numero.written ? "text-[#7fd8a4]" : "text-[#f5c451]"}>
                       {numero.written ? "oui" : "à écrire"}
                     </span>
+                    {/* Les signalements du garde-fou ne bloquent pas, mais ils
+                        se lisent avant d'ouvrir : un numéro « oui » avec trois
+                        signalements demande plus de relecture qu'un autre. */}
+                    {numero.signalements > 0 && (
+                      <span className="ml-2 text-[#f5c451]">
+                        {numero.signalements} signalement{numero.signalements > 1 ? "s" : ""}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-4 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
                     {numero.sentAt ? formatDateTime(numero.sentAt) : "—"}

@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
 const EMAIL = "agathe@next-impact.digital";
 const VISIO_URL = "https://calendar.app.google/Cw7TGQBzeZ1szKU86";
-const NEWSLETTER_URL = "https://substack.com/@comesattollo626215";
 
 type OptionKey = "phone" | "visio" | "email" | "newsletter";
 
@@ -59,7 +59,7 @@ export function FloatingContact() {
       Icon: Newspaper,
       label: t("newsletter"),
       sub: t("newsletterDescription"),
-      href: NEWSLETTER_URL,
+      href: NEWSLETTER_SUBSTACK_URL,
       external: true,
     },
   ];

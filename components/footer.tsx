@@ -21,6 +21,7 @@ const NAV_LINKS = [
 const RESOURCE_LINKS = [
   { href: "/audit-site-web", key: "freeAiAudit" },
   { href: "/conseil", key: "visioConseil" },
+  { href: "/veille",        key: "veille" },
   { href: "/outils",        key: "tools" },
   { href: "/contact",       key: "startWebApp" },
 ] as const;
@@ -135,6 +136,19 @@ export default function Footer() {
             {t("updated")}
           </span>
           <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
+          {/* Espace abonné Sentinelle. Deux points à ne pas « corriger » :
+              · balise <a> et non le Link i18n — /espace vit hors de app/[locale]/
+                (groupe produit, exclu du matcher next-intl) ; un lien localisé
+                donnerait /en/espace, qui n'existe pas ;
+              · sa place est ici, dans la ligne utilitaire, et non dans les
+                colonnes : c'est un lien pour quelqu'un qui est déjà client, pas
+                une surface de conversion. */}
+          <a
+            href="/espace"
+            className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+          >
+            {t("subscriberArea")}
+          </a>
           <LocaleSwitcher />
           {/* `#__next` était un reliquat du Pages Router : l'élément n'existe
               plus, le lien ne remontait nulle part. */}

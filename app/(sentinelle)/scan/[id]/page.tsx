@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
-import { sentinellePaymentLinkUrl } from "@/lib/sentinelle-offer";
+import { sentinellePaymentLinkFor } from "@/lib/sentinelle-offer";
 import { ScanReport } from "./report";
 
 export const metadata: Metadata = {
@@ -28,7 +28,10 @@ export default async function ScanReportPage({
           description="Voici ce que l'analyse a pu identifier depuis l'extérieur, sans accès ni mot de passe."
         />
 
-        <ScanReport scanId={id} lienAbonnement={sentinellePaymentLinkUrl()} />
+        {/* Le lien d'abonnement porte l'identifiant de cette analyse : c'est ce
+            qui permet, au paiement, d'ouvrir la fiche avec ce qui vient d'être
+            affiché plutôt qu'avec une seconde analyse. */}
+        <ScanReport scanId={id} lienAbonnement={sentinellePaymentLinkFor(id)} />
       </BlueprintSection>
     </main>
   );

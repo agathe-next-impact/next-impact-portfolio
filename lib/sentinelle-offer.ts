@@ -46,3 +46,27 @@ export function sentinellePaymentLinkUrl(): string | null {
 
   return url;
 }
+
+/**
+ * Le même lien, rattaché à l'analyse qui a mené jusqu'ici.
+ *
+ * `client_reference_id` est le seul paramètre que Stripe accepte de faire
+ * voyager jusqu'au webhook. On y met l'identifiant du scan : à l'ouverture de
+ * l'abonnement, la fiche est amorcée avec ce que le client vient de lire à
+ * l'écran, plutôt qu'avec une seconde analyse faite deux minutes plus tard —
+ * qui pourrait dire autre chose et donner l'impression d'un produit qui hésite.
+ *
+ * Stripe n'accepte que des caractères alphanumériques, tirets et soulignés dans
+ * ce champ : un identifiant qui n'est pas un UUID est ignoré plutôt que
+ * transmis, sans quoi Stripe refuserait l'ouverture de la page de paiement.
+ */
+export function sentinellePaymentLinkFor(scanId: string | null | undefined): string | null {
+  const base = sentinellePaymentLinkUrl();
+  if (!base) return null;
+
+  const id = scanId?.trim() ?? "";
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return base;
+
+  const separator = base.includes("?") ? "&" : "?";
+  return `${base}${separator}client_reference_id=${id}`;
+}

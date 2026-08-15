@@ -20,7 +20,7 @@ const PANEL_TRANSITION = { duration: DUR.ui, ease: EASE_OUT } as const;
 const BTN_PRIMARY =
   "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
 
-type TabId = "conseil" | "prestations";
+type TabId = "conseil" | "prestations" | "veille";
 
 export default function Hero() {
   const locale = useLocale() as Locale;
@@ -34,6 +34,7 @@ export default function Hero() {
   const tabRefs = useRef<Record<TabId, HTMLButtonElement | null>>({
     conseil: null,
     prestations: null,
+    veille: null,
   });
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
 
@@ -70,7 +71,18 @@ export default function Hero() {
       chips: isEn
         ? ["+25 projects shipped", "PageSpeed 45 → 98", "Fixed price & timeline", "Turnkey delivery"]
         : ["+25 projets livrés", "PageSpeed 45 → 98", "Prix & délai fixés", "Livré clé en main"],
-      cta: { label: isEn ? "See services" : "Voir les prestations", href: "/services" },
+      cta: { label: isEn ? "See services" : "Voir les prestations", href: "/solutions-web" },
+    },
+    {
+      id: "veille" as TabId,
+      label: isEn ? "Watch" : "Veille",
+      description: isEn
+        ? "The web & AI market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide — maintain, rebuild or create."
+        : "Le marché web & IA bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider — maintenir, refondre ou créer.",
+      chips: isEn
+        ? ["Free newsletter", "Sentinelle €19/month", "Human-reviewed", "No commitment"]
+        : ["Lettre gratuite", "Sentinelle 19 €/mois", "Relu par un humain", "Sans engagement"],
+      cta: { label: isEn ? "Discover the watch" : "Découvrir la veille", href: "/veille" },
     },
   ];
 

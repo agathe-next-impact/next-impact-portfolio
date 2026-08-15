@@ -16,7 +16,21 @@ export {
 export {
   resetMailTransport,
   sendSentinelleMail,
+  undeliverableReason,
   verifyMailTransport,
   type MailTransport,
   type SentinelleMail,
 } from "./send";
+
+export {
+  newsletterSubject,
+  previewAlertEmail,
+  previewNewsletterEmail,
+  renderAlertEmail,
+  renderLoginEmail,
+  renderNewsletterEmail,
+  renderWelcomeEmail,
+  type LoginEmailProps,
+  type RenderedMail,
+  type WelcomeEmailProps,
+} from "./render";

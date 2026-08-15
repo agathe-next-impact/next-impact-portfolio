@@ -125,8 +125,54 @@ export const clients = pgTable("clients", {
   // pas implémentable : `active: false` dit qu'un abonnement s'est arrêté, pas
   // quand. Remise à NULL en cas de réabonnement.
   deactivatedAt: timestamp("deactivated_at"),
+  // Scan à l'origine de l'abonnement, quand le parcours est passé par le
+  // rapport public (`client_reference_id` du Payment Link). C'est lui qui amorce
+  // la fiche : sans ce lien, un abonné démarrerait avec un stack vide alors
+  // qu'on venait de le détecter. `set null` et non `cascade` : la purge des
+  // scans à 30 jours ne doit pas emporter la fiche d'un client payant.
+  originScanId: uuid("origin_scan_id").references(() => scans.id, {
+    onDelete: "set null",
+  }),
+  // E-mail de bienvenue parti — l'idempotence du parcours post-paiement tient à
+  // cette colonne, pas à un compteur : Stripe rejoue ses webhooks, et personne
+  // ne doit recevoir deux fois le même message de bienvenue.
+  welcomeSentAt: timestamp("welcome_sent_at"),
+  // Fiche complétée au moins une fois par le client. Distingue « rien déclaré
+  // parce qu'il n'a rien à déclarer » de « jamais passé par l'onboarding ».
+  onboardedAt: timestamp("onboarded_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+// ─── Accès à l'espace client ─────────────────────────────────────────────
+//
+// Pas de mot de passe : un lien à usage unique, valable quinze minutes, envoyé
+// à l'adresse de l'abonnement. Trois raisons de stocker le condensat et non le
+// jeton : une base lue ne donne aucun accès, l'usage unique se prouve (la ligne
+// disparaît), et le jeton reste vérifiable hors ligne par sa signature avant
+// même de toucher la base.
+export const magicLinks = pgTable(
+  "magic_links",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => clients.id, { onDelete: "cascade" }),
+    // SHA-256 du jeton complet. Jamais le jeton.
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    // Renseignée à la consommation. La ligne est supprimée dans la foulée ;
+    // la colonne sert au cas où une suppression échouerait — un jeton marqué
+    // utilisé ne rouvre pas de session.
+    usedAt: timestamp("used_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("magic_link_token_hash").on(t.tokenHash),
+    // Purge des jetons échus, et comptage des demandes récentes d'un client
+    // (le seul frein possible à l'envoi en boucle de liens de connexion).
+    index("magic_link_client_created_at").on(t.clientId, t.createdAt),
+  ],
+);
 
 export const stackItems = pgTable(
   "stack_items",

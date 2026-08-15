@@ -7,6 +7,7 @@ import type {
   clients,
   digests,
   intelItems,
+  magicLinks,
   scans,
   stackItems,
 } from "./db/schema";
@@ -28,6 +29,9 @@ export type NewDigest = typeof digests.$inferInsert;
 
 export type Scan = typeof scans.$inferSelect;
 export type NewScan = typeof scans.$inferInsert;
+
+export type MagicLink = typeof magicLinks.$inferSelect;
+export type NewMagicLink = typeof magicLinks.$inferInsert;
 
 export type StackItemType = StackItem["type"];
 export type StackItemSource = StackItem["source"];

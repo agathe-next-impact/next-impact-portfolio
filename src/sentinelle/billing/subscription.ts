@@ -24,6 +24,12 @@ export { normalizeSiteUrl };
 export interface CheckoutSessionLike {
   mode?: string | null;
   payment_status?: string | null;
+  /**
+   * Identifiant du scan à l'origine de l'abonnement, posé par le CTA du rapport
+   * public. C'est ce qui permet d'amorcer la fiche avec ce que le client vient
+   * de lire à l'écran, plutôt que de refaire une analyse quelques minutes après.
+   */
+  client_reference_id?: string | null;
   customer_email?: string | null;
   customer_details?: { email?: string | null; name?: string | null } | null;
   customer?: string | { id: string } | null;
@@ -39,8 +45,16 @@ export interface CheckoutSessionLike {
 }
 
 export type SubscriptionOutcome =
-  | { ok: true; client: NewClient; warnings: string[] }
+  | { ok: true; client: NewClient; warnings: string[]; scanId: string | null }
   | { ok: false; reason: string };
+
+/** Un identifiant de scan est un UUID — le reste vient d'ailleurs et s'ignore. */
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export function scanReference(value: string | null | undefined): string | null {
+  const trimmed = value?.trim() ?? "";
+  return UUID.test(trimmed) ? trimmed.toLowerCase() : null;
+}
 
 /** Clés acceptées pour le champ personnalisé « adresse du site ». */
 const SITE_URL_FIELD_KEYS = ["siteurl", "site_url", "site", "url", "adressedusite"];
@@ -125,6 +139,7 @@ export function clientFromCheckoutSession(
   return {
     ok: true,
     warnings,
+    scanId: scanReference(session.client_reference_id),
     client: {
       email,
       name: session.customer_details?.name?.trim() || fallbackName(email),

@@ -28,6 +28,7 @@ export {
   isEmptyReport,
   purgeCancelledClients,
   purgeIntelRaw,
+  purgeMagicLinks,
   purgeScans,
   purgeWrittenTexts,
   runRetention,

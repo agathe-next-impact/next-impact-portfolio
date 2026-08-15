@@ -26,10 +26,10 @@ import {
 // Le jour du lancement, trois gestes solidaires — les faire ensemble, sinon la
 // page devient indexable sans être atteignable, ou l'inverse :
 //   1. passer AVANT_LANCEMENT à false (rétablit /scan comme CTA froid) ;
-//   2. ajouter l'entrée { path: "sentinelle", … } dans app/sitemap.xml/route.ts
-//      (la liste y est tenue à la main, rien ne s'ajoute tout seul) ;
-//   3. décider si la page entre dans la navigation du header — non fait ici,
-//      cela toucherait des surfaces marketing existantes (règle 1 du pack).
+//   2. l'entrée sitemap — FAIT (2026-08-15, `singlePages` dans
+//      app/sitemap.xml/route.ts, avec la page d'offre /veille) ;
+//   3. navigation — la veille entre dans le header via /veille (2026-08-15),
+//      qui présente les deux lettres et renvoie ici pour le détail.
 // ─────────────────────────────────────────────────────────────────────────────
 const AVANT_LANCEMENT = false;
 
@@ -45,11 +45,11 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Sentinelle — know when your website needs attention, for €19/month"
-      : "Sentinelle — sachez quand votre site a besoin de vous, pour 19 €/mois",
+      ? "Sentinelle — personalized tech watch and decision support, €19/month"
+      : "Sentinelle — veille techno personnalisée et aide à la décision, 19 €/mois",
     description: isEn
-      ? "Sentinelle watches the components your WordPress site actually runs and warns you when one of them becomes a problem. Two newsletters a month, alerts when it matters, written in plain French. €19/month."
-      : "Sentinelle surveille les composants que votre site utilise vraiment et vous prévient quand l'un d'eux devient un problème. Deux lettres par mois, des alertes quand ça compte, en français. 19 €/mois.",
+      ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: maintain, rebuild or build new. Two newsletters a month, alerts when it matters, written in plain French. €19/month."
+      : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : maintenir, refondre ou créer. Deux lettres par mois, des alertes quand ça compte, en français. 19 €/mois.",
     path: "/sentinelle",
     keywords: isEn
       ? [
@@ -64,6 +64,8 @@ export async function generateMetadata({
           "veille sécurité site web",
           "maintenance WordPress alternative",
           "mise à jour WordPress prévenir",
+          "refonte ou maintenance site web",
+          "quand refondre son site",
         ],
     locale,
     // Contenu FR uniquement pour l'instant ; et noindex tant que le produit
@@ -84,6 +86,12 @@ const CE_QUE_VOUS_RECEVEZ = [
     titre: "Deux lettres par mois",
     corps:
       "Le 1er et le 15 : l'état de votre site, ce qui a changé depuis le numéro précédent, et ce qui arrive — une version qui cesse d'être maintenue, une échéance à anticiper. De quoi décider, pas de quoi s'inquiéter.",
+  },
+  {
+    index: "03",
+    titre: "Un cap : maintenir, refondre ou créer",
+    corps:
+      "Chaque lettre se termine par un avis sur la trajectoire de votre projet : rester en l'état tant que ça tient, provisionner une refonte à telle échéance, ou saisir une techno devenue mature pour créer. La veille ne vaut que si elle aide à décider.",
   },
 ];
 
@@ -113,7 +121,7 @@ const CE_QUI_CHANGE = [
 const LIMITES = [
   "L'analyse se fonde sur les éléments publics de votre site. Elle voit ce qu'un visiteur voit, rien de plus : aucun test d'intrusion, aucune tentative d'accès.",
   "Un scan public détecte en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation — c'est là que la surveillance devient exacte.",
-  "Sentinelle prévient, elle n'intervient pas. Ce n'est ni un antivirus, ni un contrat de maintenance, ni une infogérance.",
+  "Sentinelle prévient et conseille, elle n'intervient pas. Ce n'est ni un antivirus, ni un contrat de maintenance, ni une infogérance : quand une refonte ou une intervention s'impose, vous décidez — avec le prestataire de votre choix.",
 ];
 
 export default async function SentinellePage({
@@ -159,7 +167,7 @@ export default async function SentinellePage({
               </em>
             </>
           }
-          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site utilise vraiment et vous prévient quand l'un d'eux devient un problème."
+          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème — et vous dit ce que ça change pour la suite : maintenir, refondre, ou créer."
         />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -192,11 +200,11 @@ export default async function SentinellePage({
         <SectionHeading
           index="№ 01"
           kicker="Ce que vous recevez"
-          title="Deux choses, et rien d'autre"
+          title="Trois choses, et rien d'autre"
           description="Sentinelle ne cherche pas à remplacer votre prestataire ni à remplir votre boîte mail."
         />
 
-        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
+        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-3">
           {CE_QUE_VOUS_RECEVEZ.map((bloc) => (
             <div key={bloc.index} className="bg-jet p-8">
               <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">

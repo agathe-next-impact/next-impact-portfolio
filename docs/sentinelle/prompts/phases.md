@@ -190,6 +190,14 @@ fondée sur une version de confiance moyenne**.
 
 ## Phase 4 — Admin de validation, envoi, newsletter · **faite** (2026-08-15)
 
+> **Refonte du numéro, 2026-08-15 (soir).** Le point 4 ci-dessous décrit la
+> lettre à cinq blocs. Elle a été remplacée par une **lettre de veille** de
+> consultant : douze axes, tendances qualifiées pour ce site, trois scénarios,
+> fenêtre de décision. Compte rendu et décisions : plan §10, « Refonte de la
+> lettre bimensuelle ». Deux prompts système la pilotent
+> (`redaction/lettre-collecte-system-prompt.md` et
+> `lettre-redaction-system-prompt.md`) ; l'ancien moteur a été retiré.
+
 Compte rendu et décisions : plan §10, « Lot 3 — phase 4 faite ». La commande
 d'origine est conservée ci-dessous ; deux points en diffèrent à l'arrivée et
 sont expliqués dans le plan : le contenu relu est stocké en JSON dans
@@ -229,7 +237,14 @@ numéro de newsletter → relecture → e-mail reçu.
 
 ---
 
-## Phase 5 — Onboarding et espace client (~2 j)
+## Phase 5 — Onboarding et espace client · **faite** (2026-08-15)
+
+Compte rendu, décisions et vérifications : plan §10, « Lot 4 — phase 5 faite ».
+La commande d'origine est conservée ci-dessous ; trois points en diffèrent à
+l'arrivée et sont expliqués dans le plan : le parcours post-paiement passe par un
+événement Inngest (`sentinelle/client.subscribed`) et non par le webhook
+lui-même, le lien de connexion se consomme au clic et non à l'affichage, et le
+point 4 (lancement) avait déjà été fait avec la page `/veille`.
 
 Le paiement est déjà en place : Payment Link Stripe, webhook
 `/api/sentinelle/stripe/webhook` traitant `checkout.session.completed` et

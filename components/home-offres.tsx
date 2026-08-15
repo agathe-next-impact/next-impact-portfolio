@@ -21,17 +21,17 @@ type Offer = {
 
 const OFFERS_FR: Offer[] = [
   {
-    subtitle: "Explorer",
-    title: "Diagnostic",
-    price: "gratuit",
+    subtitle: "Veiller",
+    title: "Veille techno",
+    price: "dès 0 €",
     items: [
-      "Diagnostic projet & audit IA de votre site",
-      "Sélecteur techno, diagnostic d'opportunité PWA",
-      "Générateur de cahier des charges",
+      "« Quelle techno pour mon site web à l'heure de l'IA ? » — la lettre gratuite : synthèse mensuelle + focus hebdo",
+      "Sentinelle 19 €/mois : veille personnalisée + aide à la décision — maintenir, refondre ou créer",
+      "Écrit pour décider, relu par un humain avant envoi",
     ],
-    target: "Pour s'auto-évaluer, sans engagement",
-    href: "/outils",
-    cta: "Ouvrir les outils",
+    target: "Pour rester devant, sans y passer vos soirées",
+    href: "/veille",
+    cta: "Découvrir la veille",
   },
   {
     subtitle: "Décider",
@@ -63,17 +63,17 @@ const OFFERS_FR: Offer[] = [
 
 const OFFERS_EN: Offer[] = [
   {
-    subtitle: "Explore",
-    title: "Tools",
-    price: "free",
+    subtitle: "Watch",
+    title: "Tech watch",
+    price: "from €0",
     items: [
-      "Project diagnostic & AI audit of your site",
-      "Tech selector, PWA opportunity diagnostic",
-      "Specifications generator",
+      "The free newsletter: a monthly digest + a weekly focus on web & AI",
+      "Sentinelle €19/month: personalized watch + decision support — maintain, rebuild or create",
+      "Written to help you decide, human-reviewed before sending",
     ],
-    target: "Self-assess, no commitment",
-    href: "/outils",
-    cta: "Open the tools",
+    target: "Stay ahead, without spending your evenings on it",
+    href: "/veille",
+    cta: "Discover the watch",
   },
   {
     subtitle: "Decide",
@@ -131,7 +131,7 @@ export default function HomeOffres() {
           />
         </Reveal>
 
-        {/* 3 cartes : Outils · Conseil techno · Services (pleine largeur, sans gouttière) */}
+        {/* 3 cartes : Veille · Conseil techno · Prestations (pleine largeur, sans gouttière) */}
         <Stagger className="grid md:grid-cols-3">
           {offers.map((offer) => (
             <StaggerItem
