@@ -804,9 +804,104 @@ Deux points laissés ouverts sciemment :
   conséquence sur des durées qui se comptent en jours, mais c'est une bascule en
   `timestamptz` à faire un jour, avant que d'autres colonnes ne s'y ajoutent.
 
+### Lot 2 — phase 3 faite (2026-08-15)
+
+Les quatre sous-lots sont livrés. `npm test` vert (187 tests, 15 fichiers),
+build vert, et — c'est ce qui compte ici — tout a été vérifié contre les vraies
+API et la vraie base, pas seulement en tests.
+
+**2a — routeur et collecte agnostique.** Le catalogue de sources
+(`collectors/catalog.ts`) est une table, comme les empreintes du scanner :
+ajouter une technologie surveillée n'est pas une branche de `switch`. Il ne
+porte que les exceptions — les endroits où le nom chez la source diffère du
+nôtre (« apache » → `apache-http-server`, Laravel → `laravel/framework`) ;
+le reste se déduit de l'écosystème. Un composant sans source connue ressort dans
+`plan.skipped` avec sa raison, journalisée. `endoflife.ts` produit deux faits
+par branche — fin de support et dernière version — **tous deux exprimés comme
+une plage de versions**, ce qui permet au matching de traiter une fin de support
+exactement comme une faille : même code, même prudence.
+
+Vérifié en réel : 20 produits, **543 faits en base sans aucun client**, et une
+seconde passe qui écrit 0 nouveau fait pour 543 mises à jour.
+
+**2b — matching.** Jointure sur `(slug, type, ecosystem)` et jamais sur le seul
+slug ; pas d'alerte sans version ; **pas de rouge sans version certaine** ; plage
+illisible ou version hors plage → rien. La confiance dans la version voyage dans
+`stack_items.meta.versionConfidence` — le scanner la calculait déjà, elle n'était
+simplement pas conservée. Défaut prudent quand elle manque : « probable », qui
+interdit le rouge.
+
+Le seed des quatre clients (`npm run db:seed`) est la preuve d'agnosticité :
+WordPress + WooCommerce, Drupal, Next.js + npm, site sans CMS. Chacun reçoit des
+alertes pertinentes, **le quatrième compris** (PHP 7.4 et nginx 1.18 hors
+support). 442 paires écartées pour « version hors plage » : le silence est
+compté, pas subi.
+
+**2c — OSV, WPScan, releases.** OSV interrogé avec la version du client, puis
+**la plage revérifiée de notre côté** : deux calculs valent mieux qu'un quand une
+erreur envoie un rouge à quelqu'un qui n'est pas concerné. Une faille à plusieurs
+plages disjointes devient autant de faits suffixés `#1`, `#2` — notre grammaire
+de plages ne gère pas la disjonction, et les segments étant disjoints un client
+n'en croise qu'un.
+
+Idempotence prouvée : cinq passes successives, la dernière écrit 0 fait et 0
+alerte. Les passes intermédiaires écrivent encore parce que le plafond de douze
+failles par paquet vide la file sur plusieurs jours — c'est voulu et journalisé,
+jamais silencieux.
+
+**2d — rédaction.** Sortie structurée (schéma JSON dans la requête) plutôt que
+« réponds en JSON » : le JSON est valide par construction, et zod ne sert plus
+qu'à vérifier que le schéma et le code ne divergent pas. Le prompt système vit
+dans `src/sentinelle/redaction/` et est déclaré dans `outputFileTracingIncludes`
+— lu par son chemin, il serait absent du déploiement Vercel sans cette ligne.
+
+Les deux garde-fous sont du code, pas des consignes, et ils ont été éprouvés sur
+du texte réellement produit par le modèle : un rouge dont la version passe en
+« probable » est abaissé en orange ; le même texte présenté comme une alerte sur
+un autre composant est **rejeté** parce qu'il nomme Next.js. Le premier est
+corrigible, le second ne l'est pas — un texte qui parle du mauvais composant
+n'est pas rattrapable, il est faux.
+
+Quatre décisions prises en cours de route :
+
+1. **Le repli Wordfence du pack n'existe plus.** Vérifié le 2026-08-15 : l'API
+   v2 répond 410, la v3 exige une authentification. Sans `WPSCAN_API_KEY`, il
+   n'existe aujourd'hui aucune source gratuite et anonyme de vulnérabilités
+   WordPress. Le collecteur ne produit rien et le journalise, comme le veut la
+   règle du routeur. Un site WordPress reste couvert pour les fins de support
+   (endoflife.date) et les retards d'extension (api.wordpress.org).
+2. **`releases.ts` ne traite pas le cœur de WordPress.** endoflife.date donne
+   déjà, par branche, la dernière version et la date de fin de correctifs. Un
+   client en 6.4.3 doit lire « 6.4.10 est disponible sur votre branche » plutôt
+   qu'un « passez en 7.0 » qui ignore son contexte ; ajouter une troisième source
+   sur le même objet ne produirait que des doublons. Le fichier couvre ce
+   qu'endoflife ne couvre pas : les soixante mille extensions.
+3. **Un fait « retard de version » par composant, pas par version publiée**
+   (`plugin:contact-form-7`, sans numéro). Sinon chaque sortie amont créerait un
+   fait de plus, donc une alerte de plus, pour la même chose.
+4. **`endoflife.date` est interrogé sur un socle fixe de vingt produits**,
+   indépendamment des clients. La veille a de la valeur au premier jour, et un
+   nouvel abonné est couvert à la seconde où sa fiche existe plutôt qu'au
+   lendemain de la première collecte. Vingt requêtes quotidiennes sur une API
+   gratuite : le coût est nul.
+
+Deux constats à emporter en phase 4 :
+
+- **Le volume d'alertes par client est le vrai sujet, pas la technique.** Le
+  client Drupal accumule 26 alertes, le Next.js 29 — presque toutes légitimes
+  (ces versions traînent beaucoup de CVE). Une file de validation qui les
+  présente une par une sera inutilisable : l'admin doit grouper par composant.
+- **La règle « pas de rouge sur une version probable » n'a pas pu être prouvée
+  en réel**, faute de cas : aucune faille de sévérité haute ne touche jQuery
+  1.12.4 ni Bootstrap 4.6.0, les deux composants à version probable du seed.
+  Elle est prouvée par test unitaire, et la vérification en base confirme
+  l'invariant : zéro alerte rouge fondée sur une version non certaine.
+
 ### Prochaine étape
 
-Lot 2 — phase 3, en quatre sous-lots. Séquence complète en §11.
+Lot 3 — phase 4 (admin de validation, gabarits d'e-mail, newsletter). Séquence
+complète en §11. Prérequis externes à lancer maintenant : DKIM et alias
+`veille@` (voir « En parallèle, hors code »).
 
 ---
 

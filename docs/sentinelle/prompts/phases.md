@@ -105,7 +105,12 @@ rétention tourne en local et journalise ce qu'il purge.
 
 ---
 
-## Phase 3 — Collecteurs agnostiques, matching, rédaction (~4 j)
+## Phase 3 — Collecteurs agnostiques, matching, rédaction · **faite** (2026-08-15)
+
+Compte rendu, décisions et constats : plan §10, « Lot 2 — phase 3 faite ». Le
+détail ci-dessous est conservé comme trace de la commande. Deux écarts assumés y
+sont expliqués : le repli Wordfence n'existe plus, et `releases.ts` ne traite pas
+le cœur de WordPress.
 
 C'est ici que se joue la promesse « toute technologie ». Le scan est agnostique
 depuis la phase 2 ; la veille ne l'est pas encore.

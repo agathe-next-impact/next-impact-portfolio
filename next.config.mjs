@@ -33,6 +33,14 @@ const nextConfig = {
       },
     ],
   },
+  // Le prompt système de Sentinelle est lu sur le disque au moment de rédiger
+  // une alerte (c'est un livrable produit, éditable sans toucher au code). Le
+  // file tracing de Vercel n'embarque que ce qu'il voit importé : un fichier lu
+  // par son chemin doit être déclaré, sans quoi la rédaction marche en local et
+  // échoue en production.
+  outputFileTracingIncludes: {
+    '/api/sentinelle/inngest': ['./src/sentinelle/redaction/*.md'],
+  },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,

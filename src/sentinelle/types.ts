@@ -80,6 +80,22 @@ export interface ScanResult {
   scannedAt: string;
 }
 
+/**
+ * Contenu de `stack_items.meta` tel que Sentinelle l'écrit.
+ *
+ * `versionConfidence` y est capital : c'est lui qui décide si une comparaison de
+ * plage peut fonder un verdict rouge. Le scanner distingue « le composant est-il
+ * là ? » de « la version est-elle sûre ? » ; la seconde question doit survivre
+ * au passage en base, sans quoi le matching perdrait l'information la plus
+ * importante qu'il possède.
+ */
+export interface StackItemMeta {
+  versionConfidence?: Confidence;
+  /** D'où venait la détection, quand le composant vient d'un scan. */
+  evidence?: string;
+  [key: string]: unknown;
+}
+
 /** Sortie attendue de la couche rédaction (prompts/verdict-system-prompt.md). */
 export interface DraftedAlert {
   verdict: Verdict;

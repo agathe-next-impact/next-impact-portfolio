@@ -1,7 +1,10 @@
 // API publique du module matching.
-// Le croisement intel × stack (matchIntelToStacks) arrive en phase 3 ; la
-// comparaison de versions, elle, existe et est testée dès la phase 1 parce que
-// tout le reste en dépend.
+//
+// `versions.ts` compare — c'est le code le plus critique du produit, écrit et
+// testé dès la phase 1. `match.ts` décide, purement. `run.ts` pilote la passe
+// sur la base. Les trois sont volontairement séparés : on doit pouvoir relire
+// la règle sans lire le SQL, et l'inverse.
+
 export {
   compareVersions,
   isAffected,
@@ -12,3 +15,15 @@ export {
   type Comparator,
   type VersionConstraint,
 } from "./versions";
+
+export {
+  decide,
+  targets,
+  versionConfidenceOf,
+  RADAR_MONTHS,
+  type MatchableIntel,
+  type MatchableStackItem,
+  type MatchDecision,
+} from "./match";
+
+export { runMatching, MAX_ALERTS_PER_RUN, type MatchReport } from "./run";
