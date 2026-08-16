@@ -65,7 +65,7 @@ export default function HeroVideo() {
             aria-label={isEn ? `Play video: ${title}` : `Lire la vidéo : ${title}`}
             className="absolute inset-0 grid place-items-center bg-obsidian/20 transition-colors hover:bg-obsidian/10"
           >
-            <span className="grid h-14 w-14 place-items-center border border-charcoal bg-vermilion text-white transition-transform group-hover:-translate-y-0.5 motion-reduce:transform-none">
+            <span className="grid h-14 w-14 place-items-center border border-accent-secondary bg-accent-secondary text-obsidian transition-transform group-hover:-translate-y-0.5 motion-reduce:transform-none">
               <Play size={20} fill="currentColor" className="ml-0.5" aria-hidden="true" />
             </span>
           </button>

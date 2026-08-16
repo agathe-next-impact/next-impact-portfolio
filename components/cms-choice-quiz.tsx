@@ -411,7 +411,7 @@ export default function CmsQuiz() {
             <Button
               onClick={() => handleAnswer(question.options[Number.parseInt(selectedAnswer)].value)}
               disabled={selectedAnswer === ""}
-              className="w-full gap-2 rounded-none border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:opacity-50"
+              className="w-full gap-2 rounded-none border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-50"
             >
               {currentQuestion < questions.length - 1 ? (
                 <>

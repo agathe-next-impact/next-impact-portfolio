@@ -25,7 +25,7 @@ const LAST_UPDATED = "2026-06-24";
 
 const ACCENT = "text-accent-secondary";
 const BTN_PRIMARY =
-  "inline-flex h-12 items-center gap-2 rounded-sm border border-charcoal bg-vermilion px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "inline-flex h-12 items-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_SECONDARY =
   "inline-flex h-12 items-center gap-2 rounded-sm border border-mid-gray/50 bg-transparent px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:border-accent-secondary hover:text-accent-secondary";
 

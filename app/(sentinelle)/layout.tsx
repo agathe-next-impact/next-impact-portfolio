@@ -11,10 +11,15 @@ import '../globals.css'
 // rend <html>/<body>.
 //
 // Volontairement absents ici (ne pas « harmoniser » avec le layout vitrine) :
-//   - Header / Footer / FloatingContact : Sentinelle est un produit, pas une
-//     page marketing.
+//   - Header / Footer / FloatingContact : l'admin et l'espace client sont des
+//     outils, pas des pages marketing.
+//     ⚠️ Exception depuis le 2026-08-16 : les pages publiques `/scan` et
+//     `/scan/[id]` portent bien le chrome du site — elles sont la porte
+//     d'entrée d'un inconnu. Le nécessaire est dans `scan/layout.tsx`, pas ici,
+//     pour que l'admin et l'espace n'en héritent pas.
 //   - NextIntlClientProvider : les contenus client sont en français (voir
-//     docs/sentinelle/CLAUDE.md, « Conventions »).
+//     docs/sentinelle/CLAUDE.md, « Conventions »). Le segment `scan` monte le
+//     sien, en `fr`, parce que Header et Footer appellent `useTranslations`.
 //   - ConsentManager / GA4 / Clarity : aucun traçage sur les pages produit.
 //     Les y ajouter imposerait de repasser par la bannière de consentement
 //     (voir docs/sentinelle/plan-mise-en-oeuvre.md §9).

@@ -127,7 +127,7 @@ export function YoutubePlayer({
               }}
             >
               <span
-                className="grid place-items-center border-r border-charcoal bg-vermilion text-white"
+                className="grid place-items-center border-r border-accent-secondary bg-accent-secondary text-obsidian"
                 style={{
                   width: compact ? 44 : 56,
                   height: compact ? 44 : 56,

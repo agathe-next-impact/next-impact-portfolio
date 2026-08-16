@@ -10,9 +10,8 @@ import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
 import type { CaseStudyCard } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import { PageHero } from "@/components/aspect/page-hero";
 import { Reveal } from "@/components/ui/reveal";
-import { WordAppear } from "@/components/visuals/word-appear";
-import { AuroraGlow } from "@/components/visuals/aurora-glow";
 import { NeonArcs } from "@/components/visuals/neon-arcs";
 
 const FADE = {
@@ -23,7 +22,7 @@ const FADE = {
 };
 
 const CTA_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const CTA_GHOST =
   "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
@@ -37,36 +36,23 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
 
   return (
     <div>
-      {/* Héros éditorial */}
-      <BlueprintSection
-        tone="obsidian"
-        ticks
+      {/* Héros éditorial (harmonisé /veille) — bande blanche : les tokens sont
+          surchargés localement avec les valeurs du thème clair, le texte et les
+          rails s'inversent donc sans classe conditionnelle. Les arcs animés
+          (NeonArcs) sont conservés ; AuroraGlow, halo calibré pour fond sombre,
+          n'aurait aucun rendu sur blanc. */}
+      <PageHero
+        index="№ 01"
+        kicker={isEn ? "Case studies" : "Études de cas"}
+        title={variant.titre}
+        description={variant.sousTitre}
+        className="[--obsidian:0_0%_100%] [--foreground:0_0%_5.5%] [--mid-gray:0_0%_49%] [--dark-gray:0_0%_86%] [--accent-2:223_72%_48%]"
         backdrop={
-          <>
-            <AuroraGlow intensity="subtle" />
-            <div className="absolute inset-0 opacity-50">
-              <NeonArcs />
-            </div>
-          </>
-        }
-        innerClassName="px-6 py-16 lg:px-10 lg:py-24"
-      >
-        <Reveal className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            <span>№ 01</span>
-            <span className="h-px w-6 bg-accent-secondary/50" />
-            <span className="text-mid-gray">{isEn ? "Case studies" : "Études de cas"}</span>
+          <div className="absolute inset-0 opacity-50">
+            <NeonArcs />
           </div>
-          <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            <WordAppear text={variant.titre} />
-          </h1>
-          {variant.sousTitre && (
-            <p className="mt-2 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-              {variant.sousTitre}
-            </p>
-          )}
-        </Reveal>
-      </BlueprintSection>
+        }
+      />
 
 
       {/* Grille des réalisations */}

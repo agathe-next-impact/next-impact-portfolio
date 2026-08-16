@@ -19,7 +19,13 @@ import {
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import {
+  PageHero,
+  HERO_BTN_PRIMARY,
+  HERO_BTN_SECONDARY,
+} from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
 function OfferCard({
@@ -44,7 +50,7 @@ function OfferCard({
   const ctaClass =
     "group mt-auto flex w-full items-center justify-center gap-1.5 px-5 py-3 font-mono text-xs uppercase tracking-[0.06em] no-underline transition-colors " +
     (offer.featured
-      ? "border border-vermilion bg-vermilion text-white hover:bg-vermilion-bright"
+      ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
       : "border border-dark-gray text-foreground hover:border-mid-gray");
 
   const tag = copy.tag ? (
@@ -247,44 +253,57 @@ export default function VisioConseilPage() {
 
   return (
     <main>
-      {/* § 01 — Hero */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-24">
-        <Reveal>
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            № 01 — {isEn ? "Tech advice · From decision to direction" : "Conseil techno · De la décision au pilotage"}
-          </p>
-          <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            {isEn
-              ? "Web technology advice in the age of AI."
-              : "Conseil techno web à l'heure de l'IA."}
-          </h1>
-          <p className="mt-5 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            {isEn
-              ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless, directory, automation or custom business tool."
-              : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless, annuaire, automatisation ou outil métier."}
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a
-              href="#conseils"
-              className="group inline-flex h-11 items-center gap-2 border border-vermilion bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
-            >
+      {/* § 01 — Hero (harmonisé /veille) */}
+      <PageHero
+        index="№ 01"
+        kicker={isEn ? "Tech advice · From decision to direction" : "Conseil techno · De la décision au pilotage"}
+        backdrop={
+          /* Constellation projet ↔ technos : la métaphore du conseil. */
+          <div className="absolute -right-24 top-1/2 hidden w-[560px] -translate-y-1/2 opacity-20 lg:block">
+            <ConstellationTechno showTags={false} />
+          </div>
+        }
+        title={
+          isEn ? (
+            <>
+              Web technology advice{" "}
+              <em className="font-normal not-italic text-accent-secondary">
+                in the age of AI
+              </em>
+              .
+            </>
+          ) : (
+            <>
+              Conseil techno web{" "}
+              <em className="font-normal not-italic text-accent-secondary">
+                à l'heure de l'IA
+              </em>
+              .
+            </>
+          )
+        }
+        description={
+          isEn
+            ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless, directory, automation or custom business tool."
+            : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless, annuaire, automatisation ou outil métier."
+        }
+        actions={
+          <>
+            <a href="#conseils" className={"group " + HERO_BTN_PRIMARY}>
               {isEn ? "Book the tech-selector call" : "Réserver la visio sélecteur"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
-            <a
-              href="#comment"
-              className="inline-flex h-11 items-center border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:border-mid-gray"
-            >
+            <a href="#comment" className={HERO_BTN_SECONDARY}>
               {isEn ? "How it works" : "Comment ça marche"}
             </a>
-          </div>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
-            {isEn
-              ? "Architecture · Priorities · Maintenance · Business coherence"
-              : "Architecture · Priorités · Maintenance · Cohérence business"}
-          </p>
-        </Reveal>
-      </BlueprintSection>
+          </>
+        }
+        note={
+          isEn
+            ? "Architecture · Priorities · Maintenance · Business coherence"
+            : "Architecture · Priorités · Maintenance · Cohérence business"
+        }
+      />
       <Separator />
 
       {/* § 02 — Les deux conseils */}

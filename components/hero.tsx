@@ -18,7 +18,7 @@ import { DUR, EASE_OUT } from "@/lib/motion-tokens";
 const PANEL_TRANSITION = { duration: DUR.ui, ease: EASE_OUT } as const;
 
 const BTN_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 type TabId = "conseil" | "prestations" | "veille";
 

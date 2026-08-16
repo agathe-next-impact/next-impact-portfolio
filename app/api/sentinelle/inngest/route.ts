@@ -19,7 +19,28 @@ export const dynamic = "force-dynamic";
 // bimensuel la latence n'a aucune importance, et le coût y est divisé par deux.
 export const maxDuration = 300;
 
+// ── Adresse annoncée à Inngest ──────────────────────────────────────────────
+// Sans ceci, le SDK déduit son URL de `VERCEL_URL`, c'est-à-dire l'URL de
+// déploiement immuable (`next-impact-<hash>.vercel.app`). Or « Vercel
+// Authentication » est active sur ce projet en mode
+// `prod_deployment_urls_and_all_previews` : cette URL précise répond 302 vers
+// l'écran de connexion Vercel, tandis que le domaine public répond 200.
+//
+// Inngest enregistrait donc l'application sur une adresse qu'il ne peut pas
+// joindre. Les événements arrivaient bien, mais aucun appel ne revenait, et
+// le rejet ayant lieu au bord du réseau — avant la fonction — il ne laissait
+// aucune trace dans les logs runtime. Les scans restaient `pending` à vie
+// (constaté le 2026-08-16 sur les scans 50b44589 et 2ecbb10b).
+//
+// On force donc le domaine public. Uniquement en production : une préversion
+// doit continuer à s'annoncer sous sa propre URL, jamais sous celle de la
+// production — sans quoi elle traiterait les événements réels.
+const serveHost =
+  process.env.INNGEST_SERVE_HOST ??
+  (process.env.VERCEL_ENV === "production" ? "https://www.next-impact.digital" : undefined);
+
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions,
+  ...(serveHost ? { serveHost } : {}),
 });

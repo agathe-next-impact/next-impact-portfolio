@@ -557,7 +557,7 @@ export default function EligibilityForm() {
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <button
               type="submit"
-              className="inline-flex items-center gap-2 border border-charcoal bg-vermilion px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5"
+              className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5"
             >
               {isEn ? "Show my path" : "Voir ma voie"}
               <ArrowRight size={14} />
@@ -622,7 +622,7 @@ export default function EligibilityForm() {
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-charcoal bg-vermilion px-[18px] py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+                  className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-[18px] py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
                 >
                   <Video size={14} />
                   {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}

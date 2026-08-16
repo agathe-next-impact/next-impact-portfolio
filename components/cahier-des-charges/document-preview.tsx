@@ -638,7 +638,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
             </h3>
           </div>
           <button
-            className="inline-flex items-center gap-2 border border-charcoal bg-vermilion px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+            className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
             onClick={() => setShowContactForm(true)}
           >
             <Send className="h-3.5 w-3.5" />

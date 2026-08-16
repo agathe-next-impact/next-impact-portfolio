@@ -330,7 +330,7 @@ export function CahierDesChargesForm() {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="border border-charcoal bg-vermilion px-8 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+                  className="border border-accent-secondary bg-accent-secondary px-8 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
                 >
                   {isEn ? "Preview the document" : "Voir l'aperçu du document"}
                 </button>

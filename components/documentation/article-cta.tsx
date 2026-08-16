@@ -30,7 +30,7 @@ export function ArticleCta({
       </p>
       <Link
         href={cta.href as Parameters<typeof Link>[0]["href"]}
-        className="inline-flex h-11 items-center gap-2 rounded-sm bg-vermilion px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+        className="inline-flex h-11 items-center gap-2 rounded-sm bg-accent-secondary px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
       >
         {rx(cta.label, locale)}
         <ArrowRight className="h-4 w-4" aria-hidden />

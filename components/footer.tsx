@@ -33,9 +33,27 @@ const PARTNER_LINKS = [
   { href: "/agences",    key: "whiteLabelAgencies" },
 ] as const;
 
-export default function Footer() {
+export default function Footer({
+  variant = "site",
+}: {
+  /**
+   * `"product"` — footer rendu hors du site localisé (pages Sentinelle
+   * `/scan`). Deux éléments de la ligne utilitaire y sont masqués, pour la même
+   * raison que le lien `/espace` ci-dessous est une balise `<a>` brute :
+   *
+   * · le **sélecteur de langue** — `/scan` n'existe pas sous `/en`, la bascule
+   *   produirait un 404 ;
+   * · le **bouton « Cookies »** — il rouvre le bandeau de consentement, qui
+   *   n'est pas monté sur les pages produit (aucun traçage : voir
+   *   `docs/sentinelle/plan-mise-en-oeuvre.md` §9). Sans lui, il ne fait rien.
+   *
+   * Le rendu du site est inchangé : c'est la valeur par défaut.
+   */
+  variant?: "site" | "product";
+} = {}) {
   const t = useTranslations("footer");
   const year = new Date().getFullYear();
+  const isProduct = variant === "product";
 
   return (
     <footer className="bg-obsidian px-2.5 lg:px-0">
@@ -120,7 +138,7 @@ export default function Footer() {
             </a>
             <Link
               href="/contact"
-              className="mt-5 inline-flex h-9 items-center rounded-sm bg-vermilion px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+              className="mt-5 inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("startWebApp")}
             </Link>
@@ -135,7 +153,9 @@ export default function Footer() {
           <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
             {t("updated")}
           </span>
-          <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
+          {!isProduct && (
+            <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
+          )}
           {/* Espace abonné Sentinelle. Deux points à ne pas « corriger » :
               · balise <a> et non le Link i18n — /espace vit hors de app/[locale]/
                 (groupe produit, exclu du matcher next-intl) ; un lien localisé
@@ -149,7 +169,7 @@ export default function Footer() {
           >
             {t("subscriberArea")}
           </a>
-          <LocaleSwitcher />
+          {!isProduct && <LocaleSwitcher />}
           {/* `#__next` était un reliquat du Pages Router : l'élément n'existe
               plus, le lien ne remontait nulle part. */}
           <a

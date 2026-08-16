@@ -65,7 +65,7 @@ export default function AuditSendFormClient({ userInfo, status, errorMessage }: 
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-          className="inline-flex items-center justify-center gap-2 border border-charcoal bg-vermilion px-4 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+          className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-4 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
         >
           <ScreenShareIcon size={14} />
           {isEn ? "Discuss on video" : "En discuter en visio"}

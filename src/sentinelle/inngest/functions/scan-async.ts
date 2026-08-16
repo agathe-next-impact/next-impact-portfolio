@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
 import { scanSite } from "@sentinelle/scanner";
+import { buildApercu } from "@sentinelle/apercu";
 import { inngest } from "../client";
 import { scanRequested } from "../events";
 
@@ -40,11 +41,29 @@ export const scanAsync = inngest.createFunction(
         return;
       }
 
+      // `apercu: pending` : le rapport s'affiche tout de suite, le front
+      // continue d'interroger le temps que la passe de rédaction se termine.
       await db()
         .update(scans)
-        .set({ status: "done", result: outcome.result })
+        .set({
+          status: "done",
+          result: { ...outcome.result, apercu: { status: "pending" as const } },
+        })
         .where(eq(scans.id, scanId));
     });
+
+    // L'aperçu de veille — l'échantillon de la lettre personnalisée. Étape
+    // séparée : son échec (API, quota) laisse le rapport de scan intact.
+    if (outcome.ok) {
+      const apercu = await step.run("apercu", async () => buildApercu(outcome.result));
+
+      await step.run("store-apercu", async () => {
+        await db()
+          .update(scans)
+          .set({ result: { ...outcome.result, apercu } })
+          .where(eq(scans.id, scanId));
+      });
+    }
 
     return {
       scanId,

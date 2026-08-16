@@ -13,10 +13,10 @@ import {
   SectionHeading,
   Separator,
 } from "@/components/aspect/section";
+import { PageHero } from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
-import { WordAppear } from "@/components/visuals/word-appear";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
-import { NeonArcs } from "@/components/visuals/neon-arcs";
+import { SignalPaths } from "@/components/visuals/signal-paths";
 import { MeterBar } from "@/components/visuals/charts";
 
 type LinkHref = Parameters<typeof Link>[0]["href"];
@@ -126,42 +126,22 @@ export default function AboutClient() {
 
   return (
     <div>
-      {/* № 01 — Héros : la personne derrière Next Impact */}
-      <BlueprintSection
-        tone="obsidian"
-        ticks
+      {/* № 01 — Héros : la personne derrière Next Impact (harmonisé /veille) */}
+      <PageHero
+        index="№ 01"
+        kicker={t("hero.kicker")}
+        title={t("hero.title")}
+        description={t.rich("hero.lead", {
+          em: (chunks) => (
+            <em className="not-italic text-accent-secondary">{chunks}</em>
+          ),
+        })}
         backdrop={
-          <>
-            <AuroraGlow intensity="subtle" />
-            <div className="absolute inset-0 opacity-50">
-              <NeonArcs />
-            </div>
-          </>
+          <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
+            <SignalPaths />
+          </div>
         }
-        innerClassName="px-6 py-16 lg:px-10 lg:py-24"
-      >
-        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <Reveal className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-              <span>№ 01</span>
-              <span className="h-px w-6 bg-accent-secondary/50" />
-              <span className="text-mid-gray">{t("hero.kicker")}</span>
-            </div>
-            <h1 className="max-w-3xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              <WordAppear text={t("hero.title")} />
-            </h1>
-            <p className="mt-2 max-w-xl font-inter-tight text-base leading-relaxed text-foreground md:text-lg">
-              {t.rich("hero.lead", {
-                em: (chunks) => (
-                  <em className="not-italic text-accent-secondary">{chunks}</em>
-                ),
-              })}
-            </p>
-            <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray md:text-base">
-              {t("hero.subtext")}
-            </p>
-          </Reveal>
-
+        aside={
           <Reveal
             delay={0.1}
             className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-sm border border-dark-gray lg:max-w-none"
@@ -175,8 +155,12 @@ export default function AboutClient() {
               sizes="(max-width: 1024px) 20rem, 33vw"
             />
           </Reveal>
-        </div>
-      </BlueprintSection>
+        }
+      >
+        <p className="mt-6 max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray md:text-base">
+          {t("hero.subtext")}
+        </p>
+      </PageHero>
 
       {/* En bref — TL;DR citable par les moteurs IA (GEO) */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">

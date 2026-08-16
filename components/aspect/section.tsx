@@ -69,13 +69,15 @@ export function CornerTicks() {
   );
 }
 
-/** En-tête de section : index № + kicker mono vermillon + titre + description. */
+/** En-tête de section : index № + kicker mono vermillon + titre + description.
+ *  `as="h1"` réserve le niveau 1 aux héros de page (un seul par page). */
 export function SectionHeading({
   index,
   kicker,
   title,
   description,
   align = "left",
+  as: Tag = "h2",
   className,
 }: {
   index?: string;
@@ -83,6 +85,7 @@ export function SectionHeading({
   title: React.ReactNode;
   description?: React.ReactNode;
   align?: "left" | "center";
+  as?: "h1" | "h2";
   className?: string;
 }) {
   return (
@@ -100,9 +103,9 @@ export function SectionHeading({
           {kicker && <span className="text-mid-gray">{kicker}</span>}
         </div>
       )}
-      <h2 className="max-w-3xl text-3xl font-light tracking-tight text-foreground md:text-4xl lg:text-5xl">
+      <Tag className="max-w-3xl text-3xl font-light tracking-tight text-foreground md:text-4xl lg:text-5xl">
         {title}
-      </h2>
+      </Tag>
       {description && (
         <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
           {description}

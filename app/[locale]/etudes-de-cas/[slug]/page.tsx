@@ -8,6 +8,8 @@ import CaseStudyDecisionPath from "@/components/case-studies/CaseStudyDecisionPa
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
 import { YoutubePlayer } from "@/components/youtube-player";
 import { BlueprintSection } from "@/components/aspect/section";
+import { PageHero } from "@/components/aspect/page-hero";
+import { AuroraGlow } from "@/components/visuals/aurora-glow";
 import { Reveal } from "@/components/ui/reveal";
 import { Metadata } from "next";
 import { generateArticleMetadata } from "@/lib/metadata";
@@ -141,40 +143,26 @@ export default async function CaseStudyPage({
       />
 
       <main>
-        {/* Back link + en-tête d'étude de cas */}
-        <BlueprintSection tone="obsidian">
-          <Reveal>
-            <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
-              <Link
-                href="/etudes-de-cas"
-                className="group mb-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
-              >
-                <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
-                {t("backToCaseStudies")}
-              </Link>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-                  <span>{clientTypeLabel}</span>
-                  <span className="h-px w-6 bg-accent-secondary/50" />
-                  <span className="text-mid-gray">
-                    {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
-                    {caseStudy.date.year}
-                  </span>
-                </div>
-                <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
-                  {caseStudy.title}
-                </h1>
-                <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-                  {caseStudy.description}
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        </BlueprintSection>
+        {/* Back link + en-tête d'étude de cas (harmonisé /veille) */}
+        <PageHero
+          index={clientTypeLabel}
+          kicker={`${caseStudy.date.month ? monthsRaw[caseStudy.date.month - 1] : ""} ${caseStudy.date.year ?? ""}`.trim()}
+          title={caseStudy.title}
+          description={caseStudy.description}
+          backdrop={<AuroraGlow intensity="subtle" />}
+          breadcrumb={
+            <Link
+              href="/etudes-de-cas"
+              className="group mb-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
+            >
+              <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
+              {t("backToCaseStudies")}
+            </Link>
+          }
+        />
 
         {/* Contenu principal */}
-        <BlueprintSection tone="obsidian">
+        <BlueprintSection tone="obsidian" className="border-t border-dark-gray">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px]">
             {/* Colonne gauche : média + chiffres + contenu */}
             <div className="border-b border-dark-gray px-6 py-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-12">

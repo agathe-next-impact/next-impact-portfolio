@@ -116,7 +116,7 @@ export function FloatingContact() {
           role="dialog"
           aria-modal="false"
           aria-label={t("ariaLabel")}
-          className="fixed z-[49] w-64 border border-r-0 border-dark-gray bg-jet motion-reduce:!transition-none"
+          className="fixed z-[49] w-64 border border-r-0 border-dark-gray/30 bg-jet motion-reduce:!transition-none"
           style={{
             right: "2.5rem",
             top: "50%",
@@ -138,7 +138,7 @@ export function FloatingContact() {
               {...(activeOption?.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="inline-flex items-center gap-1.5 border border-charcoal bg-vermilion px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+              className="inline-flex items-center gap-1.5 border border-accent-secondary bg-accent-secondary px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               onClick={close}
             >
               {activeOption?.label}
@@ -152,7 +152,7 @@ export function FloatingContact() {
       <div
         ref={railRef}
         aria-label={t("ariaLabel")}
-        className="fixed right-0 top-1/2 z-50 -translate-y-1/2 border border-dark-gray bg-obsidian"
+        className="fixed right-0 top-1/2 z-50 -translate-y-1/2 border border-vermilion/50 bg-obsidian"
       >
         {options.map((opt, i) => {
           const Icon = opt.Icon;
@@ -165,13 +165,13 @@ export function FloatingContact() {
               aria-expanded={isActive}
               onClick={() => toggle(opt.key)}
               className={cn(
-                "flex h-10 w-10 cursor-pointer items-center justify-center border-l-[3px] bg-transparent transition-colors duration-150",
-                i > 0 && "border-t border-t-dark-gray",
+                "flex h-10 w-10 cursor-pointer items-center justify-center border-l-[3px] transition-colors duration-150",
+                i > 0 && "border-t border-t-vermilion/50",
                 isActive
-                  ? "border-l-accent-secondary bg-jet text-accent-secondary"
+                  ? "border-l-accent-secondary bg-accent-secondary/15 text-accent-secondary"
                   : hoveredKey === opt.key
-                  ? "border-l-transparent text-foreground"
-                  : "border-l-transparent text-mid-gray",
+                  ? "border-l-transparent bg-accent-secondary/15 text-accent-secondary"
+                  : "border-l-transparent bg-transparent text-accent-secondary",
               )}
               onMouseEnter={() => setHoveredKey(opt.key)}
               onMouseLeave={() => setHoveredKey(null)}

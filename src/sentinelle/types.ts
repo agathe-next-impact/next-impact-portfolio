@@ -66,6 +66,36 @@ export interface DetectedComponent {
   evidence?: string;
 }
 
+/** Statut d'un thème dans l'aperçu de veille du rapport de scan. */
+export type ApercuStatut = "agir" | "surveiller" | "rien_a_signaler" | "non_observable";
+
+export interface ApercuTheme {
+  /** Slug du thème — les cinq grands thèmes de la lettre (apercu/dossier.ts). */
+  theme: string;
+  statut: ApercuStatut;
+  texte: string;
+}
+
+/**
+ * Aperçu de veille joint au rapport de scan : un échantillon de la lettre
+ * personnalisée, fabriqué en une passe sans outils à partir du seul dossier
+ * scan × intel déjà collectée. Contrairement à la lettre abonnée, il n'est PAS
+ * relu par un humain — le rapport l'affiche explicitement.
+ *
+ * `pending` le temps de la rédaction (le front continue d'interroger) ;
+ * `none` quand l'aperçu n'a pas lieu d'être (aucun composant, clé absente,
+ * API indisponible) — l'absence du champ sur d'anciens scans vaut `none`.
+ */
+export type ScanApercu =
+  | { status: "pending" }
+  | { status: "none"; reason?: string }
+  | {
+      status: "done";
+      themes: ApercuTheme[];
+      cap: { scenario: "consolider" | "evoluer" | "refondre"; texte: string };
+      genereLe: string;
+    };
+
 /** Résultat sérialisé dans `scans.result`. */
 export interface ScanResult {
   url: string;
@@ -82,6 +112,8 @@ export interface ScanResult {
   /** Limites à afficher honnêtement dans le rapport (specs/scanner.md). */
   notes: string[];
   scannedAt: string;
+  /** Aperçu de veille (post-plan, 2026-08-16) — absent sur les anciens scans. */
+  apercu?: ScanApercu;
 }
 
 /**

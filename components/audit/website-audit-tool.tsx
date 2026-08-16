@@ -71,7 +71,7 @@ export function WebsiteAuditTool() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex items-center justify-center gap-2 rounded-sm border border-charcoal bg-vermilion px-7 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? (
                   <>

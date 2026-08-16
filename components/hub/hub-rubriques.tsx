@@ -285,7 +285,7 @@ export function HubRubriques({ locale }: { locale: Locale }) {
             </ul>
             <Link
               href="/outils/selecteur-techno"
-              className="group inline-flex items-center gap-2 border border-charcoal bg-vermilion px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+              className="group inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {c.selecteur.cta}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

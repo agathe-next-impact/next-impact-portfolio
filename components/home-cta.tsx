@@ -52,7 +52,7 @@ export default function HomeCta() {
                 href="https://calendar.app.google/RwZqaabSR5aDMnk46"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white hover:bg-vermilion-bright"
+                className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
               >
                 <CalendarDays size={14} />
                 {isEn ? "Let's talk about your project" : "Discutons de votre projet"}

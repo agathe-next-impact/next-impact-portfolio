@@ -132,7 +132,7 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
             <div className="flex flex-wrap gap-3 md:shrink-0">
               <a
                 href={reco.anchor}
-                className="inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+                className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               >
                 {isEn ? "See this package" : "Voir ce forfait"}
                 <ArrowRight size={14} />

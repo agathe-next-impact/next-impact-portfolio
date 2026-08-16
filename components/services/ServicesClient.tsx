@@ -15,16 +15,15 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getServicesPageVariants } from "@/lib/homepage-profiles";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import {
+  PageHero,
+  HERO_BTN_PRIMARY,
+  HERO_BTN_SECONDARY,
+} from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import ConseilModal from "@/components/ui/conseil-modal";
 import { useSeen } from "@/components/ui/use-seen";
-import { WordAppear } from "@/components/visuals/word-appear";
-import { SignalPaths } from "@/components/visuals/signal-paths";
-
-const BTN_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-charcoal bg-vermilion px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
-const BTN_GHOST =
-  "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
+import { BlueprintGrid } from "@/components/visuals/blueprint-grid";
 
 export default function ServicesClient() {
   const [pricingRef, pricingSeen] = useSeen<HTMLDivElement>();
@@ -37,41 +36,29 @@ export default function ServicesClient() {
 
   return (
     <main>
-      {/* § 01 — Héros */}
-      <BlueprintSection
-        tone="obsidian"
+      {/* § 01 — Héros (harmonisé /veille) */}
+      <PageHero
+        index="№ 01"
+        kicker={isEn ? "Web solutions" : "Solutions web"}
+        title={variant.titre}
+        description={variant.sousTitre}
         backdrop={
-          <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
-            <SignalPaths />
-          </div>
+          /* Quadrillage blueprint : le plan de construction — la métaphore des
+             solutions web bâties sur mesure. */
+          <BlueprintGrid />
         }
-        innerClassName="px-6 py-16 lg:px-8 lg:py-24"
-      >
-        <Reveal className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            <span>№ 01</span>
-            <span className="h-px w-6 bg-accent-secondary/50" />
-            <span className="text-mid-gray">{isEn ? "Web solutions" : "Solutions web"}</span>
-          </div>
-          <h1 className="max-w-4xl text-4xl font-extralight leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            <WordAppear text={variant.titre} />
-          </h1>
-          {variant.sousTitre && (
-            <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-              {variant.sousTitre}
-            </p>
-          )}
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/solutions-web/eligibilite" className={BTN_PRIMARY}>
+        actions={
+          <>
+            <Link href="/solutions-web/eligibilite" className={HERO_BTN_PRIMARY}>
               {isEn ? "Run the diagnostic — 2 min" : "Lancer le diagnostic — 2 min"}
               <ArrowRight size={14} />
             </Link>
-            <a href="#tarifs" className={BTN_GHOST}>
+            <a href="#tarifs" className={HERO_BTN_SECONDARY}>
               {isEn ? "See pricing" : "Voir les tarifs"}
             </a>
-          </div>
-        </Reveal>
-      </BlueprintSection>
+          </>
+        }
+      />
 
       <Separator />
 

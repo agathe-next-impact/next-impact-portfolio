@@ -167,7 +167,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               <button
                 type="submit"
                 disabled={sending}
-                className="inline-flex items-center justify-center gap-2 border border-charcoal bg-vermilion px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sending ? (
                   <>

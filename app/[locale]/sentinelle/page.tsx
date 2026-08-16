@@ -48,8 +48,8 @@ export async function generateMetadata({
       ? "Sentinelle — personalized tech watch and decision support, €19/month"
       : "Sentinelle — veille techno personnalisée et aide à la décision, 19 €/mois",
     description: isEn
-      ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: maintain, rebuild or build new. Two newsletters a month, alerts when it matters, written in plain French. €19/month."
-      : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : maintenir, refondre ou créer. Deux lettres par mois, des alertes quand ça compte, en français. 19 €/mois.",
+      ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: consolidate, evolve or rebuild. Two letters a month, alerts when it matters, human-reviewed before sending. €19/month."
+      : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, des alertes quand ça compte, relues par un humain avant envoi. 19 €/mois.",
     path: "/sentinelle",
     keywords: isEn
       ? [
@@ -85,13 +85,13 @@ const CE_QUE_VOUS_RECEVEZ = [
     index: "02",
     titre: "Deux lettres par mois",
     corps:
-      "Le 1er et le 15 : l'état de votre site, ce qui a changé depuis le numéro précédent, et ce qui arrive — une version qui cesse d'être maintenue, une échéance à anticiper. De quoi décider, pas de quoi s'inquiéter.",
+      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes — du socle technique à la visibilité, aux coûts et à la réversibilité. Chaque axe conclut : agir, surveiller, ou non concerné — et « non concerné » se dit, c'est souvent l'information la plus rassurante.",
   },
   {
     index: "03",
-    titre: "Un cap : maintenir, refondre ou créer",
+    titre: "Un cap : consolider, évoluer ou refondre",
     corps:
-      "Chaque lettre se termine par un avis sur la trajectoire de votre projet : rester en l'état tant que ça tient, provisionner une refonte à telle échéance, ou saisir une techno devenue mature pour créer. La veille ne vaut que si elle aide à décider.",
+      "Chaque lettre se termine par trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre — avec leur ordre de coût et leur condition de déclenchement, un échéancier à six mois et trois questions à poser à votre prestataire. La veille ne vaut que si elle aide à décider.",
   },
 ];
 
@@ -114,7 +114,7 @@ const CE_QUI_CHANGE = [
   {
     titre: "Rien ne part sans relecture",
     corps:
-      "Aucune alerte n'est envoyée automatiquement. Je relis chacune avant qu'elle parte. C'est plus lent qu'un robot, et c'est le but.",
+      "Aucune alerte, aucun numéro n'est envoyé automatiquement. La lettre n'affirme que des faits datés et sourcés — le code le vérifie — et le modèle me signale ses hypothèses dans des notes de production. Je relis, je corrige, puis j'envoie. C'est plus lent qu'un robot, et c'est le but.",
   },
 ];
 
@@ -167,7 +167,7 @@ export default async function SentinellePage({
               </em>
             </>
           }
-          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème — et vous dit ce que ça change pour la suite : maintenir, refondre, ou créer."
+          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème — et vous dit ce que ça change pour la suite : consolider, faire évoluer, ou refondre."
         />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">

@@ -5,8 +5,10 @@ import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/json-ld";
 import MultiSubjectContactForm from "@/components/contact/multi-subject-form";
 import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
 import { BlueprintSection } from "@/components/aspect/section";
+import { PageHero } from "@/components/aspect/page-hero";
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 import { Reveal } from "@/components/ui/reveal";
+import { SignalPaths } from "@/components/visuals/signal-paths";
 import type { Locale } from "@/i18n/routing";
 
 export const revalidate = 21600;
@@ -61,20 +63,18 @@ export default async function ContactPage({
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ContactPageJsonLd />
 
-      {/* Hero */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-24">
-        <Reveal>
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-            № 01
-          </p>
-          <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            {t("title")}
-          </h1>
-          <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
-            {t("subtitle")}
-          </p>
-        </Reveal>
-      </BlueprintSection>
+      {/* Hero (harmonisé /veille) */}
+      <PageHero
+        index="№ 01"
+        kicker={t("breadcrumbContact")}
+        title={t("title")}
+        description={t("subtitle")}
+        backdrop={
+          <div className="absolute inset-x-0 bottom-0 h-1/2 opacity-30">
+            <SignalPaths />
+          </div>
+        }
+      />
 
       {/* Form + direct info */}
       <BlueprintSection tone="obsidian">

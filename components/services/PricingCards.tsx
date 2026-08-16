@@ -253,7 +253,7 @@ export function PricingCards() {
                   className={cn(
                     "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
                     tier.highlight
-                      ? "border border-charcoal bg-vermilion text-white hover:bg-vermilion-bright"
+                      ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
                       : "border border-dark-gray text-foreground hover:bg-obsidian",
                   )}
                 >
@@ -266,7 +266,7 @@ export function PricingCards() {
                   className={cn(
                     "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
                     tier.highlight
-                      ? "border border-charcoal bg-vermilion text-white hover:bg-vermilion-bright"
+                      ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
                       : "border border-dark-gray text-foreground hover:bg-obsidian",
                   )}
                 >

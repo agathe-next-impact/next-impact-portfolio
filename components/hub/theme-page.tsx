@@ -254,7 +254,7 @@ export function ThemePage({
                   href={p.href as Href}
                   className={
                     isHot
-                      ? "group inline-flex h-10 items-center justify-center gap-1.5 border border-charcoal bg-vermilion px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+                      ? "group inline-flex h-10 items-center justify-center gap-1.5 border border-accent-secondary bg-accent-secondary px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
                       : "group inline-flex h-10 items-center justify-center gap-1.5 border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-jet"
                   }
                 >

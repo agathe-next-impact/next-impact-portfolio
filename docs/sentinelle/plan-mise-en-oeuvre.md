@@ -1203,6 +1203,28 @@ générée en local et reste à renseigner sur Vercel. Prérequis externes incha
 DKIM et alias `veille@`, qui conditionnent l'identité d'expédition mais plus le
 fait d'envoyer.
 
+### Post-plan — aperçu de veille sur le rapport de scan (2026-08-16)
+
+Le rapport public `/scan/[id]` produit désormais un **aperçu de veille
+personnalisée**, de même forme que la lettre abonnée (cinq grands thèmes avec
+statut + cap consolider/évoluer/refondre), pour montrer le produit plutôt que
+le décrire. Décisions structurantes :
+
+- **Pas de passe de collecte** : le dossier croise les composants du scan avec
+  l'intel déjà en base (crons quotidiens) via `decide()` — le même moteur que
+  les alertes clients. Une seule passe LLM sans outils (règle 3 respectée),
+  coût borné (~1 appel, 6 000 tokens max), pas de recherche web.
+- **Non relu, et dit comme tel** : contrairement à la lettre (règle 4),
+  l'aperçu s'affiche sans validation humaine. En compensation : le rapport
+  porte la mention « non relu » en clair, et la garde `borner()` interdit un
+  statut « agir » sans fait red/orange retenu par le croisement déterministe.
+- Module isolé `src/sentinelle/apercu/` (dossier pur + schéma + fabrication),
+  prompt `src/sentinelle/redaction/apercu-system-prompt.md` (tracé par le glob
+  existant), stocké dans `scans.result.apercu` (jsonb, pas de migration),
+  étape Inngest séparée dans `scan-async` — son échec laisse le rapport
+  intact. Le front interroge tant que l'aperçu est `pending`, dans la borne
+  des 120 s existante. Tests : `apercu/dossier.test.ts`.
+
 ---
 
 ## 11. Séquence de la suite (arrêtée le 2026-08-15)

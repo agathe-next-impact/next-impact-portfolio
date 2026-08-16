@@ -5,7 +5,7 @@ import type { FamilleKey } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 
 const BTN_PRIMARY =
-  "group inline-flex w-full items-center justify-center gap-2 border border-charcoal bg-vermilion px-5 py-3 text-center font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "group inline-flex w-full items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-3 text-center font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
   "group inline-flex w-full items-center justify-center gap-2 border border-dark-gray px-5 py-3 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 

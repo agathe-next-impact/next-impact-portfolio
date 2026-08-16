@@ -27,7 +27,7 @@ const INPUT =
 const LABEL =
   "mb-1.5 block font-sans text-[13px] font-semibold text-foreground";
 const BTN_PRIMARY =
-  "inline-flex items-center justify-center gap-2 rounded-sm border border-charcoal bg-vermilion px-7 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
 const BTN_GHOST =
   "group inline-flex items-center gap-1.5 rounded-sm border border-dark-gray px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 const LABEL_MONO = "font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";

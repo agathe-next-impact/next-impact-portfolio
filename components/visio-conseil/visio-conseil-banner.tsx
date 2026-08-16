@@ -59,7 +59,7 @@ export function VisioConseilBanner({
 
         <Link
           href="/conseil"
-          className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-vermilion bg-vermilion px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-white no-underline transition-colors hover:bg-vermilion-bright"
+          className="group inline-flex flex-shrink-0 items-center gap-1.5 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
         >
           {copy.cta}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

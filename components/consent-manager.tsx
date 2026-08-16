@@ -20,7 +20,7 @@ const CLARITY_ID = "vl7osdgfi9";
 type Decision = "granted" | "denied" | null;
 
 const BTN_PRIMARY =
-  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-charcoal bg-vermilion px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright";
+  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-accent-secondary bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
   "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian";
 

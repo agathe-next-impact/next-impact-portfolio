@@ -259,7 +259,7 @@ export default function AppsSection() {
             href="https://calendar.app.google/RwZqaabSR5aDMnk46"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex h-11 items-center justify-center gap-2 rounded-sm border border-charcoal bg-vermilion px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright"
+            className="group inline-flex h-11 items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
           >
             {copy.ctaPrimary}
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />

@@ -19,7 +19,7 @@ const inputClass =
 
 // Bouton primaire — remplissage indigo bordé charcoal, label mono.
 const btnPrimaryClass =
-  "inline-flex items-center gap-2 border border-charcoal bg-vermilion px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.08em] text-white transition-colors hover:bg-vermilion-bright disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function GeminiSearch({ onResult, prompt, systemInstruction, defaultUrl }: GeminiSearchProps) {
   const locale = useLocale() as Locale;

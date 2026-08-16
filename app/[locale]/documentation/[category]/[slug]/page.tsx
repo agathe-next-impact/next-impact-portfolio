@@ -6,7 +6,8 @@ import type { Locale } from "@/i18n/routing"
 import { TranslationFallbackBanner } from "@/components/translation-fallback-banner"
 import { MarkdownContent } from "@/components/documentation/markdown-content"
 import { MdxContent } from "@/components/documentation/mdx-content"
-import { getArticleBySlug, getArticlesByCategory } from "@/lib/markdown"
+import { getArticleBySlug, getArticlesByCategory, getAllCategories } from "@/lib/markdown"
+import { routing } from "@/i18n/routing"
 import TableOfContentsPopup from "@/components/documentation/table-of-content-popup"
 import ShareSocial from "@/components/share-social"
 import { ArticleReadTracker } from "@/components/documentation/article-read-tracker"
@@ -29,6 +30,36 @@ import { ArticleCta } from "@/components/documentation/article-cta";
 import { ConseilModalOnRead } from "@/components/documentation/conseil-modal-on-read";
 import { getRubrique, rubriqueHref, rx } from "@/lib/documentation-rubriques";
 import { generateTableOfContents } from "@/lib/toc";
+
+// Même politique que la page de catégorie : les articles sont des fichiers du
+// dépôt, ils n'ont aucune raison d'être rendus à la demande. Sans ces deux
+// exports, chaque article partait en fonction serverless — les logs de
+// production du 2026-08-16 montrent 288 à 1808 ms de TTFB en `vercelCache: MISS`
+// sur les articles, quand tout le reste du site répondait en PRERENDER à ~250 ms.
+export const revalidate = 86400;
+
+/**
+ * Couples (catégorie, slug) à prérendre.
+ *
+ * On énumère par RÉPERTOIRE, pas par le champ `category` du front matter :
+ * `getArticleBySlug` résout un chemin de fichier, donc c'est le nom de dossier
+ * qui fait l'URL. Les deux locales sont fusionnées — un article traduit
+ * seulement en anglais doit exister lui aussi. `dynamicParams` reste à sa valeur
+ * par défaut : un article ajouté hors build est servi à la demande, pas en 404.
+ */
+export function generateStaticParams() {
+  const pairs = new Map<string, { category: string; slug: string }>()
+
+  for (const locale of routing.locales) {
+    for (const category of getAllCategories(locale)) {
+      for (const article of getArticlesByCategory(category, locale)) {
+        pairs.set(`${category}/${article.slug}`, { category, slug: article.slug })
+      }
+    }
+  }
+
+  return Array.from(pairs.values())
+}
 
 const categoryLabels: Record<string, string> = {
   "marketing-digital": "Marketing Digital",
