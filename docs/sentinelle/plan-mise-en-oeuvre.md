@@ -1154,7 +1154,7 @@ refusé parce qu'il écrivait « WordPress » à propos d'un site sous Next.js. 
 était juste : le dossier décrivait les publics du site comme « des dirigeants au
 parc WordPress vieillissant ». Le vocabulaire autorisé ignorait `dossier.publics`
 et le contexte client. Corrigé — un garde-fou qui interdit à un studio de parler
-du parc de ses clients n'protège plus rien, il empêche d'écrire.
+du parc de ses clients ne protège plus rien, il empêche d'écrire.
 
 **3. Les chiffres réels, qui remplacent mes estimations.** Ils sont mesurés et
 stockés dans l'encart de production de chaque numéro (`consommation`) :
