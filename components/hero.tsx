@@ -115,8 +115,8 @@ export default function Hero() {
           </span>
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-accent-secondary sm:text-5xl lg:text-6xl">
-          <WordAppear text={variant.headline} />{" "}
-          <span className="block text-foreground">{variant.subHeadline}</span>
+          <WordAppear text={variant.headline} />{" " }
+          <span className="text-foreground">{variant.subHeadline}</span>
         </h1>
       </Reveal>
 

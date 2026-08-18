@@ -23,7 +23,7 @@ import { ApercuSchema, APERCU_JSON_SCHEMA } from "./schema";
 export const APERCU_PROMPT = "apercu-system-prompt.md";
 
 /** Plafond de réflexion + réponse : l'aperçu est court par contrat de schéma. */
-const MAX_TOKENS = 6_000;
+const MAX_TOKENS = 8_000;
 
 let client: Anthropic | undefined;
 
@@ -127,6 +127,10 @@ export async function buildApercu(result: ScanResult): Promise<ScanApercu> {
 
   return {
     status: "done",
+    titre: parsed.data.titre,
+    chapeau: parsed.data.chapeau,
+    siteEnUnePhrase: parsed.data.siteEnUnePhrase,
+    ligneCloture: parsed.data.ligneCloture,
     themes: borner(parsed.data.themes as ApercuTheme[], constats),
     cap: parsed.data.cap,
     genereLe: new Date().toISOString(),

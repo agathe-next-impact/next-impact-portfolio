@@ -30,6 +30,14 @@ export const COLLECTE_PROMPT = "lettre-collecte-system-prompt.md";
 export const SEARCH_BUDGET = 30;
 export const FETCH_BUDGET = 8;
 
+/**
+ * Plafond de lecture d'une page web (jetons). Sans lui, une page obèse entre
+ * entière dans le contexte, puis est refacturée à chaque reprise. 12 000 jetons
+ * ≈ 9 000 mots : aucun article utile n'est coupé, les catalogues et les pages
+ * infinies, si.
+ */
+export const FETCH_MAX_CONTENT_TOKENS = 12_000;
+
 /** Une passe qui n'aboutit pas en huit reprises ne tourne pas rond. */
 const MAX_CONTINUATIONS = 8;
 
@@ -42,6 +50,8 @@ export interface CollecteTelemetry {
   continuations: number;
   inputTokens: number;
   outputTokens: number;
+  /** Jetons relus depuis le cache — la mesure de ce que les reprises coûtent. */
+  cachedTokens: number;
 }
 
 export type CollecteOutcome =
@@ -81,9 +91,17 @@ function countFetches(message: Anthropic.Message): number {
 
 export async function collectDossier(
   context: LettreContext,
-  options: { model?: string; effort?: "medium" | "high" | "xhigh" } = {},
+  options: {
+    model?: string;
+    effort?: "medium" | "high" | "xhigh";
+    /** Budgets réduits pour la lettre-échantillon ; défauts = lettre abonnée. */
+    searchBudget?: number;
+    fetchBudget?: number;
+  } = {},
 ): Promise<CollecteOutcome> {
   const model = options.model ?? process.env.ANTHROPIC_MODEL ?? "claude-opus-5";
+  const searchBudget = options.searchBudget ?? SEARCH_BUDGET;
+  const fetchBudget = options.fetchBudget ?? FETCH_BUDGET;
 
   const telemetry: CollecteTelemetry = {
     searches: 0,
@@ -91,6 +109,7 @@ export async function collectDossier(
     continuations: 0,
     inputTokens: 0,
     outputTokens: 0,
+    cachedTokens: 0,
   };
 
   const messages: Anthropic.MessageParam[] = [
@@ -105,13 +124,24 @@ export async function collectDossier(
         model,
         max_tokens: MAX_TOKENS,
         system: loadPrompt(COLLECTE_PROMPT),
+        // Borne de cache automatique sur le dernier bloc de la requête : à
+        // chaque reprise `pause_turn`, tout l'historique (prompt, brief,
+        // résultats de recherche déjà lus) se relit à ×0,1 au lieu de se
+        // refacturer plein tarif. C'était le premier poste de coût de la
+        // collecte — mesuré via `telemetry.cachedTokens`.
+        cache_control: { type: "ephemeral" },
         output_config: {
           effort: options.effort ?? "high",
           format: { type: "json_schema", schema: DOSSIER_JSON_SCHEMA },
         },
         tools: [
-          { type: "web_search_20260209", name: "web_search", max_uses: SEARCH_BUDGET },
-          { type: "web_fetch_20260209", name: "web_fetch", max_uses: FETCH_BUDGET },
+          { type: "web_search_20260209", name: "web_search", max_uses: searchBudget },
+          {
+            type: "web_fetch_20260209",
+            name: "web_fetch",
+            max_uses: fetchBudget,
+            max_content_tokens: FETCH_MAX_CONTENT_TOKENS,
+          },
         ],
         messages,
       });
@@ -143,6 +173,7 @@ export async function collectDossier(
     telemetry.fetches += countFetches(message);
     telemetry.inputTokens += message.usage.input_tokens;
     telemetry.outputTokens += message.usage.output_tokens;
+    telemetry.cachedTokens += message.usage.cache_read_input_tokens ?? 0;
 
     if (message.stop_reason !== "pause_turn") break;
 

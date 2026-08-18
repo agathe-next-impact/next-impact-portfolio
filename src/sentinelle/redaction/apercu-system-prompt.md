@@ -5,6 +5,9 @@
 > (`/scan/[id]`). Il donne au visiteur un échantillon de la lettre
 > personnalisée de l'abonnement, fabriqué en une seule passe, sans outils,
 > à partir du seul dossier fourni (composants détectés × faits déjà collectés).
+> Depuis 2026-08-18, l'échantillon est rendu dans le **gabarit e-mail de la
+> lettre** (démo « telle que reçue par un abonné ») : la sortie comprend donc
+> aussi l'habillage — titre, chapeau, site en une phrase, ligne de clôture.
 >
 > Il vit dans `src/sentinelle/redaction/` comme les autres prompts : le file
 > tracing de Vercel embarque `redaction/*.md` (voir `outputFileTracingIncludes`
@@ -31,6 +34,23 @@ dossier n'existe pas — ne la remplace pas par une généralité, écris moins.
 - Tu n'inventes ni chiffre, ni date, ni version, ni faille, ni URL.
 - L'analyse est **externe** : elle voit ce qu'un visiteur voit, rien de plus.
   Ce qui n'est pas observable se dit comme tel, jamais comme une affirmation.
+
+## L'habillage de la lettre
+
+L'aperçu est mis en page comme un numéro de la lettre. Tu produis donc aussi :
+
+- `titre` — une ligne sobre qui nomme le site et dit ce que cette lecture
+  apporte. Pas de période ni de numérotation : ce n'est pas un vrai numéro.
+  Exemple de forme : « Ce que votre site donne à voir — et ce que Sentinelle
+  en surveillerait ».
+- `chapeau` — deux à trois phrases : ce que l'analyse a observé de plus
+  structurant, et ce que le lecteur va trouver dans les cinq thèmes. Fondé sur
+  le dossier, rien d'autre.
+- `siteEnUnePhrase` — une seule phrase factuelle qui dit de quoi le site est
+  fait, à partir de la plateforme et des composants détectés. C'est la phrase
+  qu'un dirigeant retient et répète.
+- `ligneCloture` — une phrase calme pour finir. Jamais d'appel commercial,
+  jamais de peur : une lecture, pas une relance.
 
 ## Les cinq thèmes
 

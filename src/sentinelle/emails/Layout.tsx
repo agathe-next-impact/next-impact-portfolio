@@ -30,10 +30,16 @@ export interface LayoutProps {
   sentAt: Date;
   /** Nom affiché du destinataire, quand on l'a. */
   siteUrl?: string | null;
+  /**
+   * Pourquoi le destinataire voit ce message. Par défaut : parce que son site
+   * est sous surveillance — faux pour la lettre-échantillon du scan public,
+   * qui fournit sa propre phrase.
+   */
+  reason?: string;
   children: ReactNode;
 }
 
-export function Layout({ preview, kicker, sentAt, siteUrl, children }: LayoutProps) {
+export function Layout({ preview, kicker, sentAt, siteUrl, reason, children }: LayoutProps) {
   return (
     <Html lang="fr">
       <Head />
@@ -65,9 +71,10 @@ export function Layout({ preview, kicker, sentAt, siteUrl, children }: LayoutPro
 
           <Section style={styles.section}>
             <Text style={styles.footer}>
-              Vous recevez ce message parce que votre site est sous surveillance Sentinelle.
-              Une question, un doute sur ce qui est écrit&nbsp;? Répondez à cet e-mail, il
-              arrive directement chez Agathe.
+              {reason ??
+                "Vous recevez ce message parce que votre site est sous surveillance " +
+                  "Sentinelle. Une question, un doute sur ce qui est écrit ? Répondez " +
+                  "à cet e-mail, il arrive directement chez Agathe."}
             </Text>
             <Text style={styles.footer}>
               Next Impact Digital ·{" "}

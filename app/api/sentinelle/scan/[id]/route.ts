@@ -2,6 +2,7 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
+import { envoyerLettreEchantillon } from "@sentinelle/apercu";
 import type { ScanResult } from "@sentinelle/types";
 
 export const runtime = "nodejs";
@@ -49,10 +50,12 @@ const LeadBody = z.object({
 });
 
 /**
- * Capture de l'e-mail pour le rapport détaillé.
+ * Capture de l'e-mail pour recevoir la lettre-échantillon.
  *
- * Écrit `scans.leadEmail`. Idempotent : renvoyer le formulaire deux fois met à
- * jour l'adresse plutôt que de créer un doublon.
+ * Écrit `scans.leadEmail`, puis tente l'envoi : si la lettre est déjà rédigée
+ * elle part tout de suite, sinon c'est la fin de la rédaction (Inngest) qui
+ * l'expédiera. Idempotent : renvoyer le formulaire deux fois met à jour
+ * l'adresse plutôt que de créer un doublon — mais la lettre ne part qu'une fois.
  */
 export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
@@ -82,5 +85,9 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
     return Response.json({ error: "analyse introuvable" }, { status: 404 });
   }
 
-  return Response.json({ ok: true });
+  // « Lettre pas prête » n'est pas un échec : l'envoi se fera à la fin de la
+  // rédaction. On ne fait donc pas dépendre la réponse du résultat.
+  const envoi = await envoyerLettreEchantillon(id);
+
+  return Response.json({ ok: true, sent: envoi.sent });
 }

@@ -15,8 +15,13 @@ import { scans } from "@sentinelle/db/schema";
 // remonter à une IP par force brute sur l'espace des adresses.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Scans autorisés par heure et par adresse. */
-export const SCANS_PER_HOUR = 5;
+/**
+ * Scans autorisés par heure et par adresse. Un seul (décision du 2026-08-18) :
+ * depuis que chaque scan déclenche une lettre-échantillon (appel LLM) et un
+ * envoi d'e-mail, un scan public coûte trop cher pour tolérer les rafales — et
+ * un prospect réel n'a besoin que d'une analyse.
+ */
+export const SCANS_PER_HOUR = 1;
 
 export function hashIp(ip: string): string {
   const salt = process.env.SCAN_IP_SALT ?? "";

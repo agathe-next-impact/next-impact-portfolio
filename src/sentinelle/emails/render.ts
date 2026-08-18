@@ -4,6 +4,7 @@ import type { DraftedAlert } from "@sentinelle/types";
 // (`admin/content.ts`), où elle est testée, plutôt que d'être réécrite ici.
 import { alertSubject } from "@sentinelle/admin/content";
 import { AlertEmail, type AlertEmailProps } from "./AlertEmail";
+import { ApercuEmail, type ApercuEmailProps } from "./ApercuEmail";
 import { NewsletterEmail, type NewsletterEmailProps } from "./NewsletterEmail";
 import { WelcomeEmail, type WelcomeEmailProps } from "./WelcomeEmail";
 import { LoginEmail, type LoginEmailProps } from "./LoginEmail";
@@ -110,6 +111,52 @@ export async function previewAlertEmail(props: AlertEmailProps): Promise<string>
 
 export async function previewNewsletterEmail(props: NewsletterEmailProps): Promise<string> {
   return render(NewsletterEmail(props));
+}
+
+/**
+ * Lettre-échantillon du scan public, en HTML seul — l'iframe du rapport.
+ */
+export async function previewApercuEmail(props: ApercuEmailProps): Promise<string> {
+  return render(ApercuEmail(props));
+}
+
+/** L'objet d'une lettre-échantillon dit ce que c'est et nomme le site. */
+function echantillonSubject(siteUrl: string): string {
+  const host = siteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  return `Sentinelle — l'échantillon de votre lettre de veille pour ${host}`;
+}
+
+/**
+ * Lettre-échantillon héritée (cinq thèmes) prête à l'envoi — encore utile pour
+ * les scans d'avant le passage au pipeline complet.
+ */
+export async function renderApercuEmail(props: ApercuEmailProps): Promise<RenderedMail> {
+  const element = ApercuEmail(props);
+
+  const [html, text] = await Promise.all([
+    render(element),
+    render(element, { plainText: true }),
+  ]);
+
+  return { subject: echantillonSubject(props.siteUrl), html, text };
+}
+
+/**
+ * Lettre-échantillon actuelle : un vrai numéro (pipeline de la veille
+ * personnalisée sur la semaine écoulée), rendu dans le gabarit abonné en mode
+ * échantillon.
+ */
+export async function renderEchantillonEmail(
+  props: NewsletterEmailProps & { siteUrl: string },
+): Promise<RenderedMail> {
+  const element = NewsletterEmail(props);
+
+  const [html, text] = await Promise.all([
+    render(element),
+    render(element, { plainText: true }),
+  ]);
+
+  return { subject: echantillonSubject(props.siteUrl), html, text };
 }
 
 export type { DraftedAlert, LoginEmailProps, WelcomeEmailProps };

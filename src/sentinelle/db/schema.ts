@@ -98,6 +98,11 @@ export const scans = pgTable(
     status: text("status").notNull().default("pending"), // pending|running|done|failed
     result: jsonb("result"), // ScanResult sérialisé (composants détectés)
     leadEmail: text("lead_email"), // rempli à la capture — nullable
+    // Quand la lettre-échantillon est partie à leadEmail. La mise à jour
+    // conditionnelle (is null) fait office de verrou entre les deux
+    // déclencheurs (capture d'e-mail / fin de rédaction) — même principe que
+    // les liens de connexion à usage unique.
+    leadSentAt: timestamp("lead_sent_at"),
     // Écart spec : anti-abus du scanner public. SHA-256(ip + SCAN_IP_SALT),
     // jamais l'IP. Remis à NULL par la purge à 24 h.
     ipHash: text("ip_hash"),

@@ -51,14 +51,20 @@ export async function POST(req: Request) {
   const ipHash = hashIp(clientIp(req.headers));
 
   try {
-    const verdict = await checkRateLimit(ipHash);
-    if (!verdict.allowed) {
-      return Response.json(
-        {
-          error: `Vous avez lancé ${verdict.used} analyses dans la dernière heure. Réessayez un peu plus tard.`,
-        },
-        { status: 429 },
-      );
+    // En développement, le plafond (1 scan/heure) bloquerait chaque session de
+    // test au premier essai. La production, elle, applique toujours la limite.
+    if (process.env.NODE_ENV !== "development") {
+      const verdict = await checkRateLimit(ipHash);
+      if (!verdict.allowed) {
+        return Response.json(
+          {
+            error:
+              "Le scanner est limité à une analyse par heure et par adresse. " +
+              "Réessayez un peu plus tard.",
+          },
+          { status: 429 },
+        );
+      }
     }
 
     const [scan] = await db()

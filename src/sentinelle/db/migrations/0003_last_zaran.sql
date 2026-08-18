@@ -1,0 +1,1 @@
+ALTER TABLE "scans" ADD COLUMN "lead_sent_at" timestamp;

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
 import { scanSite } from "@sentinelle/scanner";
-import { buildApercu } from "@sentinelle/apercu";
+import { buildLettreEchantillon, envoyerLettreEchantillon } from "@sentinelle/apercu";
 import { inngest } from "../client";
 import { scanRequested } from "../events";
 
@@ -52,10 +52,15 @@ export const scanAsync = inngest.createFunction(
         .where(eq(scans.id, scanId));
     });
 
-    // L'aperçu de veille — l'échantillon de la lettre personnalisée. Étape
-    // séparée : son échec (API, quota) laisse le rapport de scan intact.
+    // La lettre-échantillon — le vrai pipeline de la veille personnalisée
+    // (collecte de la semaine écoulée + rédaction douze axes) appliqué à la
+    // stack détectée. Étape séparée : son échec (API, quota, garde-fous)
+    // laisse le rapport de scan intact. Elle se compte en minutes — c'est le
+    // step le plus long du produit avec la fabrication d'un numéro abonné.
     if (outcome.ok) {
-      const apercu = await step.run("apercu", async () => buildApercu(outcome.result));
+      const apercu = await step.run("lettre-echantillon", async () =>
+        buildLettreEchantillon(outcome.result),
+      );
 
       await step.run("store-apercu", async () => {
         await db()
@@ -63,6 +68,11 @@ export const scanAsync = inngest.createFunction(
           .set({ result: { ...outcome.result, apercu } })
           .where(eq(scans.id, scanId));
       });
+
+      // Si le visiteur a déjà laissé son adresse pendant la rédaction, la
+      // lettre part maintenant. Sinon, c'est la capture d'e-mail (PATCH) qui
+      // enverra — le verrou `lead_sent_at` arbitre entre les deux.
+      await step.run("lettre-au-lead", async () => envoyerLettreEchantillon(scanId));
     }
 
     return {

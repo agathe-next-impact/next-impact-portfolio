@@ -11,6 +11,7 @@ import type {
   scans,
   stackItems,
 } from "./db/schema";
+import type { Lettre } from "./lettre/schema";
 
 export type Client = typeof clients.$inferSelect;
 export type NewClient = typeof clients.$inferInsert;
@@ -86,15 +87,61 @@ export interface ApercuTheme {
  * `none` quand l'aperçu n'a pas lieu d'être (aucun composant, clé absente,
  * API indisponible) — l'absence du champ sur d'anciens scans vaut `none`.
  */
+/**
+ * Forme actuelle (2026-08-18, seconde itération) : le scan produit un **vrai
+ * numéro** par le pipeline de la veille personnalisée — collecte de l'actualité
+ * de la dernière semaine (outils web) puis rédaction douze axes — appliqué à la
+ * fiche technique issue de l'analyse de stack. Se reconnaît à `lettre`.
+ */
+export interface ScanApercuLettre {
+  status: "done";
+  lettre: Lettre;
+  /** Fenêtre couverte — « la semaine du 11 au 18 août 2026 ». */
+  periodLabel: string;
+  genereLe: string;
+  /**
+   * Ce que cette lettre a réellement coûté à fabriquer — chaque scan se mesure
+   * lui-même (2026-08-18). Absent sur les lettres d'avant l'instrumentation.
+   */
+  consommation?: {
+    recherches: number;
+    lectures: number;
+    reprises: number;
+    jetonsEntree: number;
+    jetonsSortie: number;
+    /** Jetons relus depuis le cache (facturés ×0,1). */
+    jetonsCacheLecture: number;
+    dureeMs: number;
+  };
+}
+
+/**
+ * Forme héritée (2026-08-16 → 18) : cinq thèmes + cap, une passe sans outils.
+ * Encore en base sur les scans passés — l'affichage la lit toujours.
+ */
+export interface ScanApercuThemes {
+  status: "done";
+  titre?: string;
+  chapeau?: string;
+  siteEnUnePhrase?: string;
+  ligneCloture?: string;
+  themes: ApercuTheme[];
+  cap: { scenario: "consolider" | "evoluer" | "refondre"; texte: string };
+  genereLe: string;
+}
+
 export type ScanApercu =
   | { status: "pending" }
   | { status: "none"; reason?: string }
-  | {
-      status: "done";
-      themes: ApercuTheme[];
-      cap: { scenario: "consolider" | "evoluer" | "refondre"; texte: string };
-      genereLe: string;
-    };
+  | ScanApercuLettre
+  | ScanApercuThemes;
+
+/** La forme actuelle porte une lettre complète ; l'héritée, des thèmes. */
+export function isApercuLettre(
+  apercu: ScanApercuLettre | ScanApercuThemes,
+): apercu is ScanApercuLettre {
+  return "lettre" in apercu;
+}
 
 /** Résultat sérialisé dans `scans.result`. */
 export interface ScanResult {

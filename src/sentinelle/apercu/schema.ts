@@ -11,6 +11,12 @@ const themeSlugs = APERCU_THEMES.map((t) => t.slug) as [string, ...string[]];
 const statuts = APERCU_STATUTS as [string, ...string[]];
 
 export const ApercuSchema = z.object({
+  // L'habillage de la lettre : l'aperçu est rendu dans le gabarit e-mail de
+  // l'abonnement (démo « telle que reçue »), il lui faut donc un titre, un
+  // chapeau et une clôture — courts, et bornés au dossier comme le reste.
+  titre: z.string().min(1).max(140),
+  chapeau: z.string().min(1).max(900),
+  siteEnUnePhrase: z.string().min(1).max(300),
   themes: z
     .array(
       z.object({
@@ -24,6 +30,7 @@ export const ApercuSchema = z.object({
     scenario: z.enum(["consolider", "evoluer", "refondre"]),
     texte: z.string().min(1).max(900),
   }),
+  ligneCloture: z.string().min(1).max(300),
 });
 
 export type ApercuPayload = z.infer<typeof ApercuSchema>;
@@ -31,8 +38,11 @@ export type ApercuPayload = z.infer<typeof ApercuSchema>;
 export const APERCU_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["themes", "cap"],
+  required: ["titre", "chapeau", "siteEnUnePhrase", "themes", "cap", "ligneCloture"],
   properties: {
+    titre: { type: "string", maxLength: 140 },
+    chapeau: { type: "string", maxLength: 900 },
+    siteEnUnePhrase: { type: "string", maxLength: 300 },
     themes: {
       type: "array",
       minItems: APERCU_THEMES.length,
@@ -57,5 +67,6 @@ export const APERCU_JSON_SCHEMA = {
         texte: { type: "string", maxLength: 900 },
       },
     },
+    ligneCloture: { type: "string", maxLength: 300 },
   },
 } as const;

@@ -73,22 +73,78 @@ async function readCapped(response: Response): Promise<string> {
   return text;
 }
 
+/** Pause avant la reprise : le temps qu'un équipement qui vient de couper la
+ * connexion accepte la suivante — observé court (‹ 100 ms), pas besoin de plus. */
+const RETRY_DELAY_MS = 300;
+
 export type FetchOutcome =
   | { ok: true; response: RawResponse }
   | { ok: false; reason: string };
 
+type Attempt =
+  | { ok: true; response: RawResponse }
+  | {
+      ok: false;
+      reason: string;
+      /** Échec à l'établissement de la connexion : une reprise a du sens. */
+      transient: boolean;
+    };
+
 /**
- * Récupère une page publique.
- *
- * Ne lève jamais : une panne réseau, un certificat invalide ou un blocage sont
- * des résultats de scan légitimes, pas des exceptions. Le rapport doit pouvoir
- * dire « je n'ai pas pu joindre ce site » sans faire échouer la tâche de fond.
+ * Libellés des causes réseau courantes. « fetch failed » est le message
+ * générique d'undici : la cause utile (ECONNRESET, ENOTFOUND…) est dans la
+ * chaîne `error.cause` — sans elle, ni le rapport ni les journaux ne
+ * permettent de comprendre pourquoi un site n'a pas répondu.
  */
-export async function fetchPage(url: string, budget: Budget): Promise<FetchOutcome> {
-  if (!budget.spend()) {
-    return { ok: false, reason: "budget de requêtes épuisé" };
+const CAUSE_LABELS: Record<string, string> = {
+  ECONNRESET: "connexion interrompue par le serveur",
+  ECONNREFUSED: "connexion refusée",
+  ENOTFOUND: "domaine introuvable",
+  EAI_AGAIN: "résolution du domaine indisponible",
+  ETIMEDOUT: "délai de connexion dépassé",
+  EHOSTUNREACH: "serveur injoignable",
+  CERT_HAS_EXPIRED: "certificat TLS expiré",
+  DEPTH_ZERO_SELF_SIGNED_CERT: "certificat TLS auto-signé",
+  ERR_TLS_CERT_ALTNAME_INVALID: "certificat TLS invalide",
+};
+
+function causeCode(error: unknown): string | null {
+  const queue: unknown[] = [error];
+  const seen = new Set<unknown>();
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!(current instanceof Error) || seen.has(current)) continue;
+    seen.add(current);
+
+    const code = (current as NodeJS.ErrnoException).code;
+    if (typeof code === "string") return code;
+
+    if (current instanceof AggregateError) queue.push(...current.errors);
+    if (current.cause) queue.push(current.cause);
   }
 
+  return null;
+}
+
+function describeFailure(error: unknown): { reason: string; transient: boolean } {
+  if (error instanceof Error && error.name === "AbortError") {
+    return { reason: `délai dépassé (${TIMEOUT_MS / 1000} s)`, transient: false };
+  }
+
+  const code = causeCode(error);
+  if (code) {
+    const label = CAUSE_LABELS[code] ?? "erreur réseau";
+    return { reason: `${label} (${code})`, transient: true };
+  }
+
+  return {
+    reason: error instanceof Error ? error.message : "erreur réseau",
+    transient: error instanceof TypeError,
+  };
+}
+
+async function attempt(url: string): Promise<Attempt> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -127,14 +183,37 @@ export async function fetchPage(url: string, budget: Budget): Promise<FetchOutco
       },
     };
   } catch (error) {
-    const reason =
-      error instanceof Error && error.name === "AbortError"
-        ? `délai dépassé (${TIMEOUT_MS / 1000} s)`
-        : error instanceof Error
-          ? error.message
-          : "erreur réseau";
-    return { ok: false, reason };
+    return { ok: false, ...describeFailure(error) };
   } finally {
     clearTimeout(timer);
   }
+}
+
+/**
+ * Récupère une page publique.
+ *
+ * Ne lève jamais : une panne réseau, un certificat invalide ou un blocage sont
+ * des résultats de scan légitimes, pas des exceptions. Le rapport doit pouvoir
+ * dire « je n'ai pas pu joindre ce site » sans faire échouer la tâche de fond.
+ *
+ * Une reprise et une seule sur échec de connexion : certains serveurs coupent
+ * la première connexion d'une rafale (constaté en production : ECONNRESET en
+ * ~100 ms, la tentative suivante passe). La reprise consomme le budget comme
+ * toute requête sortante — le plafond de politesse ne bouge pas. Jamais de
+ * reprise sur un délai dépassé : un site lent le restera, insister c'est peser.
+ */
+export async function fetchPage(url: string, budget: Budget): Promise<FetchOutcome> {
+  if (!budget.spend()) {
+    return { ok: false, reason: "budget de requêtes épuisé" };
+  }
+
+  const first = await attempt(url);
+  if (first.ok || !first.transient || !budget.spend()) {
+    return first.ok ? first : { ok: false, reason: first.reason };
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+
+  const second = await attempt(url);
+  return second.ok ? second : { ok: false, reason: second.reason };
 }

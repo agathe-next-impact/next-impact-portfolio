@@ -28,6 +28,13 @@ export interface NewsletterEmailProps {
   siteUrl?: string | null;
   /** Date de parution — celle de la période, jamais celle de l'expédition. */
   issueDate: Date;
+  /**
+   * Mode lettre-échantillon du scan public : même numéro, même gabarit, mais
+   * l'enveloppe dit ce que c'est (généré automatiquement, non relu, site pas
+   * sous surveillance) et un encart final annonce ce que l'abonnement ajoute.
+   * `rapportUrl` ramène au rapport en ligne quand la lettre part par e-mail.
+   */
+  echantillon?: { rapportUrl?: string | null };
 }
 
 const STATUT_STYLE: Record<Lettre["axes"][number]["statut"], { label: string; color: string }> = {
@@ -79,7 +86,7 @@ function Partie({ numero, titre }: { numero: string; titre: string }) {
   );
 }
 
-export function NewsletterEmail({ lettre, siteUrl, issueDate }: NewsletterEmailProps) {
+export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: NewsletterEmailProps) {
   const aAgir = lettre.axes.filter((axe) => axe.statut === "agir").length;
 
   return (
@@ -89,9 +96,17 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate }: NewsletterEmailP
           ? `${aAgir} point(s) à traiter ce mois-ci. ${lettre.synthese.actions[0]?.action ?? ""}`
           : "Rien à traiter ce mois-ci — voici pourquoi."
       }
-      kicker="Lettre de veille"
+      kicker={echantillon ? "Lettre de veille · échantillon" : "Lettre de veille"}
       sentAt={issueDate}
       siteUrl={siteUrl}
+      reason={
+        echantillon
+          ? "Vous lisez un échantillon généré à partir d'une analyse externe " +
+            "publique de votre site, sans relecture humaine. Votre site n'est " +
+            "pas sous surveillance — c'est la démonstration de ce que " +
+            "l'abonnement Sentinelle vous livrerait."
+          : undefined
+      }
     >
       <Section style={styles.section}>
         <Text style={styles.h1}>{lettre.titre}</Text>
@@ -358,6 +373,32 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate }: NewsletterEmailP
                 ))}
               </Section>
             ))}
+          </Section>
+        </>
+      )}
+
+      {echantillon && (
+        <>
+          <Hr style={styles.rule} />
+          <Section style={styles.section}>
+            <Text style={styles.label}>Ce que l&apos;abonnement ajoute à cet échantillon</Text>
+            <Text style={{ ...styles.muted, margin: 0 }}>
+              Une fiche technique complétée avec vous (ce qu&apos;une analyse
+              externe ne voit pas), des alertes entre les numéros quand un fait
+              vous concerne, la continuité d&apos;un numéro à l&apos;autre — et
+              une relecture humaine avant chaque envoi. Cet échantillon, lui,
+              est généré automatiquement et n&apos;est pas relu.
+            </Text>
+            {echantillon.rapportUrl && (
+              <Text style={{ ...styles.muted, margin: "14px 0 0" }}>
+                Le rapport complet — composants détectés et activation de la
+                surveillance — reste en ligne :{" "}
+                <Link href={echantillon.rapportUrl} style={styles.link}>
+                  revoir votre rapport
+                </Link>
+                .
+              </Text>
+            )}
           </Section>
         </>
       )}

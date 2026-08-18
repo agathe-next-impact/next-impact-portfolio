@@ -19,4 +19,20 @@ export {
 
 export { ApercuSchema, APERCU_JSON_SCHEMA, type ApercuPayload } from "./schema";
 
+// Pipeline hérité (une passe, cinq thèmes) — conservé pour lire les aperçus
+// déjà en base ; les nouveaux scans passent par ./lettre.
 export { borner, buildApercu, APERCU_PROMPT } from "./build";
+
+export {
+  blocksFromScan,
+  buildLettreEchantillon,
+  contextFromScan,
+  healthFromScan,
+  periodeSemaine,
+  ECHANTILLON_JOURS,
+  ECHANTILLON_LECTURES,
+  ECHANTILLON_RECHERCHES,
+  LETTRES_PAR_JOUR,
+} from "./lettre";
+
+export { envoyerLettreEchantillon, type EnvoiOutcome } from "./envoi";

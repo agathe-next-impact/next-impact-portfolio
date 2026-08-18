@@ -25,8 +25,11 @@ export {
 export {
   newsletterSubject,
   previewAlertEmail,
+  previewApercuEmail,
   previewNewsletterEmail,
   renderAlertEmail,
+  renderApercuEmail,
+  renderEchantillonEmail,
   renderLoginEmail,
   renderNewsletterEmail,
   renderWelcomeEmail,

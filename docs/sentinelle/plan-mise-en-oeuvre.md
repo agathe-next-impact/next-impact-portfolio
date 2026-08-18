@@ -1225,6 +1225,125 @@ le décrire. Décisions structurantes :
   intact. Le front interroge tant que l'aperçu est `pending`, dans la borne
   des 120 s existante. Tests : `apercu/dossier.test.ts`.
 
+### Post-plan — l'aperçu devient une lettre-échantillon (2026-08-18)
+
+L'aperçu n'est plus une liste de thèmes dans le design du site : le rapport
+`/scan/[id]` affiche désormais une **lettre-échantillon rendue dans le gabarit
+e-mail de l'abonnement**, telle qu'un abonné la recevrait — c'est la démo
+produit pour un futur client.
+
+- **Même passe, habillée** : la sortie de l'aperçu gagne quatre champs de
+  lettre (`titre`, `chapeau`, `siteEnUnePhrase`, `ligneCloture` — schéma
+  `apercu/schema.ts`, plafond porté à 8 000 tokens). Pas de passe de collecte
+  supplémentaire : le budget d'un scan gratuit ne change pas de nature.
+- **Gabarit réel** : `emails/ApercuEmail.tsx` réutilise `Layout` + `theme`
+  (mêmes jetons que `NewsletterEmail`) ; la route
+  `GET /api/sentinelle/scan/[id]/lettre` rend le HTML (noindex), le rapport
+  l'affiche en iframe sandbox — même mécanique que la relecture des numéros en
+  admin. La ligne « pourquoi vous recevez ce message » de `Layout` devient
+  paramétrable : l'échantillon dit qu'aucun envoi n'a eu lieu et que le site
+  n'est pas sous surveillance.
+- **Honnêteté conservée** : mentions « échantillon non relu » dans la lettre et
+  sur le rapport, encart « ce que la lettre de l'abonnement ajoute » (douze
+  axes, actualité de période, échéancier, relecture humaine), garde `borner()`
+  inchangée. Les aperçus antérieurs en base n'ont pas l'habillage : champs
+  optionnels côté type, replis dans le gabarit. Tests :
+  `emails/apercu-email.test.ts`.
+
+### Post-plan — robustesse réseau du scanner (2026-08-18)
+
+Des scans échouaient en « fetch failed » sur des sites pourtant joignables :
+certains serveurs coupent la première connexion d'une rafale (ECONNRESET en
+~100 ms, la tentative suivante passe — reproduit sur yoursportcampus.eu).
+`scanner/fetch.ts` fait désormais **une reprise et une seule** sur échec de
+connexion — la reprise consomme le budget de politesse (plafond de 4 requêtes
+inchangé), et jamais de reprise sur délai dépassé. Les raisons d'échec nomment
+la cause réelle extraite de la chaîne `error.cause` d'undici (« connexion
+interrompue par le serveur (ECONNRESET) », « domaine introuvable (ENOTFOUND) »…)
+au lieu du « fetch failed » opaque. Tests : `scanner/fetch.test.ts`.
+
+### Post-plan — 1 scan/heure et envoi de la lettre-échantillon (2026-08-18)
+
+Décisions d'Agathe, même jour que la lettre-échantillon :
+
+- **Plafond ramené de 5 à 1 scan/heure** par adresse (`SCANS_PER_HOUR`) :
+  chaque scan déclenche désormais un appel LLM et un envoi d'e-mail, et un
+  prospect réel n'a besoin que d'une analyse. En développement uniquement, la
+  route POST saute la vérification — sinon toute session de test s'arrête au
+  premier scan. Message 429 reformulé au singulier.
+- **La lettre-échantillon s'affiche ET part par e-mail.** La capture d'adresse
+  du rapport n'est plus une simple prise de lead : `apercu/envoi.ts` envoie la
+  lettre rendue (`renderApercuEmail`, objet « l'échantillon de votre lettre de
+  veille pour <site> », lien de retour vers `/scan/[id]` via
+  `sentinelleBaseUrl()`). Deux déclencheurs, dans n'importe quel ordre : la
+  capture (PATCH) et la fin de rédaction (étape Inngest `lettre-au-lead`) ; la
+  colonne `scans.lead_sent_at` (migration 0003) sert de verrou par mise à jour
+  conditionnelle — un seul envoi, garanti. Échec SMTP : le verrou est rendu et
+  journalisé, un prochain déclencheur retentera.
+- **Écart règle 4 élargi et assumé** : ce contenu part sans relecture humaine.
+  Il reste borné au périmètre de l'aperçu (mentions « non relu », garde
+  `borner()`, adresses `.invalid` refusées par `undeliverableReason`) et ne
+  touche ni alertes ni numéros abonnés.
+
+### Post-plan — l'échantillon devient un vrai numéro (2026-08-18, 2e itération)
+
+Décision d'Agathe : le scan utilise **le prompt de la veille personnalisée**,
+appliqué à la **dernière semaine**, sur la fiche issue de l'analyse de stack.
+Fini le prompt « aperçu » à cinq thèmes : la lettre-échantillon est fabriquée
+par le pipeline de la lettre abonnée — collecte avec outils web puis rédaction
+douze axes, garde-fous de sourçage compris (`apercu/lettre.ts`).
+
+- **Contexte synthétisé depuis le scan** : période « la semaine du … au … »
+  (`periodeSemaine`), fiche = composants détectés (constaté de premier regard :
+  pas d'alertes, pas de numéro précédent), radar des fins de support vérifiées
+  contre les versions détectées, notes qui disent au modèle que la fiche vient
+  d'une analyse externe non confirmée. Les prompts abonnés n'ont pas bougé —
+  la période est pilotée par le contexte.
+- **Rendu et envoi par le gabarit abonné** : `NewsletterEmail` gagne un mode
+  `echantillon` (kicker, enveloppe honnête « pas sous surveillance », encart
+  « ce que l'abonnement ajoute », lien de rapport dans l'e-mail) ;
+  `renderEchantillonEmail` pour l'envoi. `ScanApercu` devient une union — la
+  forme actuelle porte une `Lettre` entière, la forme héritée (thèmes + cap)
+  reste lisible partout (`ApercuEmail` conservé pour elle, `isApercuLettre`
+  discrimine).
+- **Coût et durée** : deux passes par scan (collecte ~30 recherches, minutes) —
+  rendu possible par le plafond d'un scan/heure décidé le même jour. Le front
+  annonce « quelques minutes » et pousse la capture d'e-mail : la lettre
+  arrive sans garder la page ouverte. Tests : `apercu/lettre.test.ts`,
+  `emails/echantillon-email.test.ts`.
+
+### Post-plan — optimisation du coût de la lettre-échantillon (2026-08-18)
+
+Mesure réelle du premier échantillon complet (hermitagelelab.com, avant
+optimisation) : **24 minutes, 10 366 mots**, coût estimé 3–7 $ par scan.
+Quatre leviers appliqués (décision d'Agathe : « optimise au maximum ») :
+
+- **Cache sur la boucle de collecte** (`lettre/collecte.ts`) : `cache_control`
+  automatique au niveau requête — chaque reprise `pause_turn` relit l'historique
+  (prompt, brief, résultats déjà lus) à ×0,1 au lieu de le repayer plein tarif.
+  C'était le premier poste. Nouveau champ `cachedTokens` dans la télémétrie.
+  Bénéficie aussi aux numéros abonnés.
+- **Lectures web bornées** : `max_content_tokens: 12 000` sur `web_fetch` — une
+  page obèse n'entre plus entière au contexte. Abonnés compris.
+- **Budgets propres à l'échantillon** (`apercu/lettre.ts`) : collecte à effort
+  `medium`, 10 recherches, 4 lectures (contre high/30/8 pour l'abonné — une
+  semaine sur fiche externe, pas une quinzaine sur fiche complète). La
+  **rédaction reste à `high`** : c'est le texte que lit le prospect et il pèse
+  peu dans le total. Vise aussi le vrai problème de prod : la collecte de
+  24 min dépassait le `maxDuration` de 300 s de la route Inngest.
+- **Plafond global** : `SENTINELLE_LETTRES_PAR_JOUR` (défaut 20/24 h, compté
+  sur les scans créés) — la limite d'un scan/heure est par IP, elle ne bornait
+  pas la dépense totale. Vérifié avant tout appel payant ; le rapport de scan
+  reste servi.
+- **Chaque scan se mesure** : `ScanApercuLettre.consommation` (recherches,
+  lectures, reprises, jetons entrée/sortie/cache, durée) + ligne de log.
+
+Chiffres avant/après consignés dans le journal de session ; cible ~1–1,50 $ et
+quelques minutes par échantillon. ⚠️ Constat au passage : la lettre de 10 366
+mots rend un HTML de 130 Ko, au-delà du seuil de troncature Gmail (~102 Ko)
+documenté dans `NewsletterEmail` — à surveiller sur les prochains numéros ;
+les budgets réduits devraient raccourcir d'eux-mêmes l'échantillon.
+
 ---
 
 ## 11. Séquence de la suite (arrêtée le 2026-08-15)
