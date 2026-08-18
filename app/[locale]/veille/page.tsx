@@ -15,15 +15,16 @@ import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
 import { Sonar } from "@/components/visuals/sonar";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Page d'offre « Veille techno » — la composante veille de l'offre globale.
+// Page « Veille techno » — hiérarchie : la newsletter d'abord, les ressources ensuite.
 //
-// Elle met en regard les deux lettres :
-//   – la gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
-//     (Substack : une synthèse mensuelle + un focus hebdo) — le CTA froid ;
-//   – Sentinelle (19 €/mois) : veille personnalisée du site ou de l'application
-//     du client + aide à la décision (maintenir, refondre, créer). La page ne
-//     re-vend pas tout le produit : elle renvoie vers /sentinelle (détail) et
-//     /scan (entrée froide).
+// Ordre de priorité (décidé le 2026-08-18) :
+//   1. PRIMAIRE — la lettre gratuite « Quelle techno pour mon site web à l'heure
+//      de l'IA ? » (Substack : une synthèse mensuelle + un focus hebdo). C'est
+//      l'accès mis en avant : héros et premier bloc, CTA principal « S'abonner ».
+//   2. Puis Sentinelle (19 €/mois) : veille personnalisée du site + aide à la
+//      décision. Renvoie vers /sentinelle (détail) et /scan (entrée froide).
+//   3. SECONDAIRE — les ressources : le hub /documentation et les outils /outils,
+//      en fin de page.
 //
 // Contenu FR uniquement (locale EN en noindex), comme /sentinelle.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -66,15 +67,21 @@ export async function generateMetadata({
   });
 }
 
-// Les douze axes de lecture de la lettre personnalisée, regroupés en cinq
-// grands thèmes pour le héros (détail des axes : prompt actif,
-// src/sentinelle/redaction/lettre-redaction-system-prompt.md).
-const AXES_LETTRE = [
-  "Socle technique & sécurité",
-  "Visibilité & contenu",
-  "Performance & expérience",
-  "IA, données & conformité",
-  "Coûts, prestataires & réversibilité",
+// Accès secondaire : les ressources — le hub documentation et les outils
+// (tous deux liés depuis le footer ; ici en fin de page veille).
+const RESSOURCES = [
+  {
+    titre: "La documentation",
+    corps:
+      "Le fond, pas l'actualité : comment choisir, migrer, sécuriser et rendre visible un site web à l'heure de l'IA. Des guides sans jargon, écrits pour décider.",
+    cta: { libelle: "Ouvrir la documentation", href: "/documentation" as const },
+  },
+  {
+    titre: "Les outils",
+    corps:
+      "Des diagnostics gratuits pour situer votre site : visibilité dans les moteurs IA, réparer ou refaire, décrypteur de devis, sélecteur de techno, checklist GEO…",
+    cta: { libelle: "Voir les outils", href: "/outils" as const },
+  },
 ];
 
 const LETTRE_GRATUITE = [
@@ -101,7 +108,7 @@ const SENTINELLE = [
   {
     titre: "Deux lettres par mois",
     corps:
-      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes — du socle technique à la visibilité, aux coûts et à la réversibilité. Et en synthèse : trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre.",
+      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon cinq axes — commercial, marketing, visibilité (SEO/GEO), expérience (UI/UX) et technique. Et en synthèse : trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre.",
   },
   {
     titre: "Un statut, pas du jargon",
@@ -190,48 +197,49 @@ export default async function VeillePage({
         }
         title={
           <>
-            La veille techno,{" "}
+            La newsletter techno web & IA,{" "}
             <em className="font-normal not-italic text-accent-secondary">
-              personnalisée pour votre site
+              pour choisir sans devenir développeur
             </em>
           </>
         }
         description={
           <>
-            Sentinelle surveille votre site et vous aide à décider — consolider,
-            faire évoluer, ou refondre. La lettre gratuite suit le marché : une
-            synthèse par mois, un focus par semaine.
+            La lettre des décideurs qui doivent trancher sur la technologie de
+            leur site, à l'heure de l'IA : une synthèse par mois, un focus par
+            semaine. Gratuite. Pour une veille sur votre site précis, Sentinelle
+            prend le relais.
           </>
         }
         actions={
           <>
-            <Link href="/scan" className={BTN_PRIMARY}>
-              Analyser mon site
-            </Link>
             <a
               href={NEWSLETTER_SUBSTACK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className={BTN_SECONDARY}
+              className={BTN_PRIMARY}
             >
-              La lettre gratuite — Substack
+              S'abonner — gratuit
             </a>
+            <Link href="/sentinelle" className={BTN_SECONDARY}>
+              Découvrir Sentinelle
+            </Link>
           </>
         }
-        note="Sans engagement · Relu par un humain avant envoi"
+        note="Gratuit · désinscription en un clic"
       >
-        {/* Les grands axes de la lettre personnalisée, en badges. */}
+        {/* Les deux rendez-vous de la lettre gratuite. */}
         <div className="mt-8">
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
-            Douze axes de lecture, cinq grands thèmes
+            Deux rendez-vous, gratuits
           </p>
           <ul className="mt-3 flex max-w-3xl flex-wrap gap-1.5">
-            {AXES_LETTRE.map((axe) => (
+            {["Une synthèse par mois", "Un focus par semaine"].map((rdv) => (
               <li
-                key={axe}
+                key={rdv}
                 className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
               >
-                {axe}
+                {rdv}
               </li>
             ))}
           </ul>
@@ -381,6 +389,38 @@ export default async function VeillePage({
           fait tourner votre activité — prises de contact, ventes, réservations —
           Sentinelle prend le relais sur ce qui vous appartient.
         </p>
+      </BlueprintSection>
+
+      {/* ── Ressources : documentation & outils (accès secondaire) ───────── */}
+      <BlueprintSection
+        id="ressources"
+        className="border-t border-dark-gray"
+        innerClassName="px-6 py-14 lg:px-12 lg:py-20"
+      >
+        <SectionHeading
+          index="№ 04"
+          kicker="Les ressources"
+          title="Pour aller au fond, entre deux lettres"
+          description="La veille suit l'actualité ; les ressources donnent le fond. Documentation et outils sont en accès libre, sans inscription."
+        />
+
+        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
+          {RESSOURCES.map((bloc) => (
+            <div key={bloc.titre} className="flex flex-col bg-jet p-8">
+              <h3 className="text-xl font-light tracking-tight text-foreground">
+                {bloc.titre}
+              </h3>
+              <p className="mt-3 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
+                {bloc.corps}
+              </p>
+              <div className="mt-8">
+                <Link href={bloc.cta.href} className={BTN_SECONDARY}>
+                  {bloc.cta.libelle}
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       </BlueprintSection>
     </main>
   );
