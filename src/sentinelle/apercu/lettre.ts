@@ -3,6 +3,7 @@ import { db } from "@sentinelle/db/client";
 import { intelItems, scans } from "@sentinelle/db/schema";
 import {
   collectDossier,
+  formateCoutLettre,
   isQuietIssue,
   writeLettre,
   type LettreContext,
@@ -20,7 +21,7 @@ import type { ScanApercu, ScanResult } from "@sentinelle/types";
 //
 // Décision du 2026-08-18 (seconde itération) : le scan utilise **le prompt de
 // la veille personnalisée** — les deux passes de la lettre abonnée (collecte
-// avec outils web, rédaction douze axes, garde-fous de sourçage) — appliqué à
+// avec outils web, rédaction cinq axes, garde-fous de sourçage) — appliqué à
 // la **dernière semaine** et à la fiche technique issue de l'analyse de stack.
 // C'est ce qui rend la démo probante : le prospect lit un numéro, pas un
 // prospectus. Le plafond d'un scan par heure et par adresse rend ce coût
@@ -269,7 +270,8 @@ export async function buildLettreEchantillon(
       "[sentinelle] échantillon fabriqué :",
       `${consommation.recherches} recherches, ${consommation.lectures} lectures,`,
       `${consommation.jetonsEntree} jetons entrée (+${consommation.jetonsCacheLecture} cache),`,
-      `${consommation.jetonsSortie} sortie, ${Math.round(consommation.dureeMs / 1000)} s`,
+      `${consommation.jetonsSortie} sortie, ${Math.round(consommation.dureeMs / 1000)} s —`,
+      formateCoutLettre(consommation),
     );
 
     return {

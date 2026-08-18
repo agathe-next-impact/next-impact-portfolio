@@ -40,7 +40,13 @@ export function loadPrompt(filename: string): string {
   const memo = cache.get(filename);
   if (memo) return memo;
 
-  const raw = readFileSync(path.join(process.cwd(), PROMPT_DIR, filename), "utf8");
+  // Normaliser CRLF → LF : sur Windows les fichiers sont enregistrés en `\r\n`,
+  // et sans ça le séparateur `\n---\n` ne matche pas — le préambule mainteneur
+  // (« ce fichier vit dans src/… ») partirait alors au modèle à chaque appel.
+  const raw = readFileSync(path.join(process.cwd(), PROMPT_DIR, filename), "utf8").replace(
+    /\r\n/g,
+    "\n",
+  );
   const separator = raw.indexOf("\n---\n");
   const body = separator === -1 ? raw : raw.slice(separator + 5);
 

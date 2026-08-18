@@ -12,7 +12,7 @@ import { z } from "zod";
 // Deux schémas par forme : un JSON Schema pour contraindre la sortie du modèle
 // (le JSON est alors valide par construction) et un schéma zod pour vérifier que
 // le contrat et le code n'ont pas divergé. Les contraintes que la sortie
-// structurée ne sait pas exprimer — « exactement douze axes », « trois actions au
+// structurée ne sait pas exprimer — « exactement cinq axes », « trois actions au
 // plus » — sont vérifiées côté code, dans `guards.ts`.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -26,20 +26,13 @@ export const TREND_DIRECTIONS = ["opportunite", "menace", "les-deux"] as const;
 
 export const MARKET_TRAJECTORIES = ["hausse", "stable", "baisse", "incertain"] as const;
 
-/** Les douze axes, dans l'ordre. La liste fait foi : le prompt la reprend. */
+/** Les cinq axes, dans l'ordre. La liste fait foi : le prompt la reprend. */
 export const AXES = [
-  "Socle technique et architecture",
-  "Sécurité et maintenance",
-  "Hébergement, infrastructure et souveraineté",
-  "Visibilité, recherche et acquisition",
-  "IA intégrée au projet",
-  "Réglementaire et conformité",
-  "Données, mesure et consentement",
-  "Expérience, performance et accessibilité",
-  "Contenu, éditorial et confiance",
-  "Coûts, prestataires et marché",
-  "Dépendance fournisseur et réversibilité",
-  "Gouvernance du projet et contractuel",
+  "Commercial : offre, conversion, tunnel",
+  "Marketing : acquisition, contenus, notoriété",
+  "SEO et GEO : référencement et moteurs IA",
+  "UI/UX : expérience, accessibilité, performance",
+  "Technique : socle, sécurité, hébergement",
 ] as const;
 
 // ─── Dossier (passe 1) ────────────────────────────────────────────────────
@@ -171,13 +164,15 @@ export type Dossier = z.infer<typeof DossierSchema>;
 // Constaté en réel le 2026-08-15 : le schéma complet fait répondre 400 à l'API —
 // « The compiled grammar is too large ». La sortie structurée compile le schéma
 // en grammaire, et celle d'une lettre à douze axes, quatre blocs de tendances et
-// une synthèse en six parties dépasse ce que le compilateur accepte.
+// une synthèse en six parties dépassait ce que le compilateur accepte. La lettre
+// est passée à cinq axes depuis, mais le découpage en trois appels reste : il
+// donne à chaque partie sa propre marge de `max_tokens`.
 //
 // Le découpage suit les étapes du prompt (3, 4, 5) plutôt qu'une coupe
 // arbitraire, et il a un effet de bord utile : chaque appel a sa propre marge de
 // `max_tokens`, là où une lettre entière en un jet frôlait le plafond.
 
-/** Étape 3 — l'ouverture et les douze axes. */
+/** Étape 3 — l'ouverture et les cinq axes. */
 export const LETTRE_AXES_SCHEMA = object(
   {
     titre: str,
@@ -187,7 +182,7 @@ export const LETTRE_AXES_SCHEMA = object(
     axes: arrayOf(
       object(
         {
-          numero: { type: "integer", description: "Numéro de l'axe, de 1 à 12." },
+          numero: { type: "integer", description: "Numéro de l'axe, de 1 à 5." },
           nom: str,
           question: { type: "string", description: "La question du client, en exergue." },
           analyse: { type: "string", description: "Le croisement constat × faits datés." },

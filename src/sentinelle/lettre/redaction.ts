@@ -9,6 +9,7 @@ import {
   type Lettre,
 } from "./schema";
 import { renderRedactionBrief, type LettreContext } from "./context";
+import { extractJsonObject } from "./collecte";
 import { guardLettre, type LettreGuardOutcome } from "./guards";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -23,8 +24,9 @@ import { guardLettre, type LettreGuardOutcome } from "./guards";
 // **Pourquoi trois appels et non un.** Le schéma complet de la lettre fait
 // répondre 400 à l'API — « The compiled grammar is too large » (constaté en réel
 // le 2026-08-15). La sortie structurée compile le schéma en grammaire, et celle
-// d'une lettre à douze axes dépasse ce que le compilateur accepte. Le découpage
-// suit les étapes du prompt (3, 4, 5).
+// d'une lettre à douze axes dépassait ce que le compilateur accepte (la lettre
+// est passée à cinq axes depuis, mais le découpage garde sa marge de max_tokens
+// par appel). Le découpage suit les étapes du prompt (3, 4, 5).
 //
 // **Le brief est mis en cache.** Il est identique aux trois appels et pèse le
 // dossier entier ; sans `cache_control`, on le paierait trois fois plein tarif.
@@ -34,8 +36,13 @@ import { guardLettre, type LettreGuardOutcome } from "./guards";
 
 export const REDACTION_PROMPT = "lettre-redaction-system-prompt.md";
 
-/** Chaque appel écrit un tiers de lettre : de la marge sans excès. */
-const MAX_TOKENS = 16_000;
+/**
+ * Chaque appel écrit un tiers de lettre. Marge large : sur Sonnet 5 la réflexion
+ * adaptative est active par défaut et compte dans `max_tokens`. À 16 000, la
+ * synthèse (trois scénarios, budget, échéancier, questions, sources) était
+ * tronquée par la réflexion. Le streaming est en place — pas de risque de timeout.
+ */
+const MAX_TOKENS = 32_000;
 
 export interface RedactionTelemetry {
   inputTokens: number;
@@ -70,8 +77,8 @@ export function setRedactionClient(injected: Anthropic | undefined): void {
 
 const CONSIGNES = {
   axes:
-    "Écris maintenant **l'ouverture et les douze axes** (étape 3) : le titre, la ligne de " +
-    "contexte, le chapeau, « votre site en une phrase », puis les douze axes dans l'ordre, " +
+    "Écris maintenant **l'ouverture et les cinq axes** (étape 3) : le titre, la ligne de " +
+    "contexte, le chapeau, « votre site en une phrase », puis les cinq axes dans l'ordre, " +
     "chacun avec sa question en exergue, son analyse et son statut conclusif. N'écris rien " +
     "d'autre : les tendances et la synthèse font l'objet d'appels séparés.",
   tendances:
@@ -153,7 +160,11 @@ async function demanderPartie(
   try {
     return { ok: true, payload: JSON.parse(raw), raw };
   } catch {
-    return { ok: false, reason: "partie illisible : JSON invalide", raw };
+    try {
+      return { ok: true, payload: JSON.parse(extractJsonObject(raw)), raw };
+    } catch {
+      return { ok: false, reason: "partie illisible : JSON invalide", raw };
+    }
   }
 }
 
@@ -163,7 +174,7 @@ export async function writeLettre(
   input: { ficheNames: string[]; quiet: boolean },
   options: { model?: string; effort?: "medium" | "high" | "xhigh" } = {},
 ): Promise<LettreOutcome> {
-  const model = options.model ?? process.env.ANTHROPIC_MODEL ?? "claude-opus-5";
+  const model = options.model ?? process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5";
   const effort = options.effort ?? "high";
   const telemetry: RedactionTelemetry = { inputTokens: 0, outputTokens: 0, cachedTokens: 0 };
   const brief = renderRedactionBrief(context, dossier);
@@ -235,6 +246,8 @@ export async function writeLettre(
     // Le secteur et les notes du client font partie de son vocabulaire
     // légitime : un studio a le droit de parler du parc de ses clients.
     clientContext: [context.sector, context.notes].filter(Boolean).join(" "),
+    // L'URL du site n'est pas une source du dossier, mais la lettre peut la citer.
+    siteUrl: context.siteUrl,
   });
 
   if (!guard.ok) {

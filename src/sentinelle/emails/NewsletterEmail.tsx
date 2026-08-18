@@ -6,9 +6,11 @@ import { COLORS, FONTS, styles } from "./theme";
 // ─────────────────────────────────────────────────────────────────────────────
 // Gabarit d'un numéro de la lettre de veille.
 //
-// Onze parties, dans l'ordre du prompt de rédaction : titre → méthode → chapeau
-// → le site en une phrase → les douze axes → les tendances → la synthèse →
-// l'échéancier → les trois questions → les sources → le périmètre.
+// Onze parties, dans l'ordre de lecture : titre → méthode → chapeau → le site
+// en une phrase → les tendances → la synthèse → les cinq axes → l'échéancier
+// → les trois questions → les sources → le périmètre. La génération, elle, écrit
+// les axes d'abord (ils établissent le profil), mais la lettre se lit dans cet
+// ordre-ci.
 //
 // Deux choses ne sont jamais rendues ici, et c'est délibéré :
 //
@@ -17,7 +19,7 @@ import { COLORS, FONTS, styles } from "./theme";
 //  · **le dossier de collecte** — la lettre en porte les sources, pas la matière
 //    brute.
 //
-// La lettre est longue par construction (3 000 à 4 500 mots). Gmail tronque un
+// La lettre vise 1 500 à 2 250 mots (format court : cinq axes). Gmail tronque un
 // e-mail au-delà d'environ 102 Ko et affiche « message tronqué » : c'est la
 // limite à surveiller si les numéros s'allongent encore. Le rendu figé à la
 // validation est mesuré à l'envoi et le poids apparaît dans l'admin.
@@ -138,39 +140,7 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
       <Hr style={styles.rule} />
 
       <Section style={styles.section}>
-        <Partie numero="Première partie" titre="Votre site lu par les douze axes" />
-
-        {lettre.axes.map((axe) => {
-          const statut = STATUT_STYLE[axe.statut];
-          return (
-            <Section key={axe.numero} style={{ margin: "0 0 26px" }}>
-              <Text style={{ ...styles.label, margin: "0 0 6px" }}>
-                Axe {axe.numero} · {axe.nom}
-              </Text>
-              <Text
-                style={{
-                  ...styles.muted,
-                  fontStyle: "italic",
-                  color: COLORS.fgSoft,
-                  margin: "0 0 10px",
-                }}
-              >
-                {axe.question}
-              </Text>
-              <Prose texte={axe.analyse} />
-              <Text style={{ ...styles.muted, color: statut.color, margin: 0 }}>
-                ● {statut.label}
-                {axe.horizon.trim() !== "" ? ` — ${axe.horizon}` : ""}
-              </Text>
-            </Section>
-          );
-        })}
-      </Section>
-
-      <Hr style={styles.rule} />
-
-      <Section style={styles.section}>
-        <Partie numero="Deuxième partie" titre="Tendances : opportunités et menaces" />
+        <Partie numero="Première partie" titre="Tendances : opportunités et menaces" />
 
         <Text style={styles.label}>Les tendances du mois</Text>
         {lettre.tendances.duMois.map((tendance, index) => (
@@ -238,7 +208,7 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
       <Hr style={styles.rule} />
 
       <Section style={styles.section}>
-        <Partie numero="Troisième partie" titre="Synthèse : actions, scénarios, décision" />
+        <Partie numero="Deuxième partie" titre="Synthèse : actions, scénarios, décision" />
 
         <Text style={styles.label}>Ce qui compte ce mois-ci</Text>
         {lettre.synthese.actions.map((action, index) => (
@@ -319,6 +289,38 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
             {entree.date.trim() !== "" ? ` (${entree.date})` : ""}
           </Text>
         ))}
+      </Section>
+
+      <Hr style={styles.rule} />
+
+      <Section style={styles.section}>
+        <Partie numero="Troisième partie" titre="Votre site lu par les cinq axes" />
+
+        {lettre.axes.map((axe) => {
+          const statut = STATUT_STYLE[axe.statut];
+          return (
+            <Section key={axe.numero} style={{ margin: "0 0 26px" }}>
+              <Text style={{ ...styles.label, margin: "0 0 6px" }}>
+                Axe {axe.numero} · {axe.nom}
+              </Text>
+              <Text
+                style={{
+                  ...styles.muted,
+                  fontStyle: "italic",
+                  color: COLORS.fgSoft,
+                  margin: "0 0 10px",
+                }}
+              >
+                {axe.question}
+              </Text>
+              <Prose texte={axe.analyse} />
+              <Text style={{ ...styles.muted, color: statut.color, margin: 0 }}>
+                ● {statut.label}
+                {axe.horizon.trim() !== "" ? ` — ${axe.horizon}` : ""}
+              </Text>
+            </Section>
+          );
+        })}
       </Section>
 
       {lettre.echeancier.length > 0 && (

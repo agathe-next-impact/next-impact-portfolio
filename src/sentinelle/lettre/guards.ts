@@ -25,11 +25,11 @@ import { AXES, type Dossier, type Lettre } from "./schema";
 // précisément pour ça qu'elle est obligatoire.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Longueur visée d'un numéro complet, en mots. */
-export const FULL_LENGTH = { min: 3000, max: 4500 } as const;
+/** Longueur visée d'un numéro complet, en mots (format court : cinq axes). */
+export const FULL_LENGTH = { min: 1500, max: 2250 } as const;
 
 /** Longueur visée d'un numéro allégé — période creuse ou premier numéro. */
-export const SHORT_LENGTH = { min: 1200, max: 1800 } as const;
+export const SHORT_LENGTH = { min: 600, max: 900 } as const;
 
 export interface LettreGuardOutcome {
   ok: boolean;
@@ -106,7 +106,7 @@ export function clientText(lettre: Lettre): string {
 /**
  * Ce que la lettre affirme **du site du client**.
  *
- * Volontairement restreint à la phrase de synthèse et aux douze axes : ce sont
+ * Volontairement restreint à la phrase de synthèse et aux cinq axes : ce sont
  * les endroits où une technologie nommée se lit comme « vous l'avez ». Les
  * tendances et le marché parlent d'autre chose et relèvent du régime de sourçage.
  */
@@ -154,15 +154,28 @@ export function allowedVocabulary(
 
 export function guardLettre(
   lettre: Lettre,
-  input: { dossier: Dossier; ficheNames: string[]; quiet: boolean; clientContext?: string },
+  input: {
+    dossier: Dossier;
+    ficheNames: string[];
+    quiet: boolean;
+    clientContext?: string;
+    /** URL du site du client — jamais une « source inventée ». */
+    siteUrl?: string;
+  },
 ): LettreGuardOutcome {
   const violations: string[] = [];
   const warnings: string[] = [];
 
   // ── Régime 1 : sourçage ────────────────────────────────────────────────
+  // Toute page du domaine du client est « son site », jamais une source externe
+  // inventée : un numéro de semaine calme parle du site (/blog, /contact…) sans
+  // fait extérieur, et serait refusé s'il fallait que chaque URL vienne du dossier.
   const known = new Set(input.dossier.faits.map((fait) => normalizeUrl(fait.source)));
+  const hostOf = (url: string) => url.split("/")[0].replace(/^www\./, "");
+  const siteHost =
+    input.siteUrl && input.siteUrl.trim() !== "" ? hostOf(normalizeUrl(input.siteUrl)) : "";
   const inventedUrls = [...new Set(urlsIn(clientText(lettre)))].filter(
-    (url) => url !== "" && !known.has(url),
+    (url) => url !== "" && !known.has(url) && (siteHost === "" || hostOf(url) !== siteHost),
   );
   if (inventedUrls.length > 0) {
     violations.push(`sources absentes du dossier : ${inventedUrls.join(", ")}`);
@@ -246,8 +259,8 @@ export function guardLettre(
   }
 
   const fond = lettre.tendances.deFond.length;
-  if (fond < 4 || fond > 6) {
-    warnings.push(`${fond} tendances de fond — la lettre en attend quatre à six`);
+  if (fond < 2 || fond > 4) {
+    warnings.push(`${fond} tendances de fond — la lettre en attend deux à quatre`);
   }
 
   const invariants = lettre.tendances.ceQuiNeChangePas.length;

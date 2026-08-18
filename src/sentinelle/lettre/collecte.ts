@@ -85,6 +85,20 @@ function textOf(message: Anthropic.Message): string {
     .join("");
 }
 
+/**
+ * Extrait l'objet JSON d'une réponse qui l'aurait entouré de texte ou de balises
+ * ```json. La sortie structurée est censée être du JSON pur ; ce filet de sécurité
+ * récupère les réponses où le modèle a ajouté une enveloppe malgré tout.
+ */
+export function extractJsonObject(text: string): string {
+  let t = text.trim();
+  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) t = fence[1].trim();
+  const start = t.indexOf("{");
+  const end = t.lastIndexOf("}");
+  return start !== -1 && end > start ? t.slice(start, end + 1) : t;
+}
+
 function countFetches(message: Anthropic.Message): number {
   return message.content.filter((block) => block.type === "web_fetch_tool_result").length;
 }
@@ -99,7 +113,7 @@ export async function collectDossier(
     fetchBudget?: number;
   } = {},
 ): Promise<CollecteOutcome> {
-  const model = options.model ?? process.env.ANTHROPIC_MODEL ?? "claude-opus-5";
+  const model = options.model ?? process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5";
   const searchBudget = options.searchBudget ?? SEARCH_BUDGET;
   const fetchBudget = options.fetchBudget ?? FETCH_BUDGET;
 
@@ -209,7 +223,14 @@ export async function collectDossier(
   try {
     payload = JSON.parse(raw);
   } catch {
-    return { ok: false, reason: "dossier illisible : JSON invalide", telemetry, raw };
+    // Robustesse : la sortie structurée doit être du JSON pur, mais Sonnet 5
+    // l'entoure parfois de balises ```json``` ou d'une phrase. On récupère l'objet
+    // avant d'abandonner — sinon une collecte payante est perdue pour une balise.
+    try {
+      payload = JSON.parse(extractJsonObject(raw));
+    } catch {
+      return { ok: false, reason: "dossier illisible : JSON invalide", telemetry, raw };
+    }
   }
 
   const parsed = DossierSchema.safeParse(payload);

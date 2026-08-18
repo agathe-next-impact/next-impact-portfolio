@@ -68,7 +68,7 @@ de l'extraction, c'est une ligne à changer.
 
 `lettre/` mérite la note la plus longue, parce que sa forme est son garde-fou.
 Le numéro n'est plus un relevé de surveillance mais une lettre de consultant :
-douze axes, tendances qualifiées pour ce site, trois scénarios, une fenêtre de
+cinq axes, tendances qualifiées pour ce site, trois scénarios, une fenêtre de
 décision. Elle a donc besoin d'actualité extérieure — ce que la règle 3
 (« le LLM ne connaît rien ») semble interdire.
 

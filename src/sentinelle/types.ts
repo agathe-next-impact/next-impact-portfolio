@@ -90,7 +90,7 @@ export interface ApercuTheme {
 /**
  * Forme actuelle (2026-08-18, seconde itération) : le scan produit un **vrai
  * numéro** par le pipeline de la veille personnalisée — collecte de l'actualité
- * de la dernière semaine (outils web) puis rédaction douze axes — appliqué à la
+ * de la dernière semaine (outils web) puis rédaction cinq axes — appliqué à la
  * fiche technique issue de l'analyse de stack. Se reconnaît à `lettre`.
  */
 export interface ScanApercuLettre {

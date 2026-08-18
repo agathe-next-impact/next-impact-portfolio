@@ -179,7 +179,7 @@ export function renderRedactionBrief(context: LettreContext, dossier: Dossier): 
       : "",
     "",
     "# Ta mission",
-    "Écris la lettre : les douze axes, les tendances qualifiées pour ce site, la synthèse.",
+    "Écris la lettre : les cinq axes, les tendances qualifiées pour ce site, la synthèse.",
     "Tout ce que tu affirmes vient de ce qui précède.",
   ]
     .filter((section) => section !== "")

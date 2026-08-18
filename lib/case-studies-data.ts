@@ -124,6 +124,26 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 
 const META: CaseStudyMeta[] = [
   {
+    id: "27",
+    slug: "aloyse-leledy-becue",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: { value: 3, unit: "semaines" },
+    clientId: null,
+    clientType: "independant",
+    clientName: "Aloyse Leledy-Bécue",
+    imageUrl: "",
+    galleryUrl: "/img/desktop-screen-cineaste.png",
+    date: { month: null, year: 2026 },
+    technologies: ["WordPress", "Thème sur-mesure", "ACF (Advanced Custom Fields)"],
+    website: "https://aloyseleledybecue.com",
+    youtubeVideoId: "t1MaHEN2g34",
+  },
+  {
     id: "24",
     slug: "hermitage-ecolise",
     famille: "sites-institutionnels",
@@ -661,6 +681,38 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  "aloyse-leledy-becue": {
+    title: "Aloyse Leledy-Bécue — Portfolio de cinéaste",
+    description:
+      "Création du portfolio WordPress sur-mesure d'Aloyse Leledy-Bécue, cinéaste : une vitrine soignée pour une filmographie de plus de vingt ans, filtrable par thème et par type de projet, et enrichie en toute autonomie.",
+    detailedDescription: `Aloyse Leledy-Bécue est cinéaste, avec une filmographie riche qui s'étend sur plus de vingt ans, de 2004 à aujourd'hui : réalisations personnelles, commandes et collaborations, aux côtés d'une biographie et d'un contact. Un tel catalogue, nombreux et varié, appelait une vitrine à la hauteur d'une identité visuelle forte — capable de donner à voir chaque film sans noyer le visiteur, et d'être enrichie sans dépendre d'un tiers à chaque nouveau projet.\n\nJ'ai conçu et développé un site vitrine WordPress avec un thème sur-mesure, pensé autour de la filmographie. Chaque film est documenté via des champs structurés (ACF — Advanced Custom Fields) : année, rôle, thèmes. Cette structuration alimente un filtrage de la filmographie par thème (architecture, art contemporain, danse et performance, expérimental, féminisme…) et par type de projet (réalisations personnelles, commandes, collaborations), qui laisse le visiteur explorer un corpus dense selon son entrée.\n\nLe thème sur-mesure porte l'identité éditoriale du portfolio, tandis que la saisie via ACF donne à la cinéaste la main sur son catalogue : ajouter un film, le documenter et le classer se fait en autonomie depuis l'administration WordPress, sans intervention technique.\n\nLe résultat est un portfolio soigné qui réunit plus de vingt ans de films en un seul lieu, filtrable et administrable en autonomie, à l'image de la démarche artistique qu'il présente.`,
+    objectives: [
+      "Donner une vitrine soignée à une filmographie riche et à une identité visuelle forte",
+      "Réunir en un seul lieu réalisations personnelles, commandes et collaborations",
+      "Permettre au cinéaste d'ajouter et de documenter ses films en autonomie",
+      "Structurer chaque film par métadonnées (année, rôle, thèmes) pour un catalogue filtrable",
+      "Offrir un filtrage par thème, par type de projet et par chronologie",
+    ],
+    results: [
+      "Portfolio WordPress sur-mesure réunissant une filmographie de 2004 à aujourd'hui",
+      "Filmographie filtrable par thème et par type de projet",
+      "Chaque film documenté par des champs structurés (année, rôle, thèmes) via ACF",
+      "Catalogue administrable en autonomie depuis l'administration WordPress",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Page builder générique clé en main",
+        "Front headless sur-mesure (WordPress + Next.js)",
+        "Thème WordPress sur-mesure adossé à ACF",
+      ],
+      decision: "Thème WordPress sur-mesure couplé à ACF (Advanced Custom Fields).",
+      rationale:
+        "Un page builder générique aurait bridé l'identité visuelle du portfolio et la saisie de métadonnées structurées ; un front headless était surdimensionné pour un catalogue auto-administré. Le thème sur-mesure porte une identité éditoriale propre, et ACF structure chaque film (année, rôle, thèmes) pour un catalogue filtrable que la cinéaste enrichit en autonomie.",
+    },
+    galleryAlt: "Portfolio de la cinéaste Aloyse Leledy-Bécue, filmographie filtrable",
+    tags: ["Indépendant", "Culture", "Cinéma", "Site vitrine", "WordPress"],
+    cardDescription: "Portfolio WordPress sur-mesure d'une cinéaste : une filmographie de plus de vingt ans, filtrable et administrable en autonomie.",
+  },
   "hermitage-ecolise": {
     title: "L'Hermitage — Démonstrateur européen ECOLISE",
     description:
@@ -1334,6 +1386,38 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "aloyse-leledy-becue": {
+    title: "Aloyse Leledy-Bécue — Filmmaker portfolio",
+    description:
+      "Built the custom WordPress portfolio for filmmaker Aloyse Leledy-Bécue: a polished showcase for a filmography spanning more than twenty years, filterable by theme and project type, and enriched fully independently.",
+    detailedDescription: `Aloyse Leledy-Bécue is a filmmaker with a rich body of work spanning more than twenty years, from 2004 to today: personal works, commissions and collaborations, alongside a biography and a contact page. Such a large and varied catalogue called for a showcase worthy of a strong visual identity — one able to give every film its due without overwhelming the visitor, and to be enriched without depending on a third party for each new project.\n\nI designed and built a WordPress brochure site with a custom theme, structured around the filmography. Each film is documented through structured fields (ACF — Advanced Custom Fields): year, role, themes. That structure powers filtering of the filmography by theme (architecture, contemporary art, dance and performance, experimental, feminism…) and by project type (personal works, commissions, collaborations), letting the visitor explore a dense body of work along their own entry point.\n\nThe custom theme carries the portfolio's editorial identity, while ACF-based entry gives the filmmaker control over the catalogue: adding a film, documenting it and classifying it is done independently from the WordPress admin, with no technical intervention.\n\nThe result is a polished portfolio that brings more than twenty years of films together in one place, filterable and independently manageable, in keeping with the artistic approach it presents.`,
+    objectives: [
+      "Give a rich filmography and a strong visual identity a polished showcase",
+      "Bring personal works, commissions and collaborations together in one place",
+      "Let the filmmaker add and document films independently",
+      "Structure each film with metadata (year, role, themes) for a filterable catalogue",
+      "Offer filtering by theme, by project type and by chronology",
+    ],
+    results: [
+      "Custom WordPress portfolio bringing together a filmography from 2004 to today",
+      "Filmography filterable by theme and by project type",
+      "Each film documented through structured fields (year, role, themes) via ACF",
+      "Catalogue manageable independently from the WordPress admin",
+    ],
+    arbitrage: {
+      consideredOptions: [
+        "Off-the-shelf generic page builder",
+        "Custom headless front end (WordPress + Next.js)",
+        "Custom WordPress theme backed by ACF",
+      ],
+      decision: "Custom WordPress theme paired with ACF (Advanced Custom Fields).",
+      rationale:
+        "A generic page builder would have constrained the portfolio's visual identity and the entry of structured metadata; a headless front end was overkill for a self-managed catalogue. The custom theme carries a distinct editorial identity, and ACF structures each film (year, role, themes) into a filterable catalogue that the filmmaker enriches independently.",
+    },
+    galleryAlt: "Portfolio of filmmaker Aloyse Leledy-Bécue, filterable filmography",
+    tags: ["Independent", "Culture", "Film", "Brochure site", "WordPress"],
+    cardDescription: "Custom WordPress portfolio for a filmmaker: a filmography spanning over twenty years, filterable and independently manageable.",
+  },
   "hermitage-ecolise": {
     title: "L'Hermitage — ECOLISE European Demonstrator",
     description:
@@ -2040,6 +2124,11 @@ function getClientTestimonial(
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  "aloyse-leledy-becue": [
+    { value: "2004–2026", label: "Filmographie réunie" },
+    { value: "ACF", label: "Catalogue administré en autonomie" },
+    { value: "Sur-mesure", label: "Thème WordPress dédié" },
+  ],
   // TODO(Agathe): remplacer par des chiffres projet réels si disponibles (PageSpeed, délai…)
   "hermitage-ecolise": [
     { value: "1 des 15", label: "Démonstrateurs européens ECOLISE" },
@@ -2165,6 +2254,11 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  "aloyse-leledy-becue": [
+    { value: "2004–2026", label: "Filmography brought together" },
+    { value: "ACF", label: "Catalogue managed independently" },
+    { value: "Custom", label: "Dedicated WordPress theme" },
+  ],
   // TODO(Agathe): replace with real project figures if available (PageSpeed, delivery time…)
   "hermitage-ecolise": [
     { value: "1 of 15", label: "ECOLISE European Demonstrators" },

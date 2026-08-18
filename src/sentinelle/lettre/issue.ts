@@ -142,7 +142,7 @@ export function missingForIssue(issue: IssueContent): string[] {
   }
 
   if (issue.lettre.chapeau.trim() === "") missing.push("le chapeau");
-  if (issue.lettre.axes.length === 0) missing.push("les douze axes");
+  if (issue.lettre.axes.length === 0) missing.push("les cinq axes");
   if (issue.lettre.synthese.actions.length === 0 && issue.lettre.synthese.reste.trim() === "") {
     missing.push("la synthèse");
   }

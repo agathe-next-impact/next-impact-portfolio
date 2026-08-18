@@ -102,7 +102,7 @@ function lettre(overrides: Partial<Lettre> = {}): Lettre {
     questions: [
       { question: "Quelle version est installée ?", axes: [2] },
       { question: "Qui applique les correctifs ?", axes: [2] },
-      { question: "Quand la dernière sauvegarde a-t-elle été testée ?", axes: [2, 8] },
+      { question: "Quand la dernière sauvegarde a-t-elle été testée ?", axes: [1, 4] },
     ],
     sources: [
       {
@@ -151,6 +151,46 @@ describe("régime de sourçage", () => {
     const outcome = guardLettre(invente, { dossier: dossier(), ficheNames: FICHE, quiet: true });
     expect(outcome.ok).toBe(false);
     expect(outcome.violations.join(" ")).toMatch(/sources absentes du dossier/);
+  });
+
+  it("ne compte pas les pages du site (domaine du client) comme sources inventées", () => {
+    // Un numéro de semaine calme, sans fait extérieur, peut renvoyer vers les
+    // pages du site (/blog, /entreprises) sans qu'on lui reproche une source
+    // absente du dossier. Seul le domaine du client est concerné.
+    const avecPagesSite = lettre({
+      axes: lettre().axes.map((axe) =>
+        axe.numero === 1
+          ? { ...axe, analyse: "Voir https://www.exemple.fr/blog et https://exemple.fr/entreprises." }
+          : axe,
+      ),
+      sources: [],
+    });
+
+    const outcome = guardLettre(avecPagesSite, {
+      dossier: dossier({ faits: [] }),
+      ficheNames: FICHE,
+      quiet: true,
+      siteUrl: "https://exemple.fr",
+    });
+    expect(outcome.violations.join(" ")).not.toMatch(/sources absentes/);
+  });
+
+  it("attrape toujours une source externe inventée, même avec un siteUrl", () => {
+    const faux = lettre({
+      sources: [
+        {
+          theme: "Marché",
+          faits: [{ enonce: "Étude.", date: "2026-08-01", source: "https://inconnu.example/x" }],
+        },
+      ],
+    });
+    const outcome = guardLettre(faux, {
+      dossier: dossier(),
+      ficheNames: FICHE,
+      quiet: true,
+      siteUrl: "https://exemple.fr",
+    });
+    expect(outcome.violations.join(" ")).toMatch(/sources absentes.*inconnu\.example/);
   });
 
   it("refuse une source citée sans date", () => {
@@ -237,12 +277,12 @@ describe("régime de vocabulaire", () => {
 });
 
 describe("structure", () => {
-  it("refuse un numéro à onze axes", () => {
-    const ampute = lettre({ axes: lettre().axes.slice(0, 11) });
+  it("refuse un numéro amputé d'un axe", () => {
+    const ampute = lettre({ axes: lettre().axes.slice(0, 4) });
     const outcome = guardLettre(ampute, { dossier: dossier(), ficheNames: FICHE, quiet: true });
 
     expect(outcome.ok).toBe(false);
-    expect(outcome.violations.join(" ")).toMatch(/axes manquants : 12/);
+    expect(outcome.violations.join(" ")).toMatch(/axes manquants : 5/);
   });
 
   it("refuse un axe « agir » sans horizon", () => {

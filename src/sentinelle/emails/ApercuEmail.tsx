@@ -133,7 +133,7 @@ export function ApercuEmail({ apercu, siteUrl, genereLe, rapportUrl }: ApercuEma
         <Text
           style={{ ...styles.muted, fontStyle: "italic", color: COLORS.fgSoft, margin: "0 0 18px" }}
         >
-          La lettre de l&apos;abonnement lit votre site par douze axes ;
+          La lettre de l&apos;abonnement lit votre site par cinq axes ;
           l&apos;échantillon les regroupe en cinq thèmes.
         </Text>
 

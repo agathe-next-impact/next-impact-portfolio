@@ -53,7 +53,7 @@ export const scanAsync = inngest.createFunction(
     });
 
     // La lettre-échantillon — le vrai pipeline de la veille personnalisée
-    // (collecte de la semaine écoulée + rédaction douze axes) appliqué à la
+    // (collecte de la semaine écoulée + rédaction cinq axes) appliqué à la
     // stack détectée. Étape séparée : son échec (API, quota, garde-fous)
     // laisse le rapport de scan intact. Elle se compte en minutes — c'est le
     // step le plus long du produit avec la fabrication d'un numéro abonné.

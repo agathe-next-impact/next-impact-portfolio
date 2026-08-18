@@ -21,10 +21,10 @@ import { DraftSchema, DRAFT_JSON_SCHEMA, toDraftedAlert } from "./schema";
 // sans validation humaine de toute façon (règle 4).
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const DEFAULT_MODEL = "claude-opus-5";
+export const DEFAULT_MODEL = "claude-sonnet-5";
 
 /**
- * Marge large : sur Claude Opus 5 la réflexion est active par défaut et
+ * Marge large : sur Claude Sonnet 5 la réflexion adaptative est active et
  * `max_tokens` plafonne réflexion + réponse. Un plafond serré tronquerait la
  * réponse au milieu d'une phrase plutôt que d'économiser quoi que ce soit.
  */

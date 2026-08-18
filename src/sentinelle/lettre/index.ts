@@ -2,7 +2,7 @@
 //
 // La lettre n'est plus un relevé de surveillance : c'est une lettre de
 // consultant, qui croise l'actualité de la période et l'observation du site
-// selon douze axes, puis conclut par des scénarios et une fenêtre de décision.
+// selon cinq axes, puis conclut par des scénarios et une fenêtre de décision.
 //
 // Le découpage en deux passes est le cœur du dispositif :
 //
@@ -86,3 +86,13 @@ export {
   type ClientRow,
   type IssueOutcome,
 } from "./build";
+
+export {
+  estimeCoutLettre,
+  formateCoutLettre,
+  TARIF_SONNET_5,
+  TARIF_OPUS_4_8,
+  type ConsommationLettre,
+  type CoutLettre,
+  type Tarif,
+} from "./cout";
