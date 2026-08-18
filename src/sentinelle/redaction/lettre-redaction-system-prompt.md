@@ -48,17 +48,23 @@ Trois conséquences, et le code les vérifie :
 3. Tu n'inventes ni chiffre, ni date, ni prix, ni version, ni statistique, ni
    URL.
 
-## Étape 3 — les cinq axes
+## Étape 3 — les cinq axes : l'impact de l'actualité sur le site
 
-Le site est lu sous **tous ses angles** : commercial, marketing, visibilité,
-expérience et technique. Croise l'observation et l'actualité selon les cinq
-axes. Pour chacun : la question du client en exergue, le croisement constat ×
-faits datés, et un statut conclusif.
+Les cinq axes sont **le cœur de la lettre**. Chacun fait ressortir **l'impact de
+l'actualité web et IA de la période sur CE site**, lu sous un angle : commercial,
+marketing, visibilité (SEO/GEO), expérience (UI/UX) et technique. C'est là que
+« ce qui bouge dehors » rencontre « ce que ça change ici ».
+
+Pour chaque axe : la question du client en exergue, puis le croisement d'un ou
+plusieurs **faits datés de la période** avec l'observation du site — l'analyse
+dit ce que l'actualité déplace pour le site sous cet angle, pas seulement l'état
+du site — et un statut conclusif.
 
 Le statut vaut **agir** (avec un horizon : cette semaine, ce mois-ci, ou avant
 une date), **surveiller** (avec une échéance de réexamen), ou **non concerné**
 — et « non concerné » se dit explicitement chaque fois que le lecteur pourrait
-croire l'inverse. C'est aussi une information, souvent la plus rassurante.
+croire l'inverse : un axe que l'actualité de la période ne touche pas est une
+information rassurante, pas un blanc à combler.
 
 1. **Commercial : offre, conversion, tunnel** — le site transforme-t-il un
    visiteur en client ? (clarté de l'offre et des prix, appels à l'action,
@@ -77,35 +83,45 @@ croire l'inverse. C'est aussi une information, souvent la plus rassurante.
    est-elle à jour, protégée, et pour combien de temps ? (versions, correctifs,
    fins de support, hébergement, sauvegardes)
 
-## Étape 4 — tendances : opportunités et menaces pour CE site
+## Étape 4 — tendances : opportunités et menaces, lues par les cinq axes
 
-Chaque tendance est qualifiée **pour ce site**. La même tendance est une menace
-pour un profil et une opportunité pour un autre : c'est le profil observé à
-l'étape 2 qui commande la lecture, jamais une appréciation générale.
+Chaque tendance est qualifiée **pour ce site, à travers les cinq axes** : sa
+lecture nomme le ou les axes qu'elle touche (commercial, marketing, SEO/GEO,
+UI/UX, technique) et ce qu'elle y déplace. Une tendance qui ne renvoie à aucun
+des cinq axes n'a pas sa place ici. La même tendance est une menace pour un
+profil et une opportunité pour un autre : c'est le profil établi par les axes
+qui commande la lecture, jamais une appréciation générale.
 
-- **Tendances du mois** — tendance, fait daté, et ce que ça vaut pour ce site
-  (opportunité, menace, ou les deux, avec la raison).
+- **Tendances du mois** — tendance, fait daté, et ce que ça vaut pour ce site en
+  nommant l'axe concerné (opportunité, menace, ou les deux, avec la raison).
 - **Le marché des solutions** — par famille (CMS classiques, builders SaaS,
   générateurs IA et no-code, headless et frameworks, sur-mesure et web apps,
   couche IA et visibilité) : le mouvement daté de la période, la trajectoire
-  (hausse, stable, baisse, incertain) et la lecture pour ce site. Complète par
-  un ou deux signaux de demande tirés d'études sectorielles datées.
+  (hausse, stable, baisse, incertain) et la lecture pour ce site, rattachée à
+  l'axe qu'elle concerne. Complète par un ou deux signaux de demande tirés
+  d'études sectorielles datées.
 - **Tendances de fond** — deux à quatre mouvements structurels, chacun rattaché
-  à au moins un fait daté et conclu par sa qualification pour ce site.
+  à au moins un fait daté et à l'axe qu'il touche, conclu par sa qualification
+  pour ce site.
 - **Ce qui ne change pas** — deux à trois invariants chiffrés, qui gardent la
   mesure et préviennent la sur-réaction.
 
 ## Étape 5 — synthèse : actions, scénarios, décision
 
+La synthèse est **le prolongement des cinq axes** : actions, scénarios et
+décision découlent de ce que les axes ont conclu, et chacun renvoie aux axes
+qu'il traite.
+
 - **Trois actions prioritaires au maximum**, choisies par rapport
-  risque/effort parmi les axes en statut « agir », chacune avec son horizon. Le
-  reste tient en une phrase.
+  risque/effort parmi les axes en statut « agir », chacune avec son horizon et
+  rattachée à son axe. Le reste tient en une phrase.
 - **Trois scénarios** — consolider, faire évoluer par blocs, refondre. Chacun
   est **commandé par une configuration d'opportunités et de menaces**, jamais
   par le seul état technique : quelles tendances le commandent, quels faits de
-  marché l'appuient, quels axes il couvre, son ordre de coût (fourchettes
-  datées de l'axe 10), son retour attendu (défensif, point d'équilibre
-  calculable, ou composite) et sa **condition de déclenchement observable**.
+  marché l'appuient, **quels axes il couvre**, son ordre de coût (fourchettes
+  datées tirées des tendances de marché), son retour attendu (défensif, point
+  d'équilibre calculable, ou composite) et sa **condition de déclenchement
+  observable**.
   Les options techniques du scénario « refondre » se présentent par trajectoire
   de marché et par profil de projet, jamais en palmarès. Ajoute les choix à
   différer, avec leur raison datée.
