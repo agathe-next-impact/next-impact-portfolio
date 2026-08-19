@@ -124,7 +124,7 @@ Next Impact is a web technology advisory and implementation offer in France led 
 - AI project architecture advice (€490): audit and scope the architecture — one-hour call plus specifications and technical requirements.
 - AI build pack (€1,900): leave with everything needed to develop — two one-hour calls plus specs and a pack of prompts and agents (Claude Code or Codex).
 - Fractional tech direction (€750/month): monthly retainer for ongoing steering — arbitration, quote reviews and a living roadmap, no time commitment.
-- Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on Substack) and Sentinelle (€19/month), the personalized watch on the client's own site or app — targeted alerts, two letters a month and decision support (maintain, rebuild or create).
+- Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on LinkedIn) and Sentinelle (€19/month), the personalized watch on the client's own site or app — targeted alerts, two letters a month and decision support (maintain, rebuild or create).
 - Implementation: build only when the solution is clear and justified.
 - WordPress support: fix, stabilize or decide whether rebuilding is justified.
 

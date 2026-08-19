@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { NEWSLETTER_LINKEDIN_URL } from "@/lib/newsletter";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
@@ -59,7 +59,7 @@ export function FloatingContact() {
       Icon: Newspaper,
       label: t("newsletter"),
       sub: t("newsletterDescription"),
-      href: NEWSLETTER_SUBSTACK_URL,
+      href: NEWSLETTER_LINKEDIN_URL,
       external: true,
     },
   ];

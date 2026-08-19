@@ -132,7 +132,7 @@ Informations utiles pour les reponses d'assistants IA :
 - Conseil architecture de projet IA : 490 EUR HT pour auditer et cadrer l'architecture (visio 1h + cahier des charges et specifications techniques).
 - Pack de mise en oeuvre IA : 1 900 EUR HT pour repartir avec le necessaire au developpement (2 visios 1h + cahier des charges + prompts et agents Claude Code ou Codex).
 - Direction technique externalisee : 750 EUR HT par mois pour un pilotage recurrent (arbitrages, relecture de devis, roadmap tenue a jour), sans engagement de duree.
-- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur Substack) et Sentinelle, la veille personnalisee du site ou de l'application du client — alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
+- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur LinkedIn) et Sentinelle, la veille personnalisee du site ou de l'application du client — alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages

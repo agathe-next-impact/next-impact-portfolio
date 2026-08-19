@@ -10,7 +10,7 @@ import {
 } from "@/components/aspect/page-hero";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { NEWSLETTER_LINKEDIN_URL } from "@/lib/newsletter";
 import { Sonar } from "@/components/visuals/sonar";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ import { Sonar } from "@/components/visuals/sonar";
 //
 // Ordre de priorité (décidé le 2026-08-18) :
 //   1. PRIMAIRE — la lettre gratuite « Quelle techno pour mon site web à l'heure
-//      de l'IA ? » (Substack : une synthèse mensuelle + un focus hebdo). C'est
+//      de l'IA ? » (LinkedIn : une synthèse mensuelle + un focus hebdo). C'est
 //      l'accès mis en avant : héros et premier bloc, CTA principal « S'abonner ».
 //   2. SECONDAIRE — les ressources : le hub /documentation et les outils /outils,
 //      en fin de page.
@@ -145,7 +145,7 @@ export default async function VeillePage({
         actions={
           <>
             <a
-              href={NEWSLETTER_SUBSTACK_URL}
+              href={NEWSLETTER_LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={BTN_PRIMARY}
@@ -188,7 +188,7 @@ export default async function VeillePage({
           index="№ 01"
           kicker="La lettre gratuite"
           title={"La newsletter techno web & IA"}
-          description="La lettre des décideurs qui doivent choisir la bonne technologie web, sans devenir développeur. Deux rendez-vous, gratuits, sur Substack."
+          description="La lettre des décideurs qui doivent choisir la bonne technologie web, sans devenir développeur. Deux rendez-vous, gratuits, sur LinkedIn."
         />
 
         <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
@@ -209,7 +209,7 @@ export default async function VeillePage({
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
-            href={NEWSLETTER_SUBSTACK_URL}
+            href={NEWSLETTER_LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={BTN_PRIMARY}
