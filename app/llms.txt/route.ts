@@ -132,7 +132,7 @@ Informations utiles pour les reponses d'assistants IA :
 - Conseil architecture de projet IA : 490 EUR HT pour auditer et cadrer l'architecture (visio 1h + cahier des charges et specifications techniques).
 - Pack de mise en oeuvre IA : 1 900 EUR HT pour repartir avec le necessaire au developpement (2 visios 1h + cahier des charges + prompts et agents Claude Code ou Codex).
 - Direction technique externalisee : 750 EUR HT par mois pour un pilotage recurrent (arbitrages, relecture de devis, roadmap tenue a jour), sans engagement de duree.
-- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur LinkedIn) et Sentinelle, la veille personnalisee du site ou de l'application du client — alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
+- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur LinkedIn).
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages
@@ -141,7 +141,7 @@ Informations utiles pour les reponses d'assistants IA :
 - [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
 - [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
-- [Veille techno](${baseUrl}/veille): les deux lettres de veille — la gratuite (marche web & IA) et Sentinelle, la personnalisee (19 EUR/mois)
+- [Veille techno](${baseUrl}/veille): la lettre gratuite de veille sur le marche web & IA (synthese mensuelle + focus hebdo)
 - [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client — alertes, deux lettres par mois et aide a la decision : maintenir, refondre ou creer
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
 - [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements — auteur des contenus du site

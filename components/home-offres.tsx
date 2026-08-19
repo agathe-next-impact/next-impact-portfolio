@@ -26,7 +26,7 @@ const OFFERS_FR: Offer[] = [
     price: "dès 0 €",
     items: [
       "« Quelle techno pour mon site web à l'heure de l'IA ? » — la lettre gratuite : synthèse mensuelle + focus hebdo",
-      "Sentinelle 19 €/mois : veille personnalisée + aide à la décision — maintenir, refondre ou créer",
+      "Aide à la décision — maintenir, refondre ou créer",
       "Écrit pour décider, relu par un humain avant envoi",
     ],
     target: "Pour rester devant, sans y passer vos soirées",
@@ -68,7 +68,7 @@ const OFFERS_EN: Offer[] = [
     price: "from €0",
     items: [
       "The free newsletter: a monthly digest + a weekly focus on web & AI",
-      "Sentinelle €19/month: personalized watch + decision support — maintain, rebuild or create",
+      "Decision support — maintain, rebuild or create",
       "Written to help you decide, human-reviewed before sending",
     ],
     target: "Stay ahead, without spending your evenings on it",
