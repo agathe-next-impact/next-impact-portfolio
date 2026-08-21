@@ -1,0 +1,179 @@
+---
+title: "RGPD et AI Act : quelles obligations pour votre site ?"
+description: "Données clients dans ChatGPT, chatbot à signaler, contenu généré : vos obligations RGPD et AI Act en 2026, expliquées sans jargon."
+category: presence
+rubrique: presence
+author: "Agathe Karinthi-Martin"
+date: "2026-08-21"
+dateModified: "2026-08-21"
+order: 2
+enBref:
+  - "Utiliser un outil d'IA générative — ChatGPT, Claude, Copilot, ou un chatbot installé sur votre site — pour produire du contenu ou échanger avec vos visiteurs vous engage sur deux textes distincts : le RGPD, dès qu'une donnée personnelle transite par l'outil, et le règlement européen sur l'IA (AI Act), dès que ce contenu ou ce système interagit avec le public."
+  - "Le RGPD n'interdit pas l'usage d'un outil d'IA tiers, mais impose de passer par un compte professionnel plutôt que personnel, de désactiver la réutilisation de vos données pour l'entraînement du modèle quand c'est possible, et de ne jamais y saisir de données personnelles de vos clients sans base légale ni garantie contractuelle du fournisseur."
+  - "L'AI Act impose depuis le 2 août 2026 — article 50 du règlement (UE) 2024/1689 — d'informer clairement un visiteur qu'il échange avec un système d'IA, et encadre le marquage du contenu de synthèse (texte, image, audio, vidéo) généré ou manipulé par IA."
+  - "Pour une PME, l'essentiel tient en trois réflexes : ne jamais saisir de données client identifiables dans un outil IA grand public, vérifier les conditions d'utilisation du fournisseur avant tout usage professionnel, et signaler explicitement tout chatbot IA présent sur le site."
+faq:
+  - question: "Puis-je coller des e-mails ou des documents clients dans ChatGPT pour rédiger plus vite ?"
+    answer: "Seulement s'ils ne contiennent aucune donnée personnelle identifiable, ou après les avoir anonymisés. S'ils en contiennent, la CNIL recommande un compte professionnel dédié, la désactivation de la réutilisation pour l'entraînement, et pour les documents sensibles une solution hébergée sur site plutôt qu'un service grand public."
+  - question: "Dois-je signaler que le contenu de mon site est écrit avec l'aide de l'IA ?"
+    answer: "Pas de façon générale pour un contenu marketing relu et validé par une personne identifiée : l'AI Act exempte le contenu ayant fait l'objet d'un contrôle éditorial humain sous responsabilité éditoriale. L'obligation de marquage vise surtout le contenu de synthèse diffusé sans cette relecture, et plus strictement les textes informant le public sur des sujets d'intérêt public."
+  - question: "Mon chatbot doit-il dire qu'il est une intelligence artificielle ?"
+    answer: "Oui, depuis le 2 août 2026 : l'article 50 du règlement européen sur l'IA impose d'informer clairement un visiteur qu'il échange avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail des usages et limites d'un chatbot sur un site est traité dans l'article dédié de la rubrique Outils métier."
+  - question: "Quelles sont les sanctions en cas de non-respect du RGPD ou de l'AI Act ?"
+    answer: "Jusqu'à 20 millions d'euros ou 4 % du chiffre d'affaires mondial pour les manquements RGPD les plus graves, et jusqu'à 15 millions d'euros ou 3 % du chiffre d'affaires mondial pour un manquement aux obligations de transparence de l'AI Act — le montant le plus élevé des deux pour une grande entreprise, le plus bas pour une PME ou une start-up."
+  - question: "Le RGPD s'applique-t-il si c'est mon prestataire, pas moi, qui utilise l'IA sur mon projet ?"
+    answer: "Oui, et c'est justement une question à poser avant de signer : quels outils IA votre prestataire utilise, ce qu'il leur transmet, et ce qu'il ne leur transmet jamais. Ce point fait partie des 12 questions IA à poser à votre prestataire avant tout engagement."
+  - question: "Une petite structure a-t-elle besoin d'un DPO pour utiliser l'IA au quotidien ?"
+    answer: "Rarement en dessous d'un traitement de données à grande échelle ou de données sensibles (santé, données bancaires, biométrie) : le DPO (délégué à la protection des données) n'est obligatoire que dans ces cas précis. En dessous, désigner un référent interne clair — qui valide les usages, qui répond en cas de doute — suffit dans la plupart des PME."
+keyFigures:
+  - value: "2 août 2026"
+    label: "Entrée en application de l'obligation de transparence chatbot et de marquage du contenu de synthèse (article 50 de l'AI Act)"
+    source: "Règlement (UE) 2024/1689"
+  - value: "20 M€ ou 4 %"
+    label: "Amende RGPD maximale pour les manquements les plus graves (le montant le plus élevé des deux, pour une grande entreprise)"
+    source: "RGPD, article 83"
+  - value: "15 M€ ou 3 %"
+    label: "Amende AI Act maximale pour un manquement aux obligations de transparence de l'article 50"
+    source: "AI Act, article 99"
+---
+
+*Article publié le 21 août 2026. Le calendrier d'application de l'AI Act est fixé par le règlement lui-même et ne dépend pas de l'actualité ; les lignes directrices qui l'accompagnent, elles, continuent d'être précisées par la Commission européenne et par la CNIL — vérifiez la date de vos propres sources avant d'agir sur un point sensible.*
+
+Un point de méthode avant de commencer : je ne suis pas juriste, et cet article ne remplace pas l'avis d'un avocat ou d'un DPO sur un cas sensible. Il vous donne le cadre et les bons réflexes pour ne pas être pris au dépourvu — et pour savoir quand appeler un spécialiste plutôt qu'improviser.
+
+Cet article complète la rubrique [Présence et audience](/documentation/presence) sur une question précise : quelles obligations légales quand vous utilisez l'IA pour le contenu ou le fonctionnement de votre site ? Trois sujets voisins sont traités ailleurs et ne sont pas repris ici. La sécurité technique des comptes utilisateurs et le RGPD appliqué à une web app avec authentification font l'objet de [Comptes utilisateurs et sécurité dans une web app](/documentation/applications-web-mobile/comptes-utilisateurs-et-securite). Le risque de pénalité Google sur un contenu produit par IA est traité dans [Faut-il utiliser l'IA pour le contenu de son site ?](/documentation/presence/contenu-ia-opportunite-et-risque). Le droit d'auteur des images générées par IA fait l'objet d'un article dédié, à paraître dans cette rubrique.
+
+## RGPD et AI Act : deux textes différents, une question à se poser d'abord
+
+**Le premier réflexe est de savoir lequel des deux textes vous concerne — souvent les deux, mais pas pour la même raison.** Le RGPD protège les personnes dont vous traitez les données, quel que soit l'outil utilisé ; l'AI Act encadre le système d'IA lui-même, qu'il traite ou non des données personnelles. Un chatbot qui ne collecte aucune donnée personnelle relève quand même de l'AI Act pour son obligation de transparence ; un simple tableur contenant des données clients relève du RGPD sans que l'AI Act n'entre jamais en jeu.
+
+<DataTable caption="RGPD et AI Act : deux objets différents">
+
+| | RGPD | AI Act (règlement européen sur l'IA) |
+|---|---|---|
+| Ce qu'il protège | Les données personnelles, quel que soit l'outil | Les personnes exposées à un système d'IA, quelle que soit la donnée traitée |
+| Applicable dès que... | Une donnée personnelle (client, prospect, salarié) transite par un outil | Vous utilisez ou déployez un système d'IA — chatbot, générateur de contenu, outil de tri de candidatures... |
+| En vigueur depuis | 2018 | 1er août 2024, application échelonnée jusqu'en 2027 |
+| Autorité de contrôle en France | La CNIL | La CNIL, désignée autorité de référence, aux côtés d'une quinzaine d'autorités sectorielles coordonnées par la DGCCRF |
+
+</DataTable>
+
+## RGPD : ce qui se passe quand vous saisissez des données dans un outil d'IA tiers
+
+**Verdict : le RGPD n'interdit pas d'utiliser un outil d'IA tiers pour votre activité, mais il transforme chaque prompt contenant une donnée personnelle en un transfert de données vers un sous-traitant.** Quand vous demandez à un assistant IA de reformuler l'e-mail d'un client, de résumer un CV ou de rédiger une fiche à partir d'un brief nominatif, ce texte part sur les serveurs du fournisseur de l'outil — et selon vos réglages de compte, il peut être conservé, voire réutilisé pour entraîner de futurs modèles.
+
+La CNIL a publié des recommandations opérationnelles pour un usage professionnel responsable de l'IA générative. Les plus actionnables pour une PME :
+
+- **Un compte professionnel, jamais un compte personnel**, pour tout usage qui touche à l'activité de l'entreprise — ne serait-ce que pour garder la main sur les réglages et la traçabilité.
+- **Désactiver la réutilisation de vos données pour l'entraînement du modèle** quand l'outil le permet (c'est un réglage, pas une négociation).
+- **Minimiser ce que vous saisissez** : anonymiser ou remplacer les noms, adresses et identifiants avant de coller un texte, quand c'est possible sans perdre l'utilité de la demande.
+- **Pour une documentation confidentielle ou des données sensibles** (santé, RH, données bancaires), privilégier une solution hébergée sur site (« on-premise ») plutôt qu'un service grand public, qui limite par nature les risques d'extraction de données.
+- **Vérifier la conformité RGPD du fournisseur** avant tout usage professionnel régulier — et sécuriser contractuellement l'accès aux données via un DPA (accord de sous-traitance) quand le volume ou la sensibilité le justifie.
+
+Ce sont les mêmes réflexes qu'attend un prestataire sérieux sur ses propres outils IA — c'est d'ailleurs l'une des [12 questions IA à poser à votre prestataire](/documentation/avant-signer/12-questions-ia-a-poser-a-votre-prestataire) avant de signer un projet de site.
+
+## AI Act européen : qu'est-ce que ça change concrètement, et depuis quand ?
+
+**Verdict : l'AI Act n'interdit presque rien pour un site vitrine ou un usage de contenu classique — il impose surtout de la transparence, pas de l'autorisation préalable.** C'est le premier cadre juridique européen consacré spécifiquement à l'intelligence artificielle, entré en vigueur le 1er août 2024, avec une application échelonnée sur plusieurs années plutôt qu'une entrée en vigueur unique.
+
+<DataTable caption="AI Act : calendrier d'application">
+
+| Date | Ce qui devient applicable |
+|---|---|
+| 2 février 2025 | Interdiction des usages d'IA jugés inacceptables (notation sociale, manipulation...) et obligation générale de littératie IA pour le personnel qui utilise ces systèmes |
+| 2 août 2025 | Obligations de gouvernance et de transparence pour les fournisseurs de modèles d'IA à usage général (les grands modèles derrière ChatGPT, Claude, etc.) |
+| 2 août 2026 | Obligations de transparence de l'article 50 (chatbot, contenu de synthèse) et régime des systèmes à haut risque de l'annexe III |
+| 2 août 2027 | Obligations pour les systèmes à haut risque intégrés à des produits déjà réglementés par ailleurs (dispositifs médicaux, machines...) |
+
+</DataTable>
+
+Pour la quasi-totalité des sites vitrines et des PME qui utilisent l'IA pour leur contenu ou leur relation client, l'échéance qui compte est celle du **2 août 2026** : l'article 50 du règlement, qui impose la transparence sur les chatbots et le contenu généré. C'est le sujet des deux sections suivantes.
+
+## Devez-vous signaler que votre site utilise un chatbot IA ?
+
+**Oui, depuis le 2 août 2026.** L'article 50 impose d'informer clairement un visiteur qu'il échange avec un système d'IA, à moins que ce soit déjà évident du contexte pour une personne raisonnablement informée. Concrètement, un message d'accueil du type « Je suis l'assistant virtuel de [votre entreprise] » ou un badge visible suffit dans la plupart des cas. Les usages, les coûts et les limites d'un chatbot sur un site sont traités en détail dans [Quels composants IA ont leur place sur votre site ?](/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site) ; un article entièrement dédié au chatbot suivra dans cette même rubrique.
+
+## Devez-vous signaler que votre contenu (texte, images) est généré par IA ?
+
+**Verdict : dans la grande majorité des cas d'un site professionnel, non — à condition qu'une personne identifiée relise et assume ce qui est publié.** L'article 50 impose un marquage machine-lisible du contenu de synthèse (texte, image, audio, vidéo) généré ou manipulé par IA, mais prévoit une exemption large : le contenu ayant fait l'objet d'une révision éditoriale humaine, sous la responsabilité éditoriale d'une personne ou d'une entité identifiée, n'entre pas dans cette obligation. C'est exactement le réflexe recommandé dans [Faut-il utiliser l'IA pour le contenu de son site ?](/documentation/presence/contenu-ia-opportunite-et-risque) : une relecture humaine avant publication n'est pas seulement une question de qualité, c'est aussi ce qui vous place hors du champ de cette obligation.
+
+L'obligation se resserre sur deux cas précis, à surveiller si votre activité les touche : les **deepfakes** (image, audio ou vidéo manipulés faisant passer une personne réelle pour l'auteur de propos ou d'actions qu'elle n'a pas tenus) doivent toujours être signalés comme tels, sans l'exemption de révision éditoriale ; et un **texte généré par IA publié pour informer le public sur un sujet d'intérêt public** doit être signalé comme tel, sauf s'il a fait l'objet d'un contrôle éditorial humain et d'une responsabilité éditoriale assumée — un cas qui concerne surtout les éditeurs de presse et les médias, rarement un site d'entreprise. Le droit d'auteur et les CGU propres aux générateurs d'images IA — un sujet distinct de cette obligation de marquage — font l'objet d'un article dédié à venir dans cette rubrique.
+
+## Quelles sanctions en cas de non-respect ?
+
+<DataTable caption="Plafonds de sanctions RGPD et AI Act">
+
+| Manquement | Plafond | Base légale |
+|---|---|---|
+| RGPD — manquements les plus graves (principes de base, droits des personnes, transferts) | 20 M€ ou 4 % du chiffre d'affaires mondial (le plus élevé des deux) | RGPD, article 83 |
+| RGPD — autres manquements | 10 M€ ou 2 % du chiffre d'affaires mondial | RGPD, article 83 |
+| AI Act — pratiques interdites (article 5) | 35 M€ ou 7 % du chiffre d'affaires mondial | AI Act, article 99 |
+| AI Act — autres obligations, dont la transparence de l'article 50 | 15 M€ ou 3 % du chiffre d'affaires mondial | AI Act, article 99 |
+
+</DataTable>
+
+Deux nuances utiles avant de s'inquiéter à tort. D'abord, pour les deux textes, c'est le montant le plus élevé des deux qui s'applique aux grandes entreprises — mais l'AI Act prévoit explicitement l'inverse pour les PME et les jeunes entreprises : c'est le montant le plus bas des deux qui leur est appliqué. Ensuite, ces plafonds sont des maximums légaux, pas des montants observés en pratique sur une PME de bonne foi : en France, la CNIL réserve ses sanctions les plus lourdes aux manquements structurels et récurrents, pas à une erreur isolée corrigée une fois signalée.
+
+## Verdict par profil
+
+<DataTable caption="Vos obligations selon votre usage de l'IA">
+
+| Profil | Ce qui s'applique | Priorité |
+|---|---|---|
+| PME sans chatbot, contenu rédigé avec l'aide de l'IA en interne | RGPD sur les prompts contenant des données personnelles ; pas d'obligation de marquage AI Act si la relecture humaine existe | Une consigne écrite : jamais de donnée client identifiable dans un outil IA grand public |
+| Site avec chatbot IA (support, vente, prise de rendez-vous) | Article 50 §1 de l'AI Act (obligatoire) + RGPD si les échanges sont enregistrés ou liés à un compte client | Un message de transparence explicite dès la première interaction |
+| Structure qui traite des données sensibles (santé, RH, données bancaires) dans un outil IA | RGPD renforcé, DPO probablement obligatoire, solution on-premise à privilégier | Un audit avant tout nouvel usage, pas après |
+| Agence ou prestataire qui manipule des données de plusieurs clients dans des outils IA | RGPD en tant que sous-traitant, DPA avec chaque client, traçabilité des outils utilisés par projet | Un registre des traitements à jour, projet par projet |
+
+</DataTable>
+
+## Les erreurs les plus fréquentes que je vois sur ce sujet
+
+- **Aucune consigne écrite** sur ce qu'on a le droit de coller dans un outil IA — chacun improvise, souvent avec un compte personnel gratuit.
+- **La réutilisation pour l'entraînement jamais désactivée**, parce que personne n'est allé chercher le réglage dans les paramètres du compte.
+- **Un chatbot qui ne se présente jamais comme une IA**, souvent parce que le prestataire l'a livré sans y penser plutôt que par choix assumé.
+- **Un DPO nommé « au cas où »** sur une structure qui n'en a pas besoin — de l'énergie mise au mauvais endroit, alors qu'un simple référent interne clair suffirait.
+- **Aucune trace de qui a relu quoi** avant publication d'un contenu généré par IA, ce qui prive l'entreprise de l'exemption de révision éditoriale humaine le jour où la question se pose.
+
+> **Ce que je constate en projet.** La question qui revient le plus souvent n'est pas « ai-je le droit d'utiliser l'IA ? » — la réponse est presque toujours oui — mais « qu'est-ce que j'ai le droit d'y mettre ? ». Une charte d'usage interne d'une page, qui dit noir sur blanc ce qui peut et ne peut pas être collé dans un outil IA, résout la plupart des situations avant qu'elles ne deviennent un problème. C'est un document court à écrire une fois, pas un chantier de conformité permanent.
+
+## FAQ — RGPD, AI Act et usage de l'IA sur votre site
+
+### Puis-je coller des e-mails ou des documents clients dans ChatGPT pour rédiger plus vite ?
+
+Seulement s'ils ne contiennent aucune donnée personnelle identifiable, ou après les avoir anonymisés. S'ils en contiennent, la CNIL recommande un compte professionnel dédié, la désactivation de la réutilisation pour l'entraînement, et pour les documents sensibles une solution hébergée sur site plutôt qu'un service grand public.
+
+### Dois-je signaler que le contenu de mon site est écrit avec l'aide de l'IA ?
+
+Pas de façon générale pour un contenu marketing relu et validé par une personne identifiée : l'AI Act exempte le contenu ayant fait l'objet d'un contrôle éditorial humain sous responsabilité éditoriale. L'obligation de marquage vise surtout le contenu de synthèse diffusé sans cette relecture, et plus strictement les textes informant le public sur des sujets d'intérêt public.
+
+### Mon chatbot doit-il dire qu'il est une intelligence artificielle ?
+
+Oui, depuis le 2 août 2026 : l'article 50 du règlement européen sur l'IA impose d'informer clairement un visiteur qu'il échange avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail des usages et limites d'un chatbot sur un site est traité dans l'article dédié de la rubrique Outils métier.
+
+### Quelles sont les sanctions en cas de non-respect du RGPD ou de l'AI Act ?
+
+Jusqu'à 20 millions d'euros ou 4 % du chiffre d'affaires mondial pour les manquements RGPD les plus graves, et jusqu'à 15 millions d'euros ou 3 % du chiffre d'affaires mondial pour un manquement aux obligations de transparence de l'AI Act — le montant le plus élevé des deux pour une grande entreprise, le plus bas pour une PME ou une start-up.
+
+### Le RGPD s'applique-t-il si c'est mon prestataire, pas moi, qui utilise l'IA sur mon projet ?
+
+Oui, et c'est justement une question à poser avant de signer : quels outils IA votre prestataire utilise, ce qu'il leur transmet, et ce qu'il ne leur transmet jamais. Ce point fait partie des 12 questions IA à poser à votre prestataire avant tout engagement.
+
+### Une petite structure a-t-elle besoin d'un DPO pour utiliser l'IA au quotidien ?
+
+Rarement en dessous d'un traitement de données à grande échelle ou de données sensibles (santé, données bancaires, biométrie) : le DPO (délégué à la protection des données) n'est obligatoire que dans ces cas précis. En dessous, désigner un référent interne clair — qui valide les usages, qui répond en cas de doute — suffit dans la plupart des PME.
+
+---
+
+**Et votre site, aujourd'hui ?** Le [Diagnostic Web & IA](/audit-site-web) fait un état des lieux gratuit en 2 minutes de votre présence en ligne, IA comprise. Si un usage précis vous semble à risque — données clients dans un outil IA, chatbot à mettre en conformité, contenu à faire relire avant publication — la [visio conseil](/conseil) fait le tour de votre situation en 30 minutes : 150 € HT, intégralement crédités si un projet démarre sous 30 jours. Pour un point réglementaire engageant (DPA, registre des traitements, situation contentieuse), un avocat ou un DPO reste le bon interlocuteur : cet article vous aide à savoir quand les appeler, pas à les remplacer.
+
+## Sources
+
+- Union européenne, [Règlement (UE) 2024/1689 établissant des règles harmonisées concernant l'intelligence artificielle (AI Act)](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) : article 50 (obligations de transparence), article 99 (sanctions), article 113 (calendrier d'application échelonné).
+- CNIL, [Les questions-réponses de la CNIL sur l'utilisation d'un système d'IA générative](https://www.cnil.fr/fr/les-questions-reponses-de-la-cnil-sur-lutilisation-dun-systeme-dia-generative) : recommandations pour un usage professionnel responsable (compte professionnel, désactivation de la réutilisation pour l'entraînement, solutions on-premise pour les données sensibles).
+- CNIL, [Intelligence artificielle](https://www.cnil.fr/fr/intelligence-artificielle) : portail des recommandations et fiches pratiques de l'autorité française de protection des données.
+- Ministère de l'Économie, [IA : la DGCCRF coordonnera l'action des autorités de surveillance en France](https://www.economie.gouv.fr/dgccrf/actualites-dgccrf/ia-la-dgccrf-coordonnera-laction-des-autorites-de-surveillance-en-france) : gouvernance française de l'AI Act, CNIL comme autorité de référence.
+
+---
+
+*Agathe Karinthi-Martin est développeuse web et fondatrice de Next Impact Digital, studio indépendant spécialisé dans les sites WordPress modernisés (front Next.js) et le conseil en choix de technologie web. Elle utilise l'IA quotidiennement dans sa production — relue, testée et sous sa responsabilité. [Prendre contact](/contact).*

@@ -1,0 +1,167 @@
+---
+title: "Recherche sémantique : faut-il l'ajouter à votre site ?"
+description: "Recherche classique ou sémantique par IA : la différence, le seuil qui justifie l'upgrade, les options et leur coût, un verdict par profil."
+category: outils-metier
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-08-21"
+dateModified: "2026-08-21"
+order: 2
+enBref:
+  - "La recherche sémantique est un moteur qui comprend le sens d'une requête — synonymes, fautes de frappe, formulations naturelles — là où une recherche classique ne retrouve que les mots exacts tapés par le visiteur."
+  - "Elle ne se justifie qu'une fois un vrai problème mesuré : un catalogue ou un annuaire assez riche pour qu'une recherche par mots-clés bien réglée échoue régulièrement, avec des recherches vides ou des abandons documentés."
+  - "Trois niveaux d'options existent, du réglage d'une recherche déjà en place à quelques dizaines d'euros par mois jusqu'à un pipeline d'embeddings sur mesure facturé à l'usage."
+  - "En 2026, la majorité des sites vitrines et des petits catalogues n'en ont pas besoin : une recherche par mots-clés bien réglée, avec de bons filtres, couvre l'essentiel des cas jusqu'à plusieurs centaines de références."
+faq:
+  - question: "Comment savoir si ma recherche actuelle a un vrai problème de pertinence ?"
+    answer: "Trois signaux mesurables : un taux de recherches qui ne renvoient aucun résultat, un taux d'abandon élevé juste après une recherche, et des verbatims de recherche qui montrent que les visiteurs reformulent plusieurs fois avant de trouver. Sans au moins un de ces signaux documenté, le problème n'est pas encore assez réel pour justifier un changement."
+  - question: "La recherche sémantique tolère-t-elle les fautes de frappe ?"
+    answer: "Oui, généralement bien, par construction : elle compare le sens d'une requête à celui des fiches plutôt que les caractères exacts, ce qui absorbe une bonne partie des fautes et des variantes. Une recherche classique peut aussi tolérer les fautes, mais seulement si cette fonctionnalité a été configurée spécifiquement."
+  - question: "Puis-je ajouter une recherche sémantique à un site WordPress existant sans tout reconstruire ?"
+    answer: "Oui : la plupart des moteurs SaaS spécialisés se branchent sur un catalogue ou des contenus existants via une synchronisation ou une extension, sans changer le CMS. L'intégration reste un vrai chantier technique (indexation initiale, réglages, tests), mais elle ne remet pas en cause votre site."
+  - question: "Combien coûte une recherche sémantique, en SaaS et en sur-mesure ?"
+    answer: "En SaaS, comptez un premier palier gratuit ou à faible coût pour tester, puis quelques dizaines à quelques centaines d'euros par mois selon le volume de fiches et de requêtes. En sur-mesure, le développement s'ajoute au coût d'inférence continu (appels au modèle d'embeddings) — un budget qui se cadre au cas par cas plutôt qu'en fourchette générique."
+  - question: "Recherche sémantique et RAG, c'est le même mécanisme technique ?"
+    answer: "Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans un article dédié à paraître dans cette rubrique."
+  - question: "Une recherche sémantique peut-elle donner de moins bons résultats qu'une recherche classique ?"
+    answer: "Oui, si elle est mal réglée ou évaluée trop vite : elle peut renvoyer des résultats sémantiquement proches mais concrètement faux, sans que ce soit visible au premier coup d'œil. C'est pour cette raison qu'une phase de test sur des requêtes réelles, avant la mise en production, n'est pas optionnelle."
+keyFigures:
+  - value: "10 000 requêtes/mois"
+    label: "Volume de recherche inclus dans l'offre gratuite d'un moteur SaaS spécialisé (Algolia), pour tester avant d'engager un budget"
+    source: "Algolia, pricing (consulté août 2026)"
+  - value: "20 à 30 $/mois"
+    label: "Premier palier payant d'un moteur de recherche sémantique en SaaS (Meilisearch Cloud) pour un catalogue de départ"
+    source: "Meilisearch, pricing (consulté août 2026)"
+  - value: "0,02 $ / million de tokens"
+    label: "Coût d'indexation en embeddings pour une recherche sémantique sur mesure (modèle text-embedding-3-small d'OpenAI), hors développement et hébergement de la base vectorielle"
+    source: "OpenAI, API pricing (consulté août 2026)"
+---
+
+*Article publié le 21 août 2026. Les tarifs des moteurs de recherche SaaS et des API d'embeddings évoluent vite ; les seuils et la grille de décision, eux, restent valables au-delà des prix du moment.*
+
+Cet article prolonge [Quels composants IA ont leur place sur votre site ?](/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site), qui donne le verdict court sur la recherche sémantique parmi six familles de composants IA. Il part du principe que vous avez déjà un moteur de recherche sur votre site ou votre catalogue — la question de savoir si vous avez besoin d'un annuaire, d'une marketplace ou d'un catalogue en premier lieu se tranche dans la rubrique [Outils métier](/documentation/outils-metier), pas ici. Et si vous développez vous-même une marketplace ou un annuaire et cherchez les fondations techniques d'une recherche performante (index full-text, scoring, filtres), direction [Marketplace et annuaire B2B](/documentation/applications-web-mobile/marketplace-et-annuaire-b2b) : cet article-ci reste au niveau de la décision, pas de l'implémentation.
+
+## Recherche classique et recherche sémantique : la différence concrète
+
+**Une recherche classique retrouve les mots exacts tapés par le visiteur ; une recherche sémantique comprend le sens de la requête, même si vos fiches emploient d'autres mots.** Techniquement, elle s'appuie le plus souvent sur des embeddings — une représentation vectorielle du sens d'un texte, comparée par proximité mathématique plutôt que par égalité de caractères.
+
+Exemple concret sur un annuaire B2B : un acheteur tape « impression textile petite série ». Si vos fiches fournisseurs parlent de « sérigraphie et broderie sur vêtements », une recherche classique ne retrouve rien — aucun mot ne correspond. Une recherche sémantique fait le lien, parce qu'elle rapproche des expressions dont le sens est proche, pas leur orthographe.
+
+Ce n'est pas un gain uniforme : sur un vocabulaire homogène (les mêmes mots reviennent d'une fiche à l'autre), une recherche classique bien réglée fait aussi bien, pour beaucoup moins cher.
+
+## À partir de quel volume ce sujet se pose-t-il vraiment ?
+
+**La recherche sémantique n'a d'intérêt qu'une fois le besoin de recherche déjà avéré et qu'une recherche classique bien réglée échoue régulièrement — pas avant.** Trois signaux mesurables indiquent que ce seuil est atteint : un taux de recherches sans résultat qui progresse, un taux d'abandon élevé juste après une recherche, et des verbatims de recherche qui montrent des reformulations répétées avant de trouver.
+
+En dessous de ce seuil, le problème n'est le plus souvent pas la sémantique mais le réglage : synonymes non configurés, tolérance aux fautes de frappe absente, classement par date plutôt que par pertinence. Un catalogue de quinze ou même de quelques dizaines de fiches n'a, dans la quasi-totalité des cas, besoin d'aucune des deux à ce point — un plan de site clair et une recherche basique suffisent.
+
+<DataTable caption="Recherche classique et recherche sémantique : ce qui change concrètement">
+
+| Aspect | Recherche classique (mots-clés) | Recherche sémantique (IA) |
+|---|---|---|
+| Ce qu'elle retrouve | Les mots exacts tapés, ou leurs variantes proches (pluriel, accents) | Le sens de la requête, même formulée autrement |
+| Fautes de frappe | Peu tolérées, sauf réglage spécifique | Généralement bien absorbées, par construction |
+| Synonymes et jargon métier | À configurer à la main (thésaurus) | Compris nativement, dans la limite du modèle utilisé |
+| Ce qui l'alimente | Un index inversé sur le texte des fiches | Des embeddings (représentation du sens) de chaque fiche |
+| Coût de fonctionnement | Faible, souvent inclus dans le CMS existant | Récurrent : abonnement SaaS ou appels API facturés à l'usage |
+| Prévisibilité des résultats | Élevée — on comprend pourquoi un résultat sort | Plus difficile à expliquer sans réglage et évaluation |
+
+</DataTable>
+
+## Les trois niveaux d'options, du réglage simple au sur-mesure
+
+**Entre « ne rien changer » et « construire un pipeline d'IA sur mesure », il existe un vrai palier intermédiaire — souvent le bon choix.**
+
+- **Réglage d'une recherche déjà en place.** Sur WordPress, des extensions comme Relevanssi ou SearchWP améliorent la pertinence (fautes de frappe, poids par champ, synonymes) sans changer de moteur ; la plupart des plateformes e-commerce ont des réglages équivalents dans leur recherche native. C'est souvent l'étape sautée alors qu'elle résout une bonne partie des cas.
+- **Moteur SaaS spécialisé, option sémantique.** Un service tiers (Algolia, Meilisearch, Typesense) se branche sur votre catalogue existant et propose une recherche sémantique en option, sans reconstruire le site. C'est l'option intermédiaire : rapide à mettre en place, mais avec un abonnement qui tourne en continu.
+- **Pipeline sur mesure.** Embeddings et base vectorielle intégrés directement au produit, généralement adossés à un RAG (retrieval-augmented generation, génération augmentée par récupération — la brique qui permet à une IA de s'appuyer sur vos propres documents). Cette voie ne se justifie qu'avec un volume et une spécificité qui dépassent ce qu'un SaaS couvre.
+
+<DataTable caption="Trois niveaux d'options pour une recherche sémantique, du réglage simple au sur-mesure">
+
+| Niveau | Ce que c'est | Coût indicatif | Pour qui |
+|---|---|---|---|
+| Réglage d'une recherche existante | Extension ou paramétrage fin du moteur déjà en place (WordPress, e-commerce) | Souvent inclus, ou une extension à quelques dizaines d'euros | Catalogue restreint, budget serré, besoin encore incertain |
+| Moteur SaaS spécialisé, option sémantique | Service tiers branché sur le catalogue existant (Algolia, Meilisearch, Typesense) | Gratuit à faible volume, puis quelques dizaines à quelques centaines d'euros par mois | Catalogue moyen à riche, recherche classique qui montre ses limites, pas d'équipe dev dédiée |
+| Pipeline sur mesure | Embeddings + base vectorielle intégrés au produit, souvent adossés à un RAG | Développement dédié + coût d'inférence continu, à cadrer au cas par cas | Volume important, besoin métier spécifique, équipe technique déjà en place |
+
+</DataTable>
+
+## Ce que la recherche sémantique apporte, et ce qu'elle ne résout pas
+
+**Les bénéfices sont réels sur le bon terrain, mais aucun n'est gratuit.**
+
+Ce qu'elle apporte :
+
+- Moins de recherches sans résultat sur un catalogue riche ou un vocabulaire hétérogène (plusieurs fournisseurs, plusieurs façons de décrire la même chose).
+- Une tolérance native aux fautes de frappe et aux formulations approximatives, sans thésaurus à maintenir à la main.
+- Une meilleure conversion sur les catalogues où le visiteur ne connaît pas le vocabulaire exact du secteur.
+
+Ce qu'elle ne résout pas :
+
+- **Un catalogue mal tenu.** Une fiche mal titrée, une catégorie incohérente ou une description trop courte reste mal retrouvée, sémantique ou pas — l'IA ne compense pas une donnée source pauvre.
+- **Le coût récurrent.** Contrairement à un réglage de recherche classique, un moteur sémantique en SaaS ou en API tourne en continu, qu'il serve beaucoup ou peu.
+- **La fiabilité sans évaluation.** Mal réglée, une recherche sémantique peut renvoyer des résultats sémantiquement proches mais concrètement faux — une confusion plus difficile à repérer qu'une simple absence de résultat.
+
+## Verdict par profil
+
+**La bonne réponse dépend du volume de votre catalogue et de la réalité déjà mesurée de l'échec de votre recherche actuelle, pas de l'envie d'ajouter de l'IA.**
+
+- **Site vitrine, pas de catalogue ou quelques dizaines de pages** : pas de recherche sémantique. Une navigation claire et une recherche basique suffisent largement.
+- **Catalogue de quelques dizaines à quelques centaines de références, avec de bons filtres** : réglez d'abord la recherche classique (synonymes, tolérance aux fautes, pertinence). Elle couvre la grande majorité de ces cas.
+- **Catalogue riche (plusieurs centaines à plusieurs milliers de références) ou vocabulaire hétérogène entre fiches**, avec des recherches vides documentées : un moteur SaaS avec option sémantique mérite d'être testé.
+- **Annuaire ou marketplace B2B à forte diversité de formulations métier** : la sémantique aide une fois les filtres et les catégories déjà consolidés — le choix de construire un annuaire ou un catalogue en premier lieu se tranche dans la rubrique [Outils métier](/documentation/outils-metier), pas ici.
+- **Base de connaissances interne ou support volumineux** : la brique pertinente est souvent un RAG plutôt qu'une simple recherche sémantique — voir la section suivante.
+- **Volume important, besoin métier spécifique, équipe technique déjà en place** : le sur-mesure devient rentable, mais seulement après avoir mesuré l'échec réel de la recherche classique — jamais avant.
+
+> **Ce que je constate en projet.** La demande arrive presque toujours formulée à l'envers : « on veut une recherche IA », alors que le problème, une fois creusé, est une recherche classique jamais réglée — pas de synonymes configurés, pas de tolérance aux fautes, un classement par date plutôt que par pertinence. Sur un annuaire ou un catalogue de quelques centaines de fiches, corriger ces réglages résout souvent l'essentiel, pour une fraction du coût d'une brique sémantique. La bascule redevient pertinente seulement quand ces réglages sont déjà faits et que le volume ou l'hétérogénéité du vocabulaire dépassent ce qu'ils peuvent couvrir.
+
+## Recherche sémantique et RAG : quel lien ?
+
+Techniquement, une recherche sémantique et un chatbot RAG s'appuient souvent sur le même mécanisme : des embeddings qui représentent le sens d'un texte, comparés par proximité plutôt que par égalité de mots. La différence est dans l'usage — la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. Cette brique commune fait l'objet d'un article dédié de cette rubrique, à paraître : elle n'a de sens qu'en soutien d'un besoin déjà identifié, ici la recherche.
+
+## Points de vigilance avant de se lancer
+
+- **Mesurez avant de changer.** Taux de recherches sans résultat, taux d'abandon après recherche, verbatims tapés. Sans ce chiffre de départ, impossible de vérifier après coup que la bascule a servi à quelque chose.
+- **Ne réglez pas un problème de catalogue avec de l'IA.** Une fiche mal titrée ou mal catégorisée reste mal retrouvée, sémantique ou pas — corrigez d'abord la donnée source.
+- **Budgétez le coût récurrent, pas seulement la mise en place.** Abonnement SaaS ou appels API tournent tant que le composant est en ligne, qu'il serve ou non.
+- **Prévoyez une phase d'évaluation humaine.** Testez sur un échantillon de requêtes réelles avant la mise en production ; une recherche sémantique mal réglée peut renvoyer des résultats plausibles mais faux.
+- **Vérifiez le sous-traitant si les requêtes peuvent contenir des données personnelles.** Un moteur SaaS ou une API d'embeddings tierce reçoit ce que vos visiteurs tapent : assurez-vous d'un contrat conforme aux [obligations RGPD du sous-traitant](https://www.cnil.fr/fr/sous-traitant) avant de brancher un service tiers sur des recherches sensibles.
+
+## FAQ — recherche sémantique
+
+### Comment savoir si ma recherche actuelle a un vrai problème de pertinence ?
+
+Trois signaux mesurables : un taux de recherches qui ne renvoient aucun résultat, un taux d'abandon élevé juste après une recherche, et des verbatims de recherche qui montrent que les visiteurs reformulent plusieurs fois avant de trouver. Sans au moins un de ces signaux documenté, le problème n'est pas encore assez réel pour justifier un changement.
+
+### La recherche sémantique tolère-t-elle les fautes de frappe ?
+
+Oui, généralement bien, par construction : elle compare le sens d'une requête à celui des fiches plutôt que les caractères exacts, ce qui absorbe une bonne partie des fautes et des variantes. Une recherche classique peut aussi tolérer les fautes, mais seulement si cette fonctionnalité a été configurée spécifiquement.
+
+### Puis-je ajouter une recherche sémantique à un site WordPress existant sans tout reconstruire ?
+
+Oui : la plupart des moteurs SaaS spécialisés se branchent sur un catalogue ou des contenus existants via une synchronisation ou une extension, sans changer le CMS. L'intégration reste un vrai chantier technique (indexation initiale, réglages, tests), mais elle ne remet pas en cause votre site.
+
+### Combien coûte une recherche sémantique, en SaaS et en sur-mesure ?
+
+En SaaS, comptez un premier palier gratuit ou à faible coût pour tester, puis quelques dizaines à quelques centaines d'euros par mois selon le volume de fiches et de requêtes. En sur-mesure, le développement s'ajoute au coût d'inférence continu (appels au modèle d'embeddings) — un budget qui se cadre au cas par cas plutôt qu'en fourchette générique.
+
+### Recherche sémantique et RAG, c'est le même mécanisme technique ?
+
+Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans un article dédié à paraître dans cette rubrique.
+
+### Une recherche sémantique peut-elle donner de moins bons résultats qu'une recherche classique ?
+
+Oui, si elle est mal réglée ou évaluée trop vite : elle peut renvoyer des résultats sémantiquement proches mais concrètement faux, sans que ce soit visible au premier coup d'œil. C'est pour cette raison qu'une phase de test sur des requêtes réelles, avant la mise en production, n'est pas optionnelle.
+
+## Sources
+
+- Algolia, [grille tarifaire](https://www.algolia.com/pricing) — paliers gratuit et payant d'un moteur de recherche SaaS, consultée en août 2026.
+- Meilisearch, [grille tarifaire Cloud](https://www.meilisearch.com/pricing) — auto-hébergement gratuit (licence MIT) et paliers Cloud, consultée en août 2026.
+- OpenAI, [tarifs de l'API](https://openai.com/api/pricing/) — coût des modèles d'embeddings utilisés dans un pipeline de recherche sémantique sur mesure, consultée en août 2026.
+- CNIL, [travailler avec un sous-traitant](https://www.cnil.fr/fr/sous-traitant) — obligations contractuelles RGPD applicables à un prestataire tiers qui traite des données pour votre compte.
+
+---
+
+**Et pour votre besoin ?** Si le point encore flou n'est pas la recherche mais la question d'avant — annuaire, catalogue ou plateforme à construire ou pas — l'outil [No-code, SaaS ou sur-mesure ?](/outils/nocode-saas-surmesure) vous oriente gratuitement en quelques minutes. Et si le diagnostic (volume réel, coût récurrent, budget de mise en œuvre) reste flou pour votre cas précis, la [visio conseil](/conseil) fait le tour de votre cas en 30 minutes : 150 € HT, intégralement crédités si un projet démarre sous 30 jours.
+
+*Pour un exemple de recherche full-text classique bien réglée à l'échelle d'un annuaire B2B (sans brique sémantique, parce qu'à son volume actuel elle n'en a pas besoin) : [étude de cas Panorama Pub](/etudes-de-cas/panorama-pub).*
