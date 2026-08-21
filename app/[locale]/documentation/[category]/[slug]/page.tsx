@@ -72,6 +72,8 @@ const categoryLabels: Record<string, string> = {
   "etre-trouve": "Être trouvé à l'heure de l'IA",
   "ia-et-code": "IA & code",
   "avant-signer": "Avant de signer",
+  "outils-metier": "Outils métier",
+  presence: "Présence et audience",
 }
 
 function estimateReadingTime(content: string): number {
@@ -158,6 +160,8 @@ export default async function ArticlePage(props: ArticlePageProps) {
       "etre-trouve": ["seo", "marketing-digital", "wordpress-headless"],
       "ia-et-code": ["etre-trouve", "wordpress-headless", "applications-web-mobile"],
       "avant-signer": ["choisir", "ia-et-code", "projet-site-web"],
+      "outils-metier": ["ia-et-code", "applications-web-mobile", "wordpress-headless"],
+      presence: ["etre-trouve", "marketing-digital", "design-ui-ux"],
     }
 
     const relatedCategorySlugs = RELATED_CATEGORIES[params.category] || []

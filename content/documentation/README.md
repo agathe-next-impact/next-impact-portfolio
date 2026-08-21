@@ -37,10 +37,14 @@ La migration se fait **par lots**, pas d'un coup.
 `presence` · `etre-trouve`
 
 Attention : **la rubrique n'est pas la catégorie.** La catégorie est le dossier
-de contenu (11 valeurs, pilote l'URL) ; la rubrique est la taxonomie éditoriale
-visible du hub (7 valeurs, pilote le parcours). Trois rubriques — `reparer`,
-`outils-metier`, `presence` — n'ont d'ailleurs pas de dossier de contenu :
-elles agrègent des articles venus d'autres catégories.
+de contenu (13 valeurs, pilote l'URL) ; la rubrique est la taxonomie éditoriale
+visible du hub (7 valeurs, pilote le parcours). La plupart des rubriques créées
+pour ce chantier possèdent leur propre dossier de contenu, au nom identique à
+la rubrique (`ia-et-code`, `avant-signer`, `etre-trouve`, et depuis le
+2026-08-21 `presence` et `outils-metier`) : `category` et `rubrique` y valent
+la même chose. Seule `reparer` n'a pas de dossier de contenu propre : elle
+agrège des articles venus d'autres catégories (ex. A7 vit dans `ia-et-code/`
+mais déclare `rubrique: reparer`).
 
 ### `enBref` — le champ le plus important
 

@@ -852,6 +852,15 @@ const outilsMetier: HubTheme = {
       href: "/solutions-web/eligibilite",
     },
   ],
+  // À compléter au fil de la rédaction du cluster E (E0-E6 — chatbot, recherche
+  // sémantique, personnalisation, automatisation, RAG, IA dans une web app
+  // métier — voir .claude/docs/verdicts-vague-5.md, verdict mode 1 du
+  // 2026-08-21). Chaque entrée : { icon, name: {fr,en}, blurb: {fr,en},
+  // href: "/documentation/outils-metier/<slug>" }. Fichiers sources attendus
+  // dans content/documentation/outils-metier/<slug>.mdx (category ET rubrique
+  // = "outils-metier"). Ordre de rédaction recommandé par le vérificateur :
+  // E0 (chapeau) → E1/E2 → E5 (pour éviter qu'E5 ne recopie 75 % d'E1/E2).
+  reading: [],
   prestas: [
     {
       name: { fr: "Plateforme métier", en: "Custom platform" },
@@ -984,6 +993,16 @@ const presence: HubTheme = {
       href: "/audit-site-web",
     },
   ],
+  // À compléter au fil de la rédaction du cluster D (D0-D6 — contenu IA,
+  // rédaction sans pénalité, E-E-A-T, images IA, design assisté, RGPD/AI Act,
+  // contenu qui ne convertit pas — voir .claude/docs/verdicts-vague-5.md,
+  // verdict mode 1 du 2026-08-21). Chaque entrée : { icon, name: {fr,en},
+  // blurb: {fr,en}, href: "/documentation/presence/<slug>" }. Fichiers sources
+  // attendus dans content/documentation/presence/<slug>.mdx (category ET
+  // rubrique = "presence"). Point de vigilance signalé par le vérificateur :
+  // D4 recoupe une section déjà publiée dans ia-et-code/ce-que-l-ia-change-
+  // dans-la-creation-d-un-site-web.mdx — vérifier la frontière à la rédaction.
+  reading: [],
   prestas: [
     VISIO(
       "Où mettre l'effort ? On arbitre site, newsletter et réseaux en visio.",

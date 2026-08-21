@@ -30,6 +30,8 @@ const categoryLabels: Record<string, string> = {
   "etre-trouve": "Etre trouve a l'heure de l'IA (SEO & GEO)",
   "ia-et-code": "IA & code",
   "avant-signer": "Avant de signer",
+  "outils-metier": "Outils metier",
+  presence: "Presence et audience",
 };
 
 // Les 7 rubriques de decision du hub « Quelle techno web ? » — la taxonomie
