@@ -1,0 +1,198 @@
+---
+title: "Qu'est-ce que le RAG ? Fonctionnement, coût, maintenance"
+description: "Le RAG en langage décideur : comment il ancre les réponses d'une IA sur vos documents, pour quels usages, ce qu'il coûte à construire et à maintenir."
+category: outils-metier
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-08-21"
+dateModified: "2026-08-21"
+order: 2
+enBref:
+  - "Le RAG (retrieval-augmented generation, génération augmentée par récupération) désigne une IA qui va chercher l'information dans vos propres documents avant de rédiger sa réponse, plutôt que de répondre uniquement depuis la mémoire générale du modèle."
+  - "Cette étape de récupération réduit fortement le risque d'invention pure, mais ne l'élimine pas : une IA qui s'appuie sur un document réel reproduit fidèlement les erreurs ou les informations périmées que ce document contient déjà."
+  - "C'est la brique technique commune à un chatbot IA qui répond sur votre activité et à un moteur de recherche sémantique qui comprend le sens d'une requête — savoir si vous avez besoin de l'un ou de l'autre se tranche dans les articles dédiés à chacun, pas ici."
+  - "Le coût ne s'arrête jamais à la mise en place : un RAG suppose une base documentaire tenue à jour dans la durée, faute de quoi il répond avec assurance sur des informations devenues fausses."
+faq:
+  - question: "Qu'est-ce que le RAG, en langage simple ?"
+    answer: "Le RAG (retrieval-augmented generation, génération augmentée par récupération) est une méthode qui fait d'abord aller chercher l'information pertinente dans vos propres documents, puis la transmet à une IA générative pour qu'elle rédige sa réponse en s'appuyant dessus — plutôt que de laisser l'IA répondre uniquement depuis sa mémoire générale."
+  - question: "Le RAG empêche-t-il complètement les hallucinations d'une IA ?"
+    answer: "Non, il les réduit fortement sans les supprimer. Une IA qui s'appuie sur un document réel invente beaucoup moins, mais elle reproduit fidèlement une erreur ou une information périmée si le document source en contient une — le RAG déplace le risque vers la qualité et la fraîcheur de la base documentaire, il ne l'élimine pas."
+  - question: "Quelle est la différence entre le RAG et le fine-tuning d'un modèle IA ?"
+    answer: "Le RAG va chercher l'information dans une base externe à chaque question, une base qu'on peut corriger ou mettre à jour à tout moment sans toucher au modèle. Le fine-tuning ré-entraîne le modèle lui-même sur un jeu de données : plus lourd à mettre à jour, et les connaissances restent figées jusqu'au prochain entraînement."
+  - question: "Combien coûte la construction d'un RAG ?"
+    answer: "Cela dépend entièrement du niveau retenu : un outil SaaS avec RAG déjà intégré n'ajoute rien au-delà de son abonnement, une plateforme RAG configurable ajoute un abonnement dédié facturé au volume, et un pipeline sur mesure ajoute le développement plus un coût d'inférence et d'hébergement continu. Aucun chiffre unique n'est honnête sans regarder le volume réel de votre base documentaire."
+  - question: "Pourquoi la maintenance d'un RAG coûte-t-elle aussi cher que sa mise en place, parfois plus ?"
+    answer: "Parce que chaque changement dans les documents sources — une procédure mise à jour, une fiche produit retirée, un tarif corrigé — doit être répercuté dans l'index pour que l'IA continue de répondre juste. Sans quelqu'un chargé de ce suivi, le RAG répond avec la même assurance sur une information devenue fausse que sur une information exacte."
+  - question: "Un chatbot ou une recherche sémantique ont-ils toujours besoin d'un RAG ?"
+    answer: "Non. Un chatbot scripté sans IA générative ou une recherche par mots-clés bien réglée n'ont besoin d'aucun RAG. Il ne devient pertinent qu'une fois décidé qu'un chatbot ou une recherche doivent répondre en s'appuyant sur vos propres documents plutôt que sur un script fixe ou une correspondance exacte de mots — une décision qui se prend dans les articles dédiés à chacun de ces deux composants."
+howto:
+  - name: "Ingestion des documents sources"
+    text: "Rassembler les documents qui doivent nourrir les réponses de l'IA — pages du site, PDF, fiches produit, procédures internes — et les convertir dans un format exploitable."
+  - name: "Découpage en fragments (chunking)"
+    text: "Découper chaque document en fragments de taille gérable, pour que la récupération retrouve le passage précis utile plutôt que le document entier."
+  - name: "Génération des embeddings"
+    text: "Transformer chaque fragment en embeddings, une représentation vectorielle de son sens, calculée par un modèle dédié et facturée à l'usage."
+  - name: "Indexation dans une base vectorielle"
+    text: "Stocker ces embeddings dans une base vectorielle spécialisée, capable de retrouver rapidement les fragments les plus proches du sens d'une requête."
+  - name: "Récupération et génération à chaque requête"
+    text: "À chaque question posée, aller chercher les fragments les plus pertinents dans la base vectorielle, puis les transmettre à l'IA générative pour qu'elle rédige sa réponse en s'appuyant dessus."
+keyFigures:
+  - value: "2020"
+    label: "Année d'introduction du terme RAG (retrieval-augmented generation) par une équipe de Facebook AI Research (aujourd'hui Meta AI)"
+    source: "Lewis et al., arXiv:2005.11401"
+  - value: "2 Go"
+    label: "Stockage inclus dans l'offre gratuite d'une base vectorielle spécialisée (Pinecone), pour prototyper un RAG avant d'engager un budget"
+    source: "Pinecone, pricing (consulté août 2026)"
+  - value: "0,02 $ / million de tokens"
+    label: "Coût d'indexation en embeddings d'un corpus de documents pour un RAG (modèle text-embedding-3-small d'OpenAI), hors développement et hébergement de la base vectorielle"
+    source: "OpenAI, API pricing (consulté août 2026)"
+---
+
+*Article publié le 21 août 2026. Les tarifs des API d'embeddings et des bases vectorielles citées ci-dessous évoluent vite ; le mécanisme et la question de la maintenance, eux, restent valables au-delà des prix du moment.*
+
+Cet article referme une promesse posée dans deux autres articles de cette rubrique. [Faut-il un chatbot IA sur son site ?](/documentation/outils-metier/faut-il-un-chatbot-ia-sur-son-site) et [Recherche sémantique : faut-il l'ajouter à votre site ?](/documentation/outils-metier/recherche-classique-ou-recherche-semantique-que-choisir) évoquent tous les deux le RAG en une phrase, puis renvoient ici pour le détail. Ce n'est volontairement pas un troisième article sur « faut-il un chatbot » ou « faut-il une recherche sémantique » — ces deux questions sont tranchées ailleurs, avec leur propre grille et leur propre verdict. Celui-ci reste au niveau de la brique technique commune aux deux : comment elle fonctionne, pourquoi elle limite les inventions de l'IA sans les supprimer, et ce qu'elle coûte — à la construction, puis dans la durée. Pour la vue d'ensemble des six familles de composants IA d'un site, [Quels composants IA ont leur place sur votre site ?](/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site) reste le bon point de départ.
+
+## Le RAG, en langage décideur : qu'est-ce que c'est ?
+
+**Le RAG (retrieval-augmented generation, génération augmentée par récupération) est une méthode en deux temps : d'abord retrouver l'information pertinente dans une base de documents choisie à l'avance, ensuite seulement la transmettre à une IA générative pour qu'elle rédige une réponse en s'appuyant dessus.** Sans RAG, une IA générative répond uniquement depuis ce qu'elle a appris pendant son entraînement — une mémoire générale, arrêtée à une date donnée, qui ne sait rien de vos tarifs actuels, de votre procédure de retour ou du produit sorti la semaine dernière.
+
+L'image la plus proche est celle d'un collaborateur qui, avant de répondre à une question, va d'abord consulter le classeur de procédures à jour plutôt que de répondre de mémoire. Le classeur, dans un RAG, c'est la base de connaissances — vos pages d'aide, votre documentation produit, vos procédures internes. L'IA générative reste la même technologie que celle utilisée sans RAG ; ce qui change, c'est qu'on lui met le bon document sous les yeux avant de lui demander de répondre.
+
+Le terme a été formalisé en 2020 par une équipe de chercheurs de Facebook AI Research (aujourd'hui Meta AI), dans un article resté la référence technique du domaine ([Lewis et al., *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*](https://arxiv.org/abs/2005.11401)) — la méthode s'est depuis généralisée à la quasi-totalité des chatbots et moteurs de recherche IA sérieux du marché.
+
+## Pourquoi le RAG limite les hallucinations, sans les supprimer
+
+**Une IA générative sans RAG invente parfois une réponse plausible plutôt que d'admettre qu'elle ne sait pas — c'est ce qu'on appelle une hallucination.** Le RAG réduit ce risque parce que l'IA n'a plus à deviner : elle a sous les yeux un ou plusieurs extraits de documents réels au moment de rédiger sa réponse, et sa tâche se rapproche de la synthèse — reformuler ce qui est écrit — plutôt que de l'invention pure.
+
+Ça ne supprime pas le risque, ça le déplace. Trois façons pour un RAG de continuer à se tromper, malgré la récupération de documents réels :
+
+- **Le document source est faux ou périmé.** Une IA qui cite fidèlement une procédure obsolète produit une réponse fausse avec la même assurance qu'une réponse juste — le mécanisme fonctionne parfaitement, c'est la base documentaire qui ment.
+- **La récupération retrouve le mauvais passage.** Si le système va chercher un extrait qui ressemble à la question sans vraiment y répondre, l'IA rédige quand même une réponse à partir de ce mauvais extrait, plutôt que de signaler qu'elle n'a rien trouvé de pertinent.
+- **L'IA reformule au-delà de ce que dit le document.** Même avec le bon extrait sous les yeux, un modèle génératif peut ajouter un détail qui n'y figure pas — une dérive plus discrète qu'une invention pure, parce que le reste de la réponse est correct.
+
+Un RAG bien construit reste donc nettement plus fiable qu'une IA sans RAG sur du contenu propre à votre activité — mais « plus fiable » n'est pas « fiable à 100 % ». La supervision humaine décrite plus loin reste nécessaire, pas optionnelle.
+
+## RAG, chatbot, recherche sémantique : qui a besoin de quoi
+
+**Le RAG n'est jamais un projet en soi — c'est une brique qui alimente un chatbot, une recherche, ou les deux à la fois, une fois que l'un ou l'autre est déjà décidé.** Il partage la même fondation technique dans les deux cas — les embeddings, une représentation vectorielle du sens d'un texte, comparée par proximité mathématique plutôt que par égalité de caractères — mais pas le même usage final :
+
+- Dans un **chatbot**, le RAG alimente une réponse rédigée : l'IA récupère les documents pertinents, puis génère une phrase qui synthétise leur contenu. La question de savoir si un chatbot est justifié chez vous — volume de questions répétitives, base de contenu fiable, qui surveille — se tranche dans [Faut-il un chatbot IA sur son site ?](/documentation/outils-metier/faut-il-un-chatbot-ia-sur-son-site), pas ici.
+- Dans une **recherche sémantique**, la récupération du RAG retourne une liste de résultats classés par pertinence, sans rédiger de réponse : c'est au visiteur de choisir parmi les résultats. La question de savoir si votre catalogue justifie cette upgrade se tranche dans [Recherche sémantique : faut-il l'ajouter à votre site ?](/documentation/outils-metier/recherche-classique-ou-recherche-semantique-que-choisir), pas ici.
+
+Ce que cet article tranche, à la place : une fois l'un des deux décidé, votre base documentaire justifie-t-elle d'aller jusqu'au RAG plutôt que de s'en tenir à une FAQ scriptée ou une recherche par mots-clés classique — et si oui, à quel prix, à la construction et dans la durée.
+
+## Comment un RAG se construit, techniquement (sans jargon)
+
+**Cinq étapes composent un pipeline RAG, qu'il soit packagé dans un outil SaaS ou construit sur mesure — les trois premières une fois au lancement puis à chaque mise à jour, les deux dernières à chaque question posée.**
+
+1. **Ingestion des documents sources.** Rassembler ce qui doit nourrir les réponses de l'IA — pages du site, PDF, fiches produit, procédures internes — dans un format exploitable.
+2. **Découpage en fragments (chunking).** Couper chaque document en fragments de taille gérable, pour que la récupération retrouve le passage précis utile plutôt que tout le document d'un coup.
+3. **Génération des embeddings.** Transformer chaque fragment en embeddings — une représentation vectorielle de son sens — calculés par un modèle dédié et facturés à l'usage.
+4. **Indexation dans une base vectorielle.** Stocker ces embeddings dans une base de données spécialisée, capable de retrouver en quelques millisecondes les fragments les plus proches du sens d'une requête.
+5. **Récupération puis génération, à chaque question posée.** Le système retrouve les fragments les plus pertinents dans la base vectorielle, les transmet à l'IA générative, qui rédige sa réponse — ou, pour une recherche, les retourne directement classés par pertinence.
+
+Les trois premières étapes forment le chantier de mise en place ; elles se répètent, en plus petit, à chaque fois que la base documentaire change — c'est tout l'enjeu de la section suivante.
+
+## Ce que ça coûte à mettre en place
+
+**Trois niveaux existent, avec un écart de contrôle et de coût important entre eux.**
+
+<DataTable caption="RAG : trois niveaux d'implémentation, du plus simple au sur-mesure">
+
+| Niveau | Ce que c'est | Contrôle sur la base documentaire | Coût indicatif |
+|---|---|---|---|
+| Outil SaaS avec RAG intégré | Chatbot ou moteur de recherche du marché qui embarque déjà son propre RAG — vous importez vos documents, l'éditeur gère le reste | Limité aux formats et connecteurs proposés par l'éditeur | Inclus dans l'abonnement à l'outil (chatbot ou recherche), pas un coût séparé |
+| Plateforme RAG configurable | Service spécialisé dans le RAG lui-même (indexation, réglages de récupération), branché sur un chatbot ou une recherche construits par ailleurs | Réglages fins possibles (découpage, seuils de pertinence) sans écrire de pipeline | Abonnement dédié en plus de l'outil final, facturé au volume de documents et de requêtes |
+| Pipeline sur mesure | Embeddings, base vectorielle et logique de récupération développés et hébergés en propre | Total — chaque étape du pipeline est réglable | Développement, plus un coût d'inférence et d'hébergement continu, à cadrer au cas par cas |
+
+</DataTable>
+
+À titre d'illustration du seul poste « embeddings », en août 2026 : indexer un corpus de documents avec le modèle text-embedding-3-small d'OpenAI coûte environ 0,02 $ par million de tokens — hors développement et hors hébergement de la base vectorielle elle-même. Côté hébergement, une base vectorielle spécialisée comme Pinecone propose un palier gratuit couvrant jusqu'à 2 Go de stockage, suffisant pour prototyper avant d'engager un budget ; au-delà, la facturation suit le volume stocké et le nombre de requêtes de lecture. Ce ne sont ni des tarifs Next Impact, ni une recommandation d'outil : deux exemples sourcés pour donner un ordre de grandeur, sur un marché où les prix bougent chaque trimestre.
+
+## Ce que ça coûte à maintenir dans la durée — le point qu'on découvre après coup
+
+**C'est le poste que les deux articles voisins de cette rubrique n'ont fait qu'effleurer, et c'est le plus mal budgété des deux.** Un RAG n'est pas un livrable qu'on ferme une fois en ligne : sa qualité dépend entièrement de la fraîcheur de la base qui l'alimente, et cette fraîcheur ne se maintient pas toute seule.
+
+<DataTable caption="RAG : coût de mise en place et coût de maintenance, deux budgets différents">
+
+| Poste | À la mise en place | En continu, tant que le RAG est en ligne |
+|---|---|---|
+| Documents sources | Rassembler et nettoyer le corpus de départ | Ajouter, corriger, retirer les documents devenus obsolètes |
+| Embeddings et indexation | Indexer le corpus initial | Ré-indexer à chaque changement significatif de contenu |
+| Base vectorielle | Provisionner l'espace de stockage nécessaire | Le stockage et les appels de lecture augmentent avec le volume indexé |
+| Supervision humaine | Valider les premières réponses sur des cas réels | Vérifier régulièrement que les réponses restent exactes, corriger ce qui dérive |
+
+</DataTable>
+
+Deux mécanismes expliquent pourquoi ce coût est récurrent, pas ponctuel :
+
+- **La base documentaire vit.** Une procédure change, un produit est retiré du catalogue, un tarif est corrigé : sans repasser par les étapes d'ingestion et d'indexation, le RAG continue de répondre avec l'ancienne version — et avec la même assurance que s'il avait raison.
+- **La ré-indexation a un coût qui suit le volume, pas une fois pour toutes.** Chaque mise à jour significative du corpus déclenche un nouveau calcul d'embeddings sur les fragments concernés ; sur une base qui change souvent, ce coût d'inférence tourne en continu, au même titre qu'un abonnement.
+
+Un budget de projet RAG qui ne prévoit que la construction, sans ligne dédiée à qui vérifie et met à jour la base ensuite, sous-estime systématiquement son coût réel.
+
+## Verdict par profil
+
+**Un RAG ne se justifie que si votre base documentaire est à la fois assez volumineuse pour dépasser ce qu'une FAQ scriptée ou une recherche par mots-clés peuvent couvrir, et assez vivante pour que la question de la fraîcheur se pose réellement.**
+
+- **Base de connaissances interne volumineuse (procédures, documentation produit, politique interne) qui change plusieurs fois par mois** : candidat naturel, à condition d'avoir identifié qui maintient la base — pas seulement qui l'a construite.
+- **Chatbot ou recherche déjà en place, jugés insuffisants sur les questions spécifiques à votre activité** : le RAG est probablement la brique manquante, une fois vérifié que le contenu source existe et reste exact.
+- **FAQ courte et stable (moins d'une trentaine de questions, qui changent rarement)** : pas de RAG. Une FAQ scriptée ou une recherche classique bien réglée suffit, pour une fraction du coût et sans risque de dérive.
+- **Documentation qui change plusieurs fois par semaine, sans personne clairement chargée de la tenir à jour** : le problème à résoudre en premier n'est pas technique, c'est de désigner cette personne. Un RAG posé sur une base non maintenue amplifie le problème plutôt que de le résoudre.
+- **Projet encore au stade de l'idée, sans chatbot ni recherche déjà décidés** : prématuré. La question à trancher d'abord est celle du composant visible — [chatbot](/documentation/outils-metier/faut-il-un-chatbot-ia-sur-son-site) ou [recherche sémantique](/documentation/outils-metier/recherche-classique-ou-recherche-semantique-que-choisir) — le RAG ne se pose qu'une fois l'un des deux acté.
+
+## Points de vigilance avant de lancer un RAG
+
+- **RGPD — vos documents partent chez un tiers.** Si vos sources contiennent des données personnelles (dossiers clients, échanges, CV), les envoyer à une API d'embeddings tierce est un traitement de données personnelles : le fournisseur devient un sous-traitant au sens du RGPD, avec les obligations contractuelles que cela implique. La CNIL détaille ce [cadre applicable à un sous-traitant](https://www.cnil.fr/fr/sous-traitant).
+- **Une démo qui marche n'est pas une mise en production fiable.** Une démo teste rarement le cas où un document a été supprimé, contredit un autre, ou n'a jamais été mis à jour depuis six mois — c'est justement ce cas qui arrive en premier une fois en ligne.
+- **Deux documents contradictoires dans la base peuvent tous les deux être récupérés à la même requête.** Une ancienne version jamais retirée et la nouvelle qui la remplace : le système choisit son extrait par proximité de sens, pas par fraîcheur — rien ne garantit qu'il prenne le bon.
+- **Le coût suit le volume ET la fréquence de mise à jour**, pas seulement la taille du corpus au démarrage.
+
+## Questions à se poser avant de lancer un RAG
+
+- Qui, dans l'organisation, est responsable de mettre à jour la base documentaire quand un contenu source change ?
+- À quelle fréquence les documents sources changent-ils réellement — un chiffre, pas une impression ?
+- Que se passe-t-il quand deux documents de la base se contredisent, faute d'avoir retiré l'ancienne version ?
+- Le budget prévoit-il la ré-indexation récurrente, ou seulement la mise en place initiale ?
+- Vos documents sources contiennent-ils des données personnelles qui partiraient vers une API tierce ?
+- Le chatbot ou la recherche que ce RAG doit alimenter sont-ils déjà décidés — ou ce sujet reste-t-il à trancher avant ?
+
+> **Ce que je constate en projet.** La question qui revient après la démo n'est presque jamais « est-ce que ça marche » — un RAG bien construit répond juste dès le premier jour, presque toujours. C'est trois mois plus tard que ça se joue : qui remarque qu'une procédure a changé, qu'une fiche produit a été retirée, qu'un tarif affiché n'est plus le bon — et va mettre à jour la base avant que l'IA continue de répondre juste avec assurance sur une information périmée. Sur les dispositifs de veille par agents IA que j'ai livrés — pour [L'Hermitage](/etudes-de-cas/hermitage-veille) et pour [Urban Pousses](/etudes-de-cas/urban-pousses-veille) — la même discipline s'applique : chaque source est revérifiée à intervalle régulier, pas une seule fois au lancement, parce qu'une source qui avait raison hier peut avoir tort aujourd'hui sans prévenir. C'est exactement le réflexe qui manque le plus souvent sur un RAG mis en production : le budget prévoit la construction, rarement la personne chargée de vérifier, chaque mois, que la base qui l'alimente dit encore la vérité.
+
+## FAQ — RAG et base de connaissances
+
+### Qu'est-ce que le RAG, en langage simple ?
+
+Le RAG (retrieval-augmented generation, génération augmentée par récupération) est une méthode qui fait d'abord aller chercher l'information pertinente dans vos propres documents, puis la transmet à une IA générative pour qu'elle rédige sa réponse en s'appuyant dessus — plutôt que de laisser l'IA répondre uniquement depuis sa mémoire générale.
+
+### Le RAG empêche-t-il complètement les hallucinations d'une IA ?
+
+Non, il les réduit fortement sans les supprimer. Une IA qui s'appuie sur un document réel invente beaucoup moins, mais elle reproduit fidèlement une erreur ou une information périmée si le document source en contient une — le RAG déplace le risque vers la qualité et la fraîcheur de la base documentaire, il ne l'élimine pas.
+
+### Quelle est la différence entre le RAG et le fine-tuning d'un modèle IA ?
+
+Le RAG va chercher l'information dans une base externe à chaque question, une base qu'on peut corriger ou mettre à jour à tout moment sans toucher au modèle. Le fine-tuning ré-entraîne le modèle lui-même sur un jeu de données : plus lourd à mettre à jour, et les connaissances restent figées jusqu'au prochain entraînement.
+
+### Combien coûte la construction d'un RAG ?
+
+Cela dépend entièrement du niveau retenu : un outil SaaS avec RAG déjà intégré n'ajoute rien au-delà de son abonnement, une plateforme RAG configurable ajoute un abonnement dédié facturé au volume, et un pipeline sur mesure ajoute le développement plus un coût d'inférence et d'hébergement continu. Aucun chiffre unique n'est honnête sans regarder le volume réel de votre base documentaire.
+
+### Pourquoi la maintenance d'un RAG coûte-t-elle aussi cher que sa mise en place, parfois plus ?
+
+Parce que chaque changement dans les documents sources — une procédure mise à jour, une fiche produit retirée, un tarif corrigé — doit être répercuté dans l'index pour que l'IA continue de répondre juste. Sans quelqu'un chargé de ce suivi, le RAG répond avec la même assurance sur une information devenue fausse que sur une information exacte.
+
+### Un chatbot ou une recherche sémantique ont-ils toujours besoin d'un RAG ?
+
+Non. Un chatbot scripté sans IA générative ou une recherche par mots-clés bien réglée n'ont besoin d'aucun RAG. Il ne devient pertinent qu'une fois décidé qu'un chatbot ou une recherche doivent répondre en s'appuyant sur vos propres documents plutôt que sur un script fixe ou une correspondance exacte de mots — une décision qui se prend dans les articles dédiés à chacun de ces deux composants.
+
+## Sources
+
+- Lewis, P. et al., [*Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*](https://arxiv.org/abs/2005.11401), Facebook AI Research, 2020 — l'article qui a formalisé le terme RAG.
+- Google Cloud, [*What is Retrieval-Augmented Generation (RAG)?*](https://cloud.google.com/use-cases/retrieval-augmented-generation) — définition de référence du mécanisme, consultée en août 2026.
+- OpenAI, [tarifs de l'API](https://openai.com/api/pricing/) — coût d'indexation en embeddings, consultés en août 2026.
+- Pinecone, [pricing](https://www.pinecone.io/pricing/) — paliers gratuit et payant d'une base vectorielle spécialisée, consultés en août 2026.
+- CNIL, [travailler avec un sous-traitant](https://www.cnil.fr/fr/sous-traitant) — obligations RGPD applicables à un prestataire IA tiers qui reçoit vos documents.
+
+---
+
+**Et pour votre base de connaissances ?** Si le doute porte encore sur l'outil visible plutôt que sur le RAG lui-même, [Faut-il un chatbot IA sur son site ?](/documentation/outils-metier/faut-il-un-chatbot-ia-sur-son-site) et [Recherche sémantique : faut-il l'ajouter à votre site ?](/documentation/outils-metier/recherche-classique-ou-recherche-semantique-que-choisir) tranchent cette question en amont. Si vous hésitez entre un outil du marché et un développement dédié pour la brique elle-même, [No-code, SaaS ou sur-mesure ?](/outils/nocode-saas-surmesure) vous oriente gratuitement en quelques minutes. Et une fois le chatbot ou la recherche décidés, si un RAG semble justifié mais que le cadrage reste flou — volume documentaire réel, qui maintient la base, budget de fonctionnement — le [Pack de mise en œuvre IA](/conseil) (1 900 €, 2 visios d'1 h, cahier des charges et pack de prompts et d'agents prêts à construire) est le format pensé pour ce genre de brique.
