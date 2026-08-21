@@ -1,0 +1,146 @@
+---
+title: "Quels composants IA ont leur place sur votre site ?"
+description: "Chatbot, recherche IA, personnalisation, automatisation, RAG : la grille pour trier ce qui sert votre site de ce qui coûte cher sans retour."
+category: outils-metier
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-08-21"
+dateModified: "2026-08-21"
+order: 1
+enBref:
+  - "Six familles de composants IA peuvent s'ajouter à un site — chatbot, recherche sémantique, personnalisation, automatisation formulaire vers CRM, RAG (génération augmentée par récupération à partir de vos propres documents) et IA intégrée à une web app métier — et aucune ne se justifie sans un problème réel, mesurable, et un volume qui couvre son coût récurrent."
+  - "Le bon réflexe est de partir du problème (questions répétitives, catalogue où l'on ne trouve rien, ressaisies manuelles) plutôt que de la technologie, puis de vérifier qui sera responsable si le composant répond mal une fois en ligne."
+  - "En 2026, la plupart des sites vitrines n'ont besoin d'aucun de ces composants au lancement ; ils deviennent pertinents à partir d'un volume ou d'une complexité identifiables, famille par famille."
+  - "Depuis le 2 août 2026, un chatbot doit légalement informer l'utilisateur qu'il parle à une intelligence artificielle, en application de l'article 50 du règlement européen sur l'IA (AI Act)."
+faq:
+  - question: "Faut-il un chatbot IA sur mon site ?"
+    answer: "Seulement si vous pouvez chiffrer le problème qu'il résout : un volume mesurable de questions répétitives et une base de contenu fiable pour y répondre. Sans ces deux conditions, un chatbot est un abonnement récurrent qui répond parfois à côté, au nom de votre marque, sans que personne ne le surveille."
+  - question: "Quelle est la différence entre une recherche classique et une recherche sémantique par IA ?"
+    answer: "Une recherche classique retrouve les mots exacts tapés par le visiteur ; une recherche sémantique comprend le sens de la requête même si vos fiches emploient d'autres mots. Elle ne se justifie qu'à partir d'un catalogue suffisamment riche pour qu'une recherche classique échoue régulièrement."
+  - question: "Le RAG et le chatbot, c'est la même chose ?"
+    answer: "Non : le RAG (retrieval-augmented generation, génération augmentée par récupération) est le mécanisme technique qui permet à une IA de répondre en s'appuyant sur vos propres documents plutôt que sur sa mémoire générale. C'est une brique qui peut alimenter un chatbot ou une recherche, jamais un projet autonome."
+  - question: "Un petit site vitrine a-t-il besoin de composants IA ?"
+    answer: "Rarement au lancement. Un site vitrine sans catalogue, sans volume de support et sans formulaire complexe n'a, dans la plupart des cas, aucun problème que ces composants résolvent — l'énergie va d'abord au contenu et à la structure du site lui-même."
+  - question: "Comment savoir si un composant IA sur mon site est un gadget plutôt qu'un outil utile ?"
+    answer: "Trois signaux : personne ne sait dire quel problème précis il résout, le volume ne justifie pas son coût récurrent, ou personne n'est désigné pour surveiller ce qu'il produit une fois en ligne. Si l'un de ces trois signaux est présent, c'est un gadget."
+  - question: "Mon chatbot doit-il dire qu'il est une intelligence artificielle ?"
+    answer: "Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte."
+  - question: "Par quel composant IA commencer si je dois n'en choisir qu'un ?"
+    answer: "Celui qui répond au problème le plus coûteux aujourd'hui, pas le plus visible. Un formulaire ressaisi à la main dans un CRM coûte des heures chaque semaine et se corrige souvent plus vite et moins cher qu'un chatbot — c'est fréquemment le meilleur point de départ."
+keyFigures:
+  - value: "2 août 2026"
+    label: "Entrée en application de l'obligation de transparence des chatbots (art. 50 de l'AI Act européen)"
+    source: "Règlement (UE) 2024/1689"
+---
+
+*Article publié le 21 août 2026. Les noms d'outils et les tarifs des API évoluent vite ; la grille de décision, elle, reste valable au-delà des produits du moment.*
+
+Cet article ouvre le volet le plus récent de la rubrique [Outils métier](/documentation/outils-metier) : les briques d'intelligence artificielle qu'on peut ajouter à un site déjà en ligne — chatbot, recherche intelligente, personnalisation, automatisation, RAG, IA dans un outil interne. Il tient une promesse faite ailleurs sur ce site : [Ce que l'IA change dans la création d'un site web](/documentation/ia-et-code/ce-que-l-ia-change-dans-la-creation-d-un-site-web) annonçait que « le tri entre les composants qui méritent leur place et les autres » aurait sa rubrique dédiée — c'est cet article qui le fait, famille par famille, verdict court à chaque fois. Si votre question porte sur la fabrication même du site plutôt que sur ce qu'on y ajoute, direction la rubrique [Choisir sa techno](/documentation/choisir).
+
+## La grille de triage : trois questions avant d'ajouter un composant IA
+
+**Un composant IA ne se choisit jamais pour lui-même — il se déduit d'un problème identifié, mesuré, et d'un budget de fonctionnement assumé dans la durée.** Trois questions, dans cet ordre, suffisent à trancher la plupart des cas avant même de regarder les outils du marché.
+
+1. **Quel problème précis ce composant résout-il — et pouvez-vous le mesurer ?** « Ça ferait moderne » n'est pas un problème. « Le support reçoit 40 fois la même question par semaine », « un visiteur sur trois abandonne la recherche sans résultat », « chaque formulaire prend cinq minutes de ressaisie manuelle » en sont. Sans ce chiffre, il n'y a rien à trier — seulement une idée séduisante.
+2. **Le volume justifie-t-il le coût récurrent ?** Contrairement à une page statique, un composant IA n'est jamais un coût qu'on paie une fois : abonnement à l'outil, appels à une API facturés à l'usage, temps humain de surveillance et de correction. Ce coût tourne tant que le composant est en ligne, qu'il serve ou non.
+3. **Qui est responsable si le composant répond mal ?** Un chatbot qui invente une réponse, une recommandation qui pousse le mauvais produit, un formulaire mal routé : ça arrive, sous votre marque. La question n'est pas « est-ce que ça peut arriver » mais « qui corrige, et en combien de temps ».
+
+## Les six familles de composants IA d'un site, et leur verdict court
+
+**Sous l'étiquette « IA sur mon site », six familles bien différentes se cachent — chacune répond à un problème précis, et aucune ne devrait apparaître sans qu'on ait d'abord identifié ce problème.** Les fiches détaillées de chaque famille arrivent progressivement dans cette rubrique ; cet article donne le verdict court en attendant, et sera mis à jour avec les liens au fur et à mesure de leur publication.
+
+### Le chatbot IA
+
+Un programme qui répond aux questions de vos visiteurs en langage naturel, à partir de vos contenus ou d'une base de connaissances dédiée. Il vaut le coup quand le volume de questions répétitives est réel et mesuré (support saturé, mêmes questions qui reviennent) et qu'une base de contenu fiable existe pour l'alimenter. Sa limite : il répond parfois à côté, exige une surveillance humaine régulière, et depuis le 2 août 2026 la loi impose de préciser à l'utilisateur qu'il parle à une IA — l'[article 50 du règlement européen sur l'IA](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) le rend obligatoire, sauf si c'est déjà évident du contexte. **Verdict : utile si le volume est réel et mesuré ; gadget coûteux posé « parce qu'il en faut un ».**
+
+### La recherche sémantique
+
+Un moteur de recherche qui comprend le sens d'une requête — « bottes de pluie enfant » — même si vos fiches emploient d'autres mots — « bottes junior imperméables » — contrairement à une recherche par mots-clés stricte. Elle n'a d'intérêt qu'une fois le besoin de recherche déjà avéré : un catalogue riche où une recherche classique échoue régulièrement. Un site de quinze pages n'en a pas besoin, quel que soit son secteur. Techniquement, elle s'appuie souvent sur les mêmes fondations qu'une recherche full-text bien construite ; pour qui développe soi-même une marketplace ou un annuaire, ces fondations sont posées dans [Marketplace et annuaire B2B](/documentation/applications-web-mobile/marketplace-et-annuaire-b2b). **Verdict : utile passé un certain volume de catalogue et une recherche classique qui échoue ; inutile en dessous.**
+
+### La personnalisation par IA
+
+Adapter automatiquement ce qu'un visiteur voit — mise en avant, recommandations, contenu affiché — sans qu'il ait formulé de requête, à partir de son comportement ou de son profil. Elle demande un volume de trafic et de catalogue suffisant pour que la donnée comportementale ait un sens statistique : en dessous, elle personnalise sur du bruit, et les recommandations ne s'améliorent jamais. Le coût de mise en place et de réglage est significatif. **Verdict : réservée aux sites à fort trafic ou catalogue conséquent ; un boulet ailleurs.**
+
+### L'automatisation formulaire vers CRM
+
+Qualifier, enrichir et router automatiquement une demande entrante vers le bon outil et le bon interlocuteur, sans ressaisie manuelle. Cette question est distincte du choix du CRM lui-même — un choix déjà tranché ailleurs sur ce site : [Plateforme métier sur-mesure vs SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas) explique pourquoi un CRM générique reste la bonne option dans la grande majorité des cas. L'automatisation, elle, se justifie souvent même quand le CRM reste un outil du marché : le gain se mesure en minutes récupérées à chaque formulaire. **Verdict : souvent le meilleur retour sur investissement du lot, parce que le gain de temps se mesure concrètement.**
+
+### Le RAG (retrieval-augmented generation, génération augmentée par récupération)
+
+Le mécanisme technique qui permet à une IA générative de répondre en s'appuyant sur vos propres documents plutôt que sur sa seule mémoire générale — c'est la brique qui rend un chatbot ou une recherche fiables sur votre contenu propre. Ce n'est pas un produit qu'on installe seul : il n'a de sens qu'en soutien d'un chatbot ou d'une recherche déjà justifiés par un besoin réel. Il hérite des limites de sa base documentaire — mal tenue, elle produit des réponses fausses avec assurance — et d'un coût de maintenance continu : documents à tenir à jour, index à régénérer. **Verdict : une brique, jamais un projet — sa pertinence dépend entièrement de ce qu'elle alimente.**
+
+### L'IA dans une web app métier
+
+Des fonctions IA intégrées à un outil interne — tableau de bord, copilote, aide à la décision — réservées à une équipe authentifiée, pas aux visiteurs publics du site. Elle vaut le coup quand une équipe traite un volume de données ou de décisions répétitives où une assistance IA fait gagner un temps mesurable. Sa limite : elle suppose déjà une web app, ou le besoin d'en construire une — ce n'est pas une brique qu'on ajoute à un site vitrine. La question de fond, « ai-je besoin d'une web app plutôt que d'un site », se tranche avant, dans [Site ou web app : comment choisir ?](/documentation/applications-web-mobile/site-ou-web-app-comment-choisir). **Verdict : pertinent une fois la web app elle-même justifiée — jamais la première brique à poser.**
+
+## Trois signaux qui trahissent un gadget plutôt qu'un outil utile
+
+**Trois signaux, indépendamment de la famille de composant, indiquent qu'on est en train de poser un gadget plutôt que de résoudre un problème.**
+
+- **Personne ne sait dire quel problème précis il résout.** La justification tient en une phrase vague — « ça fait moderne », « le concurrent en a un » — plutôt qu'en un chiffre.
+- **Le volume ne justifie pas le coût récurrent.** Un chatbot pour trois questions par mois, une recherche sémantique pour vingt fiches produit : le composant coûte plus cher à faire tourner qu'il ne fait gagner.
+- **Personne n'est désigné pour le surveiller une fois en ligne.** Un composant IA sans propriétaire humain finit par répondre à côté sans que personne ne le remarque — jusqu'au jour où un client s'en plaint.
+
+<DataTable caption="Composants IA d'un site : problème résolu, prérequis, signal de gadget">
+
+| Famille | Problème qu'elle résout | Prérequis pour que ça marche | Signal de gadget chez vous |
+|---|---|---|---|
+| Chatbot | Questions répétitives, support saturé | Volume mesuré + contenu source fiable | Posé « pour faire moderne », sans contenu à jour derrière |
+| Recherche sémantique | Catalogue où l'on ne trouve rien | Catalogue riche + recherche classique qui échoue déjà | Ajoutée sur un catalogue de quelques dizaines de fiches |
+| Personnalisation | Contenu non pertinent pour le visiteur | Trafic et catalogue suffisants statistiquement | Réglée sur un trafic trop faible pour apprendre quoi que ce soit |
+| Automatisation formulaire → CRM | Ressaisie manuelle chronophage | Volume de formulaires réel et documenté | Aucune, tant que le formulaire existe déjà — rarement un gadget |
+| RAG | Réponses fiables sur vos propres documents | Un chatbot ou une recherche déjà justifiés | Présenté comme un produit en soi, sans rien à alimenter |
+| IA dans une web app métier | Décisions répétitives d'une équipe interne | Une web app déjà justifiée, un volume de données réel | Ajoutée à un site public sans espace authentifié derrière |
+
+</DataTable>
+
+## Verdict par profil
+
+**La bonne famille de composant dépend de ce que votre structure fait vivre à son site, pas de la mode du moment.**
+
+- **Site vitrine simple, moins de vingt pages, trafic modéré** : aucun composant IA au lancement. L'effort va au contenu et à la structure du site lui-même — les six familles ci-dessus attendront un volume qui n'existe pas encore.
+- **Catalogue produit riche (plusieurs centaines de références)** : la recherche sémantique mérite d'être testée en premier ; la personnalisation vient ensuite, seulement si le trafic la justifie statistiquement.
+- **Support ou contact très sollicité, questions répétitives documentées** : le chatbot est le candidat naturel, à condition d'avoir un contenu source fiable et quelqu'un pour surveiller ses réponses.
+- **Beaucoup de formulaires qui finissent ressaisis à la main dans un outil métier** : l'automatisation formulaire vers CRM est prioritaire, et souvent le gain le plus rapide à obtenir.
+- **Base de connaissances interne volumineuse (procédures, documentation produit)** : le RAG a du sens, mais seulement en soutien d'un chatbot ou d'une recherche déjà décidés — jamais comme premier projet isolé.
+- **Outil interne avec une équipe qui traite beaucoup de données ou de décisions répétitives** : l'IA dans une web app métier se justifie, une fois la web app elle-même actée.
+
+> **Ce que je constate en projet.** La demande qui arrive n'est presque jamais « je veux un chatbot » — c'est « on perd du temps » ou « les gens ne trouvent rien ». Quand je fais reformuler la demande sous cette forme, une partie des projets de chatbot se transforment en un formulaire mieux pensé ou une page structurée différemment : moins cher à construire, rien à surveiller ensuite. L'inverse arrive aussi, dans l'autre sens : un client convaincu qu'une recherche classique suffit, alors que son catalogue a dépassé depuis longtemps ce qu'une recherche par mots-clés peut retrouver. Le tri sert dans les deux sens — et c'est précisément l'objet de cet article.
+
+## FAQ — composants IA sur un site
+
+### Faut-il un chatbot IA sur mon site ?
+
+Seulement si vous pouvez chiffrer le problème qu'il résout : un volume mesurable de questions répétitives et une base de contenu fiable pour y répondre. Sans ces deux conditions, un chatbot est un abonnement récurrent qui répond parfois à côté, au nom de votre marque, sans que personne ne le surveille.
+
+### Quelle est la différence entre une recherche classique et une recherche sémantique par IA ?
+
+Une recherche classique retrouve les mots exacts tapés par le visiteur ; une recherche sémantique comprend le sens de la requête même si vos fiches emploient d'autres mots. Elle ne se justifie qu'à partir d'un catalogue suffisamment riche pour qu'une recherche classique échoue régulièrement — les fondamentaux techniques sont détaillés dans [Marketplace et annuaire B2B](/documentation/applications-web-mobile/marketplace-et-annuaire-b2b).
+
+### Le RAG et le chatbot, c'est la même chose ?
+
+Non : le RAG (retrieval-augmented generation, génération augmentée par récupération) est le mécanisme technique qui permet à une IA de répondre en s'appuyant sur vos propres documents plutôt que sur sa mémoire générale. C'est une brique qui peut alimenter un chatbot ou une recherche, jamais un projet autonome.
+
+### Un petit site vitrine a-t-il besoin de composants IA ?
+
+Rarement au lancement. Un site vitrine sans catalogue, sans volume de support et sans formulaire complexe n'a, dans la plupart des cas, aucun problème que ces composants résolvent — l'énergie va d'abord au contenu et à la structure du site lui-même.
+
+### Comment savoir si un composant IA sur mon site est un gadget plutôt qu'un outil utile ?
+
+Trois signaux : personne ne sait dire quel problème précis il résout, le volume ne justifie pas son coût récurrent, ou personne n'est désigné pour surveiller ce qu'il produit une fois en ligne. Si l'un de ces trois signaux est présent, c'est un gadget.
+
+### Mon chatbot doit-il dire qu'il est une intelligence artificielle ?
+
+Oui, depuis le 2 août 2026 : le [règlement européen sur l'IA](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte.
+
+### Par quel composant IA commencer si je dois n'en choisir qu'un ?
+
+Celui qui répond au problème le plus coûteux aujourd'hui, pas le plus visible. Un formulaire ressaisi à la main dans un CRM coûte des heures chaque semaine et se corrige souvent plus vite et moins cher qu'un chatbot — c'est fréquemment le meilleur point de départ.
+
+## Sources
+
+- Union européenne, [Règlement (UE) 2024/1689 établissant des règles harmonisées concernant l'intelligence artificielle](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) : article 50, obligation d'informer une personne qu'elle interagit avec un système d'IA, applicable depuis le 2 août 2026.
+
+---
+
+**Et pour votre besoin ?** Si vous hésitez entre un plugin, un outil du marché ou du sur-mesure pour un besoin métier — pas seulement l'IA — l'outil [No-code, SaaS ou sur-mesure ?](/outils/nocode-saas-surmesure) vous oriente gratuitement en quelques minutes. Et si un composant précis vous semble justifié mais que le cadrage reste flou — volume réel, budget de fonctionnement, responsabilité en cas d'erreur — la [visio conseil](/conseil) fait le tour de votre cas en 30 minutes : 150 € HT, intégralement crédités si un projet démarre sous 30 jours.

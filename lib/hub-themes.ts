@@ -852,15 +852,29 @@ const outilsMetier: HubTheme = {
       href: "/solutions-web/eligibilite",
     },
   ],
-  // À compléter au fil de la rédaction du cluster E (E0-E6 — chatbot, recherche
-  // sémantique, personnalisation, automatisation, RAG, IA dans une web app
-  // métier — voir .claude/docs/verdicts-vague-5.md, verdict mode 1 du
-  // 2026-08-21). Chaque entrée : { icon, name: {fr,en}, blurb: {fr,en},
+  // E0 (chapeau) publié le 2026-08-21. Reste à compléter au fil de la
+  // rédaction du cluster E (E1-E6 — chatbot, recherche sémantique,
+  // personnalisation, automatisation, RAG, IA dans une web app métier — voir
+  // .claude/docs/verdicts-vague-5.md, verdict mode 1 du 2026-08-21). Chaque
+  // entrée : { icon, name: {fr,en}, blurb: {fr,en},
   // href: "/documentation/outils-metier/<slug>" }. Fichiers sources attendus
   // dans content/documentation/outils-metier/<slug>.mdx (category ET rubrique
   // = "outils-metier"). Ordre de rédaction recommandé par le vérificateur :
-  // E0 (chapeau) → E1/E2 → E5 (pour éviter qu'E5 ne recopie 75 % d'E1/E2).
-  reading: [],
+  // E0 (chapeau, fait) → E1/E2 → E5 (pour éviter qu'E5 ne recopie 75 % d'E1/E2).
+  reading: [
+    {
+      icon: Bot,
+      name: {
+        fr: "Quels composants IA ont leur place sur votre site ?",
+        en: "Which AI components actually belong on your site?",
+      },
+      blurb: {
+        fr: "Chatbot, recherche sémantique, personnalisation, automatisation, RAG : la grille de triage et le verdict court, famille par famille.",
+        en: "Chatbot, semantic search, personalization, automation, RAG: the triage grid and the short verdict, family by family.",
+      },
+      href: "/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site",
+    },
+  ],
   prestas: [
     {
       name: { fr: "Plateforme métier", en: "Custom platform" },
