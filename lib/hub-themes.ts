@@ -1007,7 +1007,7 @@ const presence: HubTheme = {
       href: "/audit-site-web",
     },
   ],
-  // À compléter au fil de la rédaction du cluster D (D0-D6 — contenu IA,
+  // À compléter au fil de la rédaction du cluster D (D1-D6 restants —
   // rédaction sans pénalité, E-E-A-T, images IA, design assisté, RGPD/AI Act,
   // contenu qui ne convertit pas — voir .claude/docs/verdicts-vague-5.md,
   // verdict mode 1 du 2026-08-21). Chaque entrée : { icon, name: {fr,en},
@@ -1016,7 +1016,20 @@ const presence: HubTheme = {
   // rubrique = "presence"). Point de vigilance signalé par le vérificateur :
   // D4 recoupe une section déjà publiée dans ia-et-code/ce-que-l-ia-change-
   // dans-la-creation-d-un-site-web.mdx — vérifier la frontière à la rédaction.
-  reading: [],
+  reading: [
+    {
+      icon: FileText,
+      name: {
+        fr: "Faut-il utiliser l'IA pour le contenu de son site ?",
+        en: "Should you use AI for your website's content?",
+      },
+      blurb: {
+        fr: "Le chapeau du cluster : volume, coût, voix générique, erreurs, dépendance — dimension par dimension, avec un verdict par profil.",
+        en: "The cluster overview: volume, cost, generic voice, errors, dependency — dimension by dimension, with a verdict by profile.",
+      },
+      href: "/documentation/presence/contenu-ia-opportunite-et-risque",
+    },
+  ],
   prestas: [
     VISIO(
       "Où mettre l'effort ? On arbitre site, newsletter et réseaux en visio.",
