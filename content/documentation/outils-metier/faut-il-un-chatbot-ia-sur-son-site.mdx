@@ -20,11 +20,11 @@ faq:
   - question: "Que se passe-t-il si mon chatbot IA répond à côté, au nom de ma marque ?"
     answer: "Votre entreprise en reste responsable, comme pour n'importe quel contenu publié sur votre site. Un tribunal canadien l'a confirmé dès 2024 en condamnant Air Canada pour une information erronée donnée par son chatbot : « ce n'est pas le chatbot qui a dit ça » n'est pas une défense recevable."
   - question: "Mon chatbot doit-il dire qu'il est une intelligence artificielle ?"
-    answer: "Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet d'un article dédié à venir dans la rubrique Présence et audience."
+    answer: "Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet de l'article dédié « RGPD et AI Act : quelles obligations pour votre site ? »."
   - question: "Quelle est la différence entre un chatbot scripté et un chatbot IA ?"
     answer: "Un chatbot scripté propose des boutons et des parcours prédéfinis : il ne comprend rien, il ne sait pas se tromper hors de son script. Un chatbot IA générative comprend une question formulée librement et rédige sa réponse — ce qui le rend plus utile sur les reformulations, mais capable d'inventer une réponse fausse avec la même assurance qu'une réponse juste."
   - question: "Un chatbot IA a-t-il besoin d'accéder à mes documents internes ?"
-    answer: "Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet d'un article dédié à venir dans cette rubrique."
+    answer: "Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet de l'article dédié « Qu'est-ce que le RAG ? »."
 keyFigures:
   - value: "2 août 2026"
     label: "Entrée en application de l'obligation de transparence des chatbots (art. 50 de l'AI Act européen)"
@@ -45,7 +45,7 @@ Le cas le plus solide : votre support reçoit, chaque semaine, un nombre mesurab
 
 ### Préqualifier un prospect avant qu'il ne remplisse un formulaire
 
-Un usage commercial réel apparaît quand une équipe commerciale perd du temps à reposer, appel après appel, les mêmes questions de cadrage avant de pouvoir chiffrer une demande — budget approximatif, taille de la structure, échéance. Un chatbot qui collecte ces informations en amont, en langage naturel, avant de router vers le bon interlocuteur ou le bon formulaire, fait gagner du temps des deux côtés. Ce qui se passe ensuite — router automatiquement cette information vers votre CRM sans ressaisie — est une question distincte, traitée dans un article dédié à venir dans cette rubrique.
+Un usage commercial réel apparaît quand une équipe commerciale perd du temps à reposer, appel après appel, les mêmes questions de cadrage avant de pouvoir chiffrer une demande — budget approximatif, taille de la structure, échéance. Un chatbot qui collecte ces informations en amont, en langage naturel, avant de router vers le bon interlocuteur ou le bon formulaire, fait gagner du temps des deux côtés. Ce qui se passe ensuite — router automatiquement cette information vers votre CRM sans ressaisie — est une question distincte, traitée dans [Comment automatiser un formulaire vers un CRM avec l'IA ?](/documentation/outils-metier/automatiser-un-formulaire-vers-un-crm-avec-l-ia).
 
 ### Remplacer une FAQ statique qui ne répond jamais à la bonne question
 
@@ -59,7 +59,7 @@ Ces trois usages n'excluent pas d'autres motivations parfois avancées — « ç
 
 **La FAQ scriptée (sans IA générative).** Un arbre de questions et de réponses prédéfinies, avec des boutons plutôt qu'un champ de texte libre. Avantage : coût faible, comportement entièrement prévisible, aucun risque d'invention. Limite : rigide — elle ne comprend pas une reformulation, et un parcours mal anticipé mène le visiteur dans une impasse.
 
-**Le chatbot IA générative sur base de connaissances.** Un outil du marché (les plateformes de support client proposent presque toutes une brique IA aujourd'hui) branché sur vos contenus existants — FAQ, pages d'aide, documentation produit. Techniquement, ce type de chatbot s'appuie le plus souvent sur le RAG (retrieval-augmented generation, génération augmentée par récupération), une technique qui fait chercher la réponse à l'IA dans vos propres documents plutôt que dans sa mémoire générale — le mécanisme précis, ses limites et son coût de maintenance font l'objet d'un article dédié à venir dans cette rubrique. Avantage : comprend les reformulations, se met à jour avec vos contenus. Limite : la qualité de la réponse dépend entièrement de la fraîcheur et de la fiabilité des documents qui l'alimentent — mal tenus, ils produisent des réponses fausses avec la même assurance que des réponses justes.
+**Le chatbot IA générative sur base de connaissances.** Un outil du marché (les plateformes de support client proposent presque toutes une brique IA aujourd'hui) branché sur vos contenus existants — FAQ, pages d'aide, documentation produit. Techniquement, ce type de chatbot s'appuie le plus souvent sur le RAG (retrieval-augmented generation, génération augmentée par récupération), une technique qui fait chercher la réponse à l'IA dans vos propres documents plutôt que dans sa mémoire générale — le mécanisme précis, ses limites et son coût de maintenance font l'objet de [Qu'est-ce que le RAG ?](/documentation/outils-metier/rag-et-base-de-connaissances-ia). Avantage : comprend les reformulations, se met à jour avec vos contenus. Limite : la qualité de la réponse dépend entièrement de la fraîcheur et de la fiabilité des documents qui l'alimentent — mal tenus, ils produisent des réponses fausses avec la même assurance que des réponses justes.
 
 **L'agent connecté à vos outils métier.** Un chatbot capable d'agir, pas seulement de répondre : vérifier une disponibilité en temps réel, créer une fiche prospect, déclencher une relance. Avantage : une vraie valeur métier, différenciante. Limite : développement et maintenance nettement plus lourds qu'un abonnement SaaS, à réserver à un volume et un existant technique qui le justifient.
 
@@ -95,7 +95,7 @@ Un précédent bien documenté illustre le mécanisme : en 2024, un tribunal can
 
 Cette responsabilité est la raison pour laquelle un chatbot ne devrait jamais être branché sans surveillance humaine régulière ni périmètre clairement délimité — mieux vaut un chatbot qui dit « je ne sais pas, voici comment joindre quelqu'un » qu'un chatbot qui invente une réponse plausible sur un sujet qu'il ne maîtrise pas. En interne, les dispositifs d'agents IA que j'ai mis en place pour des clients — par exemple les missions de veille sectorielle et concurrentielle pour [L'Hermitage](/etudes-de-cas/hermitage-veille) et [Urban Pousses](/etudes-de-cas/urban-pousses-veille) — ne sont pas des chatbots publics, mais suivent exactement cette discipline : chaque affirmation vérifiée à sa source, et ce qui ne peut pas être vérifié signalé comme tel plutôt que présenté avec la même assurance que le reste. C'est la même règle qui doit s'appliquer à un chatbot qui parle directement à vos visiteurs.
 
-À cette responsabilité générale s'ajoute, depuis le 2 août 2026, une obligation légale spécifique : le [règlement européen sur l'IA](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) (article 50) impose d'informer clairement l'utilisateur qu'il interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation, et son articulation avec le RGPD sur les données envoyées à un outil tiers, fait l'objet d'un article dédié à venir dans la rubrique [Présence et audience](/documentation/presence).
+À cette responsabilité générale s'ajoute, depuis le 2 août 2026, une obligation légale spécifique : le [règlement européen sur l'IA](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) (article 50) impose d'informer clairement l'utilisateur qu'il interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation, et son articulation avec le RGPD sur les données envoyées à un outil tiers, fait l'objet de [RGPD et AI Act : quelles obligations pour votre site ?](/documentation/presence/rgpd-et-ai-act-obligations-legales), dans la rubrique [Présence et audience](/documentation/presence).
 
 ## Verdict par profil
 
@@ -134,7 +134,7 @@ Votre entreprise en reste responsable, comme pour n'importe quel contenu publié
 
 ### Mon chatbot doit-il dire qu'il est une intelligence artificielle ?
 
-Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet d'un article dédié à venir dans la rubrique Présence et audience.
+Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet de [RGPD et AI Act : quelles obligations pour votre site ?](/documentation/presence/rgpd-et-ai-act-obligations-legales), dans la rubrique Présence et audience.
 
 ### Quelle est la différence entre un chatbot scripté et un chatbot IA ?
 
@@ -142,7 +142,7 @@ Un chatbot scripté propose des boutons et des parcours prédéfinis : il ne com
 
 ### Un chatbot IA a-t-il besoin d'accéder à mes documents internes ?
 
-Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet d'un article dédié à venir dans cette rubrique.
+Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet de [Qu'est-ce que le RAG ?](/documentation/outils-metier/rag-et-base-de-connaissances-ia).
 
 ## Sources
 

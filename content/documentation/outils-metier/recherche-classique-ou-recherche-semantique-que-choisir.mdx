@@ -6,7 +6,7 @@ rubrique: outils-metier
 author: "Agathe Karinthi-Martin"
 date: "2026-08-21"
 dateModified: "2026-08-21"
-order: 2
+order: 3
 enBref:
   - "La recherche sémantique est un moteur qui comprend le sens d'une requête — synonymes, fautes de frappe, formulations naturelles — là où une recherche classique ne retrouve que les mots exacts tapés par le visiteur."
   - "Elle ne se justifie qu'une fois un vrai problème mesuré : un catalogue ou un annuaire assez riche pour qu'une recherche par mots-clés bien réglée échoue régulièrement, avec des recherches vides ou des abandons documentés."
@@ -22,7 +22,7 @@ faq:
   - question: "Combien coûte une recherche sémantique, en SaaS et en sur-mesure ?"
     answer: "En SaaS, comptez un premier palier gratuit ou à faible coût pour tester, puis quelques dizaines à quelques centaines d'euros par mois selon le volume de fiches et de requêtes. En sur-mesure, le développement s'ajoute au coût d'inférence continu (appels au modèle d'embeddings) — un budget qui se cadre au cas par cas plutôt qu'en fourchette générique."
   - question: "Recherche sémantique et RAG, c'est le même mécanisme technique ?"
-    answer: "Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans un article dédié à paraître dans cette rubrique."
+    answer: "Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans l'article dédié « Qu'est-ce que le RAG ? »."
   - question: "Une recherche sémantique peut-elle donner de moins bons résultats qu'une recherche classique ?"
     answer: "Oui, si elle est mal réglée ou évaluée trop vite : elle peut renvoyer des résultats sémantiquement proches mais concrètement faux, sans que ce soit visible au premier coup d'œil. C'est pour cette raison qu'une phase de test sur des requêtes réelles, avant la mise en production, n'est pas optionnelle."
 keyFigures:
@@ -117,7 +117,7 @@ Ce qu'elle ne résout pas :
 
 ## Recherche sémantique et RAG : quel lien ?
 
-Techniquement, une recherche sémantique et un chatbot RAG s'appuient souvent sur le même mécanisme : des embeddings qui représentent le sens d'un texte, comparés par proximité plutôt que par égalité de mots. La différence est dans l'usage — la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. Cette brique commune fait l'objet d'un article dédié de cette rubrique, à paraître : elle n'a de sens qu'en soutien d'un besoin déjà identifié, ici la recherche.
+Techniquement, une recherche sémantique et un chatbot RAG s'appuient souvent sur le même mécanisme : des embeddings qui représentent le sens d'un texte, comparés par proximité plutôt que par égalité de mots. La différence est dans l'usage — la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. Cette brique commune fait l'objet de l'article dédié [Qu'est-ce que le RAG ?](/documentation/outils-metier/rag-et-base-de-connaissances-ia) : elle n'a de sens qu'en soutien d'un besoin déjà identifié, ici la recherche.
 
 ## Points de vigilance avant de se lancer
 
@@ -147,7 +147,7 @@ En SaaS, comptez un premier palier gratuit ou à faible coût pour tester, puis 
 
 ### Recherche sémantique et RAG, c'est le même mécanisme technique ?
 
-Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans un article dédié à paraître dans cette rubrique.
+Ils partagent la même brique de base — les embeddings, qui représentent le sens d'un texte pour le comparer par proximité — mais pas le même usage : la recherche sémantique retourne une liste de résultats classés, le RAG génère une réponse rédigée à partir des documents retrouvés. C'est un sujet à part entière, traité dans [Qu'est-ce que le RAG ?](/documentation/outils-metier/rag-et-base-de-connaissances-ia).
 
 ### Une recherche sémantique peut-elle donner de moins bons résultats qu'une recherche classique ?
 
