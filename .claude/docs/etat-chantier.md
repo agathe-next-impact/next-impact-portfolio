@@ -44,8 +44,10 @@
 | 5 | Suppression des 11 fusionnés + miroirs EN (22 fichiers, commit `6dd1cf9`) — build vert | orchestrateur | ✅ fait | 2026-07-18 |
 | 5 | Audit de vague : 3 bloquants (composants MDX, tableaux, tarifs 2025) + A1-A5 **corrigés le jour même** → **publiable** (rapport : audit-vague-5.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
 | 5+ | Verdicts mode 1 clusters D et E : **13 × CRÉER**, 0 doublon interne, 2 points de vigilance (D4/B0, chaîne E0-E1-E2-E5) (→ verdicts-vague-5.md) | verificateur-coherence | ✅ fait | 2026-08-21 |
-| 5+ | Prérequis infra avant rédaction : dossiers `presence/`+`outils-metier/`, `categoryLabels`/`RELATED_CATEGORIES`, bloc `reading` hub-themes | architecte-fusion | ⬜ à faire | — |
-| 5+ | Rédaction des 13 contenus (ordre recommandé cluster E : E0 → E1/E2 → E5) | redacteur-seo-geo ×13 | ⬜ à faire — rythme à trancher avec Agathe (doctrine = ~2 articles/mois, voir verdicts-vague-5.md) | — |
+| 5+ | Prérequis infra : dossiers `presence/`+`outils-metier/`, `categoryLabels`/`RELATED_CATEGORIES`, bloc `reading` hub-themes, llms.txt — commit `118a198` | architecte-fusion | ✅ fait | 2026-08-21 |
+| 5+ | Rédaction des 13 contenus (D0-D6, E0-E6 ; E5 rédigé après E1/E2 comme recommandé) — 13 commits individuels, consolidation navigation `hub-themes.ts` en 2 passes (commits `2ff6d7c`/`c52c8f3`) | redacteur-seo-geo ×13 + orchestrateur | ✅ fait | 2026-08-21 |
+| 5+ | Audit de vague (mode 2) : **3 bloquants** (placeholders éditoriaux visibles D1/D3/D4) + maillage promis non honoré (~20 liens) + `order` dupliqué + FAQ chatbot quasi-jumelle (D5/E0/E1) + CTA E6 sans prix → **corrigés le jour même**, publiable (rapport dans la conversation, non persisté en fichier séparé) | verificateur-coherence (mode 2) | ✅ fait | 2026-08-21 |
+| 5+ | Correctifs post-audit (5 catégories) — commit `c7d3aad`, build final vert | architecte-fusion | ✅ fait | 2026-08-21 |
 
 ## Publication
 
@@ -81,8 +83,19 @@
 - Doublons potentiels clusters vs existant : cartographie §8.5 (à passer au
   vérificateur avant chaque rédaction).
 - Verdicts vague 5+ (clusters D/E) : `.claude/docs/verdicts-vague-5.md`
-  (2026-08-21) — 13× CRÉER, prérequis infra identifiés, rythme de
-  publication à trancher avant rédaction en masse (doctrine ~2 articles/mois).
+  (2026-08-21) — 13× CRÉER. **Chantier exécuté en une session** (rédaction
+  + audit + corrections, 2026-08-21) plutôt qu'étalé sur ~2 articles/mois,
+  décision explicite d'Agathe (« lance les tâches ») après confirmation du
+  tension avec la doctrine de cadence.
+- **Restes ouverts après la vague 5+** : (1) 3 encarts « Ce que je constate »
+  laissés en commentaire MDX invisible faute d'anecdote réelle — à
+  compléter par Agathe dans `presence/rediger-avec-l-ia-sans-penalite.mdx`,
+  `presence/images-generees-par-ia-droit-et-credibilite.mdx`,
+  `presence/design-de-marque-assiste-par-ia.mdx` (2 autres, D6 et E3, ont
+  le même traitement mais n'étaient pas bloquants) ; (2) aucune traduction
+  EN des 13 nouveaux articles (dégradation gracieuse en bandeau de repli
+  FR) ; (3) rien n'est poussé sur le remote — tout est en commits locaux
+  sur `veille`.
 - Migration `enBref`/`dateModified` de 9 articles du chantier fusion vers le
   gabarit GEO-ready (commit `325c816`, 2026-08-21) — hors mapping vagues,
   déclenché par un audit GEO plus large (voir conversation du 2026-08-21).
