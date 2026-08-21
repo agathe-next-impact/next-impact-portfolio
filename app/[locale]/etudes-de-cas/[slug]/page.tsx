@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import CaseStudyCTA from "@/components/case-studies/CaseStudyCTA";
 import CaseStudyDecisionPath from "@/components/case-studies/CaseStudyDecisionPath";
 import CaseStudyProfileContent from "@/components/case-studies/CaseStudyProfileContent";
+import { ArticleEnBref } from "@/components/documentation/article-en-bref";
 import { YoutubePlayer } from "@/components/youtube-player";
 import { BlueprintSection } from "@/components/aspect/section";
 import { PageHero } from "@/components/aspect/page-hero";
@@ -130,6 +131,14 @@ export default async function CaseStudyPage({
       ? new Date(caseStudy.date.year, caseStudy.date.month - 1).toISOString()
       : new Date().toISOString();
 
+  // Date de dernière mise à jour éditoriale réelle (champ `updated` de la
+  // fiche) → dateModified JSON-LD. Absente = jamais retouchée depuis
+  // publication, ArticleJsonLd retombe alors sur datePublished.
+  const modifiedDate =
+    caseStudy.updated?.year && caseStudy.updated?.month
+      ? new Date(caseStudy.updated.year, caseStudy.updated.month - 1).toISOString()
+      : undefined;
+
   return (
     <>
       {/* Données structurées pour le SEO */}
@@ -139,6 +148,7 @@ export default async function CaseStudyPage({
         description={caseStudy.description}
         image={caseStudy.gallery.url || caseStudy.imageUrl}
         datePublished={publishedDate}
+        dateModified={modifiedDate}
         url={`/etudes-de-cas/${caseStudy.slug}`}
       />
 
@@ -166,6 +176,12 @@ export default async function CaseStudyPage({
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px]">
             {/* Colonne gauche : média + chiffres + contenu */}
             <div className="border-b border-dark-gray px-6 py-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-12">
+              {/* « En bref » — résumé citable en tête de fiche, rendu AVANT le
+                  média : c'est ce qu'un moteur de réponse IA extrait en premier. */}
+              {caseStudy.enBref && (
+                <ArticleEnBref lines={caseStudy.enBref} locale={locale} />
+              )}
+
               {/* Média */}
               <Reveal>
                 <div className="mb-10 rounded-md bg-overlay-gray p-2 md:p-4">
