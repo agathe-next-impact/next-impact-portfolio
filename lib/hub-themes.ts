@@ -10,6 +10,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
+  BadgeCheck,
   Blocks,
   Bot,
   Boxes,
@@ -17,17 +18,26 @@ import {
   Calculator,
   ClipboardList,
   Compass,
+  Copyright,
   FileCode2,
   FileSearch,
   FileText,
   FlaskConical,
   GitCompare,
+  LayoutDashboard,
   ListChecks,
   Megaphone,
+  MessageCircle,
+  Palette,
   Radar,
+  Scale,
   ScanSearch,
   ScrollText,
+  ShieldCheck,
   Smartphone,
+  Sparkles,
+  Target,
+  Workflow,
   Wrench,
 } from "lucide-react";
 
@@ -852,15 +862,12 @@ const outilsMetier: HubTheme = {
       href: "/solutions-web/eligibilite",
     },
   ],
-  // E0 (chapeau) publié le 2026-08-21. Reste à compléter au fil de la
-  // rédaction du cluster E (E1-E6 — chatbot, recherche sémantique,
-  // personnalisation, automatisation, RAG, IA dans une web app métier — voir
-  // .claude/docs/verdicts-vague-5.md, verdict mode 1 du 2026-08-21). Chaque
-  // entrée : { icon, name: {fr,en}, blurb: {fr,en},
-  // href: "/documentation/outils-metier/<slug>" }. Fichiers sources attendus
-  // dans content/documentation/outils-metier/<slug>.mdx (category ET rubrique
-  // = "outils-metier"). Ordre de rédaction recommandé par le vérificateur :
-  // E0 (chapeau, fait) → E1/E2 → E5 (pour éviter qu'E5 ne recopie 75 % d'E1/E2).
+  // Cluster E publié le 2026-08-21 (verdict mode 1 : .claude/docs/verdicts-
+  // vague-5.md) : E0 (chapeau), E1 (chatbot), E2 (recherche sémantique), E3
+  // (personnalisation), E4 (automatisation formulaire/CRM), E6 (web app
+  // métier). Reste E5 (RAG) — volontairement rédigé APRÈS E1/E2 pour ne pas
+  // recopier leur contenu ; à ajouter ici une fois publié, même format :
+  // { icon, name: {fr,en}, blurb: {fr,en}, href: "/documentation/outils-metier/<slug>" }.
   reading: [
     {
       icon: Bot,
@@ -873,6 +880,66 @@ const outilsMetier: HubTheme = {
         en: "Chatbot, semantic search, personalization, automation, RAG: the triage grid and the short verdict, family by family.",
       },
       href: "/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site",
+    },
+    {
+      icon: MessageCircle,
+      name: {
+        fr: "Faut-il un chatbot IA sur son site ?",
+        en: "Do you need an AI chatbot on your site?",
+      },
+      blurb: {
+        fr: "Usage réel, coût récurrent, risque de réponse à côté et obligation légale de transparence.",
+        en: "Real use cases, recurring cost, brand risk and the legal transparency obligation.",
+      },
+      href: "/documentation/outils-metier/faut-il-un-chatbot-ia-sur-son-site",
+    },
+    {
+      icon: ScanSearch,
+      name: {
+        fr: "Recherche sémantique : faut-il l'ajouter à votre site ?",
+        en: "Semantic search: should you add it to your site?",
+      },
+      blurb: {
+        fr: "Recherche classique ou sémantique par IA : le seuil qui justifie l'upgrade, les options, leur coût.",
+        en: "Keyword or AI semantic search: the threshold that justifies the upgrade, the options, their cost.",
+      },
+      href: "/documentation/outils-metier/recherche-classique-ou-recherche-semantique-que-choisir",
+    },
+    {
+      icon: Sparkles,
+      name: {
+        fr: "Faut-il de la personnalisation par IA sur son site ?",
+        en: "Should you add AI personalization to your site?",
+      },
+      blurb: {
+        fr: "Recommandations, contenu adaptatif : à partir de quel trafic et quel catalogue ça devient rentable — et où ça reste un coût sans retour.",
+        en: "Product recommendations, adaptive content: at what traffic and catalog size it pays off — and where it stays a cost with no return.",
+      },
+      href: "/documentation/outils-metier/personnalisation-par-ia-sur-un-site",
+    },
+    {
+      icon: Workflow,
+      name: {
+        fr: "Comment automatiser un formulaire vers un CRM avec l'IA ?",
+        en: "How to automate a form-to-CRM pipeline with AI?",
+      },
+      blurb: {
+        fr: "Qualifier, enrichir, router : cas d'usage réels, gain de temps honnête, outils du plus simple au sur-mesure.",
+        en: "Qualify, enrich, route: real use cases, honest time savings, tools from simplest to custom.",
+      },
+      href: "/documentation/outils-metier/automatiser-un-formulaire-vers-un-crm-avec-l-ia",
+    },
+    {
+      icon: LayoutDashboard,
+      name: {
+        fr: "IA dans une web app métier : où l'intégrer, pour qui ?",
+        en: "AI in a business web app: where does it belong, and for whom?",
+      },
+      blurb: {
+        fr: "Automatisation de workflow, tableau de bord prédictif, copilote interne : ce qui sert une équipe authentifiée, et ce qui ne sert à rien.",
+        en: "Workflow automation, predictive dashboard, internal copilot: what actually serves an authenticated team, and what doesn't.",
+      },
+      href: "/documentation/outils-metier/ia-dans-une-web-app-metier",
     },
   ],
   prestas: [
@@ -1007,15 +1074,11 @@ const presence: HubTheme = {
       href: "/audit-site-web",
     },
   ],
-  // À compléter au fil de la rédaction du cluster D (D1-D6 restants —
-  // rédaction sans pénalité, E-E-A-T, images IA, design assisté, RGPD/AI Act,
-  // contenu qui ne convertit pas — voir .claude/docs/verdicts-vague-5.md,
-  // verdict mode 1 du 2026-08-21). Chaque entrée : { icon, name: {fr,en},
-  // blurb: {fr,en}, href: "/documentation/presence/<slug>" }. Fichiers sources
-  // attendus dans content/documentation/presence/<slug>.mdx (category ET
-  // rubrique = "presence"). Point de vigilance signalé par le vérificateur :
-  // D4 recoupe une section déjà publiée dans ia-et-code/ce-que-l-ia-change-
-  // dans-la-creation-d-un-site-web.mdx — vérifier la frontière à la rédaction.
+  // Cluster D publié le 2026-08-21 (verdict mode 1 : .claude/docs/verdicts-
+  // vague-5.md) : D0 (chapeau), D1 (pénalité SEO), D2 (E-E-A-T), D3 (images
+  // IA), D4 (design de marque — frontière avec ia-et-code/ce-que-l-ia-change-
+  // dans-la-creation-d-un-site-web.mdx tenue à la rédaction), D5 (RGPD/AI
+  // Act), D6 (conversion). Cluster D complet.
   reading: [
     {
       icon: FileText,
@@ -1028,6 +1091,78 @@ const presence: HubTheme = {
         en: "The cluster overview: volume, cost, generic voice, errors, dependency — dimension by dimension, with a verdict by profile.",
       },
       href: "/documentation/presence/contenu-ia-opportunite-et-risque",
+    },
+    {
+      icon: ShieldCheck,
+      name: {
+        fr: "Google pénalise-t-il le contenu écrit avec l'IA ?",
+        en: "Does Google penalize AI-written content?",
+      },
+      blurb: {
+        fr: "Non, pas pour l'outil utilisé — mais une politique précise vous expose. Le process en 4 étapes pour rédiger avec l'IA sans risque.",
+        en: "Not for the tool itself — but one specific policy can catch you out. The 4-step process for writing with AI without the risk.",
+      },
+      href: "/documentation/presence/rediger-avec-l-ia-sans-penalite",
+    },
+    {
+      icon: BadgeCheck,
+      name: {
+        fr: "E-E-A-T : la confiance de votre site",
+        en: "E-E-A-T: your site's trust signals",
+      },
+      blurb: {
+        fr: "Auteur identifié, preuves vérifiables, transparence sur l'IA : les signaux humains qui rassurent Google et les moteurs IA.",
+        en: "Identified author, verifiable proof, AI transparency: the human signals that reassure Google and AI engines.",
+      },
+      href: "/documentation/presence/e-e-a-t-construire-la-confiance-de-son-site",
+    },
+    {
+      icon: Copyright,
+      name: {
+        fr: "Puis-je utiliser des images générées par IA sur mon site ?",
+        en: "Can I use AI-generated images on my site?",
+      },
+      blurb: {
+        fr: "Droit d'auteur, CGU des générateurs (Midjourney, ChatGPT, Firefly), crédibilité perçue : ce qui est vraiment permis.",
+        en: "Copyright, generator terms of service (Midjourney, ChatGPT, Firefly), perceived credibility: what's actually allowed.",
+      },
+      href: "/documentation/presence/images-generees-par-ia-droit-et-credibilite",
+    },
+    {
+      icon: Palette,
+      name: {
+        fr: "Faut-il utiliser l'IA pour le design de votre marque ?",
+        en: "Should you use AI for your brand's design?",
+      },
+      blurb: {
+        fr: "Canva, Figma AI, Midjourney : ce qui suffit pour vos visuels courants, ce qui reste un jugement humain — et la frontière avec la maquette d'un site.",
+        en: "Canva, Figma AI, Midjourney: what's now good enough for everyday visuals, what still needs human judgment — and the line with a website mockup.",
+      },
+      href: "/documentation/presence/design-de-marque-assiste-par-ia",
+    },
+    {
+      icon: Scale,
+      name: {
+        fr: "RGPD et AI Act : quelles obligations pour votre site ?",
+        en: "GDPR and the AI Act: what does your site owe visitors?",
+      },
+      blurb: {
+        fr: "Données clients dans un outil IA tiers, chatbot à signaler, contenu généré : ce que le RGPD et l'AI Act exigent réellement, avec les échéances et les sanctions.",
+        en: "Client data in a third-party AI tool, chatbot disclosure, generated content: what GDPR and the AI Act actually require, with deadlines and penalties.",
+      },
+      href: "/documentation/presence/rgpd-et-ai-act-obligations-legales",
+    },
+    {
+      icon: Target,
+      name: {
+        fr: "Pourquoi le contenu moyen ne convertit plus en 2026 ?",
+        en: "Why does average content no longer convert in 2026?",
+      },
+      blurb: {
+        fr: "L'angle business : commoditisation du contenu correct, les trois leviers qui différencient encore, verdict par profil de page.",
+        en: "The business angle: commodity content, the three levers that still differentiate, verdict by page profile.",
+      },
+      href: "/documentation/presence/pourquoi-le-contenu-moyen-ne-convertit-plus",
     },
   ],
   prestas: [
