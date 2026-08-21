@@ -462,7 +462,7 @@ const META: CaseStudyMeta[] = [
     offreConstruction: "wordpress",
     offreConseil: null,
     budgetIndicatif: null,
-    delai: { value: 5, unit: "jours" },
+    delai: { value: 10, unit: "jours" },
     clientId: null,
     cardImageUrl: "/img/desktop-screen-sowee.webp",
     clientType: "grande-entreprise",
@@ -1192,7 +1192,7 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
       "Création d'une section blog pour le portail de l'entreprise Sowee, spécialisée dans les solutions énergétiques.",
     enBref: [
       "J'ai développé une section blog personnalisée pour le portail de Sowee, entreprise spécialisée dans les solutions énergétiques, sur un thème WordPress GeneratePress sur-mesure.",
-      "Le thème a été réalisé en respectant fidèlement les maquettes fournies par l'équipe marketing de Sowee.",
+      "Le thème a été réalisé en respectant fidèlement les maquettes fournies par l'équipe marketing de Sowee, livré en 10 jours.",
       "La section blog permet à l'équipe de publier des articles, d'ajouter des images et de gérer les catégories en toute autonomie.",
     ],
     detailedDescription:
@@ -2055,7 +2055,7 @@ const CONTENT_EN: Record<string, CaseStudyContent> = {
       "Built a blog section for the portal of Sowee, a company specializing in energy solutions.",
     enBref: [
       "I built a custom blog section for the portal of Sowee, a company specializing in energy solutions, on a custom GeneratePress WordPress theme.",
-      "The theme strictly followed the mockups provided by Sowee's marketing team.",
+      "The theme strictly followed the mockups provided by Sowee's marketing team, delivered in 10 days.",
       "The blog section lets the team publish articles, add images and manage categories fully independently.",
     ],
     detailedDescription:
@@ -2557,7 +2557,7 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
     { value: "Headless", label: "Architecture Next.js" },
   ],
   sowee: [
-    { value: "5 jours", label: "Délai de livraison" },
+    { value: "10 jours", label: "Délai de livraison" },
     { value: "100%", label: "Fidélité aux maquettes" },
     { value: "Autonomie", label: "Pour l'équipe marketing" },
   ],
@@ -2687,7 +2687,7 @@ const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
     { value: "Headless", label: "Next.js architecture" },
   ],
   sowee: [
-    { value: "5 days", label: "Delivery time" },
+    { value: "10 days", label: "Delivery time" },
     { value: "100%", label: "Mockup fidelity" },
     { value: "Autonomy", label: "For the marketing team" },
   ],
