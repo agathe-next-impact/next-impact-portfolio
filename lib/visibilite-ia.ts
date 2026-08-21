@@ -534,3 +534,65 @@ export function getRecommendations(state: Record<string, string>, max = 3): Reco
       recoEn: option.recoEn as string,
     }));
 }
+
+// FAQ de /outils/visibilite-ia — source UNIQUE partagée par le contenu visible
+// (accordéon dans page.tsx) et le schema FAQPage (FAQJsonLd) : jamais de
+// balisage qui diverge de ce qui s'affiche. Répond honnêtement sur la nature
+// déclarative de l'outil (même doctrine que la note du composant : « reflète
+// vos réponses, pas un crawl de votre site ») ; renvoie vers /conseil quand
+// une vérification sur le site réel est pertinente.
+export interface FaqItem {
+  id: string;
+  questionFr: string;
+  questionEn: string;
+  answerFr: string;
+  answerEn: string;
+}
+
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    id: "comparable-audit",
+    questionFr: "Le score est-il comparable à un vrai audit payant ?",
+    questionEn: "Is the score comparable to a real paid audit?",
+    answerFr:
+      "Non. C'est un auto-diagnostic déclaratif : il reflète vos réponses, pas un crawl de votre robots.txt, de votre JSON-LD ou de votre contenu réel. Il donne une direction fiable en quelques minutes ; un audit ou une visio conseil (150 €) vérifient ensuite sur le site tel qu'il existe.",
+    answerEn:
+      "No. It's a declarative self-check: it reflects your answers, not a crawl of your actual robots.txt, JSON-LD or content. It gives a reliable direction in a few minutes; a paid audit or consulting call (€150) then verifies against the site as it actually is.",
+  },
+  {
+    id: "score-varie",
+    questionFr: "Pourquoi mon score change-t-il d'un jour à l'autre ?",
+    questionEn: "Why does my score change from one day to the next?",
+    answerFr:
+      "Parce que rien n'est mémorisé côté serveur : le score dépend uniquement des réponses données à l'instant du test. Une hésitation entre deux options sur une question limite, ou un vrai changement sur votre site entre deux passages, suffit à le faire bouger. Ce n'est pas une erreur, c'est la nature d'un questionnaire déclaratif.",
+    answerEn:
+      "Because nothing is stored server-side: the score depends only on the answers given at the moment you test. Hesitating between two options on a borderline question, or an actual change on your site between two runs, is enough to move it. That's not a bug — it's how a declarative questionnaire works.",
+  },
+  {
+    id: "verif-automatique",
+    questionFr: "Le diagnostic vérifie-t-il automatiquement mon robots.txt ou mon JSON-LD ?",
+    questionEn: "Does the diagnostic automatically check my robots.txt or JSON-LD?",
+    answerFr:
+      "Non, pas dans cette version : c'est vous qui répondez, en vérifiant si besoin (par exemple en ouvrant votre-site.fr/robots.txt). Rien n'est crawlé côté serveur — c'est ce qui permet un résultat instantané, sans email ni inscription.",
+    answerEn:
+      "No, not in this version: you answer yourself, checking first if needed (for example by opening yoursite.com/robots.txt). Nothing is crawled server-side — that's what makes the result instant, with no email or sign-up required.",
+  },
+  {
+    id: "je-ne-sais-pas",
+    questionFr: "Que faire si je réponds « je ne sais pas » à plusieurs questions ?",
+    questionEn: "What if I answer 'I don't know' to several questions?",
+    answerFr:
+      "Répondez quand même honnêtement : ces options comptent pour une note partielle, pas zéro, et elles pointent justement les zones à vérifier en premier. Un score gonflé par des réponses optimistes masquerait vos vrais axes faibles.",
+    answerEn:
+      "Answer honestly anyway: those options count as partial credit, not zero, and they point to exactly the areas worth checking first. A score inflated by optimistic answers would hide your real weak spots.",
+  },
+  {
+    id: "poids-axes",
+    questionFr: "Les 4 axes comptent-ils tous pareil dans le score ?",
+    questionEn: "Do all 4 axes count equally in the score?",
+    answerFr:
+      "Non : chaque question a son propre poids selon son impact observé sur la citabilité IA (l'accès aux robots pèse plus qu'un fichier llms.txt, par exemple). Le détail « Ce qui pèse dans la balance », affiché avec le résultat, montre le poids réel de chaque critère.",
+    answerEn:
+      "No: each question carries its own weight based on its observed impact on AI citability (crawler access weighs more than an llms.txt file, for example). The 'What weighs in' breakdown shown with your result reveals the real weight of each criterion.",
+  },
+];

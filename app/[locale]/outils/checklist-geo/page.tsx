@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, FAQJsonLd } from "@/components/json-ld";
 import ChecklistGeo from "@/components/outils/checklist-geo";
+import { FAQ_ITEMS } from "@/lib/checklist-geo";
 import PageLayout from "@/components/page-layout";
-import { BlueprintSection } from "@/components/aspect/section";
+import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 
 export const revalidate = 86400;
@@ -66,6 +67,12 @@ export default async function ChecklistGeoPage({
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      <FAQJsonLd
+        questions={FAQ_ITEMS.map((f) => ({
+          question: isEn ? f.questionEn : f.questionFr,
+          answer: isEn ? f.answerEn : f.answerFr,
+        }))}
+      />
       <PageLayout
         titre={isEn ? "The GEO checklist" : "La checklist GEO"}
         sousTitre={
@@ -89,6 +96,33 @@ export default async function ChecklistGeoPage({
             {isEn ? "Back to tools" : "Retour aux outils"}
           </Link>
           <ChecklistGeo />
+        </BlueprintSection>
+
+        <Separator />
+
+        <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+          <SectionHeading
+            kicker="FAQ"
+            title={isEn ? "Questions about this checklist" : "Questions sur cette checklist"}
+          />
+          <div className="mt-10 border-t border-dark-gray">
+            {FAQ_ITEMS.map((f) => (
+              <details key={f.id} className="group border-b border-dark-gray">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+                  <span className="font-inter-tight text-[15px] font-medium text-foreground md:text-base">
+                    {isEn ? f.questionEn : f.questionFr}
+                  </span>
+                  <Plus
+                    size={16}
+                    className="shrink-0 text-mid-gray transition-transform group-open:rotate-45"
+                  />
+                </summary>
+                <p className="max-w-3xl pb-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  {isEn ? f.answerEn : f.answerFr}
+                </p>
+              </details>
+            ))}
+          </div>
         </BlueprintSection>
       </PageLayout>
     </>

@@ -384,3 +384,64 @@ export function getCtaTier(pct: number): CtaTier {
   if (pct >= CTA_THRESHOLDS.tiede) return "tiede";
   return "froid";
 }
+
+// FAQ de /outils/checklist-geo — source UNIQUE partagée par le contenu visible
+// (accordéon dans page.tsx) et le schema FAQPage (FAQJsonLd) : jamais de
+// balisage qui diverge de ce qui s'affiche. Questions honnêtes sur les limites
+// de l'outil, pas de survente ; renvoie vers /outils/visibilite-ia et /conseil
+// quand un accompagnement est pertinent.
+export interface FaqItem {
+  id: string;
+  questionFr: string;
+  questionEn: string;
+  answerFr: string;
+  answerEn: string;
+}
+
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    id: "sans-developpeur",
+    questionFr: "La checklist suffit-elle sans l'aide d'un développeur ?",
+    questionEn: "Is the checklist enough without a developer?",
+    answerFr:
+      "Pas entièrement. Chaque action porte une étiquette Interne ou Prestataire : la majorité des chantiers « accès » et « pages-réponses » se fait en interne (rédaction, contenu, vérifications simples), mais certaines actions techniques — pare-feu/CDN, schémas JSON-LD, LocalBusiness — demandent un développeur. La checklist dit qui peut faire quoi, pas qui le fait à votre place.",
+    answerEn:
+      "Not entirely. Every action carries an In-house or Provider label: most of the 'access' and 'answer pages' priorities can be handled in-house (writing, content, simple checks), but a few technical actions — firewall/CDN, JSON-LD schemas, LocalBusiness — need a developer. The checklist tells you who can do what, not who does it for you.",
+  },
+  {
+    id: "combien-de-temps",
+    questionFr: "Combien de temps faut-il pour tout appliquer ?",
+    questionEn: "How long does it take to apply everything?",
+    answerFr:
+      "Ça dépend du point de départ. Les vérifications d'accès et un premier passage éditorial se font en quelques heures. Le chantier « autorité externe » est volontairement continu — la checklist recommande d'ailleurs d'y consacrer une demi-journée par mois : il n'y a pas de ligne d'arrivée, juste une régularité à tenir.",
+    answerEn:
+      "It depends where you start. The access checks and a first editorial pass take a few hours. The 'external authority' priority is deliberately ongoing — the checklist itself suggests blocking half a day a month for it: there's no finish line, just a rhythm to hold.",
+  },
+  {
+    id: "remplace-audit",
+    questionFr: "La checklist remplace-t-elle un audit de mon site ?",
+    questionEn: "Does the checklist replace an audit of my site?",
+    answerFr:
+      "Non. C'est une liste d'actions génériques, issues de constats de terrain documentés dans le guide GEO, pas un audit de votre site réel. Pour situer précisément votre site, commencez par le diagnostic visibilité IA ; pour une vérification sur votre terrain, une visio conseil (150 €) va plus loin.",
+    answerEn:
+      "No. It's a list of generic actions drawn from documented field observations, not an audit of your actual site. To place your site precisely, start with the AI visibility diagnostic; for a check on your real setup, a paid consulting call (€150) goes further.",
+  },
+  {
+    id: "autre-appareil",
+    questionFr: "Que se passe-t-il si je change d'appareil ou de navigateur ?",
+    questionEn: "What happens if I switch device or browser?",
+    answerFr:
+      "Vos cases cochées sont stockées uniquement dans ce navigateur (localStorage), sans compte ni email : elles ne se synchronisent pas ailleurs. Téléchargez le PDF pour garder une trace stable de votre avancement.",
+    answerEn:
+      "Your checked items are stored only in this browser (localStorage), with no account or email — they don't sync anywhere else. Download the PDF to keep a stable record of your progress.",
+  },
+  {
+    id: "garantie-citation",
+    questionFr: "Cocher ces 24 actions garantit-il d'être cité par ChatGPT ou Perplexity ?",
+    questionEn: "Does checking off these 24 actions guarantee I'll get cited by ChatGPT or Perplexity?",
+    answerFr:
+      "Non, aucune garantie : aucun moteur IA ne publie ses critères de citation, et ils évoluent. Ces actions reflètent des constats de terrain documentés — un socle solide, pas une formule magique.",
+    answerEn:
+      "No guarantee: no AI engine publishes its citation criteria, and they keep evolving. These actions reflect documented field observations — a solid foundation, not a magic formula.",
+  },
+];
