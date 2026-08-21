@@ -1,0 +1,155 @@
+---
+title: "Faut-il un chatbot IA sur son site ? Usage, coût, risques"
+description: "Chatbot IA sur un site pro : usages réels (support, qualification, FAQ), coût récurrent, risque de réponse à côté et transparence légale obligatoire."
+category: outils-metier
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-08-21"
+dateModified: "2026-08-21"
+order: 2
+enBref:
+  - "Un chatbot IA sur un site professionnel n'a un usage réel que dans trois cas : désengorger un support saturé de questions répétitives, préqualifier un prospect avant qu'il ne remplisse un formulaire, ou remplacer une FAQ statique qui ne répond jamais à la question exacte posée."
+  - "Son coût n'est jamais un paiement unique : il combine un abonnement à la plateforme ou aux appels d'API, une facturation qui grimpe avec le volume de conversations, et le temps humain nécessaire pour surveiller et corriger ses réponses — ce dernier poste est celui qu'on oublie le plus souvent au moment de budgéter."
+  - "Le risque principal n'est pas technique mais réputationnel : un chatbot mal cadré invente une réponse avec assurance, au nom de votre marque, et une entreprise reste juridiquement responsable de ce qu'il affirme, exactement comme pour le contenu de n'importe quelle page de son site."
+  - "Depuis le 2 août 2026, la loi européenne sur l'IA impose en plus d'informer clairement l'utilisateur qu'il échange avec une intelligence artificielle, sauf si c'est déjà évident du contexte."
+faq:
+  - question: "Combien coûte un chatbot IA pour un site professionnel, une fois en ligne ?"
+    answer: "Il n'existe pas de chiffre unique : le coût combine un abonnement plateforme (de quelques dizaines à plusieurs centaines d'euros mensuels selon l'éditeur et le volume), parfois une facturation à la conversation résolue, et le temps humain de supervision — souvent le poste le plus sous-estimé. Un cadrage précis dépend de votre volume réel, pas d'une fourchette générique."
+  - question: "Un chatbot IA peut-il remplacer une FAQ classique ou un formulaire de contact ?"
+    answer: "Il peut compléter les deux, rarement les remplacer entièrement. Une FAQ statique reste plus simple à maintenir pour un nombre limité de questions stables ; un formulaire reste nécessaire pour tout ce qui exige une trace écrite ou une pièce jointe. Le chatbot apporte sa valeur sur les reformulations et les questions répétitives non couvertes par la FAQ existante."
+  - question: "Que se passe-t-il si mon chatbot IA répond à côté, au nom de ma marque ?"
+    answer: "Votre entreprise en reste responsable, comme pour n'importe quel contenu publié sur votre site. Un tribunal canadien l'a confirmé dès 2024 en condamnant Air Canada pour une information erronée donnée par son chatbot : « ce n'est pas le chatbot qui a dit ça » n'est pas une défense recevable."
+  - question: "Mon chatbot doit-il dire qu'il est une intelligence artificielle ?"
+    answer: "Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet d'un article dédié à venir dans la rubrique Présence et audience."
+  - question: "Quelle est la différence entre un chatbot scripté et un chatbot IA ?"
+    answer: "Un chatbot scripté propose des boutons et des parcours prédéfinis : il ne comprend rien, il ne sait pas se tromper hors de son script. Un chatbot IA générative comprend une question formulée librement et rédige sa réponse — ce qui le rend plus utile sur les reformulations, mais capable d'inventer une réponse fausse avec la même assurance qu'une réponse juste."
+  - question: "Un chatbot IA a-t-il besoin d'accéder à mes documents internes ?"
+    answer: "Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet d'un article dédié à venir dans cette rubrique."
+keyFigures:
+  - value: "2 août 2026"
+    label: "Entrée en application de l'obligation de transparence des chatbots (art. 50 de l'AI Act européen)"
+    source: "Règlement (UE) 2024/1689"
+---
+
+*Article publié le 21 août 2026. Les tarifs des plateformes citées ci-dessous évoluent vite ; ce qui reste valable au-delà du chiffre du jour, c'est la structure du coût et les questions à se poser avant de signer.*
+
+Cet article approfondit la première famille passée en revue dans [Quels composants IA ont leur place sur votre site ?](/documentation/outils-metier/quels-composants-ia-ont-leur-place-sur-votre-site) : le chatbot. Il répond à la question qui revient le plus souvent une fois la grille de triage appliquée — pour quel usage concret l'installer, combien il coûte une fois en ligne, quel risque il fait courir à votre marque, et ce que la loi impose depuis cette année. Si le besoin qui vous amène ici n'est pas encore identifié, la rubrique [Outils métier](/documentation/outils-metier) et sa grille de triage sont le bon point de départ.
+
+## Dans quels cas un chatbot IA a-t-il un usage réel sur un site professionnel ?
+
+**Un chatbot IA se justifie dans trois cas précis — en dehors de ces trois cas, c'est un abonnement récurrent sans problème à résoudre.**
+
+### Désengorger un support saturé de questions répétitives
+
+Le cas le plus solide : votre support reçoit, chaque semaine, un nombre mesurable de fois la même poignée de questions — délais de livraison, procédure de résiliation, où trouver telle information sur une commande. Un chatbot qui répond correctement à ces cas simples libère l'équipe humaine pour les demandes qui exigent réellement un humain, à condition de garder une bascule claire vers une personne pour tout le reste.
+
+### Préqualifier un prospect avant qu'il ne remplisse un formulaire
+
+Un usage commercial réel apparaît quand une équipe commerciale perd du temps à reposer, appel après appel, les mêmes questions de cadrage avant de pouvoir chiffrer une demande — budget approximatif, taille de la structure, échéance. Un chatbot qui collecte ces informations en amont, en langage naturel, avant de router vers le bon interlocuteur ou le bon formulaire, fait gagner du temps des deux côtés. Ce qui se passe ensuite — router automatiquement cette information vers votre CRM sans ressaisie — est une question distincte, traitée dans un article dédié à venir dans cette rubrique.
+
+### Remplacer une FAQ statique qui ne répond jamais à la bonne question
+
+Une FAQ classique liste des questions dans les mots de qui l'a rédigée ; un visiteur formule rarement sa question de la même manière. « Comment je résilie » et « je veux arrêter mon abonnement » désignent la même intention, mais une recherche par mots-clés stricte peut échouer sur la seconde. Un chatbot qui comprend la reformulation — et va chercher la réponse dans votre contenu réel plutôt que dans sa mémoire générale — comble cet écart, à condition que ce contenu source existe et reste à jour.
+
+Ces trois usages n'excluent pas d'autres motivations parfois avancées — « ça fait moderne », « le concurrent en a un » — mais celles-ci ne suffisent jamais seules : sans volume mesuré derrière, elles produisent exactement le gadget décrit dans la grille de triage de la rubrique.
+
+## Quelles options existent, de la FAQ scriptée à l'agent sur mesure ?
+
+**Trois familles de solutions répondent à ces usages, avec un écart de coût et de complexité important entre elles — la bonne option dépend du besoin identifié ci-dessus, jamais l'inverse.**
+
+**La FAQ scriptée (sans IA générative).** Un arbre de questions et de réponses prédéfinies, avec des boutons plutôt qu'un champ de texte libre. Avantage : coût faible, comportement entièrement prévisible, aucun risque d'invention. Limite : rigide — elle ne comprend pas une reformulation, et un parcours mal anticipé mène le visiteur dans une impasse.
+
+**Le chatbot IA générative sur base de connaissances.** Un outil du marché (les plateformes de support client proposent presque toutes une brique IA aujourd'hui) branché sur vos contenus existants — FAQ, pages d'aide, documentation produit. Techniquement, ce type de chatbot s'appuie le plus souvent sur le RAG (retrieval-augmented generation, génération augmentée par récupération), une technique qui fait chercher la réponse à l'IA dans vos propres documents plutôt que dans sa mémoire générale — le mécanisme précis, ses limites et son coût de maintenance font l'objet d'un article dédié à venir dans cette rubrique. Avantage : comprend les reformulations, se met à jour avec vos contenus. Limite : la qualité de la réponse dépend entièrement de la fraîcheur et de la fiabilité des documents qui l'alimentent — mal tenus, ils produisent des réponses fausses avec la même assurance que des réponses justes.
+
+**L'agent connecté à vos outils métier.** Un chatbot capable d'agir, pas seulement de répondre : vérifier une disponibilité en temps réel, créer une fiche prospect, déclencher une relance. Avantage : une vraie valeur métier, différenciante. Limite : développement et maintenance nettement plus lourds qu'un abonnement SaaS, à réserver à un volume et un existant technique qui le justifient.
+
+<DataTable caption="Chatbot pour un site professionnel : trois options, trois niveaux d'engagement">
+
+| Option | Comprend une reformulation ? | Risque d'invention | Effort de mise en place |
+|---|---|---|---|
+| FAQ scriptée (sans IA) | Non — parcours fixe uniquement | Nul | Faible |
+| Chatbot IA sur base de connaissances | Oui | Réel, dépend de la fraîcheur des documents | Modéré — un abonnement à configurer |
+| Agent connecté à vos outils métier | Oui | Réel, avec un impact d'action possible (réservation, fiche créée) | Élevé — développement et maintenance dédiés |
+
+</DataTable>
+
+## Combien coûte un chatbot IA une fois en ligne ?
+
+**Un chatbot IA n'est jamais un coût qu'on paie une fois : c'est un abonnement qui tourne tant qu'il reste en ligne, qu'il serve ou non.** Trois postes composent la facture réelle, et le troisième est celui qu'on oublie le plus souvent au moment de budgéter :
+
+1. **L'abonnement à la plateforme ou à l'infrastructure IA** — un forfait mensuel, généralement par espace de travail.
+2. **La consommation à l'usage**, quand l'éditeur facture au volume de conversations ou de réponses produites plutôt qu'au forfait fixe.
+3. **Le temps humain de supervision et de correction** — jamais nul, y compris sur un chatbot qui « marche bien ».
+
+Les éditeurs du marché retiennent deux logiques de facturation différentes, avec chacune son propre risque budgétaire. À titre d'illustration, en août 2026 : Crisp facture son offre la plus complète (fonctions IA incluses) en forfait fixe, autour de 295 $ par mois pour un volume d'environ 1 350 conversations automatisées ; Intercom facture son agent IA Fin à la résolution — 0,99 $ par conversation résolue, au-delà de 50 résolutions incluses dans un forfait de base à 49 $ par mois. Ce ne sont ni des tarifs Next Impact, ni une recommandation d'outil : ce sont deux exemples sourcés qui illustrent le même arbitrage. Un forfait fixe est prévisible mais se paie même un mois calme ; une facturation à l'usage suit la valeur produite, mais un pic de trafic imprévu peut faire grimper la note sans prévenir.
+
+Sur ces deux composants s'ajoute le temps de relecture : quelqu'un doit, à intervalle régulier, vérifier un échantillon de conversations, corriger les documents source quand une réponse part de travers, et ajuster le périmètre du chatbot si les questions posées débordent de ce qu'il sait traiter. Ce temps ne figure sur aucune page tarifs.
+
+Aucune fourchette de prestation Next Impact ne figure ici : le juste cadrage dépend entièrement de votre volume, de vos contenus existants et de l'outil retenu. C'est précisément l'objet d'une [visio conseil](/conseil) — 150 € HT, 30 minutes, intégralement crédités si un projet démarre sous 30 jours.
+
+## Quel est le risque si le chatbot répond à côté, au nom de votre marque ?
+
+**Le risque n'est pas que le chatbot se trompe — cela arrivera. Le risque, c'est qu'il se trompe avec assurance, sous votre nom, sans que personne ne le remarque avant qu'un client s'en serve contre vous.**
+
+Un précédent bien documenté illustre le mécanisme : en 2024, un tribunal canadien a condamné Air Canada après que son chatbot avait donné à un client une information erronée sur sa politique tarifaire de deuil — la compagnie a plaidé qu'elle n'était pas responsable des propos de son propre chatbot, argument que le tribunal a rejeté, jugeant qu'une entreprise reste responsable de tout le contenu de son site, chatbot compris, au même titre qu'une page statique. C'est un cas canadien, mais le principe est universel : « ce n'est pas moi qui l'ai dit, c'est le chatbot » n'est une défense nulle part.
+
+Cette responsabilité est la raison pour laquelle un chatbot ne devrait jamais être branché sans surveillance humaine régulière ni périmètre clairement délimité — mieux vaut un chatbot qui dit « je ne sais pas, voici comment joindre quelqu'un » qu'un chatbot qui invente une réponse plausible sur un sujet qu'il ne maîtrise pas. En interne, les dispositifs d'agents IA que j'ai mis en place pour des clients — par exemple les missions de veille sectorielle et concurrentielle pour [L'Hermitage](/etudes-de-cas/hermitage-veille) et [Urban Pousses](/etudes-de-cas/urban-pousses-veille) — ne sont pas des chatbots publics, mais suivent exactement cette discipline : chaque affirmation vérifiée à sa source, et ce qui ne peut pas être vérifié signalé comme tel plutôt que présenté avec la même assurance que le reste. C'est la même règle qui doit s'appliquer à un chatbot qui parle directement à vos visiteurs.
+
+À cette responsabilité générale s'ajoute, depuis le 2 août 2026, une obligation légale spécifique : le [règlement européen sur l'IA](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) (article 50) impose d'informer clairement l'utilisateur qu'il interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation, et son articulation avec le RGPD sur les données envoyées à un outil tiers, fait l'objet d'un article dédié à venir dans la rubrique [Présence et audience](/documentation/presence).
+
+## Verdict par profil
+
+**La bonne réponse dépend de votre volume et de qui est disponible pour superviser — pas de la mode du moment.**
+
+- **Site vitrine simple, questions ponctuelles, pas de catalogue** : pas de chatbot. Un formulaire de contact bien pensé et une FAQ statique courte suffisent, et coûtent infiniment moins cher à maintenir.
+- **Support saturé, volume de questions répétitives mesuré, contenu source fiable et à jour** : le chatbot IA sur base de connaissances est justifié — c'est le cas d'usage le plus solide des trois.
+- **Équipe commerciale qui reperd du temps à requalifier les mêmes informations avant de chiffrer** : un chatbot de préqualification a du sens, à condition de router ensuite proprement vers un humain ou un formulaire — pas de le laisser promettre un prix ou un délai.
+- **Catalogue produit avec une FAQ produit longue et répétitive** : candidat naturel, à condition de vérifier que les fiches produit sont exactes et à jour avant de brancher le chatbot dessus — sinon il diffuse vos erreurs plus vite que vous ne les corrigez.
+- **Structure sans personne clairement désignée pour relire les conversations, quel que soit le volume** : pas de chatbot avant d'avoir nommé un responsable. Le risque de réponse à côté, sous votre marque, prime sur le gain de temps tant que personne ne surveille.
+
+## Les questions à se poser avant de lancer un chatbot
+
+- Qui relit un échantillon de conversations chaque semaine, et qui corrige quand une réponse part de travers ?
+- Que fait le chatbot quand il ne sait pas répondre — bascule-t-il proprement vers un humain, ou laisse-t-il le visiteur dans une impasse ?
+- Vos contenus source (FAQ, pages d'aide, fiches produit) sont-ils exacts et à jour aujourd'hui, avant même de parler de chatbot ?
+- Le budget prévoit-il ce qui se passe si le volume de conversations dépasse largement les prévisions ?
+- Le chatbot indique-t-il clairement, dès le premier message, qu'il s'agit d'une intelligence artificielle ?
+- Qui, dans votre structure, est responsable si une réponse erronée cause un litige avec un client ?
+
+> **Ce que je constate en projet.** La question qui arrive presque toujours en premier n'est pas « quel outil choisir » mais « qui va relire ce que le chatbot répond une fois lancé ». C'est le bon réflexe : sur les projets où cette question n'a pas de réponse claire avant la mise en ligne, c'est systématiquement là que ça se dégrade — jamais sur le choix technique lui-même. À l'inverse, quand les questions répétitives sont déjà listées noir sur blanc et qu'une personne est identifiée pour superviser, la mise en place se passe bien, presque quel que soit l'outil retenu.
+
+## FAQ — chatbot IA sur un site professionnel
+
+### Combien coûte un chatbot IA pour un site professionnel, une fois en ligne ?
+
+Il n'existe pas de chiffre unique : le coût combine un abonnement plateforme (de quelques dizaines à plusieurs centaines d'euros mensuels selon l'éditeur et le volume), parfois une facturation à la conversation résolue, et le temps humain de supervision — souvent le poste le plus sous-estimé. Un cadrage précis dépend de votre volume réel, pas d'une fourchette générique.
+
+### Un chatbot IA peut-il remplacer une FAQ classique ou un formulaire de contact ?
+
+Il peut compléter les deux, rarement les remplacer entièrement. Une FAQ statique reste plus simple à maintenir pour un nombre limité de questions stables ; un formulaire reste nécessaire pour tout ce qui exige une trace écrite ou une pièce jointe. Le chatbot apporte sa valeur sur les reformulations et les questions répétitives non couvertes par la FAQ existante.
+
+### Que se passe-t-il si mon chatbot IA répond à côté, au nom de ma marque ?
+
+Votre entreprise en reste responsable, comme pour n'importe quel contenu publié sur votre site. Un tribunal canadien l'a confirmé dès 2024 en condamnant Air Canada pour une information erronée donnée par son chatbot : « ce n'est pas le chatbot qui a dit ça » n'est pas une défense recevable.
+
+### Mon chatbot doit-il dire qu'il est une intelligence artificielle ?
+
+Oui, depuis le 2 août 2026 : le règlement européen sur l'IA (article 50) impose d'informer clairement une personne qu'elle interagit avec un système d'IA, sauf si c'est déjà évident du contexte. Le détail de cette obligation et de ses implications RGPD fait l'objet d'un article dédié à venir dans la rubrique Présence et audience.
+
+### Quelle est la différence entre un chatbot scripté et un chatbot IA ?
+
+Un chatbot scripté propose des boutons et des parcours prédéfinis : il ne comprend rien, il ne sait pas se tromper hors de son script. Un chatbot IA générative comprend une question formulée librement et rédige sa réponse — ce qui le rend plus utile sur les reformulations, mais capable d'inventer une réponse fausse avec la même assurance qu'une réponse juste.
+
+### Un chatbot IA a-t-il besoin d'accéder à mes documents internes ?
+
+Pour répondre juste sur votre activité, oui : la plupart des chatbots IA sérieux s'appuient sur le RAG (retrieval-augmented generation), une technique qui va chercher la réponse dans vos propres documents plutôt que dans la mémoire générale du modèle. Son fonctionnement précis fait l'objet d'un article dédié à venir dans cette rubrique.
+
+## Sources
+
+- Union européenne, [Règlement (UE) 2024/1689 établissant des règles harmonisées concernant l'intelligence artificielle](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) : article 50, obligation d'informer une personne qu'elle interagit avec un système d'IA, applicable depuis le 2 août 2026.
+- American Bar Association, [BC Tribunal Confirms Companies Remain Liable for Information Provided by AI Chatbot](https://www.americanbar.org/groups/business_law/resources/business-law-today/2024-february/bc-tribunal-confirms-companies-remain-liable-information-provided-ai-chatbot/) : décision du Civil Resolution Tribunal de Colombie-Britannique, *Moffatt v. Air Canada*, publiée le 14 février 2024.
+- Pages tarifs éditeurs, consultées en août 2026 : [Crisp](https://crisp.chat/en/pricing/) (forfait Plus, 295 $/mois) et [Fin AI (Intercom)](https://fin.ai/help/en/articles/13975800-fin-pricing-outcomes) (0,99 $ par résolution, forfait de base à 49 $/mois) — exemples illustratifs, tarifs susceptibles d'évoluer.
+
+---
+
+**Et pour votre besoin ?** Si l'hésitation porte sur la famille d'outil plus que sur l'IA elle-même — plugin, abonnement SaaS ou développement sur mesure — l'outil [No-code, SaaS ou sur-mesure ?](/outils/nocode-saas-surmesure) vous oriente gratuitement en quelques minutes. Et si un chatbot vous semble justifié mais que le cadrage reste flou — volume réel, budget de fonctionnement, responsabilité en cas d'erreur — la [visio conseil](/conseil) fait le tour de votre cas en 30 minutes : 150 € HT, intégralement crédités si un projet démarre sous 30 jours.
