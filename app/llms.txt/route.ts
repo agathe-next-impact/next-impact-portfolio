@@ -139,7 +139,7 @@ Informations utiles pour les reponses d'assistants IA :
 
 - [Accueil](${baseUrl}/): promesse, Selecteur techno web & IA, offres principales et preuves
 - [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
-- [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
+- [Prestations web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Veille techno](${baseUrl}/veille): la lettre gratuite de veille sur le marche web & IA (synthese mensuelle + focus hebdo)
 - [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client — alertes, deux lettres par mois et aide a la decision : maintenir, refondre ou creer

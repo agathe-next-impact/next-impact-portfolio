@@ -72,7 +72,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Web solutions",
+    titre: "Web services",
     sousTitre:
       "WordPress, Headless WordPress + Next.js or a custom business tool: these services are not imposed stacks, but possible answers after a clear Web & AI decision.",
     carouselLabel: "Why Next Impact?",

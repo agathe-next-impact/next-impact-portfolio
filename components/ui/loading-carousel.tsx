@@ -57,7 +57,7 @@ const defaultTips: Tip[] = [
     url: "https://www.newcult.co/templates/cult-landing-page",
   },
   {
-    text: "Les solutions web pour concrétiser vos idées.",
+    text: "Les prestations web pour concrétiser vos idées.",
     image: "/placeholders/cult-manifest.png",
     url: "https://www.newcult.co/templates/manifest",
   },

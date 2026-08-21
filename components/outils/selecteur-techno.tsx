@@ -69,7 +69,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Comprendre le headless (pour comparer)", labelEn: "Understand headless (to compare)", href: "/wordpress-headless" },
       { labelFr: "Simulateur de tarifs", labelEn: "Pricing simulator", href: "/solutions-web" },
     ],
-    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
+    next: { labelFr: "Voir les prestations web", labelEn: "See our web services", href: "/solutions-web" },
   },
   nocode: {
     labelFr: "No-code (Webflow, Framer, Airtable…)",
@@ -95,7 +95,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "Comprendre le headless", labelEn: "Understand headless", href: "/wordpress-headless" },
       { labelFr: "Quiz WordPress ou Headless", labelEn: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
     ],
-    next: { labelFr: "Voir les solutions web", labelEn: "See the web solutions", href: "/solutions-web" },
+    next: { labelFr: "Voir les prestations web", labelEn: "See our web services", href: "/solutions-web" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",

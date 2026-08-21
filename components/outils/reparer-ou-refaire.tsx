@@ -235,7 +235,7 @@ function getCtas(tier: Tier) {
       secondary: { fr: "Décider en visio — 150 €", en: "Decide on a call — €150", href: "/conseil" },
     };
   return {
-    primary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
+    primary: { fr: "Voir les prestations web", en: "See our web services", href: "/solutions-web" },
     secondary: { fr: "Décider en visio — 150 €", en: "Decide on a call — €150", href: "/conseil" },
   };
 }

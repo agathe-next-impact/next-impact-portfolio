@@ -57,7 +57,7 @@ const OFFERS_FR: Offer[] = [
     ],
     target: "Quand le besoin le justifie",
     href: "/solutions-web",
-    cta: "Voir les solutions web",
+    cta: "Voir les prestations web",
   },
 ];
 
@@ -91,7 +91,7 @@ const OFFERS_EN: Offer[] = [
   },
   {
     subtitle: "Build",
-    title: "Web solutions",
+    title: "Web services",
     price: "from €2,250 excl. VAT",
     items: [
       "Optimized WordPress, Headless + Next.js or business tool",
@@ -99,7 +99,7 @@ const OFFERS_EN: Offer[] = [
     ],
     target: "When the need justifies it",
     href: "/solutions-web",
-    cta: "See the web solutions",
+    cta: "See our web services",
   },
 ];
 

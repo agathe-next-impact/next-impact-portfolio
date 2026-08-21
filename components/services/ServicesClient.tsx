@@ -39,22 +39,23 @@ export default function ServicesClient() {
       {/* § 01 — Héros (harmonisé /veille) */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Web solutions" : "Solutions web"}
+        kicker={isEn ? "Web services" : "Prestations web"}
         title={variant.titre}
         description={variant.sousTitre}
         backdrop={
           /* Quadrillage blueprint : le plan de construction — la métaphore des
-             solutions web bâties sur mesure. */
+             prestations web bâties sur mesure. */
           <BlueprintGrid />
         }
         actions={
           <>
-            <Link href="/solutions-web/eligibilite" className={HERO_BTN_PRIMARY}>
-              {isEn ? "Run the diagnostic — 2 min" : "Lancer le diagnostic — 2 min"}
+            <a href="#tarifs" className={HERO_BTN_PRIMARY}>
+              {isEn ? "See offers" : "Voir les offres"}
               <ArrowRight size={14} />
-            </Link>
-            <a href="#tarifs" className={HERO_BTN_SECONDARY}>
-              {isEn ? "See pricing" : "Voir les tarifs"}
+            </a>
+            <a href="/contact" className={HERO_BTN_SECONDARY}>
+              {isEn ? "Contact" : "Contact"}
+              <ArrowRight size={14} />
             </a>
           </>
         }

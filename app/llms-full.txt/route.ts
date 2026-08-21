@@ -132,7 +132,7 @@ Next Impact is a web technology advisory and implementation offer in France led 
 
 - Home: ${baseUrl}/
 - Tech advice: ${baseUrl}/conseil
-- Solutions web: ${baseUrl}/solutions-web
+- Prestations web: ${baseUrl}/solutions-web
 - Case studies: ${baseUrl}/etudes-de-cas
 - Tech watch (free newsletter): ${baseUrl}/veille
 - Sentinelle (personalized site watch): ${baseUrl}/sentinelle

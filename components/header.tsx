@@ -48,7 +48,7 @@ export default function Header() {
           NEXT IMPACT
         </Link>
 
-        {/* Desktop nav — Conseil · Solutions web · Veille · Études de cas · À propos */}
+        {/* Desktop nav — Conseil · Prestations web · Veille · Études de cas · À propos */}
         <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
           {NAV_BEFORE.map((item) => (
             <Link

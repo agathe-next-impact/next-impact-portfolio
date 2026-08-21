@@ -3,7 +3,7 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Web solutions",
+    "services": "Web services",
     "demo": "Demo",
     "tools": "Online Tools",
     "documentation": "Resources",
@@ -46,7 +46,7 @@
     "privacy": "Privacy",
     "updated": "Updated: June 2026",
     "about": "About",
-    "services": "Web solutions",
+    "services": "Web services",
     "caseStudies": "Case studies",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -350,7 +350,7 @@
         "plateforme": "A business platform built from scratch.",
         "composant": "A custom component integrated into the existing site."
       },
-      "constructionLink": "See this offer on Web solutions",
+      "constructionLink": "See this offer on Web services",
       "budgetLine": "A project like this: {budget} · {delai}",
       "budgetLineNoDelai": "A project like this: {budget}"
     },
@@ -361,10 +361,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Web solutions — build what helps in the age of AI",
+    "metaTitle": "Web services — build what helps in the age of AI",
     "metaDescription": "After the web & AI tech selector, Next Impact builds only when it is the right choice: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500.",
     "breadcrumbHome": "Home",
-    "breadcrumbServices": "Web solutions & Pricing",
+    "breadcrumbServices": "Web services & Pricing",
     "calculateGain": {
       "title": "Calculate your gain",
       "description": "Estimate whether optimizing, fixing, rebuilding or building can actually pay off.",

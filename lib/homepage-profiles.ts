@@ -115,7 +115,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
   ServicesPageVariant
 > = {
   default: {
-    titre: "Solutions web",
+    titre: "Prestations web",
     sousTitre:
       "WordPress, Headless WordPress + Next.js ou outil métier sur mesure : ces services ne sont pas des choix imposés, mais des réponses possibles après une décision Web & IA claire.",
     carouselLabel: "Pourquoi Next Impact ?",

@@ -3,7 +3,7 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Solutions web",
+    "services": "Prestations web",
     "demo": "Démo",
     "tools": "Outils en ligne",
     "documentation": "Ressources",
@@ -46,7 +46,7 @@
     "privacy": "Confidentialité",
     "updated": "Mis à jour : juin 2026",
     "about": "À propos",
-    "services": "Solutions web",
+    "services": "Prestations web",
     "caseStudies": "Études de cas",
     "documentation": "Documentation",
     "blog": "Blog",
@@ -350,7 +350,7 @@
         "plateforme": "Une plateforme métier développée sur-mesure.",
         "composant": "Un composant sur-mesure intégré au site existant."
       },
-      "constructionLink": "Voir cette offre sur Solutions web",
+      "constructionLink": "Voir cette offre sur Prestations web",
       "budgetLine": "Projet de ce type : {budget} · {delai}",
       "budgetLineNoDelai": "Projet de ce type : {budget}"
     },
@@ -361,10 +361,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Solutions web — construire utile à l'heure de l'IA",
+    "metaTitle": "Prestations web — construire utile à l'heure de l'IA",
     "metaDescription": "Après le Sélecteur techno web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
     "breadcrumbHome": "Accueil",
-    "breadcrumbServices": "Solutions web & Tarifs",
+    "breadcrumbServices": "Prestations web & Tarifs",
     "calculateGain": {
       "title": "Calculez votre gain",
       "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",
