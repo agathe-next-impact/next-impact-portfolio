@@ -43,7 +43,9 @@
 | 5 | Réécriture des 7 absorbants (socle GEO P1, tarifs 2026, stats assainies) — 7 commits | redacteur-seo-geo ×7 | ✅ fait | 2026-07-18 |
 | 5 | Suppression des 11 fusionnés + miroirs EN (22 fichiers, commit `6dd1cf9`) — build vert | orchestrateur | ✅ fait | 2026-07-18 |
 | 5 | Audit de vague : 3 bloquants (composants MDX, tableaux, tarifs 2025) + A1-A5 **corrigés le jour même** → **publiable** (rapport : audit-vague-5.md) | verificateur-coherence (mode 2) + orchestrateur | ✅ fait | 2026-07-18 |
-| 5+ | Clusters D et E au fil de l'eau (verdicts mode 1 obligatoires) | (chaîne complète) | ⬜ à faire | — |
+| 5+ | Verdicts mode 1 clusters D et E : **13 × CRÉER**, 0 doublon interne, 2 points de vigilance (D4/B0, chaîne E0-E1-E2-E5) (→ verdicts-vague-5.md) | verificateur-coherence | ✅ fait | 2026-08-21 |
+| 5+ | Prérequis infra avant rédaction : dossiers `presence/`+`outils-metier/`, `categoryLabels`/`RELATED_CATEGORIES`, bloc `reading` hub-themes | architecte-fusion | ⬜ à faire | — |
+| 5+ | Rédaction des 13 contenus (ordre recommandé cluster E : E0 → E1/E2 → E5) | redacteur-seo-geo ×13 | ⬜ à faire — rythme à trancher avec Agathe (doctrine = ~2 articles/mois, voir verdicts-vague-5.md) | — |
 
 ## Publication
 
@@ -78,3 +80,9 @@
 - Décisions actées : section « Décisions actées » de `contexte-fusion.md`.
 - Doublons potentiels clusters vs existant : cartographie §8.5 (à passer au
   vérificateur avant chaque rédaction).
+- Verdicts vague 5+ (clusters D/E) : `.claude/docs/verdicts-vague-5.md`
+  (2026-08-21) — 13× CRÉER, prérequis infra identifiés, rythme de
+  publication à trancher avant rédaction en masse (doctrine ~2 articles/mois).
+- Migration `enBref`/`dateModified` de 9 articles du chantier fusion vers le
+  gabarit GEO-ready (commit `325c816`, 2026-08-21) — hors mapping vagues,
+  déclenché par un audit GEO plus large (voir conversation du 2026-08-21).
