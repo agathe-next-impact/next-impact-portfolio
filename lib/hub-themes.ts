@@ -19,6 +19,7 @@ import {
   ClipboardList,
   Compass,
   Copyright,
+  Database,
   FileCode2,
   FileSearch,
   FileText,
@@ -865,9 +866,8 @@ const outilsMetier: HubTheme = {
   // Cluster E publié le 2026-08-21 (verdict mode 1 : .claude/docs/verdicts-
   // vague-5.md) : E0 (chapeau), E1 (chatbot), E2 (recherche sémantique), E3
   // (personnalisation), E4 (automatisation formulaire/CRM), E6 (web app
-  // métier). Reste E5 (RAG) — volontairement rédigé APRÈS E1/E2 pour ne pas
-  // recopier leur contenu ; à ajouter ici une fois publié, même format :
-  // { icon, name: {fr,en}, blurb: {fr,en}, href: "/documentation/outils-metier/<slug>" }.
+  // métier), E5 (RAG — rédigé APRÈS E1/E2 pour ne pas recopier leur contenu).
+  // Cluster E complet.
   reading: [
     {
       icon: Bot,
@@ -940,6 +940,18 @@ const outilsMetier: HubTheme = {
         en: "Workflow automation, predictive dashboard, internal copilot: what actually serves an authenticated team, and what doesn't.",
       },
       href: "/documentation/outils-metier/ia-dans-une-web-app-metier",
+    },
+    {
+      icon: Database,
+      name: {
+        fr: "Qu'est-ce que le RAG ? Fonctionnement, coût, maintenance",
+        en: "What is RAG? How it works, cost, maintenance",
+      },
+      blurb: {
+        fr: "Comment le RAG ancre les réponses d'une IA sur vos documents plutôt que d'inventer — et pourquoi la maintenance coûte souvent plus cher que la mise en place.",
+        en: "How RAG grounds an AI's answers in your own documents instead of inventing — and why maintenance often costs more than the initial build.",
+      },
+      href: "/documentation/outils-metier/rag-et-base-de-connaissances-ia",
     },
   ],
   prestas: [
