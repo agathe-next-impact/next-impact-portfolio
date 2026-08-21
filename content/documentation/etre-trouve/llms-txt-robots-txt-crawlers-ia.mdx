@@ -2,10 +2,16 @@
 title: "llms.txt, robots.txt : que faire des robots IA sur votre site ?"
 description: "GPTBot, OAI-SearchBot, PerplexityBot… qui sont les robots IA, comment régler votre robots.txt, et faut-il un llms.txt ? Réponses nettes, sans jargon."
 category: etre-trouve
+rubrique: etre-trouve
 author: "Agathe Karinthi-Martin"
 date: "2026-07-18"
-updated: "2026-07-18"
+dateModified: "2026-08-21"
 order: 5
+enBref:
+  - "Trois fichiers et réglages décident de ce que les IA peuvent faire de votre site : le robots.txt (le fichier qui dit aux robots ce qu'ils ont le droit de visiter), la configuration de votre CDN ou pare-feu (qui peut bloquer en silence ce que robots.txt autorise), et éventuellement un llms.txt (un sommaire du site proposé aux IA — utile en théorie, à l'adoption non confirmée)."
+  - "La décision clé est de comprendre qu'il n'y a pas « les robots IA » mais trois familles : les robots d'entraînement (GPTBot, ClaudeBot…), les robots de recherche (OAI-SearchBot, PerplexityBot…) et les robots d'accès à la demande (ChatGPT-User…)."
+  - "Bloquer GPTBot n'empêche pas d'apparaître dans ChatGPT Search : ce sont deux décisions distinctes."
+  - "Ce guide donne le tableau complet des robots 2026, les directives robots.txt à écrire, et un verdict honnête sur le llms.txt."
 faq:
   - question: "Bloquer GPTBot fait-il disparaître mon site de ChatGPT ?"
     answer: "Non. GPTBot ne sert qu'à collecter du contenu pour entraîner les futurs modèles d'OpenAI. C'est OAI-SearchBot qui alimente l'index de ChatGPT Search : tant qu'il est autorisé, votre site peut apparaître comme source citée. Bloquer l'un n'a aucun effet sur l'autre — ce sont deux décisions distinctes."
@@ -18,8 +24,6 @@ faq:
   - question: "Faut-il bloquer les robots IA pour protéger son contenu ?"
     answer: "C'est un choix éditorial, pas une fatalité technique. Vous pouvez refuser l'entraînement des modèles (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended) tout en restant présent dans les recherches IA (OAI-SearchBot, PerplexityBot) : les deux réglages sont indépendants. Bloquer les robots de recherche IA, en revanche, revient à renoncer à être cité."
 ---
-
-**Trois fichiers et réglages décident de ce que les IA peuvent faire de votre site : le robots.txt (le fichier qui dit aux robots ce qu'ils ont le droit de visiter), la configuration de votre CDN ou pare-feu (qui peut bloquer en silence ce que robots.txt autorise), et éventuellement un llms.txt (un sommaire du site proposé aux IA — utile en théorie, à l'adoption non confirmée). La décision clé est de comprendre qu'il n'y a pas « les robots IA » mais trois familles : les robots d'entraînement (GPTBot, ClaudeBot…), les robots de recherche (OAI-SearchBot, PerplexityBot…) et les robots d'accès à la demande (ChatGPT-User…). Bloquer GPTBot n'empêche pas d'apparaître dans ChatGPT Search : ce sont deux décisions distinctes. Ce guide donne le tableau complet des robots 2026, les directives robots.txt à écrire, et un verdict honnête sur le llms.txt.**
 
 *Article publié le 18 juillet 2026. Sujet volatil : la liste des robots IA et leurs règles évoluent vite, ce contenu est revu tous les 2 à 3 mois.*
 

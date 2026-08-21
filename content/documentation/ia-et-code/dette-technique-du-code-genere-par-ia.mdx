@@ -2,10 +2,16 @@
 title: "La dette technique du code généré par IA, expliquée"
 description: "Le code écrit avec l'IA crée-t-il de la dette technique ? Les mécanismes, les chiffres (GitClear, DORA) et les garde-fous à exiger avant qu'il soit trop tard."
 category: ia-et-code
+rubrique: ia-et-code
 author: "Agathe Karinthi-Martin"
 date: "2026-07-18"
-updated: "2026-07-18"
+dateModified: "2026-08-21"
 order: 4
+enBref:
+  - "Oui, le code généré par IA crée davantage de dette technique par défaut — c'est mesuré, pas supposé."
+  - "Les analyses de GitClear sur 211 millions de lignes de code montrent que le copier-coller a dépassé le refactoring pour la première fois en 2024, et la recherche DORA de Google associe l'adoption de l'IA à une baisse estimée de 7,2 % de la stabilité de livraison."
+  - "Les mécanismes sont connus : duplication au lieu de réutilisation, code jamais relu, absence d'architecture et de tests, régénérations successives."
+  - "Et les garde-fous aussi : architecture décidée avant la génération, relecture humaine systématique, tests automatisés, livraisons par petits lots — des pratiques qui s'exigent d'une équipe comme d'un prestataire."
 faq:
   - question: "Le code généré par IA est-il de moins bonne qualité que le code humain ?"
     answer: "Pas ligne à ligne : une IA écrit du code standard souvent plus propre qu'un développeur pressé. La différence se joue à l'échelle du projet : l'IA optimise la réponse immédiate, pas la cohérence d'ensemble. Sans pilotage humain, elle duplique au lieu de réutiliser et empile au lieu d'organiser — c'est cette dérive structurelle, pas la qualité de chaque ligne, qui fabrique la dette."
@@ -18,8 +24,6 @@ faq:
   - question: "Un développeur expérimenté qui utilise l'IA produit-il aussi de la dette ?"
     answer: "Il en produit s'il abandonne ses garde-fous, pas parce qu'il utilise l'IA. L'expérience joue précisément là : savoir ce qu'il faut imposer à l'outil (architecture, conventions) et ce qu'il faut vérifier derrière lui (relecture, tests). Le risque réel de 2026 n'est pas le senior outillé, c'est le projet où plus personne ne relit parce que « l'IA s'en occupe »."
 ---
-
-**Oui, le code généré par IA crée davantage de dette technique par défaut — c'est mesuré, pas supposé. Les analyses de GitClear sur 211 millions de lignes de code montrent que le copier-coller a dépassé le refactoring pour la première fois en 2024, et la recherche DORA de Google associe l'adoption de l'IA à une baisse estimée de 7,2 % de la stabilité de livraison. Les mécanismes sont connus : duplication au lieu de réutilisation, code jamais relu, absence d'architecture et de tests, régénérations successives. Et les garde-fous aussi : architecture décidée avant la génération, relecture humaine systématique, tests automatisés, livraisons par petits lots — des pratiques qui s'exigent d'une équipe comme d'un prestataire.**
 
 *Article publié le 18 juillet 2026. Les chiffres cités proviennent des recherches GitClear et Google DORA les plus récentes ; les mécanismes décrits, eux, sont structurels.*
 
