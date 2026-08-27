@@ -1,10 +1,11 @@
 "use client";
 
-// Page « Visio conseil » — même structure que les pages offre du site. Tokens
-// DS Blueprint uniquement, i18n inline, accessibilité préservée. DEUX conseils par sujet
-// (WordPress thèmes/plugins · choix de techno), pas par durée. L'offre est
-// TIÈDE : elle vient APRÈS la preuve (l'audit gratuit), jamais en CTA froid.
-// Argument d'ancrage répété : le prix est déduit du devis projet.
+// Page « Conseil » — même structure que les pages offre du site. Tokens
+// DS Blueprint uniquement, i18n inline, accessibilité préservée. TROIS niveaux :
+// conseil techno refonte (1 h) · audit complet + préconisations + roadmap ·
+// accompagnement dans la durée (sur devis). L'offre est TIÈDE : elle vient
+// APRÈS la preuve (l'audit gratuit), jamais en CTA froid. Argument d'ancrage :
+// le conseil techno est déduit du devis projet.
 
 import { useLocale } from "next-intl";
 import {
@@ -24,19 +25,11 @@ import {
   HERO_BTN_PRIMARY,
   HERO_BTN_SECONDARY,
 } from "@/components/aspect/page-hero";
-import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
-function OfferCard({
-  offer,
-  isEn,
-  wide = false,
-}: {
-  offer: ConseilOffer;
-  isEn: boolean;
-  wide?: boolean;
-}) {
+function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
   const copy = isEn ? offer.en : offer.fr;
   const single = offer.tiers.length === 1;
   const cheapest = offer.tiers.reduce((a, b) => (a.value <= b.value ? a : b));
@@ -66,7 +59,13 @@ function OfferCard({
     </div>
   );
 
-  const priceBlock = (
+  const priceBlock = cheapest.quote ? (
+    <div className="flex items-baseline gap-1">
+      <span className="text-2xl font-light tracking-tight text-foreground">
+        {isEn ? "Custom quote" : "Sur devis"}
+      </span>
+    </div>
+  ) : (
     <div className="flex items-baseline gap-1">
       {!single && (
         <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
@@ -83,15 +82,9 @@ function OfferCard({
     </div>
   );
 
-  const note = (offer.credited || offer.recurring) && (
+  const note = offer.credited && (
     <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
-      {offer.credited
-        ? isEn
-          ? "Credited to your project quote"
-          : "Déduit du devis projet"
-        : isEn
-          ? "Monthly · no time commitment"
-          : "Abonnement mensuel · sans engagement"}
+      {isEn ? "Credited to your project quote" : "Déduit du devis projet"}
     </p>
   );
 
@@ -160,29 +153,6 @@ function OfferCard({
     </div>
   );
 
-  if (wide) {
-    return (
-      <div
-        className={
-          "relative grid gap-6 border bg-jet p-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:p-8 " +
-          (offer.featured ? "border-vermilion" : "border-dark-gray")
-        }
-      >
-        {tag}
-        <div className="flex flex-col gap-4">
-          {header}
-          {priceBlock}
-          {note}
-          {forWho}
-          {cta}
-        </div>
-        <ul className="grid content-start gap-2.5 sm:grid-cols-2 lg:border-l lg:border-dark-gray lg:pl-10">
-          {bulletItems}
-        </ul>
-      </div>
-    );
-  }
-
   return (
     <div
       className={
@@ -207,26 +177,26 @@ export default function VisioConseilPage() {
 
   const steps = isEn
     ? [
-        ["You choose", "Pick the level that matches your situation: choose a technology, scope the architecture or leave with a build pack."],
+        ["You choose", "Pick the level that matches your situation: settle a technology, get a full audit with its roadmap, or set up ongoing support."],
         ["You send context", "Share the site, quote, proposal or project notes so I can prepare the useful questions."],
         ["We decide", "Video call, analysis and written recap with recommendation, risks and the advised next step."],
       ]
     : [
-        ["Vous choisissez", "Sélectionnez le niveau adapté : choisir une techno, cadrer l'architecture ou repartir avec un pack de mise en œuvre."],
+        ["Vous choisissez", "Sélectionnez le niveau adapté : trancher une techno, obtenir un audit complet et sa roadmap, ou installer un accompagnement dans la durée."],
         ["Vous envoyez le contexte", "Partagez le site, le devis, la proposition ou les notes projet pour préparer les bonnes questions."],
         ["On décide", "Visio, analyse puis compte-rendu écrit avec recommandation, risques et prochaine étape conseillée."],
       ];
 
   const reassurance: Array<[typeof ShieldCheck, string]> = isEn
     ? [
-        [Receipt, "Tech choice call credited to your project quote"],
+        [Receipt, "Tech advice call credited to your project quote"],
         [CalendarCheck, "Book and pay online — instant confirmation"],
         [Video, "Real video call with screen sharing — not a chatbot"],
         [FileText, "Written recap after the call"],
         [ShieldCheck, "Reschedule or cancel up to 24h before"],
       ]
     : [
-        [Receipt, "Visio choix de techno créditée sur votre devis projet"],
+        [Receipt, "Conseil techno crédité sur votre devis projet"],
         [CalendarCheck, "Réservation et paiement en ligne — confirmation immédiate"],
         [Video, "Vraie visio avec partage d'écran — pas un chatbot"],
         [FileText, "Compte-rendu écrit après l'appel"],
@@ -290,7 +260,7 @@ export default function VisioConseilPage() {
         actions={
           <>
             <a href="#conseils" className={"group " + HERO_BTN_PRIMARY}>
-              {isEn ? "Book the tech-selector call" : "Réserver la visio sélecteur"}
+              {isEn ? "Book the tech advice call" : "Réserver le conseil techno"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a href="#comment" className={HERO_BTN_SECONDARY}>
@@ -314,26 +284,21 @@ export default function VisioConseilPage() {
           title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
           description={
             isEn
-              ? "A paid advisory path for small teams: choose a technology, scope the architecture, leave with an AI build pack, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
-              : "Un parcours de conseil payant pour les petites structures : choisir une techno, cadrer l'architecture, repartir avec un pack de mise en œuvre IA, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
+              ? "A paid advisory path for small teams: settle the technology of a rebuild, get a full audit with recommendations and a roadmap, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
+              : "Un parcours de conseil payant pour les petites structures : trancher la techno d'une refonte, obtenir un audit complet avec préconisations et roadmap, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
           }
         />
         <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
-          {OFFERS.slice(0, 3).map((offer) => (
+          {OFFERS.map((offer) => (
             <StaggerItem key={offer.id}>
               <OfferCard offer={offer} isEn={isEn} />
             </StaggerItem>
           ))}
         </Stagger>
-        {OFFERS[3] && (
-          <Reveal className="mt-4">
-            <OfferCard offer={OFFERS[3]} isEn={isEn} wide />
-          </Reveal>
-        )}
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Prices excl. VAT, no time commitment. Only the web tech choice call is deducted from your quote if a project follows within 30 days — the architecture advice and build pack are complete deliverables, the tech direction a monthly subscription."
-            : "Prix HT, sans engagement de durée. Seul le choix de techno est déduit de votre devis si un projet suit sous 30 jours — le conseil architecture et le pack de mise en œuvre sont des livrables complets, la direction technique un abonnement mensuel."}
+            ? "Prices excl. VAT, no time commitment. Only the tech advice call is deducted from your quote if a project follows within 30 days — the full audit is a complete deliverable, the ongoing engagement is priced on a custom quote."
+            : "Prix HT, sans engagement de durée. Seul le conseil techno est déduit de votre devis si un projet suit sous 30 jours — l'audit complet est un livrable à part entière, l'accompagnement dans la durée se chiffre sur devis."}
         </p>
 
         {/* Engagements — réassurance sous les offres */}

@@ -98,7 +98,7 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
 });
 
 const VISIO = (fr: string, en: string): ThemePresta => ({
-  name: { fr: "Choix de techno web", en: "Web tech choice" },
+  name: { fr: "Conseil techno", en: "Tech advice call" },
   price: { fr: "150 €", en: "€150" },
   temp: "tiede",
   blurb: { fr, en },
@@ -107,11 +107,11 @@ const VISIO = (fr: string, en: string): ThemePresta => ({
 });
 
 const ROADMAP = (temp: Temp, fr: string, en: string): ThemePresta => ({
-  name: { fr: "Conseil architecture de projet IA", en: "AI project architecture advice" },
-  price: { fr: "490 €", en: "€490" },
+  name: { fr: "Audit complet et préconisations", en: "Full audit & recommendations" },
+  price: { fr: "650 €", en: "€650" },
   temp,
   blurb: { fr, en },
-  cta: { fr: "Cadrer l'architecture", en: "Scope the architecture" },
+  cta: { fr: "Cadrer la suite", en: "Scope the next phase" },
   href: "/conseil",
 });
 
@@ -715,7 +715,7 @@ const avantSigner: HubTheme = {
   ],
   prestas: [
     {
-      name: { fr: "Choix de techno web", en: "Web tech choice" },
+      name: { fr: "Conseil techno", en: "Tech advice call" },
       price: { fr: "150 €", en: "€150" },
       temp: "chaud",
       blurb: {
@@ -990,12 +990,12 @@ const presence: HubTheme = {
       "Where to put the effort? We weigh site, newsletter and social on a call.",
     ),
     {
-      name: { fr: "Sparring partner techno", en: "Tech sparring partner" },
-      price: { fr: "dès 600 €/mois", en: "from €600/mo" },
+      name: { fr: "Accompagnement dans la durée", en: "Ongoing tech direction" },
+      price: { fr: "Sur devis", en: "Custom quote" },
       temp: "chaud",
       blurb: {
-        fr: "Plusieurs sujets dans l'année ? Un accompagnement mensuel pour décider et avancer.",
-        en: "Several topics across the year? A monthly retainer to decide and move forward.",
+        fr: "Plusieurs sujets dans l'année ? Un pilotage régulier pour décider et avancer.",
+        en: "Several topics across the year? Regular steering to decide and move forward.",
       },
       cta: { fr: "Voir l'accompagnement", en: "See the retainer" },
       href: "/conseil",

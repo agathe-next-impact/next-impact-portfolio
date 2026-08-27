@@ -7,7 +7,7 @@
 // générée dans un iframe caché (zéro dépendance client — voir
 // lib/checklist-geo-print.ts). Escalier de CTA par température d'avancement :
 // froid → rubrique + diagnostic gratuits, tiède → visio 150 €, chaud →
-// cadrage 490 €. Doctrine : checklist et téléchargement utilisables sans
+// audit complet 650 €. Doctrine : checklist et téléchargement utilisables sans
 // email ; la modale newsletter vient après la preuve de valeur.
 // Modèle : visibilite-ia.
 
@@ -90,8 +90,8 @@ function getCtas(tier: CtaTier) {
       en: "Foundations in place: the next step is a structured plan — what to measure, what to strengthen, in what order.",
     },
     primary: {
-      fr: "Cadrer la suite — 490 €",
-      en: "Scope the next phase — €490",
+      fr: "Cadrer la suite — audit complet 650 €",
+      en: "Scope the next phase — full audit €650",
       href: "/conseil",
     },
     secondary: {
