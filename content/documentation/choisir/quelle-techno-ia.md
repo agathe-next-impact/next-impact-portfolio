@@ -127,7 +127,7 @@ Vérifiez la réversibilité avant tout : contenus exportables, domaine à votre
 
 ---
 
-**Vous hésitez encore entre deux voies ?** C'est précisément l'objet du [choix de techno web avec l'IA](/conseil) : 30 minutes pour trancher votre cas précis, avec une recommandation claire et argumentée — 150 € HT, intégralement crédités si un projet démarre avec moi sous 30 jours. Pour dégrossir seul avant, le [Sélecteur techno](/outils/selecteur-techno) vous oriente en cinq minutes.
+**Vous hésitez encore entre deux voies ?** C'est précisément l'objet du [conseil techno](/conseil) : une heure pour trancher votre cas précis, avec une recommandation claire et argumentée — 150 € HT, intégralement crédités si un projet démarre avec moi sous 30 jours. Pour dégrossir seul avant, le [Sélecteur techno](/outils/selecteur-techno) vous oriente en cinq minutes.
 
 ## Sources
 

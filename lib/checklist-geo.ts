@@ -374,7 +374,7 @@ export function computeSectionProgress(
 // Escalier de CTA par température, proportionné à l'avancement :
 // froid (on démarre) → comprendre + se situer (gratuit) ;
 // tiède (chantier lancé) → prioriser en visio 150 € ;
-// chaud (socle en place) → cadrer la suite 490 €.
+// chaud (socle en place) → cadrer la suite avec l'audit complet 650 €.
 export type CtaTier = "froid" | "tiede" | "chaud";
 
 export const CTA_THRESHOLDS = { tiede: 30, chaud: 80 } as const;

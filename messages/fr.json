@@ -115,10 +115,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — choix de techno, architecture projet ou mise en œuvre IA",
-    "metaDescription": "Contactez Next Impact pour choisir une techno web, cadrer l'architecture d'un projet IA, obtenir un pack de mise en œuvre ou construire si nécessaire.",
+    "metaTitle": "Contact — conseil techno, audit complet ou accompagnement",
+    "metaDescription": "Contactez Next Impact pour trancher la techno d'une refonte, obtenir un audit complet avec préconisations et roadmap, ou installer un accompagnement dans la durée.",
     "title": "Contact",
-    "subtitle": "Choix de techno, conseil architecture ou pack de mise en œuvre : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Conseil techno, audit complet ou accompagnement dans la durée : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -339,10 +339,10 @@
       "stepBuild": "La construction",
       "arbitrageFallback": "Choisir la bonne approche avant de construire.",
       "conseilLink": {
-        "selecteur-techno": "Cet arbitrage, c'est l'objet de la visio Sélecteur techno ({price})",
-        "architecture-ia": "Cet arbitrage, c'est l'objet de la visio Architecture de projet IA ({price})",
-        "pack-ia": "Cet arbitrage, c'est l'objet du Pack de mise en œuvre IA ({price})",
-        "direction-technique": "Cet arbitrage, c'est le quotidien d'une Direction technique externalisée ({price}/mois)"
+        "selecteur-techno": "Cet arbitrage, c'est l'objet du conseil techno pour une refonte ({price})",
+        "architecture-ia": "Cet arbitrage, c'est l'objet de l'audit complet et préconisations ({price})",
+        "pack-ia": "Cet arbitrage s'inscrit dans un accompagnement dans la durée (sur devis)",
+        "direction-technique": "Cet arbitrage, c'est le quotidien d'un accompagnement dans la durée (sur devis)"
       },
       "constructionLine": {
         "wordpress": "Un site WordPress, administrable en interne.",

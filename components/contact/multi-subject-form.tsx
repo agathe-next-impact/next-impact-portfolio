@@ -8,7 +8,6 @@ import {
   Globe,
   Layers,
   MessageCircle,
-  Package,
   Smartphone,
   SearchCheck,
   Loader2,
@@ -22,8 +21,7 @@ import type { Locale } from "@/i18n/routing";
 type SubjectKey =
   | "decision-techno"
   | "architecture"
-  | "pack-ia"
-  | "direction-technique"
+  | "accompagnement"
   | "mise-en-oeuvre"
   | "autre";
 
@@ -34,10 +32,9 @@ interface SubjectConfig {
 }
 
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
-  "decision-techno": { icon: SearchCheck, fr: { label: "Choix de techno web avec IA", description: "Choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Web tech choice with AI", description: "Choose between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
-  architecture: { icon: Layers, fr: { label: "Conseil architecture de projet IA", description: "Cadrer l'architecture — cahier des charges et spécifications techniques", placeholder: "Décrivez le projet, les utilisateurs, les fonctionnalités imaginées et les données manipulées : je cadre l'architecture et rédige le cahier des charges." }, en: { label: "AI project architecture advice", description: "Scope the architecture — specifications and technical requirements", placeholder: "Describe the project, users, imagined features and handled data: I scope the architecture and write the specifications." } },
-  "pack-ia": { icon: Package, fr: { label: "Pack de mise en œuvre IA", description: "Specs, prompts et agents pour construire (Claude Code / Codex)", placeholder: "Décrivez le projet à développer avec l'IA (Claude Code ou Codex) : objectif, périmètre, contraintes. Je prépare specs, prompts et agents." }, en: { label: "AI build pack", description: "Specs, prompts and agents to build (Claude Code / Codex)", placeholder: "Describe the project to build with AI (Claude Code or Codex): goal, scope, constraints. I prepare specs, prompts and agents." } },
-  "direction-technique": { icon: CalendarClock, fr: { label: "Direction technique externalisée", description: "Pilotage récurrent : arbitrages, relecture de devis, roadmap tenue à jour (750 €/mois)", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement mensuel vous aiderait." }, en: { label: "Fractional tech direction", description: "Recurring steering: arbitration, quote reviews, living roadmap (€750/month)", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why a monthly retainer would help." } },
+  "decision-techno": { icon: SearchCheck, fr: { label: "Conseil techno pour une refonte", description: "Trancher en 1 h entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Tech advice for a rebuild", description: "Settle in 1h between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
+  architecture: { icon: Layers, fr: { label: "Audit complet et préconisations", description: "État des lieux complet — livrables : rapport d'audit, préconisations et roadmap", placeholder: "Décrivez le projet, l'existant, les utilisateurs et les contraintes : j'audite, je préconise et je livre la roadmap." }, en: { label: "Full audit & recommendations", description: "Complete assessment — deliverables: audit report, recommendations and roadmap", placeholder: "Describe the project, the existing setup, users and constraints: I audit, recommend and deliver the roadmap." } },
+  accompagnement: { icon: CalendarClock, fr: { label: "Accompagnement dans la durée", description: "Pilotage technique régulier : arbitrages, relecture de devis, roadmap — sur devis", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement dans la durée vous aiderait." }, en: { label: "Ongoing tech direction", description: "Regular technical steering: arbitration, quote reviews, roadmap — custom quote", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why ongoing support would help." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
@@ -45,11 +42,16 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
 const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
   "architecture",
-  "pack-ia",
-  "direction-technique",
+  "accompagnement",
   "mise-en-oeuvre",
   "autre",
 ];
+
+/** Anciens deep-links ?sujet=… encore en circulation (emails, favoris). */
+const LEGACY_SUBJECTS: Record<string, SubjectKey> = {
+  "pack-ia": "accompagnement",
+  "direction-technique": "accompagnement",
+};
 
 const fieldClass =
   "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
@@ -71,8 +73,11 @@ export default function MultiSubjectContactForm() {
   // Lu côté client (window) pour éviter la contrainte Suspense de useSearchParams.
   useEffect(() => {
     const raw = new URLSearchParams(window.location.search).get("sujet");
-    if (raw && (SUBJECT_ORDER as string[]).includes(raw)) {
+    if (!raw) return;
+    if ((SUBJECT_ORDER as string[]).includes(raw)) {
       setSubject(raw as SubjectKey);
+    } else if (LEGACY_SUBJECTS[raw]) {
+      setSubject(LEGACY_SUBJECTS[raw]);
     }
   }, []);
 
@@ -109,8 +114,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: tech choice, architecture, build pack or tech direction."
-            : "Choisissez le sujet : choix de techno, architecture, pack de mise en œuvre ou direction technique."}
+            ? "Pick the topic: tech advice, full audit, ongoing support or implementation."
+            : "Choisissez le sujet : conseil techno, audit complet, accompagnement ou mise en œuvre."}
         </p>
       </div>
 

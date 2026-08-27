@@ -15,16 +15,16 @@ export interface ConseilTier {
   value: number;
   calendlyUrl: string;
   featured?: boolean;
+  /** Prestation sur devis : le prix affiché est localisé, pas de mention HT. */
+  quote?: boolean;
   note?: { fr: string; en: string };
 }
 
 export interface ConseilOffer {
   id: string;
   featured?: boolean;
-  /** Seule offre déduite du devis projet (aujourd'hui : la visio décision). */
+  /** Seule offre déduite du devis projet (aujourd'hui : le conseil techno). */
   credited?: boolean;
-  /** Abonnement mensuel : affiche « sans engagement », pas de crédit. */
-  recurring?: boolean;
   /** CTA interne (Link i18n) au lieu du lien Calendly externe. */
   internalCta?: boolean;
   /** Libellé de CTA personnalisé (défaut : « Réserver et payer »). */
@@ -41,33 +41,33 @@ export const OFFERS: ConseilOffer[] = [
     credited: true,
     tiers: [
       {
-        duration: { fr: "30 min", en: "30 min" },
+        duration: { fr: "1 h", en: "1h" },
         price: "150 €",
         value: 150,
-        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-un-projet-web-clone`,
+        calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-une-refonte`,
       },
     ],
     fr: {
-      name: "Choix de techno web avec l'IA",
+      name: "Conseil techno pour une refonte",
       tag: "Sélecteur techno",
-      tagline: "Trancher rapidement la bonne techno pour votre projet.",
+      tagline: "Trancher la bonne techno pour votre refonte, en une heure.",
       forWho:
-        "Vous démarrez un projet et vous voulez, en 30 minutes, une reco de techno claire plutôt que des semaines de comparaison.",
+        "Vous préparez une refonte — ou un nouveau projet — et vous voulez une recommandation claire et argumentée plutôt que des semaines de comparaison.",
       bullets: [
-        "Analyse express de l'existant et recueil du besoin",
+        "Une heure en visio : analyse de l'existant et recueil du besoin",
         "Recommandation de techno principale (et alternative éventuelle)",
         "Points de vigilance : maintenance, coût, dépendance, SEO",
         "100 % crédité sur un projet signé sous 30 jours — le seul palier déduit",
       ],
     },
     en: {
-      name: "Web tech choice with AI",
+      name: "Tech advice for a rebuild",
       tag: "Compass",
-      tagline: "Settle the right technology for your project, fast.",
+      tagline: "Settle the right technology for your rebuild, in one hour.",
       forWho:
-        "You are starting a project and want, in 30 minutes, a clear technology recommendation instead of weeks of comparison.",
+        "You are preparing a rebuild — or a new project — and want a clear, argued recommendation instead of weeks of comparison.",
       bullets: [
-        "Express review of your existing setup and needs",
+        "One hour on a call: review of your existing setup and needs",
         "Main technology recommendation (and possible alternative)",
         "Watch points: maintenance, cost, lock-in, SEO",
         "100% credited to a project signed within 30 days — the only deducted tier",
@@ -78,115 +78,78 @@ export const OFFERS: ConseilOffer[] = [
     id: "architecture-projet-ia",
     tiers: [
       {
-        duration: { fr: "1 h + livrable", en: "1h + deliverable" },
-        price: "490 €",
-        value: 490,
+        duration: { fr: "1 h + livrables", en: "1h + deliverables" },
+        price: "650 €",
+        value: 650,
         calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-d-architecture-web-ia`,
       },
     ],
     fr: {
-      name: "Architecture de votre projet IA",
+      name: "Audit complet et préconisations",
       tag: "Cadrage",
-      tagline: "Auditer et cadrer l'architecture avant de produire.",
+      tagline: "L'état des lieux, les préconisations et la roadmap avant d'investir.",
       forWho:
-        "Vous avez un projet plus structurant — site, appli, outil métier, automatisation IA — et vous voulez la bonne architecture et des specs claires avant de lancer la production.",
+        "Vous préparez une décision structurante — refonte, migration, outil métier — et vous voulez un état des lieux complet et un plan d'action avant d'engager un budget.",
       bullets: [
-        "Audit de l'existant et des contraintes du projet",
-        "Préconisations : solutions et architecture adaptées au besoin",
+        "Audit complet de l'existant et des contraintes du projet",
         "Visio conseil d'1 heure pour arbitrer les choix",
-        "Livrable : cahier des charges et spécifications techniques",
+        "Préconisations : solutions et architecture adaptées au besoin",
+        "Livrables : rapport d'audit, préconisations et roadmap",
       ],
     },
     en: {
-      name: "Your AI project architecture",
+      name: "Full audit & recommendations",
       tag: "Scoping",
-      tagline: "Audit and scope the architecture before you build.",
+      tagline: "The full picture, recommendations and roadmap before you invest.",
       forWho:
-        "You have a more structural project — site, app, business tool, AI automation — and want the right architecture and clear specs before starting production.",
+        "You are preparing a structural decision — rebuild, migration, business tool — and want a complete assessment and an action plan before committing a budget.",
       bullets: [
-        "Audit of your existing setup and project constraints",
-        "Recommendations: solutions and architecture fit to the need",
+        "Full audit of your existing setup and project constraints",
         "One-hour advisory call to settle the choices",
-        "Deliverable: specifications and technical requirements",
+        "Recommendations: solutions and architecture fit to the need",
+        "Deliverables: audit report, recommendations and roadmap",
       ],
     },
   },
   {
-    id: "pack-mise-en-oeuvre-ia",
-    tiers: [
-      {
-        duration: { fr: "2 × 1 h + pack", en: "2 × 1h + pack" },
-        price: "1 900 €",
-        value: 1900,
-        calendlyUrl: `${CALENDLY_BASE}/pack-mise-en-oeuvre-ia`,
-      },
-    ],
-    fr: {
-      name: "Pack de mise en œuvre IA",
-      tag: "Clés en main",
-      tagline: "Tout le nécessaire pour construire le projet avec l'IA.",
-      forWho:
-        "Vous voulez développer votre projet avec Claude Code ou Codex et repartir avec un pack complet — specs, prompts et agents — prêt à produire.",
-      bullets: [
-        "Audit et préconisations sur les solutions adaptées au projet",
-        "2 visios conseil d'1 heure pour cadrer et affiner",
-        "Livrable : cahier des charges et spécifications techniques du projet",
-        "Livrable : pack complet de prompts et d'agents (Claude Code ou Codex) prêt au développement",
-      ],
-    },
-    en: {
-      name: "AI build pack",
-      tag: "Turnkey",
-      tagline: "Everything you need to build the project with AI.",
-      forWho:
-        "You want to develop your project with Claude Code or Codex and leave with a complete pack — specs, prompts and agents — ready to ship.",
-      bullets: [
-        "Audit and recommendations on the solutions fit to your project",
-        "Two one-hour advisory calls to scope and refine",
-        "Deliverable: project specifications and technical requirements",
-        "Deliverable: complete pack of prompts and agents (Claude Code or Codex) ready for development",
-      ],
-    },
-  },
-  {
-    id: "direction-technique-externalisee",
-    recurring: true,
+    id: "accompagnement-duree",
     internalCta: true,
-    cta: { fr: "Cadrer un accompagnement", en: "Set up a retainer" },
+    cta: { fr: "Cadrer un accompagnement", en: "Scope an engagement" },
     tiers: [
       {
-        duration: { fr: "mois", en: "month" },
-        price: "750 €",
-        value: 750,
-        calendlyUrl: "/contact?sujet=direction-technique",
+        duration: { fr: "", en: "" },
+        price: "Sur devis",
+        value: 0,
+        quote: true,
+        calendlyUrl: "/contact?sujet=accompagnement",
       },
     ],
     fr: {
-      name: "Direction technique externalisée",
-      tag: "Récurrent",
-      tagline: "Votre direction technique, à la demande, chaque mois.",
+      name: "Accompagnement dans la durée",
+      tag: "Pilotage",
+      tagline: "Votre direction technique, à vos côtés mois après mois.",
       forWho:
         "Vous n'avez pas de profil technique en interne mais vous devez arbitrer, prioriser et sécuriser vos choix web et IA en continu — sans embaucher ni dépendre d'un prestataire unique.",
       bullets: [
-        "1 visio de pilotage par mois (60 min) + arbitrages illimités en asynchrone",
+        "Pilotage régulier : visios, arbitrages et priorités au fil de vos projets",
         "Relecture de vos devis et propositions fournisseurs au fil de l'eau",
         "Roadmap vivante : priorités, budget et prochaines étapes tenus à jour",
         "Veille ciblée : IA, sécurité, obsolescence et dette technique",
-        "Sans engagement de durée · accès prioritaire à la mise en œuvre",
+        "Rythme et périmètre définis ensemble — sans engagement de durée",
       ],
     },
     en: {
-      name: "Fractional tech direction",
-      tag: "Recurring",
-      tagline: "Your technical direction, on demand, every month.",
+      name: "Ongoing tech direction",
+      tag: "Steering",
+      tagline: "Your technical direction, by your side month after month.",
       forWho:
         "You have no technical profile in-house but must arbitrate, prioritize and secure your web and AI choices continuously — without hiring or depending on a single vendor.",
       bullets: [
-        "One 60-min steering call per month + unlimited async arbitration",
+        "Regular steering: calls, arbitration and priorities as your projects unfold",
         "Ongoing review of your quotes and vendor proposals",
         "Living roadmap: priorities, budget and next steps kept up to date",
         "Targeted watch: AI, security, obsolescence and technical debt",
-        "No time commitment · priority access to implementation",
+        "Pace and scope defined together — no time commitment",
       ],
     },
   },
@@ -201,11 +164,11 @@ export const FAQ: FaqItem[] = [
   {
     fr: {
       q: "Quelle offre choisir ?",
-      a: "Le choix de techno web tranche rapidement quelle technologie viser. Le conseil architecture cadre un projet plus structurant et vous remet un cahier des charges. Le pack de mise en œuvre y ajoute les prompts et agents pour construire avec l'IA. La direction technique externalisée vous donne un pilotage récurrent, mois après mois.",
+      a: "Le conseil techno tranche en une heure la technologie de votre refonte. L'audit complet va plus loin : état des lieux, préconisations et roadmap, remis en livrables. L'accompagnement dans la durée installe ce regard dans le temps — pilotage, arbitrages et priorités au fil de vos projets, sur devis.",
     },
     en: {
       q: "Which offer should I choose?",
-      a: "The web tech choice call quickly settles which technology to aim for. The architecture advice scopes a more structural project and hands you a specifications document. The build pack adds the prompts and agents to build with AI. The fractional tech direction gives you recurring steering, month after month.",
+      a: "The tech advice call settles the technology of your rebuild in one hour. The full audit goes further: assessment, recommendations and roadmap, handed over as deliverables. The ongoing engagement installs that perspective over time — steering, arbitration and priorities as your projects unfold, on a custom quote.",
     },
   },
   {
@@ -220,12 +183,12 @@ export const FAQ: FaqItem[] = [
   },
   {
     fr: {
-      q: "C'est quoi la direction technique externalisée ?",
-      a: "Un abonnement mensuel de pilotage : une visio par mois, des arbitrages en continu, la relecture de vos devis et une roadmap tenue à jour. L'équivalent d'un directeur technique, sans l'embauche et sans engagement de durée.",
+      q: "C'est quoi l'accompagnement dans la durée ?",
+      a: "Un pilotage technique régulier : des visios, des arbitrages en continu, la relecture de vos devis et une roadmap tenue à jour. L'équivalent d'un directeur technique, sans l'embauche — le rythme et le périmètre sont définis ensemble, sur devis.",
     },
     en: {
-      q: "What is fractional tech direction?",
-      a: "A monthly steering subscription: one call per month, ongoing arbitration, review of your quotes and a roadmap kept up to date. The equivalent of a technical director, without the hire and with no time commitment.",
+      q: "What is the ongoing engagement?",
+      a: "Regular technical steering: calls, ongoing arbitration, review of your quotes and a roadmap kept up to date. The equivalent of a technical director, without the hire — pace and scope are defined together, on a custom quote.",
     },
   },
   {
@@ -241,11 +204,11 @@ export const FAQ: FaqItem[] = [
   {
     fr: {
       q: "Le montant est-il crédité si un projet suit ?",
-      a: "Seul le choix de techno web (30 min) est crédité : 100 % sur un projet signé sous 30 jours. Le conseil architecture, le pack de mise en œuvre et la direction technique externalisée sont des livrables à part entière — leur valeur est dans le rendu, pas dans un remboursement.",
+      a: "Seul le conseil techno (1 h, 150 €) est crédité : 100 % sur un projet signé sous 30 jours. L'audit complet et ses livrables — rapport d'audit, préconisations, roadmap — sont une prestation à part entière ; l'accompagnement dans la durée se chiffre sur devis.",
     },
     en: {
       q: "Is the amount credited if a project follows?",
-      a: "Only the web tech choice call (30 min) is credited: 100% on a project signed within 30 days. The architecture advice, the build pack and the fractional tech direction are standalone deliverables — their value is in the output, not in a refund.",
+      a: "Only the tech advice call (1h, €150) is credited: 100% on a project signed within 30 days. The full audit and its deliverables — audit report, recommendations, roadmap — are a standalone service; the ongoing engagement is priced on a custom quote.",
     },
   },
 ];

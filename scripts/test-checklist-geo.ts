@@ -89,7 +89,7 @@ check(
   sectionFull,
 );
 
-console.log("— Escalier de CTA (froid → visio 150 € → cadrage 490 €)");
+console.log("— Escalier de CTA (froid → visio 150 € → audit complet 650 €)");
 check("0 % → froid", getCtaTier(0) === "froid");
 check(`${CTA_THRESHOLDS.tiede - 1} % → froid`, getCtaTier(CTA_THRESHOLDS.tiede - 1) === "froid");
 check(`${CTA_THRESHOLDS.tiede} % → tiède`, getCtaTier(CTA_THRESHOLDS.tiede) === "tiede");
@@ -111,7 +111,7 @@ check(
     htmlFr.includes(p),
   ),
 );
-check("aucun montant hors 150 € dans le print", !/\b(180|390|490)\s*(€|&euro;)/.test(htmlFr));
+check("aucun montant hors 150 € dans le print", !/\b(180|390|490|650)\s*(€|&euro;)/.test(htmlFr));
 check("lang FR posé", htmlFr.includes('<html lang="fr">'));
 check("lang EN posé", htmlEn.includes('<html lang="en">'));
 

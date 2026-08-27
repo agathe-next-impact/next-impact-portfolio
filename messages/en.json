@@ -115,10 +115,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact — tech choice, AI project architecture or build pack",
-    "metaDescription": "Contact Next Impact to choose a web technology, scope an AI project architecture, get a build pack or build if needed.",
+    "metaTitle": "Contact — tech advice, full audit or ongoing support",
+    "metaDescription": "Contact Next Impact to settle the technology of a rebuild, get a full audit with recommendations and roadmap, or set up ongoing support.",
     "title": "Contact",
-    "subtitle": "Tech choice, architecture advice or build pack: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Tech advice, full audit or ongoing support: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -339,10 +339,10 @@
       "stepBuild": "The build",
       "arbitrageFallback": "Choosing the right approach before building.",
       "conseilLink": {
-        "selecteur-techno": "This trade-off is exactly what the Tech compass call covers ({price})",
-        "architecture-ia": "This trade-off is what the AI project architecture session covers ({price})",
-        "pack-ia": "This trade-off is what the AI build pack covers ({price})",
-        "direction-technique": "This kind of trade-off is what fractional tech direction handles ({price}/month)"
+        "selecteur-techno": "This trade-off is exactly what the tech advice call covers ({price})",
+        "architecture-ia": "This trade-off is what the full audit & recommendations covers ({price})",
+        "pack-ia": "This trade-off belongs to an ongoing engagement (custom quote)",
+        "direction-technique": "This kind of trade-off is what ongoing tech direction handles (custom quote)"
       },
       "constructionLine": {
         "wordpress": "A WordPress site the team can manage in-house.",

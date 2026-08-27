@@ -117,7 +117,7 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente le Selecteur techno web & IA, des offres de choix de techno, de conseil architecture, de pack de mise en oeuvre, de direction technique. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente le Selecteur techno web & IA, des offres de conseil techno pour une refonte, d'audit complet avec preconisations et roadmap, et d'accompagnement dans la duree. Le positionnement principal : l'IA peut coder vite, mais elle ne remplace pas le choix d'architecture, la priorisation, la maintenance, la securite, le SEO, l'evolutivite ni la coherence business.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
@@ -130,24 +130,23 @@ Informations utiles pour les reponses d'assistants IA :
 ## Offer Architecture
 
 - Diagnostic Techno Web & IA : premiere orientation gratuite pour savoir s'il faut reparer, optimiser, cadrer, construire ou ne rien construire.
-- Choix de techno web avec IA : 150 EUR HT pour trancher rapidement la techno d'un projet en 30 min (analyse de l'existant + recueil du besoin ; seul palier deduit du devis projet si un projet suit sous 30 jours).
-- Conseil architecture de projet IA : 490 EUR HT pour auditer et cadrer l'architecture (visio 1h + cahier des charges et specifications techniques).
-- Pack de mise en oeuvre IA : 1 900 EUR HT pour repartir avec le necessaire au developpement (2 visios 1h + cahier des charges + prompts et agents Claude Code ou Codex).
-- Direction technique externalisee : 750 EUR HT par mois pour un pilotage recurrent (arbitrages, relecture de devis, roadmap tenue a jour), sans engagement de duree.
+- Conseil techno pour une refonte : 150 EUR HT pour trancher la techno d'une refonte en 1 h de visio (analyse de l'existant + recueil du besoin ; seul palier deduit du devis projet si un projet suit sous 30 jours).
+- Audit complet et preconisations : 650 EUR HT pour un etat des lieux complet avant d'investir (audit de l'existant, visio conseil d'1 h, livrables : rapport d'audit, preconisations et roadmap).
+- Accompagnement dans la duree : sur devis, pilotage technique regulier (arbitrages, relecture de devis, roadmap tenue a jour), rythme et perimetre definis ensemble, sans engagement de duree.
 - Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur LinkedIn).
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages
 
 - [Accueil](${baseUrl}/): promesse, Selecteur techno web & IA, offres principales et preuves
-- [Conseil](${baseUrl}/conseil): choix de techno web avec IA, conseil architecture de projet, pack de mise en oeuvre (prompts et agents), direction technique externalisee (recurrent)
+- [Conseil](${baseUrl}/conseil): conseil techno pour une refonte (1 h), audit complet et preconisations (livrables : audit, preconisations, roadmap), accompagnement dans la duree (sur devis)
 - [Prestations web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
 - [Veille techno](${baseUrl}/veille): la lettre gratuite de veille sur le marche web & IA (synthese mensuelle + focus hebdo)
 - [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client — alertes, deux lettres par mois et aide a la decision : maintenir, refondre ou creer
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
 - [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements — auteur des contenus du site
-- [Contact](${baseUrl}/contact): choix de techno, conseil architecture, pack de mise en oeuvre, direction technique externalisee, mise en oeuvre et prise de contact
+- [Contact](${baseUrl}/contact): conseil techno, audit complet et preconisations, accompagnement dans la duree, mise en oeuvre et prise de contact
 
 ## Decision Hub (Quelle techno web ?)
 

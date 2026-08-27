@@ -5,7 +5,7 @@
 // 10 questions → score global /100 + 4 axes (accès robots IA, citabilité,
 // structure/données, autorité externe), verdict par palier et 3 actions
 // concrètes. Escalier de CTA par température : froid → rubrique etre-trouve,
-// tiède → visio conseil 150 €, chaud → cadrage 490 €. Doctrine : le résultat
+// tiède → visio conseil 150 €, chaud → audit complet 650 €. Doctrine : le résultat
 // est utile sans rien acheter. Scoring pur dans lib/visibilite-ia.ts (testé).
 // Modèle : reparer-ou-refaire.
 
@@ -93,8 +93,8 @@ function getCtas(tier: Tier) {
     };
   return {
     primary: {
-      fr: "Cadrer un plan de visibilité — 490 €",
-      en: "Scope a visibility plan — €490",
+      fr: "Cadrer un plan de visibilité — 650 €",
+      en: "Scope a visibility plan — €650",
       href: "/conseil",
     },
     secondary: {
