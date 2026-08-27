@@ -31,7 +31,7 @@ export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
       "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
     valueProposition:
       "Un avis indépendant avant d'engager un budget, puis une refonte en forfait : prix et délai écrits avant de commencer, performance mesurée avant et après.",
-    ctaPrimary: { label: "Voyez ce qui ralentit votre site en 2 minutes", href: "/audit-site-web" },
+    ctaPrimary: { label: "Réparer ou refaire ? Faites le test", href: "/outils/reparer-ou-refaire" },
     ctaSecondary: { label: "Discutons de votre projet", href: "/contact" },
     auditTitle: "Qu'est-ce qui ralentit votre site ?",
     auditSubtitle: "Diagnostic en 2 minutes",

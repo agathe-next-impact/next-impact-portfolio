@@ -19,9 +19,9 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // préchargées au chargement de chaque page, sans qu'aucune n'ait été demandée.
 // La documentation et les outils restent liés depuis le footer et depuis le
 // hub /documentation — aucune URL n'est modifiée.
-// Charte §7 : Diagnostic · Services · Conseil · Études de cas · À propos.
-// Le diagnostic est porté par le bouton CTA (à la place du contact) ; la
-// veille reste accessible depuis le footer et la home.
+// Nav : Services · Conseil · Études de cas · À propos.
+// La visio conseil est portée par le bouton CTA (à la place du contact) ; le
+// diagnostic et la veille restent accessibles depuis le footer et la home.
 const NAV_BEFORE = [
   { key: "services",    href: "/solutions-web" },
   { key: "conseil",     href: "/conseil" },
@@ -95,12 +95,12 @@ export default function Header() {
 
           <ThemeToggle />
 
-          {/* CTA unique : le diagnostic (froid) prend la place du contact (charte §7). */}
+          {/* CTA unique : la visio conseil prend la place du contact. */}
           <Link
-            href="/audit-site-web"
+            href="/conseil"
             className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
           >
-            {t("mainCta")}
+            {t("visioConseil")}
           </Link>
         </div>
 
@@ -173,14 +173,14 @@ export default function Header() {
                 </button>
               )}
 
-              {/* CTA unique : le diagnostic (froid), comme sur desktop */}
+              {/* CTA unique : la visio conseil, comme sur desktop */}
               <div className="flex flex-col gap-3 p-5">
                 <Link
-                  href="/audit-site-web"
+                  href="/conseil"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
                 >
-                  {t("mainCta")}
+                  {t("visioConseil")}
                 </Link>
               </div>
             </nav>

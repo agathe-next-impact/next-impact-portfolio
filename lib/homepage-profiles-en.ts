@@ -17,7 +17,7 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
       "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks.",
     valueProposition:
       "An independent opinion before you commit a budget, then a fixed-price redesign: price and timeline in writing before we start, performance measured before and after.",
-    ctaPrimary: { label: "See what slows your site down in 2 minutes", href: "/audit-site-web" },
+    ctaPrimary: { label: "Repair or rebuild? Take the test", href: "/outils/reparer-ou-refaire" },
     ctaSecondary: { label: "Let's talk about your project", href: "/contact" },
     auditTitle: "What is slowing your site down?",
     auditSubtitle: "2-minute diagnostic",
