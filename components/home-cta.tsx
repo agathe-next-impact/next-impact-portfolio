@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
@@ -28,9 +28,9 @@ export default function HomeCta() {
           {/* Left */}
           <Reveal>
             <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
-              № 6 —{" "}
+              № 06 ·{" "}
               <span className="text-mid-gray">
-                {isEn ? "Start your project" : "Démarrer votre projet"}
+                {isEn ? "Where to start" : "Par où commencer"}
               </span>
             </p>
             <WordAppear
@@ -38,32 +38,33 @@ export default function HomeCta() {
               className="mb-4 max-w-[16ch] text-3xl font-extralight leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl"
               text={
                 isEn
-                  ? "Your project online in 6 to 10 weeks."
-                  : "Votre projet en ligne en 6 à 10 semaines."
+                  ? "Your site online in 6 to 10 weeks."
+                  : "Votre site en ligne en 6 à 10 semaines."
               }
             />
             <p className="mb-8 max-w-[460px] font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "A call, a clear scope, then design and build — budget and timeline fixed upfront."
-                : "Un appel, un cadrage clair, puis conception et développement — budget et délai fixés d'emblée."}
+                ? "Start with the free diagnostic: one address, one report, a first direction. Then a call, a clear scope, budget and timeline fixed upfront."
+                : "Commencez par le diagnostic gratuit : une adresse, un rapport, une première orientation. Ensuite un appel, un cadrage clair, budget et délai fixés d'emblée."}
             </p>
             <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/audit-site-web"
+                className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
+              >
+                {isEn
+                  ? "See what slows your site down in 2 minutes"
+                  : "Voyez ce qui ralentit votre site en 2 minutes"}
+              </Link>
               <a
                 href="https://calendar.app.google/RwZqaabSR5aDMnk46"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
+                className="group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground hover:bg-jet"
               >
                 <CalendarDays size={14} />
                 {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
               </a>
-              <Link
-                href="/etudes-de-cas"
-                className="group inline-flex h-11 items-center gap-1.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground hover:bg-jet"
-              >
-                {isEn ? "View case studies" : "Voir les études de cas"}
-                <ArrowRight size={13} />
-              </Link>
             </div>
           </Reveal>
 

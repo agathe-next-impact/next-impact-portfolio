@@ -18,8 +18,9 @@ const NAV_LINKS = [
   { href: "/confidentialite",     key: "privacy" },
 ] as const;
 
+// Charte §6 Diagnostic : la page /audit-site-web vit dans la navigation
+// principale (bouton du header), plus dans le footer.
 const RESOURCE_LINKS = [
-  { href: "/audit-site-web", key: "freeAiAudit" },
   { href: "/conseil", key: "visioConseil" },
   { href: "/veille",        key: "veille" },
   { href: "/outils",        key: "tools" },

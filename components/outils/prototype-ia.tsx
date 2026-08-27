@@ -230,7 +230,7 @@ function getCtas(tier: 0 | 1 | 2) {
     };
   if (tier === 1)
     return {
-      primary: { fr: "Cadrer en visio — 150 €", en: "Scope on a call — €150", href: "/conseil" },
+      primary: { fr: "Cadrer en visio · 150 €", en: "Scope on a call · €150", href: "/conseil" },
       secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
     };
   return {

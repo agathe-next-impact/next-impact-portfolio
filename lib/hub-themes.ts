@@ -98,7 +98,7 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
 });
 
 const VISIO = (fr: string, en: string): ThemePresta => ({
-  name: { fr: "Conseil techno", en: "Tech advice call" },
+  name: { fr: "Visio conseil refonte", en: "Redesign advisory call" },
   price: { fr: "150 €", en: "€150" },
   temp: "tiede",
   blurb: { fr, en },
@@ -107,7 +107,7 @@ const VISIO = (fr: string, en: string): ThemePresta => ({
 });
 
 const ROADMAP = (temp: Temp, fr: string, en: string): ThemePresta => ({
-  name: { fr: "Audit complet et préconisations", en: "Full audit & recommendations" },
+  name: { fr: "Audit + roadmap", en: "Audit + roadmap" },
   price: { fr: "650 €", en: "€650" },
   temp,
   blurb: { fr, en },
@@ -715,12 +715,12 @@ const avantSigner: HubTheme = {
   ],
   prestas: [
     {
-      name: { fr: "Conseil techno", en: "Tech advice call" },
+      name: { fr: "Visio conseil refonte", en: "Redesign advisory call" },
       price: { fr: "150 €", en: "€150" },
       temp: "chaud",
       blurb: {
-        fr: "Un devis ou une proposition en main ? Un avis techno indépendant en visio avant de vous engager.",
-        en: "A quote or proposal in hand? An independent tech opinion on a call before you commit.",
+        fr: "Un devis ou une proposition en main ? Un avis indépendant en visio, avec un écrit sous 48 h, avant de vous engager.",
+        en: "A quote or proposal in hand? An independent opinion on a call, in writing within 48h, before you commit.",
       },
       cta: { fr: "Un avis indépendant", en: "Get an independent opinion" },
       href: "/conseil",
@@ -989,17 +989,11 @@ const presence: HubTheme = {
       "Où mettre l'effort ? On arbitre site, newsletter et réseaux en visio.",
       "Where to put the effort? We weigh site, newsletter and social on a call.",
     ),
-    {
-      name: { fr: "Accompagnement dans la durée", en: "Ongoing tech direction" },
-      price: { fr: "Sur devis", en: "Custom quote" },
-      temp: "chaud",
-      blurb: {
-        fr: "Plusieurs sujets dans l'année ? Un pilotage régulier pour décider et avancer.",
-        en: "Several topics across the year? Regular steering to decide and move forward.",
-      },
-      cta: { fr: "Voir l'accompagnement", en: "See the retainer" },
-      href: "/conseil",
-    },
+    ROADMAP(
+      "chaud",
+      "Plusieurs chantiers à arbitrer ? L'audit + roadmap pose l'état des lieux et l'ordre des priorités.",
+      "Several projects to arbitrate? The audit + roadmap sets the assessment and the order of priorities.",
+    ),
     AUDIT_GRATUIT(
       "Un point de départ ? Je regarde votre présence et vous oriente.",
       "A starting point? I look at your presence and point you the right way.",

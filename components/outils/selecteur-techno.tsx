@@ -82,7 +82,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 150 €", labelEn: "Validate on a call — €150", href: "/conseil" },
+    next: { labelFr: "Valider en visio · 150 €", labelEn: "Validate on a call · €150", href: "/conseil" },
   },
   headless: {
     labelFr: "Headless WordPress + Next.js",
@@ -446,7 +446,7 @@ export default function SelecteurTechno() {
             </Link>
             {info.next.href !== "/conseil" && (
               <Link href="/conseil" className={BTN_GHOST}>
-                {isEn ? "Book a tech choice call — €150" : "Réserver une visio — 150 €"}
+                {isEn ? "Book a tech choice call · €150" : "Réserver une visio · 150 €"}
                 <ArrowRight
                   size={13}
                   className="transition-transform group-hover:translate-x-0.5"

@@ -40,16 +40,16 @@ export default async function Home({
       <ServiceJsonLd
         name={
           isEn
-            ? "Web technology advice in the age of AI"
-            : "Conseil techno web à l'heure de l'IA"
+            ? "WordPress site redesign"
+            : "Refonte de site WordPress"
         }
         description={
           isEn
-            ? "Independent advice to choose the right web technology now that AI can code fast — WordPress, no-code, AI coding, SaaS, Headless or custom — then implementation only when it is the right choice. Fixed budget and timeline from the start."
-            : "Conseil indépendant pour choisir la bonne techno web à l'heure où l'IA peut coder vite — WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure — puis mise en œuvre seulement quand c'est le bon choix. Budget et délai fixés dès le départ."
+            ? "An aging WordPress site made fast and modern again without rebuilding everything: optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks, performance measured before and after."
+            : "Un site WordPress qui vieillit redevient rapide et moderne sans tout reconstruire : refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines, performance mesurée avant et après."
         }
         serviceType={isEn ? "Web consulting and development" : "Conseil et développement web"}
-        url="/conseil"
+        url="/solutions-web"
       />
       <FAQJsonLd
         questions={faq.items.map((f) => ({

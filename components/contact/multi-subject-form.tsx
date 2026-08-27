@@ -21,8 +21,8 @@ import type { Locale } from "@/i18n/routing";
 type SubjectKey =
   | "decision-techno"
   | "architecture"
-  | "accompagnement"
   | "mise-en-oeuvre"
+  | "diagnostic"
   | "autre";
 
 interface SubjectConfig {
@@ -32,25 +32,26 @@ interface SubjectConfig {
 }
 
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
-  "decision-techno": { icon: SearchCheck, fr: { label: "Conseil techno pour une refonte", description: "Trancher en 1 h entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure", placeholder: "Décrivez la décision à trancher, les options envisagées, vos contraintes de budget, délai, autonomie et maintenance." }, en: { label: "Tech advice for a rebuild", description: "Settle in 1h between WordPress, no-code, AI coding, SaaS, Headless or custom", placeholder: "Describe the decision to settle, the options considered, and your budget, timing, autonomy and maintenance constraints." } },
-  architecture: { icon: Layers, fr: { label: "Audit complet et préconisations", description: "État des lieux complet — livrables : rapport d'audit, préconisations et roadmap", placeholder: "Décrivez le projet, l'existant, les utilisateurs et les contraintes : j'audite, je préconise et je livre la roadmap." }, en: { label: "Full audit & recommendations", description: "Complete assessment — deliverables: audit report, recommendations and roadmap", placeholder: "Describe the project, the existing setup, users and constraints: I audit, recommend and deliver the roadmap." } },
-  accompagnement: { icon: CalendarClock, fr: { label: "Accompagnement dans la durée", description: "Pilotage technique régulier : arbitrages, relecture de devis, roadmap — sur devis", placeholder: "Décrivez votre contexte : structure, projets web/IA en cours ou à venir, décisions récurrentes à arbitrer et pourquoi un accompagnement dans la durée vous aiderait." }, en: { label: "Ongoing tech direction", description: "Regular technical steering: arbitration, quote reviews, roadmap — custom quote", placeholder: "Describe your context: organization, current or upcoming web/AI projects, recurring decisions to arbitrate and why ongoing support would help." } },
-  "mise-en-oeuvre": { icon: Globe, fr: { label: "Mise en œuvre", description: "Construire seulement si la solution est claire", placeholder: "Décrivez ce qui a déjà été décidé : besoin, techno pressentie, contenus, fonctionnalités, contraintes et niveau d'autonomie attendu." }, en: { label: "Implementation", description: "Build only when the solution is clear", placeholder: "Describe what is already decided: need, expected technology, content, features, constraints and autonomy level." } },
+  "decision-techno": { icon: CalendarClock, fr: { label: "Visio conseil refonte (150 €)", description: "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder", placeholder: "Décrivez votre site, ce qui vous gêne aujourd'hui et la décision à trancher : je prépare la visio à partir de votre situation réelle." }, en: { label: "Redesign advisory call (€150)", description: "One hour on a call, a written opinion within 48h: stay, decouple or rebuild", placeholder: "Describe your site, what bothers you today and the decision to settle: I prepare the call from your actual situation." } },
+  architecture: { icon: Layers, fr: { label: "Audit + roadmap (650 €)", description: "Rapport d'audit, préconisations chiffrées et roadmap par étapes", placeholder: "Décrivez le site, l'existant technique si vous le connaissez et vos échéances : j'audite, je préconise et je livre la roadmap." }, en: { label: "Audit + roadmap (€650)", description: "Audit report, costed recommendations and a step-by-step roadmap", placeholder: "Describe the site, the technical setup if you know it and your deadlines: I audit, recommend and deliver the roadmap." } },
+  "mise-en-oeuvre": { icon: Globe, fr: { label: "Projet de refonte", description: "WordPress optimisé, headless ou web app : prix et délai fixés avant de commencer", placeholder: "Décrivez votre site actuel, ce que vous voulez garder, ce que vous voulez changer, et vos contraintes de budget et de délai." }, en: { label: "Redesign project", description: "Optimized WordPress, headless or web app: price and timeline fixed upfront", placeholder: "Describe your current site, what you want to keep, what you want to change, and your budget and timing constraints." } },
+  diagnostic: { icon: SearchCheck, fr: { label: "Diagnostic gratuit de mon site", description: "Je regarde votre site et je vous oriente : gratuit, sans engagement", placeholder: "Indiquez l'adresse de votre site et ce qui vous préoccupe (lenteur, pannes, référencement, image) : je vous réponds avec une première orientation." }, en: { label: "Free diagnostic of my site", description: "I look at your site and point you the right way: free, no commitment", placeholder: "Share your site address and what worries you (speed, outages, search visibility, image): I reply with a first direction." } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
 
 const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
   "architecture",
-  "accompagnement",
   "mise-en-oeuvre",
+  "diagnostic",
   "autre",
 ];
 
 /** Anciens deep-links ?sujet=… encore en circulation (emails, favoris). */
 const LEGACY_SUBJECTS: Record<string, SubjectKey> = {
-  "pack-ia": "accompagnement",
-  "direction-technique": "accompagnement",
+  "pack-ia": "autre",
+  "direction-technique": "autre",
+  accompagnement: "autre",
 };
 
 const fieldClass =
@@ -114,8 +115,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: tech advice, full audit, ongoing support or implementation."
-            : "Choisissez le sujet : conseil techno, audit complet, accompagnement ou mise en œuvre."}
+            ? "Pick the topic: advisory call, audit + roadmap, redesign project or free diagnostic."
+            : "Choisissez le sujet : visio conseil, audit + roadmap, projet de refonte ou diagnostic gratuit."}
         </p>
       </div>
 

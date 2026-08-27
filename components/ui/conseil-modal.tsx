@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Popup de prise de rendez-vous « Conseil techno pour une refonte » (150 €) —
+ * Popup de prise de rendez-vous « Visio conseil refonte » (150 €) —
  * affichée dans les résultats des outils. Remplace l'ancienne popup
  * d'abonnement newsletter.
  *
@@ -216,21 +216,21 @@ export default function ConseilModal({
   const t = isEn
     ? {
         kicker: `Advisory call · ${price}`,
-        title: "Still unsure about the tech? Settle it in one hour.",
+        title: "Unsure about the trajectory? Settle it in one hour.",
         subtitle:
-          "Before committing a budget, book the tech advice call: a clear recommendation for your project, plus the watch points on maintenance, cost and lock-in.",
-        cta: `Book — ${price}`,
-        fineprint: `${duration} video call · 100% credited to a project signed within 30 days`,
+          "Before committing a budget, book the redesign advisory call: a written opinion within 48h, stay, decouple or rebuild, plus the watch points on maintenance, cost and lock-in.",
+        cta: `Book · ${price}`,
+        fineprint: `${duration} video call · 100% deducted from a quote signed within 30 days`,
         secondary: "See the advisory offers",
         close: "Close",
       }
     : {
         kicker: `Visio conseil · ${price}`,
-        title: "Un doute sur la techno ? Tranchez en une heure.",
+        title: "Un doute sur la trajectoire ? Tranchez en une heure.",
         subtitle:
-          "Avant d'engager un budget, réservez le conseil techno : une recommandation claire pour votre projet, et les points de vigilance sur la maintenance, le coût et la dépendance.",
-        cta: `Réserver — ${price}`,
-        fineprint: `${duration} en visio · 100 % crédité sur un projet signé sous 30 jours`,
+          "Avant d'engager un budget, réservez la visio conseil refonte : un avis écrit sous 48 h, rester, découpler ou refonder, et les points de vigilance sur la maintenance, le coût et la dépendance.",
+        cta: `Réserver · ${price}`,
+        fineprint: `${duration} en visio · 100 % déduit d'un devis signé sous 30 jours`,
         secondary: "Voir les offres de conseil",
         close: "Fermer",
       };

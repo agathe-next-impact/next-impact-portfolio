@@ -105,8 +105,8 @@ const RUBRIQUES: Record<RubriqueSlug, Rubrique> = {
       // Unique exception à la règle du CTA froid : ce lecteur est en phase d'achat.
       secondary: {
         label: {
-          fr: "Enjeu important ? Avis indépendant en visio — 150 €",
-          en: "High stakes? Independent second opinion on a call — €150",
+          fr: "Enjeu important ? Avis indépendant en visio · 150 €",
+          en: "High stakes? Independent second opinion on a call · €150",
         },
         href: "/conseil",
       },

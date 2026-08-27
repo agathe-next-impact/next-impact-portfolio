@@ -25,18 +25,18 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Projet web :",
-    subHeadline: "Concevoir avec l'IA.",
+    headline: "Votre site WordPress vieillit mal.",
+    subHeadline: "Il peut redevenir rapide sans tout reconstruire.",
     description:
-      "Avant d'investir — dans l'IA, une agence ou une refonte — vérifiez ce dont votre site a vraiment besoin. Avis indépendant, dès 150 €.",
+      "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
     valueProposition:
-      "Conseil indépendant, cadrage et mise en œuvre pour éviter les outils fragiles, les stacks trop lourdes et les projets mal dimensionnés.",
-    ctaPrimary: { label: "Conseil projet web avec IA", href: "/conseil" },
-    ctaSecondary: { label: "Prestations web avec IA", href: "/services" },
-    auditTitle: "Quelle techno web à l'heure de l'IA ?",
-    auditSubtitle: "Sélecteur techno web & IA",
+      "Un avis indépendant avant d'engager un budget, puis une refonte en forfait : prix et délai écrits avant de commencer, performance mesurée avant et après.",
+    ctaPrimary: { label: "Voyez ce qui ralentit votre site en 2 minutes", href: "/audit-site-web" },
+    ctaSecondary: { label: "Discutons de votre projet", href: "/contact" },
+    auditTitle: "Qu'est-ce qui ralentit votre site ?",
+    auditSubtitle: "Diagnostic en 2 minutes",
     auditDescription:
-      "Avant de demander à l'IA, à un freelance ou à une agence de construire, vérifiez s'il faut réparer, optimiser, utiliser un SaaS, du no-code, WordPress ou du sur-mesure.",
+      "Une adresse, un rapport : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
   },
   decideur: {
     headline: "Votre projet digital",
@@ -115,9 +115,9 @@ export const SERVICES_PAGE_VARIANTS: Record<
   ServicesPageVariant
 > = {
   default: {
-    titre: "Solutions web",
+    titre: "Trois trajectoires pour un site WordPress qui vieillit",
     sousTitre:
-      "WordPress, Headless WordPress + Next.js ou outil métier sur mesure : ces services ne sont pas des choix imposés, mais des réponses possibles après une décision Web & IA claire.",
+      "La vraie question n'est pas WordPress ou pas WordPress : c'est ce que vous gardez et ce que vous changez. Consolider, découpler ou refonder : prix affichés, délai annoncé, performance mesurée.",
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel niveau d'investissement pour votre projet ?",
     budgetCards: {
@@ -144,7 +144,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
       {
         question: "Est-ce que je pourrai toujours modifier mes textes ?",
         answer:
-          "Oui, pour les 3 stacks. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
+          "Oui, pour les trois trajectoires. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
       },
       {
         question: "Le Headless est-il plus cher à maintenir ?",

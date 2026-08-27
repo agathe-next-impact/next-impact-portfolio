@@ -1,5 +1,11 @@
 # CLAUDE.md — Projet vitrine Next Impact Digital
 
+> PRIORITAIRE : pour tout travail éditorial sur la vitrine (contenus, titres,
+> offres, CTA, métadonnées, navigation), lire et suivre
+> ./DIRECTIVES-CHARTE-EDITORIALE.md (charte v1.1, 2026-08-27) — elle prime sur
+> le présent fichier et fixe le catalogue d'offres de référence (5 lignes),
+> le lexique, les règles typographiques et les garde-fous.
+
 > PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
 > ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.
 

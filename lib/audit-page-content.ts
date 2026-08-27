@@ -151,9 +151,9 @@ export interface AuditPageContent {
 
 const AUDIT_PAGE_FR: AuditPageContent = {
   hero: {
-    title: "Pré-diagnostic web en 2 min",
+    title: "Voyez ce qui ralentit votre site en 2 minutes",
     subtitle:
-      "Analysez votre site selon 4 axes — performance, SEO, accessibilité et conversion — puis recevez une recommandation concrète : optimiser l'existant, refondre sous WordPress, passer en Headless WordPress + Next.js, ou cadrer une application métier.",
+      "Une adresse, un rapport : votre site analysé selon 4 axes (performance, référencement, accessibilité, conversion), puis une orientation concrète vers l'une des trois trajectoires : consolider, découpler ou refonder.",
     ctaPrimary: "Analyser mon site",
     reassurance:
       "Résultat immédiat, sans inscription. Vos coordonnées ne servent qu'à votre audit gratuit, si vous le demandez.",
@@ -379,9 +379,9 @@ const AUDIT_PAGE_FR: AuditPageContent = {
 
 const AUDIT_PAGE_EN: AuditPageContent = {
   hero: {
-    title: "Web pre-diagnostic in 2 min",
+    title: "See what slows your site down in 2 minutes",
     subtitle:
-      "Analyze your site across 4 axes — performance, SEO, accessibility and conversion — then get a concrete recommendation: optimize what you have, rebuild on WordPress, move to Headless WordPress + Next.js, or scope a business application.",
+      "One address, one report: your site analyzed across 4 axes (performance, search visibility, accessibility, conversion), then a concrete direction toward one of the three trajectories: consolidate, decouple or rebuild.",
     ctaPrimary: "Analyze my site",
     reassurance:
       "Instant result, no sign-up. Your details are only used for your free audit, if you ask for it.",

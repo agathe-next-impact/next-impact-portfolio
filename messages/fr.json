@@ -3,13 +3,13 @@
     "siteName": "Next Impact"
   },
   "nav": {
-    "services": "Solutions web",
+    "services": "Services",
     "demo": "Démo",
     "tools": "Outils en ligne",
     "documentation": "Ressources",
     "caseStudies": "Études de cas",
     "contact": "Contact",
-    "mainCta": "Me contacter",
+    "mainCta": "Diagnostic 2 min",
     "visioConseil": "Visio conseil",
     "onDemand": "À la demande",
     "free": "Gratuit",
@@ -56,13 +56,14 @@
     "visioConseil": "Visio conseil",
     "veille": "Veille techno",
     "tools": "Tous les outils",
-    "startWebApp": "Démarrer une application web",
+    "startWebApp": "Discutons de votre projet",
     "partners": "Partenaires",
     "referralPartners": "Apporteurs d'affaires",
     "whiteLabelAgencies": "Agences & studios",
-    "copyright": "© {year} Next Impact Digital — Tous droits réservés",
-    "figaroMention": "Vu dans <lien>Le Figaro</lien> — mai 2026",
-    "certificationAlt": "Certification",
+    "copyright": "© {year} Next Impact Digital · Tous droits réservés",
+    "figaroMention": "Vu dans <lien>Le Figaro</lien> · mai 2026",
+    "certificationAlt": "Certification"
+,
     "subscriberArea": "Espace abonné"
   },
   "floatingContact": {
@@ -115,10 +116,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact — conseil techno, audit complet ou accompagnement",
-    "metaDescription": "Contactez Next Impact pour trancher la techno d'une refonte, obtenir un audit complet avec préconisations et roadmap, ou installer un accompagnement dans la durée.",
+    "metaTitle": "Contact : visio conseil, audit + roadmap ou projet de refonte",
+    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
     "title": "Contact",
-    "subtitle": "Conseil techno, audit complet ou accompagnement dans la durée : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Visio conseil, audit + roadmap, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -221,8 +222,8 @@
     "breadcrumbRoi": "Simulateur de ROI"
   },
   "auditPage": {
-    "metaTitle": "Diagnostic Web & IA gratuit — une première orientation en 2 minutes",
-    "metaDescription": "Avant de construire avec l'IA, du no-code, WordPress ou du sur-mesure, obtenez une première orientation : réparer, optimiser, cadrer, refondre ou ne rien construire.",
+    "metaTitle": "Voyez ce qui ralentit votre site en 2 minutes",
+    "metaDescription": "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAudit": "Audit de site"
   },
@@ -339,10 +340,10 @@
       "stepBuild": "La construction",
       "arbitrageFallback": "Choisir la bonne approche avant de construire.",
       "conseilLink": {
-        "selecteur-techno": "Cet arbitrage, c'est l'objet du conseil techno pour une refonte ({price})",
-        "architecture-ia": "Cet arbitrage, c'est l'objet de l'audit complet et préconisations ({price})",
-        "pack-ia": "Cet arbitrage s'inscrit dans un accompagnement dans la durée (sur devis)",
-        "direction-technique": "Cet arbitrage, c'est le quotidien d'un accompagnement dans la durée (sur devis)"
+        "selecteur-techno": "Cet arbitrage, c'est l'objet de la visio conseil refonte ({price})",
+        "architecture-ia": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})",
+        "pack-ia": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})",
+        "direction-technique": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})"
       },
       "constructionLine": {
         "wordpress": "Un site WordPress, administrable en interne.",
@@ -361,8 +362,8 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Solutions web — construire utile à l'heure de l'IA",
-    "metaDescription": "Après le Sélecteur techno web & IA, Next Impact construit seulement si c'est le bon choix : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €.",
+    "metaTitle": "Trois trajectoires pour un site WordPress qui vieillit",
+    "metaDescription": "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Solutions web & Tarifs",
     "calculateGain": {
@@ -426,7 +427,7 @@
     },
     "journey": {
       "label": "Le parcours",
-      "title": "Du terrain WordPress au sélecteur techno web & IA",
+      "title": "Du terrain WordPress au conseil refonte",
       "subtitle": "Vingt ans à pratiquer le web sous tous ses angles — le code et la stratégie, le marketing et le design. Une conviction constante : la bonne techno dépend du besoin, pas de la mode.",
       "fondations": {
         "year": "2000 – 2020 — La vision d'ensemble",

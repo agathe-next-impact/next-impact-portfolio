@@ -45,22 +45,22 @@ const SITE_URL = 'https://www.next-impact.digital'
 // ce bloc sert de repli cohérent pour toute page qui ne le ferait pas.
 const LAYOUT_META = {
   fr: {
-    title: 'Next Impact — Conseil techno web à l\'heure de l\'IA',
+    title: 'Next Impact · Refonte de site WordPress',
     description:
-      'L\'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu\'où aller.',
-    ogTitle: 'Next Impact — Sélecteur techno web & IA',
+      'Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée.',
+    ogTitle: 'Next Impact · Refonte de site WordPress',
     ogDescription:
-      'Conseil techno web pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant d\'investir.',
+      'Rapide et moderne, sans tout reconstruire : consolider, découpler ou refonder. Prix et délai annoncés, performance mesurée avant et après.',
     ogLocale: 'fr_FR',
     altOgLocale: 'en_US',
   },
   en: {
-    title: 'Next Impact — Web technology advice in the age of AI',
+    title: 'Next Impact · WordPress site redesign',
     description:
-      'AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go.',
-    ogTitle: 'Next Impact — Web & AI Tech Compass',
+      'Is your WordPress site aging badly? Optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks. Displayed prices, measured performance.',
+    ogTitle: 'Next Impact · WordPress site redesign',
     ogDescription:
-      'Web technology advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom before investing.',
+      'Fast and modern, without rebuilding everything: consolidate, decouple or rebuild. Price and timeline announced, performance measured before and after.',
     ogLocale: 'en_US',
     altOgLocale: 'fr_FR',
   },
@@ -91,8 +91,8 @@ export async function generateMetadata({
     },
     description: m.description,
     keywords: [
+      'refonte site WordPress',
       'conseil techno web',
-      'Sélecteur techno web IA',
       'IA coding',
       'no-code',
       'SaaS',

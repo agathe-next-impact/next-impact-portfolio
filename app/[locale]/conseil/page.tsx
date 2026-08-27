@@ -17,28 +17,26 @@ export async function generateMetadata({
   const isEn = locale === "en";
   return generatePageMetadata({
     title: isEn
-      ? "Web technology advice in the age of AI"
-      : "Conseil techno web à l'heure de l'IA",
+      ? "Redesign advice: a clear-cut opinion before you commit a budget"
+      : "Conseil refonte : un avis tranché avant d'engager un budget",
     description: isEn
-      ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go before investing."
-      : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller avant d'investir.",
+      ? "Your WordPress site is aging? A one-hour advisory call (€150) or a full audit with roadmap (€650): stay, decouple or rebuild, in writing, before any quote."
+      : "Votre site WordPress vieillit ? Visio conseil d'une heure (150 €) ou audit + roadmap (650 €) : rester, découpler ou refonder, par écrit, avant tout devis.",
     path: "/conseil",
     keywords: isEn
       ? [
-          "WordPress advice",
-          "which WordPress theme",
-          "which WordPress plugins",
-          "tech stack advice",
-          "which technology web project",
+          "WordPress redesign advice",
+          "website audit and roadmap",
+          "WordPress site audit",
+          "redesign or optimize WordPress",
           "challenge agency quote",
           "website second opinion",
         ]
       : [
-          "conseil WordPress",
-          "quel thème WordPress",
-          "quelles extensions WordPress",
-          "conseil choix de techno",
-          "quelle techno projet web",
+          "conseil refonte WordPress",
+          "audit site WordPress",
+          "audit et roadmap site web",
+          "refondre ou optimiser WordPress",
           "challenger devis agence",
           "deuxième avis site web",
         ],
@@ -57,18 +55,18 @@ export default async function ConseilPage({
 
   const breadcrumbItems = [
     { name: isEn ? "Home" : "Accueil", url: "/" },
-    { name: isEn ? "Web & AI tech advice" : "Conseil techno Web & IA", url: "/conseil" },
+    { name: isEn ? "Redesign advice" : "Conseil refonte", url: "/conseil" },
   ];
 
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <ServiceJsonLd
-        name={isEn ? "Web & AI technology advice" : "Sélecteur techno web & IA"}
+        name={isEn ? "Website redesign advice" : "Conseil refonte de site web"}
         description={
           isEn
-            ? "Independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom development before building."
-            : "Conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure avant de construire."
+            ? "Independent advice before a redesign: a one-hour advisory call with a written opinion, or a full audit with costed recommendations and a step-by-step roadmap."
+            : "Conseil indépendant avant une refonte : visio d'une heure avec avis écrit, ou audit complet avec préconisations chiffrées et roadmap par étapes."
         }
         serviceType={isEn ? "Web consulting" : "Conseil web"}
         url="/conseil"

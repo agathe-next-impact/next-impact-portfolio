@@ -71,7 +71,7 @@ const COPY: Record<
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
           { label: "Simulateur de tarifs", href: "/solutions-web" },
         ],
-        next: { label: "Trancher en visio — 150 €", href: "/conseil" },
+        next: { label: "Trancher en visio · 150 €", href: "/conseil" },
       },
       {
         id: "ia-et-code",
@@ -129,7 +129,7 @@ const COPY: Record<
           { label: "Le Sélecteur techno web & IA", href: "/outils/selecteur-techno" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio — 150 €", href: "/conseil" },
+        next: { label: "En parler en visio · 150 €", href: "/conseil" },
       },
       {
         id: "etre-trouve",
@@ -141,7 +141,7 @@ const COPY: Record<
           { label: "Les fondamentaux SEO", href: "/documentation/seo" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio — 150 €", href: "/conseil" },
+        next: { label: "En parler en visio · 150 €", href: "/conseil" },
       },
     ],
   },
@@ -176,7 +176,7 @@ const COPY: Record<
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
           { label: "Pricing simulator", href: "/solutions-web" },
         ],
-        next: { label: "Decide on a call — €150", href: "/conseil" },
+        next: { label: "Decide on a call · €150", href: "/conseil" },
       },
       {
         id: "ia-et-code",

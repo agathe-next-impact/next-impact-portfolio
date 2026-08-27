@@ -57,21 +57,21 @@ export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
   description:
-    "Conseil techno web à l'heure de l'IA pour les petites structures. " +
-    "L'IA peut coder vite : Next Impact aide à choisir quoi construire, avec quelle technologie, et jusqu'où aller.",
+    "Refonte de site WordPress : rapide, moderne, sans tout reconstruire. " +
+    "Consolider, découpler ou refonder : prix affichés, délai annoncé, performance mesurée avant et après.",
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
     url: "/img/desktop-screen-next-impact.png",
     width: 1200,
     height: 630,
-    alt: "Next Impact — Sélecteur techno web & IA",
+    alt: "Next Impact · Refonte de site WordPress",
   },
   creator: "Agathe Karinthi-Martin",
   keywords: [
     "WordPress",
+    "Refonte site WordPress",
     "Conseil techno web",
-    "Sélecteur techno web IA",
     "IA coding",
     "No-code",
     "SaaS",
@@ -238,30 +238,30 @@ type LocalizedMeta = {
 
 const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Next Impact — Conseil techno web à l'heure de l'IA",
+    title: "Refonte de site WordPress : rapide, moderne, sans tout reconstruire · Next Impact",
     description:
-      "L'IA peut coder vite. Next Impact aide les petites structures à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
+      "Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée avant et après.",
     keywords: [
-      "conseil techno web IA",
-      "Sélecteur techno web IA",
-      "choisir technologie web",
-      "IA coding ou no-code",
+      "refonte site WordPress",
+      "refonte WordPress headless",
+      "site WordPress lent",
+      "moderniser site WordPress",
+      "refonte site web forfait",
       "second avis devis web",
-      "prototype IA maintenable",
       "Next Impact",
     ],
   },
   en: {
-    title: "Next Impact — Web technology advice in the age of AI",
+    title: "WordPress site redesign: fast, modern, without rebuilding everything · Next Impact",
     description:
-      "AI can code fast. Next Impact helps small teams decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless or custom.",
+      "Is your WordPress site aging badly? Optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks. Displayed prices, performance measured before and after.",
     keywords: [
-      "web technology advice AI",
-      "web AI tech selector",
-      "choose web technology",
-      "AI coding or no-code",
+      "WordPress site redesign",
+      "headless WordPress redesign",
+      "slow WordPress site",
+      "modernize WordPress site",
+      "fixed price website redesign",
       "web quote second opinion",
-      "maintainable AI prototype",
       "Next Impact",
     ],
   },
@@ -269,26 +269,26 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Services — construire utile après le Sélecteur techno web & IA",
+    title: "Trois trajectoires pour un site WordPress qui vieillit",
     description:
-      "Mise en œuvre Next Impact après décision : WordPress optimisé dès 2 250 €, Headless dès 4 000 €, outil métier dès 6 500 €. Construire seulement quand c'est le bon choix.",
+      "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
     keywords: [
-      "mise en œuvre après cadrage",
-      "construction site après conseil",
-      "Sélecteur techno web IA",
+      "refonte site WordPress prix",
+      "refonte WordPress optimisée",
+      "refonte WordPress headless",
       "création site WordPress optimisé",
       "web app sur-mesure",
       "outil métier sur-mesure",
     ],
   },
   en: {
-    title: "Services — build what helps after the web & AI tech selector",
+    title: "Three trajectories for an aging WordPress site",
     description:
-      "Next Impact implementation after a clear decision: optimized WordPress from €2,250, Headless from €4,000, business tool from €6,500. Build only when it is the right choice.",
+      "Consolidate (optimized WordPress, from €2,250 excl. VAT), decouple (headless WordPress, recommended, from €4,000 excl. VAT) or rebuild (web app, from €6,500 excl. VAT). Price and timeline fixed upfront.",
     keywords: [
-      "implementation after scoping",
-      "build after tech advice",
-      "web AI tech selector",
+      "WordPress redesign price",
+      "optimized WordPress redesign",
+      "headless WordPress redesign",
       "optimized WordPress build",
       "custom web app",
       "custom business tool",

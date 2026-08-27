@@ -1,6 +1,10 @@
 export const CREDIT_WINDOW_DAYS = 30;
 export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
 
+// Catalogue conseil — aligné sur DIRECTIVES-CHARTE-EDITORIALE.md §1 :
+// deux offres, libellés et prix du catalogue de référence. Rien d'autre ne
+// figure sur /conseil (ni pack, ni direction technique, ni accompagnement).
+
 interface OfferCopy {
   name: string;
   tag?: string;
@@ -15,15 +19,13 @@ export interface ConseilTier {
   value: number;
   calendlyUrl: string;
   featured?: boolean;
-  /** Prestation sur devis : le prix affiché est localisé, pas de mention HT. */
-  quote?: boolean;
   note?: { fr: string; en: string };
 }
 
 export interface ConseilOffer {
   id: string;
   featured?: boolean;
-  /** Seule offre déduite du devis projet (aujourd'hui : le conseil techno). */
+  /** Seule offre déduite du devis projet (aujourd'hui : la visio conseil refonte). */
   credited?: boolean;
   /** CTA interne (Link i18n) au lieu du lien Calendly externe. */
   internalCta?: boolean;
@@ -48,29 +50,29 @@ export const OFFERS: ConseilOffer[] = [
       },
     ],
     fr: {
-      name: "Conseil techno pour une refonte",
-      tag: "Sélecteur techno",
-      tagline: "Trancher la bonne techno pour votre refonte, en une heure.",
+      name: "Visio conseil refonte",
+      tag: "Avis tranché",
+      tagline: "Rester, découpler ou refonder : un avis tranché en une heure.",
       forWho:
-        "Vous préparez une refonte — ou un nouveau projet — et vous voulez une recommandation claire et argumentée plutôt que des semaines de comparaison.",
+        "Votre site vieillit et vous hésitez sur la trajectoire. Le coût d'une mauvaise direction se compte en mois ; celui de l'avis, en euros.",
       bullets: [
         "Une heure en visio : analyse de l'existant et recueil du besoin",
-        "Recommandation de techno principale (et alternative éventuelle)",
-        "Points de vigilance : maintenance, coût, dépendance, SEO",
-        "100 % crédité sur un projet signé sous 30 jours — le seul palier déduit",
+        "Un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi",
+        "Points de vigilance : maintenance, coût, dépendance, référencement",
+        "100 % déduit du devis si un projet démarre sous 30 jours",
       ],
     },
     en: {
-      name: "Tech advice for a rebuild",
-      tag: "Compass",
-      tagline: "Settle the right technology for your rebuild, in one hour.",
+      name: "Redesign advisory call",
+      tag: "Clear-cut advice",
+      tagline: "Stay, decouple or rebuild: a clear-cut opinion in one hour.",
       forWho:
-        "You are preparing a rebuild — or a new project — and want a clear, argued recommendation instead of weeks of comparison.",
+        "Your site is aging and you hesitate on the trajectory. The cost of a wrong direction is counted in months; the cost of the advice, in euros.",
       bullets: [
-        "One hour on a call: review of your existing setup and needs",
-        "Main technology recommendation (and possible alternative)",
-        "Watch points: maintenance, cost, lock-in, SEO",
-        "100% credited to a project signed within 30 days — the only deducted tier",
+        "One hour on a call: review of your existing site and needs",
+        "A written opinion sent within 48h: stay, decouple or rebuild, and why",
+        "Watch points: maintenance, cost, lock-in, search visibility",
+        "100% deducted from the quote if a project starts within 30 days",
       ],
     },
   },
@@ -78,78 +80,36 @@ export const OFFERS: ConseilOffer[] = [
     id: "architecture-projet-ia",
     tiers: [
       {
-        duration: { fr: "1 h + livrables", en: "1h + deliverables" },
+        duration: { fr: "livrables", en: "deliverables" },
         price: "650 €",
         value: 650,
         calendlyUrl: `${CALENDLY_BASE}/conseil-de-choix-d-architecture-web-ia`,
       },
     ],
     fr: {
-      name: "Audit complet et préconisations",
-      tag: "Cadrage",
-      tagline: "L'état des lieux, les préconisations et la roadmap avant d'investir.",
+      name: "Audit + roadmap",
+      tag: "Livrables",
+      tagline: "L'état des lieux complet et la feuille de route, par écrit.",
       forWho:
-        "Vous préparez une décision structurante — refonte, migration, outil métier — et vous voulez un état des lieux complet et un plan d'action avant d'engager un budget.",
+        "Vous préparez une décision qui engage un budget : vous voulez un état des lieux vérifiable et un plan par étapes avant de signer quoi que ce soit.",
       bullets: [
-        "Audit complet de l'existant et des contraintes du projet",
-        "Visio conseil d'1 heure pour arbitrer les choix",
-        "Préconisations : solutions et architecture adaptées au besoin",
-        "Livrables : rapport d'audit, préconisations et roadmap",
+        "Rapport d'audit : performance, sécurité, dette technique, plugins, hébergement",
+        "Préconisations chiffrées : quelle trajectoire, pour quel budget",
+        "Roadmap par étapes, priorisée",
+        "Le document vous sert même si la prestation est confiée à quelqu'un d'autre",
       ],
     },
     en: {
-      name: "Full audit & recommendations",
-      tag: "Scoping",
-      tagline: "The full picture, recommendations and roadmap before you invest.",
+      name: "Audit + roadmap",
+      tag: "Deliverables",
+      tagline: "The complete assessment and the roadmap, in writing.",
       forWho:
-        "You are preparing a structural decision — rebuild, migration, business tool — and want a complete assessment and an action plan before committing a budget.",
+        "You are preparing a decision that commits a budget: you want a verifiable assessment and a step-by-step plan before signing anything.",
       bullets: [
-        "Full audit of your existing setup and project constraints",
-        "One-hour advisory call to settle the choices",
-        "Recommendations: solutions and architecture fit to the need",
-        "Deliverables: audit report, recommendations and roadmap",
-      ],
-    },
-  },
-  {
-    id: "accompagnement-duree",
-    internalCta: true,
-    cta: { fr: "Cadrer un accompagnement", en: "Scope an engagement" },
-    tiers: [
-      {
-        duration: { fr: "", en: "" },
-        price: "Sur devis",
-        value: 0,
-        quote: true,
-        calendlyUrl: "/contact?sujet=accompagnement",
-      },
-    ],
-    fr: {
-      name: "Accompagnement dans la durée",
-      tag: "Pilotage",
-      tagline: "Votre direction technique, à vos côtés mois après mois.",
-      forWho:
-        "Vous n'avez pas de profil technique en interne mais vous devez arbitrer, prioriser et sécuriser vos choix web et IA en continu — sans embaucher ni dépendre d'un prestataire unique.",
-      bullets: [
-        "Pilotage régulier : visios, arbitrages et priorités au fil de vos projets",
-        "Relecture de vos devis et propositions fournisseurs au fil de l'eau",
-        "Roadmap vivante : priorités, budget et prochaines étapes tenus à jour",
-        "Veille ciblée : IA, sécurité, obsolescence et dette technique",
-        "Rythme et périmètre définis ensemble — sans engagement de durée",
-      ],
-    },
-    en: {
-      name: "Ongoing tech direction",
-      tag: "Steering",
-      tagline: "Your technical direction, by your side month after month.",
-      forWho:
-        "You have no technical profile in-house but must arbitrate, prioritize and secure your web and AI choices continuously — without hiring or depending on a single vendor.",
-      bullets: [
-        "Regular steering: calls, arbitration and priorities as your projects unfold",
-        "Ongoing review of your quotes and vendor proposals",
-        "Living roadmap: priorities, budget and next steps kept up to date",
-        "Targeted watch: AI, security, obsolescence and technical debt",
-        "Pace and scope defined together — no time commitment",
+        "Audit report: performance, security, technical debt, plugins, hosting",
+        "Costed recommendations: which trajectory, for which budget",
+        "Step-by-step, prioritized roadmap",
+        "The document serves you even if the work goes to someone else",
       ],
     },
   },
@@ -163,52 +123,52 @@ export interface FaqItem {
 export const FAQ: FaqItem[] = [
   {
     fr: {
-      q: "Quelle offre choisir ?",
-      a: "Le conseil techno tranche en une heure la technologie de votre refonte. L'audit complet va plus loin : état des lieux, préconisations et roadmap, remis en livrables. L'accompagnement dans la durée installe ce regard dans le temps — pilotage, arbitrages et priorités au fil de vos projets, sur devis.",
+      q: "Visio à 150 € ou audit à 650 € : lequel choisir ?",
+      a: "La visio tranche une direction en une heure : rester, découpler ou refonder, avec un avis écrit sous 48 h. L'audit + roadmap va au fond : rapport d'audit, préconisations chiffrées et plan par étapes, remis en livrables. Si vous hésitez encore sur la trajectoire, commencez par la visio ; si la décision engage un budget, l'audit la sécurise.",
     },
     en: {
-      q: "Which offer should I choose?",
-      a: "The tech advice call settles the technology of your rebuild in one hour. The full audit goes further: assessment, recommendations and roadmap, handed over as deliverables. The ongoing engagement installs that perspective over time — steering, arbitration and priorities as your projects unfold, on a custom quote.",
+      q: "€150 call or €650 audit: which one should I pick?",
+      a: "The call settles a direction in one hour: stay, decouple or rebuild, with a written opinion within 48h. The audit + roadmap goes deeper: audit report, costed recommendations and a step-by-step plan, handed over as deliverables. If you are still weighing the trajectory, start with the call; if the decision commits a budget, the audit secures it.",
     },
   },
   {
     fr: {
-      q: "Pourquoi payer du conseil avant un projet ?",
-      a: "Parce qu'à l'heure où l'IA peut générer du code en quelques minutes, le vrai enjeu est de choisir ce qu'il faut construire, avec quelle architecture, pour que ce soit utile, maintenable et rentable.",
+      q: "Pourquoi payer un avis avant un projet ?",
+      a: "Parce que le coût d'une mauvaise trajectoire se compte en mois : une refonte à refaire, une dépendance à un prestataire, un référencement perdu. L'avis coûte 150 €, il est indépendant, et il est déduit du devis si un projet suit.",
     },
     en: {
       q: "Why pay for advice before a project?",
-      a: "Because when AI can generate code in minutes, the real issue is choosing what to build, with which architecture, so it stays useful, maintainable and profitable.",
+      a: "Because the cost of a wrong trajectory is counted in months: a redesign to redo, dependency on a vendor, lost search visibility. The advice costs €150, it is independent, and it is deducted from the quote if a project follows.",
     },
   },
   {
     fr: {
-      q: "C'est quoi l'accompagnement dans la durée ?",
-      a: "Un pilotage technique régulier : des visios, des arbitrages en continu, la relecture de vos devis et une roadmap tenue à jour. L'équivalent d'un directeur technique, sans l'embauche — le rythme et le périmètre sont définis ensemble, sur devis.",
+      q: "L'audit sert-il si je confie la refonte à quelqu'un d'autre ?",
+      a: "Oui, c'est son rôle : le rapport d'audit, les préconisations et la roadmap sont rédigés pour être exploitables par n'importe quel prestataire. Il rend aussi les devis comparables entre eux.",
     },
     en: {
-      q: "What is the ongoing engagement?",
-      a: "Regular technical steering: calls, ongoing arbitration, review of your quotes and a roadmap kept up to date. The equivalent of a technical director, without the hire — pace and scope are defined together, on a custom quote.",
+      q: "Is the audit useful if someone else does the redesign?",
+      a: "Yes, that is its purpose: the audit report, recommendations and roadmap are written to be usable by any vendor. It also makes quotes comparable with each other.",
     },
   },
   {
     fr: {
       q: "Le conseil inclut-il de la correction technique ?",
-      a: "Non. Le conseil aide à décider, prioriser et réduire le risque. Les corrections WordPress et la production relèvent des services Next Impact.",
+      a: "Non. Le conseil aide à décider, prioriser et réduire le risque. Les corrections et la refonte relèvent des trois trajectoires de développement : consolider, découpler ou refonder.",
     },
     en: {
       q: "Does advice include technical fixes?",
-      a: "No. Advice helps decide, prioritize and reduce risk. WordPress fixes and implementation belong to Next Impact services.",
+      a: "No. Advice helps decide, prioritize and reduce risk. Fixes and the redesign itself belong to the three development trajectories: consolidate, decouple or rebuild.",
     },
   },
   {
     fr: {
-      q: "Le montant est-il crédité si un projet suit ?",
-      a: "Seul le conseil techno (1 h, 150 €) est crédité : 100 % sur un projet signé sous 30 jours. L'audit complet et ses livrables — rapport d'audit, préconisations, roadmap — sont une prestation à part entière ; l'accompagnement dans la durée se chiffre sur devis.",
+      q: "Le montant est-il déduit si un projet suit ?",
+      a: "La visio conseil refonte (150 €) est déduite à 100 % du devis si un projet démarre sous 30 jours. L'audit + roadmap est une prestation à part entière : sa valeur est dans les livrables, pas dans un remboursement.",
     },
     en: {
-      q: "Is the amount credited if a project follows?",
-      a: "Only the tech advice call (1h, €150) is credited: 100% on a project signed within 30 days. The full audit and its deliverables — audit report, recommendations, roadmap — are a standalone service; the ongoing engagement is priced on a custom quote.",
+      q: "Is the amount deducted if a project follows?",
+      a: "The redesign advisory call (€150) is fully deducted from the quote if a project starts within 30 days. The audit + roadmap is a standalone service: its value lies in the deliverables, not in a refund.",
     },
   },
 ];

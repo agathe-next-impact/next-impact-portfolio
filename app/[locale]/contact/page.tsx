@@ -31,14 +31,14 @@ export async function generateMetadata({
             "contact web technology advice",
             "AI prototype second opinion",
             "web quote review",
-            "Web AI Tech Compass",
+            "WordPress redesign contact",
             "project roadmap",
           ]
         : [
             "contact conseil techno web",
             "second avis prototype IA",
             "relecture devis web",
-            "Sélecteur techno web IA",
+            "contact refonte WordPress",
             "roadmap projet web",
           ],
     locale,

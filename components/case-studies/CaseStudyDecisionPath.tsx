@@ -11,9 +11,9 @@ import type { Locale } from "@/i18n/routing";
 const CONSEIL_OFFER_ID: Record<OffreConseilKey, string> = {
   "selecteur-techno": "choix-techno-ia",
   "architecture-ia": "architecture-projet-ia",
-  // Offres retirées de la gamme : ces cas pointent vers l'accompagnement sur devis.
-  "pack-ia": "accompagnement-duree",
-  "direction-technique": "accompagnement-duree",
+  // Offres retirées du catalogue (charte §1) : ces cas pointent vers l'audit + roadmap.
+  "pack-ia": "architecture-projet-ia",
+  "direction-technique": "architecture-projet-ia",
 };
 
 const STEP_LINK =

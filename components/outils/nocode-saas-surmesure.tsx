@@ -42,7 +42,7 @@ const FAMILIES: Record<Family, FamilyInfo> = {
       { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio — 150 €", labelEn: "Validate on a call — €150", href: "/conseil" },
+    next: { labelFr: "Valider en visio · 150 €", labelEn: "Validate on a call · €150", href: "/conseil" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",

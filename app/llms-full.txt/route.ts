@@ -115,14 +115,16 @@ ${entry.content}
 
 ## Entity Summary
 
-Next Impact is a web technology advisory and implementation offer in France led by Agathe Karinthi-Martin. Its core positioning: AI can code fast, but small teams still need to decide what to build, with which technology, and how far to go. Next Impact helps choose between WordPress, no-code, AI coding, SaaS, Headless, custom development or not building at all. Core expertise: technology choice, architecture, maintainability, technical debt, data, SEO, security, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA and project scoping.
+Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three trajectories (consolidate: optimized WordPress; decouple: headless WordPress, recommended; rebuild: web app), fixed price and timeline, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO and project scoping.
 
 ## Offer Architecture
 
 - Web & AI Tech diagnostic: first direction before building.
-- Tech advice for a rebuild (€150): settle the right technology for a rebuild in a one-hour call — review of existing setup and needs; the only tier credited to a project signed within 30 days.
-- Full audit & recommendations (€650): the complete assessment before investing — audit of the existing setup, one-hour advisory call, and deliverables: audit report, recommendations and roadmap.
-- Ongoing tech direction (custom quote): regular technical steering — arbitration, quote reviews and a living roadmap; pace and scope defined together, no time commitment.
+- Redesign advisory call (€150): one hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why. Deducted from the quote if a project starts within 30 days.
+- Audit + roadmap (€650): audit report (performance, security, technical debt, plugins, hosting), costed recommendations and a step-by-step roadmap. The document serves even if the work goes to someone else.
+- Optimized WordPress redesign (from €2,250): theme, plugins and optimization of the existing site, without changing the publishing tool.
+- Headless WordPress redesign (from €4,000): WordPress back office kept, modern front end: editors publish as before, visitors see a fast site. Recommended trajectory.
+- Web app redesign (from €6,500): web and/or mobile platform when the site has become a working tool.
 - Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on Substack) and Sentinelle (€19/month), the personalized watch on the client's own site or app — targeted alerts, two letters a month and decision support (maintain, rebuild or create).
 - Implementation: build only when the solution is clear and justified.
 - WordPress support: fix, stabilize or decide whether rebuilding is justified.

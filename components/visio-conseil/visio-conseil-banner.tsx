@@ -14,18 +14,18 @@ import { Reveal } from "@/components/ui/reveal";
 
 const COPY = {
   fr: {
-    eyebrow: "Sélecteur techno web & IA",
-    title: "L'IA peut coder vite. Mais quoi construire ?",
+    eyebrow: "Conseil refonte",
+    title: "Un doute sur la trajectoire de votre site ?",
     subtitle:
-      "Conseil techno pour une refonte, audit complet avec préconisations et roadmap, ou accompagnement dans la durée : un conseil indépendant pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure.",
-    cta: "Voir le conseil techno",
+      "Visio conseil refonte (150 € HT, avis écrit sous 48 h) ou audit + roadmap (650 € HT, livrables) : un avis indépendant avant d'engager un budget. Rester, découpler ou refonder.",
+    cta: "Voir le conseil",
   },
   en: {
-    eyebrow: "Web & AI Tech Compass",
-    title: "AI can code fast. But what should you build?",
+    eyebrow: "Redesign advice",
+    title: "Unsure about your site's trajectory?",
     subtitle:
-      "Tech advice for a rebuild, full audit with recommendations and roadmap, or ongoing support: independent advice to choose between WordPress, no-code, AI coding, SaaS, Headless or custom.",
-    cta: "See tech advice",
+      "Redesign advisory call (€150 excl. VAT, written opinion within 48h) or audit + roadmap (€650 excl. VAT, deliverables): an independent opinion before you commit a budget. Stay, decouple or rebuild.",
+    cta: "See the advice",
   },
 };
 

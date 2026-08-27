@@ -25,8 +25,8 @@ const OFFERS_FR: Offer[] = [
     title: "Veille techno",
     price: "dès 0 €",
     items: [
-      "« Quelle techno pour mon site web à l'heure de l'IA ? » — la lettre gratuite : synthèse mensuelle + focus hebdo",
-      "Sentinelle 19 €/mois : veille personnalisée + aide à la décision — maintenir, refondre ou créer",
+      "« Quelle techno pour mon site web à l'heure de l'IA ? », la lettre gratuite : synthèse mensuelle + focus hebdo",
+      "Sentinelle 19 €/mois : veille personnalisée + aide à la décision : maintenir, refondre ou créer",
       "Écrit pour décider, relu par un humain avant envoi",
     ],
     target: "Pour rester devant, sans y passer vos soirées",
@@ -35,29 +35,30 @@ const OFFERS_FR: Offer[] = [
   },
   {
     subtitle: "Décider",
-    title: "Conseil web & IA",
+    title: "Conseil refonte",
     price: "dès 150 € HT",
     items: [
-      "Conseil techno pour une refonte en 1 h : WordPress, no-code, IA, Headless ou sur-mesure",
-      "Audit complet : préconisations et roadmap en livrables",
-      "Accompagnement dans la durée, sur devis",
+      "Visio conseil refonte (150 €) : un avis écrit sous 48 h, rester, découpler ou refonder",
+      "Audit + roadmap (650 €) : rapport d'audit, préconisations chiffrées, plan par étapes",
+      "Visio déduite du devis si un projet démarre sous 30 jours",
     ],
-    target: "Pour trancher avant d'investir",
+    target: "Pour trancher avant d'engager un budget",
     href: "/conseil",
     cta: "Voir le conseil",
     recommended: true,
   },
   {
     subtitle: "Construire",
-    title: "Prestations web",
+    title: "Trois trajectoires",
     price: "dès 2 250 € HT",
     items: [
-      "WordPress optimisé, Headless + Next.js ou outil métier",
-      "Web app, PWA et applications sur-mesure",
+      "Consolider : refonte WordPress optimisée, dès 2 250 € HT",
+      "Découpler (recommandée) : WordPress headless, back-office conservé, dès 4 000 € HT",
+      "Refonder : web app ou plateforme, dès 6 500 € HT",
     ],
-    target: "Quand le besoin le justifie",
+    target: "Prix et délai fixés avant de commencer",
     href: "/solutions-web",
-    cta: "Voir les solutions web",
+    cta: "Voir les trajectoires",
   },
 ];
 
@@ -68,7 +69,7 @@ const OFFERS_EN: Offer[] = [
     price: "from €0",
     items: [
       "The free newsletter: a monthly digest + a weekly focus on web & AI",
-      "Sentinelle €19/month: personalized watch + decision support — maintain, rebuild or create",
+      "Sentinelle €19/month: personalized watch + decision support: maintain, rebuild or create",
       "Written to help you decide, human-reviewed before sending",
     ],
     target: "Stay ahead, without spending your evenings on it",
@@ -77,29 +78,30 @@ const OFFERS_EN: Offer[] = [
   },
   {
     subtitle: "Decide",
-    title: "Tech advice",
+    title: "Redesign advice",
     price: "from €150 excl. VAT",
     items: [
-      "Tech advice for a rebuild in 1h: WordPress, no-code, AI, Headless or custom",
-      "Full audit: recommendations and roadmap as deliverables",
-      "Ongoing support, on a custom quote",
+      "Advisory call (€150): a written opinion within 48h, stay, decouple or rebuild",
+      "Audit + roadmap (€650): audit report, costed recommendations, step-by-step plan",
+      "Call deducted from the quote if a project starts within 30 days",
     ],
-    target: "To decide before investing",
+    target: "To decide before committing a budget",
     href: "/conseil",
     cta: "See the advice",
     recommended: true,
   },
   {
     subtitle: "Build",
-    title: "Web solutions",
+    title: "Three trajectories",
     price: "from €2,250 excl. VAT",
     items: [
-      "Optimized WordPress, Headless + Next.js or business tool",
-      "Web apps, PWAs and custom applications",
+      "Consolidate: optimized WordPress redesign, from €2,250 excl. VAT",
+      "Decouple (recommended): headless WordPress, back office kept, from €4,000 excl. VAT",
+      "Rebuild: web app or platform, from €6,500 excl. VAT",
     ],
-    target: "When the need justifies it",
+    target: "Price and timeline fixed before we start",
     href: "/solutions-web",
-    cta: "See the web solutions",
+    cta: "See the trajectories",
   },
 ];
 
@@ -115,18 +117,18 @@ export default function HomeOffres() {
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
             index="№ 02"
-            kicker={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
+            kicker={isEn ? "Watch · Decide · Build" : "Veiller · Décider · Construire"}
             title={
               isEn ? (
-                <>AI can code. <span className="text-accent-secondary">It cannot decide everything.</span></>
+                <>What you keep, <span className="text-accent-secondary">what you change.</span></>
               ) : (
-                <>Accompagner <span className="text-accent-secondary">votre projet web</span> à l'heure de l'IA.</>
+                <>Ce que vous gardez, <span className="text-accent-secondary">ce que vous changez.</span></>
               )
             }
             description={
               isEn
-                ? "The real choice is no longer only WordPress vs Headless. It is WordPress, no-code, AI coding, SaaS, custom development, or not building at all."
-                : "Le vrai choix n'est plus seulement WordPress ou Headless. C'est WordPress, no-code, IA coding, SaaS, sur-mesure, ou ne rien construire du tout."
+                ? "The real question is not WordPress or not WordPress: it is what you keep and what you change. Three ways to move forward, with displayed prices."
+                : "La vraie question n'est pas WordPress ou pas WordPress : c'est ce que vous gardez et ce que vous changez. Trois façons d'avancer, aux prix affichés."
             }
           />
         </Reveal>
@@ -205,14 +207,14 @@ export default function HomeOffres() {
             {isEn ? (
               <>
                 Key idea:{" "}
-                <span className="text-foreground">production is easier</span>{" "}
-                — judgment, architecture and maintenance still matter.
+                <span className="text-foreground">change what is visible, keep what works</span>.
+                A redesign is judged by the speed measured on delivery day, not by the mockup.
               </>
             ) : (
               <>
                 Idée clé :{" "}
-                <span className="text-foreground">produire devient plus facile</span>{" "}
-                — le jugement, l'architecture et la maintenance restent décisifs.
+                <span className="text-foreground">on change ce qui est visible, on garde ce qui fonctionne</span>.
+                Une refonte se juge à la vitesse mesurée le jour de la livraison, pas à la maquette.
               </>
             )}
           </p>

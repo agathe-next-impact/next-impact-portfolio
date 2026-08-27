@@ -1,11 +1,10 @@
 "use client";
 
-// Page « Conseil » — même structure que les pages offre du site. Tokens
-// DS Blueprint uniquement, i18n inline, accessibilité préservée. TROIS niveaux :
-// conseil techno refonte (1 h) · audit complet + préconisations + roadmap ·
-// accompagnement dans la durée (sur devis). L'offre est TIÈDE : elle vient
-// APRÈS la preuve (l'audit gratuit), jamais en CTA froid. Argument d'ancrage :
-// le conseil techno est déduit du devis projet.
+// Page « Conseil » — charte éditoriale (DIRECTIVES-CHARTE-EDITORIALE.md §6) :
+// porte d'entrée payante à faible engagement, réservée aux DEUX offres de
+// conseil du catalogue (Visio conseil refonte 150 € · Audit + roadmap 650 €).
+// La page se termine par le lien vers les trois trajectoires et deux CTA de
+// deux températures. Tokens DS Blueprint uniquement, i18n inline, a11y.
 
 import { useLocale } from "next-intl";
 import {
@@ -31,8 +30,7 @@ import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
 function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
   const copy = isEn ? offer.en : offer.fr;
-  const single = offer.tiers.length === 1;
-  const cheapest = offer.tiers.reduce((a, b) => (a.value <= b.value ? a : b));
+  const tier = offer.tiers[0];
   const ctaLabel = offer.cta
     ? isEn
       ? offer.cta.en
@@ -52,105 +50,16 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
     </span>
   ) : null;
 
-  const header = (
-    <div>
-      <h3 className="pr-20 text-lg font-medium text-foreground">{copy.name}</h3>
-      <p className="mt-1 font-inter-tight text-sm text-mid-gray">{copy.tagline}</p>
-    </div>
-  );
-
-  const priceBlock = cheapest.quote ? (
-    <div className="flex items-baseline gap-1">
-      <span className="text-2xl font-light tracking-tight text-foreground">
-        {isEn ? "Custom quote" : "Sur devis"}
-      </span>
-    </div>
+  const cta = offer.internalCta ? (
+    <Link href={tier.calendlyUrl} className={ctaClass}>
+      {ctaLabel}
+      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+    </Link>
   ) : (
-    <div className="flex items-baseline gap-1">
-      {!single && (
-        <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
-          {isEn ? "From" : "Dès"}
-        </span>
-      )}
-      <span className="text-2xl font-light tracking-tight text-foreground">{cheapest.price}</span>
-      {single && (
-        <span className="font-mono text-xs text-mid-gray">
-          / {isEn ? cheapest.duration.en : cheapest.duration.fr}
-        </span>
-      )}
-      <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
-    </div>
-  );
-
-  const note = offer.credited && (
-    <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
-      {isEn ? "Credited to your project quote" : "Déduit du devis projet"}
-    </p>
-  );
-
-  const forWho = (
-    <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
-  );
-
-  const bulletItems = copy.bullets.map((b) => (
-    <li key={b} className="flex items-start gap-2.5">
-      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-      <span className="font-inter-tight text-sm leading-snug text-mid-gray">{b}</span>
-    </li>
-  ));
-
-  const cta = single ? (
-    offer.internalCta ? (
-      <Link href={cheapest.calendlyUrl} className={ctaClass}>
-        {ctaLabel}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </Link>
-    ) : (
-      <a
-        href={cheapest.calendlyUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={ctaClass}
-      >
-        {ctaLabel}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-      </a>
-    )
-  ) : (
-    <div className="mt-auto flex flex-col gap-2 border-t border-dark-gray pt-4">
-      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
-        {isEn ? "Choose your duration" : "Choisissez la durée"}
-      </p>
-      {offer.tiers.map((tier) => (
-        <a
-          key={tier.calendlyUrl}
-          href={tier.calendlyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={
-            "group flex items-center justify-between gap-3 border px-4 py-3 no-underline transition-colors " +
-            (tier.featured
-              ? "border-vermilion bg-vermilion/10 hover:bg-vermilion/20"
-              : "border-dark-gray hover:border-mid-gray")
-          }
-        >
-          <span className="flex flex-col gap-0.5">
-            <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground">
-              {isEn ? tier.duration.en : tier.duration.fr} · {tier.price} HT
-            </span>
-            {tier.note && (
-              <span className="font-inter-tight text-[11px] leading-snug text-accent-secondary">
-                {isEn ? tier.note.en : tier.note.fr}
-              </span>
-            )}
-          </span>
-          <span className="inline-flex flex-shrink-0 items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-mid-gray transition-colors group-hover:text-foreground">
-            {isEn ? "Book" : "Réserver"}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </span>
-        </a>
-      ))}
-    </div>
+    <a href={tier.calendlyUrl} target="_blank" rel="noopener noreferrer" className={ctaClass}>
+      {ctaLabel}
+      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+    </a>
   );
 
   return (
@@ -161,11 +70,31 @@ function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
       }
     >
       {tag}
-      {header}
-      {priceBlock}
-      {note}
-      {forWho}
-      <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">{bulletItems}</ul>
+      <div>
+        <h3 className="pr-20 text-lg font-medium text-foreground">{copy.name}</h3>
+        <p className="mt-1 font-inter-tight text-sm text-mid-gray">{copy.tagline}</p>
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-light tracking-tight text-foreground">{tier.price}</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">HT</span>
+        <span className="font-mono text-xs text-mid-gray">
+          · {isEn ? tier.duration.en : tier.duration.fr}
+        </span>
+      </div>
+      {offer.credited && (
+        <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+          {isEn ? "Deducted from your project quote" : "Déduit du devis projet"}
+        </p>
+      )}
+      <p className="font-inter-tight text-sm leading-relaxed text-foreground">{copy.forWho}</p>
+      <ul className="mt-1 flex flex-col gap-2.5 border-t border-dark-gray pt-4">
+        {copy.bullets.map((b) => (
+          <li key={b} className="flex items-start gap-2.5">
+            <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
+            <span className="font-inter-tight text-sm leading-snug text-mid-gray">{b}</span>
+          </li>
+        ))}
+      </ul>
       {cta}
     </div>
   );
@@ -177,56 +106,86 @@ export default function VisioConseilPage() {
 
   const steps = isEn
     ? [
-        ["You choose", "Pick the level that matches your situation: settle a technology, get a full audit with its roadmap, or set up ongoing support."],
+        ["You choose", "Pick the depth that matches the stakes: a one-hour call to settle a direction, or a full audit with its roadmap."],
         ["You send context", "Share the site, quote, proposal or project notes so I can prepare the useful questions."],
-        ["We decide", "Video call, analysis and written recap with recommendation, risks and the advised next step."],
+        ["You receive it in writing", "Video call, analysis, then a written opinion or the audit deliverables: recommendation, risks and the advised next step."],
       ]
     : [
-        ["Vous choisissez", "Sélectionnez le niveau adapté : trancher une techno, obtenir un audit complet et sa roadmap, ou installer un accompagnement dans la durée."],
+        ["Vous choisissez", "Sélectionnez la profondeur adaptée à l'enjeu : une heure de visio pour trancher une direction, ou l'audit complet avec sa roadmap."],
         ["Vous envoyez le contexte", "Partagez le site, le devis, la proposition ou les notes projet pour préparer les bonnes questions."],
-        ["On décide", "Visio, analyse puis compte-rendu écrit avec recommandation, risques et prochaine étape conseillée."],
+        ["Vous recevez l'écrit", "Visio, analyse, puis l'avis écrit ou les livrables de l'audit : recommandation, risques et prochaine étape conseillée."],
       ];
 
   const reassurance: Array<[typeof ShieldCheck, string]> = isEn
     ? [
-        [Receipt, "Tech advice call credited to your project quote"],
-        [CalendarCheck, "Book and pay online — instant confirmation"],
-        [Video, "Real video call with screen sharing — not a chatbot"],
-        [FileText, "Written recap after the call"],
+        [Receipt, "Advisory call deducted from your project quote"],
+        [CalendarCheck, "Book and pay online, instant confirmation"],
+        [Video, "Real video call with screen sharing, not a chatbot"],
+        [FileText, "Written opinion or deliverables after the call"],
         [ShieldCheck, "Reschedule or cancel up to 24h before"],
       ]
     : [
-        [Receipt, "Conseil techno crédité sur votre devis projet"],
-        [CalendarCheck, "Réservation et paiement en ligne — confirmation immédiate"],
-        [Video, "Vraie visio avec partage d'écran — pas un chatbot"],
-        [FileText, "Compte-rendu écrit après l'appel"],
-        [ShieldCheck, "Report ou annulation possible jusqu'à 24h avant"],
+        [Receipt, "Visio conseil déduite du devis projet"],
+        [CalendarCheck, "Réservation et paiement en ligne, confirmation immédiate"],
+        [Video, "Vraie visio avec partage d'écran, pas un chatbot"],
+        [FileText, "Avis écrit ou livrables après l'appel"],
+        [ShieldCheck, "Report ou annulation possible jusqu'à 24 h avant"],
       ];
 
-  const decisionMatrix = isEn
+  const trajectories = isEn
     ? [
-        ["I want a website", "Rebuilding too fast", "Check whether to fix, optimize or rebuild"],
-        ["I want an app", "Having something too heavy coded", "Check whether WordPress, Airtable, Notion, no-code or SaaS is enough"],
-        ["AI can code it", "Creating a fragile tool", "Assess maintenance, security, data, hosting and technical debt"],
-        ["I want to use AI", "Adding a gadget", "Identify a real use case and a measurable gain"],
-        ["I want a directory or map", "Installing a random plugin", "Choose between plugin, structured data, Headless or dedicated app"],
-        ["I have a quote", "Signing without understanding", "Challenge the technology, risks and future cost"],
+        {
+          name: "Consolidate",
+          offer: "Optimized WordPress redesign",
+          when: "The problem is the theme and the plugin pile-up, not WordPress.",
+          price: "From €2,250 excl. VAT",
+          recommended: false,
+        },
+        {
+          name: "Decouple",
+          offer: "Headless WordPress redesign: your editors keep publishing in WordPress, your visitors see a fast, modern site",
+          when: "The site is slow and the editorial team is settled in.",
+          price: "From €4,000 excl. VAT",
+          recommended: true,
+        },
+        {
+          name: "Rebuild",
+          offer: "Web app, platform or mobile application",
+          when: "The site has become a working tool.",
+          price: "From €6,500 excl. VAT",
+          recommended: false,
+        },
       ]
     : [
-        ["Je veux un site", "Refaire trop vite", "Vérifier s'il faut réparer, optimiser ou refondre"],
-        ["Je veux une appli", "Faire coder trop lourd", "Vérifier si WordPress, Airtable, Notion, no-code ou SaaS suffit"],
-        ["Je peux le coder avec l'IA", "Créer un outil fragile", "Évaluer maintenance, sécurité, données, hébergement et dette technique"],
-        ["Je veux utiliser l'IA", "Ajouter un gadget", "Identifier un vrai cas d'usage et un gain mesurable"],
-        ["Je veux un annuaire ou une carte", "Installer un plugin au hasard", "Choisir entre plugin, données structurées, Headless ou app dédiée"],
-        ["J'ai un devis", "Signer sans comprendre", "Challenger la techno, les risques et le coût futur"],
+        {
+          name: "Consolider",
+          offer: "Refonte WordPress optimisée",
+          when: "Le problème, c'est le thème et l'empilement de plugins, pas WordPress.",
+          price: "À partir de 2 250 € HT",
+          recommended: false,
+        },
+        {
+          name: "Découpler",
+          offer: "Refonte WordPress headless : vos rédacteurs continuent de publier dans WordPress, vos visiteurs voient un site rapide et moderne",
+          when: "Le site est lent, l'équipe éditoriale est installée.",
+          price: "À partir de 4 000 € HT",
+          recommended: true,
+        },
+        {
+          name: "Refonder",
+          offer: "Web app, plateforme ou application mobile",
+          when: "Le site est devenu un outil de travail.",
+          price: "À partir de 6 500 € HT",
+          recommended: false,
+        },
       ];
 
   return (
     <main>
-      {/* § 01 — Hero (harmonisé /veille) */}
+      {/* § 01 — Hero */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Tech advice · From decision to direction" : "Conseil techno · De la décision au pilotage"}
+        kicker={isEn ? "Redesign advice · Two entry points" : "Conseil refonte · Deux portes d'entrée"}
         backdrop={
           /* Constellation projet ↔ technos : la métaphore du conseil. */
           <div className="absolute -right-24 top-1/2 hidden w-[560px] -translate-y-1/2 opacity-20 lg:block">
@@ -236,17 +195,17 @@ export default function VisioConseilPage() {
         title={
           isEn ? (
             <>
-              Web technology advice{" "}
+              A clear-cut opinion{" "}
               <em className="font-normal not-italic text-accent-secondary">
-                in the age of AI
+                before you commit a budget
               </em>
               .
             </>
           ) : (
             <>
-              Conseil techno web{" "}
+              Un avis tranché{" "}
               <em className="font-normal not-italic text-accent-secondary">
-                à l'heure de l'IA
+                avant d'engager un budget
               </em>
               .
             </>
@@ -254,13 +213,13 @@ export default function VisioConseilPage() {
         }
         description={
           isEn
-            ? "AI can code fast. Next Impact helps you decide what to build, with which technology, and how far to go: WordPress, no-code, AI coding, SaaS, Headless, directory, automation or custom business tool."
-            : "L'IA peut coder vite. Next Impact vous aide à choisir quoi construire, avec quelle techno, et jusqu'où aller : WordPress, no-code, IA coding, SaaS, Headless, annuaire, automatisation ou outil métier."
+            ? "Your site is aging and the trajectory is still open: stay, decouple or rebuild. Two independent advisory formats, at a displayed price, before any quote."
+            : "Votre site vieillit et la trajectoire reste à trancher : rester, découpler ou refonder. Deux formats de conseil indépendant, au prix affiché, avant tout devis."
         }
         actions={
           <>
             <a href="#conseils" className={"group " + HERO_BTN_PRIMARY}>
-              {isEn ? "Book the tech advice call" : "Réserver le conseil techno"}
+              {isEn ? "Book the advisory call" : "Réserver la visio conseil"}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </a>
             <a href="#comment" className={HERO_BTN_SECONDARY}>
@@ -270,25 +229,25 @@ export default function VisioConseilPage() {
         }
         note={
           isEn
-            ? "Architecture · Priorities · Maintenance · Business coherence"
-            : "Architecture · Priorités · Maintenance · Cohérence business"
+            ? "Written opinion · Displayed prices · Reply within 48h"
+            : "Avis écrit · Prix affichés · Réponse sous 48 h"
         }
       />
       <Separator />
 
-      {/* § 02 — Les deux conseils */}
+      {/* § 02 — Les deux offres de conseil */}
       <BlueprintSection id="conseils" tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
           index="№ 02"
-          kicker={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
-          title={isEn ? "Decide what deserves to be built" : "Décider ce qui mérite d'être construit"}
+          kicker={isEn ? "Two advisory offers" : "Deux offres de conseil"}
+          title={isEn ? "The call settles, the audit documents" : "La visio tranche, l'audit documente"}
           description={
             isEn
-              ? "A paid advisory path for small teams: settle the technology of a rebuild, get a full audit with recommendations and a roadmap, then steer over time across WordPress, no-code, AI coding, SaaS, Headless, custom — or not building at all."
-              : "Un parcours de conseil payant pour les petites structures : trancher la techno d'une refonte, obtenir un audit complet avec préconisations et roadmap, puis piloter dans la durée entre WordPress, no-code, IA coding, SaaS, Headless, sur-mesure — ou ne rien construire du tout."
+              ? "The cost of a wrong trajectory is counted in months; the cost of the advice, in euros. One hour to settle a direction, or a full audit with costed recommendations and a step-by-step roadmap."
+              : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, ou un audit complet avec préconisations chiffrées et roadmap par étapes."
           }
         />
-        <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
+        <Stagger className="mt-10 grid gap-4 md:grid-cols-2">
           {OFFERS.map((offer) => (
             <StaggerItem key={offer.id}>
               <OfferCard offer={offer} isEn={isEn} />
@@ -297,8 +256,8 @@ export default function VisioConseilPage() {
         </Stagger>
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Prices excl. VAT, no time commitment. Only the tech advice call is deducted from your quote if a project follows within 30 days — the full audit is a complete deliverable, the ongoing engagement is priced on a custom quote."
-            : "Prix HT, sans engagement de durée. Seul le conseil techno est déduit de votre devis si un projet suit sous 30 jours — l'audit complet est un livrable à part entière, l'accompagnement dans la durée se chiffre sur devis."}
+            ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else."
+            : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre."}
         </p>
 
         {/* Engagements — réassurance sous les offres */}
@@ -313,52 +272,12 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 03 — Matrice de décision */}
-      <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
-        <SectionHeading
-          index="№ 03"
-          kicker={isEn ? "Decision matrix" : "Matrice de décision"}
-          title={
-            isEn
-              ? "The first question is not always technical"
-              : "La première question n'est pas toujours technique"
-          }
-          description={
-            isEn
-              ? "AI, no-code and SaaS make production faster. That is exactly why the decision before production matters more."
-              : "IA, no-code et SaaS rendent la production plus rapide. C'est précisément pour cela que la décision avant production compte davantage."
-          }
-        />
-        <div className="mt-10 overflow-hidden border border-dark-gray">
-          <div className="hidden border-b border-dark-gray bg-obsidian md:grid md:grid-cols-3">
-            {(isEn
-              ? ["Client situation", "Possible bad reflex", "Next Impact role"]
-              : ["Situation client", "Mauvais réflexe possible", "Rôle de Next Impact"]
-            ).map((head) => (
-              <div key={head} className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
-                {head}
-              </div>
-            ))}
-          </div>
-          <Stagger>
-            {decisionMatrix.map(([situation, reflex, role]) => (
-              <StaggerItem key={situation} className="grid grid-cols-1 border-b border-dark-gray last:border-b-0 md:grid-cols-3">
-                <div className="bg-jet px-4 py-4 text-sm font-medium text-foreground">{situation}</div>
-                <div className="bg-jet px-4 py-4 font-inter-tight text-sm text-mid-gray md:border-l md:border-dark-gray">{reflex}</div>
-                <div className="bg-jet px-4 py-4 font-inter-tight text-sm text-mid-gray md:border-l md:border-dark-gray">{role}</div>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </BlueprintSection>
-      <Separator />
-
-      {/* § 04 — Comment ça marche */}
+      {/* § 03 — Comment ça marche */}
       <BlueprintSection id="comment" tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 04"
+          index="№ 03"
           kicker={isEn ? "How it works" : "Comment ça marche"}
-          title={isEn ? "From request to recap" : "De la demande au compte-rendu"}
+          title={isEn ? "From request to written opinion" : "De la demande à l'avis écrit"}
         />
         <Stagger className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-3">
           {steps.map(([title, desc], i) => (
@@ -374,10 +293,10 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 05 — FAQ */}
+      {/* § 04 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 05"
+          index="№ 04"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />
@@ -391,6 +310,59 @@ export default function VisioConseilPage() {
               </div>
             );
           })}
+        </div>
+      </BlueprintSection>
+      <Separator />
+
+      {/* § 05 — La suite : les trois trajectoires + deux CTA de deux températures */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
+        <SectionHeading
+          index="№ 05"
+          kicker={isEn ? "What comes next" : "La suite"}
+          title={
+            isEn
+              ? "Three trajectories for an aging WordPress site"
+              : "Trois trajectoires pour un site WordPress qui vieillit"
+          }
+          description={
+            isEn
+              ? "The advice leads to a direction. The direction leads to one of three trajectories, each with a displayed starting price and a committed timeline."
+              : "Le conseil débouche sur une direction. La direction débouche sur l'une des trois trajectoires, chacune avec un prix de départ affiché et un délai annoncé."
+          }
+        />
+        <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
+          {trajectories.map((traj) => (
+            <StaggerItem
+              key={traj.name}
+              className={
+                "relative flex flex-col gap-3 border bg-jet p-6 " +
+                (traj.recommended ? "border-vermilion" : "border-dark-gray")
+              }
+            >
+              {traj.recommended && (
+                <span className="absolute right-4 top-4 border border-vermilion px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-vermilion">
+                  {isEn ? "Recommended" : "Recommandée"}
+                </span>
+              )}
+              <h3 className="text-lg font-medium text-foreground">{traj.name}</h3>
+              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{traj.when}</p>
+              <p className="font-inter-tight text-sm leading-relaxed text-foreground">{traj.offer}</p>
+              <p className="mt-auto pt-2 font-mono text-xs uppercase tracking-[0.06em] text-accent-secondary">
+                {traj.price}
+              </p>
+            </StaggerItem>
+          ))}
+        </Stagger>
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <Link href="/audit-site-web" className={"group " + HERO_BTN_PRIMARY}>
+            {isEn
+              ? "See what slows your site down in 2 minutes"
+              : "Voyez ce qui ralentit votre site en 2 minutes"}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link href="/contact" className={HERO_BTN_SECONDARY}>
+            {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
+          </Link>
         </div>
       </BlueprintSection>
     </main>

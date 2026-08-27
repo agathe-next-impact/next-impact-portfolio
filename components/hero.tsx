@@ -55,30 +55,30 @@ export default function Hero() {
       id: "conseil" as TabId,
       label: isEn ? "Advice" : "Conseil",
       description: isEn
-        ? "Before you invest — in AI, an agency or a rebuild — check what your site actually needs. Independent advice, from €150."
-        : "Avant d'investir, explorez les solutions pour votre projet web à l'heure de l'IA. Avis indépendant, dès 150 €.",
+        ? "Before you commit a budget, a clear-cut opinion on your redesign: advisory call (€150, written opinion within 48h) or audit + roadmap (€650, deliverables)."
+        : "Avant d'engager un budget, un avis tranché sur votre refonte : visio conseil (150 €, avis écrit sous 48 h) ou audit + roadmap (650 €, livrables).",
       chips: isEn
-        ? ["Independent advice", "From €150", "No commitment", "Reply within 48h"]
-        : ["Avis indépendant", "Dès 150 €", "Sans engagement", "Réponse sous 48 h"],
-      cta: { label: isEn ? "Book a consult" : "Réserver un conseil", href: "/conseil" },
+        ? ["Independent advice", "Call €150", "Audit + roadmap €650", "Reply within 48h"]
+        : ["Avis indépendant", "Visio 150 €", "Audit + roadmap 650 €", "Réponse sous 48 h"],
+      cta: { label: isEn ? "See the advice" : "Voir le conseil", href: "/conseil" },
     },
     {
       id: "prestations" as TabId,
-      label: isEn ? "Services" : "Prestations",
+      label: isEn ? "Redesign" : "Refonte",
       description: isEn
-        ? "Once the direction is set, I design, build and ship — WordPress, a custom Next.js front-end or a web app. Price and timeline fixed upfront."
-        : "Une fois la voie tranchée, je peux concevoir, développer et livrer des projets web : site vitrine, site e-commerce, application web. Prix et délai fixés d'avance.",
+        ? "Three trajectories for an aging site: consolidate, decouple or rebuild. Price and timeline fixed before we start, performance measured at delivery."
+        : "Trois trajectoires pour un site qui vieillit : consolider, découpler ou refonder. Prix et délai fixés avant de commencer, performance mesurée à la livraison.",
       chips: isEn
-        ? ["+25 projects shipped", "PageSpeed 45 → 98", "Fixed price & timeline", "Turnkey delivery"]
-        : ["+25 projets livrés", "PageSpeed 45 → 98", "Prix & délai fixés", "Livré clé en main"],
-      cta: { label: isEn ? "See services" : "Voir les prestations", href: "/solutions-web" },
+        ? ["+25 projects shipped", "PageSpeed 45 → 98", "Fixed price & timeline", "A single point of contact"]
+        : ["+25 projets livrés", "PageSpeed 45 → 98", "Prix & délai fixés", "Une interlocutrice unique"],
+      cta: { label: isEn ? "See the trajectories" : "Voir les trajectoires", href: "/solutions-web" },
     },
     {
       id: "veille" as TabId,
       label: isEn ? "Watch" : "Veille",
       description: isEn
-        ? "The web & AI market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide — maintain, rebuild or create."
-        : "Le marché web & IA bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider — maintenir, refondre ou créer.",
+        ? "The web market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide: maintain, rebuild or create."
+        : "Le marché web bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider : maintenir, refondre ou créer.",
       chips: isEn
         ? ["Free newsletter", "Sentinelle €19/month", "Human-reviewed", "No commitment"]
         : ["Lettre gratuite", "Sentinelle 19 €/mois", "Relu par un humain", "Sans engagement"],
@@ -103,21 +103,50 @@ export default function Hero() {
       }
       innerClassName="px-6 py-16 lg:px-10 lg:py-24 border-b border-dark-gray"
     >
-      {/* En-tête */}
+      {/* En-tête — héros charte (variante 1) : douleur + promesse, bénéfice en
+          italique, puis deux CTA de deux températures. */}
       <Reveal className="flex flex-col gap-4">
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
           <span>№ 01</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">
             {isEn
-              ? "Before you invest — AI, agency or rebuild"
-              : "Avant d'investir — IA, agence ou refonte"}
+              ? "WordPress site redesign · 6 to 10 weeks"
+              : "Refonte de site WordPress · 6 à 10 semaines"}
           </span>
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-accent-secondary sm:text-5xl lg:text-6xl">
-          <WordAppear text={variant.headline} />{" " }
-          <span className="text-foreground">{variant.subHeadline}</span>
+          <WordAppear text={variant.headline} />{" "}
+          <span className="text-foreground">
+            {isEn ? (
+              <>
+                It can become fast again <em className="font-light">without rebuilding everything</em>.
+              </>
+            ) : (
+              <>
+                Il peut redevenir rapide <em className="font-light">sans tout reconstruire</em>.
+              </>
+            )}
+          </span>
         </h1>
+        <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
+          {isEn
+            ? "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks."
+            : "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines."}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <Link href="/audit-site-web" className={BTN_PRIMARY}>
+            {isEn
+              ? "See what slows your site down in 2 minutes"
+              : "Voyez ce qui ralentit votre site en 2 minutes"}
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+          >
+            {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
+          </Link>
+        </div>
       </Reveal>
 
       {/* Onglets — les 2 CTA pilotent le contenu de la section 2 colonnes */}
@@ -233,8 +262,8 @@ export default function Hero() {
             {/* Ligne de texte — sous les logos */}
             <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
               {isEn
-                ? "AI can generate code. It cannot decide your architecture for you."
-                : "L'IA peut générer du code. Elle ne décide pas votre architecture à votre place."}
+                ? "I frame the work, AI executes: architecture choices stay human."
+                : "Je cadre, l'IA exécute : les choix d'architecture restent humains."}
             </span>
           </div>
         </Reveal>
@@ -334,8 +363,8 @@ export default function Hero() {
                 <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]" />
                   {isEn
-                    ? "Live · next-event.fr — event portal delivered"
-                    : "En ligne · next-event.fr — portail événementiel livré"}
+                    ? "Live · next-event.fr · event portal delivered"
+                    : "En ligne · next-event.fr · portail événementiel livré"}
                 </span>
                 <Link
                   href={"/etudes-de-cas/next-event" as Parameters<typeof Link>[0]["href"]}

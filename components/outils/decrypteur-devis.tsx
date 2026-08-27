@@ -443,7 +443,7 @@ export default function DecrypteurDevis() {
           {/* Prochaine étape */}
           <StaggerItem className="flex flex-wrap items-center gap-3">
             <Link href="/conseil" className={BTN_PRIMARY}>
-              {isEn ? "Get an independent opinion — €150" : "Un avis indépendant — 150 €"}
+              {isEn ? "Get an independent opinion · €150" : "Un avis indépendant · 150 €"}
               <ArrowRight size={14} />
             </Link>
             <Link href="/outils/selecteur-techno" className={BTN_GHOST}>

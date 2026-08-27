@@ -232,11 +232,11 @@ function getCtas(tier: Tier) {
   if (tier === "optimiser")
     return {
       primary: { fr: "Optimiser mon site", en: "Optimize my site", href: "/contact" },
-      secondary: { fr: "Décider en visio — 150 €", en: "Decide on a call — €150", href: "/conseil" },
+      secondary: { fr: "Décider en visio · 150 €", en: "Decide on a call · €150", href: "/conseil" },
     };
   return {
     primary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
-    secondary: { fr: "Décider en visio — 150 €", en: "Decide on a call — €150", href: "/conseil" },
+    secondary: { fr: "Décider en visio · 150 €", en: "Decide on a call · €150", href: "/conseil" },
   };
 }
 

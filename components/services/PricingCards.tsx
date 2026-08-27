@@ -31,14 +31,16 @@ function getTiers(isEn: boolean): Tier[] {
   return [
     {
       slug: "forfait-classique",
-      name: isEn ? "OPTIMIZED WORDPRESS SITE" : "SITE WORDPRESS OPTIMISE",
-      tech: isEn ? "classic WordPress, bespoke theme" : "WordPress classique, thème sur-mesure",
-      price: isEn ? "From €2,250" : "Depuis 2 250 €",
+      name: isEn ? "CONSOLIDATE" : "CONSOLIDER",
+      tech: isEn
+        ? "optimized WordPress redesign · bespoke theme"
+        : "refonte WordPress optimisée · thème sur-mesure",
+      price: isEn ? "From €2,250" : "À partir de 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
-      forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
+      forProjectLabel: isEn ? "When?" : "Quand ?",
       forProject: isEn
-        ? "Brochure site, institutional site or quick redesign of an aging WordPress."
-        : "Site vitrine, site institutionnel ou refonte rapide d'un WordPress vieillissant.",
+        ? "The problem is the theme and the plugin pile-up, not WordPress. Brochure or institutional site, redesign of an aging WordPress."
+        : "Le problème, c'est le thème et l'empilement de plugins, pas WordPress. Site vitrine ou institutionnel, refonte d'un WordPress vieillissant.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Monolithic WordPress with <em className="text-foreground not-italic">a modern custom theme</em>, optimized build, hardened security.</>
@@ -63,14 +65,16 @@ function getTiers(isEn: boolean): Tier[] {
     },
     {
       slug: "forfait-headless",
-      name: isEn ? "HEADLESS WORDPRESS + NEXT.JS" : "WORDPRESS HEADLESS + NEXT.JS",
-      tech: "WordPress Headless + Next.js",
-      price: isEn ? "From €4,000" : "Depuis 4 000 €",
+      name: isEn ? "DECOUPLE" : "DECOUPLER",
+      tech: isEn
+        ? "headless WordPress redesign · back office kept, modern front end"
+        : "refonte WordPress headless · back-office conservé, front moderne",
+      price: isEn ? "From €4,000" : "À partir de 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
-      forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
+      forProjectLabel: isEn ? "When?" : "Quand ?",
       forProject: isEn
-        ? "A site with strong SEO stakes, editorial blog, brand or product where front-end performance is a conversion lever."
-        : "Site à fort enjeu SEO, blog éditorial, marque ou produit dont la performance front est un levier de conversion.",
+        ? "The site is slow and the editorial team is settled in. Your editors keep publishing in WordPress; your visitors see a fast, modern site."
+        : "Le site est lent, l'équipe éditoriale est installée. Vos rédacteurs continuent de publier dans WordPress ; vos visiteurs voient un site rapide et moderne.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Headless WordPress as backend + <em className="text-foreground not-italic">Next.js</em> as frontend (SSG, ISR, partial hydration).</>
@@ -91,20 +95,22 @@ function getTiers(isEn: boolean): Tier[] {
           ],
       ctaLabel: isEn ? "Pick this stack" : "Choisir cette stack",
       // Préconisation > popularité : c'est un conseil, pas un effet de foule.
-      badge: isEn ? "Recommended for most redesigns" : "Recommandé pour la plupart des refontes",
+      badge: isEn ? "Recommended" : "Recommandée",
       highlight: true,
       ctaHref: "/solutions-web/eligibilite",
     },
     {
       slug: "forfait-webapp",
-      name: isEn ? "CUSTOM PLATFORM / BUSINESS TOOL" : "PLATEFORME METIER / OUTIL SUR MESURE",
-      tech: isEn ? "dedicated architecture, multisite / high-volume" : "architecture dédiée, multisites / forte volumétrie",
-      price: isEn ? "From €6,500" : "Depuis 6 500 €",
+      name: isEn ? "REBUILD" : "REFONDER",
+      tech: isEn
+        ? "web app, platform or mobile application"
+        : "web app, plateforme ou application mobile",
+      price: isEn ? "From €6,500" : "À partir de 6 500 €",
       priceTagline: isEn ? "Scalable architecture, ISR/SSR, multisite" : "Architecture évolutive, ISR/SSR, multisites",
-      forProjectLabel: isEn ? "What kind of project?" : "Pour quel projet ?",
+      forProjectLabel: isEn ? "When?" : "Quand ?",
       forProject: isEn
-        ? "High-volume platform, multisite, third-party API integrations, business applications or client portals."
-        : "Plateforme à forte volumétrie, multisites, intégrations API tierces, applications métier ou portails clients.",
+        ? "The site has become a working tool: high-volume platform, multisite, third-party integrations, business applications or client portals."
+        : "Le site est devenu un outil de travail : plateforme à forte volumétrie, multisites, intégrations tierces, applications métier ou portails clients.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Headless WordPress + <em className="text-foreground not-italic">Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>

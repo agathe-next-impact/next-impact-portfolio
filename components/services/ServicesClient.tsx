@@ -39,7 +39,7 @@ export default function ServicesClient() {
       {/* § 01 — Héros (harmonisé /veille) */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Web solutions" : "Solutions web"}
+        kicker={isEn ? "Redesign · Three trajectories" : "Refonte · Trois trajectoires"}
         title={variant.titre}
         description={variant.sousTitre}
         backdrop={
@@ -50,7 +50,7 @@ export default function ServicesClient() {
         actions={
           <>
             <Link href="/solutions-web/eligibilite" className={HERO_BTN_PRIMARY}>
-              {isEn ? "Run the diagnostic — 2 min" : "Lancer le diagnostic — 2 min"}
+              {isEn ? "Run the diagnostic: 2 min" : "Lancer le diagnostic : 2 min"}
               <ArrowRight size={14} />
             </Link>
             <a href="#tarifs" className={HERO_BTN_SECONDARY}>
@@ -77,8 +77,8 @@ export default function ServicesClient() {
             }
             description={
               isEn
-                ? "A bespoke design — never an off-the-shelf template — with smooth, clear and accessible navigation. A refined experience for your visitors and your teams alike."
-                : "Un design sur-mesure — jamais un template générique — et une navigation fluide, claire et accessible. Une expérience soignée pour vos visiteurs comme pour vos équipes."
+                ? "A bespoke design, never an off-the-shelf template, with smooth, clear and accessible navigation. A refined experience for your visitors and your teams alike."
+                : "Un design sur-mesure, jamais un template générique, et une navigation fluide, claire et accessible. Une expérience soignée pour vos visiteurs comme pour vos équipes."
             }
           />
         </Reveal>

@@ -22,10 +22,10 @@ type ProofItem = {
 /**
  * ProofStrip — bande de preuve chiffrée, placée près des points de décision
  * (home, solutions-web, page pilier). Chaque chiffre est vérifiable au clic :
- * les 22 projets renvoient aux études de cas, le parcours à la page à-propos,
- * la citation presse à l'article source. Aucun chiffre non démontrable.
- * Les années reprennent la formule officielle du hero (« 20 ans d'expérience
- * digitale dont 6 en développement ») — ne pas introduire d'autres décomptes.
+ * le 45 → 98 renvoie à l'étude de cas Proditec, les 22 projets aux études de
+ * cas, la citation presse à l'article source. Aucun chiffre non démontrable.
+ * Charte §6 Home : le bandeau porte PageSpeed avant/après, les CWV en direct,
+ * les projets documentés et Le Figaro.
  */
 export function ProofStrip({ className = "" }: { className?: string }) {
   const locale = useLocale() as Locale;
@@ -33,16 +33,16 @@ export function ProofStrip({ className = "" }: { className?: string }) {
 
   const items: ProofItem[] = isEn
     ? [
+        { value: "45 → 98", label: "Google speed score, before and after redesign", href: "/etudes-de-cas/proditec" },
         { value: "22", count: { end: 22 }, label: "documented projects", href: "/etudes-de-cas" },
-        { value: "20 yrs", count: { end: 20, suffix: " yrs" }, label: "digital experience, 6 in development", href: "/a-propos" },
-        { value: "CWV", label: "measured live on this site" },
-        { value: "Le Figaro", label: "featured — May 2026", href: FIGARO_URL, external: true },
+        { value: "CWV", label: "the three Google speed measures, live on this site" },
+        { value: "Le Figaro", label: "featured · May 2026", href: FIGARO_URL, external: true },
       ]
     : [
+        { value: "45 → 98", label: "score de vitesse Google, avant et après refonte", href: "/etudes-de-cas/proditec" },
         { value: "22", count: { end: 22 }, label: "projets documentés", href: "/etudes-de-cas" },
-        { value: "20 ans", count: { end: 20, suffix: " ans" }, label: "d'expérience digitale, dont 6 en dev", href: "/a-propos" },
-        { value: "CWV", label: "mesurés en direct sur ce site" },
-        { value: "Le Figaro", label: "cité — mai 2026", href: FIGARO_URL, external: true },
+        { value: "CWV", label: "les trois mesures de vitesse Google, en direct sur ce site" },
+        { value: "Le Figaro", label: "cité · mai 2026", href: FIGARO_URL, external: true },
       ];
 
   return (

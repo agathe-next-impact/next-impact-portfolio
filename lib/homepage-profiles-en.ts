@@ -11,18 +11,18 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "AI can code fast.",
-    subHeadline: "A website that lasts is another matter.",
+    headline: "Your WordPress site is aging badly.",
+    subHeadline: "It can become fast again without rebuilding everything.",
     description:
-      "Before you invest — in AI, an agency or a redesign — check what your site actually needs. Independent advice, from €150.",
+      "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks.",
     valueProposition:
-      "Independent advice, scoping and implementation to avoid fragile tools, overbuilt stacks and poorly sized projects.",
-    ctaPrimary: { label: "See what's slowing my site down — 2 min", href: "/audit-site-web" },
-    ctaSecondary: { label: "Book a consulting call", href: "/conseil" },
-    auditTitle: "Which web technology in the age of AI?",
-    auditSubtitle: "Web & AI Tech Compass",
+      "An independent opinion before you commit a budget, then a fixed-price redesign: price and timeline in writing before we start, performance measured before and after.",
+    ctaPrimary: { label: "See what slows your site down in 2 minutes", href: "/audit-site-web" },
+    ctaSecondary: { label: "Let's talk about your project", href: "/contact" },
+    auditTitle: "What is slowing your site down?",
+    auditSubtitle: "2-minute diagnostic",
     auditDescription:
-      "Before asking AI, a freelancer or an agency to build, check whether you should fix, optimize, use SaaS, no-code, WordPress or custom development.",
+      "One address, one report: see what slows your site down and which of the three trajectories (consolidate, decouple, rebuild) matches your situation.",
   },
   decideur: {
     headline: "Your digital project,",
@@ -72,9 +72,9 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Web solutions",
+    titre: "Three trajectories for an aging WordPress site",
     sousTitre:
-      "WordPress, Headless WordPress + Next.js or a custom business tool: these services are not imposed stacks, but possible answers after a clear Web & AI decision.",
+      "The real question is not WordPress or not WordPress: it is what you keep and what you change. Consolidate, decouple or rebuild: displayed prices, committed timeline, measured performance.",
     carouselLabel: "Why Next Impact?",
     budgetTitle: "What investment level fits your project?",
     budgetCards: {
@@ -101,7 +101,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "Will I still be able to edit my own copy?",
         answer:
-          "Yes, on all 3 stacks. You keep the WordPress interface you already know to manage all your content, images and pages. No technical skills required.",
+          "Yes, on all three trajectories. You keep the WordPress interface you already know to manage all your content, images and pages. No technical skills required.",
       },
       {
         question: "Is headless more expensive to maintain?",

@@ -19,10 +19,12 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // préchargées au chargement de chaque page, sans qu'aucune n'ait été demandée.
 // La documentation et les outils restent liés depuis le footer et depuis le
 // hub /documentation — aucune URL n'est modifiée.
+// Charte §7 : Diagnostic · Services · Conseil · Études de cas · À propos.
+// Le diagnostic est porté par le bouton CTA (à la place du contact) ; la
+// veille reste accessible depuis le footer et la home.
 const NAV_BEFORE = [
-  { key: "conseil",     href: "/conseil" },
   { key: "services",    href: "/solutions-web" },
-  { key: "veille",      href: "/veille" },
+  { key: "conseil",     href: "/conseil" },
   { key: "caseStudies", href: "/etudes-de-cas" },
 ] as const;
 
@@ -93,9 +95,9 @@ export default function Header() {
 
           <ThemeToggle />
 
-          {/* CTA unique : « Me contacter » (accent-2) → /contact. */}
+          {/* CTA unique : le diagnostic (froid) prend la place du contact (charte §7). */}
           <Link
-            href="/contact"
+            href="/audit-site-web"
             className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
           >
             {t("mainCta")}
@@ -171,10 +173,10 @@ export default function Header() {
                 </button>
               )}
 
-              {/* CTA unique */}
+              {/* CTA unique : le diagnostic (froid), comme sur desktop */}
               <div className="flex flex-col gap-3 p-5">
                 <Link
-                  href="/contact"
+                  href="/audit-site-web"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
                 >

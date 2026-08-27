@@ -35,7 +35,7 @@ const COPY: Record<Locale, Copy> = {
     sectionLabel: "Applications web & mobile",
     title: "Stack sur-mesure",
     subtitle: "Marketplace, outil métier, simulateur ou application mobile : une architecture dédiée à votre logique métier, avec une admin aussi autonome que WordPress.",
-    priceLabel: "Sur devis, après cadrage",
+    priceLabel: "À partir de 6 500 € HT, après cadrage",
     characteristicsLabel: "Caractéristiques",
     characteristics: [
       "Logique métier propre",
@@ -77,7 +77,7 @@ const COPY: Record<Locale, Copy> = {
     sectionLabel: "Web & mobile applications",
     title: "Bespoke stack",
     subtitle: "Marketplace, business tool, simulator or mobile application: a dedicated architecture built for your business logic, with an admin as autonomous as WordPress.",
-    priceLabel: "On quote, after scoping",
+    priceLabel: "From €6,500 excl. VAT, after scoping",
     characteristicsLabel: "Characteristics",
     characteristics: [
       "Dedicated business logic",

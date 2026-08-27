@@ -74,8 +74,8 @@ function getCtas(tier: CtaTier) {
         en: "Work in progress: a call helps prioritize the remaining actions for your actual site.",
       },
       primary: {
-        fr: "Prioriser mes actions en visio — 150 €",
-        en: "Prioritize my actions on a call — €150",
+        fr: "Prioriser mes actions en visio · 150 €",
+        en: "Prioritize my actions on a call · €150",
         href: "/conseil",
       },
       secondary: {
@@ -90,8 +90,8 @@ function getCtas(tier: CtaTier) {
       en: "Foundations in place: the next step is a structured plan — what to measure, what to strengthen, in what order.",
     },
     primary: {
-      fr: "Cadrer la suite — audit complet 650 €",
-      en: "Scope the next phase — full audit €650",
+      fr: "Cadrer la suite · audit complet 650 €",
+      en: "Scope the next phase · full audit €650",
       href: "/conseil",
     },
     secondary: {

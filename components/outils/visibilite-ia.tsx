@@ -73,16 +73,16 @@ function getCtas(tier: Tier) {
         href: "/documentation/etre-trouve",
       },
       secondary: {
-        fr: "Affiner en visio — 150 €",
-        en: "Fine-tune on a call — €150",
+        fr: "Affiner en visio · 150 €",
+        en: "Fine-tune on a call · €150",
         href: "/conseil",
       },
     };
   if (tier === "partiel")
     return {
       primary: {
-        fr: "Prioriser mes actions en visio — 150 €",
-        en: "Prioritize my actions on a call — €150",
+        fr: "Prioriser mes actions en visio · 150 €",
+        en: "Prioritize my actions on a call · €150",
         href: "/conseil",
       },
       secondary: {
@@ -93,8 +93,8 @@ function getCtas(tier: Tier) {
     };
   return {
     primary: {
-      fr: "Cadrer un plan de visibilité — 650 €",
-      en: "Scope a visibility plan — €650",
+      fr: "Cadrer un plan de visibilité · 650 €",
+      en: "Scope a visibility plan · €650",
       href: "/conseil",
     },
     secondary: {

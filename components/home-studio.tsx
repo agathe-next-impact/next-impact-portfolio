@@ -28,14 +28,14 @@ export default function HomeStudio() {
 
   const bullets = isEn
     ? [
-        ["AI amplifies, it doesn't replace", "An amplifier of skill, not a substitute: without domain expertise, the plausible error slips through. That's where 20 years of systems practice weigh in."],
-        ["The decision isn't delegated", "WordPress or Headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. AI proposes, the human decides."],
-        ["I frame it, AI runs it", "15 years using WordPress and 6 years building: the legitimacy to judge performance, accessibility and maintainability — where AI still gets it wrong. I hold the project ownership, AI runs the build."],
+        ["I've been in your seat", "15 years publishing in WordPress before building with it: I know what an editorial team needs, because it was my job."],
+        ["The decision isn't delegated", "WordPress or headless, custom or SaaS, which stack, which hosting: trade-offs that commit you for years. They are settled in writing, before the build."],
+        ["I frame it, AI executes", "AI speeds up production; it does not judge performance, accessibility or maintainability. I hold the project ownership and the responsibility, from quote to delivery."],
       ]
     : [
-        ["L'IA amplifie, elle ne remplace pas", "Un amplificateur de compétence, pas un substitut : sans expertise du domaine, l'erreur plausible passe inaperçue. C'est là que 20 ans de pratique des systèmes pèsent."],
-        ["La décision ne se délègue pas", "WordPress ou Headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. L'IA propose, l'humain tranche."],
-        ["Je cadre, l'IA exécute", "15 ans d'usage WordPress et 6 ans de développement : la légitimité pour juger perf, accessibilité et maintenabilité — là où l'IA se trompe encore. Je tiens la maîtrise d'ouvrage, l'IA tient le chantier."],
+        ["J'ai été à votre place", "15 ans à publier dans WordPress avant d'en développer : je sais ce dont une équipe éditoriale a besoin, parce que c'était mon métier."],
+        ["La décision ne se délègue pas", "WordPress ou headless, sur-mesure ou SaaS, quelle stack, quel hébergement : des arbitrages qui engagent des années. Ils se tranchent par écrit, avant la production."],
+        ["Je cadre, l'IA exécute", "L'IA accélère la production ; elle ne juge ni la performance, ni l'accessibilité, ni la maintenabilité. Je tiens la maîtrise d'ouvrage et la responsabilité, du devis à la livraison."],
       ];
 
   return (
@@ -76,21 +76,21 @@ export default function HomeStudio() {
           <h2 className="max-w-2xl text-3xl font-light leading-[1.1] tracking-tight text-foreground md:text-4xl">
             {isEn ? (
               <>
-                {"AI hasn't replaced advice. "}
-                <span className="text-accent-secondary">It has made it critical.</span>
+                {"Fifteen years publishing in WordPress "}
+                <span className="text-accent-secondary">before building with it.</span>
               </>
             ) : (
               <>
-                {"L'IA n'a pas remplacé le conseil. "}
-                <span className="text-accent-secondary">Elle l&apos;a rendu critique.</span>
+                {"Quinze ans à publier dans WordPress "}
+                <span className="text-accent-secondary">avant d'en développer.</span>
               </>
             )}
           </h2>
 
           <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
-              ? "AI is the best intern we've ever had: fast, structured, tireless. But an intern, however brilliant, doesn't decide the strategy. Leading a web project is still a craft — scoping the work, arbitrating the architecture, settling the choices that commit you for years, then validating what holds up in production. That's where the human is not optional."
-              : "L'IA est le meilleur stagiaire qu'on ait jamais eu : rapide, structuré, infatigable. Mais un stagiaire, même brillant, ne décide pas de la stratégie. Mener un projet web reste un métier — cadrer, arbitrer l'architecture, trancher les choix qui engagent des années, puis valider ce qui tient en production. C'est là que l'humain n'est pas contournable."}
+              ? "A solo studio is a guarantee, not a limitation: one person scopes the work, arbitrates the architecture, settles the choices that commit you for years, then validates what holds up in production. One point of contact, one responsibility, from quote to delivery."
+              : "Un studio solo est une garantie, pas une limite : une seule personne cadre, arbitre l'architecture, tranche les choix qui engagent des années, puis valide ce qui tient en production. Une interlocutrice, une responsabilité, du devis à la mise en ligne."}
           </p>
 
           {/* Deux savoir-faire */}
@@ -119,7 +119,7 @@ export default function HomeStudio() {
               rel="noopener noreferrer"
               className="font-inter-tight text-[13px] italic text-mid-gray transition-colors hover:text-foreground"
             >
-              {isEn ? "Featured in Le Figaro — May 2026" : "Vu dans Le Figaro — mai 2026"}
+              {isEn ? "Featured in Le Figaro · May 2026" : "Vu dans Le Figaro · mai 2026"}
             </a>
           </div>
         </Reveal>
