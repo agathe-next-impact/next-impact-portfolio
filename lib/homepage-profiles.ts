@@ -25,8 +25,8 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Votre site WordPress vieillit mal.",
-    subHeadline: "Il peut redevenir rapide sans tout reconstruire.",
+    headline: "Conseil et Prestations,",
+    subHeadline: "de refonte WordPress",
     description:
       "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
     valueProposition:
