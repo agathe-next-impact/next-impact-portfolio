@@ -103,8 +103,8 @@ export default function Hero() {
       }
       innerClassName="px-6 py-16 lg:px-10 lg:py-24 border-b border-dark-gray"
     >
-      {/* En-tête — héros charte (variante 1) : douleur + promesse, bénéfice en
-          italique, puis deux CTA de deux températures. */}
+      {/* En-tête — héros charte : titre, description et CTA pilotés par
+          HERO_VARIANTS.default (lib/homepage-profiles*.ts, FR + EN). */}
       <Reveal className="flex flex-col gap-4">
         <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
           <span>№ 01</span>
@@ -117,34 +117,23 @@ export default function Hero() {
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-accent-secondary sm:text-5xl lg:text-6xl">
           <WordAppear text={variant.headline} />{" "}
-          <span className="text-foreground">
-            {isEn ? (
-              <>
-                It can become fast again <em className="font-light">without rebuilding everything</em>.
-              </>
-            ) : (
-              <>
-                Il peut redevenir rapide <em className="font-light">sans tout reconstruire</em>.
-              </>
-            )}
-          </span>
+          <span className="text-foreground">{variant.subHeadline}</span>
         </h1>
         <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
-          {isEn
-            ? "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks."
-            : "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines."}
+          {variant.description}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <Link href="/audit-site-web" className={BTN_PRIMARY}>
-            {isEn
-              ? "See what slows your site down in 2 minutes"
-              : "Voyez ce qui ralentit votre site en 2 minutes"}
+          <Link
+            href={variant.ctaPrimary.href as Parameters<typeof Link>[0]["href"]}
+            className={BTN_PRIMARY}
+          >
+            {variant.ctaPrimary.label}
           </Link>
           <Link
-            href="/contact"
+            href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]}
             className="inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
           >
-            {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
+            {variant.ctaSecondary.label}
           </Link>
         </div>
       </Reveal>

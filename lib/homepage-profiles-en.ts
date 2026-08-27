@@ -11,8 +11,8 @@ import type {
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Your WordPress site is aging badly.",
-    subHeadline: "It can become fast again without rebuilding everything.",
+    headline: "Consulting and Services,",
+    subHeadline: "for WordPress redesigns",
     description:
       "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks.",
     valueProposition:
