@@ -70,8 +70,8 @@ export default async function SelecteurTechnoPage({
         titre={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
         sousTitre={
           isEn
-            ? "WordPress, no-code, Headless, SaaS or custom? Eight criteria, one recommendation — and the right next step for your case."
-            : "WordPress, no-code, Headless, SaaS ou sur-mesure ? Huit critères, une recommandation — et la bonne prochaine étape pour votre cas."
+            ? "WordPress, no-code, Headless, SaaS or custom? Eight criteria, one recommendation, and the right next step for your case."
+            : "WordPress, no-code, Headless, SaaS ou sur-mesure ? Huit critères, une recommandation, et la bonne prochaine étape pour votre cas."
         }
       >
         <BlueprintSection

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/json-ld";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import {
   PageHero,
@@ -40,11 +40,11 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Tech watch — a free newsletter, and a personalized watch on your site"
-      : "Veille techno — la lettre gratuite et la veille personnalisée de votre site",
+      ? "Tech watch: a free newsletter, and a personalized watch on your site"
+      : "Veille techno : la lettre gratuite et la veille personnalisée de votre site",
     description: isEn
-      ? "Two complementary letters: a free monthly digest and weekly focus on web & AI technology, and Sentinelle, the personalized watch that helps you decide — consolidate, evolve or rebuild — €19/month, human-reviewed before sending."
-      : "Deux lettres complémentaires : « Quelle techno pour mon site web à l'heure de l'IA ? », gratuite — une synthèse mensuelle et un focus hebdo — et Sentinelle, la veille personnalisée qui vous aide à décider : consolider, faire évoluer ou refondre. 19 €/mois, relue par un humain avant envoi.",
+      ? "Two watch letters: a free newsletter on the web & AI market (monthly digest, weekly focus), and Sentinelle, the personalized watch on your own site. €19/month, human-reviewed before sending."
+      : "Deux lettres de veille : la newsletter gratuite sur le marché web & IA (synthèse mensuelle, focus hebdo) et Sentinelle, la veille personnalisée de votre site. 19 €/mois, relue par un humain avant envoi.",
     path: "/veille",
     keywords: isEn
       ? [
@@ -177,6 +177,22 @@ export default async function VeillePage({
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      {/* Schéma Service aligné sur le contenu visible : les deux lettres de
+          veille (gratuite + Sentinelle, tarif unique dans lib/sentinelle-offer). */}
+      <ServiceJsonLd
+        name={
+          isEn
+            ? "Tech watch: free newsletter and personalized site watch"
+            : "Veille techno : lettre gratuite et veille personnalisée de votre site"
+        }
+        description={
+          isEn
+            ? "Two watch letters: a free newsletter on the web & AI market (monthly digest, weekly focus) and Sentinelle, the personalized watch on your own site (€19/month, human-reviewed before sending)."
+            : "Deux lettres de veille : la newsletter gratuite sur le marché web & IA (synthèse mensuelle, focus hebdo) et Sentinelle, la veille personnalisée de votre site (19 €/mois, relue par un humain avant envoi)."
+        }
+        serviceType={isEn ? "Technology watch" : "Veille technologique"}
+        url="/veille"
+      />
 
       {/* ── Héros : le bénéfice, puis les deux niveaux ───────────────────── */}
       <PageHero

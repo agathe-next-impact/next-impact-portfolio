@@ -119,21 +119,22 @@ Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Mart
 
 ## Offer Architecture
 
-- Web & AI Tech diagnostic: first direction before building.
+- Free 2-minute site diagnostic: see what slows the site down and which trajectory (consolidate, decouple, rebuild) fits.
 - Redesign advisory call (€150): one hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why. Deducted from the quote if a project starts within 30 days.
 - Audit + roadmap (€650): audit report (performance, security, technical debt, plugins, hosting), costed recommendations and a step-by-step roadmap. The document serves even if the work goes to someone else.
 - Optimized WordPress redesign (from €2,250): theme, plugins and optimization of the existing site, without changing the publishing tool.
 - Headless WordPress redesign (from €4,000): WordPress back office kept, modern front end: editors publish as before, visitors see a fast site. Recommended trajectory.
 - Web app redesign (from €6,500): web and/or mobile platform when the site has become a working tool.
-- Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on Substack) and Sentinelle (€19/month), the personalized watch on the client's own site or app — targeted alerts, two letters a month and decision support (maintain, rebuild or create).
+- Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on Substack) and Sentinelle (€19/month), the personalized watch on the client's own site or app: targeted alerts, two letters a month and decision support (maintain, rebuild or create).
 - Implementation: build only when the solution is clear and justified.
-- WordPress support: fix, stabilize or decide whether rebuilding is justified.
 
 ## Key URLs
 
 - Home: ${baseUrl}/
 - Tech advice: ${baseUrl}/conseil
-- Solutions web: ${baseUrl}/solutions-web
+- Solutions web (three redesign trajectories): ${baseUrl}/solutions-web
+- Headless WordPress pillar page: ${baseUrl}/wordpress-headless
+- Free 2-minute site diagnostic: ${baseUrl}/audit-site-web
 - Case studies: ${baseUrl}/etudes-de-cas
 - Tech watch (free newsletter + Sentinelle): ${baseUrl}/veille
 - Sentinelle (personalized site watch): ${baseUrl}/sentinelle

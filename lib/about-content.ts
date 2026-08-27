@@ -22,7 +22,7 @@ const FR: AboutContent = {
     lines: [
       "Agathe Karinthi-Martin est la fondatrice de Next Impact, studio solo de conseil et de développement web à l'heure de l'IA.",
       "Elle aborde chaque projet web sous quatre angles complémentaires : la technique, le business, le marketing et le design.",
-      "20 ans d'expérience digitale — des fondations PHP/MySQL aux stacks Next.js, PostgreSQL et headless — dont 15 ans à piloter des projets côté édition.",
+      "20 ans d'expérience digitale, des fondations PHP/MySQL aux stacks Next.js, PostgreSQL et headless, dont 15 ans à piloter des projets côté édition.",
       "Cette vision globale sert à décider quoi construire, avec quelle techno et jusqu'où aller, avant de construire. Next Impact est prestataire TIH (30 % déductible de la contribution AGEFIPH).",
     ],
   },
@@ -33,7 +33,7 @@ const FR: AboutContent = {
       {
         question: "Qui est Agathe Karinthi-Martin ?",
         answer:
-          "Développeuse et fondatrice de Next Impact, elle conseille et construit des projets web à l'heure de l'IA. Son parcours réunit quatre compétences — technique, business, marketing et design — après 20 ans d'expérience digitale, dont 15 ans côté édition.",
+          "Développeuse et fondatrice de Next Impact, elle conseille et construit des projets web à l'heure de l'IA. Son parcours réunit quatre compétences (technique, business, marketing et design) après 20 ans d'expérience digitale, dont 15 ans côté édition.",
       },
       {
         question: "En quoi un parcours pluridisciplinaire change-t-il le conseil ?",
@@ -48,7 +48,7 @@ const FR: AboutContent = {
       {
         question: "Comment une consultante seule mène-t-elle des projets d'agence ?",
         answer:
-          "En tenant la maîtrise d'ouvrage — cadrage, architecture, contrôle qualité — pendant que l'IA, guidée par 20 ans d'expérience, tient le chantier. Ce duo rend accessibles des projets d'une complexité auparavant réservée aux grandes structures. Le conseil oriente, la construction suit.",
+          "En tenant la maîtrise d'ouvrage (cadrage, architecture, contrôle qualité) pendant que l'IA, guidée par 20 ans d'expérience, tient le chantier. Ce duo rend accessibles des projets d'une complexité auparavant réservée aux grandes structures. Le conseil oriente, la construction suit.",
       },
       {
         question: "Quelle reconnaissance extérieure ?",
@@ -65,7 +65,7 @@ const EN: AboutContent = {
     lines: [
       "Agathe Karinthi-Martin is the founder of Next Impact, a solo studio for web advice and development in the age of AI.",
       "She approaches every web project from four complementary angles: technical, business, marketing and design.",
-      "20 years of digital experience — from PHP/MySQL foundations to Next.js, PostgreSQL and headless stacks — including 15 years steering projects on the editorial side.",
+      "20 years of digital experience, from PHP/MySQL foundations to Next.js, PostgreSQL and headless stacks, including 15 years steering projects on the editorial side.",
       "This holistic view helps decide what to build, with which technology and how far to go, before building. Next Impact is a French TIH provider (30% deductible from the AGEFIPH contribution).",
     ],
   },
@@ -76,7 +76,7 @@ const EN: AboutContent = {
       {
         question: "Who is Agathe Karinthi-Martin?",
         answer:
-          "A developer and the founder of Next Impact, she advises on and builds web projects in the age of AI. Her background brings together four skills — technical, business, marketing and design — after 20 years of digital experience, including 15 years on the editorial side.",
+          "A developer and the founder of Next Impact, she advises on and builds web projects in the age of AI. Her background brings together four skills (technical, business, marketing and design) after 20 years of digital experience, including 15 years on the editorial side.",
       },
       {
         question: "Why does a multidisciplinary background change the advice?",
@@ -91,7 +91,7 @@ const EN: AboutContent = {
       {
         question: "How can a solo consultant deliver agency-level projects?",
         answer:
-          "By holding the project ownership — scoping, architecture, quality control — while AI, guided by 20 years of experience, runs the build. This pairing makes projects of a complexity once reserved for large firms accessible. Advice guides, implementation follows.",
+          "By holding the project ownership (scoping, architecture, quality control) while AI, guided by 20 years of experience, runs the build. This pairing makes projects of a complexity once reserved for large firms accessible. Advice guides, implementation follows.",
       },
       {
         question: "Any external recognition?",

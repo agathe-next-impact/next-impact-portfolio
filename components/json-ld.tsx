@@ -320,7 +320,7 @@ export function ContactPageJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contact — Next Impact Digital",
+    name: "Contact · Next Impact Digital",
     description:
       "Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), refonte WordPress, headless ou web app, ou diagnostic gratuit.",
     url: `${siteConfig.url}/contact`,
@@ -362,7 +362,6 @@ export function ContactPageJsonLd() {
           telephone: "+33673981638",
           email: "agathe@next-impact.digital",
           availableLanguage: ["French", "English"],
-          contactOption: "TollFree",
         },
       ],
       potentialAction: [
@@ -562,7 +561,9 @@ export function HomepageJsonLd() {
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
-        dateModified: "2026-07-18",
+        // Dernier remaniement éditorial substantiel de la home (charte v1.1,
+        // héros « refonte WordPress » + trajectoires) — 2026-08-27.
+        dateModified: "2026-08-27",
         speakable: {
           "@type": "SpeakableSpecification",
           cssSelector: ["h1", ".home-tldr"],

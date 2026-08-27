@@ -29,17 +29,17 @@ export async function generateMetadata({
       locale === "en"
         ? [
             "contact web technology advice",
-            "AI prototype second opinion",
-            "web quote review",
+            "redesign advisory call",
+            "website audit and roadmap",
             "WordPress redesign contact",
-            "project roadmap",
+            "free website diagnostic",
           ]
         : [
             "contact conseil techno web",
-            "second avis prototype IA",
-            "relecture devis web",
+            "visio conseil refonte",
+            "audit et roadmap site web",
             "contact refonte WordPress",
-            "roadmap projet web",
+            "diagnostic gratuit site web",
           ],
     locale,
   });

@@ -13,8 +13,8 @@ export async function generateMetadata({
   return generatePageMetadata({
     title:
       locale === "en"
-        ? "Project diagnostic — Classic, Headless, Web app or custom application"
-        : "Diagnostic de projet — Classique, Headless, Web app ou application sur-mesure",
+        ? "Project diagnostic: classic, Headless, web app or custom application"
+        : "Diagnostic de projet : classique, Headless, web app ou application sur-mesure",
     description:
       locale === "en"
         ? "Identify in 2 minutes the path that fits your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
@@ -43,8 +43,8 @@ export default async function EligibilityPage({
       }
       sousTitre={
         locale === "en"
-          ? "An instant diagnostic to identify the right path — classic WordPress site, Headless site, custom web app or mobile application — for your project."
-          : "Un diagnostic immédiat pour identifier la voie adaptée à votre projet — site WordPress classique, site Headless, web app sur-mesure ou application mobile."
+          ? "An instant diagnostic to identify the right path for your project: classic WordPress site, Headless site, custom web app or mobile application."
+          : "Un diagnostic immédiat pour identifier la voie adaptée à votre projet : site WordPress classique, site Headless, web app sur-mesure ou application mobile."
       }
     >
       <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>

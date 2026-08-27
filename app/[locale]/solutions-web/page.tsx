@@ -25,24 +25,22 @@ export async function generateMetadata({
     keywords:
       locale === "en"
         ? [
-            "website build services",
+            "WordPress redesign price",
+            "optimized WordPress redesign",
+            "headless WordPress redesign",
             "Headless WordPress pricing",
             "custom web app",
             "custom mobile application",
             "WordPress Next.js",
-            "PWA build",
-            "marketplace build",
-            "web project pricing",
           ]
         : [
-            "services création site web",
+            "refonte site WordPress prix",
+            "refonte WordPress optimisée",
+            "refonte WordPress headless",
             "tarifs WordPress Headless",
-            "prix application web",
             "web app sur-mesure",
             "application mobile sur-mesure",
             "WordPress Next.js",
-            "marketplace sur-mesure",
-            "PWA création",
           ],
     locale,
   })
@@ -67,18 +65,20 @@ export default async function ServicesPage({
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      {/* Schéma aligné sur le contenu réel de la page : les trois trajectoires
+          de refonte du catalogue (charte §5), prix « à partir de » affichés. */}
       <ServiceJsonLd
         name={
           locale === "en"
-            ? "Website and custom application build services"
-            : "Services de création de sites web et d'applications sur-mesure"
+            ? "WordPress site redesign: consolidate, decouple or rebuild"
+            : "Refonte de site WordPress : consolider, découpler ou refonder"
         }
         description={
           locale === "en"
-            ? "Custom websites and applications: classic WordPress, Headless WordPress + Next.js, custom web apps and mobile PWAs. Solutions tailored to SMEs, enterprises and organizations with strong web requirements."
-            : "Sites web et applications sur-mesure : WordPress classique, Headless WordPress + Next.js, web apps et PWA mobile. Solutions adaptées aux PME, entreprises et organisations à fort enjeu web."
+            ? "Three redesign trajectories for an aging WordPress site: optimized WordPress (from €2,250 excl. VAT), headless WordPress (recommended, from €4,000 excl. VAT), web app (from €6,500 excl. VAT). Price and timeline fixed before starting."
+            : "Trois trajectoires de refonte pour un site WordPress qui vieillit : WordPress optimisé (dès 2 250 € HT), WordPress headless (recommandée, dès 4 000 € HT), web app (dès 6 500 € HT). Prix et délai fixés avant de commencer."
         }
-        serviceType={locale === "en" ? "Web development" : "Développement web"}
+        serviceType={locale === "en" ? "Web redesign and development" : "Refonte et développement web"}
         url="/solutions-web"
       />
       {/* La FAQ visible et son schéma FAQPage sont portés par ServicesClient →
@@ -99,8 +99,8 @@ export default async function ServicesPage({
           <span className="flex items-center justify-between gap-3">
             <span className="text-lg font-light tracking-tight text-foreground md:text-xl">
               {locale === "en"
-                ? "Headless WordPress with Next.js — definition, costs, performance"
-                : "WordPress Headless avec Next.js — définition, coûts, performance"}
+                ? "Headless WordPress with Next.js: definition, costs, performance"
+                : "WordPress Headless avec Next.js : définition, coûts, performance"}
             </span>
             <ArrowRight className="h-5 w-5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary" />
           </span>

@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "No-code, SaaS ou sur-mesure ? - Construire, acheter ou no-code",
     description:
       locale === "en"
-        ? "Webflow, an off-the-shelf SaaS, or custom development? 8 criteria — specificity, budget, autonomy, data, volume, integrations — to find the right family for your tool, then the next step."
-        : "Webflow, un SaaS du marché, ou du développement sur-mesure ? 8 critères — spécificité, budget, autonomie, données, volume, intégrations — pour trouver la bonne famille pour votre outil, puis la prochaine étape.",
+        ? "Webflow, an off-the-shelf SaaS, or custom development? 8 criteria (specificity, budget, autonomy, data, volume, integrations) to find the right family for your tool, then the next step."
+        : "Webflow, un SaaS du marché, ou du développement sur-mesure ? 8 critères (spécificité, budget, autonomie, données, volume, intégrations) pour trouver la bonne famille pour votre outil, puis la prochaine étape.",
     path: "/outils/nocode-saas-surmesure",
     keywords:
       locale === "en"
@@ -70,8 +70,8 @@ export default async function NocodeSaasSurmesurePage({
         titre={isEn ? "No-code, SaaS or custom?" : "No-code, SaaS ou sur-mesure ?"}
         sousTitre={
           isEn
-            ? "Build, buy or no-code? 8 criteria, one recommendation among three families — and the right next step for your case."
-            : "Construire, acheter ou no-code ? 8 critères, une recommandation parmi trois familles — et la bonne prochaine étape pour votre cas."
+            ? "Build, buy or no-code? 8 criteria, one recommendation among three families, and the right next step for your case."
+            : "Construire, acheter ou no-code ? 8 critères, une recommandation parmi trois familles, et la bonne prochaine étape pour votre cas."
         }
       >
         <BlueprintSection

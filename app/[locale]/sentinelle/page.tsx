@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { generatePageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/json-ld";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -45,8 +45,8 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Sentinelle — personalized tech watch and decision support, €19/month"
-      : "Sentinelle — veille techno personnalisée et aide à la décision, 19 €/mois",
+      ? "Sentinelle: personalized tech watch and decision support, €19/month"
+      : "Sentinelle : veille techno personnalisée et aide à la décision, 19 €/mois",
     description: isEn
       ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: consolidate, evolve or rebuild. Two letters a month, alerts when it matters, human-reviewed before sending. €19/month."
       : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, des alertes quand ça compte, relues par un humain avant envoi. 19 €/mois.",
@@ -153,6 +153,22 @@ export default async function SentinellePage({
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
+      {/* Schéma Service aligné sur le contenu visible : la veille personnalisée,
+          19 €/mois (source unique du tarif : lib/sentinelle-offer.ts). */}
+      <ServiceJsonLd
+        name={
+          isEn
+            ? "Sentinelle: personalized tech watch on your site"
+            : "Sentinelle : veille techno personnalisée de votre site"
+        }
+        description={
+          isEn
+            ? "Sentinelle watches the components your site actually runs, crosses that with tech news and helps you decide: consolidate, evolve or rebuild. Two letters a month, targeted alerts, human-reviewed before sending. €19/month, no commitment."
+            : "Sentinelle surveille les composants que votre site utilise vraiment, les croise avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, alertes ciblées, relues par un humain avant envoi. 19 €/mois, sans engagement."
+        }
+        serviceType={isEn ? "Technology watch" : "Veille technologique"}
+        url="/sentinelle"
+      />
 
       {/* ── Héros : la douleur avant le produit ─────────────────────────── */}
       <BlueprintSection ticks innerClassName="px-6 py-16 lg:px-12 lg:py-24">

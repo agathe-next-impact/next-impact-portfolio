@@ -138,8 +138,8 @@ export default async function CategoryPage(props: CategoryPageProps) {
                 </p>
                 <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
                   {locale === "en"
-                    ? "Definition, comparison table, costs, performance and FAQ — the full picture in one page."
-                    : "Définition, comparatif, coûts, performance et FAQ — la vue complète sur une page."}
+                    ? "Definition, comparison table, costs, performance and FAQ: the full picture in one page."
+                    : "Définition, comparatif, coûts, performance et FAQ : la vue complète sur une page."}
                 </p>
               </div>
               <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-mid-gray" />

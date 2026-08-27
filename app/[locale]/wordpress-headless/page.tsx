@@ -77,7 +77,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
     return [
       {
         q: "What is headless WordPress in plain terms?",
-        a: "Headless WordPress means the WordPress back-end (database, admin, editorial workflow) stays in place, but a separate front-end — usually Next.js — handles what visitors see. The two communicate via an API (WPGraphQL or REST). Editors keep their familiar interface; the public site gets a modern stack.",
+        a: "Headless WordPress means the WordPress back-end (database, admin, editorial workflow) stays in place, but a separate front-end, usually Next.js, handles what visitors see. The two communicate via an API (WPGraphQL or REST). Editors keep their familiar interface; the public site gets a modern stack.",
       },
       {
         q: "Is headless WordPress worth it for a small site?",
@@ -89,19 +89,19 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
       },
       {
         q: "Does headless WordPress break my SEO?",
-        a: "No — done correctly, it improves it. Pages are pre-rendered (SSG/ISR), Core Web Vitals jump, structured data and meta tags are explicit. The risk is during migration: URLs must be preserved one-to-one, 301 redirects set up for any changed slug, and sitemap.xml regenerated. With those steps respected, SEO improves rather than degrades.",
+        a: "No: done correctly, it improves it. Pages are pre-rendered (SSG/ISR), Core Web Vitals jump, structured data and meta tags are explicit. The risk is during migration: URLs must be preserved one-to-one, 301 redirects set up for any changed slug, and sitemap.xml regenerated. With those steps respected, SEO improves rather than degrades.",
       },
       {
         q: "Can editors keep using Gutenberg / Elementor in headless?",
-        a: "Gutenberg yes — its block JSON can be consumed and rendered by Next.js. Elementor and other visual builders that produce shortcode-heavy HTML are problematic because their rendering logic lives in the WordPress theme. Migrating an Elementor site to headless usually means rebuilding the page templates in the front-end.",
+        a: "Gutenberg yes: its block JSON can be consumed and rendered by Next.js. Elementor and other visual builders that produce shortcode-heavy HTML are problematic because their rendering logic lives in the WordPress theme. Migrating an Elementor site to headless usually means rebuilding the page templates in the front-end.",
       },
       {
-        q: "WPGraphQL or WordPress REST API — which one to choose?",
+        q: "WPGraphQL or WordPress REST API: which one to choose?",
         a: "WPGraphQL is recommended for new headless projects: a single endpoint, only the fields you ask for, much better TypeScript ergonomics in Next.js. The native REST API still works and is sometimes simpler for very small sites or specific integrations, but for a real production site WPGraphQL is the default.",
       },
       {
         q: "Is headless WordPress more secure than classic WordPress?",
-        a: "Yes, materially. The WordPress admin can be isolated (behind a private subdomain, IP-restricted, basic-auth). The public-facing site is static or pre-rendered HTML served from a CDN — no PHP execution exposed to visitors, no plugin XSS reaching the front. Most automated WordPress attack vectors no longer apply.",
+        a: "Yes, materially. The WordPress admin can be isolated (behind a private subdomain, IP-restricted, basic-auth). The public-facing site is static or pre-rendered HTML served from a CDN: no PHP execution exposed to visitors, no plugin XSS reaching the front. Most automated WordPress attack vectors no longer apply.",
       },
       {
         q: "How long does a WordPress to headless migration take?",
@@ -120,7 +120,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
   return [
     {
       q: "C'est quoi le WordPress headless en termes simples ?",
-      a: "WordPress headless signifie que le back-end WordPress (base de données, admin, workflow éditorial) reste en place, mais qu'un front-end séparé — généralement Next.js — gère ce que voient les visiteurs. Les deux communiquent via une API (WPGraphQL ou REST). Les éditeurs gardent leur interface, le site public passe sur une stack moderne.",
+      a: "WordPress headless signifie que le back-end WordPress (base de données, admin, workflow éditorial) reste en place, mais qu'un front-end séparé, généralement Next.js, gère ce que voient les visiteurs. Les deux communiquent via une API (WPGraphQL ou REST). Les éditeurs gardent leur interface, le site public passe sur une stack moderne.",
     },
     {
       q: "Le WordPress headless vaut-il le coup pour un petit site ?",
@@ -132,19 +132,19 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
     },
     {
       q: "Le passage au headless casse-t-il le SEO ?",
-      a: "Non — bien fait, il l'améliore. Les pages sont pré-rendues (SSG/ISR), les Core Web Vitals progressent nettement, les données structurées et meta sont explicites. Le risque est pendant la migration : conserver chaque URL à l'identique, poser des redirects 301 pour toute slug modifiée, régénérer le sitemap.xml. Avec ces étapes respectées, le SEO progresse au lieu de chuter.",
+      a: "Non : bien fait, il l'améliore. Les pages sont pré-rendues (SSG/ISR), les Core Web Vitals progressent nettement, les données structurées et meta sont explicites. Le risque est pendant la migration : conserver chaque URL à l'identique, poser des redirects 301 pour toute slug modifiée, régénérer le sitemap.xml. Avec ces étapes respectées, le SEO progresse au lieu de chuter.",
     },
     {
       q: "Les éditeurs peuvent-ils garder Gutenberg / Elementor en headless ?",
-      a: "Gutenberg oui — son JSON de blocs est consommable et rendu par Next.js. Elementor et les page builders visuels qui produisent du HTML chargé en shortcodes posent problème car leur logique de rendu vit dans le thème WordPress. Migrer un site Elementor en headless implique généralement de reconstruire les gabarits côté front.",
+      a: "Gutenberg oui : son JSON de blocs est consommable et rendu par Next.js. Elementor et les page builders visuels qui produisent du HTML chargé en shortcodes posent problème car leur logique de rendu vit dans le thème WordPress. Migrer un site Elementor en headless implique généralement de reconstruire les gabarits côté front.",
     },
     {
-      q: "WPGraphQL ou API REST WordPress — laquelle choisir ?",
+      q: "WPGraphQL ou API REST WordPress : laquelle choisir ?",
       a: "WPGraphQL est recommandé pour les nouveaux projets headless : un seul endpoint, uniquement les champs demandés, ergonomie TypeScript bien meilleure dans Next.js. L'API REST native fonctionne toujours et reste parfois plus simple pour de très petits sites ou des intégrations ciblées, mais pour un vrai site en production, WPGraphQL est le défaut.",
     },
     {
       q: "Le WordPress headless est-il plus sécurisé que le classique ?",
-      a: "Oui, nettement. L'admin WordPress peut être isolée (sous-domaine privé, restriction IP, basic-auth). Le site public est du HTML statique ou pré-rendu servi par CDN — pas d'exécution PHP exposée aux visiteurs, pas de faille plugin atteignant le front. La majorité des vecteurs d'attaque automatisés contre WordPress ne s'appliquent plus.",
+      a: "Oui, nettement. L'admin WordPress peut être isolée (sous-domaine privé, restriction IP, basic-auth). Le site public est du HTML statique ou pré-rendu servi par CDN : pas d'exécution PHP exposée aux visiteurs, pas de faille plugin atteignant le front. La majorité des vecteurs d'attaque automatisés contre WordPress ne s'appliquent plus.",
     },
     {
       q: "Combien de temps prend une migration WordPress vers headless ?",
@@ -223,8 +223,8 @@ export default async function WordPressHeadlessPillarPage({
 
   // Définition extractable (paragraphe-réponse) — clé pour les citations LLM.
   const definition = isEn
-    ? "Headless WordPress is an architecture where WordPress keeps managing content in its admin and database, while a separate front-end — typically built with Next.js — fetches that content via an API (WPGraphQL or REST) and renders the public site. Editors keep their familiar workflow; visitors get a modern, fast, pre-rendered site."
-    : "Le WordPress headless est une architecture où WordPress conserve la gestion du contenu dans son admin et sa base de données, pendant qu'un front-end séparé — typiquement construit avec Next.js — récupère ce contenu via une API (WPGraphQL ou REST) et rend le site public. Les éditeurs gardent leur workflow habituel ; les visiteurs reçoivent un site moderne, rapide, pré-rendu.";
+    ? "Headless WordPress is an architecture where WordPress keeps managing content in its admin and database, while a separate front-end, typically built with Next.js, fetches that content via an API (WPGraphQL or REST) and renders the public site. Editors keep their familiar workflow; visitors get a modern, fast, pre-rendered site."
+    : "Le WordPress headless est une architecture où WordPress conserve la gestion du contenu dans son admin et sa base de données, pendant qu'un front-end séparé, typiquement construit avec Next.js, récupère ce contenu via une API (WPGraphQL ou REST) et rend le site public. Les éditeurs gardent leur workflow habituel ; les visiteurs reçoivent un site moderne, rapide, pré-rendu.";
 
   // Speakable cible le H1 et la définition — pour assistants vocaux et lecture IA.
   const speakableWebPage = {

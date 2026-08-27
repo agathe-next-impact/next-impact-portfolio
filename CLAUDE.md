@@ -75,10 +75,17 @@ les canaux de prospection (cold mail, LinkedIn, pré-audit). Il doit donc
 
 - `/audit-vitrine [page]` — audit complet structure + contenu d'une page
   (défaut : home). Voir `.claude/skills/audit-vitrine/SKILL.md`.
+- Agent `coherence-seo-geo` (`.claude/agents/coherence-seo-geo.md`) — met en
+  conformité SEO + GEO (metas, JSON-LD, FAQ, llms.txt, sitemap, parité FR/EN)
+  avec le contenu réel. Autonome, corrige lui-même, valide par un build.
 
 ## Workflow attendu
 
 1. Pour toute demande de refonte/contenu : d'abord `/audit-vitrine` sur la page
    concernée pour établir le réel, puis proposer les modifs.
 2. Préserver perf/SEO/a11y à chaque édition de code.
-3. Documenter les recommandations en markdown sobre (pas de sur-formatage).
+3. **À l'issue de toute modification éditoriale importante** (refonte de page,
+   changement d'offre ou de prix, réécriture de contenus, ajout/suppression de
+   page) : lancer l'agent `coherence-seo-geo` pour remettre en conformité les
+   données SEO/GEO avec le nouveau contenu.
+4. Documenter les recommandations en markdown sobre (pas de sur-formatage).

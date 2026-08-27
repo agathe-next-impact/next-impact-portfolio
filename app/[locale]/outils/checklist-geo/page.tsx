@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Checklist GEO - 24 actions pour être cité par ChatGPT et Perplexity",
     description:
       locale === "en"
-        ? "A free, actionable GEO checklist for SMBs: 24 concrete actions across 4 priorities — AI crawler access, answer pages, structure and markup, external authority. Checkable online, downloadable as PDF, no email required."
-        : "Checklist GEO actionnable et gratuite pour PME : 24 actions concrètes sur 4 chantiers — accès des robots IA, pages-réponses, structure et balisage, autorité externe. Cochable en ligne, téléchargeable en PDF, sans email.",
+        ? "A free, actionable GEO checklist for SMBs: 24 concrete actions across 4 priorities (AI crawler access, answer pages, structure and markup, external authority). Checkable online, downloadable as PDF, no email required."
+        : "Checklist GEO actionnable et gratuite pour PME : 24 actions concrètes sur 4 chantiers (accès des robots IA, pages-réponses, structure et balisage, autorité externe). Cochable en ligne, téléchargeable en PDF, sans email.",
     path: "/outils/checklist-geo",
     keywords:
       locale === "en"
@@ -70,8 +70,8 @@ export default async function ChecklistGeoPage({
         titre={isEn ? "The GEO checklist" : "La checklist GEO"}
         sousTitre={
           isEn
-            ? "24 concrete actions to get cited by AI engines, grouped by the 4 GEO priorities for an SMB — checkable online, downloadable as PDF."
-            : "24 actions concrètes pour être cité par les moteurs IA, groupées par les 4 chantiers GEO d'une PME — cochable en ligne, téléchargeable en PDF."
+            ? "24 concrete actions to get cited by AI engines, grouped by the 4 GEO priorities for an SMB: checkable online, downloadable as PDF."
+            : "24 actions concrètes pour être cité par les moteurs IA, groupées par les 4 chantiers GEO d'une PME : cochable en ligne, téléchargeable en PDF."
         }
       >
         <BlueprintSection

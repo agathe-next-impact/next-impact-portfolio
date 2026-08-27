@@ -170,6 +170,10 @@ export async function GET() {
       // alternates hreflang.
       { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Pages partenaires — FR uniquement (locale EN en noindex tant que la
+      // traduction n'existe pas), donc sans alternates hreflang.
+      { path: "apporteurs", source: "app/[locale]/apporteurs/page.tsx", changefreq: "monthly", priority: 0.5 },
+      { path: "agences", source: "app/[locale]/agences/page.tsx", changefreq: "monthly", priority: 0.5 },
     ] as const;
 
     const staticUrls = await Promise.all(

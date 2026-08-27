@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Prototype IA : jetable ou maintenable ? - Faut-il le construire ?",
     description:
       locale === "en"
-        ? "You vibe-coded something with AI — now what? 9 checks on users, data, security and lifespan to know whether to keep iterating, scope it, or rebuild it properly for production."
-        : "Vous avez vibe-codé un truc avec l'IA — et maintenant ? 9 vérifications sur les utilisateurs, les données, la sécurité et la durée de vie pour savoir s'il faut continuer, cadrer ou reconstruire proprement.",
+        ? "You vibe-coded something with AI: now what? 9 checks on users, data, security and lifespan to know whether to keep iterating, scope it, or rebuild it properly for production."
+        : "Vous avez vibe-codé un truc avec l'IA : et maintenant ? 9 vérifications sur les utilisateurs, les données, la sécurité et la durée de vie pour savoir s'il faut continuer, cadrer ou reconstruire proprement.",
     path: "/outils/prototype-ia",
     keywords:
       locale === "en"
@@ -70,8 +70,8 @@ export default async function PrototypeIaPage({
         titre={isEn ? "AI prototype: throwaway or maintainable?" : "Prototype IA : jetable ou maintenable ?"}
         sousTitre={
           isEn
-            ? "AI can code fast — but should you build? 9 checks and a clear signal: keep the prototype, scope it, or rebuild it for production."
-            : "L'IA code vite — mais faut-il construire ? 9 vérifications et un signal clair : garder le prototype, le cadrer, ou le reconstruire pour la production."
+            ? "AI can code fast, but should you build? 9 checks and a clear signal: keep the prototype, scope it, or rebuild it for production."
+            : "L'IA code vite, mais faut-il construire ? 9 vérifications et un signal clair : garder le prototype, le cadrer, ou le reconstruire pour la production."
         }
       >
         <BlueprintSection

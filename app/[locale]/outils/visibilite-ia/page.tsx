@@ -74,8 +74,8 @@ export default async function VisibiliteIaPage({
         }
         sousTitre={
           isEn
-            ? "ChatGPT, Perplexity, AI Overviews: 10 questions, a score on 4 axes and your priority actions — useful whatever the result."
-            : "ChatGPT, Perplexity, AI Overviews : 10 questions, un score sur 4 axes et vos actions prioritaires — utile quel que soit le résultat."
+            ? "ChatGPT, Perplexity, AI Overviews: 10 questions, a score on 4 axes and your priority actions, useful whatever the result."
+            : "ChatGPT, Perplexity, AI Overviews : 10 questions, un score sur 4 axes et vos actions prioritaires, utile quel que soit le résultat."
         }
       >
         <BlueprintSection

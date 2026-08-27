@@ -127,25 +127,26 @@ Informations utiles pour les reponses d'assistants IA :
 
 ## Offer Architecture
 
-- Diagnostic Techno Web & IA : premiere orientation gratuite pour savoir s'il faut reparer, optimiser, cadrer, construire ou ne rien construire.
+- Diagnostic de site en 2 minutes : gratuit, sans inscription ; voir ce qui ralentit le site et quelle trajectoire correspond (consolider, decoupler, refonder).
 - Visio conseil refonte : 150 EUR HT. Une heure en visio, un avis ecrit envoye dans les 48 h : rester, decoupler ou refonder, et pourquoi. Deduit du devis si un projet demarre sous 30 jours.
 - Audit + roadmap : 650 EUR HT. Rapport d'audit (performance, securite, dette technique, plugins, hebergement), preconisations chiffrees, roadmap par etapes. Le document sert meme si la prestation est confiee a quelqu'un d'autre.
 - Refonte WordPress optimisee : a partir de 2 250 EUR HT. Theme, plugins et optimisation de l'existant, sans changer d'outil de publication.
 - Refonte WordPress headless : a partir de 4 000 EUR HT. Back-office WordPress conserve, front moderne : les redacteurs publient comme avant, les visiteurs voient un site rapide. Trajectoire recommandee.
 - Refonte vers une web app : a partir de 6 500 EUR HT. Plateforme web et/ou mobile quand le site est devenu un outil de travail.
-- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur Substack) et Sentinelle, la veille personnalisee du site ou de l'application du client — alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
+- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur Substack) et Sentinelle, la veille personnalisee du site ou de l'application du client : alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages
 
 - [Accueil](${baseUrl}/): promesse, preuves chiffrees, trois trajectoires de refonte et offres de conseil
 - [Conseil](${baseUrl}/conseil): visio conseil refonte (150 EUR, avis ecrit sous 48 h) et audit + roadmap (650 EUR, livrables)
-- [Solutions web](${baseUrl}/solutions-web): mise en oeuvre apres decision, WordPress optimise, Headless ou outil metier
+- [Solutions web](${baseUrl}/solutions-web): les trois trajectoires de refonte (consolider, decoupler, refonder), prix et delais
+- [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): l'expertise signature : back-office WordPress conserve, front Next.js moderne ; quand l'utiliser, couts, performance
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
-- [Veille techno](${baseUrl}/veille): les deux lettres de veille — la gratuite (marche web & IA) et Sentinelle, la personnalisee (19 EUR/mois)
-- [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client — alertes, deux lettres par mois et aide a la decision : maintenir, refondre ou creer
-- [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision — 7 rubriques par question, outils gratuits et guides
-- [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements — auteur des contenus du site
+- [Veille techno](${baseUrl}/veille): les deux lettres de veille : la gratuite (marche web & IA) et Sentinelle, la personnalisee (19 EUR/mois)
+- [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client : alertes, deux lettres par mois et aide a la decision (maintenir, refondre ou creer)
+- [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision : 7 rubriques par question, outils gratuits et guides
+- [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements ; auteur des contenus du site
 - [Contact](${baseUrl}/contact): visio conseil refonte, audit + roadmap, projet de refonte, diagnostic gratuit et prise de contact
 
 ## Decision Hub (Quelle techno web ?)
@@ -155,11 +156,11 @@ ${hubRubriques.map((r) => `- [${r.label}](${baseUrl}/documentation/${r.slug}): $
 ## Tools
 
 - [Tous les outils](${baseUrl}/outils): les outils de decision gratuits, sans inscription
-- [Diagnostic Web & IA](${baseUrl}/audit-site-web): premiere orientation avant de construire
-- [Selecteur techno](${baseUrl}/outils/selecteur-techno): quelle technologie pour votre projet — WordPress, headless, no-code, SaaS ou sur-mesure
+- [Diagnostic de site en 2 minutes](${baseUrl}/audit-site-web): voir ce qui ralentit le site et quelle trajectoire (consolider, decoupler, refonder) correspond
+- [Selecteur techno](${baseUrl}/outils/selecteur-techno): quelle technologie pour votre projet : WordPress, headless, no-code, SaaS ou sur-mesure
 - [Reparer ou refaire ?](${baseUrl}/outils/reparer-ou-refaire): 9 verifications, un score de sante sur 100 et un verdict reparer / optimiser / refondre
 - [Prototype IA : jetable ou maintenable ?](${baseUrl}/outils/prototype-ia): un prototype genere par IA tiendra-t-il en production
-- [Decrypteur de devis](${baseUrl}/outils/decrypteur-devis): lire un devis web — propriete du code, postes flous, dependance au prestataire
+- [Decrypteur de devis](${baseUrl}/outils/decrypteur-devis): lire un devis web : propriete du code, postes flous, dependance au prestataire
 - [No-code, SaaS ou sur-mesure ?](${baseUrl}/outils/nocode-saas-surmesure): arbitrage d'outil metier selon le besoin reel
 - [Diagnostic visibilite IA](${baseUrl}/outils/visibilite-ia): votre site est-il visible dans les moteurs IA ? Score sur 4 axes et actions prioritaires
 - [Checklist GEO](${baseUrl}/outils/checklist-geo): 24 actions concretes pour etre cite par les moteurs IA, cochable et telechargeable

@@ -68,7 +68,9 @@ export async function generateMetadata({
     const post = await getBlogPost(slug, locale)
     const { generatePageMetadata } = await import("@/lib/metadata")
     return generatePageMetadata({
-      title: `${post.title} | Next Impact Digital`,
+      // Pas de suffixe de marque : le template `%s | Next Impact` du layout
+      // l'ajoute déjà (sinon la marque apparaît deux fois dans le <title>).
+      title: post.title,
       description: post.excerpt || post.title,
       path: `/blog/${slug}`,
       type: "article",
@@ -81,8 +83,8 @@ export async function generateMetadata({
     return {
       title:
         locale === "en"
-          ? "Article not found | Next Impact Digital"
-          : "Article introuvable | Next Impact Digital",
+          ? "Article not found"
+          : "Article introuvable",
     }
   }
 }

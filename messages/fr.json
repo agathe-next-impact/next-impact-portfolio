@@ -197,25 +197,25 @@
     "breadcrumbSpecs": "Cahier des charges"
   },
   "toolsPage": {
-    "metaTitle": "Boîte à outils — Sélecteur techno web & IA et cadrage",
-    "metaDescription": "Des outils gratuits pour évaluer, cadrer et préparer une décision web : diagnostic Web & IA, sélecteur techno, opportunité PWA et cahier des charges.",
+    "metaTitle": "Boîte à outils : sélecteur techno web & IA et cadrage",
+    "metaDescription": "Des outils gratuits pour décider avant de construire : sélecteur techno, diagnostic de site en 2 minutes, visibilité IA, checklist GEO, décrypteur de devis et cahier des charges.",
     "title": "Boîte à outils",
     "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
     "breadcrumbHome": "Accueil",
     "breadcrumbTools": "Outils",
     "backToTools": "Retour aux outils",
-    "collectionName": "Boîte à outils — Sélecteur techno web & IA et cadrage",
+    "collectionName": "Boîte à outils : sélecteur techno web & IA et cadrage",
     "collectionDescription": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter."
   },
   "benchmarkingPage": {
-    "metaTitle": "Benchmarking concurrentiel — Comparez votre site aux leaders",
+    "metaTitle": "Benchmarking concurrentiel : comparez votre site aux leaders",
     "metaDescription": "Mesurez les performances réelles de votre site face à vos concurrents directs via Google PageSpeed. Audit Core Web Vitals et analyse concurrentielle gratuite.",
     "title": "Benchmarking concurrentiel",
     "subtitle": "Mesurez les performances réelles de votre site face à vos concurrents directs via Google PageSpeed.",
     "breadcrumbBenchmarking": "Benchmarking"
   },
   "roiSimulatorPage": {
-    "metaTitle": "Simulateur de ROI — Performance web & migration headless",
+    "metaTitle": "Simulateur de ROI : performance web & migration headless",
     "metaDescription": "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires générés par une migration headless.",
     "title": "Simulateur de ROI — Performance web",
     "subtitle": "Calculez le manque à gagner dû à un site lent et projetez les revenus supplémentaires générés par une migration headless.",
@@ -228,13 +228,13 @@
     "breadcrumbAudit": "Audit de site"
   },
   "demoPage": {
-    "metaTitle": "Démos — Sites web, web apps et applications mobiles",
+    "metaTitle": "Démos : sites web, web apps et applications mobiles",
     "metaDescription": "Découvrez en vidéo les réalisations Next Impact : marketplace B2B Next.js + PostgreSQL (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js (média, plateforme citoyenne, billetterie).",
     "breadcrumbHome": "Accueil",
     "breadcrumbDemo": "Démo"
   },
   "solutionsPage": {
-    "metaTitle": "Solutions Web & IA — choisir avant de construire",
+    "metaTitle": "Solutions Web & IA : choisir avant de construire",
     "metaDescription": "Comparez les options utiles selon votre besoin : WordPress, no-code, IA coding, SaaS, Headless, outil métier ou absence de développement.",
     "title": "Solutions Web & IA",
     "subtitle": "Choisissez le bon niveau de complexité avant d'investir.",
@@ -243,18 +243,18 @@
   },
   "documentationPage": {
     "metaTitle": "Quelle techno web ? Comprendre et choisir à l'heure de l'IA",
-    "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides — WordPress, no-code, Headless ou sur-mesure.",
+    "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides. WordPress, no-code, Headless ou sur-mesure.",
     "hubTitle": "Quelle techno web ?",
     "hubSubtitle": "Le centre de décision pour choisir la bonne technologie web à l'heure de l'IA — comprendre vos options avant de construire, refaire, réparer ou acheter.",
     "breadcrumbHome": "Accueil",
     "breadcrumbDocs": "Documentation"
   },
   "blogPage": {
-    "metaTitle": "Blog Web & IA — retours d'expérience, comparatifs et coûts | Next Impact",
-    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure — coûts réels et pièges à éviter."
+    "metaTitle": "Blog Web & IA : retours d'expérience, comparatifs et coûts",
+    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure. Coûts réels et pièges à éviter."
   },
   "articlesPage": {
-    "metaTitle": "Articles & comparatifs Web, IA et architecture | Next Impact",
+    "metaTitle": "Articles & comparatifs Web, IA et architecture",
     "metaDescription": "Analyses pour décider quoi construire à l'heure de l'IA : architecture, maintenabilité, coût futur, WordPress, no-code, Headless et sur-mesure."
   },
   "realisations": {
@@ -269,7 +269,7 @@
   "caseStudiesPage": {
     "breadcrumbHome": "Accueil",
     "breadcrumbCaseStudies": "Études de cas",
-    "collectionName": "Études de cas — décisions techno et réalisations",
+    "collectionName": "Études de cas : décisions techno et réalisations",
     "collectionDescription": "Découvrez des projets où la techno a été choisie selon le besoin : WordPress, Headless, PWA, outil métier ou solution légère."
   },
   "caseStudyDetail": {
@@ -414,8 +414,8 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "À propos — Agathe Karinthi-Martin, conseil techno web pluridisciplinaire | Next Impact",
-    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles — technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
+    "metaTitle": "À propos : Agathe Karinthi-Martin, conseil techno web pluridisciplinaire",
+    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles : technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "hero": {

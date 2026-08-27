@@ -71,6 +71,7 @@ export const siteConfig = {
   keywords: [
     "WordPress",
     "Refonte site WordPress",
+    "Refonte WordPress headless",
     "Conseil techno web",
     "IA coding",
     "No-code",
@@ -85,8 +86,6 @@ export const siteConfig = {
     "Web app sur-mesure",
     "Application mobile",
     "PWA",
-    "Marketplace",
-    "PostgreSQL",
     "CMS Headless",
   ],
   authors: [{ name: "Agathe Karinthi-Martin", url: "https://www.next-impact.digital" }],
@@ -296,36 +295,40 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   },
 };
 
+// Aligné sur le namespace `contactPage` des messages (source vive de la page
+// /contact) : cinq sujets du catalogue, aucune offre disparue.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact — question techno, devis, prototype IA ou mise en œuvre",
+    title: "Contact : visio conseil, audit + roadmap ou projet de refonte",
     description:
-      "Contactez Next Impact pour choisir une techno web, faire relire un devis ou prototype IA, cadrer un projet ou construire si nécessaire.",
+      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
     keywords: [
       "contact conseil techno web",
-      "second avis devis web",
-      "prototype IA maintenable",
-      "diagnostic Web IA",
+      "visio conseil refonte",
+      "audit et roadmap site web",
+      "contact refonte WordPress",
+      "diagnostic gratuit site web",
     ],
   },
   en: {
-    title: "Contact — tech question, quote, AI prototype or implementation",
+    title: "Contact: advisory call, audit + roadmap or redesign project",
     description:
-      "Contact Next Impact to choose a web technology, review a quote or AI prototype, scope a project or build if needed.",
+      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), WordPress, headless or web app redesign project, or a free diagnostic of your site.",
     keywords: [
       "contact web technology advice",
-      "web quote second opinion",
-      "maintainable AI prototype",
-      "Web AI diagnostic",
+      "redesign advisory call",
+      "website audit and roadmap",
+      "WordPress redesign contact",
+      "free website diagnostic",
     ],
   },
 };
 
 const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Études de cas — Des projets livrés, des choix expliqués",
+    title: "Études de cas : des projets livrés, des choix expliqués",
     description:
-      "Sites WordPress, sites Headless, plateformes métier et outils terrain : chaque étude de cas explique la décision — pourquoi cette techno, ce budget, ce délai — et les résultats mesurés.",
+      "Sites WordPress, sites Headless, plateformes métier et outils terrain : chaque étude de cas explique la décision (techno, budget, délai) et les résultats mesurés.",
     keywords: [
       "études de cas site web",
       "portfolio site web",
@@ -335,9 +338,9 @@ const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Case studies — Projects delivered, choices explained",
+    title: "Case studies: projects delivered, choices explained",
     description:
-      "WordPress sites, Headless sites, business platforms and field tools: each case study explains the decision — why this tech, this budget, this timeline — and the measured results.",
+      "WordPress sites, Headless sites, business platforms and field tools: each case study explains the decision (tech, budget, timeline) and the measured results.",
     keywords: [
       "website case studies",
       "website portfolio",
@@ -350,7 +353,7 @@ const CASE_STUDIES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const DOCUMENTATION_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Ressources — choisir sa techno web à l'heure de l'IA",
+    title: "Ressources : choisir sa techno web à l'heure de l'IA",
     description:
       "Guides pour choisir entre WordPress, no-code, IA coding, SaaS, Headless ou sur-mesure : architecture, SEO, maintenance, coût futur et cadrage.",
     keywords: [
@@ -361,7 +364,7 @@ const DOCUMENTATION_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Resources — choose web technology in the age of AI",
+    title: "Resources: choose web technology in the age of AI",
     description:
       "Guides to choose between WordPress, no-code, AI coding, SaaS, Headless or custom: architecture, SEO, maintenance, future cost and scoping.",
     keywords: [
@@ -396,21 +399,22 @@ export const pageMetadata = {
     });
   },
 
+  // Aligné sur le namespace `auditPage` des messages (source vive de la page).
   audit: (locale: Locale = routing.defaultLocale): Metadata =>
     generatePageMetadata({
       title:
         locale === "en"
-          ? "Free Web & AI diagnostic"
-          : "Diagnostic Web & IA gratuit",
+          ? "See what slows your site down in 2 minutes"
+          : "Voyez ce qui ralentit votre site en 2 minutes",
       description:
         locale === "en"
-          ? "Get a first direction before building: fix, optimize, use SaaS, no-code, WordPress, Headless or custom development."
-          : "Obtenez une première orientation avant de construire : réparer, optimiser, utiliser un SaaS, du no-code, WordPress, Headless ou du sur-mesure.",
+          ? "One address, one report, no sign-up: see what slows your site down and which of the three trajectories (consolidate, decouple, rebuild) matches your situation."
+          : "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
       path: "/audit-site-web",
       keywords:
         locale === "en"
-          ? ["Web AI diagnostic", "choose web technology", "AI coding", "no-code"]
-          : ["diagnostic Web IA", "choisir technologie web", "IA coding", "no-code"],
+          ? ["free website diagnostic", "slow WordPress site", "website audit", "redesign trajectory"]
+          : ["diagnostic site web gratuit", "site WordPress lent", "audit site web", "trajectoire de refonte"],
       locale,
     }),
 
