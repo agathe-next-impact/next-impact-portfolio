@@ -21,7 +21,6 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import ConseilModal, { openConseilModal } from "@/components/ui/conseil-modal";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 import { RadialGauge } from "@/components/visuals/radial-gauge";
@@ -452,10 +451,7 @@ export default function DecrypteurDevis() {
             </Link>
             <button
               type="button"
-              onClick={() => {
-                reset();
-                openConseilModal();
-              }}
+              onClick={() => reset()}
               className={BTN_GHOST}
             >
               <RotateCcw size={13} />
@@ -507,8 +503,6 @@ export default function DecrypteurDevis() {
           <ArrowRight size={14} />
         </button>
       </form>
-      {/* Montee a la racine : elle doit survivre au reset du bouton « Refaire ». */}
-      <ConseilModal source="decrypteur-devis" armed={submitted} />
     </Reveal>
   );
 }

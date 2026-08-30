@@ -36,17 +36,13 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
 
   return (
     <div>
-      {/* Héros éditorial (harmonisé /veille) — bande blanche : les tokens sont
-          surchargés localement avec les valeurs du thème clair, le texte et les
-          rails s'inversent donc sans classe conditionnelle. Les arcs animés
-          (NeonArcs) sont conservés ; AuroraGlow, halo calibré pour fond sombre,
-          n'aurait aucun rendu sur blanc. */}
+      {/* Héros éditorial (harmonisé /veille) — tokens standards, theme-aware
+          comme le reste du site (fond sombre par défaut, clair via .light). */}
       <PageHero
         index="№ 01"
         kicker={isEn ? "Case studies" : "Études de cas"}
         title={variant.titre}
         description={variant.sousTitre}
-        className="[--obsidian:0_0%_100%] [--foreground:0_0%_5.5%] [--mid-gray:0_0%_49%] [--dark-gray:0_0%_86%] [--accent-2:223_72%_48%]"
         backdrop={
           <div className="absolute inset-0 opacity-50">
             <NeonArcs />

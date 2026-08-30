@@ -15,8 +15,6 @@ import { ArrowRight, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { getAuditPageContent } from "@/lib/audit-page-content";
 import { runQuickAudit } from "@/lib/audit/quick-audit";
-import ConseilModal from "@/components/ui/conseil-modal";
-import { useSeen } from "@/components/ui/use-seen";
 import { runPerfAudit } from "@/lib/audit/perf-audit";
 import type { AuditObjective, QuickAuditResult } from "@/lib/audit/quick-audit-types";
 import { track, trackStackRecommended } from "@/lib/track";
@@ -54,13 +52,6 @@ export default function AuditExperience() {
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [emailState, setEmailState] = useState<EmailState>("idle");
-
-  // La popup conseil ne s'arme qu'une fois l'audit gratuit proposé — cette
-  // capture est l'entrée froide, une offre payante par-dessus la
-  // cannibaliserait — et seulement sur les verdicts qui posent une vraie
-  // question de techno (B et C). A = rien à arbitrer, D = passe par /contact.
-  const [optinRef, optinSeen] = useSeen<HTMLDivElement>();
-  const arbitrageVerdict = quick?.verdict === "B" || quick?.verdict === "C";
 
   const urlStarted = useRef(false);
   const pageViewed = useRef(false);
@@ -278,7 +269,7 @@ export default function AuditExperience() {
           </div>
 
           {/* Étape 3 : opt-in audit gratuit réalisé par Agathe */}
-          <div ref={optinRef} className="px-6 py-8 lg:px-8">
+          <div className="px-6 py-8 lg:px-8">
             {emailState === "sent" ? (
               <div className="flex flex-col gap-4">
                 <p className="flex items-center gap-2 text-lg font-light tracking-tight text-foreground">
@@ -397,8 +388,6 @@ export default function AuditExperience() {
         </div>
       )}
 
-      {/* Montée à la racine : elle doit survivre au reset du formulaire. */}
-      <ConseilModal source="audit-site-web" armed={optinSeen && arbitrageVerdict} />
     </div>
   );
 }

@@ -21,12 +21,9 @@ import {
   HERO_BTN_SECONDARY,
 } from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
-import ConseilModal from "@/components/ui/conseil-modal";
-import { useSeen } from "@/components/ui/use-seen";
 import { BlueprintGrid } from "@/components/visuals/blueprint-grid";
 
 export default function ServicesClient() {
-  const [pricingRef, pricingSeen] = useSeen<HTMLDivElement>();
   const { profileId } = useDocumentationMode();
   const locale = useLocale() as Locale;
   const servicesVariants = getServicesPageVariants(locale);
@@ -139,13 +136,6 @@ export default function ServicesClient() {
 
       {/* § 05 — Tableau comparatif */}
       <ServicesComparisonTable />
-
-      {/* Le visiteur a vu les prix et le comparatif : c'est le moment où se joue
-          l'arbitrage entre trois paliers séparés par plusieurs milliers d'euros.
-          La visio à 150 €, seul palier crédité, est l'assurance contre le
-          mauvais choix — d'où l'armement de la popup ici et pas plus haut. */}
-      <div ref={pricingRef} aria-hidden="true" className="h-px w-full" />
-      <ConseilModal source="solutions-web" armed={pricingSeen} />
 
       <Separator />
 

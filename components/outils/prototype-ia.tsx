@@ -20,7 +20,6 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import ConseilModal, { openConseilModal } from "@/components/ui/conseil-modal";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
 
@@ -454,10 +453,7 @@ export default function PrototypeIa() {
             </Link>
             <button
               type="button"
-              onClick={() => {
-                reset();
-                openConseilModal();
-              }}
+              onClick={() => reset()}
               className={BTN_GHOST}
             >
               <RotateCcw size={13} />
@@ -509,8 +505,6 @@ export default function PrototypeIa() {
           <ArrowRight size={14} />
         </button>
       </form>
-      {/* Montee a la racine : elle doit survivre au reset du bouton « Refaire ». */}
-      <ConseilModal source="prototype-ia" armed={submitted} />
     </Reveal>
   );
 }

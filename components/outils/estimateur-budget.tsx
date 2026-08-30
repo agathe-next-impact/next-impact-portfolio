@@ -10,7 +10,6 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import ConseilModal from "@/components/ui/conseil-modal";
 
 type ProjectType = "site-classique" | "site-headless" | "web-app" | "app-mobile";
 type Roles = "1" | "2-3" | "4+";
@@ -370,7 +369,6 @@ export default function EstimateurBudget() {
               gap: 20,
             }}
           >
-            <ConseilModal source="estimateur-budget" />
             {/* Result header */}
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <CheckCircle2

@@ -22,7 +22,6 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import ConseilModal from "@/components/ui/conseil-modal";
 import { Reveal } from "@/components/ui/reveal";
 import { track } from "@/lib/track";
 import {
@@ -112,7 +111,6 @@ export default function ChecklistGeo() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const [checked, setChecked] = useState<Set<string>>(new Set());
-  const [downloaded, setDownloaded] = useState(false);
 
   // Reprise de l'état coché (après hydratation, pour ne pas désynchroniser le SSR).
   useEffect(() => {
@@ -183,13 +181,8 @@ export default function ChecklistGeo() {
       // Nettoyage différé : la boîte de dialogue lit le document de l'iframe.
       window.setTimeout(() => iframe.remove(), 60_000);
     }, 80);
-    setDownloaded(true);
     track("checklist_geo_download", { done: progress.done, pct: progress.pct });
   }, [checked, isEn, progress.done, progress.pct]);
-
-  // Preuve de valeur d'abord : la modale n'est montée qu'après un vrai
-  // engagement (téléchargement, ou au moins 3 actions cochées).
-  const engaged = downloaded || progress.done >= 3;
 
   return (
     <Reveal className="w-full border border-dark-gray bg-obsidian">
@@ -364,7 +357,6 @@ export default function ChecklistGeo() {
             <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
-        {engaged && <ConseilModal source="checklist-geo" />}
       </div>
     </Reveal>
   );

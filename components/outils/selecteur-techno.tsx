@@ -14,7 +14,6 @@ import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { StepTransition } from "@/components/ui/step-transition";
-import ConseilModal, { openConseilModal } from "@/components/ui/conseil-modal";
 
 /* ─── Familles de solution (sorties possibles) ───────────────────────────── */
 
@@ -455,10 +454,7 @@ export default function SelecteurTechno() {
             )}
             <button
               type="button"
-              onClick={() => {
-                reset();
-                openConseilModal();
-              }}
+              onClick={() => reset()}
               className={BTN_GHOST}
             >
               <RotateCcw size={13} />
@@ -510,8 +506,6 @@ export default function SelecteurTechno() {
           <ArrowRight size={14} />
         </button>
       </form>
-      {/* Montee a la racine : elle doit survivre au reset du bouton « Refaire ». */}
-      <ConseilModal source="selecteur-techno" armed={submitted} />
     </Reveal>
   );
 }
