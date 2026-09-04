@@ -1,0 +1,103 @@
+---
+title: "Créer une plateforme de réservation : quelles briques faut-il vraiment ?"
+description: "Créneaux, comptes, paiement, rappels, admin : les briques d'une plateforme de réservation, celles qui sont indispensables et celles qui attendent. Widget, SaaS ou sur-mesure : comment trancher."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 15
+enBref:
+  - "Une plateforme de réservation repose sur cinq briques : un calendrier de disponibilités, des comptes ou des coordonnées vérifiées, une confirmation automatique, des rappels, et une interface d'administration pour gérer les créneaux et les annulations."
+  - "Le paiement en ligne n'est pas une brique obligatoire : beaucoup de réservations fonctionnent sans encaissement, et l'ajouter change le niveau de complexité et de responsabilité du projet."
+  - "Trois voies existent pour construire : un widget de réservation intégré au site, un SaaS spécialisé loué à l'abonnement, ou une plateforme sur-mesure quand la logique de réservation est spécifique au métier (ressources multiples, validation humaine, tarifs variables)."
+faq:
+  - question: "Un module de réservation suffit-il sur un site WordPress ?"
+    answer: "Oui pour un besoin standard : des créneaux réguliers, une ressource unique (une salle, un praticien), une confirmation par e-mail. Des extensions et des widgets externes le font bien. Le module montre ses limites quand la réservation dépend de règles métier : plusieurs ressources liées, validation manuelle, tarifs qui varient selon le profil ou la période."
+  - question: "Faut-il encaisser le paiement à la réservation ?"
+    answer: "Ce n'est pas une obligation technique, c'est une décision métier. L'encaissement (ou un acompte) réduit fortement les absences, mais il ajoute la gestion des remboursements, des litiges et de la conformité bancaire. Beaucoup de plateformes démarrent avec une réservation sans paiement et l'ajoutent une fois le flux validé."
+  - question: "Quand un SaaS de réservation ne suffit-il plus ?"
+    answer: "Quand vos règles ne rentrent plus dans ses cases : ressources dépendantes les unes des autres, circuits de validation, tarification spécifique, ou besoin d'intégrer la réservation à vos autres outils (CRM, paiement, e-mails). À ce stade, le contournement permanent du SaaS coûte plus cher en temps qu'une plateforme conçue pour vos règles."
+  - question: "Combien de temps pour mettre en ligne une plateforme de réservation sur-mesure ?"
+    answer: "Un projet cadré tient dans le phasage classique d'une web app : un cadrage, une première version centrée sur le flux de réservation, puis les briques secondaires (paiement, statistiques, intégrations). Le détail est décrit dans Délai et jalons d'une web app."
+---
+
+Réserver une salle, un créneau de visite, un atelier, une consultation : la demande paraît uniforme, mais derrière « un système de réservation » se cachent des projets qui vont du widget gratuit à la plateforme métier complète. Avant de comparer des devis ou des abonnements, il faut savoir de quelles briques votre réservation a besoin, et lesquelles peuvent attendre.
+
+## Les cinq briques d'une réservation en ligne
+
+**Toute réservation en ligne, du créneau de coiffeur à la location de matériel, combine les mêmes cinq briques ; leur niveau d'exigence fait le budget.**
+
+1. **Le calendrier de disponibilités.** La brique centrale : quels créneaux existent, lesquels sont pris, à quelle vitesse l'information se met à jour. Une seule ressource (une salle) est un cas standard ; plusieurs ressources liées (une salle + un animateur + du matériel) est un cas métier.
+2. **L'identification.** Au minimum des coordonnées vérifiées (e-mail confirmé) ; au maximum de vrais [comptes utilisateurs](/documentation/applications-web-mobile/comptes-utilisateurs-et-securite) avec historique et préférences. Créer des comptes n'est justifié que si vos usagers reviennent.
+3. **La confirmation.** Automatique et immédiate (le créneau est bloqué dès la validation) ou soumise à validation humaine (une demande, puis un accord). Ce choix structure tout le flux.
+4. **Les rappels et annulations.** E-mails de rappel, conditions d'annulation, liste d'attente éventuelle. C'est la brique qui réduit les absences, souvent négligée au cadrage.
+5. **L'administration.** Votre équipe doit voir le planning, bloquer des créneaux, gérer les exceptions sans appeler un prestataire. C'est le rôle d'une [interface d'administration autonome](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure).
+
+<DataTable caption="Briques d'une plateforme de réservation : indispensables et optionnelles">
+
+| Brique | Indispensable dès le départ | Peut attendre une V2 |
+|---|---|---|
+| Calendrier de disponibilités | Oui | |
+| Confirmation automatique par e-mail | Oui | |
+| Interface d'administration du planning | Oui | |
+| Rappels avant l'échéance | Recommandé | Selon le taux d'absence |
+| Comptes utilisateurs avec historique | | Oui, si les usagers reviennent |
+| Paiement ou acompte en ligne | | Oui, décision métier |
+| Liste d'attente, tarifs variables, statistiques | | Oui |
+
+</DataTable>
+
+## Widget, SaaS ou plateforme sur-mesure
+
+**Trois voies pour construire, et un critère principal : vos règles de réservation rentrent-elles dans un standard ?**
+
+- **Le widget intégré au site.** Un service externe affiche son calendrier dans une page de votre site. Mise en place rapide, coût faible. Pertinent pour une ressource unique et des règles standard ; l'apparence et le parcours restent ceux de l'outil, pas les vôtres.
+- **Le SaaS spécialisé** (outil du marché loué à l'abonnement). Il gère planning, rappels et paiements selon son standard. Pertinent tant que vos règles collent aux siennes ; la grille complète d'arbitrage est dans [Plateforme métier sur-mesure vs SaaS générique](/documentation/applications-web-mobile/plateforme-metier-vs-saas).
+- **La plateforme sur-mesure.** Une [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app) conçue autour de vos règles : ressources multiples et dépendantes, circuits de validation, tarification selon le profil, intégration à vos autres outils. Point d'entrée chez Next Impact : à partir de 6 500 € HT, dans le cadre d'une [refonte vers une web app](/solutions-web).
+
+Le signal qui fait basculer vers le sur-mesure n'est pas le volume, c'est la spécificité : si vous passez plus de temps à contourner votre outil de réservation qu'à vous en servir, vos règles ont dépassé son standard.
+
+## Le paiement change la nature du projet
+
+**Encaisser à la réservation est une décision métier avant d'être une brique technique.**
+
+Un acompte ou un paiement complet à la réservation réduit fortement les absences ; c'est son grand argument. En contrepartie, il ajoute au projet : l'intégration d'un prestataire de paiement (Stripe est la référence du secteur : vos encaissements passent par un service bancaire certifié, jamais par votre serveur), la gestion des remboursements et des conditions d'annulation, et une exigence de sécurité renforcée sur toute la chaîne.
+
+La démarche saine consiste à trancher la question à l'étape de cadrage, puis, si le paiement n'est pas indispensable au lancement, à le placer en deuxième version : le flux de réservation se valide très bien sans lui.
+
+## Les pièges classiques du cadrage
+
+**Quatre points font déraper les projets de réservation, tous prévisibles au cadrage.**
+
+- **La double réservation.** Deux personnes réservent le même créneau au même moment. La plateforme doit verrouiller le créneau à la validation ; un cas d'école qui distingue un système sérieux d'un formulaire déguisé.
+- **Les exceptions du planning.** Jours fériés, fermetures, créneaux bloqués à la dernière minute : si votre équipe ne peut pas les gérer seule dans l'administration, la plateforme échoue à son premier mois.
+- **La validation humaine oubliée.** Beaucoup d'activités ne veulent pas d'une confirmation automatique (visite sur dossier, prêt de matériel) ; le circuit demande-accord doit être prévu dès le départ, pas ajouté après.
+- **Les données personnelles.** Une réservation collecte des coordonnées, parfois plus : durées de conservation et information des usagers se prévoient au cadrage, pas après une réclamation.
+
+> **Ce que je constate en projet.** Le budget d'une plateforme de réservation se joue rarement sur le calendrier lui-même : il se joue sur les règles autour (qui valide, qui paie, qui annule, qui voit quoi). Un porteur de projet qui arrive avec ses règles écrites noir sur blanc obtient des devis comparables et un délai fiable ; celui qui arrive avec « comme tel site, mais pour nous » découvre ses règles en cours de développement, au prix fort.
+
+## Verdict selon votre situation
+
+- **Une ressource, des créneaux réguliers, pas de paiement** : un widget ou une extension WordPress suffit ; gardez votre budget pour autre chose.
+- **Des règles standard mais un vrai volume et des rappels indispensables** : un SaaS de réservation est légitime ; vérifiez l'export de vos données avant de signer.
+- **Des ressources liées, une validation humaine, des tarifs variables** : cadrez une plateforme sur-mesure ; commencez par écrire vos règles de réservation, elles sont le vrai cahier des charges.
+- **Vous hésitez entre les trois voies** : l'outil [No-code, SaaS ou sur-mesure ?](/outils/nocode-saas-surmesure) pose les questions d'arbitrage en version guidée, gratuitement.
+
+## FAQ : plateforme de réservation
+
+### Un module de réservation suffit-il sur un site WordPress ?
+
+Oui pour un besoin standard : des créneaux réguliers, une ressource unique (une salle, un praticien), une confirmation par e-mail. Des extensions et des widgets externes le font bien. Le module montre ses limites quand la réservation dépend de règles métier : plusieurs ressources liées, validation manuelle, tarifs qui varient selon le profil ou la période.
+
+### Faut-il encaisser le paiement à la réservation ?
+
+Ce n'est pas une obligation technique, c'est une décision métier. L'encaissement (ou un acompte) réduit fortement les absences, mais il ajoute la gestion des remboursements, des litiges et de la conformité bancaire. Beaucoup de plateformes démarrent avec une réservation sans paiement et l'ajoutent une fois le flux validé.
+
+### Quand un SaaS de réservation ne suffit-il plus ?
+
+Quand vos règles ne rentrent plus dans ses cases : ressources dépendantes les unes des autres, circuits de validation, tarification spécifique, ou besoin d'intégrer la réservation à vos autres outils ([CRM, paiement, e-mails](/documentation/applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement)). À ce stade, le contournement permanent du SaaS coûte plus cher en temps qu'une plateforme conçue pour vos règles.
+
+### Combien de temps pour mettre en ligne une plateforme de réservation sur-mesure ?
+
+Un projet cadré tient dans le phasage classique d'une web app : un cadrage, une première version centrée sur le flux de réservation, puis les briques secondaires (paiement, statistiques, intégrations). Le détail est décrit dans [Délai et jalons d'une web app](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app).

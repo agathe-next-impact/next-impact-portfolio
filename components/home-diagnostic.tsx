@@ -10,9 +10,9 @@ import { Reveal } from "@/components/ui/reveal";
 import { NeonArcs } from "@/components/visuals/neon-arcs";
 
 const BTN_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
 
 /**
  * HomeDiagnostic — bandeau CTA (et non plus l'outil embarqué) : la home appelle

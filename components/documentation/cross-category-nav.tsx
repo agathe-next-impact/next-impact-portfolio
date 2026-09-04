@@ -17,42 +17,50 @@ interface CategoryMeta {
   articleCount: string;
 }
 
+// Les compteurs reflètent le nombre réel de fichiers par catégorie
+// (content/documentation/<slug>/) — à tenir à jour à chaque ajout d'article.
 const ALL_CATEGORIES_FR: CategoryMeta[] = [
   {
     slug: "wordpress-headless",
     title: "Headless CMS",
     description: "Architecture découplée, API WordPress et Next.js.",
-    articleCount: "35 articles",
+    articleCount: "15 articles",
+  },
+  {
+    slug: "applications-web-mobile",
+    title: "Web app & plateforme",
+    description: "Web app, plateforme métier et PWA : quand le site ne suffit plus.",
+    articleCount: "17 articles",
   },
   {
     slug: "design-ui-ux",
     title: "Design & UI/UX",
     description: "Identité visuelle, charte graphique et maquettes.",
-    articleCount: "20 articles",
+    articleCount: "10 articles",
   },
   {
     slug: "marketing-digital",
     title: "Marketing Digital",
     description: "Stratégie, marque et visibilité en ligne.",
-    articleCount: "12 articles",
+    articleCount: "6 articles",
   },
   {
     slug: "seo",
     title: "SEO",
     description: "Référencement, mots-clés et arborescence.",
-    articleCount: "10 articles",
+    articleCount: "5 articles",
   },
   {
     slug: "projet-site-web",
     title: "Projet de site web",
     description: "Cahier des charges, pilotage et bonnes pratiques.",
-    articleCount: "8 articles",
+    articleCount: "4 articles",
   },
   {
     slug: "wordpress",
     title: "WordPress",
     description: "Thèmes, plugins et bonnes pratiques.",
-    articleCount: "8 articles",
+    articleCount: "4 articles",
   },
 ];
 
@@ -61,49 +69,56 @@ const ALL_CATEGORIES_EN: CategoryMeta[] = [
     slug: "wordpress-headless",
     title: "Headless CMS",
     description: "Decoupled architecture, WordPress API and Next.js.",
-    articleCount: "35 articles",
+    articleCount: "15 articles",
+  },
+  {
+    slug: "applications-web-mobile",
+    title: "Web app & platform",
+    description: "Web apps, custom platforms and PWAs: when a site is no longer enough.",
+    articleCount: "17 articles",
   },
   {
     slug: "design-ui-ux",
     title: "Design & UI/UX",
     description: "Brand identity, design system and mockups.",
-    articleCount: "20 articles",
+    articleCount: "10 articles",
   },
   {
     slug: "marketing-digital",
     title: "Digital marketing",
     description: "Strategy, brand and online visibility.",
-    articleCount: "12 articles",
+    articleCount: "6 articles",
   },
   {
     slug: "seo",
     title: "SEO",
     description: "Search ranking, keywords and information architecture.",
-    articleCount: "10 articles",
+    articleCount: "5 articles",
   },
   {
     slug: "projet-site-web",
     title: "Web project",
     description: "Specifications, project management and best practices.",
-    articleCount: "8 articles",
+    articleCount: "4 articles",
   },
   {
     slug: "wordpress",
     title: "WordPress",
     description: "Themes, plugins and best practices.",
-    articleCount: "8 articles",
+    articleCount: "4 articles",
   },
 ];
 
 /* ─── Relations entre catégories ──────────────────────────────────────────── */
 
 const RELATED_CATEGORIES: Record<string, string[]> = {
-  "wordpress-headless": ["wordpress", "seo", "projet-site-web"],
+  "wordpress-headless": ["applications-web-mobile", "wordpress", "seo"],
   wordpress: ["wordpress-headless", "design-ui-ux", "projet-site-web"],
   seo: ["marketing-digital", "wordpress-headless", "projet-site-web"],
   "design-ui-ux": ["projet-site-web", "marketing-digital", "wordpress"],
   "marketing-digital": ["seo", "design-ui-ux", "projet-site-web"],
-  "projet-site-web": ["wordpress-headless", "design-ui-ux", "seo"],
+  "projet-site-web": ["wordpress-headless", "applications-web-mobile", "design-ui-ux"],
+  "applications-web-mobile": ["wordpress-headless", "projet-site-web", "design-ui-ux"],
 };
 
 /* ─── Carte de catégorie (cellule SpotlightCard) ──────────────────────────── */

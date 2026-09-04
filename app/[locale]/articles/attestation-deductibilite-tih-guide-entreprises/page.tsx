@@ -30,6 +30,11 @@ export async function generateMetadata({
     publishedTime: "2025-03-01",
     modifiedTime: "2026-07-18",
     locale,
+    // Contenu rédigé en FR uniquement : la locale EN (même corps FR) n'est pas
+    // indexée, et aucune alternate EN n'est déclarée (cohérent avec le sitemap,
+    // qui liste cet article en entrée simple, sans alternates).
+    noindex: locale === "en",
+    alternateLocales: ["fr"],
   });
 }
 

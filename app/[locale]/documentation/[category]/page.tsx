@@ -17,40 +17,80 @@ import type { Locale } from "@/i18n/routing";
 // Revalidate toutes les 24 heures
 export const revalidate = 86400;
 
-const categoryInfo: Record<string, { title: string; description: string }> = {
+// Titres et descriptions par locale : le même objet alimente la meta ET le
+// header visible (H1 + chapo), pour que les deux ne divergent jamais.
+type CategoryInfo = {
+  title: string;
+  description: string;
+  titleEn: string;
+  descriptionEn: string;
+};
+
+const categoryInfo: Record<string, CategoryInfo> = {
   "marketing-digital": {
     title: "Marketing Digital",
     description: "Découvrez les principes et concepts de base du marketing digital.",
+    titleEn: "Digital marketing",
+    descriptionEn: "Learn the principles and core concepts of digital marketing.",
   },
   seo: {
     title: "SEO",
     description: "Guides et ressources pour maîtriser le SEO de votre site.",
+    titleEn: "SEO",
+    descriptionEn: "Guides and resources to master your site's SEO.",
   },
   "design-ui-ux": {
     title: "Design & UI/UX",
     description: "Créez des expériences utilisateurs engageantes et accessibles.",
+    titleEn: "Design & UI/UX",
+    descriptionEn: "Create engaging, accessible user experiences.",
   },
   "projet-site-web": {
     title: "Projet de site web",
     description: "Préparer et mener un projet de site web de A à Z.",
+    titleEn: "Web project",
+    descriptionEn: "Prepare and run a website project from A to Z.",
   },
   wordpress: {
     title: "WordPress",
     description: "Bonnes pratiques et guides pour WordPress.",
+    titleEn: "WordPress",
+    descriptionEn: "Best practices and guides for WordPress.",
   },
   "wordpress-headless": {
     title: "WordPress Headless",
     description: "Architecture headless, API REST et découplage front/back.",
+    titleEn: "Headless WordPress",
+    descriptionEn: "Headless architecture, REST API and front/back decoupling.",
   },
+  "applications-web-mobile": {
+    title: "Web app & plateforme",
+    description:
+      "Web app, plateforme métier, PWA : comprendre, cadrer et budgéter un projet applicatif quand le site ne suffit plus.",
+    titleEn: "Web app & platform",
+    descriptionEn:
+      "Web apps, business platforms, PWAs: understand, scope and budget an application project when a website is no longer enough.",
+  },
+}
+
+function localizedCategoryInfo(
+  category: string,
+  locale: Locale,
+): { title?: string; description?: string } {
+  const info = categoryInfo[category];
+  if (!info) return {};
+  return locale === "en"
+    ? { title: info.titleEn, description: info.descriptionEn }
+    : { title: info.title, description: info.description };
 }
 
 export async function generateMetadata(props: { params: Promise<{ category: string; locale: Locale }> }): Promise<Metadata> {
   const params = await props.params;
-  const info = categoryInfo[params.category];
-  const title = info?.title || params.category.charAt(0).toUpperCase() + params.category.slice(1).replace(/-/g, " ");
+  const info = localizedCategoryInfo(params.category, params.locale);
+  const title = info.title || params.category.charAt(0).toUpperCase() + params.category.slice(1).replace(/-/g, " ");
   const learnLabel = params.locale === "en" ? "Learn" : "Comprendre";
   const description =
-    info?.description ||
+    info.description ||
     (params.locale === "en"
       ? `Articles and resources on ${title}.`
       : `Articles et ressources sur ${title}.`);
@@ -85,9 +125,9 @@ export default async function CategoryPage(props: CategoryPageProps) {
     notFound()
   }
 
-  const info = categoryInfo[category]
-  const categoryTitle = info?.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
-  const categoryDescription = info?.description || ""
+  const info = localizedCategoryInfo(category, locale)
+  const categoryTitle = info.title || category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
+  const categoryDescription = info.description || ""
   const t = await getTranslations({ locale, namespace: "documentationPage" });
 
   const breadcrumbItems = [

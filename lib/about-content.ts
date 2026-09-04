@@ -51,6 +51,12 @@ const FR: AboutContent = {
           "En tenant la maîtrise d'ouvrage (cadrage, architecture, contrôle qualité) pendant que l'IA, guidée par 20 ans d'expérience, tient le chantier. Ce duo rend accessibles des projets d'une complexité auparavant réservée aux grandes structures. Le conseil oriente, la construction suit.",
       },
       {
+        question:
+          "Quelle est la formation d'Agathe Karinthi-Martin en veille technologique ?",
+        answer:
+          "Un master Veille technologique et innovation (Aix-Marseille Université, 2012-2015), qui fait de la surveillance des évolutions techniques une discipline à part entière. Cette formation fonde la veille qu'elle tient depuis sur le marché web & IA, dont la lettre gratuite publiée par Next Impact.",
+      },
+      {
         question: "Quelle reconnaissance extérieure ?",
         answer:
           "L'approche de modernisation Headless des sites WordPress de PME a été évoquée dans Le Figaro (mai 2026). Agathe Karinthi-Martin a par ailleurs publié des travaux universitaires sur la relation humain-machine (2012-2015).",
@@ -92,6 +98,12 @@ const EN: AboutContent = {
         question: "How can a solo consultant deliver agency-level projects?",
         answer:
           "By holding the project ownership (scoping, architecture, quality control) while AI, guided by 20 years of experience, runs the build. This pairing makes projects of a complexity once reserved for large firms accessible. Advice guides, implementation follows.",
+      },
+      {
+        question:
+          "What is Agathe Karinthi-Martin's training in technology watch?",
+        answer:
+          "A Master's degree in Technology Watch and Innovation (Aix-Marseille Université, 2012-2015), which treats monitoring technical evolutions as a discipline in its own right. It underpins the watch she has kept up since on the web & AI market, including Next Impact's free newsletter.",
       },
       {
         question: "Any external recognition?",

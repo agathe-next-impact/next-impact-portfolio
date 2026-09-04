@@ -30,6 +30,7 @@ export async function generateMetadata({
         ? [
             "contact web technology advice",
             "redesign advisory call",
+            "fractional CTO",
             "website audit and roadmap",
             "WordPress redesign contact",
             "free website diagnostic",
@@ -37,6 +38,7 @@ export async function generateMetadata({
         : [
             "contact conseil techno web",
             "visio conseil refonte",
+            "CTO externalisé",
             "audit et roadmap site web",
             "contact refonte WordPress",
             "diagnostic gratuit site web",

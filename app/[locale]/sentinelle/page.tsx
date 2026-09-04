@@ -33,6 +33,12 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 const AVANT_LANCEMENT = false;
 
+// Sentinelle retirée du SEO/GEO sur décision (2026-09-04) : la page reste
+// accessible en direct, mais n'est plus indexée, plus dans le sitemap, ni citée
+// dans llms.txt / llms-full.txt. Repasser ce drapeau à false pour la réexposer
+// (penser alors à réintégrer l'entrée sitemap et les bullets llms).
+const RETIREE_DU_SEO = true;
+
 export const revalidate = 86400;
 
 export async function generateMetadata({
@@ -68,9 +74,11 @@ export async function generateMetadata({
           "quand refondre son site",
         ],
     locale,
-    // Contenu FR uniquement pour l'instant ; et noindex tant que le produit
-    // n'est pas livrable (voir AVANT_LANCEMENT).
-    noindex: isEn || AVANT_LANCEMENT,
+    // Contenu FR uniquement pour l'instant ; noindex tant que le produit n'est
+    // pas livrable (AVANT_LANCEMENT) ou retiré du SEO/GEO (RETIREE_DU_SEO).
+    noindex: isEn || AVANT_LANCEMENT || RETIREE_DU_SEO,
+    // Pas d'alternate hreflang EN : la locale EN est en noindex.
+    alternateLocales: ["fr"],
   });
 }
 

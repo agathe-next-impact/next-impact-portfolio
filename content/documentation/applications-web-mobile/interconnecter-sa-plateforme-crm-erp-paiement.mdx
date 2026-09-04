@@ -1,0 +1,106 @@
+---
+title: "Interconnecter sa plateforme : CRM, ERP, paiement, comment s'y prendre ?"
+description: "Faire parler la plateforme avec les outils déjà en place : les trois familles d'intégration, les cas paiement, CRM, ERP et e-mails, et les questions à poser avant de signer un devis."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 17
+enBref:
+  - "Interconnecter une plateforme web consiste à la faire dialoguer avec les outils déjà en place (CRM, ERP, paiement, e-mails) via des API, les interfaces prévues par chaque éditeur pour échanger des données entre logiciels."
+  - "Trois familles d'intégration existent : la connexion directe par API (fiable, temps réel), les connecteurs intermédiaires type Zapier ou Make (rapides à mettre en place, dépendants d'un abonnement tiers) et l'échange de fichiers programmé (robuste, mais différé)."
+  - "Le principe de cadrage qui évite les dérives : une seule source de vérité par donnée. Chaque information (client, commande, paiement) a un outil maître, les autres la reçoivent ; les synchronisations dans les deux sens se réservent aux cas qui les justifient."
+faq:
+  - question: "Qu'est-ce qu'une API, concrètement ?"
+    answer: "C'est la porte d'entrée officielle d'un logiciel pour les autres logiciels : un ensemble de commandes documentées qui permettent de lire et d'écrire ses données de façon contrôlée. Quand un prestataire dit que votre CRM « a une API », cela signifie que votre plateforme pourra y créer un contact ou y lire une fiche sans intervention humaine."
+  - question: "Mon outil n'a pas d'API : l'intégration est-elle impossible ?"
+    answer: "Non, mais elle sera moins fluide. Les solutions de repli sont l'échange de fichiers programmé (un export déposé et importé à intervalle régulier) ou un connecteur du marché s'il prend en charge l'outil. Si l'outil n'offre ni API ni export exploitable, c'est un signal sur sa fermeture : la donnée y entre mais n'en sort pas."
+  - question: "Faut-il synchroniser les données dans les deux sens ?"
+    answer: "Le moins possible. Une synchronisation bidirectionnelle double les cas d'erreur : conflits de version, boucles de mise à jour, doublons. La règle saine est de désigner un outil maître par type de donnée ; l'autre outil lit, il n'écrit pas. Les vraies exceptions existent, mais elles se cadrent explicitement."
+  - question: "L'intégration du paiement est-elle risquée pour les données bancaires ?"
+    answer: "Avec un prestataire de paiement certifié comme Stripe, les données bancaires ne transitent jamais par votre plateforme : la saisie de carte se fait dans un module fourni par le prestataire, votre plateforme ne reçoit qu'une confirmation. C'est l'architecture standard, et c'est précisément pour cela qu'on ne code jamais soi-même la collecte d'un numéro de carte."
+---
+
+Une plateforme métier ne vit jamais seule : le CRM tient les contacts, l'ERP ou le logiciel de gestion tient la facturation, un prestataire encaisse les paiements, un service envoie les e-mails. La valeur d'une [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app) tient autant à ce qu'elle fait qu'à ce qu'elle évite de ressaisir. Cet article donne les repères pour cadrer ces interconnexions sans jargon et sans mauvaise surprise au devis.
+
+## Pourquoi l'interconnexion pèse autant dans un projet
+
+**La ressaisie est le coût caché des organisations : chaque donnée recopiée à la main d'un outil vers un autre est une erreur en attente et du temps perdu.**
+
+Le symptôme est connu : une inscription arrive sur la plateforme, quelqu'un la recopie dans le CRM, puis dans l'outil d'e-mails, puis dans la facturation. Trois ressaisies, trois occasions de faute de frappe, aucune trace en cas d'oubli. L'interconnexion supprime ces recopies : les outils se parlent via des API, les interfaces prévues par chaque éditeur pour échanger des données entre logiciels.
+
+Au moment du devis, ces intégrations représentent souvent une part significative du budget, car chacune demande de comprendre l'outil en face, de gérer ses pannes et de tester les cas limites. C'est une des lignes détaillées dans [Combien coûte une web app sur-mesure ?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure).
+
+## Les trois familles d'intégration
+
+**Toutes les interconnexions se rangent en trois familles, du temps réel au différé.**
+
+<DataTable caption="Les trois familles d'intégration entre une plateforme et les outils en place">
+
+| Famille | Comment ça marche | Points forts | Limites |
+|---|---|---|---|
+| Connexion directe par API | La plateforme lit et écrit dans l'outil via son interface officielle | Temps réel, fiable, maîtrisé | Demande du développement par outil connecté |
+| Connecteur intermédiaire (Zapier, Make…) | Un service tiers relie les outils par des scénarios configurés | Mise en place rapide, sans développement | Abonnement supplémentaire, dépendance à un tiers, volumes facturés |
+| Échange de fichiers programmé | Un export est généré puis importé à intervalle régulier | Robuste, fonctionne même sans API | Différé (les données datent de la dernière synchronisation) |
+
+</DataTable>
+
+Le choix n'est pas idéologique : une même plateforme combine souvent les trois. Le paiement exige du temps réel (API directe) ; la synchronisation vers la comptabilité tolère très bien un export quotidien.
+
+## Cas par cas : paiement, CRM, ERP, e-mails
+
+**Chaque outil a son intégration type, et ses pièges connus.**
+
+### Le paiement
+
+Le cas le plus normé. Avec un prestataire certifié comme Stripe, la saisie de carte se fait dans un module fourni par le prestataire : les données bancaires ne transitent jamais par votre plateforme, qui ne reçoit qu'une confirmation de paiement. C'est l'architecture retenue pour la plateforme Réseauteurs (abonnement en ligne via Stripe), et c'est le standard du secteur. Point de vigilance : cadrer aussi les remboursements et les échecs de paiement, pas seulement le cas où tout se passe bien.
+
+### Le CRM
+
+L'enjeu est le sens de circulation : la plateforme crée-t-elle des contacts dans le CRM, ou le CRM alimente-t-il la plateforme ? Le piège classique est la synchronisation dans les deux sens, qui double les cas d'erreur (conflits, doublons, boucles). La règle saine : un outil maître par donnée, l'autre en lecture.
+
+### L'ERP et la facturation
+
+Rarement du temps réel : un export structuré vers la comptabilité, à intervalle régulier, couvre la grande majorité des besoins. Vérifier tôt le format attendu par l'expert-comptable ou le logiciel en face évite un chantier de conversion tardif.
+
+### Les e-mails transactionnels
+
+Confirmations, relances, notifications partent via un service d'envoi spécialisé, pas depuis le serveur de la plateforme : c'est ce qui garantit qu'ils arrivent en boîte de réception et non en indésirable. L'intégration est légère, mais elle se prévoit : chaque e-mail automatique est un petit chantier de contenu.
+
+## Les questions à poser avant de signer
+
+**Cinq questions au prestataire (ou à vous-même) suffisent à sécuriser le chantier d'intégration.**
+
+1. **Quels outils restent, lesquels disparaissent ?** Une plateforme bien conçue remplace certaines briques et respecte les autres ; la liste doit être explicite au cadrage. Si l'objectif est au contraire de sortir d'un outil, c'est un autre chantier : [migrer d'un SaaS vers une web app](/documentation/applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure).
+2. **Chaque outil connecté a-t-il une API documentée ?** La réponse conditionne la famille d'intégration possible, donc le budget.
+3. **Qui est maître de chaque donnée ?** Clients, commandes, paiements : un outil maître par donnée, écrit noir sur blanc.
+4. **Que se passe-t-il quand l'outil en face tombe ?** Une intégration sérieuse prévoit la panne : mise en attente, reprise, alerte. Une intégration qui « suppose que ça marche » se découvre le mauvais jour.
+5. **Les accès sont-ils à votre nom ?** Comptes API, clés d'accès, abonnements aux connecteurs : au nom de votre organisation, pas à celui du prestataire.
+
+> **Ce que je constate en projet.** Les intégrations ratées ont presque toujours la même cause : personne n'a désigné l'outil maître. Chaque service croit détenir la bonne version du client ou de la commande, et la plateforme passe son temps à arbitrer des conflits qu'un cadrage d'une heure aurait évités. La question « qui est maître de cette donnée ? » vaut la peine d'être posée pour chaque type d'information, avant la première ligne de code.
+
+## Verdict selon votre situation
+
+- **Un seul outil à connecter, avec une API documentée** : intégration directe, sans intermédiaire ; c'est le cas le plus sain.
+- **Plusieurs outils, besoins différés** : combinez API directe pour le temps réel (paiement) et exports programmés pour le reste (comptabilité).
+- **Pas de développeur et des flux légers** : un connecteur du marché dépanne honorablement ; gardez en tête l'abonnement et la dépendance au tiers.
+- **Un outil central sans API ni export** : le problème n'est pas l'intégration, c'est l'outil ; posez la question de son remplacement avant de construire autour.
+
+## FAQ : interconnecter sa plateforme
+
+### Qu'est-ce qu'une API, concrètement ?
+
+C'est la porte d'entrée officielle d'un logiciel pour les autres logiciels : un ensemble de commandes documentées qui permettent de lire et d'écrire ses données de façon contrôlée. Quand un prestataire dit que votre CRM « a une API », cela signifie que votre plateforme pourra y créer un contact ou y lire une fiche sans intervention humaine.
+
+### Mon outil n'a pas d'API : l'intégration est-elle impossible ?
+
+Non, mais elle sera moins fluide. Les solutions de repli sont l'échange de fichiers programmé (un export déposé et importé à intervalle régulier) ou un connecteur du marché s'il prend en charge l'outil. Si l'outil n'offre ni API ni export exploitable, c'est un signal sur sa fermeture : la donnée y entre mais n'en sort pas.
+
+### Faut-il synchroniser les données dans les deux sens ?
+
+Le moins possible. Une synchronisation bidirectionnelle double les cas d'erreur : conflits de version, boucles de mise à jour, doublons. La règle saine est de désigner un outil maître par type de donnée ; l'autre outil lit, il n'écrit pas. Les vraies exceptions existent, mais elles se cadrent explicitement.
+
+### L'intégration du paiement est-elle risquée pour les données bancaires ?
+
+Avec un prestataire de paiement certifié comme Stripe, les données bancaires ne transitent jamais par votre plateforme : la saisie de carte se fait dans un module fourni par le prestataire, votre plateforme ne reçoit qu'une confirmation. C'est l'architecture standard, et c'est précisément pour cela qu'on ne code jamais soi-même la collecte d'un numéro de carte.

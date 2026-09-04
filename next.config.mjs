@@ -42,9 +42,12 @@ const nextConfig = {
     '/api/sentinelle/inngest': ['./src/sentinelle/redaction/*.md'],
   },
   experimental: {
+    // Compilation en worker conservée pour la vitesse, MAIS on retire
+    // parallelServerCompiles : compiler serveur + client simultanément double
+    // le pic mémoire et, sur une machine à 20 cœurs, fait tuer un worker par
+    // l'OOM killer → « Jest worker encountered N child process exceptions ».
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
   },
   async redirects() {
     // Tools temporarily disabled — redirect to home so old bookmarks /

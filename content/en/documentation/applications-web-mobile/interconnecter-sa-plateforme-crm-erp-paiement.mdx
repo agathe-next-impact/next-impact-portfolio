@@ -1,0 +1,106 @@
+---
+title: "Integrating your platform: CRM, ERP, payment, how to go about it?"
+description: "Making the platform talk to the tools already in place: the three integration families, the payment, CRM, ERP and e-mail cases, and the questions to ask before signing a quote."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 17
+enBref:
+  - "Integrating a web platform means making it talk to the tools already in place (CRM, ERP, payment, e-mail) through APIs, the interfaces each vendor provides for exchanging data between programs."
+  - "Three integration families exist: direct API connection (reliable, real time), middleman connectors like Zapier or Make (fast to set up, dependent on a third-party subscription), and scheduled file exchange (robust, but delayed)."
+  - "The scoping principle that prevents drift: one source of truth per data type. Each piece of information (customer, order, payment) has one master tool, the others receive it; two-way synchronization is reserved for the cases that justify it."
+faq:
+  - question: "What is an API, concretely?"
+    answer: "It is a program's official entrance for other programs: a set of documented commands for reading and writing its data in a controlled way. When a provider says your CRM \"has an API\", it means your platform will be able to create a contact or read a record there without human intervention."
+  - question: "My tool has no API: is integration impossible?"
+    answer: "No, but it will be less smooth. The fallbacks are scheduled file exchange (an export dropped and imported at regular intervals) or an off-the-shelf connector if it supports the tool. If the tool offers neither an API nor a usable export, that is a signal about its closedness: data goes in but does not come out."
+  - question: "Should data be synchronized in both directions?"
+    answer: "As little as possible. Two-way synchronization doubles the failure cases: version conflicts, update loops, duplicates. The sound rule is to designate one master tool per data type; the other tool reads, it does not write. Genuine exceptions exist, but they are scoped explicitly."
+  - question: "Is payment integration risky for banking data?"
+    answer: "With a certified payment provider such as Stripe, banking data never passes through your platform: card entry happens in a module supplied by the provider, and your platform only receives a confirmation. That is the standard architecture, and it is precisely why nobody ever codes card-number collection themselves."
+---
+
+A business platform never lives alone: the CRM holds the contacts, the ERP or management software holds the invoicing, a payment provider collects the money, a service sends the e-mails. The value of a [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app) lies as much in what it does as in what it saves you from re-entering. This article gives the landmarks for scoping these integrations without jargon and without surprises on the quote.
+
+## Why integration weighs so much in a project
+
+**Re-entry is organizations' hidden cost: every piece of data copied by hand from one tool to another is an error waiting to happen and time lost.**
+
+The symptom is well known: a registration arrives on the platform, someone copies it into the CRM, then into the e-mail tool, then into invoicing. Three re-entries, three chances for a typo, no trace if one is forgotten. Integration removes these copies: the tools talk to each other through APIs, the interfaces each vendor provides for exchanging data between programs.
+
+At quote time, these integrations often represent a significant share of the budget, because each one requires understanding the tool on the other side, handling its outages and testing the edge cases. It is one of the line items detailed in [How much does a custom web app cost?](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure).
+
+## The three integration families
+
+**All integrations fall into three families, from real time to delayed.**
+
+<DataTable caption="The three integration families between a platform and the tools in place">
+
+| Family | How it works | Strengths | Limits |
+|---|---|---|---|
+| Direct API connection | The platform reads and writes in the tool through its official interface | Real time, reliable, controlled | Requires development per connected tool |
+| Middleman connector (Zapier, Make…) | A third-party service links the tools through configured scenarios | Fast setup, no development | Extra subscription, third-party dependency, billed volumes |
+| Scheduled file exchange | An export is generated then imported at regular intervals | Robust, works even without an API | Delayed (data is as old as the last synchronization) |
+
+</DataTable>
+
+The choice is not ideological: a single platform often combines all three. Payment demands real time (direct API); synchronization toward accounting is perfectly happy with a daily export.
+
+## Case by case: payment, CRM, ERP, e-mail
+
+**Each tool has its typical integration, and its known traps.**
+
+### Payment
+
+The most standardized case. With a certified provider such as Stripe, card entry happens in a module supplied by the provider: banking data never passes through your platform, which only receives a payment confirmation. That is the architecture used for the Réseauteurs platform (online subscription through Stripe), and it is the sector standard. Point of vigilance: also scope refunds and failed payments, not just the case where everything goes well.
+
+### The CRM
+
+The stake is the direction of flow: does the platform create contacts in the CRM, or does the CRM feed the platform? The classic trap is two-way synchronization, which doubles the failure cases (conflicts, duplicates, loops). The sound rule: one master tool per data type, the other in read-only.
+
+### The ERP and invoicing
+
+Rarely real time: a structured export toward accounting, at regular intervals, covers the vast majority of needs. Checking early what format the accountant or the receiving software expects avoids a late conversion project.
+
+### Transactional e-mails
+
+Confirmations, reminders and notifications go out through a specialized sending service, not from the platform's own server: that is what guarantees they land in the inbox rather than in spam. The integration is light, but it must be planned: every automatic e-mail is a small content project.
+
+## The questions to ask before signing
+
+**Five questions to the provider (or to yourself) are enough to secure the integration work.**
+
+1. **Which tools stay, which disappear?** A well-designed platform replaces some pieces and respects the others; the list must be explicit at scoping. If the goal is instead to leave a tool, that is a different project: [migrating from a SaaS to a web app](/documentation/applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure).
+2. **Does each connected tool have a documented API?** The answer determines which integration family is possible, and therefore the budget.
+3. **Who is master of each data type?** Customers, orders, payments: one master tool per data type, written down.
+4. **What happens when the tool on the other side goes down?** A serious integration plans for the outage: queueing, retry, alert. An integration that "assumes it works" reveals itself on the wrong day.
+5. **Are the accounts in your name?** API accounts, access keys, connector subscriptions: in your organization's name, not the provider's.
+
+> **What I see on projects.** Failed integrations almost always have the same cause: nobody designated the master tool. Each service believes it holds the correct version of the customer or the order, and the platform spends its time arbitrating conflicts that one hour of scoping would have avoided. The question "who is master of this data?" is worth asking for every type of information, before the first line of code.
+
+## Verdict by situation
+
+- **One tool to connect, with a documented API**: direct integration, no middleman; the healthiest case.
+- **Several tools, delayed needs**: combine direct API for real time (payment) and scheduled exports for the rest (accounting).
+- **No developer and light flows**: an off-the-shelf connector does an honorable job; keep the subscription and the third-party dependency in mind.
+- **A central tool with neither API nor export**: the problem is not the integration, it is the tool; raise the question of replacing it before building around it.
+
+## FAQ: integrating your platform
+
+### What is an API, concretely?
+
+It is a program's official entrance for other programs: a set of documented commands for reading and writing its data in a controlled way. When a provider says your CRM "has an API", it means your platform will be able to create a contact or read a record there without human intervention.
+
+### My tool has no API: is integration impossible?
+
+No, but it will be less smooth. The fallbacks are scheduled file exchange (an export dropped and imported at regular intervals) or an off-the-shelf connector if it supports the tool. If the tool offers neither an API nor a usable export, that is a signal about its closedness: data goes in but does not come out.
+
+### Should data be synchronized in both directions?
+
+As little as possible. Two-way synchronization doubles the failure cases: version conflicts, update loops, duplicates. The sound rule is to designate one master tool per data type; the other tool reads, it does not write. Genuine exceptions exist, but they are scoped explicitly.
+
+### Is payment integration risky for banking data?
+
+With a certified payment provider such as Stripe, banking data never passes through your platform: card entry happens in a module supplied by the provider, and your platform only receives a confirmation. That is the standard architecture, and it is precisely why nobody ever codes card-number collection themselves.

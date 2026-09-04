@@ -19,7 +19,7 @@ type DocLink = {
 };
 
 const categoryLabels: Record<string, string> = {
-  "applications-web-mobile": "Applications web & mobile",
+  "applications-web-mobile": "Web app & plateforme",
   "design-ui-ux": "Design UI/UX",
   "wordpress-headless": "CMS headless",
   "marketing-digital": "Marketing digital",
@@ -86,8 +86,11 @@ function docSections(docs: DocLink[]) {
   return [...byCategory.entries()]
     .map(([category, items]) => {
       const label = categoryLabels[category] || category;
+      // 20 liens max par catégorie : couvre entièrement les plus fournies
+      // (wordpress-headless : 15, applications-web-mobile : 17) sans borner
+      // artificiellement la découverte par les moteurs IA.
       const links = items
-        .slice(0, 12)
+        .slice(0, 20)
         .map((doc) => {
           const suffix = doc.description ? `: ${doc.description}` : "";
           return `- [${doc.title}](${baseUrl}/documentation/${doc.category}/${doc.slug})${suffix}`;
@@ -115,39 +118,41 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente deux offres de conseil (visio conseil refonte 150 EUR, audit + roadmap 650 EUR) et trois trajectoires de refonte (WordPress optimisee, WordPress headless, web app). Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente trois offres de conseil (visio conseil refonte 150 EUR, audit + roadmap 650 EUR, CTO externalise a partir de 490 EUR/mois) et trois trajectoires de refonte (WordPress optimisee, WordPress headless, web app). Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
 - Personne : Agathe Karinthi-Martin
 - Statut commercial : conseil techno web independant
 - Zone : France, projets francophones et anglophones
-- Expertises : choix de technologie web, IA coding, no-code, SaaS, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web, maintenance et dette technique
+- Expertises : choix de technologie web, veille technologique (master Veille technologique et innovation, Aix-Marseille Universite), IA coding, no-code, SaaS, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web, maintenance et dette technique
 - Publics : independants, TPE, PME, ESS, associations, reseaux et petites structures qui doivent choisir entre reparer, optimiser, cadrer, construire ou ne rien construire
+- Preuves verifiables : plus de 25 projets livres depuis 2020, 26 etudes de cas documentees, PageSpeed passe de 45 a 98 avant/apres refonte (etude de cas Proditec), cite par Le Figaro (mai 2026)
+- References clients (extraits) : Sowee, Geofit, Proditec, Transitions Pro, SDEVO, Infralliance, L'Hermitage, Next Event, Mediatico, ERP Services, Reseauteurs
 
 ## Offer Architecture
 
 - Diagnostic de site en 2 minutes : gratuit, sans inscription ; voir ce qui ralentit le site et quelle trajectoire correspond (consolider, decoupler, refonder).
 - Visio conseil refonte : 150 EUR HT. Une heure en visio, un avis ecrit envoye dans les 48 h : rester, decoupler ou refonder, et pourquoi. Deduit du devis si un projet demarre sous 30 jours.
 - Audit + roadmap : 650 EUR HT. Rapport d'audit (performance, securite, dette technique, plugins, hebergement), preconisations chiffrees, roadmap par etapes. Le document sert meme si la prestation est confiee a quelqu'un d'autre.
+- CTO externalise : a partir de 490 EUR/mois HT, mission recurrente. Un decideur technique a vos cotes dans la duree : arbitrage des choix techniques (refonte, hebergement, prestataires, dette technique), cadrage et suivi des prestataires, feuille de route tenue, sans recrutement. Pour un besoin technique recurrent plutot qu'une decision ponctuelle.
 - Refonte WordPress optimisee : a partir de 2 250 EUR HT. Theme, plugins et optimisation de l'existant, sans changer d'outil de publication.
 - Refonte WordPress headless : a partir de 4 000 EUR HT. Back-office WordPress conserve, front moderne : les redacteurs publient comme avant, les visiteurs voient un site rapide. Trajectoire recommandee.
 - Refonte vers une web app : a partir de 6 500 EUR HT. Plateforme web et/ou mobile quand le site est devenu un outil de travail.
-- Veille techno : la newsletter gratuite « Quelle techno pour mon site web a l'heure de l'IA ? » (une synthese mensuelle + un focus hebdo, sur Substack) et Sentinelle, la veille personnalisee du site ou de l'application du client : alertes ciblees, deux lettres par mois et aide a la decision (maintenir, refondre ou creer), 19 EUR/mois.
+- Veille techno, lettre gratuite : la newsletter « Quelle techno pour mon site web a l'heure de l'IA ? » sur Substack. Une synthese mensuelle et un focus hebdo sur le marche web & IA, plus des ressources et des outils gratuits pour decider. Gratuit, sans jargon. C'est le contenu de la page /veille. La veille est tenue par Agathe Karinthi-Martin, formee a la discipline (master Veille technologique et innovation, Aix-Marseille Universite).
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
 ## Primary Pages
 
 - [Accueil](${baseUrl}/): promesse, preuves chiffrees, trois trajectoires de refonte et offres de conseil
-- [Conseil](${baseUrl}/conseil): visio conseil refonte (150 EUR, avis ecrit sous 48 h) et audit + roadmap (650 EUR, livrables)
+- [Conseil](${baseUrl}/conseil): visio conseil refonte (150 EUR, avis ecrit sous 48 h), audit + roadmap (650 EUR, livrables) et CTO externalise (a partir de 490 EUR/mois, accompagnement recurrent)
 - [Solutions web](${baseUrl}/solutions-web): les trois trajectoires de refonte (consolider, decoupler, refonder), prix et delais
 - [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): l'expertise signature : back-office WordPress conserve, front Next.js moderne ; quand l'utiliser, couts, performance
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
-- [Veille techno](${baseUrl}/veille): les deux lettres de veille : la gratuite (marche web & IA) et Sentinelle, la personnalisee (19 EUR/mois)
-- [Sentinelle](${baseUrl}/sentinelle): la veille personnalisee du site du client : alertes, deux lettres par mois et aide a la decision (maintenir, refondre ou creer)
+- [Veille techno](${baseUrl}/veille): la lettre gratuite (marche web & IA : synthese mensuelle, focus hebdo), des ressources et des outils gratuits pour decider, sans jargon
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision : 7 rubriques par question, outils gratuits et guides
 - [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements ; auteur des contenus du site
-- [Contact](${baseUrl}/contact): visio conseil refonte, audit + roadmap, projet de refonte, diagnostic gratuit et prise de contact
+- [Contact](${baseUrl}/contact): visio conseil refonte, audit + roadmap, CTO externalise, projet de refonte, diagnostic gratuit et prise de contact
 
 ## Decision Hub (Quelle techno web ?)
 

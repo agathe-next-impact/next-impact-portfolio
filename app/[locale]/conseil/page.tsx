@@ -20,13 +20,14 @@ export async function generateMetadata({
       ? "Redesign advice: a clear-cut opinion before you commit a budget"
       : "Conseil refonte : un avis tranché avant d'engager un budget",
     description: isEn
-      ? "Your WordPress site is aging? A one-hour advisory call (€150) or a full audit with roadmap (€650): stay, decouple or rebuild, in writing, before any quote."
-      : "Votre site WordPress vieillit ? Visio conseil d'une heure (150 €) ou audit + roadmap (650 €) : rester, découpler ou refonder, par écrit, avant tout devis.",
+      ? "Your WordPress site is aging? A €150 advisory call, a €650 audit with roadmap, or a fractional CTO from €490/month: decide and secure your technical choices."
+      : "Votre site WordPress vieillit ? Visio conseil (150 €), audit + roadmap (650 €) ou CTO externalisé dès 490 €/mois : décider et sécuriser vos choix techniques.",
     path: "/conseil",
     keywords: isEn
       ? [
           "WordPress redesign advice",
           "website audit and roadmap",
+          "fractional CTO",
           "WordPress site audit",
           "redesign or optimize WordPress",
           "challenge agency quote",
@@ -35,6 +36,7 @@ export async function generateMetadata({
       : [
           "conseil refonte WordPress",
           "audit site WordPress",
+          "CTO externalisé",
           "audit et roadmap site web",
           "refondre ou optimiser WordPress",
           "challenger devis agence",
@@ -65,8 +67,8 @@ export default async function ConseilPage({
         name={isEn ? "Website redesign advice" : "Conseil refonte de site web"}
         description={
           isEn
-            ? "Independent advice before a redesign: a one-hour advisory call with a written opinion, or a full audit with costed recommendations and a step-by-step roadmap."
-            : "Conseil indépendant avant une refonte : visio d'une heure avec avis écrit, ou audit complet avec préconisations chiffrées et roadmap par étapes."
+            ? "Independent advice before a redesign: a one-hour advisory call with a written opinion, a full audit with costed recommendations and a roadmap, or a fractional CTO (from €490/month) for ongoing technical guidance."
+            : "Conseil indépendant avant une refonte : visio d'une heure avec avis écrit, audit complet avec préconisations chiffrées et roadmap, ou CTO externalisé (à partir de 490 €/mois) pour un accompagnement technique récurrent."
         }
         serviceType={isEn ? "Web consulting" : "Conseil web"}
         url="/conseil"

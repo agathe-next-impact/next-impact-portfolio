@@ -115,7 +115,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
   ServicesPageVariant
 > = {
   default: {
-    titre: "Trois solutions pour un site WordPress qui vieillit",
+    titre: "Solutions pour une refonte",
     sousTitre:
       "La vraie question n'est pas WordPress ou pas WordPress : c'est ce que vous gardez et ce que vous changez. Consolider, découpler ou refonder : prix affichés, délai annoncé, performance mesurée.",
     carouselLabel: "Pourquoi Next Impact ?",

@@ -30,6 +30,11 @@ export async function generateMetadata({
     publishedTime: "2025-03-01",
     modifiedTime: "2026-07-18",
     locale,
+    // Contenu rédigé en FR uniquement : la locale EN (même corps FR) n'est pas
+    // indexée, et aucune alternate EN n'est déclarée (cohérent avec le sitemap,
+    // qui liste cet article en entrée simple, sans alternates).
+    noindex: locale === "en",
+    alternateLocales: ["fr"],
   });
 }
 
@@ -364,15 +369,16 @@ export default function ArticleReduireAgefiph() {
                         fontWeight: 600,
                       }}
                     >
-                      3 500 €
+                      4 550 €
                     </span>
                   </div>
                 </div>
 
                 <p style={{ color: "var(--ink-2)", lineHeight: 1.7 }}>
-                  L&apos;entreprise économise 1 500 € sur sa contribution
+                  L&apos;entreprise économise 1 950 € sur sa contribution
                   AGEFIPH et obtient un site web performant pour un coût
-                  réel de 3 500 €, soit une réduction de 30%.
+                  réel de 4 550 €, soit une réduction de 30 % du montant HT
+                  facturé.
                 </p>
               </div>
             </div>
@@ -464,10 +470,10 @@ export default function ArticleReduireAgefiph() {
 
                 <ul style={{ listStyle: "none", padding: 0, margin: "0 0 40px" }}>
                   {[
-                    "Un site web ultra-performant aux standards de la Tech (< 1s de chargement, SEO natif, sécurité maximale)",
+                    "Un site web performant, mesuré avant et après (moins d'une seconde de chargement visé, SEO natif, sécurité renforcée)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
-                    "Trois forfaits Sites web — Classique (2 250 €), Headless (4 000 €), Web app (6 500 €+) — et une offre Applications web & mobile sur-mesure, toutes éligibles à la déduction OETH",
+                    "Trois trajectoires de refonte : WordPress optimisée (à partir de 2 250 € HT), WordPress headless (à partir de 4 000 € HT), web app (à partir de 6 500 € HT), toutes éligibles à la déduction OETH",
                   ].map((item, i) => (
                     <li
                       key={i}

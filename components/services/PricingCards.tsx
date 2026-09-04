@@ -1,14 +1,13 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
-type Tier = {
+export type Tier = {
   slug: string;
   name: string;
   tech: string;
@@ -16,6 +15,8 @@ type Tier = {
   priceTagline: string;
   forProjectLabel: string;
   forProject: string;
+  solutionLabel: string;
+  solution: string;
   stackLabel: string;
   stackHtml: React.ReactNode;
   includedLabel: string;
@@ -27,20 +28,26 @@ type Tier = {
   highlight?: boolean;
 };
 
-function getTiers(isEn: boolean): Tier[] {
+// Source unique des trois trajectoires : la section d'introduction (aperçu) et
+// les sections détaillées par offre (OfferSections) en dérivent.
+export function getTiers(isEn: boolean): Tier[] {
   return [
     {
       slug: "forfait-classique",
-      name: isEn ? "CONSOLIDATE" : "CONSOLIDER",
+      name: isEn ? "Simple showcase site" : "Vitrine simple",
       tech: isEn
         ? "optimized WordPress redesign · bespoke theme"
         : "refonte WordPress optimisée · thème sur-mesure",
       price: isEn ? "From €2,250" : "À partir de 2 250 €",
       priceTagline: isEn ? "Quick to ship, controlled cost" : "Mise en ligne rapide, coût maîtrisé",
-      forProjectLabel: isEn ? "When?" : "Quand ?",
+      forProjectLabel: isEn ? "When?" : "Pour quand ?",
       forProject: isEn
         ? "The problem is the theme and the plugin pile-up, not WordPress. Brochure or institutional site, redesign of an aging WordPress."
         : "Le problème, c'est le thème et l'empilement de plugins, pas WordPress. Site vitrine ou institutionnel, refonte d'un WordPress vieillissant.",
+      solutionLabel: isEn ? "The solution" : "La solution",
+      solution: isEn
+        ? "I start from your existing WordPress, replace the theme and the plugin pile-up with a lightweight bespoke theme, and harden security. You keep your editing habits; the site becomes fast and clean again — without changing tools."
+        : "Je repars de votre WordPress, je remplace le thème et l'empilement de plugins par un thème sur-mesure léger, et je durcis la sécurité. Vous gardez vos habitudes d'édition ; le site redevient rapide et net — sans changer d'outil.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Monolithic WordPress with <em className="text-foreground not-italic">a modern custom theme</em>, optimized build, hardened security.</>
@@ -65,16 +72,20 @@ function getTiers(isEn: boolean): Tier[] {
     },
     {
       slug: "forfait-headless",
-      name: isEn ? "DECOUPLE" : "DECOUPLER",
+      name: isEn ? "Complex site" : "Site complexe",
       tech: isEn
         ? "headless WordPress redesign · back office kept, modern front end"
         : "refonte WordPress headless · back-office conservé, front moderne",
       price: isEn ? "From €4,000" : "À partir de 4 000 €",
       priceTagline: isEn ? "Front-end performance, optimized conversion" : "Performance front, conversion optimisée",
-      forProjectLabel: isEn ? "When?" : "Quand ?",
+      forProjectLabel: isEn ? "When?" : "Pour quand ?",
       forProject: isEn
         ? "The site is slow and the editorial team is settled in. Your editors keep publishing in WordPress; your visitors see a fast, modern site."
         : "Le site est lent, l'équipe éditoriale est installée. Vos rédacteurs continuent de publier dans WordPress ; vos visiteurs voient un site rapide et moderne.",
+      solutionLabel: isEn ? "The solution" : "La solution",
+      solution: isEn
+        ? "I keep your WordPress back office for your editors and plug a Next.js front end on top of it. Publishing doesn't change, but the visible site becomes as fast as a modern app, with SEO reworked from the ground up."
+        : "Je conserve votre back-office WordPress pour vos rédacteurs et je branche dessus un front Next.js. La publication ne change pas, mais le site affiché devient aussi rapide qu'une app moderne, avec un SEO repris de fond en comble.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Headless WordPress as backend + <em className="text-foreground not-italic">Next.js</em> as frontend (SSG, ISR, partial hydration).</>
@@ -101,16 +112,20 @@ function getTiers(isEn: boolean): Tier[] {
     },
     {
       slug: "forfait-webapp",
-      name: isEn ? "REBUILD" : "REFONDER",
+      name: isEn ? "Platform & app" : "Plateforme et app",
       tech: isEn
         ? "web app, platform or mobile application"
         : "web app, plateforme ou application mobile",
       price: isEn ? "From €6,500" : "À partir de 6 500 €",
       priceTagline: isEn ? "Scalable architecture, ISR/SSR, multisite" : "Architecture évolutive, ISR/SSR, multisites",
-      forProjectLabel: isEn ? "When?" : "Quand ?",
+      forProjectLabel: isEn ? "When?" : "Pour quand ?",
       forProject: isEn
         ? "The site has become a working tool: high-volume platform, multisite, third-party integrations, business applications or client portals."
         : "Le site est devenu un outil de travail : plateforme à forte volumétrie, multisites, intégrations tierces, applications métier ou portails clients.",
+      solutionLabel: isEn ? "The solution" : "La solution",
+      solution: isEn
+        ? "I design a bespoke web application: scalable architecture, third-party integrations, multisite or client area. The site becomes a real working tool, built for high volume and critical performance."
+        : "Je conçois une application web sur-mesure : architecture évolutive, intégrations tierces, multisite ou espace client. Le site devient un vrai outil de travail, pensé pour la volumétrie et la performance critique.",
       stackLabel: isEn ? "Technical stack" : "Stack technique",
       stackHtml: isEn
         ? <>Headless WordPress + <em className="text-foreground not-italic">Next.js App Router</em> (SSG, ISR, SSR), TypeScript, complete CI/CD.</>
@@ -136,6 +151,9 @@ function getTiers(isEn: boolean): Tier[] {
   ];
 }
 
+// § Introduction — aperçu des trois trajectoires : prix, « Pour quand », « Ce
+// qui est inclus ». Le détail de chaque offre (la solution + la stack) vit plus
+// bas dans OfferSections, atteignable via « Voir le détail ».
 export function PricingCards() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
@@ -146,14 +164,19 @@ export function PricingCards() {
       {/* En-tête */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
-          index="№ 04"
-          kicker={isEn ? "Implementation after decision" : "Mise en oeuvre après décision"}
+          index="№ 03"
+          kicker={isEn ? "The three trajectories at a glance" : "Les trois trajectoires en un coup d'œil"}
           title={
             isEn ? (
               <>Build only when <span className="text-accent-secondary">it makes sense</span></>
             ) : (
-              <>Construire seulement <span className="text-accent-secondary">quand c'est utile</span></>
+              <>Construire <span className="text-accent-secondary">sur le besoin</span></>
             )
+          }
+          description={
+            isEn
+              ? "When each trajectory fits and what it includes. The full detail of each offer follows below."
+              : "Pour quelle situation chaque trajectoire est faite, et ce qu'elle inclut. Le détail complet de chaque offre suit juste en dessous."
           }
         />
       </Reveal>
@@ -163,9 +186,8 @@ export function PricingCards() {
         {tiers.map((tier) => (
           <StaggerItem key={tier.name} className="h-full">
             <div
-              id={tier.slug}
               className={cn(
-                "group relative flex h-full scroll-mt-24 flex-col p-6 transition-colors hover:bg-jet lg:p-8",
+                "group relative flex h-full flex-col p-6 transition-colors hover:bg-jet lg:p-8",
                 "border-b border-dark-gray md:border-b-0",
                 "md:border-r md:border-dark-gray md:[&:nth-child(3n)]:border-r-0",
                 tier.highlight && "bg-jet",
@@ -196,7 +218,7 @@ export function PricingCards() {
 
               {/* Prix */}
               <div className="mt-6">
-                <div className="text-3xl font-light leading-none tracking-tight text-foreground md:text-4xl">
+                <div className="text-xl font-light leading-none tracking-tight text-accent-secondary md:text-2xl">
                   {tier.price}
                 </div>
                 <div className="mt-2 font-mono text-[10px] tracking-[0.08em] text-mid-gray">
@@ -204,7 +226,7 @@ export function PricingCards() {
                 </div>
               </div>
 
-              {/* Sections détaillées */}
+              {/* Pour quand + Ce qui est inclus */}
               <div className="mt-6 flex flex-1 flex-col">
                 {[
                   {
@@ -212,14 +234,6 @@ export function PricingCards() {
                     content: (
                       <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
                         {tier.forProject}
-                      </p>
-                    ),
-                  },
-                  {
-                    label: tier.stackLabel,
-                    content: (
-                      <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
-                        {tier.stackHtml}
                       </p>
                     ),
                   },
@@ -247,39 +261,16 @@ export function PricingCards() {
                     {content}
                   </div>
                 ))}
-
               </div>
 
-              {/* CTA */}
-              {tier.ctaExternal ? (
-                <a
-                  href={tier.ctaHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
-                    tier.highlight
-                      ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
-                      : "border border-dark-gray text-foreground hover:bg-obsidian",
-                  )}
-                >
-                  {tier.ctaLabel}
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                </a>
-              ) : (
-                <Link
-                  href={tier.ctaHref as Parameters<typeof Link>[0]["href"]}
-                  className={cn(
-                    "mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-sm px-5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
-                    tier.highlight
-                      ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
-                      : "border border-dark-gray text-foreground hover:bg-obsidian",
-                  )}
-                >
-                  {tier.ctaLabel}
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              )}
+              {/* Renvoi vers la section détaillée (ancre du mega menu) */}
+              <a
+                href={`#${tier.slug}`}
+                className="mt-6 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+              >
+                {isEn ? "See the detail" : "Voir le détail"}
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              </a>
             </div>
           </StaggerItem>
         ))}

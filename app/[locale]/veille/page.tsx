@@ -12,18 +12,32 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-strip";
 import { Sonar } from "@/components/visuals/sonar";
+import {
+  Radar,
+  Wrench,
+  FileSearch,
+  Compass,
+  ScanSearch,
+  GitCompare,
+  ScrollText,
+  ArrowRight,
+} from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Page d'offre « Veille techno » — la composante veille de l'offre globale.
+// Page « Veille techno » — la veille pour décideurs, sans le jargon.
 //
-// Elle met en regard les deux lettres :
-//   – la gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
-//     (Substack : une synthèse mensuelle + un focus hebdo) — le CTA froid ;
-//   – Sentinelle (19 €/mois) : veille personnalisée du site ou de l'application
-//     du client + aide à la décision (maintenir, refondre, créer). La page ne
-//     re-vend pas tout le produit : elle renvoie vers /sentinelle (détail) et
-//     /scan (entrée froide).
+// Le héros et le corps présentent trois façons d'avancer, toutes gratuites :
+//   – la lettre gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
+//     (Substack : une synthèse mensuelle + un focus hebdo sur le marché web & IA) ;
+//   – les ressources de fond (choisir sa techno, être trouvé par l'IA, lire un devis) ;
+//   – les outils de diagnostic (techno, visibilité IA, réparer ou refaire, devis).
+//
+// Sentinelle (veille personnalisée payante) n'est PAS présentée ici : elle a sa
+// propre page /sentinelle, accessible depuis la navigation. La section comparatif
+// est commentée plus bas et n'est pas rendue — la métadonnée et le JSON-LD de
+// cette page ne doivent donc décrire QUE la veille gratuite et les ressources.
 //
 // Contenu FR uniquement (locale EN en noindex), comme /sentinelle.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,41 +54,55 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Tech watch: a free newsletter, and a personalized watch on your site"
-      : "Veille techno : la lettre gratuite et la veille personnalisée de votre site",
+      ? "Tech watch for decision-makers: the free newsletter, no jargon"
+      : "Veille techno pour décideurs : la lettre gratuite, sans jargon",
     description: isEn
-      ? "Two watch letters: a free newsletter on the web & AI market (monthly digest, weekly focus), and Sentinelle, the personalized watch on your own site. €19/month, human-reviewed before sending."
-      : "Deux lettres de veille : la newsletter gratuite sur le marché web & IA (synthèse mensuelle, focus hebdo) et Sentinelle, la veille personnalisée de votre site. 19 €/mois, relue par un humain avant envoi.",
+      ? "The free newsletter on the web & AI market: one digest a month, one focus a week. Plus resources and tools to help you decide, without becoming a developer."
+      : "La lettre gratuite sur le marché web & IA : une synthèse par mois, un focus par semaine. Des ressources et des outils pour décider, sans devenir développeur.",
     path: "/veille",
     keywords: isEn
       ? [
           "web technology newsletter",
-          "tech watch website",
+          "tech watch for decision-makers",
           "AI web trends newsletter",
-          "website monitoring newsletter",
+          "free website diagnostic tools",
         ]
       : [
           "newsletter techno web",
-          "veille technologique site web",
+          "veille technologique",
           "newsletter web IA",
-          "veille site WordPress",
-          "lettre de veille personnalisée",
+          "veille techno décideurs",
+          "outils diagnostic site web",
         ],
     locale,
     // Contenu FR uniquement pour l'instant — même règle que /sentinelle.
     noindex: isEn,
+    // Pas d'alternate hreflang EN : la locale EN est en noindex (cohérent
+    // avec le sitemap, qui liste /veille sans alternates).
+    alternateLocales: ["fr"],
   });
 }
 
-// Les douze axes de lecture de la lettre personnalisée, regroupés en cinq
-// grands thèmes pour le héros (détail des axes : prompt actif,
-// src/sentinelle/redaction/lettre-redaction-system-prompt.md).
-const AXES_LETTRE = [
-  "Socle technique & sécurité",
-  "Visibilité & contenu",
-  "Performance & expérience",
-  "IA, données & conformité",
-  "Coûts, prestataires & réversibilité",
+// Aperçu dans le héros : la lettre gratuite, les ressources et les outils —
+// les trois façons d'avancer proposées par la page (ancres vers les sections).
+const VEILLE_OFFERS: HeroOffer[] = [
+  {
+    name: "Lettre gratuite",
+    price: "0 €",
+    benefit: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
+    href: NEWSLETTER_SUBSTACK_URL,
+    external: true,
+  },
+  {
+    name: "Ressources",
+    benefit: "Choisir sa techno, être trouvé par l'IA, lire un devis — sans jargon.",
+    href: "#ressources",
+  },
+  {
+    name: "Outils",
+    benefit: "Diagnostiquez votre site en quelques minutes : techno, visibilité, devis.",
+    href: "#outils",
+  },
 ];
 
 const LETTRE_GRATUITE = [
@@ -160,6 +188,68 @@ const COMPARATIF = [
   },
 ];
 
+// Les rubriques de fond à mettre en avant depuis la veille : comprendre avant
+// de décider. Renvoient vers le hub /documentation (source : lib/hub-themes).
+const RESSOURCES = [
+  {
+    icon: Compass,
+    titre: "Choisir sa techno",
+    corps:
+      "WordPress, no-code, Headless ou sur-mesure : les critères pour trancher, sans devenir développeur.",
+    href: "/documentation/choisir",
+  },
+  {
+    icon: Radar,
+    titre: "Être trouvé à l'heure de l'IA",
+    corps:
+      "Comment ChatGPT, Perplexity et les moteurs IA citent — ou ignorent — votre site, et quoi y changer.",
+    href: "/documentation/etre-trouve",
+  },
+  {
+    icon: Wrench,
+    titre: "Réparer ou refaire",
+    corps:
+      "Reconnaître un site en bout de course, et savoir quand consolider plutôt que tout refondre.",
+    href: "/documentation/reparer",
+  },
+  {
+    icon: FileSearch,
+    titre: "Avant de signer",
+    corps:
+      "Lire un devis web, poser les bonnes questions et éviter les pièges avant de vous engager.",
+    href: "/documentation/avant-signer",
+  },
+];
+
+// Les outils interactifs à mettre en avant : passer de la lecture à la décision.
+// Renvoient vers /outils (source : components/outils/outils-bento-grid).
+const OUTILS = [
+  {
+    icon: Compass,
+    titre: "Sélecteur techno web & IA",
+    corps: "8 critères, une recommandation : la bonne technologie pour votre projet.",
+    href: "/outils/selecteur-techno",
+  },
+  {
+    icon: ScanSearch,
+    titre: "Visibilité dans les moteurs IA",
+    corps: "10 questions, un score sur 4 axes et vos actions prioritaires pour être cité.",
+    href: "/outils/visibilite-ia",
+  },
+  {
+    icon: GitCompare,
+    titre: "Réparer ou refaire ?",
+    corps: "Un score de santé et un signal clair : réparer, optimiser ou refondre.",
+    href: "/outils/reparer-ou-refaire",
+  },
+  {
+    icon: ScrollText,
+    titre: "Décrypteur de devis web",
+    corps: "9 vérifications pour lire un devis et poser les bonnes questions avant de signer.",
+    href: "/outils/decrypteur-devis",
+  },
+];
+
 export default async function VeillePage({
   params,
 }: {
@@ -177,18 +267,19 @@ export default async function VeillePage({
   return (
     <main>
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      {/* Schéma Service aligné sur le contenu visible : les deux lettres de
-          veille (gratuite + Sentinelle, tarif unique dans lib/sentinelle-offer). */}
+      {/* Schéma Service aligné sur le contenu visible : la veille gratuite pour
+          décideurs (lettre Substack, ressources et outils). Sentinelle a sa
+          propre page /sentinelle et n'est pas décrite ici. */}
       <ServiceJsonLd
         name={
           isEn
-            ? "Tech watch: free newsletter and personalized site watch"
-            : "Veille techno : lettre gratuite et veille personnalisée de votre site"
+            ? "Tech watch for decision-makers: free newsletter, resources and tools"
+            : "Veille techno pour décideurs : lettre gratuite, ressources et outils"
         }
         description={
           isEn
-            ? "Two watch letters: a free newsletter on the web & AI market (monthly digest, weekly focus) and Sentinelle, the personalized watch on your own site (€19/month, human-reviewed before sending)."
-            : "Deux lettres de veille : la newsletter gratuite sur le marché web & IA (synthèse mensuelle, focus hebdo) et Sentinelle, la veille personnalisée de votre site (19 €/mois, relue par un humain avant envoi)."
+            ? "A free newsletter on the web & AI market (one digest a month, one focus a week), plus free resources and tools to understand and decide, without jargon."
+            : "La lettre gratuite sur le marché web & IA (une synthèse par mois, un focus par semaine), des ressources et des outils gratuits pour comprendre et décider, sans jargon."
         }
         serviceType={isEn ? "Technology watch" : "Veille technologique"}
         url="/veille"
@@ -208,50 +299,35 @@ export default async function VeillePage({
           <>
             La veille techno,{" "}
             <em className="font-normal not-italic text-accent-secondary">
-              personnalisée pour votre site
+              pour décideurs
             </em>
           </>
         }
         description={
           <>
-            Sentinelle surveille votre site et vous aide à décider — consolider,
-            faire évoluer, ou refondre. La lettre gratuite suit le marché : une
-            synthèse par mois, un focus par semaine.
+            La lettre gratuite suit le marché web & IA : une synthèse par mois, un
+            focus par semaine. Et des ressources et des outils pour comprendre et
+            trancher — sans devenir développeur.
           </>
         }
         actions={
           <>
-            <Link href="/scan" className={BTN_PRIMARY}>
-              Analyser mon site
-            </Link>
             <a
               href={NEWSLETTER_SUBSTACK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className={BTN_SECONDARY}
+              className={BTN_PRIMARY}
             >
               La lettre gratuite — Substack
             </a>
+            <a href="#outils" className={BTN_SECONDARY}>
+              Les outils gratuits
+            </a>
           </>
         }
-        note="Sans engagement · Relu par un humain avant envoi"
+        note="Gratuit · désinscription en un clic"
       >
-        {/* Les grands axes de la lettre personnalisée, en badges. */}
-        <div className="mt-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
-            Douze axes de lecture, cinq grands thèmes
-          </p>
-          <ul className="mt-3 flex max-w-3xl flex-wrap gap-1.5">
-            {AXES_LETTRE.map((axe) => (
-              <li
-                key={axe}
-                className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
-              >
-                {axe}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <HeroOfferStrip offers={VEILLE_OFFERS} />
       </PageHero>
 
       {/* ── La lettre gratuite : deux rendez-vous ────────────────────────── */}
@@ -284,6 +360,14 @@ export default async function VeillePage({
           ))}
         </div>
 
+        {/* Preuve : qui tient la veille — le diplôme légitime l'offre, en ligne
+            sobre près de la promesse, jamais en accroche (même logique AGEFIPH). */}
+        <p className="mt-8 max-w-2xl border-l-2 border-accent-secondary/60 pl-4 font-inter-tight text-base leading-relaxed text-foreground/80">
+          Derrière la lettre : une consultante formée à la discipline, master
+          Veille technologique et innovation (Aix-Marseille), qui pratique la
+          veille depuis 2012, du marché web aux modèles IA.
+        </p>
+
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
             href={NEWSLETTER_SUBSTACK_URL}
@@ -299,7 +383,7 @@ export default async function VeillePage({
         </p>
       </BlueprintSection>
 
-      {/* ── Sentinelle : la veille qui porte VOTRE nom de domaine ────────── */}
+{/* Sentinelle : la veille personnalisée, avec le comparatif des deux lettres. 
       <BlueprintSection
         id="sentinelle"
         className="border-t border-dark-gray"
@@ -338,7 +422,6 @@ export default async function VeillePage({
         </p>
       </BlueprintSection>
 
-      {/* ── Comparatif : une décision, deux colonnes ─────────────────────── */}
       <BlueprintSection
         tone="jet"
         className="border-t border-dark-gray"
@@ -398,6 +481,105 @@ export default async function VeillePage({
           Sentinelle prend le relais sur ce qui vous appartient.
         </p>
       </BlueprintSection>
+*/}
+
+      {/* ── Ressources : comprendre avant de décider ─────────────────────── */}
+      <BlueprintSection
+        id="ressources"
+        className="border-t border-dark-gray"
+        innerClassName="px-6 py-14 lg:px-12 lg:py-20"
+      >
+        <SectionHeading
+          index="№ 02"
+          kicker="Ressources"
+          title="Documentation"
+          description="Des repères clairs pour choisir votre techno, être trouvé par les moteurs IA et lire un devis — sans devenir développeur."
+        />
+
+        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2">
+          {RESSOURCES.map((bloc) => {
+            const Icon = bloc.icon;
+            return (
+              <Link
+                key={bloc.href}
+                href={bloc.href}
+                className="group flex flex-col bg-jet p-8 transition-colors hover:bg-obsidian"
+              >
+                <Icon
+                  size={18}
+                  className="text-mid-gray transition-colors group-hover:text-accent-secondary"
+                />
+                <h3 className="mt-5 text-lg font-medium tracking-tight text-foreground">
+                  {bloc.titre}
+                </h3>
+                <p className="mt-3 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
+                  {bloc.corps}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+                  Lire
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Link href="/documentation" className={BTN_PRIMARY}>
+            Toutes les ressources
+          </Link>
+        </div>
+      </BlueprintSection>
+
+      {/* ── Outils : passer de la lecture à la décision ──────────────────── */}
+      <BlueprintSection
+        id="outils"
+        tone="jet"
+        className="border-t border-dark-gray"
+        innerClassName="px-6 py-14 lg:px-12 lg:py-20"
+      >
+        <SectionHeading
+          index="№ 03"
+          kicker="Outils"
+          title="Outils en ligne"
+          description="Des outils gratuits pour transformer un doute en décision : quelle techno, quelle visibilité, réparer ou refaire, quel devis."
+        />
+
+        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2">
+          {OUTILS.map((bloc) => {
+            const Icon = bloc.icon;
+            return (
+              <Link
+                key={bloc.href}
+                href={bloc.href}
+                className="group flex flex-col bg-obsidian p-8 transition-colors hover:bg-jet"
+              >
+                <Icon
+                  size={18}
+                  className="text-mid-gray transition-colors group-hover:text-accent-secondary"
+                />
+                <h3 className="mt-5 text-lg font-medium tracking-tight text-foreground">
+                  {bloc.titre}
+                </h3>
+                <p className="mt-3 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
+                  {bloc.corps}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+                  Ouvrir
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Link href="/outils" className={BTN_PRIMARY}>
+            Tous les outils
+          </Link>
+        </div>
+      </BlueprintSection>
+
     </main>
   );
 }

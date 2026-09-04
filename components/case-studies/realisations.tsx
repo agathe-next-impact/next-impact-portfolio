@@ -58,7 +58,7 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
                 "flex min-w-0 flex-1 flex-col items-center gap-1 px-2 py-3.5 text-center font-mono text-[10px] uppercase leading-tight tracking-[0.08em] transition-colors",
                 idx < tabs.length - 1 && "border-r border-dark-gray",
                 isActive
-                  ? "bg-vermilion text-white"
+                  ? "bg-accent-secondary text-obsidian"
                   : "bg-jet text-mid-gray hover:bg-ebony hover:text-foreground",
               )}
             >

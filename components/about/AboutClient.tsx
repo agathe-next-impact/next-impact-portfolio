@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, CalendarDays, Gauge, Newspaper, Plus } from "lucide-react";
+import { ArrowRight, Newspaper, Plus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { getAboutContent } from "@/lib/about-content";
@@ -15,13 +15,11 @@ import {
 } from "@/components/aspect/section";
 import { PageHero } from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
-import { AuroraGlow } from "@/components/visuals/aurora-glow";
 import { SignalPaths } from "@/components/visuals/signal-paths";
 import { MeterBar } from "@/components/visuals/charts";
 
 type LinkHref = Parameters<typeof Link>[0]["href"];
 
-const CALENDAR_URL = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 const FIGARO_URL =
   "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512";
 const HAL_URL = "https://archivesic.ccsd.cnrs.fr/sic_01002025";
@@ -409,75 +407,6 @@ export default function AboutClient() {
               className="transition-transform group-hover:translate-x-0.5"
             />
           </Link>
-        </Reveal>
-      </BlueprintSection>
-
-      <Separator />
-
-      {/* № 05 — Double CTA final : froid (prioritaire) + chaud */}
-      <BlueprintSection
-        tone="jet"
-        backdrop={<AuroraGlow intensity="subtle" />}
-        innerClassName="border-t border-dark-gray px-6 py-16 lg:px-10 lg:py-20"
-      >
-        <Reveal className="flex flex-col gap-8">
-          <SectionHeading
-            index="№ 05"
-            kicker={t("ctaFinal.label")}
-            title={t("ctaFinal.title")}
-          />
-          <div className="grid gap-4 lg:grid-cols-[1.3fr_0.7fr]">
-            {/* CTA froid — dominant */}
-            <Link
-              href={"/audit-site-web" as LinkHref}
-              className="group flex flex-col justify-between gap-6 rounded-sm border border-charcoal bg-vermilion/10 p-6 transition-colors hover:bg-vermilion/15 lg:p-8"
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary">
-                  <Gauge size={14} />
-                  <span>{t("ctaFinal.coldTag")}</span>
-                </div>
-                <h3 className="text-xl font-light leading-tight tracking-tight text-foreground md:text-2xl">
-                  {t("ctaFinal.coldTitle")}
-                </h3>
-                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
-                  {t("ctaFinal.coldDescription")}
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent-secondary group-hover:text-foreground">
-                {t("ctaFinal.coldCta")}
-                <ArrowRight
-                  size={13}
-                  className="transition-transform group-hover:translate-x-0.5"
-                />
-              </span>
-            </Link>
-
-            {/* CTA chaud — secondaire */}
-            <a
-              href={CALENDAR_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex flex-col justify-between gap-6 rounded-sm border border-dark-gray p-6 transition-colors hover:border-mid-gray lg:p-8"
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                  <CalendarDays size={14} />
-                  <span>{t("ctaFinal.warmTag")}</span>
-                </div>
-                <h3 className="text-xl font-light leading-tight tracking-tight text-foreground md:text-2xl">
-                  {t("ctaFinal.warmTitle")}
-                </h3>
-              </div>
-              <span className="inline-flex items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-foreground">
-                {t("ctaFinal.warmCta")}
-                <ArrowRight
-                  size={13}
-                  className="transition-transform group-hover:translate-x-0.5"
-                />
-              </span>
-            </a>
-          </div>
         </Reveal>
       </BlueprintSection>
     </div>

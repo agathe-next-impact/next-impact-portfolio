@@ -378,6 +378,11 @@ function buildCategoryTools(isEn: boolean): Record<string, ToolLink[]> {
       TOOL_LINKS[0],
       { ...SERVICE_LINKS[2], description: t("Launch your project.", "Lancez votre projet.") },
     ],
+    "applications-web-mobile": [
+      TOOL_LINKS[0],
+      TOOL_LINKS[1],
+      { ...SERVICE_LINKS[1], description: t("Platforms and web apps in production.", "Plateformes et web apps en production.") },
+    ],
   };
 }
 
@@ -502,6 +507,14 @@ function getCategoryRelevantLinks(
         { href: "/documentation/seo", title: t("SEO guide", "Guide SEO") },
         { href: "/audit-site-web", title: t("AI audit", "Audit IA") },
         { href: "/contact", title: t("Start a project", "Démarrer un projet") },
+      ];
+    case "applications-web-mobile":
+      return [
+        ...base,
+        { href: "/outils/nocode-saas-surmesure", title: t("No-code, SaaS or custom?", "No-code, SaaS ou sur-mesure ?") },
+        { href: "/outils/audit-pwa", title: t("PWA diagnostic", "Diagnostic PWA") },
+        { href: "/etudes-de-cas", title: t("Case studies", "Études de cas") },
+        { href: "/solutions-web", title: t("Our offerings", "Nos offres") },
       ];
     case "projet-site-web":
       return [

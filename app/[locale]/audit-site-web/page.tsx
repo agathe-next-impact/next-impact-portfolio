@@ -30,7 +30,7 @@ import {
 export const revalidate = 86400;
 
 const BTN_PRIMARY =
-  "inline-flex h-12 items-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 export async function generateMetadata({
   params,

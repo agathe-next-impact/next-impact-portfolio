@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
 import { useInView, useReducedMotion } from "framer-motion";
-import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
@@ -75,16 +73,6 @@ const EN: Testimonial[] = [
     role: "Founder, Agence Créaclic",
   },
 ];
-
-// Signature discrète — logos à fond transparent, rendus en monochrome blanc
-// pour être lisibles sur fond sombre quel que soit leur format d'origine.
-const LOGOS = [
-  { src: "/img/logo-sowee.webp", alt: "Sowee" },  
-  { src: "/img/logo-transitions-pro.png", alt: "Transition Pro" },
-  { src: "/img/logo-sdevo.png", alt: "SDEVO" },
-  { src: "/img/logo-infralliance.png", alt: "Infralliance" },
-  { src: "/img/logo-hermitage.webp", alt: "Tiers Lieu L'Hermitage" },
-  { src: "/img/logo-wagner-hamisky_1.webp", alt: "Wagner Hamisky" },];
 
 /** Initiales du persona (2 premiers mots du nom) — ex. « Christophe Riboulet » → « CR ». */
 function initials(name: string): string {
@@ -242,7 +230,7 @@ export default function HomeTestimonials() {
       </Reveal>
 
       {/* Cartes */}
-      <Stagger className="grid border-b border-dark-gray md:grid-cols-2">
+      <Stagger className="grid md:grid-cols-2">
         {testimonials.map((t, i) => {
           const featured = i === 0;
           return (
@@ -297,32 +285,6 @@ export default function HomeTestimonials() {
         })}
       </Stagger>
 
-      {/* Logos — signature, pas un mur */}
-      <div className="px-6 py-8 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
-            {isEn ? "Trusted by" : "Ils m'ont fait confiance"}
-          </p>
-          <Link
-            href="/etudes-de-cas"
-            className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
-          >
-            {isEn ? "All case studies" : "Toutes les études de cas"}
-            <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        </div>
-        <div className="mt-6 flex flex-wrap items-center gap-x-10 gap-y-6">
-          {LOGOS.map((l) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={l.src}
-              src={l.src}
-              alt={l.alt}
-              className="h-6 w-auto md:h-7"
-            />
-          ))}
-        </div>
-      </div>
     </BlueprintSection>
   );
 }

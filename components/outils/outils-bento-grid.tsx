@@ -1,7 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
-import { AnimatePresence, m as motion } from "framer-motion"
 import { Link } from "@/i18n/navigation"
 import {
   BotMessageSquare,
@@ -17,8 +15,6 @@ import {
   ClipboardCheck,
   ArrowRight,
 } from "lucide-react"
-import { useDocumentationMode } from "@/contexts/documentation-mode-context"
-import type { ProfileId } from "@/lib/documentation-profiles"
 import { useLocale } from "next-intl"
 import type { Locale } from "@/i18n/routing"
 
@@ -29,7 +25,6 @@ interface BentoCard {
   icon: React.ElementType
   href: string
   tag?: string
-  hideOnMobile?: boolean
 }
 
 const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
@@ -144,81 +139,159 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
   },
 })
 
-const CARD_ORDER: Record<ProfileId | "default", string[]> = {
-  decideur:    ["selecteur-techno", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "audit-ia", "cahier-des-charges", "audit-pwa"],
-  default:     ["selecteur-techno", "visibilite-ia", "checklist-geo", "decrypteur-devis", "reparer-refaire", "nocode-saas-surmesure", "prototype-ia", "determiner-offre", "audit-ia", "audit-pwa", "cahier-des-charges"],
-  utilisateur: ["selecteur-techno", "visibilite-ia", "checklist-geo", "reparer-refaire", "nocode-saas-surmesure", "determiner-offre", "cahier-des-charges", "decrypteur-devis", "prototype-ia", "audit-ia", "audit-pwa"],
-  developpeur: ["selecteur-techno", "prototype-ia", "visibilite-ia", "checklist-geo", "nocode-saas-surmesure", "audit-pwa", "reparer-refaire", "audit-ia", "determiner-offre", "decrypteur-devis", "cahier-des-charges"],
+// Regroupement par décision à trancher — un intitulé par groupe, sous-grille
+// bento dédiée. Ordre fixe (pas de réordonnancement par profil) : plus lisible
+// et plus stable pour le SEO.
+interface ToolGroup {
+  index: string
+  slug: string
+  kicker: { fr: string; en: string }
+  title: { fr: string; en: string }
+  cards: string[]
+}
+
+const GROUPS: ToolGroup[] = [
+  {
+    index: "№ 01",
+    slug: "choisir",
+    kicker: { fr: "Choisir", en: "Choose" },
+    title: { fr: "Choisir la bonne techno", en: "Choose the right tech" },
+    cards: ["selecteur-techno", "nocode-saas-surmesure", "determiner-offre"],
+  },
+  {
+    index: "№ 02",
+    slug: "diagnostiquer",
+    kicker: { fr: "Diagnostiquer", en: "Diagnose" },
+    title: { fr: "Évaluer votre site actuel", en: "Assess your current site" },
+    cards: ["reparer-refaire", "audit-ia", "audit-pwa"],
+  },
+  {
+    index: "№ 03",
+    slug: "visibilite-ia",
+    kicker: { fr: "Visibilité IA", en: "AI visibility" },
+    title: { fr: "Être trouvé par l'IA", en: "Get found by AI" },
+    cards: ["visibilite-ia", "checklist-geo"],
+  },
+  {
+    index: "№ 04",
+    slug: "cadrer",
+    kicker: { fr: "Avant de signer", en: "Before you commit" },
+    title: { fr: "Cadrer et sécuriser le projet", en: "Scope and secure the project" },
+    cards: ["decrypteur-devis", "prototype-ia", "cahier-des-charges"],
+  },
+]
+
+function ToolCard({ card, isEn }: { card: BentoCard; isEn: boolean }) {
+  const Icon = card.icon
+  return (
+    <div className="border-b border-l border-dark-gray">
+      <Link
+        href={card.href as Parameters<typeof Link>[0]["href"]}
+        className="group flex min-h-[200px] flex-col justify-between p-7 transition-colors hover:bg-jet lg:p-8"
+      >
+        <div className="mb-5 flex items-start justify-between">
+          <Icon
+            size={18}
+            className="mt-0.5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary"
+          />
+          {card.tag && (
+            <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+              {card.tag}
+            </span>
+          )}
+        </div>
+
+        <div>
+          <h3 className="mb-2 text-base font-light leading-snug tracking-tight text-foreground">
+            {card.title}
+          </h3>
+          <p className="mb-4 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            {card.description}
+          </p>
+          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+            {isEn ? "Open" : "Ouvrir"}
+            <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </div>
+      </Link>
+    </div>
+  )
+}
+
+function GroupNav({ locale, isEn }: { locale: Locale; isEn: boolean }) {
+  const cards = buildCards(isEn)
+  return (
+    <nav aria-label={isEn ? "Tool families" : "Familles d'outils"}>
+      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+        {isEn ? "Four tool families" : "Quatre familles d'outils"}
+      </p>
+      <ul className="grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-4">
+        {GROUPS.map((group) => {
+          const count = group.cards.filter((id) => cards[id]).length
+          return (
+            <li key={group.slug} className="flex">
+              <a
+                href={`#${group.slug}`}
+                className="group flex h-full w-full flex-col justify-between gap-4 bg-jet p-4 no-underline transition-colors hover:bg-obsidian"
+              >
+                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary">
+                  <span>{group.index}</span>
+                  <span className="h-px w-5 bg-accent-secondary/50" />
+                  <span className="text-mid-gray">{group.kicker[locale]}</span>
+                </span>
+                <span className="text-base font-light leading-snug tracking-tight text-foreground">
+                  {group.title[locale]}
+                </span>
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors group-hover:text-accent-secondary">
+                  {count} {isEn ? (count > 1 ? "tools" : "tool") : count > 1 ? "outils" : "outil"}
+                  <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
 }
 
 export default function OutilsBentoGrid() {
-  const { profileId } = useDocumentationMode()
   const locale = useLocale() as Locale
   const isEn = locale === "en"
-
-  const orderedCards = useMemo(() => {
-    const cards = buildCards(isEn)
-    const order = profileId ? CARD_ORDER[profileId] : CARD_ORDER.default
-    return order.map((id) => cards[id]).filter(Boolean)
-  }, [profileId, isEn])
+  const cards = buildCards(isEn)
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={profileId || "default"}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        /* Bento bordé sans gouttière : rails haut + droite portés par le cadre,
-           chaque cellule ajoute son filet gauche + bas → cadre complet et robuste
-           à tous les breakpoints (1 / 2 / 3 colonnes). */
-        className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {orderedCards.map((card) => {
-          const Icon = card.icon
-          return (
-            <div
-              key={card.id}
-              className={
-                card.hideOnMobile
-                  ? "hidden border-b border-l border-dark-gray md:block"
-                  : "border-b border-l border-dark-gray"
-              }
-            >
-              <Link
-                href={card.href as Parameters<typeof Link>[0]["href"]}
-                className="group flex min-h-[200px] flex-col justify-between p-7 transition-colors hover:bg-jet lg:p-8"
-              >
-                <div className="mb-5 flex items-start justify-between">
-                  <Icon
-                    size={18}
-                    className="mt-0.5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary"
-                  />
-                  {card.tag && (
-                    <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
-                      {card.tag}
-                    </span>
-                  )}
-                </div>
+    <div className="flex flex-col gap-14 lg:gap-20">
+      {/* Header : mini-cartes de navigation, une par groupe (ancres vers les sections) */}
+      <GroupNav locale={locale} isEn={isEn} />
 
-                <div>
-                  <h2 className="mb-2 text-base font-light leading-snug tracking-tight text-foreground">
-                    {card.title}
-                  </h2>
-                  <p className="mb-4 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
-                    {card.description}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
-                    {isEn ? "Open" : "Ouvrir"}
-                    <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </div>
-              </Link>
+      {GROUPS.map((group) => {
+        const groupCards = group.cards.map((id) => cards[id]).filter(Boolean)
+        if (groupCards.length === 0) return null
+        return (
+          <section key={group.index} id={group.slug} className="scroll-mt-24">
+            {/* En-tête de groupe : index № + kicker mono vermillon + titre */}
+            <div className="mb-8 flex flex-col gap-2">
+              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+                <span>{group.index}</span>
+                <span className="h-px w-6 bg-accent-secondary/50" />
+                <span className="text-mid-gray">{group.kicker[locale]}</span>
+              </div>
+              <h2 className="text-xl font-light tracking-tight text-foreground md:text-2xl">
+                {group.title[locale]}
+              </h2>
             </div>
-          )
-        })}
-      </motion.div>
-    </AnimatePresence>
+
+            {/* Sous-grille bento : rails haut + droite portés par le cadre, chaque
+                cellule ajoute son filet gauche + bas → cadre complet à 1 / 2 / 3 col. */}
+            <div className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
+              {groupCards.map((card) => (
+                <ToolCard key={card.id} card={card} isEn={isEn} />
+              ))}
+            </div>
+          </section>
+        )
+      })}
+    </div>
   )
 }

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run check:docs && npm run check:sentinelle && next build",
+    "build": "npm run check:docs && npm run check:sentinelle && cross-env NODE_OPTIONS=--max-old-space-size=8192 next build",
     "check:docs": "node scripts/check-documentation-contract.mjs --strict",
     "check:sentinelle": "node scripts/check-sentinelle-isolation.mjs",
     "check:mail": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-sentinelle-mail.mjs",

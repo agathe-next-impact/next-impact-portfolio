@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
-import { ProofStrip } from "@/components/proof-strip";
+import { TechnoLogosStrip } from "@/components/techno-logos-strip";
 import { BlueprintSection, Separator } from "@/components/aspect/section";
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner";
 
@@ -39,10 +39,6 @@ const HomeDiagnostic = dynamic(() => import("./home-diagnostic"), {
   loading: () => <div style={{ minHeight: 400 }} />,
 });
 
-const HomeCta = dynamic(() => import("./home-cta"), {
-  loading: () => <div style={{ minHeight: 200 }} />,
-});
-
 export default function HomeClient() {
   return (
     <main className="flex-1">
@@ -52,8 +48,9 @@ export default function HomeClient() {
       {/* § 01b — « En bref » (TL;DR citable par les IA) */}
       <HomeTldr />
 
-      {/* § 01c — Bande de preuve chiffrée (chaque chiffre vérifiable au clic) */}
-      <ProofStrip />
+      {/* § 01c — Technos (WordPress / Next.js / Astro + outils IA) en preuve
+          discrète ; les logos clients, eux, sont dans le hero. */}
+      <TechnoLogosStrip />
 
       {/* § 02 — Offres : 3 stacks */}
       <HomeOffres />
@@ -88,9 +85,6 @@ export default function HomeClient() {
 
       {/* § 10 — FAQ (citabilité IA + FAQPage schema) */}
       <HomeFaq />
-
-      {/* § 11 — CTA final */}
-      <HomeCta />
     </main>
   );
 }

@@ -1,0 +1,103 @@
+---
+title: "Member area, client portal, extranet: what do you actually need?"
+description: "Three words for the same mechanism: part of the site behind a door. What sets them apart, the three levels of complexity, and the scoping questions to answer before any quote."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 14
+enBref:
+  - "Member area, client portal and extranet all describe the same mechanism: a part of the site reserved for identified users, with accounts, access rights, and content or data that varies with the person signed in."
+  - "The real cost driver is not the project's name but what sits behind the door: reserved content can be handled by a well-configured WordPress, personalized data calls for a dedicated database, and business actions (uploading documents, tracking a case, paying online) turn the project into a web app."
+  - "Before any quote, four points need answers: who signs in, what each profile sees, what each profile can do, and where the displayed data comes from."
+faq:
+  - question: "Can a member area be built with WordPress?"
+    answer: "Yes, as long as it is about reserving content: articles, documents, videos available after sign-in. Solid plugins do this well. The limit comes when each member must see data of their own (their case, their invoices, their history): WordPress was not designed for that, and forcing it quickly costs more than a dedicated database."
+  - question: "What is the difference between a client portal and an extranet?"
+    answer: "The audience, not the technology. A client portal serves your clients (order tracking, documents, invoices); an extranet serves external partners (suppliers, members, resellers). In both cases the mechanism is the same: accounts, access rights, data filtered by the person signed in."
+  - question: "How much does a member area cost?"
+    answer: "It depends on the level: reserving content fits into a classic WordPress redesign; a portal with personalized data and business actions is a custom web app, from €6,500 excl. VAT at Next Impact. The detailed ranges by project type give the orders of magnitude."
+  - question: "Do I need to migrate the whole site to add a member area?"
+    answer: "No. A WordPress showcase site can coexist with a dedicated web app for the member area, linked by a sign-in button. It is often the healthiest architecture: each tool does what it was designed for, and the public site does not inherit the complexity of the private part."
+---
+
+A member downloading their certificates, a client tracking the progress of their case, a reseller viewing negotiated prices: these three projects arrive under three different names (member area, client portal, extranet) and actually raise the same question. What goes behind the door, and for whom? The answer determines whether the project fits in a well-configured WordPress or crosses into a [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app).
+
+## Three names, one mechanism
+
+**All three terms describe a part of the site reserved for identified users; only the audience changes.**
+
+<DataTable caption="Member area, client portal, extranet: who signs in and what for">
+
+| Term | Who signs in | Typical use | Example |
+|---|---|---|---|
+| Member area | Members, subscribers, a community | Reserved content, internal directory, documents | A federation reserving its resources for its members |
+| Client portal | Your clients | Case tracking, invoices, contractual documents | A firm sharing case progress with clients |
+| Extranet | External partners: suppliers, resellers | Negotiated prices, orders, file exchange | A manufacturer opening its pro catalog to resellers |
+
+</DataTable>
+
+Technically, all three rest on the same building blocks: user accounts, a sign-in system, access rights, and content or data filtered by the person signed in. The project's name therefore has no impact on the quote. What does is the level of what sits behind the door.
+
+## The three levels behind the door
+
+**The cost and technology of a reserved area depend on what a signed-in user sees: the same content as everyone, data of their own, or a genuine working tool.**
+
+### Level 1: reserved content
+
+Every signed-in member sees the same thing: articles, guides, videos, downloadable documents. Sign-in acts as a filter, not as personalization. This level stays within a site's scope: a WordPress with a serious membership plugin handles it, and an [optimized WordPress redesign](/solutions-web) is often enough.
+
+### Level 2: personalized data
+
+Each member sees information of their own: profile, certificates, history, invoices. This requires a structured database, per-user records and filtered display logic. It is the gray zone: feasible by forcing WordPress, but that is exactly the case described in [When WordPress is no longer the right tool](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil): every evolution becomes a workaround.
+
+### Level 3: business actions
+
+The member no longer just reads, they act: uploading documents, filing requests, following an approval flow, paying a membership fee online. The site has become a shared working tool. This level calls for a custom web app, with its own business logic, differentiated roles and a [dedicated admin interface](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure) for your team.
+
+## WordPress, SaaS or custom: three ways to build
+
+**The right answer follows the level, not the other way around.**
+
+- **WordPress + membership plugin**: relevant at level 1. Quick to set up, content management unchanged for your team. Limit: as soon as per-member personalization appears, the plugin stack makes the site fragile.
+- **Specialized SaaS** (an off-the-shelf tool rented by subscription): services exist for memberships, document portals or light extranets. Relevant when your need matches the tool's standard. The full decision grid is in [Custom platform vs generic SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas).
+- **Custom web app**: relevant at levels 2 and 3, when data and actions are specific to your organization. You own the database, the logic and the interface; the entry cost is higher (from €6,500 excl. VAT), the cost per member does not grow with volume.
+
+One architectural point often overlooked: the public site and the reserved area do not have to live in the same tool. A WordPress showcase site linked to a dedicated web app is a common, healthy architecture; each piece stays replaceable.
+
+## The four scoping questions before the quote
+
+**No provider can price a reserved area without these four answers; preparing them avoids a quote inflated out of caution.**
+
+1. **Who signs in?** How many distinct profiles (member, administrator, partner), how many expected users, who creates the accounts: them or you?
+2. **What does each profile see?** The same content for everyone (level 1), individual data (level 2), or both?
+3. **What can each profile do?** View, download, upload, edit, pay? Every added verb is a development block and a matter of [security and user accounts](/documentation/applications-web-mobile/comptes-utilisateurs-et-securite).
+4. **Where does the data come from?** Entered by your team, imported from a file, or synchronized from an existing tool (CRM, management software)? The last case opens the [integration](/documentation/applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement) work stream.
+
+> **What I see on projects.** The request almost always arrives phrased at level 1 ("a space where our members sign in") and reveals itself as level 2 or 3 by the second meeting, when individual certificates, case tracking or online membership fees appear. Asking the four questions above before consulting providers avoids comparing quotes that are not pricing the same project.
+
+## Verdict by situation
+
+- **Content to reserve for your members, identical for all**: stay on WordPress with a proven membership plugin; no need to pay for a web app.
+- **Each member must see their own case, documents, history**: scope a level-2 web app; forcing WordPress would cost more over time.
+- **Members must act: upload, request, pay**: this is a level-3 web app; start by writing each profile's journey before talking technology.
+- **Your need matches an off-the-shelf tool** (standard association memberships, for instance): SaaS is legitimate; just check data export and cost at scale with the [custom vs SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas) grid.
+
+## FAQ: member area, client portal, extranet
+
+### Can a member area be built with WordPress?
+
+Yes, as long as it is about reserving content: articles, documents, videos available after sign-in. Solid plugins do this well. The limit comes when each member must see data of their own (their case, their invoices, their history): WordPress was not designed for that, and forcing it quickly costs more than a dedicated database.
+
+### What is the difference between a client portal and an extranet?
+
+The audience, not the technology. A client portal serves your clients (order tracking, documents, invoices); an extranet serves external partners (suppliers, members, resellers). In both cases the mechanism is the same: accounts, access rights, data filtered by the person signed in.
+
+### How much does a member area cost?
+
+It depends on the level: reserving content fits into a classic WordPress redesign; a portal with personalized data and business actions is a custom web app, from €6,500 excl. VAT at Next Impact. The [detailed ranges by project type](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) give the orders of magnitude.
+
+### Do I need to migrate the whole site to add a member area?
+
+No. A WordPress showcase site can coexist with a dedicated web app for the member area, linked by a sign-in button. It is often the healthiest architecture: each tool does what it was designed for, and the public site does not inherit the complexity of the private part.

@@ -257,8 +257,34 @@ export function HubRubriques({ locale }: { locale: Locale }) {
 
   return (
     <div className="mb-16">
-      {/* Bandeau-méthode Sélecteur */}
-      <div className="mb-10 border border-dark-gray bg-jet/40 p-7 lg:p-8">
+      {/* 7 rubriques par question — grille simplifiée : titre + lien uniquement.
+          Fond alterné : boîte actuelle (transparente) et teinte de la bannière
+          diagnostic (jet/40). */}
+      <div className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
+        {c.rubriques.map((r, i) => (
+          <div
+            key={r.id}
+            id={r.id}
+            className={`scroll-mt-24 border-b border-l border-dark-gray ${
+              i % 2 === 1 ? "bg-jet/40" : ""
+            }`}
+          >
+            <Link
+              href={`/documentation/${r.id}` as Parameters<typeof Link>[0]["href"]}
+              className="group/title flex min-h-[96px] items-center justify-between gap-3 p-7 text-lg font-light tracking-tight text-foreground no-underline transition-colors hover:text-vermilion lg:p-8"
+            >
+              {r.title}
+              <ArrowUpRight
+                size={16}
+                className="shrink-0 text-mid-gray transition-transform group-hover/title:-translate-y-0.5 group-hover/title:translate-x-0.5 group-hover/title:text-vermilion"
+              />
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      {/* Bandeau-méthode Sélecteur — sous la grille thématique */}
+      <div className="mt-10 border border-dark-gray bg-jet/40 p-7 lg:p-8">
         <div className="flex flex-wrap items-start gap-6">
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border border-dark-gray bg-obsidian">
             <Compass className="h-[1.125rem] w-[1.125rem] text-vermilion" />
@@ -292,70 +318,6 @@ export function HubRubriques({ locale }: { locale: Locale }) {
             </Link>
           </div>
         </div>
-      </div>
-
-      {/* 7 rubriques par question — bento bordé (modèle OutilsBentoGrid) */}
-      <div className="grid grid-cols-1 border-r border-t border-dark-gray sm:grid-cols-2 lg:grid-cols-3">
-        {c.rubriques.map((r, i) => {
-          const Icon = r.icon;
-          return (
-            <div
-              key={r.id}
-              id={r.id}
-              className="scroll-mt-24 border-b border-l border-dark-gray"
-            >
-              <div className="flex min-h-[240px] flex-col justify-between p-7 lg:p-8">
-                <div>
-                  <div className="mb-5 flex items-start justify-between">
-                    <Icon size={18} className="mt-0.5 shrink-0 text-mid-gray" />
-                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
-                      {c.rubriqueLabel} {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <h3 className="mb-1.5 text-lg font-light leading-snug tracking-tight text-foreground">
-                    <Link
-                      href={`/documentation/${r.id}` as Parameters<typeof Link>[0]["href"]}
-                      className="group/title inline-flex items-start gap-1 text-foreground no-underline transition-colors hover:text-vermilion"
-                    >
-                      {r.title}
-                      <ArrowUpRight
-                        size={14}
-                        className="mt-1 shrink-0 text-mid-gray transition-transform group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5"
-                      />
-                    </Link>
-                  </h3>
-                  <p className="mb-5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
-                    {r.question}
-                  </p>
-                  <ul className="flex flex-col gap-2">
-                    {r.links.map((l) => (
-                      <li key={l.href + l.label}>
-                        <Link
-                          href={l.href as Parameters<typeof Link>[0]["href"]}
-                          className="group inline-flex items-center gap-1.5 font-inter-tight text-[13px] text-mid-gray no-underline transition-colors hover:text-foreground"
-                        >
-                          <ArrowUpRight
-                            size={12}
-                            className="shrink-0 text-accent-secondary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          />
-                          {l.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Link
-                  href={r.next.href as Parameters<typeof Link>[0]["href"]}
-                  className="group mt-6 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-vermilion no-underline transition-colors hover:text-vermilion-bright"
-                >
-                  {r.next.label}
-                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

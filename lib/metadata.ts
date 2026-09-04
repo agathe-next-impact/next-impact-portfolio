@@ -268,7 +268,7 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Trois trajectoires pour un site WordPress qui vieillit",
+    title: "Solutions pour une refonte de WordPress : consolider, découpler ou refonder",
     description:
       "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
     keywords: [
@@ -296,15 +296,16 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 };
 
 // Aligné sur le namespace `contactPage` des messages (source vive de la page
-// /contact) : cinq sujets du catalogue, aucune offre disparue.
+// /contact) : six sujets du catalogue (dont le CTO externalisé), aucune offre disparue.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Contact : visio conseil, audit + roadmap ou projet de refonte",
     description:
-      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
+      "Contactez Next Impact : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé dès 490 €/mois, refonte WordPress ou web app, ou diagnostic gratuit.",
     keywords: [
       "contact conseil techno web",
       "visio conseil refonte",
+      "CTO externalisé",
       "audit et roadmap site web",
       "contact refonte WordPress",
       "diagnostic gratuit site web",
@@ -313,10 +314,11 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "Contact: advisory call, audit + roadmap or redesign project",
     description:
-      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), WordPress, headless or web app redesign project, or a free diagnostic of your site.",
+      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO from €490/month, WordPress or web app redesign, or a free diagnostic.",
     keywords: [
       "contact web technology advice",
       "redesign advisory call",
+      "fractional CTO",
       "website audit and roadmap",
       "WordPress redesign contact",
       "free website diagnostic",
@@ -457,8 +459,8 @@ export const pageMetadata = {
     generatePageMetadata({
       title:
         locale === "en"
-          ? "Project brief — WordPress specifications"
-          : "Brief projet — Cahier des charges WordPress",
+          ? "Project brief: WordPress specifications"
+          : "Brief projet : cahier des charges WordPress",
       description:
         locale === "en"
           ? "Build your interactive WordPress project brief. Free tool to structure your needs and get an accurate quote."

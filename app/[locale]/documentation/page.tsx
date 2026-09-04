@@ -1,7 +1,11 @@
 import { BentoGrid } from "@/components/documentation/bento-grid";
 import { AllCategoriesGrid } from "@/components/documentation/cross-category-nav";
 import { DocumentationToolsSection } from "@/components/documentation/documentation-internal-links";
-import { AuditContextualBanner } from "@/components/documentation/audit-contextual-banner";
+import {
+  DocumentationSearch,
+  type DocSearchItem,
+} from "@/components/documentation/documentation-search";
+import { getAllArticles } from "@/lib/markdown";
 import { HubRubriques } from "@/components/hub/hub-rubriques";
 import PageLayout from "@/components/page-layout";
 import { Metadata } from "next";
@@ -55,6 +59,17 @@ export default async function DocumentationPage({
     { name: t("breadcrumbDocs"), url: "/documentation" },
   ];
 
+  // Corpus de recherche du héros : tous les articles de documentation de la
+  // locale, réduits aux champs utiles (le filtrage est fait côté client).
+  const searchItems: DocSearchItem[] = getAllArticles(locale)
+    .map((a) => ({
+      slug: a.slug,
+      category: a.category,
+      title: a.title,
+      description: a.description ?? "",
+    }))
+    .filter((a) => a.title && a.category);
+
   // Une seule taxonomie visible : le JSON-LD du hub liste les 7 rubriques de
   // décision (source : lib/hub-themes.ts), pas les catégories encyclopédiques.
   const rubriqueItems = Object.values(HUB_THEMES).map((theme) => ({
@@ -72,16 +87,21 @@ export default async function DocumentationPage({
         url="/documentation"
         items={rubriqueItems}
       />
-      <PageLayout titre={t("hubTitle")} sousTitre={t("hubSubtitle")}>
+      <PageLayout
+        titre={t("hubTitle")}
+        sousTitre={t("hubSubtitle")}
+        headerSlot={<DocumentationSearch items={searchItems} locale={locale} />}
+      >
         <section className="s" style={{ borderTop: "1px solid var(--rule)" }}>
           <div className="container">
-            {/* Couche 1 — décision : le Sélecteur + les 6 rubriques par question */}
+            {/* Bibliothèque remontée sous le héros : les catégories d'abord */}
+            <AllCategoriesGrid />
+
+            {/* Couche décision : le Sélecteur + les 7 rubriques par question.
+                Pas de filet ici : la grille ci-dessus porte déjà son border-y. */}
+            <div className="mt-14" />
             <HubRubriques locale={locale} />
 
-            {/* Couche 2 — bibliothèque : contenus encyclopédiques (démotés) */}
-            <div className="mb-10 border-t border-dark-gray pt-12" />
-            <AuditContextualBanner />
-            <AllCategoriesGrid />
             <DocumentationToolsSection />
           </div>
         </section>

@@ -169,7 +169,7 @@ export async function GET() {
       // Pages d'offre veille — FR uniquement (locale EN en noindex), donc sans
       // alternates hreflang.
       { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
-      { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Sentinelle retirée du SEO/GEO (2026-09-04) : page en noindex, hors sitemap.
       // Pages partenaires — FR uniquement (locale EN en noindex tant que la
       // traduction n'existe pas), donc sans alternates hreflang.
       { path: "apporteurs", source: "app/[locale]/apporteurs/page.tsx", changefreq: "monthly", priority: 0.5 },

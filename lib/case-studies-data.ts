@@ -2369,6 +2369,18 @@ export interface CaseStudyCard {
   highlight?: ResultHighlight;
 }
 
+/**
+ * Études de cas vidéo (page démo) : cas publiés disposant d'une vidéo YouTube,
+ * triés des plus récents aux plus anciens. Mois inconnu = fin d'année, pour que
+ * les projets fraîchement livrés restent en tête.
+ */
+export function getVideoCaseStudies(locale: Locale): CaseStudy[] {
+  const score = (s: CaseStudy) => (s.date.year ?? 0) * 100 + (s.date.month ?? 12);
+  return getCaseStudies(locale)
+    .filter((s) => s.youtubeVideoId)
+    .sort((a, b) => score(b) - score(a));
+}
+
 export function getCaseStudyCards(locale: Locale): CaseStudyCard[] {
   const content = pickContent(locale);
   return visibleMeta().map((meta) => {

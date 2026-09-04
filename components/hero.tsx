@@ -18,7 +18,7 @@ import { DUR, EASE_OUT } from "@/lib/motion-tokens";
 const PANEL_TRANSITION = { duration: DUR.ui, ease: EASE_OUT } as const;
 
 const BTN_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 type TabId = "conseil" | "prestations" | "veille";
 
@@ -52,14 +52,25 @@ export default function Hero() {
   // Contenu piloté par les onglets (les 2 CTA sont devenus des tabs).
   const TABS = [
     {
+      id: "veille" as TabId,
+      label: isEn ? "Watch" : "Veille",
+      description: isEn
+        ? "The web market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide: maintain, rebuild or create."
+        : "Le marché web bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider : maintenir, refondre ou créer.",
+      chips: isEn
+        ? ["Free newsletter", "Sentinelle €19/month", "Human-reviewed", "No commitment"]
+        : ["Lettre gratuite", "Sentinelle 19 €/mois", "Relu par un humain", "Sans engagement"],
+      cta: { label: isEn ? "Discover the watch" : "Découvrir la veille", href: "/veille" },
+    },
+    {
       id: "conseil" as TabId,
       label: isEn ? "Advice" : "Conseil",
       description: isEn
-        ? "Before you commit a budget, a clear-cut opinion on your redesign: advisory call (€150, written opinion within 48h) or audit + roadmap (€650, deliverables)."
-        : "Avant d'engager un budget, un avis tranché sur votre refonte : visio conseil (150 €, avis écrit sous 48 h) ou audit + roadmap (650 €, livrables).",
+        ? "Before you commit a budget, a clear-cut opinion on your redesign: advisory call (€150, written opinion within 48h) or audit + roadmap (€650, deliverables). And a fractional CTO by your side if the need is recurring."
+        : "Avant d'engager un budget, un avis tranché sur votre refonte : visio conseil (150 €, avis écrit sous 48 h) ou audit + roadmap (650 €, livrables). Et un CTO externalisé à vos côtés si le besoin est récurrent.",
       chips: isEn
-        ? ["Independent advice", "Call €150", "Audit + roadmap €650", "Reply within 48h"]
-        : ["Avis indépendant", "Visio 150 €", "Audit + roadmap 650 €", "Réponse sous 48 h"],
+        ? ["Independent advice", "Call €150", "Audit + roadmap €650", "Fractional CTO from €490/mo"]
+        : ["Avis indépendant", "Visio 150 €", "Audit + roadmap 650 €", "CTO externalisé dès 490 €/mois"],
       cta: { label: isEn ? "See the advice" : "Voir le conseil", href: "/conseil" },
     },
     {
@@ -72,17 +83,6 @@ export default function Hero() {
         ? ["+25 projects shipped", "PageSpeed 45 → 98", "Fixed price & timeline", "A single point of contact"]
         : ["+25 projets livrés", "PageSpeed 45 → 98", "Prix & délai fixés", "Une interlocutrice unique"],
       cta: { label: isEn ? "See the trajectories" : "Voir les trajectoires", href: "/solutions-web" },
-    },
-    {
-      id: "veille" as TabId,
-      label: isEn ? "Watch" : "Veille",
-      description: isEn
-        ? "The web market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide: maintain, rebuild or create."
-        : "Le marché web bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider : maintenir, refondre ou créer.",
-      chips: isEn
-        ? ["Free newsletter", "Sentinelle €19/month", "Human-reviewed", "No commitment"]
-        : ["Lettre gratuite", "Sentinelle 19 €/mois", "Relu par un humain", "Sans engagement"],
-      cta: { label: isEn ? "Discover the watch" : "Découvrir la veille", href: "/veille" },
     },
   ];
 
@@ -131,7 +131,7 @@ export default function Hero() {
           </Link>
           <Link
             href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]}
-            className="inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+            className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
           >
             {variant.ctaSecondary.label}
           </Link>
@@ -227,33 +227,43 @@ export default function Hero() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Logos techno — preuve discrète */}
+          {/* Logos clients — preuve sociale discrète */}
           <div className="mt-12 flex flex-col gap-4 border-t border-dark-gray pt-6">
-            {/* Ligne de logos */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+            <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              {isEn ? "Trusted by" : "Ils m'ont fait confiance"}
+            </span>
+            {/* Ligne de logos — uniquement des assets détourés (fond
+                transparent vérifié). Écartés faute de variante sans fond :
+                SUNEIDO, Senza Nature, Connexion Plus, Panorama Pub, CODE. */}
+            <div className="flex flex-wrap items-center gap-x-[62px] gap-y-[42px]">
               {[
-                { src: "/img/logos_technos/logo_claude.png", alt: "Claude" },
-                { src: "/img/logos_technos/logo_openai.png", alt: "OpenAI" },
-                { src: "/img/logos_technos/logo_lovable.png", alt: "Lovable" },
-                { src: "/img/logos_technos/logo_bolt.webp", alt: "Bolt" },
-                { src: "/img/logos_technos/logo_v0.webp", alt: "v0" },
+                { src: "/img/logo-sowee_1.webp", alt: "Sowee" },
+                { src: "/img/logo-geofit.webp", alt: "Geofit" },
+                { src: "/img/logo-aquitaine-robotics.webp", alt: "Aquitaine Robotics" },
+                { src: "/img/logo-proditec.webp", alt: "Proditec" },
+                { src: "/img/logo-transitions-pro.webp", alt: "Transitions Pro" },
+                { src: "/img/logo-sdevo.webp", alt: "SDEVO" },
+                { src: "/img/logo-infralliance.webp", alt: "Infralliance" },
+                { src: "/img/logo-hermitage.webp", alt: "Tiers Lieu L'Hermitage" },
+                { src: "/img/logo-wagner-hamisky_3.webp", alt: "Wagner Hamisky" },
+                { src: "/img/logo-salondelacarrosserie.webp", alt: "Salon des professionnels de la carrosserie" },
+                { src: "/img/logo-next-event.webp", alt: "Next Event" },
+                { src: "/img/logo-mediatico.webp", alt: "Mediatico" },
+                { src: "/img/logo-erp-services.webp", alt: "ERP Services" },
+                { src: "/img/logo-itavera.webp", alt: "Itavera Asset Management" },
+                { src: "/img/logo-egc.webp", alt: "Les États Généraux Communaux" },
+                { src: "/img/logo-naturedea.webp", alt: "Naturedéa" },
               ].map((logo) => (
                 <Image
                   key={logo.src}
                   src={logo.src}
                   alt={logo.alt}
-                  width={96}
-                  height={24}
-                  className="h-6 w-auto opacity-60 transition-opacity hover:opacity-90"
+                  width={108}
+                  height={27}
+                  className="h-[27px] w-auto opacity-90 transition-opacity hover:opacity-100"
                 />
               ))}
             </div>
-            {/* Ligne de texte — sous les logos */}
-            <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
-              {isEn
-                ? "I frame the work, AI executes: architecture choices stay human."
-                : "Je cadre, l'IA exécute : les choix d'architecture restent humains."}
-            </span>
           </div>
         </Reveal>
 

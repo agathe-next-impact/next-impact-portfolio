@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m as motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Realisations from "@/components/case-studies/realisations";
 import { useLocale } from "next-intl";
@@ -10,7 +10,7 @@ import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
 import type { CaseStudyCard } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
-import { PageHero } from "@/components/aspect/page-hero";
+import { PageHero, HERO_BTN_PRIMARY } from "@/components/aspect/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { NeonArcs } from "@/components/visuals/neon-arcs";
 
@@ -22,9 +22,9 @@ const FADE = {
 };
 
 const CTA_PRIMARY =
-  "inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const CTA_GHOST =
-  "inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] }) {
   const { profileId } = useDocumentationMode();
@@ -43,6 +43,13 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
         kicker={isEn ? "Case studies" : "Études de cas"}
         title={variant.titre}
         description={variant.sousTitre}
+        actions={
+          /* Preuve avant demande : la démo vidéo se consulte sans engagement. */
+          <Link href="/demo" className={HERO_BTN_PRIMARY}>
+            <Play size={14} fill="currentColor" aria-hidden="true" />
+            {isEn ? "Watch the demos in video" : "Voir les démos en vidéo"}
+          </Link>
+        }
         backdrop={
           <div className="absolute inset-0 opacity-50">
             <NeonArcs />

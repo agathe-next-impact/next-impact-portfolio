@@ -1,0 +1,103 @@
+---
+title: "Espace membre, portail client, extranet : de quoi avez-vous besoin ?"
+description: "Trois mots pour une même mécanique : une partie du site derrière une porte. Ce qui les distingue, les trois niveaux de complexité et les questions de cadrage avant tout devis."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 14
+enBref:
+  - "Espace membre, portail client et extranet désignent la même mécanique : une partie du site réservée à des utilisateurs identifiés, avec des comptes, des droits et des contenus ou des données qui varient selon la personne connectée."
+  - "Le vrai facteur de coût n'est pas le nom du projet mais ce qui se trouve derrière la porte : des contenus réservés se gèrent avec un WordPress bien configuré, des données personnalisées demandent une base dédiée, des actions métier (dépôt de documents, suivi de dossier, paiement) font basculer le projet en web app."
+  - "Avant tout devis, quatre points sont à trancher : qui se connecte, ce que chaque profil voit, ce que chaque profil peut faire, et d'où viennent les données affichées."
+faq:
+  - question: "Un espace membre est-il possible avec WordPress ?"
+    answer: "Oui, tant qu'il s'agit de réserver des contenus : articles, documents, vidéos accessibles après connexion. Des extensions le font correctement. La limite arrive quand chaque membre doit voir des données qui lui sont propres (son dossier, ses factures, son historique) : WordPress n'a pas été conçu pour cela, et le forcer coûte vite plus cher qu'une base dédiée."
+  - question: "Quelle différence entre un portail client et un extranet ?"
+    answer: "L'usage, pas la technique. Le portail client s'adresse à vos clients (suivi de commande, documents, factures) ; l'extranet s'adresse à des partenaires externes (fournisseurs, adhérents, revendeurs). Dans les deux cas, la mécanique est la même : comptes, droits d'accès, données filtrées selon la personne connectée."
+  - question: "Combien coûte un espace membre ?"
+    answer: "Tout dépend du niveau : la réservation de contenus s'intègre dans une refonte WordPress classique ; un portail avec données personnalisées et actions métier relève d'une web app sur-mesure, à partir de 6 500 € HT chez Next Impact. Les fourchettes détaillées par typologie donnent les ordres de grandeur."
+  - question: "Faut-il migrer tout le site pour ajouter un espace membre ?"
+    answer: "Non. Un site vitrine WordPress peut cohabiter avec une web app dédiée à l'espace membre, reliée par un lien de connexion. C'est souvent l'architecture la plus saine : chaque outil fait ce pour quoi il est conçu, et le site public n'hérite pas de la complexité de la partie privée."
+---
+
+Un adhérent qui télécharge ses attestations, un client qui suit l'avancement de son dossier, un revendeur qui consulte ses tarifs négociés : ces trois projets arrivent avec trois noms différents (espace membre, portail client, extranet) et posent en réalité la même question. Que met-on derrière la porte, et pour qui ? La réponse détermine si le projet tient dans un WordPress bien configuré ou s'il bascule en [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app).
+
+## Trois noms, une même mécanique
+
+**Les trois termes désignent une partie du site réservée à des utilisateurs identifiés ; seul le public visé change.**
+
+<DataTable caption="Espace membre, portail client, extranet : qui se connecte et pour quoi faire">
+
+| Terme | Qui se connecte | Usage typique | Exemple |
+|---|---|---|---|
+| Espace membre | Adhérents, abonnés, communauté | Contenus réservés, annuaire interne, documents | Une fédération qui réserve ses ressources à ses adhérents |
+| Portail client | Vos clients | Suivi de dossier, factures, documents contractuels | Un cabinet qui partage l'avancement des dossiers |
+| Extranet | Partenaires externes : fournisseurs, revendeurs | Tarifs négociés, commandes, échanges de fichiers | Un fabricant qui ouvre son catalogue pro à ses revendeurs |
+
+</DataTable>
+
+Techniquement, les trois reposent sur les mêmes briques : des comptes utilisateurs, un système de connexion, des droits d'accès et des contenus ou des données filtrés selon la personne connectée. Le nom du projet n'a donc aucun impact sur le devis. Ce qui en a un, c'est le niveau de ce qui se trouve derrière la porte.
+
+## Les trois niveaux derrière la porte
+
+**Le coût et la techno d'un espace réservé dépendent de ce que voit un utilisateur connecté : les mêmes contenus que les autres, des données qui lui sont propres, ou un véritable outil de travail.**
+
+### Niveau 1 : des contenus réservés
+
+Tous les membres connectés voient la même chose : articles, guides, vidéos, documents à télécharger. La connexion sert de filtre, pas de personnalisation. Ce niveau reste dans le périmètre d'un site : un WordPress avec une extension d'adhésion sérieuse le gère, et une [refonte WordPress optimisée](/solutions-web) suffit souvent.
+
+### Niveau 2 : des données personnalisées
+
+Chaque membre voit des informations qui lui sont propres : son profil, ses attestations, son historique, ses factures. Il faut une base de données structurée, des fiches par utilisateur et une logique d'affichage filtrée. C'est la zone grise : réalisable en forçant WordPress, mais c'est précisément le cas décrit dans [Quand WordPress n'est plus le bon outil](/documentation/applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil) : chaque évolution devient un bricolage.
+
+### Niveau 3 : des actions métier
+
+Le membre ne consulte plus, il agit : il dépose des documents, remplit des demandes, suit un flux de validation, paie une cotisation en ligne. Le site est devenu un outil de travail partagé. Ce niveau relève d'une web app sur-mesure, avec une logique métier propre, des rôles différenciés et une [interface d'administration dédiée](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure) pour votre équipe.
+
+## WordPress, SaaS ou sur-mesure : trois manières de construire
+
+**La bonne réponse suit le niveau, pas l'inverse.**
+
+- **WordPress + extension d'adhésion** : pertinent au niveau 1. Rapide à mettre en place, gestion des contenus inchangée pour votre équipe. Limite : dès que la personnalisation par membre s'invite, l'empilement d'extensions fragilise le site.
+- **SaaS spécialisé** (outil du marché loué à l'abonnement) : des services existent pour les adhésions, les portails documentaires ou les extranets légers. Pertinent quand votre besoin colle au standard de l'outil. La grille de décision complète est dans [Plateforme métier sur-mesure vs SaaS générique](/documentation/applications-web-mobile/plateforme-metier-vs-saas).
+- **Web app sur-mesure** : pertinente aux niveaux 2 et 3, quand les données et les actions sont spécifiques à votre organisation. Vous possédez la base, la logique et l'interface ; le coût d'entrée est plus élevé (à partir de 6 500 € HT), le coût par membre n'augmente pas avec le volume.
+
+Un point d'architecture souvent ignoré : le site public et l'espace réservé n'ont pas à vivre dans le même outil. Un site vitrine WordPress relié à une web app dédiée est une architecture courante et saine ; chaque brique reste remplaçable.
+
+## Les quatre questions de cadrage avant le devis
+
+**Un prestataire ne peut pas chiffrer un espace réservé sans ces quatre réponses ; les préparer, c'est éviter un devis gonflé par précaution.**
+
+1. **Qui se connecte ?** Combien de profils différents (membre, administrateur, partenaire), combien d'utilisateurs attendus, qui crée les comptes : eux-mêmes ou vous ?
+2. **Que voit chaque profil ?** Les mêmes contenus pour tous (niveau 1), des données individuelles (niveau 2), ou les deux ?
+3. **Que peut faire chaque profil ?** Consulter, télécharger, déposer, modifier, payer ? Chaque verbe ajouté est une brique de développement et un enjeu de [sécurité et de comptes utilisateurs](/documentation/applications-web-mobile/comptes-utilisateurs-et-securite).
+4. **D'où viennent les données ?** Saisies à la main par votre équipe, importées d'un fichier, ou synchronisées depuis un outil existant (CRM, logiciel de gestion) ? Ce dernier cas ouvre le chantier de [l'interconnexion](/documentation/applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement).
+
+> **Ce que je constate en projet.** La demande arrive presque toujours formulée au niveau 1 (« un espace où nos membres se connectent ») et se révèle au niveau 2 ou 3 dès la deuxième réunion, quand apparaissent les attestations individuelles, le suivi de dossier ou la cotisation en ligne. Poser les quatre questions ci-dessus avant de consulter des prestataires évite de comparer des devis qui ne chiffrent pas le même projet.
+
+## Verdict selon votre situation
+
+- **Des contenus à réserver à vos adhérents, identiques pour tous** : restez sur WordPress avec une extension d'adhésion éprouvée ; inutile de payer une web app.
+- **Chaque membre doit voir son dossier, ses documents, son historique** : cadrez une web app niveau 2 ; forcer WordPress coûterait plus cher à moyen terme.
+- **Les membres doivent agir : déposer, demander, payer** : c'est une web app niveau 3 ; commencez par écrire le parcours de chaque profil avant de parler techno.
+- **Votre besoin colle à un outil du marché** (adhésions associatives standard, par exemple) : le SaaS est légitime ; vérifiez seulement l'export de vos données et le coût à l'échelle avec la grille [sur-mesure vs SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas).
+
+## FAQ : espace membre, portail client, extranet
+
+### Un espace membre est-il possible avec WordPress ?
+
+Oui, tant qu'il s'agit de réserver des contenus : articles, documents, vidéos accessibles après connexion. Des extensions le font correctement. La limite arrive quand chaque membre doit voir des données qui lui sont propres (son dossier, ses factures, son historique) : WordPress n'a pas été conçu pour cela, et le forcer coûte vite plus cher qu'une base dédiée.
+
+### Quelle différence entre un portail client et un extranet ?
+
+L'usage, pas la technique. Le portail client s'adresse à vos clients (suivi de commande, documents, factures) ; l'extranet s'adresse à des partenaires externes (fournisseurs, adhérents, revendeurs). Dans les deux cas, la mécanique est la même : comptes, droits d'accès, données filtrées selon la personne connectée.
+
+### Combien coûte un espace membre ?
+
+Tout dépend du niveau : la réservation de contenus s'intègre dans une refonte WordPress classique ; un portail avec données personnalisées et actions métier relève d'une web app sur-mesure, à partir de 6 500 € HT chez Next Impact. Les [fourchettes détaillées par typologie](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) donnent les ordres de grandeur.
+
+### Faut-il migrer tout le site pour ajouter un espace membre ?
+
+Non. Un site vitrine WordPress peut cohabiter avec une web app dédiée à l'espace membre, reliée par un lien de connexion. C'est souvent l'architecture la plus saine : chaque outil fait ce pour quoi il est conçu, et le site public n'hérite pas de la complexité de la partie privée.

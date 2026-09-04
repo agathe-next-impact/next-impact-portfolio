@@ -40,6 +40,9 @@ export async function generateMetadata({
     // Contenu uniquement FR pour l'instant : on n'indexe pas la locale EN
     // tant que la traduction n'est pas faite (cf. ApporteursClient).
     noindex: isEn,
+    // Pas d'alternate hreflang EN : la locale EN est en noindex (cohérent
+    // avec le sitemap, qui liste /apporteurs sans alternates).
+    alternateLocales: ["fr"],
   });
 }
 

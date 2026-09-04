@@ -1,6 +1,8 @@
 # Charte éditoriale · Vitrine next-impact.digital · Refonte éditoriale
 
-> Version 1.1 · 27 août 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
+> Version 1.2 · 4 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, CTO externalisé (dès 490 €/mois), Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
+>
+> Changement v1.2 (sur directive d'Agathe) : ajout d'une troisième offre de conseil, le **CTO externalisé** (accompagnement technique récurrent, à partir de 490 €/mois HT), qui prolonge le pivot « bras droit IA » du cadrage v3.1. La page Conseil passe de deux à trois offres ; l'ancienne interdiction d'une « direction technique » sur /conseil est levée pour cette offre nommée et cadrée.
 
 ---
 
@@ -40,11 +42,12 @@ Catalogue de référence (site en dev), le seul que le site mentionne :
 |---|---|---|
 | Conseil | Visio conseil refonte | 150 € HT |
 | Conseil | Audit + roadmap : rapport d'audit, préconisations, roadmap | 650 € HT |
+| Conseil | CTO externalisé : accompagnement technique récurrent (arbitrage, prestataires, feuille de route) | à partir de 490 €/mois HT |
 | Développement | Refonte WordPress optimisée : thème, plugin, optimisation de l'existant | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless : back-office conservé, front moderne | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app : plateforme web et/ou mobile | à partir de 6 500 € HT |
 
-Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces cinq lignes, avec ce libellé et ce prix.
+Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces six lignes, avec ce libellé et ce prix. Le CTO externalisé est la seule offre récurrente ; c'est un accompagnement dans la durée, pas une porte d'entrée ponctuelle (EN : « Fractional CTO »).
 
 ## 2. Objectif directeur et lecteur
 
@@ -148,12 +151,13 @@ Métadonnées cibles : `title` « Refonte de site WordPress : rapide, moderne, s
 
 ### Conseil `/conseil`
 
-Rôle : porte d'entrée payante à faible engagement, réservée aux deux offres de conseil du catalogue. Titre cible : « Un avis tranché avant d'engager un budget ».
+Rôle : porte d'entrée payante à faible engagement, qui présente les trois offres de conseil du catalogue. Titre cible : « Un avis tranché avant d'engager un budget ».
 
 - Visio conseil refonte · 150 € HT. Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi. Argument : le coût d'une mauvaise trajectoire se compte en mois, celui de l'avis en euros.
 - Audit + roadmap · 650 € HT. Rapport d'audit (performance, sécurité, dette, plugins, hébergement), préconisations chiffrées, roadmap par étapes. Argument : le document sert même si la prestation est confiée à quelqu'un d'autre. Le montant est déduit du devis si la refonte est confiée à Next Impact (à confirmer par Agathe ; si oui, l'écrire, c'est un levier).
+- CTO externalisé · à partir de 490 €/mois HT. Un décideur technique à vos côtés dans la durée : arbitrage des choix (refonte, hébergement, prestataires, dette technique), cadrage et suivi des prestataires, feuille de route, sans recrutement. Argument : le coût d'une mauvaise direction technique se compte en mois ; un arbitre récurrent le prévient, à un volume que vous ajustez. C'est la seule offre récurrente de la page ; les deux autres tranchent une décision ponctuelle.
 
-La page se termine par le lien vers les trois trajectoires. Rien d'autre n'y figure : ni build pack, ni direction fractionnée, ni « sélecteur techno ».
+La page se termine par le lien vers les trois trajectoires. Aucune ancienne offre IA n'y figure : ni build pack, ni « sélecteur techno ». Le CTO externalisé est la forme cadrée et nommée de l'ancienne « direction fractionnée » ; c'est la seule direction technique admise sur cette page, sous ce libellé et ce prix.
 
 ### Services `/solutions-web`
 
@@ -233,7 +237,7 @@ Quick wins (contenu, ordre, typographie) : points 1, 2, 3, 8, 9. Chantiers (prod
 - Ne pas créer de catalogue de sites ou de packs : commoditise et érode l'argument AGEFIPH.
 - Ne pas laisser un seul CTA d'une seule température sur une page.
 - Ne pas laisser cohabiter deux chiffres pour la même réalité (années, projets, délais).
-- Ne pas laisser subsister une mention des anciennes offres (build pack, direction fractionnée, sélecteur techno) sur aucune page, formulaire ou métadonnée.
+- Ne pas laisser subsister une mention des anciennes offres IA au format d'origine (build pack, « direction technique fractionnée », sélecteur techno) sur aucune page, formulaire ou métadonnée. Exception cadrée : le **CTO externalisé** (à partir de 490 €/mois HT), offre de conseil récurrente du catalogue §1, sous ce seul libellé.
 - Ne pas traduire en anglais avant que le français soit figé.
 
 ## 11. Contrôle avant mise en ligne d'une page

@@ -15,10 +15,10 @@ const LABEL_MONO =
   "font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
 
 const BTN_PRIMARY =
-  "inline-flex h-12 items-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "group inline-flex h-12 items-center gap-1.5 rounded-sm border border-dark-gray px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-12 items-center gap-1.5 py-3 rounded-sm border border-dark-gray px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const LINK_MONO =
   "group mt-auto inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground";

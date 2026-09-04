@@ -44,7 +44,7 @@
     "usefulLinks": "Useful links",
     "legalNotice": "Legal notice",
     "privacy": "Privacy",
-    "updated": "Updated: June 2026",
+    "updated": "Updated: September 2026",
     "about": "About",
     "services": "Web solutions",
     "caseStudies": "Case studies",
@@ -117,9 +117,9 @@
   },
   "contactPage": {
     "metaTitle": "Contact: advisory call, audit + roadmap or redesign project",
-    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), WordPress, headless or web app redesign project, or a free diagnostic of your site.",
+    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO from €490/month, WordPress or web app redesign, or a free diagnostic.",
     "title": "Contact",
-    "subtitle": "Advisory call, audit + roadmap, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Advisory call, audit + roadmap, fractional CTO, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -229,7 +229,7 @@
   },
   "demoPage": {
     "metaTitle": "Demos: websites, web apps and mobile applications",
-    "metaDescription": "Watch Next Impact projects in action: B2B Next.js + PostgreSQL marketplace (Panorama Pub), mobile PWA treasure hunt (Hermitage), Headless WordPress + Next.js sites (media, citizen platform, ticketing).",
+    "metaDescription": "Watch Next Impact projects in action: France's national networking platform (Réseauteurs), B2B Next.js marketplace (Panorama Pub), mobile PWA treasure hunt (Hermitage), Headless WordPress + Next.js sites.",
     "breadcrumbHome": "Home",
     "breadcrumbDemo": "Demo"
   },
@@ -437,7 +437,7 @@
       "theorie": {
         "year": "2012 – 2015 — Watch as a discipline",
         "title": "Learning to monitor technology — and to think it through",
-        "description": "A master's degree in Technology Watch and Innovation (Montpellier 3) — monitoring technical change as a discipline in its own right — extended by a series of works on cybernetics and Norbert Wiener: a dissertation and an essay on cybernetics as a societal paradigm, a working paper on <hal>Wiener's pragmatic thinking in the face of technology</hal> (HAL, 2014), a journal article on <magma>the cybernetic myth and the risk society</magma> (M@gm@, 2015). The conclusion back then hasn't shifted since: technology opens up alternatives; it is human choices that make society.",
+        "description": "A master's degree in Technology Watch and Innovation (Aix-Marseille Université) — monitoring technical change as a discipline in its own right — extended by a series of works on cybernetics and Norbert Wiener: a dissertation and an essay on cybernetics as a societal paradigm, a working paper on <hal>Wiener's pragmatic thinking in the face of technology</hal> (HAL, 2014), a journal article on <magma>the cybernetic myth and the risk society</magma> (M@gm@, 2015). The conclusion back then hasn't shifted since: technology opens up alternatives; it is human choices that make society.",
         "note": "(Work published under the name Agathe Martin.)"
       },
       "code": {

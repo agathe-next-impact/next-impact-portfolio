@@ -44,7 +44,7 @@
     "usefulLinks": "Liens utiles",
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",
-    "updated": "Mis à jour : juin 2026",
+    "updated": "Mis à jour : septembre 2026",
     "about": "À propos",
     "services": "Solutions web",
     "caseStudies": "Études de cas",
@@ -117,9 +117,9 @@
   },
   "contactPage": {
     "metaTitle": "Contact : visio conseil, audit + roadmap ou projet de refonte",
-    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
+    "metaDescription": "Contactez Next Impact : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé dès 490 €/mois, refonte WordPress ou web app, ou diagnostic gratuit.",
     "title": "Contact",
-    "subtitle": "Visio conseil, audit + roadmap, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Visio conseil, audit + roadmap, CTO externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -229,7 +229,7 @@
   },
   "demoPage": {
     "metaTitle": "Démos : sites web, web apps et applications mobiles",
-    "metaDescription": "Découvrez en vidéo les réalisations Next Impact : marketplace B2B Next.js + PostgreSQL (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js (média, plateforme citoyenne, billetterie).",
+    "metaDescription": "Découvrez en vidéo les réalisations Next Impact : plateforme nationale du networking (Réseauteurs), marketplace B2B Next.js (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js.",
     "breadcrumbHome": "Accueil",
     "breadcrumbDemo": "Démo"
   },
@@ -362,7 +362,7 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Trois trajectoires pour un site WordPress qui vieillit",
+    "metaTitle": "Solutions pour une refonte de WordPress : consolider, découpler ou refonder",
     "metaDescription": "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Solutions web & Tarifs",
@@ -437,7 +437,7 @@
       "theorie": {
         "year": "2012 – 2015 — La veille comme discipline",
         "title": "Apprendre à surveiller la techno — et à la penser",
-        "description": "Un master Veille technologique et innovation (Montpellier 3) — la surveillance des évolutions techniques comme discipline à part entière — prolongé par une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
+        "description": "Un master Veille technologique et innovation (Aix-Marseille Université) — la surveillance des évolutions techniques comme discipline à part entière — prolongé par une série de travaux sur la cybernétique et Norbert Wiener : un mémoire et un essai sur la cybernétique comme paradigme sociétal, un working paper sur <hal>la pensée pragmatique de Wiener face aux technologies</hal> (HAL, 2014), un article en revue sur <magma>le mythe cybernétique et la société du risque</magma> (M@gm@, 2015). La conclusion d'alors n'a pas bougé depuis : la technologie ouvre des alternatives ; ce sont les choix humains qui font la société.",
         "note": "(Travaux publiés sous le nom Agathe Martin.)"
       },
       "code": {

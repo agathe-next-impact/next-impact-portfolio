@@ -70,6 +70,7 @@ export function OrganizationJsonLd() {
     serviceType: [
       "Conseil refonte de site WordPress",
       "Audit de site web et roadmap",
+      "CTO externalisé (direction technique à temps partagé)",
       "Refonte WordPress optimisée",
       "Refonte WordPress headless",
       "Création de sites web WordPress",
@@ -322,7 +323,7 @@ export function ContactPageJsonLd() {
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
     description:
-      "Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), refonte WordPress, headless ou web app, ou diagnostic gratuit.",
+      "Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé dès 490 €/mois, refonte WordPress, headless ou web app, ou diagnostic gratuit.",
     url: `${siteConfig.url}/contact`,
     mainEntity: {
       "@type": "ProfessionalService",
@@ -375,7 +376,7 @@ export function ContactPageJsonLd() {
           "@type": "CommunicateAction",
           name: "Parler d'un projet de refonte",
           target: `${siteConfig.url}/contact`,
-          description: "Visio conseil refonte, audit + roadmap, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+          description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
         },
       ],
       hasOfferCatalog: {
@@ -396,6 +397,19 @@ export function ContactPageJsonLd() {
             description: "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
             price: "650",
             priceCurrency: "EUR",
+            url: `${siteConfig.url}/conseil`,
+          },
+          {
+            "@type": "Offer",
+            name: "CTO externalisé",
+            description: "Un décideur technique à vos côtés dans la durée : arbitrage des choix techniques, cadrage et suivi des prestataires, feuille de route tenue, sans recrutement. À partir de 490 €/mois HT, mission récurrente.",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "490",
+              priceCurrency: "EUR",
+              unitCode: "MON",
+              valueAddedTaxIncluded: false,
+            },
             url: `${siteConfig.url}/conseil`,
           },
           {
@@ -493,7 +507,16 @@ export function PersonJsonLd({
     },
     alumniOf: {
       "@type": "CollegeOrUniversity",
-      name: "Université Paul-Valéry Montpellier 3",
+      name: "Aix-Marseille Université",
+    },
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "degree",
+      name: "Master Veille technologique et innovation",
+      recognizedBy: {
+        "@type": "CollegeOrUniversity",
+        name: "Aix-Marseille Université",
+      },
     },
     // Parcours pluridisciplinaire (technique · business · marketing · design) +
     // socle académique : signaux d'expertise (E-E-A-T) lisibles par les moteurs IA.
@@ -561,9 +584,10 @@ export function HomepageJsonLd() {
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
-        // Dernier remaniement éditorial substantiel de la home (charte v1.1,
-        // héros « refonte WordPress » + trajectoires) — 2026-08-27.
-        dateModified: "2026-08-27",
+        // Dernier remaniement éditorial substantiel de la home : logos clients
+        // dans le hero, strip technos sous le TL;DR, retrait du bandeau de
+        // preuve (2026-09-04).
+        dateModified: "2026-09-04",
         speakable: {
           "@type": "SpeakableSpecification",
           cssSelector: ["h1", ".home-tldr"],
@@ -668,6 +692,7 @@ export function HomepageJsonLd() {
         serviceType: [
           "Conseil refonte de site WordPress",
           "Audit de site web et roadmap",
+          "CTO externalisé (direction technique à temps partagé)",
           "Refonte WordPress optimisée",
           "Refonte WordPress headless",
           "Création de sites web WordPress",
@@ -717,6 +742,20 @@ export function HomepageJsonLd() {
             },
             {
               "@type": "Offer",
+              name: "CTO externalisé",
+              description:
+                "Un décideur technique à vos côtés dans la durée : arbitrage des choix techniques, cadrage et suivi des prestataires, feuille de route tenue, sans recrutement. À partir de 490 €/mois HT, mission récurrente.",
+              priceSpecification: {
+                "@type": "UnitPriceSpecification",
+                price: "490",
+                priceCurrency: "EUR",
+                unitCode: "MON",
+                valueAddedTaxIncluded: false,
+              },
+              url: `${baseUrl}/conseil`,
+            },
+            {
+              "@type": "Offer",
               name: "Refonte WordPress optimisée",
               description:
                 "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
@@ -755,7 +794,7 @@ export function HomepageJsonLd() {
             "@type": "CommunicateAction",
             name: "Parler d'un projet de refonte",
             target: `${baseUrl}/contact`,
-            description: "Visio conseil refonte, audit + roadmap, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+            description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
           },
         ],
       },

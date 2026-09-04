@@ -23,7 +23,7 @@ function getOptions(isEn: boolean): Option[] {
   return [
     {
       id: "vitrine",
-      label: isEn ? "A brochure or simple site" : "Une vitrine ou un site simple",
+      label: isEn ? "A brochure or simple site" : "Une vitrine simple",
       recoName: isEn ? "High-performance brochure site" : "Site vitrine performant",
       recoPrice: isEn ? "From €2,250" : "Depuis 2 250 €",
       recoLine: isEn
@@ -33,7 +33,7 @@ function getOptions(isEn: boolean): Option[] {
     },
     {
       id: "croissance",
-      label: isEn ? "A growth site (SEO, content)" : "Un site de croissance (SEO, contenu)",
+      label: isEn ? "A growth site (SEO, content)" : "Un site haute performance",
       recoName: isEn ? "High-speed website" : "Site haute performance",
       recoPrice: isEn ? "From €4,000" : "Depuis 4 000 €",
       recoLine: isEn
@@ -60,11 +60,14 @@ function getOptions(isEn: boolean): Option[] {
  * le visiteur dit ce qu'est son projet, on recommande le forfait + on pointe vers
  * lui. Pour aller plus loin, lien vers le diagnostic complet (/solutions-web/eligibilite).
  */
-export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
+export default function MiniDiag({ index = "№ 02" }: { index?: string }) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
   const options = getOptions(isEn);
-  const [selected, setSelected] = useState<string | null>(null);
+  // Pré-sélection : le forfait recommandé (Headless) est actif d'emblée, la reco
+  // s'affiche sans clic et le tab actif montre comment les autres réagissent.
+  const defaultId = options.find((o) => o.recommended)?.id ?? options[0].id;
+  const [selected, setSelected] = useState<string>(defaultId);
   const reco = options.find((o) => o.id === selected) ?? null;
 
   return (
@@ -82,8 +85,8 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
         />
       </Reveal>
 
-      {/* Options — 1 décision */}
-      <Reveal delay={0.06} className="mt-8 grid gap-px bg-dark-gray md:grid-cols-3">
+      {/* Options — 1 décision. Cartes bordées + espacées : on lit 3 choix cliquables au premier coup d'œil. */}
+      <Reveal delay={0.06} className="mt-8 grid gap-3 md:grid-cols-3">
         {options.map((o) => {
           const active = selected === o.id;
           return (
@@ -93,17 +96,25 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
               onClick={() => setSelected(o.id)}
               aria-pressed={active}
               className={cn(
-                "relative flex items-center justify-between gap-3 p-5 text-left font-inter-tight text-sm leading-snug transition-colors lg:p-6",
-                active ? "bg-obsidian text-foreground" : "bg-jet text-mid-gray hover:bg-obsidian hover:text-foreground",
+                "group relative flex items-center justify-between gap-3 border p-5 text-left font-inter-tight text-lg leading-snug transition-colors lg:p-6",
+                active
+                  ? "border-accent-secondary bg-obsidian text-foreground"
+                  : "border-dark-gray bg-jet text-mid-gray hover:border-mid-gray hover:bg-obsidian hover:text-foreground",
               )}
             >
-              {active && (
-                <span aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-accent-secondary" />
-              )}
+              <span aria-hidden
+                className={cn(
+                  "absolute inset-x-0 top-0 h-0.5 transition-opacity",
+                  active ? "bg-accent-secondary opacity-100" : "opacity-0",
+                )}
+              />
               <span>{o.label}</span>
               <ArrowRight
                 size={14}
-                className={cn("shrink-0", active ? "text-accent-secondary" : "text-mid-gray")}
+                className={cn(
+                  "shrink-0 transition-transform group-hover:translate-x-0.5",
+                  active ? "text-accent-secondary" : "text-mid-gray",
+                )}
               />
             </button>
           );
@@ -132,14 +143,14 @@ export default function MiniDiag({ index = "№ 03" }: { index?: string }) {
             <div className="flex flex-wrap gap-3 md:shrink-0">
               <a
                 href={reco.anchor}
-                className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               >
                 {isEn ? "See this package" : "Voir ce forfait"}
                 <ArrowRight size={14} />
               </a>
               <Link
                 href="/solutions-web/eligibilite"
-                className="inline-flex h-11 items-center gap-2 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
               >
                 {isEn ? "Full diagnostic" : "Diagnostic complet"}
                 <ArrowUpRight size={13} />

@@ -141,6 +141,29 @@ const ARTICLE_PROFILES: Record<string, ProfileId[]> = {
   "design-ui-ux/pourquoi-des-maquettes":           ["decideur", "utilisateur"],
   "design-ui-ux/comment-creer-des-maquettes":      ["utilisateur", "developpeur"],
 
+  // ── Applications web & mobile (17) ───────────────────────────────────────
+  // Web app
+  "applications-web-mobile/quest-ce-quune-web-app":                        ["decideur", "utilisateur"],
+  "applications-web-mobile/site-ou-web-app-comment-choisir":               ["decideur"],
+  "applications-web-mobile/anatomie-dune-web-app":                         ["decideur", "developpeur"],
+  "applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure": ["decideur", "utilisateur"],
+  "applications-web-mobile/comptes-utilisateurs-et-securite":              ["decideur", "developpeur"],
+  // Plateforme web
+  "applications-web-mobile/plateforme-metier-vs-saas":                     ["decideur"],
+  "applications-web-mobile/marketplace-et-annuaire-b2b":                   ["decideur"],
+  "applications-web-mobile/espace-membre-portail-client-extranet":         ["decideur", "utilisateur"],
+  "applications-web-mobile/plateforme-de-reservation-les-briques-indispensables": ["decideur", "utilisateur"],
+  "applications-web-mobile/du-tableur-a-la-plateforme-web":                ["decideur", "utilisateur"],
+  "applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement": ["decideur", "developpeur"],
+  "applications-web-mobile/migrer-dun-saas-vers-une-web-app-sur-mesure":   ["decideur", "developpeur"],
+  // PWA & mobile
+  "applications-web-mobile/pwa-vs-application-native":                     ["decideur", "developpeur"],
+  "applications-web-mobile/installable-sans-store-le-pouvoir-de-la-pwa":   ["decideur", "utilisateur", "developpeur"],
+  // Décider & budgéter
+  "applications-web-mobile/quand-wordpress-nest-plus-le-bon-outil":        ["decideur", "developpeur"],
+  "applications-web-mobile/combien-coute-une-web-app-sur-mesure":          ["decideur"],
+  "applications-web-mobile/delai-et-jalons-dune-web-app":                  ["decideur", "utilisateur"],
+
   // ── SEO (5) ──────────────────────────────────────────────────────────────
   "seo/penser-seo-en-amont":                       ["decideur", "utilisateur"],
   "seo/planifier-seo-en-amont":                    ["utilisateur", "developpeur"],
@@ -300,7 +323,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     },
     {
       id: "dec-apps",
-      title: "Applications web & mobile",
+      title: "Web app & plateforme",
       description: "Quand WordPress n'est plus le bon outil : web app, marketplace, PWA.",
       icon: Smartphone,
       href: "/documentation/applications-web-mobile",
@@ -379,8 +402,8 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     },
     {
       id: "util-apps",
-      title: "Applications web & mobile",
-      description: "Une admin sur-mesure pour votre logique métier — comme WordPress, mais pour votre activité.",
+      title: "Web app & plateforme",
+      description: "Une admin sur-mesure pour votre logique métier : comme WordPress, mais pour votre activité.",
       icon: Smartphone,
       href: "/documentation/applications-web-mobile",
       colSpan: "md:col-span-1",
@@ -447,7 +470,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     },
     {
       id: "dev-apps",
-      title: "Applications web & mobile",
+      title: "Web app & plateforme",
       description: "Next.js + PostgreSQL serverless pour les web apps, PWA pour le mobile. Admin autonome sur-mesure.",
       icon: Smartphone,
       href: "/documentation/applications-web-mobile",

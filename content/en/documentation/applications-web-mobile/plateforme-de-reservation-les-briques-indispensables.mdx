@@ -1,0 +1,103 @@
+---
+title: "Building a booking platform: which blocks do you actually need?"
+description: "Time slots, accounts, payment, reminders, admin: the building blocks of a booking platform, which ones are essential and which can wait. Widget, SaaS or custom: how to decide."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 15
+enBref:
+  - "A booking platform rests on five blocks: an availability calendar, accounts or verified contact details, automatic confirmation, reminders, and an admin interface to manage slots and cancellations."
+  - "Online payment is not a mandatory block: many bookings work without collecting money, and adding it changes the project's level of complexity and responsibility."
+  - "Three ways to build exist: a booking widget embedded in the site, a specialized SaaS rented by subscription, or a custom platform when the booking logic is specific to the business (multiple linked resources, human approval, variable pricing)."
+faq:
+  - question: "Is a booking module enough on a WordPress site?"
+    answer: "Yes for a standard need: regular time slots, a single resource (one room, one practitioner), an e-mail confirmation. Plugins and external widgets do this well. The module reaches its limits when booking depends on business rules: several linked resources, manual approval, prices that vary with the profile or the season."
+  - question: "Should payment be collected at booking time?"
+    answer: "It is a business decision before being a technical requirement. Collecting payment (or a deposit) sharply reduces no-shows, but it adds refund handling, disputes and banking compliance. Many platforms launch with payment-free booking and add it once the flow is proven."
+  - question: "When does a booking SaaS stop being enough?"
+    answer: "When your rules no longer fit its boxes: resources that depend on each other, approval workflows, specific pricing, or the need to integrate booking with your other tools (CRM, payment, e-mails). At that point, permanently working around the SaaS costs more in time than a platform designed for your rules."
+  - question: "How long does it take to launch a custom booking platform?"
+    answer: "A well-scoped project fits the classic web app phasing: scoping, a first version focused on the booking flow, then the secondary blocks (payment, statistics, integrations). The details are described in Timeline and milestones of a web app."
+---
+
+Booking a room, a visit slot, a workshop, a consultation: the request sounds uniform, yet behind "a booking system" hide projects ranging from a free widget to a full business platform. Before comparing quotes or subscriptions, you need to know which blocks your booking actually requires, and which ones can wait.
+
+## The five blocks of online booking
+
+**Every online booking, from a hairdresser slot to equipment rental, combines the same five blocks; how demanding each one is makes the budget.**
+
+1. **The availability calendar.** The central block: which slots exist, which are taken, how fast the information updates. A single resource (one room) is a standard case; several linked resources (a room + a facilitator + equipment) is a business case.
+2. **Identification.** At minimum verified contact details (confirmed e-mail); at maximum full [user accounts](/documentation/applications-web-mobile/comptes-utilisateurs-et-securite) with history and preferences. Creating accounts is only justified if your users come back.
+3. **Confirmation.** Automatic and immediate (the slot is locked on validation) or subject to human approval (a request, then an agreement). This choice shapes the whole flow.
+4. **Reminders and cancellations.** Reminder e-mails, cancellation terms, an optional waiting list. This is the block that reduces no-shows, and the one most often neglected at scoping.
+5. **Administration.** Your team must see the schedule, block slots and handle exceptions without calling a provider. That is the role of an [autonomous admin interface](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure).
+
+<DataTable caption="Booking platform blocks: essential versus optional">
+
+| Block | Essential from day one | Can wait for a V2 |
+|---|---|---|
+| Availability calendar | Yes | |
+| Automatic e-mail confirmation | Yes | |
+| Schedule admin interface | Yes | |
+| Reminders before the appointment | Recommended | Depends on the no-show rate |
+| User accounts with history | | Yes, if users come back |
+| Online payment or deposit | | Yes, a business decision |
+| Waiting list, variable pricing, statistics | | Yes |
+
+</DataTable>
+
+## Widget, SaaS or custom platform
+
+**Three ways to build, and one main criterion: do your booking rules fit a standard?**
+
+- **The embedded widget.** An external service displays its calendar inside a page of your site. Fast setup, low cost. Relevant for a single resource and standard rules; the look and the journey remain the tool's, not yours.
+- **The specialized SaaS** (an off-the-shelf tool rented by subscription). It handles scheduling, reminders and payments according to its own standard. Relevant as long as your rules match; the full decision grid is in [Custom platform vs generic SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas).
+- **The custom platform.** A [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app) designed around your rules: multiple, dependent resources, approval workflows, profile-based pricing, integration with your other tools. Entry point at Next Impact: from €6,500 excl. VAT, as part of a [redesign toward a web app](/solutions-web).
+
+The signal that tips a project toward custom is not volume, it is specificity: if you spend more time working around your booking tool than using it, your rules have outgrown its standard.
+
+## Payment changes the nature of the project
+
+**Collecting money at booking time is a business decision before being a technical block.**
+
+A deposit or full payment at booking sharply reduces no-shows; that is its main argument. In return, it adds to the project: integrating a payment provider (Stripe is the sector's reference: your payments go through a certified banking service, never through your own server), handling refunds and cancellation terms, and a stronger security requirement across the whole chain.
+
+The healthy approach is to settle the question at scoping and, if payment is not essential at launch, to schedule it for a second version: the booking flow can be validated perfectly well without it.
+
+## The classic scoping traps
+
+**Four points derail booking projects, all of them predictable at scoping.**
+
+- **Double booking.** Two people book the same slot at the same moment. The platform must lock the slot on validation; a textbook case that separates a serious system from a disguised form.
+- **Schedule exceptions.** Public holidays, closures, last-minute blocked slots: if your team cannot manage them alone in the admin, the platform fails in its first month.
+- **Forgotten human approval.** Many activities do not want automatic confirmation (visits upon application, equipment lending); the request-agreement workflow must be planned from the start, not bolted on afterwards.
+- **Personal data.** A booking collects contact details, sometimes more: retention periods and user information are planned at scoping, not after a complaint.
+
+> **What I see on projects.** The budget of a booking platform is rarely decided by the calendar itself: it is decided by the rules around it (who approves, who pays, who cancels, who sees what). A project owner who arrives with their rules written down gets comparable quotes and a reliable timeline; one who arrives with "like that site, but for us" discovers their rules during development, at full price.
+
+## Verdict by situation
+
+- **One resource, regular slots, no payment**: a widget or WordPress plugin is enough; keep your budget for something else.
+- **Standard rules but real volume and essential reminders**: a booking SaaS is legitimate; check data export before signing.
+- **Linked resources, human approval, variable pricing**: scope a custom platform; start by writing your booking rules, they are the real specification.
+- **Hesitating between the three paths**: the [No-code, SaaS or custom?](/outils/nocode-saas-surmesure) tool walks through the trade-off questions, free of charge.
+
+## FAQ: booking platform
+
+### Is a booking module enough on a WordPress site?
+
+Yes for a standard need: regular time slots, a single resource (one room, one practitioner), an e-mail confirmation. Plugins and external widgets do this well. The module reaches its limits when booking depends on business rules: several linked resources, manual approval, prices that vary with the profile or the season.
+
+### Should payment be collected at booking time?
+
+It is a business decision before being a technical requirement. Collecting payment (or a deposit) sharply reduces no-shows, but it adds refund handling, disputes and banking compliance. Many platforms launch with payment-free booking and add it once the flow is proven.
+
+### When does a booking SaaS stop being enough?
+
+When your rules no longer fit its boxes: resources that depend on each other, approval workflows, specific pricing, or the need to integrate booking with your other tools ([CRM, payment, e-mails](/documentation/applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement)). At that point, permanently working around the SaaS costs more in time than a platform designed for your rules.
+
+### How long does it take to launch a custom booking platform?
+
+A well-scoped project fits the classic web app phasing: scoping, a first version focused on the booking flow, then the secondary blocks (payment, statistics, integrations). The details are described in [Timeline and milestones of a web app](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app).

@@ -6,6 +6,7 @@ import {
   CalendarClock,
   CheckCircle2,
   Globe,
+  Handshake,
   Layers,
   MessageCircle,
   Smartphone,
@@ -21,6 +22,7 @@ import type { Locale } from "@/i18n/routing";
 type SubjectKey =
   | "decision-techno"
   | "architecture"
+  | "cto-externalise"
   | "mise-en-oeuvre"
   | "diagnostic"
   | "autre";
@@ -34,6 +36,7 @@ interface SubjectConfig {
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
   "decision-techno": { icon: CalendarClock, fr: { label: "Visio conseil refonte (150 €)", description: "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder", placeholder: "Décrivez votre site, ce qui vous gêne aujourd'hui et la décision à trancher : je prépare la visio à partir de votre situation réelle." }, en: { label: "Redesign advisory call (€150)", description: "One hour on a call, a written opinion within 48h: stay, decouple or rebuild", placeholder: "Describe your site, what bothers you today and the decision to settle: I prepare the call from your actual situation." } },
   architecture: { icon: Layers, fr: { label: "Audit + roadmap (650 €)", description: "Rapport d'audit, préconisations chiffrées et roadmap par étapes", placeholder: "Décrivez le site, l'existant technique si vous le connaissez et vos échéances : j'audite, je préconise et je livre la roadmap." }, en: { label: "Audit + roadmap (€650)", description: "Audit report, costed recommendations and a step-by-step roadmap", placeholder: "Describe the site, the technical setup if you know it and your deadlines: I audit, recommend and deliver the roadmap." } },
+  "cto-externalise": { icon: Handshake, fr: { label: "CTO externalisé (dès 490 €/mois)", description: "Un décideur technique à vos côtés, sur la durée : arbitrage, prestataires, feuille de route", placeholder: "Décrivez votre contexte : parc web, projets en cours ou à venir, et où vous avez besoin d'un arbitrage technique récurrent." }, en: { label: "Fractional CTO (from €490/month)", description: "A technical decision-maker by your side, over time: arbitration, vendors, roadmap", placeholder: "Describe your context: web estate, current or upcoming projects, and where you need recurring technical arbitration." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Projet de refonte", description: "WordPress optimisé, headless ou web app : prix et délai fixés avant de commencer", placeholder: "Décrivez votre site actuel, ce que vous voulez garder, ce que vous voulez changer, et vos contraintes de budget et de délai." }, en: { label: "Redesign project", description: "Optimized WordPress, headless or web app: price and timeline fixed upfront", placeholder: "Describe your current site, what you want to keep, what you want to change, and your budget and timing constraints." } },
   diagnostic: { icon: SearchCheck, fr: { label: "Diagnostic gratuit de mon site", description: "Je regarde votre site et je vous oriente : gratuit, sans engagement", placeholder: "Indiquez l'adresse de votre site et ce qui vous préoccupe (lenteur, pannes, référencement, image) : je vous réponds avec une première orientation." }, en: { label: "Free diagnostic of my site", description: "I look at your site and point you the right way: free, no commitment", placeholder: "Share your site address and what worries you (speed, outages, search visibility, image): I reply with a first direction." } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
@@ -42,6 +45,7 @@ const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
 const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
   "architecture",
+  "cto-externalise",
   "mise-en-oeuvre",
   "diagnostic",
   "autre",
@@ -50,8 +54,8 @@ const SUBJECT_ORDER: SubjectKey[] = [
 /** Anciens deep-links ?sujet=… encore en circulation (emails, favoris). */
 const LEGACY_SUBJECTS: Record<string, SubjectKey> = {
   "pack-ia": "autre",
-  "direction-technique": "autre",
-  accompagnement: "autre",
+  "direction-technique": "cto-externalise",
+  accompagnement: "cto-externalise",
 };
 
 const fieldClass =
@@ -115,8 +119,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: advisory call, audit + roadmap, redesign project or free diagnostic."
-            : "Choisissez le sujet : visio conseil, audit + roadmap, projet de refonte ou diagnostic gratuit."}
+            ? "Pick the topic: advisory call, audit + roadmap, fractional CTO, redesign project or free diagnostic."
+            : "Choisissez le sujet : visio conseil, audit + roadmap, CTO externalisé, projet de refonte ou diagnostic gratuit."}
         </p>
       </div>
 
@@ -263,7 +267,7 @@ export default function MultiSubjectContactForm() {
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="inline-flex h-11 items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-60"
+                      className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-60"
                     >
                       {status === "loading" ? (
                         <>

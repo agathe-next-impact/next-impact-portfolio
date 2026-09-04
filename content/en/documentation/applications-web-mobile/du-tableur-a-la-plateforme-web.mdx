@@ -1,0 +1,103 @@
+---
+title: "From spreadsheet to web platform: when should a business process be automated?"
+description: "The shared Excel file that runs the business: the signs it has reached its limit, what a web platform actually changes, and the method to avoid automating too early or too late."
+category: applications-web-mobile
+rubrique: outils-metier
+author: "Agathe Karinthi-Martin"
+date: "2026-09-04"
+dateModified: "2026-09-04"
+order: 16
+enBref:
+  - "A business process run in a shared spreadsheet reaches its limit when competing versions of the file appear, data-entry errors recur, data gets copy-pasted between tools, and everything depends on the one person who knows the file."
+  - "A web platform replaces the spreadsheet with a centralized database, controlled entry screens, per-profile access rights and automations: reminders, calculations, generated documents."
+  - "The sound method starts from the process, not the tool: describe who enters what, who approves, who consults, then automate only the stable steps; a process that is still fuzzy always gets automated too early."
+faq:
+  - question: "How do I know if my Excel file should become a platform?"
+    answer: "Count the symptoms: several versions of the file in circulation, entry errors that require manual checks, regular copy-pasting to other tools, a single person able to modify it, confidential data visible to anyone who has the file. From three symptoms onward, the hidden cost of the spreadsheet usually exceeds that of a platform."
+  - question: "Isn't a custom platform too expensive to replace a file?"
+    answer: "The honest comparison is not with the file's price (zero) but with the process's cost: hours of re-entry, errors, manual follow-ups and the risk of data loss. An automation platform starts at €6,500 excl. VAT at Next Impact; the ranges by project type let you put that amount against the monthly hours the spreadsheet consumes."
+  - question: "Can Excel be kept for some uses after the platform is in place?"
+    answer: "Yes, and it is even recommended. The spreadsheet remains excellent for one-off exploration: simulations, ad hoc analyses, drafts. The platform takes what must be reliable and shared: the reference data, daily entries, approval flows. A good platform also provides exports so you can keep analyzing in a spreadsheet."
+  - question: "Should the whole process be automated at once?"
+    answer: "No. The proven approach automates the core first (the reference data and controlled entry), lives with it for a few weeks, then adds the peripheral automations: reminders, generated documents, statistics. Automating a process that has not been stabilized freezes bad habits into code."
+---
+
+Almost every organization has this file: the shared spreadsheet tracking members, orders, cases or schedules, enriched with tabs and formulas over the years. It has served well, it still serves, and it has become a risk. This article gives the objective signals for moving to a web platform, what that move changes, and the method to succeed without automating too early.
+
+## The signs the spreadsheet has reached its limit
+
+**A spreadsheet does not break all at once: it wears the organization down slowly, and the symptoms are always the same.**
+
+- **Competing versions.** "Do you have the latest version?": the file travels by e-mail, everyone has their own, and nobody knows which one is authoritative.
+- **Entry errors.** An overwritten cell, a formula broken by a sort, a duplicate: with no entry controls, every error is discovered downstream, once it has already done its damage.
+- **Copy-pasting between tools.** The same data re-entered into the spreadsheet, the e-mail tool, the invoicing software: every re-entry is an error waiting to happen.
+- **The key person.** Only one person understands the formulas and dares to change the structure. Their departure or absence is a genuine operational risk.
+- **Impossible confidentiality.** Whoever has the file sees the whole file: salaries, personal data, margins. A spreadsheet knows nothing of per-profile access rights.
+
+Three or more symptoms: the spreadsheet's hidden cost (lost hours, errors, risk) probably exceeds that of a structured tool.
+
+## What a web platform changes
+
+**A platform does not do "the same thing but prettier": it changes the nature of the data and of the process.**
+
+<DataTable caption="Shared spreadsheet versus web platform: what changes for the business process">
+
+| Dimension | Shared spreadsheet | Web platform |
+|---|---|---|
+| Reference data | As many versions as copies | A single database, current for everyone |
+| Data entry | Free cells, silent errors | Controlled forms: formats, required fields, duplicate detection |
+| Access | The whole file for whoever received it | Per-profile rights: everyone sees and edits what concerns them |
+| History | None (or dated copies) | Who changed what, and when |
+| Automations | Formulas inside the file | Reminders, e-mails, documents and calculations triggered by the process |
+| Remote and mobile access | A file to open | A web address, on any device |
+
+</DataTable>
+
+Concretely, the platform is a [web app](/documentation/applications-web-mobile/quest-ce-quune-web-app): a centralized database, screens tailored to each task and an [autonomous admin interface](/documentation/applications-web-mobile/ladmin-autonome-comme-wordpress-mais-sur-mesure) so the team manages its data without depending on a provider, just as it managed its file, with reliability added.
+
+## The method: start from the process, not the tool
+
+**The project succeeds when it starts with a description of the process, not a list of features.**
+
+1. **Describe the real flow.** Who enters what, at what moment, who approves, who consults, what triggers what. The current spreadsheet is excellent documentation: its tabs and columns tell the story of the process.
+2. **Spot what is stable.** Steps that have not changed in two years can be automated with confidence; those that change every season stay manual or configurable.
+3. **Automate the core first.** The reference data and controlled entry make up the first version. Peripheral automations (reminders, generated documents, dashboards) come later, once the core has been adopted by the team.
+4. **Plan the bridges.** The platform must import the existing data (the famous file) and export to the tools that remain: accounting, e-mail. That is the [integration](/documentation/applications-web-mobile/interconnecter-sa-plateforme-crm-erp-paiement) work stream.
+
+The full phasing of such a project (scoping, first version, evolutions) is detailed in [Timeline and milestones of a web app](/documentation/applications-web-mobile/delai-et-jalons-dune-web-app).
+
+## When not to abandon the spreadsheet
+
+**Automation has its contraindications, and knowing them makes the project credible.**
+
+- **The process changes every month.** Automating an unstable flow freezes bad habits into code. Stabilize first, automate second.
+- **The volume is marginal.** Ten rows a month do not justify a platform, however uncomfortable the file.
+- **An off-the-shelf tool already covers the need.** If your process is standard (invoicing, classic membership management), a proven SaaS is legitimate; the trade-off grid is in [Custom platform vs generic SaaS](/documentation/applications-web-mobile/plateforme-metier-vs-saas), and the [No-code, SaaS or custom?](/outils/nocode-saas-surmesure) tool walks through the questions.
+- **Exploration remains the main need.** For simulating, analyzing, drafting, the spreadsheet remains irreplaceable. The platform takes the reliable and the shared; Excel keeps the exploratory.
+
+> **What I see on projects.** The best maturity indicator is not the size of the file, it is the sentence that comes with the request. "Our file has become unmanageable" calls first for process scoping; "here is our process, here is where it breaks" calls for a quote. Between the two there is often a one-hour call and a process laid out flat, not six months of development.
+
+## Verdict by situation
+
+- **Fewer than three symptoms, shifting process**: keep the spreadsheet, structure it (one reference tab, entry rules) and revisit the question in six months.
+- **Three or more symptoms, stable process**: scope a platform; start by describing the real flow, spreadsheet in hand.
+- **A standard market process**: compare specialized SaaS first; custom is reserved for the processes that set you apart.
+- **Sensitive data in a circulating file**: do not wait for the full project to act; per-profile confidentiality is, on its own, a reason to switch.
+
+## FAQ: from spreadsheet to platform
+
+### How do I know if my Excel file should become a platform?
+
+Count the symptoms: several versions of the file in circulation, entry errors that require manual checks, regular copy-pasting to other tools, a single person able to modify it, confidential data visible to anyone who has the file. From three symptoms onward, the hidden cost of the spreadsheet usually exceeds that of a platform.
+
+### Isn't a custom platform too expensive to replace a file?
+
+The honest comparison is not with the file's price (zero) but with the process's cost: hours of re-entry, errors, manual follow-ups and the risk of data loss. An automation platform starts at €6,500 excl. VAT at Next Impact; the [ranges by project type](/documentation/applications-web-mobile/combien-coute-une-web-app-sur-mesure) let you put that amount against the monthly hours the spreadsheet consumes.
+
+### Can Excel be kept for some uses after the platform is in place?
+
+Yes, and it is even recommended. The spreadsheet remains excellent for one-off exploration: simulations, ad hoc analyses, drafts. The platform takes what must be reliable and shared: the reference data, daily entries, approval flows. A good platform also provides exports so you can keep analyzing in a spreadsheet.
+
+### Should the whole process be automated at once?
+
+No. The proven approach automates the core first (the reference data and controlled entry), lives with it for a few weeks, then adds the peripheral automations: reminders, generated documents, statistics. Automating a process that has not been stabilized freezes bad habits into code.

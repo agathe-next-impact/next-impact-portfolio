@@ -251,6 +251,53 @@ const CATEGORY_THEMES: Record<string, ThemeCard[]> = {
       ],
     },
   ],
+  "applications-web-mobile": [
+    {
+      icon: "/icons/frontend-icon.svg",
+      title: "Web app",
+      description: "Comprendre ce qu'est une web app et ce qu'elle change",
+      slugs: [
+        "quest-ce-quune-web-app",
+        "site-ou-web-app-comment-choisir",
+        "anatomie-dune-web-app",
+        "ladmin-autonome-comme-wordpress-mais-sur-mesure",
+        "comptes-utilisateurs-et-securite",
+      ],
+    },
+    {
+      icon: "/icons/layers-icon.svg",
+      title: "Plateforme web",
+      description: "Espace membre, marketplace, outil métier : construire sa plateforme",
+      slugs: [
+        "plateforme-metier-vs-saas",
+        "marketplace-et-annuaire-b2b",
+        "espace-membre-portail-client-extranet",
+        "plateforme-de-reservation-les-briques-indispensables",
+        "du-tableur-a-la-plateforme-web",
+        "interconnecter-sa-plateforme-crm-erp-paiement",
+        "migrer-dun-saas-vers-une-web-app-sur-mesure",
+      ],
+    },
+    {
+      icon: "/icons/notification-icon.svg",
+      title: "PWA & mobile",
+      description: "L'application mobile sans passer par les stores",
+      slugs: [
+        "pwa-vs-application-native",
+        "installable-sans-store-le-pouvoir-de-la-pwa",
+      ],
+    },
+    {
+      icon: "/icons/analytics-icon.svg",
+      title: "Décider & budgéter",
+      description: "Quand basculer, pour quel budget, en combien de temps",
+      slugs: [
+        "quand-wordpress-nest-plus-le-bon-outil",
+        "combien-coute-une-web-app-sur-mesure",
+        "delai-et-jalons-dune-web-app",
+      ],
+    },
+  ],
   // Catégorie doc « blog » éteinte (vague 5) : /documentation/blog → 301 /blog.
 };
 
