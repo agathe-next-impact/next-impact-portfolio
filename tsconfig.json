@@ -28,6 +28,9 @@
       ],
       "@sentinelle/*": [
         "./src/sentinelle/*"
+      ],
+      "@cto/*": [
+        "./src/cto/*"
       ]
     }
   },
