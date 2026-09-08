@@ -127,6 +127,39 @@ describe("mapPage — décision", () => {
   });
 });
 
+describe("mise en avant", () => {
+  const base = { [PROPS.decision.title]: title("Une décision") };
+
+  it("ne met en avant que sur « À la une »", () => {
+    const une = page({ ...base, [PROPS.placement]: select("À la une") });
+    expect(mapPage("decision", une, CLIENT).featured).toBe(true);
+  });
+
+  it("laisse en archive une colonne vide, absente ou « Archive »", () => {
+    // Opt-in strict : le défaut inverse ferait de la page d'accueil un
+    // déversoir qu'il faudrait vider ligne à ligne.
+    expect(mapPage("decision", page(base), CLIENT).featured).toBe(false);
+    expect(
+      mapPage("decision", page({ ...base, [PROPS.placement]: select("Archive") }), CLIENT).featured,
+    ).toBe(false);
+  });
+
+  it("tolère la casse et les accents du libellé", () => {
+    const variantes = ["a la une", "À LA UNE", " À la une "];
+    for (const valeur of variantes) {
+      expect(
+        mapPage("decision", page({ ...base, [PROPS.placement]: select(valeur) }), CLIENT).featured,
+      ).toBe(true);
+    }
+  });
+
+  it("s'applique aux trois bases synchronisées", () => {
+    const une = { [PROPS.placement]: select("À la une") };
+    expect(mapPage("roadmap", page({ ...une }), CLIENT).featured).toBe(true);
+    expect(mapPage("cartographie", page({ ...une }), CLIENT).featured).toBe(true);
+  });
+});
+
 describe("mapPage — roadmap et cartographie", () => {
   it("prend l'échéance comme date qui compte", () => {
     const chantier = page({

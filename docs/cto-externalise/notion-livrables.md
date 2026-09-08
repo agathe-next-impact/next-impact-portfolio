@@ -73,12 +73,36 @@ de table de correspondance à écrire, et rien à retraduire en lisant. Ces deux
 colonnes sont un **rappel**, pas une commande : l'état fait foi en base et se
 change en SQL (§ 3.2 de `espace-client-mise-en-place.md`).
 
-### La règle de publication
+### Deux colonnes, deux questions
 
-`Publié` est le seul interrupteur, sur les quatre bases de contenu. Décochée, la
-ligne n'existe pas pour le client. Décochée **après** publication, elle quitte
-l'espace à la synchro suivante — retirée, pas effacée : l'historique versionné la
-conserve. C'est le geste de rétractation, et il ne demande rien d'autre.
+`Publié` décide de la **visibilité**, `Affichage` du **placement**. Les
+confondre serait tentant et faux : une ligne peut mériter d'être consultable
+sans mériter la page d'accueil.
+
+`Publié` est le seul interrupteur de visibilité, sur les quatre bases de
+contenu. Décochée, la ligne n'existe pas pour le client. Décochée **après**
+publication, elle quitte l'espace à la synchro suivante — retirée, pas effacée :
+l'historique versionné la conserve. C'est le geste de rétractation, et il ne
+demande rien d'autre.
+
+`Affichage` range ce qui est déjà publié :
+
+| Valeur | Où la ligne apparaît |
+| --- | --- |
+| `À la une` | Sur l'accueil de l'espace, et dans la page de sa catégorie. |
+| `Archive`, ou vide | Seulement dans la page de sa catégorie. |
+
+**Opt-in strict** : sans valeur, une ligne reste en archive. Le défaut inverse
+aurait fait de l'accueil un déversoir qu'il aurait fallu vider ligne à ligne à
+mesure que l'accompagnement avance.
+
+**Ranger n'est pas corriger.** Basculer une ligne de `À la une` vers `Archive`
+n'écrit aucune version et ne fait apparaître aucun « corrigé le… » chez le
+client : le placement vit dans sa propre table (`cto_deliverable_placements`),
+mutable, à côté de l'historique append-only. C'est la raison d'être de cette
+seconde table — rangée dans la première, la mise en avant aurait obligé à
+choisir entre polluer l'historique à chaque rangement et ne jamais voir un
+rangement remonter.
 
 Chacune de ces bases porte une vue « En ligne chez le client » ou équivalente :
 c'est la vérification à faire avant un comité, pour voir exactement ce que le
@@ -182,6 +206,8 @@ Décocher `Publié` le retire de l'espace sans effacer son histoire.
 | Appels HTTP et pagination Notion | `src/cto/notion/api.ts` |
 | Noms des colonnes de l'atelier | `src/cto/notion/map.ts` |
 | Balayage, garde-fous, rapport | `src/cto/notion/sync.ts` |
+| Placement (table mutable) | `src/cto/db/schema.ts` — `cto_deliverable_placements` |
+| Pages de catégorie | `app/(cto)/espace-direction/livrables/[categorie]/` |
 | Commande | `scripts/cto-sync.ts` |
 | Balayage quotidien | `app/api/cto/cron/route.ts` |
 | Affichage | `app/(cto)/espace-direction/livrables.tsx` |

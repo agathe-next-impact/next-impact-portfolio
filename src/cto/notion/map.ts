@@ -25,6 +25,7 @@ export const PROPS = {
   /** Présent sur les quatre bases de contenu, sous le même nom. */
   client: "Client",
   published: "Publié",
+  placement: "Affichage",
   clients: {
     company: "Raison sociale",
     spaceId: "ID espace",
@@ -107,6 +108,18 @@ function normalize(value: string | null): string | null {
     .trim();
 }
 
+/**
+ * La ligne remonte-t-elle sur la page d'accueil de l'espace ?
+ *
+ * Opt-in strict : seule la valeur « À la une » met en avant. Vide ou
+ * « Archive », la ligne reste consultable dans la page de sa catégorie. Le
+ * défaut inverse aurait fait de la page d'accueil un déversoir qu'il aurait
+ * fallu vider ligne à ligne.
+ */
+export function isFeatured(page: NotionPage): boolean {
+  return normalize(p.select(page, PROPS.placement)) === "a la une";
+}
+
 function decisionNature(page: NotionPage): DecisionPayload["nature"] {
   const value = normalize(p.select(page, PROPS.decision.nature));
   if (value === "arbitrage") return "arbitrage";
@@ -148,6 +161,7 @@ export function mapPage(
         title: p.text(page, PROPS.decision.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.decision.date),
+        featured: isFeatured(page),
       };
     }
     case "roadmap": {
@@ -166,6 +180,7 @@ export function mapPage(
         title: p.text(page, PROPS.roadmap.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.roadmap.due),
+        featured: isFeatured(page),
       };
     }
     case "cartographie": {
@@ -183,6 +198,7 @@ export function mapPage(
         title: p.text(page, PROPS.cartographie.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.cartographie.due),
+        featured: isFeatured(page),
       };
     }
     case "document": {
@@ -200,6 +216,7 @@ export function mapPage(
         title: p.text(page, PROPS.document.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.document.date),
+        featured: isFeatured(page),
       };
     }
   }

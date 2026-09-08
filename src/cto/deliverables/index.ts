@@ -11,6 +11,7 @@ export {
   digestOf,
   history,
   listForClient,
+  setPlacement,
   type DeliverableState,
 } from "./store";
 

@@ -24,13 +24,14 @@ function pad(value: number): string {
 function printReport(report: SyncReport): void {
   if (report.dryRun) console.log("\n— À BLANC : tout a été lu, rien n'a été écrit. —");
   console.log(`\nAccompagnements rattachés : ${report.clientsMapped}`);
-  console.log("\n  base            publiés  créés  màj  restaurés  inchangés  retirés");
-  console.log("  ─────────────── ───────  ─────  ───  ─────────  ─────────  ───────");
+  console.log("\n  base            publiés  à la une  créés  màj  restaurés  inchangés  retirés");
+  console.log("  ─────────────── ───────  ────────  ─────  ───  ─────────  ─────────  ───────");
 
   for (const kind of report.kinds) {
     console.log(
-      `  ${kind.kind.padEnd(15)} ${pad(kind.published)}     ${pad(kind.created)}  ${pad(kind.updated)}  ` +
-        `${pad(kind.restored)}        ${pad(kind.unchanged)}        ${pad(kind.withdrawn)}`,
+      `  ${kind.kind.padEnd(15)} ${pad(kind.published)}      ${pad(kind.featured)}     ` +
+        `${pad(kind.created)}  ${pad(kind.updated)}  ${pad(kind.restored)}        ` +
+        `${pad(kind.unchanged)}        ${pad(kind.withdrawn)}`,
     );
   }
 

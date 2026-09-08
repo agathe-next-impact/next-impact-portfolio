@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "../db/client";
-import { ctoDeliverables } from "../db/schema";
+import { ctoDeliverablePlacements, ctoDeliverables } from "../db/schema";
 import type {
   Deliverable,
   DeliverableInput,
@@ -12,11 +12,16 @@ import type {
 // ─────────────────────────────────────────────────────────────────────────────
 // Lecture et écriture des livrables — le côté base.
 //
-// **Aucune fonction de ce fichier ne fait d'UPDATE ni de DELETE.** C'est une
-// contrainte, pas une observation : la table est append-only (parti pris 4 de
-// `db/schema.ts`), et une seule mise à jour bien intentionnée suffirait à
+// **Rien n'est jamais mis à jour ni supprimé dans `cto_deliverables`.** C'est
+// une contrainte, pas une observation : la table est append-only (parti pris 4
+// de `db/schema.ts`), et une seule mise à jour bien intentionnée suffirait à
 // détruire la propriété qui la justifie. Publier, corriger, retirer, republier :
 // quatre gestes, quatre insertions.
+//
+// `setPlacement` est la seule écriture mutable de ce fichier, et elle vise une
+// AUTRE table : le placement n'est pas un livrable, il n'a pas d'histoire à
+// tenir. Le mélanger au contenu obligerait à choisir entre polluer l'historique
+// et ne jamais voir un rangement remonter.
 //
 // La version courante d'un livrable est celle de plus haut numéro pour un même
 // `notionPageId`. Elle se calcule, elle ne se marque pas — un drapeau
@@ -147,6 +152,25 @@ export async function appendWithdrawal(
 }
 
 /**
+ * Enregistre où un livrable s'affiche.
+ *
+ * **Seule écriture mutable de cette couche, et assumée.** Le placement n'est pas
+ * un livrable : le corriger ne corrige rien pour le client (cf.
+ * `cto_deliverable_placements`). L'écrire à chaque balayage, même inchangé, coûte
+ * une requête et évite d'avoir à comparer — la synchro le fait déjà pour le
+ * contenu, qui, lui, le mérite.
+ */
+export async function setPlacement(notionPageId: string, featured: boolean): Promise<void> {
+  await db()
+    .insert(ctoDeliverablePlacements)
+    .values({ notionPageId, featured })
+    .onConflictDoUpdate({
+      target: ctoDeliverablePlacements.notionPageId,
+      set: { featured, updatedAt: new Date() },
+    });
+}
+
+/**
  * Les livrables visibles par un accompagnement, dans leur version courante.
  *
  * Le tri d'affichage se fait en mémoire : `distinct on` impose son propre ordre
@@ -166,8 +190,16 @@ export async function listForClient(clientId: string): Promise<Deliverable[]> {
       occurredAt: ctoDeliverables.occurredAt,
       withdrawnAt: ctoDeliverables.withdrawnAt,
       recordedAt: ctoDeliverables.recordedAt,
+      featured: ctoDeliverablePlacements.featured,
     })
     .from(ctoDeliverables)
+    // Jointure GAUCHE : un livrable dont le placement n'a jamais été écrit
+    // reste affichable, en archive. Une jointure stricte le ferait disparaître
+    // de l'espace pour une donnée qui ne le concerne pas.
+    .leftJoin(
+      ctoDeliverablePlacements,
+      eq(ctoDeliverablePlacements.notionPageId, ctoDeliverables.notionPageId),
+    )
     .where(eq(ctoDeliverables.clientId, clientId))
     .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
 
@@ -225,6 +257,7 @@ function toDeliverable(row: {
   payload: unknown;
   occurredAt: Date | null;
   recordedAt: Date;
+  featured?: boolean | null;
 }): Deliverable {
   return {
     id: row.id,
@@ -236,5 +269,6 @@ function toDeliverable(row: {
     payload: row.payload as DeliverablePayload,
     occurredAt: row.occurredAt,
     recordedAt: row.recordedAt,
+    featured: row.featured === true,
   };
 }

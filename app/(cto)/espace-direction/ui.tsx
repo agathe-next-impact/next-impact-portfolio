@@ -143,17 +143,106 @@ export function formatAmount(value: number | null | undefined): string | null {
 }
 
 /**
- * Étiquette d'état, en petit.
+ * Vocabulaire de couleur des livrables.
  *
- * Une seule couleur d'accent dans tout l'espace : le vermillon est réservé aux
- * actions. Un statut se lit à sa position et à son texte, pas à sa couleur —
- * sinon quatre statuts appellent quatre couleurs, et l'écran devient un tableau
- * de bord alors qu'il est un relevé.
+ * Trois teintes seulement, et chacune répond à une question que le client se
+ * pose : est-ce que ça brûle (`alerte`), est-ce que ça approche (`attention`),
+ * est-ce que c'est réglé (`fait`). Le reste est neutre.
+ *
+ * Le vermillon n'en fait PAS partie : il reste réservé aux éléments cliquables,
+ * sans quoi l'œil ne sait plus où cliquer. Et aucune de ces teintes ne porte
+ * seule une information — chaque pastille est doublée d'un mot, faute de quoi
+ * l'écran devient illisible pour qui distingue mal le rouge du vert.
  */
-export function Tag({ children }: { children: ReactNode }) {
+export type Tone = "neutre" | "attention" | "alerte" | "fait";
+
+const TONE_TEXT: Record<Tone, string> = {
+  neutre: "border-dark-gray text-mid-gray",
+  attention: "border-[#f2c94c]/45 text-[#f2c94c]",
+  alerte: "border-[#ff8a7a]/45 text-[#ff8a7a]",
+  fait: "border-[#7fd8a4]/45 text-[#7fd8a4]",
+};
+
+const TONE_FILL: Record<Tone, string> = {
+  neutre: "bg-mid-gray/50",
+  attention: "bg-[#f2c94c]",
+  alerte: "bg-[#ff8a7a]",
+  fait: "bg-[#7fd8a4]",
+};
+
+/** Étiquette d'état, en petit. */
+export function Tag({ children, tone = "neutre" }: { children: ReactNode; tone?: Tone }) {
   return (
-    <span className="border border-dark-gray px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+    <span
+      className={`border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] ${TONE_TEXT[tone]}`}
+    >
       {children}
     </span>
+  );
+}
+
+/**
+ * Pastille carrée, jamais seule.
+ *
+ * Carrée et non ronde : la grille en bordures du système est faite d'angles
+ * droits, un rond y détonne. `label` alimente le lecteur d'écran, pour qui la
+ * couleur n'existe pas.
+ */
+export function Dot({ tone, label }: { tone: Tone; label: string }) {
+  return (
+    <span
+      role="img"
+      aria-label={label}
+      className={`mt-[6px] inline-block h-2 w-2 shrink-0 ${TONE_FILL[tone]}`}
+    />
+  );
+}
+
+/**
+ * Un repère du bandeau de tête : un chiffre lisible de loin, son libellé au-dessus.
+ *
+ * Quatre au maximum. C'est la réponse à « où en est-on ? » avant tout
+ * défilement ; au-delà de quatre, ce n'est plus un coup d'œil, c'est un tableau.
+ */
+export function Stat({
+  label,
+  value,
+  hint,
+  tone = "neutre",
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  tone?: Tone;
+}) {
+  const color = tone === "neutre" ? "text-foreground" : TONE_TEXT[tone].split(" ")[1];
+
+  return (
+    <div className="border-t border-dark-gray px-4 py-5 sm:border-l sm:border-t-0 sm:first:border-l-0">
+      <Label>{label}</Label>
+      <p className={`mt-2 font-sans text-2xl font-light leading-none ${color}`}>{value}</p>
+      {hint ? (
+        <p className="mt-2 font-inter-tight text-xs leading-snug text-mid-gray">{hint}</p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Sommaire d'ancres. Rendu seulement quand il y a plus d'une section à atteindre. */
+export function SectionNav({ items }: { items: { href: string; label: string; count: number }[] }) {
+  if (items.length < 2) return null;
+
+  return (
+    <nav aria-label="Sections de votre espace" className="mt-8 flex flex-wrap gap-2">
+      {items.map((item) => (
+        <a
+          key={item.href}
+          href={item.href}
+          className="border border-dark-gray px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:border-accent-secondary hover:text-foreground"
+        >
+          {item.label} <span className="text-foreground">{item.count}</span>
+        </a>
+      ))}
+    </nav>
   );
 }

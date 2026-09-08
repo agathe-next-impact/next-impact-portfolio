@@ -5,6 +5,7 @@ import {
   timestamp,
   integer,
   jsonb,
+  boolean,
   pgEnum,
   uniqueIndex,
   index,
@@ -389,3 +390,25 @@ export const ctoDeliverables = pgTable(
     index("cto_deliverable_client_kind").on(t.clientId, t.kind),
   ],
 );
+
+/**
+ * Où un livrable s'affiche : à la une, ou seulement dans sa catégorie.
+ *
+ * **Table mutable, et c'est tout l'intérêt de la séparer.** Le placement n'est
+ * pas un livrable : basculer une décision de « À la une » vers « Archive » ne
+ * corrige rien, ne dit rien de neuf au client, et ne doit donc ni écrire une
+ * version ni faire apparaître « corrigé le… » sur son écran. Rangé dans
+ * `cto_deliverables`, il aurait fallu choisir entre deux maux : l'inclure dans
+ * l'empreinte et polluer l'historique à chaque rangement, ou l'en exclure et ne
+ * jamais voir le changement remonter — puisque la synchro saute ce qui n'a pas
+ * bougé.
+ *
+ * Clé sur `notionPageId` et non sur une version : le placement suit le livrable
+ * dans toute son histoire, pas une de ses versions.
+ */
+export const ctoDeliverablePlacements = pgTable("cto_deliverable_placements", {
+  notionPageId: text("notion_page_id").primaryKey(),
+  /** Vrai si la ligne remonte sur la page d'accueil de l'espace. */
+  featured: boolean("featured").notNull().default(false),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});

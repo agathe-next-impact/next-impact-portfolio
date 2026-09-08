@@ -78,6 +78,15 @@ export interface Deliverable<K extends DeliverableKind = DeliverableKind> {
   payload: PayloadByKind[K];
   occurredAt: Date | null;
   recordedAt: Date;
+  /**
+   * Remonte sur la page d'accueil de l'espace. Faux par défaut : la mise en
+   * avant se décide, elle ne s'hérite pas du fait d'avoir été publié.
+   *
+   * Ce n'est PAS une donnée du livrable — elle ne participe ni à son empreinte
+   * ni à son historique (cf. `cto_deliverable_placements`). Elle voyage ici
+   * parce que l'affichage en a besoin au même endroit que le reste.
+   */
+  featured: boolean;
 }
 
 /** Ce qu'une source d'atelier doit fournir pour qu'un livrable soit publiable. */
@@ -88,4 +97,5 @@ export interface DeliverableInput<K extends DeliverableKind = DeliverableKind> {
   title: string;
   payload: PayloadByKind[K];
   occurredAt: Date | null;
+  featured: boolean;
 }

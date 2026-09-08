@@ -5,6 +5,7 @@ import {
   appendWithdrawal,
   currentStates,
   digestOf,
+  setPlacement,
   type DeliverableKind,
   type DeliverableInput,
   type DeliverableState,
@@ -45,6 +46,8 @@ export interface KindReport {
   kind: DeliverableKind;
   /** Pages publiées dans l'atelier et rattachables à un accompagnement. */
   published: number;
+  /** Parmi elles, celles marquées « À la une ». */
+  featured: number;
   created: number;
   updated: number;
   restored: number;
@@ -165,6 +168,7 @@ async function syncKind(
   const report: KindReport = {
     kind,
     published: inputs.length,
+    featured: 0,
     created: 0,
     updated: 0,
     restored: 0,
@@ -174,6 +178,13 @@ async function syncKind(
 
   for (const input of inputs) {
     const state = states.get(input.notionPageId);
+
+    // Le placement s'écrit à CHAQUE passage, y compris sur un livrable
+    // inchangé : c'est la seule façon qu'un simple rangement « À la une » →
+    // « Archive » remonte, puisque le contenu, lui, n'a pas bougé et que la
+    // comparaison d'empreinte va sauter la ligne trois instructions plus bas.
+    if (!dryRun) await setPlacement(input.notionPageId, input.featured);
+    if (input.featured) report.featured += 1;
 
     if (!state) {
       if (!dryRun) await appendVersion(input, 0);
