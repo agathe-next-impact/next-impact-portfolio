@@ -10,6 +10,8 @@ import {
   sendLoginLink,
   MAGIC_LINK_TTL_MS,
 } from "@cto/access";
+import { listForClient } from "@cto/deliverables";
+import { Livrables } from "./livrables";
 import { PasskeyLoginButton } from "./passkey";
 import { buttonClass, inputClass, Label, Notice, PageHeader, Panel } from "./ui";
 import { configurationIssue, currentSession, endSession, ESPACE_PATH } from "./session";
@@ -43,7 +45,13 @@ export default async function EspaceDirectionPage({
     return <Connexion envoye={envoye === "1"} message={message} erreur={erreur === "1"} />;
   }
 
-  const credentials = await listCredentials(session.person.id);
+  // Deux lectures, pas une : les livrables et les appareils ne dépendent pas
+  // l'un de l'autre, et les enchaîner ajouterait un aller-retour à une page que
+  // le client ouvre pour trouver une réponse en dix secondes.
+  const [credentials, livrables] = await Promise.all([
+    listCredentials(session.person.id),
+    listForClient(session.person.clientId),
+  ]);
 
   async function deconnexion() {
     "use server";
@@ -75,21 +83,7 @@ export default async function EspaceDirectionPage({
         </div>
       ) : null}
 
-      {/*
-        Le jour où la couche livrables existera, c'est ici que viendront le
-        relevé de décisions, la roadmap et la cartographie. En attendant, cet
-        écran assume ce qu'il est : la preuve que l'accès fonctionne, et l'endroit
-        d'où l'on pose sa passkey.
-      */}
-      <section className="mt-10">
-        <Label>Vos livrables</Label>
-        <Panel className="mt-3 px-5 py-6">
-          <p className="font-inter-tight text-base text-mid-gray">
-            Vos livrables (relevé de décisions, roadmap, cartographie du système)
-            apparaîtront ici dès la première publication.
-          </p>
-        </Panel>
-      </section>
+      <Livrables items={livrables} />
 
       <section className="mt-10">
         <Label>Votre accès</Label>

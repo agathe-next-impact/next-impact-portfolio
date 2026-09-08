@@ -116,3 +116,44 @@ export function formatDate(value: Date | null | undefined): string {
     timeZone: "Europe/Paris",
   }).format(value);
 }
+
+/**
+ * Date sans heure.
+ *
+ * Les dates des livrables viennent de colonnes Notion sans heure : afficher
+ * « 01:00 » sur une date de comité ferait croire à une précision qui n'existe
+ * pas, et à un fuseau mal géré.
+ */
+export function formatDay(value: Date | null | undefined): string {
+  if (!value) return "—";
+  return new Intl.DateTimeFormat("fr-FR", {
+    dateStyle: "long",
+    timeZone: "Europe/Paris",
+  }).format(value);
+}
+
+/** Montant en euros, sans centimes : un budget au centime près est un faux. */
+export function formatAmount(value: number | null | undefined): string | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+/**
+ * Étiquette d'état, en petit.
+ *
+ * Une seule couleur d'accent dans tout l'espace : le vermillon est réservé aux
+ * actions. Un statut se lit à sa position et à son texte, pas à sa couleur —
+ * sinon quatre statuts appellent quatre couleurs, et l'écran devient un tableau
+ * de bord alors qu'il est un relevé.
+ */
+export function Tag({ children }: { children: ReactNode }) {
+  return (
+    <span className="border border-dark-gray px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+      {children}
+    </span>
+  );
+}

@@ -4,6 +4,12 @@
  *   npm run cto:invite -- --entreprise "Fédération X" --email a@x.fr --nom "Alain Roux" --role Dirigeant
  *   npm run cto:invite -- --client <uuid> --email b@x.fr --nom "Claire Nom" --role "Direction financière"
  *
+ * Options : --palier referent|direction (défaut : direction) · --sans-envoi
+ * (imprime le lien au lieu de l'envoyer, pour un essai en local).
+ *
+ * Toute valeur en plusieurs mots se met entre guillemets. Sans eux, le shell
+ * découpe et la commande s'arrête sur « Argument inattendu ».
+ *
  * Volontairement une commande et non un écran d'administration. Tant qu'il y a
  * quatre accompagnements au maximum (CTO_TERMS) et deux ou trois personnes
  * chacun, construire un back-office pour une dizaine de lignes reviendrait à
@@ -15,6 +21,11 @@
  * accès aux contrats et aux budgets reste une décision, pas une conséquence.
  */
 
+// EN PREMIER, avant tout module qui lit `process.env` au chargement :
+// `lib/sendMail.ts`, atteint via `access/notify.ts`, construit son transport
+// SMTP à l'import. Voir `scripts/load-env.ts` pour le détail de l'ordre.
+import "./load-env";
+
 import { eq } from "drizzle-orm";
 import { db } from "../src/cto/db/client";
 import { ctoClients, ctoPersons } from "../src/cto/db/schema";
@@ -22,16 +33,37 @@ import { issueMagicLink, sendLoginLink } from "../src/cto/access";
 
 type Args = Record<string, string>;
 
+/**
+ * Analyse la ligne de commande.
+ *
+ * Deux règles, chacune contre une erreur de frappe réelle :
+ *
+ *  - **Un drapeau sans valeur est un drapeau, pas une erreur.** `--sans-envoi`
+ *    n'attend rien après lui ; il vaut la chaîne vide, donc présent pour
+ *    `!== undefined` et refusé par `require_` s'il tenait lieu de valeur.
+ *  - **Un mot isolé est une erreur, pas un mot ignoré.** `--entreprise Agathe
+ *    test` sans guillemets créerait « Agathe » et perdrait « test » en silence.
+ *    Une raison sociale tronquée s'affiche en tête de l'espace du client.
+ */
 function parseArgs(argv: string[]): Args {
   const args: Args = {};
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
-    if (!token.startsWith("--")) continue;
+
+    if (!token.startsWith("--")) {
+      throw new Error(
+        `Argument inattendu « ${token} ». Une valeur en plusieurs mots se met entre guillemets : --entreprise "Ma Fédération".`,
+      );
+    }
+
     const key = token.slice(2);
     const value = argv[i + 1];
+
     if (value === undefined || value.startsWith("--")) {
-      throw new Error(`Valeur manquante pour --${key}`);
+      args[key] = "";
+      continue;
     }
+
     args[key] = value;
     i += 1;
   }
@@ -40,7 +72,7 @@ function parseArgs(argv: string[]): Args {
 
 function require_(args: Args, key: string): string {
   const value = args[key]?.trim();
-  if (!value) throw new Error(`--${key} est obligatoire.`);
+  if (!value) throw new Error(`--${key} est obligatoire, et attend une valeur.`);
   return value;
 }
 

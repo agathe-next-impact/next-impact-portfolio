@@ -18,6 +18,7 @@
     "db:cto:generate": "drizzle-kit generate --config=drizzle.cto.config.ts",
     "db:cto:migrate": "drizzle-kit migrate --config=drizzle.cto.config.ts",
     "cto:invite": "tsx scripts/cto-invite.ts",
+    "cto:sync": "tsx scripts/cto-sync.ts",
     "db:seed": "tsx src/sentinelle/db/seed.ts",
     "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",

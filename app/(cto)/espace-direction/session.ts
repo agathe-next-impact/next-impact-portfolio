@@ -68,18 +68,55 @@ export async function requireSession(): Promise<ResolvedSession> {
   return session;
 }
 
-/** Ouvre une session et pose le cookie. Appelée après un lien ou une passkey. */
-export async function startSession(personId: string): Promise<void> {
+/**
+ * Ouvre une session et rend le cookie à poser, sans le poser lui-même.
+ *
+ * Cette séparation existe parce que Next n'autorise l'écriture d'un cookie que
+ * dans une action serveur ou un Route Handler — jamais pendant le rendu d'une
+ * page. Les deux entrées de l'espace n'écrivent donc pas au même endroit : la
+ * passkey passe par une route d'API qui peut appeler `cookies()`, le lien de
+ * secours par un Route Handler qui pose le cookie sur SA réponse, avant de
+ * rediriger. D'où une fonction qui ouvre la session et rend de quoi la sceller,
+ * plutôt que deux implémentations de la même chose.
+ */
+export async function openSessionCookie(personId: string): Promise<{
+  name: string;
+  value: string;
+  options: {
+    httpOnly: true;
+    sameSite: "lax";
+    secure: boolean;
+    path: string;
+    maxAge: number;
+  };
+}> {
   const userAgent = (await headers()).get("user-agent");
   const session = await openSession(personId, userAgent);
 
-  (await cookies()).set(SESSION_COOKIE, session.token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: COOKIE_PATH,
-    maxAge: sessionMaxAgeSeconds(),
-  });
+  return {
+    name: SESSION_COOKIE,
+    value: session.token,
+    options: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: COOKIE_PATH,
+      maxAge: sessionMaxAgeSeconds(),
+    },
+  };
+}
+
+/**
+ * Ouvre une session et pose le cookie sur la requête courante.
+ *
+ * À n'appeler que depuis une action serveur ou un Route Handler. Depuis le
+ * rendu d'une page, Next lève « Cookies can only be modified in a Server Action
+ * or Route Handler » — utiliser `openSessionCookie` et poser le cookie sur la
+ * réponse.
+ */
+export async function startSession(personId: string): Promise<void> {
+  const cookie = await openSessionCookie(personId);
+  (await cookies()).set(cookie.name, cookie.value, cookie.options);
 }
 
 /**

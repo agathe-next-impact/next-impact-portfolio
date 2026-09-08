@@ -4,19 +4,21 @@ import {
   text,
   timestamp,
   integer,
+  jsonb,
   pgEnum,
   uniqueIndex,
   index,
 } from "drizzle-orm/pg-core";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Schéma de l'espace « CTO externalisé » — couche d'accès.
+// Schéma de l'espace « CTO externalisé » — accès et livrables.
 //
-// Périmètre de ce fichier : QUI entre, COMMENT, et ce qu'on en garde comme
-// trace. Les livrables (décisions, roadmap, cartographie…) viendront dans un
-// second schéma ; ils n'ont aucune raison d'attendre celui-ci pour exister.
+// Deux périmètres, dans cet ordre : QUI entre, COMMENT, et ce qu'on en garde
+// comme trace ; puis CE QU'IL Y TROUVE — les livrables, en bas de fichier. Le
+// second dépend du premier (un livrable appartient à un accompagnement) ;
+// l'inverse est faux, et la couche d'accès se lit sans descendre plus bas.
 //
-// Trois partis pris structurants, et leurs raisons :
+// Quatre partis pris structurants, et leurs raisons :
 //
 //  1. **L'unité d'accès est la PERSONNE, pas le client.** Chez une structure de
 //     20 à 250 salariés, trois personnes consultent l'espace : le dirigeant, la
@@ -34,6 +36,12 @@ import {
 //     lien magique et de session ne vivent en base que sous forme de condensat
 //     SHA-256 ; les passkeys ne stockent qu'une clé PUBLIQUE. Une base lue en
 //     entier ne donne accès à rien.
+//
+//  4. **Un livrable ne se modifie jamais, il s'empile.** Une correction écrit
+//     une version de plus ; aucune ligne n'est mise à jour, aucune n'est
+//     supprimée, pas même au retrait. C'est ce qui rend le relevé opposable :
+//     « ce qui était écrit en mars » doit rester lisible en septembre, y
+//     compris quand l'atelier a été corrigé depuis.
 //
 // Ce schéma n'importe rien de `src/sentinelle/` et ne doit jamais le faire :
 // les deux produits partagent la base Neon, pas leur code.
@@ -296,5 +304,88 @@ export const ctoAccessLog = pgTable(
   (t) => [
     index("cto_access_log_client_at").on(t.clientId, t.at),
     index("cto_access_log_person_at").on(t.personId, t.at),
+  ],
+);
+
+// ─── Livrables ────────────────────────────────────────────────────────────
+
+/**
+ * Nature d'un livrable, et donc forme de son `payload`.
+ *
+ * Quatre valeurs pour cinq bases Notion : le budget à trois ans n'en est pas
+ * une, il se déduit de la cartographie (`docs/cto-externalise/notion-livrables.md`).
+ * `document` est déclaré dès maintenant bien que sa synchro vienne plus tard —
+ * un enum Postgres se complète par une migration, autant ne pas en devoir une
+ * pour une valeur qu'on sait déjà nécessaire.
+ */
+export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
+  "decision",
+  "roadmap",
+  "cartographie",
+  "document",
+]);
+
+/**
+ * Un livrable publié, dans une de ses versions.
+ *
+ * **Table strictement append-only. Aucun code n'y fait d'UPDATE ni de DELETE.**
+ * Corriger un livrable écrit une version de plus ; le retirer écrit une version
+ * portant `withdrawnAt`. C'est la propriété qui rend le relevé opposable : le
+ * client doit pouvoir relire ce qui lui a été communiqué en mars, y compris
+ * après correction, et personne — moi compris — ne doit pouvoir réécrire le
+ * passé depuis Notion.
+ *
+ * La version courante d'un livrable est celle de plus haut `version` pour un
+ * même `notionPageId` ; elle est visible si son `withdrawnAt` est nul. D'où
+ * l'absence de colonne « courant » : un drapeau à maintenir se désynchronise,
+ * un maximum se calcule.
+ *
+ * `notionPageId` est la clé de rapprochement avec l'atelier. Elle survit au
+ * renommage du livrable, à son déplacement dans la base et à la réécriture de
+ * tout son contenu — ce qu'aucun titre ne fait.
+ */
+export const ctoDeliverables = pgTable(
+  "cto_deliverables",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => ctoClients.id, { onDelete: "cascade" }),
+    /** Identifiant de la page Notion d'origine. Stable, contrairement au titre. */
+    notionPageId: text("notion_page_id").notNull(),
+    kind: ctoDeliverableKindEnum("kind").notNull(),
+    /** 1 pour la première publication, puis strictement croissant. */
+    version: integer("version").notNull(),
+    title: text("title").notNull(),
+    /** Le contenu, dont la forme dépend de `kind`. Voir `src/cto/deliverables`. */
+    payload: jsonb("payload").notNull(),
+    /**
+     * Empreinte du contenu publié. Sert à ne PAS écrire de version quand la
+     * synchro relit un livrable inchangé : sans elle, un balayage quotidien
+     * produirait trois cent soixante-cinq versions identiques par an et rendrait
+     * l'historique illisible, c'est-à-dire inutile.
+     */
+    digest: text("digest").notNull(),
+    /**
+     * La date qui compte pour le client : date du comité, échéance, date du
+     * document. Hors du `payload` parce qu'elle sert à trier, et qu'un tri sur
+     * du JSON est un index qu'on n'aura pas.
+     */
+    occurredAt: timestamp("occurred_at"),
+    /**
+     * Posée sur une version de retrait. Le livrable quitte l'espace, son
+     * histoire reste. Republier écrit une version de plus, avec `null`.
+     */
+    withdrawnAt: timestamp("withdrawn_at"),
+    /** Quand cette version a été écrite ici. Jamais la date de rédaction. */
+    recordedAt: timestamp("recorded_at").notNull().defaultNow(),
+  },
+  (t) => [
+    // Deux synchros concurrentes calculeraient le même numéro de version : la
+    // seconde échoue à l'insertion plutôt que de dédoubler l'historique. Le
+    // driver HTTP n'ayant pas de transaction interactive, c'est cet index — et
+    // non un verrou applicatif — qui tient l'invariant.
+    uniqueIndex("cto_deliverable_version").on(t.notionPageId, t.version),
+    index("cto_deliverable_client_kind").on(t.clientId, t.kind),
   ],
 );
