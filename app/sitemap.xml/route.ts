@@ -140,6 +140,9 @@ export async function GET() {
       { path: "documentation", source: "app/[locale]/documentation/page.tsx", changefreq: "weekly", priority: 0.8 },
       // Page offre conseil — cœur du funnel, était absente du sitemap.
       { path: "conseil", source: "app/[locale]/conseil/page.tsx", changefreq: "monthly", priority: 0.9 },
+      // Offre récurrente de direction technique — bilingue FR + EN, donc dans
+      // les pages localisées (alternates hreflang générés).
+      { path: "cto-externalise", source: "app/[locale]/cto-externalise/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "audit-site-web", source: "app/[locale]/audit-site-web/page.tsx", changefreq: "monthly", priority: 0.8 },
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },

@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server"
 import { generatePageMetadata } from "@/lib/metadata"
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import ServicesClient from "@/components/services/ServicesClient"
+import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner"
 import type { Locale } from "@/i18n/routing"
 
 export async function generateMetadata({
@@ -58,10 +59,11 @@ export default async function ServicesPage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {/* Schéma aligné sur le contenu réel de la page : les trois trajectoires
           de refonte du catalogue (charte §5), prix « à partir de » affichés. */}
       <ServiceJsonLd
+        locale={locale}
         name={
           locale === "en"
             ? "Three trajectories for an aging WordPress site: consolidate, decouple or rebuild"
@@ -79,6 +81,10 @@ export default async function ServicesPage({
           ServicesFAQ → FaqSchema (profile-aware, schéma = contenu affiché). Pas
           de FAQJsonLd ici : cela créerait un second FAQPage divergent du visible. */}
       <ServicesClient />
+      {/* Des décisions qui reviennent tous les mois → pilotage récurrent. Renvoi
+          vers la page dédiée plutôt qu'une ancre de cette page : l'offre est
+          récurrente, elle ne rentre pas dans les trois trajectoires forfaitaires. */}
+      <CtoExternaliseBanner tone="jet" />
     </main>
   )
 }

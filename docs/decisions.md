@@ -67,3 +67,38 @@ git : données FR/EN (`lib/case-studies-data.ts`), carte de la grille
 `/etudes-de-cas/la-petite-vitrine → /solutions-web` (FR + EN) sont retirées
 de `next.config.mjs`. La mention retirée des alt/descriptions d'Artisan
 Coiffeur (ADR-005 §4) n'est pas rétablie.
+
+## ADR-007 — 2026-09-07 — Réinstauration de l'offre récurrente « CTO externalisé »
+
+Sur demande explicite d'Agathe, l'offre récurrente de direction technique,
+supprimée le 27 août 2026 par le commit `b8a328d` (« Direction technique
+externalisée », 750 € HT/mois), est réinstaurée sous le nom **CTO externalisé**,
+le terme réellement recherché.
+
+Écarts assumés par rapport aux conditions de la suppression :
+
+1. **Tarif et engagement révisés** : à partir de 950 € HT par mois, engagement de
+   3 mois minimum puis reconduction au mois. L'ancien palier de 750 €/mois sans
+   engagement n'est pas rétabli et ne doit plus être cité.
+2. **Page dédiée plutôt que carte sur `/conseil`** : l'offre vit sur
+   `/cto-externalise` (bilingue FR + EN). `/conseil` et `/solutions-web` s'y
+   contentent d'un bandeau de renvoi en pied de page. Les cartes d'offre de
+   `/conseil` restent les deux offres ponctuelles du catalogue.
+3. **Accès par une entrée plate de la navigation principale**, pas par un menu
+   déroulant : le panneau masqué du défunt menu « Ressources », retiré le
+   16 août 2026, restait dans le DOM et déclenchait le prefetch Next de ses
+   destinations à chaque page. Une entrée de plus coûte moins qu'un panneau.
+4. **Deep-links historiques recâblés** : `?sujet=direction-technique` et
+   `?sujet=accompagnement` atterrissent sur le nouveau sujet de contact
+   `cto-externalise` au lieu de « Autre ».
+
+La charte éditoriale a été amendée en conséquence (v1.2 du 7 septembre 2026) :
+catalogue porté à six lignes au §1, offre récurrente placée en aval au §5,
+clause de fermeture de la page Conseil réécrite au §6, et fiche de page
+`/cto-externalise` ajoutée. Sans cet amendement, la charte primant sur
+`CLAUDE.md`, la passe éditoriale suivante aurait purgé l'offre en toute
+bonne foi.
+
+Source de vérité unique du contenu et du prix : `lib/cto-externalise.ts`. Les
+données structurées, les fichiers `llms.txt` / `llms-full.txt`, le sujet du
+formulaire de contact et le sitemap en dérivent ; aucun ne réécrit le prix.

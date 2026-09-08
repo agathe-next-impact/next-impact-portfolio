@@ -40,7 +40,6 @@ const OFFERS_FR: Offer[] = [
     items: [
       "Visio conseil refonte (150 €) : un avis écrit sous 48 h, rester, découpler ou refonder",
       "Audit + roadmap (650 €) : rapport d'audit, préconisations chiffrées, plan par étapes",
-      "CTO externalisé (dès 490 €/mois) : un décideur technique à vos côtés, sur la durée",
       "Visio déduite du devis si un projet démarre sous 30 jours",
     ],
     target: "Pour trancher avant d'engager un budget",
@@ -84,7 +83,6 @@ const OFFERS_EN: Offer[] = [
     items: [
       "Advisory call (€150): a written opinion within 48h, stay, decouple or rebuild",
       "Audit + roadmap (€650): audit report, costed recommendations, step-by-step plan",
-      "Fractional CTO (from €490/month): a technical decision-maker by your side, over time",
       "Call deducted from the quote if a project starts within 30 days",
     ],
     target: "To decide before committing a budget",

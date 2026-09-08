@@ -10,10 +10,11 @@ import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 import { OFFERS, type ConseilOffer } from "@/lib/visio-conseil";
 
-// Index affiché (№ 0X) de chaque section d'offre, dans l'ordre des trois offres
-// de conseil. Les sections servent d'ancres au mega menu (#choix-techno-ia,
-// #architecture-projet-ia, #cto-externalise).
-const SECTION_INDEX = ["№ 04", "№ 05", "№ 06"];
+// Index affiché (№ 0X) de chaque section d'offre, dans l'ordre des deux offres
+// de conseil ponctuel. Les sections servent d'ancres au mega menu et au bandeau
+// du héros (#choix-techno-ia, #architecture-projet-ia). Le CTO externalisé n'est
+// PAS une section d'ici : offre récurrente, sur sa propre page /cto-externalise.
+const SECTION_INDEX = ["№ 04", "№ 05"];
 
 function OfferSection({
   offer,
@@ -143,8 +144,8 @@ function OfferSection({
   );
 }
 
-// Une section par offre de conseil, dans l'ordre du catalogue. Chaque section
-// porte l'id (#choix-techno-ia / #architecture-projet-ia / #cto-externalise) qui
+// Une section par offre de conseil ponctuel, dans l'ordre du catalogue. Chaque
+// section porte l'id (#choix-techno-ia / #architecture-projet-ia) qui
 // sert d'ancre au mega menu et au bandeau du héros.
 export function ConseilOfferSections() {
   const locale = useLocale() as Locale;

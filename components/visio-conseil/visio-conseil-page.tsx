@@ -1,10 +1,12 @@
 "use client";
 
-// Page « Conseil » — porte d'entrée payante à faible engagement. Trois offres :
-// deux ponctuelles (Visio conseil refonte 150 € · Audit + roadmap 650 €, charte
-// §6) et une récurrente ajoutée sur directive d'Agathe, le CTO externalisé (sur
-// devis, pivot « bras droit IA »). La page se termine par le lien vers les trois
-// trajectoires et deux CTA de deux températures. DS Blueprint, i18n inline, a11y.
+// Page « Conseil » — porte d'entrée payante à faible engagement. DEUX offres
+// ponctuelles seulement (Visio conseil refonte 150 € · Audit + roadmap 650 €,
+// charte §6) : l'offre récurrente « CTO externalisé » vit sur sa propre page
+// (/cto-externalise, arbitrage du 2026-09-07) et n'est ici que signalée par un
+// bandeau de renvoi, en dernière position — jamais vendue dans les cartes.
+// La page passe par les trois trajectoires et deux CTA de deux températures.
+// DS Blueprint, i18n inline, a11y.
 
 import { useLocale } from "next-intl";
 import {
@@ -33,6 +35,7 @@ import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-s
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { ConseilOfferSections } from "@/components/visio-conseil/conseil-offer-sections";
+import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner";
 import { FAQ } from "@/lib/visio-conseil";
 
 export default function VisioConseilPage() {
@@ -88,7 +91,9 @@ export default function VisioConseilPage() {
         [ShieldCheck, "Report ou annulation possible jusqu'à 24 h avant"],
       ];
 
-  // Aperçu des trois offres dans le héros — toutes rendues sous #conseils.
+  // Aperçu des deux offres ponctuelles dans le héros — toutes rendues sous
+  // #conseils. Le CTO externalisé n'y figure pas : offre récurrente de fin de
+  // parcours, signalée par le bandeau de pied de page (charte, fiche /conseil).
   const heroOffers: HeroOffer[] = isEn
     ? [
         {
@@ -104,12 +109,6 @@ export default function VisioConseilPage() {
           benefit: "The complete assessment and the roadmap, in writing.",
           href: "#architecture-projet-ia",
         },
-        {
-          name: "Fractional CTO",
-          price: "from €490/mo",
-          benefit: "A technical decision-maker by your side, without hiring.",
-          href: "#cto-externalise",
-        },
       ]
     : [
         {
@@ -124,12 +123,6 @@ export default function VisioConseilPage() {
           price: "650 €",
           benefit: "L'état des lieux complet et la feuille de route, par écrit.",
           href: "#architecture-projet-ia",
-        },
-        {
-          name: "CTO externalisé",
-          price: "dès 490 €/mois",
-          benefit: "Un décideur technique à vos côtés, sans recruter.",
-          href: "#cto-externalise",
         },
       ];
 
@@ -299,8 +292,8 @@ export default function VisioConseilPage() {
         />
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else. The fractional CTO is a recurring engagement, from €490/month depending on volume. The detail of each offer follows below."
-            : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre. Le CTO externalisé est un accompagnement récurrent, à partir de 490 €/mois selon le volume. Le détail de chaque offre suit juste en dessous."}
+            ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else. The detail of each offer follows below."
+            : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre. Le détail de chaque offre suit juste en dessous."}
         </p>
 
         {/* Engagements — réassurance sous le cadrage */}
@@ -376,6 +369,14 @@ export default function VisioConseilPage() {
           })}
         </div>
       </BlueprintSection>
+      <Separator />
+
+      {/* Renvoi vers l'offre récurrente, en dernière position. La charte
+          demandait que /conseil ne cite aucune direction technique ; arbitrage
+          du 2026-09-07 : le CTO externalisé est réinstauré sur sa propre page et
+          /conseil s'y contente de ce bandeau, après les deux offres ponctuelles
+          et la FAQ. Les cartes d'offre restent les deux seules du catalogue. */}
+      <CtoExternaliseBanner tone="obsidian" />
     </main>
   );
 }

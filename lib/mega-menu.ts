@@ -1,4 +1,5 @@
 import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { CTO_PATH, CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Données du mega menu — Veille · Conseil · Services.
@@ -6,7 +7,8 @@ import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
 // Chaque entrée de nav (clé = clé de traduction `nav`) ouvre un panneau plein
 // largeur (style « Blueprint ») réduit à TROIS cases, une par offre :
 //   – /veille    : la newsletter, les ressources, les outils
-//   – /conseil   : les trois offres (visio 150 €, audit 650 €, CTO dès 490 €/mois)
+//   – /conseil   : les deux offres ponctuelles (visio 150 €, audit 650 €) plus
+//                  un renvoi vers le CTO externalisé, qui a sa propre page
 //   – /solutions-web : les trois trajectoires (consolider, découpler, refonder)
 //
 // Bilingue en ligne (fr/en) — même pattern que lib/visio-conseil.ts et
@@ -95,8 +97,8 @@ export const MEGA_SECTIONS: Record<string, MegaSection> = {
           fr: "Un décideur technique à vos côtés, sans recruter.",
           en: "A technical decision-maker by your side, without hiring.",
         },
-        href: "/conseil#cto-externalise",
-        badge: { fr: "dès 490 €/mois", en: "from €490/mo" },
+        href: CTO_PATH,
+        badge: { fr: `dès ${CTO_PRICE_VALUE} €/mois`, en: `from €${CTO_PRICE_VALUE}/mo` },
       },
     ],
   },

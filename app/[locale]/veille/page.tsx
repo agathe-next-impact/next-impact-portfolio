@@ -266,7 +266,7 @@ export default async function VeillePage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {/* Schéma Service aligné sur le contenu visible : la veille gratuite pour
           décideurs (lettre Substack, ressources et outils). Sentinelle a sa
           propre page /sentinelle et n'est pas décrite ici. */}

@@ -65,7 +65,7 @@ export default async function AuditPwaPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
         titre={
           isEn

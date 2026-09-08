@@ -66,11 +66,11 @@ export default function Hero() {
       id: "conseil" as TabId,
       label: isEn ? "Advice" : "Conseil",
       description: isEn
-        ? "Before you commit a budget, a clear-cut opinion on your redesign: advisory call (€150, written opinion within 48h) or audit + roadmap (€650, deliverables). And a fractional CTO by your side if the need is recurring."
-        : "Avant d'engager un budget, un avis tranché sur votre refonte : visio conseil (150 €, avis écrit sous 48 h) ou audit + roadmap (650 €, livrables). Et un CTO externalisé à vos côtés si le besoin est récurrent.",
+        ? "Before you commit a budget, a clear-cut opinion on your redesign: advisory call (€150, written opinion within 48h) or audit + roadmap (€650, deliverables)."
+        : "Avant d'engager un budget, un avis tranché sur votre refonte : visio conseil (150 €, avis écrit sous 48 h) ou audit + roadmap (650 €, livrables).",
       chips: isEn
-        ? ["Independent advice", "Call €150", "Audit + roadmap €650", "Fractional CTO from €490/mo"]
-        : ["Avis indépendant", "Visio 150 €", "Audit + roadmap 650 €", "CTO externalisé dès 490 €/mois"],
+        ? ["Independent advice", "Call €150", "Audit + roadmap €650", "Call deducted from quote"]
+        : ["Avis indépendant", "Visio 150 €", "Audit + roadmap 650 €", "Visio déduite du devis"],
       cta: { label: isEn ? "See the advice" : "Voir le conseil", href: "/conseil" },
     },
     {

@@ -28,6 +28,10 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // Nav : Veille · Conseil · Services · Études de cas · À propos.
 // La visio conseil est portée par le bouton CTA ; le diagnostic reste accessible
 // depuis le footer et la home.
+// Le CTO externalisé (offre récurrente, /cto-externalise) n'a pas d'entrée de
+// premier niveau : il vit dans le mega menu « Conseil » (lib/mega-menu.ts) et
+// dans les bandeaux de pied de page de /conseil et /solutions-web. C'est une
+// offre de fin de parcours, pas une porte d'entrée froide.
 
 // Les trois rubriques à mega menu (clé = clé de traduction `nav`).
 const MEGA_KEYS = ["veille", "conseil", "services"] as const;

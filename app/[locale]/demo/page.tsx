@@ -77,7 +77,7 @@ export default async function DemoPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {[featured, ...others].map((study) => (
         <VideoObjectJsonLd
           key={study.slug}

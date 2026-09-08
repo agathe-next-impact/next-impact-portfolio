@@ -1,5 +1,18 @@
 # Évolution de l’offre Next Impact
 
+> **Mise à jour 2026-09-07 — L’offre récurrente est de retour, sous un autre nom
+> et à d’autres conditions.** L’offre **Direction technique externalisée
+> (750 € HT/mois, sans engagement)** décrite dans ce document a été **supprimée le
+> 27 août 2026** (commit `b8a328d`), puis **réinstaurée le 7 septembre 2026** sous
+> le nom **CTO externalisé**, sur sa propre page `/cto-externalise` :
+> **à partir de 950 € HT par mois, engagement de 3 mois minimum**, puis
+> reconduction au mois. **Le palier de 750 €/mois ne doit plus être cité nulle
+> part.** Toutes les mentions de « Direction technique externalisée » et de
+> « 750 € / mois » conservées ci-dessous le sont **à titre d’archive**
+> (raisonnement d’origine) ; elles ne décrivent plus l’offre en ligne. Source de
+> vérité du contenu et du prix : `lib/cto-externalise.ts`. Charte : v1.2, §1 et §6.
+> Décision : ADR-007 dans `docs/decisions.md`.
+
 > **Mise à jour 2026-07-05 — Offre « Dépannage WordPress » SUPPRIMÉE.** L’offre de
 > dépannage (page `/depannage-wordpress`, tickets 69 / 149 / 229 €, packs) a été
 > **retirée du site** : route, composants et bannières supprimés,
@@ -22,7 +35,8 @@
 >    complet de prompts et d'agents Claude Code ou Codex). Non crédité.
 >
 > La 4e offre **Direction technique externalisée** (750 €/mois, récurrent) est
-> **conservée telle quelle**. Les anciennes offres décrites plus bas (Visio
+> **conservée telle quelle**. *(Archive : supprimée le 2026-08-27, réinstaurée le
+> 2026-09-07 en « CTO externalisé », dès 950 € HT/mois avec engagement de 3 mois.)* Les anciennes offres décrites plus bas (Visio
 > décision techno 240 €, Second avis techno 390 €, Roadmap projet web 1 500 €)
 > sont **conservées à titre d'archive** — elles ne décrivent plus l'offre en ligne.
 
@@ -87,7 +101,8 @@ Next Impact devient :
 > **Mise à jour 2026-07-05** — grille alignée sur le site (`/conseil`) : visio
 > **240 €** (seul palier crédité), second avis **390 €** et roadmap **1 500 €**
 > désormais **non crédités** (livrables qui se suffisent), et l'étage récurrent
-> concrétisé en **Direction technique externalisée à 750 €/mois**.
+> concrétisé en **Direction technique externalisée à 750 €/mois**. *(Archive :
+> devenu « CTO externalisé », dès 950 € HT/mois, 3 mois minimum, le 2026-09-07.)*
 
 L’offre s’organise en niveaux complémentaires — dont un étage **récurrent** qui
 transforme le conseil ponctuel en revenu mensuel.
@@ -381,7 +396,7 @@ Le dépannage ne doit pas être mélangé avec le conseil techno.
 | Corriger | Urgence WordPress 24h | 229 € | Traiter un blocage prioritaire |
 | Corriger | Pack 3 heures | 330 € | Corriger ou optimiser plusieurs points |
 | Corriger | Pack 5 heures | 520 € | Stabiliser ou améliorer un site existant |
-| Piloter | Direction technique externalisée | 750 € / mois | Suivi récurrent, arbitrages et amélioration continue |
+| Piloter | ~~Direction technique externalisée~~ CTO externalisé | ~~750 € / mois~~ dès 950 € HT / mois (3 mois min.) | Suivi récurrent, arbitrages et amélioration continue |
 
 ---
 
@@ -400,6 +415,13 @@ Créer de la récurrence auprès des clients qui ont plusieurs sujets numérique
 ### Tarif recommandé
 
 **750 € HT / mois** — palier unique, sans engagement de durée, non crédité. Contenu :
+
+> **Périmé depuis le 2026-09-07.** Tarif en vigueur : **à partir de 950 € HT par
+> mois, engagement de 3 mois minimum** puis reconduction au mois. Le contenu
+> ci-dessous reste globalement exact, à deux réserves près : les arbitrages
+> asynchrones sont désormais annoncés « sous 48 h ouvrées » plutôt
+> qu'« illimités », et la page publiée énonce ce que l'offre n'est pas (ni
+> maintenance, ni astreinte, ni développement inclus, ni exclusivité).
 
 - 1 visio de pilotage par mois (60 min) + arbitrages illimités en asynchrone ;
 - relecture de devis et propositions fournisseurs au fil de l'eau ;
@@ -518,7 +540,7 @@ Offres à afficher :
 - Visio décision techno — 240 € HT (seul palier crédité) ;
 - Second avis techno — 390 € HT ;
 - Roadmap projet web — 1 500 € HT (livrable renforcé) ;
-- Direction technique externalisée — 750 € HT / mois (récurrent).
+- ~~Direction technique externalisée — 750 € HT / mois~~ → CTO externalisé, dès 950 € HT / mois, engagement de 3 mois (récurrent).
 
 ---
 

@@ -36,7 +36,7 @@ export default async function BlogPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
         name={t("metaTitle")}
         description={t("metaDescription")}

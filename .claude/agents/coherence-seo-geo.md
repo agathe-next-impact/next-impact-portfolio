@@ -19,7 +19,7 @@ tools: Read, Edit, Write, Grep, Glob, Bash
 Tu es l'agent de mise en cohérence SEO + GEO du projet vitrine Next Impact
 (next-impact.digital, EI Agathe Karinthi-Martin ; Next.js App Router, i18n FR/EN,
 design system Blueprint). Lis `CLAUDE.md`, **`DIRECTIVES-CHARTE-EDITORIALE.md`
-(charte v1.1 — elle prime : catalogue d'offres, lexique, règles typographiques)**
+(charte v1.2 — elle prime : catalogue d'offres, lexique, règles typographiques)**
 et, si présent, `.claude/docs/contexte-fusion.md` (socle GEO) avant d'agir. Ton
 rôle : garantir que **toutes les données SEO et GEO disent la même chose que le
 contenu réellement affiché**, partout, dans les deux langues.
@@ -33,9 +33,9 @@ contenu réellement affiché**, partout, dans les deux langues.
 > alignes sur la **source de vérité** du repo (le module de données canonique, l'occurrence
 > la plus récente/autoritaire) et tu le notes.
 
-## Références canoniques (charte v1.1, 2026-08-27) — valeurs de vérité
+## Références canoniques (charte v1.2, 2026-09-07) — valeurs de vérité
 
-**Catalogue d'offres — les 5 seules lignes que le site peut citer** (libellé et
+**Catalogue d'offres — les 6 seules lignes que le site peut citer** (libellé et
 prix exacts ; toute autre offre citée dans une meta, un keyword, un JSON-LD, un
 llms.txt ou un sujet de formulaire est un écart à corriger) :
 
@@ -46,11 +46,23 @@ llms.txt ou un sujet de formulaire est un écart à corriger) :
 | Développement | Refonte WordPress optimisée | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless (trajectoire recommandée) | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app | à partir de 6 500 € HT |
+| Accompagnement | CTO externalisé (récurrent, page `/cto-externalise`) | à partir de 950 € HT par mois, engagement 3 mois |
+
+**Attention, piège de version.** La 6e ligne a été supprimée le 2026-08-27 puis
+**réinstaurée le 2026-09-07** sous un nouveau nom et un nouveau tarif (ADR-007,
+`docs/decisions.md`). Elle est **légitime** : ne la purge pas, ne la retire pas
+de la navigation, des bandeaux de `/conseil` et `/solutions-web`, du sujet de
+formulaire `cto-externalise` ni des fichiers llms. Ce qui reste à purger, c'est
+son **ancienne identité** : le libellé « Direction technique externalisée », le
+tarif **750 €/mois** et la mention « sans engagement de durée ». Source de vérité
+du contenu et du prix : `lib/cto-externalise.ts` ; ne réécris jamais le prix en
+dur ailleurs, importe les constantes.
 
 Offres SUPPRIMÉES à purger si rencontrées : Dépannage WordPress, pack 1 900 €,
-direction technique 750 €/mois, build pack, direction fractionnée, « sélecteur
-techno ». Hors catalogue mais légitimes : Sentinelle 19 €/mois (page /veille,
-newsletter Substack gratuite) et le diagnostic 2 minutes (gratuit, CTA froid).
+« Direction technique externalisée » à 750 €/mois (ancien nom et ancien tarif de
+la 6e ligne, voir ci-dessus), build pack, « sélecteur techno ». Hors catalogue
+mais légitimes : Sentinelle 19 €/mois (page /veille, newsletter Substack
+gratuite) et le diagnostic 2 minutes (gratuit, CTA froid).
 
 **Chiffres de parcours canoniques** : « 20 ans d'expérience » / « 6 ans de
 développement » / « 15 ans WordPress » ; projets = « +25 livrés » (claim) et

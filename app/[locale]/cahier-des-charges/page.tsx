@@ -47,7 +47,7 @@ export default async function Home({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <WebApplicationJsonLd
         name={t("title")}
         description={t("metaDescription")}

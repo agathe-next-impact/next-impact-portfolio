@@ -248,7 +248,7 @@ export default async function WordPressHeadlessPillarPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <JsonLd data={speakableWebPage} />
       <ArticleJsonLd
         type="TechArticle"

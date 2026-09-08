@@ -54,7 +54,7 @@ export default async function DemoLayout({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {children}
     </>
   );

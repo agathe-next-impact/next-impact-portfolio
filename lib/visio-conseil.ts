@@ -1,12 +1,17 @@
+import { CTO_PRICE } from "@/lib/cto-externalise";
+
 export const CREDIT_WINDOW_DAYS = 30;
 export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
 
-// Catalogue conseil — deux portes d'entrée ponctuelles (visio conseil 150 €,
-// audit + roadmap 650 €, libellés et prix du catalogue de référence de la
-// charte §1) et une troisième offre récurrente ajoutée sur directive d'Agathe :
-// le CTO externalisé (à partir de 490 €/mois), pour un besoin technique dans la
-// durée. Elle prolonge le pivot « bras droit IA » (cadrage v3.1, accompagnement
-// récurrent).
+// Catalogue conseil — aligné sur DIRECTIVES-CHARTE-EDITORIALE.md §1 :
+// deux offres ponctuelles, libellés et prix du catalogue de référence. Ce
+// module reste la seule source des CARTES d'offre de /conseil : ni pack, ni
+// « sélecteur techno », ni offre récurrente n'y sont vendus.
+//
+// Arbitrage du 2026-09-07 : l'offre récurrente « CTO externalisé » existe de
+// nouveau, mais sur sa PROPRE page (lib/cto-externalise.ts, /cto-externalise).
+// /conseil s'y contente d'un bandeau de renvoi en pied de page, après les deux
+// offres ci-dessous. Ne pas l'ajouter à OFFERS.
 
 interface OfferCopy {
   name: string;
@@ -120,46 +125,6 @@ export const OFFERS: ConseilOffer[] = [
       ],
     },
   },
-  {
-    id: "cto-externalise",
-    internalCta: true,
-    cta: { fr: "Discutons de votre besoin", en: "Let's talk about your need" },
-    tiers: [
-      {
-        duration: { fr: "mission récurrente", en: "ongoing engagement" },
-        price: "490 €/mois",
-        value: 490,
-        calendlyUrl: "/contact?sujet=cto-externalise",
-        pricePrefix: { fr: "à partir de", en: "from" },
-      },
-    ],
-    fr: {
-      name: "CTO externalisé",
-      tag: "Sur la durée",
-      tagline: "Un décideur technique à vos côtés, sans recruter.",
-      forWho:
-        "Vous pilotez un site, des outils et des projets IA sans profil technique en interne. Vous voulez quelqu'un qui arbitre, cadre les prestataires et sécurise vos choix, mois après mois.",
-      bullets: [
-        "Arbitrage des choix techniques : refonte, hébergement, prestataires, dette technique",
-        "Cadrage et suivi de vos prestataires : vous décidez, je traduis le technique en décisions",
-        "Point récurrent : feuille de route, priorités, budgets, risques",
-        "Engagement souple, sans recrutement : vous ajustez le volume selon vos projets",
-      ],
-    },
-    en: {
-      name: "Fractional CTO",
-      tag: "Ongoing",
-      tagline: "A technical decision-maker by your side, without hiring.",
-      forWho:
-        "You run a site, tools and AI projects with no technical profile in-house. You want someone who arbitrates, frames your vendors and secures your choices, month after month.",
-      bullets: [
-        "Arbitration of technical choices: redesign, hosting, vendors, technical debt",
-        "Framing and follow-up of your vendors: you decide, I translate the technical into decisions",
-        "Recurring check-in: roadmap, priorities, budgets, risks",
-        "Flexible engagement, no hiring: you adjust the volume to your projects",
-      ],
-    },
-  },
 ];
 
 export interface FaqItem {
@@ -200,22 +165,25 @@ export const FAQ: FaqItem[] = [
   },
   {
     fr: {
-      q: "Et si mon besoin technique est récurrent, pas ponctuel ?",
-      a: "C'est le rôle du CTO externalisé : un décideur technique à vos côtés dans la durée, qui arbitre vos choix, cadre vos prestataires et tient votre feuille de route, sans recrutement. À partir de 490 €/mois selon le volume. La visio et l'audit tranchent une décision ; le CTO externalisé vous accompagne mois après mois.",
-    },
-    en: {
-      q: "What if my technical need is recurring, not one-off?",
-      a: "That is the role of the fractional CTO: a technical decision-maker by your side over time, who arbitrates your choices, frames your vendors and keeps your roadmap, without hiring. From €490/month depending on volume. The call and the audit settle a decision; the fractional CTO supports you month after month.",
-    },
-  },
-  {
-    fr: {
       q: "Le conseil inclut-il de la correction technique ?",
       a: "Non. Le conseil aide à décider, prioriser et réduire le risque. Les corrections et la refonte relèvent des trois trajectoires de développement : consolider, découpler ou refonder.",
     },
     en: {
       q: "Does advice include technical fixes?",
       a: "No. Advice helps decide, prioritize and reduce risk. Fixes and the redesign itself belong to the three development trajectories: consolidate, decouple or rebuild.",
+    },
+  },
+  {
+    // Question miroir de celle de /cto-externalise (« Je préfère un avis
+    // ponctuel »). Intentions distinctes, donc pas de cannibalisation : ici le
+    // lecteur part du ponctuel et découvre le récurrent, là-bas l'inverse.
+    fr: {
+      q: "Et si les décisions techniques reviennent tous les mois ?",
+      a: `Alors un avis ponctuel n'est pas le bon format : vous en rachèteriez un tous les mois. C'est le rôle du CTO externalisé, une direction technique à temps partagé. ${CTO_PRICE.fr.amount} ${CTO_PRICE.fr.period} : une visio de pilotage par mois, vos devis relus et une roadmap tenue à jour. La visio conseil et l'audit restent les bons points d'entrée si une seule décision est à trancher.`,
+    },
+    en: {
+      q: "What if technical decisions come up every month?",
+      a: `Then a one-off opinion is the wrong format: you would buy one every month. That is what the fractional CTO is for, a technical direction on shared time. ${CTO_PRICE.en.amount} ${CTO_PRICE.en.period}: one steering call a month, your quotes reviewed and a roadmap kept up to date. The advisory call and the audit remain the right entry points when a single decision has to be settled.`,
     },
   },
   {

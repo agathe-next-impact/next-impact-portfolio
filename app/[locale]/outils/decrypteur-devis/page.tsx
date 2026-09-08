@@ -65,7 +65,7 @@ export default async function DecrypteurDevisPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
         titre={isEn ? "Web quote decoder" : "Décrypteur de devis web"}
         sousTitre={

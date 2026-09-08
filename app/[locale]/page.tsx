@@ -36,8 +36,9 @@ export default async function Home({
     <>
       <WebsiteJsonLd />
       <HomepageJsonLd />
-      <BreadcrumbJsonLd items={[{ name: isEn ? "Home" : "Accueil", url: "/" }]} />
+      <BreadcrumbJsonLd locale={locale} items={[{ name: isEn ? "Home" : "Accueil", url: "/" }]} />
       <ServiceJsonLd
+        locale={locale}
         name={
           isEn
             ? "WordPress site redesign"
