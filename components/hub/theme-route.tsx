@@ -42,7 +42,7 @@ export async function ThemeRoute({ slug, params }: { slug: string; params: Param
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ThemePage
         theme={theme}
         locale={locale}

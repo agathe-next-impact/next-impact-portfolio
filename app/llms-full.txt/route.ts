@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import { getCaseStudies } from "@/lib/case-studies-data";
+import { CTO_PRICE_VALUE, CTO_MIN_MONTHS } from "@/lib/cto-externalise";
 
 const baseUrl = "https://www.next-impact.digital";
 
@@ -115,7 +116,7 @@ ${entry.content}
 
 ## Entity Summary
 
-Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three trajectories (consolidate: optimized WordPress; decouple: headless WordPress, recommended; rebuild: web app), fixed price and timeline, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO and project scoping.
+Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three trajectories (consolidate: optimized WordPress; decouple: headless WordPress, recommended; rebuild: web app), fixed price and timeline, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. Alongside the one-off advisory offers and the three redesign trajectories, a recurring retainer is available: the fractional CTO (from €${CTO_PRICE_VALUE} excl. VAT per month), for organisations that need ongoing technical direction without hiring. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO and project scoping.
 
 ## Offer Architecture
 
@@ -125,6 +126,7 @@ Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Mart
 - Optimized WordPress redesign (from €2,250): theme, plugins and optimization of the existing site, without changing the publishing tool.
 - Headless WordPress redesign (from €4,000): WordPress back office kept, modern front end: editors publish as before, visitors see a fast site. Recommended trajectory.
 - Web app redesign (from €6,500): web and/or mobile platform when the site has become a working tool.
+- Fractional CTO (from €${CTO_PRICE_VALUE}/month, ${CTO_MIN_MONTHS}-month minimum then rolling monthly): shared-time technical direction for an organisation with no technical profile in-house: one monthly steering call, ongoing arbitration (reply within two working days), vendor quote review, a living roadmap and a watch targeted on the client's systems. Not maintenance, not on-call, development not included; projects are priced separately, as a fixed fee.
 - Tech watch: a free newsletter "Quelle techno pour mon site web a l'heure de l'IA ?" (monthly digest + weekly focus, on Substack) and Sentinelle (€19/month), the personalized watch on the client's own site or app: targeted alerts, two letters a month and decision support (maintain, rebuild or create).
 - Implementation: build only when the solution is clear and justified.
 
@@ -132,6 +134,7 @@ Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Mart
 
 - Home: ${baseUrl}/
 - Tech advice: ${baseUrl}/conseil
+- Fractional CTO (monthly technical direction): ${baseUrl}/cto-externalise
 - Solutions web (three redesign trajectories): ${baseUrl}/solutions-web
 - Headless WordPress pillar page: ${baseUrl}/wordpress-headless
 - Free 2-minute site diagnostic: ${baseUrl}/audit-site-web

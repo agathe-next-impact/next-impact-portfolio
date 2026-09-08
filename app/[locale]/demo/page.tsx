@@ -54,7 +54,7 @@ export default async function DemoPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <VideoObjectJsonLd
         name="Panorama Pub — Marketplace B2B livrée en 2 mois"
         description="Démonstration de Panorama Pub, premier annuaire en ligne dédié aux fournisseurs d'objets publicitaires. Web app sur-mesure : Next.js + base PostgreSQL serverless, admin autonome, architecture pensée SEO et croissance."

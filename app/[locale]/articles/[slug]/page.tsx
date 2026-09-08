@@ -145,7 +145,7 @@ export default async function ArticlePage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
         title={article.title}
         description={article.category}

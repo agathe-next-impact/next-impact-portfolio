@@ -69,6 +69,9 @@ export default function ArticleAttestationTIH() {
         author="Agathe Karinthi-Martin"
         url="/articles/attestation-deductibilite-tih-guide-entreprises"
       />
+      {/* Pas de prop `locale` ici : ce composant ne reçoit pas de params, son
+          contenu est en français quelle que soit l'URL. Le fil d'Ariane pointe
+          donc les URL françaises, qui sont les seules pertinentes. */}
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <FAQJsonLd questions={faqItems} />
 

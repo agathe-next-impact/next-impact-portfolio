@@ -61,7 +61,7 @@ export default async function ApporteursPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ApporteursClient />
     </>
   );

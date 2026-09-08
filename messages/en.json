@@ -17,6 +17,7 @@
     "about": "About",
     "hub": "Which web tech?",
     "conseil": "Advisory",
+    "ctoExternalise": "Fractional CTO",
     "veille": "Tech watch",
     "selecteurTechno": "The tech selector",
     "allTools": "All tools",
@@ -54,6 +55,7 @@
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
+    "ctoExternalise": "Fractional CTO",
     "veille": "Tech watch",
     "tools": "All tools",
     "startWebApp": "Let's talk about your project",
@@ -116,10 +118,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact: advisory call, audit + roadmap or redesign project",
-    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), WordPress, headless or web app redesign project, or a free diagnostic of your site.",
+    "metaTitle": "Contact: advisory call, audit + roadmap, fractional CTO or redesign",
+    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €950/month), redesign project or free diagnostic.",
     "title": "Contact",
-    "subtitle": "Advisory call, audit + roadmap, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Advisory call, audit + roadmap, fractional CTO, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },

@@ -87,7 +87,7 @@ export default async function AuditSiteIaPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <FAQJsonLd
         questions={c.faq.items.map((f) => ({
           question: f.question,

@@ -36,7 +36,7 @@ const LegalNotice = async ({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
 
       {/* En-tête blueprint */}
       <BlueprintSection ticks innerClassName="px-6 py-14 lg:px-12 lg:py-20">

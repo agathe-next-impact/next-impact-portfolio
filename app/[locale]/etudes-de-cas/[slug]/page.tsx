@@ -133,7 +133,7 @@ export default async function CaseStudyPage({
   return (
     <>
       {/* Données structurées pour le SEO */}
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
         title={`${t("articleTitlePrefix")} ${caseStudy.title} - ${t("articleTitleSuffix")}`}
         description={caseStudy.description}

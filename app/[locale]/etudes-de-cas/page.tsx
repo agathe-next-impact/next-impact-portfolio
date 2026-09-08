@@ -41,7 +41,7 @@ export default async function CaseStudiesPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
         name={t("collectionName")}
         description={t("collectionDescription")}

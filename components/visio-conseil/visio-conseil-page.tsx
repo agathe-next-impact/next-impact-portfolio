@@ -26,6 +26,7 @@ import {
 } from "@/components/aspect/page-hero";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ConstellationTechno } from "@/components/visuals/constellation-techno";
+import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner";
 import { OFFERS, FAQ, type ConseilOffer } from "@/lib/visio-conseil";
 
 function OfferCard({ offer, isEn }: { offer: ConseilOffer; isEn: boolean }) {
@@ -365,6 +366,14 @@ export default function VisioConseilPage() {
           </Link>
         </div>
       </BlueprintSection>
+
+      {/* Renvoi vers l'offre récurrente. La charte v1.1 §6 demandait que la page
+          se termine sur les trois trajectoires et ne cite aucune offre de
+          direction technique ; arbitrage du 2026-09-07 : le CTO externalisé est
+          réinstauré sur sa propre page et /conseil y renvoie en pied de page,
+          après les deux offres ponctuelles. Les deux offres du catalogue conseil
+          restent les seules présentées ci-dessus. */}
+      <CtoExternaliseBanner tone="jet" />
     </main>
   );
 }

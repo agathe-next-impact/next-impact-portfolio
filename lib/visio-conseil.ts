@@ -1,9 +1,17 @@
+import { CTO_PRICE } from "@/lib/cto-externalise";
+
 export const CREDIT_WINDOW_DAYS = 30;
 export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
 
 // Catalogue conseil — aligné sur DIRECTIVES-CHARTE-EDITORIALE.md §1 :
-// deux offres, libellés et prix du catalogue de référence. Rien d'autre ne
-// figure sur /conseil (ni pack, ni direction technique, ni accompagnement).
+// deux offres ponctuelles, libellés et prix du catalogue de référence. Ce
+// module reste la seule source des CARTES d'offre de /conseil : ni pack, ni
+// « sélecteur techno », ni offre récurrente n'y sont vendus.
+//
+// Arbitrage du 2026-09-07 : l'offre récurrente « CTO externalisé » existe de
+// nouveau, mais sur sa PROPRE page (lib/cto-externalise.ts, /cto-externalise).
+// /conseil s'y contente d'un bandeau de renvoi en pied de page, après les deux
+// offres ci-dessous. Ne pas l'ajouter à OFFERS.
 
 interface OfferCopy {
   name: string;
@@ -159,6 +167,19 @@ export const FAQ: FaqItem[] = [
     en: {
       q: "Does advice include technical fixes?",
       a: "No. Advice helps decide, prioritize and reduce risk. Fixes and the redesign itself belong to the three development trajectories: consolidate, decouple or rebuild.",
+    },
+  },
+  {
+    // Question miroir de celle de /cto-externalise (« Je préfère un avis
+    // ponctuel »). Intentions distinctes, donc pas de cannibalisation : ici le
+    // lecteur part du ponctuel et découvre le récurrent, là-bas l'inverse.
+    fr: {
+      q: "Et si les décisions techniques reviennent tous les mois ?",
+      a: `Alors un avis ponctuel n'est pas le bon format : vous en rachèteriez un tous les mois. C'est le rôle du CTO externalisé, une direction technique à temps partagé. ${CTO_PRICE.fr.amount} ${CTO_PRICE.fr.period} : une visio de pilotage par mois, vos devis relus et une roadmap tenue à jour. La visio conseil et l'audit restent les bons points d'entrée si une seule décision est à trancher.`,
+    },
+    en: {
+      q: "What if technical decisions come up every month?",
+      a: `Then a one-off opinion is the wrong format: you would buy one every month. That is what the fractional CTO is for, a technical direction on shared time. ${CTO_PRICE.en.amount} ${CTO_PRICE.en.period}: one steering call a month, your quotes reviewed and a roadmap kept up to date. The advisory call and the audit remain the right entry points when a single decision has to be settled.`,
     },
   },
   {

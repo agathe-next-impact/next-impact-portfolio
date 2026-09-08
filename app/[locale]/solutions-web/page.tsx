@@ -6,6 +6,7 @@ import ServicesClient from "@/components/services/ServicesClient"
 import { BlueprintSection } from "@/components/aspect/section"
 import { AuditPromoBanner } from "@/components/audit/audit-promo-banner"
 import { VisioConseilBanner } from "@/components/visio-conseil/visio-conseil-banner"
+import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner"
 import { ProofStrip } from "@/components/proof-strip"
 import { Link } from "@/i18n/navigation"
 import { ArrowRight } from "lucide-react"
@@ -64,10 +65,11 @@ export default async function ServicesPage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {/* Schéma aligné sur le contenu réel de la page : les trois trajectoires
           de refonte du catalogue (charte §5), prix « à partir de » affichés. */}
       <ServiceJsonLd
+        locale={locale}
         name={
           locale === "en"
             ? "WordPress site redesign: consolidate, decouple or rebuild"
@@ -108,6 +110,10 @@ export default async function ServicesPage({
       </BlueprintSection>
       {/* Une décision à trancher avant de s'engager → visio conseil (déduite du devis). */}
       <VisioConseilBanner tone="obsidian" />
+      {/* Des décisions qui reviennent tous les mois → pilotage récurrent. Renvoi
+          vers la page dédiée plutôt que vers une ancre de cette page : l'offre
+          est récurrente, elle ne rentre pas dans les trois trajectoires forfaitaires. */}
+      <CtoExternaliseBanner tone="jet" />
       {/* Maillage : orienter ceux qui hésitent sur la stack vers l'audit. */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
         <AuditPromoBanner variant="services" />

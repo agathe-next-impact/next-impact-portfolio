@@ -296,28 +296,32 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 };
 
 // Aligné sur le namespace `contactPage` des messages (source vive de la page
-// /contact) : cinq sujets du catalogue, aucune offre disparue.
+// /contact) : les six sujets réellement proposés par le formulaire (les cinq
+// lignes du catalogue plus le CTO externalisé, 6e ligne ouverte le 2026-09-07),
+// aucune offre disparue.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact : visio conseil, audit + roadmap ou projet de refonte",
+    title: "Contact : visio conseil, audit + roadmap, CTO externalisé ou refonte",
     description:
-      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
+      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 950 €/mois), projet de refonte ou diagnostic gratuit.",
     keywords: [
       "contact conseil techno web",
       "visio conseil refonte",
       "audit et roadmap site web",
+      "contact CTO externalisé",
       "contact refonte WordPress",
       "diagnostic gratuit site web",
     ],
   },
   en: {
-    title: "Contact: advisory call, audit + roadmap or redesign project",
+    title: "Contact: advisory call, audit + roadmap, fractional CTO or redesign",
     description:
-      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), WordPress, headless or web app redesign project, or a free diagnostic of your site.",
+      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €950/month), redesign project or free diagnostic.",
     keywords: [
       "contact web technology advice",
       "redesign advisory call",
       "website audit and roadmap",
+      "fractional CTO contact",
       "WordPress redesign contact",
       "free website diagnostic",
     ],
@@ -457,8 +461,8 @@ export const pageMetadata = {
     generatePageMetadata({
       title:
         locale === "en"
-          ? "Project brief — WordPress specifications"
-          : "Brief projet — Cahier des charges WordPress",
+          ? "Project brief: WordPress specifications"
+          : "Brief projet : cahier des charges WordPress",
       description:
         locale === "en"
           ? "Build your interactive WordPress project brief. Free tool to structure your needs and get an accurate quote."

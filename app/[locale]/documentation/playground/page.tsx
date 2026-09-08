@@ -48,7 +48,7 @@ export default async function PlaygroundPage({
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <VideoObjectJsonLd
         name="Billeterie événementielle — WordPress Headless Next.js"
         description="Présentation complète d'une plateforme de billeterie propulsée par WordPress Headless et Next.js."

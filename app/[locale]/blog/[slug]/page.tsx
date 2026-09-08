@@ -122,7 +122,7 @@ export default async function BlogPostPage({
   return (
     <>
       <ReadingProgress />
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
         title={post.title}
         description={post.excerpt || post.title}

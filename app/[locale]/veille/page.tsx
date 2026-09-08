@@ -176,10 +176,11 @@ export default async function VeillePage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {/* Schéma Service aligné sur le contenu visible : les deux lettres de
           veille (gratuite + Sentinelle, tarif unique dans lib/sentinelle-offer). */}
       <ServiceJsonLd
+        locale={locale}
         name={
           isEn
             ? "Tech watch: free newsletter and personalized site watch"

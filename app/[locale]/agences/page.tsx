@@ -60,7 +60,7 @@ export default async function AgencesPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <AgencesClient />
     </>
   );

@@ -64,7 +64,7 @@ export default async function AProposPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PersonJsonLd />
       <FAQJsonLd questions={about.faq.items} />
       <AboutClient />

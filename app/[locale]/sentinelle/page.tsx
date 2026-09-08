@@ -152,10 +152,11 @@ export default async function SentinellePage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       {/* Schéma Service aligné sur le contenu visible : la veille personnalisée,
           19 €/mois (source unique du tarif : lib/sentinelle-offer.ts). */}
       <ServiceJsonLd
+        locale={locale}
         name={
           isEn
             ? "Sentinelle: personalized tech watch on your site"

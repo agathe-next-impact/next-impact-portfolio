@@ -84,7 +84,7 @@ export default async function OutilsPage({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
         name={t("collectionName")}
         description={t("collectionDescription")}

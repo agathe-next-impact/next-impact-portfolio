@@ -205,7 +205,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
 
     return (
       <div style={{ minHeight: "100vh" }}>
-        <BreadcrumbJsonLd items={breadcrumbItems} />
+        <BreadcrumbJsonLd locale={params.locale} items={breadcrumbItems} />
         <ArticleJsonLd
           title={article.title}
           description={article.description}

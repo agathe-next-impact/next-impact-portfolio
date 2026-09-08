@@ -60,8 +60,9 @@ export default async function ConseilPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ServiceJsonLd
+        locale={locale}
         name={isEn ? "Website redesign advice" : "Conseil refonte de site web"}
         description={
           isEn

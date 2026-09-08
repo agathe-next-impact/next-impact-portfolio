@@ -4,6 +4,113 @@
  */
 
 import { siteConfig } from "@/lib/metadata";
+import {
+  CTO_PATH,
+  CTO_PRICE_VALUE,
+  CTO_PRICE_CURRENCY,
+  CTO_BILLING_UNIT_CODE,
+  CTO_MIN_MONTHS,
+} from "@/lib/cto-externalise";
+
+/**
+ * Offre récurrente « CTO externalisé » (6e ligne du catalogue, arbitrage du
+ * 2026-09-07). Déclarée une seule fois : les deux OfferCatalog du site
+ * (ContactPage et LocalBusiness de la home) la réutilisent, donc un seul endroit
+ * à corriger. Prix exprimé en UnitPriceSpecification parce qu'il est mensuel et
+ * plancher (« à partir de ») : `minPrice` + `referenceQuantity` en mois.
+ */
+const CTO_OFFER = {
+  "@type": "Offer",
+  name: "CTO externalisé",
+  description:
+    `Direction technique à temps partagé, à partir de ${CTO_PRICE_VALUE} € HT par mois : une visio de pilotage par mois, vos arbitrages en continu, la relecture de vos devis, une roadmap tenue à jour et une veille ciblée sur votre parc. Engagement de ${CTO_MIN_MONTHS} mois minimum, puis reconduction au mois.`,
+  priceCurrency: CTO_PRICE_CURRENCY,
+  priceSpecification: {
+    "@type": "UnitPriceSpecification",
+    priceCurrency: CTO_PRICE_CURRENCY,
+    minPrice: CTO_PRICE_VALUE,
+    valueAddedTaxIncluded: false,
+    referenceQuantity: {
+      "@type": "QuantitativeValue",
+      value: 1,
+      unitCode: CTO_BILLING_UNIT_CODE,
+    },
+  },
+  url: `${siteConfig.url}${CTO_PATH}`,
+} as const;
+
+/**
+ * Catalogue d'offres de l'entité — les six lignes de la charte v1.2 (§1).
+ * Déclaré UNE SEULE FOIS : les deux `hasOfferCatalog` du site (ContactPage et
+ * le nœud LocalBusiness de la home) le réutilisent, donc un seul endroit à
+ * corriger quand le catalogue bouge. Les cinq premières lignes y étaient
+ * auparavant dupliquées à l'identique.
+ *
+ * Sémantique des prix, alignée sur ce que la charte et les pages affichent :
+ * les deux offres de conseil ont un prix EXACT (`price`), les trois refontes et
+ * l'abonnement sont des planchers « à partir de » (`minPrice` dans une
+ * `UnitPriceSpecification`). Déclarer 2250 en `price` laissait entendre un
+ * forfait ferme, que la page ne promet pas.
+ */
+const FROM_PRICE = (amount: number) => ({
+  "@type": "UnitPriceSpecification",
+  priceCurrency: "EUR",
+  minPrice: amount,
+  valueAddedTaxIncluded: false,
+});
+
+const OFFER_CATALOG = {
+  "@type": "OfferCatalog",
+  name: "Conseil et refonte Next Impact",
+  itemListElement: [
+    {
+      "@type": "Offer",
+      name: "Visio conseil refonte",
+      description:
+        "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
+      price: "150",
+      priceCurrency: "EUR",
+      url: `${siteConfig.url}/conseil`,
+    },
+    {
+      "@type": "Offer",
+      name: "Audit + roadmap",
+      description:
+        "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
+      price: "650",
+      priceCurrency: "EUR",
+      url: `${siteConfig.url}/conseil`,
+    },
+    {
+      "@type": "Offer",
+      name: "Refonte WordPress optimisée",
+      description:
+        "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
+      priceCurrency: "EUR",
+      priceSpecification: FROM_PRICE(2250),
+      url: `${siteConfig.url}/solutions-web`,
+    },
+    {
+      "@type": "Offer",
+      name: "Refonte WordPress headless",
+      description:
+        "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
+      priceCurrency: "EUR",
+      priceSpecification: FROM_PRICE(4000),
+      url: `${siteConfig.url}/wordpress-headless`,
+    },
+    {
+      "@type": "Offer",
+      name: "Refonte vers une web app",
+      description:
+        "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
+      priceCurrency: "EUR",
+      priceSpecification: FROM_PRICE(6500),
+      url: `${siteConfig.url}/solutions-web`,
+    },
+    CTO_OFFER,
+  ],
+} as const;
 
 interface JsonLdProps {
   data: Record<string, unknown>;
@@ -79,6 +186,7 @@ export function OrganizationJsonLd() {
       "Migration WordPress vers Headless",
       "Audit de site web",
       "Développement Next.js",
+      "Direction technique externalisée (CTO à temps partagé)",
     ],
     priceRange: "€€",
     knowsAbout: [
@@ -196,9 +304,18 @@ export function ArticleJsonLd({
  */
 export function BreadcrumbJsonLd({
   items,
+  locale,
 }: {
   items: Array<{ name: string; url: string }>;
+  /**
+   * Locale de la page rendue. Fournie, elle préfixe les URL relatives pour les
+   * locales non par défaut (`/en/...`) : sur une page anglaise, le fil d'Ariane
+   * pointe alors les URL réellement servies, et non leurs équivalents français.
+   * Omise, le comportement historique (URL françaises) est conservé.
+   */
+  locale?: string;
 }) {
+  const prefix = locale && locale !== "fr" ? `/${locale}` : "";
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -208,7 +325,7 @@ export function BreadcrumbJsonLd({
       name: item.name,
       item: item.url.startsWith("http")
         ? item.url
-        : `${siteConfig.url}${item.url}`,
+        : `${siteConfig.url}${prefix}${prefix && item.url === "/" ? "" : item.url}`,
     })),
   };
 
@@ -225,6 +342,8 @@ export function ServiceJsonLd({
   areaServed = "France",
   serviceType,
   url,
+  offer,
+  locale,
 }: {
   name: string;
   description: string;
@@ -232,7 +351,28 @@ export function ServiceJsonLd({
   areaServed?: string;
   serviceType?: string;
   url: string;
+  /**
+   * Locale de la page rendue. Fournie, l'URL relative est préfixée pour les
+   * locales non par défaut : le nœud Service d'une page anglaise pointe alors
+   * `/en/...`, et non son équivalent français. Omise, comportement historique.
+   */
+  locale?: string;
+  /**
+   * Prix réellement affiché sur la page, quand il y en a un. `minPrice` traduit
+   * le « à partir de » du catalogue ; `billingUnitCode` (UN/CEFACT, ex. « MON »)
+   * n'est renseigné que pour un prix récurrent. Ne jamais déclarer ici un prix
+   * qui n'est pas visible sur la page.
+   */
+  offer?: {
+    minPrice: number;
+    priceCurrency?: string;
+    billingUnitCode?: string;
+  };
 }) {
+  const localePrefix = locale && locale !== "fr" ? `/${locale}` : "";
+  const absoluteUrl = url.startsWith("http")
+    ? url
+    : `${siteConfig.url}${localePrefix}${url}`;
   const data = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -249,7 +389,31 @@ export function ServiceJsonLd({
       name: areaServed,
     },
     serviceType: serviceType || name,
-    url: url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+    url: absoluteUrl,
+    ...(offer
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: absoluteUrl,
+            priceCurrency: offer.priceCurrency ?? "EUR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              priceCurrency: offer.priceCurrency ?? "EUR",
+              minPrice: offer.minPrice,
+              valueAddedTaxIncluded: false,
+              ...(offer.billingUnitCode
+                ? {
+                    referenceQuantity: {
+                      "@type": "QuantitativeValue",
+                      value: 1,
+                      unitCode: offer.billingUnitCode,
+                    },
+                  }
+                : {}),
+            },
+          },
+        }
+      : {}),
   };
 
   return <JsonLd data={data} />;
@@ -322,7 +486,7 @@ export function ContactPageJsonLd() {
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
     description:
-      "Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), refonte WordPress, headless ou web app, ou diagnostic gratuit.",
+      `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
     url: `${siteConfig.url}/contact`,
     mainEntity: {
       "@type": "ProfessionalService",
@@ -375,55 +539,10 @@ export function ContactPageJsonLd() {
           "@type": "CommunicateAction",
           name: "Parler d'un projet de refonte",
           target: `${siteConfig.url}/contact`,
-          description: "Visio conseil refonte, audit + roadmap, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+          description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
         },
       ],
-      hasOfferCatalog: {
-        "@type": "OfferCatalog",
-        name: "Conseil et refonte Next Impact",
-        itemListElement: [
-          {
-            "@type": "Offer",
-            name: "Visio conseil refonte",
-            description: "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
-            price: "150",
-            priceCurrency: "EUR",
-            url: `${siteConfig.url}/conseil`,
-          },
-          {
-            "@type": "Offer",
-            name: "Audit + roadmap",
-            description: "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
-            price: "650",
-            priceCurrency: "EUR",
-            url: `${siteConfig.url}/conseil`,
-          },
-          {
-            "@type": "Offer",
-            name: "Refonte WordPress optimisée",
-            description: "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
-            price: "2250",
-            priceCurrency: "EUR",
-            url: `${siteConfig.url}/solutions-web`,
-          },
-          {
-            "@type": "Offer",
-            name: "Refonte WordPress headless",
-            description: "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
-            price: "4000",
-            priceCurrency: "EUR",
-            url: `${siteConfig.url}/wordpress-headless`,
-          },
-          {
-            "@type": "Offer",
-            name: "Refonte vers une web app",
-            description: "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
-            price: "6500",
-            priceCurrency: "EUR",
-            url: `${siteConfig.url}/solutions-web`,
-          },
-        ],
-      },
+      hasOfferCatalog: OFFER_CATALOG,
     },
   };
 
@@ -677,6 +796,7 @@ export function HomepageJsonLd() {
           "Migration WordPress vers Headless",
           "Audit de site web",
           "Développement Next.js",
+          "Direction technique externalisée (CTO à temps partagé)",
         ],
         knowsAbout: [
           "WordPress",
@@ -693,57 +813,7 @@ export function HomepageJsonLd() {
           "PostgreSQL",
           "PWA",
         ],
-        hasOfferCatalog: {
-          "@type": "OfferCatalog",
-          name: "Conseil et refonte Next Impact",
-          itemListElement: [
-            {
-              "@type": "Offer",
-              name: "Visio conseil refonte",
-              description:
-                "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
-              price: "150",
-              priceCurrency: "EUR",
-              url: `${baseUrl}/conseil`,
-            },
-            {
-              "@type": "Offer",
-              name: "Audit + roadmap",
-              description:
-                "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
-              price: "650",
-              priceCurrency: "EUR",
-              url: `${baseUrl}/conseil`,
-            },
-            {
-              "@type": "Offer",
-              name: "Refonte WordPress optimisée",
-              description:
-                "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
-              price: "2250",
-              priceCurrency: "EUR",
-              url: `${baseUrl}/solutions-web`,
-            },
-            {
-              "@type": "Offer",
-              name: "Refonte WordPress headless",
-              description:
-                "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
-              price: "4000",
-              priceCurrency: "EUR",
-              url: `${baseUrl}/wordpress-headless`,
-            },
-            {
-              "@type": "Offer",
-              name: "Refonte vers une web app",
-              description:
-                "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
-              price: "6500",
-              priceCurrency: "EUR",
-              url: `${baseUrl}/solutions-web`,
-            },
-          ],
-        },
+        hasOfferCatalog: OFFER_CATALOG,
         potentialAction: [
           {
             "@type": "ReserveAction",
@@ -755,7 +825,7 @@ export function HomepageJsonLd() {
             "@type": "CommunicateAction",
             name: "Parler d'un projet de refonte",
             target: `${baseUrl}/contact`,
-            description: "Visio conseil refonte, audit + roadmap, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+            description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
           },
         ],
       },

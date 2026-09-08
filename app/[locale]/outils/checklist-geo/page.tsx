@@ -65,7 +65,7 @@ export default async function ChecklistGeoPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
         titre={isEn ? "The GEO checklist" : "La checklist GEO"}
         sousTitre={

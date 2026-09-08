@@ -98,7 +98,7 @@ export default async function CategoryPage(props: CategoryPageProps) {
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <section className="s">
         <div className="container">
           {/* Fil d'Ariane visible — miroir du BreadcrumbList ci-dessus */}

@@ -22,6 +22,7 @@ const NAV_LINKS = [
 // principale (bouton du header), plus dans le footer.
 const RESOURCE_LINKS = [
   { href: "/conseil", key: "visioConseil" },
+  { href: "/cto-externalise", key: "ctoExternalise" },
   { href: "/veille",        key: "veille" },
   { href: "/outils",        key: "tools" },
   { href: "/contact",       key: "startWebApp" },

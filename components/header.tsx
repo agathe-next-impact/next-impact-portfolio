@@ -19,13 +19,20 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // préchargées au chargement de chaque page, sans qu'aucune n'ait été demandée.
 // La documentation et les outils restent liés depuis le footer et depuis le
 // hub /documentation — aucune URL n'est modifiée.
-// Nav : Services · Conseil · Études de cas · À propos.
+// Nav : Services · Conseil · CTO externalisé · Études de cas · À propos.
 // La visio conseil est portée par le bouton CTA (à la place du contact) ; le
 // diagnostic et la veille restent accessibles depuis le footer et la home.
+//
+// « CTO externalisé » est une entrée PLATE, volontairement pas un menu
+// déroulant : le panneau masqué du défunt menu « Ressources » restait dans le
+// DOM et l'observateur de prefetch de Next préchargeait ses destinations à
+// chaque page (cf. commentaire ci-dessus). Une entrée de plus coûte moins cher
+// qu'un panneau.
 const NAV_BEFORE = [
-  { key: "services",    href: "/solutions-web" },
-  { key: "conseil",     href: "/conseil" },
-  { key: "caseStudies", href: "/etudes-de-cas" },
+  { key: "services",       href: "/solutions-web" },
+  { key: "conseil",        href: "/conseil" },
+  { key: "ctoExternalise", href: "/cto-externalise" },
+  { key: "caseStudies",    href: "/etudes-de-cas" },
 ] as const;
 
 const NAV_AFTER = [

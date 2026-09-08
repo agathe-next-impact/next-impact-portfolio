@@ -65,7 +65,7 @@ export default async function SelecteurTechnoPage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
         titre={isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
         sousTitre={

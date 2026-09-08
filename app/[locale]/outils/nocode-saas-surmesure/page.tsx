@@ -65,7 +65,7 @@ export default async function NocodeSaasSurmesurePage({
 
   return (
     <>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
         titre={isEn ? "No-code, SaaS or custom?" : "No-code, SaaS ou sur-mesure ?"}
         sousTitre={

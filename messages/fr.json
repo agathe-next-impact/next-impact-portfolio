@@ -17,6 +17,7 @@
     "about": "À propos",
     "hub": "Quelle techno web ?",
     "conseil": "Conseil",
+    "ctoExternalise": "CTO externalisé",
     "veille": "Veille",
     "selecteurTechno": "Le Sélecteur techno",
     "allTools": "Tous les outils",
@@ -54,6 +55,7 @@
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
+    "ctoExternalise": "CTO externalisé",
     "veille": "Veille techno",
     "tools": "Tous les outils",
     "startWebApp": "Discutons de votre projet",
@@ -116,10 +118,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact : visio conseil, audit + roadmap ou projet de refonte",
-    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), projet de refonte WordPress, headless ou web app, ou diagnostic gratuit de votre site.",
+    "metaTitle": "Contact : visio conseil, audit + roadmap, CTO externalisé ou refonte",
+    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 950 €/mois), projet de refonte ou diagnostic gratuit.",
     "title": "Contact",
-    "subtitle": "Visio conseil, audit + roadmap, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Visio conseil, audit + roadmap, CTO externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },

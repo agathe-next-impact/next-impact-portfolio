@@ -57,7 +57,7 @@ export default async function PrivacyPolicy({
 
   return (
     <main>
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
 
       <BlueprintSection ticks innerClassName="px-6 py-14 lg:px-12 lg:py-20">
         <SectionHeading
