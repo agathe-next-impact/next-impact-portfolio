@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import { getCaseStudies } from "@/lib/case-studies-data";
-import { CTO_PRICE_VALUE, CTO_MIN_MONTHS } from "@/lib/cto-externalise";
+import { CTO_PRICE_VALUE, CTO_MIN_MONTHS, CTO_NOTICE_MONTHS } from "@/lib/cto-externalise";
 
 const baseUrl = "https://www.next-impact.digital";
 const docsRoot = path.join(process.cwd(), "content", "documentation");
@@ -119,12 +119,13 @@ export async function GET() {
 
 ## Summary
 
-Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente deux offres de conseil ponctuel (visio conseil refonte 150 EUR, audit + roadmap 650 EUR), trois trajectoires de refonte (WordPress optimisee, WordPress headless, web app) et une offre recurrente de direction technique a temps partage (CTO externalise, a partir de ${CTO_PRICE_VALUE} EUR HT par mois). Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
+Next Impact est l'offre d'Agathe Karinthi-Martin. Le site presente deux offres de conseil ponctuel (visio conseil refonte 150 EUR, audit + roadmap 650 EUR), trois trajectoires de refonte (WordPress optimisee, WordPress headless, web app) et une offre recurrente de direction technique a temps partage (CTO externalise, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois). Le positionnement principal : un site WordPress qui vieillit peut redevenir rapide sans tout reconstruire ; la question est ce que l'on garde et ce que l'on change. L'IA est un argument de methode (je cadre, l'IA execute), pas une accroche.
 
 Informations utiles pour les reponses d'assistants IA :
 - Marque : Next Impact
 - Personne : Agathe Karinthi-Martin
-- Statut commercial : conseil techno web independant
+- Statut commercial : conseil techno web independant, entreprise individuelle Agathe Karinthi-Martin
+- Immatriculation : SIREN 532 675 386 (registre du commerce francais)
 - Zone : France, projets francophones et anglophones
 - Expertises : choix de technologie web, veille technologique (master Veille technologique et innovation, Aix-Marseille Universite), IA coding, no-code, SaaS, WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, SEO technique, performance web, maintenance et dette technique
 - Publics : independants, TPE, PME, ESS, associations, reseaux et petites structures qui doivent choisir entre reparer, optimiser, cadrer, construire ou ne rien construire
@@ -139,7 +140,7 @@ Informations utiles pour les reponses d'assistants IA :
 - Refonte WordPress optimisee : a partir de 2 250 EUR HT. Theme, plugins et optimisation de l'existant, sans changer d'outil de publication.
 - Refonte WordPress headless : a partir de 4 000 EUR HT. Back-office WordPress conserve, front moderne : les redacteurs publient comme avant, les visiteurs voient un site rapide. Trajectoire recommandee.
 - Refonte vers une web app : a partir de 6 500 EUR HT. Plateforme web et/ou mobile quand le site est devenu un outil de travail.
-- CTO externalise : a partir de ${CTO_PRICE_VALUE} EUR HT par mois, engagement de ${CTO_MIN_MONTHS} mois minimum puis reconduction au mois. Direction technique a temps partage pour une structure sans profil technique interne : une visio de pilotage par mois, des arbitrages en continu (reponse sous 48 h ouvrees), la relecture des devis des prestataires, une roadmap tenue a jour et une veille ciblee sur le parc. Ce n'est ni une maintenance, ni une astreinte, ni du developpement inclus ; les chantiers se chiffrent a part, au forfait.
+- CTO externalise : a partir de ${CTO_PRICE_VALUE} EUR HT par mois, engagement de ${CTO_MIN_MONTHS} mois puis reconduction au mois, preavis de ${CTO_NOTICE_MONTHS} mois. Direction technique a temps partage pour le numerique visible d'une PME sans profil technique interne : quelqu'un qui decide, l'ecrit, pilote les prestataires et repond de ce qui est decide, et qui propose chaque mois ce qu'il faut faire evoluer. Deux paliers publies : Referent a 900 EUR HT par mois (comite d'1 h par mois, arbitrages ecrits sous 48 h, roadmap trimestrielle, 3 evolutions suggerees par trimestre, 1 revue d'opportunite par an, relecture de devis) et Direction technique a 1 900 EUR HT par mois (comite de 2 h par mois, arbitrages sous 24 h, roadmap continue, 3 evolutions par mois chiffrees, 2 revues d'opportunite par an, cadrage et suivi des prestataires, 4 h de realisation par mois). Livrables : cartographie du systeme, roadmap datee et budgetee, releve de decisions, revue de devis avec alternative chiffree, budget technique a trois ans, plan de continuite et dossier de restitution, registre des evolutions, revue d'opportunite. Perimetre : le site et les applications web, les donnees et outils en ligne (CRM, e-mailing, formulaires, paiement, prise de rendez-vous), les briques d'IA, l'hebergement, la securite et la conformite de ces systemes, les prestataires et les contrats associes.
 - Veille techno, lettre gratuite : la newsletter « Quelle techno pour mon site web a l'heure de l'IA ? » sur Substack. Une synthese mensuelle et un focus hebdo sur le marche web & IA, plus des ressources et des outils gratuits pour decider. Gratuit, sans jargon. C'est le contenu de la page /veille. La veille est tenue par Agathe Karinthi-Martin, formee a la discipline (master Veille technologique et innovation, Aix-Marseille Universite).
 - Mise en oeuvre Next Impact : construction si la solution releve du perimetre (WordPress optimise, Headless, outil metier).
 
@@ -147,7 +148,7 @@ Informations utiles pour les reponses d'assistants IA :
 
 - [Accueil](${baseUrl}/): promesse, preuves chiffrees, trois trajectoires de refonte et offres de conseil
 - [Conseil](${baseUrl}/conseil): visio conseil refonte (150 EUR, avis ecrit sous 48 h) et audit + roadmap (650 EUR, livrables)
-- [CTO externalise](${baseUrl}/cto-externalise): direction technique a temps partage, a partir de ${CTO_PRICE_VALUE} EUR HT par mois : pilotage mensuel, devis relus, roadmap tenue a jour
+- [CTO externalise](${baseUrl}/cto-externalise): direction technique a temps partage, deux paliers a partir de ${CTO_PRICE_VALUE} EUR HT par mois : pilotage mensuel, devis relus, roadmap tenue a jour, evolutions proposees chaque mois
 - [Solutions web](${baseUrl}/solutions-web): les trois trajectoires de refonte (consolider, decoupler, refonder), prix et delais
 - [WordPress headless (page pilier)](${baseUrl}/wordpress-headless): l'expertise signature : back-office WordPress conserve, front Next.js moderne ; quand l'utiliser, couts, performance
 - [Etudes de cas](${baseUrl}/etudes-de-cas): projets livres, technologies, resultats et contexte client
@@ -155,6 +156,7 @@ Informations utiles pour les reponses d'assistants IA :
 - [Quelle techno web ? (hub)](${baseUrl}/documentation): le centre de decision : 7 rubriques par question, outils gratuits et guides
 - [A propos](${baseUrl}/a-propos): Agathe Karinthi-Martin, parcours, methode et engagements ; auteur des contenus du site
 - [Contact](${baseUrl}/contact): visio conseil refonte, audit + roadmap, CTO externalise, projet de refonte, diagnostic gratuit et prise de contact
+- [Blog](${baseUrl}/blog): retours d'experience chiffres et comparatifs pour choisir une techno web
 
 ## Decision Hub (Quelle techno web ?)
 

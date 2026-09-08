@@ -54,12 +54,16 @@ export default function Hero() {
     {
       id: "veille" as TabId,
       label: isEn ? "Watch" : "Veille",
+      // Aligné sur ce que /veille présente réellement depuis le 2026-09-04 :
+      // la lettre gratuite, les ressources et les outils. Sentinelle n'y est
+      // plus décrite (page /sentinelle hors index et hors navigation) : la
+      // promettre ici laissait le lecteur sans page d'atterrissage.
       description: isEn
-        ? "The web market moves every week, and your site ages quietly. Two letters take care of it: a free one that tracks the market, and Sentinelle, the personalized watch that helps you decide: maintain, rebuild or create."
-        : "Le marché web bouge chaque semaine, et votre site vieillit en silence. Deux lettres s'en chargent : la gratuite suit l'actualité, Sentinelle surveille votre site et vous aide à décider : maintenir, refondre ou créer.",
+        ? "The web market moves every week, and your site ages quietly. The free newsletter takes care of it: one digest a month, one focus a week, plus resources and tools to decide, without becoming a developer."
+        : "Le marché web bouge chaque semaine, et votre site vieillit en silence. La lettre gratuite s'en charge : une synthèse par mois, un focus par semaine, et des ressources et outils pour décider, sans devenir développeur.",
       chips: isEn
-        ? ["Free newsletter", "Sentinelle €19/month", "Human-reviewed", "No commitment"]
-        : ["Lettre gratuite", "Sentinelle 19 €/mois", "Relu par un humain", "Sans engagement"],
+        ? ["Free newsletter", "A digest a month", "A focus a week", "No jargon"]
+        : ["Lettre gratuite", "Une synthèse par mois", "Un focus par semaine", "Sans jargon"],
       cta: { label: isEn ? "Discover the watch" : "Découvrir la veille", href: "/veille" },
     },
     {

@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Diagnostic visibilité IA - Votre site est-il visible dans ChatGPT et Perplexity ?",
     description:
       locale === "en"
-        ? "10 questions to score your site's visibility in AI engines (ChatGPT, Perplexity, AI Overviews) on 4 axes: AI crawler access, content citability, structure and schema, external authority. A clear verdict and concrete actions, free."
-        : "10 questions pour situer la visibilité de votre site dans les moteurs IA (ChatGPT, Perplexity, AI Overviews) sur 4 axes : accès des robots IA, citabilité du contenu, structure et données, autorité externe. Un verdict clair et des actions concrètes, gratuitement.",
+        ? "10 questions to score your site's visibility in ChatGPT, Perplexity and AI Overviews: crawler access, citability, structure, authority. Free verdict."
+        : "10 questions pour situer votre site dans ChatGPT, Perplexity et les AI Overviews : accès des robots, citabilité, structure, autorité. Verdict gratuit.",
     path: "/outils/visibilite-ia",
     keywords:
       locale === "en"

@@ -12,45 +12,66 @@ import {
   CTO_MIN_MONTHS,
 } from "@/lib/cto-externalise";
 
+type SchemaLocale = "fr" | "en";
+
+/** Normalise la locale reçue d'une route (string) vers les deux langues du site. */
+function schemaLocale(locale?: string): SchemaLocale {
+  return locale === "en" ? "en" : "fr";
+}
+
 /**
  * Offre récurrente « CTO externalisé » (6e ligne du catalogue, arbitrage du
  * 2026-09-07). Déclarée une seule fois : les deux OfferCatalog du site
  * (ContactPage et LocalBusiness de la home) la réutilisent, donc un seul endroit
  * à corriger. Prix exprimé en UnitPriceSpecification parce qu'il est mensuel et
  * plancher (« à partir de ») : `minPrice` + `referenceQuantity` en mois.
+ *
+ * Le libellé suit la langue de la page : sur /en, la page affiche
+ * « Fractional CTO », le schéma doit dire la même chose que le visible.
  */
-const CTO_OFFER = {
-  "@type": "Offer",
-  name: "CTO externalisé",
-  description:
-    `Direction technique à temps partagé, à partir de ${CTO_PRICE_VALUE} € HT par mois : une visio de pilotage par mois, vos arbitrages en continu, la relecture de vos devis, une roadmap tenue à jour et une veille ciblée sur votre parc. Engagement de ${CTO_MIN_MONTHS} mois minimum, puis reconduction au mois.`,
-  priceCurrency: CTO_PRICE_CURRENCY,
-  priceSpecification: {
-    "@type": "UnitPriceSpecification",
+const CTO_OFFER = (locale: SchemaLocale) =>
+  ({
+    "@type": "Offer",
+    name: locale === "en" ? "Fractional CTO" : "CTO externalisé",
+    description:
+      locale === "en"
+        ? `Technical direction on shared time for a mid-sized company's customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. Two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month. ${CTO_MIN_MONTHS}-month commitment, then rolling monthly.`
+        : `Direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé. Deux paliers, à partir de ${CTO_PRICE_VALUE} € HT par mois. Engagement de ${CTO_MIN_MONTHS} mois, puis reconduction au mois.`,
     priceCurrency: CTO_PRICE_CURRENCY,
-    minPrice: CTO_PRICE_VALUE,
-    valueAddedTaxIncluded: false,
-    referenceQuantity: {
-      "@type": "QuantitativeValue",
-      value: 1,
-      unitCode: CTO_BILLING_UNIT_CODE,
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      priceCurrency: CTO_PRICE_CURRENCY,
+      minPrice: CTO_PRICE_VALUE,
+      valueAddedTaxIncluded: false,
+      referenceQuantity: {
+        "@type": "QuantitativeValue",
+        value: 1,
+        unitCode: CTO_BILLING_UNIT_CODE,
+      },
     },
-  },
-  url: `${siteConfig.url}${CTO_PATH}`,
-} as const;
+    url: `${siteConfig.url}${localePath(locale, CTO_PATH)}`,
+  }) as const;
+
+/** URL réellement servie pour une locale donnée (FR sans préfixe, EN préfixé). */
+function localePath(locale: SchemaLocale, path: string): string {
+  return locale === "en" ? `/en${path}` : path;
+}
 
 /**
  * Catalogue d'offres de l'entité — les six lignes de la charte v1.2 (§1).
  * Déclaré UNE SEULE FOIS : les deux `hasOfferCatalog` du site (ContactPage et
  * le nœud LocalBusiness de la home) le réutilisent, donc un seul endroit à
- * corriger quand le catalogue bouge. Les cinq premières lignes y étaient
- * auparavant dupliquées à l'identique.
+ * corriger quand le catalogue bouge.
  *
  * Sémantique des prix, alignée sur ce que la charte et les pages affichent :
  * les deux offres de conseil ont un prix EXACT (`price`), les trois refontes et
  * l'abonnement sont des planchers « à partir de » (`minPrice` dans une
  * `UnitPriceSpecification`). Déclarer 2250 en `price` laissait entendre un
  * forfait ferme, que la page ne promet pas.
+ *
+ * Le catalogue suit la langue de la page : les libellés anglais sont ceux que
+ * la version anglaise du site affiche réellement (cartes d'offre, formulaire de
+ * contact), et les URL pointent la locale servie.
  */
 const FROM_PRICE = (amount: number) => ({
   "@type": "UnitPriceSpecification",
@@ -59,58 +80,73 @@ const FROM_PRICE = (amount: number) => ({
   valueAddedTaxIncluded: false,
 });
 
-const OFFER_CATALOG = {
-  "@type": "OfferCatalog",
-  name: "Conseil et refonte Next Impact",
-  itemListElement: [
-    {
-      "@type": "Offer",
-      name: "Visio conseil refonte",
-      description:
-        "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
-      price: "150",
-      priceCurrency: "EUR",
-      url: `${siteConfig.url}/conseil`,
-    },
-    {
-      "@type": "Offer",
-      name: "Audit + roadmap",
-      description:
-        "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
-      price: "650",
-      priceCurrency: "EUR",
-      url: `${siteConfig.url}/conseil`,
-    },
-    {
-      "@type": "Offer",
-      name: "Refonte WordPress optimisée",
-      description:
-        "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
-      priceCurrency: "EUR",
-      priceSpecification: FROM_PRICE(2250),
-      url: `${siteConfig.url}/solutions-web`,
-    },
-    {
-      "@type": "Offer",
-      name: "Refonte WordPress headless",
-      description:
-        "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
-      priceCurrency: "EUR",
-      priceSpecification: FROM_PRICE(4000),
-      url: `${siteConfig.url}/wordpress-headless`,
-    },
-    {
-      "@type": "Offer",
-      name: "Refonte vers une web app",
-      description:
-        "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
-      priceCurrency: "EUR",
-      priceSpecification: FROM_PRICE(6500),
-      url: `${siteConfig.url}/solutions-web`,
-    },
-    CTO_OFFER,
-  ],
-} as const;
+const OFFER_CATALOG = (locale: SchemaLocale) => {
+  const isEn = locale === "en";
+  const url = (path: string) => `${siteConfig.url}${localePath(locale, path)}`;
+  return {
+    "@type": "OfferCatalog",
+    name: isEn
+      ? "Next Impact advisory and redesign services"
+      : "Conseil et refonte Next Impact",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        name: isEn ? "Redesign advisory call" : "Visio conseil refonte",
+        description: isEn
+          ? "One hour on a call, a written opinion sent within 48h: stay, decouple or rebuild, and why."
+          : "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
+        price: "150",
+        priceCurrency: "EUR",
+        url: url("/conseil"),
+      },
+      {
+        "@type": "Offer",
+        name: "Audit + roadmap",
+        description: isEn
+          ? "Audit report (performance, security, technical debt, plugins, hosting), costed recommendations and a step-by-step roadmap."
+          : "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
+        price: "650",
+        priceCurrency: "EUR",
+        url: url("/conseil"),
+      },
+      {
+        "@type": "Offer",
+        name: isEn
+          ? "Optimized WordPress redesign"
+          : "Refonte WordPress optimisée",
+        description: isEn
+          ? "Theme, plugins and optimization of the existing site: a fast site without changing the publishing tool."
+          : "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
+        priceCurrency: "EUR",
+        priceSpecification: FROM_PRICE(2250),
+        url: url("/solutions-web"),
+      },
+      {
+        "@type": "Offer",
+        name: isEn
+          ? "Headless WordPress redesign"
+          : "Refonte WordPress headless",
+        description: isEn
+          ? "WordPress back office kept, modern front end: your editors publish as before, your visitors see a fast site."
+          : "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
+        priceCurrency: "EUR",
+        priceSpecification: FROM_PRICE(4000),
+        url: url("/wordpress-headless"),
+      },
+      {
+        "@type": "Offer",
+        name: isEn ? "Web app redesign" : "Refonte vers une web app",
+        description: isEn
+          ? "Web and/or mobile platform when the site has become a working tool."
+          : "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
+        priceCurrency: "EUR",
+        priceSpecification: FROM_PRICE(6500),
+        url: url("/solutions-web"),
+      },
+      CTO_OFFER(locale),
+    ],
+  } as const;
+};
 
 interface JsonLdProps {
   data: Record<string, unknown>;
@@ -137,6 +173,9 @@ export function OrganizationJsonLd() {
     "@type": "ProfessionalService",
     "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
+    // Le nom de domaine et la citation presse écrivent « Next Impact Digital » :
+    // déclarer la variante évite deux entités distinctes côté moteurs.
+    alternateName: "Next Impact Digital",
     url: siteConfig.url,
     logo: `${siteConfig.url}/img/logo-rouge-noir-carre-icon.png`,
     image: `${siteConfig.url}${siteConfig.ogImage}`,
@@ -150,6 +189,14 @@ export function OrganizationJsonLd() {
     },
     telephone: "+33673981638",
     email: "agathe@next-impact.digital",
+    // Immatriculation vérifiable (registre du commerce français). Le même
+    // numéro est déjà pointé par les liens `sameAs` ci-dessous : le déclarer
+    // en identifiant lève l'ambiguïté d'entité pour les moteurs de réponse.
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "SIREN",
+      value: "532675386",
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: "4 rue du centre",
@@ -204,6 +251,13 @@ export function OrganizationJsonLd() {
       "PostgreSQL",
       "PWA",
       "Application web sur-mesure",
+      "Refonte de site WordPress",
+      "Dette technique",
+      "Core Web Vitals",
+      "Performance web",
+      "SEO technique",
+      "Veille technologique",
+      "Direction technique à temps partagé",
     ],
     sameAs: [
       "https://www.linkedin.com/in/agat-dev/",
@@ -248,6 +302,7 @@ export function ArticleJsonLd({
   proficiencyLevel,
   dependencies,
   inLanguage,
+  locale,
 }: {
   title: string;
   description: string;
@@ -259,9 +314,20 @@ export function ArticleJsonLd({
   type?: "Article" | "TechArticle";
   proficiencyLevel?: "Beginner" | "Intermediate" | "Expert";
   dependencies?: string;
-  /** Locale du contenu (« fr-FR », « en »…) — consolide le graphe multilingue. */
+  /** Locale du contenu (« fr-FR », « en »…) : consolide le graphe multilingue. */
   inLanguage?: string;
+  /**
+   * Locale de la page rendue (« fr » / « en »). Fournie, elle préfixe l'URL
+   * relative pour les locales non par défaut : `mainEntityOfPage` pointe alors
+   * l'URL réellement servie (/en/...) et non son équivalent français. Omise,
+   * comportement historique conservé.
+   */
+  locale?: string;
 }) {
+  const localePrefix = locale && locale !== "fr" ? `/${locale}` : "";
+  const canonicalUrl = url.startsWith("http")
+    ? url
+    : `${siteConfig.url}${localePrefix}${url}`;
   const data = {
     "@context": "https://schema.org",
     "@type": type,
@@ -290,9 +356,10 @@ export function ArticleJsonLd({
         url: `${siteConfig.url}${siteConfig.ogImage}`,
       },
     },
+    url: canonicalUrl,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+      "@id": canonicalUrl,
     },
   };
 
@@ -480,14 +547,18 @@ export function HowToJsonLd({
 /**
  * Données structurées pour une page de contact
  */
-export function ContactPageJsonLd() {
+export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
+  const lang = schemaLocale(locale);
+  const isEn = lang === "en";
   const data = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
-    description:
-      `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
-    url: `${siteConfig.url}/contact`,
+    description: isEn
+      ? `Talk about a redesign project: advisory call (€150), audit + roadmap (€650), fractional CTO (from €${CTO_PRICE_VALUE}/month), WordPress, headless or web app redesign, or a free diagnostic.`
+      : `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
+    url: `${siteConfig.url}${localePath(lang, "/contact")}`,
+    inLanguage: isEn ? "en-US" : "fr-FR",
     mainEntity: {
       "@type": "ProfessionalService",
       name: siteConfig.name,
@@ -531,18 +602,24 @@ export function ContactPageJsonLd() {
       potentialAction: [
         {
           "@type": "ReserveAction",
-          name: "Réserver une visio conseil refonte",
+          name: isEn
+            ? "Book a redesign advisory call"
+            : "Réserver une visio conseil refonte",
           target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-une-refonte",
-          description: "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
+          description: isEn
+            ? "One hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why"
+            : "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
         },
         {
           "@type": "CommunicateAction",
-          name: "Parler d'un projet de refonte",
-          target: `${siteConfig.url}/contact`,
-          description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+          name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
+          target: `${siteConfig.url}${localePath(lang, "/contact")}`,
+          description: isEn
+            ? "Redesign advisory call, audit + roadmap, fractional CTO, redesign project (WordPress, headless or web app) or free diagnostic"
+            : "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
         },
       ],
-      hasOfferCatalog: OFFER_CATALOG,
+      hasOfferCatalog: OFFER_CATALOG(lang),
     },
   };
 
@@ -558,6 +635,7 @@ export function WebsiteJsonLd() {
     "@type": "WebSite",
     "@id": `${siteConfig.url}/#website`,
     name: siteConfig.name,
+    alternateName: "Next Impact Digital",
     url: siteConfig.url,
     description: siteConfig.description,
     inLanguage: ["fr-FR", "en-US"],
@@ -673,8 +751,15 @@ export function PersonJsonLd({
  * Données structurées enrichies pour la homepage
  * @graph avec Person, Organization et LocalBusiness interconnectés
  */
-export function HomepageJsonLd() {
+export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
   const baseUrl = siteConfig.url;
+  const lang = schemaLocale(locale);
+  const isEn = lang === "en";
+  // URL réellement servie pour la home de la locale rendue. Les nœuds d'entité
+  // (#person, #organization, #localbusiness) gardent leur @id canonique : ce
+  // sont les mêmes entités quelle que soit la langue. Seul le nœud WebPage,
+  // qui décrit LA page, change d'URL.
+  const homeUrl = isEn ? `${baseUrl}/en` : baseUrl;
 
   const data = {
     "@context": "https://schema.org",
@@ -683,9 +768,10 @@ export function HomepageJsonLd() {
       //   assistants vocaux / lecture IA). Les sélecteurs pointent du contenu visible. —
       {
         "@type": "WebPage",
-        "@id": `${baseUrl}/#webpage`,
-        url: baseUrl,
+        "@id": `${homeUrl}/#webpage`,
+        url: homeUrl,
         name: siteConfig.name,
+        inLanguage: isEn ? "en-US" : "fr-FR",
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
@@ -719,6 +805,22 @@ export function HomepageJsonLd() {
           addressCountry: "FR",
         },
         worksFor: { "@id": `${baseUrl}/#organization` },
+        // Mêmes signaux d'expertise que le nœud Person de /a-propos : le
+        // parcours est affiché sur la home (section « Qui le fait »), le
+        // diplôme sur /a-propos. Rien n'est déclaré qui ne soit visible.
+        alumniOf: {
+          "@type": "CollegeOrUniversity",
+          name: "Aix-Marseille Université",
+        },
+        hasCredential: {
+          "@type": "EducationalOccupationalCredential",
+          credentialCategory: "degree",
+          name: "Master Veille technologique et innovation",
+          recognizedBy: {
+            "@type": "CollegeOrUniversity",
+            name: "Aix-Marseille Université",
+          },
+        },
         knowsAbout: [
           "WordPress",
           "Conseil techno web",
@@ -823,19 +925,25 @@ export function HomepageJsonLd() {
           "PostgreSQL",
           "PWA",
         ],
-        hasOfferCatalog: OFFER_CATALOG,
+        hasOfferCatalog: OFFER_CATALOG(lang),
         potentialAction: [
           {
             "@type": "ReserveAction",
-            name: "Réserver une visio conseil refonte",
+            name: isEn
+              ? "Book a redesign advisory call"
+              : "Réserver une visio conseil refonte",
             target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-une-refonte",
-            description: "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
+            description: isEn
+              ? "One hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why"
+              : "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
           },
           {
             "@type": "CommunicateAction",
-            name: "Parler d'un projet de refonte",
-            target: `${baseUrl}/contact`,
-            description: "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+            name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
+            target: `${baseUrl}${localePath(lang, "/contact")}`,
+            description: isEn
+              ? "Redesign advisory call, audit + roadmap, fractional CTO, redesign project (WordPress, headless or web app) or free diagnostic"
+              : "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
           },
         ],
       },
@@ -860,27 +968,39 @@ export function CollectionPageJsonLd({
   description,
   url,
   items,
+  locale,
 }: {
   name: string;
   description: string;
   url: string;
   items: Array<{ name: string; url: string; description?: string }>;
+  /**
+   * Locale de la page rendue. Fournie, les URL relatives (la collection et
+   * chacun de ses items) sont préfixées pour les locales non par défaut : la
+   * liste pointe alors les URL réellement servies. Omise, comportement
+   * historique (URL françaises).
+   */
+  locale?: string;
 }) {
+  const prefix = locale && locale !== "fr" ? `/${locale}` : "";
+  const absolute = (value: string) =>
+    value.startsWith("http") ? value : `${siteConfig.url}${prefix}${value}`;
   const data = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name,
     description,
-    url: url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+    url: absolute(url),
+    ...(locale ? { inLanguage: locale === "en" ? "en-US" : "fr-FR" } : {}),
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
     mainEntity: {
       "@type": "ItemList",
+      numberOfItems: items.length,
       itemListElement: items.map((item, index) => ({
         "@type": "ListItem",
         position: index + 1,
         name: item.name,
-        url: item.url.startsWith("http")
-          ? item.url
-          : `${siteConfig.url}${item.url}`,
+        url: absolute(item.url),
         ...(item.description && { description: item.description }),
       })),
     },
@@ -898,19 +1018,23 @@ export function WebApplicationJsonLd({
   url,
   applicationCategory = "BusinessApplication",
   offers,
+  locale,
 }: {
   name: string;
   description: string;
   url: string;
   applicationCategory?: string;
   offers?: { price: string; priceCurrency?: string };
+  /** Locale de la page rendue : préfixe l'URL relative pour /en. */
+  locale?: string;
 }) {
+  const prefix = locale && locale !== "fr" ? `/${locale}` : "";
   const data = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name,
     description,
-    url: url.startsWith("http") ? url : `${siteConfig.url}${url}`,
+    url: url.startsWith("http") ? url : `${siteConfig.url}${prefix}${url}`,
     applicationCategory,
     operatingSystem: "All",
     browserRequirements: "Requires JavaScript",

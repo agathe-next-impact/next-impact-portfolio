@@ -43,6 +43,7 @@ export default async function CaseStudiesPage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
+        locale={locale}
         name={t("collectionName")}
         description={t("collectionDescription")}
         url="/etudes-de-cas"

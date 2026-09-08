@@ -118,8 +118,8 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact: advisory call, audit + roadmap, fractional CTO or redesign",
-    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €950/month), redesign project or free diagnostic.",
+    "metaTitle": "Contact: advice, audit, fractional CTO or redesign",
+    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €900/month), redesign project or free diagnostic.",
     "title": "Contact",
     "subtitle": "Advisory call, audit + roadmap, fractional CTO, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
@@ -200,7 +200,7 @@
   },
   "toolsPage": {
     "metaTitle": "Toolbox: web & AI tech selector and scoping",
-    "metaDescription": "Free tools to decide before building: tech selector, 2-minute site diagnostic, AI visibility, GEO checklist, quote decoder and project specifications.",
+    "metaDescription": "Decide before you build: 2-minute site diagnostic, AI visibility, GEO checklist and quote decoder. Free, no sign-up.",
     "title": "Toolbox",
     "subtitle": "Free tools to decide what to build, what to simplify and what to avoid.",
     "breadcrumbHome": "Home",
@@ -225,13 +225,13 @@
   },
   "auditPage": {
     "metaTitle": "See what slows your site down in 2 minutes",
-    "metaDescription": "One address, one report, no sign-up: see what slows your site down and which of the three trajectories (consolidate, decouple, rebuild) matches your situation.",
+    "metaDescription": "One address, one report, no sign-up: see what slows your site down and which trajectory fits, consolidate, decouple or rebuild.",
     "breadcrumbHome": "Home",
     "breadcrumbAudit": "Website audit"
   },
   "demoPage": {
     "metaTitle": "Demos: websites, web apps and mobile applications",
-    "metaDescription": "Watch Next Impact projects in action: France's national networking platform (Réseauteurs), B2B Next.js marketplace (Panorama Pub), mobile PWA treasure hunt (Hermitage), Headless WordPress + Next.js sites.",
+    "metaDescription": "Next Impact projects in video: the Réseauteurs national platform, a B2B Next.js marketplace, a mobile PWA treasure hunt, headless WordPress sites.",
     "breadcrumbHome": "Home",
     "breadcrumbDemo": "Demo"
   },
@@ -245,7 +245,7 @@
   },
   "documentationPage": {
     "metaTitle": "Which web tech? Understand and choose in the AI era",
-    "metaDescription": "The decision hub to choose your web technology in the age of AI: 7 question-driven sections, free tools and guides. WordPress, no-code, Headless or custom.",
+    "metaDescription": "Choosing web technology in the age of AI: 7 question-driven sections, free tools and guides. WordPress, no-code, headless or custom.",
     "hubTitle": "Which web tech?",
     "hubSubtitle": "The decision hub to choose the right web technology in the age of AI — understand your options before you build, rebuild, fix or buy.",
     "breadcrumbHome": "Home",
@@ -253,7 +253,7 @@
   },
   "blogPage": {
     "metaTitle": "Web & AI blog: field lessons, comparisons and costs",
-    "metaDescription": "Data-backed field lessons and comparisons to choose your web technology in the age of AI: WordPress, Headless, no-code, SaaS or custom. Real costs and pitfalls to avoid."
+    "metaDescription": "Data-backed field lessons to choose web technology in the age of AI: WordPress, headless, no-code or custom. Real costs and pitfalls to avoid."
   },
   "articlesPage": {
     "metaTitle": "Web, AI and architecture articles & comparisons",
@@ -364,8 +364,8 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Three trajectories for an aging WordPress site",
-    "metaDescription": "Consolidate (optimized WordPress, from €2,250 excl. VAT), decouple (headless WordPress, recommended, from €4,000 excl. VAT) or rebuild (web app, from €6,500 excl. VAT). Price and timeline fixed upfront.",
+    "metaTitle": "WordPress redesign: consolidate, decouple or rebuild",
+    "metaDescription": "Three trajectories for an aging WordPress site: optimized from €2,250, headless from €4,000, web app from €6,500. Price and timeline fixed upfront.",
     "breadcrumbHome": "Home",
     "breadcrumbServices": "Web solutions & Pricing",
     "calculateGain": {
@@ -416,8 +416,8 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "About: Agathe Karinthi-Martin, multidisciplinary web technology advice",
-    "metaDescription": "Agathe Karinthi-Martin approaches every web project from four angles: technical, business, marketing, design. 20 years of practice helping teams of 20 to 250 people choose the right technology.",
+    "metaTitle": "Agathe Karinthi-Martin: 20 years of web, advice and redesign",
+    "metaDescription": "Technical, business, marketing, design: 20 years of web practice helping organizations of 20 to 250 people choose the right technology.",
     "breadcrumbHome": "Home",
     "breadcrumbAbout": "About",
     "hero": {

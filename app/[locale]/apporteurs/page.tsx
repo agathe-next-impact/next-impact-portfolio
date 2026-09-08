@@ -19,8 +19,8 @@ export async function generateMetadata({
       ? "Referral partners: earn 10–15% on every project you recommend"
       : "Apporteurs d'affaires : touchez 10 à 15 % sur chaque projet recommandé",
     description: isEn
-      ? "Know a business with an ageing website? Refer them to Next Impact and earn 10–15% of the signed project, paid on invoice settlement. Fixed scope, no surprises for your contact."
-      : "Vous connaissez une PME dont le site vieillit mal ? Recommandez-la à Next Impact et touchez 10 à 15 % du projet signé, versés à l'encaissement. Forfait garanti, aucune surprise pour votre contact.",
+      ? "Know a business with an ageing website? Refer them and earn 10 to 15% of the signed project, paid on settlement. Fixed price, no surprises for them."
+      : "Vous connaissez une PME dont le site vieillit mal ? Recommandez-la et touchez 10 à 15 % du projet signé, versés à l'encaissement. Forfait garanti.",
     path: "/apporteurs",
     keywords: isEn
       ? [

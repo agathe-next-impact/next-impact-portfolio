@@ -30,6 +30,10 @@ export async function generateMetadata({
         ? ["playground", "design system", "UI components", "demos"]
         : ["playground", "design system", "composants UI", "démos"],
     locale,
+    // Page interne de démonstration du design system : aucun contenu utile à
+    // un prospect, absente du sitemap et de toute navigation publique. Elle
+    // était pourtant indexable — noindex pour ne pas diluer le site.
+    noindex: true,
   });
 }
 

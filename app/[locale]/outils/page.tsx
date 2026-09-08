@@ -86,6 +86,7 @@ export default async function OutilsPage({
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
+        locale={locale}
         name={t("collectionName")}
         description={t("collectionDescription")}
         url="/outils"

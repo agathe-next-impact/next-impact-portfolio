@@ -95,6 +95,19 @@ export function DocumentationSearch({
 
   useEffect(() => setMounted(true), []);
 
+  // Amorçage par `?q=` : c'est la cible déclarée par le SearchAction du
+  // JSON-LD WebSite (`/documentation?q={search_term_string}`). Sans cette
+  // lecture, le schéma annonçait une recherche que le site n'honorait pas.
+  // Lu côté client (window) pour éviter la contrainte Suspense de
+  // useSearchParams et ne pas rendre la page dynamique.
+  useEffect(() => {
+    const initial = new URLSearchParams(window.location.search).get("q");
+    if (initial && initial.trim().length >= 2) {
+      setQuery(initial);
+      setOpen(true);
+    }
+  }, []);
+
   const suggestions = useMemo(() => rank(items, query), [items, query]);
   const showList = open && query.trim().length >= 2;
 

@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Réparer ou refaire ? - Votre site est-il en bout de course ?",
     description:
       locale === "en"
-        ? "9 checks to know whether to repair, optimize or rebuild your WordPress site: age, technical base, plugins, bugs, performance, evolution needs. A health score and a clear decision signal."
-        : "9 vérifications pour savoir s'il faut réparer, optimiser ou refondre votre site WordPress : âge, socle technique, extensions, bugs, performance, besoins d'évolution. Un score de santé et un signal de décision clair.",
+        ? "Repair, optimize or rebuild your WordPress site? 9 checks on age, technical base, plugins, bugs and performance. A health score and a clear verdict."
+        : "Réparer, optimiser ou refondre votre site WordPress ? 9 vérifications : âge, socle technique, extensions, bugs, performance. Un score et un verdict clair.",
     path: "/outils/reparer-ou-refaire",
     keywords:
       locale === "en"

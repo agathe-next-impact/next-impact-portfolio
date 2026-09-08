@@ -220,6 +220,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
           proficiencyLevel={article.category === "wordpress-headless" ? "Intermediate" : undefined}
           dependencies={article.category === "wordpress-headless" ? "WordPress, Next.js, Node.js" : undefined}
           inLanguage={params.locale === "en" ? "en-US" : "fr-FR"}
+          locale={params.locale}
         />
         {article.faq && article.faq.length > 0 && <FAQJsonLd questions={article.faq} />}
         {article.howto && article.howto.length > 0 && (

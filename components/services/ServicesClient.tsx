@@ -123,6 +123,44 @@ export default function ServicesClient() {
         />
       </PageHero>
 
+      {/* « En bref » : résumé autoportant des trois trajectoires, citable tel
+          quel par un moteur de réponse (GEO). Intention distincte du TL;DR de
+          la home, qui présente l'offre d'ensemble : ici, le détail par
+          trajectoire. Chaque chiffre est celui affiché plus bas (PricingCards).
+          La classe `.services-tldr` est la cible du SpeakableSpecification. */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
+        <Reveal className="services-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
+          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+            {isEn ? "In short" : "En bref"}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {(isEn
+              ? [
+                  "Three trajectories for an aging WordPress site: consolidate, decouple or rebuild. The real question is not WordPress or not WordPress, it is what you keep and what you change.",
+                  "Consolidate: optimized WordPress redesign, bespoke theme and a cleaned-up plugin stack, from €2,250 excl. VAT. You keep WordPress, you change what slows it down.",
+                  "Decouple, the recommended trajectory: headless WordPress redesign, from €4,000 excl. VAT. Your editors publish in the same back office, your visitors see a fast, modern site.",
+                  "Rebuild: web app, platform or mobile application, from €6,500 excl. VAT, when the site has become a working tool.",
+                  "Price and timeline in writing before we start, performance measured before and after, a single point of contact from quote to launch.",
+                ]
+              : [
+                  "Trois trajectoires pour un site WordPress qui vieillit : consolider, découpler ou refonder. La vraie question n'est pas WordPress ou pas WordPress, c'est ce que vous gardez et ce que vous changez.",
+                  "Consolider : refonte WordPress optimisée, thème sur-mesure et empilement de plugins assaini, à partir de 2 250 € HT. Vous gardez WordPress, vous changez ce qui le ralentit.",
+                  "Découpler, la trajectoire recommandée : refonte WordPress headless, à partir de 4 000 € HT. Vos rédacteurs publient dans le même back-office, vos visiteurs voient un site rapide et moderne.",
+                  "Refonder : web app, plateforme ou application mobile, à partir de 6 500 € HT, quand le site est devenu un outil de travail.",
+                  "Prix et délai écrits avant de commencer, performance mesurée avant et après, une interlocutrice unique du devis à la mise en ligne.",
+                ]
+            ).map((line) => (
+              <li
+                key={line}
+                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+              >
+                {line}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </BlueprintSection>
+
       <Separator />
 
       {/* § 02 — Avantage : UI/UX moderne */}

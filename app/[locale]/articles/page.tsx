@@ -38,6 +38,7 @@ export default async function ArticlesPage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
+        locale={locale}
         name={t("metaTitle")}
         description={t("metaDescription")}
         url="/articles"

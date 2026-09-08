@@ -23,11 +23,11 @@ const OFFERS_FR: Offer[] = [
   {
     subtitle: "Veiller",
     title: "Veille techno",
-    price: "dès 0 €",
+    price: "Gratuit",
     items: [
       "« Quelle techno pour mon site web à l'heure de l'IA ? », la lettre gratuite : synthèse mensuelle + focus hebdo",
-      "Sentinelle 19 €/mois : veille personnalisée + aide à la décision : maintenir, refondre ou créer",
-      "Écrit pour décider, relu par un humain avant envoi",
+      "Des ressources pour décider : choisir sa techno, être trouvé par l'IA, lire un devis",
+      "Des outils de diagnostic gratuits : techno, visibilité IA, devis",
     ],
     target: "Pour rester devant, sans y passer vos soirées",
     href: "/veille",
@@ -66,11 +66,11 @@ const OFFERS_EN: Offer[] = [
   {
     subtitle: "Watch",
     title: "Tech watch",
-    price: "from €0",
+    price: "Free",
     items: [
       "The free newsletter: a monthly digest + a weekly focus on web & AI",
-      "Sentinelle €19/month: personalized watch + decision support: maintain, rebuild or create",
-      "Written to help you decide, human-reviewed before sending",
+      "Resources to decide: choose your tech, get found by AI, read a quote",
+      "Free diagnostic tools: technology, AI visibility, quotes",
     ],
     target: "Stay ahead, without spending your evenings on it",
     href: "/veille",

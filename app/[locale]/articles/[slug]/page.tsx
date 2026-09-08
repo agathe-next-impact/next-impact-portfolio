@@ -147,6 +147,8 @@ export default async function ArticlePage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
+        locale={locale}
+        inLanguage={locale === "en" ? "en-US" : "fr-FR"}
         title={article.title}
         description={article.category}
         image="/img/desktop-screen-next-impact.png"

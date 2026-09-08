@@ -118,8 +118,8 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact : visio conseil, audit + roadmap, CTO externalisé ou refonte",
-    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 950 €/mois), projet de refonte ou diagnostic gratuit.",
+    "metaTitle": "Contact : conseil, audit, CTO externalisé ou refonte",
+    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 900 €/mois), projet de refonte ou diagnostic gratuit.",
     "title": "Contact",
     "subtitle": "Visio conseil, audit + roadmap, CTO externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
@@ -200,7 +200,7 @@
   },
   "toolsPage": {
     "metaTitle": "Boîte à outils : sélecteur techno web & IA et cadrage",
-    "metaDescription": "Des outils gratuits pour décider avant de construire : sélecteur techno, diagnostic de site en 2 minutes, visibilité IA, checklist GEO, décrypteur de devis et cahier des charges.",
+    "metaDescription": "Décidez avant de construire : diagnostic de site en 2 minutes, visibilité IA, checklist GEO et décrypteur de devis. Gratuits, sans inscription.",
     "title": "Boîte à outils",
     "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
     "breadcrumbHome": "Accueil",
@@ -225,13 +225,13 @@
   },
   "auditPage": {
     "metaTitle": "Voyez ce qui ralentit votre site en 2 minutes",
-    "metaDescription": "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
+    "metaDescription": "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et quelle trajectoire suivre, consolider, découpler ou refonder.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAudit": "Audit de site"
   },
   "demoPage": {
     "metaTitle": "Démos : sites web, web apps et applications mobiles",
-    "metaDescription": "Découvrez en vidéo les réalisations Next Impact : plateforme nationale du networking (Réseauteurs), marketplace B2B Next.js (Panorama Pub), jeu de piste mobile PWA (Hermitage), sites WordPress Headless + Next.js.",
+    "metaDescription": "Les réalisations Next Impact en vidéo : plateforme nationale Réseauteurs, marketplace B2B Next.js, jeu de piste mobile PWA, sites WordPress headless.",
     "breadcrumbHome": "Accueil",
     "breadcrumbDemo": "Démo"
   },
@@ -245,7 +245,7 @@
   },
   "documentationPage": {
     "metaTitle": "Quelle techno web ? Comprendre et choisir à l'heure de l'IA",
-    "metaDescription": "Le centre de décision pour choisir votre techno web à l'heure de l'IA : 7 rubriques par question, outils gratuits et guides. WordPress, no-code, Headless ou sur-mesure.",
+    "metaDescription": "Choisir sa techno web à l'heure de l'IA : 7 rubriques par question, des outils gratuits et des guides. WordPress, no-code, headless ou sur-mesure.",
     "hubTitle": "Quelle techno web ?",
     "hubSubtitle": "Le centre de décision pour choisir la bonne technologie web à l'heure de l'IA — comprendre vos options avant de construire, refaire, réparer ou acheter.",
     "breadcrumbHome": "Accueil",
@@ -253,7 +253,7 @@
   },
   "blogPage": {
     "metaTitle": "Blog Web & IA : retours d'expérience, comparatifs et coûts",
-    "metaDescription": "Retours d'expérience chiffrés et comparatifs pour choisir votre techno web à l'heure de l'IA : WordPress, Headless, no-code, SaaS ou sur-mesure. Coûts réels et pièges à éviter."
+    "metaDescription": "Retours d'expérience chiffrés pour choisir sa techno web à l'heure de l'IA : WordPress, headless, no-code ou sur-mesure. Coûts réels et pièges à éviter."
   },
   "articlesPage": {
     "metaTitle": "Articles & comparatifs Web, IA et architecture",
@@ -301,7 +301,7 @@
     "similarProjects": "Projets similaires",
     "breadcrumbHome": "Accueil",
     "breadcrumbCaseStudies": "Études de cas",
-    "articleTitlePrefix": "Etude de cas",
+    "articleTitlePrefix": "Étude de cas",
     "articleTitleSuffix": "Next Impact",
     "months": [
       "Janvier",
@@ -364,8 +364,8 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Solutions pour une refonte de WordPress : consolider, découpler ou refonder",
-    "metaDescription": "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
+    "metaTitle": "Refonte WordPress : consolider, découpler ou refonder",
+    "metaDescription": "Trois trajectoires pour un site WordPress qui vieillit : optimisé dès 2 250 € HT, headless dès 4 000 € HT, web app dès 6 500 € HT. Prix et délai fixés.",
     "breadcrumbHome": "Accueil",
     "breadcrumbServices": "Solutions web & Tarifs",
     "calculateGain": {
@@ -416,8 +416,8 @@
     }
   },
   "aboutPage": {
-    "metaTitle": "À propos : Agathe Karinthi-Martin, conseil techno web pluridisciplinaire",
-    "metaDescription": "Agathe Karinthi-Martin aborde le web sous quatre angles : technique, business, marketing, design. 20 ans de pratique pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
+    "metaTitle": "Agathe Karinthi-Martin : 20 ans de web, conseil et refonte",
+    "metaDescription": "Technique, business, marketing, design : 20 ans de pratique du web pour aider les structures de 20 à 250 salariés à choisir la bonne techno.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAbout": "À propos",
     "hero": {

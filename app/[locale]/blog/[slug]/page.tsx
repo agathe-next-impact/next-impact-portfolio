@@ -124,11 +124,13 @@ export default async function BlogPostPage({
       <ReadingProgress />
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
+        locale={locale}
+        inLanguage={locale === "en" ? "en-US" : "fr-FR"}
         title={post.title}
         description={post.excerpt || post.title}
         image="/img/desktop-screen-next-impact.png"
         datePublished={post.date || new Date().toISOString()}
-        author={post.author || "Agathe"}
+        author={post.author || "Agathe Karinthi-Martin"}
         url={`/blog/${slug}`}
       />
       <BlogLayout post={post}>{content}</BlogLayout>

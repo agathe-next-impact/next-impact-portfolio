@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Prototype IA : jetable ou maintenable ? - Faut-il le construire ?",
     description:
       locale === "en"
-        ? "You vibe-coded something with AI: now what? 9 checks on users, data, security and lifespan to know whether to keep iterating, scope it, or rebuild it properly for production."
-        : "Vous avez vibe-codé un truc avec l'IA : et maintenant ? 9 vérifications sur les utilisateurs, les données, la sécurité et la durée de vie pour savoir s'il faut continuer, cadrer ou reconstruire proprement.",
+        ? "Will your AI-generated prototype hold up in production? 9 checks on users, data, security and lifespan: keep iterating, scope it, or rebuild it."
+        : "Un prototype généré par IA tiendra-t-il en production ? 9 vérifications sur les utilisateurs, les données, la sécurité et la durée de vie. Verdict immédiat.",
     path: "/outils/prototype-ia",
     keywords:
       locale === "en"

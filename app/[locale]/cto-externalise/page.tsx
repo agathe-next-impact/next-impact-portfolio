@@ -31,8 +31,8 @@ export async function generateMetadata({
     // version longue précédente était tronquée avant l'engagement, qui est
     // l'objection n° 1 sur une offre récurrente.
     description: isEn
-      ? "Shared-time technical direction, from €950 excl. VAT a month: monthly steering, quotes reviewed, roadmap kept current. No hiring, three-month minimum."
-      : "Direction technique à temps partagé, dès 950 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, 3 mois minimum.",
+      ? "Shared-time technical direction, from €900 excl. VAT a month: monthly steering, quotes reviewed, roadmap kept current. No hiring, six-month commitment."
+      : "Direction technique à temps partagé, dès 900 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement 6 mois.",
     path: CTO_PATH,
     keywords: isEn
       ? [

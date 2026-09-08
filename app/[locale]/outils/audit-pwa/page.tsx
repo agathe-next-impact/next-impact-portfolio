@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Diagnostic d'opportunité PWA - Faut-il en créer une ?",
     description:
       locale === "en"
-        ? "9 strategic questions to evaluate whether an installable PWA is relevant for your project: mobile usage, offline needs, store dependency, native complexity and technical baseline."
-        : "9 questions de cadrage pour évaluer si une PWA installable est pertinente pour votre projet : usage mobile, hors-ligne, dépendance aux stores, complexité native et socle technique.",
+        ? "9 questions to see whether an installable PWA fits your project: mobile usage, offline needs, store dependency, technical baseline. Free, no sign-up."
+        : "9 questions pour savoir si une PWA installable est pertinente : usage mobile, hors-ligne, dépendance aux stores, socle technique. Gratuit, sans inscription.",
     path: "/outils/audit-pwa",
     keywords:
       locale === "en"

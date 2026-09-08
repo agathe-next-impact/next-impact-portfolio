@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
-import { generatePageMetadata } from "@/lib/metadata"
-import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
+import { generatePageMetadata, siteConfig } from "@/lib/metadata"
+import { ServiceJsonLd, BreadcrumbJsonLd, JsonLd } from "@/components/json-ld"
 import ServicesClient from "@/components/services/ServicesClient"
 import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner"
 import type { Locale } from "@/i18n/routing"
@@ -57,17 +57,37 @@ export default async function ServicesPage({
     { name: t("breadcrumbServices"), url: "/solutions-web" },
   ]
 
+  // Nœud WebPage « speakable » : désigne aux assistants de lecture le H1 et le
+  // bloc « En bref » de la page, deux zones réellement affichées et
+  // autoportantes. Même dispositif que la home et la page pilier headless.
+  const speakableWebPage = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${siteConfig.url}${locale === "en" ? "/en" : ""}/solutions-web#webpage`,
+    url: `${siteConfig.url}${locale === "en" ? "/en" : ""}/solutions-web`,
+    name: t("metaTitle"),
+    description: t("metaDescription"),
+    inLanguage: locale === "en" ? "en-US" : "fr-FR",
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
+    about: { "@id": `${siteConfig.url}/#organization` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".services-tldr"],
+    },
+  }
+
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
+      <JsonLd data={speakableWebPage} />
       {/* Schéma aligné sur le contenu réel de la page : les trois trajectoires
           de refonte du catalogue (charte §5), prix « à partir de » affichés. */}
       <ServiceJsonLd
         locale={locale}
         name={
           locale === "en"
-            ? "Three trajectories for an aging WordPress site: consolidate, decouple or rebuild"
-            : "Solutions pour une refonte de WordPress : consolider, découpler ou refonder"
+            ? "WordPress redesign: consolidate, decouple or rebuild"
+            : "Refonte WordPress : consolider, découpler ou refonder"
         }
         description={
           locale === "en"

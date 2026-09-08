@@ -271,6 +271,7 @@ export default async function VeillePage({
           décideurs (lettre Substack, ressources et outils). Sentinelle a sa
           propre page /sentinelle et n'est pas décrite ici. */}
       <ServiceJsonLd
+        locale={locale}
         name={
           isEn
             ? "Tech watch for decision-makers: free newsletter, resources and tools"

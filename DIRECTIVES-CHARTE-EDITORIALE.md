@@ -45,7 +45,7 @@ Catalogue de référence (site en dev), le seul que le site mentionne :
 | Développement | Refonte WordPress optimisée : thème, plugin, optimisation de l'existant | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless : back-office conservé, front moderne | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app : plateforme web et/ou mobile | à partir de 6 500 € HT |
-| Accompagnement | CTO externalisé : direction technique à temps partagé, pilotage mensuel | à partir de 950 € HT par mois |
+| Accompagnement | CTO externalisé : direction technique à temps partagé, deux paliers (Référent, Direction technique) | à partir de 900 € HT par mois |
 
 Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces six lignes, avec ce libellé et ce prix.
 
@@ -117,7 +117,7 @@ Les trois trajectoires, nommées par bénéfice, la techno en sous-titre :
 
 En amont : Visio conseil refonte (150 € HT) et Audit + roadmap (650 € HT). Ce sont les portes d'entrée payantes ; le diagnostic 2 minutes est la porte d'entrée gratuite.
 
-En aval : CTO externalisé (à partir de 950 € HT par mois, engagement de 3 mois minimum). C'est la seule offre récurrente. Elle ne se propose qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid.
+En aval : CTO externalisé (deux paliers, à partir de 900 € HT par mois, engagement de 6 mois puis reconduction au mois, préavis de 2 mois). C'est la seule offre récurrente. Elle ne se propose qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid.
 
 ## 6. Charte page par page
 
@@ -166,13 +166,16 @@ La page se termine par le lien vers les trois trajectoires, puis par un bandeau 
 
 Rôle : la seule offre récurrente du catalogue, sur sa propre page. Elle ne vit ni sur `/conseil` (qui vend le ponctuel) ni sur `/solutions-web` (qui vend le forfait) : les deux y renvoient par un bandeau de pied de page. Titre cible : « Des décisions techniques à prendre, personne en interne pour les trancher ».
 
-- CTO externalisé · à partir de 950 € HT par mois. Engagement de 3 mois minimum, puis reconduction au mois. Une visio de pilotage par mois, les arbitrages en continu sous 48 h ouvrées, la relecture des devis des prestataires, une roadmap tenue à jour, une veille ciblée sur le parc du client.
-- Le terme « CTO » est le seul terme non traduit toléré en accroche du site, parce que c'est le mot que le prospect tape. Il est traduit dès la ligne suivante : « un directeur technique à temps partagé, quelques jours par mois, sans contrat de travail ni recrutement ».
-- La page dit ce que l'offre n'est PAS, en clair : ni contrat de maintenance, ni astreinte, ni développement inclus, ni exclusivité. Sur une offre récurrente, le garde-fou vaut argument de vente : il désamorce la peur de l'abonnement qui dérive.
-- Argument d'indépendance à conserver : « je suis payée pour l'arbitrage, pas pour remporter le chantier ». Il justifie le prix et distingue l'offre d'une prestation de développement déguisée.
-- Ordre des sections : douleur, en bref, pour qui, ce que ça couvre, prix et garde-fous, parcours de démarrage, FAQ, deux CTA de deux températures. La page se termine sur le choix ponctuel / récurrent, avec un lien vers `/conseil`.
+- CTO externalisé · deux paliers publiés. **Référent, 900 € HT par mois** : comité d'une heure par mois, arbitrages écrits sous 48 h, roadmap tenue à jour trimestriellement, veille dédiée d'une page par mois, 3 évolutions suggérées par trimestre, 1 revue d'opportunité par an, relecture des devis, espace client. **Direction technique, 1 900 € HT par mois** (le cas courant) : comité de deux heures, arbitrages sous 24 h, roadmap en continu, veille avec alerte à chaud, 3 évolutions par mois chiffrées, 2 revues d'opportunité par an, cadrage et suivi des prestataires, 4 h de réalisation incluses. Conditions communes : engagement de 6 mois puis reconduction au mois, préavis de 2 mois, clause de restitution documentée, 100 % à distance, 4 accompagnements simultanés au maximum.
+- Le troisième palier de la synthèse d'offre (Renforcée, 3 500 € HT par mois) n'est PAS publié : il se cadre en conversation. Ne pas l'ajouter au site sans arbitrage.
+- Le terme « CTO » est le seul terme non traduit toléré en accroche du site, parce que c'est le mot que le prospect tape. Il est traduit dès la ligne suivante : « une direction technique à temps partagé pour le numérique visible, quelques jours par mois, sans recruter ».
+- La page NE met PAS en avant ce que l'offre ne comporte pas (arbitrage d'Agathe du 8 septembre 2026). Pas de section « ce que ce n'est pas », pas de liste de garde-fous en négatif : sur une offre de direction, elle place le lecteur devant un catalogue de refus avant qu'il ait fini de comprendre ce qu'il achète. Le périmètre se dit par ce qu'il COUVRE, le numérique visible : site et applications web, données et outils en ligne (CRM, e-mailing, formulaires, paiement, prise de rendez-vous), briques d'IA, hébergement, sécurité et conformité de ces systèmes, prestataires et contrats associés. Les limites subsistantes se traitent en FAQ, en réponse à une question posée.
+- Argument d'indépendance à conserver : la réalisation est plafonnée au quota du palier, et toute recommandation qui débouche sur une prestation Next Impact est accompagnée d'une alternative externe chiffrée. Il justifie le prix et distingue l'offre d'une prestation de développement déguisée.
+- Les livrables font la preuve, et se citent : cartographie du système, roadmap datée et budgétée, relevé de décisions techniques, revue de devis avec alternative chiffrée, budget technique à trois ans, plan de continuité et dossier de restitution, registre des évolutions, revue d'opportunité. Ce sont eux qui distinguent la direction technique d'un abonnement au conseil.
+- Ordre des sections : douleur, en bref, pour qui (les symptômes), les deux paliers, les livrables et le périmètre, parcours de démarrage, FAQ, deux CTA de deux températures. La page se termine sur le choix ponctuel / récurrent, avec un lien vers `/conseil`.
+- Aucun accompagnement ne démarre sans l'audit + roadmap préalable (650 € HT) : il qualifie le besoin et devient la roadmap vivante du contrat.
 
-Métadonnées cibles : `title` « CTO externalisé : votre direction technique sans embaucher » ; `meta description` « Direction technique à temps partagé, dès 950 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, 3 mois minimum. »
+Métadonnées cibles : `title` « CTO externalisé : votre direction technique sans embaucher » ; `meta description` « Direction technique à temps partagé, dès 900 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement 6 mois. »
 
 ### Services `/solutions-web`
 

@@ -82,6 +82,7 @@ export default async function DocumentationPage({
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <CollectionPageJsonLd
+        locale={locale}
         name={t("metaTitle")}
         description={t("metaDescription")}
         url="/documentation"

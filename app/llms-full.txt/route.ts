@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import { getCaseStudies } from "@/lib/case-studies-data";
-import { CTO_PRICE_VALUE, CTO_MIN_MONTHS } from "@/lib/cto-externalise";
+import { CTO_PRICE_VALUE, CTO_MIN_MONTHS, CTO_NOTICE_MONTHS } from "@/lib/cto-externalise";
 
 const baseUrl = "https://www.next-impact.digital";
 
@@ -116,7 +116,7 @@ ${entry.content}
 
 ## Entity Summary
 
-Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three trajectories (consolidate: optimized WordPress; decouple: headless WordPress, recommended; rebuild: web app), fixed price and timeline, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. Alongside the one-off advisory offers and the three redesign trajectories, a recurring retainer is available: the fractional CTO (from €${CTO_PRICE_VALUE} excl. VAT per month), for organisations that need ongoing technical direction without hiring. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO, technology watch (Master's degree in Technology Watch and Innovation, Aix-Marseille) and project scoping. Verifiable proof: 25+ projects delivered since 2020, 26 documented case studies, PageSpeed score raised from 45 to 98 after redesign (Proditec case study), featured in Le Figaro (May 2026).
+Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Martin. Its core positioning: an aging WordPress site can become fast and modern again without rebuilding everything; the real question is what you keep and what you change. Three trajectories (consolidate: optimized WordPress; decouple: headless WordPress, recommended; rebuild: web app), fixed price and timeline, performance measured before and after. AI is a method argument (the human frames, AI executes), not the pitch. Alongside the one-off advisory offers and the three redesign trajectories, a recurring retainer is available: the fractional CTO (two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month), for organisations that need ongoing technical direction without hiring. Legal entity: sole proprietorship Agathe Karinthi-Martin, French company register SIREN 532 675 386. Core expertise: WordPress, WordPress headless, Next.js, React, TypeScript, PostgreSQL, PWA, technical debt, SEO, technology watch (Master's degree in Technology Watch and Innovation, Aix-Marseille) and project scoping. Verifiable proof: 25+ projects delivered since 2020, 26 documented case studies, PageSpeed score raised from 45 to 98 after redesign (Proditec case study), featured in Le Figaro (May 2026).
 
 ## Offer Architecture
 
@@ -126,7 +126,7 @@ Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Mart
 - Optimized WordPress redesign (from €2,250): theme, plugins and optimization of the existing site, without changing the publishing tool.
 - Headless WordPress redesign (from €4,000): WordPress back office kept, modern front end: editors publish as before, visitors see a fast site. Recommended trajectory.
 - Web app redesign (from €6,500): web and/or mobile platform when the site has become a working tool.
-- Fractional CTO (from €${CTO_PRICE_VALUE}/month, ${CTO_MIN_MONTHS}-month minimum then rolling monthly): shared-time technical direction for an organisation with no technical profile in-house: one monthly steering call, ongoing arbitration (reply within two working days), vendor quote review, a living roadmap and a watch targeted on the client's systems. Not maintenance, not on-call, development not included; projects are priced separately, as a fixed fee.
+- Fractional CTO (two tiers, from €${CTO_PRICE_VALUE}/month, ${CTO_MIN_MONTHS}-month commitment then rolling monthly with ${CTO_NOTICE_MONTHS} months' notice): technical direction on shared time for the customer-facing digital estate of a company with no technical profile in-house. Someone who decides, writes it down, steers the vendors and answers for what is decided, and who proposes every month what should evolve. Adviser tier, €900/month: a one-hour committee each month, decisions in writing within 48h, a quarterly roadmap, three qualified evolutions a quarter, one opportunity review a year, quote review. Technical direction tier, €1,900/month: a two-hour committee, decisions within 24h, a continuously updated roadmap, three costed evolutions a month, two opportunity reviews a year, vendor scoping and follow-up, four hours of implementation a month. Deliverables: system map, dated and budgeted roadmap, record of technical decisions, quote review with a costed alternative, three-year technology budget, continuity plan and handover pack, register of proposed evolutions, opportunity review. Scope: the website and web applications, online data and tools (CRM, emailing, forms, payments, appointment booking), AI components, hosting, security and compliance of those systems, vendors and the contracts that go with them.
 - Tech watch, free newsletter: "Quelle techno pour mon site web a l'heure de l'IA ?" on Substack (monthly digest + weekly focus on the web & AI market), plus free resources and tools to decide. This is the content of the /veille page. The watch is kept by Agathe Karinthi-Martin, trained in the discipline (Master's degree in Technology Watch and Innovation, Aix-Marseille Universite).
 - Implementation: build only when the solution is clear and justified.
 
@@ -141,6 +141,9 @@ Next Impact is a WordPress redesign studio in France led by Agathe Karinthi-Mart
 - Case studies: ${baseUrl}/etudes-de-cas
 - Tech watch (free newsletter, resources and tools): ${baseUrl}/veille
 - Documentation (decision hub "Which web tech?"): ${baseUrl}/documentation
+- Tools (free decision tools, no sign-up): ${baseUrl}/outils
+- Blog (data-backed field lessons and comparisons): ${baseUrl}/blog
+- About (Agathe Karinthi-Martin, background and method): ${baseUrl}/a-propos
 - Be found in the AI era (SEO & GEO section): ${baseUrl}/documentation/etre-trouve
 - Contact: ${baseUrl}/contact
 - Sitemap: ${baseUrl}/sitemap.xml

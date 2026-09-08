@@ -43,8 +43,8 @@ export async function generateMetadata({
       ? "Headless WordPress with Next.js: when to use it, costs, performance"
       : "WordPress Headless avec Next.js : quand l'utiliser, coûts, performance",
     description: isEn
-      ? "What headless WordPress means in plain terms: WordPress keeps content in its back-end, Next.js renders the public site. Comparison vs classic WordPress, performance benchmarks, cost ranges, when to migrate and when to stay."
-      : "Le WordPress headless expliqué clairement : WordPress garde la gestion de contenu, Next.js prend en charge le rendu public. Comparatif vs WordPress classique, performances mesurées, fourchettes de coût, quand migrer et quand rester.",
+      ? "Headless WordPress in plain terms: WordPress keeps content management, Next.js renders the public site. Costs, measured performance, when to migrate."
+      : "Le WordPress headless expliqué clairement : WordPress garde la gestion de contenu, Next.js affiche le site public. Coûts, performances, quand migrer.",
     path: PILLAR_PATH,
     eyebrow: isEn ? "Headless WordPress" : "WordPress Headless",
     keywords: isEn
@@ -230,8 +230,10 @@ export default async function WordPressHeadlessPillarPage({
   const speakableWebPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": `${siteConfig.url}${PILLAR_PATH}#webpage`,
-    url: `${siteConfig.url}${PILLAR_PATH}`,
+    // URL réellement servie pour la locale rendue : sur /en, le nœud WebPage
+    // pointait jusqu'ici son équivalent français.
+    "@id": `${siteConfig.url}${isEn ? "/en" : ""}${PILLAR_PATH}#webpage`,
+    url: `${siteConfig.url}${isEn ? "/en" : ""}${PILLAR_PATH}`,
     name: isEn
       ? "Headless WordPress with Next.js"
       : "WordPress Headless avec Next.js",
@@ -263,6 +265,8 @@ export default async function WordPressHeadlessPillarPage({
         dateModified={LAST_UPDATED}
         author="Agathe Karinthi-Martin"
         url={PILLAR_PATH}
+        locale={locale}
+        inLanguage={isEn ? "en-US" : "fr-FR"}
         proficiencyLevel="Intermediate"
         dependencies="WordPress, Next.js, Node.js, WPGraphQL"
       />

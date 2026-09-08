@@ -133,8 +133,8 @@ export default function VisioConseilPage() {
         index="№ 01"
         kicker={
           isEn
-            ? "Redesign advice · Three entry points"
-            : "Conseil refonte · Trois portes d'entrée"
+            ? "Redesign advice · Two entry points"
+            : "Conseil refonte · Deux portes d'entrée"
         }
         backdrop={
           /* Constellation projet ↔ technos : la métaphore du conseil. */
@@ -163,8 +163,8 @@ export default function VisioConseilPage() {
         }
         description={
           isEn
-            ? "Your site is aging and the trajectory is still open: stay, decouple or rebuild. Two one-off advisory formats before any quote, plus a fractional CTO if the need is recurring."
-            : "Votre site vieillit et la trajectoire reste à trancher : rester, découpler ou refonder. Deux formats de conseil ponctuel avant tout devis, et un CTO externalisé si le besoin est récurrent."
+            ? "Your site is aging and the trajectory is still open: stay, decouple or rebuild. Two one-off advisory formats, before any quote and before any line of code."
+            : "Votre site vieillit et la trajectoire reste à trancher : rester, découpler ou refonder. Deux formats de conseil ponctuel, avant tout devis et avant toute ligne de code."
         }
         actions={
           <>
@@ -187,7 +187,7 @@ export default function VisioConseilPage() {
         }
       >
         <HeroOfferStrip
-          label={isEn ? "Three advisory formats" : "Trois formats de conseil"}
+          label={isEn ? "Two advisory formats" : "Deux formats de conseil"}
           offers={heroOffers}
           recommendedLabel={isEn ? "Recommended" : "Recommandée"}
           ctaLabel={isEn ? "View" : "Voir"}
@@ -236,8 +236,8 @@ export default function VisioConseilPage() {
               Icon: Compass,
               label: isEn ? "The solution" : "La solution",
               desc: isEn
-                ? "Independent, clear-cut advice: an hour to settle it, a costed audit with a roadmap, or a fractional CTO over time. You leave with a written direction, not a hunch."
-                : "Un avis indépendant et tranché : une heure pour trancher, un audit chiffré avec roadmap, ou un CTO externalisé dans la durée. Vous repartez avec une direction écrite, pas une intuition.",
+                ? "Independent, clear-cut advice: one hour to settle the direction, or a costed audit with its roadmap. You leave with a written direction, not a hunch."
+                : "Un avis indépendant et tranché : une heure pour trancher la direction, ou un audit chiffré avec sa roadmap. Vous repartez avec une direction écrite, pas une intuition.",
             },
           ]).map((card, i, arr) => (
             <StaggerItem
@@ -270,7 +270,9 @@ export default function VisioConseilPage() {
 
       <Separator />
 
-      {/* § 03 — Cadrage : les trois offres de conseil + réassurance */}
+      {/* § 03 — Cadrage : les deux offres de conseil ponctuel + réassurance.
+          L'offre récurrente (CTO externalisé) n'est pas vendue ici : elle vit
+          sur /cto-externalise et n'est signalée qu'en bandeau de pied de page. */}
       <BlueprintSection
         id="conseils"
         tone="obsidian"
@@ -278,16 +280,16 @@ export default function VisioConseilPage() {
       >
         <SectionHeading
           index="№ 03"
-          kicker={isEn ? "Three advisory offers" : "Trois offres de conseil"}
+          kicker={isEn ? "Two advisory offers" : "Deux offres de conseil"}
           title={
             isEn
               ? "The call settles, the audit documents"
-              : "Accompagné pour décider"
+              : "La visio tranche, l'audit documente"
           }
           description={
             isEn
-              ? "The cost of a wrong trajectory is counted in months; the cost of the advice, in euros. One hour to settle a direction, a full audit with costed recommendations and a step-by-step roadmap, or a fractional CTO by your side when the need runs over time."
-              : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, un audit complet avec préconisations chiffrées et roadmap par étapes, ou un CTO externalisé à vos côtés quand le besoin s'inscrit dans la durée."
+              ? "The cost of a wrong trajectory is counted in months; the cost of the advice, in euros. One hour to settle a direction, or a full audit with costed recommendations and a step-by-step roadmap."
+              : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, ou un audit complet avec préconisations chiffrées et roadmap par étapes."
           }
         />
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
@@ -311,18 +313,18 @@ export default function VisioConseilPage() {
 
       <Separator />
 
-      {/* § 04–06 — Une section détaillée par offre (ancres du mega menu) */}
+      {/* § 04–05 — Une section détaillée par offre (ancres du mega menu) */}
       <ConseilOfferSections />
       <Separator />
 
-      {/* § 07 — Comment ça marche */}
+      {/* § 06 — Comment ça marche */}
       <BlueprintSection
         id="comment"
         tone="jet"
         innerClassName="px-6 py-16 lg:px-8 lg:py-20"
       >
         <SectionHeading
-          index="№ 07"
+          index="№ 06"
           kicker={isEn ? "How it works" : "Comment ça marche"}
           title={
             isEn
@@ -348,10 +350,10 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 08 — FAQ */}
+      {/* § 07 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 08"
+          index="№ 07"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />

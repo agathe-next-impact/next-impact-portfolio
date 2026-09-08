@@ -63,7 +63,7 @@ export default async function ContactPage({
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
-      <ContactPageJsonLd />
+      <ContactPageJsonLd locale={locale} />
 
       {/* Hero (harmonisé /veille) */}
       <PageHero

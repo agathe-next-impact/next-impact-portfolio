@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "No-code, SaaS ou sur-mesure ? - Construire, acheter ou no-code",
     description:
       locale === "en"
-        ? "Webflow, an off-the-shelf SaaS, or custom development? 8 criteria (specificity, budget, autonomy, data, volume, integrations) to find the right family for your tool, then the next step."
-        : "Webflow, un SaaS du marché, ou du développement sur-mesure ? 8 critères (spécificité, budget, autonomie, données, volume, intégrations) pour trouver la bonne famille pour votre outil, puis la prochaine étape.",
+        ? "No-code, off-the-shelf SaaS or custom development? 8 criteria (budget, autonomy, data, volume, integrations) to find the right family for your tool."
+        : "No-code, SaaS du marché ou développement sur-mesure ? 8 critères (budget, autonomie, données, volume, intégrations) pour trouver la bonne famille d'outil.",
     path: "/outils/nocode-saas-surmesure",
     keywords:
       locale === "en"

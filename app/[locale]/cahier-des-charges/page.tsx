@@ -49,6 +49,7 @@ export default async function Home({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <WebApplicationJsonLd
+        locale={locale}
         name={t("title")}
         description={t("metaDescription")}
         url="/cahier-des-charges"

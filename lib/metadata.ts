@@ -253,7 +253,7 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "WordPress site redesign: fast, modern, without rebuilding everything · Next Impact",
     description:
-      "Is your WordPress site aging badly? Optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks. Displayed prices, performance measured before and after.",
+      "Is your WordPress site aging badly? Optimized, headless or web app redesign, fixed price, in 6 to 10 weeks. Performance measured before and after.",
     keywords: [
       "WordPress site redesign",
       "headless WordPress redesign",
@@ -268,9 +268,9 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Solutions pour une refonte de WordPress : consolider, découpler ou refonder",
+    title: "Refonte WordPress : consolider, découpler ou refonder",
     description:
-      "Consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT) ou refonder (web app, dès 6 500 € HT). Prix et délai fixés avant de commencer.",
+      "Trois trajectoires pour un site WordPress qui vieillit : optimisé dès 2 250 € HT, headless dès 4 000 € HT, web app dès 6 500 € HT. Prix et délai fixés.",
     keywords: [
       "refonte site WordPress prix",
       "refonte WordPress optimisée",
@@ -281,9 +281,9 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Three trajectories for an aging WordPress site",
+    title: "WordPress redesign: consolidate, decouple or rebuild",
     description:
-      "Consolidate (optimized WordPress, from €2,250 excl. VAT), decouple (headless WordPress, recommended, from €4,000 excl. VAT) or rebuild (web app, from €6,500 excl. VAT). Price and timeline fixed upfront.",
+      "Three trajectories for an aging WordPress site: optimized from €2,250, headless from €4,000, web app from €6,500. Price and timeline fixed upfront.",
     keywords: [
       "WordPress redesign price",
       "optimized WordPress redesign",
@@ -301,9 +301,9 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 // aucune offre disparue.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Contact : visio conseil, audit + roadmap, CTO externalisé ou refonte",
+    title: "Contact : conseil, audit, CTO externalisé ou refonte",
     description:
-      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 950 €/mois), projet de refonte ou diagnostic gratuit.",
+      "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 900 €/mois), projet de refonte ou diagnostic gratuit.",
     keywords: [
       "contact conseil techno web",
       "visio conseil refonte",
@@ -315,9 +315,9 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     ],
   },
   en: {
-    title: "Contact: advisory call, audit + roadmap, fractional CTO or redesign",
+    title: "Contact: advice, audit, fractional CTO or redesign",
     description:
-      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €950/month), redesign project or free diagnostic.",
+      "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €900/month), redesign project or free diagnostic.",
     keywords: [
       "contact web technology advice",
       "redesign advisory call",
@@ -414,8 +414,8 @@ export const pageMetadata = {
           : "Voyez ce qui ralentit votre site en 2 minutes",
       description:
         locale === "en"
-          ? "One address, one report, no sign-up: see what slows your site down and which of the three trajectories (consolidate, decouple, rebuild) matches your situation."
-          : "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
+          ? "One address, one report, no sign-up: see what slows your site down and which trajectory fits, consolidate, decouple or rebuild."
+          : "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et quelle trajectoire suivre, consolider, découpler ou refonder.",
       path: "/audit-site-web",
       keywords:
         locale === "en"

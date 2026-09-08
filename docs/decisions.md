@@ -102,3 +102,50 @@ bonne foi.
 Source de vérité unique du contenu et du prix : `lib/cto-externalise.ts`. Les
 données structurées, les fichiers `llms.txt` / `llms-full.txt`, le sujet du
 formulaire de contact et le sitemap en dérivent ; aucun ne réécrit le prix.
+
+## ADR-008 — 2026-09-08 — Refonte de l'offre « CTO externalisé » : deux paliers publiés
+
+Remplace les points 1 et 3 de l'[ADR-007](#adr-007--2026-09-07--réinstauration-de-loffre-récurrente--cto-externalisé-),
+sur la base de la synthèse d'offre « Direction technique externalisée » remise
+par Agathe. L'offre reste sur `/cto-externalise` et reste la seule ligne
+récurrente du catalogue ; ce qui change, c'est sa structure et son prix.
+
+1. **Prix d'entrée ramené de 950 à 900 € HT par mois**, et passage d'un tarif
+   unique à **deux paliers publics** : Référent (900 €/mois, un système simple et
+   des décisions ponctuelles) et Direction technique (1 900 €/mois, le cas
+   courant : plusieurs outils, des prestataires, des échéances). Le troisième
+   palier de la synthèse, Renforcée à 3 500 €/mois, n'est **pas** publié : il se
+   cadre en conversation. Ne pas l'ajouter au site sans arbitrage.
+2. **Engagement porté de 3 à 6 mois**, puis reconduction au mois, avec un préavis
+   de 2 mois. Motif : six mois est la durée qu'il faut pour qu'un cycle complet
+   se voie (cartographie, roadmap tenue, arbitrages rendus, première revue
+   d'opportunité).
+3. **La page décrit désormais les livrables**, pas seulement la couverture :
+   cartographie du système, roadmap datée et budgétée, relevé de décisions,
+   revue de devis avec alternative chiffrée, budget technique à trois ans, plan
+   de continuité et dossier de restitution, registre des évolutions, revue
+   d'opportunité. Ce sont eux qui distinguent une direction technique d'un
+   abonnement au conseil, et ils rendent la prestation vérifiable.
+4. **Périmètre resserré et garde-fous réécrits** : l'offre couvre le numérique
+   visible (site, applications web, données et outils en ligne, briques d'IA,
+   hébergement, sécurité, prestataires). Elle exclut le SI interne, l'infogérance
+   et le support de niveau 1, l'astreinte 24/7, la communication et le marketing,
+   et la réalisation au delà du quota du palier. L'ancien garde-fou « pas de
+   développement inclus » est retiré : le palier Direction technique inclut 4 h
+   de réalisation par mois.
+5. **L'entrée de navigation plate de l'ADR-007 n'a jamais été mise en service** :
+   le merge du 8 septembre a conservé le mega menu de la branche distante, où le
+   CTO externalisé est un item du panneau « Conseil ». Le motif de l'ADR-007
+   (éviter le prefetch fantôme d'un panneau masqué) reste satisfait, le panneau
+   du mega menu n'étant monté qu'à l'ouverture.
+
+Conséquence documentaire : charte v1.2 mise à jour au §1 (ligne du catalogue),
+au §5 (mention « en aval ») et fiche de page `/cto-externalise` réécrite ;
+`.claude/agents/coherence-seo-geo.md` réaligné, faute de quoi la passe SEO
+suivante aurait rétabli 950 € et l'engagement de 3 mois en toute bonne foi.
+
+Point laissé ouvert : la synthèse impose qu'**aucun contrat ne démarre sans
+l'audit + roadmap préalable (650 € HT)**. La page l'indique dans son parcours de
+démarrage, mais les autres sections de la synthèse (revue d'opportunité, flux
+mensuel d'évolutions, traitement écrit du conflit d'intérêt) ne sont pas encore
+publiées.

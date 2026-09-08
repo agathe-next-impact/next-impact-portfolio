@@ -135,10 +135,13 @@ export default async function CaseStudyPage({
       {/* Données structurées pour le SEO */}
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <ArticleJsonLd
-        title={`${t("articleTitlePrefix")} ${caseStudy.title} - ${t("articleTitleSuffix")}`}
+        locale={locale}
+        inLanguage={locale === "en" ? "en-US" : "fr-FR"}
+        title={`${t("articleTitlePrefix")} ${caseStudy.title} : ${t("articleTitleSuffix")}`}
         description={caseStudy.description}
         image={caseStudy.gallery.url || caseStudy.imageUrl}
         datePublished={publishedDate}
+        author="Agathe Karinthi-Martin"
         url={`/etudes-de-cas/${caseStudy.slug}`}
       />
 

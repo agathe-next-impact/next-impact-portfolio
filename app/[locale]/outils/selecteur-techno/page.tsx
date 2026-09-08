@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Sélecteur techno web & IA - Quelle techno web choisir ?",
     description:
       locale === "en"
-        ? "8 criteria to find your solution family: repair, WordPress, no-code, Headless, SaaS or custom. A neutral decision tool, then the right next step for your case."
-        : "8 critères pour trouver votre famille de solution : réparer, WordPress, no-code, Headless, SaaS ou sur-mesure. Un outil de décision neutre, puis la bonne prochaine étape.",
+        ? "8 criteria to find your solution family: repair, WordPress, no-code, headless, SaaS or custom. A neutral decision tool, then the right next step."
+        : "8 critères pour trouver votre famille de solution : réparer, WordPress, no-code, headless, SaaS ou sur-mesure. Un outil de décision neutre et gratuit.",
     path: "/outils/selecteur-techno",
     keywords:
       locale === "en"

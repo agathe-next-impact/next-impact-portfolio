@@ -46,7 +46,7 @@ llms.txt ou un sujet de formulaire est un écart à corriger) :
 | Développement | Refonte WordPress optimisée | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless (trajectoire recommandée) | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app | à partir de 6 500 € HT |
-| Accompagnement | CTO externalisé (récurrent, page `/cto-externalise`) | à partir de 950 € HT par mois, engagement 3 mois |
+| Accompagnement | CTO externalisé (récurrent, page `/cto-externalise`) | deux paliers : Référent 900 € HT/mois, Direction technique 1 900 € HT/mois. Engagement 6 mois, préavis 2 mois |
 
 **Attention, piège de version.** La 6e ligne a été supprimée le 2026-08-27 puis
 **réinstaurée le 2026-09-07** sous un nouveau nom et un nouveau tarif (ADR-007,

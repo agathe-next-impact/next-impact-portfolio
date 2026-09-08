@@ -23,8 +23,8 @@ export async function generateMetadata({
         : "Décrypteur de devis web - Ce devis est-il bon ?",
     description:
       locale === "en"
-        ? "9 checks to read a website quote: code ownership, hosting, lock-in, vague items, recurring costs, right-sizing. Get a health score and the questions to ask before signing."
-        : "9 vérifications pour lire un devis web : propriété du code, hébergement, dépendance, postes flous, coûts récurrents, surdimensionnement. Un score de santé et les questions à poser avant de signer.",
+        ? "9 checks to read a website quote: code ownership, lock-in, vague items, recurring costs. A health score and the questions to ask before signing."
+        : "9 vérifications pour lire un devis web : propriété du code, dépendance, postes flous, coûts récurrents. Un score et les questions à poser avant de signer.",
     path: "/outils/decrypteur-devis",
     keywords:
       locale === "en"
