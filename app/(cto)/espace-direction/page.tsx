@@ -6,6 +6,7 @@ import {
   findPersonByEmail,
   issueMagicLink,
   listCredentials,
+  previousLoginAt,
   record,
   sendLoginLink,
   MAGIC_LINK_TTL_MS,
@@ -48,9 +49,10 @@ export default async function EspaceDirectionPage({
   // Deux lectures, pas une : les livrables et les appareils ne dépendent pas
   // l'un de l'autre, et les enchaîner ajouterait un aller-retour à une page que
   // le client ouvre pour trouver une réponse en dix secondes.
-  const [credentials, livrables] = await Promise.all([
+  const [credentials, livrables, since] = await Promise.all([
     listCredentials(session.person.id),
     listForClient(session.person.clientId),
+    previousLoginAt(session.person.id),
   ]);
 
   async function deconnexion() {
@@ -83,7 +85,7 @@ export default async function EspaceDirectionPage({
         </div>
       ) : null}
 
-      <Livrables items={livrables} />
+      <Livrables items={livrables} since={since} />
 
       <section className="mt-10">
         <Label>Votre accès</Label>

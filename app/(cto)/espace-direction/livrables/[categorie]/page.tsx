@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { previousLoginAt } from "@cto/access";
 import { listForClient } from "@cto/deliverables";
 import { BackLink, Label, Notice, PageHeader } from "../../ui";
 import { CATEGORIES, Categorie, kindFromSlug } from "../../livrables";
@@ -33,9 +34,11 @@ export default async function CategoriePage({
   if (!kind) notFound();
 
   const session = await requireSession();
-  const items = (await listForClient(session.person.clientId)).filter(
-    (item) => item.kind === kind,
-  );
+  const [tous, since] = await Promise.all([
+    listForClient(session.person.clientId),
+    previousLoginAt(session.person.id),
+  ]);
+  const items = tous.filter((item) => item.kind === kind);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
@@ -56,7 +59,7 @@ export default async function CategoriePage({
       ) : null}
 
       <div className="mt-10">
-        <Categorie kind={kind} items={items} />
+        <Categorie kind={kind} items={items} since={since} />
       </div>
     </main>
   );

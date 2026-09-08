@@ -313,8 +313,8 @@ export const ctoAccessLog = pgTable(
 /**
  * Nature d'un livrable, et donc forme de son `payload`.
  *
- * Quatre valeurs pour cinq bases Notion : le budget à trois ans n'en est pas
- * une, il se déduit de la cartographie (`docs/cto-externalise/notion-livrables.md`).
+ * Cinq valeurs pour six bases Notion : le budget à trois ans n'en est pas une,
+ * il se déduit de la cartographie (`docs/cto-externalise/notion-livrables.md`).
  * `document` est déclaré dès maintenant bien que sa synchro vienne plus tard —
  * un enum Postgres se complète par une migration, autant ne pas en devoir une
  * pour une valeur qu'on sait déjà nécessaire.
@@ -323,6 +323,7 @@ export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
   "decision",
   "roadmap",
   "cartographie",
+  "veille",
   "document",
 ]);
 

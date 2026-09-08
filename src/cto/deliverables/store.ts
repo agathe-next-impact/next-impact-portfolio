@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoDeliverablePlacements, ctoDeliverables } from "../db/schema";
 import type {
@@ -214,14 +214,29 @@ export async function listForClient(clientId: string): Promise<Deliverable[]> {
  * elle qui justifie la table — une archive qu'on ne sait pas relire n'en est
  * pas une.
  */
-export async function history(notionPageId: string): Promise<Deliverable[]> {
+export async function history(
+  notionPageId: string,
+  clientId: string,
+): Promise<Deliverable[]> {
   const rows = await db()
     .select()
     .from(ctoDeliverables)
-    .where(eq(ctoDeliverables.notionPageId, notionPageId))
+    // `clientId` n'est PAS un confort de requête : c'est la garde. L'identifiant
+    // d'une page Notion voyage dans l'URL, et sans ce filtre une personne
+    // pourrait lire l'historique d'un autre accompagnement en changeant un
+    // segment. Le vérifier après coup dans la page marcherait aussi — mais un
+    // jour quelqu'un appellerait `history()` sans refaire le contrôle.
+    .where(
+      and(
+        eq(ctoDeliverables.notionPageId, notionPageId),
+        eq(ctoDeliverables.clientId, clientId),
+      ),
+    )
     .orderBy(desc(ctoDeliverables.version));
 
-  return rows.map(toDeliverable);
+  // Les versions de retrait portent un payload vide : elles disent « à partir
+  // d'ici, plus publié », et c'est une information de l'histoire, pas un trou.
+  return rows.map((row) => ({ ...toDeliverable(row), withdrawn: row.withdrawnAt !== null }));
 }
 
 /** Compte les livrables visibles, par accompagnement. Sert au rapport de synchro. */

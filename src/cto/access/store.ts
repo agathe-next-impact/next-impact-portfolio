@@ -246,6 +246,23 @@ export async function openSession(
   return { token: issued.token, expiresAt: issued.expiresAt };
 }
 
+/**
+ * Les personnes joignables d'un accompagnement.
+ *
+ * Les révoquées sont exclues : quelqu'un qui a quitté l'entreprise cliente ne
+ * doit plus rien recevoir, pas même une notification qui ne dit rien du
+ * contenu. C'est le même geste d'offboarding que pour l'accès, appliqué au
+ * courrier.
+ */
+export async function activePersons(
+  clientId: string,
+): Promise<{ id: string; email: string; name: string }[]> {
+  return db()
+    .select({ id: ctoPersons.id, email: ctoPersons.email, name: ctoPersons.name })
+    .from(ctoPersons)
+    .where(and(eq(ctoPersons.clientId, clientId), isNull(ctoPersons.revokedAt)));
+}
+
 export interface ResolvedSession {
   sessionId: string;
   person: Person;

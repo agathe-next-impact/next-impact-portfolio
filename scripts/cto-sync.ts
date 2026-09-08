@@ -4,6 +4,7 @@
  *   npm run cto:sync                 # balaie et applique
  *   npm run cto:sync -- --a-blanc    # dit ce qu'il ferait, n'écrit rien
  *   npm run cto:sync -- --forcer     # autorise un retrait de masse
+ *   npm run cto:sync -- --sans-mail  # publie sans prévenir les clients
  *
  * Commande et non route web, pour l'instant : tant qu'elle se lance à la main
  * après un comité, elle n'a besoin ni d'authentification ni d'ordonnanceur, et
@@ -35,6 +36,11 @@ function printReport(report: SyncReport): void {
     );
   }
 
+  if (report.notified > 0) {
+    const verbe = report.dryRun ? "Aurait prévenu" : "Prévenu";
+    console.log(`\n${verbe} ${report.notified} accompagnement(s) actif(s) par e-mail.`);
+  }
+
   if (report.warnings.length > 0) {
     console.log(`\n${report.warnings.length} point(s) à regarder :`);
     for (const warning of report.warnings) console.log(`  · ${warning}`);
@@ -60,6 +66,7 @@ async function main() {
   const report = await syncFromNotion({
     force: args.includes("--forcer"),
     dryRun: args.includes("--a-blanc"),
+    notify: !args.includes("--sans-mail"),
   });
   printReport(report);
 }

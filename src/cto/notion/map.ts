@@ -7,6 +7,7 @@ import type {
   DeliverableKind,
   DocumentPayload,
   RoadmapPayload,
+  VeillePayload,
 } from "../deliverables";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -56,6 +57,15 @@ export const PROPS = {
     due: "Échéance",
     criticality: "Criticité",
     risk: "Risque",
+  },
+  veille: {
+    title: "Sujet",
+    nature: "Nature",
+    date: "Date",
+    fact: "Ce qui change",
+    impact: "Ce que ça implique",
+    source: "Source",
+    themes: "Thèmes",
   },
   document: {
     title: "Titre",
@@ -134,6 +144,13 @@ function roadmapNature(page: NotionPage): RoadmapPayload["nature"] {
   return null;
 }
 
+function veilleNature(page: NotionPage): VeillePayload["nature"] {
+  const value = normalize(p.select(page, PROPS.veille.nature));
+  if (value === "note mensuelle") return "note";
+  if (value === "alerte") return "alerte";
+  return null;
+}
+
 /**
  * Une page de l'atelier, rendue en livrable.
  *
@@ -198,6 +215,24 @@ export function mapPage(
         title: p.text(page, PROPS.cartographie.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.cartographie.due),
+        featured: isFeatured(page),
+      };
+    }
+    case "veille": {
+      const payload: VeillePayload = {
+        nature: veilleNature(page),
+        fait: p.text(page, PROPS.veille.fact),
+        implication: p.text(page, PROPS.veille.impact),
+        source: p.url(page, PROPS.veille.source),
+        themes: p.multiSelect(page, PROPS.veille.themes),
+      };
+      return {
+        clientId,
+        notionPageId: page.id,
+        kind,
+        title: p.text(page, PROPS.veille.title) ?? UNTITLED,
+        payload,
+        occurredAt: p.date(page, PROPS.veille.date),
         featured: isFeatured(page),
       };
     }

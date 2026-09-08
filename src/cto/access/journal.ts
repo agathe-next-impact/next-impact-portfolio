@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoAccessLog } from "../db/schema";
 
@@ -100,6 +100,37 @@ export async function listForClient(clientId: string, limit = 100): Promise<Jour
 }
 
 /** Libellés lisibles, pour l'affichage. */
+/**
+ * Quand cette personne s'était connectée AVANT la fois en cours.
+ *
+ * Sert à répondre « qu'est-ce qui a bougé depuis ? » sur un espace qu'on ouvre
+ * deux fois par mois. Rend `null` à la toute première connexion, où la question
+ * n'a pas de sens.
+ *
+ * On lit la connexion précédente, et non un horodatage de dernière page vue :
+ * suivre les vues supposerait d'écrire à chaque chargement, c'est-à-dire de
+ * tracer la navigation d'un client sur son propre espace. Le journal existe
+ * déjà, il est annoncé, et il suffit. La contrepartie est assumée : quelqu'un
+ * qui ne se déconnecte jamais voit la fenêtre s'élargir — il verra donc PLUS de
+ * nouveautés, jamais moins, ce qui est le bon sens de l'erreur.
+ */
+export async function previousLoginAt(personId: string): Promise<Date | null> {
+  const rows = await db()
+    .select({ at: ctoAccessLog.at })
+    .from(ctoAccessLog)
+    .where(
+      and(
+        eq(ctoAccessLog.personId, personId),
+        inArray(ctoAccessLog.event, ["connexion_lien", "connexion_passkey"]),
+      ),
+    )
+    .orderBy(desc(ctoAccessLog.at))
+    .limit(2);
+
+  // [0] est la connexion en cours : c'est la PRÉCÉDENTE qui borne la fenêtre.
+  return rows[1]?.at ?? null;
+}
+
 export const EVENT_LABELS: Record<AccessEvent, string> = {
   connexion_lien: "Connexion par lien de secours",
   connexion_passkey: "Connexion par passkey",

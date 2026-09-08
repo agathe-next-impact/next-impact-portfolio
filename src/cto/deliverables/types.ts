@@ -7,7 +7,12 @@
 // change, c'est `src/cto/notion/` qui change, pas l'espace client.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type DeliverableKind = "decision" | "roadmap" | "cartographie" | "document";
+export type DeliverableKind =
+  | "decision"
+  | "roadmap"
+  | "cartographie"
+  | "veille"
+  | "document";
 
 /**
  * Un arbitrage rendu, ou une option proposée puis écartée.
@@ -43,6 +48,23 @@ export interface CartographiePayload {
   risque: string | null;
 }
 
+/**
+ * Un item de veille dédiée.
+ *
+ * Trois champs obligatoires par doctrine, et c'est ce qui distingue cette veille
+ * d'un flux RSS relayé : le FAIT (`fait`), sa SOURCE (`source`), et ce qu'il
+ * change pour ce client-là (`implication`). Sans le troisième, on facture une
+ * revue de presse ; sans le second, rien n'est défendable devant un dirigeant
+ * qui décide dessus.
+ */
+export interface VeillePayload {
+  nature: "note" | "alerte" | null;
+  fait: string | null;
+  implication: string | null;
+  source: string | null;
+  themes: string[];
+}
+
 /** Une pièce opposable : revue de devis, plan de continuité, restitution. */
 export interface DocumentPayload {
   type: string | null;
@@ -56,6 +78,7 @@ export interface PayloadByKind {
   decision: DecisionPayload;
   roadmap: RoadmapPayload;
   cartographie: CartographiePayload;
+  veille: VeillePayload;
   document: DocumentPayload;
 }
 
@@ -87,6 +110,12 @@ export interface Deliverable<K extends DeliverableKind = DeliverableKind> {
    * parce que l'affichage en a besoin au même endroit que le reste.
    */
   featured: boolean;
+  /**
+   * Vrai sur une version de RETRAIT. Toujours faux dans les listes courantes,
+   * qui les excluent ; utile seulement quand on relit l'histoire complète, où
+   * un retrait est un événement à montrer.
+   */
+  withdrawn?: boolean;
 }
 
 /** Ce qu'une source d'atelier doit fournir pour qu'un livrable soit publiable. */

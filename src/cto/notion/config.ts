@@ -13,12 +13,18 @@ import type { DeliverableKind } from "../deliverables";
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Les bases de contenu, dans l'ordre où la synchro les balaie. */
-export const SYNCED_KINDS: DeliverableKind[] = ["decision", "roadmap", "cartographie"];
+export const SYNCED_KINDS: DeliverableKind[] = [
+  "decision",
+  "roadmap",
+  "cartographie",
+  "veille",
+];
 
 const ENV_BY_KIND: Record<DeliverableKind, string> = {
   decision: "CTO_NOTION_DB_DECISIONS",
   roadmap: "CTO_NOTION_DB_ROADMAP",
   cartographie: "CTO_NOTION_DB_CARTOGRAPHIE",
+  veille: "CTO_NOTION_DB_VEILLE",
   document: "CTO_NOTION_DB_DOCUMENTS",
 };
 

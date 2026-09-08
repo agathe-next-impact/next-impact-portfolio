@@ -3,6 +3,7 @@ import type {
   DecisionPayload,
   Deliverable,
   RoadmapPayload,
+  VeillePayload,
 } from "@cto/deliverables";
 import Link from "next/link";
 import { Dot, formatAmount, formatDay, Label, Panel, SectionNav, Stat, Tag, type Tone } from "./ui";
@@ -19,6 +20,7 @@ export const CATEGORIES = {
   decision: { slug: "decisions", titre: "Relevé de décisions" },
   roadmap: { slug: "roadmap", titre: "Roadmap" },
   cartographie: { slug: "cartographie", titre: "Cartographie du système" },
+  veille: { slug: "veille", titre: "Veille dédiée" },
 } as const;
 
 export type CategorieKind = keyof typeof CATEGORIES;
@@ -80,6 +82,29 @@ const CRITICALITY_TONE: Record<string, Tone> = {
  */
 const HORIZON_MS = 90 * 24 * 60 * 60 * 1000;
 
+/**
+ * Ce qu'un livrable est devenu depuis la connexion précédente.
+ *
+ * `version === 1` distingue une publication d'une correction : les deux méritent
+ * un signalement, mais pas le même mot. « Corrigé » sur un livrable que le
+ * client n'avait jamais vu serait faux et inquiétant.
+ */
+function nouveaute(item: Deliverable, since: Date | null): "nouveau" | "corrige" | null {
+  if (!since || item.recordedAt.getTime() <= since.getTime()) return null;
+  return item.version === 1 ? "nouveau" : "corrige";
+}
+
+/** La pastille qui signale ce qui a bougé. Rien si la fenêtre n'existe pas. */
+function Nouveaute({ item, since }: { item: Deliverable; since: Date | null }) {
+  const etat = nouveaute(item, since);
+  if (!etat) return null;
+  return etat === "nouveau" ? (
+    <Tag tone="fait">Nouveau</Tag>
+  ) : (
+    <Tag tone="attention">Corrigé</Tag>
+  );
+}
+
 function rank(order: string[], value: string | null): number {
   const index = value ? order.indexOf(value) : -1;
   return index === -1 ? order.length : index;
@@ -101,12 +126,20 @@ function deadlineTone(date: Date | null, now: number): Tone {
   return delta <= HORIZON_MS ? "attention" : "neutre";
 }
 
-export function Livrables({ items }: { items: Deliverable[] }) {
+export function Livrables({
+  items,
+  since,
+}: {
+  items: Deliverable[];
+  /** Connexion précédente. `null` à la première visite : aucune fenêtre à montrer. */
+  since: Date | null;
+}) {
   const now = Date.now();
 
   const roadmap = items.filter((item) => item.kind === "roadmap");
   const decisions = items.filter((item) => item.kind === "decision");
   const carto = items.filter((item) => item.kind === "cartographie");
+  const veille = items.filter((item) => item.kind === "veille");
 
   if (items.length === 0) {
     return (
@@ -114,8 +147,8 @@ export function Livrables({ items }: { items: Deliverable[] }) {
         <Label>Vos livrables</Label>
         <Panel className="mt-3 px-5 py-6">
           <p className="font-inter-tight text-base text-mid-gray">
-            Vos livrables (relevé de décisions, roadmap, cartographie du système)
-            apparaîtront ici dès la première publication.
+            Vos livrables (relevé de décisions, roadmap, cartographie du système,
+            veille dédiée) apparaîtront ici dès la première publication.
           </p>
         </Panel>
       </section>
@@ -134,11 +167,13 @@ export function Livrables({ items }: { items: Deliverable[] }) {
         rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
       byDate(a, b, 1),
   );
+  veille.sort((a, b) => byDate(a, b, -1));
 
   const sections = [
     { href: categoriePath("roadmap"), label: "Roadmap", count: roadmap.length },
     { href: categoriePath("decision"), label: "Décisions", count: decisions.length },
     { href: categoriePath("cartographie"), label: "Cartographie", count: carto.length },
+    { href: categoriePath("veille"), label: "Veille", count: veille.length },
   ].filter((section) => section.count > 0);
 
   // La synthèse compte TOUT, l'affichage ne montre que ce qui est à la une.
@@ -149,18 +184,79 @@ export function Livrables({ items }: { items: Deliverable[] }) {
 
   return (
     <>
+      <DepuisLaDerniereFois items={items} since={since} />
       <Synthese roadmap={roadmap} decisions={decisions} carto={carto} now={now} />
       <SectionNav items={sections} />
+      {veille.length > 0 ? (
+        <Veille items={aLaUne(veille)} total={veille.length} since={since} />
+      ) : null}
       {roadmap.length > 0 ? (
-        <Roadmap items={aLaUne(roadmap)} now={now} total={roadmap.length} />
+        <Roadmap items={aLaUne(roadmap)} now={now} total={roadmap.length} since={since} />
       ) : null}
       {decisions.length > 0 ? (
-        <Decisions items={aLaUne(decisions)} total={decisions.length} />
+        <Decisions items={aLaUne(decisions)} total={decisions.length} since={since} />
       ) : null}
       {carto.length > 0 ? (
-        <Cartographie items={aLaUne(carto)} now={now} total={carto.length} />
+        <Cartographie items={aLaUne(carto)} now={now} total={carto.length} since={since} />
       ) : null}
     </>
+  );
+}
+
+/**
+ * Ce qui a bougé depuis la connexion précédente.
+ *
+ * Le repère qui manquait le plus : sur un espace ouvert deux fois par mois, la
+ * première question n'est pas « qu'y a-t-il ? » mais « qu'est-ce qui est
+ * nouveau ? ». Sans réponse, le client relit tout ou ne relit rien.
+ *
+ * Rien ne s'affiche à la première visite, ni quand rien n'a changé : un bandeau
+ * qui annonce « 0 nouveauté » occupe la place sans rien apprendre.
+ */
+function DepuisLaDerniereFois({
+  items,
+  since,
+}: {
+  items: Deliverable[];
+  since: Date | null;
+}) {
+  if (!since) return null;
+
+  const nouveaux = items.filter((item) => nouveaute(item, since) === "nouveau");
+  const corriges = items.filter((item) => nouveaute(item, since) === "corrige");
+  if (nouveaux.length + corriges.length === 0) return null;
+
+  const morceaux = [
+    nouveaux.length > 0
+      ? `${nouveaux.length} ${nouveaux.length > 1 ? "nouveautés" : "nouveauté"}`
+      : null,
+    corriges.length > 0
+      ? `${corriges.length} ${corriges.length > 1 ? "corrections" : "correction"}`
+      : null,
+  ].filter(Boolean);
+
+  return (
+    <section className="mt-10">
+      <Panel className="border-l-2 border-l-accent-secondary px-5 py-4">
+        <Label>Depuis votre dernière connexion — {formatDay(since)}</Label>
+        <p className="mt-2 font-inter-tight text-base text-foreground">
+          {morceaux.join(" et ")}.
+        </p>
+        <ul className="mt-3 space-y-1.5">
+          {[...nouveaux, ...corriges].slice(0, 6).map((item) => (
+            <li key={item.id} className="flex flex-wrap items-baseline gap-2">
+              <Nouveaute item={item} since={since} />
+              <Link
+                href={categoriePath(item.kind as CategorieKind)}
+                className="font-inter-tight text-sm text-foreground underline underline-offset-4 hover:text-accent-secondary"
+              >
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Panel>
+    </section>
   );
 }
 
@@ -174,9 +270,11 @@ export function Livrables({ items }: { items: Deliverable[] }) {
 export function Categorie({
   kind,
   items,
+  since,
 }: {
   kind: CategorieKind;
   items: Deliverable[];
+  since: Date | null;
 }) {
   const now = Date.now();
 
@@ -196,11 +294,17 @@ export function Categorie({
         rank(STATUS_ORDER, (a.payload as RoadmapPayload).statut) -
           rank(STATUS_ORDER, (b.payload as RoadmapPayload).statut) || byDate(a, b, 1),
     );
-    return <Roadmap items={tri} now={now} bare />;
+    return <Roadmap items={tri} now={now} since={since} bare />;
   }
 
   if (kind === "decision") {
-    return <Decisions items={[...items].sort((a, b) => byDate(a, b, -1))} bare />;
+    return (
+      <Decisions items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare />
+    );
+  }
+
+  if (kind === "veille") {
+    return <Veille items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare />;
   }
 
   const tri = [...items].sort(
@@ -209,7 +313,7 @@ export function Categorie({
         rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
       byDate(a, b, 1),
   );
-  return <Cartographie items={tri} now={now} bare />;
+  return <Cartographie items={tri} now={now} since={since} bare />;
 }
 
 /** Les quatre chiffres qui répondent à « où en est-on ? » sans défiler. */
@@ -335,11 +439,13 @@ function Roadmap({
   items,
   now,
   total,
+  since = null,
   bare = false,
 }: {
   items: Deliverable[];
   now: number;
   total?: number;
+  since?: Date | null;
   bare?: boolean;
 }) {
   if (!bare && items.length === 0) {
@@ -393,7 +499,7 @@ function Roadmap({
               </div>
               <div className="space-y-3">
                 {groupe.lignes.map((item) => (
-                  <ChantierCard key={item.id} item={item} now={now} />
+                  <ChantierCard key={item.id} item={item} now={now} since={since} />
                 ))}
               </div>
             </div>
@@ -404,7 +510,15 @@ function Roadmap({
   );
 }
 
-function ChantierCard({ item, now }: { item: Deliverable; now: number }) {
+function ChantierCard({
+  item,
+  now,
+  since,
+}: {
+  item: Deliverable;
+  now: number;
+  since: Date | null;
+}) {
   const payload = item.payload as RoadmapPayload;
   const budget = formatAmount(payload.budget);
   const tone = deadlineTone(item.occurredAt, now);
@@ -413,6 +527,7 @@ function ChantierCard({ item, now }: { item: Deliverable; now: number }) {
     <article className="border border-dark-gray bg-jet/40 p-4">
       <h3 className="font-inter-tight text-sm leading-snug text-foreground">{item.title}</h3>
       <div className="mt-3 flex flex-wrap gap-1.5">
+        <Nouveaute item={item} since={since} />
         {item.occurredAt ? <Tag tone={tone}>{formatDay(item.occurredAt)}</Tag> : null}
         {budget ? <Tag>{budget}</Tag> : null}
         {payload.nature === "opportunite" ? <Tag>Opportunité</Tag> : null}
@@ -447,10 +562,12 @@ function ChantierCard({ item, now }: { item: Deliverable; now: number }) {
 function Decisions({
   items,
   total,
+  since = null,
   bare = false,
 }: {
   items: Deliverable[];
   total?: number;
+  since?: Date | null;
   bare?: boolean;
 }) {
   if (!bare && items.length === 0) {
@@ -500,8 +617,11 @@ function Decisions({
                   {item.title}
                 </h3>
 
-                {payload.nature === "ecartee" || payload.portee.length > 0 ? (
+                {payload.nature === "ecartee" ||
+                payload.portee.length > 0 ||
+                nouveaute(item, since) ? (
                   <div className="mt-2.5 flex flex-wrap gap-1.5">
+                    <Nouveaute item={item} since={since} />
                     {payload.nature === "ecartee" ? <Tag>Proposition écartée</Tag> : null}
                     {payload.portee.map((scope) => (
                       <Tag key={scope}>{scope}</Tag>
@@ -548,11 +668,13 @@ function Cartographie({
   items,
   now,
   total,
+  since = null,
   bare = false,
 }: {
   items: Deliverable[];
   now: number;
   total?: number;
+  since?: Date | null;
   bare?: boolean;
 }) {
   if (!bare && items.length === 0) {
@@ -606,7 +728,7 @@ function Cartographie({
               </div>
               <Panel className="mt-2 divide-y divide-dark-gray">
                 {lignes.map((item) => (
-                  <ElementRow key={item.id} item={item} now={now} />
+                  <ElementRow key={item.id} item={item} now={now} since={since} />
                 ))}
               </Panel>
             </div>
@@ -617,7 +739,15 @@ function Cartographie({
   );
 }
 
-function ElementRow({ item, now }: { item: Deliverable; now: number }) {
+function ElementRow({
+  item,
+  now,
+  since,
+}: {
+  item: Deliverable;
+  now: number;
+  since: Date | null;
+}) {
   const payload = item.payload as CartographiePayload;
   const criticite = payload.criticite ?? "Secondaire";
   const cost = formatAmount(payload.coutAnnuel);
@@ -647,6 +777,7 @@ function ElementRow({ item, now }: { item: Deliverable; now: number }) {
           ) : null}
         </div>
         <div className="mt-2 flex flex-wrap gap-1.5">
+          <Nouveaute item={item} since={since} />
           <Tag tone={CRITICALITY_TONE[criticite] ?? "neutre"}>{criticite}</Tag>
           {cost ? <Tag>{`${cost} / an`}</Tag> : null}
           {payload.detenteur ? <Tag>{`Détenu par ${payload.detenteur}`}</Tag> : null}
@@ -663,6 +794,114 @@ function ElementRow({ item, now }: { item: Deliverable; now: number }) {
 }
 
 /**
+ * La veille dédiée.
+ *
+ * Chronologique, la plus récente en tête : une veille se lit comme un fil, pas
+ * comme un inventaire. Chaque item porte les trois éléments qui la distinguent
+ * d'une revue de presse — le fait, sa source, et ce qu'il implique pour ce
+ * client. L'implication est mise en avant typographiquement parce que c'est la
+ * seule partie qu'on ne trouverait nulle part ailleurs.
+ *
+ * Les alertes ne sont pas isolées dans leur propre bloc : les mêler au fil, avec
+ * leur étiquette, préserve la chronologie. Un client qui cherche « ce qui s'est
+ * dit en juin » ne doit pas avoir deux endroits à regarder.
+ */
+function Veille({
+  items,
+  total,
+  since = null,
+  bare = false,
+}: {
+  items: Deliverable[];
+  total?: number;
+  since?: Date | null;
+  bare?: boolean;
+}) {
+  if (!bare && items.length === 0) {
+    return (
+      <section className="mt-12">
+        <SectionTitle
+          id="veille"
+          title="Veille dédiée"
+          count={total ?? 0}
+          href={categoriePath("veille")}
+        />
+        <RienALaUne href={categoriePath("veille")} count={total ?? 0} />
+      </section>
+    );
+  }
+
+  return (
+    <section className={bare ? "" : "mt-12"}>
+      {bare ? null : (
+        <SectionTitle
+          id="veille"
+          title="Veille dédiée"
+          count={total ?? items.length}
+          href={categoriePath("veille")}
+        />
+      )}
+      <Panel className="mt-5 divide-y divide-dark-gray">
+        {items.map((item) => {
+          const payload = item.payload as VeillePayload;
+
+          return (
+            <article key={item.id} className="px-5 py-5">
+              <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 className="font-inter-tight text-base leading-snug text-foreground">
+                  {item.title}
+                </h3>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                  {formatDay(item.occurredAt)}
+                </p>
+              </header>
+
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                <Nouveaute item={item} since={since} />
+                {payload.nature === "alerte" ? <Tag tone="alerte">Alerte</Tag> : null}
+                {payload.themes.map((theme) => (
+                  <Tag key={theme}>{theme}</Tag>
+                ))}
+              </div>
+
+              {payload.fait ? (
+                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-foreground/90">
+                  {payload.fait}
+                </p>
+              ) : null}
+
+              {payload.implication ? (
+                <div className="mt-3 border-l-2 border-l-accent-secondary pl-4">
+                  <Label>Ce que ça implique pour vous</Label>
+                  <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-foreground">
+                    {payload.implication}
+                  </p>
+                </div>
+              ) : null}
+
+              {payload.source ? (
+                <p className="mt-3">
+                  <a
+                    href={payload.source}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+                  >
+                    Source ↗
+                  </a>
+                </p>
+              ) : null}
+
+              <Correction item={item} />
+            </article>
+          );
+        })}
+      </Panel>
+    </section>
+  );
+}
+
+/**
  * La mention de correction, partout sous la même forme.
  *
  * Affichée dès la deuxième version, à dessein : le client doit pouvoir dire
@@ -672,9 +911,18 @@ function ElementRow({ item, now }: { item: Deliverable; now: number }) {
 function Correction({ item }: { item: Deliverable }) {
   if (item.version <= 1) return null;
 
+  // La mention devient un lien : dire « corrigé » sans permettre de voir ce qui
+  // a changé demande de croire sur parole, ce que cet espace est justement censé
+  // remplacer par des documents opposables.
   return (
     <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
-      Corrigé le {formatDay(item.recordedAt)} · version {item.version}
+      Corrigé le {formatDay(item.recordedAt)} ·{" "}
+      <Link
+        href={`${categoriePath(item.kind as CategorieKind)}/${item.notionPageId}`}
+        className="underline underline-offset-4 transition-colors hover:text-accent-secondary"
+      >
+        voir les {item.version} versions
+      </Link>
     </p>
   );
 }

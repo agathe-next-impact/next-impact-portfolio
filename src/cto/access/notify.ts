@@ -125,3 +125,70 @@ function escapeHtml(value: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+
+/**
+ * Ce que la notification de publication a le droit de dire.
+ *
+ * Des NOMBRES et des intitulés de catégorie, jamais un titre de livrable. La
+ * règle de tête du fichier s'applique ici plus qu'ailleurs : c'est la
+ * notification la plus fréquente, et celle qui serait la plus tentante à
+ * enrichir « pour le confort du client ». Un relevé de décisions qui se lit
+ * dans une boîte mail n'est plus révocable, plus journalisé, plus effaçable.
+ */
+export interface PublicationSummary {
+  nouveautes: number;
+  corrections: number;
+  parCategorie: { label: string; count: number }[];
+}
+
+/**
+ * « Il y a du nouveau dans votre espace. »
+ *
+ * Envoyée après une publication, parce que l'offre promet le relevé « dans les
+ * 24 h qui suivent le comité » et qu'un livrable en ligne dont personne n'est
+ * prévenu n'est pas livré. Un seul message par balayage et par personne : trois
+ * e-mails pour trois décisions du même comité se feraient filtrer, et à raison.
+ */
+export async function sendPublicationNotice(
+  to: Recipient,
+  summary: PublicationSummary,
+  url: string,
+): Promise<void> {
+  const total = summary.nouveautes + summary.corrections;
+  const titre =
+    summary.corrections === 0
+      ? `${summary.nouveautes} ${summary.nouveautes > 1 ? "nouveaux livrables" : "nouveau livrable"}`
+      : summary.nouveautes === 0
+        ? `${summary.corrections} ${summary.corrections > 1 ? "livrables corrigés" : "livrable corrigé"}`
+        : `${total} mises à jour`;
+
+  const detail = summary.parCategorie
+    .map((ligne) => `${ligne.count} en ${escapeHtml(ligne.label.toLowerCase())}`)
+    .join(", ");
+
+  const html = emailLayout({
+    preheader: `${titre} dans votre espace direction technique.`,
+    contentHtml: [
+      emailKicker("01", "Espace direction technique"),
+      emailH1(titre),
+      emailLead(`Bonjour ${escapeHtml(to.name)},`),
+      emailParagraph(
+        summary.corrections === 0
+          ? `Votre espace vient d'être mis à jour : ${escapeHtml(detail)}.`
+          : `Votre espace vient d'être mis à jour : ${escapeHtml(detail)}. Les livrables corrigés indiquent la date de leur correction et vous laissent relire les versions précédentes.`,
+      ),
+      emailButton(url, "Ouvrir mon espace"),
+      emailCard(
+        emailParagraph(
+          "Le détail n'est volontairement pas dans ce message : il reste dans votre espace, où il est daté, versionné et révocable.",
+        ),
+      ),
+    ].join(""),
+  });
+
+  await sendMail({
+    to: to.email,
+    subject: `${titre} dans votre espace — direction technique`,
+    html,
+  });
+}

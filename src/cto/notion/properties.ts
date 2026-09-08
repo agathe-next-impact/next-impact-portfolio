@@ -78,6 +78,20 @@ export function number(page: NotionPage, name: string): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
+/**
+ * Propriété URL.
+ *
+ * Rendue telle quelle, sans validation : c'est un lien que TU as saisi, pas une
+ * entrée d'utilisateur. Le vérifier ici donnerait l'illusion d'un contrôle que
+ * seule la relecture avant publication exerce vraiment.
+ */
+export function url(page: NotionPage, name: string): string | null {
+  const property = prop(page, name);
+  if (!property || property.type !== "url") return null;
+  const value = property.url;
+  return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
+}
+
 export function checkbox(page: NotionPage, name: string): boolean {
   const property = prop(page, name);
   if (!property || property.type !== "checkbox") return false;

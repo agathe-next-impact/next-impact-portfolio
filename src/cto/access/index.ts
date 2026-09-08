@@ -21,6 +21,7 @@ export {
 
 export {
   accessDecision,
+  activePersons,
   closeSession,
   consumeMagicLink,
   findPersonByEmail,
@@ -56,12 +57,18 @@ export {
 export {
   listForClient,
   listForPerson,
+  previousLoginAt,
   record,
   EVENT_LABELS,
   type AccessEvent,
   type JournalRow,
 } from "./journal";
 
-export { sendEnrollmentNotice, sendLoginLink } from "./notify";
+export {
+  sendEnrollmentNotice,
+  sendLoginLink,
+  sendPublicationNotice,
+  type PublicationSummary,
+} from "./notify";
 
 export { describeDevice, expectedOrigins, rpId, suggestLabel, RP_NAME } from "./webauthn";

@@ -34,10 +34,17 @@ Notion (atelier)  →  npm run cto:sync  →  cto_deliverables  →  /espace-dir
 lignes de tous les clients ; la seule surface qui leur est destinée est l'espace
 en ligne, cloisonné par personne.
 
-## 2. Les cinq bases
+## 2. Les six bases
 
 Elles vivent sous la page **PILOTAGE → Direction technique — clients**, dans le
 teamspace NEXT IMPACT.
+
+**La base Veille porte trois champs obligatoires**, et c'est ce qui la sépare
+d'une revue de presse : `Ce qui change` (le fait, daté), `Source` (l'URL qui le
+prouve) et `Ce que ça implique` (ce que le fait change pour CE client). Sans le
+troisième, on facture un flux RSS ; sans le second, rien n'est défendable devant
+un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alerte
+à chaud, cette dernière étant réservée au palier Direction (`CTO_TIER_ROWS`).
 
 | Base | Ce qu'elle porte | Livrables couverts (`lib/cto-externalise.ts`) |
 | --- | --- | --- |
@@ -45,9 +52,10 @@ teamspace NEXT IMPACT.
 | **Décisions** | arbitrages rendus et options écartées | relevé de décisions, registre des évolutions |
 | **Roadmap** | chantiers datés, budgétés, et opportunités | roadmap, revue d'opportunité |
 | **Cartographie** | outils, fournisseurs, contrats, accès, échéances | cartographie du système, budget à trois ans |
+| **Veille** | la veille dédiée du palier souscrit | note mensuelle, alerte à chaud |
 | **Documents** | pièces opposables | revue de devis, plan de continuité, dossier de restitution |
 
-Huit livrables, cinq bases : deux regroupements portent une décision.
+Huit livrables, six bases : deux regroupements portent une décision.
 
 **Décisions absorbe le registre des évolutions.** Un arbitrage rendu et une
 proposition écartée ont la même forme — un objet, une date, un motif, une
@@ -128,6 +136,7 @@ CTO_NOTION_DB_CLIENTS=…
 CTO_NOTION_DB_DECISIONS=…
 CTO_NOTION_DB_ROADMAP=…
 CTO_NOTION_DB_CARTOGRAPHIE=…
+CTO_NOTION_DB_VEILLE=…
 CTO_NOTION_DB_DOCUMENTS=…
 ```
 
@@ -177,12 +186,30 @@ de tourner sans faire enfler l'historique.
 (§ 4 de `espace-client-mise-en-place.md`). La commande reste utile pour publier
 tout de suite après un comité, sans attendre la nuit.
 
+### Ce que le client est prévenu
+
+Un balayage qui publie ou corrige quelque chose envoie **un** e-mail par
+personne joignable de l'accompagnement — un seul, même si trois bases ont bougé.
+Il annonce des nombres et un lien, jamais un titre : aucun contenu de l'espace
+ne voyage par courrier (règle de tête de `src/cto/access/notify.ts`), sinon la
+boîte du client devient une archive ni révocable, ni journalisée, ni effaçable.
+
+Un accompagnement `suspendu` ne reçoit rien : c'est ce que promet son état.
+`--sans-mail` coupe l'envoi pour un balayage, par exemple lors d'une reprise en
+masse de l'atelier.
+
 ### Ce que le client voit changer
 
 Cocher `Publié` fait apparaître le livrable au balayage suivant. Le corriger
 écrit une version de plus, et l'espace affiche alors « corrigé le … » à côté de
 sa date : une correction silencieuse vaudrait moins qu'une correction datée.
 Décocher `Publié` le retire de l'espace sans effacer son histoire.
+
+À sa connexion suivante, un bandeau lui dit ce qui a bougé depuis la fois
+précédente, et chaque ligne concernée porte « Nouveau » ou « Corrigé ». La
+mention de correction est cliquable : elle ouvre l'historique du livrable,
+version par version, champ par champ. C'est là que le choix append-only cesse
+d'être une décision d'architecture pour devenir une preuve utilisable.
 
 ## 5. Ce qu'il reste à coder
 
@@ -211,3 +238,4 @@ Décocher `Publié` le retire de l'espace sans effacer son histoire.
 | Commande | `scripts/cto-sync.ts` |
 | Balayage quotidien | `app/api/cto/cron/route.ts` |
 | Affichage | `app/(cto)/espace-direction/livrables.tsx` |
+| Historique d'un livrable | `app/(cto)/espace-direction/historique.tsx` |
