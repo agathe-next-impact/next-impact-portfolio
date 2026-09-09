@@ -29,6 +29,7 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
 };
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";
+const ENV_LETTRES = "CTO_NOTION_DB_LETTRES";
 
 function read(name: string): string {
   const value = process.env[name]?.trim();
@@ -46,6 +47,11 @@ export function clientsDatabaseId(): string {
   return read(ENV_CLIENTS);
 }
 
+/** Identifiant de la base Lettres. Hors `SYNCED_KINDS` : ce n'est pas un livrable. */
+export function lettersDatabaseId(): string {
+  return read(ENV_LETTRES);
+}
+
 export function databaseIdFor(kind: DeliverableKind): string {
   return read(ENV_BY_KIND[kind]);
 }
@@ -61,6 +67,7 @@ export function configurationIssue(): string | null {
   const missing = [
     "CTO_NOTION_TOKEN",
     ENV_CLIENTS,
+    ENV_LETTRES,
     ...SYNCED_KINDS.map((kind) => ENV_BY_KIND[kind]),
   ].filter((name) => !process.env[name]?.trim());
 

@@ -5,7 +5,15 @@
 // Postgres, jamais Notion.
 
 export { NotionError, queryDatabase, type NotionPage } from "./api";
-export { clientsDatabaseId, configurationIssue, databaseIdFor, SYNCED_KINDS } from "./config";
+export {
+  clientsDatabaseId,
+  configurationIssue,
+  databaseIdFor,
+  lettersDatabaseId,
+  SYNCED_KINDS,
+} from "./config";
+export { pageBody, type Block, type Span } from "./blocks";
+export { syncLetters, LETTER_PROPS, type LettersReport } from "./letters";
 export { PROPS, mapPage, UNTITLED } from "./map";
 export {
   syncFromNotion,

@@ -23,6 +23,12 @@ const MIN_INTERVAL_MS = 350;
 /** Nombre de tentatives sur une réponse retryable (429, 5xx, coupure réseau). */
 const MAX_ATTEMPTS = 4;
 
+export interface NotionRichText {
+  plain_text?: string;
+  href?: string | null;
+  annotations?: { bold?: boolean; italic?: boolean; code?: boolean };
+}
+
 export interface NotionProperty {
   type: string;
   [key: string]: unknown;
@@ -76,24 +82,28 @@ async function throttle(): Promise<void> {
   lastCall = Date.now();
 }
 
-async function post(path: string, body: unknown, attempt = 1): Promise<unknown> {
+async function call(
+  path: string,
+  init: { method: "GET" | "POST"; body?: unknown },
+  attempt = 1,
+): Promise<unknown> {
   await throttle();
 
   let response: Response;
   try {
     response = await fetch(`${API}${path}`, {
-      method: "POST",
+      method: init.method,
       headers: {
         Authorization: `Bearer ${token()}`,
         "Notion-Version": NOTION_VERSION,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: init.body === undefined ? undefined : JSON.stringify(init.body),
     });
   } catch (error) {
     if (attempt >= MAX_ATTEMPTS) throw error;
     await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
-    return post(path, body, attempt + 1);
+    return call(path, init, attempt + 1);
   }
 
   if (response.status === 429 || response.status >= 500) {
@@ -108,7 +118,7 @@ async function post(path: string, body: unknown, attempt = 1): Promise<unknown> 
     const after = Number(response.headers.get("retry-after"));
     const delay = Number.isFinite(after) && after > 0 ? after * 1000 : attempt * 1000;
     await new Promise((resolve) => setTimeout(resolve, delay));
-    return post(path, body, attempt + 1);
+    return call(path, init, attempt + 1);
   }
 
   if (!response.ok) {
@@ -127,6 +137,15 @@ async function post(path: string, body: unknown, attempt = 1): Promise<unknown> 
   }
 
   return response.json();
+}
+
+function post(path: string, body: unknown): Promise<unknown> {
+  return call(path, { method: "POST", body });
+}
+
+/** Lecture simple. Partage la limite de débit et les reprises avec les écritures. */
+export function getJson(path: string): Promise<unknown> {
+  return call(path, { method: "GET" });
 }
 
 /**
@@ -155,6 +174,18 @@ export async function queryDatabase(
   } while (cursor);
 
   return pages;
+}
+
+/**
+ * Une page seule, avec ses propriétés.
+ *
+ * Sert à suivre une relation vers une base que la synchro ne balaie pas — la
+ * fiche organisation, par exemple. Une requête par page : à quatre
+ * accompagnements, c'est moins cher que de charger une base entière pour n'en
+ * lire que quatre lignes.
+ */
+export async function fetchPage(pageId: string): Promise<NotionPage> {
+  return (await getJson(`/pages/${pageId}`)) as NotionPage;
 }
 
 /** Filtre « la case Publié est cochée ». Le seul interrupteur de visibilité. */

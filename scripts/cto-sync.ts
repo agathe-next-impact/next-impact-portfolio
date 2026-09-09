@@ -36,6 +36,12 @@ function printReport(report: SyncReport): void {
     );
   }
 
+  const l = report.letters;
+  console.log(
+    `\n  lettres         ${pad(l.published)}                ${pad(l.created)}  ` +
+      `${pad(l.updated)}             ${pad(l.unchanged)}        ${pad(l.withdrawn)}`,
+  );
+
   if (report.notified > 0) {
     const verbe = report.dryRun ? "Aurait prévenu" : "Prévenu";
     console.log(`\n${verbe} ${report.notified} accompagnement(s) actif(s) par e-mail.`);

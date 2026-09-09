@@ -30,6 +30,15 @@ export const PROPS = {
   clients: {
     company: "Raison sociale",
     spaceId: "ID espace",
+    organisation: "Organisation",
+  },
+  /**
+   * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
+   * CTO et qu'aucune synchro ne balaie : on ne la lit qu'en suivant la relation.
+   */
+  organisation: {
+    name: "Organisation",
+    pack: "Pack de rattachement",
   },
   decision: {
     title: "Décision",

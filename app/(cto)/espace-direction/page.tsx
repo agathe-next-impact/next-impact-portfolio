@@ -12,6 +12,8 @@ import {
   MAGIC_LINK_TTL_MS,
 } from "@cto/access";
 import { listForClient } from "@cto/deliverables";
+import { lettersForClient } from "@cto/letters";
+import { DerniereLettre } from "./lettre";
 import { Livrables } from "./livrables";
 import { PasskeyLoginButton } from "./passkey";
 import { buttonClass, inputClass, Label, Notice, PageHeader, Panel } from "./ui";
@@ -49,9 +51,10 @@ export default async function EspaceDirectionPage({
   // Deux lectures, pas une : les livrables et les appareils ne dépendent pas
   // l'un de l'autre, et les enchaîner ajouterait un aller-retour à une page que
   // le client ouvre pour trouver une réponse en dix secondes.
-  const [credentials, livrables, since] = await Promise.all([
+  const [credentials, livrables, lettres, since] = await Promise.all([
     listCredentials(session.person.id),
     listForClient(session.person.clientId),
+    lettersForClient(session.person.clientId),
     previousLoginAt(session.person.id),
   ]);
 
@@ -85,7 +88,25 @@ export default async function EspaceDirectionPage({
         </div>
       ) : null}
 
+      {/*
+        Le refus d'un lien de connexion s'affiche AUSSI quand une session est
+        déjà ouverte. Sans ce bloc, cliquer un lien expiré alors qu'on est
+        connecté sous une autre identité ramène en silence sur l'espace courant :
+        l'écran a l'air de s'être trompé de client, alors qu'il n'a fait
+        qu'ignorer un lien mort. Le cas est fréquent dès qu'on gère plusieurs
+        accompagnements.
+      */}
+      {erreur === "1" && message ? (
+        <div className="mt-8">
+          <Notice tone="erreur">
+            {message} Vous restez connecté en tant que {session.person.company}.
+          </Notice>
+        </div>
+      ) : null}
+
       <Livrables items={livrables} since={since} />
+
+      <DerniereLettre lettres={lettres} />
 
       <section className="mt-10">
         <Label>Votre accès</Label>

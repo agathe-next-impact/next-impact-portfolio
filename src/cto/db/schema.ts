@@ -108,6 +108,17 @@ export const ctoClients = pgTable("cto_clients", {
    * `actif` après une suspension.
    */
   statusChangedAt: timestamp("status_changed_at").notNull().defaultNow(),
+  /**
+   * Le **pack sectoriel** de la fiche organisation (ex. `pack-industrie-btp.md`),
+   * recopié à chaque balayage. Sert uniquement à distribuer les lettres
+   * sectorielles ; un client sans pack reçoit la générale et la sienne, ce qui
+   * est le comportement voulu par défaut.
+   *
+   * La valeur n'est PAS saisie ici : elle vient de la « Base des fiches
+   * organisation », qui est la source de vérité. Texte brut et non enum, pour
+   * que la liste des packs évolue chez elle sans coûter une migration ici.
+   */
+  sector: text("sector"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -413,3 +424,69 @@ export const ctoDeliverablePlacements = pgTable("cto_deliverable_placements", {
   featured: boolean("featured").notNull().default(false),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+// ─── Lettres de veille ────────────────────────────────────────────────────
+
+/**
+ * À qui une lettre s'adresse.
+ *
+ * `generale` ne porte aucun destinataire : elle va à tous les accompagnements
+ * actifs. C'est ce qui évite d'avoir à cocher les clients un par un sur chaque
+ * édition mensuelle — un oubli garanti au troisième mois.
+ */
+export const ctoLetterScopeEnum = pgEnum("cto_letter_scope", [
+  "generale",
+  "sectorielle",
+  "personnalisee",
+]);
+
+/**
+ * Une lettre de veille, dans son édition courante.
+ *
+ * **Table volontairement NON append-only**, contrairement à `cto_deliverables`,
+ * et la différence tient à la nature de l'objet. Un relevé de décisions engage :
+ * ce qui y était écrit en mars doit rester lisible en septembre. Une lettre est
+ * une publication datée : on ne « corrige » pas l'édition d'août six mois plus
+ * tard, on publie celle de septembre. Garder trente versions d'un document de
+ * trente kilo-octets alourdirait la base pour une preuve dont personne n'a
+ * l'usage.
+ *
+ * Une lettre n'est pas non plus rattachée à un client au moment de la synchro,
+ * mais à sa *portée*. La lettre générale existe en UN exemplaire : la recopier
+ * par accompagnement multiplierait un long texte par le nombre de clients, et
+ * une correction obligerait à repasser partout.
+ */
+export const ctoLetters = pgTable(
+  "cto_letters",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Page Notion d'origine. Clé de rapprochement, stable au renommage. */
+    notionPageId: text("notion_page_id").notNull(),
+    scope: ctoLetterScopeEnum("scope").notNull(),
+    /** Renseigné sur une sectorielle : doit correspondre à `cto_clients.sector`. */
+    sector: text("sector"),
+    /** Renseigné sur une personnalisée, nul partout ailleurs. */
+    clientId: uuid("client_id").references(() => ctoClients.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    /** Le mois de l'édition. Sert au tri et à la fenêtre de six mois. */
+    period: timestamp("period"),
+    /** L'accroche affichée en liste, sans avoir à charger tout le corps. */
+    chapo: text("chapo"),
+    /**
+     * Le corps, en blocs structurés (cf. `src/cto/notion/blocks.ts`). Ni HTML ni
+     * Markdown : du HTML obligerait à faire confiance à une chaîne pour
+     * l'injecter dans la page, du Markdown ajouterait un analyseur au rendu.
+     * Des blocs typés se rendent en composants, sans l'un ni l'autre.
+     */
+    body: jsonb("body").notNull(),
+    /** Empreinte du corps : évite de réécrire une lettre inchangée. */
+    digest: text("digest").notNull(),
+    /** Posée quand la lettre cesse d'être publiée, ou sort de la fenêtre. */
+    withdrawnAt: timestamp("withdrawn_at"),
+    syncedAt: timestamp("synced_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("cto_letter_page").on(t.notionPageId),
+    index("cto_letter_period").on(t.period),
+  ],
+);

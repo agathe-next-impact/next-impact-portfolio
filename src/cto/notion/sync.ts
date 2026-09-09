@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { activePersons, sendPublicationNotice, type PublicationSummary } from "../access";
 import { ctoClients } from "../db/schema";
@@ -11,9 +12,11 @@ import {
   type DeliverableInput,
   type DeliverableState,
 } from "../deliverables";
-import { queryDatabase, publishedFilter, type NotionPage } from "./api";
+import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
 import { clientsDatabaseId, databaseIdFor, SYNCED_KINDS } from "./config";
+import { syncLetters, type LettersReport } from "./letters";
 import { clientPageIds, companyName, mapPage, spaceId, PROPS, UNTITLED } from "./map";
+import * as prop from "./properties";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // De l'atelier à l'espace client.
@@ -62,6 +65,8 @@ export interface SyncReport {
   clientsMapped: number;
   /** Accompagnements pour lesquels une notification part (ou partirait). */
   notified: number;
+  /** Le balayage des lettres de veille, hors livrables. */
+  letters: LettersReport;
   kinds: KindReport[];
   warnings: string[];
 }
@@ -77,6 +82,11 @@ const KIND_LABELS: Record<DeliverableKind, string> = {
 
 interface ClientResolution {
   byNotionPage: Map<string, string>;
+  /**
+   * Fiche organisation → accompagnement. C'est par là que passent les lettres
+   * personnalisées, produites par organisation et non par contrat.
+   */
+  byOrganisation: Map<string, string>;
   /** État de chaque accompagnement : lui seul autorise une notification. */
   statusById: Map<string, string>;
   warnings: string[];
@@ -96,9 +106,10 @@ interface ClientChanges {
  * existe vraiment. Un identifiant mal recopié produirait sinon des livrables
  * rattachés à un client fantôme, invisibles de tous et détectables de personne.
  */
-async function resolveClients(): Promise<ClientResolution> {
+async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const warnings: string[] = [];
   const byNotionPage = new Map<string, string>();
+  const byOrganisation = new Map<string, string>();
 
   const statusById = new Map<string, string>();
   const rows = await db()
@@ -121,10 +132,89 @@ async function resolveClients(): Promise<ClientResolution> {
       );
       continue;
     }
+
     byNotionPage.set(page.id, id);
+    await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
   }
 
-  return { byNotionPage, statusById, warnings };
+  return { byNotionPage, byOrganisation, statusById, warnings };
+}
+
+/**
+ * Aligne l'accompagnement sur sa fiche organisation.
+ *
+ * La fiche organisation est la source de vérité de l'identité : elle porte la
+ * raison sociale exacte et le pack sectoriel qui sert de base aux lettres. Les
+ * recopier dans la base Clients les ferait diverger au premier changement, et
+ * c'est toujours la copie qu'on oublie de mettre à jour.
+ *
+ * Écriture conditionnelle : on ne touche `cto_clients` que si quelque chose a
+ * bougé. Une écriture par balayage et par client ne coûterait pas cher, mais
+ * elle rendrait `updated_at` illisible le jour où on en aura un.
+ */
+async function adopterFicheOrganisation(
+  fiche: NotionPage,
+  clientId: string,
+  nomAffiche: string,
+  warnings: string[],
+  dryRun: boolean,
+  byOrganisation: Map<string, string>,
+): Promise<void> {
+  const liens = prop.relation(fiche, PROPS.clients.organisation);
+
+  if (liens.length === 0) {
+    // Deux causes possibles, et l'API ne permet pas de les distinguer : Notion
+    // rend une relation VIDE, jamais une erreur, quand l'intégration n'a pas
+    // accès à la base visée. Nommer les deux évite une heure de recherche.
+    warnings.push(
+      `« ${nomAffiche} » n'est rattachée à aucune fiche organisation, ou la base des fiches ` +
+        `n'est pas partagée avec l'intégration. Sans elle : pas de lettre sectorielle.`,
+    );
+    return;
+  }
+  if (liens.length > 1) {
+    warnings.push(
+      `« ${nomAffiche} » est rattachée à ${liens.length} fiches organisation : à trancher, aucune n'est retenue.`,
+    );
+    return;
+  }
+
+  let organisation: NotionPage;
+  try {
+    organisation = await fetchPage(liens[0]);
+  } catch (error) {
+    console.error("[cto] fiche organisation illisible", error);
+    warnings.push(`Fiche organisation de « ${nomAffiche} » illisible : rattachement ignoré.`);
+    return;
+  }
+
+  byOrganisation.set(organisation.id, clientId);
+
+  const raisonSociale = prop.text(organisation, PROPS.organisation.name);
+  const pack = prop.select(organisation, PROPS.organisation.pack);
+
+  const [actuel] = await db()
+    .select({ company: ctoClients.company, sector: ctoClients.sector })
+    .from(ctoClients)
+    .where(eq(ctoClients.id, clientId))
+    .limit(1);
+  if (!actuel) return;
+
+  const company = raisonSociale ?? actuel.company;
+  if (company === actuel.company && pack === actuel.sector) return;
+
+  if (dryRun) {
+    warnings.push(
+      `« ${nomAffiche} » serait alignée sur sa fiche organisation : ${company}` +
+        `${pack ? `, ${pack}` : ", sans pack"}.`,
+    );
+    return;
+  }
+
+  await db()
+    .update(ctoClients)
+    .set({ company, sector: pack })
+    .where(eq(ctoClients.id, clientId));
 }
 
 interface Resolved {
@@ -332,14 +422,15 @@ async function notifier(
 export async function syncFromNotion(
   options: { force?: boolean; dryRun?: boolean; notify?: boolean } = {},
 ): Promise<SyncReport> {
-  const clients = await resolveClients();
   const dryRun = options.dryRun === true;
+  const clients = await resolveClients(dryRun);
   const changes = new Map<string, ClientChanges>();
 
   const report: SyncReport = {
     dryRun,
     clientsMapped: clients.byNotionPage.size,
     notified: 0,
+    letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0 },
     kinds: [],
     warnings: [...clients.warnings],
   };
@@ -354,6 +445,12 @@ export async function syncFromNotion(
     report.kinds.push(result.report);
     report.warnings.push(...result.warnings);
   }
+
+  // Les lettres passent en dernier : elles coûtent le plus cher en requêtes, et
+  // un échec de leur côté ne doit pas priver le client des livrables déjà écrits.
+  const lettres = await syncLetters(clients.byOrganisation, { dryRun });
+  report.letters = lettres.report;
+  report.warnings.push(...lettres.warnings);
 
   // Un seul message par personne et par balayage, envoye APRES toutes les
   // bases : prevenir base par base ferait trois e-mails pour un meme comite.
