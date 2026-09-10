@@ -44,8 +44,8 @@ export default function HomeCta() {
             />
             <p className="mb-8 max-w-[460px] font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "Start with the free diagnostic: one address, one report, a first direction. Then a call, a clear scope, budget and timeline fixed upfront."
-                : "Commencez par le diagnostic gratuit : une adresse, un rapport, une première orientation. Ensuite un appel, un cadrage clair, budget et délai fixés d'emblée."}
+                ? "Start with a free audit call: what's slowing your site down, a first direction. Then a clear scope, budget and timeline fixed upfront."
+                : "Commencez par un audit gratuit en visio : ce qui ralentit votre site, une première orientation. Ensuite, un cadrage clair, budget et délai fixés d'emblée."}
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link
@@ -53,8 +53,8 @@ export default function HomeCta() {
                 className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
               >
                 {isEn
-                  ? "See what slows your site down in 2 minutes"
-                  : "Voyez ce qui ralentit votre site en 2 minutes"}
+                  ? "Book a free audit of your site"
+                  : "Réservez un audit gratuit de votre site"}
               </Link>
               <a
                 href="https://calendar.app.google/RwZqaabSR5aDMnk46"

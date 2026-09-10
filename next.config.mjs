@@ -133,16 +133,29 @@ const nextConfig = {
         destination: '/en/documentation/wordpress-headless/:path*',
         permanent: true,
       },
-      // Renommage de la page audit : audit-site-ia → audit-site-web
-      // pour cibler la requête principale « audit site web ».
+      // Retrait du sas d'audit automatique (outil déjà mocké, lib/audit/runAudit) :
+      // /audit-site-web et son alias historique /audit-site-ia redirigent
+      // désormais directement vers la prise de RDV Calendly. S'applique à tout
+      // le trafic, y compris les CTA internes du site qui pointaient vers cette
+      // page (footer, header, home, études de cas, doc…) — décision 2026-09-10.
+      {
+        source: '/audit-site-web',
+        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
+        permanent: true,
+      },
+      {
+        source: '/en/audit-site-web',
+        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
+        permanent: true,
+      },
       {
         source: '/audit-site-ia',
-        destination: '/audit-site-web',
+        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
         permanent: true,
       },
       {
         source: '/en/audit-site-ia',
-        destination: '/en/audit-site-web',
+        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
         permanent: true,
       },
       // ── Élagage vague 5 : consolidation du stock WordPress headless ──

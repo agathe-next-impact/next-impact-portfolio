@@ -67,6 +67,7 @@ export default async function AuditPwaPage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
+        compact
         titre={
           isEn
             ? "PWA opportunity diagnostic"

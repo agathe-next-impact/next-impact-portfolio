@@ -143,7 +143,8 @@ export async function GET() {
       // Offre récurrente de direction technique — bilingue FR + EN, donc dans
       // les pages localisées (alternates hreflang générés).
       { path: "cto-externalise", source: "app/[locale]/cto-externalise/page.tsx", changefreq: "monthly", priority: 0.8 },
-      { path: "audit-site-web", source: "app/[locale]/audit-site-web/page.tsx", changefreq: "monthly", priority: 0.8 },
+      // audit-site-web retiré du sitemap : la route redirige désormais vers
+      // Calendly (next.config.mjs), ce n'est plus une page indexable.
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
       // Outils de qualification rattachés aux rubriques du hub.

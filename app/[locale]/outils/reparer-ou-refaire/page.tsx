@@ -67,6 +67,7 @@ export default async function ReparerOuRefairePage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
+        compact
         titre={isEn ? "Repair or rebuild?" : "Réparer ou refaire ?"}
         sousTitre={
           isEn

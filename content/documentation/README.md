@@ -111,10 +111,10 @@ prouve, elle ne vend pas — c'est sa crédibilité qui la rend citable.
 |---|---|---|
 | `choisir` | Lancer le Sélecteur techno | `/outils/selecteur-techno` |
 | `ia-et-code` | Prototype IA : jetable ou maintenable ? | `/outils/prototype-ia` |
-| `reparer` | Auditer mon site (gratuit, 2 min) | `/audit-site-web` |
+| `reparer` | Auditer mon site (gratuit, sur rendez-vous) | `/audit-site-web` |
 | `avant-signer` | Décrypter mon devis + avis indépendant 150 € | `/outils/decrypteur-devis` puis `/conseil` |
 | `outils-metier` | No-code, SaaS ou sur-mesure ? | `/outils/nocode-saas-surmesure` |
-| `presence` | Diagnostic Web & IA (gratuit) | `/audit-site-web` |
+| `presence` | Diagnostic Web & IA (gratuit, sur rendez-vous) | `/audit-site-web` |
 | `etre-trouve` | Visible dans les moteurs IA ? | `/outils/visibilite-ia` |
 
 `avant-signer` est la **seule** rubrique autorisée à pousser la visio payante :

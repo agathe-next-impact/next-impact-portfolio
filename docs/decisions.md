@@ -149,3 +149,74 @@ l'audit + roadmap préalable (650 € HT)**. La page l'indique dans son parcours
 démarrage, mais les autres sections de la synthèse (revue d'opportunité, flux
 mensuel d'évolutions, traitement écrit du conflit d'intérêt) ne sont pas encore
 publiées.
+
+## ADR-009 — 2026-09-10 — Le CTO externalisé revient sur `/conseil`, sans quitter sa page
+
+Remplace la clause de fermeture de l'[ADR-007](#adr-007--2026-09-07--réinstauration-de-loffre-récurrente--cto-externalisé-)
+(« `/conseil` s'y contente d'un bandeau de renvoi ») sur demande d'Agathe. Le
+catalogue ne bouge pas : six lignes, dont une seule récurrente. Ce qui change,
+c'est l'endroit où le lecteur de `/conseil` la rencontre.
+
+1. **`/conseil` présente les trois lignes Conseil**, dans l'ordre d'engagement
+   croissant : visio conseil refonte (§ 04), audit + roadmap (§ 05), CTO
+   externalisé (§ 06, ancre `#cto-externalise`). La troisième section reprend le
+   gabarit des deux autres, dans `OFFERS` (`lib/visio-conseil.ts`). Le bandeau
+   `CtoExternaliseBanner` est retiré de la page : il ferait doublon. Il reste en
+   place sur `/solutions-web`.
+2. **Présenter n'est pas vendre.** Le CTA de la section (« Voir l'offre
+   complète ») part vers `/cto-externalise`, qui reste la fiche complète
+   (paliers, livrables, périmètre, FAQ) et la destination de l'item du mega menu.
+   Aucun prix ni condition n'est recopié : la section dérive de
+   `lib/cto-externalise.ts`, source de vérité unique, y compris pour les deux
+   paliers et l'engagement cités en puces.
+3. **Garde-fous de la charte §5 tenus.** L'offre récurrente n'ouvre pas la page :
+   le héros, son titre et son CTA principal restent sur la visio conseil, offre
+   froide et ponctuelle. Le CTO n'entre dans le bandeau d'aperçu du héros qu'en
+   troisième position et sans mention « recommandée » — c'est un aperçu du
+   catalogue, pas une accroche.
+4. **Ancres de nav réparées au passage.** Le mega menu desktop scrollait lui-même
+   vers les ancres d'offre de la page courante ; l'accordéon mobile et le CTA du
+   header, eux, passaient par un `Link` next-intl nu, qui ne fait qu'une
+   navigation « même route » sans bouger la vue. Le lien « Audit + roadmap »
+   (`/conseil#architecture-projet-ia`) était donc inerte sur mobile une fois sur
+   `/conseil`. La logique est sortie dans `hooks/use-same-page-anchor.ts` et
+   appliquée aux trois endroits ; elle respecte `prefers-reduced-motion`.
+5. **Parité FR/EN des prix rétablie** dans les sections d'offre : `price` devient
+   bilingue (« 150 € » / « €150 ») et la mention légale suit la locale (HT /
+   excl. VAT). La version anglaise affichait « 150 € HT ». `CaseStudyDecisionPath`,
+   qui lit ce même prix, prend désormais la variante de sa locale.
+
+Conséquence documentaire : charte v1.2 amendée au §6 (fiche `/conseil`
+réécrite), et coquille du §12 corrigée au passage — elle citait encore 950 € HT,
+tarif d'avant l'[ADR-008](#adr-008--2026-09-08--refonte-de-loffre--cto-externalisé--deux-paliers-publiés).
+
+## ADR-010 — 2026-09-10 — L'offre récurrente se renomme « Expert technique externalisé »
+
+Décision explicite d'Agathe, en rupture assumée avec le garde-fou du §1/§10 de
+la charte (« CTO » toléré non traduit « parce que c'est le mot que le prospect
+tape », libellé protégé « sous ce seul libellé »). Le garde-fou reposait sur un
+pari de correspondance de requête ; Agathe préfère un intitulé compréhensible
+sans jargon pour une cible DIRCOM/dirigeant non technique. Confirmé
+explicitement après qu'on lui a signalé le conflit avec l'ADR-007/ADR-009.
+
+1. **Nouveau nom commercial : « Expert technique externalisé »** (FR) /
+   « Outsourced technical expert » (EN), partout où l'offre est nommée : titre
+   et méta de `/cto-externalise`, JSON-LD, item du mega menu, footer, libellé
+   du sujet de formulaire de contact, FAQ, `llms.txt`/`llms-full.txt`, et le
+   corps de `lib/cto-externalise.ts` (y compris les réponses de FAQ qui
+   utilisaient « le CTO externalisé » en sujet de phrase).
+2. **Ce qui NE change PAS** : l'URL `/cto-externalise`, la valeur du sujet de
+   formulaire (`cto-externalise`), `CTO_PATH`/`CTO_CONTACT_HREF`/le nom des
+   constantes dans le code, le contenu de `src/cto/` (espace client), et les
+   documents historiques (`docs/cto-externalise/*.md`,
+   `docs/evolution-offre-next-impact.md`) qui restent tels qu'écrits au moment
+   des faits.
+3. **Prix, paliers, structure de l'offre inchangés** — seul le libellé change.
+   Le catalogue reste à six lignes (charte §1, ligne « Accompagnement »
+   renommée).
+
+Conséquence documentaire : charte v1.2 amendée aux §1, §5, §6, §10 (le
+garde-fou qui imposait « CTO externalisé » comme seul libellé toléré est
+remplacé par un garde-fou équivalent sur « Expert technique externalisé ») ;
+`.claude/agents/coherence-seo-geo.md` mis à jour pour ne pas revenir sur ce
+renommage lors d'un prochain passage.

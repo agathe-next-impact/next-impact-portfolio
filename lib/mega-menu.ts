@@ -7,8 +7,12 @@ import { CTO_PATH, CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 // Chaque entrée de nav (clé = clé de traduction `nav`) ouvre un panneau plein
 // largeur (style « Blueprint ») réduit à TROIS cases, une par offre :
 //   – /veille    : la newsletter, les ressources, les outils
-//   – /conseil   : les deux offres ponctuelles (visio 150 €, audit 650 €) plus
-//                  un renvoi vers le CTO externalisé, qui a sa propre page
+//   – /conseil   : les trois lignes Conseil. Les deux offres ponctuelles
+//                  pointent vers leur SECTION de /conseil (ancre) ; l'expert
+//                  technique externalisé, lui, pointe vers sa PAGE dédiée, qui
+//                  reste la fiche complète même s'il est aussi présenté sur
+//                  /conseil (ADR-009). Les ancres doivent exister dans OFFERS
+//                  (lib/visio-conseil.ts) : ce sont les id des sections.
 //   – /solutions-web : les trois trajectoires (consolider, découpler, refonder)
 //
 // Bilingue en ligne (fr/en) — même pattern que lib/visio-conseil.ts et
@@ -92,7 +96,7 @@ export const MEGA_SECTIONS: Record<string, MegaSection> = {
         badge: { fr: "650 €", en: "€650" },
       },
       {
-        label: { fr: "CTO externalisé", en: "Fractional CTO" },
+        label: { fr: "Expert technique externalisé", en: "Outsourced technical expert" },
         desc: {
           fr: "Un décideur technique à vos côtés, sans recruter.",
           en: "A technical decision-maker by your side, without hiring.",

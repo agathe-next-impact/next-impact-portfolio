@@ -1,10 +1,15 @@
 "use client";
 
-// Bandeau « CTO externalisé » — drop-in de bas de page sur /conseil et
+// Bandeau « Expert technique externalisé » — drop-in de bas de page sur
 // /solutions-web. Offre RÉCURRENTE, donc chaude : elle ne s'adresse qu'à
-// quelqu'un qui a déjà lu l'offre ponctuelle ou les trajectoires. Ne jamais la
-// placer dans un héros ni en CTA froid. Tokens DS uniquement, i18n inline,
-// reduced-motion via <Reveal>.
+// quelqu'un qui a déjà lu les trajectoires. Ne jamais la placer dans un héros
+// ni en CTA froid.
+//
+// Retiré de /conseil le 2026-09-10 (ADR-009) : l'expert technique externalisé
+// y a repris une section d'offre en propre (#cto-externalise), le bandeau y
+// ferait doublon.
+//
+// Tokens DS uniquement, i18n inline, reduced-motion via <Reveal>.
 
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, CalendarClock } from "lucide-react";
@@ -16,13 +21,13 @@ import { CTO_PATH, CTO_PRICE } from "@/lib/cto-externalise";
 
 const COPY = {
   fr: {
-    eyebrow: "CTO externalisé",
+    eyebrow: "Expert technique externalisé",
     title: "Les décisions techniques reviennent tous les mois ?",
     subtitle: `Un directeur technique à temps partagé, ${CTO_PRICE.fr.amount} ${CTO_PRICE.fr.period} : une visio de pilotage par mois, vos devis relus, une roadmap tenue à jour. Sans embaucher.`,
     cta: "Voir l'accompagnement",
   },
   en: {
-    eyebrow: "Fractional CTO",
+    eyebrow: "Outsourced technical expert",
     title: "Do technical decisions come up every month?",
     subtitle: `A technical director on shared time, ${CTO_PRICE.en.amount} ${CTO_PRICE.en.period}: one steering call a month, your quotes reviewed, a roadmap kept up to date. Without hiring.`,
     cta: "See the retainer",

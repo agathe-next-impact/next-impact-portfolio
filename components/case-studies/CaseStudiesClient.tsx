@@ -101,15 +101,15 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
                 }
                 description={
                   isEn
-                    ? "Compare it to these projects in 2 minutes — then, if it helps, let's talk."
-                    : "Comparez-le à ces projets en 2 minutes — puis, si c'est utile, on en discute."
+                    ? "Book a free audit to compare it to these projects. Then, if it helps, let's talk."
+                    : "Réservez un audit gratuit pour le comparer à ces projets. Puis, si c'est utile, on en discute."
                 }
               />
               <div className="flex flex-wrap gap-3">
                 {/* Froid en primaire : un prospect qui vérifie n'est pas prêt pour
                     un RDV — on lui donne d'abord de quoi se situer. */}
                 <Link href="/audit-site-web" className={CTA_PRIMARY}>
-                  {isEn ? "Compare my site — 2 min" : "Comparer mon site — 2 min"}
+                  {isEn ? "Book my free audit" : "Réserver mon audit gratuit"}
                   <ArrowRight size={14} />
                 </Link>
                 {/* Chaud en secondaire : le RDV reste accessible pour les prêts. */}

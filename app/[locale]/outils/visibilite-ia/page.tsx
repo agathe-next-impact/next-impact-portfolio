@@ -67,6 +67,7 @@ export default async function VisibiliteIaPage({
     <>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <PageLayout
+        compact
         titre={
           isEn
             ? "Is your site visible to AI engines?"

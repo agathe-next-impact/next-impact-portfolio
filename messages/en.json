@@ -10,14 +10,14 @@
     "caseStudies": "Case studies",
     "contact": "Contact",
     "mainCta": "2-min diagnostic",
-    "visioConseil": "Advisory call",
+    "visioConseil": "Free call",
     "onDemand": "On demand",
     "free": "Free",
     "paid": "Paid",
     "about": "About",
     "hub": "Which web tech?",
     "conseil": "Advisory",
-    "ctoExternalise": "Fractional CTO",
+    "ctoExternalise": "Outsourced technical expert",
     "veille": "Tech watch",
     "selecteurTechno": "The tech selector",
     "allTools": "All tools",
@@ -55,7 +55,7 @@
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
     "visioConseil": "Advisory call",
-    "ctoExternalise": "Fractional CTO",
+    "ctoExternalise": "Outsourced technical expert",
     "veille": "Tech watch",
     "tools": "All tools",
     "startWebApp": "Let's talk about your project",
@@ -118,10 +118,10 @@
     "profileImageAlt": "Profile photo"
   },
   "contactPage": {
-    "metaTitle": "Contact: advice, audit, fractional CTO or redesign",
-    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), fractional CTO (from €900/month), redesign project or free diagnostic.",
+    "metaTitle": "Contact: advice, audit, outsourced technical expert or redesign",
+    "metaDescription": "Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), outsourced technical expert (from €900/month), redesign project or free diagnostic.",
     "title": "Contact",
-    "subtitle": "Advisory call, audit + roadmap, fractional CTO, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Advisory call, audit + roadmap, outsourced technical expert, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -137,14 +137,14 @@
     "audit": {
       "badge": "Web & AI diagnostic",
       "title": "Before building, choose the right path",
-      "subtitleStart": "Get a",
-      "subtitleHighlight": "complete report with personalized recommendations",
-      "subtitleEnd": "— free, no strings attached.",
+      "subtitleStart": "Book a",
+      "subtitleHighlight": "free audit with personalized recommendations",
+      "subtitleEnd": ", free and with no strings attached.",
       "pillPerformance": "Performance ↑",
       "pillRoi": "ROI projection",
       "pillCost": "Cost efficiency",
-      "ctaLabel": "Run my diagnostic",
-      "footer": "Free · 5-minute report · No strings attached"
+      "ctaLabel": "Book my free audit",
+      "footer": "Free · By appointment · No strings attached"
     },
     "conversion": {
       "badge": "Interactive questionnaire",
@@ -200,7 +200,7 @@
   },
   "toolsPage": {
     "metaTitle": "Toolbox: web & AI tech selector and scoping",
-    "metaDescription": "Decide before you build: 2-minute site diagnostic, AI visibility, GEO checklist and quote decoder. Free, no sign-up.",
+    "metaDescription": "Decide before you build: tech selector, AI visibility, GEO checklist and quote decoder. Free, no sign-up.",
     "title": "Toolbox",
     "subtitle": "Free tools to decide what to build, what to simplify and what to avoid.",
     "breadcrumbHome": "Home",
@@ -327,7 +327,7 @@
       "independant": "Freelancer"
     },
     "cta": {
-      "cold": "Web pre-diagnostic in 2 min",
+      "cold": "Book my free audit",
       "coldConseil": "Request a diagnosis",
       "warm": {
         "sites-institutionnels": "Discuss your website redesign",

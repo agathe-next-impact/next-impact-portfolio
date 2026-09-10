@@ -3,7 +3,8 @@
 import * as React from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
+import { useSamePageAnchor } from "@/hooks/use-same-page-anchor";
 import type { Locale } from "@/i18n/routing";
 import type { MegaSection, MegaItem } from "@/lib/mega-menu";
 
@@ -27,23 +28,15 @@ function Card({
   const label = item.label[locale];
   const desc = item.desc[locale];
   const badge = item.badge?.[locale];
-  const pathname = usePathname();
 
-  // Ancre vers une section de la page courante (ex. « Vitrine simple » →
-  // /solutions-web#forfait-classique depuis /solutions-web) : le Link next-intl
-  // ne fait qu'une navigation « même route » sans scroller. On scrolle nous-mêmes.
-  const [hrefPath, hrefHash] = item.href.split("#");
-  const isSamePageAnchor = Boolean(hrefHash) && hrefPath === pathname;
+  // Ancre vers une section de la page courante (ex. « Audit + roadmap » →
+  // /conseil#architecture-projet-ia depuis /conseil) : le Link next-intl ne fait
+  // qu'une navigation « même route » sans scroller. Le hook s'en charge, ici
+  // comme dans l'accordéon mobile du header.
+  const scrollToAnchor = useSamePageAnchor();
 
   const handleClick = (e: React.MouseEvent) => {
-    if (isSamePageAnchor) {
-      const target = document.getElementById(hrefHash);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth" });
-        if (history.replaceState) history.replaceState(null, "", `#${hrefHash}`);
-      }
-    }
+    scrollToAnchor(item.href, e);
     onNavigate();
   };
 

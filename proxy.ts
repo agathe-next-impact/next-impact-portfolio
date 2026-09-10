@@ -31,7 +31,7 @@ export const config = {
   // Match all paths except API, Next internals, static files,
   // and SEO route handlers (sitemap, robots, llms, manifest).
   //
-  // `espace-direction` : espace client de l'offre CTO externalisé
+  // `espace-direction` : espace client de l'offre expert technique externalisé
   // (app/(cto)/), non localisé lui aussi. Même motif que ci-dessous.
   //
   // `scan|admin|espace` : routes du produit Sentinelle (app/(sentinelle)/),

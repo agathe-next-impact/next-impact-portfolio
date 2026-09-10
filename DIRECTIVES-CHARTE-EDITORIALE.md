@@ -1,8 +1,10 @@
 # Charte éditoriale · Vitrine next-impact.digital · Refonte éditoriale
 
-> Version 1.2 · 7 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
+> Version 1.3 · 10 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
 >
 > **Amendement du 7 septembre 2026 (v1.2).** Le catalogue passe de cinq à **six lignes** : l'offre récurrente de direction technique, supprimée le 27 août, est réinstaurée sous le nom « CTO externalisé », sur sa propre page `/cto-externalise`. Trois passages de la v1.1 sont amendés en conséquence : le tableau du §1 et la phrase « ces cinq lignes », l'ordre des offres du §5, et la clause de fermeture de la page Conseil au §6. Décision tracée en ADR-007 (`docs/decisions.md`).
+>
+> **Amendement du 10 septembre 2026 (v1.3).** La sixième ligne se renomme « Expert technique externalisé » : décision explicite d'Agathe qui inverse le garde-fou du §1/§10 protégeant jusqu'ici « CTO » comme seul terme non traduit toléré en accroche. Le nouveau libellé est désormais le seul toléré, en français comme en anglais (« Outsourced technical expert »), partout où l'offre est nommée. L'URL `/cto-externalise` et les identifiants techniques ne changent pas. Décision tracée en ADR-010 (`docs/decisions.md`).
 
 ---
 
@@ -45,7 +47,7 @@ Catalogue de référence (site en dev), le seul que le site mentionne :
 | Développement | Refonte WordPress optimisée : thème, plugin, optimisation de l'existant | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless : back-office conservé, front moderne | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app : plateforme web et/ou mobile | à partir de 6 500 € HT |
-| Accompagnement | CTO externalisé : direction technique à temps partagé, deux paliers (Référent, Direction technique) | à partir de 900 € HT par mois |
+| Accompagnement | Expert technique externalisé : direction technique à temps partagé, deux paliers (Référent, Direction technique) | à partir de 900 € HT par mois |
 
 Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces six lignes, avec ce libellé et ce prix.
 
@@ -117,7 +119,7 @@ Les trois trajectoires, nommées par bénéfice, la techno en sous-titre :
 
 En amont : Visio conseil refonte (150 € HT) et Audit + roadmap (650 € HT). Ce sont les portes d'entrée payantes ; le diagnostic 2 minutes est la porte d'entrée gratuite.
 
-En aval : CTO externalisé (deux paliers, à partir de 900 € HT par mois, engagement de 6 mois puis reconduction au mois, préavis de 2 mois). C'est la seule offre récurrente. Elle ne se propose qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid.
+En aval : Expert technique externalisé (deux paliers, à partir de 900 € HT par mois, engagement de 6 mois puis reconduction au mois, préavis de 2 mois). C'est la seule offre récurrente. Elle ne se propose qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid.
 
 ## 6. Charte page par page
 
@@ -155,27 +157,31 @@ Métadonnées cibles : `title` « Refonte de site WordPress : rapide, moderne, s
 
 ### Conseil `/conseil`
 
-Rôle : porte d'entrée payante à faible engagement, qui présente les DEUX offres de conseil ponctuel du catalogue (la troisième ligne Conseil, le CTO externalisé, est récurrente et vit sur sa propre page). Titre cible : « Un avis tranché avant d'engager un budget ».
+Rôle : porte d'entrée payante à faible engagement, qui présente les TROIS lignes Conseil du catalogue, dans l'ordre d'engagement croissant : les deux offres ponctuelles, puis l'Expert technique externalisé (amendement du 10 septembre 2026, ADR-009 — il remplace la règle des deux seules offres). Titre cible : « Un avis tranché avant d'engager un budget ».
 
 - Visio conseil refonte · 150 € HT. Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi. Argument : le coût d'une mauvaise trajectoire se compte en mois, celui de l'avis en euros.
 - Audit + roadmap · 650 € HT. Rapport d'audit (performance, sécurité, dette, plugins, hébergement), préconisations chiffrées, roadmap par étapes. Argument : le document sert même si la prestation est confiée à quelqu'un d'autre. Le montant est déduit du devis si la refonte est confiée à Next Impact (à confirmer par Agathe ; si oui, l'écrire, c'est un levier).
 
-La page se termine par le lien vers les trois trajectoires, puis par un bandeau de renvoi vers le CTO externalisé, en dernière position. Les cartes d'offre de la page restent les deux seules ci-dessus : l'offre récurrente n'y est pas vendue, elle y est signalée. Rien d'autre n'y figure : ni build pack, ni « sélecteur techno ».
+- Expert technique externalisé · à partir de 900 € HT par mois. Section d'offre en dernière position (§ 06, ancre `#cto-externalise`), au même gabarit que les deux précédentes : deux paliers, comité mensuel, devis relus, roadmap tenue à jour, livrables dans l'espace en ligne, engagement de 6 mois.
 
-### CTO externalisé `/cto-externalise`
+Distinction à tenir : la section de `/conseil` PRÉSENTE l'offre récurrente, elle ne la VEND pas. Son CTA (« Voir l'offre complète ») part vers `/cto-externalise`, qui reste la fiche complète — paliers détaillés, livrables, périmètre, FAQ — et la destination de l'item du mega menu. Aucun prix ni condition de l'expert technique externalisé n'est recopié sur `/conseil` : le contenu de la section dérive de `lib/cto-externalise.ts`.
+
+Garde-fous inchangés (§5) : l'offre récurrente n'ouvre jamais la page. Le héros, son titre et son CTA principal restent sur la visio conseil ; l'expert technique externalisé n'apparaît dans le bandeau d'aperçu du héros qu'en dernière position et sans mention « recommandée ». Le bandeau de renvoi `CtoExternaliseBanner` est retiré de `/conseil` (il ferait doublon avec la section) et reste en place sur `/solutions-web`. Rien d'autre ne figure sur la page : ni build pack, ni « sélecteur techno ».
+
+### Expert technique externalisé `/cto-externalise`
 
 Rôle : la seule offre récurrente du catalogue, sur sa propre page. Elle ne vit ni sur `/conseil` (qui vend le ponctuel) ni sur `/solutions-web` (qui vend le forfait) : les deux y renvoient par un bandeau de pied de page. Titre cible : « Des décisions techniques à prendre, personne en interne pour les trancher ».
 
-- CTO externalisé · deux paliers publiés. **Référent, 900 € HT par mois** : comité d'une heure par mois, arbitrages écrits sous 48 h, roadmap tenue à jour trimestriellement, veille dédiée d'une page par mois, 3 évolutions suggérées par trimestre, 1 revue d'opportunité par an, relecture des devis, espace client. **Direction technique, 1 900 € HT par mois** (le cas courant) : comité de deux heures, arbitrages sous 24 h, roadmap en continu, veille avec alerte à chaud, 3 évolutions par mois chiffrées, 2 revues d'opportunité par an, cadrage et suivi des prestataires, 4 h de réalisation incluses. Conditions communes : engagement de 6 mois puis reconduction au mois, préavis de 2 mois, clause de restitution documentée, 100 % à distance, 4 accompagnements simultanés au maximum.
+- Expert technique externalisé · deux paliers publiés. **Référent, 900 € HT par mois** : comité d'une heure par mois, arbitrages écrits sous 48 h, roadmap tenue à jour trimestriellement, veille dédiée d'une page par mois, 3 évolutions suggérées par trimestre, 1 revue d'opportunité par an, relecture des devis, espace client. **Direction technique, 1 900 € HT par mois** (le cas courant) : comité de deux heures, arbitrages sous 24 h, roadmap en continu, veille avec alerte à chaud, 3 évolutions par mois chiffrées, 2 revues d'opportunité par an, cadrage et suivi des prestataires, 4 h de réalisation incluses. Conditions communes : engagement de 6 mois puis reconduction au mois, préavis de 2 mois, clause de restitution documentée, 100 % à distance, 4 accompagnements simultanés au maximum.
 - Le troisième palier de la synthèse d'offre (Renforcée, 3 500 € HT par mois) n'est PAS publié : il se cadre en conversation. Ne pas l'ajouter au site sans arbitrage.
-- Le terme « CTO » est le seul terme non traduit toléré en accroche du site, parce que c'est le mot que le prospect tape. Il est traduit dès la ligne suivante : « une direction technique à temps partagé pour le numérique visible, quelques jours par mois, sans recruter ».
+- Le libellé officiel de l'offre est « Expert technique externalisé » (FR) / « Outsourced technical expert » (EN) : c'est le seul nom à utiliser, en titre comme dans le corps du texte — ne pas réintroduire « CTO » (arbitrage du 10 septembre 2026, ADR-010, qui remplace le raisonnement inverse de l'ADR-007 sur le mot tapé par le prospect). Le nom est traduit dès la ligne suivante : « une direction technique à temps partagé pour le numérique visible, quelques jours par mois, sans recruter ».
 - La page NE met PAS en avant ce que l'offre ne comporte pas (arbitrage d'Agathe du 8 septembre 2026). Pas de section « ce que ce n'est pas », pas de liste de garde-fous en négatif : sur une offre de direction, elle place le lecteur devant un catalogue de refus avant qu'il ait fini de comprendre ce qu'il achète. Le périmètre se dit par ce qu'il COUVRE, le numérique visible : site et applications web, données et outils en ligne (CRM, e-mailing, formulaires, paiement, prise de rendez-vous), briques d'IA, hébergement, sécurité et conformité de ces systèmes, prestataires et contrats associés. Les limites subsistantes se traitent en FAQ, en réponse à une question posée.
 - Argument d'indépendance à conserver : la réalisation est plafonnée au quota du palier, et toute recommandation qui débouche sur une prestation Next Impact est accompagnée d'une alternative externe chiffrée. Il justifie le prix et distingue l'offre d'une prestation de développement déguisée.
 - Les livrables font la preuve, et se citent : cartographie du système, roadmap datée et budgétée, relevé de décisions techniques, revue de devis avec alternative chiffrée, budget technique à trois ans, plan de continuité et dossier de restitution, registre des évolutions, revue d'opportunité. Ce sont eux qui distinguent la direction technique d'un abonnement au conseil.
 - Ordre des sections : douleur, en bref, pour qui (les symptômes), les deux paliers, les livrables et le périmètre, parcours de démarrage, FAQ, deux CTA de deux températures. La page se termine sur le choix ponctuel / récurrent, avec un lien vers `/conseil`.
 - Aucun accompagnement ne démarre sans l'audit + roadmap préalable (650 € HT) : il qualifie le besoin et devient la roadmap vivante du contrat.
 
-Métadonnées cibles : `title` « CTO externalisé : votre direction technique sans embaucher » ; `meta description` « Direction technique à temps partagé, dès 900 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement 6 mois. »
+Métadonnées cibles : `title` « Expert technique externalisé : votre direction technique sans embaucher » ; `meta description` « Direction technique à temps partagé, dès 900 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement 6 mois. »
 
 ### Services `/solutions-web`
 
@@ -255,7 +261,7 @@ Quick wins (contenu, ordre, typographie) : points 1, 2, 3, 8, 9. Chantiers (prod
 - Ne pas créer de catalogue de sites ou de packs : commoditise et érode l'argument AGEFIPH.
 - Ne pas laisser un seul CTA d'une seule température sur une page.
 - Ne pas laisser cohabiter deux chiffres pour la même réalité (années, projets, délais).
-- Ne pas laisser subsister une mention des anciennes offres IA au format d'origine (build pack, « direction technique fractionnée », sélecteur techno) sur aucune page, formulaire ou métadonnée. Exception cadrée : le **CTO externalisé** (à partir de 950 € HT par mois), offre de conseil récurrente du catalogue §1, sous ce seul libellé.
+- Ne pas laisser subsister une mention des anciennes offres IA au format d'origine (build pack, « direction technique fractionnée », sélecteur techno) sur aucune page, formulaire ou métadonnée. Exception cadrée : l'**Expert technique externalisé** (à partir de 900 € HT par mois), offre de conseil récurrente du catalogue §1, sous ce seul libellé — ne pas réintroduire « CTO externalisé » ni « CTO » (ADR-010).
 - Ne pas traduire en anglais avant que le français soit figé.
 
 ## 11. Contrôle avant mise en ligne d'une page

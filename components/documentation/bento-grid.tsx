@@ -23,7 +23,7 @@ const defaultCardsFr: BentoCardConfig[] = [
   {
     id: "audit-ia",
     title: "Audit de migration IA",
-    description: "Analysez votre site : performance, SEO et conversion.",
+    description: "Réservez un audit gratuit : performance, SEO et conversion.",
     icon: SearchCheck,
     href: "/audit-site-web",
     colSpan: "md:col-span-1",
@@ -48,7 +48,7 @@ const defaultCardsEn: BentoCardConfig[] = [
   {
     id: "audit-ia",
     title: "AI migration audit",
-    description: "Analyze your site: performance, SEO and conversion.",
+    description: "Book a free audit: performance, SEO and conversion.",
     icon: SearchCheck,
     href: "/audit-site-web",
     colSpan: "md:col-span-1",

@@ -2,7 +2,6 @@
 
 import { Link } from "@/i18n/navigation"
 import {
-  BotMessageSquare,
   FileText,
   BadgePercent,
   Smartphone,
@@ -118,15 +117,6 @@ const buildCards = (isEn: boolean): Record<string, BentoCard> => ({
     icon: FileText,
     href: "/cahier-des-charges",
   },
-  "audit-ia": {
-    id: "audit-ia",
-    title: isEn ? "Should I migrate to Headless WordPress?" : "Faut-il migrer en WordPress Headless ?",
-    description: isEn
-      ? "AI-powered audit: performance, SEO, accessibility, conversion. Personalized recommendations."
-      : "Audit IA de votre site actuel : performance, SEO, accessibilité, conversion.",
-    icon: BotMessageSquare,
-    href: "/audit-site-web",
-  },
   "audit-pwa": {
     id: "audit-pwa",
     title: isEn ? "PWA opportunity diagnostic" : "Diagnostic d'opportunité PWA",
@@ -163,7 +153,7 @@ const GROUPS: ToolGroup[] = [
     slug: "diagnostiquer",
     kicker: { fr: "Diagnostiquer", en: "Diagnose" },
     title: { fr: "Évaluer votre site actuel", en: "Assess your current site" },
-    cards: ["reparer-refaire", "audit-ia", "audit-pwa"],
+    cards: ["reparer-refaire", "audit-pwa"],
   },
   {
     index: "№ 03",

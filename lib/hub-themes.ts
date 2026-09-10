@@ -564,8 +564,8 @@ const reparer: HubTheme = {
       icon: ScanSearch,
       name: { fr: "Auditer mon site", en: "Audit my site" },
       blurb: {
-        fr: "Diagnostic réel de votre site — performance, Core Web Vitals, signaux techniques — en quelques minutes.",
-        en: "A real diagnostic of your site — performance, Core Web Vitals, technical signals — in minutes.",
+        fr: "Diagnostic réel de votre site : performance, Core Web Vitals, signaux techniques, sur rendez-vous avec Agathe.",
+        en: "A real diagnostic of your site: performance, Core Web Vitals, technical signals, booked with Agathe.",
       },
       href: "/audit-site-web",
     },
@@ -978,8 +978,8 @@ const presence: HubTheme = {
       icon: ScanSearch,
       name: { fr: "Diagnostic Web & IA", en: "Web & AI diagnostic" },
       blurb: {
-        fr: "Votre site joue-t-il son rôle d'actif central ? Un état des lieux rapide.",
-        en: "Is your site pulling its weight as a core asset? A quick snapshot.",
+        fr: "Votre site joue-t-il son rôle d'actif central ? Un état des lieux gratuit, sur rendez-vous.",
+        en: "Is your site pulling its weight as a core asset? A free stock-take, by appointment.",
       },
       href: "/audit-site-web",
     },

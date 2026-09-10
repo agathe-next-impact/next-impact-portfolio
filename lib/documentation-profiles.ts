@@ -291,7 +291,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     {
       id: "dec-audit",
       title: "Audit de migration IA",
-      description: "Analysez votre site : performance, SEO et conversion.",
+      description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
       href: "/audit-site-web",
       colSpan: "md:col-span-1",
@@ -359,7 +359,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     {
       id: "util-audit",
       title: "Audit de migration IA",
-      description: "Analysez votre site : performance, SEO et conversion.",
+      description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
       href: "/audit-site-web",
       colSpan: "md:col-span-1",
@@ -427,7 +427,7 @@ export const BENTO_CONFIGS: Record<ProfileId, BentoCardConfig[]> = {
     {
       id: "dev-audit",
       title: "Audit de migration IA",
-      description: "Analysez votre site : performance, SEO et conversion.",
+      description: "Réservez un audit gratuit : performance, SEO et conversion.",
       icon: SearchCheck,
       href: "/audit-site-web",
       colSpan: "md:col-span-1",

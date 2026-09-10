@@ -1,4 +1,5 @@
-// Offre « CTO externalisé » — direction technique à temps partagé.
+// Offre « Expert technique externalisé » — direction technique à temps
+// partagé.
 //
 // Source de vérité UNIQUE de l'offre récurrente. La page /cto-externalise, la
 // bannière de renvoi, l'item du mega menu, le sujet du formulaire de contact et
@@ -12,10 +13,15 @@
 // synthèse (Renforcée, 3 500 €/mois) n'est PAS publié : il se cadre en
 // conversation. Ne pas l'ajouter ici sans arbitrage.
 //
-// Le libellé commercial reste « CTO externalisé » (charte §1) parce que c'est le
-// terme que le prospect tape ; « direction technique à temps partagé » est sa
-// traduction, donnée dès la ligne suivante. Le palier 2 porte, lui, le nom de la
-// fonction : Direction technique.
+// Le libellé commercial est « Expert technique externalisé » (charte §1,
+// ADR-010 du 2026-09-10, qui remplace l'ancien nom « CTO externalisé ») :
+// Agathe préfère un intitulé compréhensible sans jargon pour une cible
+// DIRCOM/dirigeant non technique à un acronyme qui misait sur la requête tapée
+// par le prospect. « Direction technique à temps partagé » reste sa
+// traduction, donnée dès la ligne suivante. Le palier 2 porte, lui, le nom de
+// la fonction : Direction technique. L'URL `/cto-externalise` et les
+// identifiants de code préfixés `CTO_` ne changent pas (routes, base de
+// données, espace client `src/cto/`).
 //
 // Règles de charte appliquées (DIRECTIVES-CHARTE-EDITORIALE.md §3) : « vous »
 // pour le prospect, « je » pour Agathe, jamais « nous ». Aucun tiret cadratin
@@ -75,8 +81,8 @@ export const CTO_TLDR: { label: Bilingual; lines: { fr: string; en: string }[] }
   label: { fr: "En bref", en: "In short" },
   lines: [
     {
-      fr: "Le CTO externalisé est une direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé.",
-      en: "A fractional CTO is technical direction on shared time for the customer-facing digital estate of a mid-sized company: someone who decides, writes it down, steers your vendors and answers for what is decided.",
+      fr: "L'expert technique externalisé est une direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé.",
+      en: "An outsourced technical expert is technical direction on shared time for the customer-facing digital estate of a mid-sized company: someone who decides, writes it down, steers your vendors and answers for what is decided.",
     },
     {
       fr: "Chaque mois, cette direction propose aussi ce qu'il faut faire évoluer, du correctif imposé par une fin de support à la fonctionnalité qui manque à votre activité.",
@@ -190,7 +196,7 @@ export const CTO_PROCESS: CtoProcessStep[] = [
  * l'écran demande une section, pas seulement un import.
  *
  * Les symptômes qui appellent l'offre (synthèse §2). Le prospect ne cherche pas
- * « un CTO externalisé » : il reconnaît une situation. Formulés en « vous »
+ * « un expert technique externalisé » : il reconnaît une situation. Formulés en « vous »
  * (charte §3), sans jargon, pour que la reconnaissance soit immédiate.
  */
 export const SIGNALS: Bilingual[] = [
@@ -538,11 +544,11 @@ export const CTO_FAQ: CtoFaqItem[] = [
   {
     fr: {
       q: "En quoi est-ce différent d'un contrat de maintenance ?",
-      a: "Une maintenance entretient l'existant : mises à jour, sauvegardes, correctifs. Le CTO externalisé décide de l'existant : faut-il maintenir, refondre ou remplacer, dans quel ordre et à quel budget. Les deux se complètent, ils ne se remplacent pas. Votre prestataire de maintenance garde son contrat.",
+      a: "Une maintenance entretient l'existant : mises à jour, sauvegardes, correctifs. L'expert technique externalisé décide de l'existant : faut-il maintenir, refondre ou remplacer, dans quel ordre et à quel budget. Les deux se complètent, ils ne se remplacent pas. Votre prestataire de maintenance garde son contrat.",
     },
     en: {
       q: "How is this different from a maintenance contract?",
-      a: "Maintenance keeps what exists running: updates, backups, fixes. A fractional CTO decides about what exists: whether to maintain, rebuild or replace, in which order and at what budget. The two complement each other, they do not replace each other. Your maintenance vendor keeps their contract.",
+      a: "Maintenance keeps what exists running: updates, backups, fixes. An outsourced technical expert decides about what exists: whether to maintain, rebuild or replace, in which order and at what budget. The two complement each other, they do not replace each other. Your maintenance vendor keeps their contract.",
     },
   },
   {
@@ -570,11 +576,11 @@ export const CTO_FAQ: CtoFaqItem[] = [
   {
     fr: {
       q: "Dois-je changer de prestataire ou d'agence ?",
-      a: "Non. Vous gardez vos prestataires, je vous aide à les piloter : leurs devis sont relus, leurs livrables sont contrôlés, leurs arbitrages sont tranchés. L'infogérance, les sauvegardes et l'hébergement restent chez votre prestataire actuel. Le CTO externalisé décide, il ne remplace pas ceux qui exécutent.",
+      a: "Non. Vous gardez vos prestataires, je vous aide à les piloter : leurs devis sont relus, leurs livrables sont contrôlés, leurs arbitrages sont tranchés. L'infogérance, les sauvegardes et l'hébergement restent chez votre prestataire actuel. L'expert technique externalisé décide, il ne remplace pas ceux qui exécutent.",
     },
     en: {
       q: "Do I have to change vendor or agency?",
-      a: "No. You keep your vendors, I help you steer them: their quotes are reviewed, their deliverables checked, their trade-offs settled. Managed services, backups and hosting stay with your current vendor. A fractional CTO decides, it does not replace those who execute.",
+      a: "No. You keep your vendors, I help you steer them: their quotes are reviewed, their deliverables checked, their trade-offs settled. Managed services, backups and hosting stay with your current vendor. An outsourced technical expert decides, it does not replace those who execute.",
     },
   },
   {

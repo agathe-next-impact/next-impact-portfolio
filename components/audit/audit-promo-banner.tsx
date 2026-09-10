@@ -18,40 +18,40 @@ const COPY: Record<Variant, { fr: Banner; en: Banner }> = {
     fr: {
       title: "Pas sûr de la stack à choisir ?",
       subtitle:
-        "Auditez votre site actuel et obtenez une recommandation d'architecture en 2 minutes.",
-      cta: "Auditer mon site",
+        "Réservez un audit gratuit et obtenez une recommandation d'architecture personnalisée.",
+      cta: "Réserver mon audit gratuit",
     },
     en: {
       title: "Not sure which stack to choose?",
       subtitle:
-        "Audit your current site and get an architecture recommendation in 2 minutes.",
-      cta: "Audit my site",
+        "Book a free audit and get a personalized architecture recommendation.",
+      cta: "Book my free audit",
     },
   },
   headless: {
     fr: {
       title: "Le Headless est-il pertinent pour votre site ?",
       subtitle:
-        "Testez votre site : le diagnostic indique si une migration en vaut la peine.",
-      cta: "Tester mon site",
+        "Réservez un audit gratuit : on regarde ensemble si une migration en vaut la peine.",
+      cta: "Réserver mon audit",
     },
     en: {
       title: "Is Headless relevant for your site?",
       subtitle:
-        "Test your site: the diagnosis tells you whether a migration is worth it.",
-      cta: "Test my site",
+        "Book a free audit: we'll look together at whether a migration is worth it.",
+      cta: "Book my audit",
     },
   },
   caseStudy: {
     fr: {
       title: "Votre site se compare-t-il à ce projet ?",
-      subtitle: "Lancez un diagnostic gratuit et situez votre site en 2 minutes.",
-      cta: "Comparer mon site",
+      subtitle: "Réservez un audit gratuit et situez votre site par rapport à ce projet.",
+      cta: "Réserver mon audit gratuit",
     },
     en: {
       title: "How does your site compare to this project?",
-      subtitle: "Run a free diagnosis and benchmark your site in 2 minutes.",
-      cta: "Compare my site",
+      subtitle: "Book a free audit and see how your site compares to this project.",
+      cta: "Book my free audit",
     },
   },
 };

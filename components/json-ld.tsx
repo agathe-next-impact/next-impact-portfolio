@@ -20,19 +20,22 @@ function schemaLocale(locale?: string): SchemaLocale {
 }
 
 /**
- * Offre récurrente « CTO externalisé » (6e ligne du catalogue, arbitrage du
- * 2026-09-07). Déclarée une seule fois : les deux OfferCatalog du site
- * (ContactPage et LocalBusiness de la home) la réutilisent, donc un seul endroit
- * à corriger. Prix exprimé en UnitPriceSpecification parce qu'il est mensuel et
- * plancher (« à partir de ») : `minPrice` + `referenceQuantity` en mois.
+ * Offre récurrente « Expert technique externalisé » (6e ligne du catalogue,
+ * arbitrage du 2026-09-07 ; renommée « CTO externalisé » → « Expert technique
+ * externalisé » le 2026-09-10, ADR-010). Déclarée une seule fois : les deux
+ * OfferCatalog du site (ContactPage et LocalBusiness de la home) la
+ * réutilisent, donc un seul endroit à corriger. Prix exprimé en
+ * UnitPriceSpecification parce qu'il est mensuel et plancher (« à partir de ») :
+ * `minPrice` + `referenceQuantity` en mois.
  *
  * Le libellé suit la langue de la page : sur /en, la page affiche
- * « Fractional CTO », le schéma doit dire la même chose que le visible.
+ * « Outsourced technical expert », le schéma doit dire la même chose que le
+ * visible.
  */
 const CTO_OFFER = (locale: SchemaLocale) =>
   ({
     "@type": "Offer",
-    name: locale === "en" ? "Fractional CTO" : "CTO externalisé",
+    name: locale === "en" ? "Outsourced technical expert" : "Expert technique externalisé",
     description:
       locale === "en"
         ? `Technical direction on shared time for a mid-sized company's customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. Two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month. ${CTO_MIN_MONTHS}-month commitment, then rolling monthly.`
@@ -97,7 +100,9 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
           : "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
         price: "150",
         priceCurrency: "EUR",
-        url: url("/conseil"),
+        // Ancre de la section d'offre (§ 04) plutôt que la page nue : un moteur
+        // de réponse cite alors l'endroit exact où le prix est affiché.
+        url: url("/conseil#choix-techno-ia"),
       },
       {
         "@type": "Offer",
@@ -107,7 +112,7 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
           : "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
         price: "650",
         priceCurrency: "EUR",
-        url: url("/conseil"),
+        url: url("/conseil#architecture-projet-ia"),
       },
       {
         "@type": "Offer",
@@ -224,7 +229,7 @@ export function OrganizationJsonLd() {
     serviceType: [
       "Conseil refonte de site WordPress",
       "Audit de site web et roadmap",
-      "CTO externalisé (direction technique à temps partagé)",
+      "Expert technique externalisé (direction technique à temps partagé)",
       "Refonte WordPress optimisée",
       "Refonte WordPress headless",
       "Création de sites web WordPress",
@@ -410,6 +415,7 @@ export function ServiceJsonLd({
   serviceType,
   url,
   offer,
+  offerCatalog,
   locale,
 }: {
   name: string;
@@ -434,6 +440,30 @@ export function ServiceJsonLd({
     minPrice: number;
     priceCurrency?: string;
     billingUnitCode?: string;
+  };
+  /**
+   * Catalogue des offres réellement PRÉSENTÉES sur la page, quand il y en a
+   * plusieurs (schema.org `OfferCatalog`). Chaque entrée porte l'URL de sa
+   * section ou de sa page canonique : une offre détaillée ailleurs (l'expert
+   * technique externalisé, vendu sur `/cto-externalise`) pointe vers cette
+   * page-là au lieu de dupliquer son nœud. Ne jamais déclarer ici un prix qui
+   * n'est pas visible sur la page.
+   */
+  offerCatalog?: {
+    name: string;
+    items: Array<{
+      name: string;
+      description?: string;
+      /** Ancre de section ou route interne ; absolue acceptée. */
+      url: string;
+      /** Montant exact affiché. Exclusif de `minPrice`. */
+      price?: number;
+      /** Plancher tarifaire, quand la page écrit « à partir de ». */
+      minPrice?: number;
+      priceCurrency?: string;
+      /** UN/CEFACT (ex. « MON » = par mois), pour un prix récurrent seulement. */
+      billingUnitCode?: string;
+    }>;
   };
 }) {
   const localePrefix = locale && locale !== "fr" ? `/${locale}` : "";
@@ -478,6 +508,46 @@ export function ServiceJsonLd({
                   }
                 : {}),
             },
+          },
+        }
+      : {}),
+    ...(offerCatalog
+      ? {
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: offerCatalog.name,
+            itemListElement: offerCatalog.items.map((item) => {
+              const currency = item.priceCurrency ?? "EUR";
+              return {
+                "@type": "Offer",
+                name: item.name,
+                url: item.url.startsWith("http")
+                  ? item.url
+                  : `${siteConfig.url}${localePrefix}${item.url}`,
+                priceCurrency: currency,
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  priceCurrency: currency,
+                  ...(item.price !== undefined ? { price: item.price } : {}),
+                  ...(item.minPrice !== undefined ? { minPrice: item.minPrice } : {}),
+                  valueAddedTaxIncluded: false,
+                  ...(item.billingUnitCode
+                    ? {
+                        referenceQuantity: {
+                          "@type": "QuantitativeValue",
+                          value: 1,
+                          unitCode: item.billingUnitCode,
+                        },
+                      }
+                    : {}),
+                },
+                itemOffered: {
+                  "@type": "Service",
+                  name: item.name,
+                  ...(item.description ? { description: item.description } : {}),
+                },
+              };
+            }),
           },
         }
       : {}),
@@ -555,8 +625,8 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
     description: isEn
-      ? `Talk about a redesign project: advisory call (€150), audit + roadmap (€650), fractional CTO (from €${CTO_PRICE_VALUE}/month), WordPress, headless or web app redesign, or a free diagnostic.`
-      : `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), CTO externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
+      ? `Talk about a redesign project: advisory call (€150), audit + roadmap (€650), outsourced technical expert (from €${CTO_PRICE_VALUE}/month), WordPress, headless or web app redesign, or a free diagnostic.`
+      : `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
     url: `${siteConfig.url}${localePath(lang, "/contact")}`,
     inLanguage: isEn ? "en-US" : "fr-FR",
     mainEntity: {
@@ -615,8 +685,8 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
           name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
           target: `${siteConfig.url}${localePath(lang, "/contact")}`,
           description: isEn
-            ? "Redesign advisory call, audit + roadmap, fractional CTO, redesign project (WordPress, headless or web app) or free diagnostic"
-            : "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+            ? "Redesign advisory call, audit + roadmap, outsourced technical expert, redesign project (WordPress, headless or web app) or free diagnostic"
+            : "Visio conseil refonte, audit + roadmap, expert technique externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
         },
       ],
       hasOfferCatalog: OFFER_CATALOG(lang),
@@ -899,7 +969,7 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         serviceType: [
           "Conseil refonte de site WordPress",
           "Audit de site web et roadmap",
-          "CTO externalisé (direction technique à temps partagé)",
+          "Expert technique externalisé (direction technique à temps partagé)",
           "Refonte WordPress optimisée",
           "Refonte WordPress headless",
           "Création de sites web WordPress",
@@ -942,8 +1012,8 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
             name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
             target: `${baseUrl}${localePath(lang, "/contact")}`,
             description: isEn
-              ? "Redesign advisory call, audit + roadmap, fractional CTO, redesign project (WordPress, headless or web app) or free diagnostic"
-              : "Visio conseil refonte, audit + roadmap, CTO externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+              ? "Redesign advisory call, audit + roadmap, outsourced technical expert, redesign project (WordPress, headless or web app) or free diagnostic"
+              : "Visio conseil refonte, audit + roadmap, expert technique externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
           },
         ],
       },

@@ -23,7 +23,7 @@ const FR: HomeContent = {
       "Next Impact refait les sites WordPress qui vieillissent : rapides et modernes, sans tout reconstruire.",
       "Trois trajectoires : consolider (WordPress optimisé, dès 2 250 € HT), découpler (WordPress headless, recommandée, dès 4 000 € HT), refonder (web app, dès 6 500 € HT).",
       "Prix et délai écrits avant de commencer, 6 à 10 semaines, performance mesurée avant et après.",
-      "En amont : visio conseil refonte (150 € HT) ou audit + roadmap (650 € HT) ; le diagnostic de site en 2 minutes est gratuit.",
+      "En amont : visio conseil refonte (150 € HT) ou audit + roadmap (650 € HT) ; l'audit de site est gratuit, sur rendez-vous.",
     ],
   },
   faq: {
@@ -33,7 +33,7 @@ const FR: HomeContent = {
       {
         question: "Mon site WordPress est lent : refonte ou optimisation ?",
         answer:
-          "Cela dépend de la cause. Si le problème vient du thème et de l'empilement de plugins, une refonte WordPress optimisée suffit (à partir de 2 250 € HT). Si le site est lent parce que tout passe par WordPress à chaque visite, le découplage headless change la donne (à partir de 4 000 € HT). Le diagnostic en 2 minutes donne une première orientation ; la visio conseil (150 € HT) tranche sur pièces.",
+          "Cela dépend de la cause. Si le problème vient du thème et de l'empilement de plugins, une refonte WordPress optimisée suffit (à partir de 2 250 € HT). Si le site est lent parce que tout passe par WordPress à chaque visite, le découplage headless change la donne (à partir de 4 000 € HT). L'audit gratuit donne une première orientation ; la visio conseil (150 € HT) tranche sur pièces.",
       },
       {
         question: "Qu'est-ce qu'une refonte headless, concrètement ?",
@@ -53,7 +53,7 @@ const FR: HomeContent = {
       {
         question: "Par où commencer : visio à 150 € ou audit à 650 € ?",
         answer:
-          "Si vous hésitez encore sur la direction, la visio conseil refonte (150 € HT) tranche en une heure, avec un avis écrit sous 48 h ; elle est déduite du devis si un projet démarre sous 30 jours. Si la décision engage un budget, l'audit + roadmap (650 € HT) livre un rapport d'audit, des préconisations chiffrées et un plan par étapes, utilisables même avec un autre prestataire. Et le diagnostic en 2 minutes, gratuit, donne la première orientation.",
+          "Si vous hésitez encore sur la direction, la visio conseil refonte (150 € HT) tranche en une heure, avec un avis écrit sous 48 h ; elle est déduite du devis si un projet démarre sous 30 jours. Si la décision engage un budget, l'audit + roadmap (650 € HT) livre un rapport d'audit, des préconisations chiffrées et un plan par étapes, utilisables même avec un autre prestataire. Et l'audit gratuit du site donne la première orientation.",
       },
     ],
   },
@@ -66,7 +66,7 @@ const EN: HomeContent = {
       "Next Impact redesigns aging WordPress sites: fast and modern, without rebuilding everything.",
       "Three trajectories: consolidate (optimized WordPress, from €2,250 excl. VAT), decouple (headless WordPress, recommended, from €4,000 excl. VAT), rebuild (web app, from €6,500 excl. VAT).",
       "Price and timeline in writing before we start, 6 to 10 weeks, performance measured before and after.",
-      "Upstream: redesign advisory call (€150 excl. VAT) or audit + roadmap (€650 excl. VAT); the 2-minute site diagnostic is free.",
+      "Upstream: redesign advisory call (€150 excl. VAT) or audit + roadmap (€650 excl. VAT); the site audit is free, by appointment.",
     ],
   },
   faq: {
@@ -76,7 +76,7 @@ const EN: HomeContent = {
       {
         question: "My WordPress site is slow: redesign or optimization?",
         answer:
-          "It depends on the cause. If the problem is the theme and the plugin pile-up, an optimized WordPress redesign is enough (from €2,250 excl. VAT). If the site is slow because everything goes through WordPress on every visit, headless decoupling changes the picture (from €4,000 excl. VAT). The 2-minute diagnostic gives a first direction; the advisory call (€150 excl. VAT) settles it on evidence.",
+          "It depends on the cause. If the problem is the theme and the plugin pile-up, an optimized WordPress redesign is enough (from €2,250 excl. VAT). If the site is slow because everything goes through WordPress on every visit, headless decoupling changes the picture (from €4,000 excl. VAT). The free audit gives a first direction; the advisory call (€150 excl. VAT) settles it on evidence.",
       },
       {
         question: "What is a headless redesign, concretely?",
@@ -96,7 +96,7 @@ const EN: HomeContent = {
       {
         question: "Where to start: €150 call or €650 audit?",
         answer:
-          "If you are still weighing the direction, the redesign advisory call (€150 excl. VAT) settles it in one hour, with a written opinion within 48h; it is deducted from the quote if a project starts within 30 days. If the decision commits a budget, the audit + roadmap (€650 excl. VAT) delivers an audit report, costed recommendations and a step-by-step plan, usable even with another vendor. And the free 2-minute diagnostic gives the first direction.",
+          "If you are still weighing the direction, the redesign advisory call (€150 excl. VAT) settles it in one hour, with a written opinion within 48h; it is deducted from the quote if a project starts within 30 days. If the decision commits a budget, the audit + roadmap (€650 excl. VAT) delivers an audit report, costed recommendations and a step-by-step plan, usable even with another vendor. And the free site audit gives the first direction.",
       },
     ],
   },

@@ -260,7 +260,7 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <Link href="/audit-site-web" className={BTN_PRIMARY}>
-            {isEn ? "And yours? Audit — 2 min" : "Et le vôtre ? Audit — 2 min"}
+            {isEn ? "And yours? Book a free audit" : "Et le vôtre ? Réservez un audit gratuit"}
             <ArrowRight size={14} />
           </Link>
         </div>

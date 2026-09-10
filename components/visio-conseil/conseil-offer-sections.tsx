@@ -10,19 +10,22 @@ import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 import { OFFERS, type ConseilOffer } from "@/lib/visio-conseil";
 
-// Index affiché (№ 0X) de chaque section d'offre, dans l'ordre des deux offres
-// de conseil ponctuel. Les sections servent d'ancres au mega menu et au bandeau
-// du héros (#choix-techno-ia, #architecture-projet-ia). Le CTO externalisé n'est
-// PAS une section d'ici : offre récurrente, sur sa propre page /cto-externalise.
-const SECTION_INDEX = ["№ 04", "№ 05"];
+// Index affiché (№ 0X) de chaque section d'offre, dans l'ordre du catalogue
+// Conseil : les deux offres ponctuelles, puis l'accompagnement récurrent. Les
+// sections servent d'ancres au mega menu et au bandeau du héros
+// (#choix-techno-ia, #architecture-projet-ia, #cto-externalise) : toute
+// renumérotation ici doit rester cohérente avec lib/mega-menu.ts.
+const SECTION_INDEX = ["№ 04", "№ 05", "№ 06"];
 
 function OfferSection({
   offer,
   index,
+  tone,
   isEn,
 }: {
   offer: ConseilOffer;
   index: string;
+  tone: "obsidian" | "jet";
   isEn: boolean;
 }) {
   const copy = isEn ? offer.en : offer.fr;
@@ -45,19 +48,19 @@ function OfferSection({
   );
 
   const cta = offer.internalCta ? (
-    <Link href={tier.calendlyUrl as Parameters<typeof Link>[0]["href"]} className={ctaClass}>
+    <Link href={tier.ctaHref as Parameters<typeof Link>[0]["href"]} className={ctaClass}>
       {ctaLabel}
       <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
     </Link>
   ) : (
-    <a href={tier.calendlyUrl} target="_blank" rel="noopener noreferrer" className={ctaClass}>
+    <a href={tier.ctaHref} target="_blank" rel="noopener noreferrer" className={ctaClass}>
       {ctaLabel}
       <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
     </a>
   );
 
   return (
-    <BlueprintSection id={offer.id} tone={featured ? "jet" : "obsidian"} className="scroll-mt-24">
+    <BlueprintSection id={offer.id} tone={tone} className="scroll-mt-24">
       {featured && (
         <span className="absolute inset-x-0 top-0 z-10 h-0.5 bg-accent-secondary" aria-hidden />
       )}
@@ -79,6 +82,11 @@ function OfferSection({
                 {isEn ? "Deducted from your quote" : "Déduit du devis"}
               </span>
             )}
+            {offer.recurring && (
+              <span className="inline-flex items-center border border-dark-gray px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                {isEn ? "Monthly retainer" : "Abonnement mensuel"}
+              </span>
+            )}
           </div>
         </div>
         <div className="shrink-0 md:text-right">
@@ -89,11 +97,11 @@ function OfferSection({
           )}
           <div className="flex items-baseline gap-2 md:justify-end">
             <span className="text-xl font-light leading-none tracking-tight text-accent-secondary md:text-2xl">
-              {tier.price}
+              {isEn ? tier.price.en : tier.price.fr}
             </span>
             {!tier.noHt && (
               <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
-                HT
+                {isEn ? "excl. VAT" : "HT"}
               </span>
             )}
           </div>
@@ -144,9 +152,11 @@ function OfferSection({
   );
 }
 
-// Une section par offre de conseil ponctuel, dans l'ordre du catalogue. Chaque
-// section porte l'id (#choix-techno-ia / #architecture-projet-ia) qui
-// sert d'ancre au mega menu et au bandeau du héros.
+// Une section par offre du catalogue Conseil, dans l'ordre d'engagement
+// croissant. Chaque section porte l'id (#choix-techno-ia /
+// #architecture-projet-ia / #cto-externalise) qui sert d'ancre au mega menu et
+// au bandeau du héros. Les fonds alternent jet / obsidian pour que deux
+// sections voisines ne se confondent pas.
 export function ConseilOfferSections() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
@@ -156,7 +166,12 @@ export function ConseilOfferSections() {
       {OFFERS.map((offer, i) => (
         <React.Fragment key={offer.id}>
           {i > 0 && <Separator />}
-          <OfferSection offer={offer} index={SECTION_INDEX[i] ?? `№ ${4 + i}`} isEn={isEn} />
+          <OfferSection
+            offer={offer}
+            index={SECTION_INDEX[i] ?? `№ ${4 + i}`}
+            tone={i % 2 === 0 ? "jet" : "obsidian"}
+            isEn={isEn}
+          />
         </React.Fragment>
       ))}
     </>

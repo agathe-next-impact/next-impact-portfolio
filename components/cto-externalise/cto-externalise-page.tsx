@@ -1,6 +1,6 @@
 "use client";
 
-// Page « CTO externalisé » — offre récurrente de direction technique à temps
+// Page « Expert technique externalisé » — offre récurrente de direction technique à temps
 // partagé. Ordre de conviction de la charte (§5) : douleur, promesse, rôle
 // expliqué, paliers, livrables, périmètre, bannière « Commencer », FAQ.
 // Tout le texte vient de lib/cto-externalise.ts (source unique) ; seul l'habillage vit ici.
@@ -43,8 +43,8 @@ export default function CtoExternalisePage() {
         index="№ 01"
         kicker={
           isEn
-            ? "Fractional CTO · Shared technical direction"
-            : "CTO externalisé · Direction technique à temps partagé"
+            ? "Outsourced technical expert · Shared technical direction"
+            : "Expert technique externalisé · Direction technique à temps partagé"
         }
         title={
           isEn ? (
@@ -57,7 +57,7 @@ export default function CtoExternalisePage() {
             </>
           ) : (
             <>
-              CTO - Direction technique,{" "}
+              Direction technique,{" "}
               <em className="font-normal not-italic text-accent-secondary">
                 externalisée
               </em>
@@ -67,8 +67,8 @@ export default function CtoExternalisePage() {
         }
         description={
           isEn
-            ? "A fractional CTO is technical direction on shared time for your customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. A few days a month, without hiring."
-            : "Le CTO externalisé, c'est une direction technique à temps partagé pour votre numérique visible : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé. Quelques jours par mois, sans recruter."
+            ? "An outsourced technical expert is technical direction on shared time for your customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. A few days a month, without hiring."
+            : "L'expert technique externalisé, c'est une direction technique à temps partagé pour votre numérique visible : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé. Quelques jours par mois, sans recruter."
         }
         actions={
           <>
@@ -113,7 +113,7 @@ export default function CtoExternalisePage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 02 — Ce qu'est un CTO externalisé, montré par le COMMENT : le mois
+      {/* § 02 — Ce qu'est un expert technique externalisé, montré par le COMMENT : le mois
           type en timeline, une étape par rythme. Arbitrage : la section ne
           plaide pas (« pourquoi ») et ne trie pas (« pour qui »), elle montre le
           fonctionnement. Le « pour qui » et le « pourquoi » se traitent en FAQ.
@@ -122,7 +122,7 @@ export default function CtoExternalisePage() {
         <SectionHeading
           index="№ 02"
           kicker={isEn ? "The role, in practice" : "Le service"}
-          title={isEn ? "What a fractional CTO is" : "Le CTO externalisé, en pratique"}
+          title={isEn ? "What an outsourced technical expert is" : "L'expert technique externalisé, en pratique"}
           description={
             isEn
               ? "Technical direction on shared time, for a company that has none in-house. Here is the month, step by step, once it is running."
@@ -389,7 +389,7 @@ export default function CtoExternalisePage() {
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link href="/audit-site-web" className={HERO_BTN_SECONDARY}>
-              {isEn ? "Check my site in 2 minutes" : "Diagnostic de mon site en 2 min"}
+              {isEn ? "Book my free audit" : "Réserver mon audit gratuit"}
             </Link>
           </div>
         </Reveal>

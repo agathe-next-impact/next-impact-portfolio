@@ -18,8 +18,9 @@ const NAV_LINKS = [
   { href: "/confidentialite",     key: "privacy" },
 ] as const;
 
-// Charte §6 Diagnostic : la page /audit-site-web vit dans la navigation
-// principale (bouton du header), plus dans le footer.
+// /audit-site-web redirige désormais (301) vers une prise de RDV Calendly
+// (voir next.config.mjs, décision 2026-09-10) : ce n'est plus un lien de ce
+// footer, il vit sur la home et certaines pages d'offre.
 const RESOURCE_LINKS = [
   { href: "/conseil", key: "visioConseil" },
   { href: "/cto-externalise", key: "ctoExternalise" },

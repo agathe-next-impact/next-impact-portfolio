@@ -15,6 +15,7 @@ import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { PROFILES } from "@/lib/documentation-profiles";
 import { MEGA_SECTIONS } from "@/lib/mega-menu";
 import { MegaMenuPanel } from "@/components/mega-menu-panel";
+import { useSamePageAnchor } from "@/hooks/use-same-page-anchor";
 
 type NavHref = Parameters<typeof Link>[0]["href"];
 
@@ -28,7 +29,7 @@ type NavHref = Parameters<typeof Link>[0]["href"];
 // Nav : Veille · Conseil · Services · Études de cas · À propos.
 // La visio conseil est portée par le bouton CTA ; le diagnostic reste accessible
 // depuis le footer et la home.
-// Le CTO externalisé (offre récurrente, /cto-externalise) n'a pas d'entrée de
+// L'expert technique externalisé (offre récurrente, /cto-externalise) n'a pas d'entrée de
 // premier niveau : il vit dans le mega menu « Conseil » (lib/mega-menu.ts) et
 // dans les bandeaux de pied de page de /conseil et /solutions-web. C'est une
 // offre de fin de parcours, pas une porte d'entrée froide.
@@ -40,6 +41,10 @@ const MEGA_KEYS = ["veille", "conseil", "services"] as const;
 const NAV_PLAIN_BEFORE = [{ key: "caseStudies", href: "/etudes-de-cas" }] as const;
 const NAV_AFTER = [{ key: "about", href: "/a-propos" }] as const;
 
+// Destination du CTA (desktop et mobile) : prise de rendez-vous Calendly
+// directe, plutôt qu'un renvoi vers /conseil. Lien externe (2026-09-10).
+const CTA_HREF = "https://calendly.com/agathe-next-impact/prise-de-contact-conseil";
+
 export default function Header() {
   const t = useTranslations("nav");
   const locale = useLocale() as Locale;
@@ -47,6 +52,11 @@ export default function Header() {
   const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = React.useState<string | null>(null);
   const { profileId, clearProfile } = useDocumentationMode();
+
+  // Les destinations du mega menu et du CTA sont des ancres d'offre : une fois
+  // sur la page cible, c'est ce handler qui scrolle (le Link next-intl, lui, ne
+  // ferait qu'une navigation « même route » sans bouger la vue).
+  const scrollToAnchor = useSamePageAnchor();
 
   const closeMenu = React.useCallback(() => setActiveMenu(null), []);
 
@@ -155,14 +165,16 @@ export default function Header() {
 
             <ThemeToggle />
 
-            {/* CTA unique : la visio conseil prend la place du contact. */}
-            <Link
-              href="/conseil#choix-techno-ia"
+            {/* CTA unique : prise de RDV Calendly directe. */}
+            <a
+              href={CTA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
               onMouseEnter={closeMenu}
               className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("visioConseil")}
-            </Link>
+            </a>
           </div>
 
           {/* Mobile right */}
@@ -262,7 +274,10 @@ export default function Header() {
                             ) : (
                               <Link
                                 href={item.href as NavHref}
-                                onClick={() => setMobileOpen(false)}
+                                onClick={(e) => {
+                                  scrollToAnchor(item.href, e);
+                                  setMobileOpen(false);
+                                }}
                                 className="flex items-center gap-1 py-2.5 text-sm text-foreground/90 no-underline transition-colors hover:text-accent-secondary"
                               >
                                 {item.label[locale]}
@@ -317,15 +332,17 @@ export default function Header() {
                 </button>
               )}
 
-              {/* CTA unique : la visio conseil, comme sur desktop */}
+              {/* CTA unique : prise de RDV Calendly, comme sur desktop */}
               <div className="flex flex-col gap-3 p-5">
-                <Link
-                  href="/conseil#choix-techno-ia"
+                <a
+                  href={CTA_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex min-h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
                 >
                   {t("visioConseil")}
-                </Link>
+                </a>
               </div>
             </nav>
           </div>

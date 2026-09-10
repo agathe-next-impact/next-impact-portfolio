@@ -748,12 +748,12 @@ export default async function WordPressHeadlessPillarPage({
               </h2>
               <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
                 {isEn
-                  ? "Free AI-assisted audit of your existing WordPress: Core Web Vitals, security exposure, editorial weight, headless ROI verdict. No commitment, no follow-up sales call."
-                  : "Diagnostic Web & IA de votre WordPress actuel : Core Web Vitals, exposition sécurité, charge éditoriale, verdict de pertinence du headless. Sans engagement, sans relance commerciale."}
+                  ? "Free Web & AI diagnostic of your existing WordPress, live with Agathe: Core Web Vitals, security exposure, editorial weight, opinion on headless relevance. Free, no commitment."
+                  : "Diagnostic Web & IA de votre WordPress actuel, en direct avec Agathe : Core Web Vitals, exposition sécurité, charge éditoriale, avis sur la pertinence du headless. Gratuit, sans engagement."}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/audit-site-web" className={BTN_PRIMARY}>
-                  {isEn ? "Run the free audit" : "Lancer l'audit gratuit"}
+                  {isEn ? "Book the free audit" : "Réserver l'audit gratuit"}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/contact" className={BTN_SECONDARY}>

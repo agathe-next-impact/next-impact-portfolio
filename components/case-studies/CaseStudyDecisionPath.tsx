@@ -40,8 +40,11 @@ export default async function CaseStudyDecisionPath({
   });
 
   // Prix tiré de la source canonique des offres /conseil — jamais dupliqué ici.
+  // Il est bilingue (« 650 € » / « €650 ») : prendre la variante de la locale.
   const conseilPrice = offreConseil
-    ? OFFERS.find((o) => o.id === CONSEIL_OFFER_ID[offreConseil])?.tiers[0]?.price
+    ? OFFERS.find((o) => o.id === CONSEIL_OFFER_ID[offreConseil])?.tiers[0]?.price[
+        locale === "en" ? "en" : "fr"
+      ]
     : undefined;
 
   const budgetText = budgetIndicatif

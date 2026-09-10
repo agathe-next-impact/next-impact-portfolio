@@ -1,11 +1,19 @@
 "use client";
 
-// Page « Conseil » — porte d'entrée payante à faible engagement. DEUX offres
-// ponctuelles seulement (Visio conseil refonte 150 € · Audit + roadmap 650 €,
-// charte §6) : l'offre récurrente « CTO externalisé » vit sur sa propre page
-// (/cto-externalise, arbitrage du 2026-09-07) et n'est ici que signalée par un
-// bandeau de renvoi, en dernière position — jamais vendue dans les cartes.
-// La page passe par les trois trajectoires et deux CTA de deux températures.
+// Page « Conseil » — porte d'entrée payante à faible engagement. Les TROIS
+// lignes Conseil du catalogue, dans l'ordre d'engagement croissant : Visio
+// conseil refonte 150 €, Audit + roadmap 650 €, puis l'expert technique
+// externalisé (récurrent, à partir de 900 €/mois ; renommé de « CTO
+// externalisé » le 2026-09-10, ADR-010).
+//
+// Arbitrage du 2026-09-10 (ADR-009) : l'expert technique externalisé reprend
+// une section d'offre en propre, à la place du bandeau de renvoi. Il reste
+// VENDU sur sa page dédiée /cto-externalise, où partent son CTA, l'item du
+// mega menu et la FAQ : la section d'ici présente, elle ne conclut pas.
+// Garde-fous inchangés (charte §5) : offre récurrente jamais en accroche,
+// jamais en CTA froid ; le héros et son CTA principal restent sur la visio
+// conseil.
+//
 // DS Blueprint, i18n inline, a11y.
 
 import { useLocale } from "next-intl";
@@ -35,8 +43,8 @@ import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-s
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ConstellationTechno } from "@/components/visuals/constellation-techno";
 import { ConseilOfferSections } from "@/components/visio-conseil/conseil-offer-sections";
-import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner";
-import { FAQ } from "@/lib/visio-conseil";
+import { CONSEIL_TLDR, FAQ } from "@/lib/visio-conseil";
+import { CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 
 export default function VisioConseilPage() {
   const locale = useLocale() as Locale;
@@ -46,7 +54,7 @@ export default function VisioConseilPage() {
     ? [
         [
           "You choose",
-          "Pick the depth that matches the stakes: a one-hour call to settle a direction, or a full audit with its roadmap.",
+          "Pick the depth that matches the stakes: a one-hour call to settle a direction, or a full audit with its roadmap. The ongoing retainer always starts with that audit.",
         ],
         [
           "You send context",
@@ -60,7 +68,7 @@ export default function VisioConseilPage() {
     : [
         [
           "Vous choisissez",
-          "Sélectionnez la profondeur adaptée à l'enjeu : une heure de visio pour trancher une direction, ou l'audit complet avec sa roadmap.",
+          "Sélectionnez la profondeur adaptée à l'enjeu : une heure de visio pour trancher une direction, ou l'audit complet avec sa roadmap. L'accompagnement récurrent, lui, démarre toujours par cet audit.",
         ],
         [
           "Vous envoyez le contexte",
@@ -91,9 +99,12 @@ export default function VisioConseilPage() {
         [ShieldCheck, "Report ou annulation possible jusqu'à 24 h avant"],
       ];
 
-  // Aperçu des deux offres ponctuelles dans le héros — toutes rendues sous
-  // #conseils. Le CTO externalisé n'y figure pas : offre récurrente de fin de
-  // parcours, signalée par le bandeau de pied de page (charte, fiche /conseil).
+  // Aperçu du catalogue Conseil dans le héros — trois ancres vers les sections
+  // d'offre plus bas. L'expert technique externalisé y figure en DERNIER et
+  // sans mention « recommandée » : c'est un aperçu du catalogue, pas
+  // l'accroche. L'accroche (titre, description, CTA principal) reste sur la
+  // visio conseil, offre froide et ponctuelle, comme l'exige la charte §5 pour
+  // l'offre récurrente.
   const heroOffers: HeroOffer[] = isEn
     ? [
         {
@@ -108,6 +119,12 @@ export default function VisioConseilPage() {
           price: "€650",
           benefit: "The complete assessment and the roadmap, in writing.",
           href: "#architecture-projet-ia",
+        },
+        {
+          name: "Outsourced technical expert",
+          price: `from €${CTO_PRICE_VALUE}/mo`,
+          benefit: "Technical direction on shared time, month after month.",
+          href: "#cto-externalise",
         },
       ]
     : [
@@ -124,6 +141,12 @@ export default function VisioConseilPage() {
           benefit: "L'état des lieux complet et la feuille de route, par écrit.",
           href: "#architecture-projet-ia",
         },
+        {
+          name: "Expert technique externalisé",
+          price: `dès ${CTO_PRICE_VALUE} €/mois`,
+          benefit: "Une direction technique à temps partagé, mois après mois.",
+          href: "#cto-externalise",
+        },
       ];
 
   return (
@@ -133,8 +156,8 @@ export default function VisioConseilPage() {
         index="№ 01"
         kicker={
           isEn
-            ? "Redesign advice · Two entry points"
-            : "Conseil refonte · Deux portes d'entrée"
+            ? "Redesign advice · One-off or ongoing"
+            : "Conseil refonte · Ponctuel ou récurrent"
         }
         backdrop={
           /* Constellation projet ↔ technos : la métaphore du conseil. */
@@ -163,8 +186,8 @@ export default function VisioConseilPage() {
         }
         description={
           isEn
-            ? "Your site is aging and the trajectory is still open: stay, decouple or rebuild. Two one-off advisory formats, before any quote and before any line of code."
-            : "Votre site vieillit et la trajectoire reste à trancher : rester, découpler ou refonder. Deux formats de conseil ponctuel, avant tout devis et avant toute ligne de code."
+            ? "Your site is aging and the trajectory is still open: stay, decouple or rebuild. Two one-off advisory formats before any quote and any line of code, and an ongoing retainer when the decisions come back every month."
+            : "Votre site vieillit et la trajectoire reste à trancher : rester, découpler ou refonder. Deux formats de conseil ponctuel avant tout devis et toute ligne de code, et un accompagnement récurrent quand les décisions reviennent tous les mois."
         }
         actions={
           <>
@@ -187,12 +210,43 @@ export default function VisioConseilPage() {
         }
       >
         <HeroOfferStrip
-          label={isEn ? "Two advisory formats" : "Deux formats de conseil"}
+          label={
+            isEn
+              ? "Three offers, increasing commitment"
+              : "Trois offres, un engagement croissant"
+          }
           offers={heroOffers}
           recommendedLabel={isEn ? "Recommended" : "Recommandée"}
           ctaLabel={isEn ? "View" : "Voir"}
         />
       </PageHero>
+
+      {/* § 01b — « En bref » : TL;DR autoportant, citable tel quel par les
+          moteurs de réponse (même gabarit que la home, /a-propos et
+          /cto-externalise). Le texte vient de CONSEIL_TLDR : le rendu visible et
+          les fichiers llms disent la même chose, et les prix y sont dérivés du
+          catalogue, jamais recopiés. Numéroté « 01b » pour ne pas décaler la
+          numérotation des sections fixée par l'ADR-009. */}
+      <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
+        <Reveal
+          as="aside"
+          className="conseil-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8"
+        >
+          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+            {isEn ? CONSEIL_TLDR.label.en : CONSEIL_TLDR.label.fr}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {CONSEIL_TLDR.lines.map((line) => (
+              <li
+                key={line.fr}
+                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+              >
+                {isEn ? line.en : line.fr}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </BlueprintSection>
       <Separator />
 
       {/* § 02 — Le besoin, l'objectif, la solution du conseil */}
@@ -222,8 +276,8 @@ export default function VisioConseilPage() {
               Icon: AlertTriangle,
               label: isEn ? "The need" : "Le besoin",
               desc: isEn
-                ? "Your WordPress site is aging and the trajectory is still open: stay, decouple or rebuild. Each direction commits months of work and a budget — getting it wrong is costly."
-                : "Votre site WordPress vieillit et la trajectoire reste ouverte : rester, découpler ou refonder. Chaque direction engage des mois de travail et un budget — se tromper coûte cher.",
+                ? "Your WordPress site is aging and the trajectory is still open: stay, decouple or rebuild. Each direction commits months of work and a budget: getting it wrong is costly."
+                : "Votre site WordPress vieillit et la trajectoire reste ouverte : rester, découpler ou refonder. Chaque direction engage des mois de travail et un budget : se tromper coûte cher.",
             },
             {
               Icon: Target,
@@ -270,9 +324,9 @@ export default function VisioConseilPage() {
 
       <Separator />
 
-      {/* § 03 — Cadrage : les deux offres de conseil ponctuel + réassurance.
-          L'offre récurrente (CTO externalisé) n'est pas vendue ici : elle vit
-          sur /cto-externalise et n'est signalée qu'en bandeau de pied de page. */}
+      {/* § 03 — Cadrage : les trois offres du catalogue Conseil + réassurance.
+          L'offre récurrente (Expert technique externalisé) est présentée en
+          § 06, mais reste vendue sur sa page dédiée : son CTA y renvoie. */}
       <BlueprintSection
         id="conseils"
         tone="obsidian"
@@ -280,22 +334,30 @@ export default function VisioConseilPage() {
       >
         <SectionHeading
           index="№ 03"
-          kicker={isEn ? "Two advisory offers" : "Deux offres de conseil"}
+          kicker={isEn ? "Three advisory offers" : "Trois offres de conseil"}
           title={
-            isEn
-              ? "The call settles, the audit documents"
-              : "La visio tranche, l'audit documente"
+            isEn ? (
+              <>
+                The call settles, the audit documents,{" "}
+                <span className="text-accent-secondary">the expert steers</span>
+              </>
+            ) : (
+              <>
+                La visio tranche, l'audit documente,{" "}
+                <span className="text-accent-secondary">l'expert pilote</span>
+              </>
+            )
           }
           description={
             isEn
-              ? "The cost of a wrong trajectory is counted in months; the cost of the advice, in euros. One hour to settle a direction, or a full audit with costed recommendations and a step-by-step roadmap."
-              : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, ou un audit complet avec préconisations chiffrées et roadmap par étapes."
+              ? "The cost of a wrong trajectory is counted in months; the cost of the advice, in euros. One hour to settle a direction, a full audit with costed recommendations and a step-by-step roadmap, or a technical direction on shared time when one decision is never the last."
+              : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, un audit complet avec préconisations chiffrées et roadmap par étapes, ou une direction technique à temps partagé quand une décision n'est jamais la dernière."
           }
         />
         <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
           {isEn
-            ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else. The detail of each offer follows below."
-            : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre. Le détail de chaque offre suit juste en dessous."}
+            ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else. The outsourced technical expert is the only recurring line, and every retainer starts with that audit. The detail of each offer follows below."
+            : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre. L'expert technique externalisé est la seule ligne récurrente, et tout accompagnement démarre par cet audit. Le détail de chaque offre suit juste en dessous."}
         </p>
 
         {/* Engagements — réassurance sous le cadrage */}
@@ -313,18 +375,22 @@ export default function VisioConseilPage() {
 
       <Separator />
 
-      {/* § 04–05 — Une section détaillée par offre (ancres du mega menu) */}
+      {/* § 04–06 — Une section détaillée par offre (ancres du mega menu et du
+          bandeau du héros) : #choix-techno-ia, #architecture-projet-ia,
+          #cto-externalise. */}
       <ConseilOfferSections />
       <Separator />
 
-      {/* § 06 — Comment ça marche */}
+      {/* § 07 — Comment ça marche. Fond obsidian : la § 06 (Expert technique
+          externalisé) est en jet, l'alternance évite deux bandes identiques
+          d'affilée. */}
       <BlueprintSection
         id="comment"
-        tone="jet"
+        tone="obsidian"
         innerClassName="px-6 py-16 lg:px-8 lg:py-20"
       >
         <SectionHeading
-          index="№ 06"
+          index="№ 07"
           kicker={isEn ? "How it works" : "Comment ça marche"}
           title={
             isEn
@@ -334,7 +400,7 @@ export default function VisioConseilPage() {
         />
         <Stagger className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-3">
           {steps.map(([title, desc], i) => (
-            <StaggerItem key={title} className="bg-jet p-6 lg:p-8">
+            <StaggerItem key={title} className="bg-obsidian p-6 lg:p-8">
               <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-vermilion">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -350,10 +416,10 @@ export default function VisioConseilPage() {
       </BlueprintSection>
       <Separator />
 
-      {/* § 07 — FAQ */}
+      {/* § 08 — FAQ */}
       <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-8 lg:py-20">
         <SectionHeading
-          index="№ 07"
+          index="№ 08"
           kicker="FAQ"
           title={isEn ? "Frequently asked questions" : "Questions fréquentes"}
         />
@@ -371,14 +437,6 @@ export default function VisioConseilPage() {
           })}
         </div>
       </BlueprintSection>
-      <Separator />
-
-      {/* Renvoi vers l'offre récurrente, en dernière position. La charte
-          demandait que /conseil ne cite aucune direction technique ; arbitrage
-          du 2026-09-07 : le CTO externalisé est réinstauré sur sa propre page et
-          /conseil s'y contente de ce bandeau, après les deux offres ponctuelles
-          et la FAQ. Les cartes d'offre restent les deux seules du catalogue. */}
-      <CtoExternaliseBanner tone="obsidian" />
     </main>
   );
 }

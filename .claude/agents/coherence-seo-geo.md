@@ -33,7 +33,7 @@ contenu réellement affiché**, partout, dans les deux langues.
 > alignes sur la **source de vérité** du repo (le module de données canonique, l'occurrence
 > la plus récente/autoritaire) et tu le notes.
 
-## Références canoniques (charte v1.2, 2026-09-07) — valeurs de vérité
+## Références canoniques (charte v1.3, 2026-09-10) — valeurs de vérité
 
 **Catalogue d'offres — les 6 seules lignes que le site peut citer** (libellé et
 prix exacts ; toute autre offre citée dans une meta, un keyword, un JSON-LD, un
@@ -46,17 +46,24 @@ llms.txt ou un sujet de formulaire est un écart à corriger) :
 | Développement | Refonte WordPress optimisée | à partir de 2 250 € HT |
 | Développement | Refonte WordPress headless (trajectoire recommandée) | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app | à partir de 6 500 € HT |
-| Accompagnement | CTO externalisé (récurrent, page `/cto-externalise`) | deux paliers : Référent 900 € HT/mois, Direction technique 1 900 € HT/mois. Engagement 6 mois, préavis 2 mois |
+| Accompagnement | Expert technique externalisé (récurrent, page `/cto-externalise`) | deux paliers : Référent 900 € HT/mois, Direction technique 1 900 € HT/mois. Engagement 6 mois, préavis 2 mois |
 
 **Attention, piège de version.** La 6e ligne a été supprimée le 2026-08-27 puis
 **réinstaurée le 2026-09-07** sous un nouveau nom et un nouveau tarif (ADR-007,
-`docs/decisions.md`). Elle est **légitime** : ne la purge pas, ne la retire pas
-de la navigation, des bandeaux de `/conseil` et `/solutions-web`, du sujet de
-formulaire `cto-externalise` ni des fichiers llms. Ce qui reste à purger, c'est
-son **ancienne identité** : le libellé « Direction technique externalisée », le
-tarif **750 €/mois** et la mention « sans engagement de durée ». Source de vérité
-du contenu et du prix : `lib/cto-externalise.ts` ; ne réécris jamais le prix en
-dur ailleurs, importe les constantes.
+`docs/decisions.md`), puis **renommée le 2026-09-10** de « CTO externalisé » à
+« Expert technique externalisé » (ADR-010) — décision explicite d'Agathe qui
+inverse le garde-fou de l'ADR-007 sur le mot tapé par le prospect. Le nom
+« CTO externalisé » et le mot « CTO » seul sont désormais un écart à corriger
+au même titre que l'ancienne identité de l'offre, PAS le libellé à restaurer.
+Elle reste **légitime** : ne la purge pas, ne la retire pas de la navigation,
+des bandeaux de `/conseil` et `/solutions-web`, du sujet de formulaire
+`cto-externalise` (valeur technique inchangée) ni des fichiers llms. Ce qui
+reste à purger : l'ancienne identité « Direction technique externalisée », le
+tarif **750 €/mois**, la mention « sans engagement de durée », et désormais
+« CTO externalisé »/« CTO » comme libellé visible. L'URL `/cto-externalise` et
+les identifiants techniques (`CTO_PATH`, `CTO_CONTACT_HREF`, etc.) ne changent
+pas. Source de vérité du contenu et du prix : `lib/cto-externalise.ts` ; ne
+réécris jamais le prix en dur ailleurs, importe les constantes.
 
 Offres SUPPRIMÉES à purger si rencontrées : Dépannage WordPress, pack 1 900 €,
 « Direction technique externalisée » à 750 €/mois (ancien nom et ancien tarif de

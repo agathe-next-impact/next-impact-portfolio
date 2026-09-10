@@ -19,6 +19,8 @@ interface PageLayoutProps {
   backdrop?: React.ReactNode
   /** Conservé pour compatibilité d'API — le héros harmonisé a toujours ses équerres. */
   ticks?: boolean
+  /** Réduit de moitié le padding vertical du héros (pages outils). */
+  compact?: boolean
 }
 
 /**
@@ -39,6 +41,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   breadcrumb,
   headerSlot,
   backdrop,
+  compact,
 }) => (
   <div>
     <PageHero
@@ -47,6 +50,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       description={sousTitre}
       breadcrumb={breadcrumb}
       backdrop={backdrop}
+      compact={compact}
     >
       {headerSlot && (
         <Reveal delay={0.08} className="mt-10">

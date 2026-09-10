@@ -28,6 +28,7 @@ export function PageHero({
   backdrop,
   id,
   className,
+  compact = false,
   children,
 }: {
   index?: string;
@@ -46,6 +47,8 @@ export function PageHero({
   id?: string;
   /** Classes ajoutées à la section (ex. surcharge locale de tokens). */
   className?: string;
+  /** Réduit de moitié le padding vertical du héros (pages outils). */
+  compact?: boolean;
   /** Contenu libre rendu après la note (champ de recherche, visuel…). */
   children?: React.ReactNode;
 }) {
@@ -78,7 +81,11 @@ export function PageHero({
       id={id}
       backdrop={backdrop}
       className={className}
-      innerClassName="px-6 py-16 lg:px-12 lg:py-24"
+      innerClassName={
+        compact
+          ? "px-6 py-8 lg:px-12 lg:py-12"
+          : "px-6 py-16 lg:px-12 lg:py-24"
+      }
     >
       {breadcrumb}
       {aside ? (

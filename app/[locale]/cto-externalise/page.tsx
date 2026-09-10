@@ -25,8 +25,8 @@ export async function generateMetadata({
   const isEn = locale === "en";
   return generatePageMetadata({
     title: isEn
-      ? "Fractional CTO: your technical direction without hiring"
-      : "CTO externalisé : votre direction technique sans embaucher",
+      ? "Outsourced technical expert: your technical direction without hiring"
+      : "Expert technique externalisé : votre direction technique sans embaucher",
     // Descriptions calibrées pour l'affichage SERP (≤ 160 caractères) : la
     // version longue précédente était tronquée avant l'engagement, qui est
     // l'objection n° 1 sur une offre récurrente.
@@ -36,23 +36,22 @@ export async function generateMetadata({
     path: CTO_PATH,
     keywords: isEn
       ? [
-          "fractional CTO",
-          "outsourced CTO",
-          "part-time CTO",
-          "fractional tech direction",
+          "outsourced technical expert",
           "outsourced technical director",
-          "CTO as a service",
+          "part-time technical director",
+          "fractional technical leadership",
+          "technical direction retainer",
           "technical advisor retainer",
-          "fractional CTO for SMEs",
+          "outsourced technical expert for SMEs",
           "vendor quote review",
         ]
       : [
-          "CTO externalisé",
+          "expert technique externalisé",
           "directeur technique externalisé",
-          "CTO à temps partagé",
+          "expert technique à temps partagé",
           "direction technique externalisée",
-          "CTO à temps partiel",
-          "CTO externalisé PME",
+          "expert technique à temps partiel",
+          "expert technique externalisé PME",
           "accompagnement technique mensuel",
           "relecture de devis technique",
         ],
@@ -72,7 +71,7 @@ export default async function CtoExternaliseRoute({
 
   const breadcrumbItems = [
     { name: isEn ? "Home" : "Accueil", url: "/" },
-    { name: isEn ? "Fractional CTO" : "CTO externalisé", url: CTO_PATH },
+    { name: isEn ? "Outsourced technical expert" : "Expert technique externalisé", url: CTO_PATH },
   ];
 
   return (
@@ -80,7 +79,7 @@ export default async function CtoExternaliseRoute({
       <BreadcrumbJsonLd items={breadcrumbItems} locale={locale} />
       {/* Schéma aligné sur le visible : prix et engagement affichés sur la page. */}
       <ServiceJsonLd
-        name={isEn ? "Fractional CTO" : "CTO externalisé"}
+        name={isEn ? "Outsourced technical expert" : "Expert technique externalisé"}
         description={
           isEn
             ? `Shared-time technical direction for organisations with no technical profile in-house: one monthly steering call, ongoing arbitration, vendor quote review, a living roadmap and a watch targeted on your systems. ${CTO_PRICE.en.amount} ${CTO_PRICE.en.period}. ${CTO_COMMITMENT.en}.`

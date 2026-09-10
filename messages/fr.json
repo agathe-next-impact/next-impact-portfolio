@@ -10,14 +10,14 @@
     "caseStudies": "Études de cas",
     "contact": "Contact",
     "mainCta": "Diagnostic 2 min",
-    "visioConseil": "Visio conseil",
+    "visioConseil": "Appel gratuit",
     "onDemand": "À la demande",
     "free": "Gratuit",
     "paid": "Payant",
     "about": "À propos",
     "hub": "Quelle techno web ?",
     "conseil": "Conseil",
-    "ctoExternalise": "CTO externalisé",
+    "ctoExternalise": "Expert technique externalisé",
     "veille": "Veille",
     "selecteurTechno": "Le Sélecteur techno",
     "allTools": "Tous les outils",
@@ -55,7 +55,7 @@
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
     "visioConseil": "Visio conseil",
-    "ctoExternalise": "CTO externalisé",
+    "ctoExternalise": "Expert technique externalisé",
     "veille": "Veille techno",
     "tools": "Tous les outils",
     "startWebApp": "Discutons de votre projet",
@@ -118,10 +118,10 @@
     "profileImageAlt": "Photo de profil"
   },
   "contactPage": {
-    "metaTitle": "Contact : conseil, audit, CTO externalisé ou refonte",
-    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), CTO externalisé (dès 900 €/mois), projet de refonte ou diagnostic gratuit.",
+    "metaTitle": "Contact : conseil, audit, expert technique externalisé ou refonte",
+    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), expert technique externalisé (dès 900 €/mois), projet de refonte ou diagnostic gratuit.",
     "title": "Contact",
-    "subtitle": "Visio conseil, audit + roadmap, CTO externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Visio conseil, audit + roadmap, expert technique externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -137,14 +137,14 @@
     "audit": {
       "badge": "Diagnostic Web & IA",
       "title": "Avant de construire, choisissez la bonne voie",
-      "subtitleStart": "Recevez un",
-      "subtitleHighlight": "rapport complet avec des recommandations personnalisées",
-      "subtitleEnd": "— gratuit, sans engagement.",
+      "subtitleStart": "Réservez un",
+      "subtitleHighlight": "audit gratuit avec des recommandations personnalisées",
+      "subtitleEnd": ", gratuit et sans engagement.",
       "pillPerformance": "Performance ↑",
       "pillRoi": "Projection ROI",
       "pillCost": "Maîtrise des coûts",
-      "ctaLabel": "Lancer mon diagnostic",
-      "footer": "Gratuit · Rapport en 5 minutes · Sans engagement"
+      "ctaLabel": "Réserver mon audit gratuit",
+      "footer": "Gratuit · Sur rendez-vous · Sans engagement"
     },
     "conversion": {
       "badge": "Questionnaire interactif",
@@ -200,7 +200,7 @@
   },
   "toolsPage": {
     "metaTitle": "Boîte à outils : sélecteur techno web & IA et cadrage",
-    "metaDescription": "Décidez avant de construire : diagnostic de site en 2 minutes, visibilité IA, checklist GEO et décrypteur de devis. Gratuits, sans inscription.",
+    "metaDescription": "Décidez avant de construire : sélecteur techno, visibilité IA, checklist GEO et décrypteur de devis. Gratuits, sans inscription.",
     "title": "Boîte à outils",
     "subtitle": "Des outils gratuits pour choisir quoi construire, quoi simplifier et quoi éviter.",
     "breadcrumbHome": "Accueil",
@@ -327,7 +327,7 @@
       "independant": "Indépendant"
     },
     "cta": {
-      "cold": "Pré-diagnostic web en 2 min",
+      "cold": "Réserver mon audit gratuit",
       "coldConseil": "Demander un diagnostic",
       "warm": {
         "sites-institutionnels": "Discuter de la refonte de votre site",
