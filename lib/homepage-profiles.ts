@@ -25,8 +25,8 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Conseil et Prestations,",
-    subHeadline: "de refonte WordPress",
+    headline: "Experte",
+    subHeadline: "sur les projets web",
     description:
       "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
     valueProposition:

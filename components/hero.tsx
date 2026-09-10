@@ -116,7 +116,7 @@ export default function Hero() {
           <span className="text-mid-gray">
             {isEn
               ? "WordPress site redesign · 6 to 10 weeks"
-              : "Refonte de site WordPress · 6 à 10 semaines"}
+              : "Refonte et création de sites web et web apps"}
           </span>
         </div>
         <h1 className="w-3/4 text-4xl font-extralight leading-[1.05] tracking-tight text-accent-secondary sm:text-5xl lg:text-6xl">
