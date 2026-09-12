@@ -11,7 +11,8 @@ import {
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
-import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
+import { DerniereLettre } from "@/components/veille/derniere-lettre";
 import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-strip";
 import { Sonar } from "@/components/visuals/sonar";
 import {
@@ -42,7 +43,9 @@ import {
 // Contenu FR uniquement (locale EN en noindex), comme /sentinelle.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const revalidate = 86400;
+// Une heure, et non la journée des autres pages : le héros affiche le dernier
+// numéro Substack, qui doit paraître ici le jour même de sa publication.
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -90,7 +93,7 @@ const VEILLE_OFFERS: HeroOffer[] = [
     name: "Lettre gratuite",
     price: "0 €",
     benefit: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
-    href: NEWSLETTER_SUBSTACK_URL,
+    href: NEWSLETTER_SUBSCRIBE_URL,
     external: true,
   },
   {
@@ -163,7 +166,7 @@ const COMPARATIF = [
           "« Qu'est-ce qui change, et qu'est-ce que ça change pour mes choix ? »",
       },
     ],
-    cta: { libelle: "S'abonner — gratuit", href: NEWSLETTER_SUBSTACK_URL, externe: true },
+    cta: { libelle: "S'abonner — gratuit", href: NEWSLETTER_SUBSCRIBE_URL, externe: true },
   },
   {
     nom: "Sentinelle",
@@ -314,7 +317,7 @@ export default async function VeillePage({
         actions={
           <>
             <a
-              href={NEWSLETTER_SUBSTACK_URL}
+              href={NEWSLETTER_SUBSCRIBE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={BTN_PRIMARY}
@@ -329,6 +332,9 @@ export default async function VeillePage({
         note="Gratuit · désinscription en un clic"
       >
         <HeroOfferStrip offers={VEILLE_OFFERS} />
+        {/* Preuve que la lettre paraît vraiment — lue sur le flux Substack
+            à chaque régénération de la page (ISR, voir revalidate). */}
+        <DerniereLettre />
       </PageHero>
 
       {/* ── La lettre gratuite : deux rendez-vous ────────────────────────── */}
@@ -371,7 +377,7 @@ export default async function VeillePage({
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
-            href={NEWSLETTER_SUBSTACK_URL}
+            href={NEWSLETTER_SUBSCRIBE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={BTN_PRIMARY}

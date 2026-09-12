@@ -1,6 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+
+import type { LettreSubstack } from "@/lib/substack";
 import Process from "@/components/process";
 import HomeTldr from "@/components/home-tldr";
 import { TechnoLogosStrip } from "@/components/techno-logos-strip";
@@ -39,11 +41,16 @@ const HomeDiagnostic = dynamic(() => import("./home-diagnostic"), {
   loading: () => <div style={{ minHeight: 400 }} />,
 });
 
-export default function HomeClient() {
+export default function HomeClient({
+  derniereLettre,
+}: {
+  /** Dernier numéro de la lettre, pour le panneau de l'onglet Veille. */
+  derniereLettre: LettreSubstack | null;
+}) {
   return (
     <main className="flex-1">
       {/* § 01 — Hero */}
-      <Hero />
+      <Hero derniereLettre={derniereLettre} />
 
       {/* § 01b — « En bref » (TL;DR citable par les IA) */}
       <HomeTldr />

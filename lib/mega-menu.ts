@@ -1,4 +1,4 @@
-import { NEWSLETTER_SUBSTACK_URL } from "@/lib/newsletter";
+import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
 import { CTO_PATH, CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -50,7 +50,7 @@ export const MEGA_SECTIONS: Record<string, MegaSection> = {
           fr: "Le marché web & IA : une synthèse par mois, un focus par semaine. Gratuit.",
           en: "The web & AI market: a monthly digest, a weekly focus. Free.",
         },
-        href: NEWSLETTER_SUBSTACK_URL,
+        href: NEWSLETTER_SUBSCRIBE_URL,
         external: true,
       },
       {

@@ -12,6 +12,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { AuroraGlow } from "@/components/visuals/aurora-glow";
 import { WordAppear } from "@/components/visuals/word-appear";
 import { CodeToSite } from "@/components/visuals/code-to-site";
+import { DerniereLettrePanneau } from "@/components/veille/derniere-lettre-panneau";
+import type { LettreSubstack } from "@/lib/substack";
 import { DUR, EASE_OUT } from "@/lib/motion-tokens";
 
 // Transition partagée du panneau au changement d'onglet (crossfade sobre).
@@ -22,7 +24,12 @@ const BTN_PRIMARY =
 
 type TabId = "conseil" | "prestations" | "veille";
 
-export default function Hero() {
+export default function Hero({
+  derniereLettre = null,
+}: {
+  /** Dernier numéro Substack, lu côté serveur (voir app/[locale]/page.tsx). */
+  derniereLettre?: LettreSubstack | null;
+} = {}) {
   const locale = useLocale() as Locale;
   const t = useTranslations("hero");
   const variant = getHeroVariants(locale).default;
@@ -287,8 +294,23 @@ export default function Hero() {
                 >
                   <CodeToSite url="next-event.fr" />
                 </motion.div>
+              ) : tab === "veille" && derniereLettre ? (
+                /* Veille — la preuve que la lettre paraît vraiment : le dernier
+                   numéro, lu sur le flux Substack au rendu de la page. */
+                <motion.div
+                  key="veille"
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={PANEL_TRANSITION}
+                >
+                  <DerniereLettrePanneau lettre={derniereLettre} isEn={isEn} />
+                </motion.div>
               ) : (
-                /* Conseil — preuve humaine : qui livre réellement le projet */
+                /* Conseil — preuve humaine : qui livre réellement le projet.
+                   Sert aussi de repli à l'onglet Veille si le flux est muet :
+                   le héros n'a jamais de trou. */
                 <motion.div
                   key="conseil"
                   className="absolute inset-0"
@@ -333,6 +355,25 @@ export default function Hero() {
             </span>
           </div>
 
+          {/* Tag d'angle — nomme la nature du visuel (Veille) */}
+          <AnimatePresence initial={false}>
+            {tab === "veille" && derniereLettre && (
+              <motion.div
+                key="veille-tag"
+                className="absolute -top-3 left-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={PANEL_TRANSITION}
+              >
+                <span className="h-1 w-1 rounded-full bg-vermilion" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
+                  {isEn ? "Free newsletter" : "Lettre gratuite"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Tag d'angle — signale « projet réel » en un coup d'œil (Prestations) */}
           <AnimatePresence initial={false}>
             {tab === "prestations" && (
@@ -348,6 +389,34 @@ export default function Hero() {
                 <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
                   {isEn ? "Real project" : "Réalisation"}
                 </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Légende — la promesse de la lettre + l'accès au numéro lui-même */}
+          <AnimatePresence initial={false}>
+            {tab === "veille" && derniereLettre && (
+              <motion.div
+                key="veille-caption"
+                className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={PANEL_TRANSITION}
+              >
+                <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                  {isEn
+                    ? "Free · one digest a month, one focus a week"
+                    : "Gratuit · une synthèse par mois, un focus par semaine"}
+                </span>
+                <a
+                  href={derniereLettre.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-foreground underline-offset-4 transition-colors hover:text-vermilion hover:underline"
+                >
+                  {isEn ? "Read this issue ↗" : "Lire ce numéro ↗"}
+                </a>
               </motion.div>
             )}
           </AnimatePresence>

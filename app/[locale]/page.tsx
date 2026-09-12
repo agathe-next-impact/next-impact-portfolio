@@ -9,6 +9,7 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { getHomeContent } from "@/lib/home-content";
+import { getDerniereLettre } from "@/lib/substack";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les heures
@@ -31,6 +32,9 @@ export default async function Home({
   const { locale } = await params;
   const isEn = locale === "en";
   const { faq } = getHomeContent(locale);
+  // Le héros est un composant client : il ne peut pas lire le flux Substack
+  // lui-même. On le lit ici et on descend le résultat en props.
+  const derniereLettre = await getDerniereLettre();
 
   return (
     <>
@@ -58,7 +62,7 @@ export default async function Home({
           answer: f.answer,
         }))}
       />
-      <HomeClient />
+      <HomeClient derniereLettre={derniereLettre} />
     </>
   );
 }
