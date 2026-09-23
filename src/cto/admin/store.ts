@@ -11,7 +11,7 @@ import {
   MAGIC_LINK_TTL_MS,
   SESSION_TTL_MS,
 } from "@cto/access";
-import { ADMIN_EMAIL } from "./identity";
+import { ADMIN_USER_ID } from "./identity";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Émission et consommation des accès admin — le côté base.
@@ -42,7 +42,13 @@ export async function issueAdminMagicLink(now: Date = new Date()): Promise<Issue
 
   if (count >= MAX_LINKS_PER_WINDOW) return { ok: false, reason: "trop de demandes" };
 
-  const issued = createMagicToken(ADMIN_EMAIL, accessSecret(), now);
+  // Le sujet du jeton doit être un identifiant SANS point : `verifyMagicToken`
+  // découpe le jeton sur "." en exactement 4 morceaux (voir @cto/access/token.ts),
+  // et l'adresse admin en contient un (next-impact.digital) — un jeton émis avec
+  // `ADMIN_EMAIL` ici échouerait donc TOUJOURS à la vérification, y compris
+  // fraîchement émis. `consumeAdminMagicLink` ignore de toute façon ce champ, la
+  // seule identité qui compte est le login unique de cet espace.
+  const issued = createMagicToken(ADMIN_USER_ID, accessSecret(), now);
 
   await db().insert(ctoAdminMagicLinks).values({
     tokenHash: issued.tokenHash,
