@@ -70,7 +70,13 @@ export async function listClients(now: Date = new Date()): Promise<ClientOvervie
     db()
       .select({
         clientId: ctoAccessLog.clientId,
-        last: sql<Date>`max(${ctoAccessLog.at})`,
+        // Le générique `sql<Date>` ne CONVERTIT rien : c'est une promesse de
+        // typage, pas un cast. Un agrégat brut (`max(...)`) sort du chemin de
+        // mapping automatique des colonnes de Drizzle et revient du driver
+        // `neon-http` en texte Postgres (« 2026-09-23 05:59:16.047727 »), pas en
+        // `Date` — d'où le `new Date(...)` explicite plus bas, seul endroit où
+        // ce module lit une date issue d'un `sql<...>` plutôt que d'une colonne.
+        last: sql<string>`max(${ctoAccessLog.at})`,
       })
       .from(ctoAccessLog)
       .where(inArray(ctoAccessLog.event, ["connexion_lien", "connexion_passkey"]))
@@ -79,7 +85,7 @@ export async function listClients(now: Date = new Date()): Promise<ClientOvervie
 
   const persons = new Map(personCounts.map((row) => [row.clientId, row]));
   const sessions = new Map(sessionCounts.map((row) => [row.clientId, row.count]));
-  const access = new Map(lastAccess.map((row) => [row.clientId, row.last]));
+  const access = new Map(lastAccess.map((row) => [row.clientId, new Date(row.last)]));
 
   return clients
     .map((client) => ({
