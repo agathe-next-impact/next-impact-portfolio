@@ -26,7 +26,7 @@ export interface HeroVariant {
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
     headline: "Experte",
-    subHeadline: "sur projets web",
+    subHeadline: "des projets web",
     description:
       "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
     valueProposition:
