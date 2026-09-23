@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EVENT_LABELS, listForClient } from "@cto/access";
+import { listForClient as listDeliverables } from "@cto/deliverables";
+import { lettersForClient } from "@cto/letters";
 import { clientDetail } from "@cto/admin";
 import { BackLink, Dot, buttonClass, formatDate, Label, Panel, Tag, type Tone } from "../../../../espace-direction/ui";
+import { Livrables } from "../../../../espace-direction/livrables";
+import { DerniereLettre } from "../../../../espace-direction/lettre";
 import { basculerSynchro } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -42,7 +46,12 @@ export default async function ClientDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [detail, journal] = await Promise.all([clientDetail(id), listForClient(id, 100)]);
+  const [detail, journal, deliverables, lettres] = await Promise.all([
+    clientDetail(id),
+    listForClient(id, 100),
+    listDeliverables(id),
+    lettersForClient(id),
+  ]);
 
   if (!detail) notFound();
 
@@ -65,6 +74,17 @@ export default async function ClientDetailPage({
           {formatDate(detail.createdAt)}
         </p>
       </header>
+
+      <section className="mt-10">
+        <Label>Ce que ce client voit dans son espace</Label>
+        <p className="mt-2 font-inter-tight text-sm text-mid-gray">
+          Même vue « à la une » que sur son accueil, en lecture seule. Les liens « Tout
+          voir » et « Lire la lettre » mènent à l&rsquo;espace client lui-même et exigent
+          sa propre connexion — normal, ils ne sont pas faits pour être suivis d&rsquo;ici.
+        </p>
+        <DerniereLettre lettres={lettres} />
+        <Livrables items={deliverables} since={null} />
+      </section>
 
       <section className="mt-10">
         <Panel className="flex flex-wrap items-center justify-between gap-4 p-4">
