@@ -31,7 +31,7 @@ l'ordre où elles comptent :
 Notion (atelier)  →  npm run cto:sync  →  cto_deliverables  →  /espace-direction
 ```
 
-**Un client n'est jamais invité dans Notion.** Les cinq bases contiennent les
+**Un client n'est jamais invité dans Notion.** Les sept bases contiennent les
 lignes de tous les clients ; la seule surface qui leur est destinée est l'espace
 en ligne, cloisonné par personne.
 
@@ -109,6 +109,14 @@ de table de correspondance à écrire, et rien à retraduire en lisant. Ces deux
 colonnes sont un **rappel**, pas une commande : l'état fait foi en base et se
 change en SQL (§ 3.2 de `espace-client-mise-en-place.md`).
 
+**`Lien vers l'espace`** porte l'URL où le client se connecte
+(`https://next-impact.digital/espace-direction`). Elle est **identique sur
+toutes les fiches, volontairement** : l'espace n'a qu'une seule adresse pour
+tous les accompagnements, l'identité se joue à la connexion (lien magique ou
+passkey), jamais dans l'URL. Ce n'est donc ni une donnée par client ni une
+synchro à écrire — juste un pense-bête pour ne pas avoir à la retaper depuis
+Notion. À coller à la main sur toute nouvelle fiche, comme `ID espace`.
+
 ### Deux colonnes, deux questions
 
 `Publié` décide de la **visibilité**, `Affichage` du **placement**. Les
@@ -150,7 +158,7 @@ client voit.
    capacité **lecture de contenu seule** : la synchro ne réécrit jamais dans
    Notion. Le jeton commence par `ntn_`.
 2. **Partager la page mère** — sur « Direction technique — clients », menu `•••`
-   → *Connexions* → l'intégration. Les cinq bases héritent du partage. Sans ce
+   → *Connexions* → l'intégration. Les sept bases héritent du partage. Sans ce
    geste l'API répond 404 sur tout : chez Notion, le partage n'est jamais
    implicite.
 3. **Poser les variables** — six, listées avec leurs valeurs au bas de la page

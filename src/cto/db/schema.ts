@@ -102,6 +102,19 @@ export const ctoClients = pgTable("cto_clients", {
   tier: text("tier").notNull().default("direction"),
   status: ctoClientStatusEnum("status").notNull().default("actif"),
   /**
+   * Interrupteur de la synchro Notion, indépendant de `status`. `status` dit
+   * si la PERSONNE a accès à l'espace ; celui-ci dit si l'ATELIER continue à
+   * l'alimenter. Utile à l'entrée d'un accompagnement — le temps de relire ce
+   * qui a été publié avant de laisser la synchro et ses e-mails partir tout
+   * seuls. Vrai par défaut : la synchro reste le comportement normal, ce
+   * champ n'existe que pour la pause volontaire.
+   *
+   * Suspendu, un balayage laisse les livrables déjà publiés tels quels — ni
+   * mis à jour, ni retirés — et ignore les lignes nouvellement publiées de cet
+   * accompagnement (`src/cto/notion/sync.ts`).
+   */
+  syncEnabled: boolean("sync_enabled").notNull().default(true),
+  /**
    * Date du dernier changement d'état. Sans elle, « fenêtre de restitution de
    * trois mois » n'est pas implémentable : `status` dit où on en est, pas
    * depuis quand. Remise à jour à chaque transition, y compris un retour en

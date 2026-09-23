@@ -89,6 +89,8 @@ interface ClientResolution {
   byOrganisation: Map<string, string>;
   /** État de chaque accompagnement : lui seul autorise une notification. */
   statusById: Map<string, string>;
+  /** Accompagnements dont la synchro est suspendue depuis l'admin (§ ci-dessous). */
+  disabledClientIds: Set<string>;
   warnings: string[];
 }
 
@@ -112,10 +114,14 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const byOrganisation = new Map<string, string>();
 
   const statusById = new Map<string, string>();
+  const disabledClientIds = new Set<string>();
   const rows = await db()
-    .select({ id: ctoClients.id, status: ctoClients.status })
+    .select({ id: ctoClients.id, status: ctoClients.status, syncEnabled: ctoClients.syncEnabled })
     .from(ctoClients);
-  for (const row of rows) statusById.set(row.id, row.status);
+  for (const row of rows) {
+    statusById.set(row.id, row.status);
+    if (!row.syncEnabled) disabledClientIds.add(row.id);
+  }
   const known = new Set(statusById.keys());
 
   for (const page of await queryDatabase(clientsDatabaseId())) {
@@ -134,10 +140,13 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
     }
 
     byNotionPage.set(page.id, id);
+    if (disabledClientIds.has(id)) {
+      warnings.push(`« ${name} » : synchro suspendue depuis l'admin — ses lignes ne bougent pas ce balayage.`);
+    }
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
   }
 
-  return { byNotionPage, byOrganisation, statusById, warnings };
+  return { byNotionPage, byOrganisation, statusById, disabledClientIds, warnings };
 }
 
 /**
@@ -226,6 +235,7 @@ function resolvePages(
   kind: DeliverableKind,
   pages: NotionPage[],
   byNotionPage: Map<string, string>,
+  disabledClientIds: Set<string>,
 ): Resolved {
   const warnings: string[] = [];
   const inputs: DeliverableInput[] = [];
@@ -245,6 +255,10 @@ function resolvePages(
       );
       continue;
     }
+    // Pause volontaire, pas une anomalie : rien à signaler ligne par ligne, le
+    // signalement se fait une fois par accompagnement dans `resolveClients`.
+    if (disabledClientIds.has(input.clientId)) continue;
+
     if (input.title === UNTITLED) {
       warnings.push(`Une ligne publiée de ${kind} n'a pas de titre ; elle part avec « ${UNTITLED} ».`);
     }
@@ -274,10 +288,11 @@ async function syncKind(
   byNotionPage: Map<string, string>,
   options: { force: boolean; dryRun: boolean },
   changes: Map<string, ClientChanges>,
+  disabledClientIds: Set<string>,
 ): Promise<{ report: KindReport; warnings: string[] }> {
   const { force, dryRun } = options;
   const pages = await queryDatabase(databaseIdFor(kind), publishedFilter(PROPS.published));
-  const { inputs, warnings } = resolvePages(kind, pages, byNotionPage);
+  const { inputs, warnings } = resolvePages(kind, pages, byNotionPage, disabledClientIds);
 
   const states = new Map((await currentStates(kind)).map((s) => [s.notionPageId, s]));
   const report: KindReport = {
@@ -325,6 +340,10 @@ async function syncKind(
   const stillPublished = new Set(inputs.map((input) => input.notionPageId));
   const toWithdraw: DeliverableState[] = [];
   for (const state of states.values()) {
+    // Gelé, pas retiré : un accompagnement en pause ne doit pas voir ses
+    // livrables disparaître au prochain balayage sous prétexte que ses lignes
+    // sont, par construction, absentes de `inputs` ce tour-ci.
+    if (disabledClientIds.has(state.clientId)) continue;
     if (!state.withdrawn && !stillPublished.has(state.notionPageId)) toWithdraw.push(state);
   }
 
@@ -441,6 +460,7 @@ export async function syncFromNotion(
       clients.byNotionPage,
       { force: options.force === true, dryRun },
       changes,
+      clients.disabledClientIds,
     );
     report.kinds.push(result.report);
     report.warnings.push(...result.warnings);

@@ -1,0 +1,1 @@
+ALTER TABLE "cto_clients" ADD COLUMN "sync_enabled" boolean DEFAULT true NOT NULL;

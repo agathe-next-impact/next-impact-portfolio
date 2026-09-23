@@ -3,9 +3,10 @@
 Procédure d'installation et d'exploitation de la couche d'accès de l'espace
 « CTO externalisé » (`src/cto/`, `app/(cto)/espace-direction`, `app/api/cto/`).
 
-Périmètre : **l'accès** — identités par personne, passkeys, sessions, journal.
-Les livrables (atelier Notion, synchronisation, affichage) ont leur propre
-document : `notion-livrables.md`. L'export de restitution, lui, reste à écrire.
+Périmètre : **l'accès** — identités par personne, passkeys, sessions, journal —
+et **la supervision** en lecture seule (§ 5). Les livrables (atelier Notion,
+synchronisation, affichage) ont leur propre document : `notion-livrables.md`.
+L'export de restitution, lui, reste à écrire.
 
 ---
 
@@ -16,7 +17,7 @@ document : `notion-livrables.md`. L'export de restitution, lui, reste à écrire
 | Base Postgres | Neon (`DATABASE_URL`, `DATABASE_URL_UNPOOLED`) | oui, partagée avec Sentinelle |
 | Envoi d'e-mails | SMTP Google (`NODEMAILER_*`) | oui, celui du site |
 
-L'espace CTO n'ajoute **aucun service** : il pose huit tables préfixées `cto_`
+L'espace CTO n'ajoute **aucun service** : il pose dix tables préfixées `cto_`
 dans la base existante et envoie ses deux e-mails par le transport du site. La
 synchronisation des livrables ajoute une dépendance à l'API Notion, en lecture
 seule et hors du chemin de requête du client (`notion-livrables.md`).
@@ -111,7 +112,8 @@ Vercel → Settings → Environment Variables, **portée `Production` uniquement
 | `CTO_RP_ID` | *(ne pas définir)* | défaut : `next-impact.digital` |
 | `CTO_ORIGIN` | *(ne pas définir)* | déduit : `https://next-impact.digital` et `https://www.…` |
 | `CRON_SECRET` | un secret au hasard | arme le balayage quotidien (§ 4) |
-| `CTO_NOTION_*` | six variables | seulement pour la synchro des livrables (`notion-livrables.md`) |
+| `CTO_NOTION_*` | sept variables | seulement pour la synchro des livrables (`notion-livrables.md`) |
+| `CTO_ADMIN_PASSWORD` | 16 caractères minimum, au hasard | ouvre `/admin-cto` (§ 5) |
 
 Trois précisions qui comptent :
 
@@ -280,6 +282,41 @@ qu'on manquerait alors.
 
 ---
 
+## 5. Supervision — `/admin-cto`
+
+Un mot de passe, une vue d'ensemble, **lecture seule**. Avant cet écran,
+répondre à « qui est actif, qui est suspendu ? » demandait d'ouvrir Neon ;
+`/admin-cto/pilotage` liste tous les accompagnements (statut, personnes,
+sessions ouvertes, dernière connexion) et le détail de chacun (personnes,
+journal d'accès).
+
+**Pourquoi lecture seule, et pas un formulaire de plus.** `scripts/cto-invite.ts`
+explique déjà pourquoi il n'existe pas de back-office de création : à l'échelle
+de `CTO_TERMS` (quatre accompagnements au maximum), un écran de saisie
+coûterait plus d'interface que le produit n'en vaut. Cet écran répond à un
+besoin différent — voir, pas écrire — et s'y tient : changer un statut ou
+révoquer une personne reste un geste SQL délibéré (§ 3.2 et § 3.3 ci-dessus),
+pas un bouton pressé par réflexe. Le jour où la lecture ne suffit plus, ce
+paragraphe dit ce que l'écran devra faire en plus.
+
+### Poser le mot de passe
+
+```bash
+node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))"
+```
+
+Dans `.env.local` **et** dans Vercel (portée Production, secret différent de
+celui du local, même logique que `CTO_ACCESS_SECRET` au § 2.1). Sans lui,
+`/admin-cto/connexion` affiche un message de configuration et reste fermé.
+
+### Utilisation
+
+`/admin-cto/connexion` → mot de passe → `/admin-cto/pilotage`. Session de
+12 h, cookie signé (`cto_admin`), aucune ligne en base : changer le mot de
+passe ferme d'un coup toutes les sessions ouvertes.
+
+---
+
 ## Fichiers de référence
 
 | Rôle | Fichier |
@@ -293,3 +330,6 @@ qu'on manquerait alors.
 | Invitation | `scripts/cto-invite.ts` |
 | Livrables (table, synchro, affichage) | `notion-livrables.md` |
 | Balayage quotidien | `app/api/cto/cron/route.ts` |
+| Supervision (requêtes, lecture seule) | `src/cto/admin/overview.ts` |
+| Supervision (mot de passe, session) | `src/cto/admin/session.ts` |
+| Supervision (écrans) | `app/(cto)/admin-cto/` |
