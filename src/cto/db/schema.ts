@@ -332,6 +332,80 @@ export const ctoAccessLog = pgTable(
   ],
 );
 
+// ─── Admin de supervision (compte unique) ────────────────────────────────
+
+/**
+ * Quatre tables qui recopient, ligne pour ligne, la forme de celles de la
+ * couche d'accès client (magic links, défis, justificatifs, sessions)
+ * ci-dessus — et c'est délibéré, voir `src/cto/admin/identity.ts`. Ce qui
+ * change : il n'y a ni `cto_clients` ni `cto_persons` à référencer. Il
+ * n'existe qu'UNE identité (agathe@next-impact.digital, en dur dans le code,
+ * jamais en base), donc aucune de ces tables n'a de colonne « personne » —
+ * une ligne suffit à en dire toute l'histoire.
+ *
+ * Isolées de `cto_magic_links` / `cto_challenges` / `cto_credentials` /
+ * `cto_sessions` : un secret de l'espace admin qui fuiterait ne doit ouvrir
+ * qu'une supervision en lecture seule, jamais l'espace d'un client, et
+ * réciproquement.
+ */
+
+export const ctoAdminMagicLinks = pgTable(
+  "cto_admin_magic_links",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("cto_admin_magic_link_hash").on(t.tokenHash),
+    index("cto_admin_magic_link_created").on(t.createdAt),
+  ],
+);
+
+export const ctoAdminChallenges = pgTable(
+  "cto_admin_challenges",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    challenge: text("challenge").notNull(),
+    /** `registration` ou `authentication`, même vocabulaire que côté client. */
+    kind: text("kind").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("cto_admin_challenge_expires").on(t.expiresAt)],
+);
+
+export const ctoAdminCredentials = pgTable(
+  "cto_admin_credentials",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    credentialId: text("credential_id").notNull(),
+    publicKey: text("public_key").notNull(),
+    counter: integer("counter").notNull().default(0),
+    transports: text("transports"),
+    label: text("label").notNull(),
+    aaguid: text("aaguid"),
+    lastUsedAt: timestamp("last_used_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("cto_admin_credential_id").on(t.credentialId)],
+);
+
+export const ctoAdminSessions = pgTable(
+  "cto_admin_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    lastSeenAt: timestamp("last_seen_at").notNull().defaultNow(),
+    userAgent: text("user_agent"),
+    revokedAt: timestamp("revoked_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("cto_admin_session_hash").on(t.tokenHash)],
+);
+
 // ─── Livrables ────────────────────────────────────────────────────────────
 
 /**

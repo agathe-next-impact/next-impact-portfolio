@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { purgeExpiredAccess, type PurgeReport } from "@cto/access";
+import { purgeExpiredAdminAccess, type AdminPurgeReport } from "@cto/admin";
 import { configurationIssue, syncFromNotion, type SyncReport } from "@cto/notion";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -35,6 +36,7 @@ export const maxDuration = 300;
 
 interface CronBody {
   purge: PurgeReport | { erreur: string };
+  purgeAdmin: AdminPurgeReport | { erreur: string };
   synchro: SyncReport | { ignoree: string } | { erreur: string };
 }
 
@@ -61,6 +63,7 @@ export async function GET(request: NextRequest) {
 
   const body: CronBody = {
     purge: { erreur: "non exécutée" },
+    purgeAdmin: { erreur: "non exécutée" },
     synchro: { ignoree: "non exécutée" },
   };
   let status = 200;
@@ -70,6 +73,14 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("[cto] purge impossible", error);
     body.purge = { erreur: error instanceof Error ? error.message : "échec" };
+    status = 500;
+  }
+
+  try {
+    body.purgeAdmin = await purgeExpiredAdminAccess();
+  } catch (error) {
+    console.error("[cto] purge admin impossible", error);
+    body.purgeAdmin = { erreur: error instanceof Error ? error.message : "échec" };
     status = 500;
   }
 

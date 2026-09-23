@@ -113,7 +113,8 @@ Vercel → Settings → Environment Variables, **portée `Production` uniquement
 | `CTO_ORIGIN` | *(ne pas définir)* | déduit : `https://next-impact.digital` et `https://www.…` |
 | `CRON_SECRET` | un secret au hasard | arme le balayage quotidien (§ 4) |
 | `CTO_NOTION_*` | sept variables | seulement pour la synchro des livrables (`notion-livrables.md`) |
-| `CTO_ADMIN_PASSWORD` | 16 caractères minimum, au hasard | ouvre `/admin-cto` (§ 5) |
+
+`/admin-cto` n'a pas de variable à lui : voir § 5.
 
 Trois précisions qui comptent :
 
@@ -284,8 +285,8 @@ qu'on manquerait alors.
 
 ## 5. Supervision — `/admin-cto`
 
-Un mot de passe, une vue d'ensemble, **lecture seule**. Avant cet écran,
-répondre à « qui est actif, qui est suspendu ? » demandait d'ouvrir Neon ;
+Une identité, une vue d'ensemble, **lecture seule**. Avant cet écran, répondre
+à « qui est actif, qui est suspendu ? » demandait d'ouvrir Neon ;
 `/admin-cto/pilotage` liste tous les accompagnements (statut, personnes,
 sessions ouvertes, dernière connexion) et le détail de chacun (personnes,
 journal d'accès).
@@ -299,21 +300,24 @@ révoquer une personne reste un geste SQL délibéré (§ 3.2 et § 3.3 ci-dessu
 pas un bouton pressé par réflexe. Le jour où la lecture ne suffit plus, ce
 paragraphe dit ce que l'écran devra faire en plus.
 
-### Poser le mot de passe
+### Aucune variable à poser
 
-```bash
-node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))"
-```
-
-Dans `.env.local` **et** dans Vercel (portée Production, secret différent de
-celui du local, même logique que `CTO_ACCESS_SECRET` au § 2.1). Sans lui,
-`/admin-cto/connexion` affiche un message de configuration et reste fermé.
+`/admin-cto` est associé en dur à `agathe@next-impact.digital`
+(`src/cto/admin/identity.ts`) — pas à une table, pas à une variable
+d'environnement à soi : c'est le code qui porte l'identité, pas la
+configuration. L'accès réutilise le mécanisme de l'espace client (lien de
+connexion signé + passkey) et donc son secret, `CTO_ACCESS_SECRET` (§ 2.1) :
+rien de plus à poser en local ni sur Vercel. Faire tourner ce secret ferme
+d'un coup toutes les sessions ouvertes, admin comprise.
 
 ### Utilisation
 
-`/admin-cto/connexion` → mot de passe → `/admin-cto/pilotage`. Session de
-12 h, cookie signé (`cto_admin`), aucune ligne en base : changer le mot de
-passe ferme d'un coup toutes les sessions ouvertes.
+`/admin-cto/connexion` → « Recevoir un lien de connexion » → e-mail envoyé à
+`agathe@next-impact.digital` → `/admin-cto/pilotage`. Une passkey enregistrée
+depuis le tableau de bord permet ensuite de sauter l'e-mail. Session glissante
+de sept jours, cookie non signé (`cto_admin`) dont la ligne vit en base
+(`cto_admin_sessions`) : la révoquer — ou faire tourner `CTO_ACCESS_SECRET` —
+la ferme immédiatement, sans attendre son échéance.
 
 ---
 

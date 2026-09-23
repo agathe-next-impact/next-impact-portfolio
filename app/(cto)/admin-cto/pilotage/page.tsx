@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EVENT_LABELS } from "@cto/access";
-import { listClients, recentAccessLog } from "@cto/admin";
+import { listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
+import { AdminPasskeyEnrollButton } from "../passkey";
 
 export const metadata: Metadata = { title: "Tous les accompagnements" };
 export const dynamic = "force-dynamic";
@@ -36,7 +37,11 @@ const JOUR_MS = 24 * 60 * 60 * 1000;
  * pour la raison.
  */
 export default async function PilotagePage() {
-  const [clients, journal] = await Promise.all([listClients(), recentAccessLog(30)]);
+  const [clients, journal, credentials] = await Promise.all([
+    listClients(),
+    recentAccessLog(30),
+    listAdminCredentials(),
+  ]);
 
   const actifs = clients.filter((client) => client.status === "actif").length;
   const enPause = clients.filter(
@@ -145,6 +150,20 @@ export default async function PilotagePage() {
             </p>
           ) : null}
         </div>
+      </section>
+
+      <section className="mt-12">
+        <Label>Votre accès</Label>
+        <Panel className="mt-4 px-5 py-6">
+          <p className="font-inter-tight text-base text-foreground">
+            {credentials.length === 0
+              ? "Aucun appareil enregistré. Enregistrez-en un pour vous connecter d'un geste, sans repasser par votre boîte mail."
+              : `${credentials.length} appareil${credentials.length > 1 ? "s" : ""} enregistré${credentials.length > 1 ? "s" : ""}.`}
+          </p>
+          <div className="mt-5">
+            <AdminPasskeyEnrollButton />
+          </div>
+        </Panel>
       </section>
     </main>
   );
