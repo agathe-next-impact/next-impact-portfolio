@@ -57,6 +57,7 @@ export const PROPS = {
     effort: "Effort",
     effect: "Effet",
     detail: "Détail",
+    source: "Lien",
   },
   cartographie: {
     title: "Élément",
@@ -198,6 +199,7 @@ export function mapPage(
         effort: p.select(page, PROPS.roadmap.effort),
         effet: p.select(page, PROPS.roadmap.effect),
         detail: p.text(page, PROPS.roadmap.detail),
+        source: p.url(page, PROPS.roadmap.source),
       };
       return {
         clientId,

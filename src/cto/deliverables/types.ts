@@ -37,6 +37,12 @@ export interface RoadmapPayload {
   effort: string | null;
   effet: string | null;
   detail: string | null;
+  /**
+   * Lien vers une pièce complète hébergée ailleurs (rapport d'audit, étude…).
+   * Le livrable reste un résumé actionnable ; ce lien est la porte vers le
+   * document source, pas un moyen d'en rapatrier le contenu ici.
+   */
+  source: string | null;
 }
 
 /** Une pièce du système : outil, fournisseur, contrat, accès, flux. */

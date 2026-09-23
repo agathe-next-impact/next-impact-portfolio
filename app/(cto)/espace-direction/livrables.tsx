@@ -542,6 +542,18 @@ function ChantierCard({
           {payload.detail}
         </p>
       ) : null}
+      {payload.source ? (
+        <p className="mt-3">
+          <a
+            href={payload.source}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+          >
+            Voir le document ↗
+          </a>
+        </p>
+      ) : null}
       <Correction item={item} />
     </article>
   );
