@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
-import { activePersons, sendPublicationNotice, type PublicationSummary } from "../access";
 import { ctoClients } from "../db/schema";
 import {
   appendVersion,
@@ -25,6 +24,12 @@ import * as prop from "./properties";
 // n'est jamais réécrit dans Notion, et l'espace client n'appelle jamais Notion
 // pendant une requête. Ce cloisonnement est ce qui fait qu'une indisponibilité
 // de Notion, ou une limite d'API atteinte, ne se voit pas chez le client.
+//
+// **Ce fichier n'envoie plus d'e-mail.** La notification est un processus
+// séparé (`src/cto/notify/`, commande `npm run cto:notify`), déclenché à la
+// main plutôt qu'à chaque balayage : synchroniser plusieurs fois pendant qu'on
+// relit un contenu ne doit prévenir personne. Voir `src/cto/notify/store.ts`
+// pour comment elle retrouve, après coup, ce qui a été publié.
 //
 // Trois précautions gouvernent ce fichier, toutes contre le même risque — faire
 // disparaître un livrable par accident :
@@ -63,22 +68,11 @@ export interface SyncReport {
   /** Vrai si le balayage a tout lu sans rien écrire. */
   dryRun: boolean;
   clientsMapped: number;
-  /** Accompagnements pour lesquels une notification part (ou partirait). */
-  notified: number;
   /** Le balayage des lettres de veille, hors livrables. */
   letters: LettersReport;
   kinds: KindReport[];
   warnings: string[];
 }
-
-/** Intitules lisibles pour l'e-mail. Jamais de titres de livrables. */
-const KIND_LABELS: Record<DeliverableKind, string> = {
-  decision: "relevé de décisions",
-  roadmap: "roadmap",
-  cartographie: "cartographie",
-  veille: "veille",
-  document: "documents",
-};
 
 interface ClientResolution {
   byNotionPage: Map<string, string>;
@@ -87,18 +81,9 @@ interface ClientResolution {
    * personnalisées, produites par organisation et non par contrat.
    */
   byOrganisation: Map<string, string>;
-  /** État de chaque accompagnement : lui seul autorise une notification. */
-  statusById: Map<string, string>;
   /** Accompagnements dont la synchro est suspendue depuis l'admin (§ ci-dessous). */
   disabledClientIds: Set<string>;
   warnings: string[];
-}
-
-/** Ce qui a bougé pour un accompagnement pendant ce balayage. */
-interface ClientChanges {
-  nouveautes: number;
-  corrections: number;
-  parKind: Map<DeliverableKind, number>;
 }
 
 /**
@@ -113,16 +98,14 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
 
-  const statusById = new Map<string, string>();
   const disabledClientIds = new Set<string>();
   const rows = await db()
-    .select({ id: ctoClients.id, status: ctoClients.status, syncEnabled: ctoClients.syncEnabled })
+    .select({ id: ctoClients.id, syncEnabled: ctoClients.syncEnabled })
     .from(ctoClients);
   for (const row of rows) {
-    statusById.set(row.id, row.status);
     if (!row.syncEnabled) disabledClientIds.add(row.id);
   }
-  const known = new Set(statusById.keys());
+  const known = new Set(rows.map((row) => row.id));
 
   for (const page of await queryDatabase(clientsDatabaseId())) {
     const name = companyName(page) ?? "(fiche sans raison sociale)";
@@ -146,7 +129,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
   }
 
-  return { byNotionPage, byOrganisation, statusById, disabledClientIds, warnings };
+  return { byNotionPage, byOrganisation, disabledClientIds, warnings };
 }
 
 /**
@@ -287,7 +270,6 @@ async function syncKind(
   kind: DeliverableKind,
   byNotionPage: Map<string, string>,
   options: { force: boolean; dryRun: boolean },
-  changes: Map<string, ClientChanges>,
   disabledClientIds: Set<string>,
 ): Promise<{ report: KindReport; warnings: string[] }> {
   const { force, dryRun } = options;
@@ -319,13 +301,11 @@ async function syncKind(
     if (!state) {
       if (!dryRun) await appendVersion(input, 0);
       report.created += 1;
-      noter(changes, input.clientId, kind, "nouveaute");
       continue;
     }
     if (state.withdrawn) {
       if (!dryRun) await appendVersion(input, state.version);
       report.restored += 1;
-      noter(changes, input.clientId, kind, "nouveaute");
       continue;
     }
     if (state.digest === digestOf(input)) {
@@ -334,7 +314,6 @@ async function syncKind(
     }
     if (!dryRun) await appendVersion(input, state.version);
     report.updated += 1;
-    noter(changes, input.clientId, kind, "correction");
   }
 
   const stillPublished = new Set(inputs.map((input) => input.notionPageId));
@@ -367,65 +346,6 @@ async function syncKind(
   return { report, warnings };
 }
 
-function noter(
-  changes: Map<string, ClientChanges>,
-  clientId: string,
-  kind: DeliverableKind,
-  nature: "nouveaute" | "correction",
-): void {
-  const entry = changes.get(clientId) ?? {
-    nouveautes: 0,
-    corrections: 0,
-    parKind: new Map<DeliverableKind, number>(),
-  };
-  if (nature === "nouveaute") entry.nouveautes += 1;
-  else entry.corrections += 1;
-  entry.parKind.set(kind, (entry.parKind.get(kind) ?? 0) + 1);
-  changes.set(clientId, entry);
-}
-
-/**
- * Previent les personnes d'un accompagnement qu'il y a du nouveau.
- *
- * **Un accompagnement `suspendu` ne recoit rien**, conformement a ce que
- * `cto_clients.status` promet : pendant une suspension, la synchro continue en
- * silence. Un client qui a mis l'accompagnement en pause ne doit pas recevoir de
- * courrier comme si de rien n'etait.
- *
- * Un echec d'envoi ne fait jamais echouer le balayage : les livrables sont
- * publies, c'est l'essentiel. Le manque remonte dans le rapport, ou il se voit.
- */
-async function notifier(
-  changes: Map<string, ClientChanges>,
-  statusById: Map<string, string>,
-  warnings: string[],
-): Promise<void> {
-  const base = process.env.CTO_ORIGIN?.split(",")[0]?.trim() || "https://next-impact.digital";
-  const url = `${base}/espace-direction`;
-
-  for (const [clientId, entry] of changes) {
-    if (statusById.get(clientId) !== "actif") continue;
-
-    const summary: PublicationSummary = {
-      nouveautes: entry.nouveautes,
-      corrections: entry.corrections,
-      parCategorie: [...entry.parKind].map(([kind, count]) => ({
-        label: KIND_LABELS[kind],
-        count,
-      })),
-    };
-
-    for (const person of await activePersons(clientId)) {
-      try {
-        await sendPublicationNotice({ email: person.email, name: person.name }, summary, url);
-      } catch (error) {
-        console.error("[cto] notification de publication impossible", error);
-        warnings.push(`Notification non envoyée à ${person.email} : l'envoi a échoué.`);
-      }
-    }
-  }
-}
-
 /**
  * Synchronise l'atelier vers l'espace client.
  *
@@ -439,16 +359,14 @@ async function notifier(
  * écriture, non.
  */
 export async function syncFromNotion(
-  options: { force?: boolean; dryRun?: boolean; notify?: boolean } = {},
+  options: { force?: boolean; dryRun?: boolean } = {},
 ): Promise<SyncReport> {
   const dryRun = options.dryRun === true;
   const clients = await resolveClients(dryRun);
-  const changes = new Map<string, ClientChanges>();
 
   const report: SyncReport = {
     dryRun,
     clientsMapped: clients.byNotionPage.size,
-    notified: 0,
     letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0 },
     kinds: [],
     warnings: [...clients.warnings],
@@ -459,7 +377,6 @@ export async function syncFromNotion(
       kind,
       clients.byNotionPage,
       { force: options.force === true, dryRun },
-      changes,
       clients.disabledClientIds,
     );
     report.kinds.push(result.report);
@@ -471,15 +388,6 @@ export async function syncFromNotion(
   const lettres = await syncLetters(clients.byOrganisation, { dryRun });
   report.letters = lettres.report;
   report.warnings.push(...lettres.warnings);
-
-  // Un seul message par personne et par balayage, envoye APRES toutes les
-  // bases : prevenir base par base ferait trois e-mails pour un meme comite.
-  if (!dryRun && options.notify !== false) {
-    await notifier(changes, clients.statusById, report.warnings);
-  }
-  report.notified = [...changes.keys()].filter(
-    (id) => clients.statusById.get(id) === "actif",
-  ).length;
 
   return report;
 }

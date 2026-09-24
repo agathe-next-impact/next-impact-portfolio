@@ -132,6 +132,18 @@ export const ctoClients = pgTable("cto_clients", {
    * que la liste des packs évolue chez elle sans coûter une migration ici.
    */
   sector: text("sector"),
+  /**
+   * Dernière fois qu'un e-mail « il y a du nouveau » est parti pour cet
+   * accompagnement. `null` : jamais notifié.
+   *
+   * C'est l'état qui sépare la synchro (`src/cto/notion/sync.ts`, écrit dans
+   * `cto_deliverables`) de la notification (`src/cto/notify/`, lue ici) : deux
+   * processus déclenchés séparément, l'un par un balayage régulier, l'autre par
+   * un geste délibéré. Sans cette date, il n'y aurait rien à comparer entre les
+   * deux passages, et « ce qui est nouveau depuis la dernière notification » ne
+   * voudrait plus rien dire une fois le balayage terminé.
+   */
+  lastNotifiedAt: timestamp("last_notified_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
