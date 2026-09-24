@@ -14,7 +14,16 @@ import {
 import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
 import { clientsDatabaseId, databaseIdFor, SYNCED_KINDS } from "./config";
 import { syncLetters, type LettersReport } from "./letters";
-import { clientPageIds, companyName, mapPage, spaceId, PROPS, UNTITLED } from "./map";
+import {
+  clientPageIds,
+  clientStatus,
+  clientTier,
+  companyName,
+  mapPage,
+  spaceId,
+  PROPS,
+  UNTITLED,
+} from "./map";
 import * as prop from "./properties";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -87,49 +96,130 @@ interface ClientResolution {
 }
 
 /**
- * Fait correspondre les fiches de la base Clients aux accompagnements en base.
+ * Fait correspondre les fiches de la base Clients aux accompagnements en base
+ * — et en crée un nouveau pour toute fiche qu'aucun accompagnement ne
+ * revendique encore.
  *
- * Une fiche n'est retenue que si son `ID espace` désigne un accompagnement qui
- * existe vraiment. Un identifiant mal recopié produirait sinon des livrables
- * rattachés à un client fantôme, invisibles de tous et détectables de personne.
+ * Le rattachement se fait par `notion_page_id`, jamais réécrit dans Notion
+ * (voir schema.ts). Une fiche déjà reliée à la main avant ce mécanisme — via
+ * la colonne texte legacy `ID espace` — est ADOPTÉE (son `notion_page_id` est
+ * rempli) plutôt que dupliquée. Sans l'un ou l'autre, la fiche est un nouvel
+ * accompagnement : c'est la gestion des comptes clients par Notion, la
+ * création n'a plus besoin de `cto:invite`.
  */
 async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const warnings: string[] = [];
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
 
-  const disabledClientIds = new Set<string>();
   const rows = await db()
-    .select({ id: ctoClients.id, syncEnabled: ctoClients.syncEnabled })
+    .select({
+      id: ctoClients.id,
+      notionPageId: ctoClients.notionPageId,
+      syncEnabled: ctoClients.syncEnabled,
+    })
     .from(ctoClients);
+
+  const disabledClientIds = new Set<string>();
+  const idByNotionPage = new Map<string, string>();
+  const legacyById = new Map<string, { notionPageId: string | null }>();
   for (const row of rows) {
     if (!row.syncEnabled) disabledClientIds.add(row.id);
+    if (row.notionPageId) idByNotionPage.set(row.notionPageId, row.id);
+    legacyById.set(row.id, { notionPageId: row.notionPageId });
   }
-  const known = new Set(rows.map((row) => row.id));
 
   for (const page of await queryDatabase(clientsDatabaseId())) {
     const name = companyName(page) ?? "(fiche sans raison sociale)";
-    const id = spaceId(page)?.trim();
+    let id = idByNotionPage.get(page.id);
 
     if (!id) {
-      warnings.push(`« ${name} » n'a pas d'${PROPS.clients.spaceId} : ses livrables ne remonteront pas.`);
-      continue;
+      // Repli : une fiche reliée à la main avant que `notion_page_id` existe.
+      // On l'adopte au lieu d'en recréer une seconde.
+      const legacy = spaceId(page)?.trim();
+      const known = legacy ? legacyById.get(legacy) : undefined;
+      if (legacy && known && !known.notionPageId) {
+        id = legacy;
+        if (dryRun) {
+          warnings.push(`« ${name} » serait rattachée à son accompagnement existant (${id}).`);
+        } else {
+          await db().update(ctoClients).set({ notionPageId: page.id }).where(eq(ctoClients.id, id));
+        }
+      }
     }
-    if (!known.has(id)) {
-      warnings.push(
-        `« ${name} » porte un ${PROPS.clients.spaceId} qui ne correspond à aucun accompagnement (${id}).`,
-      );
-      continue;
+
+    if (!id) {
+      if (dryRun) {
+        warnings.push(`« ${name} » : nouvel accompagnement — rien créé, lecture seule.`);
+        continue;
+      }
+      const [created] = await db()
+        .insert(ctoClients)
+        .values({
+          company: name,
+          notionPageId: page.id,
+          tier: clientTier(page) ?? undefined,
+          status: clientStatus(page) ?? undefined,
+        })
+        .returning({ id: ctoClients.id });
+      id = created.id;
+      warnings.push(`« ${name} » : nouvel accompagnement créé (${id}).`);
     }
 
     byNotionPage.set(page.id, id);
     if (disabledClientIds.has(id)) {
       warnings.push(`« ${name} » : synchro suspendue depuis l'admin — ses lignes ne bougent pas ce balayage.`);
     }
+
+    await alignerEtatEtPalier(page, id, name, warnings, dryRun);
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
   }
 
   return { byNotionPage, byOrganisation, disabledClientIds, warnings };
+}
+
+/**
+ * Aligne le statut et le palier sur les colonnes « État » et « Palier » de
+ * l'atelier — les deux choses que la fiche Notion pilote désormais, en plus
+ * de la création. Le reste (personnes, révocation) reste un geste CLI/SQL
+ * délibéré ; voir `docs/cto-externalise/espace-client-mise-en-place.md`.
+ *
+ * Écriture conditionnelle, même logique que `adopterFicheOrganisation` :
+ * on ne touche `cto_clients` que si quelque chose a réellement changé.
+ */
+async function alignerEtatEtPalier(
+  page: NotionPage,
+  clientId: string,
+  name: string,
+  warnings: string[],
+  dryRun: boolean,
+): Promise<void> {
+  const status = clientStatus(page);
+  const tier = clientTier(page);
+
+  const [actuel] = await db()
+    .select({ status: ctoClients.status, tier: ctoClients.tier })
+    .from(ctoClients)
+    .where(eq(ctoClients.id, clientId))
+    .limit(1);
+  if (!actuel) return;
+
+  const patch: { status?: typeof actuel.status; tier?: string; statusChangedAt?: Date } = {};
+  if (status && status !== actuel.status) patch.status = status;
+  if (tier && tier !== actuel.tier) patch.tier = tier;
+  if (Object.keys(patch).length === 0) return;
+
+  if (dryRun) {
+    const changements = [
+      patch.status ? `état → ${patch.status}` : null,
+      patch.tier ? `palier → ${patch.tier}` : null,
+    ].filter(Boolean);
+    warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);
+    return;
+  }
+
+  if (patch.status) patch.statusChangedAt = new Date();
+  await db().update(ctoClients).set(patch).where(eq(ctoClients.id, clientId));
 }
 
 /**

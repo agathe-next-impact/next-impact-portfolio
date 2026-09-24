@@ -94,58 +94,79 @@ export const ctoAccessEventEnum = pgEnum("cto_access_event", [
 
 // ─── Clients et personnes ─────────────────────────────────────────────────
 
-export const ctoClients = pgTable("cto_clients", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  /** Raison sociale. C'est le nom affiché en tête de l'espace. */
-  company: text("company").notNull(),
-  /** Palier souscrit : `referent` ou `direction` (cf. lib/cto-externalise.ts). */
-  tier: text("tier").notNull().default("direction"),
-  status: ctoClientStatusEnum("status").notNull().default("actif"),
-  /**
-   * Interrupteur de la synchro Notion, indépendant de `status`. `status` dit
-   * si la PERSONNE a accès à l'espace ; celui-ci dit si l'ATELIER continue à
-   * l'alimenter. Utile à l'entrée d'un accompagnement — le temps de relire ce
-   * qui a été publié avant de laisser la synchro et ses e-mails partir tout
-   * seuls. Vrai par défaut : la synchro reste le comportement normal, ce
-   * champ n'existe que pour la pause volontaire.
-   *
-   * Suspendu, un balayage laisse les livrables déjà publiés tels quels — ni
-   * mis à jour, ni retirés — et ignore les lignes nouvellement publiées de cet
-   * accompagnement (`src/cto/notion/sync.ts`).
-   */
-  syncEnabled: boolean("sync_enabled").notNull().default(true),
-  /**
-   * Date du dernier changement d'état. Sans elle, « fenêtre de restitution de
-   * trois mois » n'est pas implémentable : `status` dit où on en est, pas
-   * depuis quand. Remise à jour à chaque transition, y compris un retour en
-   * `actif` après une suspension.
-   */
-  statusChangedAt: timestamp("status_changed_at").notNull().defaultNow(),
-  /**
-   * Le **pack sectoriel** de la fiche organisation (ex. `pack-industrie-btp.md`),
-   * recopié à chaque balayage. Sert uniquement à distribuer les lettres
-   * sectorielles ; un client sans pack reçoit la générale et la sienne, ce qui
-   * est le comportement voulu par défaut.
-   *
-   * La valeur n'est PAS saisie ici : elle vient de la « Base des fiches
-   * organisation », qui est la source de vérité. Texte brut et non enum, pour
-   * que la liste des packs évolue chez elle sans coûter une migration ici.
-   */
-  sector: text("sector"),
-  /**
-   * Dernière fois qu'un e-mail « il y a du nouveau » est parti pour cet
-   * accompagnement. `null` : jamais notifié.
-   *
-   * C'est l'état qui sépare la synchro (`src/cto/notion/sync.ts`, écrit dans
-   * `cto_deliverables`) de la notification (`src/cto/notify/`, lue ici) : deux
-   * processus déclenchés séparément, l'un par un balayage régulier, l'autre par
-   * un geste délibéré. Sans cette date, il n'y aurait rien à comparer entre les
-   * deux passages, et « ce qui est nouveau depuis la dernière notification » ne
-   * voudrait plus rien dire une fois le balayage terminé.
-   */
-  lastNotifiedAt: timestamp("last_notified_at"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const ctoClients = pgTable(
+  "cto_clients",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /**
+     * Page Notion de la base Clients dont cet accompagnement est né — sa clé
+     * de rattachement, comme `notion_page_id` sur les livrables et les
+     * lettres.
+     *
+     * `null` sur un accompagnement créé avant ce mécanisme (via `cto:invite`,
+     * relié à la main par la colonne texte « ID espace »). La synchro adopte
+     * ces lignes-là au premier passage qui les recroise
+     * (`src/cto/notion/sync.ts`), plutôt que d'en créer un double : elle ne
+     * réécrit jamais Notion, donc l'identifiant de page est la SEULE clé qui
+     * lui permette de reconnaître un accompagnement déjà créé sans qu'on lui
+     * recolle l'UUID à la main.
+     */
+    notionPageId: text("notion_page_id"),
+    /** Raison sociale. C'est le nom affiché en tête de l'espace. */
+    company: text("company").notNull(),
+    /** Palier souscrit : `referent` ou `direction` (cf. lib/cto-externalise.ts). */
+    tier: text("tier").notNull().default("direction"),
+    status: ctoClientStatusEnum("status").notNull().default("actif"),
+    /**
+     * Interrupteur de la synchro Notion, indépendant de `status`. `status`
+     * dit si la PERSONNE a accès à l'espace ; celui-ci dit si l'ATELIER
+     * continue à l'alimenter. Utile à l'entrée d'un accompagnement — le temps
+     * de relire ce qui est publié avant de laisser la synchro l'alimenter
+     * pour de bon. Vrai par défaut : la synchro reste le comportement
+     * normal, ce champ n'existe que pour la pause volontaire.
+     *
+     * Suspendu, un balayage laisse les livrables déjà publiés tels quels — ni
+     * mis à jour, ni retirés — et ignore les lignes nouvellement publiées de
+     * cet accompagnement (`src/cto/notion/sync.ts`).
+     */
+    syncEnabled: boolean("sync_enabled").notNull().default(true),
+    /**
+     * Date du dernier changement d'état. Sans elle, « fenêtre de restitution
+     * de trois mois » n'est pas implémentable : `status` dit où on en est,
+     * pas depuis quand. Remise à jour à chaque transition, y compris un
+     * retour en `actif` après une suspension — que la transition vienne d'un
+     * geste SQL ou de la colonne « État » de l'atelier.
+     */
+    statusChangedAt: timestamp("status_changed_at").notNull().defaultNow(),
+    /**
+     * Le **pack sectoriel** de la fiche organisation (ex. `pack-industrie-btp.md`),
+     * recopié à chaque balayage. Sert uniquement à distribuer les lettres
+     * sectorielles ; un client sans pack reçoit la générale et la sienne, ce
+     * qui est le comportement voulu par défaut.
+     *
+     * La valeur n'est PAS saisie ici : elle vient de la « Base des fiches
+     * organisation », qui est la source de vérité. Texte brut et non enum,
+     * pour que la liste des packs évolue chez elle sans coûter une migration
+     * ici.
+     */
+    sector: text("sector"),
+    /**
+     * Dernière fois qu'un e-mail « il y a du nouveau » est parti pour cet
+     * accompagnement. `null` : jamais notifié.
+     *
+     * C'est l'état qui sépare la synchro (`src/cto/notion/sync.ts`, écrit
+     * dans `cto_deliverables`) de la notification (`src/cto/notify/`, lue
+     * ici) : deux processus déclenchés séparément, l'un par un balayage
+     * régulier, l'autre par un geste délibéré. Sans cette date, il n'y aurait
+     * rien à comparer entre les deux passages, et « ce qui est nouveau
+     * depuis la dernière notification » ne voudrait plus rien dire une fois
+     * le balayage terminé.
+     */
+    lastNotifiedAt: timestamp("last_notified_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("cto_client_notion_page").on(t.notionPageId)],
+);
 
 export const ctoPersons = pgTable(
   "cto_persons",

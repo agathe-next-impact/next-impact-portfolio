@@ -57,6 +57,13 @@
       "when": 1790169353133,
       "tag": "0007_living_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790220348958,
+      "tag": "0008_square_millenium_guard",
+      "breakpoints": true
     }
   ]
 }

@@ -9,6 +9,7 @@ import type {
   RoadmapPayload,
   VeillePayload,
 } from "../deliverables";
+import type { ClientStatus } from "../access";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // D'une page Notion à un livrable.
@@ -29,8 +30,11 @@ export const PROPS = {
   placement: "Affichage",
   clients: {
     company: "Raison sociale",
+    /** Legacy : rattachement à la main d'avant `notion_page_id`. Voir schema.ts. */
     spaceId: "ID espace",
     organisation: "Organisation",
+    status: "État",
+    tier: "Palier",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -109,6 +113,24 @@ export function spaceId(page: NotionPage): string | null {
 
 export function companyName(page: NotionPage): string | null {
   return p.text(page, PROPS.clients.company);
+}
+
+const CLIENT_STATUSES: readonly ClientStatus[] = ["actif", "suspendu", "restitution", "clos"];
+
+/**
+ * L'état affiché dans l'atelier (colonne « État »), s'il correspond à une des
+ * quatre valeurs connues de `cto_clients.status`. `null` sinon — un champ vide
+ * ou une faute de frappe ne doit pas faire tomber un accompagnement dans un
+ * état qu'il n'a pas choisi.
+ */
+export function clientStatus(page: NotionPage): ClientStatus | null {
+  const value = p.select(page, PROPS.clients.status);
+  return (CLIENT_STATUSES as readonly string[]).includes(value ?? "") ? (value as ClientStatus) : null;
+}
+
+/** Le palier souscrit (colonne « Palier »). Mêmes valeurs que `cto_clients.tier`, aucun mapping. */
+export function clientTier(page: NotionPage): string | null {
+  return p.select(page, PROPS.clients.tier);
 }
 
 /**
