@@ -64,6 +64,20 @@
       "when": 1790220348958,
       "tag": "0008_square_millenium_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790255816063,
+      "tag": "0009_gigantic_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790258664570,
+      "tag": "0010_sweet_golden_guardian",
+      "breakpoints": true
     }
   ]
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { NotionPage } from "./api";
 import { mapPage, PROPS, UNTITLED } from "./map";
-import { clientPageIds, spaceId } from "./map";
+import { clientPageIds, personEmail, personName, personRevoked, personRole, spaceId } from "./map";
 import * as p from "./properties";
 import type { CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
 
@@ -29,6 +29,8 @@ const multi = (...names: string[]) => ({
 const date = (start: string) => ({ type: "date", date: { start } });
 const number = (value: number) => ({ type: "number", number: value });
 const relation = (...ids: string[]) => ({ type: "relation", relation: ids.map((id) => ({ id })) });
+const email = (value: string) => ({ type: "email", email: value });
+const checkbox = (value: boolean) => ({ type: "checkbox", checkbox: value });
 
 describe("lecture des propriétés", () => {
   it("rend null sur une propriété absente plutôt que de lever", () => {
@@ -40,6 +42,7 @@ describe("lecture des propriétés", () => {
     expect(p.multiSelect(empty, "Portée")).toEqual([]);
     expect(p.relation(empty, "Client")).toEqual([]);
     expect(p.checkbox(empty, "Publié")).toBe(false);
+    expect(p.email(empty, "Email")).toBeNull();
   });
 
   it("rend null sur une propriété du mauvais type", () => {
@@ -73,6 +76,26 @@ describe("base Clients", () => {
 
     const ligne = page({ [PROPS.client]: relation("aaa", "bbb") });
     expect(clientPageIds(ligne)).toEqual(["aaa", "bbb"]);
+  });
+});
+
+describe("base Personnes", () => {
+  it("lit le nom, l'e-mail en minuscules et le rôle", () => {
+    const fiche = page({
+      [PROPS.persons.name]: title("Alain Roux"),
+      [PROPS.persons.email]: email("Alain.Roux@Exemple.fr"),
+      [PROPS.persons.role]: richText("Dirigeant"),
+    });
+    expect(personName(fiche)).toBe("Alain Roux");
+    expect(personEmail(fiche)).toBe("alain.roux@exemple.fr");
+    expect(personRole(fiche)).toBe("Dirigeant");
+    expect(personRevoked(fiche)).toBe(false);
+  });
+
+  it("rend l'accès révoqué seulement sur la case cochée", () => {
+    const revoquee = page({ [PROPS.persons.revoked]: checkbox(true) });
+    expect(personRevoked(revoquee)).toBe(true);
+    expect(personRevoked(page({}))).toBe(false);
   });
 });
 

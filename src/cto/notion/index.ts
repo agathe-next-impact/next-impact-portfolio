@@ -10,10 +10,12 @@ export {
   configurationIssue,
   databaseIdFor,
   lettersDatabaseId,
+  personsDatabaseId,
   SYNCED_KINDS,
 } from "./config";
 export { pageBody, type Block, type Span } from "./blocks";
 export { syncLetters, LETTER_PROPS, type LettersReport } from "./letters";
+export { syncPersons, type PersonsReport } from "./persons";
 export { PROPS, mapPage, UNTITLED } from "./map";
 export {
   syncFromNotion,

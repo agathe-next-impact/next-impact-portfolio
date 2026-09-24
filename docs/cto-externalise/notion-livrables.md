@@ -3,11 +3,12 @@
 Où s'écrivent les livrables de l'offre « CTO externalisé », et par quel chemin
 ils arrivent dans l'espace client (`app/(cto)/espace-direction`).
 
-Périmètre : le modèle, le raccordement et la synchronisation, en place pour les
-quatre bases de livrables et pour les lettres de veille. Le Cron quotidien est
-branché (§ 4 de `espace-client-mise-en-place.md`). Ce qui reste — la base
-Documents et l'export de restitution — est listé en § 6. Procédure d'accès :
-`espace-client-mise-en-place.md`.
+Périmètre : le modèle, le raccordement et la synchronisation, en place pour la
+base Clients (création et état des accompagnements), la base Personnes (qui a
+accès, § 6), les quatre bases de livrables et les lettres de veille. Le Cron
+quotidien est branché (§ 4 de `espace-client-mise-en-place.md`). Ce qui reste —
+la base Documents et l'export de restitution — est listé en § 7. Procédure
+d'accès : `espace-client-mise-en-place.md`.
 
 ---
 
@@ -29,9 +30,14 @@ l'ordre où elles comptent :
 
 ```
 Notion (atelier)  →  npm run cto:sync  →  cto_deliverables  →  /espace-direction
+                                                  ↓
+                                         npm run cto:notify  →  e-mail « il y a du nouveau »
 ```
 
-**Un client n'est jamais invité dans Notion.** Les sept bases contiennent les
+La synchro écrit, la notification prévient : deux commandes, deux moments
+(§ 4).
+
+**Un client n'est jamais invité dans Notion.** Les huit bases contiennent les
 lignes de tous les clients ; la seule surface qui leur est destinée est l'espace
 en ligne, cloisonné par personne.
 
@@ -49,7 +55,7 @@ un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alert
 
 | Base | Ce qu'elle porte | Livrables couverts (`lib/cto-externalise.ts`) |
 | --- | --- | --- |
-| **Clients** | la charnière avec la base Postgres | — |
+| **Clients** | un accompagnement par fiche : sa création, son état, son palier | — |
 | **Décisions** | arbitrages rendus et options écartées | relevé de décisions, registre des évolutions |
 | **Roadmap** | chantiers datés, budgétés, et opportunités | roadmap, revue d'opportunité |
 | **Cartographie** | outils, fournisseurs, contrats, accès, échéances | cartographie du système, budget à trois ans |
@@ -80,8 +86,8 @@ renouvellement de contrat.
 
 L'atelier se raccorde à deux endroits, et il ne faut pas les confondre.
 
-**Vers la base Postgres**, par `ID espace` (ci-dessous) : c'est ce qui décide
-*dans quel espace* une ligne atterrit.
+**Vers la base Postgres**, par la fiche *Clients* elle-même (ci-dessous) :
+c'est ce qui décide *dans quel espace* une ligne atterrit.
 
 **Vers la « Base des fiches organisation »**, par la relation `Organisation` :
 c'est ce qui décide *qui est* ce client. La fiche organisation vit hors de
@@ -97,17 +103,41 @@ par balayage.
 
 ### La charnière vers l'espace
 
-Sur chaque fiche de **Clients**, la colonne **`ID espace`** porte l'UUID de
-`cto_clients`, celui qu'imprime `npm run cto:invite`. C'est le seul point de
-contact entre les deux mondes : la synchro suit la relation `Client` d'une
-ligne, lit l'`ID espace` de la fiche, et sait dans quel espace la déposer. Une
-fiche sans `ID espace` ne remonte rien, silencieusement.
+**Une fiche de *Clients* est un accompagnement.** Au balayage, toute fiche
+qu'aucun accompagnement ne revendique encore en crée un dans `cto_clients`, et
+le rapport imprime son UUID (« nouvel accompagnement créé »). Le lien entre
+les deux est l'identifiant de la page Notion, conservé en base
+(`notion_page_id`) et jamais réécrit dans Notion. La synchro suit ensuite la
+relation `Client` de chaque ligne jusqu'à sa fiche, et sait dans quel espace la
+déposer. Procédure complète d'ouverture : § 3.1 de
+`espace-client-mise-en-place.md`.
 
-`Palier` et `État` reprennent les valeurs techniques de `cto_clients`
-(`referent` / `direction`, `actif` / `suspendu` / `restitution` / `clos`) : pas
-de table de correspondance à écrire, et rien à retraduire en lisant. Ces deux
-colonnes sont un **rappel**, pas une commande : l'état fait foi en base et se
-change en SQL (§ 3.2 de `espace-client-mise-en-place.md`).
+Conséquence : une fiche créée pour essayer crée un vrai accompagnement. On
+n'essaie pas dans l'atelier de production.
+
+**`ID espace` n'est plus qu'un raccord.** Cette colonne texte servait autrefois
+à coller l'UUID imprimé par `npm run cto:invite`. Elle ne sert plus qu'à une
+chose : si un accompagnement a été créé en CLI (`--entreprise`) avant sa fiche,
+y coller son UUID fait que la synchro l'**adopte** au lieu d'en créer un
+second. Sur une fiche déjà rattachée, elle est ignorée.
+
+**`État`, `Palier` et `ID projet WP Umbrella` commandent.** À chaque balayage,
+leurs valeurs sont recopiées dans `cto_clients` dès qu'elles diffèrent, et un
+changement d'état est daté. Les deux premières reprennent les valeurs
+techniques (`referent` / `direction`, `actif` / `suspendu` / `restitution` /
+`clos`) : pas de table de correspondance à écrire, et rien à retraduire en
+lisant. Suspendre, restituer ou clore un accompagnement se fait donc ici
+(§ 3.3 de `espace-client-mise-en-place.md`). Une colonne vide laisse la base
+décider ; une colonne remplie écrase tout changement fait en SQL au balayage
+suivant.
+
+`ID projet WP Umbrella` est l'identifiant numérique du site chez WP Umbrella
+(supervision : disponibilité, sauvegardes, vulnérabilités). Aujourd'hui, la
+synchro le stocke et rien ne l'affiche encore. Règle pour l'écran qui le lira :
+il n'est jamais saisi par le client ni lu dans une URL, il se retrouve depuis
+la session de la personne connectée (commentaire de `schema.ts`). Colonne
+ajoutée par la migration `0009` : l'appliquer en production
+(`npm run db:cto:migrate`) avant de déployer le code qui la lit.
 
 **`Lien vers l'espace`** porte l'URL où le client se connecte
 (`https://next-impact.digital/espace-direction`). Elle est **identique sur
@@ -115,7 +145,7 @@ toutes les fiches, volontairement** : l'espace n'a qu'une seule adresse pour
 tous les accompagnements, l'identité se joue à la connexion (lien magique ou
 passkey), jamais dans l'URL. Ce n'est donc ni une donnée par client ni une
 synchro à écrire — juste un pense-bête pour ne pas avoir à la retaper depuis
-Notion. À coller à la main sur toute nouvelle fiche, comme `ID espace`.
+Notion. À coller à la main sur toute nouvelle fiche.
 
 ### Deux colonnes, deux questions
 
@@ -158,11 +188,11 @@ client voit.
    capacité **lecture de contenu seule** : la synchro ne réécrit jamais dans
    Notion. Le jeton commence par `ntn_`.
 2. **Partager la page mère** — sur « Direction technique — clients », menu `•••`
-   → *Connexions* → l'intégration. Les sept bases héritent du partage. Sans ce
+   → *Connexions* → l'intégration. Les huit bases héritent du partage. Sans ce
    geste l'API répond 404 sur tout : chez Notion, le partage n'est jamais
    implicite.
-3. **Poser les variables** — six, listées avec leurs valeurs au bas de la page
-   Notion elle-même. Les identifiants de base ne sont pas des secrets, mais ils
+3. **Poser les variables** — neuf (le jeton et les huit bases), listées avec
+   leurs valeurs sur la page Notion elle-même. Les identifiants de base ne sont pas des secrets, mais ils
    n'ont pas leur place dans le dépôt : ils vivent dans `.env.local` et dans
    Vercel, portée Production.
 
@@ -174,6 +204,7 @@ CTO_NOTION_DB_ROADMAP=…
 CTO_NOTION_DB_CARTOGRAPHIE=…
 CTO_NOTION_DB_VEILLE=…
 CTO_NOTION_DB_LETTRES=…
+CTO_NOTION_DB_PERSONNES=…
 CTO_NOTION_DB_DOCUMENTS=…
 ```
 
@@ -198,20 +229,28 @@ relit, une écriture non. Le balayage à blanc fait exactement le même travail 
 lecture et compte ce qu'il aurait écrit.
 
 Le rapport donne, par base, ce qui a été créé, mis à jour, restauré, laissé
-inchangé et retiré — puis la liste des points à regarder. Les trois qui
+inchangé et retiré — puis la liste des points à regarder. Ceux qui
 reviendront :
 
 | Ce que dit le rapport | Ce qui s'est passé |
 | --- | --- |
-| « n'a pas d'ID espace » | Une fiche Clients sans UUID. Ses lignes ne remontent nulle part. |
+| « nouvel accompagnement créé (uuid) » | Une nouvelle fiche Clients. L'UUID sert à inviter la première personne. |
 | « publiée sans client » | Une ligne cochée `Publié` dont la relation *Client* est vide. |
+| « rattachée à N clients » / « fiche client non résoluble » | Relation *Client* ambiguë ou cassée : la ligne est ignorée. |
+| « synchro suspendue depuis l'admin » | La synchro de ce client est en pause (`/admin-cto`) : ses livrables ne bougent pas. |
 | « l'atelier ne rend aucune ligne publiée » | Le garde-fou de retrait de masse s'est déclenché. |
+| « nouvel accès créé » | Une nouvelle ligne dans Personnes (§ 6). |
+| « a changé de client dans Notion : ignoré » | La relation `Client` d'une personne déjà créée a bougé : rien n'est appliqué, à trancher en SQL. |
 
-Ce dernier mérite une explication. Si une base ne rend plus rien alors que
+Le garde-fou de retrait de masse mérite une explication. Si une base ne rend plus rien alors que
 l'espace en affiche plusieurs, la cause la plus probable est une colonne
 renommée ou une case décochée par accident, pas une dépublication générale. La
 synchro n'exécute donc aucun retrait dans ce cas et le dit. Après vérification,
 `--forcer` lève la retenue.
+
+À blanc, le rapport dit aussi ce qu'il **aurait** fait sur les fiches :
+« nouvel accompagnement — rien créé », « serait rattachée à son accompagnement
+existant », « serait mise à jour : état → … ».
 
 **Un balayage est idempotent.** Relancer la commande sur un atelier inchangé
 n'écrit rien : chaque livrable porte l'empreinte de son contenu, et une version
@@ -223,17 +262,32 @@ de tourner sans faire enfler l'historique.
 (§ 4 de `espace-client-mise-en-place.md`). La commande reste utile pour publier
 tout de suite après un comité, sans attendre la nuit.
 
+**Mettre un client en pause.** Sur `/admin-cto`, « Mettre en pause » gèle ses
+livrables : rien n'est créé, corrigé ni retiré chez lui tant que la pause dure.
+Sa fiche continue d'être lue (`État`, `Palier`). Voir § 5 de
+`espace-client-mise-en-place.md`.
+
 ### Ce que le client est prévenu
 
-Un balayage qui publie ou corrige quelque chose envoie **un** e-mail par
-personne joignable de l'accompagnement — un seul, même si trois bases ont bougé.
-Il annonce des nombres et un lien, jamais un titre : aucun contenu de l'espace
-ne voyage par courrier (règle de tête de `src/cto/access/notify.ts`), sinon la
+**La synchro ne prévient personne.** Ni la commande ni le Cron n'envoient
+d'e-mail : synchroniser plusieurs fois pendant qu'on relit un livrable doit
+rester invisible pour le client. La notification est une commande à part,
+lancée quand le contenu est prêt à être vu :
+
+```bash
+npm run cto:notify -- --a-blanc   # dit qui serait notifié, n'envoie rien
+npm run cto:notify                # envoie
+```
+
+Elle ne lit jamais Notion, seulement ce qui est déjà en base : pour chaque
+accompagnement `actif`, ce qui a été publié ou corrigé depuis **sa** dernière
+notification (`cto_clients.last_notified_at`). **Un** e-mail par personne
+active, même si trois bases ont bougé. Il annonce des nombres et un lien,
+jamais un titre : aucun contenu de l'espace ne voyage par courrier, sinon la
 boîte du client devient une archive ni révocable, ni journalisée, ni effaçable.
 
-Un accompagnement `suspendu` ne reçoit rien : c'est ce que promet son état.
-`--sans-mail` coupe l'envoi pour un balayage, par exemple lors d'une reprise en
-masse de l'atelier.
+Un accompagnement `suspendu` ou en `restitution` n'est pas notifié et sa date
+n'avance pas : à la réactivation, il reçoit d'un coup ce qu'il a manqué.
 
 ### Ce que le client voit changer
 
@@ -294,7 +348,53 @@ analyseur au rendu. Le vocabulaire est court — titres, paragraphes, listes,
 citation, filet, code. Un bloc d'un autre type est ignoré plutôt que rendu de
 travers ; les directives éditoriales n'utilisent ni tableau ni colonne.
 
-## 6. Ce qu'il reste à coder
+## 6. La base Personnes — qui a accès
+
+Une ligne de la base **Personnes** est un accès. Quatre colonnes : `Nom`,
+`Email`, `Rôle` (texte libre), `Client` (relation, une seule). Une cinquième,
+`Révoquée`, le coupe.
+
+**Variable : `CTO_NOTION_DB_PERSONNES`**, à poser dans `.env.local` et sur
+Vercel (portée Production). Sa valeur est l'identifiant de la base, affiché
+avec les autres sur la page Notion « Direction technique — clients », section
+« Base Personnes ». Elle est **obligatoire** : sans elle, `configurationIssue()`
+bloque toute la synchro, livrables compris (la commande s'arrête sur
+« Variables manquantes », le Cron répond `synchro: { ignoree }`).
+
+**Remplace `npm run cto:invite` comme voie normale.** Ajouter une ligne crée
+l'accès au balayage suivant, exactement comme une fiche *Clients* crée un
+accompagnement (§ 2). La commande garde deux usages, et seulement deux :
+envoyer le tout premier lien de connexion — la synchro n'envoie jamais
+d'e-mail, § 4 — et créer un accès en local sans toucher l'atelier de
+production.
+
+**La reconnaissance se fait par adresse, pas par une colonne collée à la
+main.** Une personne créée avant ce mécanisme (`cto:invite`, sans fiche
+Notion) est **adoptée** dès qu'une fiche portant la même adresse apparaît, au
+lieu d'être dupliquée — l'index unique sur l'adresse (`cto_person_email`) n'y
+survivrait pas sinon. C'est le même geste que l'adoption des accompagnements
+par `ID espace`, appliqué à l'adresse plutôt qu'à un identifiant collé.
+
+**`Révoquée` va dans les deux sens.** Cocher coupe l'accès au balayage
+suivant : sessions fermées, passkeys refusées, comme la révocation manuelle
+(§ 3.3 de `espace-client-mise-en-place.md`), dont elle est désormais une
+seconde porte. Décocher restaure l'accès — symétrique, à la manière du retour
+d'un accompagnement à `actif` après une suspension. ⚠️ Corollaire assumé :
+un décochage accidentel dans Notion rouvre un accès aussi silencieusement
+qu'un cochage le ferme.
+
+**Changer la relation `Client` d'une personne déjà créée est ignoré, pas
+appliqué.** C'est l'asymétrie du fichier (`src/cto/notion/persons.ts`) : la
+révocation *rétrécit* l'accès, sûre par défaut ; réassigner une personne à un
+autre client pourrait au contraire lui *ouvrir* les données d'une autre
+entreprise d'un simple glisser-déposer de relation. Le rapport de synchro le
+signale ; rien ne bouge tout seul. Un transfert reste un geste SQL délibéré.
+
+**Une personne disparue de Notion n'est pas révoquée.** Même traitement qu'un
+accompagnement dont la fiche disparaîtrait (§ 2) : ni l'absence de ligne ni sa
+suppression ne pilotent l'accès, seule la case le fait.
+
+## 7. Ce qu'il reste à coder
 
 1. **La base Documents.** Le type `document` existe dans le schéma et la
    correspondance des colonnes est écrite ; seule la base manque à
@@ -319,6 +419,7 @@ travers ; les directives éditoriales n'utilisent ni tableau ni colonne.
 | Placement (table mutable) | `src/cto/db/schema.ts` — `cto_deliverable_placements` |
 | Pages de catégorie | `app/(cto)/espace-direction/livrables/[categorie]/` |
 | Commande | `scripts/cto-sync.ts` |
+| Notification des publications | `src/cto/notify/store.ts`, `scripts/cto-notify.ts` |
 | Balayage quotidien | `app/api/cto/cron/route.ts` |
 | Lettres — table et lecture | `src/cto/letters/store.ts` |
 | Lettres — blocs Notion | `src/cto/notion/blocks.ts` |
@@ -326,3 +427,6 @@ travers ; les directives éditoriales n'utilisent ni tableau ni colonne.
 | Lettres — affichage | `app/(cto)/espace-direction/lettre.tsx` |
 | Affichage | `app/(cto)/espace-direction/livrables.tsx` |
 | Historique d'un livrable | `app/(cto)/espace-direction/historique.tsx` |
+| Personnes — balayage | `src/cto/notion/persons.ts` |
+| Personnes — schéma | `src/cto/db/schema.ts` — `cto_persons.notion_page_id` |
+| Invitation (voie de secours) | `scripts/cto-invite.ts` |

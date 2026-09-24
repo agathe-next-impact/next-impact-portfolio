@@ -92,6 +92,14 @@ export function url(page: NotionPage, name: string): string | null {
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
 }
 
+/** Propriété e-mail. Rendue telle quelle, en minuscules et sans espaces de bord. */
+export function email(page: NotionPage, name: string): string | null {
+  const property = prop(page, name);
+  if (!property || property.type !== "email") return null;
+  const value = property.email;
+  return typeof value === "string" && value.trim().length > 0 ? value.trim().toLowerCase() : null;
+}
+
 export function checkbox(page: NotionPage, name: string): boolean {
   const property = prop(page, name);
   if (!property || property.type !== "checkbox") return false;

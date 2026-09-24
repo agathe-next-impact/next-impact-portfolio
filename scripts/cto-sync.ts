@@ -29,6 +29,13 @@ function pad(value: number): string {
 function printReport(report: SyncReport): void {
   if (report.dryRun) console.log("\n— À BLANC : tout a été lu, rien n'a été écrit. —");
   console.log(`\nAccompagnements rattachés : ${report.clientsMapped}`);
+
+  const per = report.persons;
+  console.log(
+    `Personnes : ${per.seen} vues, ${per.created} créées, ${per.updated} màj, ` +
+      `${per.revoked} révoquées, ${per.restored} restaurées, ${per.unchanged} inchangées.`,
+  );
+
   console.log("\n  base            publiés  à la une  créés  màj  restaurés  inchangés  retirés");
   console.log("  ─────────────── ───────  ────────  ─────  ───  ─────────  ─────────  ───────");
 

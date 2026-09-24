@@ -1,7 +1,7 @@
 import type { DeliverableKind } from "../deliverables";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Où vivent les cinq bases de l'atelier.
+// Où vivent les huit bases de l'atelier.
 //
 // Les identifiants passent par l'environnement et non par une constante du
 // dépôt. Ce ne sont pas des secrets — sans le jeton ils n'ouvrent rien — mais
@@ -30,12 +30,13 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";
 const ENV_LETTRES = "CTO_NOTION_DB_LETTRES";
+const ENV_PERSONNES = "CTO_NOTION_DB_PERSONNES";
 
 function read(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(
-      `${name} manquante. Les identifiants des cinq bases figurent au bas de la page Notion ` +
+      `${name} manquante. Les identifiants des huit bases figurent au bas de la page Notion ` +
         "« Direction technique — clients ».",
     );
   }
@@ -50,6 +51,11 @@ export function clientsDatabaseId(): string {
 /** Identifiant de la base Lettres. Hors `SYNCED_KINDS` : ce n'est pas un livrable. */
 export function lettersDatabaseId(): string {
   return read(ENV_LETTRES);
+}
+
+/** Identifiant de la base Personnes. Hors `SYNCED_KINDS` : ce n'est pas un livrable non plus. */
+export function personsDatabaseId(): string {
+  return read(ENV_PERSONNES);
 }
 
 export function databaseIdFor(kind: DeliverableKind): string {
@@ -68,6 +74,7 @@ export function configurationIssue(): string | null {
     "CTO_NOTION_TOKEN",
     ENV_CLIENTS,
     ENV_LETTRES,
+    ENV_PERSONNES,
     ...SYNCED_KINDS.map((kind) => ENV_BY_KIND[kind]),
   ].filter((name) => !process.env[name]?.trim());
 

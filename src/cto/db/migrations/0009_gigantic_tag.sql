@@ -1,0 +1,1 @@
+ALTER TABLE "cto_clients" ADD COLUMN "wp_umbrella_project_id" integer;

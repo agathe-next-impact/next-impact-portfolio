@@ -1,5 +1,5 @@
 /**
- * Invitation d'une personne à l'espace direction technique.
+ * Invitation d'une personne à l'espace direction technique — voie de SECOURS.
  *
  *   npm run cto:invite -- --entreprise "Fédération X" --email a@x.fr --nom "Alain Roux" --role Dirigeant
  *   npm run cto:invite -- --client <uuid> --email b@x.fr --nom "Claire Nom" --role "Direction financière"
@@ -10,15 +10,18 @@
  * Toute valeur en plusieurs mots se met entre guillemets. Sans eux, le shell
  * découpe et la commande s'arrête sur « Argument inattendu ».
  *
- * Volontairement une commande et non un écran d'administration. Tant qu'il y a
- * quatre accompagnements au maximum (CTO_TERMS) et deux ou trois personnes
- * chacun, construire un back-office pour une dizaine de lignes reviendrait à
- * écrire plus d'interface que de produit. Le jour où ça devient pénible, ce
- * fichier dit exactement ce que l'écran devra faire.
+ * **La voie normale, depuis la base Personnes de l'atelier Notion, plus cette
+ * commande.** Ajouter une ligne (Nom, Email, Rôle, Client) y crée l'accès au
+ * balayage suivant — voir `src/cto/notion/persons.ts` et
+ * `docs/cto-externalise/notion-livrables.md` § 7. Cette commande reste utile
+ * pour deux choses que la synchro ne fait jamais : envoyer le premier lien de
+ * connexion (la synchro n'envoie aucun e-mail, voir l'en-tête de
+ * `src/cto/notion/sync.ts`) et créer un accès en local sans toucher Notion.
  *
- * C'est TOI qui invites, jamais le client : il n'existe aucun parcours
- * d'auto-inscription, et c'est ce qui garantit que la liste des personnes ayant
- * accès aux contrats et aux budgets reste une décision, pas une conséquence.
+ * Un accompagnement créé ici (`--entreprise`) sans fiche Notion correspondante
+ * reste un accompagnement à part entière ; la synchro l'ADOPTE si une fiche
+ * Notion le rejoint ensuite (`resolveClients`, `sync.ts`), elle n'en recrée
+ * jamais un second.
  */
 
 // EN PREMIER, avant tout module qui lit `process.env` au chargement :

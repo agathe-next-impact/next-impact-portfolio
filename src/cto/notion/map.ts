@@ -35,6 +35,7 @@ export const PROPS = {
     organisation: "Organisation",
     status: "État",
     tier: "Palier",
+    wpUmbrellaProjectId: "ID projet WP Umbrella",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -90,6 +91,12 @@ export const PROPS = {
     verdict: "Verdict",
     alternative: "Alternative chiffrée",
   },
+  persons: {
+    name: "Nom",
+    email: "Email",
+    role: "Rôle",
+    revoked: "Révoquée",
+  },
 } as const;
 
 /**
@@ -131,6 +138,28 @@ export function clientStatus(page: NotionPage): ClientStatus | null {
 /** Le palier souscrit (colonne « Palier »). Mêmes valeurs que `cto_clients.tier`, aucun mapping. */
 export function clientTier(page: NotionPage): string | null {
   return p.select(page, PROPS.clients.tier);
+}
+
+/** L'identifiant du site chez WP Umbrella, s'il est renseigné. */
+export function clientWpUmbrellaProjectId(page: NotionPage): number | null {
+  return p.number(page, PROPS.clients.wpUmbrellaProjectId);
+}
+
+export function personName(page: NotionPage): string | null {
+  return p.text(page, PROPS.persons.name);
+}
+
+export function personEmail(page: NotionPage): string | null {
+  return p.email(page, PROPS.persons.email);
+}
+
+export function personRole(page: NotionPage): string | null {
+  return p.text(page, PROPS.persons.role);
+}
+
+/** Case « Révoquée » de la base Personnes. Non cochée par défaut : accès ouvert. */
+export function personRevoked(page: NotionPage): boolean {
+  return p.checkbox(page, PROPS.persons.revoked);
 }
 
 /**

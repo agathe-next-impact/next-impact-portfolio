@@ -14,10 +14,12 @@ import {
 import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
 import { clientsDatabaseId, databaseIdFor, SYNCED_KINDS } from "./config";
 import { syncLetters, type LettersReport } from "./letters";
+import { syncPersons, type PersonsReport } from "./persons";
 import {
   clientPageIds,
   clientStatus,
   clientTier,
+  clientWpUmbrellaProjectId,
   companyName,
   mapPage,
   spaceId,
@@ -77,6 +79,8 @@ export interface SyncReport {
   /** Vrai si le balayage a tout lu sans rien écrire. */
   dryRun: boolean;
   clientsMapped: number;
+  /** Le balayage des personnes — qui a accès —, hors livrables. */
+  persons: PersonsReport;
   /** Le balayage des lettres de veille, hors livrables. */
   letters: LettersReport;
   kinds: KindReport[];
@@ -160,6 +164,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
           notionPageId: page.id,
           tier: clientTier(page) ?? undefined,
           status: clientStatus(page) ?? undefined,
+          wpUmbrellaProjectId: clientWpUmbrellaProjectId(page) ?? undefined,
         })
         .returning({ id: ctoClients.id });
       id = created.id;
@@ -171,7 +176,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
       warnings.push(`« ${name} » : synchro suspendue depuis l'admin — ses lignes ne bougent pas ce balayage.`);
     }
 
-    await alignerEtatEtPalier(page, id, name, warnings, dryRun);
+    await alignerFiche(page, id, name, warnings, dryRun);
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
   }
 
@@ -179,15 +184,15 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
 }
 
 /**
- * Aligne le statut et le palier sur les colonnes « État » et « Palier » de
- * l'atelier — les deux choses que la fiche Notion pilote désormais, en plus
- * de la création. Le reste (personnes, révocation) reste un geste CLI/SQL
- * délibéré ; voir `docs/cto-externalise/espace-client-mise-en-place.md`.
+ * Aligne l'état, le palier et l'identifiant WP Umbrella sur les colonnes
+ * correspondantes de l'atelier — tout ce que la fiche Notion pilote désormais,
+ * en plus de la création. Le reste (personnes, révocation) reste un geste
+ * CLI/SQL délibéré ; voir `docs/cto-externalise/espace-client-mise-en-place.md`.
  *
  * Écriture conditionnelle, même logique que `adopterFicheOrganisation` :
  * on ne touche `cto_clients` que si quelque chose a réellement changé.
  */
-async function alignerEtatEtPalier(
+async function alignerFiche(
   page: NotionPage,
   clientId: string,
   name: string,
@@ -196,23 +201,37 @@ async function alignerEtatEtPalier(
 ): Promise<void> {
   const status = clientStatus(page);
   const tier = clientTier(page);
+  const wpUmbrellaProjectId = clientWpUmbrellaProjectId(page);
 
   const [actuel] = await db()
-    .select({ status: ctoClients.status, tier: ctoClients.tier })
+    .select({
+      status: ctoClients.status,
+      tier: ctoClients.tier,
+      wpUmbrellaProjectId: ctoClients.wpUmbrellaProjectId,
+    })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
     .limit(1);
   if (!actuel) return;
 
-  const patch: { status?: typeof actuel.status; tier?: string; statusChangedAt?: Date } = {};
+  const patch: {
+    status?: typeof actuel.status;
+    tier?: string;
+    wpUmbrellaProjectId?: number;
+    statusChangedAt?: Date;
+  } = {};
   if (status && status !== actuel.status) patch.status = status;
   if (tier && tier !== actuel.tier) patch.tier = tier;
+  if (wpUmbrellaProjectId && wpUmbrellaProjectId !== actuel.wpUmbrellaProjectId) {
+    patch.wpUmbrellaProjectId = wpUmbrellaProjectId;
+  }
   if (Object.keys(patch).length === 0) return;
 
   if (dryRun) {
     const changements = [
       patch.status ? `état → ${patch.status}` : null,
       patch.tier ? `palier → ${patch.tier}` : null,
+      patch.wpUmbrellaProjectId ? `projet WP Umbrella → ${patch.wpUmbrellaProjectId}` : null,
     ].filter(Boolean);
     warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);
     return;
@@ -457,10 +476,18 @@ export async function syncFromNotion(
   const report: SyncReport = {
     dryRun,
     clientsMapped: clients.byNotionPage.size,
+    persons: { seen: 0, created: 0, updated: 0, revoked: 0, restored: 0, unchanged: 0 },
     letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0 },
     kinds: [],
     warnings: [...clients.warnings],
   };
+
+  // Avant les livrables : qui a accès ne dépend d'aucun d'eux, et une personne
+  // nouvellement révoquée ne doit pas rester une ligne de plus dans le rapport
+  // des livrables pendant qu'on cherche pourquoi son accès est encore ouvert.
+  const persons = await syncPersons(clients.byNotionPage, { dryRun });
+  report.persons = persons.report;
+  report.warnings.push(...persons.warnings);
 
   for (const kind of SYNCED_KINDS) {
     const result = await syncKind(

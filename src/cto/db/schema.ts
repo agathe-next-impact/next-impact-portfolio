@@ -151,6 +151,14 @@ export const ctoClients = pgTable(
      */
     sector: text("sector"),
     /**
+     * Identifiant du site chez WP Umbrella (supervision technique : uptime,
+     * sauvegardes, vulnérabilités). Saisi dans Notion (colonne « ID projet WP
+     * Umbrella »), jamais par le client : résolu depuis SA session, jamais
+     * depuis un paramètre d'URL — un projet WP Umbrella donne accès aux
+     * données techniques d'un site, se tromper de client serait grave.
+     */
+    wpUmbrellaProjectId: integer("wp_umbrella_project_id"),
+    /**
      * Dernière fois qu'un e-mail « il y a du nouveau » est parti pour cet
      * accompagnement. `null` : jamais notifié.
      *
@@ -175,6 +183,17 @@ export const ctoPersons = pgTable(
     clientId: uuid("client_id")
       .notNull()
       .references(() => ctoClients.id, { onDelete: "cascade" }),
+    /**
+     * Page Notion de la base Personnes dont cette personne est née — même
+     * mécanique que `ctoClients.notionPageId` : la synchro reconnaît une
+     * personne déjà créée par son `page.id`, jamais en réécrivant Notion.
+     *
+     * `null` sur une personne créée avant ce mécanisme (via `cto:invite`). La
+     * synchro l'ADOPTE par adresse e-mail au premier passage qui la recroise
+     * (`src/cto/notion/persons.ts`) plutôt que d'échouer sur l'index unique
+     * `cto_person_email` en tentant d'en créer une seconde.
+     */
+    notionPageId: text("notion_page_id"),
     email: text("email").notNull(),
     name: text("name").notNull(),
     /**
@@ -187,6 +206,11 @@ export const ctoPersons = pgTable(
      * Révocation individuelle. C'est le geste d'offboarding : une personne
      * quitte l'entreprise cliente, on pose cette date, ses passkeys cessent de
      * fonctionner et ses sessions tombent, sans toucher aux autres.
+     *
+     * Pilotable depuis Notion (case « Révoquée » de la base Personnes) autant
+     * qu'en SQL : les deux posent et lèvent la même date, symétriquement,
+     * comme `cto_clients.status` le fait déjà pour un accompagnement entier.
+     * ⚠️ Corollaire assumé : décocher la case dans Notion restaure l'accès.
      */
     revokedAt: timestamp("revoked_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -195,6 +219,7 @@ export const ctoPersons = pgTable(
     // Unicité sur l'adresse normalisée : c'est la clé d'entrée du lien magique,
     // et deux fiches pour la même adresse rendraient l'envoi ambigu.
     uniqueIndex("cto_person_email").on(t.email),
+    uniqueIndex("cto_person_notion_page").on(t.notionPageId),
     index("cto_person_client").on(t.clientId),
   ],
 );
