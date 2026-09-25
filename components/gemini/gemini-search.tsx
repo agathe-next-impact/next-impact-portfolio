@@ -5,6 +5,7 @@ const AuditSendFormClient = dynamic(() => import("./AuditSendFormClient"), { ssr
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 interface GeminiSearchProps {
   onResult: (result: any) => void;
@@ -117,6 +118,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
     setError(null);
     setSendError(null);
     try {
+      const recaptchaToken = await getRecaptchaToken("send_audit");
       const res = await fetch("/api/send-audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -128,6 +130,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
           locale,
           prompt,
           systemInstruction,
+          recaptchaToken,
         }),
       });
       if (!res.ok) {

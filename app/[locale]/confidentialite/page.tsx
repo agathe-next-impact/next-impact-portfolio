@@ -101,6 +101,23 @@ export default async function PrivacyPolicy({
               parcours, type d'appareil) via <strong>Google Analytics 4</strong> et{" "}
               <strong>Microsoft Clarity</strong>, pour comprendre et améliorer le site.
             </li>
+            <li>
+              <strong>Protection anti-spam des formulaires</strong> : au moment où vous
+              envoyez un formulaire (contact, audit, analyse Sentinelle), le service{" "}
+              <strong>Google reCAPTCHA</strong> est chargé et évalue la requête (adresse
+              IP, informations sur le navigateur et l'interaction) pour distinguer un
+              humain d'un robot. Il n'est jamais chargé à la simple consultation des
+              pages. Ce traitement est régi par les{" "}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+                règles de confidentialité
+              </a>{" "}
+              et les{" "}
+              <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">
+                conditions d'utilisation
+              </a>{" "}
+              de Google. Base légale : intérêt légitime à protéger le site des envois
+              automatisés.
+            </li>
           </ul>
 
           <h2>3. Base légale</h2>
@@ -116,7 +133,8 @@ export default async function PrivacyPolicy({
             Vos données ne sont <strong>ni vendues ni cédées</strong>. Elles sont
             traitées par moi seule et par des sous-traitants techniques présentant des
             garanties conformes au RGPD : <strong>Vercel</strong> (hébergement),{" "}
-            <strong>Google</strong> (Analytics) et <strong>Microsoft</strong> (Clarity).
+            <strong>Google</strong> (Analytics, reCAPTCHA) et <strong>Microsoft</strong>{" "}
+            (Clarity).
             Certains de ces prestataires peuvent traiter des données hors UE, avec les
             garanties appropriées (clauses contractuelles types). Le service Sentinelle a
             ses propres sous-traitants, listés au §8.3.
@@ -198,7 +216,7 @@ export default async function PrivacyPolicy({
           <p>
             <strong>Neon</strong> (base de données, UE), <strong>Inngest</strong>{" "}
             (exécution des tâches planifiées), <strong>Google</strong> (envoi des e-mails
-            de veille), <strong>Anthropic</strong> (rédaction assistée des alertes) et{" "}
+            de veille, protection anti-spam reCAPTCHA de la page d'analyse),<strong>Anthropic</strong> (rédaction assistée des alertes) et{" "}
             <strong>Stripe</strong> (paiement et facturation). Deux précisions qui me
             semblent devoir être écrites plutôt que sous-entendues : le modèle de langage
             qui aide à rédiger une alerte <strong>ne reçoit jamais votre nom ni votre

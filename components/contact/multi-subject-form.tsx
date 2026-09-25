@@ -18,6 +18,7 @@ import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 import { CTO_PRICE_VALUE } from "@/lib/cto-externalise";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 type SubjectKey =
   | "decision-techno"
@@ -103,10 +104,18 @@ export default function MultiSubjectContactForm() {
       `[${isEn ? "Subject" : "Objet"} : ${subjectLabel}]` +
       (organisation ? ` · ${isEn ? "Organization" : "Organisation"} : ${organisation}` : "") +
       `\n\n${message}`;
+    const recaptchaToken = await getRecaptchaToken("contact");
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, message: fullMessage, subject: subjectLabel, locale }),
+      body: JSON.stringify({
+        name,
+        email,
+        message: fullMessage,
+        subject: subjectLabel,
+        locale,
+        recaptchaToken,
+      }),
     });
     if (res.ok) setStatus("sent");
     else setStatus("error");

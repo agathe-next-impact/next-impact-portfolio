@@ -5,12 +5,14 @@ import { scans } from "@sentinelle/db/schema";
 import { inngest, scanRequested } from "@sentinelle/inngest";
 import { normalizeSiteUrl, isPubliclyScannable } from "@sentinelle/url";
 import { checkRateLimit, clientIp, hashIp } from "@sentinelle/scanner/rate-limit";
+import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const Body = z.object({
   url: z.string().min(3).max(2048),
+  recaptchaToken: z.string().max(4096).optional(),
 });
 
 /**
@@ -30,6 +32,15 @@ export async function POST(req: Request) {
   const parsed = Body.safeParse(payload);
   if (!parsed.success) {
     return Response.json({ error: "adresse manquante" }, { status: 400 });
+  }
+
+  const captcha = await verifyRecaptcha(
+    parsed.data.recaptchaToken,
+    "sentinelle_scan",
+    requestIp(req.headers),
+  );
+  if (!captcha.ok) {
+    return Response.json({ error: recaptchaErrorMessage(false) }, { status: 403 });
   }
 
   const url = normalizeSiteUrl(parsed.data.url);

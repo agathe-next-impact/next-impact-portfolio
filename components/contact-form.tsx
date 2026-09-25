@@ -6,6 +6,7 @@ import { Input} from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 export default function ContactForm() {
   const locale = useLocale() as Locale;
@@ -17,6 +18,7 @@ export default function ContactForm() {
     setStatus("loading");
 
     const formData = new FormData(e.currentTarget);
+    const recaptchaToken = await getRecaptchaToken("contact");
 
     const res = await fetch("/api/contact", {
       method: "POST",
@@ -26,6 +28,7 @@ export default function ContactForm() {
         email: formData.get("email"),
         message: formData.get("message"),
         locale,
+        recaptchaToken,
       }),
     });
 

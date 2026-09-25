@@ -1,4 +1,5 @@
 import { sendMail } from "@/lib/sendMail";
+import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
 import {
   EMAIL,
@@ -17,8 +18,11 @@ import {
 } from "@/lib/email-template";
 
 export async function POST(req: Request) {
-  const { name, email, message, formData, type, subject, locale } = await req.json();
+  const { name, email, message, formData, type, subject, locale, recaptchaToken } = await req.json();
   const isEn = locale === "en";
+
+  const captcha = await verifyRecaptcha(recaptchaToken, "contact", requestIp(req.headers));
+  if (!captcha.ok) return new Response(recaptchaErrorMessage(isEn), { status: 403 });
 
   try {
     // Générer le PDF si la requête vient du cahier des charges

@@ -19,6 +19,7 @@ import { runPerfAudit } from "@/lib/audit/perf-audit";
 import type { AuditObjective, QuickAuditResult } from "@/lib/audit/quick-audit-types";
 import { track, trackStackRecommended } from "@/lib/track";
 import { AuditResultCard } from "./AuditResultCard";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 const INPUT =
   "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-[15px] text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
@@ -151,6 +152,7 @@ export default function AuditExperience() {
     }\n\n${lines.join("\n")}`;
 
     try {
+      const recaptchaToken = await getRecaptchaToken("contact");
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -160,6 +162,7 @@ export default function AuditExperience() {
           locale,
           subject: isEn ? "Free audit request" : "Demande d'audit gratuit",
           message,
+          recaptchaToken,
         }),
       });
       if (!res.ok) {

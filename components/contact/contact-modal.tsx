@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import type { ProfileType, PainPoint, BudgetRange, SiteType } from "./step-result";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 interface ContactModalProps {
   open: boolean;
@@ -73,10 +74,11 @@ export function ContactModal({ open, onClose, funnelData }: ContactModalProps) {
     };
 
     try {
+      const recaptchaToken = await getRecaptchaToken("contact");
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, recaptchaToken }),
       });
 
       if (res.ok) setStatus("sent");

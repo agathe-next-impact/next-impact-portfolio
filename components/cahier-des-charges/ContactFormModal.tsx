@@ -7,6 +7,7 @@ import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 type ContactFormModalProps = {
   formData: Record<string, any>;
@@ -26,6 +27,7 @@ async function sendContactForm({
   formData: Record<string, any>;
   locale: string;
 }) {
+  const recaptchaToken = await getRecaptchaToken("contact");
   const res = await fetch("/api/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -36,6 +38,7 @@ async function sendContactForm({
       formData,
       type: "cahier-des-charges",
       locale,
+      recaptchaToken,
     }),
   });
 

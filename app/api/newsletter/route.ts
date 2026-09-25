@@ -1,4 +1,5 @@
 import { sendMail } from "@/lib/sendMail";
+import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 import {
   EMAIL,
   emailCard,
@@ -24,15 +25,18 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
-  let body: { email?: string; source?: string; locale?: string };
+  let body: { email?: string; source?: string; locale?: string; recaptchaToken?: string };
   try {
     body = await req.json();
   } catch {
     return new Response("Bad request", { status: 400 });
   }
 
-  const { email, source, locale } = body;
+  const { email, source, locale, recaptchaToken } = body;
   const isEn = locale === "en";
+
+  const captcha = await verifyRecaptcha(recaptchaToken, "newsletter", requestIp(req.headers));
+  if (!captcha.ok) return new Response(recaptchaErrorMessage(isEn), { status: 403 });
 
   if (!email || typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
     return new Response(isEn ? "Invalid email" : "Email invalide", { status: 400 });

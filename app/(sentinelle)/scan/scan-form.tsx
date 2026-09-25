@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 /**
  * Formulaire d'analyse. Poste l'URL, puis redirige vers la page de rapport :
@@ -21,10 +22,11 @@ export function ScanForm() {
     setEnvoi(true);
 
     try {
+      const recaptchaToken = await getRecaptchaToken("sentinelle_scan");
       const response = await fetch("/api/sentinelle/scan", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, recaptchaToken }),
       });
 
       const payload = await response.json();

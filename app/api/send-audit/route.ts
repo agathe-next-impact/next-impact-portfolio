@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { sendMail } from "@/lib/sendMail";
+import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 import { renderAuditEmailHtml } from "@/lib/audit-email-renderer";
 import {
   EMAIL,
@@ -162,7 +163,13 @@ async function deliverAudit(opts: {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, company, email, url, locale, prompt, systemInstruction } = await req.json();
+    const { name, company, email, url, locale, prompt, systemInstruction, recaptchaToken } =
+      await req.json();
+
+    const captcha = await verifyRecaptcha(recaptchaToken, "send_audit", requestIp(req.headers));
+    if (!captcha.ok) {
+      return NextResponse.json({ error: recaptchaErrorMessage(locale === "en") }, { status: 403 });
+    }
 
     if (!name || !email || !url || !prompt || !systemInstruction) {
       return NextResponse.json(
