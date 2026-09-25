@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { purgeExpiredAccess, type PurgeReport } from "@cto/access";
 import { purgeExpiredAdminAccess, type AdminPurgeReport } from "@cto/admin";
 import { configurationIssue, syncFromNotion, type SyncReport } from "@cto/notion";
+import { syncSites, wpUmbrellaToken, type SiteSyncReport } from "@cto/site";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le balayage quotidien de l'espace CTO.
@@ -38,6 +39,7 @@ interface CronBody {
   purge: PurgeReport | { erreur: string };
   purgeAdmin: AdminPurgeReport | { erreur: string };
   synchro: SyncReport | { ignoree: string } | { erreur: string };
+  suivi: SiteSyncReport | { ignoree: string } | { erreur: string };
 }
 
 /**
@@ -65,6 +67,7 @@ export async function GET(request: NextRequest) {
     purge: { erreur: "non exécutée" },
     purgeAdmin: { erreur: "non exécutée" },
     synchro: { ignoree: "non exécutée" },
+    suivi: { ignoree: "non exécutée" },
   };
   let status = 200;
 
@@ -87,15 +90,30 @@ export async function GET(request: NextRequest) {
   const issue = configurationIssue();
   if (issue) {
     body.synchro = { ignoree: issue };
-    return NextResponse.json(body, { status });
+  } else {
+    try {
+      body.synchro = await syncFromNotion();
+    } catch (error) {
+      console.error("[cto] synchro Notion impossible", error);
+      body.synchro = { erreur: error instanceof Error ? error.message : "échec" };
+      status = 500;
+    }
   }
 
-  try {
-    body.synchro = await syncFromNotion();
-  } catch (error) {
-    console.error("[cto] synchro Notion impossible", error);
-    body.synchro = { erreur: error instanceof Error ? error.message : "échec" };
-    status = 500;
+  // Le suivi technique passe en dernier et ne dépend pas de Notion : une
+  // synchro de l'atelier en échec ne doit pas priver le client de son relevé
+  // de la nuit, ni l'inverse. Même règle pour la configuration absente que
+  // pour Notion : 200, dit dans le corps.
+  if (!wpUmbrellaToken()) {
+    body.suivi = { ignoree: "WP_UMBRELLA_TOKEN n'est pas posée." };
+  } else {
+    try {
+      body.suivi = await syncSites();
+    } catch (error) {
+      console.error("[cto] suivi technique impossible", error);
+      body.suivi = { erreur: error instanceof Error ? error.message : "échec" };
+      status = 500;
+    }
   }
 
   return NextResponse.json(body, { status });

@@ -16,6 +16,7 @@ export {
 } from "./store";
 
 export type {
+  AttachedFile,
   CartographiePayload,
   DecisionPayload,
   Deliverable,
@@ -24,6 +25,7 @@ export type {
   DeliverablePayload,
   DocumentPayload,
   PayloadByKind,
+  PrestationPayload,
   RoadmapPayload,
   VeillePayload,
 } from "./types";

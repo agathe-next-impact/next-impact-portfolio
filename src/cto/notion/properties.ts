@@ -120,3 +120,36 @@ export function relation(page: NotionPage, name: string): string[] {
   if (!Array.isArray(links)) return [];
   return links.map((link) => link?.id).filter((v): v is string => Boolean(v));
 }
+
+/** Une pièce jointe d'une colonne « Fichiers et médias ». */
+export interface NotionFile {
+  name: string;
+  /** URL de téléchargement. Signée et valable UNE HEURE pour un fichier hébergé par Notion. */
+  url: string;
+  /** Vrai si le fichier est hébergé par Notion (lien éphémère), faux pour un lien externe. */
+  hosted: boolean;
+}
+
+/**
+ * Les pièces d'une colonne fichiers, dans l'ordre de l'atelier.
+ *
+ * Le lien d'un fichier hébergé par Notion expire au bout d'une heure : il ne
+ * sert qu'à le télécharger tout de suite, jamais à être stocké.
+ */
+export function files(page: NotionPage, name: string): NotionFile[] {
+  const property = prop(page, name);
+  if (!property || property.type !== "files") return [];
+  const list = property.files as
+    | { name?: string; type?: string; file?: { url?: string }; external?: { url?: string } }[]
+    | null;
+  if (!Array.isArray(list)) return [];
+
+  const out: NotionFile[] = [];
+  for (const item of list) {
+    const hosted = item?.type === "file";
+    const url = hosted ? item.file?.url : item?.external?.url;
+    if (!url) continue;
+    out.push({ name: item.name?.trim() || "document", url, hosted });
+  }
+  return out;
+}

@@ -2,6 +2,8 @@ import type {
   CartographiePayload,
   DecisionPayload,
   Deliverable,
+  DocumentPayload,
+  PrestationPayload,
   RoadmapPayload,
   VeillePayload,
 } from "@cto/deliverables";
@@ -21,7 +23,14 @@ export const CATEGORIES = {
   roadmap: { slug: "roadmap", titre: "Roadmap" },
   cartographie: { slug: "cartographie", titre: "Cartographie du système" },
   veille: { slug: "veille", titre: "Veille dédiée" },
+  document: { slug: "documents", titre: "Documents" },
+  prestation: { slug: "prestations", titre: "Prestations" },
 } as const;
+
+/** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */
+export function fichierPath(fileId: string): string {
+  return `${ESPACE_PATH}/fichiers/${fileId}`;
+}
 
 export type CategorieKind = keyof typeof CATEGORIES;
 
@@ -55,7 +64,7 @@ export function kindFromSlug(slug: string): CategorieKind | null {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Ordre de lecture de la roadmap : ce qui bloque d'abord, ce qui est fait ensuite. */
-const STATUS_ORDER = ["Ouvert", "Décidé", "À venir", "Fait", "Écarté"];
+export const STATUS_ORDER = ["Ouvert", "Décidé", "À venir", "Fait", "Écarté"];
 
 const STATUS_TONE: Record<string, Tone> = {
   Ouvert: "attention",
@@ -66,7 +75,7 @@ const STATUS_TONE: Record<string, Tone> = {
 };
 
 /** Ordre de lecture de la cartographie : ce qui casse l'activité d'abord. */
-const CRITICALITY_ORDER = ["Critique", "Importante", "Secondaire"];
+export const CRITICALITY_ORDER = ["Critique", "Importante", "Secondaire"];
 
 const CRITICALITY_TONE: Record<string, Tone> = {
   Critique: "alerte",
@@ -89,13 +98,13 @@ const HORIZON_MS = 90 * 24 * 60 * 60 * 1000;
  * un signalement, mais pas le même mot. « Corrigé » sur un livrable que le
  * client n'avait jamais vu serait faux et inquiétant.
  */
-function nouveaute(item: Deliverable, since: Date | null): "nouveau" | "corrige" | null {
+export function nouveaute(item: Deliverable, since: Date | null): "nouveau" | "corrige" | null {
   if (!since || item.recordedAt.getTime() <= since.getTime()) return null;
   return item.version === 1 ? "nouveau" : "corrige";
 }
 
 /** La pastille qui signale ce qui a bougé. Rien si la fenêtre n'existe pas. */
-function Nouveaute({ item, since }: { item: Deliverable; since: Date | null }) {
+export function Nouveaute({ item, since }: { item: Deliverable; since: Date | null }) {
   const etat = nouveaute(item, since);
   if (!etat) return null;
   return etat === "nouveau" ? (
@@ -105,12 +114,12 @@ function Nouveaute({ item, since }: { item: Deliverable; since: Date | null }) {
   );
 }
 
-function rank(order: string[], value: string | null): number {
+export function rank(order: string[], value: string | null): number {
   const index = value ? order.indexOf(value) : -1;
   return index === -1 ? order.length : index;
 }
 
-function byDate(a: Deliverable, b: Deliverable, direction: 1 | -1): number {
+export function byDate(a: Deliverable, b: Deliverable, direction: 1 | -1): number {
   // Une ligne sans date passe après celles qui en ont une, dans les deux sens :
   // elle est en attente de datation, pas au bout de la file.
   if (!a.occurredAt && !b.occurredAt) return 0;
@@ -119,11 +128,50 @@ function byDate(a: Deliverable, b: Deliverable, direction: 1 | -1): number {
   return (a.occurredAt.getTime() - b.occurredAt.getTime()) * direction;
 }
 
-function deadlineTone(date: Date | null, now: number): Tone {
+export function deadlineTone(date: Date | null, now: number): Tone {
   if (!date) return "neutre";
   const delta = date.getTime() - now;
   if (delta < 0) return "alerte";
   return delta <= HORIZON_MS ? "attention" : "neutre";
+}
+
+export function sortRoadmap(items: Deliverable[]): Deliverable[] {
+  return [...items].sort(
+    (a, b) =>
+      rank(STATUS_ORDER, (a.payload as RoadmapPayload).statut) -
+        rank(STATUS_ORDER, (b.payload as RoadmapPayload).statut) || byDate(a, b, 1),
+  );
+}
+
+export function sortCartographie(items: Deliverable[]): Deliverable[] {
+  return [...items].sort(
+    (a, b) =>
+      rank(CRITICALITY_ORDER, (a.payload as CartographiePayload).criticite) -
+        rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
+      byDate(a, b, 1),
+  );
+}
+
+export function sortRecentFirst(items: Deliverable[]): Deliverable[] {
+  return [...items].sort((a, b) => byDate(a, b, -1));
+}
+
+/** Ordre de lecture des prestations : ce qui est en cours d'abord. */
+export const PRESTATION_ORDER = ["En cours", "À venir", "Suspendue", "Terminée"];
+
+const PRESTATION_TONE: Record<string, Tone> = {
+  "En cours": "attention",
+  "À venir": "neutre",
+  Suspendue: "alerte",
+  Terminée: "fait",
+};
+
+export function sortPrestations(items: Deliverable[]): Deliverable[] {
+  return [...items].sort(
+    (a, b) =>
+      rank(PRESTATION_ORDER, (a.payload as PrestationPayload).statut) -
+        rank(PRESTATION_ORDER, (b.payload as PrestationPayload).statut) || byDate(a, b, 1),
+  );
 }
 
 export function Livrables({
@@ -213,7 +261,7 @@ export function Livrables({
  * Rien ne s'affiche à la première visite, ni quand rien n'a changé : un bandeau
  * qui annonce « 0 nouveauté » occupe la place sans rien apprendre.
  */
-function DepuisLaDerniereFois({
+export function DepuisLaDerniereFois({
   items,
   since,
 }: {
@@ -307,6 +355,14 @@ export function Categorie({
     return <Veille items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare />;
   }
 
+  if (kind === "document") {
+    return <Documents items={sortRecentFirst(items)} since={since} bare />;
+  }
+
+  if (kind === "prestation") {
+    return <Prestations items={sortPrestations(items)} now={now} since={since} bare />;
+  }
+
   const tri = [...items].sort(
     (a, b) =>
       rank(CRITICALITY_ORDER, (a.payload as CartographiePayload).criticite) -
@@ -317,7 +373,7 @@ export function Categorie({
 }
 
 /** Les quatre chiffres qui répondent à « où en est-on ? » sans défiler. */
-function Synthese({
+export function Synthese({
   roadmap,
   decisions,
   carto,
@@ -435,7 +491,7 @@ function RienALaUne({ href, count }: { href: string; count: number }) {
  * qu'une liste chronologique ne dit pas. Les colonnes vides ne s'affichent pas —
  * un statut inutilisé est du bruit, pas une information.
  */
-function Roadmap({
+export function Roadmap({
   items,
   now,
   total,
@@ -571,7 +627,7 @@ function ChantierCard({
  * dépliées noient les treize décisions. Repliée, elle reste à un clic, et le
  * `<details>` natif la rend accessible au clavier sans une ligne de JavaScript.
  */
-function Decisions({
+export function Decisions({
   items,
   total,
   since = null,
@@ -676,7 +732,7 @@ function Decisions({
  * contrats ai-je ? ». Groupé, le regard va directement au bloc voulu, et le
  * total annuel par groupe donne la réponse budgétaire sans calcul.
  */
-function Cartographie({
+export function Cartographie({
   items,
   now,
   total,
@@ -818,7 +874,7 @@ function ElementRow({
  * leur étiquette, préserve la chronologie. Un client qui cherche « ce qui s'est
  * dit en juin » ne doit pas avoir deux endroits à regarder.
  */
-function Veille({
+export function Veille({
   items,
   total,
   since = null,
@@ -936,5 +992,220 @@ function Correction({ item }: { item: Deliverable }) {
         voir les {item.version} versions
       </Link>
     </p>
+  );
+}
+
+/**
+ * Les documents opposables : revue de devis, note de comité, plan de continuité.
+ *
+ * Une liste, pas une grille : un document se cherche par sa date et son titre.
+ * Le verdict d'une revue de devis est mis en avant — c'est la réponse que le
+ * client est venu chercher, le reste en est la justification.
+ */
+export function Documents({
+  items,
+  total,
+  since = null,
+  bare = false,
+}: {
+  items: Deliverable[];
+  total?: number;
+  since?: Date | null;
+  bare?: boolean;
+}) {
+  if (!bare && items.length === 0) {
+    return (
+      <section className="mt-12">
+        <SectionTitle
+          id="documents"
+          title="Documents"
+          count={total ?? 0}
+          href={categoriePath("document")}
+        />
+        <RienALaUne href={categoriePath("document")} count={total ?? 0} />
+      </section>
+    );
+  }
+
+  return (
+    <section className={bare ? "" : "mt-12"}>
+      {bare ? null : (
+        <SectionTitle
+          id="documents"
+          title="Documents"
+          count={total ?? items.length}
+          href={categoriePath("document")}
+        />
+      )}
+      <Panel className="mt-5 divide-y divide-dark-gray">
+        {items.map((item) => {
+          const payload = item.payload as DocumentPayload;
+          const montant = formatAmount(payload.montant);
+          const verdictTone: Tone =
+            payload.verdict === "Favorable"
+              ? "fait"
+              : payload.verdict === "Défavorable"
+                ? "alerte"
+                : payload.verdict
+                  ? "attention"
+                  : "neutre";
+
+          return (
+            <article key={item.id} className="px-5 py-5">
+              <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 className="font-inter-tight text-base leading-snug text-foreground">{item.title}</h3>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                  {item.occurredAt ? formatDay(item.occurredAt) : "sans date"}
+                </p>
+              </header>
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                <Nouveaute item={item} since={since} />
+                {payload.type ? <Tag>{payload.type}</Tag> : null}
+                {payload.verdict ? <Tag tone={verdictTone}>{payload.verdict}</Tag> : null}
+                {payload.prestataire ? <Tag>{payload.prestataire}</Tag> : null}
+                {montant ? <Tag>{`${montant} HT`}</Tag> : null}
+              </div>
+              {payload.alternative ? (
+                <div className="mt-3 border-l-2 border-l-accent-secondary pl-4">
+                  <Label>Alternative chiffrée</Label>
+                  <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-foreground">
+                    {payload.alternative}
+                  </p>
+                </div>
+              ) : null}
+              {payload.fichier ? (
+                <p className="mt-3">
+                  <a
+                    href={fichierPath(payload.fichier.id)}
+                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+                  >
+                    Télécharger · {payload.fichier.name} ({tailleLisible(payload.fichier.size)})
+                  </a>
+                </p>
+              ) : null}
+              <Correction item={item} />
+            </article>
+          );
+        })}
+      </Panel>
+    </section>
+  );
+}
+
+/** Taille de fichier lisible, sans fausse précision. */
+export function tailleLisible(octets: number): string {
+  if (octets < 1024 * 1024) return `${Math.max(1, Math.round(octets / 1024))} Ko`;
+  return `${(octets / 1024 / 1024).toFixed(1).replace(".", ",")} Mo`;
+}
+
+/**
+ * Les prestations vendues, groupées par statut.
+ *
+ * L'avancement ne s'affiche que s'il est suivi : une barre à 0 % sur une
+ * prestation dont personne ne mesure l'avancement dirait « rien n'est fait »,
+ * ce qui est faux.
+ */
+export function Prestations({
+  items,
+  now,
+  total,
+  since = null,
+  bare = false,
+}: {
+  items: Deliverable[];
+  now: number;
+  total?: number;
+  since?: Date | null;
+  bare?: boolean;
+}) {
+  if (!bare && items.length === 0) {
+    return (
+      <section className="mt-12">
+        <SectionTitle
+          id="prestations"
+          title="Prestations en cours"
+          count={total ?? 0}
+          href={categoriePath("prestation")}
+        />
+        <RienALaUne href={categoriePath("prestation")} count={total ?? 0} />
+      </section>
+    );
+  }
+
+  return (
+    <section className={bare ? "" : "mt-12"}>
+      {bare ? null : (
+        <SectionTitle
+          id="prestations"
+          title="Prestations en cours"
+          count={total ?? items.length}
+          href={categoriePath("prestation")}
+        />
+      )}
+      <div className="mt-5 space-y-3">
+        {items.map((item) => {
+          const payload = item.payload as PrestationPayload;
+          const statut = payload.statut ?? "Sans statut";
+          const montant = formatAmount(payload.montant);
+          const debut = payload.debut ? new Date(payload.debut) : null;
+          const avancement =
+            typeof payload.avancement === "number"
+              ? Math.max(0, Math.min(100, Math.round(payload.avancement * 100)))
+              : null;
+          const echeance = statut === "Terminée" ? "neutre" : deadlineTone(item.occurredAt, now);
+
+          return (
+            <article key={item.id} className="border border-dark-gray bg-jet/40 p-5">
+              <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                <h3 className="font-inter-tight text-base leading-snug text-foreground">{item.title}</h3>
+                <Tag tone={PRESTATION_TONE[statut] ?? "neutre"}>{statut}</Tag>
+              </header>
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                <Nouveaute item={item} since={since} />
+                {debut ? <Tag>{`Depuis le ${formatDay(debut)}`}</Tag> : null}
+                {item.occurredAt ? (
+                  <Tag tone={echeance}>{`Livraison ${formatDay(item.occurredAt)}`}</Tag>
+                ) : null}
+                {montant ? <Tag>{`${montant} HT`}</Tag> : null}
+              </div>
+              {avancement !== null ? (
+                <div className="mt-4">
+                  <div className="flex items-baseline justify-between">
+                    <Label>Avancement</Label>
+                    <span className="font-mono text-[11px] text-foreground">{avancement} %</span>
+                  </div>
+                  <div
+                    className="mt-1.5 h-1.5 w-full bg-dark-gray"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={avancement}
+                    aria-label={`Avancement de ${item.title}`}
+                  >
+                    <div className="h-full bg-accent-secondary" style={{ width: `${avancement}%` }} />
+                  </div>
+                </div>
+              ) : null}
+              {payload.detail ? (
+                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">{payload.detail}</p>
+              ) : null}
+              {payload.devis ? (
+                <p className="mt-3">
+                  <a
+                    href={payload.devis}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+                  >
+                    Voir le devis ↗
+                  </a>
+                </p>
+              ) : null}
+              <Correction item={item} />
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }

@@ -69,13 +69,14 @@ export function digestOfLetter(input: {
 
 /** L'état de chaque lettre déjà connue. Sert à ne réécrire que ce qui a bougé. */
 export async function currentLetters(): Promise<
-  { notionPageId: string; digest: string; withdrawn: boolean }[]
+  { notionPageId: string; digest: string; withdrawn: boolean; scope: LetterScope }[]
 > {
   const rows = await db()
     .select({
       notionPageId: ctoLetters.notionPageId,
       digest: ctoLetters.digest,
       withdrawnAt: ctoLetters.withdrawnAt,
+      scope: ctoLetters.scope,
     })
     .from(ctoLetters);
 
@@ -83,6 +84,7 @@ export async function currentLetters(): Promise<
     notionPageId: row.notionPageId,
     digest: row.digest,
     withdrawn: row.withdrawnAt !== null,
+    scope: row.scope,
   }));
 }
 

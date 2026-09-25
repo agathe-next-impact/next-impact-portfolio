@@ -25,6 +25,7 @@ const KIND_LABELS: Record<DeliverableKind, string> = {
   cartographie: "cartographie",
   veille: "veille",
   document: "documents",
+  prestation: "prestations",
 };
 
 export interface NotifyReport {

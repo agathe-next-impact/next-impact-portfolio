@@ -4,11 +4,13 @@ Où s'écrivent les livrables de l'offre « CTO externalisé », et par quel che
 ils arrivent dans l'espace client (`app/(cto)/espace-direction`).
 
 Périmètre : le modèle, le raccordement et la synchronisation, en place pour la
-base Clients (création et état des accompagnements), la base Personnes (qui a
-accès, § 6), les quatre bases de livrables et les lettres de veille. Le Cron
-quotidien est branché (§ 4 de `espace-client-mise-en-place.md`). Ce qui reste —
-la base Documents et l'export de restitution — est listé en § 7. Procédure
-d'accès : `espace-client-mise-en-place.md`.
+base Clients (création, état, services des accompagnements), la base Personnes
+(qui a accès, § 6), les bases de livrables — dont Documents avec leurs pièces
+jointes et Prestations (§ 7) —, les lettres de veille et les éditions du
+pipeline « Veilles clients » (§ 8). Le Cron
+quotidien est branché (§ 4 de `espace-client-mise-en-place.md`). Procédure
+d'accès, suivi technique et dossier de restitution :
+`espace-client-mise-en-place.md`.
 
 ---
 
@@ -37,11 +39,11 @@ Notion (atelier)  →  npm run cto:sync  →  cto_deliverables  →  /espace-dir
 La synchro écrit, la notification prévient : deux commandes, deux moments
 (§ 4).
 
-**Un client n'est jamais invité dans Notion.** Les huit bases contiennent les
+**Un client n'est jamais invité dans Notion.** Ces bases contiennent les
 lignes de tous les clients ; la seule surface qui leur est destinée est l'espace
 en ligne, cloisonné par personne.
 
-## 2. Les sept bases
+## 2. Les bases de l'atelier
 
 Elles vivent sous la page **PILOTAGE → Direction technique — clients**, dans le
 teamspace NEXT IMPACT.
@@ -62,8 +64,10 @@ un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alert
 | **Veille** | les signaux isolés, entre deux lettres | alerte à chaud |
 | **Lettres** | les lettres de veille, corps compris | note mensuelle, veille dédiée |
 | **Documents** | pièces opposables | revue de devis, plan de continuité, dossier de restitution |
+| **Prestations** | missions commandées, avancement, livraison | — (§ 7) |
+| **Personnes** | qui a accès à quel espace | — (§ 6) |
 
-Huit livrables, sept bases : trois regroupements portent une décision.
+Huit livrables pour sept bases de contenu : trois regroupements portent une décision. Clients et Personnes ne portent pas de livrable, elles décident qui voit quoi.
 
 **Décisions absorbe le registre des évolutions.** Un arbitrage rendu et une
 proposition écartée ont la même forme — un objet, une date, un motif, une
@@ -121,6 +125,21 @@ chose : si un accompagnement a été créé en CLI (`--entreprise`) avant sa fic
 y coller son UUID fait que la synchro l'**adopte** au lieu d'en créer un
 second. Sur une fiche déjà rattachée, elle est ignorée.
 
+**`Services` compose l'espace.** Colonne à choix multiple : Direction
+technique, Suivi technique, Actions en cours, Veille personnalisée,
+Prestations en cours. Recopiée dans `cto_clients.services` (valeurs de code,
+`SERVICE_CODES` dans `map.ts`), elle décide des onglets de l'espace
+(`src/cto/espace/sections.ts`). Le tableau de bord, la veille générale et le
+contact sont toujours visibles. **Vide = affichage historique** : l'espace
+montre alors toute section qui a du contenu, comme avant les services — c'est
+ce qui permet d'ajouter la colonne sans que les accompagnements existants
+perdent leurs sections. Un service coché mais encore vide s'affiche avec un
+état « en préparation ». Un libellé inconnu est ignoré et signalé au rapport.
+
+**`Veille — organisation`** relie la fiche à sa ligne du pipeline « Veilles
+clients » : ses éditions au statut Envoyé deviennent des lettres
+personnalisées (§ 8).
+
 **`État`, `Palier` et `ID projet WP Umbrella` commandent.** À chaque balayage,
 leurs valeurs sont recopiées dans `cto_clients` dès qu'elles diffèrent, et un
 changement d'état est daté. Les deux premières reprennent les valeurs
@@ -131,13 +150,11 @@ lisant. Suspendre, restituer ou clore un accompagnement se fait donc ici
 décider ; une colonne remplie écrase tout changement fait en SQL au balayage
 suivant.
 
-`ID projet WP Umbrella` est l'identifiant numérique du site chez WP Umbrella
-(supervision : disponibilité, sauvegardes, vulnérabilités). Aujourd'hui, la
-synchro le stocke et rien ne l'affiche encore. Règle pour l'écran qui le lira :
-il n'est jamais saisi par le client ni lu dans une URL, il se retrouve depuis
-la session de la personne connectée (commentaire de `schema.ts`). Colonne
-ajoutée par la migration `0009` : l'appliquer en production
-(`npm run db:cto:migrate`) avant de déployer le code qui la lit.
+`ID projet WP Umbrella` est l'identifiant numérique du site chez WP Umbrella.
+Il alimente la section Suivi technique : le Cron relève chaque nuit le site
+correspondant (§ 6 de `espace-client-mise-en-place.md`). Il n'est jamais saisi
+par le client ni lu dans une URL : l'espace le retrouve depuis la session de la
+personne connectée.
 
 **`Lien vers l'espace`** porte l'URL où le client se connecte
 (`https://next-impact.digital/espace-direction`). Elle est **identique sur
@@ -191,8 +208,9 @@ client voit.
    → *Connexions* → l'intégration. Les huit bases héritent du partage. Sans ce
    geste l'API répond 404 sur tout : chez Notion, le partage n'est jamais
    implicite.
-3. **Poser les variables** — neuf (le jeton et les huit bases), listées avec
-   leurs valeurs sur la page Notion elle-même. Les identifiants de base ne sont pas des secrets, mais ils
+3. **Poser les variables** — neuf obligatoires (le jeton et huit bases), plus
+   deux facultatives (Prestations, Éditions de veille), listées avec leurs
+   valeurs sur la page Notion elle-même. Les identifiants de base ne sont pas des secrets, mais ils
    n'ont pas leur place dans le dépôt : ils vivent dans `.env.local` et dans
    Vercel, portée Production.
 
@@ -206,7 +224,16 @@ CTO_NOTION_DB_VEILLE=…
 CTO_NOTION_DB_LETTRES=…
 CTO_NOTION_DB_PERSONNES=…
 CTO_NOTION_DB_DOCUMENTS=…
+# Facultatives : vides, la base est ignorée avec une ligne au rapport.
+CTO_NOTION_DB_PRESTATIONS=…
+CTO_NOTION_DB_EDITIONS=…
 ```
+
+**Une base facultative n'arrête rien.** Toute base ajoutée après la mise en
+production entre par `OPTIONAL_KINDS` (`config.ts`) : sa variable absente, elle
+est sautée et le rapport le dit. La rendre obligatoire bloquerait la synchro
+entière, livrables existants compris, jusqu'à ce que quelqu'un pense à poser
+la variable sur Vercel.
 
 **Épingler `Notion-Version: 2022-06-28`.** Depuis la version `2025-09-03`, une
 base expose des *data sources* et l'interrogation passe par
@@ -394,17 +421,62 @@ signale ; rien ne bouge tout seul. Un transfert reste un geste SQL délibéré.
 accompagnement dont la fiche disparaîtrait (§ 2) : ni l'absence de ligne ni sa
 suppression ne pilotent l'accès, seule la case le fait.
 
-## 7. Ce qu'il reste à coder
+## 7. Documents et prestations
 
-1. **La base Documents.** Le type `document` existe dans le schéma et la
-   correspondance des colonnes est écrite ; seule la base manque à
-   `SYNCED_KINDS` (`src/cto/notion/config.ts`), le temps de traiter les fichiers
-   joints. Les URL que l'API Notion renvoie pour un fichier **expirent au bout
-   d'une heure** : stocker le lien ne produirait que des liens morts. Il faut
-   rapatrier le fichier (Vercel Blob) et servir le sien.
-2. **L'export de restitution.** `history()` (`src/cto/deliverables/store.ts`)
-   rend déjà l'historique complet d'un livrable, version par version. C'est la
-   matière de l'export ; il reste à en faire un PDF ou une archive.
+### Documents : la pièce est rapatriée
+
+La base **Documents** est synchronisée comme les autres, avec une étape de
+plus : la pièce de la colonne « Fichier » est **téléchargée pendant le
+balayage** et rangée en base (`cto_files`), car le lien que rend l'API Notion
+expire au bout d'une heure. Le livrable ne garde qu'une référence (nom, type,
+taille, empreinte SHA-256) dans `payload.fichier`.
+
+- **L'empreinte fait partie du livrable** : remplacer le PDF dans Notion, titre
+  inchangé, écrit une version de plus, datée, visible du client.
+- **Une seule pièce par document.** Plusieurs pièces sur une ligne : la
+  première est publiée, le rapport le signale.
+- **15 Mo au plus.** Au-delà, le document est publié sans sa pièce et le
+  rapport le dit.
+- **Pas d'hébergeur de fichiers.** Un stockage public (Vercel Blob) rendrait un
+  audit lisible par quiconque obtient l'URL. En base, la pièce ne sort que par
+  `/espace-direction/fichiers/<empreinte>`, qui vérifie la session ET
+  l'appartenance à l'accompagnement (`fileBelongsTo`), et répond 404 sinon.
+  Un document retiré retire sa pièce avec lui.
+
+### Prestations : ce qui a été commandé
+
+La base **Prestations** (sous « Direction technique — clients ») porte les
+missions vendues : `Prestation`, `Client`, `Statut` (À venir / En cours /
+Terminée / Suspendue), `Début`, `Échéance` (date de livraison, reprise dans le
+calendrier), `Montant`, `Avancement` (0 à 1, vide = non suivi), `Devis` (lien),
+`Détail`, `Publié`, `Affichage`. Même mécanique que les autres livrables
+(append-only, corrections datées). Distincte de la Roadmap à dessein : un
+chantier est ce que le système demande, une prestation est ce que le client a
+commandé.
+
+## 8. Les éditions du pipeline « Veilles clients »
+
+La veille personnalisée d'un accompagnement est produite par le pipeline
+« Veilles clients » (prompts A, A-bis, B et leurs trois validations
+manuelles, inchangés). Ses éditions arrivent dans l'espace direction comme
+**lettres personnalisées**, sans ressaisie :
+
+1. Sur la fiche *Clients*, relier `Veille — organisation` à la ligne du
+   pipeline (base « Organisations — pipeline et activation »).
+2. Poser `CTO_NOTION_DB_EDITIONS` (identifiant de la base « Éditions de
+   veille », noté sur la page Notion) et **partager aussi la page « Veilles
+   clients » avec l'intégration** (menu `•••` → *Connexions*).
+
+À chaque balayage, les éditions au statut **Envoyé** des organisations reliées
+sont reprises dans la fenêtre de six mois : titre, date d'édition, corps de la
+page. Brouillon et Relu restent dans l'atelier du pipeline. Elles passent dans
+le même balayage que la base Lettres (sinon le retrait des lettres absentes les
+effacerait à chaque passage), et si la base des éditions est illisible, **aucune
+lettre personnalisée n'est retirée** ce tour-là : un retrait à tort se voit chez
+le client, un retrait différé d'un jour ne se voit pas.
+
+Un client CTO lit sa veille personnalisée **uniquement dans l'espace
+direction** ; le portail signauxfaibles.io reste celui des clients veille seule.
 
 ## Fichiers
 
@@ -430,3 +502,7 @@ suppression ne pilotent l'accès, seule la case le fait.
 | Personnes — balayage | `src/cto/notion/persons.ts` |
 | Personnes — schéma | `src/cto/db/schema.ts` — `cto_persons.notion_page_id` |
 | Invitation (voie de secours) | `scripts/cto-invite.ts` |
+| Services → sections | `src/cto/espace/sections.ts`, `map.ts` (`SERVICE_CODES`) |
+| Pièces jointes (rapatriement, lecture, appartenance) | `src/cto/files/store.ts` |
+| Téléchargement d'une pièce | `app/(cto)/espace-direction/fichiers/[id]/route.ts` |
+| Éditions du pipeline de veille | `src/cto/notion/letters.ts` (`syncEditions`) |

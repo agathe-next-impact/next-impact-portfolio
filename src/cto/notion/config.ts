@@ -1,7 +1,7 @@
 import type { DeliverableKind } from "../deliverables";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Où vivent les huit bases de l'atelier.
+// Où vivent les bases de l'atelier.
 //
 // Les identifiants passent par l'environnement et non par une constante du
 // dépôt. Ce ne sont pas des secrets — sans le jeton ils n'ouvrent rien — mais
@@ -18,7 +18,19 @@ export const SYNCED_KINDS: DeliverableKind[] = [
   "roadmap",
   "cartographie",
   "veille",
+  "document",
 ];
+
+/**
+ * Bases de contenu FACULTATIVES : balayées si leur variable est posée,
+ * ignorées sinon — avec une ligne au rapport, pas une erreur.
+ *
+ * C'est le sort de toute base ajoutée après la mise en production : la rendre
+ * obligatoire bloquerait la synchro entière (`configurationIssue`) jusqu'à ce
+ * que quelqu'un pense à poser la variable sur Vercel, livrables existants
+ * compris. Une base nouvelle doit pouvoir arriver sans rien casser.
+ */
+export const OPTIONAL_KINDS: DeliverableKind[] = ["prestation"];
 
 const ENV_BY_KIND: Record<DeliverableKind, string> = {
   decision: "CTO_NOTION_DB_DECISIONS",
@@ -26,17 +38,20 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
   cartographie: "CTO_NOTION_DB_CARTOGRAPHIE",
   veille: "CTO_NOTION_DB_VEILLE",
   document: "CTO_NOTION_DB_DOCUMENTS",
+  prestation: "CTO_NOTION_DB_PRESTATIONS",
 };
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";
 const ENV_LETTRES = "CTO_NOTION_DB_LETTRES";
 const ENV_PERSONNES = "CTO_NOTION_DB_PERSONNES";
+/** Facultative : la base « Éditions de veille » du pipeline Veilles clients. */
+const ENV_EDITIONS = "CTO_NOTION_DB_EDITIONS";
 
 function read(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(
-      `${name} manquante. Les identifiants des huit bases figurent au bas de la page Notion ` +
+      `${name} manquante. Les identifiants des bases figurent au bas de la page Notion ` +
         "« Direction technique — clients ».",
     );
   }
@@ -60,6 +75,24 @@ export function personsDatabaseId(): string {
 
 export function databaseIdFor(kind: DeliverableKind): string {
   return read(ENV_BY_KIND[kind]);
+}
+
+/** Vrai si la variable d'une base facultative est posée. */
+export function isConfigured(kind: DeliverableKind): boolean {
+  return Boolean(process.env[ENV_BY_KIND[kind]]?.trim());
+}
+
+/** Le nom de la variable d'une base, pour le rapport. */
+export function envNameFor(kind: DeliverableKind): string {
+  return ENV_BY_KIND[kind];
+}
+
+/**
+ * Identifiant de la base « Éditions de veille », ou `null` si la variable
+ * n'est pas posée — le branchement de la veille personnalisée est facultatif.
+ */
+export function editionsDatabaseId(): string | null {
+  return process.env[ENV_EDITIONS]?.trim() || null;
 }
 
 /**

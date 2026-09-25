@@ -6,6 +6,7 @@ import type {
   DeliverableInput,
   DeliverableKind,
   DocumentPayload,
+  PrestationPayload,
   RoadmapPayload,
   VeillePayload,
 } from "../deliverables";
@@ -36,6 +37,9 @@ export const PROPS = {
     status: "État",
     tier: "Palier",
     wpUmbrellaProjectId: "ID projet WP Umbrella",
+    services: "Services",
+    /** Relation vers la ligne du pipeline « Veilles clients » (Organisations). */
+    veilleOrganisation: "Veille — organisation",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -90,6 +94,30 @@ export const PROPS = {
     amount: "Montant",
     verdict: "Verdict",
     alternative: "Alternative chiffrée",
+    file: "Fichier",
+  },
+  prestation: {
+    title: "Prestation",
+    status: "Statut",
+    start: "Début",
+    due: "Échéance",
+    amount: "Montant",
+    progress: "Avancement",
+    quote: "Devis",
+    detail: "Détail",
+  },
+  /**
+   * Base « Éditions de veille » du pipeline Veilles clients — lue, jamais
+   * écrite, et seulement pour les organisations reliées à un accompagnement.
+   */
+  editions: {
+    title: "Titre",
+    status: "Statut",
+    date: "Date d'édition",
+    organisation: "Organisation",
+    veille: "Veille",
+    number: "Numéro",
+    period: "Période couverte",
   },
   persons: {
     name: "Nom",
@@ -138,6 +166,50 @@ export function clientStatus(page: NotionPage): ClientStatus | null {
 /** Le palier souscrit (colonne « Palier »). Mêmes valeurs que `cto_clients.tier`, aucun mapping. */
 export function clientTier(page: NotionPage): string | null {
   return p.select(page, PROPS.clients.tier);
+}
+
+/**
+ * Libellé de la colonne « Services » → valeur de code de `cto_clients.services`.
+ *
+ * Table explicite plutôt que dérivation du libellé : renommer « Actions en
+ * cours » en « Chantiers en cours » dans l'atelier ne doit pas changer une
+ * valeur stockée que l'espace lit. Un libellé inconnu est ignoré (et remonte
+ * au rapport), jamais inventé.
+ */
+export const SERVICE_CODES: Record<string, string> = {
+  "direction technique": "direction-technique",
+  "suivi technique": "suivi-technique",
+  "actions en cours": "actions",
+  "veille personnalisee": "veille-personnalisee",
+  "prestations en cours": "prestations",
+};
+
+/**
+ * Les services cochés sur la fiche, en valeurs de code, et les libellés
+ * qu'aucune valeur ne reconnaît.
+ */
+export function clientServices(page: NotionPage): { codes: string[]; unknown: string[] } {
+  const codes: string[] = [];
+  const unknown: string[] = [];
+  for (const label of p.multiSelect(page, PROPS.clients.services)) {
+    const code = SERVICE_CODES[normalize(label) ?? ""];
+    if (code) {
+      if (!codes.includes(code)) codes.push(code);
+    } else {
+      unknown.push(label);
+    }
+  }
+  return { codes: codes.sort(), unknown };
+}
+
+/** Les lignes du pipeline de veille reliées à la fiche. */
+export function clientVeilleOrganisations(page: NotionPage): string[] {
+  return p.relation(page, PROPS.clients.veilleOrganisation);
+}
+
+/** Les pièces jointes d'un document, dans l'ordre de l'atelier. */
+export function documentFiles(page: NotionPage): p.NotionFile[] {
+  return p.files(page, PROPS.document.file);
 }
 
 /** L'identifiant du site chez WP Umbrella, s'il est renseigné. */
@@ -305,6 +377,9 @@ export function mapPage(
         montant: p.number(page, PROPS.document.amount),
         verdict: p.select(page, PROPS.document.verdict),
         alternative: p.text(page, PROPS.document.alternative),
+        // Rempli par la synchro APRÈS rapatriement : ce module est pur et ne
+        // télécharge rien. `null` ici veut dire « pas encore vu ».
+        fichier: null,
       };
       return {
         clientId,
@@ -313,6 +388,28 @@ export function mapPage(
         title: p.text(page, PROPS.document.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.document.date),
+        featured: isFeatured(page),
+      };
+    }
+    case "prestation": {
+      const debut = p.date(page, PROPS.prestation.start);
+      const payload: PrestationPayload = {
+        statut: p.select(page, PROPS.prestation.status),
+        // En texte ISO et non en Date : le payload est du JSON, et une Date y
+        // redeviendrait une chaîne à la relecture de toute façon.
+        debut: debut ? debut.toISOString() : null,
+        montant: p.number(page, PROPS.prestation.amount),
+        avancement: p.number(page, PROPS.prestation.progress),
+        devis: p.url(page, PROPS.prestation.quote),
+        detail: p.text(page, PROPS.prestation.detail),
+      };
+      return {
+        clientId,
+        notionPageId: page.id,
+        kind,
+        title: p.text(page, PROPS.prestation.title) ?? UNTITLED,
+        payload,
+        occurredAt: p.date(page, PROPS.prestation.due),
         featured: isFeatured(page),
       };
     }

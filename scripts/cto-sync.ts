@@ -52,6 +52,11 @@ function printReport(report: SyncReport): void {
     `\n  lettres         ${pad(l.published)}                ${pad(l.created)}  ` +
       `${pad(l.updated)}             ${pad(l.unchanged)}        ${pad(l.withdrawn)}`,
   );
+  console.log(
+    l.editions === null
+      ? "  (éditions du pipeline de veille : branchement non configuré)"
+      : `  dont éditions du pipeline de veille : ${l.editions}`,
+  );
 
   if (report.warnings.length > 0) {
     console.log(`\n${report.warnings.length} point(s) à regarder :`);

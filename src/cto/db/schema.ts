@@ -159,6 +159,21 @@ export const ctoClients = pgTable(
      */
     wpUmbrellaProjectId: integer("wp_umbrella_project_id"),
     /**
+     * Services souscrits, en valeurs de code (`direction-technique`,
+     * `suivi-technique`, `actions`, `veille-personnalisee`, `prestations`),
+     * recopiés de la colonne « Services » de la fiche Notion.
+     *
+     * Décide des sections de l'espace, pas de l'accès : une personne d'un
+     * accompagnement sans aucun service entre quand même, et voit le tableau de
+     * bord, la veille générale et le contact.
+     *
+     * `null` = colonne jamais renseignée : l'espace garde alors l'affichage
+     * d'avant les services (toute section qui a du contenu). Distinct d'un
+     * tableau vide, qui dit « aucun service optionnel » et masque tout ce qui
+     * n'est pas toujours visible (`src/cto/espace/services.ts`).
+     */
+    services: text("services").array(),
+    /**
      * Dernière fois qu'un e-mail « il y a du nouveau » est parti pour cet
      * accompagnement. `null` : jamais notifié.
      *
@@ -481,6 +496,7 @@ export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
   "cartographie",
   "veille",
   "document",
+  "prestation",
 ]);
 
 /**
@@ -634,4 +650,91 @@ export const ctoLetters = pgTable(
     uniqueIndex("cto_letter_page").on(t.notionPageId),
     index("cto_letter_period").on(t.period),
   ],
+);
+
+// ─── Fichiers ─────────────────────────────────────────────────────────────
+
+/**
+ * Un fichier rapatrié : pièce jointe d'un document Notion, rapport PDF de
+ * maintenance WP Umbrella.
+ *
+ * **Pourquoi en base et non chez un hébergeur de fichiers.** Les deux sources
+ * rendent des liens qui expirent (une heure chez Notion, quinze minutes chez WP
+ * Umbrella) : stocker le lien ne produirait que des liens morts, il faut garder
+ * le fichier. Un stockage objet public (Vercel Blob) le rendrait lisible par
+ * quiconque obtient l'URL ; un contrat ou un audit n'a rien à faire derrière
+ * une adresse devinable. En base, le fichier ne sort que par une route qui
+ * vérifie la session ET l'appartenance (`app/(cto)/espace-direction/fichiers`).
+ * À quatre accompagnements et quelques dizaines de PDF, le volume ne justifie
+ * pas un service de plus.
+ *
+ * Clé = empreinte SHA-256 du contenu : un même fichier republié n'est stocké
+ * qu'une fois, et une empreinte qui change dit qu'un document a changé — c'est
+ * ce qui fait écrire une version de plus au livrable qui le porte.
+ *
+ * Contenu en base64 dans une colonne texte plutôt qu'en `bytea` : le pilote
+ * HTTP de Neon sérialise mal le binaire, et le surcoût d'un tiers sur des
+ * fichiers bornés à 15 Mo (`MAX_FILE_BYTES`) ne pèse rien ici.
+ */
+export const ctoFiles = pgTable("cto_files", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  mime: text("mime").notNull(),
+  size: integer("size").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// ─── Suivi technique (WP Umbrella) ────────────────────────────────────────
+
+/**
+ * Le dernier état connu du site d'un accompagnement, tel que WP Umbrella le
+ * décrit : versions, extensions à mettre à jour, vulnérabilités, disponibilité,
+ * sauvegardes, maintenance récente.
+ *
+ * **Une ligne par accompagnement, écrasée à chaque balayage.** Ce n'est pas un
+ * livrable : c'est un relevé d'instruments, et l'historique utile (incidents,
+ * sauvegardes, interventions) est déjà daté DANS le relevé. Le garder
+ * version par version reproduirait chez nous la base de WP Umbrella.
+ *
+ * Écrite par le Cron, jamais pendant une requête client : l'espace ne dépend
+ * pas plus de WP Umbrella qu'il ne dépend de Notion.
+ */
+export const ctoSiteSnapshots = pgTable("cto_site_snapshots", {
+  clientId: uuid("client_id")
+    .primaryKey()
+    .references(() => ctoClients.id, { onDelete: "cascade" }),
+  projectId: integer("project_id").notNull(),
+  /** Le relevé normalisé (`src/cto/site/types.ts`), jamais la réponse brute. */
+  data: jsonb("data").notNull(),
+  fetchedAt: timestamp("fetched_at").notNull().defaultNow(),
+  /** Dernière erreur de balayage. Le relevé précédent reste affiché. */
+  error: text("error"),
+  errorAt: timestamp("error_at"),
+});
+
+/**
+ * Un rapport de maintenance mensuel, archivé.
+ *
+ * Contrairement au relevé, les rapports S'EMPILENT : c'est l'archive que le
+ * client consulte et qu'il emporte à la restitution. Le PDF est rapatrié dans
+ * `cto_files` au premier passage (son lien d'origine expire en quinze minutes)
+ * et n'est plus jamais redemandé.
+ */
+export const ctoSiteReports = pgTable(
+  "cto_site_reports",
+  {
+    /** Identifiant du rapport chez WP Umbrella. */
+    id: text("id").primaryKey(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => ctoClients.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    periodStart: timestamp("period_start"),
+    periodEnd: timestamp("period_end"),
+    generatedAt: timestamp("generated_at"),
+    fileId: text("file_id").references(() => ctoFiles.id),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("cto_site_report_client").on(t.clientId, t.generatedAt)],
 );

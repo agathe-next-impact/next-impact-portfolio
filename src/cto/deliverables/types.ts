@@ -12,7 +12,8 @@ export type DeliverableKind =
   | "roadmap"
   | "cartographie"
   | "veille"
-  | "document";
+  | "document"
+  | "prestation";
 
 /**
  * Un arbitrage rendu, ou une option proposée puis écartée.
@@ -71,6 +72,21 @@ export interface VeillePayload {
   themes: string[];
 }
 
+/**
+ * La pièce jointe d'un livrable, telle qu'elle a été rapatriée.
+ *
+ * Seulement la référence, jamais le contenu : le fichier vit dans `cto_files`,
+ * adressé par l'empreinte de son contenu (`id`). Que l'empreinte fasse partie
+ * du payload n'est pas un détail — c'est elle qui fait écrire une version de
+ * plus quand la pièce est remplacée dans Notion, titre et colonnes inchangés.
+ */
+export interface AttachedFile {
+  id: string;
+  name: string;
+  mime: string;
+  size: number;
+}
+
 /** Une pièce opposable : revue de devis, plan de continuité, restitution. */
 export interface DocumentPayload {
   type: string | null;
@@ -78,6 +94,29 @@ export interface DocumentPayload {
   montant: number | null;
   verdict: string | null;
   alternative: string | null;
+  /**
+   * La pièce elle-même, quand la ligne en porte une. `null` si la colonne
+   * « Fichier » est vide ou si le rapatriement a échoué (la synchro le dit).
+   * Absent sur les versions écrites avant le rapatriement des fichiers.
+   */
+  fichier?: AttachedFile | null;
+}
+
+/**
+ * Une prestation vendue : mission ponctuelle, devis signé.
+ *
+ * Distincte d'un chantier de roadmap : un chantier est ce que le système
+ * demande, une prestation est ce que le client a acheté. Les confondre ferait
+ * de la roadmap un bon de commande.
+ */
+export interface PrestationPayload {
+  statut: string | null;
+  debut: string | null;
+  montant: number | null;
+  /** Part réalisée, de 0 à 1. `null` = non suivie, à ne pas afficher comme 0 %. */
+  avancement: number | null;
+  devis: string | null;
+  detail: string | null;
 }
 
 export interface PayloadByKind {
@@ -86,6 +125,7 @@ export interface PayloadByKind {
   cartographie: CartographiePayload;
   veille: VeillePayload;
   document: DocumentPayload;
+  prestation: PrestationPayload;
 }
 
 export type DeliverablePayload = PayloadByKind[DeliverableKind];

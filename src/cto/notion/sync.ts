@@ -11,16 +11,27 @@ import {
   type DeliverableInput,
   type DeliverableState,
 } from "../deliverables";
+import { FileTooLargeError, importFile } from "../files";
 import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
-import { clientsDatabaseId, databaseIdFor, SYNCED_KINDS } from "./config";
+import {
+  clientsDatabaseId,
+  databaseIdFor,
+  envNameFor,
+  isConfigured,
+  OPTIONAL_KINDS,
+  SYNCED_KINDS,
+} from "./config";
 import { syncLetters, type LettersReport } from "./letters";
 import { syncPersons, type PersonsReport } from "./persons";
 import {
   clientPageIds,
+  clientServices,
   clientStatus,
   clientTier,
+  clientVeilleOrganisations,
   clientWpUmbrellaProjectId,
   companyName,
+  documentFiles,
   mapPage,
   spaceId,
   PROPS,
@@ -94,6 +105,11 @@ interface ClientResolution {
    * personnalisées, produites par organisation et non par contrat.
    */
   byOrganisation: Map<string, string>;
+  /**
+   * Ligne du pipeline « Veilles clients » → accompagnement. C'est par là que
+   * les éditions de veille personnalisée deviennent des lettres.
+   */
+  byVeilleOrganisation: Map<string, string>;
   /** Accompagnements dont la synchro est suspendue depuis l'admin (§ ci-dessous). */
   disabledClientIds: Set<string>;
   warnings: string[];
@@ -115,6 +131,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const warnings: string[] = [];
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
+  const byVeilleOrganisation = new Map<string, string>();
 
   const rows = await db()
     .select({
@@ -178,9 +195,26 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
 
     await alignerFiche(page, id, name, warnings, dryRun);
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
+
+    for (const veille of clientVeilleOrganisations(page)) {
+      const deja = byVeilleOrganisation.get(veille);
+      if (deja && deja !== id) {
+        warnings.push(
+          `« ${name} » désigne une ligne de veille déjà reliée à un autre accompagnement : ignorée pour lui.`,
+        );
+        continue;
+      }
+      byVeilleOrganisation.set(veille, id);
+    }
   }
 
-  return { byNotionPage, byOrganisation, disabledClientIds, warnings };
+  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, warnings };
+}
+
+/** Deux listes de services identiques, à l'ordre près (elles arrivent triées). */
+function sameServices(a: string[] | null, b: string[] | null): boolean {
+  if (a === null || b === null) return a === b;
+  return a.length === b.length && a.every((value, index) => value === b[index]);
 }
 
 /**
@@ -202,12 +236,25 @@ async function alignerFiche(
   const status = clientStatus(page);
   const tier = clientTier(page);
   const wpUmbrellaProjectId = clientWpUmbrellaProjectId(page);
+  const services = clientServices(page);
+  if (services.unknown.length > 0) {
+    warnings.push(
+      `« ${name} » : service(s) inconnu(s) ignoré(s) — ${services.unknown.join(", ")}. ` +
+        "Vérifier le libellé dans la colonne « Services ».",
+    );
+  }
+  // Colonne vide = jamais renseignée : on garde `null`, qui dit à l'espace de
+  // conserver l'affichage d'avant les services (cf. schema.ts). Notion ne
+  // distingue pas « vide » de « jamais rempli » ; c'est ce choix qui évite
+  // qu'un accompagnement existant perde ses sections du jour au lendemain.
+  const servicesVoulus = services.codes.length > 0 ? services.codes : null;
 
   const [actuel] = await db()
     .select({
       status: ctoClients.status,
       tier: ctoClients.tier,
       wpUmbrellaProjectId: ctoClients.wpUmbrellaProjectId,
+      services: ctoClients.services,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -218,6 +265,7 @@ async function alignerFiche(
     status?: typeof actuel.status;
     tier?: string;
     wpUmbrellaProjectId?: number;
+    services?: string[] | null;
     statusChangedAt?: Date;
   } = {};
   if (status && status !== actuel.status) patch.status = status;
@@ -225,6 +273,7 @@ async function alignerFiche(
   if (wpUmbrellaProjectId && wpUmbrellaProjectId !== actuel.wpUmbrellaProjectId) {
     patch.wpUmbrellaProjectId = wpUmbrellaProjectId;
   }
+  if (!sameServices(servicesVoulus, actuel.services)) patch.services = servicesVoulus;
   if (Object.keys(patch).length === 0) return;
 
   if (dryRun) {
@@ -232,6 +281,9 @@ async function alignerFiche(
       patch.status ? `état → ${patch.status}` : null,
       patch.tier ? `palier → ${patch.tier}` : null,
       patch.wpUmbrellaProjectId ? `projet WP Umbrella → ${patch.wpUmbrellaProjectId}` : null,
+      "services" in patch
+        ? `services → ${patch.services ? patch.services.join(", ") : "affichage historique"}`
+        : null,
     ].filter(Boolean);
     warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);
     return;
@@ -384,6 +436,7 @@ async function syncKind(
   const { force, dryRun } = options;
   const pages = await queryDatabase(databaseIdFor(kind), publishedFilter(PROPS.published));
   const { inputs, warnings } = resolvePages(kind, pages, byNotionPage, disabledClientIds);
+  if (kind === "document") await attachFiles(inputs, pages, warnings, dryRun);
 
   const states = new Map((await currentStates(kind)).map((s) => [s.notionPageId, s]));
   const report: KindReport = {
@@ -456,6 +509,54 @@ async function syncKind(
 }
 
 /**
+ * Rapatrie la pièce de chaque document publié et l'inscrit dans son payload.
+ *
+ * Avant la comparaison d'empreintes, et c'est ce qui compte : l'empreinte du
+ * fichier fait partie du payload, donc remplacer le PDF dans Notion — titre et
+ * colonnes inchangés — écrit une version de plus, datée, visible du client.
+ *
+ * Une seule pièce par document. Plusieurs pièces sur une ligne, c'est
+ * presque toujours une ancienne version oubliée à côté de la nouvelle : on
+ * prend la première et on le signale, plutôt que de publier les deux.
+ *
+ * Un échec de téléchargement dégrade la ligne (publiée sans pièce, signalée),
+ * il n'arrête pas le balayage : les autres documents n'y sont pour rien.
+ */
+async function attachFiles(
+  inputs: DeliverableInput[],
+  pages: NotionPage[],
+  warnings: string[],
+  dryRun: boolean,
+): Promise<void> {
+  const pageById = new Map(pages.map((page) => [page.id, page]));
+
+  for (const input of inputs) {
+    const page = pageById.get(input.notionPageId);
+    if (!page) continue;
+    const fichiers = documentFiles(page);
+    if (fichiers.length === 0) continue;
+    if (fichiers.length > 1) {
+      warnings.push(
+        `document « ${input.title} » porte ${fichiers.length} pièces : seule la première (${fichiers[0].name}) est publiée.`,
+      );
+    }
+
+    try {
+      const ref = await importFile(fichiers[0].url, fichiers[0].name, { dryRun });
+      (input.payload as { fichier?: unknown }).fichier = ref;
+    } catch (error) {
+      warnings.push(
+        error instanceof FileTooLargeError
+          ? `document « ${input.title} » : ${error.message}, publié sans sa pièce.`
+          : `document « ${input.title} » : pièce impossible à rapatrier (${
+              error instanceof Error ? error.message : "erreur"
+            }), publié sans elle.`,
+      );
+    }
+  }
+}
+
+/**
  * Synchronise l'atelier vers l'espace client.
  *
  * Les bases sont traitées l'une après l'autre : l'échec de l'une n'annule pas
@@ -477,7 +578,7 @@ export async function syncFromNotion(
     dryRun,
     clientsMapped: clients.byNotionPage.size,
     persons: { seen: 0, created: 0, updated: 0, revoked: 0, restored: 0, unchanged: 0 },
-    letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0 },
+    letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0, editions: null },
     kinds: [],
     warnings: [...clients.warnings],
   };
@@ -500,9 +601,28 @@ export async function syncFromNotion(
     report.warnings.push(...result.warnings);
   }
 
+  for (const kind of OPTIONAL_KINDS) {
+    if (!isConfigured(kind)) {
+      report.warnings.push(`Base « ${kind} » ignorée : ${envNameFor(kind)} n'est pas posée.`);
+      continue;
+    }
+    const result = await syncKind(
+      kind,
+      clients.byNotionPage,
+      { force: options.force === true, dryRun },
+      clients.disabledClientIds,
+    );
+    report.kinds.push(result.report);
+    report.warnings.push(...result.warnings);
+  }
+
   // Les lettres passent en dernier : elles coûtent le plus cher en requêtes, et
   // un échec de leur côté ne doit pas priver le client des livrables déjà écrits.
-  const lettres = await syncLetters(clients.byOrganisation, { dryRun });
+  const lettres = await syncLetters(
+    clients.byOrganisation,
+    { dryRun },
+    clients.byVeilleOrganisation,
+  );
   report.letters = lettres.report;
   report.warnings.push(...lettres.warnings);
 

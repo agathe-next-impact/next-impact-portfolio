@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { previousLoginAt } from "@cto/access";
-import { listForClient } from "@cto/deliverables";
-import { BackLink, Label, Notice, PageHeader } from "../../ui";
-import { CATEGORIES, Categorie, kindFromSlug } from "../../livrables";
-import { ESPACE_PATH, requireSession } from "../../session";
+import type { SectionKey } from "@cto/espace";
+import { Label } from "../../ui";
+import { CATEGORIES, Categorie, kindFromSlug, type CategorieKind } from "../../livrables";
+import { Espace, loadEspace } from "../../shell";
+import { requireSession } from "../../session";
+
+/** L'onglet de navigation auquel une catégorie appartient. */
+const SECTION_OF: Record<CategorieKind, SectionKey> = {
+  decision: "direction-technique",
+  cartographie: "direction-technique",
+  document: "direction-technique",
+  roadmap: "actions",
+  veille: "veille",
+  prestation: "prestations",
+};
 
 export const metadata: Metadata = {
   title: "Livrables",
@@ -34,33 +45,31 @@ export default async function CategoriePage({
   if (!kind) notFound();
 
   const session = await requireSession();
-  const [tous, since] = await Promise.all([
-    listForClient(session.person.clientId),
+  const [context, since] = await Promise.all([
+    loadEspace(session),
     previousLoginAt(session.person.id),
   ]);
-  const items = tous.filter((item) => item.kind === kind);
+  const items = context.items.filter((item) => item.kind === kind);
+  const section = SECTION_OF[kind];
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-      <div className="mb-8">
-        <BackLink href={ESPACE_PATH}>Votre espace</BackLink>
-      </div>
-
-      <PageHeader company={session.person.company} title={CATEGORIES[kind].titre}>
+    <Espace
+      session={session}
+      context={context}
+      // L'onglet n'est marqué que si la section fait partie de l'accompagnement :
+      // une catégorie consultée hors services reste lisible, sans prétendre être
+      // un onglet qui n'existe pas.
+      active={context.sections.some((s) => s.key === section) ? section : null}
+      title={CATEGORIES[kind].titre}
+      intro={
         <Label>
           {items.length} {items.length > 1 ? "entrées publiées" : "entrée publiée"}
         </Label>
-      </PageHeader>
-
-      {session.decision.notice ? (
-        <div className="mt-8">
-          <Notice tone="info">{session.decision.notice}</Notice>
-        </div>
-      ) : null}
-
+      }
+    >
       <div className="mt-10">
         <Categorie kind={kind} items={items} since={since} />
       </div>
-    </main>
+    </Espace>
   );
 }

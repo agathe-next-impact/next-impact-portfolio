@@ -78,6 +78,13 @@
       "when": 1790258664570,
       "tag": "0010_sweet_golden_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1790306709633,
+      "tag": "0011_tense_kabuki",
+      "breakpoints": true
     }
   ]
 }

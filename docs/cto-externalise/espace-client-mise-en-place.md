@@ -5,9 +5,10 @@ Procédure d'installation et d'exploitation de la couche d'accès de l'espace
 
 Périmètre : **l'accès** — identités par personne, passkeys, sessions, journal —,
 **l'ouverture d'un accompagnement** (§ 3.1), **la notification** des clients
-(§ 3.4) et **la supervision** (§ 5). Les livrables (atelier Notion,
-synchronisation, affichage) ont leur propre document : `notion-livrables.md`.
-L'export de restitution, lui, reste à écrire.
+(§ 3.4), **la supervision** (§ 5), **les sections de l'espace et le suivi
+technique** (§ 6) et **le dossier de restitution** (§ 7). Les livrables
+(atelier Notion, synchronisation, affichage) ont leur propre document :
+`notion-livrables.md`.
 
 ---
 
@@ -18,9 +19,12 @@ L'export de restitution, lui, reste à écrire.
 | Base Postgres | Neon (`DATABASE_URL`, `DATABASE_URL_UNPOOLED`) | oui, partagée avec Sentinelle |
 | Envoi d'e-mails | SMTP Google (`NODEMAILER_*`) | oui, celui du site |
 
-L'espace CTO n'ajoute **aucun service** : il pose quatorze tables préfixées
-`cto_` dans la base existante (dix pour l'espace client, quatre `cto_admin_*`
-pour la supervision) et envoie ses e-mails par le transport du site. La
+L'espace CTO n'ajoute **aucun service** : il pose dix-sept tables préfixées
+`cto_` dans la base existante (treize pour l'espace client — dont
+`cto_files` pour les pièces jointes et `cto_site_*` pour le suivi technique —,
+quatre `cto_admin_*` pour la supervision) et envoie ses e-mails par le
+transport du site. WP Umbrella est lu par le Cron, jamais pendant une requête
+client (§ 6). La
 synchronisation des livrables ajoute une dépendance à l'API Notion, en lecture
 seule et hors du chemin de requête du client (`notion-livrables.md`).
 
@@ -118,7 +122,8 @@ Vercel → Settings → Environment Variables, **portée `Production` uniquement
 | `CTO_RP_ID` | *(ne pas définir)* | défaut : `next-impact.digital` |
 | `CTO_ORIGIN` | *(ne pas définir)* | déduit : `https://next-impact.digital` et `https://www.…` |
 | `CRON_SECRET` | un secret au hasard | arme le balayage quotidien (§ 4) |
-| `CTO_NOTION_*` | neuf variables (le jeton et huit bases) | synchro des accompagnements, des personnes et des livrables (`notion-livrables.md`) |
+| `CTO_NOTION_*` | neuf obligatoires (le jeton et huit bases) + deux facultatives (`…_PRESTATIONS`, `…_EDITIONS`) | synchro des accompagnements, des personnes et des livrables (`notion-livrables.md`) |
+| `WP_UMBRELLA_TOKEN` | jeton d'**API publique** WP Umbrella | suivi technique (§ 6). Facultatif : absent, la section affiche « en préparation » |
 
 `/admin-cto` n'a pas de variable à lui : voir § 5.
 
@@ -153,7 +158,7 @@ Depuis votre poste, avec les chaînes de connexion de production dans
 npm run db:cto:migrate
 ```
 
-Vérifier ensuite dans Neon que les quatorze tables `cto_*` existent. À refaire
+Vérifier ensuite dans Neon que les dix-sept tables `cto_*` existent. À refaire
 à chaque nouvelle migration du dossier `src/cto/db/migrations/`, **avant** de
 déployer le code qui l'utilise : une colonne attendue par le code mais absente
 de la base fait échouer la synchro au premier balayage.
@@ -362,9 +367,12 @@ fait deux travaux sans rapport entre eux :
   échus ou servis, les défis expirés et les sessions mortes, côté client puis
   côté supervision. C'est la page de confidentialité qui l'exige, et c'est
   aussi ce qui empêche la liste des appareils de se charger de lignes mortes.
-- `syncFromNotion()` crée les nouveaux accompagnements, aligne état et palier,
-  et publie les livrables de l'atelier (`notion-livrables.md`). Il n'envoie
-  aucun e-mail (§ 3.4).
+- `syncFromNotion()` crée les nouveaux accompagnements, aligne état, palier
+  et services, rapatrie les pièces jointes et publie les livrables de
+  l'atelier (`notion-livrables.md`). Il n'envoie aucun e-mail (§ 3.4).
+- `syncSites()` relève chaque site suivi chez WP Umbrella et archive les
+  rapports mensuels (§ 6). Il passe en dernier et ne dépend pas de Notion : une
+  synchro de l'atelier en échec ne prive pas le client de son relevé.
 
 Le ménage passe en premier et passe **quoi qu'il arrive** : il ne dépend que de
 la base, là où la synchro dépend en plus de Notion. L'inverse ferait qu'une
@@ -393,7 +401,8 @@ Vercel → Observability → Crons montre le corps de la réponse. Trois cas :
 | --- | --- |
 | 200, `synchro` chiffrée | Tout a tourné. |
 | 200, `synchro: { ignoree }` | Les variables Notion ne sont pas posées sur Vercel. La purge, elle, a bien eu lieu. |
-| 500 | Une des purges (`purge`, `purgeAdmin`) ou la synchro a échoué ; le corps dit laquelle et pourquoi. |
+| 200, `suivi: { ignoree }` | `WP_UMBRELLA_TOKEN` n'est pas posée. Le reste a tourné. |
+| 500 | Une des purges (`purge`, `purgeAdmin`), la synchro ou le suivi a échoué ; le corps dit lequel et pourquoi. |
 
 Le cas « ignorée » rend 200 délibérément : un Cron rouge tous les jours pour une
 raison connue et acceptée finit par ne plus être lu, et c'est le vrai incident
@@ -446,6 +455,76 @@ la ferme immédiatement, sans attendre son échéance.
 
 ---
 
+## 6. Les sections de l'espace et le suivi technique
+
+### Ce que voit le client
+
+L'espace s'organise en onglets, composés depuis la colonne **`Services`** de
+la fiche Notion (`notion-livrables.md` § 2) :
+
+| Onglet | Contenu | Visible |
+| --- | --- | --- |
+| Tableau de bord | nouveautés depuis la dernière connexion, quatre repères, santé du site, **calendrier** (grille du mois + 90 prochains jours : échéances de chantiers, renouvellements de contrats, livraisons, lettres), à la une, dernière lettre | toujours |
+| Direction technique | relevé de décisions, cartographie, documents (pièces téléchargeables) | service « Direction technique » |
+| Suivi technique | relevé WP Umbrella + archives des rapports de maintenance | service « Suivi technique » |
+| Actions en cours | la roadmap filtrée : chantiers ouverts et décidés, puis à venir | service « Actions en cours » |
+| Veille | dernières nouvelles (base Veille) + lettres, générales et personnalisées | toujours |
+| Prestations | missions commandées, avancement, livraison | service « Prestations en cours » |
+
+Un bloc **contact** (écrire à Agathe, réserver un créneau) clôt chaque page ;
+le pied donne « Mes appareils », l'export du dossier (§ 7) et la
+déconnexion. Colonne `Services` vide : affichage historique (toute section qui
+a du contenu). Une section non souscrite redirige vers le tableau de bord.
+
+### Brancher le suivi technique d'un site
+
+1. **Jeton** : WP Umbrella → Profil → « Public API (for developers) » →
+   *Generate my token*, à poser dans `WP_UMBRELLA_TOKEN` (`.env.local` et
+   Vercel). ⚠️ Une clé de connexion de site ne convient pas : l'API répond
+   `403 invalid_scope`, et le rapport le dit en clair.
+2. **Projet** : renseigner `ID projet WP Umbrella` sur la fiche Clients, puis
+   `npm run cto:sync` pour que l'identifiant arrive en base.
+3. **Relevé** : attendre la nuit, ou le lancer tout de suite :
+
+```bash
+npm run cto:site -- --a-blanc   # interroge WP Umbrella, n'écrit rien
+npm run cto:site                # relève et écrit
+```
+
+Le relevé (`cto_site_snapshots`, une ligne par accompagnement, écrasée à
+chaque passage) couvre versions WordPress/PHP, HTTPS, performance, mises à
+jour en attente, failles connues, disponibilité sur trente jours et incidents,
+sauvegardes, interventions de maintenance des 90 derniers jours. Un échec ne
+détruit rien : le relevé précédent reste affiché avec sa date, l'erreur est
+notée à côté et montrée au client.
+
+Les **rapports mensuels** terminés sont rapatriés en PDF (`cto_site_reports` +
+`cto_files`) — leur lien d'origine expire en quinze minutes —, six par passage
+au plus pour ne pas dépasser la durée du Cron, et ne sont jamais redemandés.
+
+Source des champs : la spécification OpenAPI publiée par WP Umbrella
+(`github.com/WP-Umbrella/umbrella-skill`), qui ne donne que des exemples ; la
+lecture est défensive (`src/cto/site/normalize.ts`, testé) et un champ absent
+s'affiche « — », jamais comme une valeur fausse.
+
+---
+
+## 7. Le dossier de restitution
+
+« Exporter mon dossier (PDF) », en pied de chaque page, génère à la demande
+(`/espace-direction/restitution`) un PDF qui rassemble tout ce qui est publié :
+décisions, roadmap, cartographie, documents, prestations, veille, lettres (sans
+la fenêtre de six mois), rapports de maintenance, et l'historique de chaque
+livrable corrigé, version par version.
+
+Ouvert à toute personne connectée, quel que soit l'état (`actif`, `suspendu`,
+`restitution`) : un client n'a pas à attendre la fin du contrat pour emporter ce
+qu'il a payé. Un espace `clos` n'a plus de session, donc plus d'export — c'est
+la fin de la fenêtre de restitution. Les pièces jointes ne sont pas incluses
+dans le PDF ; il renvoie à l'espace pour les télécharger tant qu'il est ouvert.
+
+---
+
 ## Fichiers de référence
 
 | Rôle | Fichier |
@@ -465,3 +544,7 @@ la ferme immédiatement, sans attendre son échéance.
 | Supervision (identité, lien, passkeys) | `src/cto/admin/identity.ts`, `src/cto/admin/passkeys.ts` |
 | Supervision (pause de synchro) | `app/(cto)/admin-cto/pilotage/actions.ts` |
 | Supervision (écrans) | `app/(cto)/admin-cto/` |
+| Sections et calendrier (logique pure, testée) | `src/cto/espace/` |
+| Gabarit et navigation de l'espace | `app/(cto)/espace-direction/shell.tsx` |
+| Suivi technique (API, normalisation, balayage) | `src/cto/site/`, `scripts/cto-site.ts` |
+| Dossier de restitution (collecte, PDF) | `src/cto/restitution/`, `app/(cto)/espace-direction/restitution/route.ts` |

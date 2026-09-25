@@ -57,6 +57,15 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
     montant: "Montant",
     verdict: "Verdict",
     alternative: "Alternative chiffrée",
+    fichier: "Pièce jointe",
+  },
+  prestation: {
+    statut: "Statut",
+    debut: "Début",
+    montant: "Montant",
+    avancement: "Avancement",
+    devis: "Devis",
+    detail: "Détail",
   },
 };
 
@@ -65,6 +74,11 @@ const VIDE = "—";
 function lisible(value: unknown): string {
   if (value === null || value === undefined || value === "") return VIDE;
   if (Array.isArray(value)) return value.length > 0 ? value.join(", ") : VIDE;
+  // Une pièce jointe se lit par son nom ; son empreinte, qui change quand le
+  // fichier change, n'a rien à dire à un dirigeant.
+  if (typeof value === "object" && "name" in (value as object)) {
+    return String((value as { name: unknown }).name);
+  }
   if (typeof value === "number") return String(value);
   return String(value);
 }

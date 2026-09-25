@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { ARCHIVE_MONTHS, lettersForClient } from "@cto/letters";
-import { BackLink, Label, PageHeader } from "../ui";
+import { Label } from "../ui";
 import { ListeLettres } from "../lettre";
-import { ESPACE_PATH, requireSession } from "../session";
+import { Espace, loadEspace } from "../shell";
+import { requireSession } from "../session";
 
 export const metadata: Metadata = {
   title: "Votre veille",
@@ -20,20 +21,23 @@ export const dynamic = "force-dynamic";
  */
 export default async function LettresPage() {
   const session = await requireSession();
-  const lettres = await lettersForClient(session.person.clientId);
+  const [context, lettres] = await Promise.all([
+    loadEspace(session),
+    lettersForClient(session.person.clientId),
+  ]);
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-      <div className="mb-8">
-        <BackLink href={ESPACE_PATH}>Votre espace</BackLink>
-      </div>
-
-      <PageHeader company={session.person.company} title="Votre veille">
+    <Espace
+      session={session}
+      context={context}
+      active="veille"
+      title="Votre veille"
+      intro={
         <Label>
           {lettres.length} {lettres.length > 1 ? "éditions accessibles" : "édition accessible"}
         </Label>
-      </PageHeader>
-
+      }
+    >
       <div className="mt-10">
         <ListeLettres lettres={lettres} />
       </div>
@@ -43,6 +47,6 @@ export default async function LettresPage() {
         antérieures sortent de l'espace sans être détruites : elles vous sont
         restituées avec le reste en fin d'accompagnement.
       </p>
-    </main>
+    </Espace>
   );
 }
