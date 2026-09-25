@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import type { ResolvedSession } from "@cto/access";
 import { listForClient, type Deliverable } from "@cto/deliverables";
 import {
   clientProfile,
@@ -12,6 +11,7 @@ import {
 import { deconnexion } from "./actions";
 import { buttonClass, Label, Notice, PageHeader, Panel } from "./ui";
 import { ESPACE_PATH } from "./session";
+import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le gabarit commun des pages connectées : en-tête, navigation par sections,
@@ -23,8 +23,8 @@ import { ESPACE_PATH } from "./session";
 // balayage suivant, sans attendre que la personne se reconnecte.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function sectionHref(section: Section): string {
-  return section.slug ? `${ESPACE_PATH}/${section.slug}` : ESPACE_PATH;
+export function sectionHref(section: Section, base: string = ESPACE_PATH): string {
+  return section.slug ? `${base}/${section.slug}` : base;
 }
 
 export interface EspaceContext {
@@ -40,11 +40,8 @@ export interface EspaceContext {
  * historique des sections (`services === null` : une section s'affiche si elle
  * a du contenu). Les charger ici évite une seconde lecture par page.
  */
-export async function loadEspace(session: ResolvedSession): Promise<EspaceContext> {
-  const [profile, items] = await Promise.all([
-    clientProfile(session.person.clientId),
-    listForClient(session.person.clientId),
-  ]);
+export async function loadEspace(clientId: string): Promise<EspaceContext> {
+  const [profile, items] = await Promise.all([clientProfile(clientId), listForClient(clientId)]);
 
   const count = (kind: Deliverable["kind"]) => items.filter((item) => item.kind === kind).length;
   const sections = visibleSections(profile.services, {
@@ -64,7 +61,15 @@ export function sectionOuverte(context: EspaceContext, key: SectionKey): boolean
   return context.sections.some((section) => section.key === key);
 }
 
-function Navigation({ sections, active }: { sections: Section[]; active: SectionKey | null }) {
+function Navigation({
+  sections,
+  active,
+  base,
+}: {
+  sections: Section[];
+  active: SectionKey | null;
+  base: string;
+}) {
   return (
     <nav aria-label="Sections de votre espace" className="mt-6 border-b border-dark-gray">
       {/* Défilement horizontal sur mobile : six onglets ne tiennent pas sur 360 px,
@@ -75,7 +80,7 @@ function Navigation({ sections, active }: { sections: Section[]; active: Section
           return (
             <li key={section.key} className="shrink-0">
               <Link
-                href={sectionHref(section)}
+                href={sectionHref(section, base)}
                 aria-current={courant ? "page" : undefined}
                 className={`block border-b-2 px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
                   courant
@@ -140,52 +145,79 @@ export function ContactCta({ company }: { company: string }) {
  * aucun onglet n'est alors marqué courant, ce qui est vrai.
  */
 export function Espace({
-  session,
+  viewer,
   context,
   active,
   title,
   intro,
   children,
 }: {
-  session: ResolvedSession;
+  viewer: Viewer;
   context: EspaceContext;
   active: SectionKey | null;
   title: string;
   intro?: ReactNode;
   children: ReactNode;
 }) {
+  // Une section ouverte depuis l'admin alors que le client ne l'a pas : on la
+  // montre quand même (c'est tout l'intérêt de la supervision), mais on le dit.
+  const horsServices =
+    viewer.admin && active !== null && !context.sections.some((section) => section.key === active);
+
   return (
     <main className="mx-auto max-w-4xl px-6 py-16 sm:py-20">
-      <PageHeader company={session.person.company} title={title}>
+      {viewer.admin ? (
+        <div className="mb-8">
+          <Notice tone="info">
+            Vue administrateur — l&rsquo;espace tel que le voit {viewer.company}, en lecture seule.
+            Les liens restent dans la supervision.
+          </Notice>
+        </div>
+      ) : null}
+
+      <PageHeader company={viewer.company} title={title}>
         {intro}
       </PageHeader>
 
-      <Navigation sections={context.sections} active={active} />
+      <Navigation sections={context.sections} active={active} base={viewer.base} />
 
-      {session.decision.notice ? (
+      {horsServices ? (
         <div className="mt-8">
-          <Notice tone="info">{session.decision.notice}</Notice>
+          <Notice tone="erreur">
+            Section non souscrite : ce client ne la voit pas. Cochez le service dans sa fiche
+            Notion pour la lui ouvrir.
+          </Notice>
+        </div>
+      ) : null}
+
+      {viewer.notice ? (
+        <div className="mt-8">
+          <Notice tone="info">{viewer.notice}</Notice>
         </div>
       ) : null}
 
       {children}
 
-      <ContactCta company={session.person.company} />
+      <ContactCta company={viewer.company} />
 
       <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray pt-6">
         <div className="flex flex-wrap gap-2">
-          <Link href={`${ESPACE_PATH}/appareils`} className={buttonClass.quiet}>
-            Mes appareils
-          </Link>
-          <a href={`${ESPACE_PATH}/restitution`} className={buttonClass.quiet}>
-            Exporter mon dossier (PDF)
+          {viewer.admin ? null : (
+            <Link href={`${ESPACE_PATH}/appareils`} className={buttonClass.quiet}>
+              Mes appareils
+            </Link>
+          )}
+          <a href={`${viewer.base}/restitution`} className={buttonClass.quiet}>
+            {viewer.admin ? "Exporter son dossier (PDF)" : "Exporter mon dossier (PDF)"}
           </a>
         </div>
-        <form action={deconnexion}>
-          <button type="submit" className={buttonClass.quiet}>
-            Se déconnecter
-          </button>
-        </form>
+        {viewer.admin ? null : (
+          <form action={deconnexion}>
+            <button type="submit" className={buttonClass.quiet}>
+              Se déconnecter
+            </button>
+          </form>
+        )}
       </footer>
     </main>
   );

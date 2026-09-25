@@ -418,6 +418,18 @@ répondre à « qui est actif, qui est suspendu ? » demandait d'ouvrir Neon ;
 sessions ouvertes, dernière connexion) et le détail de chacun (personnes,
 journal d'accès).
 
+**L'espace de chaque client, en entier.** « Voir son espace » (liste) ou
+« Ouvrir son espace » (fiche) mène à `/admin-cto/pilotage/clients/<id>/espace`,
+qui rend les MÊMES écrans que `/espace-direction` — tableau de bord, chaque
+section, documents, lettres, historiques, export PDF — à partir d'un `Viewer`
+admin (`app/(cto)/espace-direction/viewer.ts` et `vues.tsx`). Tous les liens
+restent sous `/admin-cto` : le cookie admin n'est pas envoyé ailleurs. Deux
+différences seulement : pas de pastilles « Nouveau » (l'admin n'a pas de
+dernière connexion), et les sections non souscrites restent consultables,
+signalées « non souscrite ». Les téléchargements de pièces et le PDF passent
+par des routes propres à l'admin, qui vérifient elles-mêmes la session admin
+(un Route Handler n'hérite d'aucun layout).
+
 **Un seul bouton : mettre la synchro en pause.** Sur le détail d'un
 accompagnement, « Mettre en pause » (`basculerSynchro`,
 `app/(cto)/admin-cto/pilotage/actions.ts`) gèle ses livrables : le balayage ne

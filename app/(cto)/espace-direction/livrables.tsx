@@ -8,7 +8,7 @@ import type {
   VeillePayload,
 } from "@cto/deliverables";
 import Link from "next/link";
-import { Dot, formatAmount, formatDay, Label, Panel, SectionNav, Stat, Tag, type Tone } from "./ui";
+import { Dot, formatAmount, formatDay, Label, Panel, Stat, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 /**
@@ -28,14 +28,14 @@ export const CATEGORIES = {
 } as const;
 
 /** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */
-export function fichierPath(fileId: string): string {
-  return `${ESPACE_PATH}/fichiers/${fileId}`;
+export function fichierPath(fileId: string, base: string = ESPACE_PATH): string {
+  return `${base}/fichiers/${fileId}`;
 }
 
 export type CategorieKind = keyof typeof CATEGORIES;
 
-export function categoriePath(kind: CategorieKind): string {
-  return `${ESPACE_PATH}/livrables/${CATEGORIES[kind].slug}`;
+export function categoriePath(kind: CategorieKind, base: string = ESPACE_PATH): string {
+  return `${base}/livrables/${CATEGORIES[kind].slug}`;
 }
 
 /** Retrouve le type depuis le segment d'URL. Rend null sur un segment inconnu. */
@@ -174,83 +174,6 @@ export function sortPrestations(items: Deliverable[]): Deliverable[] {
   );
 }
 
-export function Livrables({
-  items,
-  since,
-}: {
-  items: Deliverable[];
-  /** Connexion précédente. `null` à la première visite : aucune fenêtre à montrer. */
-  since: Date | null;
-}) {
-  const now = Date.now();
-
-  const roadmap = items.filter((item) => item.kind === "roadmap");
-  const decisions = items.filter((item) => item.kind === "decision");
-  const carto = items.filter((item) => item.kind === "cartographie");
-  const veille = items.filter((item) => item.kind === "veille");
-
-  if (items.length === 0) {
-    return (
-      <section className="mt-10">
-        <Label>Vos livrables</Label>
-        <Panel className="mt-3 px-5 py-6">
-          <p className="font-inter-tight text-base text-mid-gray">
-            Vos livrables (relevé de décisions, roadmap, cartographie du système,
-            veille dédiée) apparaîtront ici dès la première publication.
-          </p>
-        </Panel>
-      </section>
-    );
-  }
-
-  roadmap.sort(
-    (a, b) =>
-      rank(STATUS_ORDER, (a.payload as RoadmapPayload).statut) -
-        rank(STATUS_ORDER, (b.payload as RoadmapPayload).statut) || byDate(a, b, 1),
-  );
-  decisions.sort((a, b) => byDate(a, b, -1));
-  carto.sort(
-    (a, b) =>
-      rank(CRITICALITY_ORDER, (a.payload as CartographiePayload).criticite) -
-        rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
-      byDate(a, b, 1),
-  );
-  veille.sort((a, b) => byDate(a, b, -1));
-
-  const sections = [
-    { href: categoriePath("roadmap"), label: "Roadmap", count: roadmap.length },
-    { href: categoriePath("decision"), label: "Décisions", count: decisions.length },
-    { href: categoriePath("cartographie"), label: "Cartographie", count: carto.length },
-    { href: categoriePath("veille"), label: "Veille", count: veille.length },
-  ].filter((section) => section.count > 0);
-
-  // La synthèse compte TOUT, l'affichage ne montre que ce qui est à la une.
-  // C'est délibéré : « quatre chantiers en cours » doit rester vrai même si
-  // aucun n'a été mis en avant, sinon le repère devient un compte d'affichage
-  // et ne répond plus à la question posée.
-  const aLaUne = (list: Deliverable[]) => list.filter((item) => item.featured);
-
-  return (
-    <>
-      <DepuisLaDerniereFois items={items} since={since} />
-      <Synthese roadmap={roadmap} decisions={decisions} carto={carto} now={now} />
-      <SectionNav items={sections} />
-      {veille.length > 0 ? (
-        <Veille items={aLaUne(veille)} total={veille.length} since={since} />
-      ) : null}
-      {roadmap.length > 0 ? (
-        <Roadmap items={aLaUne(roadmap)} now={now} total={roadmap.length} since={since} />
-      ) : null}
-      {decisions.length > 0 ? (
-        <Decisions items={aLaUne(decisions)} total={decisions.length} since={since} />
-      ) : null}
-      {carto.length > 0 ? (
-        <Cartographie items={aLaUne(carto)} now={now} total={carto.length} since={since} />
-      ) : null}
-    </>
-  );
-}
-
 /**
  * Ce qui a bougé depuis la connexion précédente.
  *
@@ -262,9 +185,11 @@ export function Livrables({
  * qui annonce « 0 nouveauté » occupe la place sans rien apprendre.
  */
 export function DepuisLaDerniereFois({
+  base = ESPACE_PATH,
   items,
   since,
 }: {
+  base?: string;
   items: Deliverable[];
   since: Date | null;
 }) {
@@ -295,7 +220,7 @@ export function DepuisLaDerniereFois({
             <li key={item.id} className="flex flex-wrap items-baseline gap-2">
               <Nouveaute item={item} since={since} />
               <Link
-                href={categoriePath(item.kind as CategorieKind)}
+                href={categoriePath(item.kind as CategorieKind, base)}
                 className="font-inter-tight text-sm text-foreground underline underline-offset-4 hover:text-accent-secondary"
               >
                 {item.title}
@@ -316,10 +241,12 @@ export function DepuisLaDerniereFois({
  * pas celui où on lui présente.
  */
 export function Categorie({
+  base = ESPACE_PATH,
   kind,
   items,
   since,
 }: {
+  base?: string;
   kind: CategorieKind;
   items: Deliverable[];
   since: Date | null;
@@ -342,25 +269,25 @@ export function Categorie({
         rank(STATUS_ORDER, (a.payload as RoadmapPayload).statut) -
           rank(STATUS_ORDER, (b.payload as RoadmapPayload).statut) || byDate(a, b, 1),
     );
-    return <Roadmap items={tri} now={now} since={since} bare />;
+    return <Roadmap items={tri} now={now} since={since} bare base={base} />;
   }
 
   if (kind === "decision") {
     return (
-      <Decisions items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare />
+      <Decisions items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare base={base} />
     );
   }
 
   if (kind === "veille") {
-    return <Veille items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare />;
+    return <Veille items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare base={base} />;
   }
 
   if (kind === "document") {
-    return <Documents items={sortRecentFirst(items)} since={since} bare />;
+    return <Documents items={sortRecentFirst(items)} since={since} bare base={base} />;
   }
 
   if (kind === "prestation") {
-    return <Prestations items={sortPrestations(items)} now={now} since={since} bare />;
+    return <Prestations items={sortPrestations(items)} now={now} since={since} bare base={base} />;
   }
 
   const tri = [...items].sort(
@@ -369,7 +296,7 @@ export function Categorie({
         rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
       byDate(a, b, 1),
   );
-  return <Cartographie items={tri} now={now} since={since} bare />;
+  return <Cartographie items={tri} now={now} since={since} bare base={base} />;
 }
 
 /** Les quatre chiffres qui répondent à « où en est-on ? » sans défiler. */
@@ -492,12 +419,14 @@ function RienALaUne({ href, count }: { href: string; count: number }) {
  * un statut inutilisé est du bruit, pas une information.
  */
 export function Roadmap({
+  base = ESPACE_PATH,
   items,
   now,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   now: number;
   total?: number;
@@ -511,9 +440,9 @@ export function Roadmap({
           id="roadmap"
           title="Roadmap"
           count={total ?? 0}
-          href={categoriePath("roadmap")}
+          href={categoriePath("roadmap", base)}
         />
-        <RienALaUne href={categoriePath("roadmap")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("roadmap", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -535,7 +464,7 @@ export function Roadmap({
           id="roadmap"
           title="Roadmap"
           count={total ?? items.length}
-          href={categoriePath("roadmap")}
+          href={categoriePath("roadmap", base)}
         />
       )}
       {/* Défilement horizontal sur petit écran plutôt qu'un empilement : les
@@ -555,7 +484,7 @@ export function Roadmap({
               </div>
               <div className="space-y-3">
                 {groupe.lignes.map((item) => (
-                  <ChantierCard key={item.id} item={item} now={now} since={since} />
+                  <ChantierCard key={item.id} item={item} now={now} since={since} base={base} />
                 ))}
               </div>
             </div>
@@ -567,10 +496,12 @@ export function Roadmap({
 }
 
 function ChantierCard({
+  base = ESPACE_PATH,
   item,
   now,
   since,
 }: {
+  base?: string;
   item: Deliverable;
   now: number;
   since: Date | null;
@@ -610,7 +541,7 @@ function ChantierCard({
           </a>
         </p>
       ) : null}
-      <Correction item={item} />
+      <Correction item={item} base={base} />
     </article>
   );
 }
@@ -628,11 +559,13 @@ function ChantierCard({
  * `<details>` natif la rend accessible au clavier sans une ligne de JavaScript.
  */
 export function Decisions({
+  base = ESPACE_PATH,
   items,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   total?: number;
   since?: Date | null;
@@ -645,9 +578,9 @@ export function Decisions({
           id="decisions"
           title="Relevé de décisions"
           count={total ?? 0}
-          href={categoriePath("decision")}
+          href={categoriePath("decision", base)}
         />
-        <RienALaUne href={categoriePath("decision")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("decision", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -659,7 +592,7 @@ export function Decisions({
           id="decisions"
           title="Relevé de décisions"
           count={total ?? items.length}
-          href={categoriePath("decision")}
+          href={categoriePath("decision", base)}
         />
       )}
       <ol className="mt-5">
@@ -715,7 +648,7 @@ export function Decisions({
                   </details>
                 ) : null}
 
-                <Correction item={item} />
+                <Correction item={item} base={base} />
               </div>
             </li>
           );
@@ -733,12 +666,14 @@ export function Decisions({
  * total annuel par groupe donne la réponse budgétaire sans calcul.
  */
 export function Cartographie({
+  base = ESPACE_PATH,
   items,
   now,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   now: number;
   total?: number;
@@ -752,9 +687,9 @@ export function Cartographie({
           id="cartographie"
           title="Cartographie du système"
           count={total ?? 0}
-          href={categoriePath("cartographie")}
+          href={categoriePath("cartographie", base)}
         />
-        <RienALaUne href={categoriePath("cartographie")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("cartographie", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -770,7 +705,7 @@ export function Cartographie({
           id="cartographie"
           title="Cartographie du système"
           count={total ?? items.length}
-          href={categoriePath("cartographie")}
+          href={categoriePath("cartographie", base)}
         />
       )}
       <div className="mt-5 space-y-6">
@@ -796,7 +731,7 @@ export function Cartographie({
               </div>
               <Panel className="mt-2 divide-y divide-dark-gray">
                 {lignes.map((item) => (
-                  <ElementRow key={item.id} item={item} now={now} since={since} />
+                  <ElementRow key={item.id} item={item} now={now} since={since} base={base} />
                 ))}
               </Panel>
             </div>
@@ -808,10 +743,12 @@ export function Cartographie({
 }
 
 function ElementRow({
+  base = ESPACE_PATH,
   item,
   now,
   since,
 }: {
+  base?: string;
   item: Deliverable;
   now: number;
   since: Date | null;
@@ -855,7 +792,7 @@ function ElementRow({
             {payload.risque}
           </p>
         ) : null}
-        <Correction item={item} />
+        <Correction item={item} base={base} />
       </div>
     </article>
   );
@@ -875,11 +812,13 @@ function ElementRow({
  * dit en juin » ne doit pas avoir deux endroits à regarder.
  */
 export function Veille({
+  base = ESPACE_PATH,
   items,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   total?: number;
   since?: Date | null;
@@ -892,9 +831,9 @@ export function Veille({
           id="veille"
           title="Veille dédiée"
           count={total ?? 0}
-          href={categoriePath("veille")}
+          href={categoriePath("veille", base)}
         />
-        <RienALaUne href={categoriePath("veille")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("veille", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -906,7 +845,7 @@ export function Veille({
           id="veille"
           title="Veille dédiée"
           count={total ?? items.length}
-          href={categoriePath("veille")}
+          href={categoriePath("veille", base)}
         />
       )}
       <Panel className="mt-5 divide-y divide-dark-gray">
@@ -960,7 +899,7 @@ export function Veille({
                 </p>
               ) : null}
 
-              <Correction item={item} />
+              <Correction item={item} base={base} />
             </article>
           );
         })}
@@ -976,7 +915,7 @@ export function Veille({
  * « ce n'est pas ce que j'avais lu » et avoir raison. Une correction silencieuse
  * vaudrait moins qu'une correction datée.
  */
-function Correction({ item }: { item: Deliverable }) {
+function Correction({ item, base = ESPACE_PATH }: { item: Deliverable; base?: string }) {
   if (item.version <= 1) return null;
 
   // La mention devient un lien : dire « corrigé » sans permettre de voir ce qui
@@ -986,7 +925,7 @@ function Correction({ item }: { item: Deliverable }) {
     <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
       Corrigé le {formatDay(item.recordedAt)} ·{" "}
       <Link
-        href={`${categoriePath(item.kind as CategorieKind)}/${item.notionPageId}`}
+        href={`${categoriePath(item.kind as CategorieKind, base)}/${item.notionPageId}`}
         className="underline underline-offset-4 transition-colors hover:text-accent-secondary"
       >
         voir les {item.version} versions
@@ -1003,11 +942,13 @@ function Correction({ item }: { item: Deliverable }) {
  * client est venu chercher, le reste en est la justification.
  */
 export function Documents({
+  base = ESPACE_PATH,
   items,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   total?: number;
   since?: Date | null;
@@ -1020,9 +961,9 @@ export function Documents({
           id="documents"
           title="Documents"
           count={total ?? 0}
-          href={categoriePath("document")}
+          href={categoriePath("document", base)}
         />
-        <RienALaUne href={categoriePath("document")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("document", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -1034,7 +975,7 @@ export function Documents({
           id="documents"
           title="Documents"
           count={total ?? items.length}
-          href={categoriePath("document")}
+          href={categoriePath("document", base)}
         />
       )}
       <Panel className="mt-5 divide-y divide-dark-gray">
@@ -1076,14 +1017,14 @@ export function Documents({
               {payload.fichier ? (
                 <p className="mt-3">
                   <a
-                    href={fichierPath(payload.fichier.id)}
+                    href={fichierPath(payload.fichier.id, base)}
                     className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
                   >
                     Télécharger · {payload.fichier.name} ({tailleLisible(payload.fichier.size)})
                   </a>
                 </p>
               ) : null}
-              <Correction item={item} />
+              <Correction item={item} base={base} />
             </article>
           );
         })}
@@ -1106,12 +1047,14 @@ export function tailleLisible(octets: number): string {
  * ce qui est faux.
  */
 export function Prestations({
+  base = ESPACE_PATH,
   items,
   now,
   total,
   since = null,
   bare = false,
 }: {
+  base?: string;
   items: Deliverable[];
   now: number;
   total?: number;
@@ -1125,9 +1068,9 @@ export function Prestations({
           id="prestations"
           title="Prestations en cours"
           count={total ?? 0}
-          href={categoriePath("prestation")}
+          href={categoriePath("prestation", base)}
         />
-        <RienALaUne href={categoriePath("prestation")} count={total ?? 0} />
+        <RienALaUne href={categoriePath("prestation", base)} count={total ?? 0} />
       </section>
     );
   }
@@ -1139,7 +1082,7 @@ export function Prestations({
           id="prestations"
           title="Prestations en cours"
           count={total ?? items.length}
-          href={categoriePath("prestation")}
+          href={categoriePath("prestation", base)}
         />
       )}
       <div className="mt-5 space-y-3">
@@ -1201,7 +1144,7 @@ export function Prestations({
                   </a>
                 </p>
               ) : null}
-              <Correction item={item} />
+              <Correction item={item} base={base} />
             </article>
           );
         })}

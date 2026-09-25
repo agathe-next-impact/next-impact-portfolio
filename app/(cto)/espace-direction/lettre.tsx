@@ -18,6 +18,11 @@ import { ESPACE_PATH } from "./session";
 
 export const LETTRES_PATH = `${ESPACE_PATH}/lettres`;
 
+/** Les archives de la veille, sous la base de l'espace (client ou vue admin). */
+export function lettresPath(base: string = ESPACE_PATH): string {
+  return `${base}/lettres`;
+}
+
 const SCOPE_LABELS: Record<LetterSummary["scope"], string> = {
   generale: "Lettre générale",
   sectorielle: "Lettre sectorielle",
@@ -175,9 +180,11 @@ export function CorpsLettre({ body }: { body: Block[] }) {
 export function CarteLettre({
   lettre,
   principale = false,
+  base = ESPACE_PATH,
 }: {
   lettre: LetterSummary;
   principale?: boolean;
+  base?: string;
 }) {
   return (
     <article className={principale ? "px-5 py-6" : "px-5 py-5"}>
@@ -208,7 +215,7 @@ export function CarteLettre({
 
       <div className="mt-4">
         <Link
-          href={`${LETTRES_PATH}/${lettre.notionPageId}`}
+          href={`${lettresPath(base)}/${lettre.notionPageId}`}
           className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
         >
           Lire la lettre →
@@ -224,7 +231,13 @@ export function CarteLettre({
  * Une seule lettre en avant. Le client vient lire celle du mois ; lui en
  * présenter six revient à ne rien mettre en avant du tout.
  */
-export function DerniereLettre({ lettres }: { lettres: LetterSummary[] }) {
+export function DerniereLettre({
+  lettres,
+  base = ESPACE_PATH,
+}: {
+  lettres: LetterSummary[];
+  base?: string;
+}) {
   if (lettres.length === 0) return null;
 
   const [derniere, ...archives] = lettres;
@@ -235,7 +248,7 @@ export function DerniereLettre({ lettres }: { lettres: LetterSummary[] }) {
         <h2 className="font-sans text-lg font-light text-foreground">Votre veille</h2>
         {archives.length > 0 ? (
           <Link
-            href={LETTRES_PATH}
+            href={lettresPath(base)}
             className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
           >
             Archives · {archives.length + 1} éditions →
@@ -243,14 +256,20 @@ export function DerniereLettre({ lettres }: { lettres: LetterSummary[] }) {
         ) : null}
       </div>
       <Panel className="mt-5">
-        <CarteLettre lettre={derniere} principale />
+        <CarteLettre lettre={derniere} principale base={base} />
       </Panel>
     </section>
   );
 }
 
 /** La liste des archives, la plus récente en tête. */
-export function ListeLettres({ lettres }: { lettres: LetterSummary[] }) {
+export function ListeLettres({
+  lettres,
+  base = ESPACE_PATH,
+}: {
+  lettres: LetterSummary[];
+  base?: string;
+}) {
   if (lettres.length === 0) {
     return (
       <Panel className="mt-6 px-5 py-6">
@@ -266,7 +285,7 @@ export function ListeLettres({ lettres }: { lettres: LetterSummary[] }) {
       <Label>Six derniers mois</Label>
       <Panel className="mt-3 divide-y divide-dark-gray">
         {lettres.map((lettre) => (
-          <CarteLettre key={lettre.notionPageId} lettre={lettre} />
+          <CarteLettre key={lettre.notionPageId} lettre={lettre} base={base} />
         ))}
       </Panel>
     </>

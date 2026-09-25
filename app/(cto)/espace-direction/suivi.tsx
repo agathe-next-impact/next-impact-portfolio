@@ -91,7 +91,7 @@ export function IndicateursSite({ snapshot }: { snapshot: SiteSnapshot }) {
 }
 
 /** Le bloc « santé du site » du tableau de bord. */
-export function SanteSite({ state }: { state: SiteState }) {
+export function SanteSite({ state, base = ESPACE_PATH }: { state: SiteState; base?: string }) {
   return (
     <section aria-labelledby="sante-titre" className="mt-12">
       <div className="flex items-baseline justify-between gap-4 border-b border-dark-gray pb-3">
@@ -99,7 +99,7 @@ export function SanteSite({ state }: { state: SiteState }) {
           Santé du site
         </h2>
         <Link
-          href={`${ESPACE_PATH}/suivi-technique`}
+          href={`${base}/suivi-technique`}
           className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
         >
           Suivi technique →
@@ -137,9 +137,11 @@ function Bloc({ titre, compte, children }: { titre: string; compte?: number; chi
 export function SuiviTechnique({
   state,
   reports,
+  base = ESPACE_PATH,
 }: {
   state: SiteState;
   reports: SiteReport[];
+  base?: string;
 }) {
   const snapshot = state.snapshot;
 
@@ -323,7 +325,7 @@ export function SuiviTechnique({
                 </div>
                 {report.fileId ? (
                   <a
-                    href={fichierPath(report.fileId)}
+                    href={fichierPath(report.fileId, base)}
                     className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
                   >
                     Télécharger le PDF

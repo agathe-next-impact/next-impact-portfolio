@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { kindFromSlug } from "../../../../../../espace-direction/livrables";
+import { loadEspace } from "../../../../../../espace-direction/shell";
+import {
+  VueActions,
+  VueCategorie,
+  VueDirectionTechnique,
+  VueHistorique,
+  VueLettre,
+  VueLettres,
+  VuePrestations,
+  VueSuivi,
+  VueTableau,
+  VueVeille,
+} from "../../../../../../espace-direction/vues";
+import { viewerForClient } from "../acces";
+
+export const metadata: Metadata = {
+  title: "Espace client — vue admin",
+  robots: { index: false, follow: false },
+};
+
+export const dynamic = "force-dynamic";
+
+/**
+ * L'espace d'un client, en entier, vu depuis la supervision.
+ *
+ * Une seule route pour tous les écrans : elle reproduit l'arborescence de
+ * `/espace-direction` sous `…/clients/<id>/espace/…` et rend les MÊMES vues
+ * (`espace-direction/vues.tsx`), avec un `Viewer` admin. Ce que l'admin voit
+ * est donc, par construction, ce que le client voit — à une différence près :
+ * les sections non souscrites restent ouvertes ici, signalées comme telles.
+ *
+ * Garde : le layout de `/admin-cto/pilotage` exige la session admin avant tout
+ * rendu. L'identifiant d'accompagnement vient de l'URL, ce qui est légitime ici
+ * et seulement ici : l'admin a, par définition, accès à tous.
+ */
+export default async function EspaceAdminPage({
+  params,
+}: {
+  params: Promise<{ id: string; chemin?: string[] }>;
+}) {
+  const { id, chemin = [] } = await params;
+  const viewer = await viewerForClient(id);
+  if (!viewer) notFound();
+
+  const context = await loadEspace(viewer.clientId);
+  const [tete, suite, fin] = chemin;
+
+  if (chemin.length === 0) return <VueTableau viewer={viewer} context={context} />;
+
+  if (chemin.length === 1) {
+    switch (tete) {
+      case "direction-technique":
+        return <VueDirectionTechnique viewer={viewer} context={context} />;
+      case "suivi-technique":
+        return <VueSuivi viewer={viewer} context={context} />;
+      case "actions":
+        return <VueActions viewer={viewer} context={context} />;
+      case "veille":
+        return <VueVeille viewer={viewer} context={context} />;
+      case "prestations":
+        return <VuePrestations viewer={viewer} context={context} />;
+      case "lettres":
+        return <VueLettres viewer={viewer} context={context} />;
+    }
+    notFound();
+  }
+
+  if (tete === "lettres" && chemin.length === 2) {
+    const vue = await VueLettre({ viewer, context, id: suite });
+    if (!vue) notFound();
+    return vue;
+  }
+
+  if (tete === "livrables") {
+    const kind = kindFromSlug(suite ?? "");
+    if (!kind) notFound();
+    if (chemin.length === 2) return <VueCategorie viewer={viewer} context={context} kind={kind} />;
+    if (chemin.length === 3) {
+      const vue = await VueHistorique({ viewer, context, kind, id: fin });
+      if (!vue) notFound();
+      return vue;
+    }
+  }
+
+  notFound();
+}

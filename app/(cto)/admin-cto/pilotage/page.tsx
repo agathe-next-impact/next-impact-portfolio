@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { adminEspacePath } from "../../espace-direction/viewer";
 import { EVENT_LABELS } from "@cto/access";
 import { listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
@@ -79,11 +80,14 @@ export default async function PilotagePage() {
         <Label>Accompagnements ({clients.length})</Label>
         <div className="mt-4 divide-y divide-dark-gray border border-dark-gray">
           {clients.map((client) => (
-            <Link
+            <div
               key={client.id}
-              href={`/admin-cto/pilotage/clients/${client.id}`}
               className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-jet/60 sm:flex-row sm:items-center sm:justify-between"
             >
+              <Link
+                href={`/admin-cto/pilotage/clients/${client.id}`}
+                className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              >
               <div className="flex items-start gap-3">
                 <Dot tone={STATUS_TONE[client.status]} label={STATUS_LABEL[client.status]} />
                 <div>
@@ -110,7 +114,16 @@ export default async function PilotagePage() {
                 </Tag>
                 <Tag>{client.lastAccessAt ? formatDate(client.lastAccessAt) : "jamais connecté"}</Tag>
               </div>
-            </Link>
+              </Link>
+              {/* Un second lien, à côté et non dedans : deux liens imbriqués ne
+                  sont pas du HTML valide, et le clic irait au hasard. */}
+              <Link
+                href={adminEspacePath(client.id)}
+                className="shrink-0 border border-dark-gray px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:border-accent-secondary hover:text-foreground"
+              >
+                Voir son espace →
+              </Link>
+            </div>
           ))}
 
           {clients.length === 0 ? (

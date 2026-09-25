@@ -1,34 +1,19 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   accessDecision,
   findPersonByEmail,
   issueMagicLink,
-  previousLoginAt,
   record,
   sendLoginLink,
   MAGIC_LINK_TTL_MS,
 } from "@cto/access";
-import type { Deliverable } from "@cto/deliverables";
-import { buildEvents } from "@cto/espace";
-import { lettersForClient } from "@cto/letters";
-import { siteStateFor } from "@cto/site";
-import { Calendrier } from "./calendrier";
-import { DerniereLettre, LETTRES_PATH } from "./lettre";
-import {
-  CATEGORIES,
-  categoriePath,
-  DepuisLaDerniereFois,
-  Nouveaute,
-  Synthese,
-  type CategorieKind,
-} from "./livrables";
 import { PasskeyLoginButton } from "./passkey";
-import { Espace, loadEspace, sectionOuverte } from "./shell";
-import { SanteSite } from "./suivi";
-import { buttonClass, formatDay, inputClass, Label, Notice, Panel } from "./ui";
+import { loadEspace } from "./shell";
+import { buttonClass, inputClass, Label, Notice } from "./ui";
 import { configurationIssue, currentSession, ESPACE_PATH } from "./session";
+import { viewerFromSession } from "./viewer";
+import { VueTableau } from "./vues";
 
 export const metadata: Metadata = {
   title: "Espace direction technique",
@@ -59,131 +44,17 @@ export default async function EspaceDirectionPage({
     return <Connexion envoye={envoye === "1"} message={message} erreur={erreur === "1"} />;
   }
 
-  const context = await loadEspace(session);
-  const suivi = sectionOuverte(context, "suivi-technique");
-
-  // Lectures indépendantes, en parallèle : la page est celle qu'on ouvre pour
-  // trouver une réponse en dix secondes.
-  const [lettres, since, site] = await Promise.all([
-    lettersForClient(session.person.clientId),
-    previousLoginAt(session.person.id),
-    suivi ? siteStateFor(session.person.clientId) : Promise.resolve(null),
-  ]);
-
-  const { items } = context;
-  const now = new Date();
-  const roadmap = items.filter((item) => item.kind === "roadmap");
-  const decisions = items.filter((item) => item.kind === "decision");
-  const carto = items.filter((item) => item.kind === "cartographie");
-
-  const events = buildEvents(
-    items,
-    lettres.map((lettre) => ({
-      title: lettre.title,
-      period: lettre.period,
-      href: `${LETTRES_PATH}/${lettre.notionPageId}`,
-    })),
-    (item) =>
-      item.kind in CATEGORIES ? categoriePath(item.kind as CategorieKind) : null,
-    now,
-  );
-
+  // Le tableau de bord vit dans `./vues.tsx`, partagé avec la vue admin. Le
+  // refus d'un lien de connexion s'affiche AUSSI quand une session est déjà
+  // ouverte : sans lui, cliquer un lien expiré ramènerait en silence sur
+  // l'espace courant, qui aurait l'air de s'être trompé de client.
+  const viewer = viewerFromSession(session);
   return (
-    <Espace
-      session={session}
-      context={context}
-      active="tableau"
-      title="Tableau de bord"
-      intro={
-        <p className="font-inter-tight text-base text-mid-gray">
-          {session.person.name}
-          {session.person.role ? ` — ${session.person.role}` : ""}
-        </p>
-      }
-    >
-      {/*
-        Le refus d'un lien de connexion s'affiche AUSSI quand une session est
-        déjà ouverte. Sans ce bloc, cliquer un lien expiré alors qu'on est
-        connecté sous une autre identité ramène en silence sur l'espace courant :
-        l'écran a l'air de s'être trompé de client, alors qu'il n'a fait
-        qu'ignorer un lien mort. Le cas est fréquent dès qu'on gère plusieurs
-        accompagnements.
-      */}
-      {erreur === "1" && message ? (
-        <div className="mt-8">
-          <Notice tone="erreur">
-            {message} Vous restez connecté en tant que {session.person.company}.
-          </Notice>
-        </div>
-      ) : null}
-
-      <DepuisLaDerniereFois items={items} since={since} />
-
-      {roadmap.length + decisions.length + carto.length > 0 ? (
-        <Synthese roadmap={roadmap} decisions={decisions} carto={carto} now={now.getTime()} />
-      ) : null}
-
-      {site ? <SanteSite state={site} /> : null}
-
-      <Calendrier events={events} now={now} />
-
-      <ALaUne items={items.filter((item) => item.featured)} since={since} />
-
-      <DerniereLettre lettres={lettres} />
-    </Espace>
-  );
-}
-
-const KIND_TITRES: Record<string, string> = {
-  roadmap: "Chantier",
-  decision: "Décision",
-  cartographie: "Système",
-  veille: "Veille",
-  document: "Document",
-  prestation: "Prestation",
-};
-
-/**
- * Ce qui a été mis à la une, toutes sections confondues.
- *
- * La mise en avant se décide dans l'atelier (colonne « Affichage ») ; le
- * tableau de bord la respecte sans la réinterpréter. Une ligne par entrée, qui
- * mène à sa section : le détail vit là-bas, pas ici.
- */
-function ALaUne({ items, since }: { items: Deliverable[]; since: Date | null }) {
-  if (items.length === 0) return null;
-
-  return (
-    <section aria-labelledby="une-titre" className="mt-12">
-      <div className="border-b border-dark-gray pb-3">
-        <h2 id="une-titre" className="font-sans text-lg font-light text-foreground">
-          À la une
-        </h2>
-      </div>
-      <Panel className="mt-5 divide-y divide-dark-gray">
-        {items.slice(0, 8).map((item) => (
-          <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
-            <div className="flex min-w-0 flex-wrap items-baseline gap-2">
-              <Nouveaute item={item} since={since} />
-              {item.kind in CATEGORIES ? (
-                <Link
-                  href={categoriePath(item.kind as CategorieKind)}
-                  className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                >
-                  {item.title}
-                </Link>
-              ) : (
-                <span className="font-inter-tight text-sm text-foreground">{item.title}</span>
-              )}
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-              {KIND_TITRES[item.kind] ?? item.kind}
-              {item.occurredAt ? ` · ${formatDay(item.occurredAt)}` : ""}
-            </span>
-          </div>
-        ))}
-      </Panel>
-    </section>
+    <VueTableau
+      viewer={viewer}
+      context={await loadEspace(viewer.clientId)}
+      erreur={erreur === "1" && message ? message : null}
+    />
   );
 }
 
