@@ -33,19 +33,31 @@ export type Block =
   | { k: "h1" | "h2" | "h3" | "p" | "quote" | "callout"; s: Span[] }
   | { k: "li" | "oli"; s: Span[] }
   | { k: "hr" }
-  | { k: "code"; t: string };
+  | { k: "code"; t: string }
+  // Les trois formes suivantes ne sortent que de la lecture d'un audit
+  // (`audit.ts`) : une lettre n'en contient pas, et `pageBody` ne les produit
+  // jamais. Elles vivent dans le même type pour qu'un seul rendu serve aux deux.
+  /** Un encadré et ce qu'il contient : un callout Notion à enfants. `s` peut être vide. */
+  | { k: "box"; s: Span[]; c: Block[] }
+  /**
+   * Un tableau : bloc tableau Notion, ou base inline mise à plat. `title` porte
+   * le nom de la base ; `head` est null quand le tableau n'a pas d'en-tête.
+   */
+  | { k: "table"; title?: string; head: Span[][] | null; rows: Span[][][] }
+  /** Une image rapatriée, par l'empreinte de son contenu (`cto_files`). */
+  | { k: "img"; f: string; alt: string };
 
 /** Profondeur maximale de descente dans les blocs imbriqués. */
 const MAX_DEPTH = 3;
 
-interface RawBlock {
+export interface RawBlock {
   id: string;
   type: string;
   has_children?: boolean;
   [key: string]: unknown;
 }
 
-function spans(rich: NotionRichText[] | undefined): Span[] {
+export function spans(rich: NotionRichText[] | undefined): Span[] {
   if (!Array.isArray(rich)) return [];
   const out: Span[] = [];
 
@@ -65,7 +77,7 @@ function spans(rich: NotionRichText[] | undefined): Span[] {
   return out;
 }
 
-function convert(raw: RawBlock): Block | null {
+export function convert(raw: RawBlock): Block | null {
   const contenu = raw[raw.type] as { rich_text?: NotionRichText[] } | undefined;
   const s = spans(contenu?.rich_text);
 
@@ -98,7 +110,7 @@ function convert(raw: RawBlock): Block | null {
   }
 }
 
-async function children(blockId: string): Promise<RawBlock[]> {
+export async function children(blockId: string): Promise<RawBlock[]> {
   const blocks: RawBlock[] = [];
   let cursor: string | null = null;
 

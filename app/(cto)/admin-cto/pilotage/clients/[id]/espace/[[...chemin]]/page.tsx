@@ -4,10 +4,12 @@ import { kindFromSlug } from "../../../../../../espace-direction/livrables";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import {
   VueActions,
+  VueAudit,
   VueCategorie,
   VueDirectionTechnique,
   VueHistorique,
   VueLettre,
+  VueLectureAudit,
   VueLettres,
   VuePrestations,
   VueSuivi,
@@ -52,6 +54,8 @@ export default async function EspaceAdminPage({
 
   if (chemin.length === 1) {
     switch (tete) {
+      case "audit":
+        return <VueAudit viewer={viewer} context={context} />;
       case "direction-technique":
         return <VueDirectionTechnique viewer={viewer} context={context} />;
       case "suivi-technique":
@@ -66,6 +70,12 @@ export default async function EspaceAdminPage({
         return <VueLettres viewer={viewer} context={context} />;
     }
     notFound();
+  }
+
+  if (tete === "audit" && chemin.length === 2) {
+    const vue = await VueLectureAudit({ viewer, context, id: suite });
+    if (!vue) notFound();
+    return vue;
   }
 
   if (tete === "lettres" && chemin.length === 2) {

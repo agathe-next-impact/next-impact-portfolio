@@ -50,6 +50,7 @@ export async function loadEspace(clientId: string): Promise<EspaceContext> {
     documents: count("document"),
     roadmap: count("roadmap"),
     prestations: count("prestation"),
+    audits: count("audit"),
     site: profile.hasSite,
   });
 

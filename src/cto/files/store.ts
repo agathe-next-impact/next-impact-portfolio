@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, or, sql } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoDeliverables, ctoFiles, ctoSiteReports } from "../db/schema";
 
@@ -138,17 +138,26 @@ export async function fileBelongsTo(fileId: string, clientId: string): Promise<b
     .limit(1);
   if (report) return true;
 
-  // Les documents du client qui ont porté ce fichier, dans n'importe quelle
-  // version — puis l'état COURANT de chacun : s'il est un retrait, la pièce ne
-  // sort plus.
+  // Les documents et audits du client qui ont porté ce fichier, dans n'importe
+  // quelle version — puis l'état COURANT de chacun : s'il est un retrait, la
+  // pièce ne sort plus. Un audit liste ses pièces (images, annexe) dans
+  // `payload.fichiers`, faute de pouvoir les chercher dans ses blocs.
   const porteurs = await db()
     .selectDistinct({ notionPageId: ctoDeliverables.notionPageId })
     .from(ctoDeliverables)
     .where(
       and(
         eq(ctoDeliverables.clientId, clientId),
-        eq(ctoDeliverables.kind, "document"),
-        sql`${ctoDeliverables.payload} -> 'fichier' ->> 'id' = ${fileId}`,
+        or(
+          and(
+            eq(ctoDeliverables.kind, "document"),
+            sql`${ctoDeliverables.payload} -> 'fichier' ->> 'id' = ${fileId}`,
+          ),
+          and(
+            eq(ctoDeliverables.kind, "audit"),
+            sql`${ctoDeliverables.payload} -> 'fichiers' @> jsonb_build_array(${fileId}::text)`,
+          ),
+        ),
       ),
     );
   if (porteurs.length === 0) return false;

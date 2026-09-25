@@ -36,4 +36,56 @@ describe("dossier de restitution", () => {
     expect(new TextDecoder().decode(pdf.slice(0, 5))).toBe("%PDF-");
     expect(pdf.byteLength).toBeGreaterThan(2000);
   });
+
+  it("restitue un audit en entier, tableaux et encadrés compris", () => {
+    const data: RestitutionData = {
+      company: "Institut",
+      tier: "audit",
+      generatedAt: new Date("2026-09-25T10:00:00Z"),
+      items: [
+        {
+          id: "a",
+          clientId: "c",
+          notionPageId: "pa",
+          kind: "audit",
+          version: 1,
+          title: "Audit technique WordPress",
+          payload: {
+            site: "https://exemple.fr",
+            dateMesures: "2026-09-21T00:00:00.000Z",
+            synthese: [
+              { k: "box", s: [], c: [{ k: "h3", s: [{ t: "Audit" }] }, { k: "li", s: [{ t: "25 constats" }] }] },
+            ],
+            sections: [
+              {
+                id: "s1",
+                titre: "Sécurité",
+                icone: "🔐",
+                corps: [
+                  { k: "p", s: [{ t: "Verdict : alerte." }] },
+                  {
+                    k: "table",
+                    title: "SECURITE",
+                    head: [[{ t: "SITE" }], [{ t: "Solutions" }]],
+                    rows: [[[{ t: "kek.php" }], [{ t: "Nettoyer" }]]],
+                  },
+                  { k: "img", f: "0".repeat(64), alt: "Frise" },
+                ],
+              },
+            ],
+            annexe: null,
+            fichiers: [],
+          },
+          occurredAt: new Date("2026-09-21"),
+          recordedAt: new Date("2026-09-23"),
+          featured: false,
+        },
+      ],
+      corrections: [],
+      letters: [],
+      reports: [],
+    };
+    const pdf = renderRestitutionPdf(data);
+    expect(new TextDecoder().decode(pdf.slice(0, 5))).toBe("%PDF-");
+  });
 });

@@ -16,6 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type ServiceCode =
+  | "audit"
   | "direction-technique"
   | "suivi-technique"
   | "actions"
@@ -24,6 +25,7 @@ export type ServiceCode =
 
 export type SectionKey =
   | "tableau"
+  | "audit"
   | "direction-technique"
   | "suivi-technique"
   | "actions"
@@ -42,6 +44,9 @@ export interface Section {
 /** Dans l'ordre de la navigation : du plus général au plus opérationnel. */
 export const SECTIONS: readonly Section[] = [
   { key: "tableau", slug: "", label: "Tableau de bord", service: null },
+  // Juste après l'accueil : un audit est le point de départ, ce que le reste
+  // de l'espace met en œuvre. Pour un client audit seul, c'est toute sa visite.
+  { key: "audit", slug: "audit", label: "Audit", service: "audit" },
   { key: "direction-technique", slug: "direction-technique", label: "Direction technique", service: "direction-technique" },
   { key: "suivi-technique", slug: "suivi-technique", label: "Suivi technique", service: "suivi-technique" },
   { key: "actions", slug: "actions", label: "Actions en cours", service: "actions" },
@@ -56,6 +61,7 @@ export interface Contents {
   documents: number;
   roadmap: number;
   prestations: number;
+  audits: number;
   /** Vrai si un projet WP Umbrella est renseigné. */
   site: boolean;
 }
@@ -70,6 +76,8 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
       return contents.roadmap > 0;
     case "prestations":
       return contents.prestations > 0;
+    case "audit":
+      return contents.audits > 0;
     default:
       return true;
   }

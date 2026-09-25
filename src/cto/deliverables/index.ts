@@ -17,6 +17,8 @@ export {
 
 export type {
   AttachedFile,
+  AuditPayload,
+  AuditSection,
   CartographiePayload,
   DecisionPayload,
   Deliverable,

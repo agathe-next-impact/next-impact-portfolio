@@ -66,6 +66,7 @@ un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alert
 | **Documents** | pièces opposables | revue de devis, plan de continuité, dossier de restitution |
 | **Prestations** | missions commandées, avancement, livraison | — (§ 7) |
 | **Personnes** | qui a accès à quel espace | — (§ 6) |
+| **Audits** | un audit remis par ligne, qui pointe sa page de mission | audit complet (§ 9) |
 
 Huit livrables pour sept bases de contenu : trois regroupements portent une décision. Clients et Personnes ne portent pas de livrable, elles décident qui voit quoi.
 
@@ -227,6 +228,7 @@ CTO_NOTION_DB_DOCUMENTS=…
 # Facultatives : vides, la base est ignorée avec une ligne au rapport.
 CTO_NOTION_DB_PRESTATIONS=…
 CTO_NOTION_DB_EDITIONS=…
+CTO_NOTION_DB_AUDITS=…
 ```
 
 **Une base facultative n'arrête rien.** Toute base ajoutée après la mise en
@@ -478,6 +480,79 @@ le client, un retrait différé d'un jour ne se voit pas.
 Un client CTO lit sa veille personnalisée **uniquement dans l'espace
 direction** ; le portail signauxfaibles.io reste celui des clients veille seule.
 
+## 9. Les audits
+
+Un audit (prestation Audit + roadmap, kit d'audit WordPress) n'est pas écrit
+dans une base de l'atelier : il vit dans sa **page de mission**, copie du modèle
+« Audit technique WordPress » sous PILOTAGE → **Audits et Roadmap**, remplie par
+`/publier-notion` puis relue à la main. L'espace en reçoit le **contenu entier**
+(ADR-011), pas un résumé.
+
+### Publier un audit
+
+1. Sur la fiche *Clients* : cocher le service **Audit**. Pour un client audit
+   seul, palier **audit** et état **actif** ; ajouter sa ou ses personnes dans
+   *Personnes*.
+2. Dans la base **Audits** (sous « Direction technique — clients »), une ligne :
+   `Audit` (le titre affiché), `Client`, `Page de l'audit` (le lien de la
+   page de mission, copié depuis Notion), `Date des mesures`, `Site`, et
+   l'`Annexe` (l'archive des preuves du kit, 15 Mo au plus).
+3. Relire la page de mission, puis cocher `Publié`. Synchroniser
+   (`npm run cto:sync -- --a-blanc` d'abord), puis notifier.
+
+Prérequis, une fois pour toutes : la page **« Audits et Roadmap »** partagée
+avec l'intégration (menu `•••` → *Connexions*). Sans ce geste, la synchro
+répond « page illisible » et ne publie rien.
+
+### Ce que la synchro lit
+
+- La page de mission donne la **synthèse** ; chaque sous-page donne une
+  **partie**, dans l'ordre de la page, avec son émoji. Une sous-page de
+  sous-page est ignorée et signalée.
+- Colonnes, encadrés (callouts), listes, tableaux : tout est repris. Les
+  colonnes sont mises à plat — elles n'existent pas sur un téléphone.
+- Chaque **base inline** (SECURITE, Diagnostic, ROADMAP…) devient un tableau à
+  l'endroit où elle se trouve, colonne titre d'abord, lignes dans leur ordre de
+  création. Le code ne connaît aucun schéma : ajouter une base au modèle
+  n'oblige à rien.
+- Les **images** hébergées par Notion sont rapatriées en base (leur lien
+  expire en une heure), comme l'annexe. Elles ne sortent que par la route des
+  pièces jointes, qui vérifie la session et l'appartenance.
+
+Coût : une centaine d'appels à l'API par audit, une trentaine de secondes, à
+chaque balayage. L'empreinte évite d'écrire une version quand rien n'a bougé,
+pas de relire.
+
+### Ce que voit le client
+
+La section **Audit** ouvre l'audit directement s'il est seul (la liste sinon) :
+en-tête (site, date des mesures, annexe, versions), sommaire, synthèse, puis
+chaque partie en entier. L'accueil le rappelle dans « Votre audit ». Corriger
+la page après publication écrit une version de plus : l'historique dit quelles
+parties ont changé (« Parties corrigées : Sécurité, Roadmap »), sans rejouer
+des centaines de blocs.
+
+### Des actions de l'audit à la roadmap
+
+Les lignes de la base inline **ROADMAP** de l'audit passent dans la roadmap de
+l'espace selon leur `Statut` :
+
+| Statut dans l'audit | Dans la roadmap de l'espace |
+| --- | --- |
+| Proposé, Écarté | rien : une recommandation reste dans l'audit |
+| Validé client | chantier « Décidé » |
+| En cours | chantier « Ouvert » |
+| Fait | chantier « Fait » |
+
+« En cours » et « Fait » ne sont pas dans le modèle du kit : les ajouter aux
+options de `Statut` de la base ROADMAP de la mission quand on suit ses actions
+après la restitution. Phase, critère de réussite, prérequis et constats liés
+passent dans le détail du chantier, avec le nom de l'audit.
+
+**Garde-fou.** Si un audit n'a pas pu être lu en entier ce tour-ci (page non
+partagée, base illisible), la roadmap ne retire rien : une action absente n'est
+peut-être qu'une action pas vue. L'audit lui-même garde sa version en ligne.
+
 ## Fichiers
 
 | Rôle | Fichier |
@@ -506,3 +581,6 @@ direction** ; le portail signauxfaibles.io reste celui des clients veille seule.
 | Pièces jointes (rapatriement, lecture, appartenance) | `src/cto/files/store.ts` |
 | Téléchargement d'une pièce | `app/(cto)/espace-direction/fichiers/[id]/route.ts` |
 | Éditions du pipeline de veille | `src/cto/notion/letters.ts` (`syncEditions`) |
+| Audits — lecture de la page de mission | `src/cto/notion/audit.ts` |
+| Audits — balayage, pont vers la roadmap | `src/cto/notion/sync.ts` (`syncAudits`), `map.ts` (`auditActionInput`) |
+| Audits — affichage | `app/(cto)/espace-direction/vues.tsx` (`VueAudit`, `VueLectureAudit`), `lettre.tsx` (`CorpsLettre`) |

@@ -1,4 +1,5 @@
 import type {
+  AuditPayload,
   CartographiePayload,
   DecisionPayload,
   Deliverable,
@@ -25,6 +26,7 @@ export const CATEGORIES = {
   veille: { slug: "veille", titre: "Veille dédiée" },
   document: { slug: "documents", titre: "Documents" },
   prestation: { slug: "prestations", titre: "Prestations" },
+  audit: { slug: "audits", titre: "Audits" },
 } as const;
 
 /** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */
@@ -288,6 +290,10 @@ export function Categorie({
 
   if (kind === "prestation") {
     return <Prestations items={sortPrestations(items)} now={now} since={since} bare base={base} />;
+  }
+
+  if (kind === "audit") {
+    return <Audits items={sortRecentFirst(items)} since={since} base={base} />;
   }
 
   const tri = [...items].sort(
@@ -1030,6 +1036,59 @@ export function Documents({
         })}
       </Panel>
     </section>
+  );
+}
+
+/** L'adresse de lecture d'un audit. */
+export function auditPath(notionPageId: string, base: string = ESPACE_PATH): string {
+  return `${base}/audit/${notionPageId}`;
+}
+
+/**
+ * Les audits remis : de quoi choisir lequel ouvrir.
+ *
+ * Le plus souvent il n'y en a qu'un, et la section Audit l'ouvre directement ;
+ * cette liste sert quand un second audit vient mesurer le premier.
+ */
+export function Audits({
+  base = ESPACE_PATH,
+  items,
+  since = null,
+}: {
+  base?: string;
+  items: Deliverable[];
+  since?: Date | null;
+}) {
+  return (
+    <Panel className="mt-5 divide-y divide-dark-gray">
+      {items.map((item) => {
+        const payload = item.payload as AuditPayload;
+        return (
+          <article key={item.id} className="px-5 py-5">
+            <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 className="font-inter-tight text-base leading-snug text-foreground">
+                <Link
+                  href={auditPath(item.notionPageId, base)}
+                  className="underline-offset-4 hover:text-accent-secondary hover:underline"
+                >
+                  {item.title}
+                </Link>
+              </h3>
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                {item.occurredAt ? `Mesures du ${formatDay(item.occurredAt)}` : "sans date"}
+              </p>
+            </header>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              <Nouveaute item={item} since={since} />
+              {payload.site ? <Tag>{payload.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}</Tag> : null}
+              <Tag>{`${payload.sections.length} parties`}</Tag>
+              {payload.annexe ? <Tag>Annexe de preuves</Tag> : null}
+            </div>
+            <Correction item={item} base={base} />
+          </article>
+        );
+      })}
+    </Panel>
   );
 }
 

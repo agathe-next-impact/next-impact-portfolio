@@ -1,6 +1,8 @@
 import { jsPDF } from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
+import type { Block, Span } from "../notion/blocks";
 import type {
+  AuditPayload,
   CartographiePayload,
   DecisionPayload,
   Deliverable,
@@ -85,6 +87,21 @@ class Writer {
     this.y += 6;
   }
 
+  subheading(text: string, size = 11) {
+    this.ensure(14);
+    this.y += 3;
+    this.doc.setFont("helvetica", "bold");
+    this.doc.setFontSize(size);
+    this.doc.setTextColor(...INK);
+    const lines = this.doc.splitTextToSize(clean(text), this.width) as string[];
+    for (const line of lines) {
+      this.ensure(size * 0.45 + 1);
+      this.doc.text(line, MARGIN, this.y);
+      this.y += size * 0.45;
+    }
+    this.y += 2;
+  }
+
   paragraph(text: string, options: { size?: number; muted?: boolean } = {}) {
     this.doc.setFont("helvetica", "normal");
     this.doc.setFontSize(options.size ?? 10);
@@ -147,6 +164,61 @@ class Writer {
   }
 }
 
+function plain(spans: Span[]): string {
+  return spans.map((span) => span.t).join("");
+}
+
+/**
+ * Le corps d'un audit, bloc par bloc, dans le PDF.
+ *
+ * Le contenu entier, sans résumé : un audit restitué doit se relire sans
+ * l'espace. La mise en forme se réduit à ce que l'impression garde — titres,
+ * paragraphes, puces, tableaux. Une image devient sa légende : le fichier reste
+ * téléchargeable depuis l'espace tant qu'il est ouvert.
+ */
+function writeBlocks(w: Writer, blocks: Block[]): void {
+  let numero = 0;
+  for (const bloc of blocks) {
+    if (bloc.k !== "oli") numero = 0;
+    switch (bloc.k) {
+      case "h1":
+      case "h2":
+      case "h3":
+        w.subheading(plain(bloc.s), bloc.k === "h1" ? 12 : bloc.k === "h2" ? 11 : 10);
+        break;
+      case "li":
+        w.paragraph(`• ${plain(bloc.s)}`, { size: 9.5 });
+        break;
+      case "oli":
+        numero += 1;
+        w.paragraph(`${numero}. ${plain(bloc.s)}`, { size: 9.5 });
+        break;
+      case "hr":
+        w.y += 2;
+        break;
+      case "code":
+        w.paragraph(bloc.t, { size: 8.5, muted: true });
+        break;
+      case "box":
+        if (bloc.s.length > 0) w.paragraph(plain(bloc.s));
+        writeBlocks(w, bloc.c);
+        break;
+      case "table":
+        if (bloc.title) w.subheading(bloc.title, 9.5);
+        w.table(
+          (bloc.head ?? bloc.rows[0]?.map(() => [] as Span[]) ?? []).map(plain),
+          bloc.rows.map((row) => row.map(plain)),
+        );
+        break;
+      case "img":
+        w.paragraph(`[Image${bloc.alt ? ` : ${bloc.alt}` : ""}]`, { size: 8.5, muted: true });
+        break;
+      default:
+        w.paragraph(plain(bloc.s), { size: 9.5 });
+    }
+  }
+}
+
 /** Le PDF complet, en octets. */
 export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
   const w = new Writer();
@@ -172,7 +244,7 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
   w.paragraph(
     "Ce dossier rassemble tout ce que l'accompagnement a produit et qui est publié à cette date : " +
       "relevé de décisions, roadmap, cartographie du système, documents relus, prestations, veille, " +
-      "lettres et rapports de maintenance. Il se lit sans aucun compte ni outil : c'est l'objet même " +
+      "lettres, rapports de maintenance et audits, ces derniers en entier. Il se lit sans aucun compte ni outil : c'est l'objet même " +
       "de la clause de restitution.",
   );
   w.paragraph(
@@ -191,7 +263,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     ["6", "Veille", String(byKind(data.items, "veille").length)],
     ["7", "Lettres de veille", String(data.letters.length)],
     ["8", "Rapports de maintenance", String(data.reports.length)],
-    ["9", "Historique des corrections", String(data.corrections.length)],
+    ["9", "Audits", String(byKind(data.items, "audit").length)],
+    ["10", "Historique des corrections", String(data.corrections.length)],
   ];
   w.y += 4;
   w.table(["", "Rubrique", "Entrées"], sommaire, [10, w.width - 34, 24]);
@@ -331,8 +404,39 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     [w.width - 90, 60, 30],
   );
 
-  // ─── 9. Corrections ────────────────────────────────────────────────────
-  w.heading("9. Historique des corrections");
+  // ─── 9. Audits ─────────────────────────────────────────────────────────
+  w.heading("9. Audits");
+  const audits = byKind(data.items, "audit");
+  if (audits.length === 0) {
+    w.paragraph("Aucun audit publié.", { muted: true, size: 9 });
+  }
+  for (const audit of audits) {
+    const p = audit.payload as AuditPayload;
+    w.subheading(audit.title, 12);
+    w.paragraph(
+      [
+        audit.occurredAt ? `Mesures du ${day(audit.occurredAt)}` : null,
+        p.site,
+        audit.version > 1 ? `version ${audit.version}, corrigée le ${day(audit.recordedAt)}` : null,
+        p.annexe ? `annexe : ${p.annexe.name}` : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      { muted: true, size: 9 },
+    );
+    if (p.synthese.length > 0) {
+      w.subheading("Synthèse");
+      writeBlocks(w, p.synthese);
+    }
+    for (const partie of p.sections) {
+      w.subheading(partie.titre, 11.5);
+      writeBlocks(w, partie.corps);
+    }
+    w.y += 4;
+  }
+
+  // ─── 10. Corrections ───────────────────────────────────────────────────
+  w.heading("10. Historique des corrections");
   if (data.corrections.length === 0) {
     w.paragraph("Aucun livrable n'a été corrigé après sa publication.", { muted: true, size: 9 });
   } else {

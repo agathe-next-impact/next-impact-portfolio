@@ -7,13 +7,16 @@
 // change, c'est `src/cto/notion/` qui change, pas l'espace client.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import type { Block } from "../notion/blocks";
+
 export type DeliverableKind =
   | "decision"
   | "roadmap"
   | "cartographie"
   | "veille"
   | "document"
-  | "prestation";
+  | "prestation"
+  | "audit";
 
 /**
  * Un arbitrage rendu, ou une option proposée puis écartée.
@@ -119,6 +122,46 @@ export interface PrestationPayload {
   detail: string | null;
 }
 
+/** Une partie d'audit : une sous-page de la page d'audit, dans l'ordre de l'atelier. */
+export interface AuditSection {
+  /** Identifiant de la sous-page Notion. Sert d'ancre, stable au renommage. */
+  id: string;
+  titre: string;
+  /** L'émoji de la sous-page, s'il y en a un. */
+  icone: string | null;
+  corps: Block[];
+}
+
+/**
+ * Un audit complet, rapatrié de sa page Notion.
+ *
+ * **Le contenu entier, pas un résumé.** C'est l'inverse assumé de
+ * `RoadmapPayload.source` : un audit remis au client doit se lire dans son
+ * espace, et lui rester en fin d'accompagnement (ADR-011). La page Notion de la
+ * mission est la version finale — relue, retouchée à la main après
+ * `/publier-notion` —, et c'est elle qu'on recopie, bases inline comprises.
+ *
+ * Une photographie datée : le corriger écrit une version de plus, affichée
+ * « corrigé le … », comme tout livrable.
+ */
+export interface AuditPayload {
+  /** L'adresse du site audité. */
+  site: string | null;
+  /** Date des mesures, en ISO. L'audit décrit le site à cette date, pas après. */
+  dateMesures: string | null;
+  /** Le corps de la page d'audit elle-même, hors sous-pages. */
+  synthese: Block[];
+  sections: AuditSection[];
+  /** L'annexe de preuves (archive des fichiers `data/`), rapatriée. */
+  annexe: AttachedFile | null;
+  /**
+   * Empreintes de toutes les pièces que l'audit référence (images, annexe).
+   * Ne s'affiche pas : c'est ce que lit le contrôle d'appartenance des fichiers,
+   * qui ne sait pas descendre dans des blocs.
+   */
+  fichiers: string[];
+}
+
 export interface PayloadByKind {
   decision: DecisionPayload;
   roadmap: RoadmapPayload;
@@ -126,6 +169,7 @@ export interface PayloadByKind {
   veille: VeillePayload;
   document: DocumentPayload;
   prestation: PrestationPayload;
+  audit: AuditPayload;
 }
 
 export type DeliverablePayload = PayloadByKind[DeliverableKind];

@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { previousLoginAt } from "@cto/access";
-import { history, type Deliverable, type RoadmapPayload } from "@cto/deliverables";
-import { buildEvents } from "@cto/espace";
+import { history, type AuditPayload, type Deliverable, type RoadmapPayload } from "@cto/deliverables";
+import { buildEvents, sectionByKey } from "@cto/espace";
 import { ARCHIVE_MONTHS, letterForClient, lettersForClient } from "@cto/letters";
 import { siteReportsFor, siteStateFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
 import { Historique } from "./historique";
 import { CorpsLettre, DerniereLettre, formatPeriode, lettresPath, ListeLettres } from "./lettre";
 import {
+  Audits,
+  auditPath,
   CATEGORIES,
   Cartographie,
   Categorie,
@@ -23,10 +25,12 @@ import {
   sortRecentFirst,
   sortRoadmap,
   Synthese,
+  tailleLisible,
+  fichierPath,
   Veille,
   type CategorieKind,
 } from "./livrables";
-import { EnPreparation, Espace, sectionOuverte, type EspaceContext } from "./shell";
+import { EnPreparation, Espace, sectionHref, sectionOuverte, type EspaceContext } from "./shell";
 import { SanteSite, SuiviTechnique } from "./suivi";
 import { BackLink, formatDay, Label, Notice, Panel } from "./ui";
 import type { Viewer } from "./viewer";
@@ -49,6 +53,9 @@ function sinceFor(viewer: Viewer): Promise<Date | null> {
 }
 
 function hrefFor(viewer: Viewer, item: Deliverable): string | null {
+  // Un audit s'ouvre à sa lecture, pas à la liste de sa catégorie : c'est un
+  // document, pas une ligne parmi d'autres.
+  if (item.kind === "audit") return auditPath(item.notionPageId, viewer.base);
   return item.kind in CATEGORIES ? categoriePath(item.kind as CategorieKind, viewer.base) : null;
 }
 
@@ -61,6 +68,7 @@ const KIND_TITRES: Record<string, string> = {
   veille: "Veille",
   document: "Document",
   prestation: "Prestation",
+  audit: "Audit",
 };
 
 /**
@@ -169,6 +177,8 @@ export async function VueTableau({
 
       <DepuisLaDerniereFois items={items} since={since} base={viewer.base} />
 
+      <AuditsRemis items={items.filter((item) => item.kind === "audit")} viewer={viewer} />
+
       {roadmap.length + decisions.length + carto.length > 0 ? (
         <Synthese roadmap={roadmap} decisions={decisions} carto={carto} now={now.getTime()} />
       ) : null}
@@ -184,7 +194,242 @@ export async function VueTableau({
   );
 }
 
+/**
+ * Les audits remis, sur l'accueil.
+ *
+ * Pas soumis à « À la une » : pour un client audit seul, l'audit est la raison
+ * même de sa visite, et l'obliger à passer par un onglet pour le trouver serait
+ * le cacher. Un encart court — l'audit se lit sur sa page.
+ */
+function AuditsRemis({ items, viewer }: { items: Deliverable[]; viewer: Viewer }) {
+  if (items.length === 0) return null;
+
+  return (
+    <section aria-labelledby="audits-titre" className="mt-12">
+      <div className="border-b border-dark-gray pb-3">
+        <h2 id="audits-titre" className="font-sans text-lg font-light text-foreground">
+          {items.length > 1 ? "Vos audits" : "Votre audit"}
+        </h2>
+      </div>
+      <Panel className="mt-5 divide-y divide-dark-gray">
+        {sortRecentFirst(items).map((item) => (
+          <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+            <Link
+              href={auditPath(item.notionPageId, viewer.base)}
+              className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+            >
+              {item.title}
+            </Link>
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+              {item.occurredAt ? `Mesures du ${formatDay(item.occurredAt)}` : "Audit"}
+            </span>
+          </div>
+        ))}
+      </Panel>
+    </section>
+  );
+}
+
 // ─── Sections ────────────────────────────────────────────────────────────
+
+/**
+ * La section Audit.
+ *
+ * Un seul audit, le cas courant : il s'ouvre directement, sans liste d'un
+ * élément à traverser. Plusieurs : la liste, le plus récent en tête.
+ */
+export async function VueAudit({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const audits = sortRecentFirst(context.items.filter((item) => item.kind === "audit"));
+  if (audits.length === 1) return VueLectureAudit({ viewer, context, id: audits[0].notionPageId });
+
+  const since = await sinceFor(viewer);
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="audit"
+      title="Audit"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          L'état de votre site mesuré à une date donnée, les constats qui le fondent, et la
+          feuille de route qui en découle.
+        </p>
+      }
+    >
+      {audits.length === 0 ? (
+        <EnPreparation>
+          Votre audit apparaîtra ici dès sa remise : synthèse, constats partie par partie,
+          scénarios et roadmap chiffrée.
+        </EnPreparation>
+      ) : (
+        <div className="mt-10">
+          <Audits items={audits} since={since} base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
+
+/**
+ * La lecture d'un audit : synthèse, sommaire, puis chaque partie en entier.
+ *
+ * Tout sur une page, avec des ancres : un audit se lit d'un bout à l'autre
+ * avant la réunion de restitution, puis se consulte par partie. Une page par
+ * partie obligerait au va-et-vient pour la première lecture, qui compte le plus.
+ *
+ * `null` si l'identifiant n'est pas un audit publié de CET accompagnement : la
+ * liste vient de `context.items`, déjà filtrée par client.
+ */
+export async function VueLectureAudit({
+  viewer,
+  context,
+  id,
+}: {
+  viewer: Viewer;
+  context: EspaceContext;
+  id: string;
+}) {
+  const audit = context.items.find((item) => item.kind === "audit" && item.notionPageId === id);
+  if (!audit) return null;
+  const payload = audit.payload as AuditPayload;
+  const plusieurs = context.items.filter((item) => item.kind === "audit").length > 1;
+  const section = sectionByKey("audit");
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active={sectionOuverte(context, "audit") ? "audit" : null}
+      title={audit.title}
+      intro={
+        <Label>
+          {audit.occurredAt ? `Mesures du ${formatDay(audit.occurredAt)}` : "Audit"}
+          {audit.version > 1 ? ` · corrigé le ${formatDay(audit.recordedAt)}` : ""}
+        </Label>
+      }
+    >
+      {plusieurs ? (
+        <div className="mt-8">
+          <BackLink href={sectionHref(section, viewer.base)}>Tous les audits</BackLink>
+        </div>
+      ) : null}
+
+      <Panel className="mt-8 px-5 py-5">
+        <dl className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <dt><Label>Site audité</Label></dt>
+            <dd className="mt-1.5 break-words font-inter-tight text-sm text-foreground">
+              {payload.site ? (
+                <a
+                  href={payload.site}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="underline underline-offset-4 hover:text-accent-secondary"
+                >
+                  {payload.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                </a>
+              ) : (
+                "—"
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt><Label>Annexe de preuves</Label></dt>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
+              {payload.annexe ? (
+                <a
+                  href={fichierPath(payload.annexe.id, viewer.base)}
+                  className="underline underline-offset-4 hover:text-accent-secondary"
+                >
+                  Télécharger ({tailleLisible(payload.annexe.size)})
+                </a>
+              ) : (
+                "—"
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt><Label>Versions</Label></dt>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
+              <Link
+                href={`${categoriePath("audit", viewer.base)}/${audit.notionPageId}`}
+                className="underline underline-offset-4 hover:text-accent-secondary"
+              >
+                {audit.version > 1 ? `${audit.version} versions, voir ce qui a changé` : "Version d'origine"}
+              </Link>
+            </dd>
+          </div>
+        </dl>
+        <p className="mt-4 font-inter-tight text-xs leading-relaxed text-mid-gray">
+          L'audit est une photographie du site à la date des mesures. Une correction ultérieure
+          ajoute une version datée, sans effacer la précédente.
+        </p>
+      </Panel>
+
+      {payload.sections.length > 0 ? (
+        <nav aria-label="Parties de l'audit" className="mt-10">
+          <Label>Sommaire</Label>
+          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+            {payload.synthese.length > 0 ? (
+              <li>
+                <a href="#synthese" className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline">
+                  Synthèse
+                </a>
+              </li>
+            ) : null}
+            {payload.sections.map((partie) => (
+              <li key={partie.id}>
+                <a
+                  href={`#partie-${partie.id}`}
+                  className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+                >
+                  {partie.icone ? `${partie.icone} ` : ""}
+                  {partie.titre}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : null}
+
+      {payload.synthese.length > 0 ? (
+        <section id="synthese" aria-labelledby="synthese-titre" className="mt-12 scroll-mt-8">
+          <h2 id="synthese-titre" className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground">
+            Synthèse
+          </h2>
+          <CorpsLettre body={payload.synthese} large base={viewer.base} />
+        </section>
+      ) : null}
+
+      {payload.sections.map((partie) => (
+        <section
+          key={partie.id}
+          id={`partie-${partie.id}`}
+          aria-labelledby={`titre-${partie.id}`}
+          className="mt-16 scroll-mt-8"
+        >
+          <h2
+            id={`titre-${partie.id}`}
+            className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground"
+          >
+            {partie.icone ? <span aria-hidden>{partie.icone} </span> : null}
+            {partie.titre}
+          </h2>
+          {partie.corps.length > 0 ? (
+            <CorpsLettre body={partie.corps} large base={viewer.base} />
+          ) : (
+            <p className="mt-4 font-inter-tight text-sm text-mid-gray">Partie vide.</p>
+          )}
+          <p className="mt-6">
+            <a href="#top" className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 hover:text-accent-secondary">
+              Haut de page ↑
+            </a>
+          </p>
+        </section>
+      ))}
+    </Espace>
+  );
+}
 
 export async function VueDirectionTechnique({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const since = await sinceFor(viewer);
@@ -384,6 +629,7 @@ const SECTION_OF = {
   roadmap: "actions",
   veille: "veille",
   prestation: "prestations",
+  audit: "audit",
 } as const;
 
 export async function VueCategorie({

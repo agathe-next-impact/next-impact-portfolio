@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Block, LetterSummary, Span } from "@cto/letters";
 import { Label, Panel, Tag } from "./ui";
+import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -72,8 +73,20 @@ function Texte({ spans }: { spans: Span[] }) {
  * Les puces consécutives sont regroupées en une seule liste : Notion les livre
  * une par une, et les rendre séparément produirait autant de listes d'un élément,
  * avec les espacements qui vont avec.
+ *
+ * Sert aussi au corps d'un audit, qui ajoute trois formes (encadré, tableau,
+ * image) : `large` lève la mesure de ligne, qu'un tableau à six colonnes ne
+ * tient pas, et `base` situe les images sous l'espace courant (client ou admin).
  */
-export function CorpsLettre({ body }: { body: Block[] }) {
+export function CorpsLettre({
+  body,
+  large = false,
+  base = ESPACE_PATH,
+}: {
+  body: Block[];
+  large?: boolean;
+  base?: string;
+}) {
   const rendus: React.ReactNode[] = [];
   let liste: { ordonnee: boolean; items: Span[][] } | null = null;
 
@@ -159,6 +172,41 @@ export function CorpsLettre({ body }: { body: Block[] }) {
           </pre>,
         );
         break;
+      case "box":
+        rendus.push(
+          <div key={index} className="mt-6 border border-dark-gray border-l-2 border-l-accent-secondary bg-jet/30 px-4 py-1 sm:px-5">
+            {bloc.s.length > 0 ? (
+              <p className="mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground">
+                <Texte spans={bloc.s} />
+              </p>
+            ) : null}
+            <div className="pb-4">
+              <CorpsLettre body={bloc.c} large={large} base={base} />
+            </div>
+          </div>,
+        );
+        break;
+      case "table":
+        rendus.push(<Tableau key={index} bloc={bloc} />);
+        break;
+      case "img":
+        rendus.push(
+          <figure key={index} className="mt-6">
+            {/* Servie par la route des pièces jointes, qui vérifie session ET
+                appartenance : pas de next/image, dont l'optimiseur ne porte
+                pas les cookies de l'espace. */}
+            <img
+              src={fichierPath(bloc.f, base)}
+              alt={bloc.alt}
+              loading="lazy"
+              className="max-w-full border border-dark-gray"
+            />
+            {bloc.alt ? (
+              <figcaption className="mt-2 font-inter-tight text-xs text-mid-gray">{bloc.alt}</figcaption>
+            ) : null}
+          </figure>,
+        );
+        break;
       default:
         rendus.push(
           <p
@@ -173,7 +221,59 @@ export function CorpsLettre({ body }: { body: Block[] }) {
 
   viderListe(body.length);
 
-  return <div className="max-w-[68ch]">{rendus}</div>;
+  return <div className={large ? undefined : "max-w-[68ch]"}>{rendus}</div>;
+}
+
+/**
+ * Un tableau d'audit : bloc tableau Notion ou base inline.
+ *
+ * Défilement horizontal plutôt que colonnes écrasées : une base de constats à
+ * quatre colonnes de quarante mots ne se lit pas sur 360 px autrement.
+ */
+function Tableau({ bloc }: { bloc: Extract<Block, { k: "table" }> }) {
+  return (
+    <figure className="mt-6">
+      {bloc.title ? (
+        <figcaption className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+          {bloc.title}
+        </figcaption>
+      ) : null}
+      {bloc.rows.length === 0 ? (
+        <p className="font-inter-tight text-sm text-mid-gray">Aucune ligne.</p>
+      ) : (
+        <div className="overflow-x-auto border border-dark-gray">
+          <table className="w-full min-w-[36rem] border-collapse text-left font-inter-tight text-[13px] leading-relaxed">
+            {bloc.head ? (
+              <thead className="bg-jet/50">
+                <tr>
+                  {bloc.head.map((cellule, index) => (
+                    <th
+                      key={index}
+                      scope="col"
+                      className="border-b border-dark-gray px-3 py-2 align-bottom font-mono text-[10px] font-normal uppercase tracking-[0.1em] text-mid-gray"
+                    >
+                      <Texte spans={cellule} />
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            ) : null}
+            <tbody className="divide-y divide-dark-gray">
+              {bloc.rows.map((ligne, index) => (
+                <tr key={index}>
+                  {ligne.map((cellule, colonne) => (
+                    <td key={colonne} className="px-3 py-2 align-top text-foreground/90">
+                      <Texte spans={cellule} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </figure>
+  );
 }
 
 /** Une lettre en carte : ce qu'il faut pour décider de l'ouvrir, et rien de plus. */

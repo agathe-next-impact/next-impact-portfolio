@@ -1,4 +1,4 @@
-import type { Deliverable, DeliverableKind } from "@cto/deliverables";
+import type { AuditPayload, Deliverable, DeliverableKind } from "@cto/deliverables";
 import { formatDay, Label, Panel, Tag } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -67,6 +67,12 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
     devis: "Devis",
     detail: "Détail",
   },
+  // Les blocs ne se comparent pas ici champ à champ : voir `partiesModifiees`.
+  audit: {
+    site: "Site audité",
+    dateMesures: "Date des mesures",
+    annexe: "Annexe",
+  },
 };
 
 const VIDE = "—";
@@ -85,8 +91,43 @@ function lisible(value: unknown): string {
 
 interface Changement {
   champ: string;
-  avant: string;
+  /** Null quand l'ancien état n'a pas de forme lisible : seul le nouveau s'affiche. */
+  avant: string | null;
   apres: string;
+}
+
+/**
+ * Ce qui a bougé entre deux versions d'un audit, partie par partie.
+ *
+ * Un audit pèse des centaines de blocs : les afficher barrés puis réécrits
+ * noierait la correction. Le client a besoin de savoir OÙ regarder — « la
+ * partie Sécurité a été corrigée » —, puis de lire la partie elle-même.
+ */
+function partiesModifiees(a: Record<string, unknown>, b: Record<string, unknown>): Changement[] {
+  const avant = a as Partial<AuditPayload>;
+  const apres = b as Partial<AuditPayload>;
+  const modifiees: string[] = [];
+  const empreinte = (valeur: unknown) => JSON.stringify(valeur ?? null);
+
+  if (empreinte(avant.synthese) !== empreinte(apres.synthese)) modifiees.push("Synthèse");
+
+  const anciennes = new Map((avant.sections ?? []).map((section) => [section.id, section]));
+  const nouvelles = new Set((apres.sections ?? []).map((section) => section.id));
+  const ajoutees: string[] = [];
+  for (const section of apres.sections ?? []) {
+    const ancienne = anciennes.get(section.id);
+    if (!ancienne) ajoutees.push(section.titre);
+    else if (empreinte(ancienne) !== empreinte(section)) modifiees.push(section.titre);
+  }
+  const retirees = (avant.sections ?? [])
+    .filter((section) => !nouvelles.has(section.id))
+    .map((section) => section.titre);
+
+  const changements: Changement[] = [];
+  if (modifiees.length > 0) changements.push({ champ: "Parties corrigées", avant: null, apres: modifiees.join(", ") });
+  if (ajoutees.length > 0) changements.push({ champ: "Parties ajoutées", avant: null, apres: ajoutees.join(", ") });
+  if (retirees.length > 0) changements.push({ champ: "Parties retirées", avant: null, apres: retirees.join(", ") });
+  return changements;
 }
 
 /**
@@ -123,6 +164,8 @@ function comparer(precedent: Deliverable, suivant: Deliverable): Changement[] {
     const apres = lisible(b[cle]);
     if (avant !== apres) changements.push({ champ: label, avant, apres });
   }
+
+  if (suivant.kind === "audit") changements.push(...partiesModifiees(a, b));
 
   return changements;
 }
@@ -199,9 +242,11 @@ export function Historique({ versions }: { versions: Deliverable[] }) {
                         {changement.champ}
                       </dt>
                       <dd className="mt-1.5 space-y-1.5">
-                        <p className="border-l-2 border-l-dark-gray pl-3 font-inter-tight text-sm leading-relaxed text-mid-gray line-through decoration-mid-gray/40">
-                          {changement.avant}
-                        </p>
+                        {changement.avant !== null ? (
+                          <p className="border-l-2 border-l-dark-gray pl-3 font-inter-tight text-sm leading-relaxed text-mid-gray line-through decoration-mid-gray/40">
+                            {changement.avant}
+                          </p>
+                        ) : null}
                         <p className="border-l-2 border-l-accent-secondary pl-3 font-inter-tight text-sm leading-relaxed text-foreground">
                           {changement.apres}
                         </p>

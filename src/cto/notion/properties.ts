@@ -121,6 +121,63 @@ export function relation(page: NotionPage, name: string): string[] {
   return links.map((link) => link?.id).filter((v): v is string => Boolean(v));
 }
 
+/** Nombre à la française, espace fine insécable comprise : c'est ainsi qu'il s'affiche. */
+function formatNumber(value: number): string {
+  return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(value);
+}
+
+/**
+ * N'importe quelle propriété, rendue en texte lisible.
+ *
+ * Sert aux bases inline d'un audit, dont la synchro ne connaît pas le schéma à
+ * l'avance : chaque cellule s'affiche telle que l'atelier la montre. Les types
+ * qui n'ont rien à dire à un client (relation, personne, date de création…)
+ * rendent une chaîne vide plutôt qu'un identifiant.
+ */
+export function cellText(property: NotionProperty | null | undefined): string {
+  if (!property || typeof property !== "object") return "";
+  const value = property[property.type] as unknown;
+
+  switch (property.type) {
+    case "title":
+    case "rich_text":
+      return joinRichText(value) ?? "";
+    case "number":
+      return typeof value === "number" && Number.isFinite(value) ? formatNumber(value) : "";
+    case "select":
+    case "status":
+      return (value as { name?: string } | null)?.name?.trim() ?? "";
+    case "multi_select":
+      return Array.isArray(value)
+        ? (value as { name?: string }[]).map((option) => option?.name?.trim() ?? "").filter(Boolean).join(", ")
+        : "";
+    case "date": {
+      const start = (value as { start?: string } | null)?.start;
+      if (!start) return "";
+      const parsed = new Date(start);
+      return Number.isNaN(parsed.getTime())
+        ? ""
+        : new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium", timeZone: "Europe/Paris" }).format(parsed);
+    }
+    case "checkbox":
+      return value === true ? "Oui" : "Non";
+    case "url":
+    case "email":
+    case "phone_number":
+      return typeof value === "string" ? value.trim() : "";
+    case "formula": {
+      const formula = value as { type?: string; string?: string; number?: number; boolean?: boolean } | null;
+      if (!formula) return "";
+      if (formula.type === "string") return formula.string?.trim() ?? "";
+      if (formula.type === "number" && typeof formula.number === "number") return formatNumber(formula.number);
+      if (formula.type === "boolean") return formula.boolean ? "Oui" : "Non";
+      return "";
+    }
+    default:
+      return "";
+  }
+}
+
 /** Une pièce jointe d'une colonne « Fichiers et médias ». */
 export interface NotionFile {
   name: string;

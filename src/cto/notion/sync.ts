@@ -7,6 +7,7 @@ import {
   currentStates,
   digestOf,
   setPlacement,
+  type AuditPayload,
   type DeliverableKind,
   type DeliverableInput,
   type DeliverableState,
@@ -21,9 +22,13 @@ import {
   OPTIONAL_KINDS,
   SYNCED_KINDS,
 } from "./config";
+import { importAnnex, readAuditTree } from "./audit";
 import { syncLetters, type LettersReport } from "./letters";
 import { syncPersons, type PersonsReport } from "./persons";
 import {
+  auditActionInput,
+  auditAnnexFiles,
+  auditPageId,
   clientPageIds,
   clientServices,
   clientStatus,
@@ -432,12 +437,46 @@ async function syncKind(
   byNotionPage: Map<string, string>,
   options: { force: boolean; dryRun: boolean },
   disabledClientIds: Set<string>,
+  /**
+   * Lignes venues d'ailleurs que de la base du type : les actions d'audit
+   * validées, pour la roadmap. Elles passent DANS le même balayage, sinon le
+   * retrait des lignes absentes de la base les effacerait à chaque passage.
+   */
+  extra: { inputs: DeliverableInput[]; complete: boolean } = { inputs: [], complete: true },
 ): Promise<{ report: KindReport; warnings: string[] }> {
-  const { force, dryRun } = options;
   const pages = await queryDatabase(databaseIdFor(kind), publishedFilter(PROPS.published));
   const { inputs, warnings } = resolvePages(kind, pages, byNotionPage, disabledClientIds);
-  if (kind === "document") await attachFiles(inputs, pages, warnings, dryRun);
+  if (kind === "document") await attachFiles(inputs, pages, warnings, options.dryRun);
+  inputs.push(...extra.inputs);
 
+  if (!extra.complete) {
+    warnings.push(
+      `${kind} : la lecture des audits est incomplète ce tour-ci — aucun retrait effectué, ` +
+        "une action absente n'est peut-être qu'une action pas vue.",
+    );
+  }
+  const report = await applyInputs(kind, inputs, warnings, disabledClientIds, {
+    ...options,
+    withdraw: extra.complete,
+  });
+  return { report, warnings };
+}
+
+/**
+ * Écrit ce qui a changé et retire ce qui a disparu, pour un type de livrable.
+ *
+ * `keep` protège du retrait des livrables absents de `inputs` pour une raison
+ * qui n'est pas une dépublication — un audit dont la page n'a pas pu être lue
+ * ce tour-ci garde sa version publiée. `withdraw: false` suspend tout retrait.
+ */
+async function applyInputs(
+  kind: DeliverableKind,
+  inputs: DeliverableInput[],
+  warnings: string[],
+  disabledClientIds: Set<string>,
+  options: { force: boolean; dryRun: boolean; keep?: Set<string>; withdraw?: boolean },
+): Promise<KindReport> {
+  const { force, dryRun } = options;
   const states = new Map((await currentStates(kind)).map((s) => [s.notionPageId, s]));
   const report: KindReport = {
     kind,
@@ -485,6 +524,7 @@ async function syncKind(
     // livrables disparaître au prochain balayage sous prétexte que ses lignes
     // sont, par construction, absentes de `inputs` ce tour-ci.
     if (disabledClientIds.has(state.clientId)) continue;
+    if (options.keep?.has(state.notionPageId)) continue;
     if (!state.withdrawn && !stillPublished.has(state.notionPageId)) toWithdraw.push(state);
   }
 
@@ -497,15 +537,111 @@ async function syncKind(
         `${toWithdraw.length}. Aucun retrait effectué — vérifier la case « ${PROPS.published} » ` +
         "et le nom des colonnes, puis relancer avec --forcer si le retrait est bien voulu.",
     );
-    return { report, warnings };
+    return report;
   }
+  if (options.withdraw === false) return report;
 
   for (const state of toWithdraw) {
     if (!dryRun) await appendWithdrawal(state, kind, UNTITLED);
     report.withdrawn += 1;
   }
 
-  return { report, warnings };
+  return report;
+}
+
+interface AuditsResult {
+  report: KindReport | null;
+  warnings: string[];
+  /** Les actions d'audit engagées, à verser dans la roadmap. */
+  roadmap: DeliverableInput[];
+  /** Faux si un audit n'a pas pu être lu en entier : la roadmap ne retire rien. */
+  complete: boolean;
+}
+
+/**
+ * Balaie la base Audits : pour chaque ligne publiée, lit toute la page d'audit
+ * qu'elle désigne et en fait un livrable `audit`.
+ *
+ * Un audit illisible ce tour-ci — lien absent, page non partagée — n'est ni
+ * publié ni retiré : sa version déjà en ligne reste telle quelle, et le rapport
+ * le dit. C'est la doctrine des éditions de veille : un retrait à tort se voit
+ * chez le client, un retrait différé d'un jour ne se voit pas.
+ */
+async function syncAudits(
+  byNotionPage: Map<string, string>,
+  options: { force: boolean; dryRun: boolean },
+  disabledClientIds: Set<string>,
+): Promise<AuditsResult> {
+  const { dryRun } = options;
+  if (!isConfigured("audit")) {
+    return {
+      report: null,
+      warnings: [`Base « audit » ignorée : ${envNameFor("audit")} n'est pas posée.`],
+      roadmap: [],
+      complete: true,
+    };
+  }
+
+  const pages = await queryDatabase(databaseIdFor("audit"), publishedFilter(PROPS.published));
+  const resolved = resolvePages("audit", pages, byNotionPage, disabledClientIds);
+  const warnings = resolved.warnings;
+  const pageById = new Map(pages.map((page) => [page.id, page]));
+  const keep = new Set<string>();
+  const inputs: DeliverableInput[] = [];
+  const roadmap: DeliverableInput[] = [];
+  let complete = true;
+
+  for (const input of resolved.inputs) {
+    const page = pageById.get(input.notionPageId);
+    const pageId = page ? auditPageId(page) : null;
+    if (!page || !pageId) {
+      warnings.push(
+        `audit « ${input.title} » : pas de lien vers sa page dans « ${PROPS.audit.page} », ignoré.`,
+      );
+      keep.add(input.notionPageId);
+      complete = false;
+      continue;
+    }
+
+    let tree: Awaited<ReturnType<typeof readAuditTree>>;
+    try {
+      tree = await readAuditTree(pageId, input.title, { dryRun });
+    } catch (error) {
+      warnings.push(
+        `audit « ${input.title} » : page illisible (${
+          error instanceof Error ? error.message : "erreur"
+        }). La version en ligne, s'il y en a une, reste telle quelle.`,
+      );
+      keep.add(input.notionPageId);
+      complete = false;
+      continue;
+    }
+    warnings.push(...tree.warnings);
+    if (!tree.complete) complete = false;
+
+    const annexes = auditAnnexFiles(page);
+    if (annexes.length > 1) {
+      warnings.push(
+        `audit « ${input.title} » porte ${annexes.length} annexes : seule la première (${annexes[0].name}) est publiée.`,
+      );
+    }
+    const annexe = annexes[0] ? await importAnnex(annexes[0], input.title, { dryRun }, warnings) : null;
+
+    const payload = input.payload as AuditPayload;
+    payload.synthese = tree.synthese;
+    payload.sections = tree.sections;
+    payload.annexe = annexe;
+    payload.fichiers = [...new Set([...tree.fichiers, ...(annexe ? [annexe.id] : [])])].sort();
+    inputs.push(input);
+
+    for (const row of tree.roadmapRows) {
+      const action = auditActionInput(row, input.clientId, input.title);
+      if (action) roadmap.push(action);
+    }
+  }
+
+  const report = await applyInputs("audit", inputs, warnings, disabledClientIds, { ...options, keep });
+  return { report, warnings, roadmap, complete };
 }
 
 /**
@@ -590,12 +726,36 @@ export async function syncFromNotion(
   report.persons = persons.report;
   report.warnings.push(...persons.warnings);
 
+  // Les audits avant les livrables : leurs actions validées alimentent la
+  // roadmap, qui doit les recevoir dans son propre balayage. Un échec ici ne
+  // prive le client de rien d'autre — la roadmap suspend seulement ses retraits.
+  let audits: AuditsResult;
+  try {
+    audits = await syncAudits(
+      clients.byNotionPage,
+      { force: options.force === true, dryRun },
+      clients.disabledClientIds,
+    );
+  } catch (error) {
+    console.error("[cto] balayage des audits impossible", error);
+    audits = {
+      report: null,
+      warnings: [
+        `Audits illisibles (${error instanceof Error ? error.message : "erreur"}) : rien publié ni retiré ce tour-ci.`,
+      ],
+      roadmap: [],
+      complete: false,
+    };
+  }
+  report.warnings.push(...audits.warnings);
+
   for (const kind of SYNCED_KINDS) {
     const result = await syncKind(
       kind,
       clients.byNotionPage,
       { force: options.force === true, dryRun },
       clients.disabledClientIds,
+      kind === "roadmap" ? { inputs: audits.roadmap, complete: audits.complete } : undefined,
     );
     report.kinds.push(result.report);
     report.warnings.push(...result.warnings);
@@ -615,6 +775,8 @@ export async function syncFromNotion(
     report.kinds.push(result.report);
     report.warnings.push(...result.warnings);
   }
+
+  if (audits.report) report.kinds.push(audits.report);
 
   // Les lettres passent en dernier : elles coûtent le plus cher en requêtes, et
   // un échec de leur côté ne doit pas priver le client des livrables déjà écrits.

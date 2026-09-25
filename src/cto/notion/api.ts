@@ -128,8 +128,9 @@ async function call(
     // brut de Notion ne le dit pas.
     if (response.status === 404) {
       throw new NotionError(
-        "Notion répond 404. Soit l'identifiant de base est faux, soit la page « Direction technique " +
-          "— clients » n'a pas été partagée avec l'intégration (menu ••• → Connexions).",
+        "Notion répond 404. Soit l'identifiant est faux, soit la page qui le contient (« Direction " +
+          "technique — clients », ou « Audits et Roadmap » pour un audit) n'a pas été partagée avec " +
+          "l'intégration (menu ••• → Connexions).",
         404,
       );
     }
@@ -159,6 +160,7 @@ export function getJson(path: string): Promise<unknown> {
 export async function queryDatabase(
   databaseId: string,
   filter?: unknown,
+  sorts?: unknown[],
 ): Promise<NotionPage[]> {
   const pages: NotionPage[] = [];
   let cursor: string | null = null;
@@ -166,6 +168,7 @@ export async function queryDatabase(
   do {
     const body: Record<string, unknown> = { page_size: 100 };
     if (filter) body.filter = filter;
+    if (sorts) body.sorts = sorts;
     if (cursor) body.start_cursor = cursor;
 
     const data = (await post(`/databases/${databaseId}/query`, body)) as QueryResponse;

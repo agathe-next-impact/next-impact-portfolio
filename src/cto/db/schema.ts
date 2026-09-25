@@ -497,6 +497,8 @@ export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
   "veille",
   "document",
   "prestation",
+  // Un audit complet, lu dans sa page de mission (ADR-011).
+  "audit",
 ]);
 
 /**

@@ -1,6 +1,7 @@
 import type { NotionPage } from "./api";
 import * as p from "./properties";
 import type {
+  AuditPayload,
   CartographiePayload,
   DecisionPayload,
   DeliverableInput,
@@ -107,6 +108,34 @@ export const PROPS = {
     detail: "Détail",
   },
   /**
+   * Base « Audits » de l'atelier : une ligne par audit remis, qui pointe la
+   * page de mission sous « Audits et Roadmap ». Le contenu vit dans la page,
+   * pas dans la ligne.
+   */
+  audit: {
+    title: "Audit",
+    page: "Page de l'audit",
+    date: "Date des mesures",
+    site: "Site",
+    annex: "Annexe",
+  },
+  /**
+   * La base inline ROADMAP d'une page d'audit (modèle « Audit technique
+   * WordPress », kit d'audit). Reconnue à son titre, lue pour relier les
+   * actions validées par le client à la roadmap de l'espace.
+   */
+  auditRoadmap: {
+    database: "ROADMAP",
+    title: "Action",
+    phase: "Phase",
+    effortMin: "Effort min (h)",
+    effortMax: "Effort max (h)",
+    prerequisite: "Prérequis",
+    criterion: "Critère de réussite",
+    findings: "Constats liés",
+    status: "Statut",
+  },
+  /**
    * Base « Éditions de veille » du pipeline Veilles clients — lue, jamais
    * écrite, et seulement pour les organisations reliées à un accompagnement.
    */
@@ -182,6 +211,7 @@ export const SERVICE_CODES: Record<string, string> = {
   "actions en cours": "actions",
   "veille personnalisee": "veille-personnalisee",
   "prestations en cours": "prestations",
+  audit: "audit",
 };
 
 /**
@@ -210,6 +240,121 @@ export function clientVeilleOrganisations(page: NotionPage): string[] {
 /** Les pièces jointes d'un document, dans l'ordre de l'atelier. */
 export function documentFiles(page: NotionPage): p.NotionFile[] {
   return p.files(page, PROPS.document.file);
+}
+
+/** Les pièces de la colonne « Annexe » d'un audit. */
+export function auditAnnexFiles(page: NotionPage): p.NotionFile[] {
+  return p.files(page, PROPS.audit.annex);
+}
+
+/**
+ * L'identifiant de la page d'audit, tiré du lien collé dans la colonne
+ * « Page de l'audit ».
+ *
+ * Un lien plutôt qu'une relation : la page de mission n'est pas une ligne de
+ * base, Notion ne sait donc pas la relier. L'identifiant est les 32 derniers
+ * caractères hexadécimaux du chemin, avec ou sans tirets — c'est la forme de
+ * tous les liens Notion (`notion.so/…`, `app.notion.com/p/…`, titre en slug ou
+ * non). `null` si le lien n'en contient pas.
+ */
+export function auditPageId(page: NotionPage): string | null {
+  const lien = p.url(page, PROPS.audit.page) ?? p.text(page, PROPS.audit.page);
+  return pageIdFromUrl(lien);
+}
+
+export function pageIdFromUrl(lien: string | null): string | null {
+  if (!lien) return null;
+  let chemin = lien.trim();
+  try {
+    chemin = new URL(chemin).pathname;
+  } catch {
+    // Pas une URL : on cherche l'identifiant dans la chaîne telle quelle.
+  }
+  const segment = chemin.split("/").filter(Boolean).at(-1) ?? "";
+
+  // Deux formes seulement : l'UUID à tirets, ou 32 caractères en fin de
+  // segment après le titre en slug. Surtout pas « 32 hexadécimaux n'importe
+  // où une fois les tirets ôtés » : le slug « …-Lean-France-3e2f… » deviendrait
+  // « …France3e2f… », et le « ce » de France serait lu comme le début de
+  // l'identifiant.
+  const uuid = segment.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+  const brut = (uuid ? segment.replace(/-/g, "") : segment.split("-").at(-1) ?? "").toLowerCase();
+  if (!/^[0-9a-f]{32}$/.test(brut)) return null;
+  return `${brut.slice(0, 8)}-${brut.slice(8, 12)}-${brut.slice(12, 16)}-${brut.slice(16, 20)}-${brut.slice(20)}`;
+}
+
+/**
+ * Statut d'une action d'audit → statut de chantier de roadmap.
+ *
+ * Seules les actions engagées passent dans la roadmap de l'espace. `Proposé`
+ * reste une recommandation de l'audit, lisible dans l'audit ; `Écarté` n'est
+ * pas un chantier. « En cours » et « Fait » ne figurent pas dans le modèle du
+ * kit : ce sont les options à ajouter à la base ROADMAP d'une mission pour la
+ * suivre après la restitution.
+ */
+const AUDIT_ACTION_STATUSES: Record<string, string> = {
+  "valide client": "Décidé",
+  "en cours": "Ouvert",
+  fait: "Fait",
+};
+
+/**
+ * Une ligne de la base ROADMAP d'un audit, rendue en chantier de roadmap.
+ *
+ * `null` si l'action n'est pas engagée : elle n'a rien à faire dans la roadmap
+ * de l'espace. La phase, le critère de réussite, les prérequis et les constats
+ * liés passent dans le détail, en clair : c'est ce qui permet au client de
+ * relier le chantier à l'audit qui l'a motivé.
+ */
+export function auditActionInput(
+  page: NotionPage,
+  clientId: string,
+  auditTitle: string,
+): DeliverableInput<"roadmap"> | null {
+  const statut = AUDIT_ACTION_STATUSES[normalize(p.select(page, PROPS.auditRoadmap.status)) ?? ""];
+  if (!statut) return null;
+
+  const min = p.number(page, PROPS.auditRoadmap.effortMin);
+  const max = p.number(page, PROPS.auditRoadmap.effortMax);
+  const effort =
+    min !== null && max !== null && min !== max
+      ? `${min} à ${max} h`
+      : min !== null || max !== null
+        ? `${min ?? max} h`
+        : null;
+
+  const detail = [
+    `Issue de l'audit « ${auditTitle} »`,
+    p.select(page, PROPS.auditRoadmap.phase),
+    labelled("Critère de réussite", p.text(page, PROPS.auditRoadmap.criterion)),
+    labelled("Prérequis", p.text(page, PROPS.auditRoadmap.prerequisite)),
+    labelled("Constats liés", p.text(page, PROPS.auditRoadmap.findings)),
+  ]
+    .filter(Boolean)
+    .join(". ");
+
+  const payload: RoadmapPayload = {
+    nature: "chantier",
+    statut,
+    budget: null,
+    effort,
+    effet: null,
+    detail: `${detail}.`,
+    source: null,
+  };
+  return {
+    clientId,
+    notionPageId: page.id,
+    kind: "roadmap",
+    title: p.text(page, PROPS.auditRoadmap.title) ?? UNTITLED,
+    payload,
+    occurredAt: null,
+    featured: false,
+  };
+}
+
+function labelled(label: string, value: string | null): string | null {
+  return value ? `${label} : ${value}` : null;
 }
 
 /** L'identifiant du site chez WP Umbrella, s'il est renseigné. */
@@ -388,6 +533,28 @@ export function mapPage(
         title: p.text(page, PROPS.document.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.document.date),
+        featured: isFeatured(page),
+      };
+    }
+    case "audit": {
+      const mesures = p.date(page, PROPS.audit.date);
+      const payload: AuditPayload = {
+        site: p.url(page, PROPS.audit.site),
+        dateMesures: mesures ? mesures.toISOString() : null,
+        // Remplis par la synchro après lecture de la page d'audit : ce module
+        // est pur et ne descend dans aucune page.
+        synthese: [],
+        sections: [],
+        annexe: null,
+        fichiers: [],
+      };
+      return {
+        clientId,
+        notionPageId: page.id,
+        kind,
+        title: p.text(page, PROPS.audit.title) ?? UNTITLED,
+        payload,
+        occurredAt: mesures,
         featured: isFeatured(page),
       };
     }

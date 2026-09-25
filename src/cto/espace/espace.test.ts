@@ -9,6 +9,7 @@ const EMPTY: Contents = {
   documents: 0,
   roadmap: 0,
   prestations: 0,
+  audits: 0,
   site: false,
 };
 
@@ -40,6 +41,16 @@ describe("sections visibles", () => {
     expect(keys(visibleSections(null, { ...EMPTY, decisions: 2, roadmap: 3 }))).toEqual([
       "tableau",
       "direction-technique",
+      "actions",
+      "veille",
+    ]);
+  });
+
+  it("ouvre la section Audit juste après l'accueil, seule pour un client audit seul", () => {
+    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "audit", "veille"]);
+    expect(keys(visibleSections(null, { ...EMPTY, audits: 1, roadmap: 2 }))).toEqual([
+      "tableau",
+      "audit",
       "actions",
       "veille",
     ]);

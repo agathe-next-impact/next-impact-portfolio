@@ -26,6 +26,7 @@ const STATUS_TONE: Record<string, Tone> = {
 const TIER_LABEL: Record<string, string> = {
   referent: "Référent",
   direction: "Direction",
+  audit: "Audit seul",
 };
 
 export async function generateMetadata({

@@ -39,6 +39,10 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
   veille: "CTO_NOTION_DB_VEILLE",
   document: "CTO_NOTION_DB_DOCUMENTS",
   prestation: "CTO_NOTION_DB_PRESTATIONS",
+  // Facultative, et hors `OPTIONAL_KINDS` : un audit ne se lit pas comme une
+  // ligne de base mais comme un arbre de pages (`audit.ts`), avec son propre
+  // balayage dans `sync.ts`.
+  audit: "CTO_NOTION_DB_AUDITS",
 };
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";

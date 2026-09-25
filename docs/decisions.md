@@ -220,3 +220,43 @@ garde-fou qui imposait « CTO externalisé » comme seul libellé toléré est
 remplacé par un garde-fou équivalent sur « Expert technique externalisé ») ;
 `.claude/agents/coherence-seo-geo.md` mis à jour pour ne pas revenir sur ce
 renommage lors d'un prochain passage.
+
+## ADR-011 — 2026-09-25 — L'espace client reçoit l'audit complet, lu dans sa page Notion
+
+Revient sur un choix inscrit dans `src/cto/deliverables/types.ts` : un lien de
+roadmap vers un rapport d'audit était « la porte vers le document source, pas un
+moyen d'en rapatrier le contenu ici ». Décision explicite d'Agathe (option C de
+l'analyse du 2026-09-25), réponses aux quatre questions posées :
+
+1. **Un client audit seul a accès à l'espace.** Palier `audit`, service
+   `Audit` sur sa fiche Clients : l'espace lui ouvre la section Audit, le
+   tableau de bord et la veille générale.
+2. **La source est la page Notion, pas les JSON du kit.** La page de mission
+   (« Audits et Roadmap ») est la version relue et retouchée après
+   `/publier-notion` ; les fichiers `constats.json`, `roadmap.json` du kit
+   restent locaux et peuvent diverger.
+3. **Le contenu entier est recopié**, synthèse, sous-pages et bases inline,
+   pas un résumé. Il vit en base derrière la session et le contrôle
+   d'appartenance ; la notification n'annonce que des compteurs ; la
+   restitution PDF le reprend en entier.
+4. **L'intégration Notion est partagée sur « Audits et Roadmap »**, en plus de
+   « Direction technique — clients ».
+
+Conséquences :
+
+- Nouveau type de livrable `audit` (enum Postgres, migration 0012), donc
+  append-only comme les autres : une correction de l'audit après remise écrit
+  une version datée, l'historique dit quelles parties ont changé.
+- Nouvelle base Notion facultative **Audits** (`CTO_NOTION_DB_AUDITS`) : une
+  ligne par audit remis, qui pointe sa page de mission. Le contenu reste dans la
+  page, la ligne ne porte que le rattachement, la date des mesures, l'annexe et
+  l'interrupteur `Publié`.
+- Les actions de la base inline ROADMAP d'un audit au statut « Validé client »
+  (puis « En cours », « Fait ») deviennent des chantiers de la roadmap de
+  l'espace, sans ressaisie. « Proposé » reste une recommandation, lisible dans
+  l'audit seulement.
+- Le modèle d'audit n'est pas figé dans le code : toute sous-page devient une
+  partie, toute base inline un tableau. Seule ROADMAP est reconnue par son nom.
+- Coût : une centaine de requêtes Notion par audit publié et par balayage
+  (environ 30 s). Acceptable à quelques audits ; à revoir au-delà de cinq ou six
+  audits publiés en même temps (le Cron a 300 s).
