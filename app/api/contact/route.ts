@@ -1,5 +1,6 @@
 import { sendMail } from "@/lib/sendMail";
 import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
+import { spamReason } from "@/lib/antispam";
 import { generateCahierDesChargesPDF } from "@/lib/cahier-des-charges-pdf-renderer";
 import {
   EMAIL,
@@ -18,11 +19,27 @@ import {
 } from "@/lib/email-template";
 
 export async function POST(req: Request) {
-  const { name, email, message, formData, type, subject, locale, recaptchaToken } = await req.json();
+  const { name, email, message, formData, type, subject, locale, recaptchaToken, website, elapsedMs } =
+    await req.json();
   const isEn = locale === "en";
 
   const captcha = await verifyRecaptcha(recaptchaToken, "contact", requestIp(req.headers));
   if (!captcha.ok) return new Response(recaptchaErrorMessage(isEn), { status: 403 });
+
+  // Second filtre, après le reCAPTCHA que certains robots passent (lib/antispam.ts).
+  // Rejet SILENCIEUX : la réponse est celle d'un envoi réussi, pour qu'un robot
+  // n'apprenne rien de ce qui l'a arrêté.
+  const reason = spamReason({
+    name,
+    message,
+    website,
+    elapsedMs,
+    generated: type === "cahier-des-charges",
+  });
+  if (reason) {
+    console.warn(`[antispam] contact rejeté (${reason}), score reCAPTCHA ${captcha.score ?? "n/a"}`);
+    return new Response(isEn ? "Message sent" : "Message envoyé", { status: 200 });
+  }
 
   try {
     // Générer le PDF si la requête vient du cahier des charges
@@ -123,30 +140,31 @@ export async function POST(req: Request) {
         : "Confirmation de réception — Next Impact Digital",
     });
 
-    await Promise.all([
-      sendMail({
-        to: ["agathe@next-impact.digital"],
-        subject: isCahierDesCharges
-          ? `Nouveau cahier des charges de ${name}`
-          : subject
-          ? `[${subject}] Nouveau message de ${name}`
-          : `Nouveau message de ${name}`,
-        html: adminHtml,
-        attachments,
-      }),
-      sendMail({
+    await sendMail({
+      to: ["agathe@next-impact.digital"],
+      subject: isCahierDesCharges
+        ? `Nouveau cahier des charges de ${name}`
+        : subject
+        ? `[${subject}] Nouveau message de ${name}`
+        : `Nouveau message de ${name}`,
+      html: adminHtml,
+      attachments,
+    });
+
+    // Plus d'accusé de réception automatique pour un simple message : c'était
+    // l'ENJEU des robots (faire envoyer par next-impact.digital un e-mail à
+    // l'adresse d'un tiers). Seul le cahier des charges repart vers son auteur,
+    // parce que le PDF joint a une valeur pour lui — et après les deux filtres.
+    if (isCahierDesCharges) {
+      await sendMail({
         to: [email],
-        subject: isCahierDesCharges
-          ? isEn
-            ? "Your project specifications — Next Impact Digital"
-            : "Votre cahier des charges — Next Impact Digital"
-          : isEn
-          ? "We received your message — Next Impact Digital"
-          : "Confirmation de réception de votre message — Next Impact Digital",
+        subject: isEn
+          ? "Your project specifications — Next Impact Digital"
+          : "Votre cahier des charges — Next Impact Digital",
         html: userHtml,
         attachments,
-      }),
-    ]);
+      });
+    }
 
     return new Response(isEn ? "Message sent" : "Message envoyé", { status: 200 });
   } catch (err) {

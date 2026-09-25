@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   CalendarClock,
@@ -74,6 +74,11 @@ export default function MultiSubjectContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [organisation, setOrganisation] = useState("");
+  // Anti-spam (lib/antispam.ts) : un champ piège que seul un robot remplit, et
+  // l'heure d'affichage du formulaire — un envoi en moins de trois secondes
+  // n'est pas humain.
+  const [website, setWebsite] = useState("");
+  const mountedAt = useRef<number>(Date.now());
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
@@ -115,6 +120,8 @@ export default function MultiSubjectContactForm() {
         subject: subjectLabel,
         locale,
         recaptchaToken,
+        website,
+        elapsedMs: Date.now() - mountedAt.current,
       }),
     });
     if (res.ok) setStatus("sent");
@@ -144,12 +151,28 @@ export default function MultiSubjectContactForm() {
             </h3>
             <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
               {isEn
-                ? "Thanks, I'll get back to you within 24h. A confirmation has been sent to your inbox."
-                : "Merci, je reviens vers vous sous 24 h. Une confirmation a été envoyée dans votre boîte mail."}
+                ? "Thanks, I'll get back to you within 24h, from agathe@next-impact.digital."
+                : "Merci, je reviens vers vous sous 24 h, depuis agathe@next-impact.digital."}
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+            {/* Champ piège : hors écran, ignoré des lecteurs d'écran et du
+                remplissage automatique. Un humain ne le voit pas ; un robot qui
+                remplit tous les champs se dénonce. */}
+            <div aria-hidden="true" className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
+              <label>
+                Site web
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </label>
+            </div>
             {/* Subject selector */}
             <div>
               <div className={labelClass}>
