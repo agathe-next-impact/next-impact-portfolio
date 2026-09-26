@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Block } from "../notion/blocks";
-import { lirePhase, lireSeverites, lireSynthese } from "./synthese";
+import { estColonneGravite, lireGravite, lirePhase, lireSeverites, lireSynthese } from "./synthese";
 
 const SYNTHESE: Block[] = [
   { k: "p", s: [{ t: "Site web: " }, { h: "https://exemple.fr/", t: "https://exemple.fr" }] },
@@ -64,6 +64,18 @@ describe("synthèse d'audit", () => {
       ],
     });
     expect(lireSeverites("un seul constat critique")).toBeNull();
+  });
+
+  it("lit la gravité d'une cellule de tableau, accents et genre compris", () => {
+    expect(lireGravite("Critique")).toBe("critique");
+    expect(lireGravite("élevée")).toBe("eleve");
+    expect(lireGravite("Elevé")).toBe("eleve");
+    expect(lireGravite("Modérée")).toBe("modere");
+    expect(lireGravite("faible")).toBe("faible");
+    expect(lireGravite("Prod")).toBeNull();
+    expect(estColonneGravite("Gravité")).toBe(true);
+    expect(estColonneGravite("SEVERITE")).toBe(true);
+    expect(estColonneGravite("Solutions")).toBe(false);
   });
 
   it("lit un montant avec espace et HT", () => {

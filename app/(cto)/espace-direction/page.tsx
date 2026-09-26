@@ -9,6 +9,7 @@ import {
   MAGIC_LINK_TTL_MS,
 } from "@cto/access";
 import { PasskeyLoginButton } from "./passkey";
+import { PurgeHorsLigne } from "./pwa";
 import { loadEspace } from "./shell";
 import { buttonClass, inputClass, Label, Notice } from "./ui";
 import { configurationIssue, currentSession, ESPACE_PATH } from "./session";
@@ -125,6 +126,8 @@ async function Connexion({
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-6 py-16">
+      {/* Plus de session : les pages gardées pour la lecture hors ligne partent. */}
+      <PurgeHorsLigne />
       <Label>Next Impact — Direction technique</Label>
       <h1 className="mt-3 font-sans text-2xl font-light text-foreground sm:text-3xl">
         Votre espace

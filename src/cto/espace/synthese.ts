@@ -142,6 +142,25 @@ const GRAVITES: { gravite: Gravite; label: string; motif: RegExp }[] = [
   { gravite: "faible", label: "Faibles", motif: /(\d+)\s+faibles?\b/i },
 ];
 
+/**
+ * La gravité d'une cellule (« Critique », « élevée », « Modéré »…), ou null.
+ * Sert aux tableaux d'audit : une colonne Gravité devient un badge.
+ */
+export function lireGravite(brut: string): Gravite | null {
+  const t = brut.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+  if (/^critiques?\b/.test(t)) return "critique";
+  if (/^elevee?s?\b/.test(t)) return "eleve";
+  if (/^moderee?s?\b/.test(t)) return "modere";
+  if (/^faibles?\b/.test(t)) return "faible";
+  return null;
+}
+
+/** Une colonne de tableau qui porte la gravité : « Gravité », « Sévérité », « Criticité ». */
+export function estColonneGravite(entete: string): boolean {
+  const t = entete.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+  return t === "gravite" || t === "severite" || t === "criticite";
+}
+
 export function lireSeverites(brut: string): Severites | null {
   const niveaux = GRAVITES.flatMap(({ gravite, label, motif }) => {
     const m = brut.match(motif);

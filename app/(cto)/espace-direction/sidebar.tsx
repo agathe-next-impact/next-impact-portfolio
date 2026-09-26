@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { deconnexion } from "./actions";
 import { NAV_COOKIE } from "./nav";
+import { viderPagesHorsLigne } from "./pwa";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La barre latérale de l'espace.
@@ -50,8 +51,11 @@ import { NAV_COOKIE } from "./nav";
 //  - bureau replié (64 px)  : icônes seules, info-bulle au survol et au focus,
 //    pastille réduite à un point — le mot reste dans l'info-bulle et dans
 //    l'étiquette lue par le lecteur d'écran ;
-//  - mobile (< 1024 px)     : barre du haut + tiroir (Radix Dialog : focus
-//    piégé, Échap, clic sur le fond), refermé à chaque navigation.
+//  - mobile et tablette (< 1024 px) : l'application installable. Barre
+//    d'onglets en bas d'écran (Accueil + un onglet par groupe, cinq au plus),
+//    sous-onglets du groupe courant sous la barre du haut, et une feuille
+//    « Plus » (Radix Dialog : focus piégé, Échap, clic sur le fond) pour la
+//    situation, le contact et les réglages — refermée à chaque navigation.
 //
 // L'état replié vit dans un COOKIE, pas dans le localStorage : le serveur le lit
 // et rend la page directement dans le bon état. Un localStorage ne se lit
@@ -397,11 +401,14 @@ function Contenu({
   props,
   collapsed,
   entete,
+  navigation = true,
 }: {
   props: SidebarProps;
   collapsed: boolean;
-  /** Le bouton du coin : replier (bureau) ou fermer (tiroir). */
+  /** Le bouton du coin : replier (bureau) ou fermer (feuille). */
   entete: ReactNode;
+  /** Faux dans la feuille mobile : la navigation y est déjà, en bas d'écran. */
+  navigation?: boolean;
 }) {
   return (
     <>
@@ -429,6 +436,7 @@ function Contenu({
           situation ne doit pas réduire la navigation à trois lignes. */}
       <div className="min-h-0 flex-1 overflow-y-auto">
         {props.situation ? <SituationActuelle situation={props.situation} collapsed={collapsed} /> : null}
+        {navigation ? (
         <nav aria-label="Sections de votre espace" className="px-2 py-3">
           <ul className="space-y-4">
             {props.groups.map((groupe, index) => (
@@ -450,6 +458,7 @@ function Contenu({
             ))}
           </ul>
         </nav>
+        ) : null}
       </div>
 
       <div className="border-t border-dark-gray px-2 py-3">
@@ -488,13 +497,111 @@ function Contenu({
           <Outil collapsed={collapsed} icon={Download} label={props.restitution.label} href={props.restitution.href} />
           <Theme collapsed={collapsed} />
           {props.admin ? null : (
-            <form action={deconnexion}>
+            <form action={deconnexion} onSubmit={() => void viderPagesHorsLigne()}>
               <Outil collapsed={collapsed} icon={LogOut} label="Se déconnecter" type="submit" />
             </form>
           )}
         </div>
       </div>
     </>
+  );
+}
+
+// ─── Mobile et tablette ──────────────────────────────────────────────────
+
+const TON_RANG: Record<BadgeTone, number> = { neutre: 0, nouveau: 1, attention: 2, alerte: 3 };
+
+/** La pastille la plus pressante d'un onglet : c'est elle qu'il porte. */
+function tonDe(items: NavItem[]): BadgeTone | null {
+  let ton: BadgeTone | null = null;
+  for (const item of items) {
+    if (item.badge && (ton === null || TON_RANG[item.badge.tone] > TON_RANG[ton])) ton = item.badge.tone;
+  }
+  return ton;
+}
+
+/**
+ * Les onglets du bas : l'accueil, puis un onglet par groupe (Missions, Votre
+ * site, Agir, Veille) — cinq au plus, la limite au-delà de laquelle un
+ * libellé ne tient plus sur un téléphone de 320 px. Un onglet mène à la
+ * première entrée de son groupe ; les autres sont dans les sous-onglets.
+ */
+function BarreDuBas({ groups }: { groups: NavGroup[] }) {
+  const onglets = groups.flatMap((groupe) =>
+    groupe.label
+      ? groupe.items.length > 0
+        ? [{ cle: groupe.label, label: groupe.label, items: groupe.items }]
+        : []
+      : groupe.items.map((item) => ({ cle: item.key, label: item.label, items: [item] })),
+  );
+
+  return (
+    <nav
+      aria-label="Sections de votre espace"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-dark-gray bg-obsidian/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
+    >
+      <ul className="mx-auto grid max-w-2xl" style={{ gridTemplateColumns: `repeat(${onglets.length}, minmax(0, 1fr))` }}>
+        {onglets.map((onglet) => {
+          const [premier] = onglet.items;
+          const Icon = ICONS[premier.key];
+          const actif = onglet.items.some((item) => item.active);
+          const ton = tonDe(onglet.items);
+          const descriptions = onglet.items.flatMap((item) => (item.badge ? [item.badge.description] : []));
+          return (
+            <li key={onglet.cle}>
+              <Link
+                href={premier.href}
+                aria-current={premier.active ? "page" : actif ? "true" : undefined}
+                aria-label={descriptions.length > 0 ? `${onglet.label} (${descriptions.join(", ")})` : undefined}
+                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 border-t-2 px-1 pb-1.5 pt-2 font-inter-tight text-[10px] leading-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-secondary ${
+                  actif ? "border-t-accent-secondary text-foreground" : "border-t-transparent text-mid-gray hover:text-foreground"
+                }`}
+              >
+                <span className="relative">
+                  <Icon aria-hidden className="h-5 w-5" strokeWidth={1.7} />
+                  {ton ? <span aria-hidden className={`absolute -right-1.5 -top-0.5 h-1.5 w-1.5 ${DOT_CLASS[ton]}`} /> : null}
+                </span>
+                <span className="max-w-full truncate">{onglet.label}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+/** Les entrées du groupe courant, sous la barre du haut, quand il en a plusieurs. */
+function SousOnglets({ groups }: { groups: NavGroup[] }) {
+  const groupe = groups.find(
+    (candidat) => candidat.label && candidat.items.length > 1 && candidat.items.some((item) => item.active),
+  );
+  if (!groupe) return null;
+
+  return (
+    <nav aria-label={groupe.label ?? undefined} className="border-t border-dark-gray">
+      <ul className="flex gap-1.5 overflow-x-auto px-4 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {groupe.items.map((item) => (
+          <li key={item.key} className="shrink-0">
+            <Link
+              href={item.href}
+              aria-current={item.active ? "page" : undefined}
+              className={`flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-secondary ${
+                item.active ? "border-accent-secondary text-foreground" : "border-dark-gray text-mid-gray hover:text-foreground"
+              }`}
+            >
+              {item.label}
+              {item.badge ? (
+                <>
+                  <span aria-hidden className={`h-1.5 w-1.5 ${DOT_CLASS[item.badge.tone]}`} />
+                  <span className="sr-only">{`, ${item.badge.description}`}</span>
+                </>
+              ) : null}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
@@ -532,42 +639,53 @@ export function Sidebar(props: SidebarProps) {
 
   return (
     <Tooltip.Provider delayDuration={150}>
-      {/* Mobile : barre du haut + tiroir. */}
-      <div className="sticky top-0 z-30 flex items-center gap-3 border-b border-dark-gray bg-obsidian/95 px-4 py-2.5 backdrop-blur lg:hidden">
-        <Dialog.Root open={ouvert} onOpenChange={setOuvert}>
-          <Dialog.Trigger asChild>
-            <button type="button" aria-label="Ouvrir le menu" className={coin}>
-              <Menu aria-hidden className="h-5 w-5" strokeWidth={1.7} />
-            </button>
-          </Dialog.Trigger>
-          <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 lg:hidden" />
-            <Dialog.Content
-              aria-describedby={undefined}
-              className="fixed inset-y-0 left-0 z-50 flex w-[280px] max-w-[85vw] flex-col border-r border-dark-gray bg-jet text-foreground shadow-2xl lg:hidden"
-            >
-              <Dialog.Title className="sr-only">Navigation de l&rsquo;espace</Dialog.Title>
-              <Contenu
-                props={props}
-                collapsed={false}
-                entete={
-                  <Dialog.Close asChild>
-                    <button type="button" aria-label="Fermer le menu" className={coin}>
-                      <X aria-hidden className="h-4 w-4" strokeWidth={1.8} />
-                    </button>
-                  </Dialog.Close>
-                }
-              />
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
-        <p className="min-w-0 flex-1 truncate font-sans text-sm font-medium text-foreground">{props.company}</p>
-        {props.signal ? (
-          <span className={`shrink-0 border px-2 font-mono text-[10px] uppercase leading-5 tracking-[0.08em] ${BADGE_CLASS[props.signal.tone]}`}>
-            {props.signal.text}
+      {/* Mobile et tablette : barre du haut, sous-onglets, barre d'onglets en bas. */}
+      <div className="sticky top-0 z-30 border-b border-dark-gray bg-obsidian/95 pt-[env(safe-area-inset-top)] backdrop-blur lg:hidden">
+        <div className="flex items-center gap-3 px-4 py-2.5">
+          <span
+            aria-hidden
+            className="grid h-8 w-8 shrink-0 place-items-center border border-dark-gray font-mono text-[11px] text-accent-secondary"
+          >
+            NI
           </span>
-        ) : null}
+          <p className="min-w-0 flex-1 truncate font-sans text-sm font-medium text-foreground">{props.company}</p>
+          {props.signal ? (
+            <span className={`shrink-0 border px-2 font-mono text-[10px] uppercase leading-5 tracking-[0.08em] ${BADGE_CLASS[props.signal.tone]}`}>
+              {props.signal.text}
+            </span>
+          ) : null}
+          <Dialog.Root open={ouvert} onOpenChange={setOuvert}>
+            <Dialog.Trigger asChild>
+              <button type="button" aria-label="Situation, contact et réglages" className={coin}>
+                <Menu aria-hidden className="h-5 w-5" strokeWidth={1.7} />
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 lg:hidden" />
+              <Dialog.Content
+                aria-describedby={undefined}
+                className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] flex-col border-t border-dark-gray bg-jet pb-[env(safe-area-inset-bottom)] text-foreground shadow-2xl sm:inset-x-auto sm:inset-y-0 sm:right-0 sm:max-h-none sm:w-[380px] sm:border-l sm:border-t-0 lg:hidden"
+              >
+                <Dialog.Title className="sr-only">Situation, contact et réglages</Dialog.Title>
+                <Contenu
+                  props={props}
+                  collapsed={false}
+                  navigation={false}
+                  entete={
+                    <Dialog.Close asChild>
+                      <button type="button" aria-label="Fermer" className={`${coin} ml-auto`}>
+                        <X aria-hidden className="h-4 w-4" strokeWidth={1.8} />
+                      </button>
+                    </Dialog.Close>
+                  }
+                />
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
+        <SousOnglets groups={props.groups} />
       </div>
+      <BarreDuBas groups={props.groups} />
 
       {/* Bureau : barre fixe, repliable. */}
       <aside

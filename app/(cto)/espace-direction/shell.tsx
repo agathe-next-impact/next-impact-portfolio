@@ -21,6 +21,8 @@ import {
 import { siteStateFor, type SiteState } from "@cto/site";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
+import { BanniereInstallation, EtatReseau } from "./pwa";
+import { RetourHaut } from "./retour-haut";
 import { Sidebar, type NavBadge, type NavGroup, type Situation, type SituationLigne } from "./sidebar";
 import { buttonClass, Label, Notice, PageHeader, Panel } from "./ui";
 import { ESPACE_PATH } from "./session";
@@ -37,6 +39,8 @@ import type { Viewer } from "./viewer";
 //
 // Le contact, les appareils, l'export et la déconnexion vivent en bas de la
 // barre latérale : présents sur chaque page sans occuper le bas de chacune.
+// Sous 1024 px, la barre latérale laisse place à une barre d'onglets en bas
+// d'écran (cf. `sidebar.tsx`) : le contenu réserve sa hauteur.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CALENDLY_URL = "https://calendly.com/agathe-next-impact";
@@ -389,11 +393,13 @@ export async function Espace({
         admin={viewer.admin}
       />
 
-      <main id="contenu" className="min-w-0 flex-1">
+      <main id="contenu" tabIndex={-1} className="min-w-0 flex-1 focus:outline-none">
         {/* Pleine largeur : la barre latérale prend déjà la gauche, et les vues
             d'ensemble (cartes, frise, colonnes) ont besoin de toute la place. Le
             texte long garde sa propre mesure, dans ses composants. */}
-        <div className="w-full px-5 pb-20 pt-8 sm:px-8 lg:px-10 lg:pt-12 2xl:px-14">
+        <div className="w-full px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-8 sm:px-8 lg:px-10 lg:pb-20 lg:pt-12 2xl:px-14">
+          <EtatReseau />
+
           {viewer.admin ? (
             <div className="mb-8">
               <Notice tone="info">
@@ -425,6 +431,9 @@ export async function Espace({
           {children}
         </div>
       </main>
+
+      <RetourHaut />
+      {viewer.admin ? null : <BanniereInstallation />}
     </div>
   );
 }

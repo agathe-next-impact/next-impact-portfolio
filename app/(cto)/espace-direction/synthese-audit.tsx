@@ -1,5 +1,6 @@
 import type { Block } from "@cto/letters";
-import { lireSynthese, type Fiche, type Gravite, type Rubrique, type Severites } from "@cto/espace";
+import { lireSynthese, type Fiche, type Rubrique, type Severites } from "@cto/espace";
+import { GRAVITE_FOND, GRAVITE_TEXTE } from "./gravite";
 import { CorpsLettre, Texte } from "./lettre";
 import { formatAmount, Label } from "./ui";
 
@@ -18,20 +19,6 @@ import { formatAmount, Label } from "./ui";
 //
 // Une synthèse qui ne suit pas cette forme retombe sur le rendu bloc par bloc.
 // ─────────────────────────────────────────────────────────────────────────────
-
-const GRAVITE_FOND: Record<Gravite, string> = {
-  critique: "bg-[#ff8a7a]",
-  eleve: "bg-[#f2c94c]",
-  modere: "bg-accent-secondary/70",
-  faible: "bg-mid-gray/50",
-};
-
-const GRAVITE_TEXTE: Record<Gravite, string> = {
-  critique: "text-[#ff8a7a]",
-  eleve: "text-[#f2c94c]",
-  modere: "text-foreground",
-  faible: "text-foreground",
-};
 
 /** P0 brûle, P1 approche, le reste suit. */
 function phaseClass(code: string): string {

@@ -52,6 +52,8 @@ export {
   type ServiceCode,
 } from "./sections";
 export {
+  estColonneGravite,
+  lireGravite,
   lirePhase,
   lireSeverites,
   lireSynthese,

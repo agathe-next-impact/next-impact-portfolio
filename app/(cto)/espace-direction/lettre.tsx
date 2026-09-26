@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Block, LetterSummary, Span } from "@cto/letters";
+import { estColonneGravite, lireGravite } from "@cto/espace";
+import { BadgeGravite } from "./gravite";
 import { Label, Panel, Tag } from "./ui";
 import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
@@ -247,6 +249,15 @@ export function CorpsLettre({
  * quatre colonnes de quarante mots ne se lit pas sur 360 px autrement.
  */
 function Tableau({ bloc }: { bloc: Extract<Block, { k: "table" }> }) {
+  // Une colonne « Gravité » passe en tête et chaque ligne y porte son badge :
+  // on parcourt un tableau de constats par gravité avant de le lire.
+  const texteCellule = (cellule: Span[] | undefined) => (cellule ?? []).map((span) => span.t).join("");
+  const colGravite = bloc.head ? bloc.head.findIndex((cellule) => estColonneGravite(texteCellule(cellule))) : -1;
+  const ordre = (n: number) => {
+    const indices = Array.from({ length: n }, (_, i) => i);
+    return colGravite < 0 ? indices : [colGravite, ...indices.filter((i) => i !== colGravite)];
+  };
+
   return (
     <figure className="mt-6">
       {bloc.title ? (
@@ -262,13 +273,13 @@ function Tableau({ bloc }: { bloc: Extract<Block, { k: "table" }> }) {
             {bloc.head ? (
               <thead className="bg-jet/50">
                 <tr>
-                  {bloc.head.map((cellule, index) => (
+                  {ordre(bloc.head.length).map((index) => (
                     <th
                       key={index}
                       scope="col"
                       className="border-b border-dark-gray px-3 py-2 align-bottom font-mono text-[10px] font-normal uppercase tracking-[0.1em] text-mid-gray"
                     >
-                      <Texte spans={cellule} />
+                      <Texte spans={bloc.head![index]} />
                     </th>
                   ))}
                 </tr>
@@ -277,11 +288,15 @@ function Tableau({ bloc }: { bloc: Extract<Block, { k: "table" }> }) {
             <tbody className="divide-y divide-dark-gray">
               {bloc.rows.map((ligne, index) => (
                 <tr key={index}>
-                  {ligne.map((cellule, colonne) => (
-                    <td key={colonne} className="px-3 py-2 align-top text-foreground/90">
-                      <Texte spans={cellule} />
-                    </td>
-                  ))}
+                  {ordre(ligne.length).map((colonne) => {
+                    const cellule = ligne[colonne];
+                    const gravite = colonne === colGravite ? lireGravite(texteCellule(cellule)) : null;
+                    return (
+                      <td key={colonne} className="px-3 py-2 align-top text-foreground/90">
+                        {gravite ? <BadgeGravite gravite={gravite} /> : <Texte spans={cellule} />}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
