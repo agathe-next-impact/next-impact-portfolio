@@ -58,6 +58,7 @@ import {
   sectionOuverte,
   type EspaceContext,
 } from "./shell";
+import { SyntheseAudit } from "./synthese-audit";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
 import { BackLink, Dot, formatDay, Label, Notice, Panel, SectionNav } from "./ui";
 import type { Viewer } from "./viewer";
@@ -488,7 +489,7 @@ export async function VueAudit({ viewer, context }: { viewer: Viewer; context: E
       active="audit"
       title="Audit"
       intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+        <p className="font-inter-tight text-base text-mid-gray">
           L'état de votre site mesuré à une date donnée, les constats qui le fondent, et la
           feuille de route qui en découle.
         </p>
@@ -597,7 +598,7 @@ export async function VueLectureAudit({
       {payload.sections.length > 0 ? (
         <nav aria-label="Parties de l'audit" className="mt-10">
           <Label>Sommaire</Label>
-          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {payload.synthese.length > 0 ? (
               <li>
                 <a href="#synthese" className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline">
@@ -625,7 +626,7 @@ export async function VueLectureAudit({
           <h2 id="synthese-titre" className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground">
             Synthèse
           </h2>
-          <CorpsLettre body={payload.synthese} large base={viewer.base} />
+          <SyntheseAudit blocks={payload.synthese} base={viewer.base} />
         </section>
       ) : null}
 

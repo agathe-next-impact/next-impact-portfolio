@@ -41,7 +41,7 @@ export function formatPeriode(date: Date | null): string {
   return brut.charAt(0).toUpperCase() + brut.slice(1);
 }
 
-function Texte({ spans }: { spans: Span[] }) {
+export function Texte({ spans }: { spans: Span[] }) {
   return (
     <>
       {spans.map((span, index) => {
@@ -90,17 +90,13 @@ export function CorpsLettre({
   const rendus: React.ReactNode[] = [];
   let liste: { ordonnee: boolean; items: Span[][] } | null = null;
 
-  // En lecture pleine largeur (audit), les tableaux et les images prennent la
-  // place ; le texte courant garde une mesure lisible.
-  const mesure = large ? " max-w-[75ch]" : "";
-
   const viderListe = (cle: number) => {
     if (!liste) return;
     const Tag_ = liste.ordonnee ? "ol" : "ul";
     rendus.push(
       <Tag_
         key={`l${cle}`}
-        className={`mt-4 space-y-2 pl-5 font-inter-tight text-[15px] leading-relaxed text-foreground/90${mesure} ${
+        className={`mt-4 space-y-2 pl-5 font-inter-tight text-[15px] leading-relaxed text-foreground/90 ${
           liste.ordonnee ? "list-decimal" : "list-disc"
         }`}
       >
@@ -157,7 +153,7 @@ export function CorpsLettre({
         rendus.push(
           <blockquote
             key={index}
-            className={`mt-5 border-l-2 border-l-accent-secondary pl-4 font-inter-tight text-[15px] leading-relaxed text-foreground${mesure}`}
+            className="mt-5 border-l-2 border-l-accent-secondary pl-4 font-inter-tight text-[15px] leading-relaxed text-foreground"
           >
             <Texte spans={bloc.s} />
           </blockquote>,
@@ -203,7 +199,7 @@ export function CorpsLettre({
               src={fichierPath(bloc.f, base)}
               alt={bloc.alt}
               loading="lazy"
-              className="max-w-full border border-dark-gray"
+              className={`${large ? "h-auto w-full" : "max-w-full"} border border-dark-gray`}
             />
             {bloc.alt ? (
               <figcaption className="mt-2 font-inter-tight text-xs text-mid-gray">{bloc.alt}</figcaption>
@@ -215,7 +211,7 @@ export function CorpsLettre({
         rendus.push(
           <p
             key={index}
-            className={`mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground/90${mesure}`}
+            className="mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground/90"
           >
             <Texte spans={bloc.s} />
           </p>,

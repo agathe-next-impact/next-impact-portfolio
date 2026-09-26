@@ -50,3 +50,15 @@ export {
   type SectionKey,
   type ServiceCode,
 } from "./sections";
+export {
+  lirePhase,
+  lireSeverites,
+  lireSynthese,
+  type Fiche,
+  type Gravite,
+  type Phase as PhaseAudit,
+  type Point,
+  type Rubrique,
+  type Severites,
+  type Synthese,
+} from "./synthese";
