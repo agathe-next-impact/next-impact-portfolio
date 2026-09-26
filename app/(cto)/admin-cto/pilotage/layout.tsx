@@ -24,8 +24,11 @@ export default async function PilotageLayout({ children }: { children: ReactNode
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-6 py-10 lg:px-10">
-      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-dark-gray pb-6">
+    // Pleine largeur : la vue de l'espace d'un client (sous `clients/<id>/espace`)
+    // doit s'afficher comme chez le client, barre latérale comprise. Les pages
+    // de supervision se contraignent elles-mêmes (`PILOTAGE_LARGEUR`).
+    <div className="w-full">
+      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-dark-gray px-6 py-5 lg:px-10">
         <div>
           <Link
             href="/admin-cto/pilotage"

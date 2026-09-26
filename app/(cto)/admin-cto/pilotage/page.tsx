@@ -5,6 +5,7 @@ import { EVENT_LABELS } from "@cto/access";
 import { listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
 import { AdminPasskeyEnrollButton } from "../passkey";
+import { PILOTAGE_LARGEUR } from "./largeur";
 
 export const metadata: Metadata = { title: "Tous les accompagnements" };
 export const dynamic = "force-dynamic";
@@ -55,7 +56,7 @@ export default async function PilotagePage() {
   ).length;
 
   return (
-    <main>
+    <main className={PILOTAGE_LARGEUR}>
       <Label>Vue d&rsquo;ensemble</Label>
       <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">
         Tous les accompagnements

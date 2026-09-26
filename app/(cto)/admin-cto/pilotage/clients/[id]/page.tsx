@@ -6,6 +6,7 @@ import { clientDetail } from "@cto/admin";
 import { BackLink, Dot, buttonClass, formatDate, Label, Panel, Tag, type Tone } from "../../../../espace-direction/ui";
 import { adminEspacePath } from "../../../../espace-direction/viewer";
 import { basculerSynchro } from "../../actions";
+import { PILOTAGE_LARGEUR } from "../../largeur";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +51,7 @@ export default async function ClientDetailPage({
   if (!detail) notFound();
 
   return (
-    <main>
+    <main className={PILOTAGE_LARGEUR}>
       <BackLink href="/admin-cto/pilotage">Tous les accompagnements</BackLink>
 
       <header className="mt-6 border-b border-dark-gray pb-6">

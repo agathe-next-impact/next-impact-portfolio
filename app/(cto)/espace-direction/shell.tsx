@@ -4,8 +4,10 @@ import { previousLoginAt } from "@cto/access";
 import { listForClient, type Deliverable } from "@cto/deliverables";
 import {
   actionsFor,
+  BACKUP_MAX_AGE_DAYS,
   clientProfile,
   GROUP_LABELS,
+  lastSuccessfulBackup,
   missionsOf,
   sitePoints,
   siteVerdict,
@@ -17,9 +19,9 @@ import {
   type SectionKey,
 } from "@cto/espace";
 import { siteStateFor, type SiteState } from "@cto/site";
-import { nouveaute } from "./livrables";
+import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
-import { Sidebar, type NavBadge, type NavGroup } from "./sidebar";
+import { Sidebar, type NavBadge, type NavGroup, type Situation, type SituationLigne } from "./sidebar";
 import { buttonClass, Label, Notice, PageHeader, Panel } from "./ui";
 import { ESPACE_PATH } from "./session";
 import type { Viewer } from "./viewer";
@@ -193,6 +195,90 @@ function navigation(context: EspaceContext, active: SectionKey | null, base: str
   return groups;
 }
 
+// ─── Situation actuelle ──────────────────────────────────────────────────
+
+const jourCourt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" });
+const heure = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" });
+
+/**
+ * Le bloc « Situation actuelle » de la barre latérale : le site d'après le
+ * dernier relevé WP Umbrella (écrit par le Cron, jamais demandé pendant la
+ * requête), et le dernier audit remis. Null si l'accompagnement n'a ni l'un
+ * ni l'autre — un bloc vide ne situerait rien.
+ */
+function situationFor(context: EspaceContext, base: string): Situation | null {
+  let site: Situation["site"] = null;
+  if (context.site) {
+    const state = context.site;
+    const snapshot = state.snapshot;
+    const verdict = siteVerdict(state);
+    const lignes: SituationLigne[] = [];
+
+    if (snapshot) {
+      const uptime = snapshot.uptime.percentage;
+      lignes.push({
+        label: "Disponibilité 30 j",
+        valeur: uptime === null ? "—" : `${uptime.toLocaleString("fr-FR")} %`,
+        tone: snapshot.status.down ? "alerte" : uptime !== null && uptime < 99 ? "attention" : "neutre",
+      });
+      const failles = snapshot.vulnerabilities.items.length;
+      lignes.push({ label: "Failles connues", valeur: String(failles), tone: failles > 0 ? "alerte" : "neutre" });
+      const sauvegarde = lastSuccessfulBackup(snapshot);
+      const trop =
+        !sauvegarde || Date.now() - new Date(sauvegarde.date).getTime() > BACKUP_MAX_AGE_DAYS * 86_400_000;
+      lignes.push({
+        label: "Dernière sauvegarde",
+        valeur: sauvegarde ? jourCourt.format(new Date(sauvegarde.date)) : "aucune",
+        tone: trop ? "alerte" : "neutre",
+      });
+      lignes.push({
+        label: "Mises à jour en attente",
+        valeur: String(snapshot.updates.plugins.length + snapshot.updates.themes.length),
+        tone: "neutre",
+      });
+      if (snapshot.site.php) {
+        lignes.push({
+          label: "PHP",
+          valeur: snapshot.site.php,
+          tone: snapshot.site.phpSecure === false ? "attention" : "neutre",
+        });
+      }
+      if (snapshot.site.performance !== null) {
+        const perf = snapshot.site.performance;
+        lignes.push({
+          label: "Performance",
+          valeur: `${perf}/100`,
+          tone: perf < 50 ? "alerte" : perf < 80 ? "attention" : "neutre",
+        });
+      }
+    }
+
+    site = {
+      verdict: verdict.headline,
+      tone: verdict.tone,
+      releve: state.fetchedAt
+        ? `Relevé WP Umbrella du ${jourCourt.format(state.fetchedAt)} à ${heure.format(state.fetchedAt)}`
+        : null,
+      enEchec: Boolean(state.error && snapshot),
+      lignes,
+      href: sectionOuverte(context, "site") ? `${base}/site` : null,
+    };
+  }
+
+  const audits = sortRecentFirst(context.items.filter((item) => item.kind === "audit"));
+  const [dernier] = audits;
+  const audit: Situation["audit"] = dernier
+    ? {
+        titre: dernier.title,
+        mesures: dernier.occurredAt ? `Mesures du ${jourCourt.format(dernier.occurredAt)} ${dernier.occurredAt.getUTCFullYear()}` : null,
+        href: auditPath(dernier.notionPageId, base),
+        autres: audits.length - 1,
+      }
+    : null;
+
+  return site || audit ? { site, audit } : null;
+}
+
 // ─── Contact ─────────────────────────────────────────────────────────────
 
 /**
@@ -231,14 +317,6 @@ export function ContactCta({ company }: { company: string }) {
 
 // ─── Gabarit ─────────────────────────────────────────────────────────────
 
-const LARGEURS = {
-  /** Accueil et vues d'ensemble : trois colonnes, une frise. */
-  large: "max-w-6xl",
-  normale: "max-w-5xl",
-  /** Lecture longue : audit, lettre. */
-  lecture: "max-w-4xl",
-} as const;
-
 /**
  * Le gabarit.
  *
@@ -251,7 +329,6 @@ export async function Espace({
   active,
   title,
   intro,
-  largeur = "normale",
   children,
 }: {
   viewer: Viewer;
@@ -259,7 +336,6 @@ export async function Espace({
   active: SectionKey | null;
   title: string;
   intro?: ReactNode;
-  largeur?: keyof typeof LARGEURS;
   children: ReactNode;
 }) {
   const rail = (await cookies()).get(NAV_COOKIE)?.value === "rail";
@@ -286,6 +362,7 @@ export async function Espace({
           viewer.personName ? `${viewer.personName}${viewer.personRole ? ` · ${viewer.personRole}` : ""}` : viewer.admin ? "Vue administrateur" : null
         }
         groups={navigation(context, active, viewer.base)}
+        situation={situationFor(context, viewer.base)}
         initialCollapsed={rail}
         signal={
           aTraiter > 0
@@ -306,7 +383,10 @@ export async function Espace({
       />
 
       <main id="contenu" className="min-w-0 flex-1">
-        <div className={`mx-auto ${LARGEURS[largeur]} px-5 pb-20 pt-8 sm:px-8 lg:px-10 lg:pt-12`}>
+        {/* Pleine largeur : la barre latérale prend déjà la gauche, et les vues
+            d'ensemble (cartes, frise, colonnes) ont besoin de toute la place. Le
+            texte long garde sa propre mesure, dans ses composants. */}
+        <div className="w-full px-5 pb-20 pt-8 sm:px-8 lg:px-10 lg:pt-12 2xl:px-14">
           {viewer.admin ? (
             <div className="mb-8">
               <Notice tone="info">

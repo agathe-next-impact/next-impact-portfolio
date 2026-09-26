@@ -283,7 +283,6 @@ export async function VueTableau({
       viewer={viewer}
       context={context}
       active="tableau"
-      largeur="large"
       title={prenom ? `Bonjour ${prenom}` : "Accueil"}
     >
       {erreur ? (
@@ -350,7 +349,6 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
       viewer={viewer}
       context={context}
       active="missions"
-      largeur="large"
       title="Missions"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
@@ -530,7 +528,6 @@ export async function VueLectureAudit({
       viewer={viewer}
       context={context}
       active={sectionOuverte(context, "audit") ? "audit" : null}
-      largeur="lecture"
       title={audit.title}
       intro={
         <Label>
@@ -1065,7 +1062,6 @@ export async function VueLettre({
       viewer={viewer}
       context={context}
       active="veille"
-      largeur="lecture"
       title={lettre.title}
       intro={<Label>{formatPeriode(lettre.period)}</Label>}
     >

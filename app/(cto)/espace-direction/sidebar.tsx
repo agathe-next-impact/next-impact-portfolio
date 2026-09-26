@@ -13,6 +13,7 @@ import {
   CalendarPlus,
   Download,
   FileText,
+  Gauge,
   Flag,
   Folder,
   Gavel,
@@ -109,10 +110,44 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+export type SituationTone = "neutre" | "attention" | "alerte" | "fait";
+
+export interface SituationLigne {
+  label: string;
+  valeur: string;
+  tone: SituationTone;
+}
+
+/**
+ * La situation actuelle, en tête de barre : l'état du site d'après le dernier
+ * relevé WP Umbrella, et le dernier audit remis. Toujours sous les yeux, quelle
+ * que soit la page — c'est le repère auquel tout le reste se rapporte.
+ */
+export interface Situation {
+  site: {
+    verdict: string;
+    tone: SituationTone;
+    /** « Relevé WP Umbrella du … », ou null avant le premier relevé. */
+    releve: string | null;
+    /** Le dernier passage a échoué : les chiffres datent du précédent. */
+    enEchec: boolean;
+    lignes: SituationLigne[];
+    href: string | null;
+  } | null;
+  audit: {
+    titre: string;
+    mesures: string | null;
+    href: string;
+    /** Audits précédents, en plus de celui-ci. */
+    autres: number;
+  } | null;
+}
+
 export interface SidebarProps {
   company: string;
   person: string | null;
   groups: NavGroup[];
+  situation: Situation | null;
   initialCollapsed: boolean;
   /** Le signal de la barre du haut sur mobile (« 2 à traiter »), s'il y a lieu. */
   signal: NavBadge | null;
@@ -259,6 +294,102 @@ function Theme({ collapsed }: { collapsed: boolean }) {
   );
 }
 
+const TONE_TEXTE: Record<SituationTone, string> = {
+  neutre: "text-foreground",
+  attention: "text-[#f2c94c]",
+  alerte: "text-[#ff8a7a]",
+  fait: "text-[#7fd8a4]",
+};
+
+const TONE_POINT: Record<SituationTone, string> = {
+  neutre: "bg-mid-gray",
+  attention: "bg-[#f2c94c]",
+  alerte: "bg-[#ff8a7a]",
+  fait: "bg-[#7fd8a4]",
+};
+
+function resume(situation: Situation): string {
+  return [
+    situation.site ? `Site : ${situation.site.verdict}` : null,
+    situation.audit ? `${situation.audit.titre}${situation.audit.mesures ? `, ${situation.audit.mesures}` : ""}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function SituationActuelle({ situation, collapsed }: { situation: Situation; collapsed: boolean }) {
+  const { site, audit } = situation;
+
+  // Rail : un seul repère, sa couleur est celle du site (ou neutre sans suivi),
+  // et le résumé complet est dans l'info-bulle et l'étiquette.
+  if (collapsed) {
+    const cible = site?.href ?? audit?.href;
+    if (!cible) return null;
+    const texte = `Situation actuelle. ${resume(situation)}`;
+    return (
+      <div className="border-b border-dark-gray px-2 py-2">
+        <Bulle texte={resume(situation)}>
+          <Link href={cible} aria-label={texte} className={`${ROW} justify-center border-l-transparent px-0 py-2.5 text-mid-gray hover:bg-overlay-gray hover:text-foreground`}>
+            <Gauge aria-hidden className="h-4 w-4" strokeWidth={1.7} />
+            {site ? <span aria-hidden className={`absolute right-3.5 top-1.5 h-1.5 w-1.5 ${TONE_POINT[site.tone]}`} /> : null}
+          </Link>
+        </Bulle>
+      </div>
+    );
+  }
+
+  return (
+    <section aria-labelledby="situation-titre" className="border-b border-dark-gray px-4 py-4">
+      <h2 id="situation-titre" className="font-mono text-[10px] uppercase tracking-[0.16em] text-mid-gray/70">
+        Situation actuelle
+      </h2>
+
+      {site ? (
+        <div className="mt-2.5">
+          {site.href ? (
+            <Link href={site.href} className="group flex items-start gap-2 font-inter-tight text-sm text-foreground">
+              <span aria-hidden className={`mt-[7px] h-2 w-2 shrink-0 ${TONE_POINT[site.tone]}`} />
+              <span className="group-hover:text-accent-secondary">{site.verdict}</span>
+            </Link>
+          ) : (
+            <p className="flex items-start gap-2 font-inter-tight text-sm text-foreground">
+              <span aria-hidden className={`mt-[7px] h-2 w-2 shrink-0 ${TONE_POINT[site.tone]}`} />
+              {site.verdict}
+            </p>
+          )}
+          {site.releve ? <p className="mt-1 pl-4 font-inter-tight text-[11px] text-mid-gray">{site.releve}</p> : null}
+          {site.enEchec ? (
+            <p className="mt-1 pl-4 font-inter-tight text-[11px] text-[#ff8a7a]">Dernier relevé en échec : chiffres du précédent.</p>
+          ) : null}
+          {site.lignes.length > 0 ? (
+            <dl className="mt-2.5 grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 pl-4 font-inter-tight text-xs">
+              {site.lignes.map((ligne) => (
+                <div key={ligne.label} className="contents">
+                  <dt className="truncate text-mid-gray">{ligne.label}</dt>
+                  <dd className={`text-right tabular-nums ${TONE_TEXTE[ligne.tone]}`}>{ligne.valeur}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
+        </div>
+      ) : null}
+
+      {audit ? (
+        <div className={site ? "mt-3 border-t border-dark-gray pt-3" : "mt-2.5"}>
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">Dernier audit</p>
+          <Link href={audit.href} className="mt-1 block font-inter-tight text-sm leading-snug text-foreground hover:text-accent-secondary">
+            {audit.titre}
+          </Link>
+          <p className="mt-0.5 font-inter-tight text-[11px] text-mid-gray">
+            {audit.mesures ?? "Date des mesures non renseignée"}
+            {audit.autres > 0 ? ` · ${audit.autres} ${audit.autres > 1 ? "précédents" : "précédent"}` : ""}
+          </p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 function Contenu({
   props,
   collapsed,
@@ -291,27 +422,32 @@ function Contenu({
         {entete}
       </div>
 
-      <nav aria-label="Sections de votre espace" className="flex-1 overflow-y-auto px-2 py-3">
-        <ul className="space-y-4">
-          {props.groups.map((groupe, index) => (
-            <li key={groupe.label ?? `groupe-${index}`}>
-              {groupe.label && !collapsed ? (
-                <p className="px-3 pb-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mid-gray/70">
-                  {groupe.label}
-                </p>
-              ) : null}
-              {groupe.label && collapsed ? <span className="mx-3 mb-2 block border-t border-dark-gray" aria-hidden /> : null}
-              <ul className="space-y-0.5" aria-label={groupe.label ?? undefined}>
-                {groupe.items.map((item) => (
-                  <li key={item.key}>
-                    <Entree item={item} collapsed={collapsed} />
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Situation et navigation défilent ensemble : sur un petit écran, la
+          situation ne doit pas réduire la navigation à trois lignes. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {props.situation ? <SituationActuelle situation={props.situation} collapsed={collapsed} /> : null}
+        <nav aria-label="Sections de votre espace" className="px-2 py-3">
+          <ul className="space-y-4">
+            {props.groups.map((groupe, index) => (
+              <li key={groupe.label ?? `groupe-${index}`}>
+                {groupe.label && !collapsed ? (
+                  <p className="px-3 pb-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mid-gray/70">
+                    {groupe.label}
+                  </p>
+                ) : null}
+                {groupe.label && collapsed ? <span className="mx-3 mb-2 block border-t border-dark-gray" aria-hidden /> : null}
+                <ul className="space-y-0.5" aria-label={groupe.label ?? undefined}>
+                  {groupe.items.map((item) => (
+                    <li key={item.key}>
+                      <Entree item={item} collapsed={collapsed} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
 
       <div className="border-t border-dark-gray px-2 py-3">
         {collapsed ? (
