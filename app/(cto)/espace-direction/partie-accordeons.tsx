@@ -1,4 +1,5 @@
 import type { Block, Span } from "@cto/letters";
+import { EtatVersionFiche } from "./audit-formes";
 import { CorpsLettre, Texte } from "./lettre";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -93,9 +94,12 @@ export function PartieAccordeons({ corps, base }: { corps: Block[]; base: string
                   </p>
                 ) : (
                   <details key={i} className="group border border-dark-gray bg-jet/40">
-                    <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 px-5 py-4 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
-                      <span className="font-sans text-base font-normal text-foreground">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
+                      <span className="min-w-0 font-sans text-base font-normal text-foreground">
                         <Texte spans={c.titre} />
+                      </span>
+                      <span className="ml-auto shrink-0">
+                        <EtatVersionFiche corps={c.corps} />
                       </span>
                       <span aria-hidden className="font-mono text-sm text-mid-gray group-open:text-accent-secondary">
                         <span className="group-open:hidden">+</span>

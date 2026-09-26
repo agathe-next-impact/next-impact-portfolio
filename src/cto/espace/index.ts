@@ -65,3 +65,16 @@ export {
   type Severites,
   type Synthese,
 } from "./synthese";
+export {
+  estColonneScore,
+  estColonneSolution,
+  etatVersion,
+  lireReference,
+  lireSolution,
+  registreEncadre,
+  statutScore,
+  type EtatVersion,
+  type Reference,
+  type Registre,
+  type Statut,
+} from "./lecture-audit";

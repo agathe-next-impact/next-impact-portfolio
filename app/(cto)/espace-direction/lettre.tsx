@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Block, LetterSummary, Span } from "@cto/letters";
-import { estColonneGravite, lireGravite } from "@cto/espace";
-import { BadgeGravite } from "./gravite";
+import { Encadre, PaireEncadres, PuceAudit, registreBox, TableauAudit } from "./audit-formes";
 import { Label, Panel, Tag } from "./ui";
 import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
@@ -116,7 +115,7 @@ export function CorpsLettre({
       >
         {liste.items.map((spans, index) => (
           <li key={index} className="pl-1">
-            <Texte spans={spans} />
+            {large ? <PuceAudit spans={spans} /> : <Texte spans={spans} />}
           </li>
         ))}
       </Tag_>,
@@ -124,7 +123,11 @@ export function CorpsLettre({
     liste = null;
   };
 
+  // Un encadré « situation » suivi d'un encadré « solutions » : rendus en paire.
+  const apparie = new Set<number>();
+
   body.forEach((bloc, index) => {
+    if (apparie.has(index)) return;
     if (bloc.k === "li" || bloc.k === "oli") {
       const ordonnee = bloc.k === "oli";
       if (!liste || liste.ordonnee !== ordonnee) {
@@ -190,22 +193,18 @@ export function CorpsLettre({
           </pre>,
         );
         break;
-      case "box":
-        rendus.push(
-          <div key={index} className="mt-6 border border-dark-gray border-l-2 border-l-accent-secondary bg-jet/30 px-4 py-1 sm:px-5">
-            {bloc.s.length > 0 ? (
-              <p className="mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground">
-                <Texte spans={bloc.s} />
-              </p>
-            ) : null}
-            <div className="pb-4">
-              <CorpsLettre body={bloc.c} large={large} base={base} />
-            </div>
-          </div>,
-        );
+      case "box": {
+        const suivant = body[index + 1];
+        if (large && registreBox(bloc) === "situation" && suivant?.k === "box" && registreBox(suivant) === "solution") {
+          apparie.add(index + 1);
+          rendus.push(<PaireEncadres key={index} situation={bloc} solution={suivant} large={large} base={base} />);
+        } else {
+          rendus.push(<Encadre key={index} bloc={bloc} large={large} base={base} />);
+        }
         break;
+      }
       case "table":
-        rendus.push(<Tableau key={index} bloc={bloc} />);
+        rendus.push(<TableauAudit key={index} bloc={bloc} />);
         break;
       case "img":
         rendus.push(
@@ -240,71 +239,6 @@ export function CorpsLettre({
   viderListe(body.length);
 
   return <div className={large ? undefined : "max-w-[68ch]"}>{rendus}</div>;
-}
-
-/**
- * Un tableau d'audit : bloc tableau Notion ou base inline.
- *
- * Défilement horizontal plutôt que colonnes écrasées : une base de constats à
- * quatre colonnes de quarante mots ne se lit pas sur 360 px autrement.
- */
-function Tableau({ bloc }: { bloc: Extract<Block, { k: "table" }> }) {
-  // Une colonne « Gravité » passe en tête et chaque ligne y porte son badge :
-  // on parcourt un tableau de constats par gravité avant de le lire.
-  const texteCellule = (cellule: Span[] | undefined) => (cellule ?? []).map((span) => span.t).join("");
-  const colGravite = bloc.head ? bloc.head.findIndex((cellule) => estColonneGravite(texteCellule(cellule))) : -1;
-  const ordre = (n: number) => {
-    const indices = Array.from({ length: n }, (_, i) => i);
-    return colGravite < 0 ? indices : [colGravite, ...indices.filter((i) => i !== colGravite)];
-  };
-
-  return (
-    <figure className="mt-6">
-      {bloc.title ? (
-        <figcaption className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
-          {bloc.title}
-        </figcaption>
-      ) : null}
-      {bloc.rows.length === 0 ? (
-        <p className="font-inter-tight text-sm text-mid-gray">Aucune ligne.</p>
-      ) : (
-        <div className="overflow-x-auto border border-dark-gray">
-          <table className="w-full min-w-[36rem] border-collapse text-left font-inter-tight text-[13px] leading-relaxed">
-            {bloc.head ? (
-              <thead className="bg-jet/50">
-                <tr>
-                  {ordre(bloc.head.length).map((index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="border-b border-dark-gray px-3 py-2 align-bottom font-mono text-[10px] font-normal uppercase tracking-[0.1em] text-mid-gray"
-                    >
-                      <Texte spans={bloc.head![index]} />
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-            ) : null}
-            <tbody className="divide-y divide-dark-gray">
-              {bloc.rows.map((ligne, index) => (
-                <tr key={index}>
-                  {ordre(ligne.length).map((colonne) => {
-                    const cellule = ligne[colonne];
-                    const gravite = colonne === colGravite ? lireGravite(texteCellule(cellule)) : null;
-                    return (
-                      <td key={colonne} className="px-3 py-2 align-top text-foreground/90">
-                        {gravite ? <BadgeGravite gravite={gravite} /> : <Texte spans={cellule} />}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </figure>
-  );
 }
 
 /** Une lettre en carte : ce qu'il faut pour décider de l'ouvrir, et rien de plus. */
