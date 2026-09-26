@@ -1,22 +1,30 @@
 import type { Block, Span } from "@cto/letters";
+import type { ReactNode } from "react";
 import {
   estColonneGravite,
   estColonneScore,
   estColonneSolution,
+  estTableauScenarios,
   etatVersion,
   lireGravite,
+  lireNombre,
+  lireNomScenario,
   lireReference,
   lireSolution,
+  lireStatutScenario,
   registreEncadre,
+  roleColonneScenario,
   statutScore,
   type EtatVersion,
   type Gravite,
   type Registre,
+  type RoleScenario,
   type Statut,
+  type StatutScenario,
 } from "@cto/espace";
 import { BadgeGravite } from "./gravite";
 import { CorpsLettre, Texte } from "./lettre";
-import { Label } from "./ui";
+import { formatAmount, Label } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les formes d'un audit, pensées pour une lecture « situation → solutions
@@ -28,7 +36,10 @@ import { Label } from "./ui";
 //  - puces : la référence finale « (SEC-05, 1 à 3 h) » devient des étiquettes ;
 //  - tableaux de constats : une carte par ligne, situation à gauche, solution
 //    préconisée à droite, triée par gravité ;
-//  - scores PageSpeed : jauge aux seuils Lighthouse, libellé toujours écrit.
+//  - scores PageSpeed : jauge aux seuils Lighthouse, libellé toujours écrit ;
+//  - tableaux de scénarios : une carte par scénario, le retenu en tête, les
+//    chiffres en repères et les textes longs (risques, conditions) repliés ;
+//  - cellules longues d'un tableau ordinaire : repliées derrière un extrait.
 //
 // La couleur ne porte jamais seule l'information : chaque teinte a son libellé.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -36,7 +47,7 @@ import { Label } from "./ui";
 const texteDe = (spans: Span[] | undefined) => (spans ?? []).map((span) => span.t).join("");
 
 /** Retire les `n` derniers caractères d'une suite de spans, mise en forme conservée. */
-function couperFin(spans: Span[], n: number): Span[] {
+export function couperFin(spans: Span[], n: number): Span[] {
   const out = spans.map((span) => ({ ...span }));
   let reste = n;
   while (reste > 0 && out.length > 0) {
@@ -216,6 +227,10 @@ export function TableauAudit({ bloc }: { bloc: TableBlock }) {
   const colGravite = entetes.findIndex(estColonneGravite);
   const colSolution = entetes.findIndex(estColonneSolution);
 
+  if (bloc.head && estTableauScenarios(entetes) && bloc.rows.length > 0) {
+    return <Scenarios bloc={bloc} entetes={entetes} />;
+  }
+
   if (bloc.head && colSolution >= 0 && bloc.rows.length > 0) {
     return <Constats bloc={bloc} entetes={entetes} colGravite={colGravite} colSolution={colSolution} />;
   }
@@ -266,6 +281,8 @@ export function TableauAudit({ bloc }: { bloc: TableBlock }) {
                           <BadgeGravite gravite={gravite} />
                         ) : scores.has(colonne) && texte.trim() ? (
                           <Score valeur={texte} />
+                        ) : texte.length > CELLULE_LONGUE ? (
+                          <CelluleRepliee spans={cellule} texte={texte} />
                         ) : (
                           <Texte spans={cellule} />
                         )}
@@ -381,6 +398,247 @@ function Constats({
                   </p>
                 </div>
               </div>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+// ── Accordéons ───────────────────────────────────────────────────────────────
+
+/** Au-delà, une cellule de tableau ordinaire se replie derrière son extrait. */
+const CELLULE_LONGUE = 160;
+
+/** Un contenu long replié sous son titre. `<details>` natif : clavier et lecteur d'écran sans JavaScript. */
+export function Accordeon({ titre, children }: { titre: ReactNode; children: ReactNode }) {
+  return (
+    <details className="group border-t border-dark-gray">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray group-open:text-foreground">
+          {titre}
+        </span>
+        <span aria-hidden className="font-mono text-sm text-mid-gray group-open:text-accent-secondary">
+          <span className="group-open:hidden">+</span>
+          <span className="hidden group-open:inline">−</span>
+        </span>
+      </summary>
+      <div className="px-5 pb-4 font-inter-tight text-sm leading-relaxed text-foreground/90">{children}</div>
+    </details>
+  );
+}
+
+/** Une cellule longue : son début, puis le reste à la demande. */
+function CelluleRepliee({ spans, texte }: { spans: Span[]; texte: string }) {
+  const extrait = texte.slice(0, 110).replace(/\s+\S*$/, "");
+  return (
+    <details className="group">
+      <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+        <span className="group-open:hidden">{extrait}… </span>
+        <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+          <span className="group-open:hidden">Lire la suite +</span>
+          <span className="hidden group-open:inline">Replier −</span>
+        </span>
+      </summary>
+      <div className="mt-1">
+        <Texte spans={spans} />
+      </div>
+    </details>
+  );
+}
+
+// ── Scénarios ────────────────────────────────────────────────────────────────
+
+const STATUT_SCENARIO: Record<StatutScenario, { rang: number; carte: string; badge: string; signe: string }> = {
+  retenu: {
+    rang: 0,
+    carte: "border-accent-secondary bg-accent-secondary/[0.05]",
+    badge: "border-accent-secondary bg-accent-secondary text-obsidian",
+    signe: "✓ ",
+  },
+  possible: { rang: 1, carte: "border-dark-gray bg-jet/40", badge: "border-foreground/40 text-foreground", signe: "" },
+  ecarte: { rang: 3, carte: "border-dark-gray bg-jet/20", badge: "border-dark-gray text-mid-gray", signe: "✕ " },
+};
+
+/** Une fourchette de montants : « 2 500 € », « 7 900 € à 15 700 € ». */
+function fourchette(min: number | null, max: number | null): string | null {
+  const a = formatAmount(min);
+  const b = formatAmount(max);
+  if (a && b) return min === max ? a : `${a} à ${b}`;
+  return a ?? b;
+}
+
+function Repere({ label, children, large = false }: { label: string; children: ReactNode; large?: boolean }) {
+  return (
+    <div className={`bg-obsidian px-5 py-3 ${large ? "col-span-2" : ""}`}>
+      <dt>
+        <Label>{label}</Label>
+      </dt>
+      <dd className="mt-1 font-inter-tight text-sm leading-snug text-foreground">{children}</dd>
+    </div>
+  );
+}
+
+/**
+ * Un tableau de scénarios, rendu en cartes comparables : treize colonnes ne se
+ * lisent pas en ligne, trois cartes côte à côte, si. En tête de carte, ce qui
+ * tranche (statut, note, coût, délai, constats résolus) ; le résumé ensuite ;
+ * les textes longs (conditions de choix, risques) repliés en accordéons.
+ */
+function Scenarios({ bloc, entetes }: { bloc: TableBlock; entetes: string[] }) {
+  const roles = entetes.map(roleColonneScenario);
+  const col = (role: RoleScenario) => roles.indexOf(role);
+  const nombre = (ligne: Span[][], role: RoleScenario) => (col(role) >= 0 ? lireNombre(texteDe(ligne[col(role)])) : null);
+  const aCout = roles.some((role) => role.startsWith("cout"));
+
+  const scenarios = bloc.rows
+    .map((ligne, index) => {
+      const lu = lireNomScenario(texteDe(ligne[0]));
+      const statutBrut = col("statut") >= 0 ? texteDe(ligne[col("statut")]).trim() : "";
+      const statut = lireStatutScenario(statutBrut) ?? lu.statut;
+      const libelle = statutBrut || (statut ? { retenu: "Retenu", possible: "Possible", ecarte: "Écarté" }[statut] : "");
+      return { ligne, index, nom: lu.nom, statut, libelle, note: nombre(ligne, "note") };
+    })
+    .sort(
+      (a, b) =>
+        (a.statut ? STATUT_SCENARIO[a.statut].rang : 2) - (b.statut ? STATUT_SCENARIO[b.statut].rang : 2) ||
+        (b.note ?? -1) - (a.note ?? -1) ||
+        a.index - b.index,
+    );
+
+  return (
+    <section className="mt-6" aria-label={bloc.title || "Scénarios"}>
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+          {scenarios.length} scénarios comparés
+        </p>
+        {scenarios.some((s) => s.note !== null) ? (
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">Note pondérée sur 10</p>
+        ) : null}
+      </div>
+      <ol className="grid items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {scenarios.map(({ ligne, index, nom, statut, libelle, note }) => {
+          const style = statut ? STATUT_SCENARIO[statut] : null;
+          const cout =
+            fourchette(nombre(ligne, "cout-min"), nombre(ligne, "cout-max")) ??
+            (col("cout") >= 0 ? texteDe(ligne[col("cout")]).trim() || null : null);
+          const cout3 =
+            fourchette(nombre(ligne, "cout-3ans-min"), nombre(ligne, "cout-3ans-max")) ??
+            (col("cout-3ans") >= 0 ? texteDe(ligne[col("cout-3ans")]).trim() || null : null);
+          const delai = col("delai") >= 0 ? texteDe(ligne[col("delai")]).trim() : "";
+          const resolus = nombre(ligne, "resolus");
+          const restants = nombre(ligne, "restants");
+          const totalConstats = resolus !== null && restants !== null ? resolus + restants : null;
+          const resume = col("resume") >= 0 ? ligne[col("resume")] : null;
+          const details = roles
+            .map((role, colonne) => ({ role, colonne, texte: texteDe(ligne[colonne]).trim() }))
+            .filter(({ role, texte }) => role === "detail" && texte.length > 0);
+
+          // Les petits repères d'abord, deux par ligne ; le délai, souvent une phrase, en pleine largeur.
+          const reperes: { label: string; valeur: ReactNode; large: boolean }[] = [];
+          if (aCout) {
+            reperes.push({ label: "Coût", valeur: cout ?? <span className="text-mid-gray">Non chiffré</span>, large: false });
+          }
+          if (cout3) reperes.push({ label: "Coût sur 3 ans", valeur: cout3, large: false });
+          if (resolus !== null && totalConstats !== null) {
+            reperes.push({
+              label: "Constats résolus",
+              large: false,
+              valeur: (
+                <>
+                  <span className="tabular-nums">
+                    {resolus} sur {totalConstats}
+                  </span>
+                  <span aria-hidden className="mt-1.5 block h-1 w-full bg-dark-gray">
+                    <span
+                      className="block h-full bg-[#7fd8a4]"
+                      style={{ width: `${totalConstats > 0 ? (resolus / totalConstats) * 100 : 0}%` }}
+                    />
+                  </span>
+                </>
+              ),
+            });
+          }
+          if (delai) reperes.push({ label: "Délai", valeur: delai, large: true });
+
+          return (
+            <li key={index} className={`flex flex-col border ${style ? style.carte : "border-dark-gray bg-jet/40"}`}>
+              <header className="px-5 py-4">
+                <div className="flex items-start justify-between gap-3">
+                  {libelle ? (
+                    <span
+                      className={`inline-flex border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] ${
+                        style ? style.badge : "border-dark-gray text-mid-gray"
+                      }`}
+                    >
+                      {style?.signe}
+                      {libelle}
+                    </span>
+                  ) : (
+                    <span />
+                  )}
+                  {note !== null ? (
+                    <p className="text-right">
+                      <span className="font-sans text-2xl font-light tabular-nums text-foreground">
+                        {note.toLocaleString("fr-FR")}
+                      </span>
+                      <span className="font-mono text-[10px] text-mid-gray"> /10</span>
+                    </p>
+                  ) : null}
+                </div>
+                <h4
+                  className={`mt-3 font-sans text-lg font-normal leading-snug ${
+                    statut === "ecarte" ? "text-mid-gray" : "text-foreground"
+                  }`}
+                >
+                  {nom}
+                </h4>
+                {note !== null ? (
+                  <span aria-hidden className="mt-3 block h-1 w-full bg-dark-gray">
+                    <span
+                      className={`block h-full ${statut === "retenu" ? "bg-accent-secondary" : "bg-mid-gray"}`}
+                      style={{ width: `${Math.max(0, Math.min(100, note * 10))}%` }}
+                    />
+                  </span>
+                ) : null}
+              </header>
+
+              {resume && texteDe(resume).trim() ? (
+                <p className="px-5 pb-4 font-inter-tight text-sm leading-relaxed text-foreground/90">
+                  <Texte spans={resume} />
+                </p>
+              ) : null}
+
+              <dl className="grid grid-cols-2 gap-px border-t border-dark-gray bg-dark-gray">
+                {reperes.map((repere, i) => (
+                  <Repere
+                    key={repere.label}
+                    label={repere.label}
+                    // Un repère seul sur sa ligne en prend toute la largeur.
+                    large={
+                      repere.large ||
+                      (i === reperes.findLastIndex((r) => !r.large) && reperes.filter((r) => !r.large).length % 2 === 1)
+                    }
+                  >
+                    {repere.valeur}
+                  </Repere>
+                ))}
+              </dl>
+
+              {details.map(({ colonne, texte }) => (
+                <Accordeon key={colonne} titre={entetes[colonne]}>
+                  {texte.split(/(?<=\.)\s+(?=[A-ZÀ-Ý0-9])/).length > 2 ? (
+                    <ul className="list-disc space-y-1.5 pl-4">
+                      {texte.split(/(?<=\.)\s+(?=[A-ZÀ-Ý0-9])/).map((phrase, i) => (
+                        <li key={i}>{phrase}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Texte spans={ligne[colonne]} />
+                  )}
+                </Accordeon>
+              ))}
             </li>
           );
         })}

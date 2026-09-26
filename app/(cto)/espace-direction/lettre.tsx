@@ -42,6 +42,24 @@ export function formatPeriode(date: Date | null): string {
   return brut.charAt(0).toUpperCase() + brut.slice(1);
 }
 
+/** Le jour d'une édition hebdomadaire ou bimensuelle, qui ne couvre pas un mois entier. */
+function formatJour(date: Date | null): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/Paris",
+  }).format(date);
+}
+
+/** Ce qu'est la lettre, en un mot : sa veille d'origine avant sa portée. */
+export function libelleLettre(lettre: Pick<LetterSummary, "source" | "label" | "scope">): string {
+  if (lettre.source === "sentinelle") return "Veille technique";
+  if (lettre.source === "signaux-faibles") return `Signaux faibles${lettre.label ? ` · ${lettre.label}` : ""}`;
+  return SCOPE_LABELS[lettre.scope];
+}
+
 export function Texte({ spans }: { spans: Span[] }) {
   return (
     <>
@@ -255,9 +273,9 @@ export function CarteLettre({
     <article className={principale ? "px-5 py-6" : "px-5 py-5"}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-          {formatPeriode(lettre.period)}
+          {lettre.source === "atelier" ? formatPeriode(lettre.period) : formatJour(lettre.period)}
         </p>
-        <Tag>{SCOPE_LABELS[lettre.scope]}</Tag>
+        <Tag>{libelleLettre(lettre)}</Tag>
       </div>
 
       <h3

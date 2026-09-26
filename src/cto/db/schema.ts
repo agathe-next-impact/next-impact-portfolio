@@ -186,6 +186,16 @@ export const ctoClients = pgTable(
      * le balayage terminé.
      */
     lastNotifiedAt: timestamp("last_notified_at"),
+    /**
+     * Identifiant du client chez Sentinelle (UUID de `clients`). Saisi dans
+     * Notion (colonne « ID Sentinelle »), jamais par le client.
+     *
+     * C'est la seule jointure entre les deux produits, et elle passe par HTTP :
+     * l'espace lit l'export Sentinelle (`/api/sentinelle/export/<id>`), il
+     * n'importe jamais `src/sentinelle/`. Null : pas de veille technique pour
+     * cet accompagnement, le digest s'en passe.
+     */
+    sentinelleClientId: text("sentinelle_client_id"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [uniqueIndex("cto_client_notion_page").on(t.notionPageId)],
@@ -621,12 +631,43 @@ export const ctoLetterScopeEnum = pgEnum("cto_letter_scope", [
  * par accompagnement multiplierait un long texte par le nombre de clients, et
  * une correction obligerait à repasser partout.
  */
+/**
+ * D'où vient une lettre.
+ *
+ *  - `atelier`         : la base Lettres de l'atelier (générale, sectorielle,
+ *                        personnalisée rédigée à la main).
+ *  - `signaux-faibles` : une édition du pipeline « Veilles clients », lue dans
+ *                        la base « Éditions de veille ».
+ *  - `sentinelle`      : un numéro validé de la veille technique, lu dans
+ *                        l'export Sentinelle.
+ *
+ * Chaque synchro ne retire que les lettres de SA source : la synchro Notion ne
+ * voit jamais les numéros Sentinelle et ne doit pas les prendre pour des
+ * lettres dépubliées.
+ */
+export const ctoLetterSourceEnum = pgEnum("cto_letter_source", [
+  "atelier",
+  "signaux-faibles",
+  "sentinelle",
+]);
+
 export const ctoLetters = pgTable(
   "cto_letters",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    /** Page Notion d'origine. Clé de rapprochement, stable au renommage. */
+    /**
+     * Clé de rapprochement, stable au renommage : la page Notion d'origine, ou
+     * `sentinelle-<id du numéro>` pour une lettre Sentinelle.
+     */
     notionPageId: text("notion_page_id").notNull(),
+    source: ctoLetterSourceEnum("source").notNull().default("atelier"),
+    /**
+     * Nom de la veille tel que le client le lit (« Écosystème »,
+     * « Positionnement »…) pour une édition Signaux Faibles ; null ailleurs.
+     */
+    label: text("label"),
+    /** « Action de la semaine » d'une édition Signaux Faibles, reprise par le digest. */
+    action: text("action"),
     scope: ctoLetterScopeEnum("scope").notNull(),
     /** Renseigné sur une sectorielle : doit correspondre à `cto_clients.sector`. */
     sector: text("sector"),
@@ -741,4 +782,71 @@ export const ctoSiteReports = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [index("cto_site_report_client").on(t.clientId, t.generatedAt)],
+);
+
+// ─── Veille technique (export Sentinelle) ─────────────────────────────────
+
+/**
+ * Le dernier export Sentinelle d'un accompagnement : fiche technique, alertes
+ * validées, radar des fins de support. Les lettres complètes, elles, vont dans
+ * `cto_letters` (source `sentinelle`), à côté des autres.
+ *
+ * Même régime que `cto_site_snapshots` : une ligne par accompagnement, écrasée
+ * par le Cron, jamais lue en direct pendant une requête client. Le JSON est
+ * gardé tel que le contrat le décrit (`src/cto/sentinelle/contract.ts`), après
+ * validation.
+ */
+export const ctoSentinelleSnapshots = pgTable("cto_sentinelle_snapshots", {
+  clientId: uuid("client_id")
+    .primaryKey()
+    .references(() => ctoClients.id, { onDelete: "cascade" }),
+  data: jsonb("data").notNull(),
+  fetchedAt: timestamp("fetched_at").notNull().defaultNow(),
+  /** Dernière erreur de lecture. L'export précédent reste utilisé. */
+  error: text("error"),
+  errorAt: timestamp("error_at"),
+});
+
+// ─── Digest hebdomadaire ──────────────────────────────────────────────────
+
+/**
+ * `draft → validated → sent`, comme les alertes Sentinelle : rien ne part
+ * sans un geste humain. Un digest ne contient que des lignes déjà relues à
+ * leur source ; la validation porte sur l'assemblage, pas sur les faits.
+ */
+export const ctoDigestStatusEnum = pgEnum("cto_digest_status", ["draft", "validated", "sent"]);
+
+/**
+ * Le digest d'une semaine pour un accompagnement : 15 lignes de veille
+ * technique (Sentinelle), puis 8 lignes par édition Signaux Faibles, deux au
+ * plus.
+ *
+ * Assemblé par du code, sans modèle de langage (`src/cto/digest/`). Un
+ * brouillon est réassemblé à chaque balayage tant qu'il n'est pas validé — une
+ * édition publiée le mardi rejoint le digest de sa semaine. Validé, il ne
+ * bouge plus : ce que le client reçoit est ce qu'il relira dans l'espace.
+ */
+export const ctoDigests = pgTable(
+  "cto_digests",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => ctoClients.id, { onDelete: "cascade" }),
+    /** Semaine ISO couverte, ex. `2026-W39`. */
+    week: text("week").notNull(),
+    status: ctoDigestStatusEnum("status").notNull().default("draft"),
+    /** Le contenu assemblé (`DigestContent`, `src/cto/digest/types.ts`). */
+    content: jsonb("content").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    validatedAt: timestamp("validated_at"),
+    sentAt: timestamp("sent_at"),
+  },
+  (t) => [
+    // Un digest par semaine et par accompagnement : c'est l'index, pas le
+    // code, qui garantit qu'un rejeu du Cron n'envoie rien deux fois.
+    uniqueIndex("cto_digest_client_week").on(t.clientId, t.week),
+    index("cto_digest_status").on(t.status, t.week),
+  ],
 );

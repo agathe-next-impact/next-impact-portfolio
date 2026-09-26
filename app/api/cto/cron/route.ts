@@ -3,6 +3,8 @@ import { purgeExpiredAccess, type PurgeReport } from "@cto/access";
 import { purgeExpiredAdminAccess, type AdminPurgeReport } from "@cto/admin";
 import { configurationIssue, syncFromNotion, type SyncReport } from "@cto/notion";
 import { syncSites, wpUmbrellaToken, type SiteSyncReport } from "@cto/site";
+import { sentinelleExportConfig, syncSentinelle, type SentinelleSyncReport } from "@cto/sentinelle";
+import { assembleWeek, previousWeek, type DigestAssembleReport } from "@cto/digest";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le balayage quotidien de l'espace CTO.
@@ -40,6 +42,8 @@ interface CronBody {
   purgeAdmin: AdminPurgeReport | { erreur: string };
   synchro: SyncReport | { ignoree: string } | { erreur: string };
   suivi: SiteSyncReport | { ignoree: string } | { erreur: string };
+  veilleTechnique: SentinelleSyncReport | { ignoree: string } | { erreur: string };
+  digest: DigestAssembleReport | { erreur: string };
 }
 
 /**
@@ -68,6 +72,8 @@ export async function GET(request: NextRequest) {
     purgeAdmin: { erreur: "non exécutée" },
     synchro: { ignoree: "non exécutée" },
     suivi: { ignoree: "non exécutée" },
+    veilleTechnique: { ignoree: "non exécutée" },
+    digest: { erreur: "non exécuté" },
   };
   let status = 200;
 
@@ -114,6 +120,31 @@ export async function GET(request: NextRequest) {
       body.suivi = { erreur: error instanceof Error ? error.message : "échec" };
       status = 500;
     }
+  }
+
+  // La veille technique, puis le digest. Le digest passe en tout dernier : il
+  // lit ce que les étapes précédentes viennent d'écrire (éditions Signaux
+  // Faibles, export Sentinelle) et ne réassemble que des brouillons — un digest
+  // validé ne bouge plus. Il tourne chaque jour sur la dernière semaine
+  // complète : le lundi matin, les brouillons attendent la relecture.
+  if (!sentinelleExportConfig()) {
+    body.veilleTechnique = { ignoree: "SENTINELLE_EXPORT_URL ou SENTINELLE_EXPORT_SECRET n'est pas posée." };
+  } else {
+    try {
+      body.veilleTechnique = await syncSentinelle();
+    } catch (error) {
+      console.error("[cto] veille technique impossible", error);
+      body.veilleTechnique = { erreur: error instanceof Error ? error.message : "échec" };
+      status = 500;
+    }
+  }
+
+  try {
+    body.digest = await assembleWeek(previousWeek(new Date()));
+  } catch (error) {
+    console.error("[cto] assemblage du digest impossible", error);
+    body.digest = { erreur: error instanceof Error ? error.message : "échec" };
+    status = 500;
   }
 
   return NextResponse.json(body, { status });

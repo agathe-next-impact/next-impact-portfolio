@@ -21,6 +21,7 @@
     "cto:sync": "tsx scripts/cto-sync.ts",
     "cto:notify": "tsx scripts/cto-notify.ts",
     "cto:site": "tsx scripts/cto-site.ts",
+    "cto:digest": "tsx scripts/cto-digest.ts",
     "db:seed": "tsx src/sentinelle/db/seed.ts",
     "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",

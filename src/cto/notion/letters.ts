@@ -150,6 +150,9 @@ export async function syncLetters(
     await ecrire(
       {
         notionPageId: page.id,
+        source: "atelier",
+        label: null,
+        action: null,
         scope,
         sector: secteur,
         clientId,
@@ -181,6 +184,10 @@ export async function syncLetters(
   // deux se traitent pareil — la lettre quitte l'espace, la ligne reste.
   for (const [notionPageId, etat] of etats) {
     if (etat.withdrawn || retenues.has(notionPageId)) continue;
+    // Les numéros Sentinelle ne viennent pas de Notion : leur retrait appartient
+    // à la synchro Sentinelle (`src/cto/sentinelle/`), qui seule sait s'ils ont
+    // quitté l'export.
+    if (etat.source === "sentinelle") continue;
     // Base des éditions illisible ce tour-ci : on ne sait pas si une lettre
     // personnalisée absente a été dépubliée ou simplement pas vue. Dans le
     // doute, on ne retire rien — un retrait à tort se voit chez le client, un
@@ -193,7 +200,7 @@ export async function syncLetters(
   return { report, warnings };
 }
 
-type Etat = { digest: string; withdrawn: boolean };
+type Etat = { digest: string; withdrawn: boolean; scope: LetterScope; source: string };
 
 async function ecrire(
   input: LetterInput,
@@ -283,6 +290,9 @@ async function syncEditions(
     await ecrire(
       {
         notionPageId: page.id,
+        source: "signaux-faibles",
+        label: p.select(page, PROPS.editions.veille),
+        action: p.text(page, PROPS.editions.action),
         scope: "personnalisee",
         sector: null,
         clientId,

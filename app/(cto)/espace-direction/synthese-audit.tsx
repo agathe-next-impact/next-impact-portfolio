@@ -1,6 +1,16 @@
 import type { Block } from "@cto/letters";
-import { lireSynthese, type Fiche, type Rubrique, type Severites } from "@cto/espace";
-import { GRAVITE_FOND, GRAVITE_TEXTE } from "./gravite";
+import {
+  lireEtiquettesPoint,
+  lireSeverites,
+  lireSynthese,
+  type Domaine,
+  type Fiche,
+  type Point,
+  type Rubrique,
+  type Severites,
+} from "@cto/espace";
+import { couperFin } from "./audit-formes";
+import { BadgeGravite, GRAVITE_FOND, GRAVITE_TEXTE } from "./gravite";
 import { CorpsLettre, Texte } from "./lettre";
 import { formatAmount, Label } from "./ui";
 
@@ -14,7 +24,8 @@ import { formatAmount, Label } from "./ui";
 //  1. les fiches de la mission (site, auteur, rendez-vous) en bandeau ;
 //  2. les constats par gravité, une case par gravité sur deux colonnes ;
 //  3. les rubriques l'une sous l'autre, pleine largeur, leurs puces en grille
-//     de trois colonnes, chacune avec son titre détaché ;
+//     de trois colonnes, chacune avec son titre détaché ; dans « Audit » et
+//     « Recommandations », chaque carte porte son domaine et sa gravité ;
 //  4. la roadmap en phases, pleine largeur, montant aligné à droite.
 //
 // Une synthèse qui ne suit pas cette forme retombe sur le rendu bloc par bloc.
@@ -93,8 +104,34 @@ function Gravites({ severites }: { severites: Severites }) {
   );
 }
 
+/** Les rubriques dont les cartes reçoivent domaine et gravité. */
+const RUBRIQUE_ETIQUETEE = /audit|constat|recommand|preconis/;
+
+function BadgeDomaine({ domaine }: { domaine: Domaine }) {
+  return (
+    <span className="inline-flex whitespace-nowrap border border-dark-gray bg-obsidian px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground">
+      <span className="sr-only">Domaine : </span>
+      {domaine}
+    </span>
+  );
+}
+
+/**
+ * Le domaine et la gravité d'une carte, avec son texte débarrassé de la
+ * mention explicite qui les a donnés. La ligne de décompte (« 25 constats :
+ * 2 critiques… ») n'en reçoit pas : elle est déjà la répartition.
+ */
+function etiqueter(point: Point) {
+  if (lireSeverites(point.brut)) return { domaine: null, gravite: null, texte: point.texte };
+  const { domaine, gravite, coupe } = lireEtiquettesPoint(point.brut);
+  return { domaine, gravite, texte: coupe > 0 ? couperFin(point.texte, coupe) : point.texte };
+}
+
 function CarteRubrique({ rubrique, base }: { rubrique: Rubrique; base: string }) {
   const nombre = rubrique.phases?.length ?? rubrique.points.length;
+  const etiquetee = RUBRIQUE_ETIQUETEE.test(
+    rubrique.titre.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(),
+  );
 
   return (
     <article className="flex flex-col border border-dark-gray bg-jet/40">
@@ -126,24 +163,35 @@ function CarteRubrique({ rubrique, base }: { rubrique: Rubrique; base: string })
         </ol>
       ) : (
         <ul className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-3">
-          {rubrique.points.map((point, index) => (
-            <li key={index} className="border border-dark-gray bg-obsidian px-5 py-4">
-              {point.titre ? (
-                <>
-                  <p className="font-inter-tight text-[15px] font-medium leading-snug text-foreground">{point.titre}</p>
-                  {point.texte.length > 0 ? (
-                    <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-mid-gray">
-                      <Texte spans={point.texte} />
-                    </p>
-                  ) : null}
-                </>
-              ) : (
-                <p className="font-inter-tight text-[15px] leading-relaxed text-foreground/90">
-                  <Texte spans={point.texte} />
-                </p>
-              )}
-            </li>
-          ))}
+          {rubrique.points.map((point, index) => {
+            const { domaine, gravite, texte } = etiquetee
+              ? etiqueter(point)
+              : { domaine: null, gravite: null, texte: point.texte };
+            return (
+              <li key={index} className="border border-dark-gray bg-obsidian px-5 py-4">
+                {domaine || gravite ? (
+                  <p className="mb-3 flex flex-wrap items-center gap-1.5">
+                    {domaine ? <BadgeDomaine domaine={domaine} /> : null}
+                    {gravite ? <BadgeGravite gravite={gravite} /> : null}
+                  </p>
+                ) : null}
+                {point.titre ? (
+                  <>
+                    <p className="font-inter-tight text-[15px] font-medium leading-snug text-foreground">{point.titre}</p>
+                    {texte.length > 0 ? (
+                      <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                        <Texte spans={texte} />
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="font-inter-tight text-[15px] leading-relaxed text-foreground/90">
+                    <Texte spans={texte} />
+                  </p>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 

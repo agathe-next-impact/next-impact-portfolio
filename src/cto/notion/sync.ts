@@ -35,6 +35,7 @@ import {
   clientStatus,
   clientTier,
   clientVeilleOrganisations,
+  clientSentinelleId,
   clientWpUmbrellaProjectId,
   companyName,
   documentFiles,
@@ -244,6 +245,12 @@ async function alignerFiche(
   const tier = clientTier(page);
   const wpUmbrellaProjectId = clientWpUmbrellaProjectId(page);
   const services = clientServices(page);
+  const sentinelle = clientSentinelleId(page);
+  if (sentinelle.invalid) {
+    warnings.push(
+      `« ${name} » : « ID Sentinelle » n'est pas un identifiant valide — veille technique non reliée.`,
+    );
+  }
   if (services.unknown.length > 0) {
     warnings.push(
       `« ${name} » : service(s) inconnu(s) ignoré(s) — ${services.unknown.join(", ")}. ` +
@@ -262,6 +269,7 @@ async function alignerFiche(
       tier: ctoClients.tier,
       wpUmbrellaProjectId: ctoClients.wpUmbrellaProjectId,
       services: ctoClients.services,
+      sentinelleClientId: ctoClients.sentinelleClientId,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -273,6 +281,7 @@ async function alignerFiche(
     tier?: string;
     wpUmbrellaProjectId?: number;
     services?: string[] | null;
+    sentinelleClientId?: string | null;
     statusChangedAt?: Date;
   } = {};
   if (status && status !== actuel.status) patch.status = status;
@@ -281,6 +290,11 @@ async function alignerFiche(
     patch.wpUmbrellaProjectId = wpUmbrellaProjectId;
   }
   if (!sameServices(servicesVoulus, actuel.services)) patch.services = servicesVoulus;
+  // Un identifiant mal formé ne délie pas un accompagnement déjà relié : on
+  // garde l'ancien plutôt que de couper la veille sur une faute de frappe.
+  if (!sentinelle.invalid && sentinelle.id !== actuel.sentinelleClientId) {
+    patch.sentinelleClientId = sentinelle.id;
+  }
   if (Object.keys(patch).length === 0) return;
 
   if (dryRun) {
@@ -290,6 +304,9 @@ async function alignerFiche(
       patch.wpUmbrellaProjectId ? `projet WP Umbrella → ${patch.wpUmbrellaProjectId}` : null,
       "services" in patch
         ? `services → ${patch.services ? patch.services.join(", ") : "affichage historique"}`
+        : null,
+      "sentinelleClientId" in patch
+        ? `veille technique → ${patch.sentinelleClientId ?? "déliée"}`
         : null,
     ].filter(Boolean);
     warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);

@@ -21,9 +21,15 @@ import type { Block } from "../notion/blocks";
 
 export type LetterScope = "generale" | "sectorielle" | "personnalisee";
 
+/** D'où vient une lettre (voir `ctoLetterSourceEnum`). */
+export type LetterSource = "atelier" | "signaux-faibles" | "sentinelle";
+
 /** Une lettre en liste : tout sauf le corps, qui pèse et ne sert qu'à la lecture. */
 export interface LetterSummary {
   notionPageId: string;
+  source: LetterSource;
+  /** Nom de la veille pour une édition Signaux Faibles. */
+  label: string | null;
   scope: LetterScope;
   sector: string | null;
   title: string;
@@ -38,6 +44,9 @@ export interface Letter extends LetterSummary {
 
 export interface LetterInput {
   notionPageId: string;
+  source: LetterSource;
+  label: string | null;
+  action: string | null;
   scope: LetterScope;
   sector: string | null;
   clientId: string | null;
@@ -58,18 +67,39 @@ export interface LetterInput {
 export const ARCHIVE_MONTHS = 6;
 
 export function digestOfLetter(input: {
+  source?: LetterSource;
+  label?: string | null;
+  action?: string | null;
   title: string;
   chapo: string | null;
   body: Block[];
 }): string {
+  // La source, le libellé et l'action entrent dans l'empreinte : sans eux, une
+  // édition déjà connue ne serait jamais réécrite avec sa source réelle.
   return createHash("sha256")
-    .update(JSON.stringify({ title: input.title, chapo: input.chapo, body: input.body }))
+    .update(
+      JSON.stringify({
+        source: input.source ?? "atelier",
+        label: input.label ?? null,
+        action: input.action ?? null,
+        title: input.title,
+        chapo: input.chapo,
+        body: input.body,
+      }),
+    )
     .digest("hex");
 }
 
 /** L'état de chaque lettre déjà connue. Sert à ne réécrire que ce qui a bougé. */
 export async function currentLetters(): Promise<
-  { notionPageId: string; digest: string; withdrawn: boolean; scope: LetterScope }[]
+  {
+    notionPageId: string;
+    digest: string;
+    withdrawn: boolean;
+    scope: LetterScope;
+    source: LetterSource;
+    clientId: string | null;
+  }[]
 > {
   const rows = await db()
     .select({
@@ -77,6 +107,8 @@ export async function currentLetters(): Promise<
       digest: ctoLetters.digest,
       withdrawnAt: ctoLetters.withdrawnAt,
       scope: ctoLetters.scope,
+      source: ctoLetters.source,
+      clientId: ctoLetters.clientId,
     })
     .from(ctoLetters);
 
@@ -85,6 +117,8 @@ export async function currentLetters(): Promise<
     digest: row.digest,
     withdrawn: row.withdrawnAt !== null,
     scope: row.scope,
+    source: row.source,
+    clientId: row.clientId,
   }));
 }
 
@@ -102,6 +136,9 @@ export async function upsertLetter(input: LetterInput): Promise<void> {
     .insert(ctoLetters)
     .values({
       notionPageId: input.notionPageId,
+      source: input.source,
+      label: input.label,
+      action: input.action,
       scope: input.scope,
       sector: input.sector,
       clientId: input.clientId,
@@ -115,6 +152,9 @@ export async function upsertLetter(input: LetterInput): Promise<void> {
     .onConflictDoUpdate({
       target: ctoLetters.notionPageId,
       set: {
+        source: input.source,
+        label: input.label,
+        action: input.action,
         scope: input.scope,
         sector: input.sector,
         clientId: input.clientId,
@@ -173,6 +213,8 @@ export async function lettersForClient(
   const rows = await db()
     .select({
       notionPageId: ctoLetters.notionPageId,
+      source: ctoLetters.source,
+      label: ctoLetters.label,
       scope: ctoLetters.scope,
       sector: ctoLetters.sector,
       title: ctoLetters.title,
@@ -208,6 +250,8 @@ export async function letterForClient(
   const [row] = await db()
     .select({
       notionPageId: ctoLetters.notionPageId,
+      source: ctoLetters.source,
+      label: ctoLetters.label,
       scope: ctoLetters.scope,
       sector: ctoLetters.sector,
       title: ctoLetters.title,

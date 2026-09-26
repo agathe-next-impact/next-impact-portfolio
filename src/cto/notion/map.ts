@@ -42,6 +42,8 @@ export const PROPS = {
     services: "Services",
     /** Relation vers la ligne du pipeline « Veilles clients » (Organisations). */
     veilleOrganisation: "Veille — organisation",
+    /** UUID du client chez Sentinelle : la jointure avec la veille technique. */
+    sentinelleClientId: "ID Sentinelle",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -159,6 +161,8 @@ export const PROPS = {
     veille: "Veille",
     number: "Numéro",
     period: "Période couverte",
+    /** Reprise telle quelle par le digest hebdomadaire. */
+    action: "Action de la semaine",
   },
   persons: {
     name: "Nom",
@@ -377,6 +381,19 @@ function labelled(label: string, value: string | null): string | null {
 /** L'identifiant du site chez WP Umbrella, s'il est renseigné. */
 export function clientWpUmbrellaProjectId(page: NotionPage): number | null {
   return p.number(page, PROPS.clients.wpUmbrellaProjectId);
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * L'identifiant Sentinelle saisi sur la fiche, ou null s'il est vide ou mal
+ * formé. Un UUID tronqué au copier-coller ne doit pas devenir une requête vers
+ * l'export d'un autre client : il est écarté, et la synchro le signale.
+ */
+export function clientSentinelleId(page: NotionPage): { id: string | null; invalid: boolean } {
+  const value = p.text(page, PROPS.clients.sentinelleClientId)?.trim() ?? "";
+  if (!value) return { id: null, invalid: false };
+  return UUID.test(value) ? { id: value.toLowerCase(), invalid: false } : { id: null, invalid: true };
 }
 
 export function personName(page: NotionPage): string | null {

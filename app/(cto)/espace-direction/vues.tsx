@@ -15,8 +15,10 @@ import {
   type Action,
 } from "@cto/espace";
 import { ARCHIVE_MONTHS, letterForClient, lettersForClient } from "@cto/letters";
+import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
+import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
 import { CorpsLettre, DerniereLettre, formatPeriode, grandsTitres, lettresPath, ListeLettres } from "./lettre";
 import {
@@ -1076,10 +1078,25 @@ export async function VueDocuments({ viewer, context }: { viewer: Viewer; contex
   );
 }
 
-export async function VueVeille({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const lettres = await lettersForClient(viewer.clientId);
+export async function VueVeille({
+  viewer,
+  context,
+  semaine,
+}: {
+  viewer: Viewer;
+  context: EspaceContext;
+  /** Semaine du digest à afficher (`2026-W39`) ; la plus récente par défaut. */
+  semaine?: string;
+}) {
+  const [lettres, digests] = await Promise.all([
+    lettersForClient(viewer.clientId),
+    digestsForClient(viewer.clientId),
+  ]);
   const since = context.since;
   const nouvelles = sortRecentFirst(context.items.filter((item) => item.kind === "veille"));
+  // Une semaine inconnue (lien ancien, faute de frappe) retombe sur la plus
+  // récente plutôt que sur une page vide.
+  const digest = digests.find((d) => d.week === semaine) ?? digests[0] ?? null;
 
   return (
     <Espace
@@ -1093,6 +1110,14 @@ export async function VueVeille({ viewer, context }: { viewer: Viewer; context: 
         </p>
       }
     >
+      {digest ? (
+        <DigestSemaine
+          content={digest.content}
+          semaines={digests.map((d) => d.week)}
+          base={viewer.base}
+        />
+      ) : null}
+
       {nouvelles.length > 0 ? (
         <Veille items={nouvelles.slice(0, 6)} total={nouvelles.length} since={since} base={viewer.base} />
       ) : null}

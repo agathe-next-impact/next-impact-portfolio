@@ -48,10 +48,13 @@ export const dynamic = "force-dynamic";
  */
 export default async function EspaceAdminPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string; chemin?: string[] }>;
+  searchParams: Promise<{ semaine?: string }>;
 }) {
   const { id, chemin = [] } = await params;
+  const { semaine } = await searchParams;
   const viewer = await viewerForClient(id);
   if (!viewer) notFound();
 
@@ -83,7 +86,7 @@ export default async function EspaceAdminPage({
       case "propositions":
         return <VuePropositions viewer={viewer} context={context} />;
       case "veille":
-        return <VueVeille viewer={viewer} context={context} />;
+        return <VueVeille viewer={viewer} context={context} semaine={semaine} />;
       case "documents":
         return <VueDocuments viewer={viewer} context={context} />;
       case "lettres":

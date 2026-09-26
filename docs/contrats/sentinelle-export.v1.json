@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-28T05:00:00.000Z",
+  "client": { "id": "0b9c6f0e-2b1a-4c3d-9e8f-1a2b3c4d5e6f", "siteUrl": "https://exemple.fr" },
+  "axes": [
+    "Socle technique et architecture",
+    "Sécurité et maintenance",
+    "Hébergement, infrastructure et souveraineté",
+    "Visibilité, recherche et acquisition",
+    "IA intégrée au projet",
+    "Réglementaire et conformité",
+    "Données, mesure et consentement",
+    "Expérience, performance et accessibilité",
+    "Contenu, éditorial et confiance",
+    "Coûts, prestataires et marché",
+    "Dépendance fournisseur et réversibilité",
+    "Gouvernance du projet et contractuel"
+  ],
+  "stack": {
+    "components": [
+      { "label": "WordPress", "slug": "wordpress", "type": "cms", "version": "6.6.2", "openAlerts": 1 },
+      { "label": "PHP", "slug": "php", "type": "runtime", "version": "8.1", "openAlerts": 0 }
+    ],
+    "withoutVersion": 0
+  },
+  "alerts": [
+    {
+      "id": "5f1d2c3b-4a5e-4f60-8a7b-9c0d1e2f3a4b",
+      "ref": "wpscan:CVE-2026-1234",
+      "title": "Faille corrigée dans WordPress 6.6.3",
+      "verdict": "red",
+      "status": "sent",
+      "component": "WordPress",
+      "recommendedAction": "Appliquer la mise à jour 6.6.3.",
+      "at": "2026-09-23T08:00:00.000Z"
+    }
+  ],
+  "radar": [
+    { "label": "PHP", "version": "8.1", "title": "Fin de support de PHP 8.1", "endsOn": "2026-12-31", "daysLeft": 94 }
+  ],
+  "letters": [
+    {
+      "id": "7a8b9c0d-1e2f-4a3b-8c4d-5e6f7a8b9c0d",
+      "period": "2026-09-2",
+      "issueDate": "2026-09-15T05:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-09-15T07:00:00.000Z",
+      "title": "Septembre 2026, seconde quinzaine",
+      "chapeau": "Deux mouvements dominent la quinzaine.",
+      "axesAAgir": 2,
+      "actions": [{ "action": "Planifier la montée de PHP 8.1 vers 8.3.", "horizon": "ce trimestre" }],
+      "blocks": [
+        { "k": "p", "s": [{ "t": "Deux mouvements dominent la quinzaine." }] },
+        { "k": "h2", "s": [{ "t": "Ce qui compte ce mois-ci" }] },
+        { "k": "li", "s": [{ "t": "Planifier la montée de PHP.", "b": true }, { "t": " · ce trimestre." }] },
+        { "k": "hr" }
+      ]
+    }
+  ]
+}

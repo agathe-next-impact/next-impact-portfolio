@@ -16,6 +16,7 @@ export {
   type Letter,
   type LetterInput,
   type LetterScope,
+  type LetterSource,
   type LetterSummary,
 } from "./store";
 
