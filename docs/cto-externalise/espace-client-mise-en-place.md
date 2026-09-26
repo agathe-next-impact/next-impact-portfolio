@@ -124,6 +124,8 @@ Vercel → Settings → Environment Variables, **portée `Production` uniquement
 | `CRON_SECRET` | un secret au hasard | arme le balayage quotidien (§ 4) |
 | `CTO_NOTION_*` | neuf obligatoires (le jeton et huit bases) + deux facultatives (`…_PRESTATIONS`, `…_EDITIONS`) | synchro des accompagnements, des personnes et des livrables (`notion-livrables.md`) |
 | `WP_UMBRELLA_TOKEN` | jeton d'**API publique** WP Umbrella | suivi technique (§ 6). Facultatif : absent, la section affiche « en préparation » |
+| `SENTINELLE_EXPORT_SECRET` | un secret au hasard, **le même** côté Sentinelle et côté espace | ouvre l'export en lecture seule `/api/sentinelle/export/<id>`. Absent : la route répond 503 et la veille technique n'est pas balayée |
+| `SENTINELLE_EXPORT_URL` | `https://next-impact.digital` | racine du site qui sert l'export. Facultatif avec la précédente : les deux posées, ou ni l'une ni l'autre |
 
 `/admin-cto` n'a pas de variable à lui : voir § 5.
 
@@ -402,6 +404,7 @@ Vercel → Observability → Crons montre le corps de la réponse. Trois cas :
 | 200, `synchro` chiffrée | Tout a tourné. |
 | 200, `synchro: { ignoree }` | Les variables Notion ne sont pas posées sur Vercel. La purge, elle, a bien eu lieu. |
 | 200, `suivi: { ignoree }` | `WP_UMBRELLA_TOKEN` n'est pas posée. Le reste a tourné. |
+| 200, `veilleTechnique: { ignoree }` | `SENTINELLE_EXPORT_URL` ou `SENTINELLE_EXPORT_SECRET` n'est pas posée : pas de veille technique, le digest ne porte que Signaux Faibles. |
 | 500 | Une des purges (`purge`, `purgeAdmin`), la synchro ou le suivi a échoué ; le corps dit lequel et pourquoi. |
 
 Le cas « ignorée » rend 200 délibérément : un Cron rouge tous les jours pour une
