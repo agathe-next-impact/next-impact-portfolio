@@ -15,7 +15,7 @@ export function ArticleSequentialNav({ prev, next }: ArticleSequentialNavProps) 
   const cardClass =
     "group flex flex-col gap-1.5 border-b border-r border-dark-gray bg-transparent p-4 px-5 no-underline transition-colors hover:bg-jet/40";
   const labelClass =
-    "flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-mid-gray";
+    "flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.06em] text-mid-gray";
   const titleClass =
     "text-sm font-light leading-tight tracking-tight text-foreground transition-colors group-hover:text-accent-secondary";
 

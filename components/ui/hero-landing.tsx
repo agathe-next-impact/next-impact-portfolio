@@ -33,7 +33,7 @@ export default function HeroLanding({
             <div
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: 9,
+                fontSize: 11,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 border: "1px solid var(--rule)",

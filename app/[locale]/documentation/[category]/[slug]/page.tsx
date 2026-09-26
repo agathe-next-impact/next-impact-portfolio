@@ -246,7 +246,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
               <div className="mb-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/documentation"
-                  className="inline-flex items-center gap-1.5 text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
+                  className="inline-flex items-center gap-1.5 text-sm text-mid-gray no-underline transition-colors hover:text-accent-secondary"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   {t("breadcrumbDocs")}
@@ -254,7 +254,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
                 <span className="text-dark-gray" aria-hidden>·</span>
                 <Link
                   href={`/documentation/${article.category}` as never}
-                  className="text-[0.8125rem] text-mid-gray no-underline transition-colors hover:text-accent-secondary"
+                  className="text-sm text-mid-gray no-underline transition-colors hover:text-accent-secondary"
                 >
                   {categoryLabel}
                 </Link>
@@ -265,7 +265,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
             <div className="mb-10 border-t-2 border-foreground pt-10">
               {/* Meta row */}
               <div className="mb-4 flex flex-wrap items-center gap-4">
-                <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                <span className="border border-dark-gray px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                   {rubrique ? rx(rubrique.label, params.locale) : categoryLabel}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-mid-gray">
@@ -295,7 +295,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
                     {article.author || "Next Impact"}
                   </span>
                   <span className="text-dark-gray" aria-hidden>·</span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                  <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                     {typeof article.date === "string" ? article.date : tArticle.recently}
                   </span>
                   {/* Date de mise à jour — mois + année sur le gabarit, toujours
@@ -303,7 +303,7 @@ export default async function ArticlePage(props: ArticlePageProps) {
                   {(isGeoReady ? updatedMonthYear : article.updated) && (
                     <>
                       <span className="text-dark-gray" aria-hidden>·</span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                      <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                         {tArticle.updated} {isGeoReady ? updatedMonthYear : article.updated}
                       </span>
                     </>

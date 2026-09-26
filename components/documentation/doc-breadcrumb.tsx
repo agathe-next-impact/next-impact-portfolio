@@ -34,7 +34,7 @@ export function DocBreadcrumb({
 }) {
   return (
     <nav aria-label="Fil d'Ariane" className={className}>
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 p-0 text-[0.8125rem] text-mid-gray">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 p-0 text-sm text-mid-gray">
         {items.map((item, i) => {
           const isLast = i === items.length - 1;
           return (

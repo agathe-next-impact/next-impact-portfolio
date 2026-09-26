@@ -63,7 +63,7 @@ export function TarifsLanding({
               <div
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 9,
+                  fontSize: 11,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   color: "var(--ink-2)",

@@ -53,7 +53,7 @@ export function ApplicationsTabs({ applications }: ApplicationsTabsProps) {
               whiteSpace: "nowrap",
             }}
           >
-            <span style={{ color: active === app.key ? "var(--accent-color)" : "var(--muted-color)", fontSize: 10 }}>
+            <span style={{ color: active === app.key ? "var(--accent-color)" : "var(--muted-color)", fontSize: 11 }}>
               0{i + 1}
             </span>
             {app.title}
@@ -93,7 +93,7 @@ export function ApplicationsTabs({ applications }: ApplicationsTabsProps) {
                   key={ex}
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 10,
+                    fontSize: 11,
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     border: "1px solid var(--rule-strong)",

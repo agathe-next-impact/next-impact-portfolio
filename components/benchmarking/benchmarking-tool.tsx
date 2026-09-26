@@ -357,7 +357,7 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
           <span
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               color: "var(--ink-2)",
               width: 96,
               flexShrink: 0,
@@ -401,7 +401,7 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
             <span
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: 10,
+                fontSize: 11,
                 color: "var(--muted-color)",
                 width: 96,
                 flexShrink: 0,
@@ -449,7 +449,7 @@ function MetricBar({ gap }: { gap: BenchmarkGap }) {
           <span
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               color: "var(--muted-color)",
               width: 96,
               flexShrink: 0,
@@ -709,7 +709,7 @@ export default function BenchmarkingTool() {
             <span
               style={{
                 fontFamily: "var(--sans)",
-                fontSize: 10,
+                fontSize: 11,
                 color: "var(--muted-color)",
                 marginLeft: 4,
               }}
@@ -852,7 +852,7 @@ export default function BenchmarkingTool() {
                           alignItems: "center",
                           justifyContent: "center",
                           fontFamily: "var(--mono)",
-                          fontSize: 9,
+                          fontSize: 11,
                           fontWeight: 700,
                           color: "var(--paper)",
                           flexShrink: 0,
@@ -1183,7 +1183,7 @@ export default function BenchmarkingTool() {
                         alignItems: "center",
                         gap: 6,
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         color: "var(--muted-color)",
@@ -1274,7 +1274,7 @@ export default function BenchmarkingTool() {
                         alignItems: "center",
                         gap: 6,
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         color: "var(--muted-color)",
                         border: "1px solid var(--rule)",
                         padding: "3px 8px",
@@ -1311,7 +1311,7 @@ export default function BenchmarkingTool() {
                           <span
                             style={{
                               fontFamily: "var(--mono)",
-                              fontSize: 10,
+                              fontSize: 11,
                               color: "var(--muted-color)",
                               display: "block",
                               marginBottom: 6,
@@ -1333,7 +1333,7 @@ export default function BenchmarkingTool() {
                           <span
                             style={{
                               fontFamily: "var(--sans)",
-                              fontSize: 10,
+                              fontSize: 11,
                               color: STATUS_CSS_COLORS[status],
                             }}
                           >
@@ -1424,7 +1424,7 @@ export default function BenchmarkingTool() {
                             alignItems: "center",
                             gap: 6,
                             fontFamily: "var(--mono)",
-                            fontSize: 10,
+                            fontSize: 11,
                             letterSpacing: "0.1em",
                             textTransform: "uppercase",
                             color: "var(--muted-color)",
@@ -1561,7 +1561,7 @@ export default function BenchmarkingTool() {
                         alignItems: "center",
                         gap: 6,
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         color: "var(--muted-color)",
                         border: "1px solid var(--rule)",
                         padding: "3px 8px",

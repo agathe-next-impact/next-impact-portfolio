@@ -30,12 +30,12 @@ export function ArticleCta({
       </p>
       <Link
         href={cta.href as Parameters<typeof Link>[0]["href"]}
-        className="inline-flex min-h-11 items-center gap-2 py-2.5 rounded-sm bg-accent-secondary px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+        className="inline-flex min-h-11 items-center gap-2 py-2.5 rounded-sm bg-accent-secondary px-5 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
       >
         {rx(cta.label, locale)}
         <ArrowRight className="h-4 w-4" aria-hidden />
       </Link>
-      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+      <p className="mt-3 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
         {rx(cta.note, locale)}
       </p>
       {cta.secondary && (

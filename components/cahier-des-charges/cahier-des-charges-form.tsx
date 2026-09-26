@@ -24,10 +24,10 @@ type FormField = {
 };
 
 const fieldClass =
-  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
 const labelClass =
-  "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+  "block mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 // Collapsible section component
 function CollapsibleSection({
@@ -49,7 +49,7 @@ function CollapsibleSection({
         aria-expanded={open}
         className="flex w-full items-center justify-between border-b border-dark-gray py-4 text-left transition-colors hover:border-accent-secondary/50"
       >
-        <span className="text-[15px] font-medium tracking-tight text-foreground">
+        <span className="text-base font-medium tracking-tight text-foreground">
           {title}
         </span>
         <span className="select-none font-mono text-lg leading-none text-mid-gray">
@@ -123,7 +123,7 @@ export function CahierDesChargesForm() {
             onClick={() => handleTabChange("form")}
             aria-pressed={activeTab === "form"}
             className={cn(
-              "border border-dark-gray px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors",
+              "border border-dark-gray px-6 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] transition-colors",
               activeTab === "form"
                 ? "bg-accent-secondary text-obsidian"
                 : "bg-jet text-mid-gray hover:text-foreground"
@@ -136,7 +136,7 @@ export function CahierDesChargesForm() {
             onClick={() => handleTabChange("preview")}
             aria-pressed={activeTab === "preview"}
             className={cn(
-              "border border-l-0 border-dark-gray px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors",
+              "border border-l-0 border-dark-gray px-6 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] transition-colors",
               activeTab === "preview"
                 ? "bg-accent-secondary text-obsidian"
                 : "bg-jet text-mid-gray hover:text-foreground"
@@ -152,7 +152,7 @@ export function CahierDesChargesForm() {
         <Reveal>
           {/* Progress indicator */}
           <div className="mb-6 flex items-center justify-between border border-dark-gray bg-jet px-4 py-3">
-            <p className="font-inter-tight text-[13px] text-mid-gray">
+            <p className="font-inter-tight text-base text-mid-gray">
               <span className="font-semibold text-accent-secondary">
                 {filledCount}
               </span>{" "}
@@ -163,7 +163,7 @@ export function CahierDesChargesForm() {
             <button
               type="button"
               onClick={() => handleTabChange("preview")}
-              className="font-inter-tight text-[13px] text-accent-secondary transition-opacity hover:opacity-75"
+              className="font-inter-tight text-sm text-accent-secondary transition-opacity hover:opacity-75"
             >
               {isEn ? "View preview" : "Voir l'aperçu"}
             </button>
@@ -174,7 +174,7 @@ export function CahierDesChargesForm() {
               <h2 className="mb-1 text-2xl font-light tracking-tight text-foreground">
                 {isEn ? "Your project" : "Votre projet"}
               </h2>
-              <p className="mb-6 font-inter-tight text-[13px] text-mid-gray">
+              <p className="mb-6 font-inter-tight text-base text-mid-gray">
                 {isEn
                   ? "Fill out the sections below to generate your specifications document"
                   : "Remplissez les sections ci-dessous pour générer votre cahier des charges"}
@@ -212,7 +212,7 @@ export function CahierDesChargesForm() {
                                         : "border-dark-gray bg-obsidian hover:border-mid-gray/60"
                                     )}
                                   >
-                                    <p className="mb-1 text-[13px] font-medium text-foreground">
+                                    <p className="mb-1 text-sm font-medium text-foreground">
                                       {option.label}
                                     </p>
                                     {option.description && (
@@ -258,7 +258,7 @@ export function CahierDesChargesForm() {
                                       }
                                       className="size-3.5 shrink-0 accent-accent-secondary"
                                     />
-                                    <span className="font-inter-tight text-[13px] leading-snug text-foreground">
+                                    <span className="font-inter-tight text-sm leading-snug text-foreground">
                                       {option.label}
                                     </span>
                                   </label>
@@ -285,7 +285,7 @@ export function CahierDesChargesForm() {
                               }
                               className="size-3.5 shrink-0 accent-accent-secondary"
                             />
-                            <span className="font-inter-tight text-[13px] leading-snug text-foreground">
+                            <span className="font-inter-tight text-sm leading-snug text-foreground">
                               {field.label}
                             </span>
                           </label>
@@ -330,7 +330,7 @@ export function CahierDesChargesForm() {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="border border-accent-secondary bg-accent-secondary px-8 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+                  className="border border-accent-secondary bg-accent-secondary px-8 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
                 >
                   {isEn ? "Preview the document" : "Voir l'aperçu du document"}
                 </button>
@@ -349,7 +349,7 @@ export function CahierDesChargesForm() {
             <button
               type="button"
               onClick={() => handleTabChange("form")}
-              className="border border-dark-gray bg-jet px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
+              className="border border-dark-gray bg-jet px-6 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
             >
               {isEn ? "Back to form" : "Retour au formulaire"}
             </button>

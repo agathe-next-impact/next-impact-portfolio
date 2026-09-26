@@ -88,7 +88,7 @@ export default function Header() {
             href="/"
             className="flex shrink-0 items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-foreground no-underline"
           >
-            <span className="text-[10px] text-vermilion">◼</span>
+            <span className="text-2xs text-vermilion">◼</span>
             NEXT IMPACT
           </Link>
 
@@ -150,7 +150,7 @@ export default function Header() {
               className="overflow-hidden whitespace-nowrap transition-all duration-200"
               style={{ maxWidth: profileId ? 160 : 0, opacity: profileId ? 1 : 0 }}
             >
-              <span className="inline-flex items-center gap-2 border-l-2 border-vermilion pl-2 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              <span className="inline-flex items-center gap-2 border-l-2 border-vermilion pl-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                 {profileId && PROFILES[profileId].label}
                 <button
                   type="button"
@@ -171,7 +171,7 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={closeMenu}
-              className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+              className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("visioConseil")}
             </a>
@@ -207,8 +207,8 @@ export default function Header() {
           />
           <div className="fixed bottom-0 left-0 top-0 z-[49] flex w-[min(340px,88vw)] flex-col border-r border-dark-gray bg-obsidian">
             <div className="flex h-16 items-center justify-between border-b border-dark-gray px-5">
-              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground">
-                <span className="text-[9px] text-vermilion">◼</span>
+              <span className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.12em] text-foreground">
+                <span className="text-2xs text-vermilion">◼</span>
                 NEXT IMPACT
               </span>
               <button
@@ -231,7 +231,7 @@ export default function Header() {
                       <Link
                         href={section.href as NavHref}
                         onClick={() => setMobileOpen(false)}
-                        className="flex-1 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                        className="flex-1 px-5 py-4 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
                       >
                         {t(key as Parameters<typeof t>[0])}
                       </Link>
@@ -265,7 +265,7 @@ export default function Header() {
                               >
                                 {item.label[locale]}
                                 {item.badge && (
-                                  <span className="ml-1 font-mono text-[9px] uppercase tracking-[0.1em] text-accent-secondary">
+                                  <span className="ml-1 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                                     · {item.badge[locale]}
                                   </span>
                                 )}
@@ -282,7 +282,7 @@ export default function Header() {
                               >
                                 {item.label[locale]}
                                 {item.badge && (
-                                  <span className="ml-1 font-mono text-[9px] uppercase tracking-[0.1em] text-accent-secondary">
+                                  <span className="ml-1 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                                     · {item.badge[locale]}
                                   </span>
                                 )}
@@ -301,7 +301,7 @@ export default function Header() {
                   key={item.key}
                   href={item.href as NavHref}
                   onClick={() => setMobileOpen(false)}
-                  className="block border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                  className="block border-b border-dark-gray px-5 py-4 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
                 >
                   {t(item.key as Parameters<typeof t>[0])}
                 </Link>
@@ -312,7 +312,7 @@ export default function Header() {
                   key={item.key}
                   href={item.href as NavHref}
                   onClick={() => setMobileOpen(false)}
-                  className="block border-b border-dark-gray px-5 py-4 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+                  className="block border-b border-dark-gray px-5 py-4 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
                 >
                   {t(item.key as Parameters<typeof t>[0])}
                 </Link>
@@ -325,7 +325,7 @@ export default function Header() {
                     clearProfile();
                     setMobileOpen(false);
                   }}
-                  className="flex w-full items-center justify-between border-b border-l-2 border-dark-gray border-l-vermilion px-5 py-3 text-left font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-foreground"
+                  className="flex w-full items-center justify-between border-b border-l-2 border-dark-gray border-l-vermilion px-5 py-3 text-left font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-foreground"
                 >
                   <span>{PROFILES[profileId].label}</span>
                   <CloseIcon size={10} strokeWidth={2} />
@@ -339,7 +339,7 @@ export default function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex min-h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+                  className="inline-flex min-h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 py-2.5 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
                 >
                   {t("visioConseil")}
                 </a>

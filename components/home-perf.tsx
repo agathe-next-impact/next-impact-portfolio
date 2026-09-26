@@ -10,7 +10,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 type VitalKey = "lcp" | "cls" | "ttfb";
 
@@ -198,10 +198,10 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
               className="border-b border-dark-gray px-6 py-8 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 lg:px-8"
             >
               <div className="flex items-baseline justify-between">
-                <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                   {m.label}
                 </span>
-                <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <span className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {m.threshold}
                 </span>
               </div>
@@ -211,10 +211,10 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
               >
                 {v !== null ? m.format(v) : <span className="text-mid-gray">…</span>}
               </div>
-              <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+              <div className="mt-2 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {m.caption}
               </div>
-              <div className="mt-4 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.1em]">
+              <div className="mt-4 flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.1em]">
                 {good === null ? (
                   <span className="text-mid-gray">
                     {isEn ? "Measuring…" : "Mesure en cours…"}
@@ -249,7 +249,7 @@ export default function HomePerf({ index = "№ 08" }: { index?: string }) {
 
       {/* Pied — note de mesure + CTA froid + vérification PSI */}
       <Reveal className="flex flex-col gap-6 px-6 py-8 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
           {allGood
             ? isEn
               ? "All green — this page already meets Google's recommended thresholds for a fast, well-ranked site."

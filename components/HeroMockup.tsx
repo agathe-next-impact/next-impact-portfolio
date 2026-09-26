@@ -106,7 +106,7 @@ function MockupPlaceholder() {
 
         {/* Titre */}
         <div className="mb-3.5" style={fade(phase >= 2)}>
-          <div className="mb-2.5 text-[20px] leading-[1.15] text-foreground">
+          <div className="mb-2.5 text-xl leading-[1.15] text-foreground">
             Sites WordPress<br />
             <span className="text-accent-secondary">ultra rapides.</span>
           </div>

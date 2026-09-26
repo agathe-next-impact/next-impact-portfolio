@@ -366,7 +366,7 @@ function ScoreGauge({ score }: { score: number }) {
         </div>
       </motion.div>
 
-      <div className="flex justify-between mt-3 text-[11px] font-googletexte text-white/50">
+      <div className="flex justify-between mt-3 text-2xs font-googletexte text-white/50">
         <span>WP traditionnel</span>
         <span>Zone mixte</span>
         <span>Headless</span>

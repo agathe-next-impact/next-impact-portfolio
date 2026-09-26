@@ -16,7 +16,7 @@ export default function TableOfContentsPopup({
 
   return (
     <nav className="w-full border-t border-dark-gray pt-4">
-      <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+      <p className="mb-3 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
         Sommaire
       </p>
       <ul className="m-0 list-none p-0">
@@ -32,7 +32,7 @@ export default function TableOfContentsPopup({
                   "block border-l-2 py-1.5 leading-tight no-underline transition-colors duration-150",
                   item.level === 3
                     ? "pl-4 text-xs"
-                    : "pl-2 text-[0.8125rem]",
+                    : "pl-2 text-sm",
                   isActive
                     ? "border-accent-secondary text-accent-secondary"
                     : "border-transparent text-mid-gray hover:text-foreground",

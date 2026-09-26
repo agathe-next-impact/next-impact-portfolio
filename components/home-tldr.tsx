@@ -17,14 +17,14 @@ export default function HomeTldr() {
   return (
     <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
       <Reveal className="home-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
-        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+        <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
           {tldr.label}
         </p>
         <ul className="flex flex-col gap-2">
           {tldr.lines.map((line) => (
             <li
               key={line}
-              className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+              className="font-inter-tight text-base leading-relaxed text-mid-gray"
             >
               {line}
             </li>

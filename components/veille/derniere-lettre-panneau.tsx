@@ -68,7 +68,7 @@ export function DerniereLettrePanneau({
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-1 flex-col justify-center gap-2.5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+          <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
             {isEn ? "Latest issue" : "Dernier numéro"}
             <span className="text-foreground/70">
               {" · "}
@@ -77,7 +77,7 @@ export function DerniereLettrePanneau({
           </p>
 
           {lettre.etiquette && (
-            <span className="inline-block self-start border border-dark-gray px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+            <span className="inline-block self-start border border-dark-gray px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
               {lettre.etiquette}
             </span>
           )}
@@ -87,7 +87,7 @@ export function DerniereLettrePanneau({
           </p>
 
           {lettre.sousTitre && (
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {lettre.sousTitre}
             </p>
           )}
@@ -95,7 +95,7 @@ export function DerniereLettrePanneau({
 
         <span
           aria-hidden
-          className="mt-4 inline-flex items-center gap-1.5 border-t border-dark-gray pt-3 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary"
+          className="mt-4 inline-flex items-center gap-1.5 border-t border-dark-gray pt-3 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary"
         >
           {isEn ? "Subscribe — free" : "S'abonner — gratuit"}
           <span className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">

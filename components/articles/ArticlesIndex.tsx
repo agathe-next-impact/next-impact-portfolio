@@ -71,7 +71,7 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
               onClick={() => setActiveCategory(cat.value)}
               aria-pressed={isActive}
               className={cn(
-                "border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.1em] transition-colors",
+                "border px-3 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] transition-colors",
                 isActive
                   ? "border-accent-secondary/60 bg-accent-secondary/10 text-accent-secondary"
                   : "border-dark-gray text-mid-gray hover:border-mid-gray hover:text-foreground",
@@ -94,7 +94,7 @@ export function ArticlesIndex({ articles }: ArticlesIndexProps) {
         </Stagger>
       ) : (
         <div className="border-b border-dark-gray px-6 py-16 text-center lg:px-8">
-          <p className="font-inter-tight text-sm text-mid-gray">
+          <p className="font-inter-tight text-base text-mid-gray">
             {isEn
               ? "No article in this category yet."
               : "Aucun article dans cette catégorie pour le moment."}

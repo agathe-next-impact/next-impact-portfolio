@@ -12,7 +12,7 @@ const FIGARO_URL =
   "https://www.lefigaro.fr/economie/wordpress-headless-comment-les-pme-peuvent-moderniser-leur-site-sans-tout-reconstruire-avec-next-impact-digital-20260512";
 
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 /**
  * HomeStudio — présence humaine + conviction : la section « à propos » de la home,
@@ -41,7 +41,7 @@ export default function HomeStudio() {
   return (
     <BlueprintSection tone="jet" innerClassName="px-6 py-16 lg:px-10 lg:py-24">
       {/* En-tête de section */}
-      <Reveal className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+      <Reveal className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
         <span>№ 05</span>
         <span className="h-px w-6 bg-accent-secondary/50" />
         <span className="text-mid-gray">{isEn ? "The studio" : "Le studio"}</span>
@@ -61,10 +61,10 @@ export default function HomeStudio() {
             />
           </div>
           <div className="mt-3 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-foreground">
+            <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
               Agathe Karinthi-Martin
             </span>
-            <span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+            <span className="flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
               <span className="status-dot" />
               {isEn ? "Remote · France" : "Remote · France"}
             </span>
@@ -87,7 +87,7 @@ export default function HomeStudio() {
             )}
           </h2>
 
-          <p className="mt-5 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
+          <p className="mt-5 max-w-xl font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
             {isEn
               ? "A solo studio is a guarantee, not a limitation: one person scopes the work, arbitrates the architecture, settles the choices that commit you for years, then validates what holds up in production. One point of contact, one responsibility, from quote to delivery."
               : "Un studio solo est une garantie, pas une limite : une seule personne cadre, arbitre l'architecture, tranche les choix qui engagent des années, puis valide ce qui tient en production. Une interlocutrice, une responsabilité, du devis à la mise en ligne."}
@@ -97,10 +97,10 @@ export default function HomeStudio() {
           <dl className="mt-8 flex flex-col gap-5 border-t border-dark-gray pt-8">
             {bullets.map(([label, text]) => (
               <div key={label} className="grid gap-1.5 sm:grid-cols-[180px_1fr] sm:gap-6">
-                <dt className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+                <dt className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                   {label}
                 </dt>
-                <dd className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <dd className="font-inter-tight text-base leading-relaxed text-mid-gray">
                   {text}
                 </dd>
               </div>
@@ -117,7 +117,7 @@ export default function HomeStudio() {
               href={FIGARO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-inter-tight text-[13px] italic text-mid-gray transition-colors hover:text-foreground"
+              className="font-inter-tight text-base italic text-mid-gray transition-colors hover:text-foreground"
             >
               {isEn ? "Featured in Le Figaro · May 2026" : "Vu dans Le Figaro · mai 2026"}
             </a>

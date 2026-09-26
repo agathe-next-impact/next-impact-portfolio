@@ -92,7 +92,7 @@ function InlineLearningPath({ locale }: { locale: Locale }) {
             style={{ width: `${progressPercent}%` }}
           />
         </div>
-        <span className="font-mono text-[0.6875rem] tracking-[0.06em] text-mid-gray">
+        <span className="font-mono text-2xs tracking-[0.06em] text-mid-gray">
           {readCount} / {journey.length}
         </span>
       </div>
@@ -194,7 +194,7 @@ export function BentoGrid() {
                         <span className="text-3xl font-light leading-none tracking-tight text-accent-secondary">
                           {stat.value}
                         </span>
-                        <span className="font-inter-tight text-[0.8125rem] text-mid-gray">{stat.label}</span>
+                        <span className="font-inter-tight text-base text-mid-gray">{stat.label}</span>
                       </div>
                     ))}
                   </div>
@@ -210,7 +210,7 @@ export function BentoGrid() {
                           <div className="border border-dark-gray p-2">
                             <SIcon size={14} strokeWidth={1.5} className="block text-mid-gray" />
                           </div>
-                          <span className="font-mono text-[0.5rem] uppercase tracking-[0.08em] text-mid-gray">{label}</span>
+                          <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">{label}</span>
                         </div>
                         {i < 2 && <div className="h-px w-4 bg-dark-gray" />}
                       </div>
@@ -229,11 +229,11 @@ export function BentoGrid() {
                 >
                   {card.title}
                 </h3>
-                <p className="font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
+                <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                   {card.description}
                 </p>
                 {card.external && (
-                  <div className="mt-3 font-mono text-[0.5625rem] uppercase tracking-[0.1em] text-accent-secondary">
+                  <div className="mt-3 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                     ↓ PDF
                   </div>
                 )}

@@ -68,7 +68,7 @@ function AnimatedValue({ value, formatter, color }: { value: number; formatter: 
 const labelStyle: React.CSSProperties = {
   display: "block",
   fontFamily: "var(--mono)",
-  fontSize: 9,
+  fontSize: 11,
   letterSpacing: "0.12em",
   textTransform: "uppercase",
   color: "var(--muted-color)",
@@ -121,7 +121,7 @@ export default function ROISimulator() {
 
       {/* ── Inputs ── */}
       <div style={{ borderRight: "1px solid var(--rule)", padding: "32px" }}>
-        <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 24 }}>
+        <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 24 }}>
           {isEn ? "Your current data" : "Vos données actuelles"}
         </div>
 
@@ -147,7 +147,7 @@ export default function ROISimulator() {
             <input type="range" min={1000} max={500000} step={1000} value={monthlyTraffic}
               onChange={(e) => setMonthlyTraffic(Number(e.target.value))}
               style={{ width: "100%", accentColor: "var(--accent-color)" }} />
-            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 9, color: "var(--muted-color)", marginTop: 4 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 4 }}>
               <span>1 000</span><span>500 000</span>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function ROISimulator() {
             <input type="range" min={0.1} max={15} step={0.1} value={conversionRate}
               onChange={(e) => setConversionRate(Number(e.target.value))}
               style={{ width: "100%", accentColor: "var(--accent-color)" }} />
-            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 9, color: "var(--muted-color)", marginTop: 4 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 4 }}>
               <span>0,1 %</span><span>15 %</span>
             </div>
           </div>
@@ -175,25 +175,25 @@ export default function ROISimulator() {
             <input type="range" min={5} max={1000} step={5} value={avgCartValue}
               onChange={(e) => setAvgCartValue(Number(e.target.value))}
               style={{ width: "100%", accentColor: "var(--accent-color)" }} />
-            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 9, color: "var(--muted-color)", marginTop: 4 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 4 }}>
               <span>5 €</span><span>1 000 €</span>
             </div>
           </div>
 
           {/* Speed context */}
           <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 20 }}>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <Clock size={10} />
               {isEn ? `Load time — ${sectorData.name}` : `Temps de chargement — ${sectorData.name}`}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: "var(--muted-color)", textTransform: "uppercase", marginBottom: 2 }}>{isEn ? "Legacy" : "Classique"}</div>
+                <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", textTransform: "uppercase", marginBottom: 2 }}>{isEn ? "Legacy" : "Classique"}</div>
                 <span className="ni-serif" style={{ fontSize: 22, color: "var(--accent-color)" }}>{sectorData.avgLoadTimeLegacy.toFixed(1)}s</span>
               </div>
               <ChevronRight size={14} style={{ color: "var(--muted-color)" }} />
               <div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: "var(--muted-color)", textTransform: "uppercase", marginBottom: 2 }}>Headless</div>
+                <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", textTransform: "uppercase", marginBottom: 2 }}>Headless</div>
                 <span className="ni-serif" style={{ fontSize: 22, color: "#2a7a2a" }}>{sectorData.avgLoadTimeHeadless.toFixed(1)}s</span>
               </div>
             </div>
@@ -207,7 +207,7 @@ export default function ROISimulator() {
         <div style={{ padding: "32px", borderBottom: "1px solid var(--rule)", borderLeft: "3px solid var(--accent-color)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
             <AlertTriangle size={14} style={{ color: "var(--accent-color)" }} />
-            <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent-color)" }}>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent-color)" }}>
               {isEn ? "The cost of inaction" : "Le coût de l'inaction"}
             </span>
           </div>
@@ -221,7 +221,7 @@ export default function ROISimulator() {
               <div className="ni-serif" style={{ fontSize: "clamp(24px, 2.5vw, 36px)", color: "var(--accent-color)", lineHeight: 1 }}>
                 <AnimatedValue value={results.monthlyLoss} formatter={(v) => formatCurrency(v, locale)} color="var(--accent-color)" />
               </div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", marginTop: 6 }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 6 }}>
                 {formatPercent(results.lostConversionRate, locale)} {isEn ? "conversion lost" : "de conversion perdue"}
               </div>
             </div>
@@ -230,7 +230,7 @@ export default function ROISimulator() {
               <div className="ni-serif" style={{ fontSize: "clamp(24px, 2.5vw, 36px)", color: "var(--accent-color)", lineHeight: 1 }}>
                 <AnimatedValue value={results.yearlyLoss} formatter={(v) => formatCurrency(v, locale)} color="var(--accent-color)" />
               </div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", marginTop: 6 }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 6 }}>
                 <AnimatedValue value={results.additionalMonthlyConversions * 12} formatter={(v) => formatNumber(v, locale)} color="var(--muted-color)" />{" "}
                 {isEn ? "lost sales / year" : "ventes perdues / an"}
               </div>
@@ -254,7 +254,7 @@ export default function ROISimulator() {
         <div style={{ padding: "32px", borderBottom: "1px solid var(--rule)", borderLeft: "3px solid #2a7a2a" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
             <Zap size={14} style={{ color: "#2a7a2a" }} />
-            <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "#2a7a2a" }}>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "#2a7a2a" }}>
               {isEn ? "The Headless opportunity" : "L'opportunité Headless"}
             </span>
           </div>
@@ -268,7 +268,7 @@ export default function ROISimulator() {
               <div className="ni-serif" style={{ fontSize: "clamp(24px, 2.5vw, 36px)", color: "#2a7a2a", lineHeight: 1 }}>
                 +<AnimatedValue value={results.monthlyLoss} formatter={(v) => formatCurrency(v, locale)} color="#2a7a2a" />
               </div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", marginTop: 6 }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 6 }}>
                 +<AnimatedValue value={results.additionalMonthlyConversions} formatter={(v) => formatNumber(v, locale)} color="var(--muted-color)" />{" "}
                 {isEn ? "conversions / month" : "conversions / mois"}
               </div>
@@ -278,7 +278,7 @@ export default function ROISimulator() {
               <div className="ni-serif" style={{ fontSize: "clamp(24px, 2.5vw, 36px)", color: "#2a7a2a", lineHeight: 1 }}>
                 -{results.timeSaved.toFixed(1)}s
               </div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", marginTop: 6 }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 6 }}>
                 {sectorData.avgLoadTimeLegacy.toFixed(1)}s → {sectorData.avgLoadTimeHeadless.toFixed(1)}s
               </div>
             </div>
@@ -303,7 +303,7 @@ export default function ROISimulator() {
           <div className="ni-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", color: "#2a7a2a", lineHeight: 1 }}>
             +<AnimatedValue value={results.yearlyLoss} formatter={(v) => formatCurrency(v, locale)} color="#2a7a2a" />
           </div>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-color)", marginTop: 8, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--muted-color)", marginTop: 8, textTransform: "uppercase", letterSpacing: "0.08em" }}>
             {isEn ? "of revenue recovered" : "de chiffre d'affaires récupéré"}
           </div>
         </div>

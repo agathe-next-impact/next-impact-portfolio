@@ -9,8 +9,8 @@ export default function SummaryTable({ rows }: SummaryTableProps) {
       <table style={{ width: "100%", borderCollapse: "collapse", background: "var(--paper)" }}>
         <thead style={{ background: "var(--paper-2)" }}>
           <tr>
-            <th style={{ padding: "10px 16px", fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", textAlign: "left", borderBottom: "1px solid var(--rule)" }}>Critère</th>
-            <th style={{ padding: "10px 16px", fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", textAlign: "left", borderBottom: "1px solid var(--rule)" }}>Valeur</th>
+            <th style={{ padding: "10px 16px", fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", textAlign: "left", borderBottom: "1px solid var(--rule)" }}>Critère</th>
+            <th style={{ padding: "10px 16px", fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", textAlign: "left", borderBottom: "1px solid var(--rule)" }}>Valeur</th>
           </tr>
         </thead>
         <tbody>

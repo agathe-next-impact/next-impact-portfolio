@@ -27,6 +27,11 @@ const config: Config = {
       "5xl": "2",
     },
     extend: {
+      /* Échelle typo : Tailwind par défaut + `2xs` (11px) = plancher des labels
+         mono. Pas de taille arbitraire `text-[Npx]` sous 11px. */
+      fontSize: {
+        "2xs": ["0.6875rem", { lineHeight: "1rem" }],
+      },
       fontFamily: {
         sans:        ["var(--font-sans)", "var(--font-inter)", "Arial", "Helvetica", "sans-serif"],
         serif:       ["var(--font-serif)", "Georgia", "serif"],

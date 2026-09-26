@@ -20,7 +20,7 @@ import { DUR, EASE_OUT } from "@/lib/motion-tokens";
 const PANEL_TRANSITION = { duration: DUR.ui, ease: EASE_OUT } as const;
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-regular uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 type TabId = "conseil" | "prestations" | "veille";
 
@@ -117,7 +117,7 @@ export default function Hero({
       {/* En-tête — héros charte : titre, description et CTA pilotés par
           HERO_VARIANTS.default (lib/homepage-profiles*.ts, FR + EN). */}
       <Reveal className="flex flex-col gap-4">
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+        <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           <span>№ 01</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">
@@ -130,7 +130,7 @@ export default function Hero({
           <WordAppear text={variant.headline} />{" "}
           <span className="text-foreground">{variant.subHeadline}</span>
         </h1>
-        <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
+        <p className="max-w-2xl font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
           {variant.description}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -142,7 +142,7 @@ export default function Hero({
           </Link>
           <Link
             href={variant.ctaSecondary.href as Parameters<typeof Link>[0]["href"]}
-            className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+            className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs font-regular uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
           >
             {variant.ctaSecondary.label}
           </Link>
@@ -170,12 +170,12 @@ export default function Hero({
               aria-selected={selected}
               aria-controls={`hero-panel-${tb.id}`}
               onClick={() => setTab(tb.id)}
-              className={`flex items-baseline gap-2 px-6 py-4 font-mono text-[16px] font-regular uppercase tracking-[0.06em] transition-colors duration-200 ${
+              className={`flex items-baseline gap-2 px-6 py-4 font-mono text-base font-regular uppercase tracking-[0.06em] transition-colors duration-200 ${
                 selected ? "text-accent-secondary" : "text-mid-gray hover:text-foreground"
               }`}
             >
               <span
-                className={`text-[12px] font-normal transition-colors duration-200 ${
+                className={`text-xs font-normal transition-colors duration-200 ${
                   selected ? "text-accent-secondary" : "text-mid-gray/70"
                 }`}
               >
@@ -218,7 +218,7 @@ export default function Hero({
                 {active.chips.map((chip) => (
                   <span
                     key={chip}
-                    className="inline-flex items-center gap-1.5 border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
+                    className="inline-flex items-center gap-1.5 border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray"
                   >
                     <span className="h-1 w-1 rounded-full bg-accent-secondary" />
                     {chip}
@@ -240,7 +240,7 @@ export default function Hero({
 
           {/* Logos clients — preuve sociale discrète */}
           <div className="mt-12 flex flex-col gap-4 border-t border-dark-gray pt-6">
-            <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {isEn ? "Trusted by" : "Ils m'ont fait confiance"}
             </span>
             {/* Ligne de logos — uniquement des assets détourés (fond
@@ -335,10 +335,10 @@ export default function Hero({
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
                   {/* Légende identité — preuve humaine */}
                   <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-3 py-2.5">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white">
+                    <span className="font-mono text-2xs uppercase tracking-[0.1em] text-white">
                       Agathe Karinthi-Martin
                     </span>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/70">
+                    <span className="font-mono text-2xs uppercase tracking-[0.12em] text-white/70">
                       Next · Impact · Digital
                     </span>
                   </div>
@@ -350,7 +350,7 @@ export default function Hero({
           {/* Badge disponible */}
           <div className="absolute -top-3 right-0 flex items-center gap-1.5 border border-dark-gray bg-jet px-3 py-1">
             <span className="status-dot" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
+            <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
               {t("available")}
             </span>
           </div>
@@ -367,7 +367,7 @@ export default function Hero({
                 transition={PANEL_TRANSITION}
               >
                 <span className="h-1 w-1 rounded-full bg-vermilion" />
-                <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
+                <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
                   {isEn ? "Free newsletter" : "Lettre gratuite"}
                 </span>
               </motion.div>
@@ -386,7 +386,7 @@ export default function Hero({
                 transition={PANEL_TRANSITION}
               >
                 <span className="h-1 w-1 rounded-full bg-vermilion" />
-                <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-foreground">
+                <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
                   {isEn ? "Real project" : "Réalisation"}
                 </span>
               </motion.div>
@@ -404,7 +404,7 @@ export default function Hero({
                 exit={{ opacity: 0, y: -4 }}
                 transition={PANEL_TRANSITION}
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                   {isEn
                     ? "Free · one digest a month, one focus a week"
                     : "Gratuit · une synthèse par mois, un focus par semaine"}
@@ -413,7 +413,7 @@ export default function Hero({
                   href={derniereLettre.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-foreground underline-offset-4 transition-colors hover:text-vermilion hover:underline"
+                  className="inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-foreground underline-offset-4 transition-colors hover:text-vermilion hover:underline"
                 >
                   {isEn ? "Read this issue ↗" : "Lire ce numéro ↗"}
                 </a>
@@ -432,7 +432,7 @@ export default function Hero({
                 exit={{ opacity: 0, y: -4 }}
                 transition={PANEL_TRANSITION}
               >
-                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                <span className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]" />
                   {isEn
                     ? "Live · next-event.fr · event portal delivered"
@@ -440,7 +440,7 @@ export default function Hero({
                 </span>
                 <Link
                   href={"/etudes-de-cas/next-event" as Parameters<typeof Link>[0]["href"]}
-                  className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-foreground underline-offset-4 transition-colors hover:text-vermilion hover:underline"
+                  className="inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-foreground underline-offset-4 transition-colors hover:text-vermilion hover:underline"
                 >
                   {isEn ? "Case study →" : "Étude de cas →"}
                 </Link>

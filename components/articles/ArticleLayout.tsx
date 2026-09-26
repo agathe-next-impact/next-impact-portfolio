@@ -18,7 +18,7 @@ export function ArticleLayout({ article, sectionCount, children }: ArticleLayout
       <TranslationFallbackBanner show={article.isFallback} />
       <BlueprintSection ticks>
         {/* Fil d'Ariane */}
-        <div className="flex flex-wrap items-center gap-3 border-b border-dark-gray px-6 py-4 font-mono text-[11px] uppercase tracking-[0.12em] lg:px-8">
+        <div className="flex flex-wrap items-center gap-3 border-b border-dark-gray px-6 py-4 font-mono text-2xs uppercase tracking-[0.12em] lg:px-8">
           <Link
             href="/articles"
             className="inline-flex items-center gap-1.5 text-mid-gray transition-colors hover:text-accent-secondary"

@@ -77,7 +77,7 @@ export const FaqLanding: React.FC<FaqLandingProps> = ({
                     <span
                       style={{
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         color: "var(--ink-2)",
                         letterSpacing: "0.08em",
                         flexShrink: 0,

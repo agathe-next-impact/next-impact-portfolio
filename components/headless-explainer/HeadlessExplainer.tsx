@@ -137,7 +137,7 @@ export default function HeadlessExplainer() {
       {/* En-tête de section */}
       <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>№ 06</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
             <span className="text-mid-gray">{isEn ? "Stack comparison" : "Comparatif technique"}</span>
@@ -163,7 +163,7 @@ export default function HeadlessExplainer() {
               aria-selected={isActive}
               onClick={() => setActiveId(stack.id)}
               className={cn(
-                "relative px-6 py-4 text-left font-mono text-[11px] uppercase tracking-[0.12em] transition-colors lg:px-8",
+                "relative px-6 py-4 text-left font-mono text-2xs uppercase tracking-[0.12em] transition-colors lg:px-8",
                 i < stacks.length - 1 && "border-r border-dark-gray",
                 isActive
                   ? "bg-obsidian text-foreground"
@@ -197,21 +197,21 @@ export default function HeadlessExplainer() {
           >
             {/* Gauche : sous-titre + description + stack + points forts */}
             <div className="border-b border-dark-gray p-6 md:border-b-0 md:border-r lg:p-8">
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+              <p className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                 {current.sublabel}
               </p>
-              <p className="mt-4 font-inter-tight text-base leading-relaxed text-mid-gray">
+              <p className="mt-4 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {current.description}
               </p>
 
-              <p className="mt-8 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              <p className="mt-8 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                 Stack
               </p>
-              <p className="mt-2 font-mono text-[11px] leading-relaxed tracking-[0.04em] text-foreground/80">
+              <p className="mt-2 font-mono text-2xs leading-relaxed tracking-[0.04em] text-foreground/80">
                 {current.tech}
               </p>
 
-              <p className="mt-8 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              <p className="mt-8 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                 {isEn ? "Key strengths" : "Points forts"}
               </p>
               <ul className="mt-3 flex flex-col gap-2.5">
@@ -227,7 +227,7 @@ export default function HeadlessExplainer() {
             {/* Droite : idéal pour + à prévoir + prix + CTA */}
             <div className="flex flex-col p-6 lg:p-8">
               <div className="flex-1">
-                <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                   {isEn ? "Ideal for" : "Idéal pour"}
                 </p>
                 <ul className="mt-3 flex flex-col gap-2">
@@ -242,10 +242,10 @@ export default function HeadlessExplainer() {
                 </ul>
 
                 <div className="mt-8 border-t border-dark-gray pt-6">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                  <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                     {isEn ? "To consider" : "À prévoir"}
                   </p>
-                  <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
                     {current.limit}
                   </p>
                 </div>
@@ -257,7 +257,7 @@ export default function HeadlessExplainer() {
                 </p>
                 <Link
                   href="/contact"
-                  className="group mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary transition-colors hover:text-foreground"
+                  className="group mt-4 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary transition-colors hover:text-foreground"
                 >
                   {isEn ? "Discuss this stack" : "Discuter de cette stack"}
                   <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />

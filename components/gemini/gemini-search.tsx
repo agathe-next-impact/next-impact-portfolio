@@ -16,11 +16,11 @@ interface GeminiSearchProps {
 
 // Champ URL / texte — surface jet, liseré dark-gray, focus accent secondaire.
 const inputClass =
-  "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-[15px] text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
+  "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-base text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
 
 // Bouton primaire — remplissage indigo bordé charcoal, label mono.
 const btnPrimaryClass =
-  "inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function GeminiSearch({ onResult, prompt, systemInstruction, defaultUrl }: GeminiSearchProps) {
   const locale = useLocale() as Locale;
@@ -172,13 +172,13 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             </button>
           </div>
           {error && (
-            <div className="border-l-[3px] border-vermilion bg-jet px-3 py-2.5 font-sans text-[13px] text-vermilion">
+            <div className="border-l-[3px] border-vermilion bg-jet px-3 py-2.5 font-sans text-sm text-vermilion">
               {error}
             </div>
           )}
           {optinRefused && (
             <div className="flex flex-wrap items-center gap-3 border border-dark-gray border-l-[3px] border-l-accent-secondary bg-jet px-4 py-3">
-              <span className="flex-1 font-sans text-[13px] text-mid-gray">
+              <span className="flex-1 font-sans text-sm text-mid-gray">
                 {isEn
                   ? "Your contact details are required to receive your personalized audit."
                   : "Vos coordonnées sont obligatoires pour recevoir votre audit personnalisé."}
@@ -226,7 +226,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
               <ShieldCheck size={18} className="text-accent-secondary" />
               {isEn ? "Before running the audit" : "Avant de lancer l'audit"}
             </h2>
-            <p className="mb-6 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="mb-6 font-inter-tight text-base leading-relaxed text-mid-gray">
               {detectedCms
                 ? isEn
                   ? `${detectedCms} detected. Enter your contact details to receive your full audit report.`
@@ -237,20 +237,20 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
             </p>
             <form onSubmit={handleOptinSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
+                <label className="mb-1.5 block font-sans text-sm font-semibold text-foreground">
                   {isEn ? "Name" : "Nom"} <span className="text-accent-secondary">*</span>
                 </label>
                 <input type="text" value={optinName} onChange={(e) => setOptinName(e.target.value)} required placeholder={isEn ? "Your name" : "Votre nom"} className={inputClass} />
               </div>
               <div>
-                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
+                <label className="mb-1.5 block font-sans text-sm font-semibold text-foreground">
                   {isEn ? "Company" : "Entreprise"}{" "}
                   <span className="font-normal text-mid-gray text-xs">{isEn ? "(optional)" : "(optionnel)"}</span>
                 </label>
                 <input type="text" value={optinCompany} onChange={(e) => setOptinCompany(e.target.value)} placeholder={isEn ? "Your company" : "Votre entreprise"} className={inputClass} />
               </div>
               <div>
-                <label className="mb-1.5 block font-sans text-[13px] font-semibold text-foreground">
+                <label className="mb-1.5 block font-sans text-sm font-semibold text-foreground">
                   Email <span className="text-accent-secondary">*</span>
                 </label>
                 <input type="email" value={optinEmail} onChange={(e) => setOptinEmail(e.target.value)} required placeholder={isEn ? "you@email.com" : "votre@email.com"} className={inputClass} />
@@ -259,7 +259,7 @@ export default function GeminiSearch({ onResult, prompt, systemInstruction, defa
                 {isEn ? "Run analysis" : "Lancer l'analyse"}
                 <ArrowRight size={14} />
               </button>
-              <p className="text-center font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray">
+              <p className="text-center font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {isEn ? "Your data is used only to send you your report." : "Vos données sont utilisées uniquement pour vous envoyer votre rapport."}
               </p>
             </form>

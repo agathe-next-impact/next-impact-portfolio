@@ -13,7 +13,7 @@ export default function RecommendedStackCard({ title, stack, highlights }: Recom
       background: "var(--paper-2)",
       padding: "24px",
     }}>
-      <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2a7a2a", marginBottom: 8 }}>
+      <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2a7a2a", marginBottom: 8 }}>
         {title}
       </div>
       <div style={{ fontFamily: "var(--serif)", fontSize: 20, color: "var(--ink)", marginBottom: 12 }}>

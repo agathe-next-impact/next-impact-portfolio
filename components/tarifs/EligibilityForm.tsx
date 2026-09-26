@@ -200,9 +200,9 @@ const PATH_METER: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", { va
 };
 
 const fieldClass =
-  "w-full bg-jet border border-dark-gray px-3 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+  "w-full bg-jet border border-dark-gray px-3 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
-const labelClass = "block font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+const labelClass = "block font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 export default function EligibilityForm() {
   const locale = useLocale() as Locale;
@@ -311,7 +311,7 @@ export default function EligibilityForm() {
         {/* Header row */}
         <div className="mb-6">
           <p className={labelClass}>{isEn ? "Project diagnostic" : "Diagnostic projet"}</p>
-          <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
               ? "Identify in 2 minutes the right path for your project: classic WordPress site, Headless WordPress + Next.js site, custom web app or mobile application."
               : "Identifiez en 2 minutes la voie adaptée à votre projet : site WordPress classique, site Headless WordPress + Next.js, web app sur-mesure ou application mobile."}
@@ -373,7 +373,7 @@ export default function EligibilityForm() {
                             type="button"
                             onClick={() => { setProjectType(key); setProjectOpen(false); }}
                             className={cn(
-                              "block w-full border-l-2 px-3 py-2.5 text-left font-inter-tight text-[13px] text-foreground transition-colors hover:bg-obsidian",
+                              "block w-full border-l-2 px-3 py-2.5 text-left font-inter-tight text-sm text-foreground transition-colors hover:bg-obsidian",
                               active
                                 ? "border-accent-secondary bg-obsidian"
                                 : "border-transparent"
@@ -418,7 +418,7 @@ export default function EligibilityForm() {
                     <p className="font-inter-tight text-sm font-medium text-foreground">
                       {band.title}
                     </p>
-                    <p className="mt-0.5 font-mono text-[11px] text-mid-gray">
+                    <p className="mt-0.5 font-mono text-2xs text-mid-gray">
                       {band.subtitle}
                     </p>
                   </div>
@@ -478,7 +478,7 @@ export default function EligibilityForm() {
                       onChange={() => toggle(key, setSelectedIntegrations)}
                       className="accent-accent-secondary"
                     />
-                    <span className="font-inter-tight text-[13px] text-mid-gray">
+                    <span className="font-inter-tight text-base text-mid-gray">
                       {integrationLabels[key][locale] ?? integrationLabels[key].fr}
                     </span>
                   </label>
@@ -545,7 +545,7 @@ export default function EligibilityForm() {
                     onChange={() => toggle(key, setSelectedReasons)}
                     className="accent-accent-secondary"
                   />
-                  <span className="font-inter-tight text-[13px] text-mid-gray">
+                  <span className="font-inter-tight text-base text-mid-gray">
                     {reasonLabels[key][locale] ?? reasonLabels[key].fr}
                   </span>
                 </label>
@@ -557,7 +557,7 @@ export default function EligibilityForm() {
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <button
               type="submit"
-              className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5"
+              className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 [&_svg]:transition-transform hover:[&_svg]:translate-x-0.5"
             >
               {isEn ? "Show my path" : "Voir ma voie"}
               <ArrowRight size={14} />
@@ -578,14 +578,14 @@ export default function EligibilityForm() {
           <div className="mt-8 border border-dark-gray border-l-2 border-l-accent-secondary bg-jet p-6">
             <div className="mb-3 flex items-center gap-2">
               <CheckCircle2 size={16} className="text-accent-secondary" />
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+              <p className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                 {isEn ? "Recommended path" : "Voie recommandée"}
               </p>
             </div>
             <h4 className="mb-3 font-sans text-xl font-light tracking-tight text-foreground md:text-2xl">
               {result.title}
             </h4>
-            <p className="mb-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="mb-3 font-inter-tight text-base leading-relaxed text-mid-gray">
               {result.message}
             </p>
             <p className="mb-4 font-mono text-2xl font-light text-accent-secondary">
@@ -603,7 +603,7 @@ export default function EligibilityForm() {
               </div>
             )}
 
-            <p className="font-inter-tight text-[13px] italic text-foreground">
+            <p className="font-inter-tight text-sm italic text-foreground">
               {result.highlight}
             </p>
             {name && (
@@ -622,21 +622,21 @@ export default function EligibilityForm() {
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-[18px] py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+                  className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-[18px] py-2.5 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
                 >
                   <Video size={14} />
                   {isEn ? "Book a 15-min discovery call" : "Planifier un appel découverte (15 min)"}
                 </a>
                 <a
                   href="mailto:agathe@next-impact.digital"
-                  className="inline-flex items-center gap-2 py-2.5 font-inter-tight text-[13px] text-foreground transition-colors hover:text-accent-secondary"
+                  className="inline-flex items-center gap-2 py-2.5 font-inter-tight text-sm text-foreground transition-colors hover:text-accent-secondary"
                 >
                   <Mail size={14} />
                   {isEn ? "Describe my project in writing" : "Décrire mon projet par écrit"}
                 </a>
                 <a
                   href="tel:0673981638"
-                  className="inline-flex items-center gap-2 py-2.5 font-inter-tight text-[13px] text-foreground transition-colors hover:text-accent-secondary"
+                  className="inline-flex items-center gap-2 py-2.5 font-inter-tight text-sm text-foreground transition-colors hover:text-accent-secondary"
                 >
                   <Phone size={14} />
                   06 73 98 16 38

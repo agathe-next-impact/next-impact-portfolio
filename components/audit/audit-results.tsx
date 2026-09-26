@@ -76,7 +76,7 @@ export function AuditResults({ data }: AuditResultsProps) {
               <CardDescription className="font-inter-tight text-mid-gray">
                 Basé sur l'analyse de {data.url}
               </CardDescription>
-              <p className="mt-2 max-w-md font-inter-tight text-sm text-mid-gray">
+              <p className="mt-2 max-w-md font-inter-tight text-base text-mid-gray">
                 {data.overallScore >= 80
                   ? "Excellent ! Votre site web est performant dans la plupart des domaines."
                   : data.overallScore >= 60
@@ -88,7 +88,7 @@ export function AuditResults({ data }: AuditResultsProps) {
           </CardHeader>
         </Card>
       </Reveal>
-      <div className="mt-2 text-right font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+      <div className="mt-2 text-right font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
         Analyse réalisée le : {new Date(data.timestamp).toLocaleString("fr-FR")}
       </div>
 

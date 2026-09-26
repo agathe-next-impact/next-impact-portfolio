@@ -219,7 +219,7 @@ export function MeterBar({
       {(label || sublabel) && (
         <div className="mb-2 flex items-baseline justify-between">
           {label && <span className="text-sm font-light text-foreground">{label}</span>}
-          <span className="font-mono text-[11px] text-mid-gray">{sublabel ?? `${v}%`}</span>
+          <span className="font-mono text-2xs text-mid-gray">{sublabel ?? `${v}%`}</span>
         </div>
       )}
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-dark-gray">

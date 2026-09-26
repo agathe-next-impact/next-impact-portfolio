@@ -22,7 +22,7 @@ export function ArticleKeyFigures({
 
   return (
     <section aria-label={label} className="border border-dark-gray">
-      <p className="border-b border-dark-gray px-6 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray">
+      <p className="border-b border-dark-gray px-6 py-3 font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray">
         {label}
       </p>
       <dl className="m-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -34,11 +34,11 @@ export function ArticleKeyFigures({
             <dd className="m-0 mb-2 text-3xl font-light leading-none text-foreground">
               {figure.value}
             </dd>
-            <dt className="font-inter-tight text-sm leading-snug text-mid-gray">
+            <dt className="font-inter-tight text-base leading-snug text-mid-gray">
               {figure.label}
             </dt>
             {figure.source && (
-              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-dark-gray">
+              <p className="mt-2 font-mono text-2xs uppercase tracking-[0.1em] text-dark-gray">
                 {figure.source}
               </p>
             )}

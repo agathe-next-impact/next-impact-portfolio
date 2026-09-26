@@ -55,7 +55,7 @@ const LegalNotice = async ({
         <div
           id="mentions-legales"
           className={[
-            "max-w-3xl font-inter-tight text-base leading-relaxed text-mid-gray",
+            "max-w-3xl font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray",
             // Titres Figtree, fins
             "[&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:font-sans [&_h2]:text-2xl [&_h2]:font-light [&_h2]:tracking-tight [&_h2]:text-foreground md:[&_h2]:text-3xl",
             "[&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:font-sans [&_h3]:text-lg [&_h3]:font-medium [&_h3]:tracking-tight [&_h3]:text-foreground md:[&_h3]:text-xl",

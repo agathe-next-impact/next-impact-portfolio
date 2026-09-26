@@ -48,13 +48,13 @@ export function VisioConseilBanner({
         </div>
 
         <div className="min-w-[12rem] flex-1">
-          <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+          <p className="mb-1.5 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
             {copy.eyebrow}
           </p>
           <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
             {copy.title}
           </h3>
-          <p className="font-inter-tight text-sm text-mid-gray">{copy.subtitle}</p>
+          <p className="font-inter-tight text-base text-mid-gray">{copy.subtitle}</p>
         </div>
 
         <Link

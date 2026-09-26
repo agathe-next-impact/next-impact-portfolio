@@ -156,7 +156,7 @@ export default async function CaseStudyPage({
           breadcrumb={
             <Link
               href="/etudes-de-cas"
-              className="group mb-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
+              className="group mb-8 inline-flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
             >
               <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
               {t("backToCaseStudies")}
@@ -219,7 +219,7 @@ export default async function CaseStudyPage({
                         <div className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
                           {highlight.value}
                         </div>
-                        <div className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                        <div className="mt-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                           {highlight.label}
                         </div>
                       </div>
@@ -245,18 +245,18 @@ export default async function CaseStudyPage({
               {caseStudy.arbitrage && (
                 <Reveal>
                   <div className="mt-10 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 p-6">
-                    <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                    <div className="mb-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                       {t("arbitrageTitle")}
                     </div>
                     <div className="mb-4">
-                      <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                      <div className="mb-2 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                         {t("arbitrageOptions")}
                       </div>
                       <ul className="flex flex-col gap-1.5">
                         {caseStudy.arbitrage.consideredOptions.map((option) => (
                           <li
                             key={option}
-                            className="font-inter-tight text-sm leading-relaxed text-mid-gray"
+                            className="font-inter-tight text-base leading-relaxed text-mid-gray"
                           >
                             — {option}
                           </li>
@@ -264,7 +264,7 @@ export default async function CaseStudyPage({
                       </ul>
                     </div>
                     <div className="mb-4">
-                      <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                      <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                         {t("arbitrageDecision")}
                       </div>
                       <p className="font-inter-tight text-sm font-medium leading-relaxed text-foreground">
@@ -272,10 +272,10 @@ export default async function CaseStudyPage({
                       </p>
                     </div>
                     <div>
-                      <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                      <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                         {t("arbitrageRationale")}
                       </div>
-                      <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                      <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                         {caseStudy.arbitrage.rationale}
                       </p>
                     </div>
@@ -295,7 +295,7 @@ export default async function CaseStudyPage({
                       {caseStudy.solution.split("\n\n").map((paragraph, index) => (
                         <p
                           key={index}
-                          className="mb-4 text-[15px] leading-relaxed text-mid-gray"
+                          className="mb-4 text-base leading-relaxed text-mid-gray"
                         >
                           {paragraph}
                         </p>
@@ -313,7 +313,7 @@ export default async function CaseStudyPage({
               {caseStudy.testimonial && (
                 <Reveal>
                   <blockquote className="mt-10 border-l-2 border-accent-secondary pl-6">
-                    <p className="mb-4 font-inter-tight text-[15px] italic leading-relaxed text-foreground">
+                    <p className="mb-4 font-inter-tight text-base italic leading-relaxed text-foreground">
                       &ldquo;{caseStudy.testimonial.content}&rdquo;
                     </p>
                     <footer className="flex items-center gap-3">
@@ -328,7 +328,7 @@ export default async function CaseStudyPage({
                         <div className="text-sm font-medium text-foreground">
                           {caseStudy.testimonial.author}
                         </div>
-                        <div className="font-mono text-[10px] text-mid-gray">
+                        <div className="font-mono text-2xs text-mid-gray">
                           {caseStudy.testimonial.position}
                         </div>
                       </div>
@@ -343,7 +343,7 @@ export default async function CaseStudyPage({
                 <Reveal>
                   <div className="mt-10 border border-dark-gray">
                     <div className="border-b border-dark-gray px-6 py-4">
-                      <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                      <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                         {t("clientHistory.title")}
                       </div>
                       <p className="font-inter-tight text-sm leading-relaxed text-foreground">
@@ -366,11 +366,11 @@ export default async function CaseStudyPage({
                         className="group flex items-center justify-between gap-4 px-6 py-4 no-underline transition-colors hover:bg-jet/40 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-dark-gray"
                       >
                         <span className="min-w-0">
-                          <span className="block truncate text-[15px] font-light tracking-tight text-foreground">
+                          <span className="block truncate text-base font-light tracking-tight text-foreground">
                             {project.title}
                           </span>
                           {project.date.year && (
-                            <span className="font-mono text-[10px] text-mid-gray">
+                            <span className="font-mono text-2xs text-mid-gray">
                               {project.date.year}
                             </span>
                           )}
@@ -390,23 +390,23 @@ export default async function CaseStudyPage({
             <aside className="px-6 py-10 lg:sticky lg:top-20 lg:self-start lg:px-8 lg:py-12">
               {/* Client */}
               <div className="mb-4 border-b border-dark-gray pb-4">
-                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {t("client")}
                 </div>
-                <div className="text-[15px] font-medium text-foreground">
+                <div className="text-base font-medium text-foreground">
                   {caseStudy.clientName}
                 </div>
-                <div className="mt-0.5 font-mono text-[10px] text-mid-gray">
+                <div className="mt-0.5 font-mono text-2xs text-mid-gray">
                   {clientTypeLabel}
                 </div>
               </div>
 
               {/* Date de livraison */}
               <div className="mb-4 border-b border-dark-gray pb-4">
-                <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {t("deliveryDate")}
                 </div>
-                <div className="flex items-center gap-1.5 text-[15px] font-medium text-foreground">
+                <div className="flex items-center gap-1.5 text-base font-medium text-foreground">
                   <Calendar size={14} className="text-mid-gray" />
                   {caseStudy.date.month && monthsRaw[caseStudy.date.month - 1]}{" "}
                   {caseStudy.date.year}
@@ -416,10 +416,10 @@ export default async function CaseStudyPage({
               {/* Durée — masquée tant que la donnée n'est pas fournie (brouillons) */}
               {caseStudy.delai && (
                 <div className="mb-4 border-b border-dark-gray pb-4">
-                  <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                     {t("duration")}
                   </div>
-                  <div className="text-[15px] font-medium text-foreground">
+                  <div className="text-base font-medium text-foreground">
                     {formatDelai(caseStudy.delai, locale)}
                   </div>
                 </div>
@@ -427,14 +427,14 @@ export default async function CaseStudyPage({
 
               {/* Technologies */}
               <div className="mb-4 border-b border-dark-gray pb-4">
-                <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mb-2 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {t("technologies")}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {caseStudy.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray"
+                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray"
                     >
                       {tech}
                     </span>
@@ -444,14 +444,14 @@ export default async function CaseStudyPage({
 
               {/* Tags */}
               <div className="mb-4 border-b border-dark-gray pb-4">
-                <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mb-2 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {t("tags")}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {caseStudy.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray"
+                      className="rounded-sm border border-dark-gray px-2 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray"
                     >
                       {tag}
                     </span>
@@ -462,14 +462,14 @@ export default async function CaseStudyPage({
               {/* Site web */}
               {caseStudy.website && (
                 <div className="mb-4 border-b border-dark-gray pb-4">
-                  <div className="mb-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                  <div className="mb-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                     {t("website")}
                   </div>
                   <a
                     href={caseStudy.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="break-all font-mono text-[11px] text-accent-secondary underline underline-offset-2 hover:text-foreground"
+                    className="break-all font-mono text-2xs text-accent-secondary underline underline-offset-2 hover:text-foreground"
                   >
                     {caseStudy.website}
                   </a>
@@ -512,7 +512,7 @@ export default async function CaseStudyPage({
                     <h3 className="mb-1.5 text-lg font-light tracking-tight text-foreground">
                       {study.title}
                     </h3>
-                    <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                       {study.description}
                     </p>
                   </div>

@@ -23,7 +23,7 @@ export function AuditContextualBanner() {
         <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
           {isEn ? "Which path for your project?" : "Quelle voie pour votre projet ?"}
         </h3>
-        <p className="font-inter-tight text-sm text-mid-gray">
+        <p className="font-inter-tight text-base text-mid-gray">
           {isEn
             ? "Answer a few questions and get a clear recommendation in 2 minutes."
             : "Répondez à quelques questions et obtenez une recommandation claire en 2 minutes."}

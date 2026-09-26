@@ -55,7 +55,7 @@ function CTACard({
           alignItems: "center",
           gap: 8,
           fontFamily: "var(--mono)",
-          fontSize: 9,
+          fontSize: 11,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
           color: "var(--ink-2)",
@@ -115,7 +115,7 @@ function CTACard({
         <p
           style={{
             fontFamily: "var(--mono)",
-            fontSize: 9,
+            fontSize: 11,
             letterSpacing: "0.08em",
             color: "var(--muted-color)",
             marginTop: 10,
@@ -198,7 +198,7 @@ export function BlocReassurance() {
         <div
           style={{
             fontFamily: "var(--mono)",
-            fontSize: 9,
+            fontSize: 11,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: "var(--muted-color)",
@@ -240,7 +240,7 @@ export function BlocReassurance() {
               alignItems: "center",
               gap: 6,
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: "var(--ink-2)",

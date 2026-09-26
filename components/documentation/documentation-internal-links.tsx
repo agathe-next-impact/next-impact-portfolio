@@ -303,7 +303,7 @@ export function DocumentationToolsSection() {
         <h2 className="mb-2 text-2xl font-light tracking-tight text-foreground">
           {isEn ? "Tools and resources" : "Outils et ressources"}
         </h2>
-        <p className="font-inter-tight text-sm text-mid-gray">
+        <p className="font-inter-tight text-base text-mid-gray">
           {isEn
             ? "Free tools to evaluate and plan your web project."
             : "Des outils gratuits pour évaluer et planifier votre projet web."}
@@ -327,10 +327,10 @@ export function DocumentationToolsSection() {
               <h3 className="mb-1.5 text-lg font-light tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                 {tool.title}
               </h3>
-              <p className="flex-1 font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
+              <p className="flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {tool.description}
               </p>
-              <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+              <div className="mt-4 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
                 {isEn ? "Discover →" : "Découvrir →"}
               </div>
             </Link>
@@ -400,7 +400,7 @@ export function CategoryToolsLinks({ category }: CategoryToolsLinksProps) {
     <section className="mt-10 border-t border-dark-gray pt-8">
       <div className="mb-5 flex items-center gap-2">
         <Wrench size={16} strokeWidth={1.5} className="text-mid-gray" />
-        <h3 className="m-0 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+        <h3 className="m-0 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
           {isEn ? "Useful tools" : "Outils utiles"}
         </h3>
       </div>
@@ -444,7 +444,7 @@ export function ArticleInternalLinks({ category }: { category: string }) {
 
   return (
     <Reveal className="mt-6 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5">
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+      <p className="mb-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
         {isEn ? "Going further" : "Pour aller plus loin"}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -452,7 +452,7 @@ export function ArticleInternalLinks({ category }: { category: string }) {
           <Link
             key={link.href}
             href={link.href}
-            className="inline-flex items-center gap-1 border border-dark-gray bg-obsidian px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:border-accent-secondary hover:text-accent-secondary"
+            className="inline-flex items-center gap-1 border border-dark-gray bg-obsidian px-3 py-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:border-accent-secondary hover:text-accent-secondary"
           >
             {link.title}
             <ArrowRight size={10} />

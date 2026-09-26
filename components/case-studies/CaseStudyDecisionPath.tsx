@@ -17,7 +17,7 @@ const CONSEIL_OFFER_ID: Record<OffreConseilKey, string> = {
 };
 
 const STEP_LINK =
-  "group/link mt-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground";
+  "group/link mt-2 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground";
 
 /**
  * Le chemin de décision — relie la fiche aux offres vendues : le besoin,
@@ -94,7 +94,7 @@ export default async function CaseStudyDecisionPath({
   return (
     <Reveal>
       <div className="mt-10 border border-dark-gray">
-        <div className="border-b border-dark-gray px-6 py-4 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+        <div className="border-b border-dark-gray px-6 py-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           {t("title")}
         </div>
         {steps.map((step, i) => (
@@ -102,18 +102,18 @@ export default async function CaseStudyDecisionPath({
             key={step.key}
             className="flex gap-4 px-6 py-5 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-dark-gray"
           >
-            <span className="font-mono text-[10px] leading-6 text-mid-gray">
+            <span className="font-mono text-2xs leading-6 text-mid-gray">
               0{i + 1}
             </span>
             <div className="min-w-0">
-              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+              <div className="mb-1 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                 {step.label}
               </div>
               <p className="font-inter-tight text-sm leading-relaxed text-foreground">
                 {step.line}
               </p>
               {step.key === "build" && offreConstruction && budgetText && (
-                <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                   {budgetText}
                 </p>
               )}

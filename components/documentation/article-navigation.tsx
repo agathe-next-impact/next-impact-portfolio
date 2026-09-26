@@ -42,7 +42,7 @@ export function ArticleNavigation({ category, slug }: ArticleNavigationProps) {
           <Icon className="h-4 w-4 text-accent-secondary" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="mb-1 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-mid-gray">
+          <p className="mb-1 font-mono text-2xs uppercase tracking-[0.06em] text-mid-gray">
             Prochain dans votre parcours {profile.label}
           </p>
           <p className="truncate text-sm font-light tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">

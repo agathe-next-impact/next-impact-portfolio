@@ -20,7 +20,7 @@ export function ArticleHeader({ article, sectionCount }: ArticleHeaderProps) {
   return (
     <div className="border-t border-foreground/80 pt-8">
       {/* Ligne méta */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
         <span className="text-accent-secondary">{article.category}</span>
         <span className="flex items-center gap-1.5">
           <Clock className="h-3 w-3" aria-hidden />
@@ -38,7 +38,7 @@ export function ArticleHeader({ article, sectionCount }: ArticleHeaderProps) {
           {article.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray"
+              className="border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray"
             >
               {tag}
             </span>
@@ -66,7 +66,7 @@ export function ArticleHeader({ article, sectionCount }: ArticleHeaderProps) {
           <p className="text-sm font-medium text-foreground">{article.author}</p>
           <p className="font-inter-tight text-xs text-mid-gray">{article.authorRole}</p>
         </div>
-        <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+        <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           {formatDateFr(article.date)}
         </span>
       </div>

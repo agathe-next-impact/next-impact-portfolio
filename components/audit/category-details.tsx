@@ -35,13 +35,13 @@ export function CategoryDetail({ category, onBack }: CategoryDetailProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">Résumé</h3>
+          <h3 className="mb-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">Résumé</h3>
           <MeterBar value={category.score} className="mb-3" />
-          <p className="font-inter-tight text-sm text-mid-gray">{category.summary}</p>
+          <p className="font-inter-tight text-base text-mid-gray">{category.summary}</p>
         </div>
 
         <div>
-          <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">Points clés</h3>
+          <h3 className="mb-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">Points clés</h3>
           <ul className="space-y-2">
             {category.findings.map((finding, index) => (
               <li key={index} className="rounded-sm border border-dark-gray bg-obsidian p-3">
@@ -57,7 +57,7 @@ export function CategoryDetail({ category, onBack }: CategoryDetailProps) {
                   />
                   <div>
                     <p className="font-light text-foreground">{finding.title}</p>
-                    <p className="font-inter-tight text-sm text-mid-gray">{finding.description}</p>
+                    <p className="font-inter-tight text-base text-mid-gray">{finding.description}</p>
                   </div>
                 </div>
               </li>
@@ -66,12 +66,12 @@ export function CategoryDetail({ category, onBack }: CategoryDetailProps) {
         </div>
 
         <div>
-          <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">Recommandations</h3>
+          <h3 className="mb-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">Recommandations</h3>
           <ul className="space-y-2">
             {category.recommendations.map((recommendation, index) => (
               <li key={index} className="rounded-sm border border-dark-gray bg-obsidian p-3">
                 <p className="font-light text-foreground">{recommendation.title}</p>
-                <p className="font-inter-tight text-sm text-mid-gray">{recommendation.description}</p>
+                <p className="font-inter-tight text-base text-mid-gray">{recommendation.description}</p>
                 {recommendation.link && (
                   <a
                     href={recommendation.link}
@@ -89,8 +89,8 @@ export function CategoryDetail({ category, onBack }: CategoryDetailProps) {
 
         {category.sources && category.sources.length > 0 && (
           <div>
-            <h3 className="mb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">Sources</h3>
-            <ul className="font-inter-tight text-sm text-mid-gray">
+            <h3 className="mb-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">Sources</h3>
+            <ul className="font-inter-tight text-base text-mid-gray">
               {category.sources.map((source, index) => (
                 <li key={index} className="mb-1">
                   <a

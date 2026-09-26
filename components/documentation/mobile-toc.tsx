@@ -33,7 +33,7 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
       >
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 border border-dark-gray bg-obsidian px-3.5 py-2 font-mono text-[0.8125rem] text-mid-gray transition-colors hover:border-accent-secondary hover:text-accent-secondary"
+          className="flex items-center gap-2 border border-dark-gray bg-obsidian px-3.5 py-2 font-mono text-sm text-mid-gray transition-colors hover:border-accent-secondary hover:text-accent-secondary"
         >
           <List className="h-3.5 w-3.5" />
           Sommaire
@@ -55,7 +55,7 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
         }`}
       >
         <div className="mb-4 flex items-center justify-between">
-          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-mid-gray">
+          <p className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
             Sommaire
           </p>
           <button
@@ -76,8 +76,8 @@ export function MobileToc({ tableOfContents }: MobileTocProps) {
                   aria-current={activeId === item.id ? "location" : undefined}
                   className={`block border-b border-dark-gray no-underline transition-colors duration-150 ${
                     item.level === 3
-                      ? "py-2 pl-4 text-[0.8125rem]"
-                      : "py-2 pl-2 text-[0.9375rem]"
+                      ? "py-2 pl-4 text-sm"
+                      : "py-2 pl-2 text-base"
                   } ${
                     activeId === item.id
                       ? "border-l-2 border-l-accent-secondary text-accent-secondary"

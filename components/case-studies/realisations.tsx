@@ -43,11 +43,11 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
 
   return (
     <section id="realisations">
-      {/* Sélecteur d'onglets — cellules bordées blueprint */}
-      <div className="mb-12 flex border border-dark-gray">
+      {/* Sélecteur d'onglets — cellules bordées blueprint, collé au filet de
+          section (haut) et à la grille (bas) : bordures latérales seulement. */}
+      <div className="flex border-x border-dark-gray">
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
-          const projectCount = cardsFor(tab).length;
           return (
             <button
               key={tab}
@@ -55,7 +55,7 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
               onClick={() => setActiveTab(tab)}
               aria-pressed={isActive}
               className={cn(
-                "flex min-w-0 flex-1 flex-col items-center gap-1 px-2 py-3.5 text-center font-mono text-[10px] uppercase leading-tight tracking-[0.08em] transition-colors",
+                "flex min-w-0 flex-1 flex-col items-center px-2 py-3.5 text-center font-mono text-2xs uppercase leading-tight tracking-[0.08em] transition-colors",
                 idx < tabs.length - 1 && "border-r border-dark-gray",
                 isActive
                   ? "bg-accent-secondary text-obsidian"
@@ -63,9 +63,6 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
               )}
             >
               <span className="text-inherit">{t(`tabs.${tab}`)}</span>
-              <span className={cn("font-mono text-[9px] tracking-[0.05em] text-inherit", isActive ? "opacity-100" : "opacity-50")}>
-                {projectCount}
-              </span>
             </button>
           );
         })}
@@ -92,7 +89,14 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
                     "hover:border-mid-gray/40 hover:bg-jet/40",
                   )}
                 >
-                  <div className="relative aspect-[16/9] overflow-hidden">
+                  {/* Image cliquable : doublon souris du lien titre, donc hors
+                      tabulation et masquée aux lecteurs d'écran. */}
+                  <Link
+                    href={card.link}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    className="relative block aspect-[16/9] overflow-hidden"
+                  >
                     <Image
                       src={card.image}
                       alt={card.alt}
@@ -101,17 +105,17 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     />
                     {card.isDemo && (
-                      <span className="absolute right-2 top-2 z-10 border border-dark-gray bg-obsidian/85 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.14em] text-mid-gray backdrop-blur-sm">
+                      <span className="absolute right-2 top-2 z-10 border border-dark-gray bg-obsidian/85 px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray backdrop-blur-sm">
                         {locale === "en" ? "Demo" : "Démo"}
                       </span>
                     )}
-                  </div>
+                  </Link>
                   <div className="flex flex-1 flex-col border-t border-dark-gray px-6 py-5">
                     <Link href={card.link} className="block no-underline">
                       <h3 className="text-lg font-light tracking-tight text-foreground">
                         {card.title}
                       </h3>
-                      <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                      <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                         {card.description}
                       </p>
                     </Link>
@@ -119,10 +123,10 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
                         sans chiffre est une image, pas une preuve. */}
                     {card.highlight && (
                       <div className="mt-3.5 inline-flex w-fit items-baseline gap-2 border border-dark-gray bg-jet/50 px-2.5 py-1">
-                        <span className="font-mono text-[13px] font-semibold tracking-tight text-accent-secondary tabular-nums">
+                        <span className="font-mono text-sm font-semibold tracking-tight text-accent-secondary tabular-nums">
                           {card.highlight.value}
                         </span>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-mid-gray">
+                        <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                           {card.highlight.label}
                         </span>
                       </div>
@@ -130,7 +134,7 @@ export default function Realisations({ cards, defaultTab = "selection" }: Realis
                     <div className="mt-auto pt-4">
                       <Link
                         href={card.link}
-                        className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground"
+                        className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary no-underline transition-colors hover:text-foreground"
                       >
                         {t("viewProject")}
                         <ArrowRight size={10} className="transition-transform duration-200 group-hover:translate-x-0.5" />

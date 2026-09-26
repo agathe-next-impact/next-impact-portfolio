@@ -208,11 +208,11 @@ const INITIAL: Record<string, string> = {
 };
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 function statusBorderClass(status: Status) {
   if (status === "ok") return "border-l-accent-secondary";
@@ -355,7 +355,7 @@ export default function PrototypeIa() {
           <p className={LABEL_MONO}>
             {isEn ? "AI prototype: throwaway or maintainable?" : "Prototype IA : jetable ou maintenable ?"}
           </p>
-          <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-foreground">
             {isEn
               ? "You generated something with AI — and now? Answer 9 checks to know whether to keep iterating, scope it, or rebuild it properly before production."
               : "Vous avez généré un truc avec l'IA — et maintenant ? Répondez à 9 vérifications pour savoir s'il faut continuer en proto, le cadrer, ou le reconstruire proprement avant la production."}
@@ -376,7 +376,7 @@ export default function PrototypeIa() {
               {isEn ? verdict.titleEn : verdict.titleFr}
             </h3>
             <StakesScale stakes={stakes} tier={verdict.tier} />
-            <div className="mt-2.5 flex justify-between font-mono text-[10px] uppercase tracking-[0.1em]">
+            <div className="mt-2.5 flex justify-between font-mono text-2xs uppercase tracking-[0.1em]">
               <span className={verdict.tier === 0 ? "text-accent-secondary" : "text-mid-gray"}>
                 {isEn ? "Proto OK" : "Proto OK"}
               </span>
@@ -387,7 +387,7 @@ export default function PrototypeIa() {
                 {isEn ? "Rebuild" : "À reconstruire"}
               </span>
             </div>
-            <p className={`mt-6 font-inter-tight text-[15px] leading-relaxed ${verdict.toneClass}`}>
+            <p className={`mt-6 font-inter-tight text-base leading-relaxed ${verdict.toneClass}`}>
               {isEn ? verdict.en : verdict.fr}
             </p>
           </StaggerItem>
@@ -416,7 +416,7 @@ export default function PrototypeIa() {
                     <p className="font-inter-tight text-sm font-medium text-foreground">
                       {isEn ? factor.criterionEn : factor.criterionFr}
                     </p>
-                    <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                       {isEn ? opt.detailEn : opt.detailFr}
                     </p>
                   </div>
@@ -428,7 +428,7 @@ export default function PrototypeIa() {
           {/* Note anti-cannibalisation */}
           <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
-            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
                 ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you — a call (or architecture advice) frames the move from prototype to product."
                 : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente — une visio (ou un conseil architecture) cadre le passage du prototype au produit."}
@@ -470,10 +470,10 @@ export default function PrototypeIa() {
         <div className="mb-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {FACTORS.map((f) => (
             <div key={f.id}>
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.16em] text-accent-secondary">
+              <p className="mb-1 font-mono text-2xs uppercase tracking-[0.16em] text-accent-secondary">
                 {isEn ? f.criterionEn : f.criterionFr}
               </p>
-              <p className="mb-2.5 font-inter-tight text-[13px] text-mid-gray">
+              <p className="mb-2.5 font-inter-tight text-base text-mid-gray">
                 {isEn ? f.questionEn : f.questionFr}
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -485,7 +485,7 @@ export default function PrototypeIa() {
                       type="button"
                       onClick={() => setState((s) => ({ ...s, [f.id]: opt.value }))}
                       className={
-                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-[13px] transition-colors " +
+                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-sm transition-colors " +
                         (selected
                           ? "border-l-[3px] border-l-accent-secondary border-dark-gray bg-jet text-foreground"
                           : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")

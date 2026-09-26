@@ -15,7 +15,7 @@ export default function ComparisonTable({ headers, rows }: ComparisonTableProps)
               <th key={i} style={{
                 padding: "12px 16px",
                 fontFamily: "var(--mono)",
-                fontSize: 10,
+                fontSize: 11,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: "var(--ink)",

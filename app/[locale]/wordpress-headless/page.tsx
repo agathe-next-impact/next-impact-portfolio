@@ -25,9 +25,9 @@ const LAST_UPDATED = "2026-06-24";
 
 const ACCENT = "text-accent-secondary";
 const BTN_PRIMARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_SECONDARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-mid-gray/50 bg-transparent px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:border-accent-secondary hover:text-accent-secondary";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-mid-gray/50 bg-transparent px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-foreground transition-colors hover:border-accent-secondary hover:text-accent-secondary";
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
@@ -276,7 +276,7 @@ export default async function WordPressHeadlessPillarPage({
         {/* ── 1. HERO + DÉFINITION EXTRACTABLE ─────────────────────────── */}
         <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-20 md:px-12 md:py-28">
           <Reveal>
-            <div className="flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+            <div className="flex flex-col gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
               <span>№ 01 — {isEn ? "REFERENCE" : "REFERENCE"}</span>
               <span className="text-mid-gray">
                 {isEn ? "Updated" : "Mis à jour le"}{" "}
@@ -354,7 +354,7 @@ export default async function WordPressHeadlessPillarPage({
                 key={i}
                 className="flex items-start gap-3 border border-dark-gray bg-obsidian/40 p-5"
               >
-                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center border border-accent-secondary/60 font-mono text-[10px] text-accent-secondary">
+                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center border border-accent-secondary/60 font-mono text-2xs text-accent-secondary">
                   {i + 1}
                 </span>
                 <span className="font-inter-tight text-base leading-relaxed text-foreground/90">
@@ -413,7 +413,7 @@ export default async function WordPressHeadlessPillarPage({
                   className="border border-dark-gray bg-jet p-6"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center border border-accent-secondary/60 font-mono text-[12px] text-accent-secondary">
+                    <span className="inline-flex h-8 w-8 items-center justify-center border border-accent-secondary/60 font-mono text-xs text-accent-secondary">
                       {step.num}
                     </span>
                     <Icon className={`h-5 w-5 ${ACCENT}`} aria-hidden />
@@ -421,7 +421,7 @@ export default async function WordPressHeadlessPillarPage({
                   <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
                     {step.title}
                   </h3>
-                  <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
                     {step.body}
                   </p>
                 </div>
@@ -452,13 +452,13 @@ export default async function WordPressHeadlessPillarPage({
             <table className="w-full min-w-[700px] border-collapse text-left font-inter-tight text-sm">
               <thead>
                 <tr className="border-b border-dark-gray bg-obsidian/60">
-                  <th className="p-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+                  <th className="p-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                     {isEn ? "Criterion" : "Critère"}
                   </th>
-                  <th className="p-4 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+                  <th className="p-4 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
                     {isEn ? "Classic WordPress" : "WordPress classique"}
                   </th>
-                  <th className="p-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+                  <th className="p-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                     {isEn ? "Headless WordPress" : "WordPress headless"}
                   </th>
                 </tr>
@@ -517,7 +517,7 @@ export default async function WordPressHeadlessPillarPage({
           />
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="border border-accent-secondary/40 bg-jet p-6">
-              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 <Check className="h-4 w-4" />
                 {isEn ? "Choose headless if" : "Choisir le headless si"}
               </div>
@@ -548,7 +548,7 @@ export default async function WordPressHeadlessPillarPage({
               </ul>
             </div>
             <div className="border border-mid-gray/30 bg-jet p-6">
-              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+              <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
                 <X className="h-4 w-4" />
                 {isEn ? "Stay on classic if" : "Rester sur classique si"}
               </div>
@@ -634,7 +634,7 @@ export default async function WordPressHeadlessPillarPage({
                   <div className="mt-2 font-inter-tight text-sm text-foreground/90">
                     {stat.label}
                   </div>
-                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.10em] text-mid-gray">
+                  <div className="mt-2 font-mono text-2xs uppercase tracking-[0.10em] text-mid-gray">
                     {stat.sub}
                   </div>
                 </div>
@@ -673,14 +673,14 @@ export default async function WordPressHeadlessPillarPage({
                       {item.q}
                     </h3>
                     <span
-                      className={`mt-1 font-mono text-[14px] ${ACCENT} transition-transform group-open:rotate-45`}
+                      className={`mt-1 font-mono text-sm ${ACCENT} transition-transform group-open:rotate-45`}
                       aria-hidden
                     >
                       +
                     </span>
                   </div>
                 </summary>
-                <p className="mt-4 max-w-[68ch] font-inter-tight text-sm leading-relaxed text-mid-gray md:text-base">
+                <p className="mt-4 max-w-[68ch] font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
                   {item.a}
                 </p>
               </details>
@@ -738,7 +738,7 @@ export default async function WordPressHeadlessPillarPage({
         <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-20 md:px-12 md:py-24">
           <Reveal>
             <div className="flex flex-col items-start gap-6 md:max-w-3xl">
-              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <div className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 {isEn ? "Next step" : "Prochaine étape"}
               </div>
               <h2 className="text-3xl font-light leading-tight tracking-tight text-foreground md:text-4xl lg:text-5xl">

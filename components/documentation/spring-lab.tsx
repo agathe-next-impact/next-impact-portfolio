@@ -136,7 +136,7 @@ export function SpringLab() {
 
           {/* Code output */}
           <div className="rounded-xl bg-darkblue/60 border border-lightblue/10 p-3">
-            <p className="text-[10px] text-white/80 font-mono mb-1">Configuration</p>
+            <p className="text-2xs text-white/80 font-mono mb-1">Configuration</p>
             <pre className="text-xs text-extralightblue/80 font-mono">
 {`useSpring(value, {
   stiffness: ${config.stiffness},

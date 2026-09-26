@@ -41,7 +41,7 @@ function OfferSection({
       : "Réserver et payer";
 
   const ctaClass = cn(
-    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
+    "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors",
     featured
       ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
       : "border border-dark-gray text-foreground hover:bg-jet",
@@ -68,7 +68,7 @@ function OfferSection({
       {/* En-tête : index + tag + nom + tarif */}
       <Reveal className="flex flex-col gap-6 border-b border-dark-gray px-6 py-12 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-16">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>{index}</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
             {copy.tag && <span className="text-mid-gray">{copy.tag}</span>}
@@ -78,12 +78,12 @@ function OfferSection({
               {copy.name}
             </h2>
             {offer.credited && (
-              <span className="inline-flex items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+              <span className="inline-flex items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                 {isEn ? "Deducted from your quote" : "Déduit du devis"}
               </span>
             )}
             {offer.recurring && (
-              <span className="inline-flex items-center border border-dark-gray px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+              <span className="inline-flex items-center border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                 {isEn ? "Monthly retainer" : "Abonnement mensuel"}
               </span>
             )}
@@ -91,7 +91,7 @@ function OfferSection({
         </div>
         <div className="shrink-0 md:text-right">
           {tier.pricePrefix && (
-            <span className="block font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+            <span className="block font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
               {isEn ? tier.pricePrefix.en : tier.pricePrefix.fr}
             </span>
           )}
@@ -100,12 +100,12 @@ function OfferSection({
               {isEn ? tier.price.en : tier.price.fr}
             </span>
             {!tier.noHt && (
-              <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+              <span className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {isEn ? "excl. VAT" : "HT"}
               </span>
             )}
           </div>
-          <div className="mt-2 font-mono text-[10px] tracking-[0.08em] text-mid-gray">
+          <div className="mt-2 font-mono text-2xs tracking-[0.08em] text-mid-gray">
             {isEn ? tier.duration.en : tier.duration.fr}
           </div>
         </div>
@@ -115,15 +115,15 @@ function OfferSection({
       <Reveal className="grid gap-8 px-6 py-10 md:grid-cols-2 lg:px-8 lg:py-12">
         <div className="flex flex-col gap-8">
           <div>
-            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {isEn ? "When?" : "Pour quand ?"}
             </div>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {copy.forWho}
             </p>
           </div>
           <div>
-            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {isEn ? "What it is" : "Ce que c'est"}
             </div>
             <p className="font-inter-tight text-base leading-relaxed text-foreground">
@@ -132,14 +132,14 @@ function OfferSection({
           </div>
         </div>
         <div>
-          <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+          <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
             {isEn ? "What's included" : "Ce qui est inclus"}
           </div>
           <ul className="flex flex-col gap-2.5">
             {copy.bullets.map((b) => (
               <li key={b} className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-                <span className="font-inter-tight text-sm leading-snug text-mid-gray">{b}</span>
+                <span className="font-inter-tight text-base leading-snug text-mid-gray">{b}</span>
               </li>
             ))}
           </ul>

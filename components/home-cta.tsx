@@ -27,7 +27,7 @@ export default function HomeCta() {
         <div className="grid items-end gap-10 md:grid-cols-[1fr_auto]">
           {/* Left */}
           <Reveal>
-            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+            <p className="mb-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
               № 06 ·{" "}
               <span className="text-mid-gray">
                 {isEn ? "Where to start" : "Par où commencer"}
@@ -42,7 +42,7 @@ export default function HomeCta() {
                   : "Votre site en ligne en 6 à 10 semaines."
               }
             />
-            <p className="mb-8 max-w-[460px] font-inter-tight text-base leading-relaxed text-mid-gray">
+            <p className="mb-8 max-w-[460px] font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
               {isEn
                 ? "Start with a free audit call: what's slowing your site down, a first direction. Then a clear scope, budget and timeline fixed upfront."
                 : "Commencez par un audit gratuit en visio : ce qui ralentit votre site, une première orientation. Ensuite, un cadrage clair, budget et délai fixés d'emblée."}
@@ -50,7 +50,7 @@ export default function HomeCta() {
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/audit-site-web"
-                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian hover:bg-accent-secondary/85"
               >
                 {isEn
                   ? "Book a free audit of your site"
@@ -60,7 +60,7 @@ export default function HomeCta() {
                 href="https://calendar.app.google/RwZqaabSR5aDMnk46"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground hover:bg-jet"
+                className="group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground hover:bg-jet"
               >
                 <CalendarDays size={14} />
                 {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
@@ -85,7 +85,7 @@ export default function HomeCta() {
                 <div className="text-3xl font-extralight leading-none tracking-tight text-foreground">
                   {s.value}
                 </div>
-                <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mt-1 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {s.label}
                 </div>
               </StaggerItem>

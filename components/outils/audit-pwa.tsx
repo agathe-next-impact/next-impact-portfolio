@@ -50,13 +50,13 @@ const INITIAL: FormState = {
 };
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 /** Couleur de texte d'un état, en tokens DS (jamais de couleur en dur). */
 function statusTextClass(status: "ok" | "warn" | "ko") {
@@ -319,7 +319,7 @@ export default function AuditPwa() {
         <p className={LABEL_MONO}>
           {isEn ? "PWA opportunity diagnostic" : "Diagnostic d'opportunité PWA"}
         </p>
-        <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
+        <p className="mt-2 font-inter-tight text-base leading-relaxed text-foreground">
           {isEn
             ? "Should you turn your site or mobile idea into an installable PWA? Answer 9 strategic questions."
             : "Faut-il transformer votre site ou votre idée mobile en PWA installable ? Répondez à 9 questions de cadrage."}
@@ -356,7 +356,7 @@ export default function AuditPwa() {
                 {isEn ? "Decision signal" : "Signal de décision"}
               </p>
               <p
-                className={`mt-3 font-inter-tight text-[15px] leading-relaxed ${verdict.toneClass}`}
+                className={`mt-3 font-inter-tight text-base leading-relaxed ${verdict.toneClass}`}
               >
                 {isEn ? verdict.en : verdict.fr}
               </p>
@@ -393,7 +393,7 @@ export default function AuditPwa() {
                     <p className="font-inter-tight text-sm font-medium text-foreground">
                       {isEn ? r.labelEn : r.labelFr}
                     </p>
-                    <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                       {isEn ? r.detailEn : r.detailFr}
                     </p>
                   </div>
@@ -405,7 +405,7 @@ export default function AuditPwa() {
           {/* Note méthodologique */}
           <div className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
-            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
                 ? "This is an opportunity diagnostic, not a Lighthouse audit. The next step is to validate priority user journeys, then check manifest, service worker, cache strategy, mobile performance and real-device behavior."
                 : "Ce diagnostic mesure l'intérêt de faire une PWA, pas seulement sa conformité technique. L'étape suivante consiste à valider les parcours prioritaires, puis à vérifier manifest, service worker, stratégie de cache, performance mobile et comportement sur appareils réels."}
@@ -560,7 +560,7 @@ function Field({
 }) {
   return (
     <div>
-      <p className="mb-2.5 font-inter-tight text-[13px] text-mid-gray">{label}</p>
+      <p className="mb-2.5 font-inter-tight text-base text-mid-gray">{label}</p>
       <div className="flex flex-wrap gap-1.5">
         {options.map((opt) => {
           const selected = value === opt.value;
@@ -570,7 +570,7 @@ function Field({
               type="button"
               onClick={() => onChange(opt.value)}
               className={
-                "rounded-sm border px-3.5 py-1.5 font-inter-tight text-[13px] transition-colors " +
+                "rounded-sm border px-3.5 py-1.5 font-inter-tight text-sm transition-colors " +
                 (selected
                   ? "border-l-[3px] border-l-accent-secondary border-dark-gray bg-jet text-foreground"
                   : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")

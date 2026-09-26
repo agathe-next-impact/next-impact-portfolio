@@ -43,7 +43,7 @@ export function HeroOfferStrip({
   return (
     <div className={"mt-8" + (className ? " " + className : "")}>
       {label && (
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+        <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
           {label}
         </p>
       )}
@@ -62,24 +62,24 @@ export function HeroOfferStrip({
                 />
               )}
               <span className="flex items-baseline justify-between gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground">
+                <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
                   {offer.name}
                 </span>
                 {offer.price && (
-                  <span className="whitespace-nowrap font-mono text-[11px] tracking-[0.04em] text-accent-secondary">
+                  <span className="whitespace-nowrap font-mono text-2xs tracking-[0.04em] text-accent-secondary">
                     {offer.price}
                   </span>
                 )}
               </span>
               {offer.recommended && (
-                <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+                <span className="mt-1 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                   ★ {recommendedLabel}
                 </span>
               )}
-              <span className="mt-2 font-inter-tight text-[13px] leading-snug text-mid-gray">
+              <span className="mt-2 font-inter-tight text-base leading-snug text-mid-gray">
                 {offer.benefit}
               </span>
-              <span className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+              <span className="mt-3 inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
                 {offer.external ? externalCtaLabel : ctaLabel}
                 <ArrowRight
                   size={11}

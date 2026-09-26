@@ -98,7 +98,7 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
     <>
       {/* En-tête de section */}
       <Reveal className="flex flex-col gap-4">
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+        <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           <span>{index}</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
           <span className="text-mid-gray">
@@ -114,7 +114,7 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
         </h2>
         {/* Argument anti-risque : les livrables par phase existent déjà dans les
             données — on l'explicite comme garantie de sortie à chaque étape. */}
-        <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
           {isEn
             ? "Each phase ends with a deliverable you keep — scoping document, mockups, staging site, performance report. If we stop there, you leave with it."
             : "Chaque phase se termine par un livrable que vous gardez — cadrage, maquettes, site en staging, rapport de performance. Si on s'arrête là, vous repartez avec."}
@@ -141,7 +141,7 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
               className="grid grid-cols-[56px_1fr_auto] items-start gap-x-6 border-b border-dark-gray py-7"
             >
               {/* Numéro mono accent */}
-              <div className="pt-[3px] font-mono text-[11px] tracking-[0.08em] text-accent-secondary">
+              <div className="pt-[3px] font-mono text-2xs tracking-[0.08em] text-accent-secondary">
                 {String(i + 1).padStart(2, "0")}
               </div>
 
@@ -150,16 +150,16 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
                 <h3 className="mb-2 font-light tracking-tight text-foreground text-lg">
                   {phase.title}
                 </h3>
-                <p className="mb-3 max-w-[520px] font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <p className="mb-3 max-w-[520px] font-inter-tight text-base leading-relaxed text-mid-gray">
                   {phase.description}
                 </p>
-                <p className="font-mono text-[10px] tracking-[0.06em] text-mid-gray">
+                <p className="font-mono text-2xs tracking-[0.06em] text-mid-gray">
                   ↳ {phase.deliverable}
                 </p>
               </div>
 
               {/* Durée */}
-              <div className="whitespace-nowrap pt-[3px] font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+              <div className="whitespace-nowrap pt-[3px] font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {phase.duration}
               </div>
             </StaggerItem>
@@ -171,12 +171,12 @@ export default function Process({ index = "№ 05" }: { index?: string }) {
       <Reveal className="mt-6 flex flex-col gap-4">
         <Hairline />
         <div className="flex flex-wrap items-center justify-between gap-6 pt-1">
-          <p className="font-inter-tight text-sm italic text-mid-gray">
+          <p className="font-inter-tight text-base italic text-mid-gray">
             {isEn
               ? "6 to 10 weeks total, depending on stack and complexity."
               : "6 à 10 semaines au total, selon la stack et la complexité."}
           </p>
-          <span className="whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+          <span className="whitespace-nowrap font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
             {isEn
               ? "Classic: 6 w · Headless: 8 w · Web app: 10 w"
               : "Classique : 6 s · Headless : 8 s · Web app : 10 s"}

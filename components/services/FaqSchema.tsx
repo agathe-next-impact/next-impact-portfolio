@@ -66,7 +66,7 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
                 aria-expanded={isOpen}
                 className="grid w-full grid-cols-[40px_1fr_24px] items-baseline gap-5 px-6 py-6 text-left lg:px-8"
               >
-                <span className="font-mono text-[11px] tracking-[0.08em] text-accent-secondary">
+                <span className="font-mono text-2xs tracking-[0.08em] text-accent-secondary">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-light tracking-tight text-foreground text-base md:text-lg">
@@ -82,7 +82,7 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
                 />
               </button>
               {isOpen && (
-                <div className="px-6 pb-6 pl-[60px] font-inter-tight text-sm leading-relaxed text-mid-gray lg:px-8 lg:pl-[60px]">
+                <div className="px-6 pb-6 pl-[60px] font-inter-tight text-base leading-relaxed text-mid-gray lg:px-8 lg:pl-[60px]">
                   {faq.answer}
                 </div>
               )}

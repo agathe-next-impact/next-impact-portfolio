@@ -25,7 +25,7 @@ const FIGARO_URL =
 const HAL_URL = "https://archivesic.ccsd.cnrs.fr/sic_01002025";
 const MAGMA_URL = "http://www.analisiqualitativa.com/magma/1302/article_10.htm";
 
-const STEP_P = "font-inter-tight text-sm leading-relaxed text-mid-gray";
+const STEP_P = "font-inter-tight text-base leading-relaxed text-mid-gray";
 const LINK_INLINE =
   "text-accent-secondary underline underline-offset-4 hover:text-foreground";
 
@@ -69,7 +69,7 @@ export default function AboutClient() {
               ),
             })}
           </p>
-          <p className="mt-2 font-inter-tight text-[13px] italic leading-relaxed text-mid-gray">
+          <p className="mt-2 font-inter-tight text-base italic leading-relaxed text-mid-gray">
             {t("journey.theorie.note")}
           </p>
         </>
@@ -155,7 +155,7 @@ export default function AboutClient() {
           </Reveal>
         }
       >
-        <p className="mt-6 max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray md:text-base">
+        <p className="mt-6 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
           {t("hero.subtext")}
         </p>
       </PageHero>
@@ -163,14 +163,14 @@ export default function AboutClient() {
       {/* En bref — TL;DR citable par les moteurs IA (GEO) */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
         <Reveal className="about-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
             {about.tldr.label}
           </p>
           <ul className="flex flex-col gap-2">
             {about.tldr.lines.map((line) => (
               <li
                 key={line}
-                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+                className="font-inter-tight text-base leading-relaxed text-mid-gray"
               >
                 {line}
               </li>
@@ -198,7 +198,7 @@ export default function AboutClient() {
               key={i}
               className="grid gap-4 border-b border-dark-gray p-6 last:border-b-0 lg:grid-cols-[180px_1fr] lg:gap-10 lg:p-8"
             >
-              <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent-secondary lg:pt-1">
+              <div className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary lg:pt-1">
                 {step.year}
               </div>
               <div>
@@ -228,7 +228,7 @@ export default function AboutClient() {
           <blockquote className="max-w-3xl border-l-2 border-accent-secondary/60 pl-6 text-xl font-extralight leading-snug tracking-tight text-foreground md:text-2xl">
             &ldquo;{t("manifesto.chapo")}&rdquo;
           </blockquote>
-          <p className="mt-3 pl-6 font-mono text-[11px] uppercase tracking-[0.1em] text-mid-gray">
+          <p className="mt-3 pl-6 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
             {t("manifesto.chapoByline")}
           </p>
           <p className="mt-8 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
@@ -242,22 +242,22 @@ export default function AboutClient() {
               key={key}
               className="flex h-full flex-col border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:border-r md:border-dark-gray md:last:border-r-0 lg:p-8"
             >
-              <span className="mb-6 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <span className="mb-6 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 {n}
               </span>
               <h3 className="text-xl font-light leading-tight tracking-tight text-foreground md:text-2xl">
                 {t(`manifesto.${key}.title`)}
               </h3>
-              <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {t(`manifesto.${key}.description`)}
               </p>
               <ul className="mt-6 flex flex-1 flex-col justify-end gap-2 border-t border-dark-gray pt-5">
                 {(["item1", "item2", "item3"] as const).map((it) => (
                   <li
                     key={it}
-                    className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray"
+                    className="flex gap-2 font-inter-tight text-base leading-relaxed text-mid-gray"
                   >
-                    <span className="shrink-0 pt-px font-mono text-[11px] text-accent-secondary">
+                    <span className="shrink-0 pt-px font-mono text-2xs text-accent-secondary">
                       →
                     </span>
                     {t(`manifesto.${key}.${it}`)}
@@ -293,7 +293,7 @@ export default function AboutClient() {
               href={FIGARO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex shrink-0 items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
+              className="group inline-flex shrink-0 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
             >
               {t("proofs.figaro.cta")}
               <ArrowRight
@@ -313,14 +313,14 @@ export default function AboutClient() {
               <div className="text-5xl font-extralight leading-none tracking-tight text-foreground lg:text-6xl">
                 <CountUp end={stat.end} />
               </div>
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+              <p className="mt-3 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                 {stat.label}
               </p>
               <MeterBar value={stat.meter} className="mt-6" />
               {stat.href && (
                 <Link
                   href={stat.href as LinkHref}
-                  className="group mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
+                  className="group mt-4 inline-flex items-center gap-1.5 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
                 >
                   {stat.cta}
                   <ArrowRight
@@ -351,7 +351,7 @@ export default function AboutClient() {
               className="group border-b border-dark-gray last:border-b-0"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
-                <span className="font-inter-tight text-[15px] text-foreground md:text-base">
+                <span className="font-inter-tight text-base text-foreground">
                   {f.question}
                 </span>
                 <Plus
@@ -359,7 +359,7 @@ export default function AboutClient() {
                   className="shrink-0 text-mid-gray transition-transform group-open:rotate-45"
                 />
               </summary>
-              <p className="max-w-3xl pb-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="max-w-3xl pb-6 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {f.answer}
               </p>
             </details>
@@ -375,7 +375,7 @@ export default function AboutClient() {
         innerClassName="border-t border-dark-gray px-6 py-8 lg:px-10"
       >
         <Reveal className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="max-w-3xl font-inter-tight text-base leading-relaxed text-mid-gray">
             {/* Copy inlinée (pas dans messages/*.json) : les messages next-intl sont
                 sérialisés dans le payload de TOUTES les pages, or la mention TIH ne
                 doit apparaître que sur /a-propos (acceptation Lot A, directives v3.1). */}
@@ -399,7 +399,7 @@ export default function AboutClient() {
           </p>
           <Link
             href={"/articles/reduire-contribution-agefiph-sous-traitance-tih" as LinkHref}
-            className="group inline-flex shrink-0 items-center gap-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
+            className="group inline-flex shrink-0 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-accent-secondary hover:text-foreground"
           >
             {locale === "en" ? "Understand the OETH benefit" : "Comprendre l'avantage OETH"}
             <ArrowRight

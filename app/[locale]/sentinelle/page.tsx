@@ -210,7 +210,7 @@ export default async function SentinellePage({
           </Link>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
           19 €/mois · sans engagement · relu par un humain avant envoi
         </p>
       </BlueprintSection>
@@ -232,13 +232,13 @@ export default async function SentinellePage({
         <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-3">
           {CE_QUE_VOUS_RECEVEZ.map((bloc) => (
             <div key={bloc.index} className="bg-jet p-8">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <span className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 № {bloc.index}
               </span>
               <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
                 {bloc.titre}
               </h3>
-              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {bloc.corps}
               </p>
             </div>
@@ -264,7 +264,7 @@ export default async function SentinellePage({
               <h3 className="text-lg font-medium tracking-tight text-foreground">
                 {bloc.titre}
               </h3>
-              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {bloc.corps}
               </p>
             </div>
@@ -319,7 +319,7 @@ export default async function SentinellePage({
         </div>
 
         {lienPaiement && (
-          <p className="mt-6 max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="mt-6 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
             Paiement sécurisé par Stripe. Carte bancaire ou paiement en un clic
             avec Link. L'adresse de votre site vous est demandée au moment du
             règlement : c'est elle qui déclenche la surveillance.
@@ -343,7 +343,7 @@ export default async function SentinellePage({
           {LIMITES.map((limite) => (
             <li
               key={limite}
-              className="border-l border-dark-gray pl-5 font-inter-tight text-base leading-relaxed text-mid-gray"
+              className="border-l border-dark-gray pl-5 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray"
             >
               {limite}
             </li>

@@ -27,7 +27,7 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
       {/* En-tête : index + nom + prix */}
       <Reveal className="flex flex-col gap-6 border-b border-dark-gray px-6 py-12 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-16">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>{index}</span>
             <span className="h-px w-6 bg-accent-secondary/50" />
             <span className="text-mid-gray">{tier.tech}</span>
@@ -37,7 +37,7 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
               {tier.name}
             </h2>
             {tier.badge && (
-              <span className="inline-flex items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+              <span className="inline-flex items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                 {tier.badge}
               </span>
             )}
@@ -47,7 +47,7 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
           <div className="text-xl font-light leading-none tracking-tight text-accent-secondary md:text-2xl">
             {tier.price}
           </div>
-          <div className="mt-2 font-mono text-[10px] tracking-[0.08em] text-mid-gray">
+          <div className="mt-2 font-mono text-2xs tracking-[0.08em] text-mid-gray">
             {tier.priceTagline}
           </div>
         </div>
@@ -57,24 +57,24 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
       <Reveal className="grid gap-8 px-6 py-10 md:grid-cols-2 lg:px-8 lg:py-12">
         <div className="flex flex-col gap-8">
           <div>
-            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {tier.forProjectLabel}
             </div>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {tier.forProject}
             </p>
           </div>
           <div>
-            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {tier.stackLabel}
             </div>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {tier.stackHtml}
             </p>
           </div>
         </div>
         <div>
-          <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+          <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
             {tier.solutionLabel}
           </div>
           <p className="font-inter-tight text-base leading-relaxed text-foreground">
@@ -91,7 +91,7 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
+              "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors",
               tier.highlight
                 ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
                 : "border border-dark-gray text-foreground hover:bg-jet",
@@ -104,7 +104,7 @@ function OfferSection({ tier, index }: { tier: Tier; index: string }) {
           <Link
             href={tier.ctaHref as Parameters<typeof Link>[0]["href"]}
             className={cn(
-              "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-[12px] uppercase tracking-[0.08em] transition-colors",
+              "group inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors",
               tier.highlight
                 ? "border border-accent-secondary bg-accent-secondary text-obsidian hover:bg-accent-secondary/85"
                 : "border border-dark-gray text-foreground hover:bg-jet",

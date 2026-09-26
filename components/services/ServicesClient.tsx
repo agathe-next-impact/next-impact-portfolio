@@ -130,7 +130,7 @@ export default function ServicesClient() {
           La classe `.services-tldr` est la cible du SpeakableSpecification. */}
       <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
         <Reveal className="services-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
             {isEn ? "In short" : "En bref"}
           </p>
           <ul className="flex flex-col gap-2">
@@ -152,7 +152,7 @@ export default function ServicesClient() {
             ).map((line) => (
               <li
                 key={line}
-                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+                className="font-inter-tight text-base leading-relaxed text-mid-gray"
               >
                 {line}
               </li>
@@ -220,7 +220,7 @@ export default function ServicesClient() {
                 className="text-mid-gray transition-colors group-hover:text-accent-secondary"
               />
               <h3 className="text-lg font-light tracking-tight text-foreground">{card.title}</h3>
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{card.desc}</p>
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{card.desc}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -268,7 +268,7 @@ export default function ServicesClient() {
               <h3 className="text-lg font-light tracking-tight text-foreground">
                 {card.title}
               </h3>
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                 {card.desc}
               </p>
             </StaggerItem>

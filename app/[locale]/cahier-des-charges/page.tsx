@@ -59,7 +59,7 @@ export default async function Home({
         <BlueprintSection tone="obsidian" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
           <Link
             href="/outils"
-            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:text-foreground"
+            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
             <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />
             {tOutils("backToTools")}

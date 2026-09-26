@@ -55,7 +55,7 @@ export function RadialGauge({
         <div className="text-center">
           <div className="text-sm font-light text-foreground">{label}</div>
           {sublabel && (
-            <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+            <div className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
               {sublabel}
             </div>
           )}

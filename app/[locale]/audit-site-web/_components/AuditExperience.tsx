@@ -22,14 +22,14 @@ import { AuditResultCard } from "./AuditResultCard";
 import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 const INPUT =
-  "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-[15px] text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
+  "w-full border border-dark-gray bg-jet px-4 py-3 font-sans text-base text-foreground outline-none transition-colors placeholder:text-mid-gray focus:border-accent-secondary focus:ring-1 focus:ring-accent-secondary";
 const LABEL =
-  "mb-1.5 block font-sans text-[13px] font-semibold text-foreground";
+  "mb-1.5 block font-sans text-sm font-semibold text-foreground";
 const BTN_PRIMARY =
-  "inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3.5 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50";
 const BTN_GHOST =
-  "group inline-flex items-center gap-1.5 rounded-sm border border-dark-gray px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
-const LABEL_MONO = "font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "group inline-flex items-center gap-1.5 rounded-sm border border-dark-gray px-5 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+const LABEL_MONO = "font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 type EmailState = "idle" | "sending" | "sent" | "error";
 
@@ -254,7 +254,7 @@ export default function AuditExperience() {
       {stage === "loading" && (
         <div className="flex flex-col items-center justify-center gap-4 px-6 py-16">
           <Loader2 className="h-8 w-8 animate-spin text-accent-secondary" />
-          <p className="font-inter-tight text-sm text-mid-gray">{c.form.analyzing}</p>
+          <p className="font-inter-tight text-base text-mid-gray">{c.form.analyzing}</p>
         </div>
       )}
 
@@ -279,7 +279,7 @@ export default function AuditExperience() {
                   <CheckCircle2 size={18} className="text-accent-secondary" />
                   {c.email.successTitle}
                 </p>
-                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                   {c.email.successBody}
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -305,7 +305,7 @@ export default function AuditExperience() {
                 <h3 className="mb-2 text-xl font-light tracking-tight text-foreground">
                   {c.email.title}
                 </h3>
-                <p className="mb-6 font-inter-tight text-sm text-mid-gray">
+                <p className="mb-6 font-inter-tight text-base text-mid-gray">
                   {c.email.description}
                 </p>
                 <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
@@ -356,7 +356,7 @@ export default function AuditExperience() {
                     />
                   </div>
                   {emailState === "error" && (
-                    <p className="border-l-[3px] border-vermilion bg-jet px-3 py-2.5 font-sans text-[13px] text-vermilion">
+                    <p className="border-l-[3px] border-vermilion bg-jet px-3 py-2.5 font-sans text-sm text-vermilion">
                       {c.email.error}
                     </p>
                   )}

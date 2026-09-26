@@ -36,15 +36,15 @@ const EXEMPLE_MAX = Math.round((EXEMPLE_MONTANT * COMMISSION_MAX) / 100);
    Styles partagés
    ───────────────────────────────────────────────────────────────── */
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const FIELD =
-  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
-const LABEL = "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+const LABEL = "block mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 /* ─────────────────────────────────────────────────────────────────
    Données de contenu
@@ -121,7 +121,7 @@ export default function ApporteursClient() {
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
       <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-16 lg:px-10 lg:py-28">
         <Reveal>
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <p className="mb-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             Apporteurs d'affaires
           </p>
           <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
@@ -171,10 +171,10 @@ export default function ApporteursClient() {
               <span className="font-mono text-3xl font-light tracking-tight text-foreground">
                 {p.value}
               </span>
-              <span className="font-inter-tight text-sm leading-snug text-mid-gray">
+              <span className="font-inter-tight text-base leading-snug text-mid-gray">
                 {p.label}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+              <span className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                 {p.sub}
               </span>
             </StaggerItem>
@@ -187,11 +187,11 @@ export default function ApporteursClient() {
               <div key={title} className="flex flex-col gap-3">
                 <div className="flex items-center gap-2.5">
                   <Icon size={14} className="flex-shrink-0 text-accent-secondary" aria-hidden="true" />
-                  <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground">
+                  <span className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
                     {title}
                   </span>
                 </div>
-                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{body}</p>
+                <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{body}</p>
               </div>
             ))}
           </div>
@@ -208,13 +208,13 @@ export default function ApporteursClient() {
 
         <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray lg:grid-cols-2">
           <Reveal className="flex flex-col gap-4 bg-jet px-8 py-10">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+            <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               Taux de commission
             </p>
             <p className="text-5xl font-light tracking-tight text-foreground">
               {COMMISSION_MIN}–{COMMISSION_MAX} <span className="text-3xl text-accent-secondary">%</span>
             </p>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               Du montant HT du premier projet signé, versée à l'encaissement. Je paie après
               avoir été payée — votre commission ne dépend jamais d'une facture en attente
               côté client.
@@ -222,13 +222,13 @@ export default function ApporteursClient() {
           </Reveal>
 
           <Reveal delay={0.05} className="flex flex-col gap-4 bg-jet px-8 py-10">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+            <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               Exemple — projet Headless WordPress
             </p>
             <p className="text-5xl font-light tracking-tight text-foreground">
               {EXEMPLE_MIN}–{EXEMPLE_MAX} <span className="text-2xl text-mid-gray">€</span>
             </p>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               Pour un projet facturé {EXEMPLE_MONTANT.toLocaleString("fr-FR")} € HT, votre
               commission est de {EXEMPLE_MIN} à {EXEMPLE_MAX} €, versés dans les 5 jours
               suivant mon encaissement.
@@ -237,7 +237,7 @@ export default function ApporteursClient() {
         </div>
 
         <Reveal delay={0.08}>
-          <p className="mt-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="mt-6 font-inter-tight text-base leading-relaxed text-mid-gray">
             Pas de contrat cadre préalable exigé. On acte la mise en relation par email —
             c'est suffisant. Si on travaille régulièrement ensemble, on peut formaliser une
             convention apporteur simple.
@@ -271,10 +271,10 @@ export default function ApporteursClient() {
             >
               <span className="font-mono text-2xl font-light text-accent-secondary">{step.num}</span>
               <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[13px] uppercase tracking-[0.08em] text-foreground">
+                <h3 className="font-mono text-sm uppercase tracking-[0.08em] text-foreground">
                   {step.title}
                 </h3>
-                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{step.body}</p>
+                <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{step.body}</p>
               </div>
             </StaggerItem>
           ))}
@@ -305,7 +305,7 @@ export default function ApporteursClient() {
                   className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-secondary"
                   aria-hidden="true"
                 />
-                <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                   {profile}
                 </span>
               </StaggerItem>
@@ -316,7 +316,7 @@ export default function ApporteursClient() {
         <Reveal delay={0.1} className="mt-12 border-t border-dark-gray pt-12">
           <div className="flex items-start gap-4 border border-dark-gray bg-jet px-6 py-5">
             <Users size={16} className="mt-0.5 flex-shrink-0 text-accent-secondary" aria-hidden="true" />
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               Ce dispositif n'est pas réservé aux professionnels du web. Si vous évoluez dans
               un réseau de dirigeants de PME ou d'artisans, vous détectez probablement des
               besoins de modernisation sans le savoir.
@@ -378,7 +378,7 @@ function PartnerIntroForm() {
       className="flex flex-col gap-5 border border-dark-gray bg-obsidian p-6 lg:p-8"
       aria-label="Formulaire de mise en relation apporteur"
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+      <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
         Parlez-moi du contact
       </p>
 
@@ -430,7 +430,7 @@ function PartnerIntroForm() {
         <ArrowRight size={14} aria-hidden="true" />
       </button>
 
-      <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+      <p className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
         Pas d'engagement · Réponse sous 24 h · Commission à l'encaissement
       </p>
     </form>

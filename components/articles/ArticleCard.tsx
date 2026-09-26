@@ -26,7 +26,7 @@ export function ArticleCard({ article, index = 0 }: ArticleCardProps) {
       className="group relative flex h-full w-full flex-col border border-dark-gray bg-transparent p-6 transition-colors hover:bg-jet lg:p-8"
     >
       {/* Meta : index + catégorie */}
-      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+      <div className="flex items-center justify-between font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
         <span className="text-accent-secondary">{article.category}</span>
         <span>{String(index + 1).padStart(2, "0")}</span>
       </div>
@@ -49,7 +49,7 @@ export function ArticleCard({ article, index = 0 }: ArticleCardProps) {
       )}
 
       {/* Pied : date + temps de lecture + flèche */}
-      <div className="mt-auto flex items-center gap-2 pt-6 font-mono text-[10px] tracking-[0.06em] text-mid-gray">
+      <div className="mt-auto flex items-center gap-2 pt-6 font-mono text-2xs tracking-[0.06em] text-mid-gray">
         {formattedDate && <span>{formattedDate}</span>}
         {formattedDate && <span aria-hidden>·</span>}
         <span>

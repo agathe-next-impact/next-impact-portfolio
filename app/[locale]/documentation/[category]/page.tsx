@@ -168,7 +168,7 @@ export default async function CategoryPage(props: CategoryPageProps) {
               className="mb-10 flex items-start justify-between gap-4 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 no-underline transition-colors hover:border-accent-secondary"
             >
               <div>
-                <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+                <p className="mb-1 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                   {locale === "en" ? "Overview" : "Vue d'ensemble"}
                 </p>
                 <p className="text-base font-medium text-foreground">
@@ -176,7 +176,7 @@ export default async function CategoryPage(props: CategoryPageProps) {
                     ? "Headless WordPress"
                     : "WordPress Headless"}
                 </p>
-                <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                   {locale === "en"
                     ? "Definition, comparison table, costs, performance and FAQ: the full picture in one page."
                     : "Définition, comparatif, coûts, performance et FAQ : la vue complète sur une page."}

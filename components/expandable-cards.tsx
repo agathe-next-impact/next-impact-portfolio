@@ -760,7 +760,7 @@ export function ExpandableCardDemo() {
           <div
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               color: "var(--muted-color)",

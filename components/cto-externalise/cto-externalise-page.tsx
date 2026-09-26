@@ -96,14 +96,14 @@ export default function CtoExternalisePage() {
           as="aside"
           className="cto-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8"
         >
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
             {CTO_TLDR.label[lang]}
           </p>
           <ul className="flex flex-col gap-2">
             {CTO_TLDR.lines.map((line) => (
               <li
                 key={line.fr}
-                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+                className="font-inter-tight text-base leading-relaxed text-mid-gray"
               >
                 {line[lang]}
               </li>
@@ -142,7 +142,7 @@ export default function CtoExternalisePage() {
                 key={step.id}
                 className="grid gap-x-8 gap-y-1 lg:grid-cols-[10rem_1fr]"
               >
-                <span className="font-mono text-[11px] uppercase leading-5 tracking-[0.14em] text-accent-secondary lg:pt-1 lg:text-right">
+                <span className="font-mono text-2xs uppercase leading-5 tracking-[0.14em] text-accent-secondary lg:pt-1 lg:text-right">
                   {step.when[lang]}
                 </span>
                 <div
@@ -158,7 +158,7 @@ export default function CtoExternalisePage() {
                   <h3 className="text-lg font-light leading-tight tracking-tight text-foreground md:text-xl">
                     {step[lang].title}
                   </h3>
-                  <p className="mt-2 max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <p className="mt-2 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
                     {step[lang].body}
                   </p>
                 </div>
@@ -172,13 +172,13 @@ export default function CtoExternalisePage() {
             ce qu'il COUVRE (arbitrage du 2026-09-08) ; les limites se traitent
             en FAQ, jamais en section mise en avant. */}
         <Reveal className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-4">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+          <span className="font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
             {isEn ? "Scope" : "Le périmètre"}
           </span>
           {PERIMETER.map((item) => (
             <span
               key={item.fr}
-              className="flex items-center gap-2 font-inter-tight text-sm text-mid-gray"
+              className="flex items-center gap-2 font-inter-tight text-base text-mid-gray"
             >
               <Check className="h-3.5 w-3.5 flex-shrink-0 text-accent-secondary" />
               {item[lang]}
@@ -214,7 +214,7 @@ export default function CtoExternalisePage() {
               }
             >
               {tier.featured && (
-                <span className="self-start border border-vermilion px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-vermilion">
+                <span className="self-start border border-vermilion px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.1em] text-vermilion">
                   {isEn ? "The common case" : "Le cas courant"}
                 </span>
               )}
@@ -227,7 +227,7 @@ export default function CtoExternalisePage() {
                   {isEn ? "per month" : "par mois"}
                 </span>
               </div>
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                 {tier.forWho[lang]}
               </p>
               <Link
@@ -253,7 +253,7 @@ export default function CtoExternalisePage() {
               <div className="bg-obsidian px-4 py-3" />
               {CTO_TIERS.map((tier) => (
                 <div key={tier.id} className="bg-obsidian px-4 py-3">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+                  <span className="font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                     {tier.name[lang]}
                   </span>
                 </div>
@@ -271,7 +271,7 @@ export default function CtoExternalisePage() {
                 </div>
                 {row.values.map((value, i) => (
                   <div key={CTO_TIERS[i].id} className="bg-jet px-4 py-3">
-                    <span className="font-inter-tight text-sm text-mid-gray">{value[lang]}</span>
+                    <span className="font-inter-tight text-base text-mid-gray">{value[lang]}</span>
                   </div>
                 ))}
               </div>
@@ -284,7 +284,7 @@ export default function CtoExternalisePage() {
           {CTO_TERMS.map((term) => (
             <li key={term.fr} className="flex items-start gap-2.5">
               <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-              <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                 {term[lang]}
               </span>
             </li>
@@ -324,10 +324,10 @@ export default function CtoExternalisePage() {
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
                 <span className="flex items-baseline gap-4">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-vermilion">
+                  <span className="font-mono text-2xs uppercase tracking-[0.14em] text-vermilion">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-inter-tight text-[15px] font-regular text-foreground md:text-base">
+                  <h3 className="font-inter-tight text-base font-regular text-foreground">
                     {item[lang].title}
                   </h3>
                 </span>
@@ -336,7 +336,7 @@ export default function CtoExternalisePage() {
                   className="shrink-0 text-mid-gray transition-transform group-open:rotate-45"
                 />
               </summary>
-              <p className="max-w-3xl pb-6 pl-9 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="max-w-3xl pb-6 pl-9 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {item[lang].body}
               </p>
             </StaggerItem>
@@ -353,7 +353,7 @@ export default function CtoExternalisePage() {
       <BlueprintSection tone="jet" innerClassName="px-6 py-12 lg:px-8 lg:py-16">
         <Reveal className="flex flex-col gap-8 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-obsidian/40 px-6 py-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <div className="max-w-xl">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+            <p className="font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
               {isEn ? "Getting started" : "Commencer"}
             </p>
             <h2 className="mt-3 text-2xl font-light tracking-tight text-foreground md:text-3xl">
@@ -361,7 +361,7 @@ export default function CtoExternalisePage() {
                 ? "You describe your situation, I reply within 48h"
                 : "Vous décrivez votre situation, je réponds sous 48 h"}
             </h2>
-            <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn ? (
                 <>
                   Every retainer starts with the audit and roadmap (€650 excl. VAT, three weeks).
@@ -409,7 +409,7 @@ export default function CtoExternalisePage() {
             return (
               <div key={c.q} className="bg-jet p-6 lg:p-8">
                 <h3 className="text-base font-medium text-foreground">{c.q}</h3>
-                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">{c.a}</p>
+                <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">{c.a}</p>
               </div>
             );
           })}

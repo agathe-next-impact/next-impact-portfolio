@@ -20,13 +20,13 @@ export function ArticleTocInline({
 
   return (
     <nav aria-label={label} className="mb-10 border border-dark-gray bg-jet/30 px-6 py-5">
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray">
+      <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray">
         {label}
       </p>
       <ol className="m-0 flex list-none flex-col gap-1.5 p-0">
         {sections.map((section, i) => (
           <li key={section.id} className="flex gap-3 text-sm">
-            <span className="font-mono text-[11px] text-dark-gray" aria-hidden>
+            <span className="font-mono text-2xs text-dark-gray" aria-hidden>
               {String(i + 1).padStart(2, "0")}
             </span>
             <a

@@ -290,7 +290,7 @@ export function MdxGallery() {
             key={c.id}
             onClick={() => setActive(c.id)}
             className={cn(
-              "rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-googletexte border transition-all duration-200",
+              "rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-2xs sm:text-xs font-googletexte border transition-all duration-200",
               active === c.id
                 ? "bg-regularblue/30 text-white border-regularblue/40"
                 : "bg-darkblue/40 text-white/80 border-lightblue/10 hover:bg-darkblue/60 hover:text-white/80"

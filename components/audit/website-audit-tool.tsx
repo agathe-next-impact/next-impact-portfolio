@@ -57,7 +57,7 @@ export function WebsiteAuditTool() {
       <Card className="mx-auto w-max max-w-full rounded-md border-dark-gray bg-jet p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="url" className="font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+            <label htmlFor="url" className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
               URL du site
             </label>
             <div className="flex max-w-[40rem] flex-col gap-2 sm:flex-row">
@@ -71,7 +71,7 @@ export function WebsiteAuditTool() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-accent-secondary bg-accent-secondary px-7 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? (
                   <>

@@ -24,11 +24,11 @@ export function ArticleEnBref({
       aria-label={label}
       className="article-en-bref mb-10 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8"
     >
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+      <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
         {label}
       </p>
       {lines.length === 1 ? (
-        <p className="font-inter-tight text-[15px] leading-relaxed text-foreground">
+        <p className="font-inter-tight text-base leading-relaxed text-foreground">
           {lines[0]}
         </p>
       ) : (
@@ -36,7 +36,7 @@ export function ArticleEnBref({
           {lines.map((line) => (
             <li
               key={line}
-              className="font-inter-tight text-sm leading-relaxed text-foreground md:text-[15px]"
+              className="font-inter-tight text-sm leading-relaxed text-foreground md:text-base"
             >
               {line}
             </li>

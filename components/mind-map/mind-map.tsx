@@ -557,7 +557,7 @@ function MindMapNodeCard({
         {node.hasChildren && (
           <div className="flex items-center gap-1 flex-shrink-0">
             <span
-              className="text-[10px] font-medium font-googletexte"
+              className="text-2xs font-medium font-googletexte"
               style={{
                 color: node.color,
               }}
@@ -983,7 +983,7 @@ export default function MindMap() {
         ).map((item) => (
           <div
             key={item.label}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] text-white/70 backdrop-blur-sm font-googletexte bg-darkblue/40 border border-lightblue/10"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-2xs text-white/70 backdrop-blur-sm font-googletexte bg-darkblue/40 border border-lightblue/10"
           >
             <div
               className="w-2 h-2 rounded-full"
@@ -999,7 +999,7 @@ export default function MindMap() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-4 right-4 z-30 text-[11px] text-white/25 select-none font-googletexte"
+        className="absolute bottom-4 right-4 z-30 text-2xs text-white/25 select-none font-googletexte"
       >
         {isEn
           ? "Click to explore · Scroll to zoom · Drag to pan · Double-click to recenter"

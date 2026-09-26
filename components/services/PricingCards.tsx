@@ -198,7 +198,7 @@ export function PricingCards() {
               )}
 
               {tier.badge && (
-                <span className="mb-4 inline-flex w-fit items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+                <span className="mb-4 inline-flex w-fit items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                   {tier.badge}
                 </span>
               )}
@@ -206,13 +206,13 @@ export function PricingCards() {
               {/* Nom + tech */}
               <div
                 className={cn(
-                  "font-mono text-[11px] uppercase tracking-[0.14em]",
+                  "font-mono text-2xs uppercase tracking-[0.14em]",
                   tier.highlight ? "text-accent-secondary" : "text-mid-gray",
                 )}
               >
                 {tier.name}
               </div>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+              <p className="mt-1 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                 {tier.tech}
               </p>
 
@@ -221,7 +221,7 @@ export function PricingCards() {
                 <div className="text-xl font-light leading-none tracking-tight text-accent-secondary md:text-2xl">
                   {tier.price}
                 </div>
-                <div className="mt-2 font-mono text-[10px] tracking-[0.08em] text-mid-gray">
+                <div className="mt-2 font-mono text-2xs tracking-[0.08em] text-mid-gray">
                   {tier.priceTagline}
                 </div>
               </div>
@@ -232,7 +232,7 @@ export function PricingCards() {
                   {
                     label: tier.forProjectLabel,
                     content: (
-                      <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                      <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                         {tier.forProject}
                       </p>
                     ),
@@ -244,9 +244,9 @@ export function PricingCards() {
                         {tier.included.map((item) => (
                           <li
                             key={item.text}
-                            className="flex items-start gap-2 font-inter-tight text-[13px] leading-relaxed text-mid-gray"
+                            className="flex items-start gap-2 font-inter-tight text-base leading-relaxed text-mid-gray"
                           >
-                            <span className="shrink-0 pt-px font-mono text-[11px] text-accent-secondary">→</span>
+                            <span className="shrink-0 pt-px font-mono text-2xs text-accent-secondary">→</span>
                             {item.text}
                           </li>
                         ))}
@@ -255,7 +255,7 @@ export function PricingCards() {
                   },
                 ].map(({ label, content }) => (
                   <div key={label} className="border-t border-dark-gray py-5">
-                    <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                    <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                       {label}
                     </div>
                     {content}
@@ -266,7 +266,7 @@ export function PricingCards() {
               {/* Renvoi vers la section détaillée (ancre du mega menu) */}
               <a
                 href={`#${tier.slug}`}
-                className="mt-6 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+                className="mt-6 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
               >
                 {isEn ? "See the detail" : "Voir le détail"}
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />

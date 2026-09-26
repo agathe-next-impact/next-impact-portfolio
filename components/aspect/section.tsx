@@ -97,7 +97,7 @@ export function SectionHeading({
       )}
     >
       {(index || kicker) && (
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+        <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           {index && <span>{index}</span>}
           {index && kicker && <span className="h-px w-6 bg-accent-secondary/50" />}
           {kicker && <span className="text-mid-gray">{kicker}</span>}

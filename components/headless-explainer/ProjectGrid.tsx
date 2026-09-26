@@ -42,14 +42,14 @@ export default function ProjectGrid({ items }: ProjectGridProps) {
               <h4 className="text-lg font-light tracking-tight text-foreground">{item.label}</h4>
               <span
                 className={cn(
-                  "inline-flex shrink-0 items-center border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em]",
+                  "inline-flex shrink-0 items-center border px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.08em]",
                   config.className,
                 )}
               >
                 {config.label}
               </span>
             </div>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{item.description}</p>
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{item.description}</p>
           </div>
         )
       })}

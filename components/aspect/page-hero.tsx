@@ -67,7 +67,7 @@ export function PageHero({
         </div>
       )}
       {note && (
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
           {note}
         </p>
       )}

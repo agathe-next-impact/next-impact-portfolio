@@ -139,7 +139,7 @@ export default function AppsSection() {
           title={copy.title}
           description={copy.subtitle}
         />
-        <span className="mt-4 inline-flex font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+        <span className="mt-4 inline-flex font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
           {copy.priceLabel}
         </span>
       </Reveal>
@@ -154,13 +154,13 @@ export default function AppsSection() {
             key={col.label}
             className="border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:p-8 md:[&:not(:last-child)]:border-r"
           >
-            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-4 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {col.label}
             </div>
             <ul className="flex flex-col gap-2.5">
               {col.items.map((item) => (
-                <li key={item} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
-                  <span className="shrink-0 pt-px font-mono text-[12px] text-accent-secondary">{col.symbol}</span>
+                <li key={item} className="flex gap-2 font-inter-tight text-base leading-relaxed text-mid-gray">
+                  <span className="shrink-0 pt-px font-mono text-xs text-accent-secondary">{col.symbol}</span>
                   {item}
                 </li>
               ))}
@@ -175,7 +175,7 @@ export default function AppsSection() {
           <h3 className="mb-3 text-xl font-light tracking-tight text-foreground md:text-2xl">
             {copy.differentiatorTitle}
           </h3>
-          <p className="max-w-2xl font-inter-tight text-[15px] italic leading-relaxed text-mid-gray">
+          <p className="max-w-2xl font-inter-tight text-base md:text-lg italic leading-relaxed text-mid-gray">
             {copy.differentiator}
           </p>
         </blockquote>
@@ -191,15 +191,15 @@ export default function AppsSection() {
             key={col.label}
             className="border-b border-dark-gray p-6 last:border-b-0 md:border-b-0 md:p-8 md:[&:not(:last-child)]:border-r"
           >
-            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-4 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {col.label}
             </div>
             <ul className="flex flex-col gap-2">
               {col.items.map((item) => (
-                <li key={item} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <li key={item} className="flex gap-2 font-inter-tight text-base leading-relaxed text-mid-gray">
                   <span
                     className={cn(
-                      "shrink-0 pt-px font-mono text-[12px]",
+                      "shrink-0 pt-px font-mono text-xs",
                       col.accent ? "text-accent-secondary" : "text-mid-gray",
                     )}
                   >
@@ -215,7 +215,7 @@ export default function AppsSection() {
 
       {/* Réalisations — preuve (web app & mobile) */}
       <div className="border-b border-dark-gray px-6 py-10 lg:px-8 lg:py-12">
-        <div className="mb-6 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+        <div className="mb-6 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           {copy.proofsLabel}
         </div>
         <div className="grid gap-px bg-dark-gray md:grid-cols-2">
@@ -239,7 +239,7 @@ export default function AppsSection() {
                   <h4 className="text-lg font-light tracking-tight text-foreground">
                     {proof.title}
                   </h4>
-                  <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                  <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                     {proof.tagline}
                   </p>
                 </div>
@@ -259,7 +259,7 @@ export default function AppsSection() {
             href="https://calendar.app.google/RwZqaabSR5aDMnk46"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex min-h-11 items-center justify-center gap-2 py-2.5 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+            className="group inline-flex min-h-11 items-center justify-center gap-2 py-2.5 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
           >
             {copy.ctaPrimary}
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />

@@ -28,7 +28,7 @@ export default function AuditSendFormClient({ userInfo, status, errorMessage }: 
           <h2 className="m-0 font-sans text-2xl font-light text-foreground">
             {isEn ? "Your audit is on its way!" : "Votre audit est en route !"}
           </h2>
-          <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
               ? userInfo
                 ? `We will send the full report to ${userInfo.email} as soon as it is ready (a few minutes). Check your inbox (and spam folder, just in case).`
@@ -46,7 +46,7 @@ export default function AuditSendFormClient({ userInfo, status, errorMessage }: 
           <h2 className="m-0 font-sans text-2xl font-light text-vermilion">
             {isEn ? "We could not send your audit" : "Impossible d'envoyer votre audit"}
           </h2>
-          <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn
               ? `Send error: ${errorMessage ?? "unknown error"}. Please contact us directly so we can send it to you.`
               : `Erreur lors de l'envoi : ${errorMessage ?? "erreur inconnue"}. Contactez-nous directement, nous vous l'enverrons.`}
@@ -65,7 +65,7 @@ export default function AuditSendFormClient({ userInfo, status, errorMessage }: 
         </div>
         <a
           href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
-          className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-4 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+          className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-4 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
         >
           <ScreenShareIcon size={14} />
           {isEn ? "Discuss on video" : "En discuter en visio"}

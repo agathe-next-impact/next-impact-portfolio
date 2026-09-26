@@ -149,10 +149,10 @@ function CategoryCell({
         >
           {cat.title}
         </h3>
-        <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
           {cat.description}
         </p>
-        <div className="mt-4 flex items-center justify-between border-t border-dark-gray pt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+        <div className="mt-4 flex items-center justify-between border-t border-dark-gray pt-3 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           <span>{cat.articleCount}</span>
           <ArrowRight
             className="h-3.5 w-3.5 text-accent-secondary transition-transform duration-300 group-hover:translate-x-0.5"
@@ -184,14 +184,14 @@ export function CrossCategoryNav({ currentCategory }: CrossCategoryNavProps) {
   return (
     <section className="mt-16 border-t border-dark-gray pt-10">
       <Reveal>
-        <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+        <p className="mb-4 flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           <span>{isEn ? "Related" : "À explorer"}</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
         </p>
         <h2 className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
           {isEn ? "Related categories" : "Catégories associées"}
         </h2>
-        <p className="mt-1.5 max-w-xl font-inter-tight text-sm text-mid-gray md:text-base">
+        <p className="mt-1.5 max-w-xl font-inter-tight text-base text-mid-gray md:text-lg">
           {isEn
             ? "Continue exploring with complementary topics."
             : "Continuez votre exploration avec des thématiques complémentaires."}
@@ -222,14 +222,14 @@ export function AllCategoriesGrid() {
   return (
     <section className="mt-12 border-y border-dark-gray py-10">
       <Reveal>
-        <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+        <p className="mb-4 flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
           <span>{isEn ? "Browse" : "Parcourir"}</span>
           <span className="h-px w-6 bg-accent-secondary/50" />
         </p>
         <h2 className="text-2xl font-light tracking-tight text-foreground md:text-3xl">
           {isEn ? "Explore the documentation" : "Explorer la documentation"}
         </h2>
-        <p className="mt-1.5 max-w-xl font-inter-tight text-sm text-mid-gray md:text-base">
+        <p className="mt-1.5 max-w-xl font-inter-tight text-base text-mid-gray md:text-lg">
           {isEn
             ? "All guides and resources, organized by topic."
             : "Tous nos guides et ressources, organisés par thématique."}

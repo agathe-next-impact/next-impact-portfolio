@@ -81,7 +81,7 @@ export default async function PrototypeIaPage({
         >
           <Link
             href="/outils"
-            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
+            className="group mb-10 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
           >
             <ArrowLeft
               size={12}

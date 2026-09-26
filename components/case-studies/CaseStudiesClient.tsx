@@ -22,9 +22,9 @@ const FADE = {
 };
 
 const CTA_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const CTA_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] }) {
   const { profileId } = useDocumentationMode();
@@ -62,17 +62,10 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
       <AnimatePresence mode="wait">
         <motion.div key={`grid-${key}`} {...FADE}>
           <BlueprintSection tone="obsidian">
-            <div className="border-t border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
-              <Reveal>
-                <SectionHeading
-                  index="№ 02"
-                  kicker={variant.tabsLabel}
-                  title={isEn ? "Case studies" : "Études de cas"}
-                />
-              </Reveal>
-              <div className="mt-10">
-                <Realisations cards={cards} defaultTab={variant.defaultTab} />
-              </div>
+            <div className="border-t border-dark-gray px-6 pb-12 lg:px-8 lg:pb-16">
+              {/* Titre visuel retiré ; h2 conservé pour la hiérarchie h1 → h3 des cartes. */}
+              <h2 className="sr-only">{isEn ? "Case studies" : "Études de cas"}</h2>
+              <Realisations cards={cards} defaultTab={variant.defaultTab} />
             </div>
           </BlueprintSection>
         </motion.div>
@@ -86,7 +79,7 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
           <BlueprintSection tone="jet">
             <Reveal className="flex flex-col gap-6 border-t border-dark-gray px-6 py-14 lg:px-8 lg:py-20">
               <SectionHeading
-                index="№ 03"
+                index="№ 02"
                 kicker={isEn ? "Your site" : "Votre site"}
                 title={
                   isEn ? (
@@ -132,7 +125,7 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
                 )}
               </div>
               {/* Sortie latérale pour l'indécis techno : la visio Sélecteur (/conseil). */}
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                 {isEn ? (
                   <>
                     Still unsure about the tech?{" "}

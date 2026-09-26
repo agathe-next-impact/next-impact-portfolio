@@ -22,7 +22,7 @@ export default function HomeFaq() {
         {faq.items.map((f) => (
           <details key={f.question} className="group border-b border-dark-gray">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
-              <span className="font-inter-tight text-[15px] font-regular text-foreground md:text-base">
+              <span className="font-inter-tight text-base font-regular text-foreground">
                 {f.question}
               </span>
               <Plus
@@ -30,7 +30,7 @@ export default function HomeFaq() {
                 className="shrink-0 text-mid-gray transition-transform group-open:rotate-45"
               />
             </summary>
-            <p className="max-w-3xl pb-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="max-w-3xl pb-6 font-inter-tight text-base leading-relaxed text-mid-gray">
               {f.answer}
             </p>
           </details>

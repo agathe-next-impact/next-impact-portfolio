@@ -32,15 +32,15 @@ const TARIF_NET_REMISE = 20; // % de remise par rapport au tarif public
    Styles partagés
    ───────────────────────────────────────────────────────────────── */
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const FIELD =
-  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
-const LABEL = "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+const LABEL = "block mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 /* ─────────────────────────────────────────────────────────────────
    Données de contenu
@@ -114,7 +114,7 @@ export default function AgencesClient() {
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
       <BlueprintSection tone="obsidian" ticks innerClassName="px-6 py-16 lg:px-10 lg:py-28">
         <Reveal>
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <p className="mb-4 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             Agences &amp; studios
           </p>
           <h1 className="max-w-3xl text-3xl font-light leading-[1.05] tracking-tight text-foreground md:text-4xl lg:text-5xl">
@@ -149,14 +149,14 @@ export default function AgencesClient() {
               <Lock size={28} className="text-accent-secondary" aria-hidden="true" />
             </div>
             <div className="flex flex-col gap-3">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <p className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 Engagement de non-démarchage — Marque blanche
               </p>
               <p className="max-w-2xl text-xl font-light tracking-tight text-foreground md:text-2xl">
                 Je ne contacte jamais vos clients en direct. La relation reste la vôtre,
                 intégralement et définitivement.
               </p>
-              <p className="max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
                 Cet engagement n'est pas enterré dans des CGV. Il est ici, en haut de page,
                 parce que c'est la condition de confiance sur laquelle repose tout le reste.
                 Votre client ne sait pas que j'existe sauf si vous le décidez.
@@ -188,11 +188,11 @@ export default function AgencesClient() {
             <StaggerItem key={g.title} className="flex flex-col gap-3 bg-jet px-6 py-8">
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={13} className="flex-shrink-0 text-accent-secondary" aria-hidden="true" />
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground">
+                <h3 className="font-mono text-2xs uppercase tracking-[0.1em] text-foreground">
                   {g.title}
                 </h3>
               </div>
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{g.body}</p>
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{g.body}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -224,10 +224,10 @@ export default function AgencesClient() {
             >
               <span className="font-mono text-2xl font-light text-accent-secondary">{step.num}</span>
               <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[13px] uppercase tracking-[0.08em] text-foreground">
+                <h3 className="font-mono text-sm uppercase tracking-[0.08em] text-foreground">
                   {step.title}
                 </h3>
-                <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{step.body}</p>
+                <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{step.body}</p>
               </div>
             </StaggerItem>
           ))}
@@ -258,8 +258,8 @@ export default function AgencesClient() {
               <span className="font-mono text-3xl font-light tracking-tight text-foreground">
                 {p.value}
               </span>
-              <span className="font-inter-tight text-sm leading-snug text-mid-gray">{p.label}</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+              <span className="font-inter-tight text-base leading-snug text-mid-gray">{p.label}</span>
+              <span className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                 {p.sub}
               </span>
             </StaggerItem>
@@ -337,7 +337,7 @@ function AgencyContactForm({ tarif }: { tarif: number }) {
       className="flex flex-col gap-5 border border-dark-gray bg-obsidian p-6 lg:p-8"
       aria-label="Formulaire de contact agence partenaire"
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+      <p className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
         Brief du premier projet test
       </p>
 
@@ -388,7 +388,7 @@ function AgencyContactForm({ tarif }: { tarif: number }) {
         <ArrowRight size={14} aria-hidden="true" />
       </button>
 
-      <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+      <p className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
         Devis net partenaire −{tarif} % · Réponse sous 24 h · Non-démarchage garanti
       </p>
     </form>

@@ -64,7 +64,7 @@ export default function CaseStudyProfileContent({
             {detailedDescription.split("\n\n").map((paragraph, index) => (
               <p
                 key={index}
-                className="mb-4 text-[15px] leading-relaxed text-mid-gray"
+                className="mb-4 text-base leading-relaxed text-mid-gray"
               >
                 {paragraph}
               </p>
@@ -89,7 +89,7 @@ export default function CaseStudyProfileContent({
                     strokeWidth={1.5}
                     className="mt-0.5 shrink-0 text-accent-secondary"
                   />
-                  <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                     {objective}
                   </span>
                 </li>
@@ -111,7 +111,7 @@ export default function CaseStudyProfileContent({
                     strokeWidth={1.5}
                     className="mt-0.5 shrink-0 text-accent-secondary"
                   />
-                  <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                  <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                     {result}
                   </span>
                 </li>

@@ -70,7 +70,7 @@ export function ProofStrip({ className = "" }: { className?: string }) {
                   />
                 )}
               </span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+              <span className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                 {item.label}
               </span>
             </StaggerItem>

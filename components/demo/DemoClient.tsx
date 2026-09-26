@@ -29,11 +29,8 @@ export default function DemoClient({
   return (
     <main>
       <PageLayout
-        titre={
-          isEn
-            ? "Demos — Websites, web apps and mobile applications"
-            : "Démos — Sites web, web apps et applications mobiles"
-        }
+        compact
+        titre={isEn ? "Demos" : "Démos"}
         sousTitre={
           isEn
             ? "From Réseauteurs, France's national networking platform, to Headless WordPress sites and mobile PWAs: every Next Impact project in action, from newest to oldest."
@@ -90,7 +87,7 @@ export default function DemoClient({
                   href={`/etudes-de-cas/${featured.slug}`}
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 10,
+                    fontSize: 11,
                     letterSpacing: "0.08em",
                     textTransform: "uppercase",
                     color: "var(--accent-color)",
@@ -187,7 +184,7 @@ export default function DemoClient({
                       href={`/etudes-de-cas/${video.slug}`}
                       style={{
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
                         color: "var(--accent-color)",

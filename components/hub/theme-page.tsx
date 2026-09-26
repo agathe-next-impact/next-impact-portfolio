@@ -18,7 +18,7 @@ import type { HubTheme, Temp } from "@/lib/hub-themes";
 import { tx } from "@/lib/hub-themes";
 
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 // Température → couleur d'accent. froid (regarde) → tiède (décide) → chaud (agit).
 const TEMP: Record<Temp, { border: string; chip: string; fr: string; en: string }> = {
@@ -87,7 +87,7 @@ export function ThemePage({
                   <p className="font-inter-tight text-base text-foreground">
                     {tx(opt.label, locale)}
                   </p>
-                  <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                  <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
                     {tx(opt.detail, locale)}
                   </p>
                 </StaggerItem>
@@ -114,10 +114,10 @@ export function ThemePage({
             >
               <Lightbulb size={16} className="mt-0.5 shrink-0 text-accent" />
               <div>
-                <p className="font-inter-tight text-[15px] text-foreground">
+                <p className="font-inter-tight text-base text-foreground">
                   {tx(a.point, locale)}
                 </p>
-                <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                   {tx(a.detail, locale)}
                 </p>
               </div>
@@ -126,7 +126,7 @@ export function ThemePage({
         </Stagger>
         <Reveal className="mt-6 flex items-start gap-3 border border-dark-gray bg-obsidian px-4 py-4">
           <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
-          <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+          <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
             {copy.doctrine}
           </p>
         </Reveal>
@@ -159,7 +159,7 @@ export function ThemePage({
                         <p className="font-inter-tight text-base text-foreground">
                           {tx(r.name, locale)}
                         </p>
-                        <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                        <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                           {tx(r.blurb, locale)}
                         </p>
                       </div>
@@ -207,7 +207,7 @@ export function ThemePage({
                     <p className="font-inter-tight text-base text-foreground">
                       {tx(tool.name, locale)}
                     </p>
-                    <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                       {tx(tool.blurb, locale)}
                     </p>
                   </div>
@@ -235,17 +235,17 @@ export function ThemePage({
               >
                 <div>
                   <div className="mb-3 flex items-center justify-between">
-                    <span className={`font-mono text-[9px] uppercase tracking-[0.16em] ${temp.chip}`}>
+                    <span className={`font-mono text-2xs uppercase tracking-[0.16em] ${temp.chip}`}>
                       {isEn ? temp.en : temp.fr}
                     </span>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-foreground">
+                    <span className="font-mono text-2xs uppercase tracking-[0.08em] text-foreground">
                       {tx(p.price, locale)}
                     </span>
                   </div>
                   <p className="font-inter-tight text-base text-foreground">
                     {tx(p.name, locale)}
                   </p>
-                  <p className="mt-1.5 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                  <p className="mt-1.5 font-inter-tight text-base leading-relaxed text-mid-gray">
                     {tx(p.blurb, locale)}
                   </p>
                 </div>
@@ -253,8 +253,8 @@ export function ThemePage({
                   href={p.href as Href}
                   className={
                     isHot
-                      ? "group inline-flex min-h-10 items-center justify-center gap-1.5 py-2 border border-accent-secondary bg-accent-secondary px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
-                      : "group inline-flex min-h-10 items-center justify-center gap-1.5 py-2 border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-jet"
+                      ? "group inline-flex min-h-10 items-center justify-center gap-1.5 py-2 border border-accent-secondary bg-accent-secondary px-4 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+                      : "group inline-flex min-h-10 items-center justify-center gap-1.5 py-2 border border-dark-gray px-4 font-mono text-2xs uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-jet"
                   }
                 >
                   {tx(p.cta, locale)}

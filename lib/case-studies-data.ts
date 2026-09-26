@@ -124,6 +124,50 @@ export interface CaseStudy extends CaseStudyMeta, CaseStudyContent {
 
 const META: CaseStudyMeta[] = [
   {
+    id: "28",
+    slug: "hermitage-sejours",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: null,
+    offreConstruction: "plateforme", // aligné sur hermitage-ecolise (one-page Next.js). TODO(Agathe): confirmer
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: null, // TODO(Agathe): durée de réalisation
+    clientId: "hermitage",
+    clientType: "ess",
+    clientName: "Tiers Lieu L'Hermitage",
+    imageUrl: "/img/logo-hermitage.webp",
+    // Capture existante (commit « landings », 23/05/2026) : montre une version antérieure du héros.
+    // TODO(Agathe): remplacer par une capture du héros vidéo actuel si souhaité.
+    galleryUrl: "/img/desktop-screen-sejours-hermitage.jpg",
+    cardImageUrl: "/img/desktop-screen-sejours-hermitage.webp",
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de mise en ligne (site en ligne au plus tard en mai 2026)
+    technologies: ["Next.js", "Tailwind CSS", "Vercel"],
+    website: "https://sejours.hermitagelelab.com/",
+    youtubeVideoId: "SEwUiDnePUM",
+  },
+  {
+    id: "27",
+    slug: "aloyse-leledy-becue",
+    famille: "sites-institutionnels",
+    statut: "publie",
+    featured: 3,
+    offreConstruction: "wordpress",
+    offreConseil: null,
+    budgetIndicatif: null,
+    delai: null, // TODO(Agathe): durée de réalisation
+    clientId: null,
+    clientType: "independant",
+    clientName: "Aloyse Leledy-Bécue",
+    imageUrl: "",
+    galleryUrl: "/img/desktop-screen-aloyse-leledy-becue.png",
+    cardImageUrl: "/img/desktop-screen-aloyse-leledy-becue.webp",
+    date: { month: null, year: 2026 }, // TODO(Agathe): mois de mise en ligne (contenus saisis fin juillet 2026)
+    technologies: ["WordPress", "Thème bloc sur mesure", "Full Site Editing", "Interactivity API"],
+    website: "https://aloyseleledybecue.com/",
+    youtubeVideoId: "t1MaHEN2g34",
+  },
+  {
     id: "24",
     slug: "hermitage-ecolise",
     famille: "sites-institutionnels",
@@ -228,7 +272,7 @@ const META: CaseStudyMeta[] = [
     slug: "panorama-pub",
     famille: "app-web-mobile",
     statut: "publie",
-    featured: 3,
+    featured: null,
     offreConstruction: "plateforme",
     offreConseil: null,
     budgetIndicatif: null,
@@ -661,6 +705,58 @@ const META: CaseStudyMeta[] = [
 // ─── French content ────────────────────────────────────────────────────────
 
 const CONTENT_FR: Record<string, CaseStudyContent> = {
+  "hermitage-sejours": {
+    title: "L'Hermitage · Séjours de groupe et d'entreprise",
+    description:
+      "Création de la landing page des séjours de L'Hermitage : une vidéo aérienne du domaine, six briques pour composer un séminaire ou un séjour de groupe, et un bouton « Réserver » qui mène directement à l'interlocutrice du lieu.",
+    detailedDescription: `L'Hermitage est un tiers-lieu rural installé à Autrêches, dans l'Oise : un domaine forestier de 30 hectares à 1h40 de Paris. Le lieu accueille des séminaires, des team-buildings et des séjours en groupe ou en famille, dans une grande maison d'hôtes, des maisons forestières, des chalets et, l'été, un campement de tipis. L'offre est riche mais composite : hébergement, restauration, espaces de travail, activités, logistique. Elle avait besoin d'une page à elle, sur un sous-domaine dédié, qui parle à la personne chargée d'organiser le séjour.\n\nJ'ai conçu et développé cette landing page avec Next.js et Tailwind CSS. Le héros installe le lieu avant tout argument : une vidéo aérienne du domaine, encadrée de photos du lieu, et un titre qui se déroule phrase par phrase, de « Votre séjour à l'Hermitage, en groupe, en famille » à « à très vite !! », en 19 phrases qui racontent le domaine. Vient ensuite « Construisons votre expérience » : six briques pour composer le séjour, chacune adossée à un chiffre du lieu. Plus de 100 couchages, plus de 16 options de restauration à la carte, 6 espaces de travail modulables, plus de 50 activités de groupe, des événements jusqu'à plus de 250 personnes, le transport et la logistique à la demande.\n\nLa suite de la page apporte la preuve : une galerie de séminaires et de team-buildings organisés sur place, le domaine en chiffres (30 hectares, 100+ couchages, 1h40 de Paris) et un bandeau de 38 références qui y ont déjà séjourné. Le parcours de réservation reste volontairement direct : le bouton « Réserver » de l'en-tête, comme chacune des six briques, ouvre un même panneau de contact avec l'interlocutrice du lieu, par e-mail ou par téléphone, avec ses horaires de disponibilité.\n\nCôté technique, la page est pré-rendue et servie en statique depuis Vercel ; les images passent par le composant d'optimisation de Next.js et chaque visuel porte un texte alternatif descriptif. La landing s'ajoute à l'écosystème web de L'Hermitage que je fais grandir projet après projet : site principal, jeu de piste, site du démonstrateur européen ECOLISE.`,
+    objectives: [
+      "Donner à l'offre de séjours de groupe et d'entreprise une page dédiée, distincte du site principal du tiers-lieu",
+      "Faire ressentir le domaine dès l'arrivée sur la page : forêt, hébergements, espaces de travail",
+      "Présenter une offre composite en briques lisibles, chacune adossée à un chiffre du lieu",
+      "Rassurer les organisateurs par des images de séjours passés et des références",
+      "Ramener chaque parcours vers une prise de contact directe avec l'interlocutrice du lieu",
+    ],
+    results: [
+      "Landing page en ligne sur un sous-domaine dédié de l'écosystème L'Hermitage",
+      "Héros avec vidéo aérienne du domaine et titre animé en 19 phrases qui racontent le lieu",
+      "Six briques pour composer un séjour : 100+ couchages, 16+ options de restauration, 6 espaces modulables, 50+ activités, événements jusqu'à 250+ personnes, transport à la demande",
+      "Galerie de séminaires organisés sur place et bandeau de 38 références clients",
+      "Bouton « Réserver » et briques reliés à un même panneau de contact, par e-mail ou par téléphone",
+    ],
+    galleryAlt:
+      "Landing page des séjours de L'Hermitage : en-tête avec bouton Réserver, photos des hébergements et titre animé",
+    tags: ["ESS", "Tiers-lieu", "Landing page", "Next.js", "Séjours de groupe"],
+    cardTitle: "L'Hermitage · Séjours",
+    cardDescription:
+      "Landing page Next.js des séjours de groupe et d'entreprise de L'Hermitage : vidéo du domaine, six briques et réservation directe.",
+    cardAlt: "Landing page des séjours de groupe et d'entreprise de L'Hermitage",
+  },
+  "aloyse-leledy-becue": {
+    title: "Aloyse Leledy-Bécue",
+    description:
+      "Création du portfolio WordPress de la cinéaste Aloyse Leledy-Bécue : 33 films présentés en bande défilante, filtrables par 12 thématiques, sur un thème sur mesure qu'elle administre elle-même.",
+    detailedDescription: `Aloyse Leledy-Bécue est cinéaste : documentaire, film d'artiste, court-métrage, web. Sur ses projets, elle tient un ou plusieurs rôles : réalisatrice, cheffe-opératrice, monteuse, voix off. Pour une cinéaste, le portfolio est un outil de travail. Programmateurs, commanditaires et collaborateurs doivent pouvoir parcourir la filmographie, comprendre qui a fait quoi et lancer un film sans détour.\n\nJ'ai développé un thème WordPress sur mesure, pensé comme une table de montage. Sur un fond sombre qui laisse la place aux images, les films défilent en bande horizontale ; chaque vignette affiche sa durée, de 2 à 109 minutes. Un clic ouvre le film dans une visionneuse en surimpression, sans quitter la page. Une colonne de filtres, à droite, trie la filmographie par thématique : architecture, art contemporain, danse et performance, féminisme, paysage, spectacle vivant, et six autres.\n\nSous l'interface, chaque film est un contenu à part entière dans WordPress, classé selon trois axes : la thématique, le rôle tenu par Aloyse et la nature du projet (réalisations personnelles, commandes, collaborations). Ces trois familles de projets forment aussi la navigation principale, avec la biographie et le contact. Aloyse ajoute un film depuis l'administration WordPress qu'elle connaît : il rejoint la bande et les filtres sans intervention technique. Le thème est un thème bloc (Full Site Editing : les gabarits se modifient dans l'éditeur de WordPress, sans code), et les interactions (défilement, filtres, visionneuse) reposent sur l'API d'interactivité native de WordPress.\n\nLe résultat est un portfolio en ligne qui présente 33 films dans une seule vue, filtrable par 12 thématiques et par 4 métiers. Côté visiteur, le site ne charge ni jQuery ni extension tierce : moins de mises à jour, moins de failles, moins de pannes.`,
+    objectives: [
+      "Présenter l'ensemble de la filmographie dans une interface qui laisse la place aux images",
+      "Permettre de parcourir les films par thématique, par rôle tenu et par nature de projet",
+      "Lancer la lecture d'un film sans quitter la page",
+      "Donner à la cinéaste l'autonomie pour ajouter et classer ses films dans WordPress",
+    ],
+    results: [
+      "Portfolio en ligne présentant 33 films, avec leur durée, en bande défilante horizontale",
+      "Filtres par 12 thématiques, et navigation par 4 rôles et 3 familles de projets",
+      "Visionneuse en surimpression : le film se lance sans changer de page",
+      "Thème WordPress sur mesure, sans jQuery ni extension tierce chargée côté visiteur",
+      "Nouveaux films ajoutés depuis l'administration WordPress, sans intervention technique",
+    ],
+    galleryAlt:
+      "Page Films du portfolio d'Aloyse Leledy-Bécue : vignettes de films sur fond sombre en défilement horizontal et filtres par thématique",
+    tags: ["Indépendante", "Cinéma", "Portfolio", "WordPress", "Thème sur mesure"],
+    cardDescription:
+      "Portfolio WordPress sur mesure d'une cinéaste : 33 films en bande défilante, filtrables par thématique.",
+    cardAlt: "Portfolio de la cinéaste Aloyse Leledy-Bécue, page Films",
+  },
   "hermitage-ecolise": {
     title: "L'Hermitage — Démonstrateur européen ECOLISE",
     description:
@@ -1334,6 +1430,58 @@ const CONTENT_FR: Record<string, CaseStudyContent> = {
 // ─── English content ───────────────────────────────────────────────────────
 
 const CONTENT_EN: Record<string, CaseStudyContent> = {
+  "hermitage-sejours": {
+    title: "L'Hermitage · Group and corporate stays",
+    description:
+      "Built the landing page for L'Hermitage's stays: an aerial video of the estate, six building blocks to put together a seminar or a group stay, and a \"Book\" button that leads straight to the venue's contact person.",
+    detailedDescription: `L'Hermitage is a rural third place in Autrêches, in the Oise department: a 30-hectare forest estate 1h40 from Paris. It hosts seminars, team-building events and group or family stays, in a large guesthouse, forest houses, chalets and, in summer, a tipi camp. The offer is rich but made of many parts: accommodation, catering, workspaces, activities, logistics. It needed a page of its own, on a dedicated subdomain, speaking to the person in charge of organising the stay.\n\nI designed and developed this landing page with Next.js and Tailwind CSS. The hero sets the scene before any argument: an aerial video of the estate, framed by photos of the venue, and a headline that unfolds phrase by phrase, from "Your stay at L'Hermitage, as a group, as a family" to "see you very soon!!", in 19 phrases that tell the story of the estate. Next comes "Let's build your experience": six building blocks to put the stay together, each backed by a figure from the venue. Over 100 beds, over 16 à la carte catering options, 6 modular workspaces, over 50 group activities, events for over 250 people, transport and logistics on request.\n\nThe rest of the page provides the proof: a gallery of seminars and team-building events held on site, the estate in figures (30 hectares, 100+ beds, 1h40 from Paris) and a strip of 38 organisations that have already stayed there. The booking path is deliberately direct: the "Book" button in the header, like each of the six blocks, opens the same contact panel with the venue's contact person, by email or phone, with her opening hours.\n\nOn the technical side, the page is prerendered and served statically from Vercel; images go through the Next.js optimisation component and every visual carries a descriptive alt text. The landing page joins the L'Hermitage web ecosystem I have been growing project after project: main website, treasure hunt, site for the ECOLISE European demonstrator.`,
+    objectives: [
+      "Give the group and corporate stays offer a dedicated page, separate from the third place's main website",
+      "Let visitors feel the estate as soon as they land: forest, accommodation, workspaces",
+      "Present a many-sided offer as clear building blocks, each backed by a figure from the venue",
+      "Reassure organisers with pictures of past stays and references",
+      "Bring every path back to direct contact with the venue's contact person",
+    ],
+    results: [
+      "Landing page live on a dedicated subdomain of the L'Hermitage ecosystem",
+      "Hero with an aerial video of the estate and a headline animated in 19 phrases that tell the story of the place",
+      "Six building blocks to put a stay together: 100+ beds, 16+ catering options, 6 modular workspaces, 50+ activities, events for 250+ people, transport on request",
+      "Gallery of seminars held on site and a strip of 38 client references",
+      "\"Book\" button and blocks linked to the same contact panel, by email or phone",
+    ],
+    galleryAlt:
+      "L'Hermitage stays landing page: header with Book button, photos of the accommodation and animated headline",
+    tags: ["Social economy", "Third place", "Landing page", "Next.js", "Group stays"],
+    cardTitle: "L'Hermitage · Stays",
+    cardDescription:
+      "Next.js landing page for L'Hermitage's group and corporate stays: estate video, six building blocks and direct booking.",
+    cardAlt: "Landing page for L'Hermitage's group and corporate stays",
+  },
+  "aloyse-leledy-becue": {
+    title: "Aloyse Leledy-Bécue",
+    description:
+      "Built the WordPress portfolio of filmmaker Aloyse Leledy-Bécue: 33 films presented in a scrolling strip, filterable by 12 themes, on a custom theme she manages herself.",
+    detailedDescription: `Aloyse Leledy-Bécue is a filmmaker: documentary, artist film, short film, web. On her projects she takes on one or more roles: director, cinematographer, editor, voice-over. For a filmmaker, the portfolio is a working tool. Programmers, commissioners and collaborators need to browse the filmography, understand who did what and start a film without detours.\n\nI built a custom WordPress theme, designed like an editing table. On a dark background that leaves room for the images, the films scroll in a horizontal strip; each thumbnail shows its running time, from 2 to 109 minutes. One click opens the film in an overlay viewer, without leaving the page. A column of filters on the right sorts the filmography by theme: architecture, contemporary art, dance and performance, feminism, landscape, live performance, and six others.\n\nUnder the interface, each film is a content item in its own right in WordPress, classified along three axes: the theme, the role Aloyse held and the type of project (personal works, commissions, collaborations). These three project families also form the main navigation, alongside the biography and contact pages. Aloyse adds a film from the WordPress admin she already knows: it joins the strip and the filters with no technical intervention. The theme is a block theme (Full Site Editing: templates are edited in the WordPress editor, without code), and the interactions (scrolling, filters, viewer) rely on WordPress's native Interactivity API.\n\nThe result is a live portfolio that presents 33 films in a single view, filterable by 12 themes and 4 roles. On the visitor side, the site loads neither jQuery nor any third-party plugin: fewer updates, fewer vulnerabilities, fewer breakdowns.`,
+    objectives: [
+      "Present the whole filmography in an interface that leaves room for the images",
+      "Let visitors browse films by theme, by role held and by type of project",
+      "Start a film without leaving the page",
+      "Give the filmmaker the autonomy to add and classify her films in WordPress",
+    ],
+    results: [
+      "Live portfolio presenting 33 films, with their running time, in a horizontal scrolling strip",
+      "Filters by 12 themes, plus navigation by 4 roles and 3 project families",
+      "Overlay viewer: the film starts without a page change",
+      "Custom WordPress theme, with neither jQuery nor third-party plugins loaded for visitors",
+      "New films added from the WordPress admin, with no technical intervention",
+    ],
+    galleryAlt:
+      "Films page of Aloyse Leledy-Bécue's portfolio: film thumbnails on a dark background in a horizontal scroll, with theme filters",
+    tags: ["Freelancer", "Film", "Portfolio", "WordPress", "Custom theme"],
+    cardDescription:
+      "Custom WordPress portfolio for a filmmaker: 33 films in a scrolling strip, filterable by theme.",
+    cardAlt: "Portfolio of filmmaker Aloyse Leledy-Bécue, Films page",
+  },
   "hermitage-ecolise": {
     title: "L'Hermitage — ECOLISE European Demonstrator",
     description:
@@ -2040,6 +2188,18 @@ function getClientTestimonial(
 // ─── Result highlights (per slug, per locale) ──────────────────────────────
 
 const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
+  // Relevé sur le site en ligne (26/09/2026). TODO(Agathe): PageSpeed / délai / demandes de séjour si disponibles
+  "hermitage-sejours": [
+    { value: "6 briques", label: "Pour composer un séjour sur mesure" },
+    { value: "38 références", label: "Clients affichés en bandeau" },
+    { value: "Pré-rendue", label: "Page servie en statique depuis Vercel" },
+  ],
+  // Compté sur le site en ligne (API WordPress, 26/09/2026). TODO(Agathe): PageSpeed / délai si disponibles
+  "aloyse-leledy-becue": [
+    { value: "33 films", label: "Présentés dans une seule vue" },
+    { value: "12 thématiques", label: "Pour filtrer la filmographie" },
+    { value: "Sur mesure", label: "Thème WordPress dédié" },
+  ],
   // TODO(Agathe): remplacer par des chiffres projet réels si disponibles (PageSpeed, délai…)
   "hermitage-ecolise": [
     { value: "1 des 15", label: "Démonstrateurs européens ECOLISE" },
@@ -2165,6 +2325,18 @@ const RESULT_HIGHLIGHTS_FR: Record<string, ResultHighlight[]> = {
 };
 
 const RESULT_HIGHLIGHTS_EN: Record<string, ResultHighlight[]> = {
+  // Taken from the live site (2026-09-26). TODO(Agathe): PageSpeed / delivery time / stay enquiries if available
+  "hermitage-sejours": [
+    { value: "6 blocks", label: "To build a tailor-made stay" },
+    { value: "38 references", label: "Client logos shown in a strip" },
+    { value: "Prerendered", label: "Page served statically from Vercel" },
+  ],
+  // Counted on the live site (WordPress API, 2026-09-26). TODO(Agathe): PageSpeed / delivery time if available
+  "aloyse-leledy-becue": [
+    { value: "33 films", label: "Presented in a single view" },
+    { value: "12 themes", label: "To filter the filmography" },
+    { value: "Custom", label: "Dedicated WordPress theme" },
+  ],
   // TODO(Agathe): replace with real project figures if available (PageSpeed, delivery time…)
   "hermitage-ecolise": [
     { value: "1 of 15", label: "ECOLISE European Demonstrators" },

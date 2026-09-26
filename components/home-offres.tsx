@@ -168,7 +168,7 @@ export default function HomeOffres() {
                   className="pointer-events-none absolute bottom-1.5 right-1.5 h-2.5 w-2.5 border-b border-r border-accent-secondary opacity-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 motion-safe:translate-x-1 motion-safe:translate-y-1 motion-safe:group-hover:translate-x-0 motion-safe:group-hover:translate-y-0 motion-reduce:transition-none"
                 />
 
-                <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                <div className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                   {offer.subtitle}
                 </div>
                 <h3 className="mt-2 text-2xl font-normal leading-tight tracking-tight text-foreground md:text-3xl">
@@ -181,18 +181,18 @@ export default function HomeOffres() {
 
                 <ul className="mt-6 flex flex-1 flex-col gap-2">
                   {offer.items.map((s) => (
-                    <li key={s} className="flex gap-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
-                      <span className="shrink-0 pt-px font-mono text-[11px] text-accent-secondary">→</span>
+                    <li key={s} className="flex gap-2 font-inter-tight text-base leading-relaxed text-mid-gray">
+                      <span className="shrink-0 pt-px font-mono text-2xs text-accent-secondary">→</span>
                       {s}
                     </li>
                   ))}
                 </ul>
 
-                <div className="mt-6 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+                <div className="mt-6 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                   {offer.target}
                 </div>
 
-                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
                   {offer.cta}
                   <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
@@ -203,7 +203,7 @@ export default function HomeOffres() {
 
         {/* Comment ça marche — fil rouge « garder WordPress » */}
         <div className="border-t border-dark-gray px-6 py-5 lg:px-8">
-          <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+          <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
             {isEn ? (
               <>
                 Key idea:{" "}
@@ -224,13 +224,13 @@ export default function HomeOffres() {
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray px-6 py-6 lg:px-8">
           <Link
             href="/solutions-web"
-            className="font-mono text-[10px] tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
+            className="font-mono text-2xs tracking-[0.06em] text-mid-gray transition-colors hover:text-foreground"
           >
             {isEn ? "Pricing simulator →" : "Simulateur de tarifs →"}
           </Link>
           <Link
             href="/solutions-web"
-            className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+            className="group inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
           >
             {isEn ? "Compare in detail" : "Comparer en détail"}
             <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />

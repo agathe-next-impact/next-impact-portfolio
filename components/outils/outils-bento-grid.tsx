@@ -185,7 +185,7 @@ function ToolCard({ card, isEn }: { card: BentoCard; isEn: boolean }) {
             className="mt-0.5 shrink-0 text-mid-gray transition-colors group-hover:text-accent-secondary"
           />
           {card.tag && (
-            <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+            <span className="border border-accent-secondary px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
               {card.tag}
             </span>
           )}
@@ -195,10 +195,10 @@ function ToolCard({ card, isEn }: { card: BentoCard; isEn: boolean }) {
           <h3 className="mb-2 text-base font-light leading-snug tracking-tight text-foreground">
             {card.title}
           </h3>
-          <p className="mb-4 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+          <p className="mb-4 font-inter-tight text-base leading-relaxed text-mid-gray">
             {card.description}
           </p>
-          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+          <span className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
             {isEn ? "Open" : "Ouvrir"}
             <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
           </span>
@@ -212,7 +212,7 @@ function GroupNav({ locale, isEn }: { locale: Locale; isEn: boolean }) {
   const cards = buildCards(isEn)
   return (
     <nav aria-label={isEn ? "Tool families" : "Familles d'outils"}>
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+      <p className="mb-3 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
         {isEn ? "Four tool families" : "Quatre familles d'outils"}
       </p>
       <ul className="grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-4">
@@ -224,7 +224,7 @@ function GroupNav({ locale, isEn }: { locale: Locale; isEn: boolean }) {
                 href={`#${group.slug}`}
                 className="group flex h-full w-full flex-col justify-between gap-4 bg-jet p-4 no-underline transition-colors hover:bg-obsidian"
               >
-                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary">
+                <span className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                   <span>{group.index}</span>
                   <span className="h-px w-5 bg-accent-secondary/50" />
                   <span className="text-mid-gray">{group.kicker[locale]}</span>
@@ -232,7 +232,7 @@ function GroupNav({ locale, isEn }: { locale: Locale; isEn: boolean }) {
                 <span className="text-base font-light leading-snug tracking-tight text-foreground">
                   {group.title[locale]}
                 </span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors group-hover:text-accent-secondary">
+                <span className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors group-hover:text-accent-secondary">
                   {count} {isEn ? (count > 1 ? "tools" : "tool") : count > 1 ? "outils" : "outil"}
                   <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
@@ -262,7 +262,7 @@ export default function OutilsBentoGrid() {
           <section key={group.index} id={group.slug} className="scroll-mt-24">
             {/* En-tête de groupe : index № + kicker mono vermillon + titre */}
             <div className="mb-8 flex flex-col gap-2">
-              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 <span>{group.index}</span>
                 <span className="h-px w-6 bg-accent-secondary/50" />
                 <span className="text-mid-gray">{group.kicker[locale]}</span>

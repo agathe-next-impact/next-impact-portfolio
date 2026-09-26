@@ -19,7 +19,7 @@ export function BlogIndex({ posts }: BlogIndexProps) {
       <div className="relative mx-auto w-full max-w-[1200px] border-x border-dark-gray">
         {/* En-tête de page */}
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
             <span>№ 01</span>
             <span className="h-px w-6 bg-accent-secondary/50" aria-hidden />
             <span className="text-mid-gray">{isEn ? "Journal" : "Le journal"}</span>
@@ -51,7 +51,7 @@ export function BlogIndex({ posts }: BlogIndexProps) {
             <p className="font-inter-tight text-base text-foreground">
               {isEn ? "The blog is coming soon." : "Le blog arrive bientôt."}
             </p>
-            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+            <p className="mt-2 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
               {isEn ? "First articles in the works." : "Premiers articles en cours d'écriture."}
             </p>
           </div>

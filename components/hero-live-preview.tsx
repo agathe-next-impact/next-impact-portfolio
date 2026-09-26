@@ -69,7 +69,7 @@ export default function HeroLivePreview() {
               tabIndex={active ? 0 : -1}
               onClick={() => setTab(t.id)}
               className={cn(
-                "relative flex items-center gap-2 border-r border-dark-gray px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors",
+                "relative flex items-center gap-2 border-r border-dark-gray px-4 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] transition-colors",
                 active
                   ? "bg-jet text-foreground"
                   : "text-mid-gray hover:bg-jet/40 hover:text-foreground",
@@ -97,7 +97,7 @@ export default function HeroLivePreview() {
         </div>
         <div className="flex flex-1 items-center gap-1.5 bg-jet px-2.5 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-accent-secondary" />
-          <span className="font-mono text-[10px] tracking-[0.04em] text-mid-gray">{url}</span>
+          <span className="font-mono text-2xs tracking-[0.04em] text-mid-gray">{url}</span>
         </div>
       </div>
 
@@ -157,7 +157,7 @@ export default function HeroLivePreview() {
             href={SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute bottom-2 right-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition-colors hover:bg-jet"
+            className="absolute bottom-2 right-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition-colors hover:bg-jet"
           >
             <span className="status-dot" />
             {isEn ? "Live demo" : "Démo live"}
@@ -167,7 +167,7 @@ export default function HeroLivePreview() {
             />
           </a>
         ) : (
-          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray backdrop-blur-sm">
+          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray backdrop-blur-sm">
             <LayoutDashboard size={11} className="text-accent-secondary" />
             {isEn ? "The admin you already use" : "L'admin que vous gérez déjà"}
           </span>

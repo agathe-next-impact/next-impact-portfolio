@@ -21,7 +21,7 @@ export default function TimelineStep({ step, label, description, isLast = false 
       {/* Contenu */}
       <div className={cn("pb-8", isLast && "pb-0")}>
         <p className="text-lg font-light tracking-tight text-foreground">{label}</p>
-        <p className="mt-1 font-inter-tight text-sm leading-relaxed text-mid-gray">{description}</p>
+        <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">{description}</p>
       </div>
     </div>
   )

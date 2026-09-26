@@ -3,9 +3,9 @@ import { Link } from "@/i18n/navigation";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
-const KICKER = "font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray";
+const KICKER = "font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray";
 const FOOT_LINK =
-  "font-mono text-[11px] uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
+  "font-mono text-2xs uppercase tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground";
 
 const NAV_LINKS = [
   { href: "/solutions-web",            key: "services" },
@@ -67,13 +67,13 @@ export default function Footer({
           <div className="p-8">
             <div className={KICKER}>Studio</div>
             <div className="mt-4 text-lg text-foreground">{t("company")}</div>
-            <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
               {t("owner")}
             </p>
-            <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
               {t("address")}
             </p>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+            <p className="mt-3 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
               SIREN 532 675 386
             </p>
           </div>
@@ -129,19 +129,19 @@ export default function Footer({
             <div className={KICKER}>{t("contactQuestion")}</div>
             <a
               href="mailto:agathe@next-impact.digital"
-              className="mt-4 block font-mono text-[11px] tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
+              className="mt-4 block font-mono text-2xs tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
             >
               agathe@next-impact.digital
             </a>
             <a
               href="tel:0673981638"
-              className="mt-2 block font-mono text-[11px] tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
+              className="mt-2 block font-mono text-2xs tracking-[0.06em] text-foreground no-underline transition-colors hover:text-vermilion"
             >
               06 73 98 16 38
             </a>
             <Link
               href="/contact"
-              className="mt-5 inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+              className="mt-5 inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {t("startWebApp")}
             </Link>
@@ -150,14 +150,14 @@ export default function Footer({
 
         {/* Colophon */}
         <div className="flex flex-wrap items-center justify-between gap-2 border border-t-0 border-dark-gray bg-jet px-6 py-4">
-          <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+          <span className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
             © {year} NEXT IMPACT DIGITAL
           </span>
-          <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+          <span className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
             {t("updated")}
           </span>
           {!isProduct && (
-            <CookieSettingsButton className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
+            <CookieSettingsButton className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
           )}
           {/* Espace abonné Sentinelle. Deux points à ne pas « corriger » :
               · balise <a> et non le Link i18n — /espace vit hors de app/[locale]/
@@ -168,7 +168,7 @@ export default function Footer({
                 une surface de conversion. */}
           <a
             href="/espace"
-            className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+            className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
             {t("subscriberArea")}
           </a>
@@ -177,7 +177,7 @@ export default function Footer({
               plus, le lien ne remontait nulle part. */}
           <a
             href="#top"
-            className="font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+            className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
             ↑ HAUT DE PAGE
           </a>

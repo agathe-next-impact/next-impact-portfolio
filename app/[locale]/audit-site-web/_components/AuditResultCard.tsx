@@ -11,7 +11,7 @@ import type { AuditPageContent, AuditVerdict } from "@/lib/audit-page-content";
 import type { CwvRating, Impact, QuickAuditResult } from "@/lib/audit/quick-audit-types";
 
 const LABEL_MONO =
-  "font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 function impactText(impact: Impact): string {
   if (impact === "high") return "text-vermilion";
@@ -55,7 +55,7 @@ export function AuditResultCard({
             <p className="font-inter-tight text-sm font-medium text-foreground">
               {copy.unreachableTitle}
             </p>
-            <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
               {result.error}
             </p>
           </div>
@@ -70,7 +70,7 @@ export function AuditResultCard({
               <p className={LABEL_MONO}>{copy.scoreCaption}</p>
               <RadialGauge value={result.overallScore} size={132} label={copy.scoreLabel} />
               {result.tech.wordpress && (
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+                <span className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                   <Cpu size={11} />
                   {copy.wordpressDetected}
                 </span>
@@ -86,20 +86,20 @@ export function AuditResultCard({
                       <span className="font-inter-tight text-sm text-foreground">
                         {copy.axisLabels[axis.key]}
                         {axis.estimated && (
-                          <span className="ml-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                          <span className="ml-2 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                             {copy.estimate}
                           </span>
                         )}
                         {perfLoading && axis.key === "performance" && (
-                          <span className="ml-2 inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.1em] text-accent-secondary">
+                          <span className="ml-2 inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                             <Loader2 size={9} className="animate-spin" />
                             {copy.cwvLoading}
                           </span>
                         )}
                       </span>
-                      <span className="font-mono text-[12px] tabular-nums text-mid-gray">
+                      <span className="font-mono text-xs tabular-nums text-mid-gray">
                         {axis.score}
-                        <span className="text-[10px]">/100</span>
+                        <span className="text-2xs">/100</span>
                       </span>
                     </div>
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-dark-gray">
@@ -113,7 +113,7 @@ export function AuditResultCard({
                         {axis.metrics.map((m) => (
                           <span
                             key={m.label}
-                            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-[10px] ${cwvChip(
+                            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-2xs ${cwvChip(
                               m.rating,
                             )}`}
                           >
@@ -144,7 +144,7 @@ export function AuditResultCard({
                     <AlertTriangle size={15} className={`mt-0.5 shrink-0 ${impactText(p.impact)}`} />
                     <div>
                       <p className="font-inter-tight text-sm text-foreground">{p.title}</p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-mid-gray">
+                      <p className="mt-0.5 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
                         {copy.axisLabels[p.axis]}
                       </p>
                     </div>
@@ -162,7 +162,7 @@ export function AuditResultCard({
                 {strengths.map((s, i) => (
                   <li key={i} className="flex gap-2.5">
                     <Check size={15} className="mt-0.5 shrink-0 text-accent-secondary" />
-                    <span className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                       {s}
                     </span>
                   </li>
@@ -177,17 +177,17 @@ export function AuditResultCard({
       <div className="border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 p-6">
         <p className={`${LABEL_MONO} mb-2 text-accent-secondary`}>{copy.orientationTitle}</p>
         <h4 className="mb-2 text-lg font-light tracking-tight text-foreground">{verdict.title}</h4>
-        <p className="mb-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="mb-4 font-inter-tight text-base leading-relaxed text-mid-gray">
           {verdict.description}
         </p>
         <Link
           href={verdict.href}
-          className="group inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+          className="group inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
         >
           {verdict.offerLabel}
           <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
         </Link>
-        <p className="mt-4 flex items-start gap-2 border-t border-dark-gray pt-3 font-inter-tight text-[12px] leading-relaxed text-mid-gray">
+        <p className="mt-4 flex items-start gap-2 border-t border-dark-gray pt-3 font-inter-tight text-xs leading-relaxed text-mid-gray">
           <Check size={13} className="mt-0.5 shrink-0 text-mid-gray" />
           {copy.orientationHint}
         </p>

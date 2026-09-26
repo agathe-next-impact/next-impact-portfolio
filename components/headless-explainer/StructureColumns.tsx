@@ -28,7 +28,7 @@ export default function StructureColumns({ groups }: StructureColumnsProps) {
               <li
                 key={item}
                 className={cn(
-                  "border-l-2 py-1 pl-4 font-inter-tight text-sm leading-relaxed text-mid-gray",
+                  "border-l-2 py-1 pl-4 font-inter-tight text-base leading-relaxed text-mid-gray",
                   colorMap[group.color],
                 )}
               >

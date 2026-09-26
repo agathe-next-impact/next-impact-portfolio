@@ -88,7 +88,7 @@ export function AuditPromoBanner({
         <h3 className="mb-1 text-lg font-light tracking-tight text-foreground">
           {copy.title}
         </h3>
-        <p className="font-inter-tight text-sm text-mid-gray">{copy.subtitle}</p>
+        <p className="font-inter-tight text-base text-mid-gray">{copy.subtitle}</p>
       </div>
 
       <Link

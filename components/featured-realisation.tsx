@@ -9,9 +9,9 @@ import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-ebony";
 
 type Copy = {
   badge: string;
@@ -117,7 +117,7 @@ export default function FeaturedRealisation() {
               <div className="text-3xl font-light tracking-tight text-foreground">
                 {stat.value}
               </div>
-              <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+              <div className="mt-2 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {stat.label}
               </div>
             </div>
@@ -140,27 +140,27 @@ export default function FeaturedRealisation() {
             <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-light tracking-tight text-foreground">+25</span>
-                <span className="max-w-[140px] font-mono text-[10px] uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
+                <span className="max-w-[140px] font-mono text-2xs uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
                   {isEn ? "projects shipped since 2020" : "projets livrés depuis 2020"}
                 </span>
               </div>
               <div className="flex items-baseline gap-3 border-dark-gray sm:border-l sm:pl-10">
                 <span className="text-3xl font-light tracking-tight text-foreground">98/100</span>
-                <span className="max-w-[150px] font-mono text-[10px] uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
+                <span className="max-w-[150px] font-mono text-2xs uppercase leading-relaxed tracking-[0.08em] text-mid-gray">
                   {isEn ? "PageSpeed reached (Proditec, 45 → 98)" : "PageSpeed atteint (Proditec, 45 → 98)"}
                 </span>
               </div>
             </div>
             <Link
               href="/etudes-de-cas"
-              className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+              className="group inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
             >
               {isEn ? "All case studies" : "Toutes les études de cas"}
               <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
 
-          <p className="mt-8 border-t border-dark-gray pt-6 font-mono text-[11px] leading-[2.2] tracking-[0.04em] text-mid-gray">
+          <p className="mt-8 border-t border-dark-gray pt-6 font-mono text-2xs leading-[2.2] tracking-[0.04em] text-mid-gray">
             {CLIENTS.map((name, i) => (
               <span key={name}>
                 {i > 0 && <span className="px-2.5 text-accent-secondary/50">·</span>}

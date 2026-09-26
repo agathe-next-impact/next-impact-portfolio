@@ -184,7 +184,7 @@ export function DocumentationSearch({
             className="fixed z-[100] max-h-96 overflow-y-auto border border-dark-gray bg-obsidian shadow-2xl"
           >
             {suggestions.length === 0 ? (
-              <li className="px-4 py-3 font-inter-tight text-sm text-mid-gray">
+              <li className="px-4 py-3 font-inter-tight text-base text-mid-gray">
                 {isEn ? "No guide found for" : "Aucun guide trouvé pour"} «{" "}
                 {query.trim()} »
               </li>
@@ -215,7 +215,7 @@ export function DocumentationSearch({
                       <span className="block truncate text-sm font-light tracking-tight text-foreground">
                         {item.title}
                       </span>
-                      <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+                      <span className="mt-0.5 block font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                         {docCategoryLabel(item.category, locale)}
                       </span>
                     </span>
@@ -262,10 +262,10 @@ export function DocumentationSearch({
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={onKeyDown}
-          className="w-full bg-transparent font-inter-tight text-sm text-foreground outline-none placeholder:text-mid-gray [&::-webkit-search-cancel-button]:hidden"
+          className="w-full bg-transparent font-inter-tight text-base text-foreground outline-none placeholder:text-mid-gray [&::-webkit-search-cancel-button]:hidden"
         />
         <span
-          className="hidden shrink-0 border border-dark-gray px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray sm:block"
+          className="hidden shrink-0 border border-dark-gray px-1.5 py-0.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray sm:block"
           aria-hidden
         >
           {items.length} guides

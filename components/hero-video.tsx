@@ -78,7 +78,7 @@ export default function HeroVideo() {
           type="button"
           onClick={toggle}
           aria-label={isEn ? "Pause video" : "Mettre la vidéo en pause"}
-          className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition-colors hover:bg-jet"
+          className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 border border-dark-gray bg-obsidian/90 px-2.5 py-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-foreground backdrop-blur-sm transition-colors hover:bg-jet"
         >
           <Pause size={11} aria-hidden="true" className="text-accent-secondary" />
           {isEn ? "Pause" : "Pause"}

@@ -62,9 +62,9 @@ const LEGACY_SUBJECTS: Record<string, SubjectKey> = {
 };
 
 const fieldClass =
-  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary";
 
-const labelClass = "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+const labelClass = "block mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 export default function MultiSubjectContactForm() {
   const locale = useLocale() as Locale;
@@ -132,10 +132,10 @@ export default function MultiSubjectContactForm() {
     <div className="h-full bg-obsidian">
       {/* Header */}
       <div className="border-b border-dark-gray px-6 py-6 lg:px-8">
-        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+        <p className="mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           {isEn ? "Contact form" : "Formulaire de contact"}
         </p>
-        <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
           {isEn
             ? "Pick the topic: advisory call, audit + roadmap, outsourced technical expert, redesign project or free diagnostic."
             : "Choisissez le sujet : visio conseil, audit + roadmap, expert technique externalisé, projet de refonte ou diagnostic gratuit."}
@@ -149,7 +149,7 @@ export default function MultiSubjectContactForm() {
             <h3 className="text-2xl font-light tracking-tight text-foreground">
               {isEn ? "Message sent" : "Message envoyé"}
             </h3>
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
                 ? "Thanks, I'll get back to you within 24h, from agathe@next-impact.digital."
                 : "Merci, je reviens vers vous sous 24 h, depuis agathe@next-impact.digital."}
@@ -210,7 +210,7 @@ export default function MultiSubjectContactForm() {
                         )}
                       />
                       <div>
-                        <p className="mb-0.5 text-[13px] font-medium text-foreground">
+                        <p className="mb-0.5 text-sm font-medium text-foreground">
                           {copy.label}
                         </p>
                         <p className="font-inter-tight text-xs leading-snug text-mid-gray">
@@ -301,7 +301,7 @@ export default function MultiSubjectContactForm() {
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-60"
+                      className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-60"
                     >
                       {status === "loading" ? (
                         <>
@@ -315,13 +315,13 @@ export default function MultiSubjectContactForm() {
                         </>
                       )}
                     </button>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+                    <p className="font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                       {isEn ? "Reply within 24h · Free, no strings attached" : "Réponse sous 24h · Gratuit, sans engagement"}
                     </p>
                   </div>
 
                   {status === "error" && (
-                    <div className="flex items-center gap-2 border border-accent-secondary bg-accent-secondary/5 px-4 py-3 font-inter-tight text-[13px] text-accent-secondary">
+                    <div className="flex items-center gap-2 border border-accent-secondary bg-accent-secondary/5 px-4 py-3 font-inter-tight text-sm text-accent-secondary">
                       <AlertCircle size={14} className="shrink-0" />
                       {isEn
                         ? "Something went wrong. Please try again, or reach out via email or phone."

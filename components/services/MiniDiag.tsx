@@ -126,7 +126,7 @@ export default function MiniDiag({ index = "№ 02" }: { index?: string }) {
         <Reveal className="mt-px border border-dark-gray bg-obsidian p-6 lg:p-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+              <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                 {isEn ? "Recommended" : "Recommandé"}
                 {reco.recommended && (
                   <span className="text-mid-gray">· {isEn ? "most popular" : "le plus demandé"}</span>
@@ -134,23 +134,23 @@ export default function MiniDiag({ index = "№ 02" }: { index?: string }) {
               </div>
               <div className="mt-2 flex flex-wrap items-baseline gap-3">
                 <span className="text-2xl font-light tracking-tight text-foreground">{reco.recoName}</span>
-                <span className="font-mono text-[12px] tracking-[0.06em] text-mid-gray">{reco.recoPrice}</span>
+                <span className="font-mono text-xs tracking-[0.06em] text-mid-gray">{reco.recoPrice}</span>
               </div>
-              <p className="mt-2 max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="mt-2 max-w-xl font-inter-tight text-base leading-relaxed text-mid-gray">
                 {reco.recoLine}
               </p>
             </div>
             <div className="flex flex-wrap gap-3 md:shrink-0">
               <a
                 href={reco.anchor}
-                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               >
                 {isEn ? "See this package" : "Voir ce forfait"}
                 <ArrowRight size={14} />
               </a>
               <Link
                 href="/solutions-web/eligibilite"
-                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
+                className="inline-flex min-h-11 items-center gap-2 py-2.5 border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet"
               >
                 {isEn ? "Full diagnostic" : "Diagnostic complet"}
                 <ArrowUpRight size={13} />
@@ -162,7 +162,7 @@ export default function MiniDiag({ index = "№ 02" }: { index?: string }) {
         <Reveal className="mt-6">
           <Link
             href="/solutions-web/eligibilite"
-            className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
+            className="group inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground"
           >
             {isEn ? "Or run the full diagnostic — 2 min" : "Ou lancez le diagnostic complet — 2 min"}
             <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />

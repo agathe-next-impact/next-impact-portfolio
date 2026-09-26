@@ -56,7 +56,7 @@ export default function Advantages() {
             <span
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: 10,
+                fontSize: 11,
                 color: selected === feature.id ? "var(--accent-color)" : "var(--muted-color)",
                 letterSpacing: "0.08em",
                 paddingTop: 2,

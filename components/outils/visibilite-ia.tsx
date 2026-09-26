@@ -41,11 +41,11 @@ import {
 } from "@/lib/visibilite-ia";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 type LinkHref = Parameters<typeof Link>[0]["href"];
 
@@ -173,7 +173,7 @@ export default function VisibiliteIa() {
               ? "Is your site visible to AI engines?"
               : "Votre site est-il visible dans les moteurs IA ?"}
           </p>
-          <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-foreground">
             {isEn
               ? "ChatGPT, Perplexity and AI Overviews now answer instead of listing links. 10 questions to score your site on 4 axes — AI crawler access, content citability, structure, external authority — with concrete actions, whatever your score."
               : "ChatGPT, Perplexity et les AI Overviews répondent désormais à la place des listes de liens. 10 questions pour situer votre site sur 4 axes — accès des robots IA, citabilité du contenu, structure, autorité externe — avec des actions concrètes, quel que soit votre score."}
@@ -206,7 +206,7 @@ export default function VisibiliteIa() {
               aria-live="polite"
             >
               <p className={LABEL_MONO}>{isEn ? "Verdict" : "Verdict"}</p>
-              <p className={`mt-3 font-inter-tight text-[15px] leading-relaxed ${verdict.toneClass}`}>
+              <p className={`mt-3 font-inter-tight text-base leading-relaxed ${verdict.toneClass}`}>
                 {isEn ? verdict.en : verdict.fr}
               </p>
             </div>
@@ -226,7 +226,7 @@ export default function VisibiliteIa() {
                       <p className="font-inter-tight text-sm font-medium text-foreground">
                         {isEn ? axis.labelEn : axis.labelFr}
                       </p>
-                      <p className="font-mono text-[11px] text-mid-gray">{value}/100</p>
+                      <p className="font-mono text-2xs text-mid-gray">{value}/100</p>
                     </div>
                     <div
                       className="mt-2.5 h-1.5 w-full border border-dark-gray bg-jet"
@@ -258,11 +258,11 @@ export default function VisibiliteIa() {
                       reco.status
                     )} ${i < recommendations.length - 1 ? "border-b border-b-dark-gray" : ""}`}
                   >
-                    <span className="mt-0.5 font-mono text-[11px] text-mid-gray">
+                    <span className="mt-0.5 font-mono text-2xs text-mid-gray">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-accent-secondary">
+                      <p className="font-mono text-2xs uppercase tracking-[0.16em] text-accent-secondary">
                         {axisLabel(reco.axis)}
                       </p>
                       <p className="mt-1 font-inter-tight text-sm leading-relaxed text-foreground">
@@ -299,7 +299,7 @@ export default function VisibiliteIa() {
                     <p className="font-inter-tight text-sm font-medium text-foreground">
                       {isEn ? question.criterionEn : question.criterionFr}
                     </p>
-                    <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                    <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                       {isEn ? option.detailEn : option.detailFr}
                     </p>
                   </div>
@@ -311,7 +311,7 @@ export default function VisibiliteIa() {
           {/* Note d'honnêteté / doctrine */}
           <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
-            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
                 ? "This is a declarative self-check: it reflects your answers, not a crawl of your site. The actions above can be done without any provider — a call helps prioritize and verify on the real site."
                 : "Auto-diagnostic déclaratif : il reflète vos réponses, pas un crawl de votre site. Les actions ci-dessus se mènent sans prestataire — une visio sert à prioriser et vérifier sur le site réel."}
@@ -347,10 +347,10 @@ export default function VisibiliteIa() {
         <div className="mb-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {QUESTIONS.map((q) => (
             <div key={q.id}>
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.16em] text-accent-secondary">
+              <p className="mb-1 font-mono text-2xs uppercase tracking-[0.16em] text-accent-secondary">
                 {isEn ? q.criterionEn : q.criterionFr}
               </p>
-              <p className="mb-2.5 font-inter-tight text-[13px] text-mid-gray" id={`vis-ia-q-${q.id}`}>
+              <p className="mb-2.5 font-inter-tight text-base text-mid-gray" id={`vis-ia-q-${q.id}`}>
                 {isEn ? q.questionEn : q.questionFr}
               </p>
               <div
@@ -367,7 +367,7 @@ export default function VisibiliteIa() {
                       aria-pressed={selected}
                       onClick={() => setState((s) => ({ ...s, [q.id]: opt.value }))}
                       className={
-                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-[13px] transition-colors " +
+                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-sm transition-colors " +
                         (selected
                           ? "border-l-[3px] border-l-accent-secondary border-dark-gray bg-jet text-foreground"
                           : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")

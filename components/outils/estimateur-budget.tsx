@@ -189,7 +189,7 @@ export default function EstimateurBudget() {
 
   const labelStyle: React.CSSProperties = {
     fontFamily: "var(--mono)",
-    fontSize: 9,
+    fontSize: 11,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
     color: "var(--muted-color)",
@@ -213,7 +213,7 @@ export default function EstimateurBudget() {
           style={{
             display: "inline-block",
             fontFamily: "var(--mono)",
-            fontSize: 9,
+            fontSize: 11,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: "var(--muted-color)",
@@ -377,7 +377,7 @@ export default function EstimateurBudget() {
               <span
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 9,
+                  fontSize: 11,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   color: "var(--muted-color)",
@@ -414,7 +414,7 @@ export default function EstimateurBudget() {
                 <span
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 9,
+                    fontSize: 11,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
                     color: "var(--muted-color)",
@@ -453,7 +453,7 @@ export default function EstimateurBudget() {
                 <span
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 9,
+                    fontSize: 11,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
                     color: "var(--muted-color)",

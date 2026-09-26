@@ -38,11 +38,11 @@ import { buildChecklistPrintHtml } from "@/lib/checklist-geo-print";
 const LS_CHECKED = "ni:checklist-geo:checked";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 type LinkHref = Parameters<typeof Link>[0]["href"];
 
@@ -195,7 +195,7 @@ export default function ChecklistGeo() {
           <p className={LABEL_MONO}>
             {isEn ? "The GEO checklist" : "La checklist GEO"}
           </p>
-          <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-foreground">
             {isEn
               ? "24 concrete actions to get cited by ChatGPT, Perplexity and AI Overviews, grouped by the 4 GEO priorities for an SMB: AI crawler access, answer pages, structure and markup, external authority. Check off as you go — your progress is saved on this device."
               : "24 actions concrètes pour être cité par ChatGPT, Perplexity et les AI Overviews, groupées par les 4 chantiers GEO d'une PME : accès des robots IA, pages-réponses, structure et balisage, autorité externe. Cochez au fil de l'eau — votre avancement est conservé sur cet appareil."}
@@ -209,7 +209,7 @@ export default function ChecklistGeo() {
           <div className="min-w-[220px] flex-1">
             <div className="flex items-baseline justify-between gap-3">
               <p className={LABEL_MONO}>{isEn ? "Progress" : "Avancement"}</p>
-              <p className="font-mono text-[11px] text-mid-gray" aria-hidden="true">
+              <p className="font-mono text-2xs text-mid-gray" aria-hidden="true">
                 {progress.done}/{progress.total}
               </p>
             </div>
@@ -248,7 +248,7 @@ export default function ChecklistGeo() {
             </button>
           </div>
         </div>
-        <p className="mt-3 font-inter-tight text-[12px] leading-relaxed text-mid-gray">
+        <p className="mt-3 font-inter-tight text-xs leading-relaxed text-mid-gray">
           {isEn
             ? "The download opens your browser's print dialog: choose \"Save as PDF\". Your checked items are included."
             : "Le téléchargement ouvre la boîte d'impression du navigateur : choisissez « Enregistrer en PDF ». Vos cases cochées sont reprises."}
@@ -269,17 +269,17 @@ export default function ChecklistGeo() {
             </legend>
             <div className="mb-4 flex items-baseline justify-between gap-4" aria-hidden="true">
               <div>
-                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-accent-secondary">
+                <p className="font-mono text-2xs uppercase tracking-[0.16em] text-accent-secondary">
                   {isEn ? "Priority" : "Chantier"} {section.order}/4
                 </p>
-                <p className="mt-1 font-inter-tight text-[15px] font-medium text-foreground">
+                <p className="mt-1 font-inter-tight text-base font-medium text-foreground">
                   {isEn ? section.titleEn : section.titleFr}
                 </p>
-                <p className="mt-0.5 font-inter-tight text-[13px] text-mid-gray">
+                <p className="mt-0.5 font-inter-tight text-base text-mid-gray">
                   {isEn ? section.subtitleEn : section.subtitleFr}
                 </p>
               </div>
-              <p className="shrink-0 font-mono text-[11px] text-mid-gray">
+              <p className="shrink-0 font-mono text-2xs text-mid-gray">
                 {sp.done}/{sp.total}
               </p>
             </div>
@@ -313,18 +313,18 @@ export default function ChecklistGeo() {
                       </span>
                       <span className="min-w-0">
                         <span
-                          className={`font-inter-tight text-sm leading-relaxed ${
+                          className={`font-inter-tight text-base leading-relaxed ${
                             isChecked ? "text-mid-gray line-through decoration-dark-gray" : "text-foreground"
                           }`}
                         >
                           {isEn ? item.actionEn : item.actionFr}{" "}
                           <span
-                            className={`ml-1 inline-block whitespace-nowrap border px-1.5 py-px align-middle font-mono text-[9px] uppercase tracking-[0.12em] no-underline ${badge.cls}`}
+                            className={`ml-1 inline-block whitespace-nowrap border px-1.5 py-px align-middle font-mono text-2xs uppercase tracking-[0.12em] no-underline ${badge.cls}`}
                           >
                             {badge.label}
                           </span>
                         </span>
-                        <span className="mt-0.5 block font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+                        <span className="mt-0.5 block font-inter-tight text-base leading-relaxed text-mid-gray">
                           {isEn ? item.whyEn : item.whyFr}
                         </span>
                       </span>
@@ -341,7 +341,7 @@ export default function ChecklistGeo() {
       <div className="border-t border-dark-gray px-6 py-8 lg:px-8">
         <p className={`${LABEL_MONO} mb-3`}>{isEn ? "Next step" : "Prochaine étape"}</p>
         <p
-          className="mb-5 max-w-2xl font-inter-tight text-[14px] leading-relaxed text-foreground"
+          className="mb-5 max-w-2xl font-inter-tight text-sm leading-relaxed text-foreground"
           role="status"
           aria-live="polite"
         >

@@ -354,13 +354,13 @@ export default async function VeillePage({
         <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
           {LETTRE_GRATUITE.map((bloc) => (
             <div key={bloc.index} className="bg-jet p-8">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <span className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 № {bloc.index}
               </span>
               <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
                 {bloc.titre}
               </h3>
-              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {bloc.corps}
               </p>
             </div>
@@ -385,7 +385,7 @@ export default async function VeillePage({
             S'abonner — gratuit
           </a>
         </div>
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
           Gratuit · désinscription en un clic
         </p>
       </BlueprintSection>
@@ -409,7 +409,7 @@ export default async function VeillePage({
               <h3 className="text-lg font-medium tracking-tight text-foreground">
                 {bloc.titre}
               </h3>
-              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {bloc.corps}
               </p>
             </div>
@@ -424,7 +424,7 @@ export default async function VeillePage({
             Découvrir Sentinelle en détail
           </Link>
         </div>
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
           {OFFER_PRICE_LABEL} · sans engagement · relu par un humain avant envoi
         </p>
       </BlueprintSection>
@@ -444,7 +444,7 @@ export default async function VeillePage({
         <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
           {COMPARATIF.map((offre) => (
             <div key={offre.nom} className="flex flex-col bg-jet p-8">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+              <span className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                 {offre.badge}
               </span>
               <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
@@ -453,7 +453,7 @@ export default async function VeillePage({
               <dl className="mt-6 flex-1 space-y-5">
                 {offre.lignes.map((ligne) => (
                   <div key={ligne.label}>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+                    <dt className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                       {ligne.label}
                     </dt>
                     <dd className="mt-1 font-inter-tight text-base leading-relaxed text-foreground/80">
@@ -519,10 +519,10 @@ export default async function VeillePage({
                 <h3 className="mt-5 text-lg font-medium tracking-tight text-foreground">
                   {bloc.titre}
                 </h3>
-                <p className="mt-3 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
+                <p className="mt-3 flex-1 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                   {bloc.corps}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
                   Lire
                   <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
@@ -568,10 +568,10 @@ export default async function VeillePage({
                 <h3 className="mt-5 text-lg font-medium tracking-tight text-foreground">
                   {bloc.titre}
                 </h3>
-                <p className="mt-3 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
+                <p className="mt-3 flex-1 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                   {bloc.corps}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+                <span className="mt-5 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
                   Ouvrir
                   <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                 </span>

@@ -49,10 +49,10 @@ async function sendContactForm({
 }
 
 const fieldClass =
-  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-sm text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary disabled:opacity-60";
+  "w-full bg-jet border border-dark-gray px-3.5 py-2.5 font-inter-tight text-base text-foreground placeholder:text-mid-gray outline-none transition-colors focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:border-accent-secondary disabled:opacity-60";
 
 const labelClass =
-  "block mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray";
+  "block mb-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray";
 
 export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
   const locale = useLocale() as Locale;
@@ -109,12 +109,12 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               <h2 className="mb-2 text-2xl font-light tracking-tight text-foreground">
                 {isEn ? "Thank you!" : "Merci !"}
               </h2>
-              <p className="mb-6 font-inter-tight text-sm text-mid-gray">
+              <p className="mb-6 font-inter-tight text-base text-mid-gray">
                 {isEn ? "Your request has been sent." : "Votre demande a bien été envoyée."}
               </p>
               <button
                 onClick={onClose}
-                className="border border-dark-gray bg-obsidian px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
+                className="border border-dark-gray bg-obsidian px-6 py-2.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-foreground"
               >
                 {isEn ? "Close" : "Fermer"}
               </button>
@@ -125,7 +125,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
                 <h2 className="mb-1 text-2xl font-light tracking-tight text-foreground">
                   {isEn ? "Request a quote" : "Demander un devis"}
                 </h2>
-                <p className="font-inter-tight text-[13px] text-mid-gray">
+                <p className="font-inter-tight text-base text-mid-gray">
                   {isEn
                     ? "Your specifications document will be attached automatically"
                     : "Votre cahier des charges sera joint automatiquement"}
@@ -162,7 +162,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               </div>
 
               {error && (
-                <div className="border border-vermilion/60 border-l-2 border-l-vermilion bg-obsidian px-3 py-2.5 font-inter-tight text-[13px] text-vermilion">
+                <div className="border border-vermilion/60 border-l-2 border-l-vermilion bg-obsidian px-3 py-2.5 font-inter-tight text-sm text-vermilion">
                   {error}
                 </div>
               )}
@@ -170,7 +170,7 @@ export function ContactFormModal({ formData, onClose }: ContactFormModalProps) {
               <button
                 type="submit"
                 disabled={sending}
-                className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sending ? (
                   <>

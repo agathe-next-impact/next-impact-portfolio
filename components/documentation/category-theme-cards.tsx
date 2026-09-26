@@ -359,7 +359,7 @@ export function CategoryPageContent({
                         strokeWidth={1.5}
                         aria-hidden
                       />
-                      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                      <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                         {count}
                       </span>
                     </div>
@@ -383,7 +383,7 @@ export function CategoryPageContent({
           {/* Indicateur de filtre actif */}
           {activeTheme !== null && themes[activeTheme] && (
             <div className="mt-3 flex items-center gap-3">
-              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+              <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
                 Filtre actif : {themes[activeTheme].title}
               </span>
               <span className="text-dark-gray" aria-hidden>
@@ -392,7 +392,7 @@ export function CategoryPageContent({
               <button
                 type="button"
                 onClick={() => setActiveTheme(null)}
-                className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary transition-colors hover:text-foreground"
+                className="font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary transition-colors hover:text-foreground"
               >
                 Afficher tout
               </button>
@@ -426,14 +426,14 @@ export function CategoryPageContent({
                 />
                 <div>
                   {profileId && relevant && (
-                    <span className="mb-1.5 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
+                    <span className="mb-1.5 inline-block font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
                       Recommandé
                     </span>
                   )}
                   <h3 className="font-light leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                     {article.title}
                   </h3>
-                  <p className="mt-1 line-clamp-2 font-inter-tight text-[0.8125rem] leading-relaxed text-mid-gray">
+                  <p className="mt-1 line-clamp-2 font-inter-tight text-base leading-relaxed text-mid-gray">
                     {article.description}
                   </p>
                 </div>

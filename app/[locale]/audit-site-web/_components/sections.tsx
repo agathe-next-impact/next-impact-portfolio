@@ -12,16 +12,16 @@ import { RadialGauge } from "@/components/visuals/radial-gauge";
 import type { AuditPageContent } from "@/lib/audit-page-content";
 
 const LABEL_MONO =
-  "font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 const BTN_PRIMARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 const BTN_GHOST =
-  "group inline-flex min-h-12 items-center gap-1.5 py-3 rounded-sm border border-dark-gray px-6 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-12 items-center gap-1.5 py-3 rounded-sm border border-dark-gray px-6 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 
 const LINK_MONO =
-  "group mt-auto inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground";
+  "group mt-auto inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors hover:text-foreground";
 
 /** Exemple de résultat figé — score + 3 priorités, avant le formulaire détaillé. */
 export function ExempleResultat({
@@ -56,7 +56,7 @@ export function ExempleResultat({
               <p className="font-inter-tight text-sm font-medium text-foreground">
                 {p.label}
               </p>
-              <p className="mt-1 font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+              <p className="mt-1 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {p.detail}
               </p>
             </div>
@@ -81,14 +81,14 @@ export function PourQui({
       <Reveal className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-3">
         {content.items.map((it) => (
           <div key={it} className="bg-obsidian p-6">
-            <p className="font-inter-tight text-[15px] leading-relaxed text-foreground">
+            <p className="font-inter-tight text-base leading-relaxed text-foreground">
               {it}
             </p>
           </div>
         ))}
       </Reveal>
       <Reveal className="mt-8 flex flex-wrap items-center gap-4 border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5">
-        <p className="min-w-[12rem] flex-1 font-inter-tight text-sm text-mid-gray">
+        <p className="min-w-[12rem] flex-1 font-inter-tight text-base text-mid-gray">
           {content.triPhrase}
         </p>
         <Link href={content.triHref} className={BTN_GHOST}>
@@ -120,7 +120,7 @@ export function Preuves({
             <span className="text-4xl font-light tracking-tight text-foreground lg:text-5xl">
               {p.value}
             </span>
-            <span className="font-inter-tight text-sm text-mid-gray">{p.label}</span>
+            <span className="font-inter-tight text-base text-mid-gray">{p.label}</span>
           </div>
         ))}
       </Reveal>
@@ -150,7 +150,7 @@ export function CommentLireVerdict({
             <h3 className="text-lg font-light tracking-tight text-foreground">
               {v.title}
             </h3>
-            <p className="font-inter-tight text-[14px] leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {v.description}
             </p>
             <Link href={v.href} className={LINK_MONO}>
@@ -200,7 +200,7 @@ export function LimitesAudit({
             {content.notReplace.map((d) => (
               <li key={d} className="flex gap-2.5">
                 <Minus size={16} className="mt-0.5 shrink-0 text-mid-gray" />
-                <span className="font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <span className="font-inter-tight text-base leading-relaxed text-mid-gray">
                   {d}
                 </span>
               </li>
@@ -227,7 +227,7 @@ export function AuditFaq({
         {content.items.map((f) => (
           <details key={f.question} className="group border-b border-dark-gray">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
-              <span className="font-inter-tight text-[15px] font-medium text-foreground md:text-base">
+              <span className="font-inter-tight text-base font-medium text-foreground">
                 {f.question}
               </span>
               <Plus
@@ -235,7 +235,7 @@ export function AuditFaq({
                 className="shrink-0 text-mid-gray transition-transform group-open:rotate-45"
               />
             </summary>
-            <p className="pb-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="pb-6 font-inter-tight text-base leading-relaxed text-mid-gray">
               {f.answer}
             </p>
           </details>

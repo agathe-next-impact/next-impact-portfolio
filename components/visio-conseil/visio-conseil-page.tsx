@@ -232,14 +232,14 @@ export default function VisioConseilPage() {
           as="aside"
           className="conseil-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8"
         >
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent-secondary">
+          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
             {isEn ? CONSEIL_TLDR.label.en : CONSEIL_TLDR.label.fr}
           </p>
           <ul className="flex flex-col gap-2">
             {CONSEIL_TLDR.lines.map((line) => (
               <li
                 key={line.fr}
-                className="font-inter-tight text-sm leading-relaxed text-mid-gray md:text-[15px]"
+                className="font-inter-tight text-base leading-relaxed text-mid-gray"
               >
                 {isEn ? line.en : line.fr}
               </li>
@@ -306,7 +306,7 @@ export default function VisioConseilPage() {
                 className="text-mid-gray transition-colors group-hover:text-accent-secondary"
               />
               <h3 className="text-lg font-light tracking-tight text-foreground">{card.label}</h3>
-              <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">{card.desc}</p>
+              <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{card.desc}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -354,7 +354,7 @@ export default function VisioConseilPage() {
               : "Le coût d'une mauvaise trajectoire se compte en mois ; celui de l'avis, en euros. Une heure pour trancher une direction, un audit complet avec préconisations chiffrées et roadmap par étapes, ou une direction technique à temps partagé quand une décision n'est jamais la dernière."
           }
         />
-        <p className="mt-6 max-w-3xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="mt-6 max-w-3xl font-inter-tight text-base leading-relaxed text-mid-gray">
           {isEn
             ? "Prices excl. VAT. The advisory call is fully deducted from your quote if a project starts within 30 days. The audit + roadmap is a standalone deliverable: it serves you even if the work goes to someone else. The outsourced technical expert is the only recurring line, and every retainer starts with that audit. The detail of each offer follows below."
             : "Prix HT. La visio conseil est déduite à 100 % de votre devis si un projet démarre sous 30 jours. L'audit + roadmap est un livrable à part entière : il vous sert même si la prestation est confiée à quelqu'un d'autre. L'expert technique externalisé est la seule ligne récurrente, et tout accompagnement démarre par cet audit. Le détail de chaque offre suit juste en dessous."}
@@ -365,7 +365,7 @@ export default function VisioConseilPage() {
           {reassurance.map(([Icon, label]) => (
             <div key={label} className="flex items-start gap-3 bg-obsidian p-5">
               <Icon className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-secondary" />
-              <span className="font-inter-tight text-sm leading-snug text-mid-gray">
+              <span className="font-inter-tight text-base leading-snug text-mid-gray">
                 {label}
               </span>
             </div>
@@ -401,13 +401,13 @@ export default function VisioConseilPage() {
         <Stagger className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-3">
           {steps.map(([title, desc], i) => (
             <StaggerItem key={title} className="bg-obsidian p-6 lg:p-8">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-vermilion">
+              <span className="font-mono text-2xs uppercase tracking-[0.14em] text-vermilion">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-3 text-lg font-light tracking-tight text-foreground">
                 {title}
               </h3>
-              <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {desc}
               </p>
             </StaggerItem>
@@ -429,7 +429,7 @@ export default function VisioConseilPage() {
             return (
               <div key={c.q} className="bg-jet p-6 lg:p-8">
                 <h3 className="text-base font-medium text-foreground">{c.q}</h3>
-                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">
                   {c.a}
                 </p>
               </div>

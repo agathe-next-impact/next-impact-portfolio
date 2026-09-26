@@ -372,7 +372,7 @@ export default function CmsQuiz() {
       <Card className="bg-jet border border-dark-gray rounded-none">
         <CardHeader>
           <div className="space-y-4">
-            <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="flex items-center justify-between font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               <span>
                 Question {currentQuestion + 1} sur {questions.length}
               </span>
@@ -411,7 +411,7 @@ export default function CmsQuiz() {
             <Button
               onClick={() => handleAnswer(question.options[Number.parseInt(selectedAnswer)].value)}
               disabled={selectedAnswer === ""}
-              className="w-full gap-2 rounded-none border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-50"
+              className="w-full gap-2 rounded-none border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85 disabled:opacity-50"
             >
               {currentQuestion < questions.length - 1 ? (
                 <>

@@ -73,7 +73,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
           >
             Diagnostic gratuit →
           </Link>
-          <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray">
+          <p className="mt-2 text-center font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
             3 min · Sans engagement
           </p>
         </div>
@@ -81,7 +81,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
         {/* Sommaire */}
         {tocItems.length > 0 && (
           <nav className="border-t border-dark-gray pt-4">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+            <p className="mb-3 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               Sommaire
             </p>
             <ul className="list-none border-l border-dark-gray">
@@ -92,7 +92,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
                     className={cn(
                       "-ml-px block border-l-2 py-1.5 font-mono transition-colors",
                       level === 3
-                        ? "pl-6 text-[11px]"
+                        ? "pl-6 text-2xs"
                         : "pl-3 text-xs",
                       activeId === id
                         ? "border-accent-secondary text-accent-secondary"
@@ -110,7 +110,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
         {/* Articles liés */}
         {relatedArticles.length > 0 && (
           <div className="border-t border-dark-gray pt-4">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+            <p className="mb-3 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               Articles liés
             </p>
             <div className="flex flex-col">
@@ -120,10 +120,10 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
                   href={`/articles/${a.slug}`}
                   className="group block border-t border-dark-gray py-2.5 transition-colors hover:bg-jet"
                 >
-                  <span className="mb-1 inline-block font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+                  <span className="mb-1 inline-block font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                     {a.category}
                   </span>
-                  <span className="block font-inter-tight text-[0.8125rem] leading-snug text-foreground/90 group-hover:text-foreground">
+                  <span className="block font-inter-tight text-sm leading-snug text-foreground/90 group-hover:text-foreground">
                     {a.title}
                   </span>
                 </Link>
@@ -135,7 +135,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
         {/* Documentation liée */}
         {relatedDocs.length > 0 && (
           <div className="border-t border-dark-gray pt-4">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
+            <p className="mb-3 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               Documentation
             </p>
             <div className="flex flex-col gap-1">
@@ -143,7 +143,7 @@ export function ArticleSidebar({ relatedArticles, relatedDocs }: ArticleSidebarP
                 <Link
                   key={d.path}
                   href={d.path}
-                  className="flex items-center gap-2 py-1 font-inter-tight text-[0.8125rem] text-foreground/90 transition-colors hover:text-foreground"
+                  className="flex items-center gap-2 py-1 font-inter-tight text-sm text-foreground/90 transition-colors hover:text-foreground"
                 >
                   <span aria-hidden className="text-accent-secondary">→</span>
                   <span>{d.title}</span>

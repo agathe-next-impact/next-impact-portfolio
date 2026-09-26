@@ -46,7 +46,7 @@ function Card({
   const inner = (
     <>
       {badge && (
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+        <span className="font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
           {badge}
         </span>
       )}
@@ -56,11 +56,11 @@ function Card({
           <ArrowUpRight size={14} className="text-mid-gray transition-colors group-hover:text-accent-secondary" />
         )}
       </h3>
-      <p className="mt-2 flex-1 font-inter-tight text-sm leading-relaxed text-mid-gray">
+      <p className="mt-2 flex-1 font-inter-tight text-base leading-relaxed text-mid-gray">
         {desc}
       </p>
       {!item.external && (
-        <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+        <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
           {locale === "en" ? "Discover" : "Découvrir"}
           <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
@@ -106,11 +106,11 @@ export function MegaMenuPanel({
         onClick={onNavigate}
         className="group flex items-center justify-between gap-3 border-b border-dark-gray bg-jet px-6 py-3 no-underline lg:px-8"
       >
-        <span className="inline-flex items-center gap-1 font-mono text-[13px] font-bold uppercase tracking-[0.16em] text-foreground transition-colors group-hover:text-accent-secondary">
+        <span className="inline-flex items-center gap-1 font-mono text-sm font-bold uppercase tracking-[0.16em] text-foreground transition-colors group-hover:text-accent-secondary">
           {section.heading[locale]}
           <ArrowUpRight size={14} className="text-mid-gray transition-colors group-hover:text-accent-secondary" />
         </span>
-        <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-mid-gray transition-colors group-hover:text-accent-secondary">
+        <span className="inline-flex items-center gap-1.5 font-mono text-2xs font-bold uppercase tracking-[0.08em] text-mid-gray transition-colors group-hover:text-accent-secondary">
           {locale === "en" ? "See the page" : "Voir la page"}
           <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>

@@ -37,7 +37,7 @@ export function DataTable({
   const captionEl = (
     <caption
       key="caption"
-      className="caption-top pb-3 text-left font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray"
+      className="caption-top pb-3 text-left font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray"
     >
       {caption}
     </caption>

@@ -36,7 +36,7 @@ export async function DecisionHelper() {
       </p>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid var(--rule)" }}>
         <div style={{ padding: "28px 24px 32px" }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent-color)", marginBottom: 16 }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent-color)", marginBottom: 16 }}>
             ● Headless recommandé si
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -49,7 +49,7 @@ export async function DecisionHelper() {
           </ul>
         </div>
         <div style={{ padding: "28px 24px 32px", borderLeft: "1px solid var(--rule)", background: "var(--paper-2)" }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted-color)", marginBottom: 16 }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted-color)", marginBottom: 16 }}>
             ○ WordPress traditionnel si
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>

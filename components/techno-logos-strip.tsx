@@ -62,7 +62,7 @@ export function TechnoLogosStrip({ className = "" }: { className?: string }) {
             />
           ))}
         </div>
-        <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+        <span className="font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
           {isEn
             ? "I frame the work, AI executes: architecture choices stay human."
             : "Je cadre, l'IA exécute : les choix d'architecture restent humains."}

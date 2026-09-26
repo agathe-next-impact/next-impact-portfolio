@@ -310,8 +310,8 @@ const STRINGS_EN: Strings = {
 function PreviewField({ label, value, fallback }: { label: string; value?: string; fallback: string }) {
   return (
     <div className="mb-1.5">
-      <span className="text-[13px] font-semibold text-foreground">{label} </span>
-      <span className="font-inter-tight text-[13px] text-mid-gray">
+      <span className="text-sm font-semibold text-foreground">{label} </span>
+      <span className="font-inter-tight text-base text-mid-gray">
         {value || fallback}
       </span>
     </div>
@@ -320,7 +320,7 @@ function PreviewField({ label, value, fallback }: { label: string; value?: strin
 
 function CheckboxList({ data, fallback }: { data: Record<string, any> | undefined; fallback: string }) {
   if (!data) {
-    return <span className="font-inter-tight text-[13px] text-mid-gray">{fallback}</span>
+    return <span className="font-inter-tight text-base text-mid-gray">{fallback}</span>
   }
   return (
     <ul className="m-0 list-none p-0">
@@ -329,7 +329,7 @@ function CheckboxList({ data, fallback }: { data: Record<string, any> | undefine
           <span className={value?.checked ? "text-accent-secondary" : "text-mid-gray"}>•</span>
           <span
             className={cn(
-              "font-inter-tight text-[13px]",
+              "font-inter-tight text-sm",
               value?.checked ? "text-foreground" : "text-mid-gray",
             )}
           >
@@ -344,7 +344,7 @@ function CheckboxList({ data, fallback }: { data: Record<string, any> | undefine
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-4 border-b border-foreground/80 py-2">
-      <h2 className="m-0 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground">
+      <h2 className="m-0 font-mono text-2xs font-semibold uppercase tracking-[0.12em] text-foreground">
         {title}
       </h2>
     </div>
@@ -354,7 +354,7 @@ function SectionHeader({ title }: { title: string }) {
 function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-5">
-      <h3 className="m-0 border-b border-dark-gray pb-1 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-accent-secondary">
+      <h3 className="m-0 border-b border-dark-gray pb-1 font-mono text-2xs font-medium uppercase tracking-[0.1em] text-accent-secondary">
         {title}
       </h3>
       <div className="mt-3 flex flex-col gap-1.5">
@@ -405,41 +405,41 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
             <h1 className="m-0 text-2xl font-light tracking-tight text-foreground md:text-[28px]">
               {t.documentTitle}
             </h1>
-            <h2 className="mt-2 font-inter-tight text-[15px] font-normal text-mid-gray">
+            <h2 className="mt-2 font-inter-tight text-base md:text-lg font-normal text-mid-gray">
               {t.subtitle}
             </h2>
 
             <div className="mx-auto mt-8 flex max-w-[400px] flex-col gap-2.5 text-left">
               <div className="flex gap-2">
-                <span className="w-[140px] flex-shrink-0 text-[13px] font-semibold text-foreground">{t.organization}</span>
-                <span className="font-inter-tight text-[13px] text-mid-gray">{formData.organisation_name || t.notSpecified}</span>
+                <span className="w-[140px] flex-shrink-0 text-sm font-semibold text-foreground">{t.organization}</span>
+                <span className="font-inter-tight text-base text-mid-gray">{formData.organisation_name || t.notSpecified}</span>
               </div>
               <div className="flex gap-2">
-                <span className="w-[140px] flex-shrink-0 text-[13px] font-semibold text-foreground">{t.industry}</span>
-                <span className="font-inter-tight text-[13px] text-mid-gray">{formData.secteur_activite || t.notSpecified}</span>
+                <span className="w-[140px] flex-shrink-0 text-sm font-semibold text-foreground">{t.industry}</span>
+                <span className="font-inter-tight text-base text-mid-gray">{formData.secteur_activite || t.notSpecified}</span>
               </div>
               <div className="flex gap-2">
-                <span className="w-[140px] flex-shrink-0 text-[13px] font-semibold text-foreground">{t.date}</span>
-                <span className="font-inter-tight text-[13px] text-mid-gray">{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
+                <span className="w-[140px] flex-shrink-0 text-sm font-semibold text-foreground">{t.date}</span>
+                <span className="font-inter-tight text-base text-mid-gray">{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
               </div>
               <div className="flex gap-2">
-                <span className="w-[140px] flex-shrink-0 text-[13px] font-semibold text-foreground">{t.author}</span>
-                <span className="font-inter-tight text-[13px] text-mid-gray">{formData.redacteur || t.notSpecified}</span>
+                <span className="w-[140px] flex-shrink-0 text-sm font-semibold text-foreground">{t.author}</span>
+                <span className="font-inter-tight text-base text-mid-gray">{formData.redacteur || t.notSpecified}</span>
               </div>
             </div>
 
-            <p className="mb-0 mt-6 font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">{t.confidential}</p>
+            <p className="mb-0 mt-6 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">{t.confidential}</p>
           </div>
         </div>
 
         {/* TOC */}
         <div className="border border-dark-gray bg-obsidian p-6">
-          <h2 className="m-0 mb-4 text-center font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground">
+          <h2 className="m-0 mb-4 text-center font-mono text-2xs font-semibold uppercase tracking-[0.12em] text-foreground">
             {t.toc}
           </h2>
           <ul className="m-0 list-none p-0">
             {t.tocItems.map((item) => (
-              <li key={item} className="border-b border-dark-gray py-1.5 font-inter-tight text-[13px] text-mid-gray">
+              <li key={item} className="border-b border-dark-gray py-1.5 font-inter-tight text-base text-mid-gray">
                 {item}
               </li>
             ))}
@@ -616,7 +616,7 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         </div>
 
         {/* Footer */}
-        <div className="mt-2 flex flex-wrap justify-between gap-2 border-t border-dark-gray pt-4 font-mono text-[11px] text-mid-gray">
+        <div className="mt-2 flex flex-wrap justify-between gap-2 border-t border-dark-gray pt-4 font-mono text-2xs text-mid-gray">
           <span>{formData.organisation_name || t.defaultDocTitle}</span>
           <span>{formData.redacteur || t.defaultAuthor}</span>
           <span>{formData.date_redaction || new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR")}</span>
@@ -633,12 +633,12 @@ export function DocumentPreview({ formData }: DocumentPreviewProps) {
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-dark-gray bg-obsidian px-6 py-4">
           <div className="flex items-center gap-2">
             <FileText className="h-[18px] w-[18px] text-mid-gray" />
-            <h3 className="m-0 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-foreground">
+            <h3 className="m-0 font-mono text-2xs font-medium uppercase tracking-[0.1em] text-foreground">
               {t.preview}
             </h3>
           </div>
           <button
-            className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-[11px] uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+            className="inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-2xs uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
             onClick={() => setShowContactForm(true)}
           >
             <Send className="h-3.5 w-3.5" />

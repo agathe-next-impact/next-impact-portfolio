@@ -30,7 +30,7 @@ import {
 export const revalidate = 86400;
 
 const BTN_PRIMARY =
-  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-12 items-center gap-2 py-3 rounded-sm border border-accent-secondary bg-accent-secondary px-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 
 export async function generateMetadata({
   params,
@@ -114,7 +114,7 @@ export default async function AuditSiteIaPage({
                   <ArrowRight size={14} />
                 </a>
               </div>
-              <p className="max-w-xl font-mono text-[11px] uppercase tracking-[0.08em] text-mid-gray">
+              <p className="max-w-xl font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray">
                 {c.hero.reassurance}
               </p>
             </div>
@@ -140,7 +140,7 @@ export default async function AuditSiteIaPage({
             <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-dark-gray pt-8">
               <Link
                 href="/outils"
-                className="group inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
+                className="group inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray transition-colors hover:text-accent-secondary"
               >
                 <ArrowLeft
                   size={12}

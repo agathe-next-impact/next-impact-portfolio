@@ -132,6 +132,16 @@ corps     text-base md:text-lg lg:text-xl  text-mid-gray  .font-inter-tight
 kicker    .label-mono : Geist Mono, ~11px, uppercase, tracking large, vermillon
 ```
 
+**Tailles de texte (harmonisées 2026-09-26) :**
+
+- Base `body` : **16px** (plus de 15px).
+- Paragraphe de lecture principal (`font-inter-tight text-mid-gray`) : `text-base md:text-lg` (16 → 18px).
+- Paragraphe de carte / secondaire : `text-base` (16px) ; jamais `text-sm` ni 13px pour du texte à lire.
+- UI (boutons, nav, champs, méta) : `text-sm` / `text-xs`.
+- Labels mono, kickers, badges : `text-2xs` (11px, jeton ajouté dans `tailwind.config.ts`) = **plancher absolu**.
+- Interdit : `text-[Npx]` arbitraires et `fontSize` inline sous 11px. Seule exception : les maquettes
+  d'écran miniatures décoratives (`components/visuals/code-to-site.tsx`, `components/HeroMockup.tsx`).
+
 > Les titres aspect sont **grands, fins, `tracking-tight`**. Ne pas alourdir en `font-bold`
 > systématique. Le contraste vient de la taille et de la grille, pas de la graisse.
 

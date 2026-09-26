@@ -20,9 +20,9 @@ const CLARITY_ID = "vl7osdgfi9";
 type Decision = "granted" | "denied" | null;
 
 const BTN_PRIMARY =
-  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-accent-secondary bg-accent-secondary px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-accent-secondary bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-[11px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian";
+  "inline-flex h-9 flex-1 items-center justify-center rounded-sm border border-dark-gray px-4 font-mono text-2xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-obsidian";
 
 function AnalyticsScripts() {
   return (
@@ -69,11 +69,11 @@ function Banner({
           aria-hidden
           className="absolute -bottom-[6px] left-5 h-2.5 w-2.5 rotate-45 border-b border-r border-dark-gray bg-jet/95"
         />
-        <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
+        <div className="mb-2 flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
           <Cookie size={13} strokeWidth={1.5} />
           Cookies
         </div>
-        <p className="font-inter-tight text-[12px] leading-relaxed text-mid-gray">
+        <p className="font-inter-tight text-xs leading-relaxed text-mid-gray">
           {isEn
             ? "Audience-measurement cookies (Google Analytics, Microsoft Clarity)."
             : "Cookies de mesure d'audience (Google Analytics, Microsoft Clarity)."}{" "}

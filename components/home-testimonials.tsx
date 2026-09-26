@@ -265,7 +265,7 @@ export default function HomeTestimonials() {
               </span>
               <div className="min-w-0">
                 <div className="text-sm font-medium tracking-tight text-foreground">{t.author}</div>
-                <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                <div className="mt-0.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {t.role}
                 </div>
               </div>

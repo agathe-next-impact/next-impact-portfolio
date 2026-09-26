@@ -139,7 +139,7 @@ export default function ArticleReduireAgefiph() {
                       <p
                         style={{
                           fontFamily: "var(--mono)",
-                          fontSize: 9,
+                          fontSize: 11,
                           textTransform: "uppercase",
                           letterSpacing: "0.08em",
                           color: "var(--muted-color)",
@@ -162,7 +162,7 @@ export default function ArticleReduireAgefiph() {
                       <p
                         style={{
                           fontFamily: "var(--mono)",
-                          fontSize: 9,
+                          fontSize: 11,
                           textTransform: "uppercase",
                           letterSpacing: "0.06em",
                           color: "var(--muted-color)",
@@ -185,7 +185,7 @@ export default function ArticleReduireAgefiph() {
                   <p
                     style={{
                       fontFamily: "var(--mono)",
-                      fontSize: 9,
+                      fontSize: 11,
                       textTransform: "uppercase",
                       letterSpacing: "0.08em",
                       color: "var(--accent-color)",
@@ -550,7 +550,7 @@ export default function ArticleReduireAgefiph() {
                 <p
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 9,
+                    fontSize: 11,
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
                     color: "var(--muted-color)",

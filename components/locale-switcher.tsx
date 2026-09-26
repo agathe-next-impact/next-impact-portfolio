@@ -57,7 +57,7 @@ export function LocaleSwitcher({ className = "" }: LocaleSwitcherProps) {
             title={active ? undefined : t("switchTo", { target: targetLabel })}
             style={{
               fontFamily: "var(--mono, monospace)",
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               height: "100%",

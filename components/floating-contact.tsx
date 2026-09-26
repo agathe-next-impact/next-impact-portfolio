@@ -125,11 +125,11 @@ export function FloatingContact() {
           }}
         >
           <div className="px-5 pb-4 pt-5">
-            <div className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.12em] text-mid-gray">
+            <div className="mb-2.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
               {activeOption?.label}
             </div>
 
-            <p className="mb-4 break-all font-mono text-[11px] leading-relaxed text-foreground">
+            <p className="mb-4 break-all font-mono text-2xs leading-relaxed text-foreground">
               {activeOption?.sub}
             </p>
 
@@ -138,7 +138,7 @@ export function FloatingContact() {
               {...(activeOption?.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="inline-flex items-center gap-1.5 border border-accent-secondary bg-accent-secondary px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
+              className="inline-flex items-center gap-1.5 border border-accent-secondary bg-accent-secondary px-3 py-1.5 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85"
               onClick={close}
             >
               {activeOption?.label}

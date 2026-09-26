@@ -258,11 +258,11 @@ const INITIAL: Record<string, string> = {
 };
 
 const BTN_PRIMARY =
-  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
+  "inline-flex min-h-11 items-center gap-2 py-2.5 border border-accent-secondary bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian transition-colors hover:bg-accent-secondary/85";
 const BTN_GHOST =
-  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-[12px] uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
+  "group inline-flex min-h-11 items-center gap-1.5 py-2.5 rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground transition-colors hover:bg-jet";
 const LABEL_MONO =
-  "block font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray";
+  "block font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray";
 
 export default function SelecteurTechno() {
   const locale = useLocale() as Locale;
@@ -342,7 +342,7 @@ export default function SelecteurTechno() {
           <p className={LABEL_MONO}>
             {isEn ? "Web & AI tech selector" : "Sélecteur techno web & IA"}
           </p>
-          <p className="mt-2 font-inter-tight text-[15px] leading-relaxed text-foreground">
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-foreground">
             {isEn
               ? "Eight criteria, one recommendation. Answer below to see which solution family fits — and the next step for your case."
               : "Huit critères, une recommandation. Répondez ci-dessous pour voir quelle famille de solution vous correspond — et la prochaine étape pour votre cas."}
@@ -366,7 +366,7 @@ export default function SelecteurTechno() {
               <h3 className="mt-3 text-2xl font-light tracking-tight text-accent-secondary">
                 {isEn ? info.labelEn : info.labelFr}
               </h3>
-              <p className="mt-3 font-inter-tight text-[15px] leading-relaxed text-mid-gray">
+              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
                 {isEn ? info.summaryEn : info.summaryFr}
               </p>
             </div>
@@ -381,7 +381,7 @@ export default function SelecteurTechno() {
                   const pct = Math.round((scores[f] / maxScore) * 100);
                   return (
                     <div key={f} className="flex items-center gap-3">
-                      <span className="w-1/2 shrink-0 truncate font-inter-tight text-[12px] text-mid-gray">
+                      <span className="w-1/2 shrink-0 truncate font-inter-tight text-xs text-mid-gray">
                         {isEn ? FAMILIES[f].labelEn : FAMILIES[f].labelFr}
                       </span>
                       <div className="relative h-1.5 flex-1 bg-dark-gray">
@@ -427,7 +427,7 @@ export default function SelecteurTechno() {
           {/* Note anti-cannibalisation */}
           <StaggerItem className="flex gap-3 border border-dark-gray bg-jet px-4 py-4">
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
-            <p className="font-inter-tight text-[13px] leading-relaxed text-mid-gray">
+            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
                 ? "This signal points you in a direction — it doesn't replace a decision for your exact case. A decision call applies the selector to your real budget, data and constraints, and is credited back if a project follows."
                 : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio de choix de techno applique le Sélecteur à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
@@ -471,10 +471,10 @@ export default function SelecteurTechno() {
         <div className="mb-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {QUESTIONS.map((q) => (
             <div key={q.id}>
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.16em] text-accent-secondary">
+              <p className="mb-1 font-mono text-2xs uppercase tracking-[0.16em] text-accent-secondary">
                 {isEn ? q.criterionEn : q.criterionFr}
               </p>
-              <p className="mb-2.5 font-inter-tight text-[13px] text-mid-gray">
+              <p className="mb-2.5 font-inter-tight text-base text-mid-gray">
                 {isEn ? q.labelEn : q.labelFr}
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -486,7 +486,7 @@ export default function SelecteurTechno() {
                       type="button"
                       onClick={() => setState((s) => ({ ...s, [q.id]: opt.value }))}
                       className={
-                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-[13px] transition-colors " +
+                        "rounded-sm border px-3.5 py-1.5 font-inter-tight text-sm transition-colors " +
                         (selected
                           ? "border-l-[3px] border-l-accent-secondary border-dark-gray bg-jet text-foreground"
                           : "border-dark-gray text-mid-gray hover:bg-jet hover:text-foreground")

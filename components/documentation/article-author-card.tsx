@@ -43,19 +43,19 @@ export function ArticleAuthorCard({ locale }: { locale: Locale }) {
         className="h-20 w-20 shrink-0 rounded-sm border border-dark-gray object-cover"
       />
       <div className="flex flex-col gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-mid-gray">
+        <p className="font-mono text-2xs uppercase tracking-[0.18em] text-mid-gray">
           {t.kicker}
         </p>
         <p className="text-base font-medium text-foreground">{t.name}</p>
-        <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary">
+        <p className="font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
           {t.role}
         </p>
-        <p className="max-w-[60ch] font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="max-w-[60ch] font-inter-tight text-base leading-relaxed text-mid-gray">
           {t.blurb}
         </p>
         <Link
           href="/a-propos"
-          className="mt-1 inline-flex w-fit items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-foreground no-underline transition-colors hover:text-accent-secondary"
+          className="mt-1 inline-flex w-fit items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-foreground no-underline transition-colors hover:text-accent-secondary"
         >
           {t.link}
           <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />

@@ -290,20 +290,20 @@ export function HubRubriques({ locale }: { locale: Locale }) {
             <Compass className="h-[1.125rem] w-[1.125rem] text-vermilion" />
           </div>
           <div className="min-w-[14rem] flex-1">
-            <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+            <p className="mb-1.5 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
               {c.selecteur.eyebrow}
             </p>
             <h2 className="mb-2 text-xl font-light tracking-tight text-foreground">
               {c.selecteur.title}
             </h2>
-            <p className="mb-4 max-w-2xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <p className="mb-4 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
               {c.selecteur.subtitle}
             </p>
             <ul className="mb-6 flex flex-wrap gap-2">
               {c.selecteur.criteria.map((x) => (
                 <li
                   key={x}
-                  className="border border-dark-gray px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-mid-gray"
+                  className="border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-mid-gray"
                 >
                   {x}
                 </li>
@@ -311,7 +311,7 @@ export function HubRubriques({ locale }: { locale: Locale }) {
             </ul>
             <Link
               href="/outils/selecteur-techno"
-              className="group inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+              className="group inline-flex items-center gap-2 border border-accent-secondary bg-accent-secondary px-5 py-2.5 font-mono text-2xs font-semibold uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
               {c.selecteur.cta}
               <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

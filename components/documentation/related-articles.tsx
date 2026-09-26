@@ -51,25 +51,25 @@ export function RelatedArticles({ articles, categoryLabels }: RelatedArticlesPro
               className="group relative flex flex-col border-b border-r border-dark-gray bg-transparent p-5 no-underline transition-colors hover:bg-jet/40"
             >
               <div className="mb-2 flex flex-wrap items-center gap-1.5">
-                <span className="border border-dark-gray px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-mid-gray">
+                <span className="border border-dark-gray px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                   {categoryLabels[article.category] || article.category}
                 </span>
                 {isRecommended && (
-                  <span className="border border-accent-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-accent-secondary">
+                  <span className="border border-accent-secondary px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.1em] text-accent-secondary">
                     Recommandé
                   </span>
                 )}
               </div>
-              <h4 className="mb-1.5 flex-1 text-[0.9375rem] font-light leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
+              <h4 className="mb-1.5 flex-1 text-base font-light leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
                 {article.title}
               </h4>
               <p className="mb-2 line-clamp-2 font-inter-tight text-xs leading-relaxed text-mid-gray">
                 {article.description}
               </p>
-              <div className="flex items-center gap-1.5 font-mono text-[0.6875rem] text-mid-gray">
+              <div className="flex items-center gap-1.5 font-mono text-2xs text-mid-gray">
                 <Clock className="h-3 w-3" />
                 <span>{article.readingTime} min</span>
-                <span className="ml-auto font-mono text-[10px] tracking-[0.08em] text-mid-gray">
+                <span className="ml-auto font-mono text-2xs tracking-[0.08em] text-mid-gray">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>

@@ -38,7 +38,7 @@ export async function DerniereLettre() {
       aria-label="Le dernier numéro de la lettre"
       className="mt-8 border border-dark-gray bg-jet"
     >
-      <p className="border-b border-dark-gray px-4 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+      <p className="border-b border-dark-gray px-4 py-2 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
         Le dernier numéro
         <span className="text-foreground/70">
           {" · "}
@@ -69,7 +69,7 @@ export async function DerniereLettre() {
 
         <span className="min-w-0 flex-1">
           {derniere.etiquette && (
-            <span className="mb-2 inline-block border border-dark-gray px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-secondary">
+            <span className="mb-2 inline-block border border-dark-gray px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
               {derniere.etiquette}
             </span>
           )}
@@ -77,11 +77,11 @@ export async function DerniereLettre() {
             {derniere.titreCourt}
           </span>
           {derniere.sousTitre && (
-            <span className="mt-1.5 block font-inter-tight text-sm leading-relaxed text-mid-gray">
+            <span className="mt-1.5 block font-inter-tight text-base leading-relaxed text-mid-gray">
               {derniere.sousTitre}
             </span>
           )}
-          <span className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary">
+          <span className="mt-3 inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary">
             Lire ce numéro
             <ArrowUpRight
               size={11}
@@ -93,7 +93,7 @@ export async function DerniereLettre() {
 
       {precedentes.length > 0 && (
         <div className="border-t border-dark-gray px-4 py-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+          <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
             Numéros précédents
           </p>
           <ul className="mt-2 space-y-1.5">
@@ -109,7 +109,7 @@ export async function DerniereLettre() {
                         sectorielles du même mois partagent le même titre, et
                         seul le secteur les distingue dans la liste. */}
                   {lettre.etiquette && (
-                    <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                    <span className="mr-2 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray">
                       {lettre.etiquette}
                     </span>
                   )}

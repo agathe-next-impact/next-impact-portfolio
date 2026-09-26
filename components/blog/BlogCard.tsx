@@ -31,7 +31,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
       <span className="absolute inset-x-0 top-0 h-px scale-x-0 bg-accent-secondary transition-transform duration-300 group-hover:scale-x-100" aria-hidden />
 
       {/* Méta : index + date */}
-      <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+      <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
         <span>{String(index + 1).padStart(2, "0")}</span>
         {formattedDate && <span className="h-px w-5 bg-dark-gray" aria-hidden />}
         {formattedDate && <time dateTime={post.date}>{formattedDate}</time>}
@@ -42,14 +42,14 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
       </h3>
 
       {post.excerpt && (
-        <p className="mt-3 line-clamp-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
+        <p className="mt-3 line-clamp-2 font-inter-tight text-base leading-relaxed text-mid-gray">
           {post.excerpt}
         </p>
       )}
 
       <div className="mt-6 flex flex-1 items-end justify-between gap-4">
         {post.readingTime > 0 ? (
-          <span className="flex items-center gap-1.5 font-mono text-[11px] tracking-[0.06em] text-mid-gray">
+          <span className="flex items-center gap-1.5 font-mono text-2xs tracking-[0.06em] text-mid-gray">
             <Clock size={12} aria-hidden />
             {post.readingTime} min
           </span>
@@ -57,7 +57,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
           <span />
         )}
         <span
-          className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground"
+          className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground"
           aria-hidden
         >
           {isEn ? "Read" : "Lire"}

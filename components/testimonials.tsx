@@ -62,7 +62,7 @@ export default function Testimonials() {
               <div
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   color: "var(--muted-color)",
@@ -74,7 +74,7 @@ export default function Testimonials() {
               <div
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   color: "var(--ink-2)",

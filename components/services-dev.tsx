@@ -29,7 +29,7 @@ export const ServicesDev = () => {
           <div
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               color: "var(--muted-color)",
@@ -59,7 +59,7 @@ export const ServicesDev = () => {
                     key={ex}
                     style={{
                       fontFamily: "var(--mono)",
-                      fontSize: 9,
+                      fontSize: 11,
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
                       border: "1px solid var(--rule)",
@@ -86,7 +86,7 @@ export const ServicesDev = () => {
           <div
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 10,
+              fontSize: 11,
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               color: "var(--muted-color)",
@@ -116,7 +116,7 @@ export const ServicesDev = () => {
                     key={ex}
                     style={{
                       fontFamily: "var(--mono)",
-                      fontSize: 9,
+                      fontSize: 11,
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
                       border: "1px solid var(--rule)",

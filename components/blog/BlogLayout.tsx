@@ -74,14 +74,14 @@ export function BlogLayout({ post, children }: BlogLayoutProps) {
           {/* Fil d'Ariane */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-accent-secondary"
+            className="inline-flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-accent-secondary"
           >
             <ArrowLeft className="size-3.5" aria-hidden />
             Blog
           </Link>
 
           {/* Kicker mono : date + tags */}
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-accent-secondary">
+          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
             {formattedDate && <time dateTime={post.date}>{formattedDate}</time>}
             {post.tags.length > 0 && (
               <>
@@ -102,7 +102,7 @@ export function BlogLayout({ post, children }: BlogLayoutProps) {
 
           {/* Méta : auteur + temps de lecture */}
           {(post.author || post.readingTime > 0) && (
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.06em] text-mid-gray">
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-2xs tracking-[0.06em] text-mid-gray">
               {post.author && <span>{post.author}</span>}
               {post.author && post.readingTime > 0 && (
                 <span className="h-px w-4 bg-dark-gray" aria-hidden />
