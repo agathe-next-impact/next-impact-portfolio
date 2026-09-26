@@ -61,12 +61,20 @@ export default async function PilotagePage() {
       <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">
         Tous les accompagnements
       </h1>
-      <Link
-        href="/admin-cto/pilotage/digests"
-        className="mt-3 inline-block font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
-      >
-        Digests de la semaine →
-      </Link>
+      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+        <Link
+          href="/admin-cto/pilotage/prestations"
+          className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
+        >
+          Prestations et tarifs →
+        </Link>
+        <Link
+          href="/admin-cto/pilotage/digests"
+          className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
+        >
+          Digests de la semaine →
+        </Link>
+      </div>
 
       <Panel className="mt-8 grid grid-cols-2 sm:grid-cols-4">
         <Stat label="Actifs" value={String(actifs)} tone="fait" />

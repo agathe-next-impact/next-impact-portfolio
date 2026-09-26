@@ -8,7 +8,6 @@ const EMPTY: Contents = {
   cartographie: 0,
   documents: 0,
   roadmap: 0,
-  prestations: 0,
   audits: 0,
   propositions: 0,
   site: false,
@@ -30,10 +29,8 @@ describe("sections visibles", () => {
   });
 
   it("ouvre les entrées d'un service coché, même vides (état « en préparation »)", () => {
-    expect(keys(visibleSections(["suivi-technique", "prestations"], EMPTY))).toEqual([
+    expect(keys(visibleSections(["suivi-technique"], EMPTY))).toEqual([
       "tableau",
-      "missions",
-      "prestations",
       "site",
       "rapports",
       "a-traiter",
@@ -87,6 +84,12 @@ describe("sections visibles", () => {
       "veille",
     ]);
     expect(keys(visibleSections(null, EMPTY))).not.toContain("propositions");
+  });
+
+  it("n'ouvre rien côté client pour le service Prestations, réservé à l'administration", () => {
+    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "a-traiter", "veille"]);
+    expect(SECTIONS.some((s) => s.slug === "prestations")).toBe(false);
+    expect(LEGACY_SLUGS.prestations).toBe("missions");
   });
 
   it("donne une section existante à chaque ancienne adresse", () => {
@@ -148,19 +151,17 @@ describe("calendrier", () => {
           occurredAt: new Date("2026-11-01"),
           payload: { type: "Contrat", detenteur: null, coutAnnuel: null, criticite: null, risque: null },
         }),
-        item({
-          notionPageId: "presta",
-          kind: "prestation",
-          title: "Refonte",
-          occurredAt: new Date("2026-10-15"),
-          payload: { statut: "En cours", debut: null, montant: null, avancement: null, devis: null, detail: null },
-        }),
       ],
       [{ title: "Lettre d'octobre", period: new Date("2026-10-01"), href: "/l" }],
       () => "/x",
       now,
+      [
+        { title: "Refonte", date: new Date("2026-10-15"), statut: "En cours" },
+        { title: "Livrée", date: new Date("2026-10-20"), statut: "Terminée" },
+      ],
     );
     expect(events.map((e) => e.kind)).toEqual(["lettre", "prestation", "echeance"]);
+    expect(events[1].href).toBeNull();
     expect(events[2].title).toBe("Hébergement OVH (contrat)");
   });
 

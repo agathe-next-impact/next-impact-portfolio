@@ -137,3 +137,78 @@ describe("outils", () => {
     expect(dateEcheance("Bientôt", PERIODE)).toBeNull();
   });
 });
+
+describe("lettres personnalisées", () => {
+  it("lit les axes « Veilles clients » avec flèche de tendance et rubriques", () => {
+    const lettre = structureLettre(
+      [
+        h("h2", "Lecture du mois"),
+        p("Deux calendriers se croisent."),
+        h("h2", "Les onze axes du mois pour Mastora"),
+        pb("1. Financements de la formation · Tendance : →", ""),
+        p("Ce qui s'est passé : Aucune évolution."),
+        p("Ce qui impacte votre projet : Chaque page doit être claire. Suite."),
+        pb("2. Qualiopi · Tendance : ↑", ""),
+        p("Ce qui s'est passé : Décret du 4 août."),
+        p("Ce qui impacte votre projet : Chaque affirmation se justifie."),
+        pb("3. Marchés · Tendance : ↓", ""),
+        p("Ce qui impacte votre projet : Sans objet."),
+        h("h2", "Les questions du mois"),
+        { k: "oli", s: [{ t: "Quelle version ?" }] },
+      ],
+      PERIODE,
+    )!;
+    const axes = lettre.sections.find((s) => s.kind === "axes");
+    if (axes?.kind !== "axes") throw new Error("axes absents");
+    expect(axes.axes.map((a) => [a.numero, a.nom, a.pression])).toEqual([
+      [1, "Financements de la formation", "stable"],
+      [2, "Qualiopi", "hausse"],
+      [3, "Marchés", "baisse"],
+    ]);
+    expect(axes.axes[0].verdict).toBe("Chaque page doit être claire.");
+    expect(axes.axes[0].rubriques.map((r) => r.titre)).toEqual([
+      "Ce qui s'est passé",
+      "Ce qui impacte votre projet",
+    ]);
+    expect(lettre.sections.map((s) => s.kind)).toEqual(["prose", "axes", "questions"]);
+  });
+
+  it("lit une lettre rédigée à la main : décision, points en h3, chantiers", () => {
+    const lettre = structureLettre(
+      [
+        h("h2", "À décider ce mois-ci"),
+        h("h3", "Le nom de domaine expire le 14 novembre"),
+        p("Il est enregistré sur un compte personnel."),
+        { k: "li", s: [{ t: "Qui : la présidence." }] },
+        h("h2", "Ce qui a bougé dans votre écosystème"),
+        h("h3", "PHP 8.2 ne sera plus corrigé"),
+        p("Votre site est en PHP 8.3."),
+        h("h3", "Le Cyber Resilience Act"),
+        p("Vous n'êtes pas visés."),
+        h("h2", "Où en sont vos chantiers"),
+        { k: "li", s: [{ t: "Formulaire de devis", b: true }, { t: " : 40 %. Livraison le 30 octobre." }] },
+        { k: "li", s: [{ t: "Sortie de Divi", b: true }, { t: " : démarre le 2 novembre." }] },
+        { k: "hr" },
+        p("Prochain comité : mercredi 7 octobre."),
+      ],
+      PERIODE,
+    )!;
+    expect(lettre.sections.map((s) => s.kind)).toEqual(["actions", "cartes", "avancement"]);
+
+    const [decision] = (lettre.sections[0] as Extract<typeof lettre.sections[0], { kind: "actions" }>).actions;
+    expect(decision.titre).toBe("Le nom de domaine expire le 14 novembre");
+    expect(decision.periode).toBeNull();
+    expect(decision.echeance).toBe("Ce mois-ci");
+    expect(decision.urgence).toBe("mois");
+    expect(decision.contexte.map((c) => c.titre)).toEqual(["", "Qui"]);
+
+    const avancement = lettre.sections[2];
+    if (avancement.kind !== "avancement") throw new Error("avancement absent");
+    expect(avancement.chantiers.map((c) => [c.titre, c.pourcentage, c.statut])).toEqual([
+      ["Formulaire de devis", 40, "En cours"],
+      ["Sortie de Divi", null, "À venir"],
+    ]);
+    expect(avancement.chantiers[0].texte.map((s) => s.t).join("")).toBe("Livraison le 30 octobre.");
+    expect(avancement.blocs).toEqual([p("Prochain comité : mercredi 7 octobre.")]);
+  });
+});

@@ -4,6 +4,7 @@
 // importent d'ici, jamais d'un fichier interne.
 
 export {
+  ADMIN_ONLY_KINDS,
   appendVersion,
   appendWithdrawal,
   countsByClient,
@@ -11,6 +12,8 @@ export {
   digestOf,
   history,
   listForClient,
+  listPrestations,
+  livraisonsForClient,
   setPlacement,
   type DeliverableState,
 } from "./store";
@@ -26,6 +29,7 @@ export type {
   DeliverableKind,
   DeliverablePayload,
   DocumentPayload,
+  Livraison,
   PayloadByKind,
   PrestationPayload,
   PropositionPayload,

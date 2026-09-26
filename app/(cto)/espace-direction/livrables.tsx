@@ -4,7 +4,6 @@ import type {
   DecisionPayload,
   Deliverable,
   DocumentPayload,
-  PrestationPayload,
   PropositionPayload,
   RoadmapPayload,
   VeillePayload,
@@ -26,7 +25,6 @@ export const CATEGORIES = {
   cartographie: { slug: "cartographie", titre: "Cartographie du système" },
   veille: { slug: "veille", titre: "Veille dédiée" },
   document: { slug: "documents", titre: "Documents" },
-  prestation: { slug: "prestations", titre: "Prestations" },
   audit: { slug: "audits", titre: "Audits" },
   proposition: { slug: "propositions", titre: "Propositions" },
 } as const;
@@ -160,24 +158,6 @@ export function sortRecentFirst(items: Deliverable[]): Deliverable[] {
   return [...items].sort((a, b) => byDate(a, b, -1));
 }
 
-/** Ordre de lecture des prestations : ce qui est en cours d'abord. */
-export const PRESTATION_ORDER = ["En cours", "À venir", "Suspendue", "Terminée"];
-
-const PRESTATION_TONE: Record<string, Tone> = {
-  "En cours": "attention",
-  "À venir": "neutre",
-  Suspendue: "alerte",
-  Terminée: "fait",
-};
-
-export function sortPrestations(items: Deliverable[]): Deliverable[] {
-  return [...items].sort(
-    (a, b) =>
-      rank(PRESTATION_ORDER, (a.payload as PrestationPayload).statut) -
-        rank(PRESTATION_ORDER, (b.payload as PrestationPayload).statut) || byDate(a, b, 1),
-  );
-}
-
 /**
  * Ce qui a bougé depuis la connexion précédente.
  *
@@ -288,10 +268,6 @@ export function Categorie({
 
   if (kind === "document") {
     return <Documents items={sortRecentFirst(items)} since={since} bare base={base} />;
-  }
-
-  if (kind === "prestation") {
-    return <Prestations items={sortPrestations(items)} now={now} since={since} bare base={base} />;
   }
 
   if (kind === "audit") {
@@ -1109,116 +1085,3 @@ export function tailleLisible(octets: number): string {
   return `${(octets / 1024 / 1024).toFixed(1).replace(".", ",")} Mo`;
 }
 
-/**
- * Les prestations vendues, groupées par statut.
- *
- * L'avancement ne s'affiche que s'il est suivi : une barre à 0 % sur une
- * prestation dont personne ne mesure l'avancement dirait « rien n'est fait »,
- * ce qui est faux.
- */
-export function Prestations({
-  base = ESPACE_PATH,
-  items,
-  now,
-  total,
-  since = null,
-  bare = false,
-}: {
-  base?: string;
-  items: Deliverable[];
-  now: number;
-  total?: number;
-  since?: Date | null;
-  bare?: boolean;
-}) {
-  if (!bare && items.length === 0) {
-    return (
-      <section className="mt-12">
-        <SectionTitle
-          id="prestations"
-          title="Prestations en cours"
-          count={total ?? 0}
-          href={categoriePath("prestation", base)}
-        />
-        <RienALaUne href={categoriePath("prestation", base)} count={total ?? 0} />
-      </section>
-    );
-  }
-
-  return (
-    <section className={bare ? "" : "mt-12"}>
-      {bare ? null : (
-        <SectionTitle
-          id="prestations"
-          title="Prestations en cours"
-          count={total ?? items.length}
-          href={categoriePath("prestation", base)}
-        />
-      )}
-      <div className="mt-5 space-y-3">
-        {items.map((item) => {
-          const payload = item.payload as PrestationPayload;
-          const statut = payload.statut ?? "Sans statut";
-          const montant = formatAmount(payload.montant);
-          const debut = payload.debut ? new Date(payload.debut) : null;
-          const avancement =
-            typeof payload.avancement === "number"
-              ? Math.max(0, Math.min(100, Math.round(payload.avancement * 100)))
-              : null;
-          const echeance = statut === "Terminée" ? "neutre" : deadlineTone(item.occurredAt, now);
-
-          return (
-            <article key={item.id} className="border border-dark-gray bg-jet/40 p-5">
-              <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-                <h3 className="font-inter-tight text-base leading-snug text-foreground">{item.title}</h3>
-                <Tag tone={PRESTATION_TONE[statut] ?? "neutre"}>{statut}</Tag>
-              </header>
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
-                <Nouveaute item={item} since={since} />
-                {debut ? <Tag>{`Depuis le ${formatDay(debut)}`}</Tag> : null}
-                {item.occurredAt ? (
-                  <Tag tone={echeance}>{`Livraison ${formatDay(item.occurredAt)}`}</Tag>
-                ) : null}
-                {montant ? <Tag>{`${montant} HT`}</Tag> : null}
-              </div>
-              {avancement !== null ? (
-                <div className="mt-4">
-                  <div className="flex items-baseline justify-between">
-                    <Label>Avancement</Label>
-                    <span className="font-mono text-[11px] text-foreground">{avancement} %</span>
-                  </div>
-                  <div
-                    className="mt-1.5 h-1.5 w-full bg-dark-gray"
-                    role="progressbar"
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuenow={avancement}
-                    aria-label={`Avancement de ${item.title}`}
-                  >
-                    <div className="h-full bg-accent-secondary" style={{ width: `${avancement}%` }} />
-                  </div>
-                </div>
-              ) : null}
-              {payload.detail ? (
-                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">{payload.detail}</p>
-              ) : null}
-              {payload.devis ? (
-                <p className="mt-3">
-                  <a
-                    href={payload.devis}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
-                  >
-                    Voir le devis ↗
-                  </a>
-                </p>
-              ) : null}
-              <Correction item={item} base={base} />
-            </article>
-          );
-        })}
-      </div>
-    </section>
-  );
-}

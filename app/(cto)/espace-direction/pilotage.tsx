@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Deliverable, RoadmapPayload } from "@cto/deliverables";
-import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, Verdict } from "@cto/espace";
+import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, SectionKey, Verdict } from "@cto/espace";
 import { auditPath, categoriePath, CATEGORIES, propositionPath, propositionTone, type CategorieKind } from "./livrables";
 import { contactHref, sectionOuverte, type EspaceContext } from "./shell";
 import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
@@ -13,17 +13,19 @@ import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
 // `@cto/espace/pilotage`, pures et testées. Ici, seulement la forme.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** L'entrée de la barre latérale qui porte un livrable. */
-const SECTION_OF_KIND = {
+/**
+ * L'entrée de la barre latérale qui porte un livrable. Les prestations n'en ont
+ * pas : elles ne sont lues que dans l'administration (`ADMIN_ONLY_KINDS`).
+ */
+const SECTION_OF_KIND: Partial<Record<Deliverable["kind"], SectionKey>> = {
   roadmap: "missions",
-  prestation: "prestations",
   decision: "decisions",
   audit: "audit",
   cartographie: "cartographie",
   document: "documents",
   veille: "veille",
   proposition: "propositions",
-} as const;
+};
 
 /**
  * Où mène un livrable : sa section quand elle fait partie de l'accompagnement,

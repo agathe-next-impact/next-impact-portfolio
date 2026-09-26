@@ -32,11 +32,9 @@ import {
   DepuisLaDerniereFois,
   Documents,
   Nouveaute,
-  Prestations,
   Propositions,
   propositionTone,
   sortCartographie,
-  sortPrestations,
   sortRecentFirst,
   tailleLisible,
   fichierPath,
@@ -358,6 +356,7 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
     })),
     (item) => livrableHref(item, context, viewer.base),
     now,
+    context.livraisons,
   );
   const roadmap = context.items.some((item) => item.kind === "roadmap");
 
@@ -387,7 +386,7 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
     >
       {context.missions.length === 0 ? (
         <EnPreparation>
-          Les chantiers décidés, les prestations commandées, les décisions et les audits
+          Les chantiers décidés, les décisions et les audits
           apparaîtront ici dès leur première publication, avec leur échéance.
         </EnPreparation>
       ) : (
@@ -426,35 +425,6 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
       )}
 
       <Calendrier events={events} now={now} />
-    </Espace>
-  );
-}
-
-export async function VuePrestations({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const items = sortPrestations(context.items.filter((item) => item.kind === "prestation"));
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="prestations"
-      title="Prestations"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les missions commandées, leur avancement et leur date de livraison.
-        </p>
-      }
-    >
-      {items.length === 0 ? (
-        <EnPreparation>
-          Vos prestations en cours (missions ponctuelles, devis signés) apparaîtront ici avec
-          leur avancement et leur date de livraison.
-        </EnPreparation>
-      ) : (
-        <div className="mt-10">
-          <Prestations items={items} now={Date.now()} since={context.since} bare base={viewer.base} />
-        </div>
-      )}
     </Espace>
   );
 }
@@ -1144,7 +1114,6 @@ const SECTION_OF = {
   document: "documents",
   roadmap: "missions",
   veille: "veille",
-  prestation: "prestations",
   audit: "audit",
   proposition: "propositions",
 } as const;
@@ -1270,12 +1239,9 @@ export async function VueLettre({
   const lettre = await letterForClient(id, viewer.clientId);
   if (!lettre) return null;
 
-  // Générale et sectorielle suivent le gabarit éditorial de l'atelier : elles
-  // passent en grille quand il y est reconnu. Les autres gardent le texte suivi.
-  const structure =
-    lettre.source === "atelier" && lettre.scope !== "personnalisee"
-      ? structureLettre(lettre.body, lettre.period)
-      : null;
+  // Les lettres de l'atelier (générale, sectorielle, personnalisée) passent en
+  // grille quand leur gabarit est reconnu. Les autres gardent le texte suivi.
+  const structure = lettre.source === "atelier" ? structureLettre(lettre.body, lettre.period) : null;
 
   if (structure) {
     return (

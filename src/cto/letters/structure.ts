@@ -1,13 +1,18 @@
 import type { Block, Span } from "../notion/blocks";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// La structure d'une lettre générale ou sectorielle, lue dans son corps.
+// La structure d'une lettre de l'atelier, lue dans son corps.
 //
 // Les lettres de l'atelier suivent un gabarit éditorial fixe (directives v3.2) :
-// une lecture du mois avec le tour des douze axes, des actions sur l'existant,
-// les solutions de refonte et de création, le marché, un échéancier et les
+// une lecture du mois avec le tour des axes, des actions sur l'existant, les
+// solutions de refonte et de création, le marché, un échéancier et les
 // questions au prestataire. Ce gabarit n'est écrit NULLE PART en colonnes : il
 // vit dans les titres et les attaques en gras du texte.
+//
+// Deux variantes s'y ajoutent pour les lettres personnalisées : les éditions du
+// pipeline « Veilles clients » (axes « 1. Nom · Tendance : ↑ » suivis de leurs
+// rubriques) et les lettres rédigées à la main (« À décider », points titrés
+// en h3, « Où en sont vos chantiers » avec leur avancement en pourcentage).
 //
 // Ce module le retrouve, pour que la page puisse le montrer en grille (niveaux
 // de pression, urgences, frise des échéances) au lieu d'un long texte continu.
@@ -27,6 +32,8 @@ export interface Axe {
   verdict: string;
   /** Le reste du paragraphe. */
   detail: Span[];
+  /** Variante « Veilles clients » : « Ce qui s'est passé », « Ce qui impacte votre projet »… */
+  rubriques: { titre: string; texte: Span[] }[];
 }
 
 /** Quand agir, d'après l'attaque « À faire … ». */
@@ -52,6 +59,16 @@ export interface Carte {
   texte: Span[];
 }
 
+/** Un chantier et son avancement (« **Formulaire de devis** : 40 %. … »). */
+export interface Chantier {
+  titre: string;
+  texte: Span[];
+  /** 0-100, null si l'avancement n'est pas chiffré. */
+  pourcentage: number | null;
+  /** À défaut de pourcentage : « À venir », « Livré »… */
+  statut: string | null;
+}
+
 export interface Echeance {
   /** « Au 1er septembre », « Les 14 et 15 septembre »… */
   libelle: string;
@@ -65,6 +82,7 @@ export type Section =
   | { kind: "actions"; titre: Span[]; actions: Action[]; blocs: Block[] }
   | { kind: "options"; titre: Span[]; options: Carte[]; blocs: Block[] }
   | { kind: "cartes"; titre: Span[]; cartes: Carte[]; blocs: Block[] }
+  | { kind: "avancement"; titre: Span[]; chantiers: Chantier[]; blocs: Block[] }
   | { kind: "echeancier"; titre: Span[]; echeances: Echeance[]; blocs: Block[] }
   | { kind: "questions"; titre: Span[]; questions: Span[][]; blocs: Block[] };
 
@@ -157,9 +175,65 @@ function lireAxes(blocs: Block[]): Axe[] | null {
       pression: pressionDe(phrase),
       verdict: phrase,
       detail: reste,
+      rubriques: [],
     });
   }
   return axes.length >= 3 ? axes : null;
+}
+
+/** La flèche de tendance d'une édition « Veilles clients ». */
+function pressionDeTendance(tendance: string): Pression {
+  if (/[↑↗⬆]/.test(tendance)) return "hausse";
+  if (/[↓↘⬇]/.test(tendance)) return "baisse";
+  if (/[→⟶➡]/.test(tendance)) return "stable";
+  return pressionDe(tendance);
+}
+
+/** « Ce qui s'est passé : … » → titre et texte. null sans deux-points en tête. */
+function rubrique(spans: Span[]): { titre: string; texte: Span[] } | null {
+  const a = attaque(spans);
+  if (a) return { titre: a.titre, texte: a.reste };
+  const brut = texteDe(spans);
+  const match = /^([^:.]{2,40}?)\s*:\s*/.exec(brut);
+  if (!match) return null;
+  return { titre: match[1].trim(), texte: coupe(spans, match[0].length) };
+}
+
+/**
+ * Variante « Veilles clients » : « **1. Financements · Tendance : →** » puis
+ * ses rubriques en paragraphes. Le verdict affiché est la première phrase de ce
+ * qui touche le client (« Ce qui impacte votre projet »).
+ */
+function lireAxesTendance(blocs: Block[]): Axe[] | null {
+  const axes: Axe[] = [];
+  for (const bloc of blocs) {
+    if (bloc.k !== "p") return null;
+    const a = attaque(bloc.s);
+    const tete = a ? /^(\d+)\s*[.)]\s*(.+?)\s*·\s*Tendance\s*:?\s*(.*)$/i.exec(a.titre) : null;
+    if (tete) {
+      axes.push({
+        numero: Number(tete[1]),
+        nom: tete[2].trim(),
+        pression: pressionDeTendance(tete[3]),
+        verdict: "",
+        detail: [],
+        rubriques: [],
+      });
+      continue;
+    }
+    const courant = axes[axes.length - 1];
+    if (!courant) return null;
+    courant.rubriques.push(rubrique(bloc.s) ?? { titre: "", texte: bloc.s });
+  }
+  if (axes.length < 3) return null;
+
+  for (const axe of axes) {
+    const impact =
+      axe.rubriques.find((r) => /impact|pour vous|votre projet/.test(normaliser(r.titre))) ??
+      axe.rubriques[axe.rubriques.length - 1];
+    axe.verdict = impact ? premierePhrase(impact.texte).phrase : "";
+  }
+  return axes;
 }
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
@@ -167,7 +241,7 @@ function lireAxes(blocs: Block[]): Axe[] | null {
 function urgenceDe(echeance: string): Urgence {
   const e = normaliser(echeance);
   if (/semaine|immediat|aujourd'hui|sans attendre|urgent/.test(e)) return "semaine";
-  if (/mois/.test(e)) return "mois";
+  if (/mois|avant/.test(e)) return "mois";
   return "plus-tard";
 }
 
@@ -177,7 +251,20 @@ function numerosAxes(texte: string): number[] {
   return [...match[1].matchAll(/\d+/g)].map((m) => Number(m[0]));
 }
 
-function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | null {
+/** « Cette semaine » à partir de « À faire cette semaine » ou « À décider ce mois-ci ». */
+function echeanceDe(titre: string): string | null {
+  const reste = titre.replace(/^(à|a)\s+(faire|décider|decider)\s*/i, "").trim();
+  return reste ? reste.charAt(0).toUpperCase() + reste.slice(1) : null;
+}
+
+/**
+ * Les actions d'une section : un h3 par action. `defaut` porte l'échéance du
+ * titre de section (« À décider ce mois-ci »), quand l'action n'en dit pas.
+ */
+function lireActions(
+  blocs: Block[],
+  defaut: string | null = null,
+): { actions: Action[]; reste: Block[] } | null {
   const actions: Action[] = [];
   const reste: Block[] = [];
   let courante: Action | null = null;
@@ -191,8 +278,8 @@ function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | nu
         periode: null,
         sources: [],
         axes: [],
-        urgence: "plus-tard",
-        echeance: null,
+        urgence: defaut ? urgenceDe(defaut) : "plus-tard",
+        echeance: defaut,
         aFaire: null,
         contexte: [],
       };
@@ -203,6 +290,11 @@ function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | nu
       reste.push(bloc);
       continue;
     }
+    if (bloc.k === "li" || bloc.k === "oli") {
+      // « Qui : la présidence… » : une rubrique courte, gardée dans la carte.
+      courante.contexte.push(rubrique(bloc.s) ?? { titre: "", texte: bloc.s });
+      continue;
+    }
     if (bloc.k !== "p") {
       reste.push(bloc);
       continue;
@@ -211,7 +303,8 @@ function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | nu
     const a = attaque(bloc.s);
     if (!a) {
       // La ligne de repères : « 6 août - 27 août · WordPress… · sources · axes 4 et 7 ».
-      if (courante.periode === null && courante.contexte.length === 0 && !courante.aFaire) {
+      const repere = texteDe(bloc.s).includes(" · ");
+      if (repere && courante.periode === null && courante.contexte.length === 0 && !courante.aFaire) {
         const morceaux = texteDe(bloc.s)
           .split(" · ")
           .map((m) => m.trim())
@@ -228,10 +321,10 @@ function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | nu
       continue;
     }
 
-    if (/^a faire/.test(normaliser(a.titre))) {
-      const echeance = a.titre.replace(/^À faire\s*/i, "").replace(/^A faire\s*/i, "").trim();
-      courante.echeance = echeance ? echeance.charAt(0).toUpperCase() + echeance.slice(1) : null;
-      courante.urgence = urgenceDe(echeance);
+    if (/^a (faire|decider)/.test(normaliser(a.titre))) {
+      const echeance = echeanceDe(a.titre) ?? defaut;
+      courante.echeance = echeance;
+      courante.urgence = urgenceDe(echeance ?? "");
       courante.aFaire = a.reste;
     } else {
       courante.contexte.push({ titre: a.titre, texte: a.reste });
@@ -243,15 +336,67 @@ function lireActions(blocs: Block[]): { actions: Action[]; reste: Block[] } | nu
 
 // ─── Cartes (paragraphes à attaque en gras) ──────────────────────────────────
 
+/**
+ * Deux formes de carte : un paragraphe ou une puce à attaque en gras, ou un h3
+ * suivi de ses paragraphes (une carte par h3).
+ */
 function lireCartes(blocs: Block[]): { cartes: Carte[]; reste: Block[] } | null {
   const cartes: Carte[] = [];
   const reste: Block[] = [];
+  let sousTitre: Carte | null = null;
+
   for (const bloc of blocs) {
-    const a = bloc.k === "p" ? attaque(bloc.s) : null;
+    if (bloc.k === "h3") {
+      sousTitre = { titre: texteDe(bloc.s).trim(), texte: [] };
+      cartes.push(sousTitre);
+      continue;
+    }
+    if (sousTitre && (bloc.k === "p" || bloc.k === "li")) {
+      if (sousTitre.texte.length > 0) sousTitre.texte.push({ t: " " });
+      sousTitre.texte.push(...bloc.s);
+      continue;
+    }
+    sousTitre = null;
+    const a = bloc.k === "p" || bloc.k === "li" ? attaque(bloc.s) : null;
     if (a) cartes.push({ titre: a.titre, texte: a.reste });
     else reste.push(bloc);
   }
   return cartes.length >= 2 ? { cartes, reste } : null;
+}
+
+// ─── Avancement des chantiers ────────────────────────────────────────────────
+
+function statutDe(texte: string): string | null {
+  const t = normaliser(texte);
+  if (/\b(livre|termine|en ligne)\b/.test(t)) return "Livré";
+  if (/\ben cours\b/.test(t)) return "En cours";
+  if (/\b(demarre|a venir|programme|prevu|decide)/.test(t)) return "À venir";
+  return null;
+}
+
+/** Retire la ponctuation laissée en tête après une coupe. */
+function nettoieTete(spans: Span[]): Span[] {
+  const out = spans.map((span) => ({ ...span }));
+  while (out[0] && out[0].t.replace(/^[\s.:,;]+/, "") === "") out.shift();
+  if (out[0]) out[0].t = out[0].t.replace(/^[\s.:,;]+/, "");
+  if (out[0]) out[0].t = out[0].t.charAt(0).toUpperCase() + out[0].t.slice(1);
+  return out;
+}
+
+/** Des cartes dont au moins une porte un pourcentage deviennent des chantiers. */
+function enChantiers(cartes: Carte[]): Chantier[] | null {
+  const chantiers = cartes.map((carte): Chantier => {
+    const texte = texteDe(carte.texte);
+    const pct = /^\D{0,15}?(\d{1,3})\s*%/.exec(texte);
+    const pourcentage = pct ? Math.min(100, Number(pct[1])) : null;
+    return {
+      titre: carte.titre,
+      texte: nettoieTete(pct ? coupe(carte.texte, pct[0].length) : carte.texte),
+      pourcentage,
+      statut: pourcentage === null ? statutDe(texte) : pourcentage >= 100 ? "Livré" : "En cours",
+    };
+  });
+  return chantiers.some((c) => c.pourcentage !== null) ? chantiers : null;
 }
 
 // ─── Échéancier ──────────────────────────────────────────────────────────────
@@ -379,6 +524,12 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
   const contenu = sansFilets(blocs);
   const prose: Section = { kind: "prose", titre, blocs: contenu };
 
+  if (/\baxes\b/.test(t)) {
+    // Variante « Veilles clients » : les axes ont leur propre section.
+    const axes = lireAxesTendance(contenu) ?? lireAxes(contenu);
+    if (axes) return [{ kind: "axes", titre, axes }];
+  }
+
   if (t.startsWith("lecture")) {
     // Le tour des axes vit sous un h3 de la lecture du mois.
     const index = contenu.findIndex((b) => b.k === "h3" && /axes/.test(normaliser(texteDe(b.s))));
@@ -392,8 +543,8 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
     ];
   }
 
-  if (t.startsWith("a faire")) {
-    const lu = lireActions(contenu);
+  if (t.startsWith("a faire") || t.startsWith("a decider")) {
+    const lu = lireActions(contenu, t.startsWith("a decider") ? echeanceDe(texteDe(titre).trim()) : null);
     return lu ? [{ kind: "actions", titre, actions: lu.actions, blocs: lu.reste }] : [prose];
   }
 
@@ -402,7 +553,7 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
     return lu ? [{ kind: "echeancier", titre, echeances: lu.echeances, blocs: lu.reste }] : [prose];
   }
 
-  if (t.startsWith("questions")) {
+  if (/\bquestions\b/.test(t)) {
     const questions = contenu.filter((b) => b.k === "oli" || b.k === "li").map((b) => (b as { s: Span[] }).s);
     if (questions.length === 0) return [prose];
     return [
@@ -417,6 +568,8 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
 
   const lu = lireCartes(contenu);
   if (!lu) return [prose];
+  const chantiers = enChantiers(lu.cartes);
+  if (chantiers) return [{ kind: "avancement", titre, chantiers, blocs: lu.reste }];
   const options = lu.cartes.every((c) => /^(a considerer|a differer|a eviter|ordre de cout)/.test(normaliser(c.titre)));
   return options
     ? [{ kind: "options", titre, options: lu.cartes, blocs: lu.reste }]

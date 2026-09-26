@@ -7,7 +7,6 @@ import type {
   DecisionPayload,
   Deliverable,
   DocumentPayload,
-  PrestationPayload,
   RoadmapPayload,
   VeillePayload,
 } from "../deliverables";
@@ -243,7 +242,7 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
   w.paragraph(`Établi le ${day(data.generatedAt)}.`, { muted: true });
   w.paragraph(
     "Ce dossier rassemble tout ce que l'accompagnement a produit et qui est publié à cette date : " +
-      "relevé de décisions, roadmap, cartographie du système, documents relus, prestations, veille, " +
+      "relevé de décisions, roadmap, cartographie du système, documents relus, veille, " +
       "lettres, rapports de maintenance et audits, ces derniers en entier. Il se lit sans aucun compte ni outil : c'est l'objet même " +
       "de la clause de restitution.",
   );
@@ -259,12 +258,11 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     ["2", "Roadmap", String(byKind(data.items, "roadmap").length)],
     ["3", "Cartographie du système", String(byKind(data.items, "cartographie").length)],
     ["4", "Documents", String(byKind(data.items, "document").length)],
-    ["5", "Prestations", String(byKind(data.items, "prestation").length)],
-    ["6", "Veille", String(byKind(data.items, "veille").length)],
-    ["7", "Lettres de veille", String(data.letters.length)],
-    ["8", "Rapports de maintenance", String(data.reports.length)],
-    ["9", "Audits", String(byKind(data.items, "audit").length)],
-    ["10", "Historique des corrections", String(data.corrections.length)],
+    ["5", "Veille", String(byKind(data.items, "veille").length)],
+    ["6", "Lettres de veille", String(data.letters.length)],
+    ["7", "Rapports de maintenance", String(data.reports.length)],
+    ["8", "Audits", String(byKind(data.items, "audit").length)],
+    ["9", "Historique des corrections", String(data.corrections.length)],
   ];
   w.y += 4;
   w.table(["", "Rubrique", "Entrées"], sommaire, [10, w.width - 34, 24]);
@@ -348,26 +346,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     { muted: true, size: 8.5 },
   );
 
-  // ─── 5. Prestations ────────────────────────────────────────────────────
-  w.heading("5. Prestations");
-  w.table(
-    ["Prestation", "Statut", "Début", "Livraison", "Montant", "Détail"],
-    byKind(data.items, "prestation").map((item) => {
-      const p = item.payload as PrestationPayload;
-      return [
-        item.title,
-        p.statut ?? "",
-        p.debut ? day(new Date(p.debut)) : "",
-        day(item.occurredAt),
-        euros(p.montant),
-        p.detail ?? "",
-      ];
-    }),
-    [40, 20, 22, 22, 22, w.width - 126],
-  );
-
-  // ─── 6. Veille ─────────────────────────────────────────────────────────
-  w.heading("6. Veille");
+  // ─── 5. Veille ─────────────────────────────────────────────────────────
+  w.heading("5. Veille");
   w.table(
     ["Date", "Sujet", "Ce qui change", "Ce que ça implique", "Source"],
     byKind(data.items, "veille").map((item) => {
@@ -377,8 +357,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     [20, 32, 48, 48, w.width - 148],
   );
 
-  // ─── 7. Lettres ────────────────────────────────────────────────────────
-  w.heading("7. Lettres de veille");
+  // ─── 6. Lettres ────────────────────────────────────────────────────────
+  w.heading("6. Lettres de veille");
   w.table(
     ["Période", "Titre", "Portée", "Accroche"],
     data.letters.map((letter) => [
@@ -392,8 +372,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     [26, 50, 24, w.width - 100],
   );
 
-  // ─── 8. Rapports ───────────────────────────────────────────────────────
-  w.heading("8. Rapports de maintenance");
+  // ─── 7. Rapports ───────────────────────────────────────────────────────
+  w.heading("7. Rapports de maintenance");
   w.table(
     ["Rapport", "Période", "Généré le"],
     data.reports.map((report) => [
@@ -404,8 +384,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     [w.width - 90, 60, 30],
   );
 
-  // ─── 9. Audits ─────────────────────────────────────────────────────────
-  w.heading("9. Audits");
+  // ─── 8. Audits ─────────────────────────────────────────────────────────
+  w.heading("8. Audits");
   const audits = byKind(data.items, "audit");
   if (audits.length === 0) {
     w.paragraph("Aucun audit publié.", { muted: true, size: 9 });
@@ -435,8 +415,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     w.y += 4;
   }
 
-  // ─── 10. Corrections ───────────────────────────────────────────────────
-  w.heading("10. Historique des corrections");
+  // ─── 9. Corrections ───────────────────────────────────────────────────
+  w.heading("9. Historique des corrections");
   if (data.corrections.length === 0) {
     w.paragraph("Aucun livrable n'a été corrigé après sa publication.", { muted: true, size: 9 });
   } else {

@@ -123,6 +123,17 @@ export interface PrestationPayload {
   detail: string | null;
 }
 
+/**
+ * Ce que le client voit d'une prestation : une date de livraison dans son
+ * calendrier. Ni tarif, ni devis, ni détail — ceux-là restent dans
+ * l'administration (cf. `ADMIN_ONLY_KINDS`).
+ */
+export interface Livraison {
+  title: string;
+  date: Date;
+  statut: string | null;
+}
+
 /** Une partie d'audit : une sous-page de la page d'audit, dans l'ordre de l'atelier. */
 export interface AuditSection {
   /** Identifiant de la sous-page Notion. Sert d'ancre, stable au renommage. */

@@ -89,6 +89,21 @@ export default async function ClientDetailPage({
       <section className="mt-10">
         <Panel className="flex flex-wrap items-center justify-between gap-4 p-4">
           <div>
+            <Label>Prestations</Label>
+            <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
+              Les missions vendues à ce client, leur tarif et leur avancement. Suivi réservé à
+              l&rsquo;administration : son espace ne les montre pas.
+            </p>
+          </div>
+          <Link href={`/admin-cto/pilotage/prestations?client=${detail.id}`} className={buttonClass.ghost}>
+            Voir ses prestations
+          </Link>
+        </Panel>
+      </section>
+
+      <section className="mt-10">
+        <Panel className="flex flex-wrap items-center justify-between gap-4 p-4">
+          <div>
             <Label>Synchro Notion</Label>
             <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
               {detail.syncEnabled

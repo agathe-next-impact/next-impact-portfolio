@@ -1,7 +1,7 @@
 import type {
   CartographiePayload,
   Deliverable,
-  PrestationPayload,
+  Livraison,
   RoadmapPayload,
 } from "../deliverables";
 
@@ -37,6 +37,7 @@ export function buildEvents(
   letters: { title: string; period: Date | null; href: string }[],
   hrefFor: (item: Deliverable) => string | null,
   now: Date = new Date(),
+  livraisons: Livraison[] = [],
 ): CalendarEvent[] {
   const events: CalendarEvent[] = [];
   const today = startOfDay(now).getTime();
@@ -60,11 +61,20 @@ export function buildEvents(
         href: hrefFor(item),
         overdue: past,
       });
-    } else if (item.kind === "prestation") {
-      const statut = (item.payload as PrestationPayload).statut;
-      if (statut && DONE_PRESTATION.has(statut)) continue;
-      events.push({ date: item.occurredAt, kind: "prestation", title: item.title, href: hrefFor(item), overdue: past });
     }
+  }
+
+  // Les prestations arrivent à part, sans tarif (cf. `Livraison`), et sans
+  // lien : leur fiche n'existe que dans l'administration.
+  for (const livraison of livraisons) {
+    if (livraison.statut && DONE_PRESTATION.has(livraison.statut)) continue;
+    events.push({
+      date: livraison.date,
+      kind: "prestation",
+      title: livraison.title,
+      href: null,
+      overdue: livraison.date.getTime() < today,
+    });
   }
 
   for (const letter of letters) {

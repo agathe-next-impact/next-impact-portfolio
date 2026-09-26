@@ -9,7 +9,6 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   Activity,
   BookOpen,
-  Briefcase,
   CalendarPlus,
   Download,
   FileText,
@@ -67,7 +66,6 @@ import { viderPagesHorsLigne } from "./pwa";
 export type NavIconName =
   | "tableau"
   | "missions"
-  | "prestations"
   | "decisions"
   | "audit"
   | "site"
@@ -83,7 +81,6 @@ export type NavIconName =
 const ICONS: Record<NavIconName, LucideIcon> = {
   tableau: House,
   missions: Flag,
-  prestations: Briefcase,
   decisions: Gavel,
   audit: Search,
   site: Activity,

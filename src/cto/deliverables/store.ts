@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray, notInArray, sql, type SQL } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoDeliverablePlacements, ctoDeliverables } from "../db/schema";
 import type {
@@ -7,6 +7,7 @@ import type {
   DeliverableInput,
   DeliverableKind,
   DeliverablePayload,
+  Livraison,
 } from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -171,6 +172,18 @@ export async function setPlacement(notionPageId: string, featured: boolean): Pro
 }
 
 /**
+ * Les types de livrables que seule l'administration lit.
+ *
+ * Une prestation porte son tarif : c'est du suivi commercial, pas un livrable
+ * à montrer au client. Elle est synchronisée comme les autres (même table, même
+ * historique), mais aucune lecture côté client ne la rend — ni l'espace, ni
+ * les notifications, ni le dossier de restitution, qui passent tous par
+ * `listForClient` ou `history`. Le filtre est ici, et pas dans chaque écran,
+ * pour la même raison que la garde `clientId` de `history()`.
+ */
+export const ADMIN_ONLY_KINDS: readonly DeliverableKind[] = ["prestation"];
+
+/**
  * Les livrables visibles par un accompagnement, dans leur version courante.
  *
  * Le tri d'affichage se fait en mémoire : `distinct on` impose son propre ordre
@@ -178,6 +191,44 @@ export async function setPlacement(notionPageId: string, featured: boolean): Pro
  * cher qu'une sous-requête à relire dans six mois.
  */
 export async function listForClient(clientId: string): Promise<Deliverable[]> {
+  return currentDeliverables(
+    and(eq(ctoDeliverables.clientId, clientId), notInArray(ctoDeliverables.kind, [...ADMIN_ONLY_KINDS])),
+  );
+}
+
+/**
+ * Les prestations de tous les accompagnements, dans leur version courante.
+ * Réservé à l'administration (cf. `ADMIN_ONLY_KINDS`).
+ */
+export async function listPrestations(): Promise<Deliverable<"prestation">[]> {
+  return (await currentDeliverables(eq(ctoDeliverables.kind, "prestation"))) as Deliverable<"prestation">[];
+}
+
+/**
+ * Les dates de livraison des prestations d'un accompagnement, pour son
+ * calendrier. La requête ne lit que le titre, la date et le statut : le tarif
+ * ne quitte pas la base, il n'y a donc rien à oublier de filtrer à l'affichage.
+ */
+export async function livraisonsForClient(clientId: string): Promise<Livraison[]> {
+  const rows = await db()
+    .selectDistinctOn([ctoDeliverables.notionPageId], {
+      title: ctoDeliverables.title,
+      occurredAt: ctoDeliverables.occurredAt,
+      statut: sql<string | null>`${ctoDeliverables.payload}->>'statut'`,
+      withdrawnAt: ctoDeliverables.withdrawnAt,
+    })
+    .from(ctoDeliverables)
+    .where(and(eq(ctoDeliverables.clientId, clientId), eq(ctoDeliverables.kind, "prestation")))
+    .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
+
+  return rows.flatMap((row) =>
+    row.withdrawnAt === null && row.occurredAt
+      ? [{ title: row.title, date: row.occurredAt, statut: row.statut }]
+      : [],
+  );
+}
+
+async function currentDeliverables(where: SQL | undefined): Promise<Deliverable[]> {
   const rows = await db()
     .selectDistinctOn([ctoDeliverables.notionPageId], {
       id: ctoDeliverables.id,
@@ -200,7 +251,7 @@ export async function listForClient(clientId: string): Promise<Deliverable[]> {
       ctoDeliverablePlacements,
       eq(ctoDeliverablePlacements.notionPageId, ctoDeliverables.notionPageId),
     )
-    .where(eq(ctoDeliverables.clientId, clientId))
+    .where(where)
     .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
 
   return rows.filter((row) => row.withdrawnAt === null).map(toDeliverable);
@@ -230,6 +281,9 @@ export async function history(
       and(
         eq(ctoDeliverables.notionPageId, notionPageId),
         eq(ctoDeliverables.clientId, clientId),
+        // Même garde pour le type : l'identifiant d'une prestation dans l'URL
+        // d'une autre catégorie ne doit pas en rendre le tarif.
+        notInArray(ctoDeliverables.kind, [...ADMIN_ONLY_KINDS]),
       ),
     )
     .orderBy(desc(ctoDeliverables.version));

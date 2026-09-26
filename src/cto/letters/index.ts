@@ -26,6 +26,7 @@ export {
   type Action,
   type Axe,
   type Carte,
+  type Chantier,
   type Echeance,
   type LettreStructuree,
   type Pression,

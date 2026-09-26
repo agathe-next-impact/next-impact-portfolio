@@ -18,7 +18,6 @@ import {
   VueLettres,
   VueLectureProposition,
   VueMissions,
-  VuePrestations,
   VuePropositions,
   VueRapports,
   VueSite,
@@ -68,8 +67,6 @@ export default async function EspaceAdminPage({
     switch (tete) {
       case "missions":
         return <VueMissions viewer={viewer} context={context} />;
-      case "prestations":
-        return <VuePrestations viewer={viewer} context={context} />;
       case "decisions":
         return <VueDecisions viewer={viewer} context={context} />;
       case "audit":

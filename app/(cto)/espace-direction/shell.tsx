@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { previousLoginAt } from "@cto/access";
-import { listForClient, type Deliverable } from "@cto/deliverables";
+import { listForClient, livraisonsForClient, type Deliverable, type Livraison } from "@cto/deliverables";
 import {
   actionsFor,
   BACKUP_MAX_AGE_DAYS,
@@ -52,6 +52,8 @@ export function sectionHref(section: Section, base: string = ESPACE_PATH): strin
 export interface EspaceContext {
   profile: ClientProfile;
   items: Deliverable[];
+  /** Les livraisons de prestations, pour le calendrier : titre et date, jamais le tarif. */
+  livraisons: Livraison[];
   sections: Section[];
   /** Connexion précédente de la personne. Null pour l'admin et à la première visite. */
   since: Date | null;
@@ -70,9 +72,10 @@ export interface EspaceContext {
  * seconde lecture par page.
  */
 export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
-  const [profile, items, since] = await Promise.all([
+  const [profile, items, livraisons, since] = await Promise.all([
     clientProfile(viewer.clientId),
     listForClient(viewer.clientId),
+    livraisonsForClient(viewer.clientId),
     viewer.personId ? previousLoginAt(viewer.personId) : Promise.resolve(null),
   ]);
 
@@ -82,7 +85,6 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     cartographie: count("cartographie"),
     documents: count("document"),
     roadmap: count("roadmap"),
-    prestations: count("prestation"),
     audits: count("audit"),
     propositions: count("proposition"),
     site: profile.hasSite,
@@ -95,6 +97,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
   return {
     profile,
     items,
+    livraisons,
     sections,
     since,
     site,
@@ -143,8 +146,6 @@ function badgeFor(key: SectionKey, context: EspaceContext): NavBadge | null {
       if (enCours === 0) return null;
       return { text: String(enCours), description: `${enCours} en cours`, tone: "neutre" };
     }
-    case "prestations":
-      return nouveautes(context, ["prestation"]);
     case "decisions":
       return nouveautes(context, ["decision"]);
     case "audit":

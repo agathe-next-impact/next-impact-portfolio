@@ -28,12 +28,14 @@ export type ServiceCode =
   | "actions"
   | "veille-personnalisee"
   | "veille-technique"
+  // Coché dans la fiche Notion, il n'ouvre plus rien côté client : le suivi
+  // des prestations et de leur tarif vit dans l'administration
+  // (`/admin-cto/pilotage/prestations`).
   | "prestations";
 
 export type SectionKey =
   | "tableau"
   | "missions"
-  | "prestations"
   | "decisions"
   | "audit"
   | "site"
@@ -84,9 +86,8 @@ export const SECTIONS: readonly Section[] = [
     slug: "missions",
     label: "Vue d'ensemble",
     group: "missions",
-    services: ["actions", "prestations", "direction-technique", "audit"],
+    services: ["actions", "direction-technique", "audit"],
   },
-  { key: "prestations", slug: "prestations", label: "Prestations", group: "missions", services: ["prestations"] },
   { key: "decisions", slug: "decisions", label: "Décisions", group: "missions", services: ["direction-technique"] },
   { key: "audit", slug: "audit", label: "Audit", group: "missions", services: ["audit"] },
 
@@ -125,7 +126,6 @@ export interface Contents {
   cartographie: number;
   documents: number;
   roadmap: number;
-  prestations: number;
   audits: number;
   propositions: number;
   /** Vrai si un projet WP Umbrella est renseigné. */
@@ -137,9 +137,7 @@ export interface Contents {
 function hasContent(key: SectionKey, contents: Contents): boolean {
   switch (key) {
     case "missions":
-      return contents.roadmap + contents.prestations + contents.decisions + contents.audits > 0;
-    case "prestations":
-      return contents.prestations > 0;
+      return contents.roadmap + contents.decisions + contents.audits > 0;
     case "decisions":
       return contents.decisions > 0;
     case "audit":
@@ -199,4 +197,6 @@ export const LEGACY_SLUGS: Record<string, SectionKey> = {
   "direction-technique": "decisions",
   actions: "missions",
   "suivi-technique": "site",
+  // Les prestations et leur tarif sont passées dans l'administration.
+  prestations: "missions",
 };

@@ -4,6 +4,7 @@ import type {
   Block,
   Axe,
   Carte,
+  Chantier,
   Echeance,
   LettreStructuree,
   Pression,
@@ -17,7 +18,7 @@ import { Label, Panel, Stat, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Une lettre générale ou sectorielle, en grille.
+// Une lettre de l'atelier (générale, sectorielle ou personnalisée), en grille.
 //
 // Le texte est le même que dans le rendu linéaire (`CorpsLettre`), mot pour
 // mot : seule la mise en page change. Ce qui se compare (la pression des douze
@@ -56,6 +57,13 @@ const FOND: Record<Tone, string> = {
 const JOUR = 86_400_000;
 
 const ancreSection = (index: number) => `section-${index}`;
+
+const normaliserTitre = (titre: Span[]) =>
+  texteDe(titre)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
 const ancreAxe = (numero: number) => `axe-${numero}`;
 
 function joursAvant(date: Date, maintenant: Date): number {
@@ -172,6 +180,7 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
   const actions = trouve("actions");
   const echeancier = trouve("echeancier");
   const questions = trouve("questions");
+  const avancement = trouve("avancement");
 
   const enHausse = axes?.axes.filter((a) => a.pression === "hausse").length ?? 0;
   const urgentes = actions?.actions.filter((a) => a.urgence === "semaine").length ?? 0;
@@ -195,10 +204,16 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
     stats.push(
       <Stat
         key="actions"
-        label="Actions sur l'existant"
+        label={normaliserTitre(actions.titre).startsWith("a decider") ? "À décider" : "Actions sur l'existant"}
         value={String(actions.actions.length)}
-        tone={urgentes > 0 ? "alerte" : "neutre"}
-        hint={urgentes > 0 ? `dont ${urgentes} cette semaine` : undefined}
+        tone={urgentes > 0 ? "alerte" : actions.actions.some((a) => a.urgence === "mois") ? "attention" : "neutre"}
+        hint={
+          urgentes > 0
+            ? `dont ${urgentes} cette semaine`
+            : actions.actions.length === 1 && actions.actions[0].echeance
+              ? actions.actions[0].echeance
+              : undefined
+        }
       />,
     );
   if (echeancier)
@@ -213,6 +228,17 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
         }
       />,
     );
+  if (avancement) {
+    const enCours = avancement.chantiers.filter((c) => c.pourcentage !== null && c.pourcentage < 100).length;
+    stats.push(
+      <Stat
+        key="chantiers"
+        label="Chantiers suivis"
+        value={String(avancement.chantiers.length)}
+        hint={enCours > 0 ? `dont ${enCours} en cours` : undefined}
+      />,
+    );
+  }
   if (questions)
     stats.push(
       <Stat
@@ -223,13 +249,21 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
       />,
     );
 
+  // Quatre repères au plus : au-delà, ce n'est plus un coup d'œil.
+  stats.splice(4);
   if (stats.length === 0 && !axes) return null;
 
   return (
     <section aria-label="En un coup d'œil" className="mt-8">
       <Panel>
         {stats.length > 0 ? (
-          <div className={`grid grid-cols-2 ${stats.length >= 4 ? "lg:grid-cols-4" : "sm:grid-cols-3"}`}>{stats}</div>
+          <div
+            className={`grid grid-cols-2 ${
+              stats.length >= 4 ? "lg:grid-cols-4" : stats.length === 3 ? "sm:grid-cols-3" : ""
+            }`}
+          >
+            {stats}
+          </div>
         ) : null}
         {axes ? (
           <div className="border-t border-dark-gray">
@@ -278,13 +312,23 @@ function GrilleAxes({ axes }: { axes: Axe[] }) {
               <Pastille tone={tone}>{label}</Pastille>
             </div>
             <h3 className="mt-3 font-sans text-base font-normal leading-snug text-foreground">{axe.nom}</h3>
-            <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">{axe.verdict}</p>
-            {axe.detail.length > 0 ? (
+            {axe.verdict ? (
+              <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">{axe.verdict}</p>
+            ) : null}
+            {axe.detail.length > 0 || axe.rubriques.length > 0 ? (
               <div className="mt-auto">
                 <Plus resume="Le détail">
-                  <p>
-                    <Texte spans={axe.detail} />
-                  </p>
+                  {axe.detail.length > 0 ? (
+                    <p>
+                      <Texte spans={axe.detail} />
+                    </p>
+                  ) : null}
+                  {axe.rubriques.map((r, i) => (
+                    <p key={i}>
+                      {r.titre ? <strong className="font-medium text-foreground">{r.titre}. </strong> : null}
+                      <Texte spans={r.texte} />
+                    </p>
+                  ))}
                 </Plus>
               </div>
             ) : null}
@@ -303,7 +347,7 @@ function CarteAction({ action, axes }: { action: Action; axes: Map<number, strin
     <Carreau className={tone === "alerte" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
-          Action {action.numero}
+          {action.aFaire || action.periode ? `Action ${action.numero}` : `Point ${action.numero}`}
           {action.periode ? ` · ${action.periode}` : ""}
         </p>
         {action.echeance ? <Pastille tone={tone}>{action.echeance}</Pastille> : null}
@@ -336,7 +380,20 @@ function CarteAction({ action, axes }: { action: Action; axes: Map<number, strin
         </div>
       ) : null}
 
-      {action.contexte.length > 0 || concerne ? (
+      {!action.aFaire && action.contexte.length > 0 ? (
+        // Une décision sans « À faire » (lettre rédigée à la main) : son texte
+        // EST le contenu, il reste visible.
+        <div className="mt-4 space-y-2 border-l-2 border-l-accent-secondary pl-3 font-inter-tight text-sm leading-relaxed text-foreground">
+          {action.contexte.map((c, i) => (
+            <p key={i}>
+              {c.titre ? <strong className="font-medium">{c.titre} : </strong> : null}
+              <Texte spans={c.texte} />
+            </p>
+          ))}
+        </div>
+      ) : null}
+
+      {(action.aFaire && action.contexte.length > 0) || concerne ? (
         <div className="mt-auto">
           <Plus resume="Contexte, impact et coût">
             {action.contexte.map((c, i) => (
@@ -384,6 +441,50 @@ function GrilleOptions({ options }: { options: Carte[] }) {
           </Carreau>
         );
       })}
+    </div>
+  );
+}
+
+/** L'avancement des chantiers : une jauge par chantier chiffré, un statut sinon. */
+function GrilleChantiers({ chantiers }: { chantiers: Chantier[] }) {
+  return (
+    <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {chantiers.map((chantier, index) => (
+        <Carreau key={index}>
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="font-sans text-base font-normal leading-snug text-foreground">{chantier.titre}</h3>
+            {chantier.statut ? (
+              <Pastille tone={chantier.statut === "Livré" ? "fait" : "neutre"}>{chantier.statut}</Pastille>
+            ) : null}
+          </div>
+          {chantier.pourcentage !== null ? (
+            <div className="mt-4">
+              <div className="flex items-baseline justify-between">
+                <Label>Avancement</Label>
+                <p className="font-sans text-xl font-light leading-none text-foreground">{chantier.pourcentage} %</p>
+              </div>
+              <div
+                role="progressbar"
+                aria-label={`Avancement de ${chantier.titre}`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={chantier.pourcentage}
+                className="mt-2 h-2 w-full rounded-[4px] bg-mid-gray/25"
+              >
+                <div
+                  className="h-2 rounded-[4px] bg-accent-secondary"
+                  style={{ width: `${Math.max(2, chantier.pourcentage)}%` }}
+                />
+              </div>
+            </div>
+          ) : null}
+          {chantier.texte.length > 0 ? (
+            <p className="mt-4 font-inter-tight text-sm leading-relaxed text-foreground/85">
+              <Texte spans={chantier.texte} />
+            </p>
+          ) : null}
+        </Carreau>
+      ))}
     </div>
   );
 }
@@ -590,9 +691,9 @@ function RenduSection({
           <TitreSection
             id={id}
             titre={section.titre}
-            sousTitre={`${section.actions.length} action${section.actions.length > 1 ? "s" : ""}${
-              urgentes > 0 ? ` · ${urgentes} cette semaine` : ""
-            }`}
+            sousTitre={`${section.actions.length} ${
+              normaliserTitre(section.titre).startsWith("a decider") ? "point" : "action"
+            }${section.actions.length > 1 ? "s" : ""}${urgentes > 0 ? ` · ${urgentes} cette semaine` : ""}`}
           />
           <div className="mt-6 grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
             {section.actions.map((action) => (
@@ -608,6 +709,18 @@ function RenduSection({
         <section aria-labelledby={id}>
           <TitreSection id={id} titre={section.titre} />
           <GrilleOptions options={section.options} />
+          <Reste blocs={section.blocs} base={base} />
+        </section>
+      );
+    case "avancement":
+      return (
+        <section aria-labelledby={id}>
+          <TitreSection
+            id={id}
+            titre={section.titre}
+            sousTitre={`${section.chantiers.length} chantier${section.chantiers.length > 1 ? "s" : ""}`}
+          />
+          <GrilleChantiers chantiers={section.chantiers} />
           <Reste blocs={section.blocs} base={base} />
         </section>
       );
@@ -654,6 +767,12 @@ export function LettreEnGrille({
   base?: string;
   maintenant?: Date;
 }) {
+  // Les éditions « Veilles clients » ouvrent sur la même ligne que le chapô :
+  // l'afficher deux fois de suite n'apprend rien.
+  const intro = structure.intro.filter(
+    (bloc) => !(chapo && bloc.k === "p" && texteDe(bloc.s).trim() === chapo.trim()),
+  );
+
   const axes = new Map<number, string>();
   for (const section of structure.sections) {
     if (section.kind === "axes") for (const axe of section.axes) axes.set(axe.numero, axe.nom);
@@ -670,9 +789,9 @@ export function LettreEnGrille({
       <CoupDOeil structure={structure} maintenant={maintenant} />
       <Sommaire sections={structure.sections} />
 
-      {structure.intro.length > 0 ? (
+      {intro.length > 0 ? (
         <div className="mt-4">
-          <CorpsLettre body={structure.intro} base={base} />
+          <CorpsLettre body={intro} base={base} />
         </div>
       ) : null}
 
