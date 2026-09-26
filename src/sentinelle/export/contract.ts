@@ -60,6 +60,8 @@ export const ExportAlertSchema = z.object({
   /** Composant concerné, tel qu'il s'affiche dans la fiche. */
   component: z.string(),
   recommendedAction: z.string(),
+  /** Le corps relu de l'alerte, tel que le client l'a reçu. Ajout compatible (v1). */
+  body: z.string().optional(),
   /** Date ISO : l'envoi s'il a eu lieu, la création sinon. */
   at: z.string(),
 });

@@ -20,4 +20,17 @@ export {
   type LetterSummary,
 } from "./store";
 
+export {
+  structureLettre,
+  texteDe,
+  type Action,
+  type Axe,
+  type Carte,
+  type Echeance,
+  type LettreStructuree,
+  type Pression,
+  type Section,
+  type Urgence,
+} from "./structure";
+
 export type { Block, Span } from "../notion/blocks";

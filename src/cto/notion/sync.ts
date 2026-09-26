@@ -25,6 +25,7 @@ import {
 } from "./config";
 import { importAnnex, readAuditTree } from "./audit";
 import { syncLetters, type LettersReport } from "./letters";
+import { provisionSentinelle, type ProvisionReport, type WatchWish } from "../sentinelle/provision";
 import { syncPersons, type PersonsReport } from "./persons";
 import {
   auditActionInput,
@@ -36,6 +37,7 @@ import {
   clientTier,
   clientVeilleOrganisations,
   clientSentinelleId,
+  clientWatch,
   clientWpUmbrellaProjectId,
   companyName,
   documentFiles,
@@ -102,6 +104,8 @@ export interface SyncReport {
   persons: PersonsReport;
   /** Le balayage des lettres de veille, hors livrables. */
   letters: LettersReport;
+  /** Le provisionnement Sentinelle piloté par la fiche (service « Veille technique »). */
+  veilleTechnique?: ProvisionReport;
   kinds: KindReport[];
   warnings: string[];
 }
@@ -120,6 +124,8 @@ interface ClientResolution {
   byVeilleOrganisation: Map<string, string>;
   /** Accompagnements dont la synchro est suspendue depuis l'admin (§ ci-dessous). */
   disabledClientIds: Set<string>;
+  /** Ce que chaque fiche demande à la veille technique (Sentinelle). */
+  watchWishes: WatchWish[];
   warnings: string[];
 }
 
@@ -140,6 +146,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
   const byVeilleOrganisation = new Map<string, string>();
+  const watchWishes: WatchWish[] = [];
 
   const rows = await db()
     .select({
@@ -204,6 +211,16 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
     await alignerFiche(page, id, name, warnings, dryRun);
     await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
 
+    const watch = clientWatch(page);
+    watchWishes.push({
+      clientId: id,
+      company: name,
+      wanted:
+        clientServices(page).codes.includes("veille-technique") && clientStatus(page) !== "clos",
+      site: watch.site,
+      contact: watch.contact,
+    });
+
     for (const veille of clientVeilleOrganisations(page)) {
       const deja = byVeilleOrganisation.get(veille);
       if (deja && deja !== id) {
@@ -216,7 +233,7 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
     }
   }
 
-  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, warnings };
+  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, watchWishes, warnings };
 }
 
 /** Deux listes de services identiques, à l'ordre près (elles arrivent triées). */
@@ -292,7 +309,9 @@ async function alignerFiche(
   if (!sameServices(servicesVoulus, actuel.services)) patch.services = servicesVoulus;
   // Un identifiant mal formé ne délie pas un accompagnement déjà relié : on
   // garde l'ancien plutôt que de couper la veille sur une faute de frappe.
-  if (!sentinelle.invalid && sentinelle.id !== actuel.sentinelleClientId) {
+  // Colonne vide : on garde l'identifiant en base, que le provisionnement a pu
+  // poser lui-même. Seule une valeur saisie (relier un abonné existant) le remplace.
+  if (sentinelle.id && sentinelle.id !== actuel.sentinelleClientId) {
     patch.sentinelleClientId = sentinelle.id;
   }
   if (Object.keys(patch).length === 0) return;
@@ -882,6 +901,20 @@ export async function syncFromNotion(
   );
   report.letters = lettres.report;
   report.warnings.push(...lettres.warnings);
+
+  // La veille technique en tout dernier : elle dépend des personnes (le nom du
+  // contact) et appelle un autre produit, dont une panne ne doit rien coûter au
+  // reste du balayage.
+  try {
+    const veille = await provisionSentinelle(clients.watchWishes, { dryRun });
+    report.veilleTechnique = veille.report;
+    report.warnings.push(...veille.warnings);
+  } catch (error) {
+    console.error("[cto] provisionnement Sentinelle impossible", error);
+    report.warnings.push(
+      `Veille technique non provisionnée (${error instanceof Error ? error.message : "erreur"}) : nouvel essai au prochain balayage.`,
+    );
+  }
 
   return report;
 }

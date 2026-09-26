@@ -542,6 +542,31 @@ Source des champs : la spécification OpenAPI publiée par WP Umbrella
 lecture est défensive (`src/cto/site/normalize.ts`, testé) et un champ absent
 s'affiche « — », jamais comme une valeur fausse.
 
+### Brancher la veille technique (Sentinelle) depuis Notion
+
+**La fiche Clients commande Sentinelle**, comme elle commande le reste de
+l'accompagnement. Aucun geste dans Sentinelle, aucun UUID à recopier.
+
+| Colonne de la fiche | Rôle |
+| --- | --- |
+| `Services` ∋ « Veille technique » | active la surveillance et ouvre la section « Veille technique » de l'espace |
+| `Site surveillé` (URL) | le site analysé |
+| `Contact veille` (e-mail) | l'adresse qui reçoit alertes et lettres Sentinelle ; si c'est une personne de l'accompagnement, son nom est repris |
+| `État` = `clos` | arrête la surveillance (désactivation, même effet qu'une résiliation) |
+| `ID Sentinelle` (facultatif) | relier à la main un abonné Sentinelle existant ; vide dans le cas normal |
+
+À chaque synchro (`npm run cto:sync` ou le balayage de 4 h), la fiche est
+traduite en une demande envoyée à Sentinelle (`POST /api/sentinelle/provision`,
+jeton `SENTINELLE_EXPORT_SECRET`), qui crée, aligne ou désactive son client.
+À la création, l'analyse du site part en tâche de fond (Inngest), **sans
+e-mail de bienvenue** Sentinelle. L'identifiant renvoyé est gardé en base
+(`cto_clients.sentinelle_client_id`) ; Notion n'est jamais réécrit. Une fiche
+inchangée ne rappelle pas Sentinelle (`sentinelle_sync_digest`).
+
+Service coché mais `Site surveillé` ou `Contact veille` vide : rien n'est
+créé, le rapport de synchro le dit. Le rapport liste aussi chaque client créé
+ou relié. Voie de secours hors Notion : `npm run sentinelle:client`.
+
 ---
 
 ## 7. Le dossier de restitution

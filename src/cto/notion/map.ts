@@ -42,8 +42,16 @@ export const PROPS = {
     services: "Services",
     /** Relation vers la ligne du pipeline « Veilles clients » (Organisations). */
     veilleOrganisation: "Veille — organisation",
-    /** UUID du client chez Sentinelle : la jointure avec la veille technique. */
+    /**
+     * UUID d'un client Sentinelle EXISTANT, à relier à la main (un abonné
+     * Stripe devenu client d'accompagnement). Vide : le provisionnement crée
+     * la fiche lui-même et garde l'identifiant en base.
+     */
     sentinelleClientId: "ID Sentinelle",
+    /** Site surveillé par la veille technique (service « Veille technique »). */
+    watchedSite: "Site surveillé",
+    /** Adresse qui reçoit les alertes et lettres Sentinelle. */
+    watchContact: "Contact veille",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -228,6 +236,7 @@ export const SERVICE_CODES: Record<string, string> = {
   "veille personnalisee": "veille-personnalisee",
   "prestations en cours": "prestations",
   audit: "audit",
+  "veille technique": "veille-technique",
 };
 
 /**
@@ -390,6 +399,14 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  * formé. Un UUID tronqué au copier-coller ne doit pas devenir une requête vers
  * l'export d'un autre client : il est écarté, et la synchro le signale.
  */
+/** Le site surveillé et le contact de la veille technique, tels que la fiche les porte. */
+export function clientWatch(page: NotionPage): { site: string | null; contact: string | null } {
+  return {
+    site: p.url(page, PROPS.clients.watchedSite),
+    contact: p.email(page, PROPS.clients.watchContact),
+  };
+}
+
 export function clientSentinelleId(page: NotionPage): { id: string | null; invalid: boolean } {
   const value = p.text(page, PROPS.clients.sentinelleClientId)?.trim() ?? "";
   if (!value) return { id: null, invalid: false };

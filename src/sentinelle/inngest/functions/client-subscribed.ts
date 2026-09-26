@@ -31,7 +31,7 @@ export const onClientSubscribed = inngest.createFunction(
     retries: 3,
   },
   async ({ event, step }) => {
-    const { clientId, scanId } = event.data;
+    const { clientId, scanId, welcome: withWelcome } = event.data;
 
     const client = await step.run("load-client", async () => {
       const [row] = await db()
@@ -89,6 +89,8 @@ export const onClientSubscribed = inngest.createFunction(
       const { written } = await importScannedStack(clientId, result);
       return written;
     });
+
+    if (withWelcome === false) return { clientId, imported, welcome: "non demandée" };
 
     const welcome = await step.run("send-welcome", async () => {
       const outcome = await sendWelcome(clientId);

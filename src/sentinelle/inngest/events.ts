@@ -42,5 +42,12 @@ export const clientSubscribed = eventType("sentinelle/client.subscribed", {
   schema: z.object({
     clientId: z.string().uuid(),
     scanId: z.string().uuid().optional(),
+    /**
+     * `false` : amorcer la fiche sans e-mail de bienvenue. Posé par le
+     * provisionnement depuis l'espace de direction technique, dont les clients
+     * lisent leur veille là-bas et n'ont pas à découvrir un second espace.
+     * Absent : comportement d'origine (bienvenue envoyée).
+     */
+    welcome: z.boolean().optional(),
   }),
 });

@@ -260,13 +260,14 @@ export function DigestSemaine({
               <Ligne key={index} line={line} anchor />
             ))}
           </ul>
-          {sentinelle.letterKey ? (
-            <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+            <LienLettre href={`${base}/veille-technique`}>Toutes les alertes et la fiche</LienLettre>
+            {sentinelle.letterKey ? (
               <LienLettre href={`${lettresPath(base)}/${sentinelle.letterKey}`}>
                 Lire la lettre de veille technique
               </LienLettre>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </Panel>
       ) : null}
 

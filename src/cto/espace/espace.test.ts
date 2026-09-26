@@ -17,6 +17,14 @@ const EMPTY: Contents = {
 const keys = (list: { key: string }[]) => list.map((s) => s.key);
 
 describe("sections visibles", () => {
+  it("ouvre la veille technique par son service, ou par un client relié en régime historique", () => {
+    expect(keys(visibleSections([], EMPTY))).not.toContain("veille-technique");
+    expect(keys(visibleSections([], { ...EMPTY, sentinelle: true }))).not.toContain("veille-technique");
+    expect(keys(visibleSections(["veille-technique"], EMPTY))).toContain("veille-technique");
+    expect(keys(visibleSections(null, { ...EMPTY, sentinelle: true }))).toContain("veille-technique");
+    expect(keys(visibleSections(null, EMPTY))).not.toContain("veille-technique");
+  });
+
   it("montre toujours l'accueil, « À traiter » et la veille, même sans aucun service", () => {
     expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "a-traiter", "veille"]);
   });

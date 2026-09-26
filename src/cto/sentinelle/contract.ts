@@ -40,6 +40,7 @@ const Alert = z.object({
   status: z.enum(["validated", "sent"]),
   component: z.string(),
   recommendedAction: z.string(),
+  body: z.string().optional(),
   at: z.string(),
 });
 

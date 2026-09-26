@@ -58,6 +58,14 @@ function printReport(report: SyncReport): void {
       : `  dont éditions du pipeline de veille : ${l.editions}`,
   );
 
+  const v = report.veilleTechnique;
+  if (v) {
+    console.log(
+      `\n  veille technique (Sentinelle) : ${v.sent} demande(s) envoyée(s), ${v.created} client(s) créé(s) ou relié(s), ` +
+        `${v.deactivated} désactivé(s), ${v.unchanged} inchangé(s), ${v.failed} échec(s)`,
+    );
+  }
+
   if (report.warnings.length > 0) {
     console.log(`\n${report.warnings.length} point(s) à regarder :`);
     for (const warning of report.warnings) console.log(`  · ${warning}`);

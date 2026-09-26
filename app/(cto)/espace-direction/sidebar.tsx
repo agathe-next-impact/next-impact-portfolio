@@ -30,6 +30,7 @@ import {
   PanelLeftOpen,
   Scale,
   Search,
+  ShieldCheck,
   Sun,
   X,
   type LucideIcon,
@@ -76,6 +77,7 @@ export type NavIconName =
   | "a-arbitrer"
   | "propositions"
   | "veille"
+  | "veille-technique"
   | "documents";
 
 const ICONS: Record<NavIconName, LucideIcon> = {
@@ -91,6 +93,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   "a-arbitrer": Scale,
   propositions: Handshake,
   veille: BookOpen,
+  "veille-technique": ShieldCheck,
   documents: Folder,
 };
 

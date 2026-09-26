@@ -86,6 +86,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     audits: count("audit"),
     propositions: count("proposition"),
     site: profile.hasSite,
+    sentinelle: profile.hasSentinelle,
   });
 
   const site = sections.some((section) => section.key === "site") ? await siteStateFor(viewer.clientId) : null;

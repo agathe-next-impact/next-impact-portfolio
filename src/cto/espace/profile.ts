@@ -15,6 +15,8 @@ export interface ClientProfile {
   services: string[] | null;
   tier: string;
   hasSite: boolean;
+  /** Vrai si un client Sentinelle est relié (colonne Notion « ID Sentinelle »). */
+  hasSentinelle: boolean;
 }
 
 export async function clientProfile(clientId: string): Promise<ClientProfile> {
@@ -23,6 +25,7 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
       services: ctoClients.services,
       tier: ctoClients.tier,
       projectId: ctoClients.wpUmbrellaProjectId,
+      sentinelleClientId: ctoClients.sentinelleClientId,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -32,5 +35,6 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
     services: row?.services ?? null,
     tier: row?.tier ?? "direction",
     hasSite: Boolean(row?.projectId),
+    hasSentinelle: Boolean(row?.sentinelleClientId),
   };
 }

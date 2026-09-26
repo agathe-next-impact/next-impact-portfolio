@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { LEGACY_SLUGS, sectionByKey } from "@cto/espace";
 import { kindFromSlug } from "../../../../../../espace-direction/livrables";
 import { loadEspace } from "../../../../../../espace-direction/shell";
+import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
 import {
   VueAArbitrer,
   VueATraiter,
@@ -87,6 +88,8 @@ export default async function EspaceAdminPage({
         return <VuePropositions viewer={viewer} context={context} />;
       case "veille":
         return <VueVeille viewer={viewer} context={context} semaine={semaine} />;
+      case "veille-technique":
+        return <VueVeilleTechnique viewer={viewer} context={context} />;
       case "documents":
         return <VueDocuments viewer={viewer} context={context} />;
       case "lettres":

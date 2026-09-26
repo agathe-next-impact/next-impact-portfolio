@@ -77,6 +77,7 @@ async function loadAlerts(clientId: string, since: Date): Promise<ExportAlert[]>
       status: row.status as ExportAlert["status"],
       component: row.component,
       recommendedAction: (row.recommendedAction ?? content.recommendedAction ?? "").trim(),
+      body: content.body.trim(),
       at: (row.sentAt ?? row.createdAt).toISOString(),
     };
   });

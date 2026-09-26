@@ -32,6 +32,7 @@
       "status": "sent",
       "component": "WordPress",
       "recommendedAction": "Appliquer la mise à jour 6.6.3.",
+      "body": "Une faille permettant l'exécution de code a été corrigée dans WordPress 6.6.3. Votre site utilise la version 6.6.2.",
       "at": "2026-09-23T08:00:00.000Z"
     }
   ],

@@ -27,6 +27,7 @@ export type ServiceCode =
   | "suivi-technique"
   | "actions"
   | "veille-personnalisee"
+  | "veille-technique"
   | "prestations";
 
 export type SectionKey =
@@ -42,6 +43,7 @@ export type SectionKey =
   | "a-arbitrer"
   | "propositions"
   | "veille"
+  | "veille-technique"
   | "documents";
 
 export type SectionGroup = "missions" | "site" | "agir" | "veille";
@@ -103,6 +105,17 @@ export const SECTIONS: readonly Section[] = [
   { key: "propositions", slug: "propositions", label: "Propositions", group: "agir", services: null, siContenu: true },
 
   { key: "veille", slug: "veille", label: "Lettres et alertes", group: "veille", services: null },
+  // Le service « Veille technique » de la fiche Notion l'ouvre, et c'est le même
+  // service qui fait créer le client Sentinelle (`src/cto/sentinelle/provision.ts`).
+  // Régime historique (colonne Services vide) : ouverte dès qu'un client
+  // Sentinelle est relié.
+  {
+    key: "veille-technique",
+    slug: "veille-technique",
+    label: "Veille technique",
+    group: "veille",
+    services: ["veille-technique"],
+  },
   { key: "documents", slug: "documents", label: "Documents", group: "veille", services: ["direction-technique"] },
 ];
 
@@ -117,6 +130,8 @@ export interface Contents {
   propositions: number;
   /** Vrai si un projet WP Umbrella est renseigné. */
   site: boolean;
+  /** Vrai si un client Sentinelle est relié. */
+  sentinelle?: boolean;
 }
 
 function hasContent(key: SectionKey, contents: Contents): boolean {
@@ -140,6 +155,8 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
       return contents.documents > 0;
     case "propositions":
       return contents.propositions > 0;
+    case "veille-technique":
+      return contents.sentinelle === true;
     default:
       return true;
   }

@@ -12,6 +12,16 @@ export {
   type SentinelleVerdict,
 } from "./contract";
 export {
+  decideProvision,
+  digestOf,
+  provisionSentinelle,
+  type ProvisionBody,
+  type ProvisionDecision,
+  type ProvisionReport,
+  type WatchState,
+  type WatchWish,
+} from "./provision";
+export {
   letterInputFrom,
   sentinelleLetterKey,
   sentinelleStateFor,

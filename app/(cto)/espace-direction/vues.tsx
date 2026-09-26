@@ -14,12 +14,13 @@ import {
   siteVerdict,
   type Action,
 } from "@cto/espace";
-import { ARCHIVE_MONTHS, letterForClient, lettersForClient } from "@cto/letters";
+import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre } from "@cto/letters";
 import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
 import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
+import { LettreEnGrille } from "./lettre-grille";
 import { CorpsLettre, DerniereLettre, formatPeriode, grandsTitres, lettresPath, ListeLettres } from "./lettre";
 import {
   Audits,
@@ -1268,6 +1269,30 @@ export async function VueLettre({
 }) {
   const lettre = await letterForClient(id, viewer.clientId);
   if (!lettre) return null;
+
+  // Générale et sectorielle suivent le gabarit éditorial de l'atelier : elles
+  // passent en grille quand il y est reconnu. Les autres gardent le texte suivi.
+  const structure =
+    lettre.source === "atelier" && lettre.scope !== "personnalisee"
+      ? structureLettre(lettre.body, lettre.period)
+      : null;
+
+  if (structure) {
+    return (
+      <Espace
+        viewer={viewer}
+        context={context}
+        active="veille"
+        title={lettre.title}
+        intro={<Label>{formatPeriode(lettre.period)}</Label>}
+      >
+        <div className="mt-8">
+          <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>
+        </div>
+        <LettreEnGrille structure={structure} chapo={lettre.chapo} base={viewer.base} />
+      </Espace>
+    );
+  }
 
   return (
     <Espace

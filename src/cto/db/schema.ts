@@ -196,6 +196,12 @@ export const ctoClients = pgTable(
      * cet accompagnement, le digest s'en passe.
      */
     sentinelleClientId: text("sentinelle_client_id"),
+    /**
+     * Empreinte de la dernière demande de provisionnement acceptée par
+     * Sentinelle (`src/cto/sentinelle/provision.ts`). Une fiche inchangée ne
+     * rappelle pas Sentinelle à chaque balayage.
+     */
+    sentinelleSyncDigest: text("sentinelle_sync_digest"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [uniqueIndex("cto_client_notion_page").on(t.notionPageId)],
