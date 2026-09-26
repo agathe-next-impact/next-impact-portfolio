@@ -8,6 +8,7 @@ import type {
   DeliverableKind,
   DocumentPayload,
   PrestationPayload,
+  PropositionPayload,
   RoadmapPayload,
   VeillePayload,
 } from "../deliverables";
@@ -118,6 +119,17 @@ export const PROPS = {
     date: "Date des mesures",
     site: "Site",
     annex: "Annexe",
+  },
+  /**
+   * Base « Propositions » de l'atelier : une ligne par proposition envoyée,
+   * qui pointe sa page sous CRM → Propositions. Comme pour un audit, le
+   * contenu vit dans la page, pas dans la ligne.
+   */
+  proposition: {
+    title: "Proposition",
+    page: "Page de la proposition",
+    date: "Date",
+    status: "Statut",
   },
   /**
    * La base inline ROADMAP d'une page d'audit (modèle « Audit technique
@@ -257,6 +269,11 @@ export function auditAnnexFiles(page: NotionPage): p.NotionFile[] {
  * tous les liens Notion (`notion.so/…`, `app.notion.com/p/…`, titre en slug ou
  * non). `null` si le lien n'en contient pas.
  */
+export function propositionPageId(page: NotionPage): string | null {
+  const lien = p.url(page, PROPS.proposition.page) ?? p.text(page, PROPS.proposition.page);
+  return pageIdFromUrl(lien);
+}
+
 export function auditPageId(page: NotionPage): string | null {
   const lien = p.url(page, PROPS.audit.page) ?? p.text(page, PROPS.audit.page);
   return pageIdFromUrl(lien);
@@ -555,6 +572,24 @@ export function mapPage(
         title: p.text(page, PROPS.audit.title) ?? UNTITLED,
         payload,
         occurredAt: mesures,
+        featured: isFeatured(page),
+      };
+    }
+    case "proposition": {
+      const payload: PropositionPayload = {
+        statut: p.select(page, PROPS.proposition.status),
+        // Remplis par la synchro après lecture de la page : ce module est pur.
+        corps: [],
+        sections: [],
+        fichiers: [],
+      };
+      return {
+        clientId,
+        notionPageId: page.id,
+        kind,
+        title: p.text(page, PROPS.proposition.title) ?? UNTITLED,
+        payload,
+        occurredAt: p.date(page, PROPS.proposition.date),
         featured: isFeatured(page),
       };
     }

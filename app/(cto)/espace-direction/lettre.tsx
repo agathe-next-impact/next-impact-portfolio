@@ -67,6 +67,15 @@ export function Texte({ spans }: { spans: Span[] }) {
   );
 }
 
+const ancreTitre = (index: number) => `titre-${index}`;
+
+/** Les grands titres d'un corps, avec l'ancre que `CorpsLettre ancres` leur donne. */
+export function grandsTitres(body: Block[]): { id: string; texte: string }[] {
+  return body.flatMap((bloc, index) =>
+    bloc.k === "h1" ? [{ id: ancreTitre(index), texte: bloc.s.map((span) => span.t).join("").trim() }] : [],
+  );
+}
+
 /**
  * Le corps d'une lettre.
  *
@@ -82,10 +91,13 @@ export function CorpsLettre({
   body,
   large = false,
   base = ESPACE_PATH,
+  ancres = false,
 }: {
   body: Block[];
   large?: boolean;
   base?: string;
+  /** Donne une ancre à chaque grand titre, pour un sommaire (cf. `grandsTitres`). */
+  ancres?: boolean;
 }) {
   const rendus: React.ReactNode[] = [];
   let liste: { ordonnee: boolean; items: Span[][] } | null = null;
@@ -126,7 +138,11 @@ export function CorpsLettre({
     switch (bloc.k) {
       case "h1":
         rendus.push(
-          <h2 key={index} className="mt-10 font-sans text-xl font-light text-foreground">
+          <h2
+            key={index}
+            id={ancres ? ancreTitre(index) : undefined}
+            className="mt-10 scroll-mt-8 font-sans text-xl font-light text-foreground"
+          >
             <Texte spans={bloc.s} />
           </h2>,
         );

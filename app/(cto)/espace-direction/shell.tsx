@@ -80,6 +80,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     roadmap: count("roadmap"),
     prestations: count("prestation"),
     audits: count("audit"),
+    propositions: count("proposition"),
     site: profile.hasSite,
   });
 
@@ -165,6 +166,12 @@ function badgeFor(key: SectionKey, context: EspaceContext): NavBadge | null {
       if (n === 0) return null;
       const urgent = context.actions.aTraiter.some((action) => action.tone === "alerte");
       return { text: String(n), description: `${n} à traiter`, tone: urgent ? "alerte" : "attention" };
+    }
+    case "propositions": {
+      const n = context.actions.aArbitrer.filter((action) => action.kind === "proposition").length;
+      return n === 0
+        ? null
+        : { text: String(n), description: `${n} en attente de votre réponse`, tone: "nouveau" };
     }
     case "a-arbitrer": {
       const n = context.actions.aArbitrer.length;

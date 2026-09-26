@@ -16,7 +16,8 @@ export type DeliverableKind =
   | "veille"
   | "document"
   | "prestation"
-  | "audit";
+  | "audit"
+  | "proposition";
 
 /**
  * Un arbitrage rendu, ou une option proposée puis écartée.
@@ -162,6 +163,23 @@ export interface AuditPayload {
   fichiers: string[];
 }
 
+/**
+ * Une proposition commerciale : chiffrage, scénarios, recommandation.
+ *
+ * Même lecture qu'un audit : la ligne de la base « Propositions » pointe une
+ * page (sous CRM → Propositions), recopiée en entier, bases inline comprises.
+ * Le statut dit où en est la discussion ; il ne se déduit pas du contenu.
+ */
+export interface PropositionPayload {
+  /** Envoyée, En discussion, Acceptée, Déclinée — tel que l'atelier l'écrit. */
+  statut: string | null;
+  /** Le corps de la page, hors sous-pages. */
+  corps: Block[];
+  sections: AuditSection[];
+  /** Empreintes des images rapatriées, pour le contrôle d'appartenance des fichiers. */
+  fichiers: string[];
+}
+
 export interface PayloadByKind {
   decision: DecisionPayload;
   roadmap: RoadmapPayload;
@@ -170,6 +188,7 @@ export interface PayloadByKind {
   document: DocumentPayload;
   prestation: PrestationPayload;
   audit: AuditPayload;
+  proposition: PropositionPayload;
 }
 
 export type DeliverablePayload = PayloadByKind[DeliverableKind];

@@ -28,6 +28,7 @@ export type {
   DocumentPayload,
   PayloadByKind,
   PrestationPayload,
+  PropositionPayload,
   RoadmapPayload,
   VeillePayload,
 } from "./types";

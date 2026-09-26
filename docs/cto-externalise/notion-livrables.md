@@ -230,6 +230,7 @@ CTO_NOTION_DB_DOCUMENTS=…
 CTO_NOTION_DB_PRESTATIONS=…
 CTO_NOTION_DB_EDITIONS=…
 CTO_NOTION_DB_AUDITS=…
+CTO_NOTION_DB_PROPOSITIONS=…
 ```
 
 **Une base facultative n'arrête rien.** Toute base ajoutée après la mise en
@@ -553,6 +554,42 @@ passent dans le détail du chantier, avec le nom de l'audit.
 **Garde-fou.** Si un audit n'a pas pu être lu en entier ce tour-ci (page non
 partagée, base illisible), la roadmap ne retire rien : une action absente n'est
 peut-être qu'une action pas vue. L'audit lui-même garde sa version en ligne.
+
+## 10. Les propositions
+
+Une proposition chiffrée (optimisation, refonte, maintenance, en heures ou en
+euros) vit dans sa **page** sous CRM → **Propositions**, comme un audit vit
+dans sa page de mission. L'espace en reçoit le **contenu entier** : texte,
+encadrés, tableaux, bases inline (plan d'action, synthèse comparative) mises à
+plat en tableaux, images rapatriées. Même lecteur que les audits
+(`readAuditTree`), même doctrine : illisible ce tour-ci = ni publiée ni
+retirée.
+
+### Publier une proposition
+
+1. Le destinataire a une fiche *Clients* (un prospect aussi : état **actif**,
+   aucun service coché suffit) et au moins une ligne dans *Personnes*.
+2. Dans la base **Propositions** (sous « Direction technique — clients »), une
+   ligne : `Proposition` (le titre affiché), `Client`, `Page de la
+   proposition` (le lien de la page, copié depuis Notion), `Date` (la remise),
+   `Statut` (Envoyée, En discussion, Acceptée, Déclinée).
+3. Relire la page, cocher `Publié`, synchroniser (`--a-blanc` d'abord), notifier.
+
+Prérequis, une fois pour toutes : la page **CRM → Propositions** partagée avec
+l'intégration (menu `•••` → *Connexions*). Une page de proposition rangée
+ailleurs (hors de cette page) doit être partagée à part.
+
+### Ce que voit le client
+
+- L'entrée **Agir → Propositions** apparaît dès qu'une proposition est publiée
+  pour lui, **quels que soient ses services** — un prospect n'a rien souscrit.
+  Elle ouvre la proposition directement si elle est seule.
+- La lecture : statut, date de remise, versions, sommaire des grands titres,
+  le document en entier, puis « Votre réponse » (e-mail au sujet prérempli,
+  ou créneau).
+- Tant que le `Statut` n'est pas Acceptée, Signée, Déclinée ou Refusée, la
+  proposition compte comme **à arbitrer** : carte « Que pouvez-vous faire ? »
+  de l'accueil, page À arbitrer, pastille dans la barre latérale.
 
 ## Fichiers
 

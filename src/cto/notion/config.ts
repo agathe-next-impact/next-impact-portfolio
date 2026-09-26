@@ -43,6 +43,8 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
   // ligne de base mais comme un arbre de pages (`audit.ts`), avec son propre
   // balayage dans `sync.ts`.
   audit: "CTO_NOTION_DB_AUDITS",
+  // Même régime que les audits : facultative, lue comme un arbre de pages.
+  proposition: "CTO_NOTION_DB_PROPOSITIONS",
 };
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";

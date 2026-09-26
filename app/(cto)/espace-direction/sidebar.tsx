@@ -17,6 +17,7 @@ import {
   Flag,
   Folder,
   Gavel,
+  Handshake,
   House,
   KeyRound,
   Layers,
@@ -69,6 +70,7 @@ export type NavIconName =
   | "cartographie"
   | "a-traiter"
   | "a-arbitrer"
+  | "propositions"
   | "veille"
   | "documents";
 
@@ -83,6 +85,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   cartographie: Layers,
   "a-traiter": ListChecks,
   "a-arbitrer": Scale,
+  propositions: Handshake,
   veille: BookOpen,
   documents: Folder,
 };

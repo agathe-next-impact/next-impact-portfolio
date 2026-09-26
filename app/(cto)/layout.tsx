@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Inter_Tight, Geist_Mono } from "next/font/google";
+import { figtree, interTight, geistMono } from "../fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 
@@ -20,27 +20,6 @@ import "../globals.css";
 //     de consentement. Le journal d'accès, lui, est une fonctionnalité assumée
 //     et annoncée, pas du traçage.
 // ─────────────────────────────────────────────────────────────────────────────
-
-const figtree = Figtree({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const interTight = Inter_Tight({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-inter-tight",
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  weight: ["300", "400", "500"],
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 // noindex sur tout le groupe, sans exception possible : aucune page de cet
 // espace n'a vocation à être trouvée par un moteur.

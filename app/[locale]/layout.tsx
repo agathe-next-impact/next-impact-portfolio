@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { Figtree, Inter_Tight, Geist_Mono } from 'next/font/google'
+import { figtree, interTight, geistMono } from '../fonts'
 import Header from '@/components/header'
 import '../globals.css'
 import Footer from '@/components/footer'
@@ -14,29 +14,6 @@ import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
 import { MotionProvider } from '@/components/motion-provider'
 import { routing } from '@/i18n/routing'
-
-// Typographie « Blueprint / aspect » : Figtree (titres + UI + corps par défaut),
-// Inter Tight (paragraphes de contenu via .font-inter-tight), Geist Mono (labels).
-const figtree = Figtree({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
-
-const interTight = Inter_Tight({
-  weight: ['400', '500'],
-  subsets: ['latin'],
-  variable: '--font-inter-tight',
-  display: 'swap',
-})
-
-const geistMono = Geist_Mono({
-  weight: ['300', '400', '500'],
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-})
 
 const SITE_URL = 'https://www.next-impact.digital'
 

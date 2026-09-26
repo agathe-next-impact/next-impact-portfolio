@@ -27,6 +27,7 @@ const KIND_LABELS: Record<DeliverableKind, string> = {
   document: "documents",
   prestation: "prestations",
   audit: "audit",
+  proposition: "propositions",
 };
 
 export interface NotifyReport {

@@ -47,6 +47,8 @@ export interface AuditTree {
 }
 
 interface Context {
+  /** Ce qu'on lit, pour le rapport : « audit », « proposition ». */
+  label: string;
   title: string;
   dryRun: boolean;
   fichiers: Set<string>;
@@ -80,7 +82,7 @@ async function walk(blockId: string, depth: number, ctx: Context, racine: boolea
       case "child_page": {
         const titre = (raw.child_page as { title?: string } | undefined)?.title?.trim() || "Sans titre";
         if (racine) ctx.sousPages.push({ id: raw.id, titre });
-        else ctx.warnings.push(`audit « ${ctx.title} » : sous-page imbriquée « ${titre} » ignorée.`);
+        else ctx.warnings.push(`${ctx.label} « ${ctx.title} » : sous-page imbriquée « ${titre} » ignorée.`);
         continue;
       }
 
@@ -184,7 +186,7 @@ async function databaseTable(databaseId: string, titre: string, ctx: Context): P
   } catch (error) {
     ctx.complete = false;
     ctx.warnings.push(
-      `audit « ${ctx.title} » : base « ${titre || "sans titre"} » illisible (${
+      `${ctx.label} « ${ctx.title} » : base « ${titre || "sans titre"} » illisible (${
         error instanceof Error ? error.message : "erreur"
       }), omise.`,
     );
@@ -236,7 +238,7 @@ async function imageBlock(raw: RawBlock, ctx: Context): Promise<Block | null> {
     return { k: "img", f: ref.id, alt: legende };
   } catch (error) {
     ctx.warnings.push(
-      `audit « ${ctx.title} » : image « ${nom} » non rapatriée (${
+      `${ctx.label} « ${ctx.title} » : image « ${nom} » non rapatriée (${
         error instanceof FileTooLargeError ? error.message : error instanceof Error ? error.message : "erreur"
       }).`,
     );
@@ -251,7 +253,8 @@ async function pageIcon(pageId: string): Promise<string | null> {
 }
 
 /**
- * Lit toute une page d'audit.
+ * Lit toute une page d'audit — ou de proposition, qui se lit de la même façon
+ * (`label` ne change que les messages du rapport).
  *
  * Lève si la page elle-même est illisible (non partagée avec l'intégration,
  * supprimée) : l'appelant garde alors la version déjà publiée, plutôt que de
@@ -261,9 +264,10 @@ async function pageIcon(pageId: string): Promise<string | null> {
 export async function readAuditTree(
   pageId: string,
   title: string,
-  options: { dryRun: boolean },
+  options: { dryRun: boolean; label?: string },
 ): Promise<AuditTree> {
   const ctx: Context = {
+    label: options.label ?? "audit",
     title,
     dryRun: options.dryRun,
     fichiers: new Set(),
@@ -286,7 +290,7 @@ export async function readAuditTree(
     } catch (error) {
       ctx.complete = false;
       ctx.warnings.push(
-        `audit « ${title} » : partie « ${sousPage.titre} » illisible (${
+        `${ctx.label} « ${title} » : partie « ${sousPage.titre} » illisible (${
           error instanceof Error ? error.message : "erreur"
         }), omise.`,
       );

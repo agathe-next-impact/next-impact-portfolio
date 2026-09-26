@@ -10,6 +10,7 @@ const EMPTY: Contents = {
   roadmap: 0,
   prestations: 0,
   audits: 0,
+  propositions: 0,
   site: false,
 };
 
@@ -68,6 +69,16 @@ describe("sections visibles", () => {
 
   it("ouvre l'audit dans Missions pour un client audit seul", () => {
     expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "a-traiter", "veille"]);
+  });
+
+  it("montre les propositions dès qu'il y en a une, même sans aucun service", () => {
+    expect(keys(visibleSections([], { ...EMPTY, propositions: 1 }))).toEqual([
+      "tableau",
+      "a-traiter",
+      "propositions",
+      "veille",
+    ]);
+    expect(keys(visibleSections(null, EMPTY))).not.toContain("propositions");
   });
 
   it("donne une section existante à chaque ancienne adresse", () => {

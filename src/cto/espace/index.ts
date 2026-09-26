@@ -19,6 +19,7 @@ export {
   buildFrise,
   byPhase,
   isOpenOpportunity,
+  isPendingProposition,
   lastSuccessfulBackup,
   missionsOf,
   missionsVerdict,

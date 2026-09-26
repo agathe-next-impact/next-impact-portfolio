@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { history, type AuditPayload } from "@cto/deliverables";
+import { history, type AuditPayload, type PropositionPayload } from "@cto/deliverables";
 import {
   actionsVerdict,
   buildEvents,
+  isPendingProposition,
   buildFrise,
   byPhase,
   lastSuccessfulBackup,
@@ -17,7 +18,7 @@ import { ARCHIVE_MONTHS, letterForClient, lettersForClient } from "@cto/letters"
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
 import { Historique } from "./historique";
-import { CorpsLettre, DerniereLettre, formatPeriode, lettresPath, ListeLettres } from "./lettre";
+import { CorpsLettre, DerniereLettre, formatPeriode, grandsTitres, lettresPath, ListeLettres } from "./lettre";
 import {
   Audits,
   CATEGORIES,
@@ -29,6 +30,8 @@ import {
   Documents,
   Nouveaute,
   Prestations,
+  Propositions,
+  propositionTone,
   sortCartographie,
   sortPrestations,
   sortRecentFirst,
@@ -51,6 +54,8 @@ import {
   missionMeta,
 } from "./pilotage";
 import {
+  CALENDLY_URL,
+  contactHref,
   ContactCta,
   EnPreparation,
   Espace,
@@ -60,7 +65,7 @@ import {
 } from "./shell";
 import { SyntheseAudit } from "./synthese-audit";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
-import { BackLink, Dot, formatDay, Label, Notice, Panel, SectionNav } from "./ui";
+import { BackLink, buttonClass, Dot, formatDay, Label, Notice, Panel, SectionNav, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -236,15 +241,22 @@ function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceCont
   const arbitrer = href(viewer, context, "a-arbitrer");
   const lignes: { action: Action; href: string | null }[] = [
     ...aTraiter.map((action) => ({ action, href: traiter })),
-    ...aArbitrer.map((action) => ({ action, href: arbitrer })),
+    // Une proposition mène à sa page : un prospect n'a pas forcément « À arbitrer ».
+    ...aArbitrer.map((action) => ({
+      action,
+      href: action.kind === "proposition" && action.item ? livrableHref(action.item, context, viewer.base) : arbitrer,
+    })),
   ].slice(0, 3);
 
+  const propositions = href(viewer, context, "propositions");
   const pied =
     aTraiter.length > 0 && traiter
       ? { href: traiter, label: "Voir et en parler" }
       : aArbitrer.length > 0 && arbitrer
         ? { href: arbitrer, label: "Voir et en parler" }
-        : null;
+        : aArbitrer.some((action) => action.kind === "proposition") && propositions
+          ? { href: propositions, label: "Voir les propositions" }
+          : null;
 
   return (
     <CarteReponse question="Que pouvez-vous faire ?" verdict={actionsVerdict(context.actions)} pied={pied}>
@@ -842,8 +854,8 @@ export async function VueAArbitrer({ viewer, context }: { viewer: Viewer; contex
       title="À arbitrer"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les opportunités repérées pour vous, avec l&rsquo;effort, l&rsquo;effet attendu et le budget.
-          Rien ne se lance sans votre accord.
+          Les propositions qui attendent votre réponse, puis les opportunités repérées pour vous,
+          avec l&rsquo;effort, l&rsquo;effet attendu et le budget. Rien ne se lance sans votre accord.
         </p>
       }
     >
@@ -856,6 +868,174 @@ export async function VueAArbitrer({ viewer, context }: { viewer: Viewer; contex
         <ListeActions actions={actions} viewer={viewer} context={context} />
       )}
       <ContactCta company={viewer.company} />
+    </Espace>
+  );
+}
+
+// ─── Propositions ────────────────────────────────────────────────────────
+
+/**
+ * Les propositions remises. Une seule, le cas courant : elle s'ouvre
+ * directement, comme un audit.
+ */
+export async function VuePropositions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRecentFirst(context.items.filter((item) => item.kind === "proposition"));
+  if (items.length === 1) return VueLectureProposition({ viewer, context, id: items[0].notionPageId });
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="propositions"
+      title="Propositions"
+      intro={
+        <p className="font-inter-tight text-base text-mid-gray">
+          Les propositions chiffrées qui vous ont été remises : scénarios, volumes, recommandation.
+        </p>
+      }
+    >
+      {items.length === 0 ? (
+        <EnPreparation>Aucune proposition remise pour l&rsquo;instant.</EnPreparation>
+      ) : (
+        <div className="mt-10">
+          <Propositions items={items} since={context.since} base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
+
+/**
+ * La lecture d'une proposition : repères, sommaire, le document en entier, et
+ * la réponse attendue.
+ *
+ * `null` si l'identifiant n'est pas une proposition publiée de CET
+ * accompagnement : la liste vient de `context.items`, déjà filtrée par client.
+ */
+export async function VueLectureProposition({
+  viewer,
+  context,
+  id,
+}: {
+  viewer: Viewer;
+  context: EspaceContext;
+  id: string;
+}) {
+  const proposition = context.items.find((item) => item.kind === "proposition" && item.notionPageId === id);
+  if (!proposition) return null;
+  const payload = proposition.payload as PropositionPayload;
+  const plusieurs = context.items.filter((item) => item.kind === "proposition").length > 1;
+  const enAttente = isPendingProposition(proposition);
+  const sommaire = [
+    ...grandsTitres(payload.corps).map((titre) => ({ href: `#${titre.id}`, texte: titre.texte })),
+    ...payload.sections.map((partie) => ({
+      href: `#partie-${partie.id}`,
+      texte: `${partie.icone ? `${partie.icone} ` : ""}${partie.titre}`,
+    })),
+  ];
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active={sectionOuverte(context, "propositions") ? "propositions" : null}
+      title={proposition.title}
+      intro={
+        <Label>
+          {proposition.occurredAt ? `Remise le ${formatDay(proposition.occurredAt)}` : "Proposition"}
+          {proposition.version > 1 ? ` · corrigée le ${formatDay(proposition.recordedAt)}` : ""}
+        </Label>
+      }
+    >
+      {plusieurs ? (
+        <div className="mt-8">
+          <BackLink href={`${viewer.base}/propositions`}>Toutes les propositions</BackLink>
+        </div>
+      ) : null}
+
+      <Panel className="mt-8 px-5 py-5">
+        <dl className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <dt><Label>Statut</Label></dt>
+            <dd className="mt-2">
+              <Tag tone={propositionTone(payload.statut)}>{payload.statut ?? "En attente de réponse"}</Tag>
+            </dd>
+          </div>
+          <div>
+            <dt><Label>Remise le</Label></dt>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">{formatDay(proposition.occurredAt)}</dd>
+          </div>
+          <div>
+            <dt><Label>Versions</Label></dt>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
+              <Link
+                href={`${categoriePath("proposition", viewer.base)}/${proposition.notionPageId}`}
+                className="underline underline-offset-4 hover:text-accent-secondary"
+              >
+                {proposition.version > 1 ? `${proposition.version} versions, voir ce qui a changé` : "Version d'origine"}
+              </Link>
+            </dd>
+          </div>
+        </dl>
+      </Panel>
+
+      {sommaire.length > 1 ? (
+        <nav aria-label="Parties de la proposition" className="mt-10">
+          <Label>Sommaire</Label>
+          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+            {sommaire.map((entree) => (
+              <li key={entree.href}>
+                <a
+                  href={entree.href}
+                  className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+                >
+                  {entree.texte}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : null}
+
+      <article className="mt-6">
+        <CorpsLettre body={payload.corps} large ancres base={viewer.base} />
+      </article>
+
+      {payload.sections.map((partie) => (
+        <section
+          key={partie.id}
+          id={`partie-${partie.id}`}
+          aria-labelledby={`titre-partie-${partie.id}`}
+          className="mt-16 scroll-mt-8"
+        >
+          <h2
+            id={`titre-partie-${partie.id}`}
+            className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground"
+          >
+            {partie.icone ? <span aria-hidden>{partie.icone} </span> : null}
+            {partie.titre}
+          </h2>
+          <CorpsLettre body={partie.corps} large base={viewer.base} />
+        </section>
+      ))}
+
+      {/* La réponse attendue, au bout de la lecture : c'est là qu'on la donne. */}
+      <section aria-labelledby="reponse-titre" className="mt-16">
+        <Panel className="border-l-2 border-l-accent-secondary px-5 py-6 sm:px-6">
+          <Label>{enAttente ? "Votre réponse" : "Une question sur cette proposition ?"}</Label>
+          <h2 id="reponse-titre" className="mt-2 font-sans text-xl font-light text-foreground">
+            {enAttente ? "Un scénario vous convient, ou vous voulez l'ajuster ?" : "Parlons-en."}
+          </h2>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a href={contactHref(viewer.company, `Proposition : ${proposition.title}`)} className={buttonClass.primary}>
+              {enAttente ? "Répondre à la proposition" : "Écrire à Agathe"}
+            </a>
+            <a href={CALENDLY_URL} target="_blank" rel="noreferrer noopener" className={buttonClass.ghost}>
+              En discuter de vive voix ↗
+            </a>
+          </div>
+        </Panel>
+      </section>
     </Espace>
   );
 }
@@ -935,6 +1115,7 @@ const SECTION_OF = {
   veille: "veille",
   prestation: "prestations",
   audit: "audit",
+  proposition: "propositions",
 } as const;
 
 export async function VueCategorie({

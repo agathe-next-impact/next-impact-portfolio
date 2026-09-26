@@ -73,6 +73,9 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
     dateMesures: "Date des mesures",
     annexe: "Annexe",
   },
+  proposition: {
+    statut: "Statut",
+  },
 };
 
 const VIDE = "—";
@@ -109,7 +112,9 @@ function partiesModifiees(a: Record<string, unknown>, b: Record<string, unknown>
   const modifiees: string[] = [];
   const empreinte = (valeur: unknown) => JSON.stringify(valeur ?? null);
 
-  if (empreinte(avant.synthese) !== empreinte(apres.synthese)) modifiees.push("Synthèse");
+  // `synthese` pour un audit, `corps` pour une proposition : la page elle-même.
+  const corps = (payload: Record<string, unknown>) => payload.synthese ?? payload.corps;
+  if (empreinte(corps(a)) !== empreinte(corps(b))) modifiees.push(avant.synthese !== undefined ? "Synthèse" : "Corps");
 
   const anciennes = new Map((avant.sections ?? []).map((section) => [section.id, section]));
   const nouvelles = new Set((apres.sections ?? []).map((section) => section.id));
@@ -165,7 +170,7 @@ function comparer(precedent: Deliverable, suivant: Deliverable): Changement[] {
     if (avant !== apres) changements.push({ champ: label, avant, apres });
   }
 
-  if (suivant.kind === "audit") changements.push(...partiesModifiees(a, b));
+  if (suivant.kind === "audit" || suivant.kind === "proposition") changements.push(...partiesModifiees(a, b));
 
   return changements;
 }

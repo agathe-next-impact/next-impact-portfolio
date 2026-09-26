@@ -15,8 +15,10 @@ import {
   VueLettre,
   VueLectureAudit,
   VueLettres,
+  VueLectureProposition,
   VueMissions,
   VuePrestations,
+  VuePropositions,
   VueRapports,
   VueSite,
   VueTableau,
@@ -78,6 +80,8 @@ export default async function EspaceAdminPage({
         return <VueATraiter viewer={viewer} context={context} />;
       case "a-arbitrer":
         return <VueAArbitrer viewer={viewer} context={context} />;
+      case "propositions":
+        return <VuePropositions viewer={viewer} context={context} />;
       case "veille":
         return <VueVeille viewer={viewer} context={context} />;
       case "documents":
@@ -93,6 +97,12 @@ export default async function EspaceAdminPage({
 
   if (tete === "audit" && chemin.length === 2) {
     const vue = await VueLectureAudit({ viewer, context, id: suite });
+    if (!vue) notFound();
+    return vue;
+  }
+
+  if (tete === "propositions" && chemin.length === 2) {
+    const vue = await VueLectureProposition({ viewer, context, id: suite });
     if (!vue) notFound();
     return vue;
   }

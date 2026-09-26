@@ -92,6 +92,13 @@
       "when": 1790347828381,
       "tag": "0012_wise_miss_america",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1790396568970,
+      "tag": "0013_left_tattoo",
+      "breakpoints": true
     }
   ]
 }

@@ -154,7 +154,7 @@ export async function fileBelongsTo(fileId: string, clientId: string): Promise<b
             sql`${ctoDeliverables.payload} -> 'fichier' ->> 'id' = ${fileId}`,
           ),
           and(
-            eq(ctoDeliverables.kind, "audit"),
+            inArray(ctoDeliverables.kind, ["audit", "proposition"]),
             sql`${ctoDeliverables.payload} -> 'fichiers' @> jsonb_build_array(${fileId}::text)`,
           ),
         ),

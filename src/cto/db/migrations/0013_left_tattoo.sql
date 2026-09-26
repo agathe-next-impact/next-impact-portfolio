@@ -1,0 +1,1 @@
+ALTER TYPE "public"."cto_deliverable_kind" ADD VALUE 'proposition';

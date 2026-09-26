@@ -181,6 +181,17 @@ describe("actions", () => {
   });
 });
 
+describe("propositions", () => {
+  const proposition = (id: string, statut: string | null) =>
+    item({ notionPageId: id, kind: "proposition", title: id, occurredAt: new Date("2026-09-20"), payload: { statut, corps: [], sections: [], fichiers: [] } });
+
+  it("met les propositions sans réponse à arbitrer, avant les opportunités, et jamais dans les missions", () => {
+    const items = [proposition("envoyee", "Envoyée"), proposition("acceptee", "Acceptée"), roadmap("ia", "Ouvert", null, "opportunite")];
+    expect(actionsFor(items, null, now).aArbitrer.map((a) => a.id)).toEqual(["proposition-envoyee", "opportunite-ia"]);
+    expect(missionsOf(items, now)).toEqual([]);
+  });
+});
+
 describe("frise", () => {
   it("place aujourd'hui au milieu d'une fenêtre de sept mois", () => {
     const frise = buildFrise([], [], now);

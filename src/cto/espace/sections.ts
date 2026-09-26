@@ -40,6 +40,7 @@ export type SectionKey =
   | "cartographie"
   | "a-traiter"
   | "a-arbitrer"
+  | "propositions"
   | "veille"
   | "documents";
 
@@ -61,6 +62,12 @@ export interface Section {
   group: SectionGroup | null;
   /** Les services qui l'ouvrent (un seul suffit), ou null si elle est toujours visible. */
   services: readonly ServiceCode[] | null;
+  /**
+   * Visible dès qu'elle a du contenu, et seulement alors, quels que soient les
+   * services. Une proposition s'envoie aussi à un prospect qui n'a encore rien
+   * souscrit ; une entrée vide « Propositions » n'aurait, elle, rien à dire.
+   */
+  siContenu?: true;
 }
 
 /** Dans l'ordre de la navigation. */
@@ -93,6 +100,7 @@ export const SECTIONS: readonly Section[] = [
     group: "agir",
     services: ["actions", "direction-technique"],
   },
+  { key: "propositions", slug: "propositions", label: "Propositions", group: "agir", services: null, siContenu: true },
 
   { key: "veille", slug: "veille", label: "Lettres et alertes", group: "veille", services: null },
   { key: "documents", slug: "documents", label: "Documents", group: "veille", services: ["direction-technique"] },
@@ -106,6 +114,7 @@ export interface Contents {
   roadmap: number;
   prestations: number;
   audits: number;
+  propositions: number;
   /** Vrai si un projet WP Umbrella est renseigné. */
   site: boolean;
 }
@@ -129,6 +138,8 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
       return contents.roadmap > 0;
     case "documents":
       return contents.documents > 0;
+    case "propositions":
+      return contents.propositions > 0;
     default:
       return true;
   }
@@ -143,6 +154,7 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
  */
 export function visibleSections(services: string[] | null, contents: Contents): Section[] {
   return SECTIONS.filter((section) => {
+    if (section.siContenu) return hasContent(section.key, contents);
     if (section.services === null) return true;
     if (services === null) return hasContent(section.key, contents);
     return section.services.some((service) => services.includes(service));

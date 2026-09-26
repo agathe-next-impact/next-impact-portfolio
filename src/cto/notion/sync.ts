@@ -8,6 +8,7 @@ import {
   digestOf,
   setPlacement,
   type AuditPayload,
+  type PropositionPayload,
   type DeliverableKind,
   type DeliverableInput,
   type DeliverableState,
@@ -38,6 +39,7 @@ import {
   companyName,
   documentFiles,
   mapPage,
+  propositionPageId,
   spaceId,
   PROPS,
   UNTITLED,
@@ -645,6 +647,67 @@ async function syncAudits(
 }
 
 /**
+ * Balaie la base Propositions : pour chaque ligne publiée, lit toute la page de
+ * proposition qu'elle désigne (bases inline comprises) et en fait un livrable
+ * `proposition`.
+ *
+ * Même doctrine que les audits : une proposition illisible ce tour-ci n'est ni
+ * publiée ni retirée, sa version en ligne reste telle quelle.
+ */
+async function syncPropositions(
+  byNotionPage: Map<string, string>,
+  options: { force: boolean; dryRun: boolean },
+  disabledClientIds: Set<string>,
+): Promise<{ report: KindReport | null; warnings: string[] }> {
+  const { dryRun } = options;
+  if (!isConfigured("proposition")) {
+    return { report: null, warnings: [`Base « proposition » ignorée : ${envNameFor("proposition")} n'est pas posée.`] };
+  }
+
+  const pages = await queryDatabase(databaseIdFor("proposition"), publishedFilter(PROPS.published));
+  const resolved = resolvePages("proposition", pages, byNotionPage, disabledClientIds);
+  const warnings = resolved.warnings;
+  const pageById = new Map(pages.map((page) => [page.id, page]));
+  const keep = new Set<string>();
+  const inputs: DeliverableInput[] = [];
+
+  for (const input of resolved.inputs) {
+    const page = pageById.get(input.notionPageId);
+    const pageId = page ? propositionPageId(page) : null;
+    if (!pageId) {
+      warnings.push(
+        `proposition « ${input.title} » : pas de lien vers sa page dans « ${PROPS.proposition.page} », ignorée.`,
+      );
+      keep.add(input.notionPageId);
+      continue;
+    }
+
+    let tree: Awaited<ReturnType<typeof readAuditTree>>;
+    try {
+      tree = await readAuditTree(pageId, input.title, { dryRun, label: "proposition" });
+    } catch (error) {
+      warnings.push(
+        `proposition « ${input.title} » : page illisible (${
+          error instanceof Error ? error.message : "erreur"
+        }). Est-elle partagée avec l'intégration ? La version en ligne, s'il y en a une, reste telle quelle.`,
+      );
+      keep.add(input.notionPageId);
+      continue;
+    }
+    warnings.push(...tree.warnings);
+
+    const payload = input.payload as PropositionPayload;
+    payload.corps = tree.synthese;
+    payload.sections = tree.sections;
+    payload.fichiers = tree.fichiers;
+    inputs.push(input);
+  }
+
+  const report = await applyInputs("proposition", inputs, warnings, disabledClientIds, { ...options, keep });
+  return { report, warnings };
+}
+
+/**
  * Rapatrie la pièce de chaque document publié et l'inscrit dans son payload.
  *
  * Avant la comparaison d'empreintes, et c'est ce qui compte : l'empreinte du
@@ -777,6 +840,21 @@ export async function syncFromNotion(
   }
 
   if (audits.report) report.kinds.push(audits.report);
+
+  try {
+    const propositions = await syncPropositions(
+      clients.byNotionPage,
+      { force: options.force === true, dryRun },
+      clients.disabledClientIds,
+    );
+    if (propositions.report) report.kinds.push(propositions.report);
+    report.warnings.push(...propositions.warnings);
+  } catch (error) {
+    console.error("[cto] balayage des propositions impossible", error);
+    report.warnings.push(
+      `Propositions illisibles (${error instanceof Error ? error.message : "erreur"}) : rien publié ni retiré ce tour-ci.`,
+    );
+  }
 
   // Les lettres passent en dernier : elles coûtent le plus cher en requêtes, et
   // un échec de leur côté ne doit pas priver le client des livrables déjà écrits.

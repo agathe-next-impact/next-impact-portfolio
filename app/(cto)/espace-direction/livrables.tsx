@@ -5,6 +5,7 @@ import type {
   Deliverable,
   DocumentPayload,
   PrestationPayload,
+  PropositionPayload,
   RoadmapPayload,
   VeillePayload,
 } from "@cto/deliverables";
@@ -27,6 +28,7 @@ export const CATEGORIES = {
   document: { slug: "documents", titre: "Documents" },
   prestation: { slug: "prestations", titre: "Prestations" },
   audit: { slug: "audits", titre: "Audits" },
+  proposition: { slug: "propositions", titre: "Propositions" },
 } as const;
 
 /** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */
@@ -294,6 +296,10 @@ export function Categorie({
 
   if (kind === "audit") {
     return <Audits items={sortRecentFirst(items)} since={since} base={base} />;
+  }
+
+  if (kind === "proposition") {
+    return <Propositions items={sortRecentFirst(items)} since={since} base={base} />;
   }
 
   const tri = [...items].sort(
@@ -1034,6 +1040,60 @@ export function Audits({
               {payload.site ? <Tag>{payload.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}</Tag> : null}
               <Tag>{`${payload.sections.length} parties`}</Tag>
               {payload.annexe ? <Tag>Annexe de preuves</Tag> : null}
+            </div>
+            <Correction item={item} base={base} />
+          </article>
+        );
+      })}
+    </Panel>
+  );
+}
+
+/** L'adresse de lecture d'une proposition. */
+export function propositionPath(notionPageId: string, base: string = ESPACE_PATH): string {
+  return `${base}/propositions/${notionPageId}`;
+}
+
+/** Ton d'un statut de proposition : acceptée = réglé, déclinée = neutre, le reste attend. */
+export function propositionTone(statut: string | null): Tone {
+  if (statut === "Acceptée" || statut === "Signée") return "fait";
+  if (statut === "Déclinée" || statut === "Refusée") return "neutre";
+  return "attention";
+}
+
+/** Les propositions remises : de quoi choisir laquelle ouvrir. */
+export function Propositions({
+  base = ESPACE_PATH,
+  items,
+  since = null,
+}: {
+  base?: string;
+  items: Deliverable[];
+  since?: Date | null;
+}) {
+  return (
+    <Panel className="mt-5 divide-y divide-dark-gray">
+      {items.map((item) => {
+        const payload = item.payload as PropositionPayload;
+        return (
+          <article key={item.id} className="px-5 py-5">
+            <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 className="font-inter-tight text-base leading-snug text-foreground">
+                <Link
+                  href={propositionPath(item.notionPageId, base)}
+                  className="underline-offset-4 hover:text-accent-secondary hover:underline"
+                >
+                  {item.title}
+                </Link>
+              </h3>
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+                {item.occurredAt ? formatDay(item.occurredAt) : "sans date"}
+              </p>
+            </header>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              <Nouveaute item={item} since={since} />
+              <Tag tone={propositionTone(payload.statut)}>{payload.statut ?? "En attente de réponse"}</Tag>
+              {payload.sections.length > 0 ? <Tag>{`${payload.sections.length} parties`}</Tag> : null}
             </div>
             <Correction item={item} base={base} />
           </article>

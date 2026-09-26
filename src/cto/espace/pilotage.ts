@@ -2,6 +2,7 @@ import type {
   CartographiePayload,
   Deliverable,
   PrestationPayload,
+  PropositionPayload,
   RoadmapPayload,
 } from "../deliverables";
 import type { SiteSnapshot, SiteState } from "../site";
@@ -280,7 +281,17 @@ export function siteVerdict(state: SiteState | null, now: Date = new Date()): Ve
 
 // ─── Actions ─────────────────────────────────────────────────────────────
 
-export type ActionKind = "site" | "echeance" | "retard" | "opportunite";
+export type ActionKind = "site" | "echeance" | "retard" | "opportunite" | "proposition";
+
+/** Les statuts qui closent une proposition : la réponse est donnée. */
+const PROPOSITION_CLOSE = new Set(["Acceptée", "Déclinée", "Refusée", "Signée"]);
+
+/** Vrai pour une proposition qui attend encore la réponse du client. */
+export function isPendingProposition(item: Deliverable): boolean {
+  if (item.kind !== "proposition") return false;
+  const statut = (item.payload as PropositionPayload).statut;
+  return !statut || !PROPOSITION_CLOSE.has(statut);
+}
 
 export interface Action {
   id: string;
@@ -296,7 +307,7 @@ export interface Action {
 export interface Actions {
   /** Ce qui demande une intervention : site, échéances proches, retards. */
   aTraiter: Action[];
-  /** Les opportunités ouvertes, qui attendent une décision du client. */
+  /** Les propositions en attente de réponse, puis les opportunités ouvertes : ce qui attend une décision du client. */
   aArbitrer: Action[];
 }
 
@@ -355,7 +366,20 @@ export function actionsFor(
 
   aTraiter.sort((a, b) => TONE_RANK[a.tone] - TONE_RANK[b.tone] || compareDates(a.date, b.date));
 
-  const aArbitrer: Action[] = items
+  const propositions: Action[] = items
+    .filter(isPendingProposition)
+    .map((item) => ({
+      id: `proposition-${item.notionPageId}`,
+      kind: "proposition" as const,
+      title: item.title,
+      detail: (item.payload as PropositionPayload).statut ?? "En attente de votre réponse",
+      tone: "neutre" as const,
+      date: item.occurredAt,
+      item,
+    }))
+    .sort((a, b) => compareDates(b.date, a.date));
+
+  const opportunites: Action[] = items
     .filter(isOpenOpportunity)
     .map((item) => ({
       id: `opportunite-${item.notionPageId}`,
@@ -368,7 +392,7 @@ export function actionsFor(
     }))
     .sort((a, b) => compareDates(a.date, b.date) || a.title.localeCompare(b.title, "fr"));
 
-  return { aTraiter, aArbitrer };
+  return { aTraiter, aArbitrer: [...propositions, ...opportunites] };
 }
 
 /** « Que pouvez-vous faire ? », en une phrase. */

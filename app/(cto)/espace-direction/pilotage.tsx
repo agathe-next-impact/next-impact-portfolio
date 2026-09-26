@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Deliverable, RoadmapPayload } from "@cto/deliverables";
 import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, Verdict } from "@cto/espace";
-import { auditPath, categoriePath, CATEGORIES, type CategorieKind } from "./livrables";
+import { auditPath, categoriePath, CATEGORIES, propositionPath, propositionTone, type CategorieKind } from "./livrables";
 import { contactHref, sectionOuverte, type EspaceContext } from "./shell";
 import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
 
@@ -22,6 +22,7 @@ const SECTION_OF_KIND = {
   cartographie: "cartographie",
   document: "documents",
   veille: "veille",
+  proposition: "propositions",
 } as const;
 
 /**
@@ -30,6 +31,7 @@ const SECTION_OF_KIND = {
  */
 export function livrableHref(item: Deliverable, context: EspaceContext, base: string): string {
   if (item.kind === "audit") return auditPath(item.notionPageId, base);
+  if (item.kind === "proposition") return propositionPath(item.notionPageId, base);
   const section = SECTION_OF_KIND[item.kind];
   if (section && sectionOuverte(context, section)) return `${base}/${section}`;
   return item.kind in CATEGORIES ? categoriePath(item.kind as CategorieKind, base) : base;
@@ -200,6 +202,7 @@ export function ListeMissions({
 
 export function ActionTag({ action }: { action: Action }) {
   if (action.kind === "opportunite") return <Tag>À arbitrer</Tag>;
+  if (action.kind === "proposition") return <Tag tone={propositionTone(action.detail)}>Proposition</Tag>;
   if (action.kind === "retard") return <Tag tone="alerte">En retard</Tag>;
   if (action.kind === "echeance") {
     return <Tag tone={action.tone}>{action.date ? formatDay(action.date) : "Échéance"}</Tag>;
@@ -216,6 +219,9 @@ export function actionMeta(action: Action): string | null {
       formatAmount(payload.budget) ? `~${formatAmount(payload.budget)}` : null,
     ].filter(Boolean);
     return morceaux.length > 0 ? morceaux.join(" · ") : null;
+  }
+  if (action.kind === "proposition") {
+    return [action.detail, action.date ? `remise le ${formatDay(action.date)}` : null].filter(Boolean).join(" · ");
   }
   return action.detail;
 }

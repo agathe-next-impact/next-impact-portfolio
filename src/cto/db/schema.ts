@@ -499,6 +499,8 @@ export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
   "prestation",
   // Un audit complet, lu dans sa page de mission (ADR-011).
   "audit",
+  // Une proposition commerciale, lue dans sa page (CRM → Propositions).
+  "proposition",
 ]);
 
 /**
