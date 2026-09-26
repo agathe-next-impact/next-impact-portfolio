@@ -471,22 +471,42 @@ la ferme immédiatement, sans attendre son échéance.
 
 ### Ce que voit le client
 
-L'espace s'organise en onglets, composés depuis la colonne **`Services`** de
-la fiche Notion (`notion-livrables.md` § 2) :
+L'espace (refonte du 2026-09-26, « option C ») est rangé par **question du
+client**, dans une **barre latérale rétractable** : « Où en sont les
+missions ? », « Comment va le site ? », « Que puis-je faire ? », plus la
+veille. Chaque entrée reste commandée par la colonne **`Services`** de la fiche
+Notion (`notion-livrables.md` § 2) ; une entrée s'ouvre dès qu'UN de ses
+services est coché (`src/cto/espace/sections.ts`).
 
-| Onglet | Contenu | Visible |
-| --- | --- | --- |
-| Tableau de bord | nouveautés depuis la dernière connexion, quatre repères, santé du site, **calendrier** (grille du mois + 90 prochains jours : échéances de chantiers, renouvellements de contrats, livraisons, lettres), à la une, dernière lettre | toujours |
-| Direction technique | relevé de décisions, cartographie, documents (pièces téléchargeables) | service « Direction technique » |
-| Suivi technique | relevé WP Umbrella + archives des rapports de maintenance | service « Suivi technique » |
-| Actions en cours | la roadmap filtrée : chantiers ouverts et décidés, puis à venir | service « Actions en cours » |
-| Veille | dernières nouvelles (base Veille) + lettres, générales et personnalisées | toujours |
-| Prestations | missions commandées, avancement, livraison | service « Prestations en cours » |
+| Groupe | Entrée | Contenu | Visible |
+| --- | --- | --- | --- |
+| — | Accueil | nouveautés depuis la dernière connexion, **trois cartes-réponses** (missions, site, actions, chacune résumée en une phrase), **frise** de 7 mois (3 derrière, 3 devant : fait / missions / échéances), à la une, dernière lettre, contact | toujours |
+| Missions | Vue d'ensemble | frise + listes En cours / À venir / Fait (chantiers, prestations, décisions, audits confondus) + calendrier des 90 prochains jours | Actions, Prestations, Direction technique ou Audit |
+| Missions | Prestations | missions commandées, avancement, livraison | Prestations en cours |
+| Missions | Décisions | relevé de décisions | Direction technique |
+| Missions | Audit | lecture de l'audit | Audit |
+| Votre site | État du site | verdict + points à corriger, relevé WP Umbrella | Suivi technique |
+| Votre site | Rapports | rapports mensuels de maintenance (PDF) | Suivi technique |
+| Votre site | Cartographie | systèmes, détenteurs, coûts, renouvellements | Direction technique |
+| Agir | À traiter | points du site à corriger, échéances de contrats à **moins de 60 jours** (ou échues), missions en retard, chacun avec « En parler » (e-mail au sujet prérempli) | toujours (vide = « rien d'urgent ») |
+| Agir | À arbitrer | opportunités de la roadmap non tranchées (nature Opportunité, statut Ouvert ou vide) : effort, effet, budget | Actions ou Direction technique |
+| Veille | Lettres et alertes | dernières nouvelles (base Veille) + lettres | toujours |
+| Veille | Documents | documents relus, pièces téléchargeables | Direction technique |
 
-Un bloc **contact** (écrire à Agathe, réserver un créneau) clôt chaque page ;
-le pied donne « Mes appareils », l'export du dossier (§ 7) et la
-déconnexion. Colonne `Services` vide : affichage historique (toute section qui
-a du contenu). Une section non souscrite redirige vers le tableau de bord.
+Règles des verdicts (pures et testées, `src/cto/espace/pilotage.ts`) : une
+sauvegarde réussie de **plus de 7 jours**, une faille connue, un site sans
+HTTPS ou injoignable = point **à corriger** ; PHP plus maintenu, supervision
+déconnectée, disponibilité < 99 % = point **à surveiller**. Les mises à jour
+en attente ne comptent pas (maintenance courante).
+
+La barre latérale porte aussi le contact compact, « Mes appareils », l'export
+du dossier (§ 7), la bascule clair/sombre et la déconnexion. Repliée en rail
+d'icônes (touche `[`), elle garde son état dans le cookie `cto-nav` ; sous
+1024 px elle devient un tiroir. Anciennes adresses redirigées :
+`/direction-technique` → `/decisions`, `/actions` → `/missions`,
+`/suivi-technique` → `/site`. Colonne `Services` vide : affichage historique
+(toute entrée qui a du contenu). Une entrée non souscrite redirige vers
+l'accueil.
 
 ### Brancher le suivi technique d'un site
 

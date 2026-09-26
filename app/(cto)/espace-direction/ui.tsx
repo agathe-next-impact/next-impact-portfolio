@@ -233,7 +233,7 @@ export function SectionNav({ items }: { items: { href: string; label: string; co
   if (items.length < 2) return null;
 
   return (
-    <nav aria-label="Sections de votre espace" className="mt-8 flex flex-wrap gap-2">
+    <nav aria-label="Sommaire de la page" className="mt-8 flex flex-wrap gap-2">
       {items.map((item) => (
         <a
           key={item.href}

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { SiteReport, SiteSnapshot, SiteState } from "@cto/site";
 import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
@@ -90,36 +89,6 @@ export function IndicateursSite({ snapshot }: { snapshot: SiteSnapshot }) {
   );
 }
 
-/** Le bloc « santé du site » du tableau de bord. */
-export function SanteSite({ state, base = ESPACE_PATH }: { state: SiteState; base?: string }) {
-  return (
-    <section aria-labelledby="sante-titre" className="mt-12">
-      <div className="flex items-baseline justify-between gap-4 border-b border-dark-gray pb-3">
-        <h2 id="sante-titre" className="font-sans text-lg font-light text-foreground">
-          Santé du site
-        </h2>
-        <Link
-          href={`${base}/suivi-technique`}
-          className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
-        >
-          Suivi technique →
-        </Link>
-      </div>
-      <div className="mt-5">
-        {state.snapshot ? (
-          <IndicateursSite snapshot={state.snapshot} />
-        ) : (
-          <Panel className="px-5 py-6">
-            <p className="font-inter-tight text-sm text-mid-gray">
-              Le premier relevé de votre site est en cours de préparation.
-            </p>
-          </Panel>
-        )}
-      </div>
-    </section>
-  );
-}
-
 function Bloc({ titre, compte, children }: { titre: string; compte?: number; children: React.ReactNode }) {
   return (
     <section className="mt-12">
@@ -134,15 +103,7 @@ function Bloc({ titre, compte, children }: { titre: string; compte?: number; chi
   );
 }
 
-export function SuiviTechnique({
-  state,
-  reports,
-  base = ESPACE_PATH,
-}: {
-  state: SiteState;
-  reports: SiteReport[];
-  base?: string;
-}) {
+export function SuiviTechnique({ state }: { state: SiteState }) {
   const snapshot = state.snapshot;
 
   return (
@@ -304,38 +265,49 @@ export function SuiviTechnique({
         </>
       )}
 
-      <Bloc titre="Rapports de maintenance" compte={reports.length}>
-        {reports.length === 0 ? (
-          <Panel className="mt-5 px-5 py-6">
-            <p className="font-inter-tight text-sm text-mid-gray">
-              Les rapports mensuels de maintenance seront archivés ici, en PDF, au fil des mois.
-            </p>
-          </Panel>
-        ) : (
-          <Panel className="mt-5 divide-y divide-dark-gray">
-            {reports.map((report) => (
-              <div key={report.id} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 px-4 py-3">
-                <div>
-                  <p className="font-inter-tight text-sm text-foreground">{report.name}</p>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                    {report.periodStart && report.periodEnd
-                      ? `Du ${formatDay(report.periodStart)} au ${formatDay(report.periodEnd)}`
-                      : formatDay(report.generatedAt)}
-                  </p>
-                </div>
-                {report.fileId ? (
-                  <a
-                    href={fichierPath(report.fileId, base)}
-                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
-                  >
-                    Télécharger le PDF
-                  </a>
-                ) : null}
+    </>
+  );
+}
+
+/**
+ * Les rapports mensuels de maintenance, en PDF.
+ *
+ * Leur propre entrée dans la barre latérale : on vient les chercher pour les
+ * transmettre (à un comité, à un auditeur), pas en lisant l'état du site.
+ */
+export function RapportsMaintenance({ reports, base = ESPACE_PATH }: { reports: SiteReport[]; base?: string }) {
+  return (
+    <>
+      {reports.length === 0 ? (
+        <Panel className="mt-5 px-5 py-6">
+          <p className="font-inter-tight text-sm text-mid-gray">
+            Les rapports mensuels de maintenance seront archivés ici, en PDF, au fil des mois.
+          </p>
+        </Panel>
+      ) : (
+        <Panel className="mt-5 divide-y divide-dark-gray">
+          {reports.map((report) => (
+            <div key={report.id} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 px-4 py-3">
+              <div>
+                <p className="font-inter-tight text-sm text-foreground">{report.name}</p>
+                <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                  {report.periodStart && report.periodEnd
+                    ? `Du ${formatDay(report.periodStart)} au ${formatDay(report.periodEnd)}`
+                    : formatDay(report.generatedAt)}
+                </p>
               </div>
-            ))}
-          </Panel>
-        )}
-      </Bloc>
+              {report.fileId ? (
+                <a
+                  href={fichierPath(report.fileId, base)}
+                  className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+                >
+                  Télécharger le PDF
+                </a>
+              ) : null}
+            </div>
+          ))}
+        </Panel>
+      )}
     </>
   );
 }

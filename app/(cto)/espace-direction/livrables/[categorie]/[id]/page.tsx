@@ -28,7 +28,7 @@ export default async function Page({
 
   const session = await requireSession();
   const viewer = viewerFromSession(session);
-  const vue = await VueHistorique({ viewer, context: await loadEspace(viewer.clientId), kind, id });
+  const vue = await VueHistorique({ viewer, context: await loadEspace(viewer), kind, id });
   if (!vue) notFound();
   return vue;
 }

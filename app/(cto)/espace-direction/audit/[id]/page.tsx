@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const viewer = viewerFromSession(session);
-  const vue = await VueLectureAudit({ viewer, context: await loadEspace(viewer.clientId), id });
+  const vue = await VueLectureAudit({ viewer, context: await loadEspace(viewer), id });
   if (!vue) notFound();
   return vue;
 }

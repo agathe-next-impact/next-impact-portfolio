@@ -1,23 +1,12 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { loadEspace, sectionOuverte } from "../shell";
-import { ESPACE_PATH, requireSession } from "../session";
-import { viewerFromSession } from "../viewer";
-import { VueDirectionTechnique } from "../vues";
-
-export const metadata: Metadata = {
-  title: "Direction technique",
-  robots: { index: false, follow: false },
-};
+import { ESPACE_PATH } from "../session";
 
 export const dynamic = "force-dynamic";
 
-/** Direction technique : décisions, cartographie, documents. L'écran vit dans `../vues.tsx`, partagé avec la vue admin. */
-export default async function Page() {
-  const session = await requireSession();
-  const viewer = viewerFromSession(session);
-  const context = await loadEspace(viewer.clientId);
-  if (!sectionOuverte(context, "direction-technique")) redirect(ESPACE_PATH);
-
-  return <VueDirectionTechnique viewer={viewer} context={context} />;
+/**
+ * Ancienne adresse, gardée pour les favoris et les anciens e-mails : l'espace
+ * est désormais rangé par question (cf. `LEGACY_SLUGS` dans `@cto/espace`).
+ */
+export default function Page() {
+  redirect(`${ESPACE_PATH}/decisions`);
 }

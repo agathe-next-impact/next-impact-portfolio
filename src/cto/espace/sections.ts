@@ -1,18 +1,24 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Quelles sections un accompagnement voit.
+// Quelles sections un accompagnement voit, et dans quel groupe.
 //
-// Pur, testé. Deux familles, et la distinction est le cœur du fichier :
+// Pur, testé. La navigation est rangée par QUESTION du client, pas par base
+// Notion : « où en sont les missions ? » (Missions), « comment va mon site ? »
+// (Votre site), « que puis-je faire ? » (Agir), plus la Veille. Chaque entrée
+// garde son interrupteur de service — c'est toujours la fiche Notion qui décide
+// de ce qu'un client voit, entrée par entrée.
 //
-//  - **Toujours visibles** : le tableau de bord, la veille (la lettre générale
-//    va à tous), le contact. Personne n'achète « le droit de voir son accueil ».
+// Deux familles :
+//
+//  - **Toujours visibles** : l'accueil, « À traiter » (vide = « rien
+//    d'urgent », ce qui est aussi une réponse), la veille (la lettre générale
+//    va à tous). Personne n'achète « le droit de voir son accueil ».
 //  - **Activées par service** : ce que la colonne « Services » de la fiche
-//    Notion coche (`cto_clients.services`).
+//    Notion coche (`cto_clients.services`). Une entrée peut dépendre de
+//    plusieurs services : elle s'ouvre dès que l'un d'eux est coché.
 //
 // Et un régime de transition : `services === null` (colonne jamais
-// renseignée) garde le comportement d'avant les services — une section
-// s'affiche dès qu'elle a du contenu. C'est ce qui permet d'ajouter la colonne
-// sans que les accompagnements existants perdent leurs sections du jour au
-// lendemain.
+// renseignée) garde le comportement d'avant les services — une entrée
+// s'affiche dès qu'elle a du contenu.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type ServiceCode =
@@ -25,33 +31,71 @@ export type ServiceCode =
 
 export type SectionKey =
   | "tableau"
+  | "missions"
+  | "prestations"
+  | "decisions"
   | "audit"
-  | "direction-technique"
-  | "suivi-technique"
-  | "actions"
+  | "site"
+  | "rapports"
+  | "cartographie"
+  | "a-traiter"
+  | "a-arbitrer"
   | "veille"
-  | "prestations";
+  | "documents";
+
+export type SectionGroup = "missions" | "site" | "agir" | "veille";
+
+export const GROUP_LABELS: Record<SectionGroup, string> = {
+  missions: "Missions",
+  site: "Votre site",
+  agir: "Agir",
+  veille: "Veille",
+};
 
 export interface Section {
   key: SectionKey;
-  /** Segment d'URL sous `/espace-direction`. Vide pour le tableau de bord. */
+  /** Segment d'URL sous `/espace-direction`. Vide pour l'accueil. */
   slug: string;
   label: string;
-  /** Le service qui l'ouvre, ou null si elle est toujours visible. */
-  service: ServiceCode | null;
+  /** Null pour l'accueil, qui se tient hors des groupes. */
+  group: SectionGroup | null;
+  /** Les services qui l'ouvrent (un seul suffit), ou null si elle est toujours visible. */
+  services: readonly ServiceCode[] | null;
 }
 
-/** Dans l'ordre de la navigation : du plus général au plus opérationnel. */
+/** Dans l'ordre de la navigation. */
 export const SECTIONS: readonly Section[] = [
-  { key: "tableau", slug: "", label: "Tableau de bord", service: null },
-  // Juste après l'accueil : un audit est le point de départ, ce que le reste
-  // de l'espace met en œuvre. Pour un client audit seul, c'est toute sa visite.
-  { key: "audit", slug: "audit", label: "Audit", service: "audit" },
-  { key: "direction-technique", slug: "direction-technique", label: "Direction technique", service: "direction-technique" },
-  { key: "suivi-technique", slug: "suivi-technique", label: "Suivi technique", service: "suivi-technique" },
-  { key: "actions", slug: "actions", label: "Actions en cours", service: "actions" },
-  { key: "veille", slug: "veille", label: "Veille", service: null },
-  { key: "prestations", slug: "prestations", label: "Prestations", service: "prestations" },
+  { key: "tableau", slug: "", label: "Accueil", group: null, services: null },
+
+  // Missions : d'abord la vue d'ensemble (passé, présent, avenir), puis le
+  // détail par nature. L'audit ferme le groupe : c'est le point de départ, il
+  // se consulte plus qu'il ne se suit.
+  {
+    key: "missions",
+    slug: "missions",
+    label: "Vue d'ensemble",
+    group: "missions",
+    services: ["actions", "prestations", "direction-technique", "audit"],
+  },
+  { key: "prestations", slug: "prestations", label: "Prestations", group: "missions", services: ["prestations"] },
+  { key: "decisions", slug: "decisions", label: "Décisions", group: "missions", services: ["direction-technique"] },
+  { key: "audit", slug: "audit", label: "Audit", group: "missions", services: ["audit"] },
+
+  { key: "site", slug: "site", label: "État du site", group: "site", services: ["suivi-technique"] },
+  { key: "rapports", slug: "rapports", label: "Rapports", group: "site", services: ["suivi-technique"] },
+  { key: "cartographie", slug: "cartographie", label: "Cartographie", group: "site", services: ["direction-technique"] },
+
+  { key: "a-traiter", slug: "a-traiter", label: "À traiter", group: "agir", services: null },
+  {
+    key: "a-arbitrer",
+    slug: "a-arbitrer",
+    label: "À arbitrer",
+    group: "agir",
+    services: ["actions", "direction-technique"],
+  },
+
+  { key: "veille", slug: "veille", label: "Lettres et alertes", group: "veille", services: null },
+  { key: "documents", slug: "documents", label: "Documents", group: "veille", services: ["direction-technique"] },
 ];
 
 /** Ce qui existe dans l'espace d'un accompagnement, pour le régime historique. */
@@ -68,16 +112,23 @@ export interface Contents {
 
 function hasContent(key: SectionKey, contents: Contents): boolean {
   switch (key) {
-    case "direction-technique":
-      return contents.decisions + contents.cartographie + contents.documents > 0;
-    case "suivi-technique":
-      return contents.site;
-    case "actions":
-      return contents.roadmap > 0;
+    case "missions":
+      return contents.roadmap + contents.prestations + contents.decisions + contents.audits > 0;
     case "prestations":
       return contents.prestations > 0;
+    case "decisions":
+      return contents.decisions > 0;
     case "audit":
       return contents.audits > 0;
+    case "site":
+    case "rapports":
+      return contents.site;
+    case "cartographie":
+      return contents.cartographie > 0;
+    case "a-arbitrer":
+      return contents.roadmap > 0;
+    case "documents":
+      return contents.documents > 0;
     default:
       return true;
   }
@@ -92,9 +143,9 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
  */
 export function visibleSections(services: string[] | null, contents: Contents): Section[] {
   return SECTIONS.filter((section) => {
-    if (section.service === null) return true;
+    if (section.services === null) return true;
     if (services === null) return hasContent(section.key, contents);
-    return services.includes(section.service);
+    return section.services.some((service) => services.includes(service));
   });
 }
 
@@ -108,3 +159,15 @@ export function sectionByKey(key: SectionKey): Section {
   if (!section) throw new Error(`section inconnue : ${key}`);
   return section;
 }
+
+/**
+ * Les anciennes adresses de section, et où elles mènent désormais.
+ *
+ * Les clients ont ces URL en favori et dans leurs e-mails de notification :
+ * elles redirigent, elles ne cassent pas.
+ */
+export const LEGACY_SLUGS: Record<string, SectionKey> = {
+  "direction-technique": "decisions",
+  actions: "missions",
+  "suivi-technique": "site",
+};

@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 export default async function Page() {
   const session = await requireSession();
   const viewer = viewerFromSession(session);
-  const context = await loadEspace(viewer.clientId);
+  const context = await loadEspace(viewer);
   if (!sectionOuverte(context, "audit")) redirect(ESPACE_PATH);
 
   return <VueAudit viewer={viewer} context={context} />;

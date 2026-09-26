@@ -52,7 +52,7 @@ export default async function EspaceDirectionPage({
   return (
     <VueTableau
       viewer={viewer}
-      context={await loadEspace(viewer.clientId)}
+      context={await loadEspace(viewer)}
       erreur={erreur === "1" && message ? message : null}
     />
   );

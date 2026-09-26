@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { LEGACY_SLUGS, sectionByKey } from "@cto/espace";
 import { kindFromSlug } from "../../../../../../espace-direction/livrables";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import {
-  VueActions,
+  VueAArbitrer,
+  VueATraiter,
   VueAudit,
+  VueCartographie,
   VueCategorie,
-  VueDirectionTechnique,
+  VueDecisions,
+  VueDocuments,
   VueHistorique,
   VueLettre,
   VueLectureAudit,
   VueLettres,
+  VueMissions,
   VuePrestations,
-  VueSuivi,
+  VueRapports,
+  VueSite,
   VueTableau,
   VueVeille,
 } from "../../../../../../espace-direction/vues";
@@ -47,28 +53,41 @@ export default async function EspaceAdminPage({
   const viewer = await viewerForClient(id);
   if (!viewer) notFound();
 
-  const context = await loadEspace(viewer.clientId);
+  const context = await loadEspace(viewer);
   const [tete, suite, fin] = chemin;
 
   if (chemin.length === 0) return <VueTableau viewer={viewer} context={context} />;
 
   if (chemin.length === 1) {
     switch (tete) {
-      case "audit":
-        return <VueAudit viewer={viewer} context={context} />;
-      case "direction-technique":
-        return <VueDirectionTechnique viewer={viewer} context={context} />;
-      case "suivi-technique":
-        return <VueSuivi viewer={viewer} context={context} />;
-      case "actions":
-        return <VueActions viewer={viewer} context={context} />;
-      case "veille":
-        return <VueVeille viewer={viewer} context={context} />;
+      case "missions":
+        return <VueMissions viewer={viewer} context={context} />;
       case "prestations":
         return <VuePrestations viewer={viewer} context={context} />;
+      case "decisions":
+        return <VueDecisions viewer={viewer} context={context} />;
+      case "audit":
+        return <VueAudit viewer={viewer} context={context} />;
+      case "site":
+        return <VueSite viewer={viewer} context={context} />;
+      case "rapports":
+        return <VueRapports viewer={viewer} context={context} />;
+      case "cartographie":
+        return <VueCartographie viewer={viewer} context={context} />;
+      case "a-traiter":
+        return <VueATraiter viewer={viewer} context={context} />;
+      case "a-arbitrer":
+        return <VueAArbitrer viewer={viewer} context={context} />;
+      case "veille":
+        return <VueVeille viewer={viewer} context={context} />;
+      case "documents":
+        return <VueDocuments viewer={viewer} context={context} />;
       case "lettres":
         return <VueLettres viewer={viewer} context={context} />;
     }
+    // Anciennes adresses : la supervision suit la même carte que le client.
+    const nouvelle = LEGACY_SLUGS[tete];
+    if (nouvelle) redirect(`${viewer.base}/${sectionByKey(nouvelle).slug}`);
     notFound();
   }
 

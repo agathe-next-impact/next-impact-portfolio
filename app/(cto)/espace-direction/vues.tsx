@@ -1,15 +1,25 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { previousLoginAt } from "@cto/access";
-import { history, type AuditPayload, type Deliverable, type RoadmapPayload } from "@cto/deliverables";
-import { buildEvents, sectionByKey } from "@cto/espace";
+import { history, type AuditPayload } from "@cto/deliverables";
+import {
+  actionsVerdict,
+  buildEvents,
+  buildFrise,
+  byPhase,
+  lastSuccessfulBackup,
+  missionsVerdict,
+  sectionByKey,
+  sitePoints,
+  siteVerdict,
+  type Action,
+} from "@cto/espace";
 import { ARCHIVE_MONTHS, letterForClient, lettersForClient } from "@cto/letters";
-import { siteReportsFor, siteStateFor } from "@cto/site";
+import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
 import { Historique } from "./historique";
 import { CorpsLettre, DerniereLettre, formatPeriode, lettresPath, ListeLettres } from "./lettre";
 import {
   Audits,
-  auditPath,
   CATEGORIES,
   Cartographie,
   Categorie,
@@ -19,20 +29,37 @@ import {
   Documents,
   Nouveaute,
   Prestations,
-  Roadmap,
   sortCartographie,
   sortPrestations,
   sortRecentFirst,
-  sortRoadmap,
-  Synthese,
   tailleLisible,
   fichierPath,
   Veille,
   type CategorieKind,
 } from "./livrables";
-import { EnPreparation, Espace, sectionHref, sectionOuverte, type EspaceContext } from "./shell";
-import { SanteSite, SuiviTechnique } from "./suivi";
-import { BackLink, formatDay, Label, Notice, Panel } from "./ui";
+import {
+  ActionLigne,
+  ActionTag,
+  actionMeta,
+  CarteReponse,
+  Frise,
+  LigneCarte,
+  LigneVide,
+  ListeMissions,
+  livrableHref,
+  MissionTag,
+  missionMeta,
+} from "./pilotage";
+import {
+  ContactCta,
+  EnPreparation,
+  Espace,
+  sectionHref,
+  sectionOuverte,
+  type EspaceContext,
+} from "./shell";
+import { RapportsMaintenance, SuiviTechnique } from "./suivi";
+import { BackLink, Dot, formatDay, Label, Notice, Panel, SectionNav } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -45,21 +72,18 @@ import type { Viewer } from "./viewer";
 //
 // Seule différence assumée : l'admin n'a pas de « dernière connexion », donc
 // pas de pastilles « Nouveau » ni de bandeau « depuis votre dernière visite ».
+//
+// L'espace est rangé par question du client — Missions, Votre site, Agir,
+// Veille — et l'accueil répond aux trois premières en une phrase chacune.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Connexion précédente de la personne. Aucune pour l'admin. */
-function sinceFor(viewer: Viewer): Promise<Date | null> {
-  return viewer.personId ? previousLoginAt(viewer.personId) : Promise.resolve(null);
+const pluriel = (n: number, un: string, plusieurs: string) => (n > 1 ? plusieurs : un);
+
+function href(viewer: Viewer, context: EspaceContext, key: Parameters<typeof sectionByKey>[0]): string | null {
+  return sectionOuverte(context, key) ? sectionHref(sectionByKey(key), viewer.base) : null;
 }
 
-function hrefFor(viewer: Viewer, item: Deliverable): string | null {
-  // Un audit s'ouvre à sa lecture, pas à la liste de sa catégorie : c'est un
-  // document, pas une ligne parmi d'autres.
-  if (item.kind === "audit") return auditPath(item.notionPageId, viewer.base);
-  return item.kind in CATEGORIES ? categoriePath(item.kind as CategorieKind, viewer.base) : null;
-}
-
-// ─── Tableau de bord ─────────────────────────────────────────────────────
+// ─── Accueil ─────────────────────────────────────────────────────────────
 
 const KIND_TITRES: Record<string, string> = {
   roadmap: "Chantier",
@@ -74,11 +98,12 @@ const KIND_TITRES: Record<string, string> = {
 /**
  * Ce qui a été mis à la une, toutes sections confondues.
  *
- * La mise en avant se décide dans l'atelier (colonne « Affichage ») ; le
- * tableau de bord la respecte sans la réinterpréter. Une ligne par entrée, qui
- * mène à sa section : le détail vit là-bas, pas ici.
+ * La mise en avant se décide dans l'atelier (colonne « Affichage ») ; l'accueil
+ * la respecte sans la réinterpréter. Une ligne par entrée, qui mène à sa
+ * section : le détail vit là-bas, pas ici.
  */
-function ALaUne({ items, since, viewer }: { items: Deliverable[]; since: Date | null; viewer: Viewer }) {
+function ALaUne({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = context.items.filter((item) => item.featured);
   if (items.length === 0) return null;
 
   return (
@@ -89,32 +114,150 @@ function ALaUne({ items, since, viewer }: { items: Deliverable[]; since: Date | 
         </h2>
       </div>
       <Panel className="mt-5 divide-y divide-dark-gray">
-        {items.slice(0, 8).map((item) => {
-          const href = hrefFor(viewer, item);
-          return (
-            <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
-              <div className="flex min-w-0 flex-wrap items-baseline gap-2">
-                <Nouveaute item={item} since={since} />
-                {href ? (
-                  <Link
-                    href={href}
-                    className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                  >
-                    {item.title}
-                  </Link>
-                ) : (
-                  <span className="font-inter-tight text-sm text-foreground">{item.title}</span>
-                )}
-              </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                {KIND_TITRES[item.kind] ?? item.kind}
-                {item.occurredAt ? ` · ${formatDay(item.occurredAt)}` : ""}
-              </span>
+        {items.slice(0, 8).map((item) => (
+          <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+            <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+              <Nouveaute item={item} since={context.since} />
+              <Link
+                href={livrableHref(item, context, viewer.base)}
+                className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+              >
+                {item.title}
+              </Link>
             </div>
-          );
-        })}
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+              {KIND_TITRES[item.kind] ?? item.kind}
+              {item.occurredAt ? ` · ${formatDay(item.occurredAt)}` : ""}
+            </span>
+          </div>
+        ))}
       </Panel>
     </section>
+  );
+}
+
+/** « Où en sont les missions ? » : ce qui court d'abord, puis ce qui vient, puis ce qui est fait. */
+function CarteMissions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const lignes = [
+    ...byPhase(context.missions, "en-cours"),
+    ...byPhase(context.missions, "a-venir"),
+    ...byPhase(context.missions, "passe"),
+  ].slice(0, 3);
+  const lien = href(viewer, context, "missions");
+
+  return (
+    <CarteReponse
+      question="Où en sont les missions ?"
+      verdict={missionsVerdict(context.missions)}
+      pied={lien ? { href: lien, label: "Toutes les missions" } : null}
+    >
+      {lignes.length === 0 ? (
+        <LigneVide>Les missions apparaîtront ici dès leur première publication.</LigneVide>
+      ) : (
+        lignes.map((mission) => (
+          <LigneCarte
+            key={mission.item.id}
+            titre={mission.title}
+            href={livrableHref(mission.item, context, viewer.base)}
+            tag={<MissionTag mission={mission} />}
+            meta={missionMeta(mission)}
+            avancement={mission.phase === "en-cours" ? mission.progress : null}
+          />
+        ))
+      )}
+    </CarteReponse>
+  );
+}
+
+/** « Comment va le site ? » : les points à corriger d'abord, puis les trois repères qui rassurent. */
+function CarteSite({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const snapshot = context.site?.snapshot ?? null;
+  const lien = href(viewer, context, "site");
+
+  let lignes: ReactNode[] = [];
+  if (snapshot) {
+    const points = sitePoints(snapshot).slice(0, 2).map((point) => (
+      <LigneCarte
+        key={point.id}
+        titre={point.title}
+        href={lien}
+        tag={<ActionTag action={{ id: point.id, kind: "site", title: point.title, detail: null, tone: point.tone, date: null, item: null }} />}
+      />
+    ));
+    const sauvegarde = lastSuccessfulBackup(snapshot);
+    const miseAJour = snapshot.updates.plugins.length + snapshot.updates.themes.length;
+    const reperes = [
+      <LigneCarte
+        key="uptime"
+        titre="Disponibilité 30 jours"
+        tag={
+          <span className="font-mono text-[11px] text-mid-gray">
+            {snapshot.uptime.percentage === null ? "—" : `${snapshot.uptime.percentage.toLocaleString("fr-FR")} %`}
+          </span>
+        }
+      />,
+      <LigneCarte
+        key="sauvegarde"
+        titre="Dernière sauvegarde"
+        tag={<span className="font-mono text-[11px] text-mid-gray">{sauvegarde ? formatDay(new Date(sauvegarde.date)) : "—"}</span>}
+      />,
+      <LigneCarte
+        key="maj"
+        titre="Mises à jour en attente"
+        tag={<span className="font-mono text-[11px] text-mid-gray">{miseAJour}</span>}
+      />,
+    ];
+    lignes = [...points, ...reperes].slice(0, 4);
+  }
+
+  return (
+    <CarteReponse
+      question="Comment va le site ?"
+      verdict={siteVerdict(context.site)}
+      pied={lien ? { href: lien, label: "État détaillé" } : null}
+    >
+      {lignes.length === 0 ? (
+        <LigneVide>
+          Le premier relevé de votre site arrive après le prochain passage de la supervision, chaque
+          nuit.
+        </LigneVide>
+      ) : (
+        lignes
+      )}
+    </CarteReponse>
+  );
+}
+
+/** « Que pouvez-vous faire ? » : l'urgent d'abord, puis ce qui attend votre arbitrage. */
+function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const { aTraiter, aArbitrer } = context.actions;
+  const traiter = href(viewer, context, "a-traiter");
+  const arbitrer = href(viewer, context, "a-arbitrer");
+  const lignes: { action: Action; href: string | null }[] = [
+    ...aTraiter.map((action) => ({ action, href: traiter })),
+    ...aArbitrer.map((action) => ({ action, href: arbitrer })),
+  ].slice(0, 3);
+
+  const pied =
+    aTraiter.length > 0 && traiter
+      ? { href: traiter, label: "Voir et en parler" }
+      : aArbitrer.length > 0 && arbitrer
+        ? { href: arbitrer, label: "Voir et en parler" }
+        : null;
+
+  return (
+    <CarteReponse question="Que pouvez-vous faire ?" verdict={actionsVerdict(context.actions)} pied={pied}>
+      {lignes.length === 0 ? (
+        <LigneVide>
+          Rien ne demande votre intervention. Une question, un devis à relire ? Écrivez à Agathe
+          depuis le menu.
+        </LigneVide>
+      ) : (
+        lignes.map(({ action, href: lien }) => (
+          <LigneCarte key={action.id} titre={action.title} href={lien} tag={<ActionTag action={action} />} meta={actionMeta(action)} />
+        ))
+      )}
+    </CarteReponse>
   );
 }
 
@@ -128,44 +271,20 @@ export async function VueTableau({
   /** Message d'un lien de connexion refusé, affiché même session ouverte. */
   erreur?: string | null;
 }) {
-  const suivi = sectionOuverte(context, "suivi-technique");
-  const [lettres, since, site] = await Promise.all([
-    lettersForClient(viewer.clientId),
-    sinceFor(viewer),
-    suivi ? siteStateFor(viewer.clientId) : Promise.resolve(null),
-  ]);
-
-  const { items } = context;
+  const lettres = await lettersForClient(viewer.clientId);
   const now = new Date();
-  const roadmap = items.filter((item) => item.kind === "roadmap");
-  const decisions = items.filter((item) => item.kind === "decision");
-  const carto = items.filter((item) => item.kind === "cartographie");
-
-  const events = buildEvents(
-    items,
-    lettres.map((lettre) => ({
-      title: lettre.title,
-      period: lettre.period,
-      href: `${lettresPath(viewer.base)}/${lettre.notionPageId}`,
-    })),
-    (item) => hrefFor(viewer, item),
-    now,
-  );
+  const missions = sectionOuverte(context, "missions");
+  const site = sectionOuverte(context, "site");
+  const cartes = 1 + (missions ? 1 : 0) + (site ? 1 : 0);
+  const prenom = viewer.personName?.trim().split(/\s+/)[0];
 
   return (
     <Espace
       viewer={viewer}
       context={context}
       active="tableau"
-      title="Tableau de bord"
-      intro={
-        viewer.personName ? (
-          <p className="font-inter-tight text-base text-mid-gray">
-            {viewer.personName}
-            {viewer.personRole ? ` — ${viewer.personRole}` : ""}
-          </p>
-        ) : undefined
-      }
+      largeur="large"
+      title={prenom ? `Bonjour ${prenom}` : "Accueil"}
     >
       {erreur ? (
         <div className="mt-8">
@@ -175,62 +294,184 @@ export async function VueTableau({
         </div>
       ) : null}
 
-      <DepuisLaDerniereFois items={items} since={since} base={viewer.base} />
+      <DepuisLaDerniereFois items={context.items} since={context.since} base={viewer.base} />
 
-      <AuditsRemis items={items.filter((item) => item.kind === "audit")} viewer={viewer} />
+      <section
+        aria-label="L'essentiel en trois questions"
+        className={`mt-10 grid gap-4 ${cartes === 3 ? "md:grid-cols-2 xl:grid-cols-3" : cartes === 2 ? "md:grid-cols-2" : "max-w-xl"}`}
+      >
+        {missions ? <CarteMissions viewer={viewer} context={context} /> : null}
+        {site ? <CarteSite viewer={viewer} context={context} /> : null}
+        <CarteActions viewer={viewer} context={context} />
+      </section>
 
-      {roadmap.length + decisions.length + carto.length > 0 ? (
-        <Synthese roadmap={roadmap} decisions={decisions} carto={carto} now={now.getTime()} />
+      {missions || context.items.some((item) => item.kind === "cartographie") ? (
+        <Frise frise={buildFrise(context.missions, context.items, now)} context={context} base={viewer.base} />
       ) : null}
 
-      {site ? <SanteSite state={site} base={viewer.base} /> : null}
-
-      <Calendrier events={events} now={now} />
-
-      <ALaUne items={items.filter((item) => item.featured)} since={since} viewer={viewer} />
+      <ALaUne viewer={viewer} context={context} />
 
       <DerniereLettre lettres={lettres} base={viewer.base} />
+
+      <ContactCta company={viewer.company} />
     </Espace>
   );
 }
 
+// ─── Missions ────────────────────────────────────────────────────────────
+
 /**
- * Les audits remis, sur l'accueil.
+ * La vue d'ensemble des missions : la frise, puis les trois moments en listes.
  *
- * Pas soumis à « À la une » : pour un client audit seul, l'audit est la raison
- * même de sa visite, et l'obliger à passer par un onglet pour le trouver serait
- * le cacher. Un encart court — l'audit se lit sur sa page.
+ * Les trois listes sont toutes visibles, dans l'ordre de la question qu'on se
+ * pose (qu'est-ce qui court, qu'est-ce qui vient, qu'est-ce qui est fait) ; le
+ * sommaire en tête permet de sauter à la troisième sans défiler.
  */
-function AuditsRemis({ items, viewer }: { items: Deliverable[]; viewer: Viewer }) {
-  if (items.length === 0) return null;
+export async function VueMissions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const now = new Date();
+  const enCours = byPhase(context.missions, "en-cours");
+  const aVenir = byPhase(context.missions, "a-venir");
+  const fait = byPhase(context.missions, "passe");
+  const lettres = await lettersForClient(viewer.clientId);
+  const events = buildEvents(
+    context.items,
+    lettres.map((lettre) => ({
+      title: lettre.title,
+      period: lettre.period,
+      href: `${lettresPath(viewer.base)}/${lettre.notionPageId}`,
+    })),
+    (item) => livrableHref(item, context, viewer.base),
+    now,
+  );
+  const roadmap = context.items.some((item) => item.kind === "roadmap");
 
   return (
-    <section aria-labelledby="audits-titre" className="mt-12">
-      <div className="border-b border-dark-gray pb-3">
-        <h2 id="audits-titre" className="font-sans text-lg font-light text-foreground">
-          {items.length > 1 ? "Vos audits" : "Votre audit"}
-        </h2>
-      </div>
-      <Panel className="mt-5 divide-y divide-dark-gray">
-        {sortRecentFirst(items).map((item) => (
-          <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
-            <Link
-              href={auditPath(item.notionPageId, viewer.base)}
-              className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-            >
-              {item.title}
-            </Link>
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-              {item.occurredAt ? `Mesures du ${formatDay(item.occurredAt)}` : "Audit"}
-            </span>
-          </div>
-        ))}
-      </Panel>
-    </section>
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="missions"
+      largeur="large"
+      title="Missions"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Ce qui a été fait, ce qui avance et ce qui arrive, sur une seule ligne de temps.
+          {roadmap ? (
+            <>
+              {" "}La roadmap complète, avec ce qui a été écarté, reste{" "}
+              <Link
+                href={categoriePath("roadmap", viewer.base)}
+                className="text-foreground underline underline-offset-4 hover:text-accent-secondary"
+              >
+                consultable ici
+              </Link>
+              .
+            </>
+          ) : null}
+        </p>
+      }
+    >
+      {context.missions.length === 0 ? (
+        <EnPreparation>
+          Les chantiers décidés, les prestations commandées, les décisions et les audits
+          apparaîtront ici dès leur première publication, avec leur échéance.
+        </EnPreparation>
+      ) : (
+        <>
+          <SectionNav
+            items={[
+              { href: "#en-cours", label: "En cours", count: enCours.length },
+              { href: "#a-venir", label: "À venir", count: aVenir.length },
+              { href: "#fait", label: "Fait", count: fait.length },
+            ]}
+          />
+
+          <Frise frise={buildFrise(context.missions, context.items, now)} context={context} base={viewer.base} />
+
+          <section id="en-cours" aria-labelledby="en-cours-titre" className="mt-12 scroll-mt-20">
+            <h2 id="en-cours-titre" className="font-sans text-lg font-light text-foreground">
+              En cours <span className="text-mid-gray">· {enCours.length}</span>
+            </h2>
+            <ListeMissions missions={enCours} context={context} base={viewer.base} vide="Rien en cours pour l'instant." />
+          </section>
+
+          <section id="a-venir" aria-labelledby="a-venir-titre" className="mt-12 scroll-mt-20">
+            <h2 id="a-venir-titre" className="font-sans text-lg font-light text-foreground">
+              À venir <span className="text-mid-gray">· {aVenir.length}</span>
+            </h2>
+            <ListeMissions missions={aVenir} context={context} base={viewer.base} vide="Rien de programmé pour l'instant." />
+          </section>
+
+          <section id="fait" aria-labelledby="fait-titre" className="mt-12 scroll-mt-20">
+            <h2 id="fait-titre" className="font-sans text-lg font-light text-foreground">
+              Fait <span className="text-mid-gray">· {fait.length}</span>
+            </h2>
+            <ListeMissions missions={fait} context={context} base={viewer.base} vide="Rien de terminé pour l'instant." />
+          </section>
+        </>
+      )}
+
+      <Calendrier events={events} now={now} />
+    </Espace>
   );
 }
 
-// ─── Sections ────────────────────────────────────────────────────────────
+export async function VuePrestations({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortPrestations(context.items.filter((item) => item.kind === "prestation"));
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="prestations"
+      title="Prestations"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Les missions commandées, leur avancement et leur date de livraison.
+        </p>
+      }
+    >
+      {items.length === 0 ? (
+        <EnPreparation>
+          Vos prestations en cours (missions ponctuelles, devis signés) apparaîtront ici avec
+          leur avancement et leur date de livraison.
+        </EnPreparation>
+      ) : (
+        <div className="mt-10">
+          <Prestations items={items} now={Date.now()} since={context.since} bare base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
+
+export async function VueDecisions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRecentFirst(context.items.filter((item) => item.kind === "decision"));
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="decisions"
+      title="Décisions"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Ce qui a été tranché, quand, pourquoi, et ce qui a été écarté.
+        </p>
+      }
+    >
+      {items.length === 0 ? (
+        <EnPreparation>
+          Le relevé de décisions apparaîtra ici dès le premier arbitrage publié : la décision, son
+          motif et l&rsquo;option écartée.
+        </EnPreparation>
+      ) : (
+        <div className="mt-6">
+          <Decisions items={items} since={context.since} bare base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
 
 /**
  * La section Audit.
@@ -242,7 +483,6 @@ export async function VueAudit({ viewer, context }: { viewer: Viewer; context: E
   const audits = sortRecentFirst(context.items.filter((item) => item.kind === "audit"));
   if (audits.length === 1) return VueLectureAudit({ viewer, context, id: audits[0].notionPageId });
 
-  const since = await sinceFor(viewer);
   return (
     <Espace
       viewer={viewer}
@@ -263,23 +503,13 @@ export async function VueAudit({ viewer, context }: { viewer: Viewer; context: E
         </EnPreparation>
       ) : (
         <div className="mt-10">
-          <Audits items={audits} since={since} base={viewer.base} />
+          <Audits items={audits} since={context.since} base={viewer.base} />
         </div>
       )}
     </Espace>
   );
 }
 
-/**
- * La lecture d'un audit : synthèse, sommaire, puis chaque partie en entier.
- *
- * Tout sur une page, avec des ancres : un audit se lit d'un bout à l'autre
- * avant la réunion de restitution, puis se consulte par partie. Une page par
- * partie obligerait au va-et-vient pour la première lecture, qui compte le plus.
- *
- * `null` si l'identifiant n'est pas un audit publié de CET accompagnement : la
- * liste vient de `context.items`, déjà filtrée par client.
- */
 export async function VueLectureAudit({
   viewer,
   context,
@@ -300,6 +530,7 @@ export async function VueLectureAudit({
       viewer={viewer}
       context={context}
       active={sectionOuverte(context, "audit") ? "audit" : null}
+      largeur="lecture"
       title={audit.title}
       intro={
         <Label>
@@ -431,152 +662,59 @@ export async function VueLectureAudit({
   );
 }
 
-export async function VueDirectionTechnique({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const since = await sinceFor(viewer);
-  const now = Date.now();
-  const decisions = sortRecentFirst(context.items.filter((item) => item.kind === "decision"));
-  const carto = sortCartographie(context.items.filter((item) => item.kind === "cartographie"));
-  const documents = sortRecentFirst(context.items.filter((item) => item.kind === "document"));
-  const vide = decisions.length + carto.length + documents.length === 0;
+// ─── Votre site ──────────────────────────────────────────────────────────
+
+export async function VueSite({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const state = context.site;
+  const verdict = siteVerdict(state);
+  const points = state?.snapshot ? sitePoints(state.snapshot) : [];
+  const traiter = href(viewer, context, "a-traiter");
 
   return (
     <Espace
       viewer={viewer}
       context={context}
-      active="direction-technique"
-      title="Direction technique"
+      active="site"
+      title="État du site"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Audit, préconisations et arbitrages : ce qui a été décidé, sur quoi repose votre système,
-          et les documents relus pour vous.
-        </p>
-      }
-    >
-      {vide ? (
-        <EnPreparation>
-          Le relevé de décisions, la cartographie de votre système et les documents relus
-          (devis, plans de continuité) apparaîtront ici dès leur première publication.
-        </EnPreparation>
-      ) : null}
-      {decisions.length > 0 ? (
-        <Decisions items={decisions.slice(0, 8)} total={decisions.length} since={since} base={viewer.base} />
-      ) : null}
-      {carto.length > 0 ? (
-        <Cartographie items={carto} total={carto.length} now={now} since={since} base={viewer.base} />
-      ) : null}
-      {documents.length > 0 ? (
-        <Documents items={documents} total={documents.length} since={since} base={viewer.base} />
-      ) : null}
-    </Espace>
-  );
-}
-
-/** Les statuts qui font d'un chantier une action EN COURS. */
-const EN_COURS = new Set(["Ouvert", "Décidé"]);
-
-export async function VueActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const since = await sinceFor(viewer);
-  const roadmap = context.items.filter((item) => item.kind === "roadmap");
-  const enCours = sortRoadmap(
-    roadmap.filter((item) => EN_COURS.has((item.payload as RoadmapPayload).statut ?? "")),
-  );
-  const aVenir = sortRoadmap(
-    roadmap.filter((item) => (item.payload as RoadmapPayload).statut === "À venir"),
-  );
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="actions"
-      title="Actions en cours"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les chantiers ouverts et décidés, et ceux qui suivent. La roadmap complète, avec ce qui
-          est fait ou écarté, reste{" "}
-          <Link
-            href={categoriePath("roadmap", viewer.base)}
-            className="text-foreground underline underline-offset-4 hover:text-accent-secondary"
-          >
-            consultable ici
-          </Link>
-          .
-        </p>
-      }
-    >
-      {enCours.length + aVenir.length === 0 ? (
-        <EnPreparation>
-          Aucun chantier en cours pour l&rsquo;instant. Les actions décidées en comité apparaîtront
-          ici, avec leur échéance et leur budget.
-        </EnPreparation>
-      ) : null}
-      {enCours.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="font-sans text-lg font-light text-foreground">En cours</h2>
-          <Roadmap items={enCours} now={Date.now()} since={since} bare base={viewer.base} />
-        </section>
-      ) : null}
-      {aVenir.length > 0 ? (
-        <section className="mt-12">
-          <h2 className="font-sans text-lg font-light text-foreground">Ensuite</h2>
-          <Roadmap items={aVenir} now={Date.now()} since={since} bare base={viewer.base} />
-        </section>
-      ) : null}
-    </Espace>
-  );
-}
-
-export async function VuePrestations({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const since = await sinceFor(viewer);
-  const items = sortPrestations(context.items.filter((item) => item.kind === "prestation"));
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="prestations"
-      title="Prestations"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les missions commandées, leur avancement et leur date de livraison.
-        </p>
-      }
-    >
-      {items.length === 0 ? (
-        <EnPreparation>
-          Vos prestations en cours (missions ponctuelles, devis signés) apparaîtront ici avec
-          leur avancement et leur date de livraison.
-        </EnPreparation>
-      ) : (
-        <div className="mt-10">
-          <Prestations items={items} now={Date.now()} since={since} bare base={viewer.base} />
-        </div>
-      )}
-    </Espace>
-  );
-}
-
-export async function VueSuivi({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const [state, reports] = await Promise.all([
-    siteStateFor(viewer.clientId),
-    siteReportsFor(viewer.clientId),
-  ]);
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="suivi-technique"
-      title="Suivi technique"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Maintenance et état de votre site : disponibilité, mises à jour, failles connues,
-          sauvegardes et rapports mensuels. Relevé chaque nuit.
+          Disponibilité, failles connues, sauvegardes et maintenance de votre site. Relevé chaque nuit.
         </p>
       }
     >
       {state ? (
-        <SuiviTechnique state={state} reports={reports} base={viewer.base} />
+        <>
+          {state.snapshot ? (
+            <Panel className="mt-10 px-5 py-5">
+              <p className="flex items-start gap-2.5 font-sans text-lg text-foreground">
+                <Dot tone={verdict.tone} label={verdict.tone === "fait" ? "En ordre" : "À regarder"} />
+                <span>{verdict.headline}</span>
+              </p>
+              {points.length > 0 ? (
+                <ul className="mt-4 space-y-2">
+                  {points.map((point) => (
+                    <li key={point.id} className="flex flex-wrap items-baseline gap-2">
+                      <ActionTag action={{ id: point.id, kind: "site", title: point.title, detail: null, tone: point.tone, date: null, item: null }} />
+                      <span className="font-inter-tight text-sm text-foreground">{point.title}</span>
+                      {point.detail ? (
+                        <span className="font-inter-tight text-xs text-mid-gray">{point.detail}</span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              {points.length > 0 && traiter ? (
+                <Link
+                  href={traiter}
+                  className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary hover:text-foreground"
+                >
+                  En parler depuis « À traiter » →
+                </Link>
+              ) : null}
+            </Panel>
+          ) : null}
+          <SuiviTechnique state={state} />
+        </>
       ) : (
         <EnPreparation>
           La supervision de votre site est en cours de mise en place. Le relevé quotidien
@@ -587,8 +725,177 @@ export async function VueSuivi({ viewer, context }: { viewer: Viewer; context: E
   );
 }
 
+export async function VueRapports({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const reports = await siteReportsFor(viewer.clientId);
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="rapports"
+      title="Rapports de maintenance"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Les rapports mensuels de maintenance de votre site, en PDF, à transmettre tels quels.
+        </p>
+      }
+    >
+      <div className="mt-6">
+        <RapportsMaintenance reports={reports} base={viewer.base} />
+      </div>
+    </Espace>
+  );
+}
+
+export async function VueCartographie({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortCartographie(context.items.filter((item) => item.kind === "cartographie"));
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="cartographie"
+      title="Cartographie"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Les systèmes dont dépend votre activité : qui les détient, ce qu&rsquo;ils coûtent, quand
+          ils se renouvellent.
+        </p>
+      }
+    >
+      {items.length === 0 ? (
+        <EnPreparation>
+          La cartographie de votre système (hébergement, contrats, outils, détenteurs des accès)
+          apparaîtra ici dès sa première publication.
+        </EnPreparation>
+      ) : (
+        <div className="mt-6">
+          <Cartographie items={items} now={Date.now()} since={context.since} bare base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
+
+// ─── Agir ────────────────────────────────────────────────────────────────
+
+function ListeActions({
+  actions,
+  viewer,
+  context,
+}: {
+  actions: Action[];
+  viewer: Viewer;
+  context: EspaceContext;
+}) {
+  return (
+    <ul className="mt-10 divide-y divide-dark-gray border border-dark-gray bg-jet/40">
+      {actions.map((action) => (
+        <ActionLigne key={action.id} action={action} company={viewer.company} context={context} base={viewer.base} />
+      ))}
+    </ul>
+  );
+}
+
+export async function VueATraiter({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const actions = context.actions.aTraiter;
+  const urgentes = actions.filter((action) => action.tone === "alerte").length;
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="a-traiter"
+      title="À traiter"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Ce qui demande une intervention : points du site à corriger, échéances de contrats dans
+          les 60 jours, missions en retard.
+          {actions.length > 0
+            ? ` ${actions.length} ${pluriel(actions.length, "point", "points")}, dont ${urgentes} ${pluriel(urgentes, "urgent", "urgents")}.`
+            : ""}
+        </p>
+      }
+    >
+      {actions.length === 0 ? (
+        <Panel className="mt-10 px-5 py-6">
+          <Label>Rien d&rsquo;urgent</Label>
+          <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
+            Aucun point du site à corriger, aucune échéance dans les 60 jours, aucune mission en
+            retard.
+          </p>
+        </Panel>
+      ) : (
+        <ListeActions actions={actions} viewer={viewer} context={context} />
+      )}
+      <ContactCta company={viewer.company} />
+    </Espace>
+  );
+}
+
+export async function VueAArbitrer({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const actions = context.actions.aArbitrer;
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="a-arbitrer"
+      title="À arbitrer"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Les opportunités repérées pour vous, avec l&rsquo;effort, l&rsquo;effet attendu et le budget.
+          Rien ne se lance sans votre accord.
+        </p>
+      }
+    >
+      {actions.length === 0 ? (
+        <EnPreparation>
+          Aucune opportunité en attente de décision. Celles repérées en comité ou en veille
+          apparaîtront ici, chiffrées.
+        </EnPreparation>
+      ) : (
+        <ListeActions actions={actions} viewer={viewer} context={context} />
+      )}
+      <ContactCta company={viewer.company} />
+    </Espace>
+  );
+}
+
+// ─── Veille ──────────────────────────────────────────────────────────────
+
+export async function VueDocuments({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRecentFirst(context.items.filter((item) => item.kind === "document"));
+
+  return (
+    <Espace
+      viewer={viewer}
+      context={context}
+      active="documents"
+      title="Documents"
+      intro={
+        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
+          Les documents relus pour vous : devis, notes de comité, plans de continuité.
+        </p>
+      }
+    >
+      {items.length === 0 ? (
+        <EnPreparation>
+          Les documents relus pour vous (revues de devis, notes de comité, plans de continuité)
+          apparaîtront ici dès leur première publication.
+        </EnPreparation>
+      ) : (
+        <div className="mt-6">
+          <Documents items={items} since={context.since} bare base={viewer.base} />
+        </div>
+      )}
+    </Espace>
+  );
+}
+
 export async function VueVeille({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const [lettres, since] = await Promise.all([lettersForClient(viewer.clientId), sinceFor(viewer)]);
+  const lettres = await lettersForClient(viewer.clientId);
+  const since = context.since;
   const nouvelles = sortRecentFirst(context.items.filter((item) => item.kind === "veille"));
 
   return (
@@ -596,7 +903,7 @@ export async function VueVeille({ viewer, context }: { viewer: Viewer; context: 
       viewer={viewer}
       context={context}
       active="veille"
-      title="Veille"
+      title="Lettres et alertes"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
           Ce qui change dans votre environnement numérique, et ce que ça implique pour vous.
@@ -623,10 +930,10 @@ export async function VueVeille({ viewer, context }: { viewer: Viewer; context: 
 
 /** L'onglet de navigation auquel une catégorie appartient. */
 const SECTION_OF = {
-  decision: "direction-technique",
-  cartographie: "direction-technique",
-  document: "direction-technique",
-  roadmap: "actions",
+  decision: "decisions",
+  cartographie: "cartographie",
+  document: "documents",
+  roadmap: "missions",
   veille: "veille",
   prestation: "prestations",
   audit: "audit",
@@ -641,7 +948,7 @@ export async function VueCategorie({
   context: EspaceContext;
   kind: CategorieKind;
 }) {
-  const since = await sinceFor(viewer);
+  const since = context.since;
   const items = context.items.filter((item) => item.kind === kind);
   const section = SECTION_OF[kind];
 
@@ -758,6 +1065,7 @@ export async function VueLettre({
       viewer={viewer}
       context={context}
       active="veille"
+      largeur="lecture"
       title={lettre.title}
       intro={<Label>{formatPeriode(lettre.period)}</Label>}
     >

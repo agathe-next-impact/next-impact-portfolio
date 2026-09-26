@@ -24,5 +24,5 @@ export default async function Page({ params }: { params: Promise<{ categorie: st
 
   const session = await requireSession();
   const viewer = viewerFromSession(session);
-  return <VueCategorie viewer={viewer} context={await loadEspace(viewer.clientId)} kind={kind} />;
+  return <VueCategorie viewer={viewer} context={await loadEspace(viewer)} kind={kind} />;
 }

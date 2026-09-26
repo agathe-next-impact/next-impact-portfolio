@@ -18,5 +18,5 @@ export const dynamic = "force-dynamic";
 export default async function Page() {
   const session = await requireSession();
   const viewer = viewerFromSession(session);
-  return <VueLettres viewer={viewer} context={await loadEspace(viewer.clientId)} />;
+  return <VueLettres viewer={viewer} context={await loadEspace(viewer)} />;
 }

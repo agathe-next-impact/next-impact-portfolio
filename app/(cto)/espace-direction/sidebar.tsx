@@ -1,0 +1,464 @@
+"use client";
+
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import * as Dialog from "@radix-ui/react-dialog";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import {
+  Activity,
+  BookOpen,
+  Briefcase,
+  CalendarPlus,
+  Download,
+  FileText,
+  Flag,
+  Folder,
+  Gavel,
+  House,
+  KeyRound,
+  Layers,
+  ListChecks,
+  LogOut,
+  Mail,
+  Menu,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Scale,
+  Search,
+  Sun,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { deconnexion } from "./actions";
+import { NAV_COOKIE } from "./nav";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// La barre latérale de l'espace.
+//
+// Seul morceau client du gabarit : tout ce qu'elle affiche (entrées, groupes,
+// pastilles) est calculé côté serveur par `shell.tsx` et arrive en props. Elle
+// ne gère que ce qui n'existe que dans le navigateur — replier, ouvrir le
+// tiroir, le raccourci clavier.
+//
+// Trois états :
+//  - bureau déployé (248 px) : libellés, groupes, pastilles ;
+//  - bureau replié (64 px)  : icônes seules, info-bulle au survol et au focus,
+//    pastille réduite à un point — le mot reste dans l'info-bulle et dans
+//    l'étiquette lue par le lecteur d'écran ;
+//  - mobile (< 1024 px)     : barre du haut + tiroir (Radix Dialog : focus
+//    piégé, Échap, clic sur le fond), refermé à chaque navigation.
+//
+// L'état replié vit dans un COOKIE, pas dans le localStorage : le serveur le lit
+// et rend la page directement dans le bon état. Un localStorage ne se lit
+// qu'après l'hydratation — la barre s'ouvrirait puis se refermerait à chaque
+// page.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type NavIconName =
+  | "tableau"
+  | "missions"
+  | "prestations"
+  | "decisions"
+  | "audit"
+  | "site"
+  | "rapports"
+  | "cartographie"
+  | "a-traiter"
+  | "a-arbitrer"
+  | "veille"
+  | "documents";
+
+const ICONS: Record<NavIconName, LucideIcon> = {
+  tableau: House,
+  missions: Flag,
+  prestations: Briefcase,
+  decisions: Gavel,
+  audit: Search,
+  site: Activity,
+  rapports: FileText,
+  cartographie: Layers,
+  "a-traiter": ListChecks,
+  "a-arbitrer": Scale,
+  veille: BookOpen,
+  documents: Folder,
+};
+
+export type BadgeTone = "neutre" | "attention" | "alerte" | "nouveau";
+
+export interface NavBadge {
+  /** Court : « 2 », « 1 faille ». */
+  text: string;
+  /** La phrase complète, pour l'info-bulle et le lecteur d'écran. */
+  description: string;
+  tone: BadgeTone;
+}
+
+export interface NavItem {
+  key: NavIconName;
+  href: string;
+  label: string;
+  active: boolean;
+  badge: NavBadge | null;
+}
+
+export interface NavGroup {
+  label: string | null;
+  items: NavItem[];
+}
+
+export interface SidebarProps {
+  company: string;
+  person: string | null;
+  groups: NavGroup[];
+  initialCollapsed: boolean;
+  /** Le signal de la barre du haut sur mobile (« 2 à traiter »), s'il y a lieu. */
+  signal: NavBadge | null;
+  contact: { mailto: string; calendly: string };
+  appareilsHref: string | null;
+  restitution: { href: string; label: string };
+  /** Vue de supervision : ni appareils ni déconnexion — ce ne sont pas les siens. */
+  admin: boolean;
+}
+
+const BADGE_CLASS: Record<BadgeTone, string> = {
+  neutre: "border-dark-gray text-mid-gray",
+  attention: "border-[#f2c94c]/45 text-[#f2c94c]",
+  alerte: "border-[#ff8a7a]/45 text-[#ff8a7a]",
+  nouveau: "border-accent-secondary/50 text-accent-secondary",
+};
+
+const DOT_CLASS: Record<BadgeTone, string> = {
+  neutre: "bg-mid-gray",
+  attention: "bg-[#f2c94c]",
+  alerte: "bg-[#ff8a7a]",
+  nouveau: "bg-accent-secondary",
+};
+
+function Badge({ badge }: { badge: NavBadge }) {
+  return (
+    <span
+      aria-hidden
+      className={`ml-auto shrink-0 border px-1.5 font-mono text-[10px] leading-[18px] tracking-[0.04em] ${BADGE_CLASS[badge.tone]}`}
+    >
+      {badge.text}
+    </span>
+  );
+}
+
+function linkLabel(item: NavItem): string {
+  return item.badge ? `${item.label} (${item.badge.description})` : item.label;
+}
+
+const ROW =
+  "group relative flex items-center gap-3 border-l-2 font-inter-tight text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-secondary";
+
+function Entree({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
+  const Icon = ICONS[item.key];
+  const lien = (
+    <Link
+      href={item.href}
+      aria-current={item.active ? "page" : undefined}
+      aria-label={collapsed ? linkLabel(item) : undefined}
+      className={`${ROW} ${collapsed ? "justify-center px-0 py-2.5" : "px-3 py-2"} ${
+        item.active
+          ? "border-l-accent-secondary bg-overlay-gray text-foreground"
+          : "border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground"
+      }`}
+    >
+      <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+      {collapsed ? (
+        item.badge ? (
+          <span aria-hidden className={`absolute right-3.5 top-1.5 h-1.5 w-1.5 ${DOT_CLASS[item.badge.tone]}`} />
+        ) : null
+      ) : (
+        <>
+          <span className="min-w-0 truncate">{item.label}</span>
+          {item.badge ? (
+            <>
+              <Badge badge={item.badge} />
+              <span className="sr-only">{`, ${item.badge.description}`}</span>
+            </>
+          ) : null}
+        </>
+      )}
+    </Link>
+  );
+
+  return collapsed ? <Bulle texte={linkLabel(item)}>{lien}</Bulle> : lien;
+}
+
+/** L'info-bulle du rail. Radix : rendue hors de la barre, donc jamais coupée par son défilement. */
+function Bulle({ texte, children }: { texte: string; children: ReactNode }) {
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Content
+          side="right"
+          sideOffset={10}
+          className="z-50 border border-dark-gray bg-jet px-2.5 py-1.5 font-inter-tight text-xs text-foreground shadow-lg"
+        >
+          {texte}
+        </Tooltip.Content>
+      </Tooltip.Portal>
+    </Tooltip.Root>
+  );
+}
+
+function Outil({
+  collapsed,
+  icon: Icon,
+  label,
+  href,
+  onClick,
+  type,
+}: {
+  collapsed: boolean;
+  icon: LucideIcon;
+  label: string;
+  href?: string;
+  onClick?: () => void;
+  type?: "submit";
+}) {
+  const className = `${ROW} w-full border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground ${
+    collapsed ? "justify-center px-0 py-2.5" : "px-3 py-2"
+  }`;
+  const contenu = (
+    <>
+      <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+      {collapsed ? null : <span className="truncate">{label}</span>}
+    </>
+  );
+  const element = href ? (
+    <a href={href} aria-label={collapsed ? label : undefined} className={className}>
+      {contenu}
+    </a>
+  ) : (
+    <button type={type ?? "button"} onClick={onClick} aria-label={collapsed ? label : undefined} className={className}>
+      {contenu}
+    </button>
+  );
+  return collapsed ? <Bulle texte={label}>{element}</Bulle> : element;
+}
+
+function Theme({ collapsed }: { collapsed: boolean }) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [pret, setPret] = useState(false);
+  useEffect(() => setPret(true), []);
+  const sombre = !pret || resolvedTheme !== "light";
+  return (
+    <Outil
+      collapsed={collapsed}
+      icon={sombre ? Sun : Moon}
+      label={sombre ? "Passer en clair" : "Passer en sombre"}
+      onClick={() => setTheme(sombre ? "light" : "dark")}
+    />
+  );
+}
+
+function Contenu({
+  props,
+  collapsed,
+  entete,
+}: {
+  props: SidebarProps;
+  collapsed: boolean;
+  /** Le bouton du coin : replier (bureau) ou fermer (tiroir). */
+  entete: ReactNode;
+}) {
+  return (
+    <>
+      <div
+        className={`flex min-h-[64px] items-center gap-3 border-b border-dark-gray ${
+          collapsed ? "flex-col justify-center gap-2 px-0 py-3" : "px-4 py-3"
+        }`}
+      >
+        <span
+          aria-hidden
+          className="grid h-8 w-8 shrink-0 place-items-center border border-dark-gray font-mono text-[11px] text-accent-secondary"
+        >
+          NI
+        </span>
+        {collapsed ? null : (
+          <div className="min-w-0 flex-1 leading-tight">
+            <p className="truncate font-sans text-sm font-medium text-foreground">{props.company}</p>
+            {props.person ? <p className="truncate font-inter-tight text-xs text-mid-gray">{props.person}</p> : null}
+          </div>
+        )}
+        {entete}
+      </div>
+
+      <nav aria-label="Sections de votre espace" className="flex-1 overflow-y-auto px-2 py-3">
+        <ul className="space-y-4">
+          {props.groups.map((groupe, index) => (
+            <li key={groupe.label ?? `groupe-${index}`}>
+              {groupe.label && !collapsed ? (
+                <p className="px-3 pb-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mid-gray/70">
+                  {groupe.label}
+                </p>
+              ) : null}
+              {groupe.label && collapsed ? <span className="mx-3 mb-2 block border-t border-dark-gray" aria-hidden /> : null}
+              <ul className="space-y-0.5" aria-label={groupe.label ?? undefined}>
+                {groupe.items.map((item) => (
+                  <li key={item.key}>
+                    <Entree item={item} collapsed={collapsed} />
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="border-t border-dark-gray px-2 py-3">
+        {collapsed ? (
+          <div className="space-y-0.5">
+            <Outil collapsed icon={Mail} label="Écrire à Agathe" href={props.contact.mailto} />
+            <Outil collapsed icon={CalendarPlus} label="Réserver un créneau" href={props.contact.calendly} />
+          </div>
+        ) : (
+          <div className="mx-1 mb-3 border border-dark-gray px-3 py-3">
+            <p className="font-inter-tight text-xs leading-snug text-mid-gray">
+              Une question, un devis à relire, une décision à prendre ?
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              <a
+                href={props.contact.mailto}
+                className="border border-accent-secondary bg-accent-secondary px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-obsidian hover:opacity-90"
+              >
+                Écrire
+              </a>
+              <a
+                href={props.contact.calendly}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="border border-dark-gray px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground hover:border-accent-secondary"
+              >
+                Réserver ↗
+              </a>
+            </div>
+          </div>
+        )}
+        <div className="mt-1 space-y-0.5">
+          {props.appareilsHref ? (
+            <Outil collapsed={collapsed} icon={KeyRound} label="Mes appareils" href={props.appareilsHref} />
+          ) : null}
+          <Outil collapsed={collapsed} icon={Download} label={props.restitution.label} href={props.restitution.href} />
+          <Theme collapsed={collapsed} />
+          {props.admin ? null : (
+            <form action={deconnexion}>
+              <Outil collapsed={collapsed} icon={LogOut} label="Se déconnecter" type="submit" />
+            </form>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function Sidebar(props: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(props.initialCollapsed);
+  const [ouvert, setOuvert] = useState(false);
+  const pathname = usePathname();
+
+  const basculer = useCallback(() => {
+    setCollapsed((valeur) => {
+      const suivant = !valeur;
+      document.cookie = `${NAV_COOKIE}=${suivant ? "rail" : "large"}; path=/; max-age=31536000; samesite=lax`;
+      return suivant;
+    });
+  }, []);
+
+  // Le tiroir se referme à chaque navigation : on ne garde pas le menu ouvert
+  // par-dessus la page qu'on vient de demander.
+  useEffect(() => setOuvert(false), [pathname]);
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "[" || event.ctrlKey || event.metaKey || event.altKey) return;
+      const cible = event.target as HTMLElement | null;
+      if (cible && (cible.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(cible.tagName))) return;
+      if (!window.matchMedia("(min-width: 1024px)").matches) return;
+      event.preventDefault();
+      basculer();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [basculer]);
+
+  const coin = "grid h-8 w-8 shrink-0 place-items-center border border-transparent text-mid-gray transition-colors hover:border-dark-gray hover:text-foreground";
+
+  return (
+    <Tooltip.Provider delayDuration={150}>
+      {/* Mobile : barre du haut + tiroir. */}
+      <div className="sticky top-0 z-30 flex items-center gap-3 border-b border-dark-gray bg-obsidian/95 px-4 py-2.5 backdrop-blur lg:hidden">
+        <Dialog.Root open={ouvert} onOpenChange={setOuvert}>
+          <Dialog.Trigger asChild>
+            <button type="button" aria-label="Ouvrir le menu" className={coin}>
+              <Menu aria-hidden className="h-5 w-5" strokeWidth={1.7} />
+            </button>
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 lg:hidden" />
+            <Dialog.Content
+              aria-describedby={undefined}
+              className="fixed inset-y-0 left-0 z-50 flex w-[280px] max-w-[85vw] flex-col border-r border-dark-gray bg-jet text-foreground shadow-2xl lg:hidden"
+            >
+              <Dialog.Title className="sr-only">Navigation de l&rsquo;espace</Dialog.Title>
+              <Contenu
+                props={props}
+                collapsed={false}
+                entete={
+                  <Dialog.Close asChild>
+                    <button type="button" aria-label="Fermer le menu" className={coin}>
+                      <X aria-hidden className="h-4 w-4" strokeWidth={1.8} />
+                    </button>
+                  </Dialog.Close>
+                }
+              />
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+        <p className="min-w-0 flex-1 truncate font-sans text-sm font-medium text-foreground">{props.company}</p>
+        {props.signal ? (
+          <span className={`shrink-0 border px-2 font-mono text-[10px] uppercase leading-5 tracking-[0.08em] ${BADGE_CLASS[props.signal.tone]}`}>
+            {props.signal.text}
+          </span>
+        ) : null}
+      </div>
+
+      {/* Bureau : barre fixe, repliable. */}
+      <aside
+        id="espace-navigation"
+        className={`sticky top-0 hidden h-screen shrink-0 flex-col border-r border-dark-gray bg-jet/60 transition-[width] duration-200 motion-reduce:transition-none lg:flex ${
+          collapsed ? "w-16" : "w-[248px]"
+        }`}
+      >
+        <Contenu
+          props={props}
+          collapsed={collapsed}
+          entete={
+            <button
+              type="button"
+              onClick={basculer}
+              aria-expanded={!collapsed}
+              aria-controls="espace-navigation"
+              aria-label={collapsed ? "Déplier le menu (raccourci [)" : "Replier le menu (raccourci [)"}
+              title={collapsed ? "Déplier le menu  [" : "Replier le menu  ["}
+              className={`${coin} ${collapsed ? "" : "ml-auto"}`}
+            >
+              {collapsed ? (
+                <PanelLeftOpen aria-hidden className="h-4 w-4" strokeWidth={1.7} />
+              ) : (
+                <PanelLeftClose aria-hidden className="h-4 w-4" strokeWidth={1.7} />
+              )}
+            </button>
+          }
+        />
+      </aside>
+    </Tooltip.Provider>
+  );
+}

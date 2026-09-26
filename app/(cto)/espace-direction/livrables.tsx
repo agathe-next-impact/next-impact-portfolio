@@ -9,7 +9,7 @@ import type {
   VeillePayload,
 } from "@cto/deliverables";
 import Link from "next/link";
-import { Dot, formatAmount, formatDay, Label, Panel, Stat, Tag, type Tone } from "./ui";
+import { Dot, formatAmount, formatDay, Label, Panel, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 /**
@@ -303,55 +303,6 @@ export function Categorie({
       byDate(a, b, 1),
   );
   return <Cartographie items={tri} now={now} since={since} bare base={base} />;
-}
-
-/** Les quatre chiffres qui répondent à « où en est-on ? » sans défiler. */
-export function Synthese({
-  roadmap,
-  decisions,
-  carto,
-  now,
-}: {
-  roadmap: Deliverable[];
-  decisions: Deliverable[];
-  carto: Deliverable[];
-  now: number;
-}) {
-  const ouverts = roadmap.filter((item) => {
-    const statut = (item.payload as RoadmapPayload).statut;
-    return statut === "Ouvert" || statut === "Décidé";
-  }).length;
-
-  // La prochaine échéance se cherche dans les DEUX bases : un renouvellement de
-  // contrat engage autant qu'un chantier, et le client ne fait pas la différence
-  // entre les deux quand il demande « qu'est-ce qui tombe bientôt ? ».
-  const prochaine = [...roadmap, ...carto]
-    .filter((item) => item.occurredAt && item.occurredAt.getTime() >= now)
-    .sort((a, b) => a.occurredAt!.getTime() - b.occurredAt!.getTime())[0];
-
-  const critiques = carto.filter(
-    (item) => (item.payload as CartographiePayload).criticite === "Critique",
-  ).length;
-
-  return (
-    <section aria-label="Vue d'ensemble" className="mt-10">
-      <Panel className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Chantiers en cours" value={String(ouverts)} />
-        <Stat
-          label="Prochaine échéance"
-          value={prochaine ? formatDay(prochaine.occurredAt) : "—"}
-          hint={prochaine?.title}
-          tone={prochaine ? deadlineTone(prochaine.occurredAt, now) : "neutre"}
-        />
-        <Stat label="Décisions rendues" value={String(decisions.length)} />
-        <Stat
-          label="Points critiques"
-          value={String(critiques)}
-          tone={critiques > 0 ? "alerte" : "neutre"}
-        />
-      </Panel>
-    </section>
-  );
 }
 
 /**

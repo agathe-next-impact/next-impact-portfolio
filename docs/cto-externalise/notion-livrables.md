@@ -129,9 +129,10 @@ second. Sur une fiche déjà rattachée, elle est ignorée.
 **`Services` compose l'espace.** Colonne à choix multiple : Direction
 technique, Suivi technique, Actions en cours, Veille personnalisée,
 Prestations en cours. Recopiée dans `cto_clients.services` (valeurs de code,
-`SERVICE_CODES` dans `map.ts`), elle décide des onglets de l'espace
-(`src/cto/espace/sections.ts`). Le tableau de bord, la veille générale et le
-contact sont toujours visibles. **Vide = affichage historique** : l'espace
+`SERVICE_CODES` dans `map.ts`), elle décide des entrées de la barre latérale
+(`src/cto/espace/sections.ts`, une entrée peut dépendre de plusieurs
+services). L'accueil, « À traiter », la veille générale et le contact sont
+toujours visibles. **Vide = affichage historique** : l'espace
 montre alors toute section qui a du contenu, comme avant les services — c'est
 ce qui permet d'ajouter la colonne sans que les accompagnements existants
 perdent leurs sections. Un service coché mais encore vide s'affiche avec un

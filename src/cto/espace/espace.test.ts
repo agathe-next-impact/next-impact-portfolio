@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Deliverable } from "../deliverables";
 import { buildEvents, dayKey, monthGrid, upcoming } from "./calendar";
-import { hasPersonalisedWatch, visibleSections, type Contents } from "./sections";
+import { hasPersonalisedWatch, LEGACY_SLUGS, SECTIONS, visibleSections, type Contents } from "./sections";
 
 const EMPTY: Contents = {
   decisions: 0,
@@ -16,23 +16,41 @@ const EMPTY: Contents = {
 const keys = (list: { key: string }[]) => list.map((s) => s.key);
 
 describe("sections visibles", () => {
-  it("montre toujours le tableau de bord et la veille, même sans aucun service", () => {
-    expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "veille"]);
+  it("montre toujours l'accueil, « À traiter » et la veille, même sans aucun service", () => {
+    expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "a-traiter", "veille"]);
   });
 
-  it("ouvre les sections cochées, même vides (état « en préparation »)", () => {
+  it("ouvre les entrées d'un service coché, même vides (état « en préparation »)", () => {
     expect(keys(visibleSections(["suivi-technique", "prestations"], EMPTY))).toEqual([
       "tableau",
-      "suivi-technique",
-      "veille",
+      "missions",
       "prestations",
+      "site",
+      "rapports",
+      "a-traiter",
+      "veille",
     ]);
   });
 
-  it("ferme une section non cochée même si elle a du contenu", () => {
+  it("range la direction technique dans Missions, Votre site, Agir et Veille", () => {
+    expect(keys(visibleSections(["direction-technique"], EMPTY))).toEqual([
+      "tableau",
+      "missions",
+      "decisions",
+      "cartographie",
+      "a-traiter",
+      "a-arbitrer",
+      "veille",
+      "documents",
+    ]);
+  });
+
+  it("ferme une entrée non cochée même si elle a du contenu", () => {
     expect(keys(visibleSections(["actions"], { ...EMPTY, decisions: 4 }))).toEqual([
       "tableau",
-      "actions",
+      "missions",
+      "a-traiter",
+      "a-arbitrer",
       "veille",
     ]);
   });
@@ -40,20 +58,20 @@ describe("sections visibles", () => {
   it("garde l'affichage historique quand la colonne n'a jamais été renseignée", () => {
     expect(keys(visibleSections(null, { ...EMPTY, decisions: 2, roadmap: 3 }))).toEqual([
       "tableau",
-      "direction-technique",
-      "actions",
+      "missions",
+      "decisions",
+      "a-traiter",
+      "a-arbitrer",
       "veille",
     ]);
   });
 
-  it("ouvre la section Audit juste après l'accueil, seule pour un client audit seul", () => {
-    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "audit", "veille"]);
-    expect(keys(visibleSections(null, { ...EMPTY, audits: 1, roadmap: 2 }))).toEqual([
-      "tableau",
-      "audit",
-      "actions",
-      "veille",
-    ]);
+  it("ouvre l'audit dans Missions pour un client audit seul", () => {
+    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "a-traiter", "veille"]);
+  });
+
+  it("donne une section existante à chaque ancienne adresse", () => {
+    for (const key of Object.values(LEGACY_SLUGS)) expect(SECTIONS.some((s) => s.key === key)).toBe(true);
   });
 
   it("considère la veille personnalisée souscrite en régime historique", () => {
