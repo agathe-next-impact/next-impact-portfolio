@@ -64,6 +64,7 @@ import {
   type EspaceContext,
 } from "./shell";
 import { SyntheseAudit } from "./synthese-audit";
+import { PartieAccordeons, partieEnAccordeons } from "./partie-accordeons";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
 import { BackLink, buttonClass, Dot, formatDay, Label, Notice, Panel, SectionNav, Tag } from "./ui";
 import type { Viewer } from "./viewer";
@@ -657,7 +658,11 @@ export async function VueLectureAudit({
             {partie.titre}
           </h2>
           {partie.corps.length > 0 ? (
-            <CorpsLettre body={partie.corps} large base={viewer.base} />
+            partieEnAccordeons(partie.titre) ? (
+              <PartieAccordeons corps={partie.corps} base={viewer.base} />
+            ) : (
+              <CorpsLettre body={partie.corps} large base={viewer.base} />
+            )
           ) : (
             <p className="mt-4 font-inter-tight text-sm text-mid-gray">Partie vide.</p>
           )}
