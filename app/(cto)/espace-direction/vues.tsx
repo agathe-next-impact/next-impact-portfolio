@@ -21,6 +21,7 @@ import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
 import { CarteContrats } from "./contrats";
+import { CarteProchaineEtape } from "./prochaine-etape";
 import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
 import { Chapitre, LectureLongue } from "./lecture";
@@ -174,7 +175,7 @@ function NouveauPourVous({ viewer, context }: { viewer: Viewer; context: EspaceC
  * une ligne chacune. Remplace le grand bloc de la dernière lettre : sur
  * l'accueil, le titre suffit à décider de la lire.
  */
-function CarteVeille({ viewer, lettres }: { viewer: Viewer; lettres: LetterSummary[] }) {
+export function CarteVeille({ viewer, lettres, libelle = "Toute la veille" }: { viewer: Viewer; lettres: LetterSummary[]; libelle?: string }) {
   const [derniere] = lettres;
   const verdict = derniere
     ? { headline: `Dernière lettre ${dateLettre(derniere)}`, tone: "neutre" as const }
@@ -184,7 +185,7 @@ function CarteVeille({ viewer, lettres }: { viewer: Viewer; lettres: LetterSumma
     <CarteReponse
       question="Qu'est-ce qui change autour de vous ?"
       verdict={verdict}
-      pied={{ href: sectionHref(sectionByKey("veille"), viewer.base), label: "Toute la veille" }}
+      pied={{ href: sectionHref(sectionByKey("veille"), viewer.base), label: libelle }}
     >
       {lettres.length === 0 ? (
         <LigneVide>Vos lettres de veille arriveront ici dès la première parution.</LigneVide>
@@ -204,7 +205,7 @@ function CarteVeille({ viewer, lettres }: { viewer: Viewer; lettres: LetterSumma
 }
 
 /** « Où en sont les missions ? » : ce qui court d'abord, puis ce qui vient, puis ce qui est fait. */
-function CarteMissions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+export function CarteMissions({ viewer, context, libelle = "Tout le pilotage" }: { viewer: Viewer; context: EspaceContext; libelle?: string }) {
   const lignes = [
     ...byPhase(context.missions, "en-cours"),
     ...byPhase(context.missions, "a-venir"),
@@ -216,7 +217,7 @@ function CarteMissions({ viewer, context }: { viewer: Viewer; context: EspaceCon
     <CarteReponse
       question="Où en sont les chantiers ?"
       verdict={missionsVerdict(context.missions)}
-      pied={lien ? { href: lien, label: "Tout le pilotage" } : null}
+      pied={lien ? { href: lien, label: libelle } : null}
     >
       {lignes.length === 0 ? (
         <LigneVide>Les chantiers et décisions apparaîtront ici dès leur première publication.</LigneVide>
@@ -237,7 +238,7 @@ function CarteMissions({ viewer, context }: { viewer: Viewer; context: EspaceCon
 }
 
 /** « Comment va le site ? » : les points à corriger d'abord, puis les trois repères qui rassurent. */
-function CarteSite({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+export function CarteSite({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const snapshot = context.site?.snapshot ?? null;
   const lien = href(viewer, context, "site");
 
@@ -296,7 +297,7 @@ function CarteSite({ viewer, context }: { viewer: Viewer; context: EspaceContext
 }
 
 /** « Que pouvez-vous faire ? » : l'urgent d'abord, puis ce qui attend votre arbitrage. */
-function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+export function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   // Sans les propositions : elles ont leur bloc à part, Contrats (`CarteContrats`).
   const { aTraiter, aArbitrer } = context.actions;
   const agir = href(viewer, context, "agir");
@@ -373,6 +374,8 @@ export async function VueTableau({
       </section>
 
       <CarteContrats viewer={viewer} context={context} />
+
+      <CarteProchaineEtape viewer={viewer} context={context} />
     </Espace>
   );
 }

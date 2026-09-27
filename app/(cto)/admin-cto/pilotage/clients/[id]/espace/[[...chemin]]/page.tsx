@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { LEGACY_SLUGS, sectionByKey } from "@cto/espace";
+import { groupFromSlug, LEGACY_SLUGS, sectionByKey, SYNTHESE_SEGMENT } from "@cto/espace";
+import { groupeAvecSynthese, VueGroupe } from "../../../../../../espace-direction/groupes";
 import { categoriePath, kindFromSlug } from "../../../../../../espace-direction/livrables";
+import { VueAccompagnement } from "../../../../../../espace-direction/accompagnement";
 import { VuePrestations } from "../../../../../../espace-direction/prestations";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
@@ -90,11 +92,20 @@ export default async function EspaceAdminPage({
         return <VueLettres viewer={viewer} context={context} />;
       case "prestations":
         return <VuePrestations viewer={viewer} context={context} />;
+      case "accompagnement":
+        return <VueAccompagnement viewer={viewer} context={context} />;
     }
     // Anciennes adresses : la supervision suit la même carte que le client.
     const nouvelle = LEGACY_SLUGS[tete];
     if (nouvelle) redirect(`${viewer.base}/${sectionByKey(nouvelle).slug}`);
     notFound();
+  }
+
+  if (tete === SYNTHESE_SEGMENT && chemin.length === 2) {
+    const group = groupFromSlug(suite);
+    const groupe = group ? groupeAvecSynthese(context, group) : null;
+    if (!groupe) notFound();
+    return <VueGroupe viewer={viewer} context={context} groupe={groupe} />;
   }
 
   if (tete === "audit" && chemin.length === 2) {

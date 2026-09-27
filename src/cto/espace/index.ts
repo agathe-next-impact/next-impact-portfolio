@@ -43,12 +43,20 @@ export {
 } from "./pilotage";
 export {
   GROUP_LABELS,
+  GROUP_QUESTIONS,
+  GROUP_SLUGS,
+  groupFromSlug,
+  SYNTHESE_SEGMENT,
+  visibleGroups,
+  type VisibleGroup,
   hasPersonalisedWatch,
   LEGACY_SLUGS,
   arbitrageOuvert,
   sectionByKey,
   SECTIONS,
   visibleSections,
+  sectionsEnSommeil,
+  SOMMEIL_JOURS,
   type Contents,
   type Section,
   type SectionGroup,
@@ -94,3 +102,12 @@ export {
   type Statut,
   type StatutScenario,
 } from "./lecture-audit";
+export {
+  ANNONCE_FIN_SUIVI_JOURS,
+  MASQUAGE_JOURS,
+  prochaineEtape,
+  SEUIL_ARBITRAGES,
+  type FaitsEspace,
+  type Suggestion,
+} from "./suggestions";
+export { masquerSuggestion, suggestionsMasquees } from "./suggestions-store";

@@ -35,7 +35,7 @@ export {
   type RegistrationOutcome as AdminRegistrationOutcome,
 } from "./passkeys";
 
-export { sendAdminEnrollmentNotice, sendAdminLoginLink } from "./notify";
+export { sendAdminEnrollmentNotice, sendAdminLoginLink, sendSyncAlert } from "./notify";
 
 export {
   clientDetail,
@@ -50,4 +50,7 @@ export {
 // Les écritures de ce module — voir son en-tête pour la raison des exceptions.
 export { sendAccessLink, setSyncEnabled, type AccessLinkOutcome } from "./actions";
 
-export { summarizeNotify, summarizeSync, type ReportSummary } from "./rapport";
+export { newAlerts, summarizeNotify, summarizeSync, type ReportSummary } from "./rapport";
+
+// Le journal des balayages : ce que le Cron de 4 h a remonté, relu au matin.
+export { lastSyncRun, recordSyncRun, type SyncRun, type SyncRunSource } from "./runs";

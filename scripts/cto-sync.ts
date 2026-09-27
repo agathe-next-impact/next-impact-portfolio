@@ -20,6 +20,7 @@
 // `process.env` dès leur premier appel. Voir `scripts/load-env.ts`.
 import "./load-env";
 
+import { recordSyncRun } from "../src/cto/admin/runs";
 import { configurationIssue, syncFromNotion, type SyncReport } from "../src/cto/notion";
 
 function pad(value: number): string {
@@ -66,12 +67,18 @@ function printReport(report: SyncReport): void {
     );
   }
 
-  if (report.warnings.length > 0) {
-    console.log(`\n${report.warnings.length} point(s) à regarder :`);
-    for (const warning of report.warnings) console.log(`  · ${warning}`);
-  } else {
-    console.log("\nRien à signaler.");
+  // Ce qui touche un accès ou un rattachement d'abord : c'est ce qui demande
+  // un geste dans l'atelier. Le reste suit, sans le redire.
+  const autres = report.warnings.filter((warning) => !report.alerts.includes(warning));
+  if (report.alerts.length > 0) {
+    console.log(`\n${report.alerts.length} point(s) À TRAITER (accès ou rattachement) :`);
+    for (const alerte of report.alerts) console.log(`  ! ${alerte}`);
   }
+  if (autres.length > 0) {
+    console.log(`\n${autres.length} point(s) à regarder :`);
+    for (const warning of autres) console.log(`  · ${warning}`);
+  }
+  if (report.warnings.length === 0) console.log("\nRien à signaler.");
 }
 
 async function main() {
@@ -88,11 +95,19 @@ async function main() {
     process.exit(1);
   }
 
-  const report = await syncFromNotion({
-    force: args.includes("--forcer"),
-    dryRun: args.includes("--a-blanc"),
-  });
-  printReport(report);
+  const dryRun = args.includes("--a-blanc");
+  try {
+    const report = await syncFromNotion({ force: args.includes("--forcer"), dryRun });
+    printReport(report);
+    // Au journal, sans e-mail : le rapport vient de s'imprimer sous les yeux
+    // de qui a lancé la commande. À blanc, rien ne s'inscrit.
+    await recordSyncRun({ source: "commande", report });
+  } catch (error) {
+    if (!dryRun) {
+      await recordSyncRun({ source: "commande", error: error instanceof Error ? error.message : "échec" });
+    }
+    throw error;
+  }
 }
 
 main()

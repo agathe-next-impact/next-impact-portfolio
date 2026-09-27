@@ -3,7 +3,7 @@ import type { NotionPage } from "./api";
 import { mapPage, PROPS, UNTITLED } from "./map";
 import { clientPageIds, personEmail, personName, personRevoked, personRole, spaceId } from "./map";
 import { clientInPreparation, clientStatus } from "./map";
-import { paymentOf, sortPayments } from "./map";
+import { paymentOf, servicesOuverts, sortPayments } from "./map";
 import * as p from "./properties";
 import type { CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
 
@@ -271,5 +271,17 @@ describe("échéancier des prestations", () => {
       "Solde",
     ]);
     expect(sortPayments([situation, solde, acompte])).toEqual(sortPayments([acompte, solde, situation]));
+  });
+});
+
+describe("dates d'ouverture des services", () => {
+  const maintenant = new Date("2026-09-27T08:00:00Z");
+
+  it("garde la date d'un service déjà vu, date un nouveau, oublie un décoché", () => {
+    const avant = { actions: "2026-06-01T00:00:00.000Z", "veille-technique": "2026-07-01T00:00:00.000Z" };
+    expect(servicesOuverts(["actions", "prestations"], avant, maintenant)).toEqual({
+      actions: "2026-06-01T00:00:00.000Z",
+      prestations: "2026-09-27T08:00:00.000Z",
+    });
   });
 });

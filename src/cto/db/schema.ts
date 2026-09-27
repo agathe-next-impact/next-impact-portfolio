@@ -90,6 +90,10 @@ export const ctoAccessEventEnum = pgEnum("cto_access_event", [
   "session_fermee",
   "session_revoquee",
   "acces_refuse",
+  // Les suggestions de l'accueil (« Prochaine étape ») : ce que le client en
+  // fait. Pas les affichages — une ligne par page vue noierait le journal.
+  "suggestion_cliquee",
+  "suggestion_masquee",
 ]);
 
 // ─── Clients et personnes ─────────────────────────────────────────────────
@@ -202,6 +206,28 @@ export const ctoClients = pgTable(
      * rappelle pas Sentinelle à chaque balayage.
      */
     sentinelleSyncDigest: text("sentinelle_sync_digest"),
+    /**
+     * Début du contrat (colonne « Début du contrat » de la fiche) : d'où se
+     * calcule la fin de l'engagement initial affichée dans « Votre
+     * accompagnement ».
+     */
+    contractStart: timestamp("contract_start"),
+    /** Formule du suivi et maintenance : « Essentiel » ou « Actif » (colonne « Formule suivi »). */
+    suiviFormule: text("suivi_formule"),
+    /**
+     * Fin des mois de suivi inclus dans un forfait (colonne « Fin du suivi
+     * inclus ») : la suggestion « continuer le suivi » part trente jours avant.
+     */
+    suiviInclusJusquau: timestamp("suivi_inclus_jusquau"),
+    /** Case « Sans suggestions » de la fiche : coupe la carte « Prochaine étape » pour ce client. */
+    suggestionsCoupees: boolean("suggestions_coupees").notNull().default(false),
+    /**
+     * Date à laquelle chaque service a été vu coché pour la première fois
+     * (code → ISO). Sert au retrait des sections vides : la semaine de grâce
+     * se compte depuis l'ouverture de la section, pas depuis aujourd'hui.
+     * Écrit par la synchro ; un service décoché perd sa date.
+     */
+    servicesOuverts: jsonb("services_ouverts").$type<Record<string, string>>().notNull().default({}),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [uniqueIndex("cto_client_notion_page").on(t.notionPageId)],
@@ -244,6 +270,12 @@ export const ctoPersons = pgTable(
      * ⚠️ Corollaire assumé : décocher la case dans Notion restaure l'accès.
      */
     revokedAt: timestamp("revoked_at"),
+    /**
+     * Les suggestions que cette personne a masquées (« Pas maintenant ») :
+     * identifiant de suggestion → ISO. Par personne et non par accompagnement :
+     * le dirigeant qui écarte une suggestion ne l'écarte pas pour son DSI.
+     */
+    suggestionsMasquees: jsonb("suggestions_masquees").$type<Record<string, string>>().notNull().default({}),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [
@@ -855,4 +887,43 @@ export const ctoDigests = pgTable(
     uniqueIndex("cto_digest_client_week").on(t.clientId, t.week),
     index("cto_digest_status").on(t.status, t.week),
   ],
+);
+
+// ─── Journal des balayages ────────────────────────────────────────────────
+
+/**
+ * Un balayage de l'atelier Notion, et ce qu'il a remonté.
+ *
+ * Le rapport du Cron de 4 h partait dans la réponse HTTP, donc nulle part : un
+ * accès révoqué ou une ligne sans client ne se voyait qu'en relançant la
+ * synchro à la main. Chaque balayage RÉEL laisse ici son rapport, relu dans
+ * `/admin-cto/pilotage` ; un balayage à blanc n'écrit rien, journal compris.
+ *
+ * `alerts` est le sous-ensemble de `warnings` qui touche un accès ou un
+ * rattachement (`src/cto/notion/findings.ts`). C'est la comparaison avec les
+ * alertes du balayage précédent qui décide d'un e-mail : un point déjà connu
+ * la veille ne réécrit pas chaque nuit.
+ *
+ * `source` en texte et non en enum : `cron`, `admin`, `commande`. Une
+ * quatrième porte ne doit pas coûter une migration.
+ *
+ * Purgé au-delà de 90 jours, à chaque écriture (`src/cto/admin/runs.ts`).
+ */
+export const ctoSyncRuns = pgTable(
+  "cto_sync_runs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    at: timestamp("at").notNull().defaultNow(),
+    source: text("source").notNull(),
+    /** Faux si le balayage a levé : `error` dit pourquoi, le reste est vide. */
+    ok: boolean("ok").notNull(),
+    /** Le résumé, en phrases (`summarizeSync`). */
+    lines: jsonb("lines").$type<string[]>().notNull(),
+    warnings: jsonb("warnings").$type<string[]>().notNull(),
+    alerts: jsonb("alerts").$type<string[]>().notNull(),
+    error: text("error"),
+    /** Date de l'e-mail d'alerte parti pour ce balayage, s'il y en a eu un. */
+    alertedAt: timestamp("alerted_at"),
+  },
+  (t) => [index("cto_sync_run_at").on(t.at)],
 );

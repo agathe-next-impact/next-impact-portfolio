@@ -10,8 +10,10 @@ import {
 import { queryDatabase, publishedFilter, type NotionPage } from "./api";
 import { firstParagraph, pageBody } from "./blocks";
 import { editionsDatabaseId, lettersDatabaseId } from "./config";
+import { alert, emptyFindings, type Findings } from "./findings";
 import { PROPS } from "./map";
 import * as p from "./properties";
+import { checkColumns, column, COLUMNS, schemaWarning, type Column } from "./schema";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La synchro des lettres de veille.
@@ -36,6 +38,17 @@ export const LETTER_PROPS = {
   chapo: "Chapô",
   published: "Publié",
 } as const;
+
+/** Les colonnes lues dans la base Lettres, et leur type (`schema.ts`). */
+export const LETTER_COLUMNS: Column[] = [
+  column(LETTER_PROPS.title, "title"),
+  column(LETTER_PROPS.period, "date"),
+  column(LETTER_PROPS.scope, "select"),
+  column(LETTER_PROPS.pack, "select"),
+  column(LETTER_PROPS.organisation, "relation"),
+  column(LETTER_PROPS.chapo, "rich_text"),
+  column(LETTER_PROPS.published, "checkbox"),
+];
 
 export interface LettersReport {
   /** Lettres publiées et dans la fenêtre de six mois. */
@@ -85,8 +98,9 @@ export async function syncLetters(
   options: { dryRun: boolean },
   /** Ligne du pipeline « Veilles clients » → accompagnement (relation « Veille — organisation »). */
   clientByVeilleOrganisation: Map<string, string> = new Map(),
-): Promise<{ report: LettersReport; warnings: string[] }> {
-  const warnings: string[] = [];
+): Promise<{ report: LettersReport } & Findings> {
+  const findings = emptyFindings();
+  const { warnings } = findings;
   const report: LettersReport = {
     published: 0,
     created: 0,
@@ -96,10 +110,16 @@ export async function syncLetters(
     editions: null,
   };
 
-  const pages = await queryDatabase(
-    lettersDatabaseId(),
-    publishedFilter(LETTER_PROPS.published),
-  );
+  // « Portée » ou « Période » renommée : chaque lettre serait écartée, puis
+  // retirée de l'espace. Schéma douteux, les lettres restent où elles sont.
+  const databaseId = lettersDatabaseId();
+  const broken = schemaWarning("Lettres", await checkColumns(databaseId, LETTER_COLUMNS));
+  if (broken) {
+    alert(findings, broken);
+    return { report, ...findings };
+  }
+
+  const pages = await queryDatabase(databaseId, publishedFilter(LETTER_PROPS.published));
   const etats = new Map((await currentLetters()).map((l) => [l.notionPageId, l]));
   const debut = windowStart();
   const retenues = new Set<string>();
@@ -126,11 +146,13 @@ export async function syncLetters(
       const cibles = p.relation(page, LETTER_PROPS.organisation);
       clientId = cibles.length === 1 ? (clientByOrganisation.get(cibles[0]) ?? null) : null;
       if (!clientId) {
-        warnings.push(
-          cibles.length === 0
-            ? `Lettre personnalisée « ${titre} » sans organisation : elle n'apparaît nulle part.`
-            : `Lettre personnalisée « ${titre} » : son organisation n'a pas d'accompagnement rattaché, elle attend.`,
-        );
+        if (cibles.length === 0) {
+          alert(findings, `Lettre personnalisée « ${titre} » sans organisation : elle n'apparaît nulle part.`);
+        } else {
+          warnings.push(
+            `Lettre personnalisée « ${titre} » : son organisation n'a pas d'accompagnement rattaché, elle attend.`,
+          );
+        }
         continue;
       }
     }
@@ -179,6 +201,7 @@ export async function syncLetters(
     options,
   );
   warnings.push(...editions.warnings);
+  findings.alerts.push(...editions.alerts);
 
   // Retrait : dépubliée dans l'atelier, ou sortie de la fenêtre de six mois. Les
   // deux se traitent pareil — la lettre quitte l'espace, la ligne reste.
@@ -197,7 +220,7 @@ export async function syncLetters(
     report.withdrawn += 1;
   }
 
-  return { report, warnings };
+  return { report, ...findings };
 }
 
 type Etat = { digest: string; withdrawn: boolean; scope: LetterScope; source: string };
@@ -242,10 +265,11 @@ async function syncEditions(
   debut: Date,
   report: LettersReport,
   options: { dryRun: boolean },
-): Promise<{ warnings: string[]; failed: boolean }> {
+): Promise<{ warnings: string[]; alerts: string[]; failed: boolean }> {
   const warnings: string[] = [];
+  const alerts: string[] = [];
   const databaseId = editionsDatabaseId();
-  if (!databaseId) return { warnings, failed: false };
+  if (!databaseId) return { warnings, alerts, failed: false };
 
   // On lit la base même si aucune fiche ne semble reliée au pipeline : quand
   // « Veilles clients » n'est pas partagée, les relations se lisent VIDES et
@@ -253,6 +277,14 @@ async function syncEditions(
   // une page non partagée pour « aucune édition ».
   let pages: NotionPage[];
   try {
+    // Schéma bougé : même traitement qu'une base illisible, aucune lettre
+    // personnalisée n'est retirée ce tour-ci.
+    const broken = schemaWarning("Éditions de veille", await checkColumns(databaseId, COLUMNS.editions));
+    if (broken) {
+      warnings.push(broken);
+      alerts.push(broken);
+      return { warnings, alerts, failed: true };
+    }
     pages = await queryDatabase(databaseId, {
       property: PROPS.editions.status,
       select: { equals: "Envoyé" },
@@ -263,7 +295,7 @@ async function syncEditions(
         "La page « Veilles clients » est-elle partagée avec l'intégration ? " +
         "Aucune lettre personnalisée retirée ce tour-ci.",
     );
-    return { warnings, failed: true };
+    return { warnings, alerts, failed: true };
   }
 
   let count = 0;
@@ -308,5 +340,5 @@ async function syncEditions(
   }
 
   report.editions = count;
-  return { warnings, failed: false };
+  return { warnings, alerts, failed: false };
 }

@@ -16,7 +16,7 @@ import {
   type PrestationPayload,
 } from "../deliverables";
 import { FileTooLargeError, importFile } from "../files";
-import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
+import { fetchPage, NotionError, queryDatabase, publishedFilter, type NotionPage } from "./api";
 import {
   clientsDatabaseId,
   databaseIdFor,
@@ -27,6 +27,8 @@ import {
   SYNCED_KINDS,
 } from "./config";
 import { importAnnex, readAuditTree } from "./audit";
+import { alert, emptyFindings, merge, type Findings } from "./findings";
+import { checkColumns, COLUMNS, schemaWarning } from "./schema";
 import { syncLetters, type LettersReport } from "./letters";
 import { provisionSentinelle, type ProvisionReport, type WatchWish } from "../sentinelle/provision";
 import { syncPersons, type PersonsReport } from "./persons";
@@ -43,6 +45,8 @@ import {
   clientSentinelleId,
   clientWatch,
   clientWpUmbrellaProjectId,
+  clientCommercial,
+  servicesOuverts,
   companyName,
   documentFiles,
   mapPage,
@@ -69,8 +73,8 @@ import * as prop from "./properties";
 // relit un contenu ne doit prévenir personne. Voir `src/cto/notify/store.ts`
 // pour comment elle retrouve, après coup, ce qui a été publié.
 //
-// Trois précautions gouvernent ce fichier, toutes contre le même risque — faire
-// disparaître un livrable par accident :
+// Quatre précautions gouvernent ce fichier, toutes contre le même risque — faire
+// disparaître ou abîmer un livrable par accident :
 //
 //  1. **Une base se traite d'un bloc.** La liste des pages publiées doit être
 //     COMPLÈTE avant de conclure qu'un livrable a disparu. Une pagination
@@ -80,6 +84,13 @@ import * as prop from "./properties";
 //     une colonne renommée qu'une dépublication générale.
 //  3. **Un livrable orphelin est signalé, jamais deviné.** Une page sans client
 //     résoluble n'est publiée nulle part, et son cas remonte dans le rapport.
+//  4. **Une base dont le schéma a bougé n'est pas lue.** Colonne renommée ou
+//     changée de type : la base n'est ni écrite ni retirée ce tour-ci
+//     (`schema.ts`). Pour la base Clients, dont tout dépend, le balayage
+//     s'arrête avant d'avoir rien écrit.
+//
+// Ce qui touche un accès ou un rattachement remonte en ALERTE, en plus de
+// figurer au rapport (`findings.ts`).
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -114,9 +125,11 @@ export interface SyncReport {
   veilleTechnique?: ProvisionReport;
   kinds: KindReport[];
   warnings: string[];
+  /** Parmi `warnings`, ce qui touche un accès ou un rattachement (`findings.ts`). */
+  alerts: string[];
 }
 
-interface ClientResolution {
+interface ClientResolution extends Findings {
   byNotionPage: Map<string, string>;
   /**
    * Fiche organisation → accompagnement. C'est par là que passent les lettres
@@ -132,7 +145,6 @@ interface ClientResolution {
   disabledClientIds: Set<string>;
   /** Ce que chaque fiche demande à la veille technique (Sentinelle). */
   watchWishes: WatchWish[];
-  warnings: string[];
 }
 
 /**
@@ -148,13 +160,27 @@ interface ClientResolution {
  * création n'a plus besoin de `cto:invite`.
  */
 async function resolveClients(dryRun: boolean, force = false): Promise<ClientResolution> {
-  const warnings: string[] = [];
+  const findings = emptyFindings();
+  const { warnings } = findings;
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
   const byVeilleOrganisation = new Map<string, string>();
   const watchWishes: WatchWish[] = [];
   /** Veille personnalisée cochée, mais aucune ligne de veille lisible (un seul avertissement pour tous). */
   const sansVeille: string[] = [];
+  /** Raison sociale par accompagnement, pour nommer les deux fiches d'un doublon. */
+  const nomParClient = new Map<string, string>();
+
+  // La base Clients est la charnière : « Services » renommée viderait la
+  // navigation de tous les espaces, « Veille — organisation » ferait retirer
+  // leurs lettres. Schéma douteux, on s'arrête AVANT d'avoir rien écrit.
+  const issues = await checkColumns(clientsDatabaseId(), COLUMNS.clients);
+  if (issues.length > 0) {
+    throw new NotionError(
+      `Clients : ${issues.join(" ; ")}. Balayage arrêté, rien n'a été écrit — ` +
+        "rétablir la colonne dans Notion, ou aligner `map.ts` si le changement est voulu.",
+    );
+  }
 
   const rows = await db()
     .select({
@@ -175,7 +201,14 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     legacyById.set(row.id, { notionPageId: row.notionPageId });
   }
 
-  const pagesClients = await queryDatabase(clientsDatabaseId());
+  // Dans l'ordre de création : quand deux fiches se disputent une organisation
+  // ou une ligne de veille, c'est la plus ancienne qui la garde — une fiche
+  // dupliquée par mégarde ne prend rien à son original. Les fiches closes
+  // passent après toutes les autres (tri stable) : un client revenu sous une
+  // nouvelle fiche reprend son organisation à l'ancienne.
+  const pagesClients = (
+    await queryDatabase(clientsDatabaseId(), undefined, [{ timestamp: "created_time", direction: "ascending" }])
+  ).sort((a, b) => Number(clientStatus(a) === "clos") - Number(clientStatus(b) === "clos"));
   const fichesLues = pagesClients.length;
   for (const page of pagesClients) {
     const name = companyName(page) ?? "(fiche sans raison sociale)";
@@ -230,12 +263,13 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     }
 
     byNotionPage.set(page.id, id);
+    nomParClient.set(id, name);
     if (disabledClientIds.has(id)) {
       warnings.push(`« ${name} » : synchro suspendue depuis l'admin — ses lignes ne bougent pas ce balayage.`);
     }
 
     await alignerFiche(page, id, name, warnings, dryRun);
-    await adopterFicheOrganisation(page, id, name, warnings, dryRun, byOrganisation);
+    await adopterFicheOrganisation(page, id, name, findings, dryRun, byOrganisation, nomParClient);
 
     const watch = clientWatch(page);
     watchWishes.push({
@@ -257,7 +291,8 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     for (const veille of veilles) {
       const deja = byVeilleOrganisation.get(veille);
       if (deja && deja !== id) {
-        warnings.push(
+        alert(
+          findings,
           `« ${name} » désigne une ligne de veille déjà reliée à un autre accompagnement : ignorée pour lui.`,
         );
         continue;
@@ -283,13 +318,15 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
   const fiches = new Set(pagesClients.map((fiche) => fiche.id));
   const orphelins = rows.filter((row) => row.notionPageId && !fiches.has(row.notionPageId) && row.status !== "clos");
   if (orphelins.length > 0 && fichesLues === 0 && orphelins.length > MASS_WITHDRAWAL_THRESHOLD && !force) {
-    warnings.push(
+    alert(
+      findings,
       `Clients : la base ne rend aucune fiche alors que ${orphelins.length} accompagnements sont ouverts. ` +
         "Aucune fermeture — vérifier le partage de la base, puis relancer avec --forcer si c'est voulu.",
     );
   } else {
     for (const row of orphelins) {
-      warnings.push(
+      alert(
+        findings,
         dryRun
           ? `« ${row.company} » : fiche disparue de la base Clients — serait clos, accès fermé.`
           : `« ${row.company} » : fiche disparue de la base Clients — accompagnement clos, accès fermé.`,
@@ -302,7 +339,7 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     }
   }
 
-  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, watchWishes, warnings };
+  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, watchWishes, ...findings };
 }
 
 /** Deux listes de services identiques, à l'ordre près (elles arrivent triées). */
@@ -356,6 +393,11 @@ async function alignerFiche(
       wpUmbrellaProjectId: ctoClients.wpUmbrellaProjectId,
       services: ctoClients.services,
       sentinelleClientId: ctoClients.sentinelleClientId,
+      contractStart: ctoClients.contractStart,
+      suiviFormule: ctoClients.suiviFormule,
+      suiviInclusJusquau: ctoClients.suiviInclusJusquau,
+      suggestionsCoupees: ctoClients.suggestionsCoupees,
+      servicesOuverts: ctoClients.servicesOuverts,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -369,7 +411,27 @@ async function alignerFiche(
     services?: string[] | null;
     sentinelleClientId?: string | null;
     statusChangedAt?: Date;
+    contractStart?: Date | null;
+    suiviFormule?: string | null;
+    suiviInclusJusquau?: Date | null;
+    suggestionsCoupees?: boolean;
+    servicesOuverts?: Record<string, string>;
   } = {};
+
+  // Ce que « Votre accompagnement » et « Prochaine étape » lisent. Une colonne
+  // vidée dans Notion vide la valeur : ces champs n'ont pas d'autre pilote.
+  const commercial = clientCommercial(page);
+  const memeJour = (a: Date | null, b: Date | null) => (a?.getTime() ?? null) === (b?.getTime() ?? null);
+  if (!memeJour(commercial.contractStart, actuel.contractStart)) patch.contractStart = commercial.contractStart;
+  if (commercial.suiviFormule !== actuel.suiviFormule) patch.suiviFormule = commercial.suiviFormule;
+  if (!memeJour(commercial.suiviInclusJusquau, actuel.suiviInclusJusquau)) {
+    patch.suiviInclusJusquau = commercial.suiviInclusJusquau;
+  }
+  if (commercial.suggestionsCoupees !== actuel.suggestionsCoupees) {
+    patch.suggestionsCoupees = commercial.suggestionsCoupees;
+  }
+  const ouverts = servicesOuverts(services.codes, actuel.servicesOuverts, new Date());
+  if (JSON.stringify(ouverts) !== JSON.stringify(actuel.servicesOuverts)) patch.servicesOuverts = ouverts;
   if (status && status !== actuel.status) patch.status = status;
   if (tier && tier !== actuel.tier) patch.tier = tier;
   if (wpUmbrellaProjectId && wpUmbrellaProjectId !== actuel.wpUmbrellaProjectId) {
@@ -396,8 +458,14 @@ async function alignerFiche(
       "sentinelleClientId" in patch
         ? `veille technique → ${patch.sentinelleClientId ?? "déliée"}`
         : null,
+      "contractStart" in patch ? "début du contrat" : null,
+      "suiviFormule" in patch ? `formule suivi → ${patch.suiviFormule ?? "aucune"}` : null,
+      "suiviInclusJusquau" in patch ? "fin du suivi inclus" : null,
+      "suggestionsCoupees" in patch ? `suggestions → ${patch.suggestionsCoupees ? "coupées" : "actives"}` : null,
     ].filter(Boolean);
-    warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);
+    // Les dates d'ouverture des services suivent la colonne Services, déjà
+    // annoncée : les taire évite une ligne de bruit par balayage.
+    if (changements.length > 0) warnings.push(`« ${name} » serait mise à jour : ${changements.join(", ")}.`);
     return;
   }
 
@@ -416,15 +484,22 @@ async function alignerFiche(
  * Écriture conditionnelle : on ne touche `cto_clients` que si quelque chose a
  * bougé. Une écriture par balayage et par client ne coûterait pas cher, mais
  * elle rendrait `updated_at` illisible le jour où on en aura un.
+ *
+ * Une organisation ne se relie qu'à UN accompagnement : ses lettres
+ * personnalisées n'ont qu'un espace où paraître. Deux fiches qui la désignent
+ * — le plus souvent une fiche dupliquée — et la seconde est ignorée pour elle,
+ * au lieu de détourner sans bruit les lettres de la première.
  */
 async function adopterFicheOrganisation(
   fiche: NotionPage,
   clientId: string,
   nomAffiche: string,
-  warnings: string[],
+  findings: Findings,
   dryRun: boolean,
   byOrganisation: Map<string, string>,
+  nomParClient: Map<string, string>,
 ): Promise<void> {
+  const { warnings } = findings;
   const liens = prop.relation(fiche, PROPS.clients.organisation);
 
   if (liens.length === 0) {
@@ -438,8 +513,19 @@ async function adopterFicheOrganisation(
     return;
   }
   if (liens.length > 1) {
-    warnings.push(
+    alert(
+      findings,
       `« ${nomAffiche} » est rattachée à ${liens.length} fiches organisation : à trancher, aucune n'est retenue.`,
+    );
+    return;
+  }
+
+  const deja = byOrganisation.get(liens[0]);
+  if (deja && deja !== clientId) {
+    alert(
+      findings,
+      `« ${nomAffiche} » désigne la fiche organisation de « ${nomParClient.get(deja) ?? deja} » : ignorée pour elle. ` +
+        "Fiche dupliquée ? Une organisation ne se relie qu'à un accompagnement.",
     );
     return;
   }
@@ -482,9 +568,8 @@ async function adopterFicheOrganisation(
     .where(eq(ctoClients.id, clientId));
 }
 
-interface Resolved {
+interface Resolved extends Findings {
   inputs: DeliverableInput[];
-  warnings: string[];
 }
 
 function resolvePages(
@@ -493,7 +578,8 @@ function resolvePages(
   byNotionPage: Map<string, string>,
   disabledClientIds: Set<string>,
 ): Resolved {
-  const warnings: string[] = [];
+  const findings = emptyFindings();
+  const { warnings } = findings;
   const inputs: DeliverableInput[] = [];
 
   for (const page of pages) {
@@ -502,13 +588,18 @@ function resolvePages(
 
     if (!input) {
       const title = mapPage(kind, page, "").title;
-      warnings.push(
-        links.length === 0
-          ? `${kind} « ${title} » est publiée sans client : elle n'apparaît nulle part.`
-          : links.length > 1
-            ? `${kind} « ${title} » est rattachée à ${links.length} clients : à trancher, elle est ignorée.`
-            : `${kind} « ${title} » pointe une fiche client non résoluble : elle est ignorée.`,
-      );
+      // Une fiche non résoluble est l'ordinaire d'un client en préparation ;
+      // une relation vide ou double est une erreur de saisie.
+      if (links.length === 1) {
+        warnings.push(`${kind} « ${title} » pointe une fiche client non résoluble : elle est ignorée.`);
+      } else {
+        alert(
+          findings,
+          links.length === 0
+            ? `${kind} « ${title} » est publiée sans client : elle n'apparaît nulle part.`
+            : `${kind} « ${title} » est rattachée à ${links.length} clients : à trancher, elle est ignorée.`,
+        );
+      }
       continue;
     }
     // Pause volontaire, pas une anomalie : rien à signaler ligne par ligne, le
@@ -521,7 +612,22 @@ function resolvePages(
     inputs.push(input);
   }
 
-  return { inputs, warnings };
+  return { inputs, ...findings };
+}
+
+/**
+ * Compare le schéma d'une base aux colonnes lues, et inscrit l'écart au
+ * rapport. Rend vrai si la base doit être laissée de côté ce tour-ci.
+ */
+async function schemaBroken(
+  label: string,
+  databaseId: string,
+  base: keyof typeof COLUMNS,
+  findings: Findings,
+): Promise<boolean> {
+  const broken = schemaWarning(label, await checkColumns(databaseId, COLUMNS[base]));
+  if (broken) alert(findings, broken);
+  return broken !== null;
 }
 
 function tryMap(
@@ -550,14 +656,24 @@ async function syncKind(
    * retrait des lignes absentes de la base les effacerait à chaque passage.
    */
   extra: { inputs: DeliverableInput[]; complete: boolean } = { inputs: [], complete: true },
-): Promise<{ report: KindReport; warnings: string[] }> {
-  const pages = await queryDatabase(databaseIdFor(kind), publishedFilter(PROPS.published));
-  const { inputs, warnings } = resolvePages(kind, pages, byNotionPage, disabledClientIds);
+): Promise<{ report: KindReport } & Findings> {
+  const findings = emptyFindings();
+  const { warnings } = findings;
+
+  const databaseId = databaseIdFor(kind);
+  if (await schemaBroken(kind, databaseId, kind, findings)) {
+    return { report: emptyReport(kind, 0), ...findings };
+  }
+
+  const pages = await queryDatabase(databaseId, publishedFilter(PROPS.published));
+  const resolved = resolvePages(kind, pages, byNotionPage, disabledClientIds);
+  merge(findings, resolved);
+  const { inputs } = resolved;
   if (kind === "document") await attachFiles(inputs, pages, warnings, options.dryRun);
-  if (kind === "prestation" && !(await attachPayments(inputs, warnings))) {
+  if (kind === "prestation" && !(await attachPayments(inputs, findings))) {
     // Échéancier illisible : écrire les prestations sans lui changerait leur
     // empreinte et daterait une version « sans paiement » qui n'a jamais existé.
-    return { report: emptyReport(kind, inputs.length), warnings };
+    return { report: emptyReport(kind, inputs.length), ...findings };
   }
   inputs.push(...extra.inputs);
 
@@ -567,11 +683,11 @@ async function syncKind(
         "une action absente n'est peut-être qu'une action pas vue.",
     );
   }
-  const report = await applyInputs(kind, inputs, warnings, disabledClientIds, {
+  const report = await applyInputs(kind, inputs, findings, disabledClientIds, {
     ...options,
     withdraw: extra.complete,
   });
-  return { report, warnings };
+  return { report, ...findings };
 }
 
 /**
@@ -584,7 +700,7 @@ async function syncKind(
 async function applyInputs(
   kind: DeliverableKind,
   inputs: DeliverableInput[],
-  warnings: string[],
+  findings: Findings,
   disabledClientIds: Set<string>,
   options: { force: boolean; dryRun: boolean; keep?: Set<string>; withdraw?: boolean },
 ): Promise<KindReport> {
@@ -644,7 +760,8 @@ async function applyInputs(
   // l'espace en contient plusieurs ressemble davantage à une colonne renommée
   // qu'à une dépublication générale. Retirer une ou deux lignes reste normal.
   if (inputs.length === 0 && toWithdraw.length > MASS_WITHDRAWAL_THRESHOLD && !force) {
-    warnings.push(
+    alert(
+      findings,
       `${kind} : l'atelier ne rend aucune ligne publiée alors que l'espace en affiche ` +
         `${toWithdraw.length}. Aucun retrait effectué — vérifier la case « ${PROPS.published} » ` +
         "et le nom des colonnes, puis relancer avec --forcer si le retrait est bien voulu.",
@@ -661,9 +778,8 @@ async function applyInputs(
   return report;
 }
 
-interface AuditsResult {
+interface AuditsResult extends Findings {
   report: KindReport | null;
-  warnings: string[];
   /** Les actions d'audit engagées, à verser dans la roadmap. */
   roadmap: DeliverableInput[];
   /** Faux si un audit n'a pas pu être lu en entier : la roadmap ne retire rien. */
@@ -689,14 +805,25 @@ async function syncAudits(
     return {
       report: null,
       warnings: [`Base « audit » ignorée : ${envNameFor("audit")} n'est pas posée.`],
+      alerts: [],
       roadmap: [],
       complete: true,
     };
   }
 
-  const pages = await queryDatabase(databaseIdFor("audit"), publishedFilter(PROPS.published));
+  const findings = emptyFindings();
+  const { warnings } = findings;
+
+  const databaseId = databaseIdFor("audit");
+  if (await schemaBroken("audit", databaseId, "audit", findings)) {
+    // `complete: false` : les actions d'audit déjà versées dans la roadmap
+    // n'ont pas été relues, la roadmap ne doit donc pas les retirer.
+    return { report: null, ...findings, roadmap: [], complete: false };
+  }
+
+  const pages = await queryDatabase(databaseId, publishedFilter(PROPS.published));
   const resolved = resolvePages("audit", pages, byNotionPage, disabledClientIds);
-  const warnings = resolved.warnings;
+  merge(findings, resolved);
   const pageById = new Map(pages.map((page) => [page.id, page]));
   const keep = new Set<string>();
   const inputs: DeliverableInput[] = [];
@@ -752,8 +879,8 @@ async function syncAudits(
     }
   }
 
-  const report = await applyInputs("audit", inputs, warnings, disabledClientIds, { ...options, keep });
-  return { report, warnings, roadmap, complete };
+  const report = await applyInputs("audit", inputs, findings, disabledClientIds, { ...options, keep });
+  return { report, ...findings, roadmap, complete };
 }
 
 /**
@@ -768,15 +895,27 @@ async function syncPropositions(
   byNotionPage: Map<string, string>,
   options: { force: boolean; dryRun: boolean },
   disabledClientIds: Set<string>,
-): Promise<{ report: KindReport | null; warnings: string[] }> {
+): Promise<{ report: KindReport | null } & Findings> {
   const { dryRun } = options;
   if (!isConfigured("proposition")) {
-    return { report: null, warnings: [`Base « proposition » ignorée : ${envNameFor("proposition")} n'est pas posée.`] };
+    return {
+      report: null,
+      warnings: [`Base « proposition » ignorée : ${envNameFor("proposition")} n'est pas posée.`],
+      alerts: [],
+    };
   }
 
-  const pages = await queryDatabase(databaseIdFor("proposition"), publishedFilter(PROPS.published));
+  const findings = emptyFindings();
+  const { warnings } = findings;
+
+  const databaseId = databaseIdFor("proposition");
+  if (await schemaBroken("proposition", databaseId, "proposition", findings)) {
+    return { report: null, ...findings };
+  }
+
+  const pages = await queryDatabase(databaseId, publishedFilter(PROPS.published));
   const resolved = resolvePages("proposition", pages, byNotionPage, disabledClientIds);
-  const warnings = resolved.warnings;
+  merge(findings, resolved);
   const pageById = new Map(pages.map((page) => [page.id, page]));
   const keep = new Set<string>();
   const inputs: DeliverableInput[] = [];
@@ -813,8 +952,8 @@ async function syncPropositions(
     inputs.push(input);
   }
 
-  const report = await applyInputs("proposition", inputs, warnings, disabledClientIds, { ...options, keep });
-  return { report, warnings };
+  const report = await applyInputs("proposition", inputs, findings, disabledClientIds, { ...options, keep });
+  return { report, ...findings };
 }
 
 /**
@@ -840,18 +979,20 @@ function emptyReport(kind: DeliverableKind, published: number): KindReport {
  *
  * La base se lit en entier, sans filtre de publication : un règlement n'est
  * visible que dans l'administration, sa prestation décide seule de ce qui
- * paraît. Rend `false` si la base est posée mais illisible — la synchro des
- * prestations saute alors ce tour-ci plutôt que d'effacer les échéanciers.
+ * paraît. Rend `false` si la base est posée mais illisible, ou si son schéma a
+ * bougé — la synchro des prestations saute alors ce tour-ci plutôt que
+ * d'effacer les échéanciers.
  */
-async function attachPayments(inputs: DeliverableInput[], warnings: string[]): Promise<boolean> {
+async function attachPayments(inputs: DeliverableInput[], findings: Findings): Promise<boolean> {
   const databaseId = paymentsDatabaseId();
   if (!databaseId) return true;
 
   let pages: NotionPage[];
   try {
+    if (await schemaBroken("Paiements", databaseId, "paiement", findings)) return false;
     pages = await queryDatabase(databaseId);
   } catch (error) {
-    warnings.push(
+    findings.warnings.push(
       `Paiements illisibles (${error instanceof Error ? error.message : "erreur"}) : ` +
         "prestations ni écrites ni retirées ce tour-ci.",
     );
@@ -862,7 +1003,8 @@ async function attachPayments(inputs: DeliverableInput[], warnings: string[]): P
   for (const page of pages) {
     const payment = paymentOf(page);
     if (!payment) {
-      warnings.push(
+      alert(
+        findings,
         `Paiement « ${prop.text(page, PROPS.paiement.title) ?? UNTITLED} » : rattaché à aucune ` +
           "ou à plusieurs prestations, ignoré.",
       );
@@ -941,6 +1083,7 @@ export async function syncFromNotion(
     letters: { published: 0, created: 0, updated: 0, unchanged: 0, withdrawn: 0, editions: null },
     kinds: [],
     warnings: [...clients.warnings],
+    alerts: [...clients.alerts],
   };
 
   // Avant les livrables : qui a accès ne dépend d'aucun d'eux, et une personne
@@ -948,7 +1091,7 @@ export async function syncFromNotion(
   // des livrables pendant qu'on cherche pourquoi son accès est encore ouvert.
   const persons = await syncPersons(clients.byNotionPage, { dryRun, force: options.force === true });
   report.persons = persons.report;
-  report.warnings.push(...persons.warnings);
+  merge(report, persons);
 
   // Les audits avant les livrables : leurs actions validées alimentent la
   // roadmap, qui doit les recevoir dans son propre balayage. Un échec ici ne
@@ -967,11 +1110,12 @@ export async function syncFromNotion(
       warnings: [
         `Audits illisibles (${error instanceof Error ? error.message : "erreur"}) : rien publié ni retiré ce tour-ci.`,
       ],
+      alerts: [],
       roadmap: [],
       complete: false,
     };
   }
-  report.warnings.push(...audits.warnings);
+  merge(report, audits);
 
   for (const kind of SYNCED_KINDS) {
     const result = await syncKind(
@@ -982,7 +1126,7 @@ export async function syncFromNotion(
       kind === "roadmap" ? { inputs: audits.roadmap, complete: audits.complete } : undefined,
     );
     report.kinds.push(result.report);
-    report.warnings.push(...result.warnings);
+    merge(report, result);
   }
 
   for (const kind of OPTIONAL_KINDS) {
@@ -997,7 +1141,7 @@ export async function syncFromNotion(
       clients.disabledClientIds,
     );
     report.kinds.push(result.report);
-    report.warnings.push(...result.warnings);
+    merge(report, result);
   }
 
   if (audits.report) report.kinds.push(audits.report);
@@ -1009,7 +1153,7 @@ export async function syncFromNotion(
       clients.disabledClientIds,
     );
     if (propositions.report) report.kinds.push(propositions.report);
-    report.warnings.push(...propositions.warnings);
+    merge(report, propositions);
   } catch (error) {
     console.error("[cto] balayage des propositions impossible", error);
     report.warnings.push(
@@ -1025,7 +1169,7 @@ export async function syncFromNotion(
     clients.byVeilleOrganisation,
   );
   report.letters = lettres.report;
-  report.warnings.push(...lettres.warnings);
+  merge(report, lettres);
 
   // La veille technique en tout dernier : elle dépend des personnes (le nom du
   // contact) et appelle un autre produit, dont une panne ne doit rien coûter au
@@ -1033,7 +1177,7 @@ export async function syncFromNotion(
   try {
     const veille = await provisionSentinelle(clients.watchWishes, { dryRun });
     report.veilleTechnique = veille.report;
-    report.warnings.push(...veille.warnings);
+    merge(report, veille);
   } catch (error) {
     console.error("[cto] provisionnement Sentinelle impossible", error);
     report.warnings.push(

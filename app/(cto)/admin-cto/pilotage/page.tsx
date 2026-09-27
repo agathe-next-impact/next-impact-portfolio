@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { adminEspacePath } from "../../espace-direction/viewer";
 import { EVENT_LABELS } from "@cto/access";
-import { listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
+import { lastSyncRun, listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
 import { AdminPasskeyEnrollButton } from "../passkey";
+import { DernierBalayage } from "./dernier-balayage";
 import { PILOTAGE_LARGEUR } from "./largeur";
 import { OutilsExploitation } from "./outils";
 
@@ -44,10 +45,11 @@ const JOUR_MS = 24 * 60 * 60 * 1000;
  * pour la raison.
  */
 export default async function PilotagePage() {
-  const [clients, journal, credentials] = await Promise.all([
+  const [clients, journal, credentials, balayage] = await Promise.all([
     listClients(),
     recentAccessLog(30),
     listAdminCredentials(),
+    lastSyncRun(),
   ]);
 
   const actifs = clients.filter((client) => client.status === "actif").length;
@@ -98,6 +100,9 @@ export default async function PilotagePage() {
 
       <section className="mt-12">
         <Label>Exploitation</Label>
+        <div className="mt-4">
+          <DernierBalayage run={balayage} />
+        </div>
         <div className="mt-4">
           <OutilsExploitation />
         </div>

@@ -65,6 +65,52 @@ export async function sendAdminEnrollmentNotice(label: string, when: Date): Prom
   await sendMail({ to: ADMIN_EMAIL, subject: "Nouvel appareil enregistré sur la supervision", html });
 }
 
+/**
+ * L'alerte d'un balayage : un nombre et un lien, jamais le détail.
+ *
+ * Les points eux-mêmes nomment des clients et des personnes ; ils se lisent
+ * dans la supervision, derrière sa connexion. `failed` : le balayage a levé
+ * avant d'aboutir.
+ */
+export async function sendSyncAlert(count: number, failed: boolean, url: string): Promise<void> {
+  const titre = failed
+    ? "Le balayage de l'atelier a échoué"
+    : count > 1
+      ? `${count} points à traiter après le balayage`
+      : "Un point à traiter après le balayage";
+
+  const html = emailLayout({
+    preheader: failed
+      ? "Le dernier balayage de l'atelier Notion n'a pas abouti."
+      : "Le dernier balayage de l'atelier Notion a relevé du nouveau sur un accès ou un rattachement.",
+    contentHtml: [
+      emailKicker("01", "Supervision — direction technique"),
+      emailH1(titre),
+      emailLead(`Bonjour ${ADMIN_NAME},`),
+      emailParagraph(
+        failed
+          ? "Le dernier balayage de l'atelier Notion n'a pas abouti : les espaces clients sont restés tels qu'ils étaient."
+          : `Le dernier balayage de l'atelier Notion a relevé <strong>${count} point${count > 1 ? "s" : ""}</strong> ` +
+              "qui touche" +
+              (count > 1 ? "nt" : "") +
+              " un accès ou un rattachement, et que le balayage précédent ne signalait pas.",
+      ),
+      emailButton(url, "Ouvrir la supervision"),
+      emailCard(
+        emailParagraph(
+          "Le détail se lit dans la supervision, sous « Dernier balayage ». Un point déjà signalé n'est pas renvoyé tant qu'il reste le même.",
+        ),
+      ),
+    ].join(""),
+  });
+
+  await sendMail({
+    to: ADMIN_EMAIL,
+    subject: failed ? "Balayage de l'atelier en échec — supervision CTO" : `${titre} — supervision CTO`,
+    html,
+  });
+}
+
 function escapeHtml(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }

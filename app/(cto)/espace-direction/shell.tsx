@@ -12,17 +12,21 @@ import {
   actionsFor,
   BACKUP_MAX_AGE_DAYS,
   clientProfile,
-  GROUP_LABELS,
+  GROUP_SLUGS,
   lastSuccessfulBackup,
   missionsOf,
   sitePoints,
   siteVerdict,
+  SYNTHESE_SEGMENT,
+  visibleGroups,
   visibleSections,
+  sectionsEnSommeil,
   withoutPrice,
   type Actions,
   type ClientProfile,
   type Mission,
   type Section,
+  type SectionGroup,
   type SectionKey,
 } from "@cto/espace";
 import { siteStateFor, type SiteState } from "@cto/site";
@@ -57,6 +61,11 @@ export function sectionHref(section: Section, base: string = ESPACE_PATH): strin
   return section.slug ? `${base}/${section.slug}` : base;
 }
 
+/** La page de synthèse d'un groupe (Pilotage, Votre site…). */
+export function syntheseHref(group: SectionGroup, base: string = ESPACE_PATH): string {
+  return `${base}/${SYNTHESE_SEGMENT}/${GROUP_SLUGS[group]}`;
+}
+
 export interface EspaceContext {
   profile: ClientProfile;
   items: Deliverable[];
@@ -69,6 +78,11 @@ export interface EspaceContext {
   site: SiteState | null;
   missions: Mission[];
   actions: Actions;
+  /**
+   * Sections ouvertes mais vides depuis plus d'une semaine : hors de la
+   * navigation, toujours accessibles (`sectionsEnSommeil`).
+   */
+  sommeil: Set<SectionKey>;
 }
 
 /**
@@ -88,7 +102,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
   ]);
 
   const count = (kind: Deliverable["kind"]) => items.filter((item) => item.kind === kind).length;
-  const sections = visibleSections(profile.services, {
+  const contents = {
     decisions: count("decision"),
     cartographie: count("cartographie"),
     documents: count("document"),
@@ -97,7 +111,8 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     propositions: count("proposition"),
     site: profile.hasSite,
     sentinelle: profile.hasSentinelle,
-  });
+  };
+  const sections = visibleSections(profile.services, contents);
 
   const [site, prestations] = await Promise.all([
     sections.some((section) => section.key === "site") ? siteStateFor(viewer.clientId) : null,
@@ -119,6 +134,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     site,
     missions: missionsOf(suivis, now),
     actions: actionsFor(suivis, site?.snapshot ?? null, now),
+    sommeil: sectionsEnSommeil(sections, contents, profile.servicesOuverts, now),
   };
 }
 
@@ -213,24 +229,44 @@ function badgeFor(key: SectionKey, context: EspaceContext): NavBadge | null {
   }
 }
 
-function navigation(context: EspaceContext, active: SectionKey | null, base: string): NavGroup[] {
-  const groups: NavGroup[] = [];
-  for (const section of context.sections) {
-    const label = section.group ? GROUP_LABELS[section.group] : null;
-    let groupe = groups.find((candidate) => candidate.label === label);
-    if (!groupe) {
-      groupe = { label, items: [] };
-      groups.push(groupe);
-    }
-    groupe.items.push({
-      key: section.key,
-      href: sectionHref(section, base),
-      label: section.label,
-      active: section.key === active,
-      badge: badgeFor(section.key, context),
-    });
-  }
-  return groups;
+/**
+ * Les groupes de la barre latérale : l'accueil seul en tête, puis un groupe par
+ * question. Un groupe de plusieurs entrées porte l'adresse de sa synthèse ;
+ * celui d'une seule entrée n'en a pas et mène droit à elle.
+ */
+function navigation(
+  context: EspaceContext,
+  active: SectionKey | null,
+  activeGroup: SectionGroup | null,
+  base: string,
+): NavGroup[] {
+  const entree = (section: Section) => ({
+    key: section.key,
+    href: sectionHref(section, base),
+    label: section.label,
+    active: section.key === active,
+    badge: badgeFor(section.key, context),
+  });
+
+  // Les sections en sommeil quittent la navigation ; la page reste ouverte.
+  // Celle qu'on consulte y reste, pour ne pas perdre le repère.
+  const enNavigation = context.sections.filter(
+    (section) => !context.sommeil.has(section.key) || section.key === active,
+  );
+
+  const horsGroupe: NavGroup[] = enNavigation
+    .filter((section) => !section.group)
+    .map((section) => ({ key: null, label: null, href: null, active: false, items: [entree(section)] }));
+
+  const groupes: NavGroup[] = visibleGroups(enNavigation).map((groupe) => ({
+    key: groupe.group,
+    label: groupe.label,
+    href: groupe.synthese ? syntheseHref(groupe.group, base) : null,
+    active: groupe.group === activeGroup,
+    items: groupe.sections.map(entree),
+  }));
+
+  return [...horsGroupe, ...groupes];
 }
 
 // ─── Situation actuelle ──────────────────────────────────────────────────
@@ -365,6 +401,7 @@ export async function Espace({
   viewer,
   context,
   active,
+  activeGroup = null,
   title,
   intro,
   children,
@@ -372,6 +409,8 @@ export async function Espace({
   viewer: Viewer;
   context: EspaceContext;
   active: SectionKey | null;
+  /** La synthèse de groupe affichée, le cas échéant : son intitulé est alors l'entrée courante. */
+  activeGroup?: SectionGroup | null;
   title: string;
   intro?: ReactNode;
   children: ReactNode;
@@ -399,7 +438,7 @@ export async function Espace({
         person={
           viewer.personName ? `${viewer.personName}${viewer.personRole ? ` · ${viewer.personRole}` : ""}` : viewer.admin ? "Vue administrateur" : null
         }
-        groups={navigation(context, active, viewer.base)}
+        groups={navigation(context, active, activeGroup, viewer.base)}
         situation={situationFor(context, viewer.base)}
         initialCollapsed={rail}
         signal={

@@ -204,9 +204,12 @@ async function stateOf(clientId: string, contact: string | null): Promise<WatchS
 export async function provisionSentinelle(
   wishes: WatchWish[],
   options: { dryRun: boolean },
-): Promise<{ report: ProvisionReport; warnings: string[] }> {
+): Promise<{ report: ProvisionReport; warnings: string[]; alerts: string[] }> {
   const report: ProvisionReport = { sent: 0, created: 0, deactivated: 0, unchanged: 0, failed: 0 };
   const warnings: string[] = [];
+  // Parmi `warnings`, ce qui touche un rattachement : deux fiches pour un même
+  // client Sentinelle. Même convention que `src/cto/notion/findings.ts`.
+  const alerts: string[] = [];
 
   if (!sentinelleExportConfig()) {
     if (wishes.some((wish) => wish.wanted)) {
@@ -214,7 +217,7 @@ export async function provisionSentinelle(
         "Veille technique cochée sur une fiche, mais SENTINELLE_EXPORT_URL ou SENTINELLE_EXPORT_SECRET n'est pas posée : rien n'a été provisionné.",
       );
     }
-    return { report, warnings };
+    return { report, warnings, alerts };
   }
 
   const entries: { wish: WatchWish; state: WatchState }[] = [];
@@ -226,6 +229,7 @@ export async function provisionSentinelle(
     if (conflict) {
       report.failed += 1;
       warnings.push(conflict);
+      alerts.push(conflict);
       continue;
     }
 
@@ -261,10 +265,11 @@ export async function provisionSentinelle(
         .limit(1);
       if (holder) {
         report.failed += 1;
-        warnings.push(
+        const message =
           `« ${wish.company} » : Sentinelle a rendu le client de « ${holder.company} » (${result.id}) — non relié. ` +
-            "Vérifier « Contact veille » et « Site surveillé » sur les deux fiches.",
-        );
+          "Vérifier « Contact veille » et « Site surveillé » sur les deux fiches.";
+        warnings.push(message);
+        alerts.push(message);
         continue;
       }
 
@@ -287,5 +292,5 @@ export async function provisionSentinelle(
     }
   }
 
-  return { report, warnings };
+  return { report, warnings, alerts };
 }

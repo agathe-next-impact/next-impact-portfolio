@@ -10,7 +10,11 @@ import {
   Activity,
   BookOpen,
   CalendarPlus,
+  ChevronRight,
+  Compass,
   Download,
+  FileSignature,
+  Globe,
   Milestone,
   Gauge,
   Flag,
@@ -28,6 +32,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Receipt,
+  Award,
   Search,
   ShieldCheck,
   Sun,
@@ -47,13 +52,19 @@ import { viderPagesHorsLigne } from "./pwa";
 // tiroir, le raccourci clavier.
 //
 // Trois états :
-//  - bureau déployé (248 px) : libellés, groupes, pastilles ;
-//  - bureau replié (64 px)  : icônes seules, info-bulle au survol et au focus,
+//  - bureau déployé (248 px) : libellés, pastilles, et chaque groupe en
+//    accordéon — l'intitulé mène à la synthèse du groupe, le chevron déplie
+//    ses entrées. Le groupe de la page courante est ouvert d'office ; les
+//    autres restent comme la personne les a laissés. Un groupe d'une seule
+//    entrée n'a ni synthèse ni chevron : son intitulé mène à l'entrée ;
+//  - bureau replié (64 px)  : une icône par groupe (vers sa synthèse), et les
+//    entrées du groupe courant dessous ; info-bulle au survol et au focus,
 //    pastille réduite à un point — le mot reste dans l'info-bulle et dans
 //    l'étiquette lue par le lecteur d'écran ;
 //  - mobile et tablette (< 1024 px) : l'application installable. Barre
-//    d'onglets en bas d'écran (Accueil + un onglet par groupe, cinq au plus),
-//    sous-onglets du groupe courant sous la barre du haut, et une feuille
+//    d'onglets en bas d'écran (Accueil + un onglet par groupe, vers sa
+//    synthèse), sous-onglets du groupe courant (Synthèse puis ses entrées)
+//    sous la barre du haut, et une feuille
 //    « Plus » (Radix Dialog : focus piégé, Échap, clic sur le fond) pour la
 //    situation, le contact et les réglages — refermée à chaque navigation.
 //
@@ -76,7 +87,8 @@ export type NavIconName =
   | "veille"
   | "veille-technique"
   | "documents"
-  | "prestations";
+  | "prestations"
+  | "accompagnement";
 
 const ICONS: Record<NavIconName, LucideIcon> = {
   tableau: House,
@@ -92,6 +104,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   "veille-technique": ShieldCheck,
   documents: Folder,
   prestations: Receipt,
+  accompagnement: Award,
 };
 
 export type BadgeTone = "neutre" | "attention" | "alerte" | "nouveau";
@@ -112,9 +125,30 @@ export interface NavItem {
   badge: NavBadge | null;
 }
 
+export type NavGroupKey = "missions" | "site" | "agir" | "veille" | "contrats";
+
+const GROUP_ICONS: Record<NavGroupKey, LucideIcon> = {
+  missions: Compass,
+  site: Globe,
+  agir: ListChecks,
+  veille: BookOpen,
+  contrats: FileSignature,
+};
+
 export interface NavGroup {
+  /** Null hors groupe (l'accueil). */
+  key: NavGroupKey | null;
   label: string | null;
+  /** La synthèse du groupe, ou null quand il n'a qu'une entrée. */
+  href: string | null;
+  /** La synthèse est la page courante. */
+  active: boolean;
   items: NavItem[];
+}
+
+/** Le groupe contient la page courante : sa synthèse ou l'une de ses entrées. */
+function groupeCourant(groupe: NavGroup): boolean {
+  return groupe.active || groupe.items.some((item) => item.active);
 }
 
 export type SituationTone = "neutre" | "attention" | "alerte" | "fait";
@@ -194,23 +228,40 @@ function linkLabel(item: NavItem): string {
   return item.badge ? `${item.label} (${item.badge.description})` : item.label;
 }
 
+const TON_RANG: Record<BadgeTone, number> = { neutre: 0, nouveau: 1, attention: 2, alerte: 3 };
+
+/** La pastille la plus pressante d'un groupe : c'est elle qu'il porte, fermé. */
+function tonDe(items: NavItem[]): BadgeTone | null {
+  let ton: BadgeTone | null = null;
+  for (const item of items) {
+    if (item.badge && (ton === null || TON_RANG[item.badge.tone] > TON_RANG[ton])) ton = item.badge.tone;
+  }
+  return ton;
+}
+
+/** L'intitulé d'un groupe suivi de ce que signalent ses entrées, pour l'info-bulle et le lecteur d'écran. */
+function groupeLabel(groupe: NavGroup): string {
+  const descriptions = groupe.items.flatMap((item) => (item.badge ? [`${item.label} : ${item.badge.description}`] : []));
+  return descriptions.length > 0 ? `${groupe.label} (${descriptions.join(", ")})` : (groupe.label ?? "");
+}
+
 const ROW =
   "group relative flex items-center gap-3 border-l-2 font-inter-tight text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-secondary";
 
-function Entree({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
+function Entree({ item, collapsed, retrait = false }: { item: NavItem; collapsed: boolean; retrait?: boolean }) {
   const Icon = ICONS[item.key];
   const lien = (
     <Link
       href={item.href}
       aria-current={item.active ? "page" : undefined}
       aria-label={collapsed ? linkLabel(item) : undefined}
-      className={`${ROW} ${collapsed ? "justify-center px-0 py-2.5" : "px-3 py-2"} ${
+      className={`${ROW} ${collapsed ? "justify-center px-0 py-2.5" : retrait ? "py-1.5 pl-10 pr-3 text-[13px]" : "px-3 py-2"} ${
         item.active
           ? "border-l-accent-secondary bg-overlay-gray text-foreground"
           : "border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground"
       }`}
     >
-      <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+      {retrait && !collapsed ? null : <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />}
       {collapsed ? (
         item.badge ? (
           <span aria-hidden className={`absolute right-3.5 top-1.5 h-1.5 w-1.5 ${DOT_CLASS[item.badge.tone]}`} />
@@ -230,6 +281,162 @@ function Entree({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
   );
 
   return collapsed ? <Bulle texte={linkLabel(item)}>{lien}</Bulle> : lien;
+}
+
+/**
+ * Un groupe de la barre déployée.
+ *
+ * Plusieurs entrées : l'intitulé mène à la synthèse, le chevron (bouton
+ * distinct, `aria-expanded`) déplie les entrées. Fermé, le groupe porte la
+ * pastille la plus pressante de ses entrées, pour que rien ne se cache dans un
+ * accordéon fermé. Une seule entrée : l'intitulé du groupe mène à elle.
+ */
+function GroupeDeplie({
+  groupe,
+  ouvert,
+  basculer,
+}: {
+  groupe: NavGroup;
+  ouvert: boolean;
+  basculer: () => void;
+}) {
+  const Icon = groupe.key ? GROUP_ICONS[groupe.key] : ICONS[groupe.items[0].key];
+  const courant = groupeCourant(groupe);
+
+  if (!groupe.href) {
+    const [seule] = groupe.items;
+    return (
+      <Link
+        href={seule.href}
+        aria-current={seule.active ? "page" : undefined}
+        className={`${ROW} px-3 py-2 ${
+          seule.active
+            ? "border-l-accent-secondary bg-overlay-gray text-foreground"
+            : "border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground"
+        }`}
+      >
+        <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+        <span className="min-w-0 truncate">{groupe.label}</span>
+        {seule.badge ? (
+          <>
+            <Badge badge={seule.badge} />
+            <span className="sr-only">{`, ${seule.badge.description}`}</span>
+          </>
+        ) : null}
+      </Link>
+    );
+  }
+
+  const ton = tonDe(groupe.items);
+  const liste = `groupe-${groupe.key}`;
+
+  return (
+    <>
+      <div
+        className={`flex items-stretch border-l-2 ${
+          groupe.active ? "border-l-accent-secondary bg-overlay-gray" : courant ? "border-l-dark-gray" : "border-l-transparent"
+        }`}
+      >
+        <Link
+          href={groupe.href}
+          aria-current={groupe.active ? "page" : undefined}
+          aria-label={!ouvert && ton ? groupeLabel(groupe) : undefined}
+          className={`${ROW} min-w-0 flex-1 border-l-0 px-3 py-2 ${
+            groupe.active || courant ? "text-foreground" : "text-mid-gray hover:bg-overlay-gray hover:text-foreground"
+          }`}
+        >
+          <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+          <span className="min-w-0 truncate">{groupe.label}</span>
+          {!ouvert && ton ? <span aria-hidden className={`ml-auto h-1.5 w-1.5 shrink-0 ${DOT_CLASS[ton]}`} /> : null}
+        </Link>
+        <button
+          type="button"
+          onClick={basculer}
+          aria-expanded={ouvert}
+          aria-controls={liste}
+          aria-label={`${ouvert ? "Replier" : "Déplier"} ${groupe.label}`}
+          className="grid w-8 shrink-0 place-items-center text-mid-gray transition-colors hover:bg-overlay-gray hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-secondary"
+        >
+          <ChevronRight
+            aria-hidden
+            className={`h-3.5 w-3.5 transition-transform duration-150 motion-reduce:transition-none ${ouvert ? "rotate-90" : ""}`}
+            strokeWidth={1.8}
+          />
+        </button>
+      </div>
+      <ul id={liste} hidden={!ouvert} aria-label={groupe.label ?? undefined} className="mb-1 mt-0.5 space-y-0.5">
+        {groupe.items.map((item) => (
+          <li key={item.key}>
+            <Entree item={item} collapsed={false} retrait />
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/** Un groupe du rail : son icône vers la synthèse, et ses entrées dessous s'il est le groupe courant. */
+function GroupeRail({ groupe }: { groupe: NavGroup }) {
+  if (!groupe.href || !groupe.key) {
+    const [seule] = groupe.items;
+    const Icon = groupe.key ? GROUP_ICONS[groupe.key] : ICONS[seule.key];
+    const texte = linkLabel(groupe.label ? { ...seule, label: groupe.label } : seule);
+    return (
+      <Bulle texte={texte}>
+        <Link
+          href={seule.href}
+          aria-current={seule.active ? "page" : undefined}
+          aria-label={texte}
+          className={`${ROW} justify-center px-0 py-2.5 ${
+            seule.active
+              ? "border-l-accent-secondary bg-overlay-gray text-foreground"
+              : "border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground"
+          }`}
+        >
+          <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+          {seule.badge ? (
+            <span aria-hidden className={`absolute right-3.5 top-1.5 h-1.5 w-1.5 ${DOT_CLASS[seule.badge.tone]}`} />
+          ) : null}
+        </Link>
+      </Bulle>
+    );
+  }
+
+  const Icon = GROUP_ICONS[groupe.key];
+  const courant = groupeCourant(groupe);
+  const ton = tonDe(groupe.items);
+  const texte = groupeLabel(groupe);
+
+  return (
+    <>
+      <Bulle texte={texte}>
+        <Link
+          href={groupe.href}
+          aria-current={groupe.active ? "page" : undefined}
+          aria-label={texte}
+          className={`${ROW} justify-center px-0 py-2.5 ${
+            groupe.active
+              ? "border-l-accent-secondary bg-overlay-gray text-foreground"
+              : courant
+                ? "border-l-dark-gray text-foreground"
+                : "border-l-transparent text-mid-gray hover:bg-overlay-gray hover:text-foreground"
+          }`}
+        >
+          <Icon aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+          {ton && !courant ? <span aria-hidden className={`absolute right-3.5 top-1.5 h-1.5 w-1.5 ${DOT_CLASS[ton]}`} /> : null}
+        </Link>
+      </Bulle>
+      {courant ? (
+        <ul aria-label={groupe.label ?? undefined} className="mb-1 mt-0.5 space-y-0.5 border-y border-dark-gray/60 bg-overlay-gray/40">
+          {groupe.items.map((item) => (
+            <li key={item.key}>
+              <Entree item={item} collapsed />
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </>
+  );
 }
 
 /** L'info-bulle du rail. Radix : rendue hors de la barre, donc jamais coupée par son défilement. */
@@ -402,9 +609,14 @@ function Contenu({
   collapsed,
   entete,
   navigation = true,
+  ouverts,
+  basculerGroupe,
 }: {
   props: SidebarProps;
   collapsed: boolean;
+  /** Les groupes dépliés dans l'accordéon. */
+  ouverts: ReadonlySet<string>;
+  basculerGroupe: (cle: string) => void;
   /** Le bouton du coin : replier (bureau) ou fermer (feuille). */
   entete: ReactNode;
   /** Faux dans la feuille mobile : la navigation y est déjà, en bas d'écran. */
@@ -438,22 +650,26 @@ function Contenu({
         {props.situation ? <SituationActuelle situation={props.situation} collapsed={collapsed} /> : null}
         {navigation ? (
         <nav aria-label="Sections de votre espace" className="px-2 py-3">
-          <ul className="space-y-4">
+          <ul className={collapsed ? "space-y-1" : "space-y-0.5"}>
             {props.groups.map((groupe, index) => (
-              <li key={groupe.label ?? `groupe-${index}`}>
-                {groupe.label && !collapsed ? (
-                  <p className="px-3 pb-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mid-gray/70">
-                    {groupe.label}
-                  </p>
-                ) : null}
-                {groupe.label && collapsed ? <span className="mx-3 mb-2 block border-t border-dark-gray" aria-hidden /> : null}
-                <ul className="space-y-0.5" aria-label={groupe.label ?? undefined}>
-                  {groupe.items.map((item) => (
-                    <li key={item.key}>
-                      <Entree item={item} collapsed={collapsed} />
-                    </li>
-                  ))}
-                </ul>
+              <li key={groupe.key ?? `hors-groupe-${index}`}>
+                {groupe.key === null ? (
+                  <ul className={collapsed ? "mb-2 border-b border-dark-gray pb-2" : "mb-3"}>
+                    {groupe.items.map((item) => (
+                      <li key={item.key}>
+                        <Entree item={item} collapsed={collapsed} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : collapsed ? (
+                  <GroupeRail groupe={groupe} />
+                ) : (
+                  <GroupeDeplie
+                    groupe={groupe}
+                    ouvert={ouverts.has(groupe.key)}
+                    basculer={() => basculerGroupe(groupe.key as string)}
+                  />
+                )}
               </li>
             ))}
           </ul>
@@ -509,31 +725,39 @@ function Contenu({
 
 // ─── Mobile et tablette ──────────────────────────────────────────────────
 
-const TON_RANG: Record<BadgeTone, number> = { neutre: 0, nouveau: 1, attention: 2, alerte: 3 };
-
-/** La pastille la plus pressante d'un onglet : c'est elle qu'il porte. */
-function tonDe(items: NavItem[]): BadgeTone | null {
-  let ton: BadgeTone | null = null;
-  for (const item of items) {
-    if (item.badge && (ton === null || TON_RANG[item.badge.tone] > TON_RANG[ton])) ton = item.badge.tone;
-  }
-  return ton;
-}
-
 /**
- * Les onglets du bas : l'accueil, puis un onglet par groupe (Missions, Votre
+ * Les onglets du bas : l'accueil, puis un onglet par groupe (Pilotage, Votre
  * site, Agir, Veille, Contrats). Cinq tiennent sur un téléphone de 320 px ;
  * le sixième n'arrive qu'au client qui a à la fois le suivi technique et des
- * prestations, et les libellés se tronquent alors plutôt que de déborder. Un onglet mène à la
- * première entrée de son groupe ; les autres sont dans les sous-onglets.
+ * prestations, et les libellés se tronquent alors plutôt que de déborder. Un
+ * onglet mène à la synthèse de son groupe (à son entrée unique s'il n'en a
+ * qu'une) ; les entrées sont dans les sous-onglets.
  */
 function BarreDuBas({ groups }: { groups: NavGroup[] }) {
   const onglets = groups.flatMap((groupe) =>
-    groupe.label
+    groupe.key
       ? groupe.items.length > 0
-        ? [{ cle: groupe.label, label: groupe.label, items: groupe.items }]
+        ? [
+            {
+              cle: groupe.key as string,
+              label: groupe.label ?? "",
+              items: groupe.items,
+              icon: GROUP_ICONS[groupe.key],
+              href: groupe.href ?? groupe.items[0].href,
+              page: groupe.href ? groupe.active : groupe.items[0].active,
+              actif: groupeCourant(groupe),
+            },
+          ]
         : []
-      : groupe.items.map((item) => ({ cle: item.key, label: item.label, items: [item] })),
+      : groupe.items.map((item) => ({
+          cle: item.key as string,
+          label: item.label,
+          items: [item],
+          icon: ICONS[item.key],
+          href: item.href,
+          page: item.active,
+          actif: item.active,
+        })),
   );
 
   return (
@@ -543,16 +767,15 @@ function BarreDuBas({ groups }: { groups: NavGroup[] }) {
     >
       <ul className="mx-auto grid max-w-2xl" style={{ gridTemplateColumns: `repeat(${onglets.length}, minmax(0, 1fr))` }}>
         {onglets.map((onglet) => {
-          const [premier] = onglet.items;
-          const Icon = ICONS[premier.key];
-          const actif = onglet.items.some((item) => item.active);
+          const Icon = onglet.icon;
+          const actif = onglet.actif;
           const ton = tonDe(onglet.items);
           const descriptions = onglet.items.flatMap((item) => (item.badge ? [item.badge.description] : []));
           return (
             <li key={onglet.cle}>
               <Link
-                href={premier.href}
-                aria-current={premier.active ? "page" : actif ? "true" : undefined}
+                href={onglet.href}
+                aria-current={onglet.page ? "page" : actif ? "true" : undefined}
                 aria-label={descriptions.length > 0 ? `${onglet.label} (${descriptions.join(", ")})` : undefined}
                 className={`flex min-h-[56px] flex-col items-center justify-center gap-1 border-t-2 px-1 pb-1.5 pt-2 font-inter-tight text-[10px] leading-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent-secondary ${
                   actif ? "border-t-accent-secondary text-foreground" : "border-t-transparent text-mid-gray hover:text-foreground"
@@ -572,24 +795,29 @@ function BarreDuBas({ groups }: { groups: NavGroup[] }) {
   );
 }
 
-/** Les entrées du groupe courant, sous la barre du haut, quand il en a plusieurs. */
+/** La synthèse et les entrées du groupe courant, sous la barre du haut, quand il en a plusieurs. */
 function SousOnglets({ groups }: { groups: NavGroup[] }) {
-  const groupe = groups.find(
-    (candidat) => candidat.label && candidat.items.length > 1 && candidat.items.some((item) => item.active),
-  );
-  if (!groupe) return null;
+  const groupe = groups.find((candidat) => candidat.href && groupeCourant(candidat));
+  if (!groupe || !groupe.href) return null;
+  const puce = (actif: boolean) =>
+    `flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-secondary ${
+      actif ? "border-accent-secondary text-foreground" : "border-dark-gray text-mid-gray hover:text-foreground"
+    }`;
 
   return (
     <nav aria-label={groupe.label ?? undefined} className="border-t border-dark-gray">
       <ul className="flex gap-1.5 overflow-x-auto px-4 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <li className="shrink-0">
+          <Link href={groupe.href} aria-current={groupe.active ? "page" : undefined} className={puce(groupe.active)}>
+            Synthèse
+          </Link>
+        </li>
         {groupe.items.map((item) => (
           <li key={item.key} className="shrink-0">
             <Link
               href={item.href}
               aria-current={item.active ? "page" : undefined}
-              className={`flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-secondary ${
-                item.active ? "border-accent-secondary text-foreground" : "border-dark-gray text-mid-gray hover:text-foreground"
-              }`}
+              className={puce(item.active)}
             >
               {item.label}
               {item.badge ? (
@@ -610,6 +838,22 @@ export function Sidebar(props: SidebarProps) {
   const [collapsed, setCollapsed] = useState(props.initialCollapsed);
   const [ouvert, setOuvert] = useState(false);
   const pathname = usePathname();
+
+  // L'accordéon : le groupe de la page courante s'ouvre à chaque navigation ;
+  // ceux que la personne a ouverts ou fermés restent comme elle les a laissés.
+  const courant = props.groups.find((groupe) => groupe.key && groupeCourant(groupe))?.key ?? null;
+  const [ouverts, setOuverts] = useState<Set<string>>(() => new Set(courant ? [courant] : []));
+  useEffect(() => {
+    if (!courant) return;
+    setOuverts((actuels) => (actuels.has(courant) ? actuels : new Set(actuels).add(courant)));
+  }, [courant]);
+  const basculerGroupe = useCallback((cle: string) => {
+    setOuverts((actuels) => {
+      const suivants = new Set(actuels);
+      if (!suivants.delete(cle)) suivants.add(cle);
+      return suivants;
+    });
+  }, []);
 
   const basculer = useCallback(() => {
     setCollapsed((valeur) => {
@@ -672,6 +916,8 @@ export function Sidebar(props: SidebarProps) {
                   props={props}
                   collapsed={false}
                   navigation={false}
+                  ouverts={ouverts}
+                  basculerGroupe={basculerGroupe}
                   entete={
                     <Dialog.Close asChild>
                       <button type="button" aria-label="Fermer" className={`${coin} ml-auto`}>
@@ -698,6 +944,8 @@ export function Sidebar(props: SidebarProps) {
         <Contenu
           props={props}
           collapsed={collapsed}
+          ouverts={ouverts}
+          basculerGroupe={basculerGroupe}
           entete={
             <button
               type="button"

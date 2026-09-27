@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
 import type { Deliverable } from "../deliverables";
 import { buildEvents, dayKey, monthGrid, upcoming } from "./calendar";
-import { arbitrageOuvert, hasPersonalisedWatch, LEGACY_SLUGS, SECTIONS, visibleSections, type Contents } from "./sections";
+import {
+  arbitrageOuvert,
+  GROUP_SLUGS,
+  groupFromSlug,
+  hasPersonalisedWatch,
+  LEGACY_SLUGS,
+  SECTIONS,
+  sectionsEnSommeil,
+  visibleGroups,
+  visibleSections,
+  type Contents,
+} from "./sections";
 
 const EMPTY: Contents = {
   decisions: 0,
@@ -34,6 +45,7 @@ describe("sections visibles", () => {
       "site",
       "agir",
       "veille",
+      "accompagnement",
     ]);
   });
 
@@ -47,6 +59,7 @@ describe("sections visibles", () => {
       "cartographie",
       "agir",
       "veille",
+      "accompagnement",
     ]);
   });
 
@@ -57,6 +70,7 @@ describe("sections visibles", () => {
       "roadmap",
       "agir",
       "veille",
+      "accompagnement",
     ]);
   });
 
@@ -68,11 +82,18 @@ describe("sections visibles", () => {
       "decisions",
       "agir",
       "veille",
+      "accompagnement",
     ]);
   });
 
   it("ouvre l'audit dans Missions pour un client audit seul", () => {
-    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "agir", "veille"]);
+    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "agir", "veille", "accompagnement"]);
+  });
+
+  it("montre « Votre accompagnement » dès qu'un service est souscrit, jamais à un prospect", () => {
+    expect(keys(visibleSections(["veille-personnalisee"], EMPTY))).toContain("accompagnement");
+    expect(keys(visibleSections(null, EMPTY))).toContain("accompagnement");
+    expect(keys(visibleSections([], { ...EMPTY, propositions: 1 }))).not.toContain("accompagnement");
   });
 
   it("montre les propositions dès qu'il y en a une, même sans aucun service", () => {
@@ -86,10 +107,17 @@ describe("sections visibles", () => {
   });
 
   it("range propositions puis missions en cours dans Contrats, en dernier", () => {
-    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "agir", "veille", "prestations"]);
-    expect(keys(visibleSections(["prestations"], { ...EMPTY, propositions: 2 })).slice(-2)).toEqual([
+    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual([
+      "tableau",
+      "agir",
+      "veille",
+      "prestations",
+      "accompagnement",
+    ]);
+    expect(keys(visibleSections(["prestations"], { ...EMPTY, propositions: 2 })).slice(-3)).toEqual([
       "propositions",
       "prestations",
+      "accompagnement",
     ]);
     expect(SECTIONS.find((s) => s.key === "prestations")?.group).toBe("contrats");
     expect(SECTIONS.find((s) => s.key === "propositions")?.group).toBe("contrats");
@@ -116,6 +144,27 @@ describe("sections visibles", () => {
     expect(hasPersonalisedWatch(null)).toBe(true);
     expect(hasPersonalisedWatch(["actions"])).toBe(false);
     expect(hasPersonalisedWatch(["veille-personnalisee"])).toBe(true);
+  });
+});
+
+describe("groupes et synthèses", () => {
+  it("regroupe les sections visibles dans l'ordre, sans l'accueil", () => {
+    const groupes = visibleGroups(visibleSections(["direction-technique", "suivi-technique"], EMPTY));
+    expect(groupes.map((g) => g.group)).toEqual(["missions", "site", "agir", "veille", "contrats"]);
+    expect(groupes.map((g) => g.label)).toEqual(["Pilotage", "Votre site", "Agir", "Veille", "Contrats"]);
+  });
+
+  it("n'ouvre une synthèse qu'aux groupes de deux entrées ou plus", () => {
+    const groupes = visibleGroups(visibleSections(["direction-technique", "veille-technique"], EMPTY));
+    const synthese = Object.fromEntries(groupes.map((g) => [g.group, g.synthese]));
+    expect(synthese).toEqual({ missions: true, site: false, agir: false, veille: true, contrats: false });
+  });
+
+  it("donne des adresses de synthèse uniques, relues par groupFromSlug", () => {
+    const slugs = Object.values(GROUP_SLUGS);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const [group, slug] of Object.entries(GROUP_SLUGS)) expect(groupFromSlug(slug)).toBe(group);
+    expect(groupFromSlug("inconnu")).toBeNull();
   });
 });
 
@@ -207,5 +256,34 @@ describe("calendrier", () => {
 
   it("range une date Notion sans heure au bon jour, en heure de Paris", () => {
     expect(dayKey(new Date("2026-10-31T23:30:00Z"))).toBe("2026-11-01");
+  });
+});
+
+describe("sections en sommeil", () => {
+  const maintenant = new Date("2026-09-27T08:00:00Z");
+  const sections = visibleSections(["direction-technique", "audit"], EMPTY);
+  const ilYa = (jours: number) => new Date(maintenant.getTime() - jours * 86_400_000).toISOString();
+
+  it("retire de la navigation une section cochée, vide depuis plus d'une semaine", () => {
+    const sommeil = sectionsEnSommeil(sections, EMPTY, { "direction-technique": ilYa(10), audit: ilYa(10) }, maintenant);
+    expect([...sommeil]).toEqual(expect.arrayContaining(["decisions", "documents", "cartographie", "audit"]));
+    expect(sommeil.has("agir")).toBe(false);
+    expect(sommeil.has("veille")).toBe(false);
+    expect(sommeil.has("accompagnement")).toBe(false);
+  });
+
+  it("laisse sa semaine de grâce à une section tout juste ouverte", () => {
+    expect(sectionsEnSommeil(sections, EMPTY, { "direction-technique": ilYa(3), audit: ilYa(3) }, maintenant).size).toBe(0);
+  });
+
+  it("réveille une section dès son premier contenu", () => {
+    const sommeil = sectionsEnSommeil(sections, { ...EMPTY, decisions: 1 }, { "direction-technique": ilYa(30) }, maintenant);
+    expect(sommeil.has("decisions")).toBe(false);
+    expect(sommeil.has("missions")).toBe(false);
+    expect(sommeil.has("documents")).toBe(true);
+  });
+
+  it("ne met rien en sommeil sans date d'ouverture connue", () => {
+    expect(sectionsEnSommeil(sections, EMPTY, {}, maintenant).size).toBe(0);
   });
 });

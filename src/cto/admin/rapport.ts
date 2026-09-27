@@ -14,6 +14,20 @@ export interface ReportSummary {
   lines: string[];
   /** Les points à regarder, tels que la synchro les a formulés. */
   warnings: string[];
+  /** Parmi eux, ceux qui touchent un accès ou un rattachement : à traiter. */
+  alerts: string[];
+}
+
+/**
+ * Les alertes de ce balayage que le précédent ne portait pas.
+ *
+ * C'est ce qui décide d'un e-mail. Une ligne publiée sans client reste une
+ * alerte tant qu'elle n'est pas corrigée ; la redire chaque nuit apprendrait
+ * seulement à ne plus ouvrir le message.
+ */
+export function newAlerts(current: string[], previous: string[]): string[] {
+  const connues = new Set(previous);
+  return [...new Set(current)].filter((message) => !connues.has(message));
 }
 
 function plural(count: number, one: string, many: string): string {
@@ -58,7 +72,7 @@ export function summarizeSync(report: SyncReport): ReportSummary {
     );
   }
 
-  return { lines, warnings: report.warnings };
+  return { lines, warnings: report.warnings, alerts: report.alerts };
 }
 
 export function summarizeNotify(report: NotifyReport, dryRun: boolean): ReportSummary {
@@ -69,5 +83,5 @@ export function summarizeNotify(report: NotifyReport, dryRun: boolean): ReportSu
       `${report.upToDate} déjà à jour.`,
   ];
   if (dryRun) lines.unshift("À blanc : aucun e-mail n'est parti.");
-  return { lines, warnings: report.warnings };
+  return { lines, warnings: report.warnings, alerts: [] };
 }

@@ -428,6 +428,31 @@ Le cas « ignorée » rend 200 délibérément : un Cron rouge tous les jours po
 raison connue et acceptée finit par ne plus être lu, et c'est le vrai incident
 qu'on manquerait alors.
 
+### Le journal des balayages, et l'alerte
+
+Le code HTTP ne dit pas ce que la synchro a **trouvé** : une personne révoquée,
+une ligne publiée sans client, une colonne renommée. Chaque balayage réel — Cron,
+bouton « Synchroniser » ou `npm run cto:sync` — laisse donc son rapport dans
+`cto_sync_runs` (migration `0016`, purge à 90 jours), et le dernier s'affiche en
+tête de `/admin-cto/pilotage` sous **« Dernier balayage »**. Un balayage à blanc
+n'y figure pas : il n'a rien écrit.
+
+Le rapport distingue deux niveaux. Les **points à regarder** sont l'ordinaire
+(« nouvel accompagnement créé », « base ignorée »). Les **points à traiter**
+touchent un accès ou un rattachement et demandent un geste dans l'atelier :
+accès révoqué, ligne sans client ou à plusieurs clients, doublon d'adresse ou de
+fiche organisation, paiement orphelin, base écartée pour son schéma
+(`notion-livrables.md` § 4).
+
+**Le Cron seul envoie un e-mail**, à `agathe@next-impact.digital`, et
+seulement pour un point à traiter que le balayage précédent ne portait pas —
+ou pour un balayage en échec. Un point laissé en l'état ne réécrit pas chaque
+nuit. L'e-mail donne un nombre et un lien, jamais le détail : il nomme des
+clients et des personnes, il se lit derrière la connexion de la supervision.
+
+Le journal ne fait jamais échouer un balayage : table absente (migration pas
+encore appliquée) ou envoi refusé se disent dans les logs Vercel, rien de plus.
+
 ---
 
 ## 5. Supervision — `/admin-cto`
@@ -450,10 +475,12 @@ signalées « non souscrite ». Les téléchargements de pièces et le PDF passe
 par des routes propres à l'admin, qui vérifient elles-mêmes la session admin
 (un Route Handler n'hérite d'aucun layout).
 
-**Exploitation, sans terminal.** En tête de `/admin-cto/pilotage`, deux
-panneaux lancent la synchro Notion (§ 4, `synchroniser`) et la notification
-(§ 3.4, `prevenir`), chacun « à blanc » d'abord ; le rapport s'affiche sous les
-boutons, avec les points à regarder. Mêmes fonctions que `cto:sync` et
+**Exploitation, sans terminal.** En tête de `/admin-cto/pilotage`, le
+**dernier balayage** inscrit au journal (§ 4 — d'abord celui de la nuit), puis
+deux panneaux qui lancent la synchro Notion (§ 4, `synchroniser`) et la
+notification (§ 3.4, `prevenir`), chacun « à blanc » d'abord ; le rapport
+s'affiche sous les boutons, les points à traiter ouverts en tête, les points à
+regarder repliés dessous. Mêmes fonctions que `cto:sync` et
 `cto:notify` ; la page porte `maxDuration = 300`, comme le Cron. Sur la fiche
 d'un accompagnement, **« Envoyer l'invitation »** envoie le lien de connexion
 d'une personne (§ 3.2, `sendAccessLink`) : refusé pour une personne révoquée

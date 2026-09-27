@@ -46,7 +46,8 @@ export type SectionKey =
   | "veille"
   | "veille-technique"
   | "documents"
-  | "prestations";
+  | "prestations"
+  | "accompagnement";
 
 export type SectionGroup = "missions" | "site" | "agir" | "veille" | "contrats";
 
@@ -76,6 +77,12 @@ export interface Section {
    * souscrit ; une entrée vide « Propositions » n'aurait, elle, rien à dire.
    */
   siContenu?: true;
+  /**
+   * Visible dès que l'accompagnement a souscrit quelque chose (un service
+   * coché, ou le régime historique). Un prospect qui n'a qu'une proposition
+   * n'a pas encore d'accompagnement à décrire.
+   */
+  siSouscrit?: true;
 }
 
 /** Dans l'ordre de la navigation. */
@@ -129,6 +136,16 @@ export const SECTIONS: readonly Section[] = [
     label: "Missions en cours",
     group: "contrats",
     services: ["prestations"],
+  },
+  // Ce que l'on a, ce que l'on pourrait avoir : la destination de toutes les
+  // suggestions « Prochaine étape ». Sans montants (décision du 2026-09-27).
+  {
+    key: "accompagnement",
+    slug: "accompagnement",
+    label: "Votre accompagnement",
+    group: "contrats",
+    services: null,
+    siSouscrit: true,
   },
 ];
 
@@ -185,6 +202,7 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
 export function visibleSections(services: string[] | null, contents: Contents): Section[] {
   return SECTIONS.filter((section) => {
     if (section.siContenu) return hasContent(section.key, contents);
+    if (section.siSouscrit) return services === null || services.length > 0;
     if (section.services === null) return true;
     if (services === null) return hasContent(section.key, contents);
     return section.services.some((service) => services.includes(service));
@@ -219,10 +237,132 @@ export const LEGACY_SLUGS: Record<string, SectionKey> = {
   "a-arbitrer": "agir",
 };
 
+// ─── Groupes ─────────────────────────────────────────────────────────────
+//
+// Un groupe de plusieurs entrées a sa page de synthèse, sous
+// `/espace-direction/synthese/<slug>` : une carte par entrée, la réponse en une
+// phrase et le lien vers le détail. Dans la barre latérale, le groupe devient
+// un accordéon dont l'intitulé mène à cette synthèse.
+//
+// Un segment `synthese/` plutôt que le slug du groupe à la racine : « veille »
+// et « agir » y sont déjà des entrées, et leurs adresses sont en favori.
+//
+// Un groupe réduit à une seule entrée (Agir, toujours ; Veille sans veille
+// technique) n'a pas de synthèse : elle répéterait la page qu'elle résume.
+
+export const SYNTHESE_SEGMENT = "synthese";
+
+export const GROUP_SLUGS: Record<SectionGroup, string> = {
+  missions: "pilotage",
+  site: "votre-site",
+  agir: "agir",
+  veille: "veille",
+  contrats: "contrats",
+};
+
+/** La question à laquelle répond la synthèse du groupe, en tête de page. */
+export const GROUP_QUESTIONS: Record<SectionGroup, string> = {
+  missions: "Où en est votre système : chantiers, décisions, audits et pièces remises.",
+  site: "Comment va votre site, et de quoi votre système est fait.",
+  agir: "Ce qui demande votre intervention, puis ce qui attend votre arbitrage.",
+  veille: "Ce qui change autour de vous, et ce qui concerne vos composants.",
+  contrats: "Ce qui attend votre accord, et ce qui est signé.",
+};
+
+export function groupFromSlug(slug: string): SectionGroup | null {
+  const entry = Object.entries(GROUP_SLUGS).find(([, value]) => value === slug);
+  return entry ? (entry[0] as SectionGroup) : null;
+}
+
+export interface VisibleGroup {
+  group: SectionGroup;
+  label: string;
+  sections: Section[];
+  /** Vrai si le groupe a sa page de synthèse (deux entrées ou plus). */
+  synthese: boolean;
+}
+
+/** Les groupes des sections visibles, dans l'ordre de la navigation. L'accueil n'en fait pas partie. */
+export function visibleGroups(sections: readonly Section[]): VisibleGroup[] {
+  const groups: VisibleGroup[] = [];
+  for (const section of sections) {
+    if (!section.group) continue;
+    let groupe = groups.find((candidate) => candidate.group === section.group);
+    if (!groupe) {
+      groupe = { group: section.group, label: GROUP_LABELS[section.group], sections: [], synthese: false };
+      groups.push(groupe);
+    }
+    groupe.sections.push(section);
+    groupe.synthese = groupe.sections.length > 1;
+  }
+  return groups;
+}
+
 /**
  * La partie « À arbitrer » de la page Actions est-elle souscrite ? Mêmes
  * services que la roadmap, dont elle arbitre les opportunités.
  */
 export function arbitrageOuvert(sections: readonly Section[]): boolean {
   return sections.some((section) => section.key === "roadmap");
+}
+
+/** Une section cochée mais vide quitte la navigation après ce délai (décision du 2026-09-27). */
+export const SOMMEIL_JOURS = 7;
+
+/** Vide, pour les sections dont l'espace sait mesurer le contenu. `null` : jamais mise en sommeil. */
+function vide(key: SectionKey, contents: Contents): boolean | null {
+  switch (key) {
+    case "missions":
+      return contents.roadmap + contents.decisions + contents.audits === 0;
+    case "roadmap":
+      return contents.roadmap === 0;
+    case "decisions":
+      return contents.decisions === 0;
+    case "audit":
+      return contents.audits === 0;
+    case "documents":
+      return contents.documents === 0;
+    case "cartographie":
+      return contents.cartographie === 0;
+    case "site":
+      return !contents.site;
+    case "veille-technique":
+      return contents.sentinelle !== true;
+    default:
+      // Accueil, Actions, Veille, Contrats : toujours utiles, ou déjà ouvertes
+      // au seul contenu. Les prestations : leur nombre n'est pas dans `Contents`.
+      return null;
+  }
+}
+
+/**
+ * Les sections « en sommeil » : ouvertes par un service coché, encore vides,
+ * et ouvertes depuis plus de `SOMMEIL_JOURS`. Elles quittent la navigation —
+ * une entrée qui ne mène qu'à « En préparation » est du bruit — mais restent
+ * accessibles (elles figurent dans « Votre accompagnement »), et reviennent
+ * d'elles-mêmes au premier contenu.
+ *
+ * La semaine se compte depuis l'OUVERTURE de la section (date où son service a
+ * été vu coché, `servicesOuverts`), pas depuis aujourd'hui : un client tout
+ * juste lancé garde ses sections le temps que le premier livrable arrive. Sans
+ * date connue (régime historique), rien n'est mis en sommeil.
+ */
+export function sectionsEnSommeil(
+  sections: readonly Section[],
+  contents: Contents,
+  ouverts: Record<string, string>,
+  maintenant: Date,
+): Set<SectionKey> {
+  const seuil = maintenant.getTime() - SOMMEIL_JOURS * 86_400_000;
+  const sommeil = new Set<SectionKey>();
+  for (const section of sections) {
+    if (!section.services || vide(section.key, contents) !== true) continue;
+    const dates = section.services
+      .map((code) => ouverts[code])
+      .filter((date): date is string => Boolean(date))
+      .map((date) => new Date(date).getTime());
+    if (dates.length === 0) continue;
+    if (Math.min(...dates) < seuil) sommeil.add(section.key);
+  }
+  return sommeil;
 }

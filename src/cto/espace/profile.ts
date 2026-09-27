@@ -17,6 +17,18 @@ export interface ClientProfile {
   hasSite: boolean;
   /** Vrai si un client Sentinelle est relié (colonne Notion « ID Sentinelle »). */
   hasSentinelle: boolean;
+  /** État de l'accompagnement : les suggestions ne s'adressent qu'à un accompagnement actif. */
+  status: string;
+  /** Début du contrat, pour la fin d'engagement de « Votre accompagnement ». */
+  contractStart: Date | null;
+  /** Formule du suivi et maintenance : Essentiel, Actif, ou rien. */
+  suiviFormule: string | null;
+  /** Fin des mois de suivi inclus dans un forfait. */
+  suiviInclusJusquau: Date | null;
+  /** Case « Sans suggestions » de la fiche. */
+  suggestionsCoupees: boolean;
+  /** Date d'ouverture de chaque service coché (code → ISO). */
+  servicesOuverts: Record<string, string>;
 }
 
 export async function clientProfile(clientId: string): Promise<ClientProfile> {
@@ -26,6 +38,12 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
       tier: ctoClients.tier,
       projectId: ctoClients.wpUmbrellaProjectId,
       sentinelleClientId: ctoClients.sentinelleClientId,
+      status: ctoClients.status,
+      contractStart: ctoClients.contractStart,
+      suiviFormule: ctoClients.suiviFormule,
+      suiviInclusJusquau: ctoClients.suiviInclusJusquau,
+      suggestionsCoupees: ctoClients.suggestionsCoupees,
+      servicesOuverts: ctoClients.servicesOuverts,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -36,5 +54,11 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
     tier: row?.tier ?? "direction",
     hasSite: Boolean(row?.projectId),
     hasSentinelle: Boolean(row?.sentinelleClientId),
+    status: row?.status ?? "actif",
+    contractStart: row?.contractStart ?? null,
+    suiviFormule: row?.suiviFormule ?? null,
+    suiviInclusJusquau: row?.suiviInclusJusquau ?? null,
+    suggestionsCoupees: row?.suggestionsCoupees ?? false,
+    servicesOuverts: row?.servicesOuverts ?? {},
   };
 }

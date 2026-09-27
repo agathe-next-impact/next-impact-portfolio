@@ -298,6 +298,35 @@ reviendront :
 | « l'atelier ne rend aucune ligne publiée » | Le garde-fou de retrait de masse s'est déclenché. |
 | « nouvel accès créé » | Une nouvelle ligne dans Personnes (§ 6). |
 | « a changé de client dans Notion : ignoré » | La relation `Client` d'une personne déjà créée a bougé : rien n'est appliqué, à trancher en SQL. |
+| « colonne « X » absente (renommée en « Y » ?) » / « de type …, attendu … » | Le contrôle de schéma a écarté la base (ci-dessous). |
+| « l'adresse … figure sur N lignes » | Doublon dans Personnes : une ligne est retenue, les autres ignorées (§ 6). |
+| « désigne la fiche organisation de … » | Deux fiches Clients pour une organisation : la seconde est ignorée pour elle. |
+
+**Deux niveaux.** Le rapport marque « à traiter » (le `!` de la commande, le
+cadre rouge de l'écran) ce qui touche un accès ou un rattachement : accès
+révoqué ou fermé, ligne sans client ou à plusieurs clients, doublon, paiement
+orphelin, base écartée. Le reste est à regarder. Seul le « à traiter » nouveau
+vaut un e-mail, et seulement après le Cron (§ 4 de
+`espace-client-mise-en-place.md`, journal des balayages).
+
+**Le contrôle de schéma.** Avant de lire les lignes d'une base, la synchro
+compare son schéma aux colonnes que le code lit (`src/cto/notion/schema.ts`).
+Une colonne absente — presque toujours renommée — ou changée de type, et la
+base n'est **ni écrite ni retirée** ce tour-ci : le rapport la nomme, et cite
+la colonne qui l'a sans doute remplacée quand il n'y en a qu'une candidate.
+Sans ce contrôle, renommer « Motif » réécrivait toutes les décisions avec un
+motif vide, et le client lisait « corrigé le… » sur chacune. Pour la base
+**Clients**, dont tout dépend, le balayage entier s'arrête avant d'avoir rien
+écrit. Ajouter une colonne dans l'atelier ne demande rien ; en lire une
+nouvelle dans `map.ts` demande de la déclarer dans `schema.ts` (un test le
+rappelle). Exception : `Affichage` est facultative — sans elle tout part en
+archive, et c'est le cas de la base Documents, qui ne l'a jamais eue.
+
+**Qui garde quoi quand deux fiches se disputent.** Une organisation ou une
+ligne « Veille — organisation » ne se relie qu'à un accompagnement. En cas de
+doublon, la fiche la plus ancienne la garde ; une fiche **close** passe après
+toutes les autres, pour qu'un client revenu sous une nouvelle fiche reprenne son
+organisation.
 
 Le garde-fou de retrait de masse mérite une explication. Si une base ne rend plus rien alors que
 l'espace en affiche plusieurs, la cause la plus probable est une colonne
@@ -433,6 +462,15 @@ Notion) est **adoptée** dès qu'une fiche portant la même adresse apparaît, a
 lieu d'être dupliquée — l'index unique sur l'adresse (`cto_person_email`) n'y
 survivrait pas sinon. C'est le même geste que l'adoption des accompagnements
 par `ID espace`, appliqué à l'adresse plutôt qu'à un identifiant collé.
+
+**Une adresse, une ligne.** Notion laisse saisir deux lignes pour la même
+adresse ; la base, non (`cto_person_email`), et l'écriture de la seconde faisait
+échouer tout le balayage. Désormais une seule est retenue — celle que l'accès
+désigne déjà, à défaut la plus ancienne —, les autres sont ignorées et
+signalées « à traiter » jusqu'à leur suppression. Même prudence pour une
+adresse modifiée qui serait déjà celle d'un autre accès : le changement n'est
+pas appliqué. Si la ligne d'un accès est supprimée et qu'une autre porte son
+adresse, l'accès passe sur la nouvelle ligne au lieu d'être révoqué.
 
 **`Révoquée` va dans les deux sens.** Cocher coupe l'accès au balayage
 suivant : sessions fermées, passkeys refusées, comme la révocation manuelle
@@ -675,6 +713,48 @@ la forme de sa prestation. Le groupe de la roadmap, des décisions et de l'audit
 s'appelle désormais **Pilotage** (et non plus Missions) pour que le mot
 « mission » ne désigne qu'une chose.
 
+### Votre accompagnement, Prochaine étape, sections en sommeil
+
+Trois mécanismes pour inciter à l'étape suivante, **sans jamais afficher de
+montant** (décision du 2026-09-27 : le tarif se discute en comité).
+
+**Contrats → Votre accompagnement** (dès qu'un service est coché) : ce que le
+client a (palier, engagement calculé depuis « Début du contrat » — 6 mois puis
+au mois, préavis de 2 mois —, formule de suivi, mois inclus), ce que l'étape
+d'après apporte (Référent après un audit seul, Direction technique après le
+Référent, tel que le dit la page publique `lib/cto-externalise.ts`), ce qui peut
+s'ajouter (suivi, veille personnalisée, projets ponctuels), et un seul bouton
+« En parler ». La page liste aussi toutes les sections de l'espace.
+
+**Carte « Prochaine étape »** sur l'accueil, sous Contrats : une suggestion à
+la fois, la première qui s'applique, qui cite le fait qui la motive
+(`src/cto/espace/suggestions.ts`, testé) :
+
+1. une proposition sans réponse (non masquable) ;
+2. les mois de suivi inclus qui se terminent sous 30 jours ;
+3. des alertes critiques sur le site, sans suivi et maintenance ;
+4. un audit remis, sans service Actions ni Direction technique ;
+5. palier Référent et 3 opportunités ou plus à arbitrer.
+
+« Pas maintenant » la masque 60 jours pour la personne. Jamais pour un
+accompagnement suspendu, en restitution ou clos (la démo est suspendue). Les
+clics « En parler » et les masquages sont journalisés (journal de l'admin, pas
+celui des appareils du client).
+
+**Sections en sommeil** : une section cochée mais vide sort de la barre
+latérale **une semaine** après son ouverture (date où son service a été vu
+coché), et revient au premier contenu. Sa page reste ouverte et listée dans
+« Votre accompagnement ».
+
+**Colonnes de la fiche Clients**, toutes facultatives :
+
+| Colonne | Sert à |
+| --- | --- |
+| Début du contrat | fin d'engagement affichée |
+| Formule suivi | Essentiel ou Actif, affichée dans « Votre accompagnement » |
+| Fin du suivi inclus | déclencheur 2 |
+| Sans suggestions | coupe la carte pour ce client (négociation en cours…) |
+
 ## Fichiers
 
 | Rôle | Fichier |
@@ -685,6 +765,9 @@ s'appelle désormais **Pilotage** (et non plus Missions) pour que le mot
 | Appels HTTP et pagination Notion | `src/cto/notion/api.ts` |
 | Noms des colonnes de l'atelier | `src/cto/notion/map.ts` |
 | Balayage, garde-fous, rapport | `src/cto/notion/sync.ts` |
+| Colonnes attendues, contrôle de schéma | `src/cto/notion/schema.ts` |
+| Points à traiter / à regarder | `src/cto/notion/findings.ts` |
+| Journal des balayages, e-mail d'alerte | `src/cto/admin/runs.ts`, `src/cto/db/schema.ts` — `cto_sync_runs` |
 | Placement (table mutable) | `src/cto/db/schema.ts` — `cto_deliverable_placements` |
 | Pages de catégorie | `app/(cto)/espace-direction/livrables/[categorie]/` |
 | Commande | `scripts/cto-sync.ts` |

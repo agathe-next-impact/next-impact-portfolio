@@ -53,6 +53,14 @@ export const PROPS = {
     watchedSite: "Site surveillé",
     /** Adresse qui reçoit les alertes et lettres Sentinelle. */
     watchContact: "Contact veille",
+    /** D'où se calcule la fin de l'engagement initial (« Votre accompagnement »). */
+    contractStart: "Début du contrat",
+    /** Essentiel ou Actif ; vide sans suivi. */
+    suiviFormule: "Formule suivi",
+    /** Fin des mois de suivi inclus dans un forfait. */
+    suiviInclus: "Fin du suivi inclus",
+    /** Coupe la carte « Prochaine étape » pour ce client. */
+    sansSuggestions: "Sans suggestions",
   },
   /**
    * Colonnes de la « Base des fiches organisation », qui vit hors de l'atelier
@@ -448,6 +456,37 @@ function labelled(label: string, value: string | null): string | null {
 /** L'identifiant du site chez WP Umbrella, s'il est renseigné. */
 export function clientWpUmbrellaProjectId(page: NotionPage): number | null {
   return p.number(page, PROPS.clients.wpUmbrellaProjectId);
+}
+
+/** Ce que « Votre accompagnement » et la carte « Prochaine étape » lisent de la fiche. */
+export function clientCommercial(page: NotionPage): {
+  contractStart: Date | null;
+  suiviFormule: string | null;
+  suiviInclusJusquau: Date | null;
+  suggestionsCoupees: boolean;
+} {
+  const formule = p.select(page, PROPS.clients.suiviFormule);
+  return {
+    contractStart: p.date(page, PROPS.clients.contractStart),
+    // Seules les formules publiées passent : une option ajoutée par erreur
+    // dans Notion ne doit pas s'afficher chez le client.
+    suiviFormule: formule === "Essentiel" || formule === "Actif" ? formule : null,
+    suiviInclusJusquau: p.date(page, PROPS.clients.suiviInclus),
+    suggestionsCoupees: p.checkbox(page, PROPS.clients.sansSuggestions),
+  };
+}
+
+/**
+ * La date d'ouverture de chaque service coché : l'ancienne pour un service
+ * déjà vu, `maintenant` pour un nouveau, et plus rien pour un service décoché.
+ * Pur, pour le test : la synchro n'a qu'à comparer et écrire.
+ */
+export function servicesOuverts(
+  codes: string[],
+  avant: Record<string, string>,
+  maintenant: Date,
+): Record<string, string> {
+  return Object.fromEntries(codes.map((code) => [code, avant[code] ?? maintenant.toISOString()]));
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

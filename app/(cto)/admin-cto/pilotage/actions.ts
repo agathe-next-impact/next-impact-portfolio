@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { sendAccessLink, setSyncEnabled, summarizeNotify, summarizeSync } from "@cto/admin";
+import { recordSyncRun, sendAccessLink, setSyncEnabled, summarizeNotify, summarizeSync } from "@cto/admin";
 import { configurationIssue, syncFromNotion } from "@cto/notion";
 import { notifyPendingPublications } from "@cto/notify";
 import { requireSession } from "../session";
@@ -56,6 +56,8 @@ export interface RapportState {
   ok: boolean;
   lines: string[];
   warnings: string[];
+  /** Parmi `warnings`, ce qui touche un accès ou un rattachement. */
+  alerts: string[];
   at: string | null;
 }
 
@@ -69,15 +71,20 @@ export async function synchroniser(_prev: RapportState, formData: FormData): Pro
   const at = new Date().toISOString();
 
   const issue = configurationIssue();
-  if (issue) return { ok: false, lines: [issue], warnings: [], at };
+  if (issue) return { ok: false, lines: [issue], warnings: [], alerts: [], at };
 
+  const dryRun = formData.get("mode") === "a-blanc";
   try {
-    const report = await syncFromNotion({ dryRun: formData.get("mode") === "a-blanc" });
+    const report = await syncFromNotion({ dryRun });
+    // Au journal, sans e-mail : le rapport est sous les yeux de qui a cliqué.
+    await recordSyncRun({ source: "admin", report });
     revalidatePath("/admin-cto/pilotage", "layout");
     return { ok: true, ...summarizeSync(report), at };
   } catch (error) {
     console.error("[cto] synchro depuis l'admin impossible", error);
-    return { ok: false, lines: [error instanceof Error ? error.message : "Échec de la synchro."], warnings: [], at };
+    const erreur = error instanceof Error ? error.message : "Échec de la synchro.";
+    if (!dryRun) await recordSyncRun({ source: "admin", error: erreur });
+    return { ok: false, lines: [erreur], warnings: [], alerts: [], at };
   }
 }
 
@@ -96,6 +103,12 @@ export async function prevenir(_prev: RapportState, formData: FormData): Promise
     return { ok: true, ...summarizeNotify(report, dryRun), at };
   } catch (error) {
     console.error("[cto] notification depuis l'admin impossible", error);
-    return { ok: false, lines: [error instanceof Error ? error.message : "Échec de la notification."], warnings: [], at };
+    return {
+      ok: false,
+      lines: [error instanceof Error ? error.message : "Échec de la notification."],
+      warnings: [],
+      alerts: [],
+      at,
+    };
   }
 }

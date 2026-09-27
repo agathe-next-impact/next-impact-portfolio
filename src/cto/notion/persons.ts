@@ -4,7 +4,9 @@ import { ctoPersons } from "../db/schema";
 import { record, revokeAllSessions } from "../access";
 import { queryDatabase, type NotionPage } from "./api";
 import { personsDatabaseId } from "./config";
+import { alert, emptyFindings, type Findings } from "./findings";
 import { clientPageIds, personEmail, personName, personRevoked, personRole } from "./map";
+import { checkColumns, COLUMNS, schemaWarning } from "./schema";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // La synchro des personnes — qui a accès, depuis Notion plutôt que la CLI.
@@ -15,7 +17,7 @@ import { clientPageIds, personEmail, personName, personRevoked, personRole } fro
 // le lien magique ; il sert ici de clé d'adoption gratuite pour toute personne
 // créée avant ce mécanisme (`npm run cto:invite`).
 //
-// Deux prudences, asymétriques et volontaires :
+// Trois prudences, dont deux asymétriques et volontaires :
 //
 //  1. **La révocation est pilotée par Notion, la réassignation ne l'est pas.**
 //     Cocher « Révoquée » NARROWS l'accès : c'est sûr par défaut, donc
@@ -31,6 +33,11 @@ import { clientPageIds, personEmail, personName, personRevoked, personRole } fro
 //     Notion rouvre l'accès au balayage suivant (même page, case décochée).
 //     Garde-fou : si la base ne rend plus AUCUNE ligne, rien n'est révoqué
 //     en masse sans `--forcer` — une base vide ressemble à une panne.
+//  3. **Une adresse, une ligne.** Notion n'a pas de contrainte d'unicité, la
+//     base si. Deux lignes pour la même adresse : une seule est retenue,
+//     l'autre est ignorée et signalée (`onePerEmail`). Une adresse déjà
+//     portée par un autre accès n'est pas reprise. Sans cela, l'index unique
+//     ferait échouer l'écriture, et tout le balayage avec elle.
 //
 // Aucun e-mail ne part d'ici : le lien de connexion reste un geste séparé
 // (`cto:invite --client <uuid> --email …`, ou la personne se présente
@@ -56,6 +63,53 @@ interface ExistingPerson {
   revokedAt: Date | null;
 }
 
+/** Une ligne de la base Personnes, réduite à ce qui sert à départager les doublons. */
+export interface PersonLine {
+  id: string;
+  email: string | null;
+  name: string | null;
+}
+
+export interface DuplicateEmail {
+  email: string;
+  kept: PersonLine;
+  ignored: PersonLine[];
+}
+
+/**
+ * Pur : les adresses portées par plusieurs lignes, et la ligne retenue pour
+ * chacune.
+ *
+ * Retenue : la ligne que l'accès existant désigne déjà (`holders` : adresse →
+ * page Notion de l'accès qui la porte en base), à défaut la première de
+ * `lines`, qui arrive dans l'ordre de création. Une ligne sans adresse n'est
+ * le doublon de personne ; elle est signalée plus loin, pour ce qu'elle est.
+ */
+export function onePerEmail(lines: PersonLine[], holders: Map<string, string>): DuplicateEmail[] {
+  const byEmail = new Map<string, PersonLine[]>();
+  for (const line of lines) {
+    if (!line.email) continue;
+    byEmail.set(line.email, [...(byEmail.get(line.email) ?? []), line]);
+  }
+
+  const duplicates: DuplicateEmail[] = [];
+  for (const [email, group] of byEmail) {
+    if (group.length < 2) continue;
+    const kept = group.find((line) => line.id === holders.get(email)) ?? group[0];
+    duplicates.push({ email, kept, ignored: group.filter((line) => line !== kept) });
+  }
+  return duplicates;
+}
+
+/** Ce que le balayage d'une ligne a besoin de savoir des autres. */
+interface Context {
+  byNotionPage: Map<string, string>;
+  byPage: Map<string, ExistingPerson>;
+  byEmail: Map<string, ExistingPerson>;
+  /** Les pages présentes dans la base, doublons compris. */
+  presentes: Set<string>;
+}
+
 /**
  * Balaie la base Personnes.
  *
@@ -66,8 +120,8 @@ interface ExistingPerson {
 export async function syncPersons(
   byNotionPage: Map<string, string>,
   options: { dryRun: boolean; force?: boolean },
-): Promise<{ report: PersonsReport; warnings: string[] }> {
-  const warnings: string[] = [];
+): Promise<{ report: PersonsReport } & Findings> {
+  const findings = emptyFindings();
   const report: PersonsReport = {
     seen: 0,
     created: 0,
@@ -77,7 +131,20 @@ export async function syncPersons(
     unchanged: 0,
   };
 
-  const pages = await queryDatabase(personsDatabaseId());
+  // Avant toute lecture de ligne : « Révoquée » renommée se lirait décochée
+  // partout, et rouvrirait d'un coup tous les accès coupés.
+  const databaseId = personsDatabaseId();
+  const broken = schemaWarning("Personnes", await checkColumns(databaseId, COLUMNS.persons));
+  if (broken) {
+    alert(findings, broken);
+    return { report, ...findings };
+  }
+
+  // Dans l'ordre de création : entre deux lignes pour la même adresse, c'est
+  // la plus ancienne qui reste.
+  const pages = await queryDatabase(databaseId, undefined, [
+    { timestamp: "created_time", direction: "ascending" },
+  ]);
 
   const rows: ExistingPerson[] = await db()
     .select({
@@ -91,20 +158,40 @@ export async function syncPersons(
     })
     .from(ctoPersons);
 
-  const byPage = new Map(
-    rows.filter((row): row is ExistingPerson & { notionPageId: string } => row.notionPageId !== null)
-      .map((row) => [row.notionPageId, row]),
+  const context: Context = {
+    byNotionPage,
+    byPage: new Map(
+      rows.filter((row): row is ExistingPerson & { notionPageId: string } => row.notionPageId !== null)
+        .map((row) => [row.notionPageId, row]),
+    ),
+    byEmail: new Map(rows.map((row) => [row.email, row])),
+    presentes: new Set(pages.map((page) => page.id)),
+  };
+
+  const holders = new Map(
+    rows.flatMap((row) => (row.notionPageId ? [[row.email, row.notionPageId] as const] : [])),
   );
-  const byEmail = new Map(rows.map((row) => [row.email, row]));
+  const lines = pages.map((page) => ({ id: page.id, email: personEmail(page), name: personName(page) }));
+  const ignorees = new Set<string>();
+  for (const doublon of onePerEmail(lines, holders)) {
+    for (const line of doublon.ignored) ignorees.add(line.id);
+    alert(
+      findings,
+      `Personnes : l'adresse ${doublon.email} figure sur ${doublon.ignored.length + 1} lignes. ` +
+        `Seule « ${doublon.kept.name ?? doublon.email} » est retenue — supprimer ` +
+        `${doublon.ignored.length > 1 ? "les doublons" : "le doublon"} dans Notion.`,
+    );
+  }
 
   for (const page of pages) {
     report.seen += 1;
-    await syncOne(page, byNotionPage, byPage, byEmail, options.dryRun, report, warnings);
+    if (ignorees.has(page.id)) continue;
+    await syncOne(page, context, options.dryRun, report, findings);
   }
 
-  await revokeMissing(pages, rows, options, report, warnings);
+  await revokeMissing(pages, rows, options, report, findings);
 
-  return { report, warnings };
+  return { report, ...findings };
 }
 
 /** Au-delà, une base Personnes vide ressemble à une panne : pas de révocation sans --forcer. */
@@ -121,7 +208,7 @@ async function revokeMissing(
   rows: ExistingPerson[],
   options: { dryRun: boolean; force?: boolean },
   report: PersonsReport,
-  warnings: string[],
+  findings: Findings,
 ): Promise<void> {
   const presentes = new Set(pages.map((page) => page.id));
   const disparues = rows.filter(
@@ -130,7 +217,8 @@ async function revokeMissing(
   if (disparues.length === 0) return;
 
   if (pages.length === 0 && disparues.length > SEUIL_RETRAIT_MASSIF && !options.force) {
-    warnings.push(
+    alert(
+      findings,
       `Personnes : la base ne rend aucune ligne alors que ${disparues.length} accès sont ouverts. ` +
         "Aucune révocation — vérifier le partage de la base, puis relancer avec --forcer si c'est voulu.",
     );
@@ -138,7 +226,8 @@ async function revokeMissing(
   }
 
   for (const row of disparues) {
-    warnings.push(
+    alert(
+      findings,
       options.dryRun
         ? `« ${row.name} » : ligne disparue de la base Personnes — accès serait révoqué.`
         : `« ${row.name} » : ligne disparue de la base Personnes — accès révoqué.`,
@@ -158,38 +247,41 @@ async function revokeMissing(
 
 async function syncOne(
   page: NotionPage,
-  byNotionPage: Map<string, string>,
-  byPage: Map<string, ExistingPerson>,
-  byEmail: Map<string, ExistingPerson>,
+  context: Context,
   dryRun: boolean,
   report: PersonsReport,
-  warnings: string[],
+  findings: Findings,
 ): Promise<void> {
   const name = personName(page);
   const email = personEmail(page);
   const label = name ?? email ?? "(sans nom ni e-mail)";
 
   if (!name || !email) {
-    warnings.push(`Personne « ${label} » sans nom ou sans e-mail : ignorée.`);
+    findings.warnings.push(`Personne « ${label} » sans nom ou sans e-mail : ignorée.`);
     return;
   }
 
   const links = clientPageIds(page);
-  const clientId = links.length === 1 ? byNotionPage.get(links[0]) : undefined;
+  const clientId = links.length === 1 ? context.byNotionPage.get(links[0]) : undefined;
   if (!clientId) {
-    warnings.push(
-      links.length === 0
-        ? `Personne « ${label} » sans client : elle n'a accès à rien.`
-        : links.length > 1
-          ? `Personne « ${label} » rattachée à plusieurs clients : à trancher, elle est ignorée.`
-          : `Personne « ${label} » : son client n'est pas encore résoluble, elle attend.`,
-    );
+    // Un client pas encore résoluble est l'ordinaire d'une fiche en
+    // préparation ; une relation vide ou double est une erreur de saisie.
+    if (links.length === 1) {
+      findings.warnings.push(`Personne « ${label} » : son client n'est pas encore résoluble, elle attend.`);
+    } else {
+      alert(
+        findings,
+        links.length === 0
+          ? `Personne « ${label} » sans client : elle n'a accès à rien.`
+          : `Personne « ${label} » rattachée à plusieurs clients : à trancher, elle est ignorée.`,
+      );
+    }
     return;
   }
 
   const role = personRole(page);
   const revoked = personRevoked(page);
-  const existing = byPage.get(page.id) ?? byEmail.get(email);
+  const existing = context.byPage.get(page.id) ?? context.byEmail.get(email);
 
   if (!existing) {
     if (!dryRun) {
@@ -197,32 +289,67 @@ async function syncOne(
         .insert(ctoPersons)
         .values({ clientId, notionPageId: page.id, email, name, role, revokedAt: revoked ? new Date() : null });
     }
-    warnings.push(`« ${label} » : nouvel accès créé${revoked ? " (déjà révoqué)" : ""}.`);
+    findings.warnings.push(`« ${label} » : nouvel accès créé${revoked ? " (déjà révoqué)" : ""}.`);
     report.created += 1;
     return;
   }
 
-  if (!existing.notionPageId && dryRun) {
-    warnings.push(`« ${label} » serait rattachée à son accès existant, créé via cto:invite.`);
+  const patch: { notionPageId?: string; name?: string; role?: string | null; email?: string; revokedAt?: Date | null } = {};
+
+  if (!existing.notionPageId) {
+    if (dryRun) findings.warnings.push(`« ${label} » serait rattachée à son accès existant, créé via cto:invite.`);
+    patch.notionPageId = page.id;
+  } else if (existing.notionPageId !== page.id) {
+    // Accès reconnu à son adresse, mais né d'une autre ligne. Si elle est
+    // toujours là, l'adresse lui appartient encore en base : on attend qu'elle
+    // l'ait lâchée. Si elle a disparu, l'accès suit l'adresse — sans quoi il
+    // serait révoqué pour une ligne supprimée alors qu'une autre le porte.
+    if (context.presentes.has(existing.notionPageId)) {
+      alert(
+        findings,
+        `« ${label} » : l'adresse ${email} est encore celle de l'accès de « ${existing.name} ». Ligne ignorée ce tour-ci.`,
+      );
+      return;
+    }
+    findings.warnings.push(`« ${label} » : accès rattaché à cette ligne, l'ancienne a disparu de la base.`);
+    patch.notionPageId = page.id;
   }
+
   if (existing.clientId !== clientId) {
-    warnings.push(
+    alert(
+      findings,
       `« ${label} » a changé de client dans Notion : ignoré. Un transfert entre accompagnements reste un geste SQL délibéré.`,
     );
   }
+
   if (email !== existing.email) {
-    warnings.push(`« ${label} » : adresse changée dans Notion (${existing.email} → ${email}).`);
+    const holder = context.byEmail.get(email);
+    if (holder && holder.id !== existing.id) {
+      alert(
+        findings,
+        `« ${label} » : l'adresse ${email} est déjà celle de l'accès de « ${holder.name} ». Changement d'adresse ignoré.`,
+      );
+    } else {
+      alert(findings, `« ${label} » : adresse changée dans Notion (${existing.email} → ${email}).`);
+      patch.email = email;
+    }
   }
 
-  const patch: { notionPageId?: string; name?: string; role?: string | null; email?: string; revokedAt?: Date | null } = {};
-  if (!existing.notionPageId) patch.notionPageId = page.id;
   if (name !== existing.name) patch.name = name;
   if (role !== existing.role) patch.role = role;
-  if (email !== existing.email) patch.email = email;
 
   const wasRevoked = existing.revokedAt !== null;
   if (revoked && !wasRevoked) patch.revokedAt = new Date();
   else if (!revoked && wasRevoked) patch.revokedAt = null;
+
+  // La suite du balayage raisonne sur l'état à venir, à blanc comme en vrai :
+  // `revokeMissing` ne doit pas révoquer un accès qui vient de changer de ligne.
+  if (patch.notionPageId) existing.notionPageId = patch.notionPageId;
+  if (patch.email) {
+    context.byEmail.delete(existing.email);
+    existing.email = patch.email;
+    context.byEmail.set(patch.email, existing);
+  }
 
   if (Object.keys(patch).length === 0) {
     report.unchanged += 1;

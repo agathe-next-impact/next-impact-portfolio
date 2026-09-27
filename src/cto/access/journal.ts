@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray, notInArray } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoAccessLog } from "../db/schema";
 
@@ -26,7 +26,12 @@ export type AccessEvent =
   | "passkey_supprimee"
   | "session_fermee"
   | "session_revoquee"
-  | "acces_refuse";
+  | "acces_refuse"
+  | "suggestion_cliquee"
+  | "suggestion_masquee";
+
+/** Les événements qui décrivent un usage, pas un accès : exclus du journal de sécurité du client. */
+export const EVENEMENTS_SUGGESTION = ["suggestion_cliquee", "suggestion_masquee"] as const satisfies readonly AccessEvent[];
 
 export interface AccessEntry {
   event: AccessEvent;
@@ -75,7 +80,10 @@ export async function listForPerson(
       at: ctoAccessLog.at,
     })
     .from(ctoAccessLog)
-    .where(eq(ctoAccessLog.personId, personId))
+    // Les réponses aux suggestions ne sont pas des faits de sécurité : elles
+    // restent dans le journal de l'admin, pas dans celui que le client relit
+    // pour repérer une connexion qu'il ne reconnaît pas.
+    .where(and(eq(ctoAccessLog.personId, personId), notInArray(ctoAccessLog.event, [...EVENEMENTS_SUGGESTION])))
     .orderBy(desc(ctoAccessLog.at))
     .limit(limit);
 
@@ -139,4 +147,6 @@ export const EVENT_LABELS: Record<AccessEvent, string> = {
   session_fermee: "Déconnexion",
   session_revoquee: "Appareil déconnecté à distance",
   acces_refuse: "Tentative refusée",
+  suggestion_cliquee: "Suggestion : « En parler »",
+  suggestion_masquee: "Suggestion masquée",
 };

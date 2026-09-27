@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SyncReport } from "../notion";
-import { summarizeNotify, summarizeSync } from "./rapport";
+import { newAlerts, summarizeNotify, summarizeSync } from "./rapport";
 
 function report(overrides: Partial<SyncReport> = {}): SyncReport {
   return {
@@ -13,6 +13,7 @@ function report(overrides: Partial<SyncReport> = {}): SyncReport {
       { kind: "roadmap", published: 3, featured: 0, created: 0, updated: 0, restored: 0, unchanged: 3, withdrawn: 0 },
     ],
     warnings: ["« Client X » : en préparation — aucun accompagnement créé tant que l'état n'est pas « actif »."],
+    alerts: [],
     ...overrides,
   } as SyncReport;
 }
@@ -35,6 +36,27 @@ describe("résumé de synchro", () => {
     const summary = summarizeSync(calme);
     expect(summary.lines[0]).toMatch(/À blanc/);
     expect(summary.lines).toContain("Livrables : rien de nouveau.");
+  });
+
+  it("garde à part ce qui touche un accès ou un rattachement", () => {
+    const alerte = "decision « Hébergement » est publiée sans client : elle n'apparaît nulle part.";
+    const summary = summarizeSync(report({ warnings: ["Base « prestation » ignorée.", alerte], alerts: [alerte] }));
+    expect(summary.alerts).toEqual([alerte]);
+    expect(summary.warnings).toContain(alerte);
+  });
+});
+
+describe("alertes nouvelles", () => {
+  const sansClient = "decision « Hébergement » est publiée sans client : elle n'apparaît nulle part.";
+  const revoquee = "« Camille Roy » : ligne disparue de la base Personnes — accès révoqué.";
+
+  it("ne redit pas une alerte que le balayage précédent portait déjà", () => {
+    expect(newAlerts([sansClient, revoquee], [sansClient])).toEqual([revoquee]);
+    expect(newAlerts([sansClient], [sansClient])).toEqual([]);
+  });
+
+  it("redit une alerte revenue après avoir disparu, et ne compte pas deux fois la même", () => {
+    expect(newAlerts([sansClient, sansClient], [])).toEqual([sansClient]);
   });
 });
 

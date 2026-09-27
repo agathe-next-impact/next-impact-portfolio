@@ -113,6 +113,20 @@
       "when": 1790434876869,
       "tag": "0015_workable_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1790501911143,
+      "tag": "0016_glamorous_rocket_raccoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1790502523966,
+      "tag": "0017_sticky_terror",
+      "breakpoints": true
     }
   ]
 }

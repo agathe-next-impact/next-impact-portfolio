@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { purgeExpiredAccess, type PurgeReport } from "@cto/access";
-import { purgeExpiredAdminAccess, type AdminPurgeReport } from "@cto/admin";
+import { purgeExpiredAdminAccess, recordSyncRun, type AdminPurgeReport } from "@cto/admin";
 import { configurationIssue, syncFromNotion, type SyncReport } from "@cto/notion";
 import { syncSites, wpUmbrellaToken, type SiteSyncReport } from "@cto/site";
 import { sentinelleExportConfig, syncSentinelle, type SentinelleSyncReport } from "@cto/sentinelle";
@@ -93,16 +93,23 @@ export async function GET(request: NextRequest) {
     status = 500;
   }
 
+  // Le rapport part au journal, échec compris : c'est le seul balayage que
+  // personne ne regarde au moment où il tourne. Une alerte nouvelle vaut un
+  // e-mail à la supervision (`recordSyncRun` ne lève jamais).
   const issue = configurationIssue();
   if (issue) {
     body.synchro = { ignoree: issue };
   } else {
     try {
-      body.synchro = await syncFromNotion();
+      const report = await syncFromNotion();
+      body.synchro = report;
+      await recordSyncRun({ source: "cron", report, notify: true });
     } catch (error) {
       console.error("[cto] synchro Notion impossible", error);
-      body.synchro = { erreur: error instanceof Error ? error.message : "échec" };
+      const erreur = error instanceof Error ? error.message : "échec";
+      body.synchro = { erreur };
       status = 500;
+      await recordSyncRun({ source: "cron", error: erreur, notify: true });
     }
   }
 

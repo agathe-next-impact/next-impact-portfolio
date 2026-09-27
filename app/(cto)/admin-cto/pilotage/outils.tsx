@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { buttonClass, Label, Notice, Panel } from "../../espace-direction/ui";
 import { prevenir, synchroniser, type RapportState } from "./actions";
+import { Points } from "./points";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les deux gestes d'exploitation, depuis l'écran plutôt que depuis le terminal :
@@ -14,7 +15,7 @@ import { prevenir, synchroniser, type RapportState } from "./actions";
 // applique. Le rapport reste affiché sous les boutons jusqu'au clic suivant.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const INITIAL: RapportState = { ok: true, lines: [], warnings: [], at: null };
+const INITIAL: RapportState = { ok: true, lines: [], warnings: [], alerts: [], at: null };
 
 function Rapport({ state }: { state: RapportState }) {
   if (!state.at) return null;
@@ -27,18 +28,7 @@ function Rapport({ state }: { state: RapportState }) {
           </span>
         ))}
       </Notice>
-      {state.warnings.length > 0 ? (
-        <details className="border border-dark-gray px-4 py-3">
-          <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-            {state.warnings.length} point{state.warnings.length > 1 ? "s" : ""} à regarder
-          </summary>
-          <ul className="mt-3 space-y-1.5 font-inter-tight text-sm text-mid-gray">
-            {state.warnings.map((warning, index) => (
-              <li key={index}>· {warning}</li>
-            ))}
-          </ul>
-        </details>
-      ) : null}
+      <Points warnings={state.warnings} alerts={state.alerts} />
     </div>
   );
 }
