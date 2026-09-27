@@ -20,6 +20,7 @@ export {
   buildFrise,
   byPhase,
   isOpenOpportunity,
+  STATUT_PROPOSITION,
   isPendingProposition,
   lastSuccessfulBackup,
   missionsOf,

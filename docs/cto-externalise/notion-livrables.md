@@ -179,6 +179,16 @@ passkey), jamais dans l'URL. Ce n'est donc ni une donnée par client ni une
 synchro à écrire — juste un pense-bête pour ne pas avoir à la retaper depuis
 Notion. À coller à la main sur toute nouvelle fiche.
 
+### Le statut « Proposition » de la Roadmap
+
+Un chantier que l'on **propose** au client, prêt à lancer sur son accord, prend
+le statut **Proposition** (quelle que soit sa `Nature`). Il ouvre la roadmap de
+l'espace (première colonne) et figure dans **Actions → À arbitrer**, étiqueté
+« Chantier proposé » ; il n'entre ni dans les missions ni dans la frise tant
+que la réponse n'est pas donnée. Accord obtenu : passer à « Décidé » ou « À
+venir ». Refus : « Écarté ». À ne pas confondre avec une **proposition
+commerciale** (base Propositions, groupe Contrats), qui engage un contrat.
+
 ### Deux colonnes, deux questions
 
 `Publié` décide de la **visibilité**, `Affichage` du **placement**. Les
@@ -439,9 +449,17 @@ autre client pourrait au contraire lui *ouvrir* les données d'une autre
 entreprise d'un simple glisser-déposer de relation. Le rapport de synchro le
 signale ; rien ne bouge tout seul. Un transfert reste un geste SQL délibéré.
 
-**Une personne disparue de Notion n'est pas révoquée.** Même traitement qu'un
-accompagnement dont la fiche disparaîtrait (§ 2) : ni l'absence de ligne ni sa
-suppression ne pilotent l'accès, seule la case le fait.
+**Supprimer une ligne coupe l'accès** (décision du 2026-09-27). Une personne
+dont la ligne disparaît de *Personnes* (supprimée, mise à la corbeille) est
+révoquée comme si la case était cochée, sessions comprises. Un accompagnement
+dont la fiche disparaît de *Clients* est **clos** : accès fermé, livrables
+retirés de l'espace. Restaurer la ligne ou la fiche depuis la corbeille Notion
+rouvre au balayage suivant (même page ; pour une fiche, repasser « État » à
+« actif »). Garde-fou : si une base ne rend plus **aucune** ligne alors que
+plusieurs accès sont ouverts, rien n'est révoqué ni clos sans `--forcer` — une
+base vide ressemble davantage à un partage retiré qu'à un ménage. Chaque
+révocation ou fermeture figure au rapport de synchro ; lancer `--a-blanc`
+d'abord pour la voir venir.
 
 ## 7. Documents, prestations et paiements
 

@@ -147,18 +147,22 @@ interface ClientResolution {
  * accompagnement : c'est la gestion des comptes clients par Notion, la
  * création n'a plus besoin de `cto:invite`.
  */
-async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
+async function resolveClients(dryRun: boolean, force = false): Promise<ClientResolution> {
   const warnings: string[] = [];
   const byNotionPage = new Map<string, string>();
   const byOrganisation = new Map<string, string>();
   const byVeilleOrganisation = new Map<string, string>();
   const watchWishes: WatchWish[] = [];
+  /** Veille personnalisée cochée, mais aucune ligne de veille lisible (un seul avertissement pour tous). */
+  const sansVeille: string[] = [];
 
   const rows = await db()
     .select({
       id: ctoClients.id,
       notionPageId: ctoClients.notionPageId,
       syncEnabled: ctoClients.syncEnabled,
+      company: ctoClients.company,
+      status: ctoClients.status,
     })
     .from(ctoClients);
 
@@ -171,7 +175,9 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
     legacyById.set(row.id, { notionPageId: row.notionPageId });
   }
 
-  for (const page of await queryDatabase(clientsDatabaseId())) {
+  const pagesClients = await queryDatabase(clientsDatabaseId());
+  const fichesLues = pagesClients.length;
+  for (const page of pagesClients) {
     const name = companyName(page) ?? "(fiche sans raison sociale)";
     let id = idByNotionPage.get(page.id);
 
@@ -241,7 +247,14 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
       contact: watch.contact,
     });
 
-    for (const veille of clientVeilleOrganisations(page)) {
+    const veilles = clientVeilleOrganisations(page);
+    // Veille personnalisée cochée mais aucune ligne de veille lisible : ses
+    // éditions Signaux Faibles ne peuvent pas arriver. Le cas typique est la
+    // page « Veilles clients » non partagée avec l'intégration — l'API rend
+    // alors la relation VIDE, sans erreur, et le silence passait pour « rien
+    // à publier ».
+    if (veilles.length === 0 && clientServices(page).codes.includes("veille-personnalisee")) sansVeille.push(name);
+    for (const veille of veilles) {
       const deja = byVeilleOrganisation.get(veille);
       if (deja && deja !== id) {
         warnings.push(
@@ -250,6 +263,42 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
         continue;
       }
       byVeilleOrganisation.set(veille, id);
+    }
+  }
+
+  if (sansVeille.length > 0) {
+    warnings.push(
+      `Veille personnalisée cochée mais aucune « Veille — organisation » lisible pour : ${sansVeille.join(", ")}. ` +
+        "Relation vide, ou page « Veilles clients » non partagée avec l'intégration : leurs lettres Signaux Faibles n'arrivent pas.",
+    );
+  }
+
+  // Un accompagnement dont la fiche a disparu de la base Clients (supprimée,
+  // mise à la corbeille) est clos : l'accès se ferme, ses livrables quittent
+  // l'espace au balayage (plus aucune ligne ne s'y rattache). Restaurer la fiche
+  // depuis la corbeille et repasser « État » à « actif » le rouvre.
+  //
+  // Garde-fou : une base Clients qui ne rend plus RIEN ressemble à une panne
+  // (partage retiré, identifiant faux) ; on ne ferme rien en masse sans --forcer.
+  const fiches = new Set(pagesClients.map((fiche) => fiche.id));
+  const orphelins = rows.filter((row) => row.notionPageId && !fiches.has(row.notionPageId) && row.status !== "clos");
+  if (orphelins.length > 0 && fichesLues === 0 && orphelins.length > MASS_WITHDRAWAL_THRESHOLD && !force) {
+    warnings.push(
+      `Clients : la base ne rend aucune fiche alors que ${orphelins.length} accompagnements sont ouverts. ` +
+        "Aucune fermeture — vérifier le partage de la base, puis relancer avec --forcer si c'est voulu.",
+    );
+  } else {
+    for (const row of orphelins) {
+      warnings.push(
+        dryRun
+          ? `« ${row.company} » : fiche disparue de la base Clients — serait clos, accès fermé.`
+          : `« ${row.company} » : fiche disparue de la base Clients — accompagnement clos, accès fermé.`,
+      );
+      if (dryRun) continue;
+      await db()
+        .update(ctoClients)
+        .set({ status: "clos", statusChangedAt: new Date() })
+        .where(eq(ctoClients.id, row.id));
     }
   }
 
@@ -883,7 +932,7 @@ export async function syncFromNotion(
   options: { force?: boolean; dryRun?: boolean } = {},
 ): Promise<SyncReport> {
   const dryRun = options.dryRun === true;
-  const clients = await resolveClients(dryRun);
+  const clients = await resolveClients(dryRun, options.force === true);
 
   const report: SyncReport = {
     dryRun,
@@ -897,7 +946,7 @@ export async function syncFromNotion(
   // Avant les livrables : qui a accès ne dépend d'aucun d'eux, et une personne
   // nouvellement révoquée ne doit pas rester une ligne de plus dans le rapport
   // des livrables pendant qu'on cherche pourquoi son accès est encore ouvert.
-  const persons = await syncPersons(clients.byNotionPage, { dryRun });
+  const persons = await syncPersons(clients.byNotionPage, { dryRun, force: options.force === true });
   report.persons = persons.report;
   report.warnings.push(...persons.warnings);
 

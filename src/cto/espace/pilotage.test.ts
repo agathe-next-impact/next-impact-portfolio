@@ -169,6 +169,12 @@ describe("actions", () => {
     expect(actions.aTraiter.map((a) => a.id)).toEqual(["retard-retard", "echeance-hebergement", "site-php"]);
   });
 
+  it("met un chantier au statut Proposition à arbitrer, hors des missions, quelle que soit sa nature", () => {
+    const items = [roadmap("refonte", "Proposition", null, "chantier"), roadmap("veille-ia", "Proposition", null, "opportunite")];
+    expect(actionsFor(items, null, now).aArbitrer.map((a) => a.title)).toEqual(["refonte", "veille-ia"]);
+    expect(missionsOf(items, now)).toEqual([]);
+  });
+
   it("met les opportunités ouvertes à arbitrer, pas les autres", () => {
     const actions = actionsFor(
       [roadmap("ia", "Ouvert", null, "opportunite"), roadmap("decidee", "Décidé", null, "opportunite")],

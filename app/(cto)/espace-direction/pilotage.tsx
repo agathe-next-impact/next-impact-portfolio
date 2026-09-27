@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Deliverable, RoadmapPayload } from "@cto/deliverables";
+import { STATUT_PROPOSITION } from "@cto/espace";
 import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, SectionKey, Verdict } from "@cto/espace";
 import { auditPath, categoriePath, CATEGORIES, propositionPath, propositionTone, type CategorieKind } from "./livrables";
 import { contactHref, sectionOuverte, type EspaceContext } from "./shell";
@@ -204,7 +205,12 @@ export function ListeMissions({
 // ─── Actions ─────────────────────────────────────────────────────────────
 
 export function ActionTag({ action }: { action: Action }) {
-  if (action.kind === "opportunite") return <Tag>À arbitrer</Tag>;
+  if (action.kind === "opportunite") {
+    // Un chantier proposé se distingue d'une opportunité repérée : l'un est
+    // prêt à lancer sur accord, l'autre reste à instruire.
+    const propose = (action.item?.payload as RoadmapPayload | undefined)?.statut === STATUT_PROPOSITION;
+    return propose ? <Tag tone="attention">Chantier proposé</Tag> : <Tag>À arbitrer</Tag>;
+  }
   if (action.kind === "proposition") return <Tag tone={propositionTone(action.detail)}>Proposition</Tag>;
   if (action.kind === "retard") return <Tag tone="alerte">En retard</Tag>;
   if (action.kind === "echeance") {

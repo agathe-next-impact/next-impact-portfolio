@@ -75,10 +75,15 @@ export function kindFromSlug(slug: string): CategorieKind | null {
 // défiler, et c'est exactement l'usage d'un dirigeant entre deux réunions.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Ordre de lecture de la roadmap : ce qui bloque d'abord, ce qui est fait ensuite. */
-export const STATUS_ORDER = ["Ouvert", "Décidé", "À venir", "Fait", "Écarté"];
+/**
+ * Ordre de lecture de la roadmap : ce qui attend l'accord du client d'abord
+ * (« Proposition », un chantier proposé, qui figure aussi dans Actions → À
+ * arbitrer), puis ce qui court, ce qui vient, ce qui est fait.
+ */
+export const STATUS_ORDER = ["Proposition", "Ouvert", "Décidé", "À venir", "Fait", "Écarté"];
 
 const STATUS_TONE: Record<string, Tone> = {
+  Proposition: "attention",
   Ouvert: "attention",
   Décidé: "neutre",
   "À venir": "neutre",

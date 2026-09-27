@@ -24,9 +24,13 @@ import { clientPageIds, personEmail, personName, personRevoked, personRole } fro
 //     créée pourrait au contraire lui OUVRIR les données d'une autre
 //     entreprise par un simple glisser-déposer de relation ; ce cas-là est
 //     seulement signalé, jamais appliqué.
-//  2. **Une personne disparue de Notion n'est PAS révoquée.** Même traitement
-//     que pour un accompagnement dont la fiche disparaîtrait : ni la ligne
-//     Notion ni sa suppression ne pilotent l'accès, seule la case le fait.
+//  2. **Une personne disparue de Notion est révoquée** (décision du
+//     2026-09-27) : supprimer sa ligne coupe l'accès comme la case, sessions
+//     comprises. Même règle pour un accompagnement dont la fiche disparaît
+//     (clos, cf. `resolveClients`). Restaurer la ligne depuis la corbeille
+//     Notion rouvre l'accès au balayage suivant (même page, case décochée).
+//     Garde-fou : si la base ne rend plus AUCUNE ligne, rien n'est révoqué
+//     en masse sans `--forcer` — une base vide ressemble à une panne.
 //
 // Aucun e-mail ne part d'ici : le lien de connexion reste un geste séparé
 // (`cto:invite --client <uuid> --email …`, ou la personne se présente
@@ -61,7 +65,7 @@ interface ExistingPerson {
  */
 export async function syncPersons(
   byNotionPage: Map<string, string>,
-  options: { dryRun: boolean },
+  options: { dryRun: boolean; force?: boolean },
 ): Promise<{ report: PersonsReport; warnings: string[] }> {
   const warnings: string[] = [];
   const report: PersonsReport = {
@@ -98,7 +102,58 @@ export async function syncPersons(
     await syncOne(page, byNotionPage, byPage, byEmail, options.dryRun, report, warnings);
   }
 
+  await revokeMissing(pages, rows, options, report, warnings);
+
   return { report, warnings };
+}
+
+/** Au-delà, une base Personnes vide ressemble à une panne : pas de révocation sans --forcer. */
+const SEUIL_RETRAIT_MASSIF = 3;
+
+/**
+ * Une personne dont la ligne a disparu de la base (supprimée, mise à la
+ * corbeille) perd son accès, comme si « Révoquée » était cochée : sessions
+ * fermées, événement journalisé. Les accès créés hors Notion (`cto:invite`,
+ * sans page) ne sont pas concernés : la base ne les a jamais portés.
+ */
+async function revokeMissing(
+  pages: NotionPage[],
+  rows: ExistingPerson[],
+  options: { dryRun: boolean; force?: boolean },
+  report: PersonsReport,
+  warnings: string[],
+): Promise<void> {
+  const presentes = new Set(pages.map((page) => page.id));
+  const disparues = rows.filter(
+    (row) => row.notionPageId !== null && !presentes.has(row.notionPageId) && row.revokedAt === null,
+  );
+  if (disparues.length === 0) return;
+
+  if (pages.length === 0 && disparues.length > SEUIL_RETRAIT_MASSIF && !options.force) {
+    warnings.push(
+      `Personnes : la base ne rend aucune ligne alors que ${disparues.length} accès sont ouverts. ` +
+        "Aucune révocation — vérifier le partage de la base, puis relancer avec --forcer si c'est voulu.",
+    );
+    return;
+  }
+
+  for (const row of disparues) {
+    warnings.push(
+      options.dryRun
+        ? `« ${row.name} » : ligne disparue de la base Personnes — accès serait révoqué.`
+        : `« ${row.name} » : ligne disparue de la base Personnes — accès révoqué.`,
+    );
+    report.revoked += 1;
+    if (options.dryRun) continue;
+    await db().update(ctoPersons).set({ revokedAt: new Date() }).where(eq(ctoPersons.id, row.id));
+    await revokeAllSessions(row.id);
+    await record({
+      event: "session_revoquee",
+      personId: row.id,
+      clientId: row.clientId,
+      detail: "ligne supprimée de la base Personnes",
+    });
+  }
 }
 
 async function syncOne(

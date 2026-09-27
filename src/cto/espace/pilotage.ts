@@ -70,10 +70,19 @@ const PRESTATION_PHASE: Record<string, Phase> = {
   Terminée: "passe",
 };
 
-/** Vrai pour une opportunité que personne n'a encore tranchée : elle est à arbitrer, pas à suivre. */
+/** Le statut d'un chantier proposé au client, qui attend son accord. */
+export const STATUT_PROPOSITION = "Proposition";
+
+/**
+ * Vrai pour ce qui attend l'accord du client dans la roadmap : une opportunité
+ * que personne n'a encore tranchée, ou un chantier au statut « Proposition ».
+ * C'est à arbitrer (page Actions), pas à suivre : ni dans les missions, ni dans
+ * la frise, tant que la réponse n'est pas donnée.
+ */
 export function isOpenOpportunity(item: Deliverable): boolean {
   if (item.kind !== "roadmap") return false;
   const payload = item.payload as RoadmapPayload;
+  if (payload.statut === STATUT_PROPOSITION) return true;
   return payload.nature === "opportunite" && (payload.statut === null || payload.statut === "Ouvert");
 }
 

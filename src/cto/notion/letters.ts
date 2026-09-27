@@ -246,11 +246,11 @@ async function syncEditions(
   const warnings: string[] = [];
   const databaseId = editionsDatabaseId();
   if (!databaseId) return { warnings, failed: false };
-  if (clientByVeilleOrganisation.size === 0) {
-    report.editions = 0;
-    return { warnings, failed: false };
-  }
 
+  // On lit la base même si aucune fiche ne semble reliée au pipeline : quand
+  // « Veilles clients » n'est pas partagée, les relations se lisent VIDES et
+  // c'est précisément ici que l'accès échoue. Sortir plus tôt faisait passer
+  // une page non partagée pour « aucune édition ».
   let pages: NotionPage[];
   try {
     pages = await queryDatabase(databaseId, {
