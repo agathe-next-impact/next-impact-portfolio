@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decideProvision, digestOf, type WatchState, type WatchWish } from "./provision";
+import { decideProvision, digestOf, provisionConflicts, type WatchState, type WatchWish } from "./provision";
 
 const ID = "0b9c6f0e-2b1a-4c3d-9e8f-1a2b3c4d5e6f";
 
@@ -65,5 +65,52 @@ describe("decideProvision", () => {
     expect(decideProvision(wish({ wanted: false }), state({ sentinelleClientId: ID, digest: digestOf(body) }))).toEqual({
       kind: "skip",
     });
+  });
+});
+
+describe("provisionConflicts", () => {
+  const premier = wish({ clientId: "cto-1", company: "Premier", contact: "veille@atelier.fr" });
+  const second = wish({ clientId: "cto-2", company: "Second", contact: "Veille@atelier.fr ", site: "https://second.fr" });
+
+  it("ne signale rien quand chaque fiche a son adresse", () => {
+    const entries = [
+      { wish: premier, state: state() },
+      { wish: wish({ clientId: "cto-2", company: "Second", contact: "dsi@second.fr" }), state: state() },
+    ];
+    expect(provisionConflicts(entries).size).toBe(0);
+  });
+
+  it("laisse l'adresse à la première fiche et écarte la suivante", () => {
+    const conflicts = provisionConflicts([
+      { wish: premier, state: state() },
+      { wish: second, state: state() },
+    ]);
+    expect([...conflicts.keys()]).toEqual(["cto-2"]);
+    expect(conflicts.get("cto-2")).toContain("déjà celui de « Premier »");
+  });
+
+  it("laisse l'adresse à la fiche déjà reliée, même si elle vient après", () => {
+    const conflicts = provisionConflicts([
+      { wish: premier, state: state() },
+      { wish: second, state: state({ sentinelleClientId: ID }) },
+    ]);
+    expect([...conflicts.keys()]).toEqual(["cto-1"]);
+  });
+
+  it("ignore l'adresse d'une fiche qui ne demande pas la veille", () => {
+    const conflicts = provisionConflicts([
+      { wish: { ...premier, wanted: false }, state: state() },
+      { wish: second, state: state() },
+    ]);
+    expect(conflicts.size).toBe(0);
+  });
+
+  it("gèle tous les porteurs d'un client Sentinelle partagé, désactivation comprise", () => {
+    const conflicts = provisionConflicts([
+      { wish: premier, state: state({ sentinelleClientId: ID }) },
+      { wish: { ...second, wanted: false }, state: state({ sentinelleClientId: ID }) },
+    ]);
+    expect([...conflicts.keys()].sort()).toEqual(["cto-1", "cto-2"]);
+    expect(conflicts.get("cto-2")).toContain("partagé entre « Premier », « Second »");
   });
 });

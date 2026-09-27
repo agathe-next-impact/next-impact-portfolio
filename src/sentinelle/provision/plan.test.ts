@@ -45,6 +45,16 @@ describe("planProvision", () => {
     expect(plan).toMatchObject({ kind: "update", adopted: true, scan: false, patch: { name: "Client SAS" } });
   });
 
+  it("refuse d'adopter un abonné qui suit un autre site sous la même adresse", () => {
+    const plan = planProvision({ ...active, siteUrl: "autre-client.fr" }, existing({ siteUrl: planSite("client.fr") }));
+    expect(plan).toMatchObject({ kind: "reject", status: 409 });
+  });
+
+  it("laisse une fiche déjà reliée changer de site", () => {
+    const plan = planProvision({ ...active, id: ID, siteUrl: "autre-client.fr" }, existing({ siteUrl: planSite("client.fr") }));
+    expect(plan).toMatchObject({ kind: "update", adopted: false, scan: true });
+  });
+
   it("réactive et rescanne une fiche désactivée", () => {
     const plan = planProvision({ ...active, id: ID }, existing({ active: false }));
     expect(plan).toMatchObject({ kind: "update", scan: true, patch: { active: true } });

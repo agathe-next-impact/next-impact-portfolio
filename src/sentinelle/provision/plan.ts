@@ -12,8 +12,10 @@ import { normalizeSiteUrl } from "@sentinelle/url";
 // Deux formes de demande :
 //  - avec `id` : la fiche est déjà reliée, on l'aligne (ou on la désactive) ;
 //  - sans `id` : première activation, on crée — ou on adopte la fiche d'un
-//    abonné existant qui porte la même adresse, plutôt que d'en créer une
-//    seconde (l'e-mail est unique chez Sentinelle).
+//    abonné existant qui porte la même adresse ET suit le même site, plutôt
+//    que d'en créer une seconde (l'e-mail est unique chez Sentinelle). La même
+//    adresse pour un autre site est refusée : ce serait réécrire la fiche
+//    d'un autre client.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const ProvisionRequestSchema = z.union([
@@ -48,7 +50,7 @@ export interface ExistingClient {
 }
 
 export type ProvisionPlan =
-  | { kind: "reject"; status: 400 | 404; reason: string }
+  | { kind: "reject"; status: 400 | 404 | 409; reason: string }
   | { kind: "noop"; id: string }
   | { kind: "deactivate"; id: string }
   | {
@@ -92,6 +94,17 @@ export function planProvision(request: ProvisionRequest, existing: ExistingClien
   if (!existing) {
     if (request.id) return { kind: "reject", status: 404, reason: "client Sentinelle introuvable" };
     return { kind: "create", values: wanted, scan: true };
+  }
+
+  // Adopter, c'est reconnaître le même abonné : même adresse ET même site. La
+  // même adresse pour un autre site désigne un autre client — l'aligner
+  // réécrirait sa fiche et mêlerait deux stacks sous un seul identifiant.
+  if (!request.id && (normalizeSiteUrl(existing.siteUrl) ?? existing.siteUrl) !== wanted.siteUrl) {
+    return {
+      kind: "reject",
+      status: 409,
+      reason: "cette adresse est déjà celle d'un client Sentinelle qui suit un autre site",
+    };
   }
 
   const patch: Extract<ProvisionPlan, { kind: "update" }>["patch"] = {};

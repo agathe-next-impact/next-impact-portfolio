@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { and, desc, eq, inArray, or, sql } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoDeliverables, ctoFiles, ctoSiteReports } from "../db/schema";
+import { isLatestVersion } from "../deliverables";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les fichiers rapatriés — pièces jointes Notion, rapports WP Umbrella.
@@ -169,6 +170,9 @@ export async function fileBelongsTo(fileId: string, clientId: string): Promise<b
     .from(ctoDeliverables)
     .where(
       and(
+        // Courant tous accompagnements confondus : un document passé à un
+        // autre client n'est plus à celui-ci, quoi qu'en dise sa vieille version.
+        isLatestVersion(),
         eq(ctoDeliverables.clientId, clientId),
         inArray(
           ctoDeliverables.notionPageId,

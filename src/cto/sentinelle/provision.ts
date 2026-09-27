@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, ne } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients, ctoPersons } from "../db/schema";
 import { redirectError, sentinelleExportConfig } from "./api";
@@ -88,6 +88,58 @@ export function decideProvision(wish: WatchWish, state: WatchState): ProvisionDe
   return digest === state.digest ? { kind: "skip" } : { kind: "send", body, digest };
 }
 
+/**
+ * Pur : les fiches qu'on ne provisionne pas, parce qu'elles en désignent une
+ * autre — et pourquoi, en une phrase pour le rapport.
+ *
+ * Sentinelle tient un client par adresse. Deux fiches qui donnent le même
+ * « Contact veille » désignent donc le même client : la seconde adopterait
+ * celui de la première, et l'espace de l'une montrerait le système de l'autre.
+ * L'adresse reste à la fiche déjà reliée, à défaut à la première de l'atelier.
+ *
+ * Un client Sentinelle déjà partagé gèle tous ses porteurs, désactivation
+ * comprise : aucun n'a plus le droit de le réécrire tant que le partage dure.
+ */
+export function provisionConflicts(entries: { wish: WatchWish; state: WatchState }[]): Map<string, string> {
+  const conflicts = new Map<string, string>();
+
+  const holders = new Map<string, WatchWish[]>();
+  for (const { wish, state } of entries) {
+    if (!state.sentinelleClientId) continue;
+    holders.set(state.sentinelleClientId, [...(holders.get(state.sentinelleClientId) ?? []), wish]);
+  }
+  for (const [id, wishes] of holders) {
+    if (wishes.length < 2) continue;
+    const names = wishes.map((wish) => `« ${wish.company} »`).join(", ");
+    for (const wish of wishes) {
+      conflicts.set(
+        wish.clientId,
+        `« ${wish.company} » : client Sentinelle ${id} partagé entre ${names} — rien envoyé. ` +
+          "Un seul accompagnement doit le garder ; les autres sont à délier.",
+      );
+    }
+  }
+
+  const owners = new Map<string, WatchWish>();
+  const claims = entries.filter(({ wish }) => wish.wanted && wish.contact);
+  // Les fiches déjà reliées d'abord : l'adresse leur appartient.
+  for (const { wish } of [...claims.filter(({ state }) => state.sentinelleClientId), ...claims]) {
+    const address = (wish.contact as string).trim().toLowerCase();
+    const owner = owners.get(address);
+    if (!owner) {
+      owners.set(address, wish);
+    } else if (owner.clientId !== wish.clientId && !conflicts.has(wish.clientId)) {
+      conflicts.set(
+        wish.clientId,
+        `« ${wish.company} » : « Contact veille » est déjà celui de « ${owner.company} » — Sentinelle non provisionnée. ` +
+          "Sentinelle suit un site par adresse : donner à cette fiche une adresse qui lui est propre.",
+      );
+    }
+  }
+
+  return conflicts;
+}
+
 export interface ProvisionReport {
   sent: number;
   created: number;
@@ -165,8 +217,18 @@ export async function provisionSentinelle(
     return { report, warnings };
   }
 
-  for (const wish of wishes) {
-    const state = await stateOf(wish.clientId, wish.contact);
+  const entries: { wish: WatchWish; state: WatchState }[] = [];
+  for (const wish of wishes) entries.push({ wish, state: await stateOf(wish.clientId, wish.contact) });
+  const conflicts = provisionConflicts(entries);
+
+  for (const { wish, state } of entries) {
+    const conflict = conflicts.get(wish.clientId);
+    if (conflict) {
+      report.failed += 1;
+      warnings.push(conflict);
+      continue;
+    }
+
     const decision = decideProvision(wish, state);
 
     if (decision.kind === "skip") {
@@ -190,6 +252,22 @@ export async function provisionSentinelle(
     try {
       const result = await callSentinelle(decision.body);
       report.sent += 1;
+
+      // Dernière garde : ne jamais relier deux accompagnements au même client.
+      const [holder] = await db()
+        .select({ company: ctoClients.company })
+        .from(ctoClients)
+        .where(and(eq(ctoClients.sentinelleClientId, result.id), ne(ctoClients.id, wish.clientId)))
+        .limit(1);
+      if (holder) {
+        report.failed += 1;
+        warnings.push(
+          `« ${wish.company} » : Sentinelle a rendu le client de « ${holder.company} » (${result.id}) — non relié. ` +
+            "Vérifier « Contact veille » et « Site surveillé » sur les deux fiches.",
+        );
+        continue;
+      }
+
       if (result.outcome === "created" || result.outcome === "adopted") report.created += 1;
       if (result.outcome === "deactivated") report.deactivated += 1;
       await db()

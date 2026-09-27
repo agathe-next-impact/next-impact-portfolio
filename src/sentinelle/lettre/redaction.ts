@@ -9,7 +9,7 @@ import {
   type Lettre,
 } from "./schema";
 import { renderRedactionBrief, type LettreContext } from "./context";
-import { guardLettre, type LettreGuardOutcome } from "./guards";
+import { clientContextOf, guardLettre, type LettreGuardOutcome } from "./guards";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Passe 2 — la rédaction, en trois appels.
@@ -234,7 +234,7 @@ export async function writeLettre(
     quiet: input.quiet,
     // Le secteur et les notes du client font partie de son vocabulaire
     // légitime : un studio a le droit de parler du parc de ses clients.
-    clientContext: [context.sector, context.notes].filter(Boolean).join(" "),
+    clientContext: clientContextOf(context),
   });
 
   if (!guard.ok) {

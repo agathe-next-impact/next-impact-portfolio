@@ -31,6 +31,18 @@ export const scanRequested = eventType("sentinelle/scan.requested", {
 });
 
 /**
+ * L'admin demande de refabriquer un numéro resté sans lettre.
+ *
+ * Émis par une action de l'admin, jamais exécuté dans sa requête : une
+ * fabrication se compte en minutes.
+ */
+export const issueRebuildRequested = eventType("sentinelle/issue.rebuild.requested", {
+  schema: z.object({
+    digestId: z.string().uuid(),
+  }),
+});
+
+/**
  * Un abonnement vient d'être encaissé (phase 5).
  *
  * Émis par le webhook Stripe, jamais par une page : le retour du navigateur

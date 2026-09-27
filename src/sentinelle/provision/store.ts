@@ -27,7 +27,10 @@ async function loadExisting(where: ReturnType<typeof eq>): Promise<ExistingClien
       siteUrl: clients.siteUrl,
       sector: clients.sector,
       active: clients.active,
-      components: sql<number>`(select count(*) from ${stackItems} where ${stackItems.clientId} = ${clients.id})`,
+      // Colonnes qualifiées à la main : dans une sélection sur une seule table,
+      // Drizzle les écrit sans leur table, et `client_id = id` se lirait alors
+      // tout entier dans `stack_items` — zéro composant, quel que soit le client.
+      components: sql<number>`(select count(*) from ${stackItems} where ${stackItems}.client_id = ${clients}.id)`,
     })
     .from(clients)
     .where(where)

@@ -44,8 +44,10 @@ export {
 
 export {
   allowedVocabulary,
+  clientContextOf,
   clientText,
   guardLettre,
+  guardRelecture,
   normalizeUrl,
   wordCount,
   FULL_LENGTH,
@@ -75,6 +77,7 @@ export {
   isQuietIssue,
   missingForIssue,
   parseIssue,
+  rebuildRefusal,
   ISSUE_VERSION,
   type IssueContent,
   type ProductionNote,
@@ -83,6 +86,7 @@ export {
 export {
   buildAndStoreIssue,
   listClientsForIssue,
+  rebuildIssue,
   type ClientRow,
   type IssueOutcome,
 } from "./build";

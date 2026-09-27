@@ -137,6 +137,16 @@ async function loadRadarCandidates(clientId: string): Promise<RadarCandidate[]> 
   return rows;
 }
 
+/**
+ * Le vocabulaire de la fiche, seul : noms et identifiants des composants suivis.
+ *
+ * Sert à rejouer le garde-fou sur une lettre relue, avec les mêmes mots qu'à la
+ * fabrication.
+ */
+export async function loadFicheNames(clientId: string): Promise<string[]> {
+  return (await loadComponents(clientId)).names;
+}
+
 /** Ce client a-t-il déjà reçu un numéro ? */
 async function hasPreviousIssue(clientId: string): Promise<boolean> {
   const [row] = await db()

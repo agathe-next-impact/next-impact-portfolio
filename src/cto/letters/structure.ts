@@ -113,7 +113,11 @@ export type Section = (
   | { kind: "avancement"; titre: Span[]; chantiers: Chantier[]; chapeau: Block[]; blocs: Block[] }
   | { kind: "echeancier"; titre: Span[]; echeances: Echeance[]; blocs: Block[] }
   | { kind: "questions"; titre: Span[]; questions: Span[][]; blocs: Block[] }
-) & { signal?: Intensite };
+) & {
+  signal?: Intensite;
+  /** Le h1 qui regroupe la section, quand la lettre titre ses rubriques en h1 et ses thèmes en h2. */
+  rubrique?: Span[];
+};
 
 export interface LettreStructuree {
   /** Ce qui précède la première section (accroche). */
@@ -204,7 +208,7 @@ function carte(titre: string, texte: Span[]): Carte {
 }
 
 /** Coupe des spans après la première phrase. */
-function premierePhrase(spans: Span[]): { phrase: string; reste: Span[] } {
+export function premierePhrase(spans: Span[]): { phrase: string; reste: Span[] } {
   const texte = texteDe(spans);
   const match = /^(.+?[.!?])(\s+|$)/.exec(texte);
   if (!match) return { phrase: texte.trim(), reste: [] };
@@ -519,7 +523,7 @@ function lireActionsEnAttaques(
       const echeance = lu.echeance ?? defaut;
       courante = {
         numero: actions.length + 1,
-        titre: lu.titre,
+        titre: lu.titre.charAt(0).toUpperCase() + lu.titre.slice(1),
         periode: null,
         sources: [],
         axes: numerosAxes(texteDe(a.reste)),
@@ -821,9 +825,56 @@ function lireSection(titreBrut: Span[], blocs: Block[], periode: Date | null): S
   return sections;
 }
 
+/** Des blocs découpés sur leurs h3, chacun lu comme une section à part. */
+function sousSections(blocs: Block[], periode: Date | null): Section[] {
+  const sections: Section[] = [];
+  let titre: Span[] | null = null;
+  let courant: Block[] = [];
+  const fermer = () => {
+    if (titre) sections.push(...lireSection(titre, courant, periode));
+  };
+  for (const bloc of blocs) {
+    if (bloc.k === "h3") {
+      fermer();
+      titre = bloc.s;
+      courant = [];
+    } else courant.push(bloc);
+  }
+  fermer();
+  return sections;
+}
+
+/** « Recommandation de la période : publier avant le 30 septembre la position… » */
+const TITRE_PORTE_ACTION = /^((?:la |notre )?recommandation[^:]*|action sugg[eé]r[eé]e[^:]*|(?:le )?geste[^:]*)\s*:\s*(.+)$/i;
+
 function formeDe(titre: Span[], contenu: Block[], periode: Date | null): Section[] {
   const t = normaliser(texteDe(titre));
   const prose: Section = { kind: "prose", titre, blocs: contenu };
+
+  // Le titre EST l'action : il devient la carte, le corps son détail.
+  const porte = TITRE_PORTE_ACTION.exec(texteDe(titre).trim());
+  if (porte) {
+    const lu = lireActionsEnAttaques(
+      [{ k: "p", s: [{ t: porte[2], b: true }] }, ...contenu],
+      echeanceDeSection(porte[1]),
+      periode,
+    );
+    if (lu) return [{ kind: "actions", titre: [{ t: porte[1].trim() }], actions: lu.actions, chapeau: [], blocs: lu.reste }];
+  }
+
+  // « Ce qui compte ce mois-ci » : les priorités en tête, puis des h3
+  // (scénarios, budget…) qui sont autant de sections.
+  if (/^(ce qui compte|priorites?\b)/.test(t)) {
+    const coupe = contenu.findIndex((b) => b.k === "h3");
+    const tete = coupe < 0 ? contenu : contenu.slice(0, coupe);
+    const lu = lireActionsEnAttaques(tete, echeanceDeSection(texteDe(titre)), periode);
+    if (lu) {
+      return [
+        { kind: "actions", titre, actions: lu.actions, chapeau: lu.chapeau, blocs: lu.reste },
+        ...(coupe < 0 ? [] : sousSections(contenu.slice(coupe), periode)),
+      ];
+    }
+  }
 
   if (/\baxes\b/.test(t)) {
     // Variante « Veilles clients » : les axes ont leur propre section.
@@ -831,11 +882,7 @@ function formeDe(titre: Span[], contenu: Block[], periode: Date | null): Section
     if (axes) return [{ kind: "axes", titre, axes }];
     const numerotes = lireAxesNumerotes(contenu);
     if (numerotes) {
-      const [suivant, ...suite] = numerotes.suite;
-      return [
-        { kind: "axes", titre, axes: numerotes.axes },
-        ...(suivant?.k === "h3" ? lireSection(suivant.s, suite, periode) : []),
-      ];
+      return [{ kind: "axes", titre, axes: numerotes.axes }, ...sousSections(numerotes.suite, periode)];
     }
   }
 
@@ -908,15 +955,22 @@ export function structureLettre(body: Block[], periode: Date | null): LettreStru
   const sections: Section[] = [];
 
   let titre: Span[] | null = null;
+  let niveau: Block["k"] = "h2";
+  let rubrique: Span[] | null = null;
   let blocs: Block[] = [];
   const fermer = () => {
-    if (titre) sections.push(...lireSection(titre, blocs, periode));
+    if (!titre) return;
+    const lues = lireSection(titre, blocs, periode);
+    if (rubriquesH1 && niveau === "h2" && rubrique) for (const section of lues) section.rubrique = rubrique;
+    sections.push(...lues);
   };
 
   for (const bloc of body.slice(premier)) {
     if (ouvre(bloc)) {
       fermer();
       titre = (bloc as { s: Span[] }).s;
+      niveau = bloc.k;
+      if (bloc.k === "h1") rubrique = signalDuTitre(titre).titre;
       blocs = [];
     } else {
       blocs.push(bloc);
@@ -928,4 +982,147 @@ export function structureLettre(body: Block[], periode: Date | null): LettreStru
   if (reconnues === 0) return null;
 
   return { intro, sections };
+}
+
+// ─── Lecture groupée ─────────────────────────────────────────────────────────
+//
+// Une lettre de quinze sections ne se lit pas comme quinze sections de même
+// poids. La page les range en trois temps — ce qu'il faut faire, ce qui bouge,
+// le reste — et remonte au premier écran ce qui compte le plus : les actions
+// les plus pressées, les signaux forts, les prochaines échéances. Le rangement
+// se décide ici, sur la forme, pour valoir pour toute lettre.
+
+/** Une section et sa place dans la lettre (ancres de la page). */
+export interface SectionPlacee {
+  section: Section;
+  index: number;
+}
+
+export interface Lecture {
+  /** « L'essentiel du jour », « Votre site en une phrase » : remonté au premier écran. */
+  enBref: SectionPlacee | null;
+  /** Actions, décisions, échéancier, chantiers, questions. */
+  agir: SectionPlacee[];
+  /** Axes, actualités, analyses : ce qui bouge. */
+  suivre: SectionPlacee[];
+  /** Rubriques sans signal (RAS) : repliées sur une ligne. */
+  sansSignal: SectionPlacee[];
+  /** Le reste (idées de posts, cadrage, sources) : replié. */
+  reste: SectionPlacee[];
+}
+
+const TITRE_EN_BREF = /^(l'essentiel|en bref|a retenir|resume|votre site en une phrase)/;
+const TITRE_SUIVRE = /(actualit|signaux|signal|marche|bouge|tendance|analyse|lecture|ce que font|axes)/;
+/** Des sections en prose qui appartiennent pourtant au temps de l'action. */
+const TITRE_AGIR = /^(ce qui compte|recommandation|(l')?agenda|calendrier|priorites?\b|a faire|a decider)/;
+/** L'ordre du temps « À faire » ; une prose d'action (agenda non daté…) vient après les actions. */
+const ORDRE_AGIR: Section["kind"][] = ["actions", "prose", "echeancier", "avancement", "options", "questions"];
+const FORMES_AGIR: Section["kind"][] = ["actions", "echeancier", "avancement", "options", "questions"];
+const RANG_SIGNAL: Record<Intensite, number> = { fort: 0, moyen: 1, faible: 2, ras: 3 };
+
+/** Le niveau d'une section : le sien, sinon le plus fort de ses cartes ; RAS seulement si toutes le sont. */
+export function signalDeSection(section: Section): Intensite | undefined {
+  if (section.signal) return section.signal;
+  if (section.kind !== "cartes") return undefined;
+  const niveaux = section.cartes.map((c) => c.signal);
+  if (niveaux.length > 0 && niveaux.every((n) => n === "ras")) return "ras";
+  const actifs = niveaux.filter((n): n is Intensite => n !== undefined && n !== "ras");
+  return actifs.sort((a, b) => RANG_SIGNAL[a] - RANG_SIGNAL[b])[0];
+}
+
+export function lecture(structure: LettreStructuree): Lecture {
+  const lu: Lecture = { enBref: null, agir: [], suivre: [], sansSignal: [], reste: [] };
+
+  structure.sections.forEach((section, index) => {
+    // Un h1 qui n'ouvre que des thèmes (« Actualités par thème ») : ses thèmes
+    // portent sa lecture, il ne reste qu'un titre vide.
+    if (section.kind === "prose" && section.blocs.length === 0) return;
+    const t = section.titre ? normaliser(texteDe(section.titre)) : "";
+    // Le sommaire écrit dans la lettre double la navigation de la page.
+    if (t === "sommaire") return;
+
+    const placee = { section, index };
+    if (!lu.enBref && TITRE_EN_BREF.test(t)) lu.enBref = placee;
+    else if (FORMES_AGIR.includes(section.kind) || TITRE_AGIR.test(t)) lu.agir.push(placee);
+    else {
+      const signal = signalDeSection(section);
+      if (signal === "ras") lu.sansSignal.push(placee);
+      else if (section.kind === "axes" || signal || section.rubrique || TITRE_SUIVRE.test(t)) lu.suivre.push(placee);
+      else lu.reste.push(placee);
+    }
+  });
+
+  const rang = (p: SectionPlacee) => {
+    const i = ORDRE_AGIR.indexOf(p.section.kind);
+    return i < 0 ? ORDRE_AGIR.indexOf("prose") : i;
+  };
+  lu.agir.sort((a, b) => rang(a) - rang(b) || a.index - b.index);
+  return lu;
+}
+
+/** Les échéances datées d'une section, dans l'ordre du temps (celui de la frise et des ancres). */
+export function echeancesDatees(echeances: Echeance[]): (Echeance & { date: Date })[] {
+  return echeances
+    .filter((e): e is Echeance & { date: Date } => e.date !== null)
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
+}
+
+export interface Priorites {
+  /** Les trois actions les plus pressées. */
+  actions: { action: Action; index: number }[];
+  /** Les trois prochaines échéances ; `rang` : leur place (1…) dans leur échéancier. */
+  echeances: { echeance: Echeance & { date: Date }; index: number; rang: number }[];
+  /** Jusqu'à quatre signaux forts, à défaut moyens. `carte` : null pour une section entière. */
+  signaux: { titre: string; signal: Intensite; index: number; carte: number | null }[];
+  /** Les axes à traiter ou en hausse. */
+  axes: Axe[];
+}
+
+const RANG_URGENCE: Record<Urgence, number> = { semaine: 0, mois: 1, "plus-tard": 2 };
+
+export function priorites(structure: LettreStructuree, maintenant: Date): Priorites {
+  const actions: Priorites["actions"] = [];
+  const echeances: Priorites["echeances"] = [];
+  const signaux: Priorites["signaux"] = [];
+  const axes: Axe[] = [];
+
+  structure.sections.forEach((section, index) => {
+    if (section.kind === "actions") for (const action of section.actions) actions.push({ action, index });
+    if (section.kind === "echeancier") {
+      echeancesDatees(section.echeances).forEach((echeance, i) => {
+        if (echeance.date.getTime() >= maintenant.getTime() - 86_400_000) echeances.push({ echeance, index, rang: i + 1 });
+      });
+    }
+    if (section.kind === "axes") axes.push(...section.axes.filter((a) => a.pression === "traiter" || a.pression === "hausse"));
+    if (section.kind === "cartes") {
+      section.cartes.forEach((carte, i) => {
+        const signal = carte.signal ?? section.signal;
+        // « Rien de neuf chez… » dans une rubrique forte : pas un signal.
+        if ((signal === "fort" || signal === "moyen") && !/^(rien|ras\b|aucun)/i.test(carte.titre)) {
+          signaux.push({ titre: carte.titre, signal, index, carte: i });
+        }
+      });
+    } else if (section.titre && (section.signal === "fort" || section.signal === "moyen")) {
+      signaux.push({ titre: texteDe(section.titre), signal: section.signal, index, carte: null });
+    }
+  });
+
+  actions.sort((a, b) => RANG_URGENCE[a.action.urgence] - RANG_URGENCE[b.action.urgence]);
+  echeances.sort((a, b) => a.echeance.date.getTime() - b.echeance.date.getTime());
+  const forts = signaux.filter((s) => s.signal === "fort");
+
+  return {
+    actions: actions.slice(0, 3),
+    echeances: echeances.slice(0, 3),
+    signaux: (forts.length > 0 ? forts : signaux).slice(0, 4),
+    axes,
+  };
+}
+
+/**
+ * Un chapô qui n'est qu'une note de méthode (« Note de méthode. », « Format : »,
+ * « Période creuse estivale ») : à sa place en fin de lettre, pas au premier écran.
+ */
+export function estNoteDeMethode(texte: string): boolean {
+  return /^(note de methode|methode|format\b|periode creuse|edition .{0,3}treve)/.test(normaliser(texte));
 }

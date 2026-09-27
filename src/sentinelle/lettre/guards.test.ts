@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { guardLettre, normalizeUrl, wordCount } from "./guards";
+import type { NewsletterBlocks } from "@sentinelle/newsletter/blocks";
+import { clientContextOf, guardLettre, guardRelecture, normalizeUrl, wordCount } from "./guards";
 import { AXES, type Dossier, type Lettre } from "./schema";
 
 const SOURCE = "https://cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-0001/";
@@ -233,6 +234,69 @@ describe("régime de vocabulaire", () => {
     });
 
     expect(guardLettre(cite, { dossier: avecDrupal, ficheNames: FICHE, quiet: true }).ok).toBe(true);
+  });
+});
+
+describe("relecture", () => {
+  const constate: NewsletterBlocks = {
+    period: "2026-08-2",
+    issueDate: "2026-08-15T00:00:00.000Z",
+    health: {
+      components: [{ label: "WordPress", version: "6.5", type: "cms", openAlerts: 0 }],
+      withoutVersion: 0,
+    },
+    delta: { since: null, alerts: [], newComponents: [] },
+    watch: "",
+    reco: "",
+    radar: [],
+  };
+
+  const surDrupal = lettre({
+    axes: lettre().axes.map((axe) =>
+      axe.numero === 1 ? { ...axe, analyse: "Vos clients migrent depuis Drupal." } : axe,
+    ),
+  });
+
+  it("juge la lettre relue avec le secteur et les notes du client, comme la fabrication", () => {
+    // Le défaut corrigé : la relecture ignorait les notes, et refusait un mot
+    // que la fabrication avait accepté grâce à elles.
+    const contexte = { sector: null, notes: "Agence dont les clients quittent Drupal." };
+
+    const fabrication = guardLettre(surDrupal, {
+      dossier: dossier(),
+      ficheNames: FICHE,
+      quiet: true,
+      clientContext: clientContextOf(contexte),
+    });
+    const relecture = guardRelecture(
+      surDrupal,
+      { constate, dossier: dossier() },
+      { ...contexte, ficheNames: [] },
+    );
+
+    expect(fabrication.ok).toBe(true);
+    expect(relecture.violations).toEqual([]);
+  });
+
+  it("refuse toujours une technologie que rien n'autorise", () => {
+    const relecture = guardRelecture(
+      surDrupal,
+      { constate, dossier: dossier() },
+      { sector: null, notes: null, ficheNames: [] },
+    );
+
+    expect(relecture.violations.join(" ")).toMatch(/Drupal/);
+  });
+
+  it("autorise les composants du constaté sans relire la fiche", () => {
+    // `lettre()` écrit « un site WordPress » : seul le constaté le porte ici.
+    const relecture = guardRelecture(
+      lettre(),
+      { constate, dossier: dossier({ faits: [{ ...dossier().faits[0], toucheFiche: [] }] }) },
+      { sector: null, notes: null, ficheNames: [] },
+    );
+
+    expect(relecture.violations).toEqual([]);
   });
 });
 

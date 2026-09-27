@@ -86,6 +86,19 @@ export function isOpenOpportunity(item: Deliverable): boolean {
   return payload.nature === "opportunite" && (payload.statut === null || payload.statut === "Ouvert");
 }
 
+/**
+ * Une prestation telle que le pilotage la montre : titre, statut, avancement,
+ * livraison. Tarif, devis et règlements se lisent sur l'écran Contrats et nulle
+ * part ailleurs — les retirer ici évite qu'une mission promène son prix dans
+ * les cartes, la frise ou les actions, où personne ne pense à le filtrer.
+ */
+export function withoutPrice(item: Deliverable): Deliverable {
+  if (item.kind !== "prestation") return item;
+  const { statut, debut, avancement, detail } = item.payload as PrestationPayload;
+  const payload: PrestationPayload = { statut, debut, montant: null, avancement, devis: null, detail };
+  return { ...item, payload };
+}
+
 /** Sans statut reconnu, la date tranche : dans le futur, c'est à venir ; sinon, en cours. */
 function phaseByDate(date: Date | null, today: number): Phase {
   return date && date.getTime() >= today ? "a-venir" : "en-cours";

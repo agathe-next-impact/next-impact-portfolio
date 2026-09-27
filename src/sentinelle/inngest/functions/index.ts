@@ -1,6 +1,7 @@
 import { onClientSubscribed } from "./client-subscribed";
 import { collectDaily } from "./collect-daily";
 import { healthcheck } from "./healthcheck";
+import { issueRebuild } from "./issue-rebuild";
 import { newsletterBuild } from "./newsletter-build";
 import { retentionDaily } from "./retention-daily";
 import { scanAsync } from "./scan-async";
@@ -12,5 +13,6 @@ export const functions = [
   retentionDaily,
   collectDaily,
   newsletterBuild,
+  issueRebuild,
   onClientSubscribed,
 ];

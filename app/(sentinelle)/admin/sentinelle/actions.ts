@@ -8,6 +8,7 @@ import {
   reopenAlert,
   saveAlertContent,
   parseLettreDraft,
+  requestDigestRebuild,
   saveDigestLettre,
   sendAlert,
   sendDigest,
@@ -136,8 +137,15 @@ export async function enregistrerNumero(formData: FormData): Promise<void> {
   }
 
   const resultat = await saveDigestLettre(id, lue.lettre);
+  const violations = resultat.ok ? resultat.value.violations : [];
 
-  retour(`/admin/sentinelle/numeros/${id}`, resultat, "Numéro enregistré.");
+  retour(
+    `/admin/sentinelle/numeros/${id}`,
+    resultat,
+    violations.length > 0
+      ? `Numéro enregistré. La validation le refusera en l'état : ${violations.join(" · ")}`
+      : "Numéro enregistré.",
+  );
 }
 
 export async function validerNumero(formData: FormData): Promise<void> {
@@ -169,6 +177,19 @@ export async function envoyerNumero(formData: FormData): Promise<void> {
     `/admin/sentinelle/numeros/${id}`,
     resultat,
     resultat.ok ? `Envoyé à ${resultat.value.to}.` : "",
+  );
+}
+
+export async function refabriquerNumero(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const id = String(formData.get("digestId"));
+  const resultat = await requestDigestRebuild(id);
+
+  retour(
+    `/admin/sentinelle/numeros/${id}`,
+    resultat,
+    "Refabrication lancée. Comptez quelques minutes, puis rechargez la page.",
   );
 }
 

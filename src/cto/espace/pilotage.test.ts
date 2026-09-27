@@ -10,6 +10,7 @@ import {
   missionsVerdict,
   sitePoints,
   siteVerdict,
+  withoutPrice,
 } from "./pilotage";
 
 const now = new Date("2026-09-26T10:00:00Z");
@@ -128,6 +129,40 @@ describe("missions", () => {
   it("garde l'avancement d'une prestation en pourcentage entier", () => {
     const [mission] = missionsOf([prestation("p", "En cours", "2026-10-15")], now);
     expect(mission.progress).toBe(60);
+  });
+
+  it("retire tarif, devis et règlements d'une prestation avant de la montrer au pilotage", () => {
+    const vendue = item({
+      notionPageId: "refonte",
+      kind: "prestation",
+      title: "refonte",
+      occurredAt: new Date("2026-10-08"),
+      payload: {
+        statut: "En cours",
+        debut: "2026-09-01",
+        montant: 3400,
+        avancement: 0.7,
+        devis: "https://exemple.fr/devis.pdf",
+        detail: "Refonte du site vitrine",
+        paiements: [{ libelle: "Acompte 50 %", montant: 1700, date: null, statut: "Reçu" }],
+      },
+    });
+    const montree = withoutPrice(vendue);
+    expect(montree.payload).toEqual({
+      statut: "En cours",
+      debut: "2026-09-01",
+      montant: null,
+      avancement: 0.7,
+      devis: null,
+      detail: "Refonte du site vitrine",
+    });
+    const [mission] = missionsOf([montree], now);
+    expect(mission).toMatchObject({ kind: "prestation", phase: "en-cours", progress: 70, overdue: false });
+  });
+
+  it("laisse intacts les livrables qui ne sont pas des prestations", () => {
+    const chantier = roadmap("ouvert", "Ouvert", "2026-09-30");
+    expect(withoutPrice(chantier)).toBe(chantier);
   });
 });
 

@@ -99,6 +99,11 @@ Trois pièges qui ne se voient qu'en production, et que le code traite :
   lettre sans son dossier n'est plus vérifiable six mois plus tard, seulement
   croyable.
 
+À la relecture, le garde-fou est rejoué avec le vocabulaire de la fabrication
+(`guardRelecture`) : il signale à l'enregistrement, il refuse à la validation.
+Un numéro resté sans lettre se refabrique depuis l'admin (`rebuildIssue`, fonction
+`issue-rebuild`) : le cron ne repasse pas sur une période écoulée.
+
 `admin/` mérite une note : `session.ts` et `content.ts` sont **purs et testés**
 (signature de jeton, contrat de contenu), `queue.ts` et `actions.ts` touchent la
 base, et la glue Next — cookies, redirections, formulaires — vit dans

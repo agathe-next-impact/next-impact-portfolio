@@ -21,8 +21,17 @@ export {
 } from "./store";
 
 export {
+  echeancesDatees,
+  estNoteDeMethode,
+  lecture,
+  premierePhrase,
+  priorites,
+  signalDeSection,
   structureLettre,
   texteDe,
+  type Lecture,
+  type Priorites,
+  type SectionPlacee,
   type Action,
   type Axe,
   type Carte,

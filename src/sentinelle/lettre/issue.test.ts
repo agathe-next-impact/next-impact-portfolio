@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { NewsletterBlocks } from "@sentinelle/newsletter/blocks";
-import { emptyProduction, isQuietIssue, missingForIssue, parseIssue, ISSUE_VERSION } from "./issue";
+import {
+  emptyProduction,
+  isQuietIssue,
+  missingForIssue,
+  parseIssue,
+  rebuildRefusal,
+  ISSUE_VERSION,
+} from "./issue";
 import type { IssueContent } from "./issue";
 
 function constate(overrides: Partial<NewsletterBlocks> = {}): NewsletterBlocks {
@@ -53,6 +60,36 @@ describe("parseIssue", () => {
 describe("missingForIssue", () => {
   it("refuse d'abord l'absence de lettre, sans énumérer le reste", () => {
     expect(missingForIssue(issue())).toEqual(["la lettre elle-même"]);
+  });
+});
+
+describe("rebuildRefusal", () => {
+  const rate = { status: "draft", period: "2026-08-2", blocks: issue(), clientActive: true };
+
+  it("laisse refabriquer un brouillon resté sans lettre", () => {
+    expect(rebuildRefusal(rate)).toBeNull();
+  });
+
+  it("laisse refabriquer un numéro de l'ancienne forme, qui n'a jamais eu de lettre", () => {
+    expect(rebuildRefusal({ ...rate, blocks: constate() })).toBeNull();
+  });
+
+  it("refuse un numéro validé ou envoyé", () => {
+    expect(rebuildRefusal({ ...rate, status: "validated" })).toMatch(/brouillon/);
+    expect(rebuildRefusal({ ...rate, status: "sent" })).toMatch(/brouillon/);
+  });
+
+  it("refuse un numéro qui porte une lettre, même hors schéma : il y a une relecture à perdre", () => {
+    const ecrit = issue({ lettre: { chapeau: "…" } as IssueContent["lettre"] });
+    expect(rebuildRefusal({ ...rate, blocks: ecrit })).toMatch(/relecture/);
+  });
+
+  it("refuse une période illisible", () => {
+    expect(rebuildRefusal({ ...rate, period: "2026-08" })).toMatch(/Période illisible/);
+  });
+
+  it("refuse un abonnement résilié", () => {
+    expect(rebuildRefusal({ ...rate, clientActive: false })).toMatch(/résilié/);
   });
 });
 

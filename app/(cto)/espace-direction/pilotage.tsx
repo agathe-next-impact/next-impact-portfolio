@@ -15,12 +15,14 @@ import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * L'entrée de la barre latérale qui porte un livrable. Les prestations n'en ont
- * pas ici : hors de `listForClient` (`ADMIN_ONLY_KINDS`), elles ne se lisent que
- * sur leur propre écran, Contrats → Prestations (`prestations.tsx`).
+ * L'entrée de la barre latérale qui porte un livrable. Une prestation mène à
+ * son écran, Contrats → Prestations (`prestations.tsx`) : le seul où elle se
+ * lit en entier, tarif compris. Elle n'arrive ici que si cet écran est ouvert
+ * (cf. `loadEspace`).
  */
 const SECTION_OF_KIND: Partial<Record<Deliverable["kind"], SectionKey>> = {
   roadmap: "missions",
+  prestation: "prestations",
   decision: "decisions",
   audit: "audit",
   cartographie: "cartographie",

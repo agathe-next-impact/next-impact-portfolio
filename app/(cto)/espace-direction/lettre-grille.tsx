@@ -7,21 +7,28 @@ import type {
   Chantier,
   Echeance,
   Intensite,
+  Lecture,
   LettreStructuree,
   Pression,
   Section,
+  SectionPlacee,
   Span,
   Urgence,
 } from "@cto/letters";
-import { texteDe } from "@cto/letters";
+import { echeancesDatees, estNoteDeMethode, lecture, premierePhrase, priorites, texteDe } from "@cto/letters";
 import { CorpsLettre, Texte } from "./lettre";
-import { Label, Panel, Stat, Tag, type Tone } from "./ui";
+import { Label, Panel, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Une lettre de veille en grille, quelle que soit sa source (atelier, Signaux
 // Faibles, Sentinelle) : la grille ne connaît que les formes que
 // `structureLettre` a reconnues.
+//
+// La lecture est rangée en trois temps (`lecture`) : ce qu'il faut faire, ce
+// qui bouge, le reste replié. Le premier écran porte l'essentiel en clair —
+// les actions à faire en premier, ce qui pèse, les prochaines échéances —
+// chaque ligne menant à son détail.
 //
 // Le texte est le même que dans le rendu linéaire (`CorpsLettre`), mot pour
 // mot : seule la mise en page change. Ce qui se compare (la pression des douze
@@ -115,10 +122,10 @@ function TitreSection({
   signal?: Intensite;
 }) {
   return (
-    <div className="mt-14 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-dark-gray pb-3">
-      <h2 id={id} className="scroll-mt-8 font-sans text-xl font-light text-foreground">
+    <div className="mt-12 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-dark-gray pb-3">
+      <h3 id={id} className="scroll-mt-8 font-sans text-xl font-light text-foreground">
         <Texte spans={titre} />
-      </h2>
+      </h3>
       {sousTitre || signal ? (
         <div className="flex flex-wrap items-center gap-3">
           {sousTitre ? <Label>{sousTitre}</Label> : null}
@@ -152,7 +159,7 @@ function Carreau({ children, id, className = "" }: { children: ReactNode; id?: s
   );
 }
 
-// ─── En un coup d'œil ────────────────────────────────────────────────────────
+// ─── Pression des axes ───────────────────────────────────────────────────────
 
 /**
  * Répartition des axes par niveau de pression : une barre de douze cases,
@@ -203,122 +210,177 @@ function BarrePression({ axes }: { axes: Axe[] }) {
   );
 }
 
-function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; maintenant: Date }) {
-  const trouve = <K extends Section["kind"]>(kind: K) =>
-    structure.sections.find((s): s is Extract<Section, { kind: K }> => s.kind === kind);
+// ─── Premier écran : l'essentiel ─────────────────────────────────────────────
 
-  const axes = trouve("axes");
-  const actions = trouve("actions");
-  const echeancier = trouve("echeancier");
-  const questions = trouve("questions");
-  const avancement = trouve("avancement");
+const ancreAction = (section: number, numero: number) => `action-${section}-${numero}`;
+const ancreCarte = (section: number, carte: number) => `carte-${section}-${carte}`;
+const ancreEcheance = (section: number, rang: number) => `echeance-${section}-${rang}`;
 
-  const enHausse = axes?.axes.filter((a) => a.pression === "hausse" || a.pression === "traiter").length ?? 0;
-  const signalees = structure.sections.filter((s) => s.signal);
-  const fortes = signalees.filter((s) => s.signal === "fort").length;
-  const moyennes = signalees.filter((s) => s.signal === "moyen").length;
-  const titreActions = actions ? normaliserTitre(actions.titre) : "";
-  const urgentes = actions?.actions.filter((a) => a.urgence === "semaine").length ?? 0;
-  const prochaine = echeancier?.echeances
-    .filter((e) => e.date && e.date.getTime() >= maintenant.getTime() - JOUR)
-    .sort((a, b) => a.date!.getTime() - b.date!.getTime())[0];
-  const dans = prochaine?.date ? joursAvant(prochaine.date, maintenant) : null;
+/** Une ligne de l'essentiel : un repère, un libellé qui mène à son détail. */
+function LigneEssentiel({ href, repere, children }: { href: string; repere: ReactNode; children: ReactNode }) {
+  return (
+    <li>
+      <a
+        href={href}
+        className="group flex items-start gap-3 py-2.5 transition-colors hover:text-accent-secondary"
+      >
+        <span className="shrink-0 pt-0.5">{repere}</span>
+        <span className="font-inter-tight text-sm leading-snug text-foreground group-hover:text-accent-secondary">
+          {children}
+        </span>
+      </a>
+    </li>
+  );
+}
 
-  const stats: ReactNode[] = [];
-  if (axes)
-    stats.push(
-      <Stat
-        key="axes"
-        label={axes.axes.some((a) => a.pression === "traiter") ? "Axes à traiter" : "Axes en hausse"}
-        value={`${enHausse} / ${axes.axes.length}`}
-        tone={enHausse > axes.axes.length / 2 ? "alerte" : enHausse > 0 ? "attention" : "neutre"}
-        hint="La pression monte sur ces sujets"
-      />,
-    );
-  if (signalees.length >= 2)
-    stats.push(
-      <Stat
-        key="signaux"
-        label="Rubriques en signal fort"
-        value={`${fortes} / ${signalees.length}`}
-        tone={fortes > 0 ? "alerte" : moyennes > 0 ? "attention" : "neutre"}
-        hint={moyennes > 0 ? `et ${moyennes} en signal moyen` : undefined}
-      />,
-    );
-  if (actions)
-    stats.push(
-      <Stat
-        key="actions"
-        label={
-          titreActions.startsWith("a decider")
-            ? "À décider"
-            : titreActions.startsWith("a faire sur")
-              ? "Actions sur l'existant"
-              : "Actions"
-        }
-        value={String(actions.actions.length)}
-        tone={urgentes > 0 ? "alerte" : actions.actions.some((a) => a.urgence === "mois") ? "attention" : "neutre"}
-        hint={
-          urgentes > 0
-            ? `dont ${urgentes} cette semaine`
-            : actions.actions.length === 1 && actions.actions[0].echeance
-              ? actions.actions[0].echeance
-              : undefined
-        }
-      />,
-    );
-  if (echeancier)
-    stats.push(
-      <Stat
-        key="echeance"
-        label="Prochaine échéance"
-        value={prochaine?.date ? formatCourt(prochaine.date) : "—"}
-        tone={dans !== null && dans <= 14 ? "attention" : "neutre"}
-        hint={
-          dans === null ? "Aucune échéance à venir" : dans <= 0 ? "Aujourd'hui" : `Dans ${dans} jour${dans > 1 ? "s" : ""}`
-        }
-      />,
-    );
-  if (avancement) {
-    const enCours = avancement.chantiers.filter((c) => c.pourcentage !== null && c.pourcentage < 100).length;
-    stats.push(
-      <Stat
-        key="chantiers"
-        label="Chantiers suivis"
-        value={String(avancement.chantiers.length)}
-        hint={enCours > 0 ? `dont ${enCours} en cours` : undefined}
-      />,
+function ColonneEssentiel({ titre, children }: { titre: string; children: ReactNode }) {
+  return (
+    <div className="px-5 py-5">
+      <Label>{titre}</Label>
+      <ul className="mt-2 divide-y divide-dark-gray">{children}</ul>
+    </div>
+  );
+}
+
+/** Le résumé de tête (« L'essentiel du jour ») en liste courte, quelle que soit sa forme. */
+function EnBref({ placee, base }: { placee: SectionPlacee; base: string }) {
+  const { section } = placee;
+  if (section.kind === "cartes") {
+    return (
+      <ul className="mt-3 space-y-2 font-inter-tight text-[15px] leading-relaxed text-foreground/90">
+        {section.cartes.map((carte, i) => (
+          <li key={i} className="flex gap-3">
+            <span aria-hidden className="mt-2.5 h-1 w-1 shrink-0 bg-accent-secondary" />
+            <span>
+              <strong className="font-medium text-foreground">{carte.titre}</strong>
+              {carte.texte.length > 0 ? (
+                <>
+                  {" "}
+                  <Texte spans={carte.texte} />
+                </>
+              ) : null}
+            </span>
+          </li>
+        ))}
+      </ul>
     );
   }
-  if (questions)
-    stats.push(
-      <Stat
-        key="questions"
-        label="Questions au prestataire"
-        value={String(questions.questions.length)}
-        hint="À poser avant la prochaine intervention"
-      />,
+  if (section.kind === "prose") return <CorpsLettre body={section.blocs} base={base} />;
+  return <RenduSection section={section} index={placee.index} axes={new Map()} maintenant={new Date()} base={base} avecTitre={false} />;
+}
+
+/**
+ * Le premier écran : ce qu'il faut faire d'abord, ce qui pèse, ce qui approche.
+ * Des contenus, pas des compteurs : chaque ligne dit la chose et mène à son
+ * détail plus bas.
+ */
+function Essentiel({
+  structure,
+  lu,
+  maintenant,
+  base,
+}: {
+  structure: LettreStructuree;
+  lu: Lecture;
+  maintenant: Date;
+  base: string;
+}) {
+  const prio = priorites(structure, maintenant);
+  const axesSection = structure.sections.find((s): s is Extract<Section, { kind: "axes" }> => s.kind === "axes");
+
+  const colonnes: ReactNode[] = [];
+  if (prio.actions.length > 0)
+    colonnes.push(
+      <ColonneEssentiel key="agir" titre="À faire en premier">
+        {prio.actions.map(({ action, index }) => (
+          <LigneEssentiel
+            key={`${index}-${action.numero}`}
+            href={`#${ancreAction(index, action.numero)}`}
+            repere={<Pastille tone={URGENCE_TONE[action.urgence]}>{action.echeance ?? "Sans date"}</Pastille>}
+          >
+            {action.titre}
+          </LigneEssentiel>
+        ))}
+      </ColonneEssentiel>,
+    );
+  if (prio.signaux.length > 0)
+    colonnes.push(
+      <ColonneEssentiel key="signaux" titre="Ce qui pèse">
+        {prio.signaux.map((s, i) => (
+          <LigneEssentiel
+            key={i}
+            href={`#${s.carte === null ? ancreSection(s.index) : ancreCarte(s.index, s.carte)}`}
+            repere={<Signal signal={s.signal} />}
+          >
+            {s.titre}
+          </LigneEssentiel>
+        ))}
+      </ColonneEssentiel>,
+    );
+  else if (prio.axes.length > 0)
+    colonnes.push(
+      <ColonneEssentiel key="axes" titre="Ce qui pèse">
+        {prio.axes.slice(0, 4).map((axe) => (
+          <LigneEssentiel
+            key={axe.numero}
+            href={`#${ancreAxe(axe.numero)}`}
+            repere={<Pastille tone={PRESSION[axe.pression].tone}>{PRESSION[axe.pression].label}</Pastille>}
+          >
+            {axe.nom}
+          </LigneEssentiel>
+        ))}
+      </ColonneEssentiel>,
+    );
+  if (prio.echeances.length > 0)
+    colonnes.push(
+      <ColonneEssentiel key="echeances" titre="Prochaines échéances">
+        {prio.echeances.map(({ echeance, index, rang }) => {
+          const jours = joursAvant(echeance.date, maintenant);
+          return (
+            <LigneEssentiel
+              key={`${index}-${rang}`}
+              href={`#${ancreEcheance(index, rang)}`}
+              repere={
+                <Pastille tone={jours <= 7 ? "alerte" : jours <= 30 ? "attention" : "neutre"}>
+                  {formatCourt(echeance.date)}
+                </Pastille>
+              }
+            >
+              {premierePhrase(echeance.texte).phrase || echeance.libelle}
+            </LigneEssentiel>
+          );
+        })}
+      </ColonneEssentiel>,
     );
 
-  // Quatre repères au plus : au-delà, ce n'est plus un coup d'œil.
-  stats.splice(4);
-  if (stats.length === 0 && !axes) return null;
+  if (!lu.enBref && colonnes.length === 0 && !axesSection) return null;
 
   return (
-    <section aria-label="En un coup d'œil" className="mt-8">
+    <section aria-labelledby="essentiel" className="mt-8">
+      <h2 id="essentiel" className="sr-only">
+        L&rsquo;essentiel
+      </h2>
       <Panel>
-        {stats.length > 0 ? (
-          <div
-            className={`grid grid-cols-2 ${
-              stats.length >= 4 ? "lg:grid-cols-4" : stats.length === 3 ? "sm:grid-cols-3" : ""
-            }`}
-          >
-            {stats}
+        {lu.enBref ? (
+          <div className="px-5 py-5">
+            <Label>{lu.enBref.section.titre ? texteDe(lu.enBref.section.titre) : "En bref"}</Label>
+            <div className="max-w-[80ch]">
+              <EnBref placee={lu.enBref} base={base} />
+            </div>
           </div>
         ) : null}
-        {axes ? (
+        {colonnes.length > 0 ? (
+          <div
+            className={`grid divide-y divide-dark-gray md:divide-x md:divide-y-0 ${lu.enBref ? "border-t border-dark-gray" : ""} ${
+              colonnes.length >= 3 ? "md:grid-cols-3" : colonnes.length === 2 ? "md:grid-cols-2" : ""
+            }`}
+          >
+            {colonnes}
+          </div>
+        ) : null}
+        {axesSection ? (
           <div className="border-t border-dark-gray">
-            <BarrePression axes={axes.axes} />
+            <BarrePression axes={axesSection.axes} />
           </div>
         ) : null}
       </Panel>
@@ -326,24 +388,64 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
   );
 }
 
-function Sommaire({ sections }: { sections: Section[] }) {
-  const items = sections.flatMap((section, index) =>
-    section.titre ? [{ href: `#${ancreSection(index)}`, label: texteDe(section.titre) }] : [],
-  );
-  if (items.length < 2) return null;
+// ─── Les trois temps de la lecture ───────────────────────────────────────────
 
+const GROUPES = {
+  agir: { id: "a-faire", titre: "À faire" },
+  suivre: { id: "ce-qui-bouge", titre: "Ce qui bouge" },
+  plus: { id: "plus-loin", titre: "Pour aller plus loin" },
+} as const;
+
+function NavGroupes({ comptes }: { comptes: { cle: keyof typeof GROUPES; n: number }[] }) {
+  const visibles = comptes.filter((c) => c.n > 0);
+  if (visibles.length < 2) return null;
   return (
-    <nav aria-label="Sommaire de la lettre" className="mt-6 flex flex-wrap gap-2">
-      {items.map((item) => (
+    <nav aria-label="Parties de la lettre" className="mt-6 flex flex-wrap gap-2">
+      {visibles.map(({ cle, n }) => (
         <a
-          key={item.href}
-          href={item.href}
-          className="border border-dark-gray px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:border-accent-secondary hover:text-foreground"
+          key={cle}
+          href={`#${GROUPES[cle].id}`}
+          className="flex items-center gap-2 border border-dark-gray px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:border-accent-secondary hover:text-foreground"
         >
-          {item.label.replace(/\s*:\s*quelles solutions envisager\s*$/i, "")}
+          {GROUPES[cle].titre}
+          <span className="text-foreground">{n}</span>
         </a>
       ))}
     </nav>
+  );
+}
+
+function Groupe({ cle, sousTitre, children }: { cle: keyof typeof GROUPES; sousTitre?: string; children: ReactNode }) {
+  const { id, titre } = GROUPES[cle];
+  return (
+    <section aria-labelledby={id} className="mt-16">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-foreground/30 pb-3">
+        <h2 id={id} className="scroll-mt-8 font-sans text-2xl font-light text-foreground">
+          {titre}
+        </h2>
+        {sousTitre ? <Label>{sousTitre}</Label> : null}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+/** Une section repliée : son titre suffit à décider de l'ouvrir. */
+function Repli({ id, titre, resume, children }: { id?: string; titre: ReactNode; resume?: ReactNode; children: ReactNode }) {
+  return (
+    <details id={id} className="group scroll-mt-8 border-b border-dark-gray">
+      <summary className="flex cursor-pointer list-none items-start justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+        <span>
+          <span className="block font-sans text-base font-normal text-foreground">{titre}</span>
+          {resume ? <span className="mt-1 block font-inter-tight text-sm text-mid-gray">{resume}</span> : null}
+        </span>
+        <span aria-hidden className="pt-0.5 font-mono text-sm text-mid-gray group-open:text-accent-secondary">
+          <span className="group-open:hidden">+</span>
+          <span className="hidden group-open:inline">−</span>
+        </span>
+      </summary>
+      <div className="pb-6">{children}</div>
+    </details>
   );
 }
 
@@ -362,7 +464,7 @@ function GrilleAxes({ axes }: { axes: Axe[] }) {
               </p>
               <Pastille tone={tone}>{label}</Pastille>
             </div>
-            <h3 className="mt-3 font-sans text-base font-normal leading-snug text-foreground">{axe.nom}</h3>
+            <h4 className="mt-3 font-sans text-base font-normal leading-snug text-foreground">{axe.nom}</h4>
             {axe.verdict ? (
               <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">{axe.verdict}</p>
             ) : null}
@@ -390,12 +492,17 @@ function GrilleAxes({ axes }: { axes: Axe[] }) {
   );
 }
 
-function CarteAction({ action, axes }: { action: Action; axes: Map<number, string> }) {
+function CarteAction({ action, axes, id }: { action: Action; axes: Map<number, string>; id: string }) {
   const tone = URGENCE_TONE[action.urgence];
   const [concerne, ...sources] = action.sources;
+  // Une décision sans « À faire » (lettre rédigée à la main, geste Signaux
+  // Faibles) : sa première phrase de contexte EST le contenu et reste visible,
+  // le reste (étapes, pourquoi, quand) passe sous le pli.
+  const visible = action.aFaire ? null : (action.contexte[0] ?? null);
+  const replie = action.aFaire ? action.contexte : action.contexte.slice(1);
 
   return (
-    <Carreau className={tone === "alerte" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
+    <Carreau id={id} className={tone === "alerte" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
           {action.aFaire || action.periode ? `Action ${action.numero}` : `Point ${action.numero}`}
@@ -403,7 +510,7 @@ function CarteAction({ action, axes }: { action: Action; axes: Map<number, strin
         </p>
         {action.echeance ? <Pastille tone={tone}>{action.echeance}</Pastille> : null}
       </div>
-      <h3 className="mt-3 font-sans text-base font-normal leading-snug text-foreground">{action.titre}</h3>
+      <h4 className="mt-3 font-sans text-base font-normal leading-snug text-foreground">{action.titre}</h4>
 
       {action.axes.length > 0 ? (
         <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Axes concernés">
@@ -431,23 +538,17 @@ function CarteAction({ action, axes }: { action: Action; axes: Map<number, strin
         </div>
       ) : null}
 
-      {!action.aFaire && action.contexte.length > 0 ? (
-        // Une décision sans « À faire » (lettre rédigée à la main) : son texte
-        // EST le contenu, il reste visible.
-        <div className="mt-4 space-y-2 border-l-2 border-l-accent-secondary pl-3 font-inter-tight text-sm leading-relaxed text-foreground">
-          {action.contexte.map((c, i) => (
-            <p key={i}>
-              {c.titre ? <strong className="font-medium">{c.titre} : </strong> : null}
-              <Texte spans={c.texte} />
-            </p>
-          ))}
-        </div>
+      {visible ? (
+        <p className="mt-4 border-l-2 border-l-accent-secondary pl-3 font-inter-tight text-sm leading-relaxed text-foreground">
+          {visible.titre ? <strong className="font-medium">{visible.titre} : </strong> : null}
+          <Texte spans={visible.texte} />
+        </p>
       ) : null}
 
-      {(action.aFaire && action.contexte.length > 0) || concerne ? (
+      {replie.length > 0 || concerne ? (
         <div className="mt-auto">
-          <Plus resume="Contexte, impact et coût">
-            {action.contexte.map((c, i) => (
+          <Plus resume={action.aFaire ? "Contexte, impact et coût" : "Le détail"}>
+            {replie.map((c, i) => (
               <p key={i}>
                 {c.titre ? <strong className="font-medium text-foreground">{c.titre}. </strong> : null}
                 <Texte spans={c.texte} />
@@ -503,7 +604,7 @@ function GrilleChantiers({ chantiers }: { chantiers: Chantier[] }) {
       {chantiers.map((chantier, index) => (
         <Carreau key={index}>
           <div className="flex items-start justify-between gap-3">
-            <h3 className="font-sans text-base font-normal leading-snug text-foreground">{chantier.titre}</h3>
+            <h4 className="font-sans text-base font-normal leading-snug text-foreground">{chantier.titre}</h4>
             {chantier.statut ? (
               <Pastille tone={chantier.statut === "Livré" ? "fait" : "neutre"}>{chantier.statut}</Pastille>
             ) : null}
@@ -540,37 +641,65 @@ function GrilleChantiers({ chantiers }: { chantiers: Chantier[] }) {
   );
 }
 
-function GrilleCartes({ cartes }: { cartes: Carte[] }) {
+/** Au-delà, le texte d'une carte passe sous le pli : la carte se lit d'un coup d'œil. */
+const CARTE_COURTE = 220;
+
+function GrilleCartes({ cartes, section }: { cartes: Carte[]; section: number }) {
   return (
     <div className={`mt-6 grid gap-3 ${cartes.length > 1 ? "sm:grid-cols-2 xl:grid-cols-3" : ""}`}>
-      {cartes.map((carte, index) => (
-        <Carreau key={index} className={carte.signal === "fort" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
-          {carte.signal ? (
-            <div className="mb-3">
-              <Signal signal={carte.signal} />
-            </div>
-          ) : null}
-          <h3 className="font-sans text-base font-normal leading-snug text-foreground">{carte.titre}</h3>
-          {carte.texte.length > 0 ? (
-            <p className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
-              <Texte spans={carte.texte} />
-            </p>
-          ) : null}
-          {carte.suite?.map((spans, i) => (
-            <p key={i} className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
-              <Texte spans={spans} />
-            </p>
-          ))}
-          {carte.sources ? (
-            <div className="mt-auto space-y-1 pt-4">
-              {carte.sources.map((spans, i) => (
-                <p key={i} className="font-inter-tight text-xs leading-relaxed text-mid-gray">
-                  <Texte spans={spans} />
-                </p>
-              ))}
-            </div>
-          ) : null}
-        </Carreau>
+      {cartes.map((carte, index) => {
+        const courte = !carte.suite && texteDe(carte.texte).length <= CARTE_COURTE;
+        const { phrase, reste } = premierePhrase(carte.texte);
+        const replie = !courte && (reste.length > 0 || carte.suite || carte.sources);
+        return (
+          <Carreau
+            key={index}
+            id={ancreCarte(section, index)}
+            className={carte.signal === "fort" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}
+          >
+            {carte.signal ? (
+              <div className="mb-3">
+                <Signal signal={carte.signal} />
+              </div>
+            ) : null}
+            <h4 className="font-sans text-base font-normal leading-snug text-foreground">{carte.titre}</h4>
+            {carte.texte.length > 0 ? (
+              <p className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
+                {courte ? <Texte spans={carte.texte} /> : phrase}
+              </p>
+            ) : null}
+            {courte && carte.sources ? <SourcesCarte sources={carte.sources} /> : null}
+            {replie ? (
+              <div className="mt-auto">
+                <Plus resume="Lire la suite">
+                  {reste.length > 0 ? (
+                    <p>
+                      <Texte spans={reste} />
+                    </p>
+                  ) : null}
+                  {carte.suite?.map((spans, i) => (
+                    <p key={i}>
+                      <Texte spans={spans} />
+                    </p>
+                  ))}
+                  {carte.sources ? <SourcesCarte sources={carte.sources} /> : null}
+                </Plus>
+              </div>
+            ) : null}
+          </Carreau>
+        );
+      })}
+    </div>
+  );
+}
+
+function SourcesCarte({ sources }: { sources: Span[][] }) {
+  return (
+    <div className="mt-auto space-y-1 pt-4">
+      {sources.map((spans, i) => (
+        <p key={i} className="font-inter-tight text-xs leading-relaxed text-mid-gray">
+          <Texte spans={spans} />
+        </p>
       ))}
     </div>
   );
@@ -581,7 +710,15 @@ function GrilleCartes({ cartes }: { cartes: Carte[] }) {
  * échéance, graduée par mois, avec la date du jour. Deux marqueurs trop
  * proches passent sur une seconde ligne plutôt que de se chevaucher.
  */
-function Frise({ echeances, maintenant }: { echeances: (Echeance & { date: Date })[]; maintenant: Date }) {
+function Frise({
+  echeances,
+  section,
+  maintenant,
+}: {
+  echeances: (Echeance & { date: Date })[];
+  section: number;
+  maintenant: Date;
+}) {
   const premiere = echeances[0].date;
   const derniere = echeances[echeances.length - 1].date;
   const debut = new Date(Date.UTC(premiere.getUTCFullYear(), premiere.getUTCMonth(), 1));
@@ -635,7 +772,7 @@ function Frise({ echeances, maintenant }: { echeances: (Echeance & { date: Date 
           return (
             <a
               key={index}
-              href={`#echeance-${index + 1}`}
+              href={`#${ancreEcheance(section, index + 1)}`}
               title={`${e.libelle}${passee ? " (passée)" : ""}`}
               aria-label={`Échéance ${index + 1} : ${e.libelle}${passee ? ", passée" : ""}`}
               className={`absolute flex h-5 w-5 -translate-x-1/2 items-center justify-center font-mono text-[10px] transition-opacity hover:opacity-80 ${
@@ -654,21 +791,27 @@ function Frise({ echeances, maintenant }: { echeances: (Echeance & { date: Date 
   );
 }
 
-function Echeancier({ echeances, maintenant }: { echeances: Echeance[]; maintenant: Date }) {
-  const datees = echeances
-    .filter((e): e is Echeance & { date: Date } => e.date !== null)
-    .sort((a, b) => a.date.getTime() - b.date.getTime());
+function Echeancier({
+  echeances,
+  section,
+  maintenant,
+}: {
+  echeances: Echeance[];
+  section: number;
+  maintenant: Date;
+}) {
+  const datees = echeancesDatees(echeances);
 
   return (
     <>
-      {datees.length >= 2 ? <Frise echeances={datees} maintenant={maintenant} /> : null}
+      {datees.length >= 2 ? <Frise echeances={datees} section={section} maintenant={maintenant} /> : null}
       <ol className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {datees.map((e, index) => {
           const jours = joursAvant(e.date, maintenant);
           const passee = jours < 0;
           const tone: Tone = passee ? "neutre" : jours <= 7 ? "alerte" : jours <= 30 ? "attention" : "neutre";
           return (
-            <li key={index} id={`echeance-${index + 1}`} className="scroll-mt-8">
+            <li key={index} id={ancreEcheance(section, index + 1)} className="scroll-mt-8">
               <Carreau className={`h-full ${passee ? "opacity-70" : ""}`}>
                 <div className="flex items-start justify-between gap-3">
                   <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
@@ -732,47 +875,58 @@ function RenduSection({
   axes,
   maintenant,
   base,
+  avecTitre = true,
 }: {
   section: Section;
   index: number;
   axes: Map<number, string>;
   maintenant: Date;
   base: string;
+  /** Faux dans un repli, dont le résumé porte déjà le titre. */
+  avecTitre?: boolean;
 }) {
   const id = ancreSection(index);
   const signal = section.signal;
+  const titre = (sousTitre?: string) =>
+    avecTitre && section.titre ? (
+      <TitreSection id={id} titre={section.titre} sousTitre={sousTitre} signal={signal} />
+    ) : null;
+  const labelle = avecTitre && section.titre ? id : undefined;
 
   switch (section.kind) {
     case "prose":
       return (
-        <section aria-labelledby={section.titre ? id : undefined}>
-          {section.titre ? <TitreSection id={id} titre={section.titre} signal={signal} /> : null}
+        <section aria-labelledby={labelle}>
+          {titre()}
           <CorpsLettre body={section.blocs} base={base} />
         </section>
       );
     case "axes":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} sousTitre={`${section.axes.length} axes`} signal={signal} />
+        <section aria-labelledby={labelle}>
+          {titre(`${section.axes.length} axes`)}
           <GrilleAxes axes={section.axes} />
         </section>
       );
     case "actions": {
       const urgentes = section.actions.filter((a) => a.urgence === "semaine").length;
+      const unite = normaliserTitre(section.titre).startsWith("a decider") ? "point" : "action";
       return (
-        <section aria-labelledby={id}>
-          <TitreSection
-            id={id}
-            titre={section.titre}
-            signal={signal}
-            sousTitre={`${section.actions.length} ${
-              normaliserTitre(section.titre).startsWith("a decider") ? "point" : "action"
-            }${section.actions.length > 1 ? "s" : ""}${urgentes > 0 ? ` · ${urgentes} cette semaine` : ""}`}
-          />
+        <section aria-labelledby={labelle}>
+          {titre(
+            `${section.actions.length} ${unite}${section.actions.length > 1 ? "s" : ""}${
+              urgentes > 0 ? ` · ${urgentes} cette semaine` : ""
+            }`,
+          )}
           <Reste blocs={section.chapeau} base={base} />
           <div className="mt-6 grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
             {section.actions.map((action) => (
-              <CarteAction key={action.numero} action={action} axes={axes} />
+              <CarteAction
+                key={action.numero}
+                id={ancreAction(index, action.numero)}
+                action={action}
+                axes={axes}
+              />
             ))}
           </div>
           <Reste blocs={section.blocs} base={base} />
@@ -781,8 +935,8 @@ function RenduSection({
     }
     case "options":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} signal={signal} />
+        <section aria-labelledby={labelle}>
+          {titre()}
           <Reste blocs={section.chapeau} base={base} />
           <GrilleOptions options={section.options} />
           <Reste blocs={section.blocs} base={base} />
@@ -790,13 +944,8 @@ function RenduSection({
       );
     case "avancement":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection
-            id={id}
-            titre={section.titre}
-            signal={signal}
-            sousTitre={`${section.chantiers.length} chantier${section.chantiers.length > 1 ? "s" : ""}`}
-          />
+        <section aria-labelledby={labelle}>
+          {titre(`${section.chantiers.length} chantier${section.chantiers.length > 1 ? "s" : ""}`)}
           <Reste blocs={section.chapeau} base={base} />
           <GrilleChantiers chantiers={section.chantiers} />
           <Reste blocs={section.blocs} base={base} />
@@ -804,30 +953,25 @@ function RenduSection({
       );
     case "cartes":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} signal={signal} />
+        <section aria-labelledby={labelle}>
+          {titre()}
           <Reste blocs={section.chapeau} base={base} />
-          <GrilleCartes cartes={section.cartes} />
+          <GrilleCartes cartes={section.cartes} section={index} />
           <Reste blocs={section.blocs} base={base} />
         </section>
       );
     case "echeancier":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection
-            id={id}
-            titre={section.titre}
-            signal={signal}
-            sousTitre={`${section.echeances.length} échéance${section.echeances.length > 1 ? "s" : ""}`}
-          />
-          <Echeancier echeances={section.echeances} maintenant={maintenant} />
+        <section aria-labelledby={labelle}>
+          {titre(`${section.echeances.length} échéance${section.echeances.length > 1 ? "s" : ""}`)}
+          <Echeancier echeances={section.echeances} section={index} maintenant={maintenant} />
           <Reste blocs={section.blocs} base={base} />
         </section>
       );
     case "questions":
       return (
-        <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} signal={signal} />
+        <section aria-labelledby={labelle}>
+          {titre()}
           <Questions questions={section.questions} />
           <Reste blocs={section.blocs} base={base} />
         </section>
@@ -835,7 +979,10 @@ function RenduSection({
   }
 }
 
-/** La lettre en grille : coup d'œil, sommaire, puis chaque section dans sa forme. */
+/**
+ * La lettre en trois temps : l'essentiel au premier écran, puis ce qu'il faut
+ * faire, ce qui bouge, et le reste replié.
+ */
 export function LettreEnGrille({
   structure,
   chapo,
@@ -847,8 +994,13 @@ export function LettreEnGrille({
   base?: string;
   maintenant?: Date;
 }) {
-  // Les éditions « Veilles clients » ouvrent sur la même ligne que le chapô :
-  // l'afficher deux fois de suite n'apprend rien.
+  const lu = lecture(structure);
+
+  // Un chapô qui n'est qu'une note de méthode descend avec le reste : le
+  // premier écran est réservé à ce qui se décide.
+  const methode = chapo !== null && estNoteDeMethode(chapo);
+  // Les éditions ouvrent souvent sur la même ligne que le chapô : l'afficher
+  // deux fois de suite n'apprend rien.
   const intro = structure.intro.filter(
     (bloc) => !(chapo && bloc.k === "p" && texteDe(bloc.s).trim() === chapo.trim()),
   );
@@ -858,28 +1010,93 @@ export function LettreEnGrille({
     if (section.kind === "axes") for (const axe of section.axes) axes.set(axe.numero, axe.nom);
   }
 
+  const rendu = ({ section, index }: SectionPlacee, avecTitre = true) => (
+    <RenduSection
+      key={index}
+      section={section}
+      index={index}
+      axes={axes}
+      maintenant={maintenant}
+      base={base}
+      avecTitre={avecTitre}
+    />
+  );
+
+  const nbPlus = lu.reste.length + (methode || intro.length > 0 ? 1 : 0);
+  let rubriquePrecedente = "";
+
   return (
     <>
-      {chapo ? (
+      {chapo && !methode ? (
         <p className="mt-8 max-w-[68ch] border-l-2 border-l-accent-secondary pl-4 font-inter-tight text-base leading-relaxed text-foreground">
           {chapo}
         </p>
       ) : null}
 
-      <CoupDOeil structure={structure} maintenant={maintenant} />
-      <Sommaire sections={structure.sections} />
+      <Essentiel structure={structure} lu={lu} maintenant={maintenant} base={base} />
+      <NavGroupes
+        comptes={[
+          { cle: "agir", n: lu.agir.length },
+          { cle: "suivre", n: lu.suivre.length + lu.sansSignal.length },
+          { cle: "plus", n: nbPlus },
+        ]}
+      />
 
-      {intro.length > 0 ? (
-        <div className="mt-4">
-          <CorpsLettre body={intro} base={base} />
-        </div>
+      {lu.agir.length > 0 ? <Groupe cle="agir">{lu.agir.map((p) => rendu(p))}</Groupe> : null}
+
+      {lu.suivre.length + lu.sansSignal.length > 0 ? (
+        <Groupe cle="suivre">
+          {lu.suivre.map((placee) => {
+            // Les thèmes d'une même rubrique (« Actualités par thème ») sous
+            // un seul intertitre.
+            const rubrique = placee.section.rubrique ? texteDe(placee.section.rubrique) : "";
+            const intertitre = rubrique && rubrique !== rubriquePrecedente ? rubrique : null;
+            rubriquePrecedente = rubrique;
+            return (
+              <div key={placee.index}>
+                {intertitre ? (
+                  <p className="mt-12 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">{intertitre}</p>
+                ) : null}
+                {rendu(placee)}
+              </div>
+            );
+          })}
+          {lu.sansSignal.length > 0 ? (
+            <div className="mt-10 border-t border-dark-gray">
+              <Repli
+                titre={`Sans signal cette fois (${lu.sansSignal.length})`}
+                resume={lu.sansSignal.map((p) => (p.section.titre ? texteDe(p.section.titre) : "")).join(" · ")}
+              >
+                {lu.sansSignal.map((p) => rendu(p))}
+              </Repli>
+            </div>
+          ) : null}
+        </Groupe>
       ) : null}
 
-      <article>
-        {structure.sections.map((section, index) => (
-          <RenduSection key={index} section={section} index={index} axes={axes} maintenant={maintenant} base={base} />
-        ))}
-      </article>
+      {nbPlus > 0 ? (
+        <Groupe cle="plus">
+          <div className="mt-2">
+            {lu.reste.map((placee) => (
+              <Repli
+                key={placee.index}
+                id={ancreSection(placee.index)}
+                titre={placee.section.titre ? <Texte spans={placee.section.titre} /> : "Suite"}
+              >
+                {rendu(placee, false)}
+              </Repli>
+            ))}
+            {methode || intro.length > 0 ? (
+              <Repli titre={methode ? "Note de méthode" : "Préambule"}>
+                {methode ? (
+                  <p className="font-inter-tight text-[15px] leading-relaxed text-foreground/90">{chapo}</p>
+                ) : null}
+                {intro.length > 0 ? <CorpsLettre body={intro} base={base} /> : null}
+              </Repli>
+            ) : null}
+          </div>
+        </Groupe>
+      ) : null}
     </>
   );
 }

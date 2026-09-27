@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { NewsletterBlocks } from "@sentinelle/newsletter/blocks";
+import { parseNewsletterPeriod } from "@sentinelle/newsletter/period";
 import { DossierSchema, LettreSchema, type Dossier, type Lettre } from "./schema";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -148,6 +149,39 @@ export function missingForIssue(issue: IssueContent): string[] {
   }
 
   return missing;
+}
+
+/**
+ * Ce qui interdit de refabriquer un numéro, ou null si rien ne s'y oppose.
+ *
+ * La refabrication réécrit le numéro en place. Elle ne vaut donc que pour un
+ * brouillon resté sans lettre : dès qu'un texte existe, le réécrire effacerait
+ * une relecture, et dès qu'il est validé, il a peut-être déjà été lu.
+ *
+ * Partagée par l'admin, qui demande, et par la fabrication, qui exécute : entre
+ * les deux s'écoulent des minutes, et le numéro a pu changer.
+ */
+export function rebuildRefusal(numero: {
+  status: string;
+  period: string;
+  blocks: unknown;
+  clientActive: boolean;
+}): string | null {
+  if (numero.status !== "draft") {
+    return "Seul un brouillon se refabrique : ce numéro est déjà validé ou envoyé.";
+  }
+  // Lu sur la colonne brute, pas à travers le schéma : une lettre que le schéma
+  // ne reconnaît plus reste un texte que quelqu'un a pu relire.
+  const brut = numero.blocks as { lettre?: unknown } | null;
+  if (typeof brut === "object" && brut !== null && typeof brut.lettre === "object" && brut.lettre !== null) {
+    return "Ce numéro a une lettre : le refabriquer effacerait la relecture.";
+  }
+  if (!parseNewsletterPeriod(numero.period)) {
+    return `Période illisible (« ${numero.period} ») : refabrication impossible.`;
+  }
+  if (!numero.clientActive) return "Abonnement résilié : aucune fabrication.";
+
+  return null;
 }
 
 /** Un numéro sans rien de neuf reste un numéro — il est seulement plus court. */

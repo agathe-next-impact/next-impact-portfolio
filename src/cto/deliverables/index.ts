@@ -11,6 +11,7 @@ export {
   currentStates,
   digestOf,
   history,
+  isLatestVersion,
   listForClient,
   listPrestations,
   livraisonsForClient,

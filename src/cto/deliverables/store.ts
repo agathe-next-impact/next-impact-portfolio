@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { and, desc, eq, inArray, notInArray, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, notExists, notInArray, sql, type SQL } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { db } from "../db/client";
 import { ctoDeliverablePlacements, ctoDeliverables } from "../db/schema";
 import type {
@@ -72,6 +73,28 @@ function sortKeys(value: unknown): unknown {
     return out;
   }
   return value;
+}
+
+const newer = alias(ctoDeliverables, "newer");
+
+/**
+ * Vrai pour la dernière version d'un livrable, TOUS accompagnements confondus.
+ *
+ * À poser dans toute lecture filtrée par `clientId`. Sans elle, la « version
+ * courante » se calcule parmi les seules lignes du client : un livrable passé à
+ * un autre accompagnement, puis retiré, garde chez le premier sa dernière
+ * version à lui — publiée, donc affichée, alors que la synchro (`currentStates`,
+ * qui ne filtre pas) le tient pour retiré et n'y reviendra jamais.
+ */
+export function isLatestVersion(): SQL {
+  return notExists(
+    db()
+      .select({ one: sql`1` })
+      .from(newer)
+      .where(
+        and(eq(newer.notionPageId, ctoDeliverables.notionPageId), gt(newer.version, ctoDeliverables.version)),
+      ),
+  );
 }
 
 /**
@@ -233,7 +256,9 @@ export async function livraisonsForClient(clientId: string): Promise<Livraison[]
       withdrawnAt: ctoDeliverables.withdrawnAt,
     })
     .from(ctoDeliverables)
-    .where(and(eq(ctoDeliverables.clientId, clientId), eq(ctoDeliverables.kind, "prestation")))
+    .where(
+      and(isLatestVersion(), eq(ctoDeliverables.clientId, clientId), eq(ctoDeliverables.kind, "prestation")),
+    )
     .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
 
   return rows.flatMap((row) =>
@@ -266,7 +291,7 @@ async function currentDeliverables(where: SQL | undefined): Promise<Deliverable[
       ctoDeliverablePlacements,
       eq(ctoDeliverablePlacements.notionPageId, ctoDeliverables.notionPageId),
     )
-    .where(where)
+    .where(and(isLatestVersion(), where))
     .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
 
   return rows.filter((row) => row.withdrawnAt === null).map(toDeliverable);
@@ -321,7 +346,7 @@ export async function countsByClient(clientIds: string[]): Promise<Map<string, n
       withdrawnAt: ctoDeliverables.withdrawnAt,
     })
     .from(ctoDeliverables)
-    .where(inArray(ctoDeliverables.clientId, clientIds))
+    .where(and(isLatestVersion(), inArray(ctoDeliverables.clientId, clientIds)))
     .orderBy(ctoDeliverables.notionPageId, desc(ctoDeliverables.version));
 
   for (const row of rows) {

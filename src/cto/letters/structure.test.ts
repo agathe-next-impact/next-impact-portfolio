@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { Block } from "../notion/blocks";
-import { attaque, dateEcheance, pressionDe, structureLettre, texteDe } from "./structure";
+import {
+  attaque,
+  dateEcheance,
+  estNoteDeMethode,
+  lecture,
+  pressionDe,
+  priorites,
+  structureLettre,
+  texteDe,
+} from "./structure";
 
 const p = (t: string): Block => ({ k: "p", s: [{ t }] });
 const pb = (gras: string, t: string): Block => ({ k: "p", s: [{ t: gras, b: true }, { t }] });
@@ -381,5 +390,73 @@ describe("toutes sources : la forme décide, pas l'origine", () => {
     const lettre = structureLettre(LETTRE, PERIODE)!;
     expect(lettre.intro.some((b) => b.k === "h1")).toBe(false);
     expect(lettre.sections[0].titre && texteDe(lettre.sections[0].titre)).toBe("Lecture du mois");
+  });
+});
+
+describe("lecture groupée", () => {
+  const EDITION = new Date("2026-09-13T22:00:00.000Z");
+  const SF: Block[] = [
+    pb("Note de méthode.", " Fenêtre élargie."),
+    h("h1", "L'essentiel du jour"),
+    { k: "li", s: [{ t: "Rentrée sans opérateur national." }] },
+    h("h1", "Actualités par thème"),
+    h("h2", "① Politique publique — MOYEN"),
+    pb("La doctrine de l'après-guichet.", " Texte."),
+    p("Source : Sénat"),
+    h("h2", "② Lieux emblématiques — RAS"),
+    p("RAS vérifiable."),
+    h("h2", "③ Réseaux — FORT"),
+    pb("Portes ouvertes nationales.", " Texte."),
+    pb("Recensement 2026.", " Texte."),
+    h("h1", "Trois idées de posts de fond"),
+    { k: "oli", s: [{ t: "Idée un.", b: true }, { t: " Angle." }] },
+    { k: "oli", s: [{ t: "Idée deux.", b: true }, { t: " Angle." }] },
+    h("h1", "Le geste de la période"),
+    pb("Écrire à la Région avant le vendredi 2 octobre.", " Une demi-heure."),
+    h("h1", "Ce qui suit"),
+    pb("Réécrire le message.", " Texte."),
+    pb("Immédiat : relancer le prestataire.", " Texte."),
+    h("h1", "Agenda des quinze jours"),
+    p("Vendredi 25 septembre, visioconférence des tiers-lieux."),
+    p("Le 1er octobre, fin de la subrogation."),
+  ];
+
+  it("range en trois temps : à faire, ce qui bouge, le reste ; l'essentiel à part", () => {
+    const lu = lecture(structureLettre(SF, EDITION)!);
+    const titres = (liste: { section: { titre: unknown } }[]) =>
+      liste.map((p) => texteDe(p.section.titre as never));
+
+    expect(lu.enBref && texteDe(lu.enBref.section.titre!)).toBe("L'essentiel du jour");
+    expect(titres(lu.agir)).toEqual(["Le geste de la période", "Ce qui suit", "Agenda des quinze jours"]);
+    expect(titres(lu.suivre)).toEqual(["① Politique publique", "③ Réseaux"]);
+    expect(lu.suivre.map((p) => p.section.rubrique && texteDe(p.section.rubrique))).toEqual([
+      "Actualités par thème",
+      "Actualités par thème",
+    ]);
+    expect(titres(lu.sansSignal)).toEqual(["② Lieux emblématiques"]);
+    expect(titres(lu.reste)).toEqual(["Trois idées de posts de fond"]);
+  });
+
+  it("remonte les actions les plus pressées, les signaux forts et les prochaines échéances", () => {
+    const prio = priorites(structureLettre(SF, EDITION)!, EDITION);
+    expect(prio.actions.map((a) => [a.action.titre, a.action.urgence])).toEqual([
+      ["Relancer le prestataire", "semaine"],
+      ["Écrire à la Région avant le vendredi 2 octobre", "mois"],
+      ["Réécrire le message", "plus-tard"],
+    ]);
+    expect(prio.signaux.map((s) => [s.titre, s.signal])).toEqual([
+      ["Portes ouvertes nationales", "fort"],
+      ["Recensement 2026", "fort"],
+    ]);
+    expect(prio.echeances.map((e) => [e.echeance.libelle, e.rang])).toEqual([
+      ["Vendredi 25 septembre", 1],
+      ["Le 1er octobre", 2],
+    ]);
+  });
+
+  it("reconnaît une note de méthode en guise de chapô", () => {
+    expect(estNoteDeMethode("Note de méthode. L'actualité est pauvre.")).toBe(true);
+    expect(estNoteDeMethode("Format : référentiel de veille.")).toBe(true);
+    expect(estNoteDeMethode("Trois évolutions à considérer ce mois-ci.")).toBe(false);
   });
 });

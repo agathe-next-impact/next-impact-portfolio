@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { previousLoginAt } from "@cto/access";
-import { listForClient, livraisonsForClient, type Deliverable, type Livraison } from "@cto/deliverables";
+import {
+  listForClient,
+  livraisonsForClient,
+  prestationsForClient,
+  type Deliverable,
+  type Livraison,
+} from "@cto/deliverables";
 import {
   actionsFor,
   BACKUP_MAX_AGE_DAYS,
@@ -12,6 +18,7 @@ import {
   sitePoints,
   siteVerdict,
   visibleSections,
+  withoutPrice,
   type Actions,
   type ClientProfile,
   type Mission,
@@ -92,8 +99,16 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     sentinelle: profile.hasSentinelle,
   });
 
-  const site = sections.some((section) => section.key === "site") ? await siteStateFor(viewer.clientId) : null;
+  const [site, prestations] = await Promise.all([
+    sections.some((section) => section.key === "site") ? siteStateFor(viewer.clientId) : null,
+    // Les prestations signées sont des missions comme les chantiers : elles
+    // entrent dans le pilotage (cartes, frise, retards) dès que l'écran
+    // Contrats est ouvert au client, sans leur tarif. `items` ne les reçoit
+    // pas : notifications, historique et restitution restent sans elles.
+    sections.some((section) => section.key === "prestations") ? prestationsForClient(viewer.clientId) : [],
+  ]);
   const now = new Date();
+  const suivis = [...items, ...prestations.map(withoutPrice)];
 
   return {
     profile,
@@ -102,8 +117,8 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     sections,
     since,
     site,
-    missions: missionsOf(items, now),
-    actions: actionsFor(items, site?.snapshot ?? null, now),
+    missions: missionsOf(suivis, now),
+    actions: actionsFor(suivis, site?.snapshot ?? null, now),
   };
 }
 

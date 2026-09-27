@@ -1,4 +1,6 @@
+import type { NewsletterBlocks } from "@sentinelle/newsletter/blocks";
 import { citedOutside } from "@sentinelle/redaction/guards";
+import { isQuietIssue } from "./issue";
 import { AXES, type Dossier, type Lettre } from "./schema";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -150,6 +152,43 @@ export function allowedVocabulary(
   // `citedOutside` rend les technologies du catalogue présentes dans un texte
   // quand rien n'est autorisé : c'est exactement la liste cherchée.
   return [...ficheNames, ...citedOutside(dossierText, [])];
+}
+
+/**
+ * Ce que le client dit de lui-même : son secteur et ses notes.
+ *
+ * Une seule définition, partagée par la fabrication et par la relecture. Chacune
+ * avait écrit la sienne, et la relecture oubliait le secteur et les notes : un
+ * numéro accepté à la fabrication pouvait être refusé à la validation pour un
+ * mot que le modèle avait eu le droit d'écrire.
+ */
+export function clientContextOf(client: { sector: string | null; notes: string | null }): string {
+  return [client.sector, client.notes].filter(Boolean).join(" ");
+}
+
+/**
+ * Le garde-fou, rejoué sur une lettre relue à la main.
+ *
+ * Même vocabulaire qu'à la fabrication, et c'est tout l'objet de cette
+ * fonction : les composants du constaté, figés avec le numéro, plus les noms et
+ * identifiants de la fiche, plus le contexte du client. Une relecture jugée sur
+ * un vocabulaire plus étroit ne serait pas plus sûre, elle serait seulement
+ * impossible à satisfaire.
+ */
+export function guardRelecture(
+  lettre: Lettre,
+  issue: { constate: NewsletterBlocks; dossier: Dossier },
+  client: { sector: string | null; notes: string | null; ficheNames: string[] },
+): LettreGuardOutcome {
+  return guardLettre(lettre, {
+    dossier: issue.dossier,
+    ficheNames: [
+      ...issue.constate.health.components.map((component) => component.label),
+      ...client.ficheNames,
+    ],
+    quiet: isQuietIssue(issue.constate),
+    clientContext: clientContextOf(client),
+  });
 }
 
 export function guardLettre(

@@ -46,6 +46,7 @@ export {
   getDigestDetail,
   listDigests,
   parseLettreDraft,
+  requestDigestRebuild,
   saveDigestLettre,
   sendDigest,
   validateDigest,

@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import { getDigestDetail } from "@sentinelle/admin";
 import { previewNewsletterEmail } from "@sentinelle/emails/render";
 import { isQuietIssue, wordCount } from "@sentinelle/lettre";
-import { enregistrerNumero, envoyerNumero, validerNumero } from "../../actions";
+import {
+  enregistrerNumero,
+  envoyerNumero,
+  refabriquerNumero,
+  validerNumero,
+} from "../../actions";
 import {
   BackLink,
   buttonClass,
@@ -203,9 +208,10 @@ export default async function DigestPage({
                 <Label>La lettre · relue et corrigée ici</Label>
               </label>
               <p className="mt-2 font-inter-tight text-sm leading-relaxed text-mid-gray">
-                Structure et sourçage sont revérifiés à l'enregistrement : une source
-                ajoutée à la main qui ne figure pas au dossier est refusée, comme elle
-                le serait venant du modèle.
+                La structure est revérifiée à l'enregistrement. Le sourçage y est
+                signalé, et il bloque la validation : une source ajoutée à la main qui
+                ne figure pas au dossier est refusée, comme elle le serait venant du
+                modèle.
               </p>
               <textarea
                 id="lettre"
@@ -236,9 +242,17 @@ export default async function DigestPage({
               <Label>Pas de lettre</Label>
               <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
                 La fabrication n'a pas abouti pour ce numéro. La raison est dans l'encart
-                de production ci-dessus. Supprimer le numéro le fera refabriquer à la
-                prochaine passe du cron.
+                de production ci-dessus. Le cron ne repasse pas sur une période écoulée :
+                un second essai se demande ici.
               </p>
+              {numero.status === "draft" && (
+                <form action={refabriquerNumero} className="mt-5">
+                  <input type="hidden" name="digestId" value={numero.id} />
+                  <button type="submit" className={buttonClass.ghost}>
+                    Refabriquer ce numéro
+                  </button>
+                </form>
+              )}
             </Panel>
           )}
 
