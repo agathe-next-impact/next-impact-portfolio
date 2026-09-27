@@ -6,7 +6,7 @@
 // localStorage, barre de progression, et téléchargement PDF via une vue print
 // générée dans un iframe caché (zéro dépendance client — voir
 // lib/checklist-geo-print.ts). Escalier de CTA par température d'avancement :
-// froid → rubrique + diagnostic gratuits, tiède → visio 150 €, chaud →
+// froid → rubrique + diagnostic gratuits, tiède → échange de 15 minutes gratuit, chaud →
 // audit complet 650 €. Doctrine : checklist et téléchargement utilisables sans
 // email ; la modale newsletter vient après la preuve de valeur.
 // Modèle : visibilite-ia.
@@ -69,13 +69,13 @@ function getCtas(tier: CtaTier) {
   if (tier === "tiede")
     return {
       lead: {
-        fr: "Chantier lancé : une visio sert à prioriser les actions restantes selon votre site réel.",
-        en: "Work in progress: a call helps prioritize the remaining actions for your actual site.",
+        fr: "Chantier lancé : un échange de 15 minutes aide à prioriser les actions restantes selon votre site réel.",
+        en: "Work in progress: a 15-minute call helps prioritize the remaining actions for your actual site.",
       },
       primary: {
-        fr: "Prioriser mes actions en visio · 150 €",
-        en: "Prioritize my actions on a call · €150",
-        href: "/conseil",
+        fr: "Prioriser mes actions · 15 min, gratuit",
+        en: "Prioritize my actions · 15 min, free",
+        href: "/conseil#choix-techno-ia",
       },
       secondary: {
         fr: "Approfondir : la rubrique Être trouvé",

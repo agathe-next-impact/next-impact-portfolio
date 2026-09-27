@@ -266,7 +266,7 @@ export default function EstimateurBudget() {
                       fontFamily: "var(--sans)",
                       fontSize: 13,
                       color: selected ? "var(--ink)" : "var(--ink-2)",
-                      fontWeight: selected ? 600 : 400,
+                      fontWeight: selected ? 500 : 400,
                       outline: "none",
                       borderBottom: "1px solid var(--rule)",
                     }}

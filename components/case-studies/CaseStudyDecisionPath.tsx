@@ -41,11 +41,19 @@ export default async function CaseStudyDecisionPath({
 
   // Prix tiré de la source canonique des offres /conseil — jamais dupliqué ici.
   // Il est bilingue (« 650 € » / « €650 ») : prendre la variante de la locale.
+  // Il se lit en milieu de phrase : l'échange de 15 minutes vaut « Gratuit » /
+  // « Free » (ADR-023), d'où la minuscule (sans effet sur « 650 € »).
   const conseilPrice = offreConseil
     ? OFFERS.find((o) => o.id === CONSEIL_OFFER_ID[offreConseil])?.tiers[0]?.price[
         locale === "en" ? "en" : "fr"
-      ]
+      ]?.toLocaleLowerCase(locale)
     : undefined;
+  // Un prix chiffré se lit hors taxes, comme partout sur le site ; « gratuit »
+  // n'a pas de suffixe.
+  const conseilPriceHT =
+    conseilPrice && /\d/.test(conseilPrice)
+      ? `${conseilPrice} ${locale === "en" ? "excl. VAT" : "HT"}`
+      : conseilPrice;
 
   const budgetText = budgetIndicatif
     ? caseStudy.delai
@@ -71,7 +79,7 @@ export default async function CaseStudyDecisionPath({
         offreConseil && conseilPrice
           ? {
               href: "/conseil" as const,
-              label: t(`conseilLink.${offreConseil}`, { price: conseilPrice }),
+              label: t(`conseilLink.${offreConseil}`, { price: conseilPriceHT ?? "" }),
             }
           : null,
     },

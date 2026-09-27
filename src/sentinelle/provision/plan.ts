@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Plan } from "@sentinelle/db/schema";
 import { normalizeSiteUrl } from "@sentinelle/url";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -16,6 +17,10 @@ import { normalizeSiteUrl } from "@sentinelle/url";
 //    que d'en créer une seconde (l'e-mail est unique chez Sentinelle). La même
 //    adresse pour un autre site est refusée : ce serait réécrire la fiche
 //    d'un autre client.
+//
+// Toute fiche passée par ici est en formule `accompagnement` : sa veille se lit
+// dans l'espace d'accompagnement, rien ne lui part par e-mail. Un abonné
+// Sentinelle seul adopté change donc de formule avec l'adoption.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const ProvisionRequestSchema = z.union([
@@ -45,6 +50,7 @@ export interface ExistingClient {
   siteUrl: string;
   sector: string | null;
   active: boolean;
+  plan: Plan;
   /** Composants suivis : zéro veut dire une fiche jamais amorcée. */
   components: number;
 }
@@ -55,7 +61,14 @@ export type ProvisionPlan =
   | { kind: "deactivate"; id: string }
   | {
       kind: "create";
-      values: { email: string; name: string; company: string | null; siteUrl: string; sector: string | null };
+      values: {
+        email: string;
+        name: string;
+        company: string | null;
+        siteUrl: string;
+        sector: string | null;
+        plan: "accompagnement";
+      };
       scan: true;
     }
   | {
@@ -68,6 +81,7 @@ export type ProvisionPlan =
         siteUrl: string;
         sector: string | null;
         active: boolean;
+        plan: "accompagnement";
       }>;
       /** Relancer l'analyse : site changé, fiche jamais amorcée, ou réactivation. */
       scan: boolean;
@@ -93,7 +107,7 @@ export function planProvision(request: ProvisionRequest, existing: ExistingClien
 
   if (!existing) {
     if (request.id) return { kind: "reject", status: 404, reason: "client Sentinelle introuvable" };
-    return { kind: "create", values: wanted, scan: true };
+    return { kind: "create", values: { ...wanted, plan: "accompagnement" }, scan: true };
   }
 
   // Adopter, c'est reconnaître le même abonné : même adresse ET même site. La
@@ -116,6 +130,7 @@ export function planProvision(request: ProvisionRequest, existing: ExistingClien
   // ne doit pas effacer ce que l'onboarding a appris.
   if (wanted.sector && wanted.sector !== existing.sector) patch.sector = wanted.sector;
   if (!existing.active) patch.active = true;
+  if (existing.plan !== "accompagnement") patch.plan = "accompagnement";
 
   const scan = patch.siteUrl !== undefined || existing.components === 0 || patch.active === true;
   const adopted = !request.id;

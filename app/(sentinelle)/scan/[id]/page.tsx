@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
-import { sentinellePaymentLinkFor } from "@/lib/sentinelle-offer";
+import { BlueprintSection } from "@/components/aspect/section";
 import { ScanReport } from "./report";
 
 export const metadata: Metadata = {
-  title: "Sentinelle — rapport d'analyse",
+  title: "Sentinelle · rapport d'analyse",
   // Un rapport concerne le site de quelqu'un : jamais indexé, jamais suivi.
   robots: { index: false, follow: false },
 };
@@ -20,18 +19,15 @@ export default async function ScanReportPage({
 
   return (
     <main>
-      <BlueprintSection ticks innerClassName="px-6 py-16 lg:px-12 lg:py-24">
-        <SectionHeading
-          index="№ 01"
-          kicker="Sentinelle"
-          title="De quoi votre site est fait"
-          description="Voici ce que l'analyse a pu identifier depuis l'extérieur, sans accès ni mot de passe."
-        />
-
-        {/* Le lien d'abonnement porte l'identifiant de cette analyse : c'est ce
-            qui permet, au paiement, d'ouvrir la fiche avec ce qui vient d'être
-            affiché plutôt qu'avec une seconde analyse. */}
-        <ScanReport scanId={id} lienAbonnement={sentinellePaymentLinkFor(id)} />
+      {/* Hero ramassé : la cartouche de résultat doit être entièrement visible
+          à l'ouverture de la page, sans défilement (demande du 2026-09-27). */}
+      <BlueprintSection ticks innerClassName="px-6 pt-6 pb-16 lg:px-12 lg:pt-8">
+        {/* Pas de surtitre : le titre, « Audit de <organisation> », est porté
+            par le rapport, seul à connaître le site analysé. */}
+        {/* La demande d'inscription faite depuis le rapport porte l'identifiant
+            de cette analyse : à l'activation, la fiche s'ouvre avec ce qui vient
+            d'être affiché plutôt qu'avec une seconde analyse. */}
+        <ScanReport scanId={id} />
       </BlueprintSection>
     </main>
   );

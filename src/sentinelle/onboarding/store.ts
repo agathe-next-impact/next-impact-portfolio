@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { clients, stackItems } from "@sentinelle/db/schema";
+import { clients, stackItems, type Plan } from "@sentinelle/db/schema";
 import type { ScanResult, StackItemType } from "@sentinelle/types";
 import { detectPlatform } from "@sentinelle/scanner/platform";
 import { stackItemsFromScan, type StackDraft } from "./stack";
@@ -36,7 +36,7 @@ export interface Fiche {
     sector: string | null;
     notes: string | null;
     active: boolean;
-    stripeCustomerId: string | null;
+    plan: Plan;
     onboardedAt: Date | null;
     welcomeSentAt: Date | null;
     createdAt: Date;
@@ -58,7 +58,7 @@ export async function getFiche(clientId: string): Promise<Fiche | null> {
       sector: clients.sector,
       notes: clients.notes,
       active: clients.active,
-      stripeCustomerId: clients.stripeCustomerId,
+      plan: clients.plan,
       onboardedAt: clients.onboardedAt,
       welcomeSentAt: clients.welcomeSentAt,
       createdAt: clients.createdAt,
@@ -210,8 +210,8 @@ export async function saveDeclaredStack(
  * Marque l'e-mail de bienvenue comme parti.
  *
  * Écriture conditionnelle : le premier passage gagne. C'est ce qui rend le
- * parcours post-paiement rejouable sans qu'un abonné reçoive deux fois le même
- * message — Stripe rejoue ses webhooks, et un rejeu n'est pas un événement.
+ * parcours d'ouverture rejouable sans qu'un abonné reçoive deux fois le même
+ * message — Inngest rejoue ses étapes, et un rejeu n'est pas un événement.
  */
 export async function markWelcomeSent(
   clientId: string,

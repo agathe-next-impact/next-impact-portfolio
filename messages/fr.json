@@ -19,6 +19,13 @@
     "conseil": "Conseil",
     "ctoExternalise": "Expert technique externalisé",
     "veille": "Veille",
+    "decider": "Audit",
+    "refaire": "Prestations",
+    "surveiller": "Veille",
+    "tenir": "Pilotage",
+    "analyserSite": "Analyser mon site",
+    "espaceClient": "Espace client",
+    "prendreRdv": "Prendre rendez-vous",
     "selecteurTechno": "Le Sélecteur techno",
     "allTools": "Tous les outils",
     "allResources": "Toutes les ressources",
@@ -54,8 +61,12 @@
     "resources": "Ressources",
     "freeAiAudit": "Diagnostic Web & IA",
     "wordpressHeadlessPillar": "WordPress Headless",
-    "visioConseil": "Visio conseil",
+    "visioConseil": "Échange de 15 minutes",
     "ctoExternalise": "Expert technique externalisé",
+    "tarifs": "Tarifs",
+    "sentinelle": "Sentinelle",
+    "maintenance": "Suivi et maintenance",
+    "clientArea": "Espace client",
     "veille": "Veille techno",
     "tools": "Tous les outils",
     "startWebApp": "Discutons de votre projet",
@@ -72,10 +83,10 @@
     "openLabel": "Ouvrir les moyens de contact",
     "closeLabel": "Fermer les moyens de contact",
     "title": "Comment me contacter ?",
-    "subtitle": "Choisissez le canal qui vous convient — réponse sous 24h.",
+    "subtitle": "Choisissez le canal qui vous convient, réponse sous 24 h.",
     "phone": "Téléphone",
     "video": "Visio",
-    "videoDescription": "Réserver un appel de 15 min",
+    "videoDescription": "Échange de 15 minutes, gratuit",
     "email": "E-mail",
     "newsletter": "Newsletter",
     "newsletterDescription": "S'abonner sur Substack",
@@ -119,9 +130,9 @@
   },
   "contactPage": {
     "metaTitle": "Contact : conseil, audit, expert technique externalisé ou refonte",
-    "metaDescription": "Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), expert technique externalisé (dès 900 €/mois), projet de refonte ou diagnostic gratuit.",
+    "metaDescription": "Échange de 15 minutes gratuit, audit + roadmap, refonte, suivi et maintenance, expert technique externalisé, diagnostic gratuit : réponse sous 24 h.",
     "title": "Contact",
-    "subtitle": "Visio conseil, audit + roadmap, expert technique externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
+    "subtitle": "Échange de 15 minutes gratuit, audit + roadmap, expert technique externalisé, projet de refonte ou diagnostic gratuit : choisissez le bon point d'entrée, je vous réponds sous 24 h.",
     "breadcrumbHome": "Accueil",
     "breadcrumbContact": "Contact"
   },
@@ -224,8 +235,8 @@
     "breadcrumbRoi": "Simulateur de ROI"
   },
   "auditPage": {
-    "metaTitle": "Voyez ce qui ralentit votre site en 2 minutes",
-    "metaDescription": "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et quelle trajectoire suivre, consolider, découpler ou refonder.",
+    "metaTitle": "Analysez votre site en 2 minutes",
+    "metaDescription": "Une adresse, un rapport, aucun accès demandé : de quoi votre site est fait, et quels composants sont à risque.",
     "breadcrumbHome": "Accueil",
     "breadcrumbAudit": "Audit de site"
   },
@@ -342,7 +353,7 @@
       "stepBuild": "La construction",
       "arbitrageFallback": "Choisir la bonne approche avant de construire.",
       "conseilLink": {
-        "selecteur-techno": "Cet arbitrage, c'est l'objet de la visio conseil refonte ({price})",
+        "selecteur-techno": "Cet arbitrage, c'est l'objet de l'échange de 15 minutes ({price})",
         "architecture-ia": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})",
         "pack-ia": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})",
         "direction-technique": "Cet arbitrage, c'est l'objet de l'audit + roadmap ({price})"
@@ -364,10 +375,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "Refonte WordPress : consolider, découpler ou refonder",
-    "metaDescription": "Trois trajectoires pour un site WordPress qui vieillit : optimisé dès 2 250 € HT, headless dès 4 000 € HT, web app dès 6 500 € HT. Prix et délai fixés.",
+    "metaTitle": "Refonte WordPress : trois prestations pour un site qui vieillit",
+    "metaDescription": "Trois prestations pour un site WordPress qui vieillit : Optimisation, Refonte (recommandée) ou Évolution. Prix et délai écrits avant de commencer, veille incluse.",
     "breadcrumbHome": "Accueil",
-    "breadcrumbServices": "Solutions web & Tarifs",
+    "breadcrumbServices": "Solutions web",
     "calculateGain": {
       "title": "Calculez votre gain",
       "description": "Estimez si optimiser, réparer, refondre ou construire peut réellement se rentabiliser.",

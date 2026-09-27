@@ -112,12 +112,12 @@ prouve, elle ne vend pas — c'est sa crédibilité qui la rend citable.
 | `choisir` | Lancer le Sélecteur techno | `/outils/selecteur-techno` |
 | `ia-et-code` | Prototype IA : jetable ou maintenable ? | `/outils/prototype-ia` |
 | `reparer` | Auditer mon site (gratuit, sur rendez-vous) | `/audit-site-web` |
-| `avant-signer` | Décrypter mon devis + avis indépendant 150 € | `/outils/decrypteur-devis` puis `/conseil` |
+| `avant-signer` | Décrypter mon devis + échange de 15 minutes (gratuit) | `/outils/decrypteur-devis` puis `/conseil` |
 | `outils-metier` | No-code, SaaS ou sur-mesure ? | `/outils/nocode-saas-surmesure` |
 | `presence` | Diagnostic Web & IA (gratuit, sur rendez-vous) | `/audit-site-web` |
 | `etre-trouve` | Visible dans les moteurs IA ? | `/outils/visibilite-ia` |
 
-`avant-signer` est la **seule** rubrique autorisée à pousser la visio payante :
+`avant-signer` est la **seule** rubrique autorisée à pousser l'offre payante (audit + roadmap, 650 € HT, après l'échange gratuit de 15 minutes) :
 son lecteur est déjà en phase d'achat. Partout ailleurs, l'outil gratuit est la
 seule sortie. Aucun CTA intermédiaire dans le corps de l'article.
 

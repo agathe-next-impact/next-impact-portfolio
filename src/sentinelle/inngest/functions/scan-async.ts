@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
 import { scanSite } from "@sentinelle/scanner";
-import { buildLettreEchantillon, envoyerLettreEchantillon } from "@sentinelle/apercu";
+import { buildDiagnostic } from "@sentinelle/diagnostic";
 import { inngest } from "../client";
 import { scanRequested } from "../events";
 
@@ -41,38 +41,34 @@ export const scanAsync = inngest.createFunction(
         return;
       }
 
-      // `apercu: pending` : le rapport s'affiche tout de suite, le front
-      // continue d'interroger le temps que la passe de rédaction se termine.
+      // `pending` : le rapport s'affiche tout de suite, le front continue
+      // d'interroger le temps que le diagnostic se rédige.
       await db()
         .update(scans)
         .set({
           status: "done",
-          result: { ...outcome.result, apercu: { status: "pending" as const } },
+          result: { ...outcome.result, diagnostic: { status: "pending" as const } },
         })
         .where(eq(scans.id, scanId));
     });
 
-    // La lettre-échantillon — le vrai pipeline de la veille personnalisée
-    // (collecte de la semaine écoulée + rédaction douze axes) appliqué à la
-    // stack détectée. Étape séparée : son échec (API, quota, garde-fous)
-    // laisse le rapport de scan intact. Elle se compte en minutes — c'est le
-    // step le plus long du produit avec la fabrication d'un numéro abonné.
     if (outcome.ok) {
-      const apercu = await step.run("lettre-echantillon", async () =>
-        buildLettreEchantillon(outcome.result),
+      // La grille en quatre cases : collecte web courte puis rédaction sans
+      // outils. Son échec laisse le rapport de scan intact.
+      //
+      // Plus de lettre-échantillon ici (décision du 2026-09-27) : la lettre de
+      // veille personnalisée n'est plus générée automatiquement. Le rapport
+      // propose une inscription (opt-in) qui sert à Agathe à recontacter.
+      const diagnostic = await step.run("diagnostic", async () =>
+        buildDiagnostic(outcome.result),
       );
 
-      await step.run("store-apercu", async () => {
+      await step.run("store-diagnostic", async () => {
         await db()
           .update(scans)
-          .set({ result: { ...outcome.result, apercu } })
+          .set({ result: { ...outcome.result, diagnostic } })
           .where(eq(scans.id, scanId));
       });
-
-      // Si le visiteur a déjà laissé son adresse pendant la rédaction, la
-      // lettre part maintenant. Sinon, c'est la capture d'e-mail (PATCH) qui
-      // enverra — le verrou `lead_sent_at` arbitre entre les deux.
-      await step.run("lettre-au-lead", async () => envoyerLettreEchantillon(scanId));
     }
 
     return {

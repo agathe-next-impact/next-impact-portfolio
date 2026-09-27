@@ -30,6 +30,11 @@ import {
   Smartphone,
   Wrench,
 } from "lucide-react";
+import { ECHANGE_NAME, OFFERS } from "@/lib/visio-conseil";
+import { TRAJECTOIRES, formatEuros } from "@/lib/trajectoires";
+
+// Prix de l'audit + roadmap, lu dans sa source (lib/visio-conseil.ts).
+const AUDIT_VALUE = OFFERS.find((o) => o.id === "architecture-projet-ia")!.tiers[0].value;
 
 export type LocaleText = { fr: string; en: string };
 
@@ -59,7 +64,7 @@ export type Temp = "froid" | "tiede" | "chaud";
 /** Une prestation possible en sortie de thème (la « prochaine étape »). */
 export interface ThemePresta {
   name: LocaleText;
-  price: LocaleText; // « Gratuit », « 150 € », « dès 6 500 € »…
+  price: LocaleText; // « Gratuit », « 650 € », « dès 6 500 € »…
   temp: Temp;
   blurb: LocaleText;
   cta: LocaleText;
@@ -97,18 +102,25 @@ const AUDIT_GRATUIT = (fr: string, en: string): ThemePresta => ({
   href: "/audit-site-web",
 });
 
-const VISIO = (fr: string, en: string): ThemePresta => ({
-  name: { fr: "Visio conseil refonte", en: "Redesign advisory call" },
-  price: { fr: "150 €", en: "€150" },
+// Palier tiède : l'échange de 15 minutes, gratuit (ADR-023). Nom et prix lus
+// dans lib/visio-conseil.ts (offre `choix-techno-ia`), jamais réécrits ici.
+const ECHANGE_PRICE: LocaleText = OFFERS.find((o) => o.id === "choix-techno-ia")?.tiers[0]?.price ?? {
+  fr: "",
+  en: "",
+};
+
+const ECHANGE = (fr: string, en: string): ThemePresta => ({
+  name: { fr: ECHANGE_NAME.fr, en: ECHANGE_NAME.en },
+  price: ECHANGE_PRICE,
   temp: "tiede",
   blurb: { fr, en },
-  cta: { fr: "Réserver une visio", en: "Book a call" },
-  href: "/conseil",
+  cta: { fr: "En parler 15 min · gratuit", en: "Talk it through · 15 min, free" },
+  href: "/conseil#choix-techno-ia",
 });
 
 const ROADMAP = (temp: Temp, fr: string, en: string): ThemePresta => ({
   name: { fr: "Audit + roadmap", en: "Audit + roadmap" },
-  price: { fr: "650 €", en: "€650" },
+  price: { fr: `${formatEuros(AUDIT_VALUE, "fr")} HT`, en: `${formatEuros(AUDIT_VALUE, "en")} excl. VAT` },
   temp,
   blurb: { fr, en },
   cta: { fr: "Cadrer la suite", en: "Scope the next phase" },
@@ -250,9 +262,9 @@ const choisir: HubTheme = {
     },
   ],
   prestas: [
-    VISIO(
-      "Une question techno précise ? On la tranche en visio, créditée si vous lancez un projet.",
-      "A precise tech question? We settle it on a call, credited if you start a project.",
+    ECHANGE(
+      "Une question techno précise ? On en parle 15 minutes, sans engagement.",
+      "A precise tech question? We talk it through in 15 minutes, no commitment.",
     ),
     ROADMAP(
       "chaud",
@@ -433,9 +445,9 @@ const iaEtCode: HubTheme = {
     },
   ],
   prestas: [
-    VISIO(
-      "Un projet IA ou un proto à arbitrer ? On décide quoi construire en visio.",
-      "An AI project or a prototype to weigh? We decide what to build on a call.",
+    ECHANGE(
+      "Un projet IA ou un proto à arbitrer ? On en parle 15 minutes pour décider quoi construire.",
+      "An AI project or a prototype to weigh? We talk it through in 15 minutes to decide what to build.",
     ),
     ROADMAP(
       "chaud",
@@ -571,9 +583,9 @@ const reparer: HubTheme = {
     },
   ],
   prestas: [
-    VISIO(
-      "Un doute réparer / refondre ? On tranche votre cas en une visio, créditée si vous lancez un projet.",
-      "Torn between repair and rebuild? We settle your case on a call, credited if you start a project.",
+    ECHANGE(
+      "Un doute réparer / refondre ? On en parle 15 minutes, sans engagement.",
+      "Torn between repair and rebuild? We talk it through in 15 minutes, no commitment.",
     ),
     AUDIT_GRATUIT(
       "Pas encore sûr ? Je regarde votre site et vous oriente vers la bonne suite.",
@@ -714,20 +726,14 @@ const avantSigner: HubTheme = {
     },
   ],
   prestas: [
-    {
-      name: { fr: "Visio conseil refonte", en: "Redesign advisory call" },
-      price: { fr: "150 €", en: "€150" },
-      temp: "chaud",
-      blurb: {
-        fr: "Un devis ou une proposition en main ? Un avis indépendant en visio, avec un écrit sous 48 h, avant de vous engager.",
-        en: "A quote or proposal in hand? An independent opinion on a call, in writing within 48h, before you commit.",
-      },
-      cta: { fr: "Un avis indépendant", en: "Get an independent opinion" },
-      href: "/conseil",
-    },
-    VISIO(
-      "Juste un doute à lever ? On en parle en visio, créditée sur un projet.",
-      "Just one doubt to clear? We talk it through on a call, credited on a project.",
+    ECHANGE(
+      "Un devis ou une proposition en main ? On le regarde ensemble 15 minutes, avant de vous engager.",
+      "A quote or proposal in hand? We go over it together for 15 minutes, before you commit.",
+    ),
+    ROADMAP(
+      "chaud",
+      "Un projet engageant ? L'audit + roadmap pose l'état des lieux et les priorités avant de signer.",
+      "A major commitment? The audit + roadmap sets the assessment and the priorities before you sign.",
     ),
     AUDIT_GRATUIT(
       "Pas de devis encore ? Je diagnostique votre site et vous oriente.",
@@ -854,8 +860,12 @@ const outilsMetier: HubTheme = {
   ],
   prestas: [
     {
-      name: { fr: "Plateforme métier", en: "Custom platform" },
-      price: { fr: "dès 6 500 €", en: "from €6,500" },
+      // Nom et prix de la prestation Évolution, lus dans lib/trajectoires.ts.
+      name: TRAJECTOIRES["forfait-webapp"].name,
+      price: {
+        fr: `dès ${formatEuros(TRAJECTOIRES["forfait-webapp"].priceValue, "fr")} HT`,
+        en: `from ${formatEuros(TRAJECTOIRES["forfait-webapp"].priceValue, "en")} excl. VAT`,
+      },
       temp: "chaud",
       blurb: {
         fr: "Le besoin justifie le sur-mesure ? Conception d'annuaire, carte ou espace métier.",
@@ -985,9 +995,9 @@ const presence: HubTheme = {
     },
   ],
   prestas: [
-    VISIO(
-      "Où mettre l'effort ? On arbitre site, newsletter et réseaux en visio.",
-      "Where to put the effort? We weigh site, newsletter and social on a call.",
+    ECHANGE(
+      "Où mettre l'effort ? On arbitre site, newsletter et réseaux en 15 minutes.",
+      "Where to put the effort? We weigh site, newsletter and social in 15 minutes.",
     ),
     ROADMAP(
       "chaud",
@@ -1199,9 +1209,9 @@ const etreTrouve: HubTheme = {
     },
   ],
   prestas: [
-    VISIO(
-      "Une question précise — SEO, GEO, par quoi commencer ? On la tranche en visio, créditée si vous lancez un projet.",
-      "A precise question — SEO, GEO, where to start? We settle it on a call, credited if you start a project.",
+    ECHANGE(
+      "Une question précise (SEO, GEO, par quoi commencer) ? On en parle 15 minutes, sans engagement.",
+      "A precise question (SEO, GEO, where to start)? We talk it through in 15 minutes, no commitment.",
     ),
     ROADMAP(
       "chaud",

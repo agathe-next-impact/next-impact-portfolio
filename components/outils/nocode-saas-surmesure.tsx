@@ -38,10 +38,10 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "You stay in control, launch fast, on a small budget. Ideal for a standard need or a first product — watch SEO, data ownership and the ceilings as it grows.",
     links: [
-      { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
+      { labelFr: "En parler 15 min · gratuit", labelEn: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio · 150 €", labelEn: "Validate on a call · €150", href: "/conseil" },
+    next: { labelFr: "Valider mon choix · 15 min, gratuit", labelEn: "Validate my choice · 15 min, free", href: "/conseil#choix-techno-ia" },
   },
   saas: {
     labelFr: "Un logiciel du marché (SaaS)",
@@ -51,10 +51,10 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "If an existing tool covers the essentials, buying it is often far cheaper than building it. Compare the options and check reversibility before committing.",
     links: [
-      { labelFr: "Un avis indépendant en visio", labelEn: "An independent opinion on a call", href: "/conseil" },
+      { labelFr: "Un avis en 15 min · gratuit", labelEn: "A 15-min opinion · free", href: "/conseil#choix-techno-ia" },
       { labelFr: "Décrypter un devis reçu", labelEn: "Decode a quote you received", href: "/outils/decrypteur-devis" },
     ],
-    next: { labelFr: "Sécuriser le choix — avis indépendant", labelEn: "Secure the choice — independent opinion", href: "/conseil" },
+    next: { labelFr: "Sécuriser le choix · 15 min, gratuit", labelEn: "Secure the choice · 15 min, free", href: "/conseil#choix-techno-ia" },
   },
   surmesure: {
     labelFr: "Développement sur-mesure",
@@ -351,8 +351,8 @@ export default function NocodeSaasSurmesure() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "This signal points you in a direction. A tech choice call applies it to your real budget, data and constraints — and is credited back if a project follows."
-                : "Ce signal vous oriente. Une visio de choix de techno l'applique à votre budget réel, vos données et vos contraintes — et se déduit d'un projet si vous le lancez."}
+                ? "This signal points you in a direction. A free 15-minute call applies it to your real budget, data and constraints."
+                : "Ce signal vous oriente. Un échange de 15 minutes, gratuit, l'applique à votre budget réel, vos données et vos contraintes."}
             </p>
           </StaggerItem>
 

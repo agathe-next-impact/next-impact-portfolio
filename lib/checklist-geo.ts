@@ -373,7 +373,7 @@ export function computeSectionProgress(
 
 // Escalier de CTA par température, proportionné à l'avancement :
 // froid (on démarre) → comprendre + se situer (gratuit) ;
-// tiède (chantier lancé) → prioriser en visio 150 € ;
+// tiède (chantier lancé) → prioriser lors d'un échange de 15 minutes gratuit ;
 // chaud (socle en place) → cadrer la suite avec l'audit complet 650 €.
 export type CtaTier = "froid" | "tiede" | "chaud";
 

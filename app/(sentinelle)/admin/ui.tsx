@@ -47,6 +47,7 @@ export function StatusBadge({ status }: { status: string }) {
     sent: "envoyée",
     dismissed: "écartée",
     resolved: "résolue",
+    activated: "activée",
   };
 
   return (

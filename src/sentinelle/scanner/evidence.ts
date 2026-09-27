@@ -59,6 +59,8 @@ export interface RawResponse {
   headers: Record<string, string>;
   setCookies: string[];
   html: string;
+  /** Temps jusqu'aux en-têtes, en ms — absent des réponses fabriquées en test. */
+  elapsedMs?: number;
 }
 
 /** Assemble tout ce que le moteur de détection sait lire. */

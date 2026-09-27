@@ -41,14 +41,21 @@ const config: Config = {
         googletexte: ["var(--font-inter-tight)", "var(--font-sans)", "sans-serif"],
         "inter-tight": ["var(--font-inter-tight)", "var(--font-sans)", "sans-serif"],
       },
+      /* Graisse maximale du site : 500 (règle d'Agathe du 2026-09-27,
+         ADR-017). Aucune classe ne peut rendre plus gras : `font-medium`,
+         `font-semibold`, `font-bold`, `font-extrabold` et `font-black` sont
+         plafonnées à 500. Pour écrire 500, préférer `font-regular`. Ne pas
+         relever ces valeurs, ni écrire de graisse arbitraire entre crochets,
+         ni de `fontWeight` en ligne au-dessus de 500. */
       fontWeight: {
         light:     "300",
         normal:    "400",
         regular:   "500",
-        medium:    "600",
-        semibold:  "700",
-        bold:      "800",
-        extrabold: "900",
+        medium:    "500",
+        semibold:  "500",
+        bold:      "500",
+        extrabold: "500",
+        black:     "500",
       },
       colors: {
         darkblue:       "#0e0e0c",

@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/routing";
 
-// Contenu GEO de la page /a-propos : bloc « En bref » (TL;DR citable par les LLMs)
+// Contenu GEO de la page /a-propos : cartouche « L'essentiel » (TL;DR citable par les LLMs)
 // + FAQ centrée sur la PERSONNE et son parcours pluridisciplinaire (intention
 // distincte de la FAQ service de la home → pas de cannibalisation). Source de
 // vérité unique, consommée par le rendu visible (AboutClient) ET par le JSON-LD
@@ -18,7 +18,7 @@ export interface AboutContent {
 
 const FR: AboutContent = {
   tldr: {
-    label: "En bref",
+    label: "L'essentiel",
     lines: [
       "Agathe Karinthi-Martin est la fondatrice de Next Impact, studio solo de conseil et de développement web à l'heure de l'IA.",
       "Elle aborde chaque projet web sous quatre angles complémentaires : la technique, le business, le marketing et le design.",
@@ -67,7 +67,7 @@ const FR: AboutContent = {
 
 const EN: AboutContent = {
   tldr: {
-    label: "In short",
+    label: "Key points",
     lines: [
       "Agathe Karinthi-Martin is the founder of Next Impact, a solo studio for web advice and development in the age of AI.",
       "She approaches every web project from four complementary angles: technical, business, marketing and design.",

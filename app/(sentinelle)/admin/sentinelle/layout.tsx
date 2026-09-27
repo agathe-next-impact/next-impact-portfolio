@@ -45,6 +45,12 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
           >
             Numéros
           </Link>
+          <Link
+            href="/admin/sentinelle/inscriptions"
+            className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
+          >
+            Inscriptions
+          </Link>
         </div>
 
         <form action={deconnecter}>

@@ -16,6 +16,7 @@ export {
 export {
   resetMailTransport,
   sendSentinelleMail,
+  planMailReason,
   undeliverableReason,
   verifyMailTransport,
   type MailTransport,

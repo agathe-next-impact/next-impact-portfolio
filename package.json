@@ -102,7 +102,6 @@
     "remark-gfm": "^4.0.1",
     "resend": "^4.5.2",
     "sonner": "^1.7.1",
-    "stripe": "^22.5.0",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.24.1"
   },

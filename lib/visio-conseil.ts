@@ -1,13 +1,45 @@
-import {
-  CTO_COMMITMENT,
-  CTO_PATH,
-  CTO_PRICE,
-  CTO_PRICE_VALUE,
-  CTO_TIERS,
-} from "@/lib/cto-externalise";
+import { CTO_PRICE } from "@/lib/cto-externalise";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type Lang } from "@/lib/trajectoires";
 
-export const CREDIT_WINDOW_DAYS = 30;
+/**
+ * Les trois prestations sous leur seul nom, lu dans lib/trajectoires.ts (charte
+ * v1.6, ADR-014) : « Optimisation, Refonte ou Évolution ».
+ */
+const prestations = (lang: Lang) => {
+  const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[lang]);
+  return `${names.slice(0, -1).join(", ")} ${lang === "en" ? "or" : "ou"} ${names.at(-1)}`;
+};
+
 export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
+
+/**
+ * L'échange de 15 minutes, gratuit (ADR-023) : première offre du moment
+ * « Diagnostiquer », à la place de la visio conseil refonte payante. C'est
+ * aussi la destination du bouton chaud « Discutons de votre projet », partout
+ * sur le site (voir CTA_CHAUD). Lien Calendly fourni par Agathe le 2026-09-27 :
+ * c'est la seule occurrence dans le code de la vitrine.
+ */
+export const ECHANGE_URL = `${CALENDLY_BASE}/prise-de-contact-conseil`;
+export const ECHANGE_NAME = { fr: "Échange de 15 minutes", en: "15-minute call" } as const;
+
+/**
+ * Le bouton chaud du site (charte §7) : libellé fixe, il réserve l'échange de
+ * 15 minutes. Lien externe : balise <a>, jamais le Link i18n.
+ */
+export const CTA_CHAUD = {
+  href: ECHANGE_URL,
+  label: { fr: "Discutons de votre projet", en: "Let's talk about your project" },
+} as const;
+
+/**
+ * Le premier bouton (plein) de chaque héros (demande du 2026-09-27) :
+ * l'échange gratuit, sur Calendly, ouvert dans un nouvel onglet. L'analyse du
+ * site (`/scan`) passe en second bouton, en filet.
+ */
+export const CTA_ECHANGE = {
+  href: ECHANGE_URL,
+  label: { fr: "Échange gratuit de 15 min", en: "Free 15-min call" },
+} as const;
 
 /**
  * `CTO_PRICE.*.amount` ouvre une phrase sur /cto-externalise, donc il porte une
@@ -18,23 +50,21 @@ export const CALENDLY_BASE = "https://calendly.com/agathe-next-impact";
  */
 const lowerFirst = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
 
-// Catalogue conseil — aligné sur DIRECTIVES-CHARTE-EDITORIALE.md §1 : les TROIS
-// lignes Conseil du catalogue de référence, dans l'ordre d'engagement croissant
-// (visio ponctuelle, audit ponctuel, accompagnement récurrent). Ce module reste
+// Catalogue du moment « Diagnostiquer », aligné sur
+// DIRECTIVES-CHARTE-EDITORIALE.md §1 (v1.7) : les DEUX offres du moment, dans
+// l'ordre d'engagement croissant (échange de 15 minutes gratuit, puis audit +
+// roadmap). L'échange remplace la visio conseil refonte payante (ADR-023). Ce module reste
 // la seule source des sections d'offre de /conseil : ni pack, ni « sélecteur
 // techno » n'y figurent.
 //
-// Arbitrage du 2026-09-10 (ADR-009), qui remplace celui du 2026-09-07 :
-// l'expert technique externalisé est de nouveau PRÉSENTÉ sur /conseil, en
-// dernière position, à la place du simple bandeau de renvoi. Il n'y est pas
-// VENDU : son CTA part vers sa page dédiée /cto-externalise, qui reste la
-// fiche complète (paliers, livrables, périmètre, FAQ) et la destination du
-// mega menu. Offre renommée « CTO externalisé » → « Expert technique
-// externalisé » le même jour (ADR-010) ; seul le libellé change.
+// Arbitrage du 2026-09-27 (ADR-013), qui revient sur l'ADR-009 : l'expert
+// technique externalisé ne vit plus que dans le moment « Gérer ». /conseil n'en
+// porte plus de section d'offre : un bandeau de renvoi (CtoExternaliseBanner)
+// suffit, plus une ligne de « L'essentiel » et une question de la FAQ. Son prix
+// n'est jamais réécrit ici : il est lu dans lib/cto-externalise.ts.
 //
-// Conséquence : aucun prix ni condition de cette offre n'est réécrit ici. Le
-// contenu de la troisième offre dérive de lib/cto-externalise.ts, source de
-// vérité unique.
+// Les identifiants `choix-techno-ia` et `architecture-projet-ia` sont des
+// ancres en circulation (menu, llms, e-mails) : ils ne changent pas.
 
 interface OfferCopy {
   name: string;
@@ -66,12 +96,10 @@ export interface ConseilTier {
 export interface ConseilOffer {
   id: string;
   featured?: boolean;
-  /** Seule offre déduite du devis projet (aujourd'hui : la visio conseil refonte). */
+  /** Offre déduite du devis projet (aucune depuis l'ADR-022). */
   credited?: boolean;
   /** CTA interne (Link i18n) au lieu du lien Calendly externe. */
   internalCta?: boolean;
-  /** Offre récurrente : présentée ici, mais détaillée et vendue sur sa page. */
-  recurring?: boolean;
   /** Libellé de CTA personnalisé (défaut : « Réserver et payer »). */
   cta?: { fr: string; en: string };
   tiers: ConseilTier[];
@@ -81,41 +109,41 @@ export interface ConseilOffer {
 
 export const OFFERS: ConseilOffer[] = [
   {
+    // Identifiant conservé : ancre en circulation (menu, llms, e-mails).
     id: "choix-techno-ia",
     featured: true,
-    credited: true,
+    cta: { fr: "Réserver l'échange", en: "Book the call" },
     tiers: [
       {
-        duration: { fr: "1 h", en: "1h" },
-        price: { fr: "150 €", en: "€150" },
-        value: 150,
-        ctaHref: `${CALENDLY_BASE}/conseil-de-choix-de-techno-pour-une-refonte`,
+        duration: { fr: "15 min", en: "15 min" },
+        price: { fr: "Gratuit", en: "Free" },
+        value: 0,
+        noHt: true,
+        ctaHref: ECHANGE_URL,
       },
     ],
     fr: {
-      name: "Visio conseil refonte",
-      tag: "Avis tranché",
-      tagline: "Rester, découpler ou refonder : un avis tranché en une heure.",
+      name: ECHANGE_NAME.fr,
+      tag: "Gratuit",
+      tagline: "Quinze minutes pour poser votre situation et savoir par où commencer.",
       forWho:
-        "Votre site vieillit et vous hésitez sur la trajectoire. Le coût d'une mauvaise direction se compte en mois ; celui de l'avis, en euros.",
+        "Votre site vieillit, un devis est sur la table ou une décision vous attend, et vous voulez en parler avant d'engager quoi que ce soit.",
       bullets: [
-        "Une heure en visio : analyse de l'existant et recueil du besoin",
-        "Un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi",
-        "Points de vigilance : maintenance, coût, dépendance, référencement",
-        "100 % déduit du devis si un projet démarre sous 30 jours",
+        "15 minutes en visio, à la date qui vous convient",
+        "Vous exposez votre situation, je vous dis par où commencer : l'analyse du site, l'audit + roadmap ou directement un devis",
+        "Sans engagement et sans paiement",
       ],
     },
     en: {
-      name: "Redesign advisory call",
-      tag: "Clear-cut advice",
-      tagline: "Stay, decouple or rebuild: a clear-cut opinion in one hour.",
+      name: ECHANGE_NAME.en,
+      tag: "Free",
+      tagline: "Fifteen minutes to lay out your situation and know where to start.",
       forWho:
-        "Your site is aging and you hesitate on the trajectory. The cost of a wrong direction is counted in months; the cost of the advice, in euros.",
+        "Your site is aging, a quote is on the table or a decision is waiting, and you want to talk it through before committing to anything.",
       bullets: [
-        "One hour on a call: review of your existing site and needs",
-        "A written opinion sent within 48h: stay, decouple or rebuild, and why",
-        "Watch points: maintenance, cost, lock-in, search visibility",
-        "100% deducted from the quote if a project starts within 30 days",
+        "15 minutes on a video call, at a time that suits you",
+        "You lay out your situation, I tell you where to start: the site analysis, the audit + roadmap or a quote straight away",
+        "No commitment, no payment",
       ],
     },
   },
@@ -137,8 +165,10 @@ export const OFFERS: ConseilOffer[] = [
         "Vous préparez une décision qui engage un budget : vous voulez un état des lieux vérifiable et un plan par étapes avant de signer quoi que ce soit.",
       bullets: [
         "Rapport d'audit : performance, sécurité, dette technique, plugins, hébergement",
-        "Préconisations chiffrées : quelle trajectoire, pour quel budget",
+        "Première analyse de veille technique et stratégique : ce qui bouge autour de votre site, et ce que ça change pour la suite",
+        "Préconisations chiffrées : quelle direction, pour quel budget",
         "Roadmap par étapes, priorisée",
+        "1 h de restitution en visio : les conclusions présentées, vos questions, les priorités arbitrées ensemble",
         "Le document vous sert même si la prestation est confiée à quelqu'un d'autre",
       ],
     },
@@ -150,58 +180,11 @@ export const OFFERS: ConseilOffer[] = [
         "You are preparing a decision that commits a budget: you want a verifiable assessment and a step-by-step plan before signing anything.",
       bullets: [
         "Audit report: performance, security, technical debt, plugins, hosting",
-        "Costed recommendations: which trajectory, for which budget",
+        "First technical and strategic watch analysis: what is moving around your site, and what it changes for what comes next",
+        "Costed recommendations: which direction, for which budget",
         "Step-by-step, prioritized roadmap",
+        "A 1-hour debrief by video call: the findings presented, your questions, the priorities settled together",
         "The document serves you even if the work goes to someone else",
-      ],
-    },
-  },
-  // Troisième ligne Conseil : la seule offre RÉCURRENTE du catalogue. Présentée
-  // ici en dernière position (ordre d'engagement croissant), détaillée sur
-  // /cto-externalise où partent son CTA et l'item du mega menu. Prix, paliers et
-  // engagement sont importés, jamais recopiés : lib/cto-externalise.ts fait foi.
-  {
-    id: "cto-externalise",
-    recurring: true,
-    internalCta: true,
-    cta: { fr: "Voir l'offre complète", en: "See the full offer" },
-    tiers: [
-      {
-        duration: { fr: "par mois", en: "per month" },
-        price: { fr: `${CTO_PRICE_VALUE} €`, en: `€${CTO_PRICE_VALUE}` },
-        value: CTO_PRICE_VALUE,
-        ctaHref: CTO_PATH,
-        pricePrefix: { fr: "à partir de", en: "from" },
-      },
-    ],
-    fr: {
-      name: "Expert technique externalisé",
-      tag: "Accompagnement récurrent",
-      tagline:
-        "Une direction technique à temps partagé, quelques jours par mois, sans recruter.",
-      forWho:
-        "Les décisions techniques reviennent tous les mois : un devis à relire, une fin de support qui tombe, un prestataire à cadrer. Un avis ponctuel se rachèterait à chaque fois.",
-      bullets: [
-        `Deux paliers : ${CTO_TIERS[0].name.fr} ${CTO_TIERS[0].priceLabel.fr} par mois, ${CTO_TIERS[1].name.fr} ${CTO_TIERS[1].priceLabel.fr} par mois`,
-        "Un comité technique par mois, des arbitrages écrits sous 24 à 48 h",
-        "Vos devis relus, vos prestataires pilotés, votre roadmap tenue à jour",
-        "Vos livrables dans un espace en ligne : cartographie du système, décisions datées, budget à trois ans",
-        `${CTO_COMMITMENT.fr}.`,
-      ],
-    },
-    en: {
-      name: "Outsourced technical expert",
-      tag: "Ongoing retainer",
-      tagline:
-        "Technical direction on shared time, a few days a month, without hiring.",
-      forWho:
-        "Technical decisions come up every month: a quote to review, an end-of-support date landing, a vendor to scope. A one-off opinion would have to be bought again each time.",
-      bullets: [
-        `Two tiers: ${CTO_TIERS[0].name.en} ${CTO_TIERS[0].priceLabel.en} a month, ${CTO_TIERS[1].name.en} ${CTO_TIERS[1].priceLabel.en} a month`,
-        "One technical steering committee a month, decisions in writing within 24 to 48h",
-        "Your quotes reviewed, your vendors steered, your roadmap kept up to date",
-        "Your deliverables in an online workspace: system map, dated decisions, three-year budget",
-        `${CTO_COMMITMENT.en}.`,
       ],
     },
   },
@@ -212,7 +195,7 @@ const priceOf = (id: string, locale: "fr" | "en") =>
   OFFERS.find((offer) => offer.id === id)?.tiers[0]?.price[locale] ?? "";
 
 /**
- * Bloc « En bref » (TL;DR) de /conseil : résumé autoportant, cible de citation
+ * Cartouche « L'essentiel » (TL;DR, ADR-024) de /conseil : résumé autoportant, cible de citation
  * pour les moteurs de réponse (GEO). Même gabarit que la home, /a-propos et
  * /cto-externalise : chaque ligne doit pouvoir être citée seule, sans le reste
  * de la page.
@@ -221,30 +204,30 @@ const priceOf = (id: string, locale: "fr" | "en") =>
  * dérivés d'OFFERS et de lib/cto-externalise.ts, jamais recopiés, pour qu'un
  * changement de tarif ne laisse pas un résumé périmé derrière lui.
  *
- * La quatrième ligne PRÉSENTE l'offre récurrente et renvoie à sa page (ADR-009) :
- * elle ne la vend pas, et n'ouvre pas la page.
+ * La quatrième ligne RENVOIE vers l'expert technique externalisé (ADR-013) : il
+ * n'est plus une offre de cette page, il vit dans le moment « Gérer ».
  */
 export const CONSEIL_TLDR: {
   label: { fr: string; en: string };
   lines: { fr: string; en: string }[];
 } = {
-  label: { fr: "En bref", en: "In short" },
+  label: { fr: "L'essentiel", en: "Key points" },
   lines: [
     {
-      fr: "Trois offres de conseil avant une refonte, dans l'ordre d'engagement croissant : un avis tranché en une heure, un audit documenté, puis une direction technique récurrente.",
-      en: "Three advisory offers before a redesign, in order of increasing commitment: a clear-cut opinion in one hour, a documented audit, then ongoing technical direction.",
+      fr: "Deux offres avant une refonte, dans l'ordre d'engagement croissant : un échange gratuit de 15 minutes, puis un audit documenté avec sa roadmap.",
+      en: "Two offers before a redesign, in order of increasing commitment: a free 15-minute call, then a documented audit with its roadmap.",
     },
     {
-      fr: `Visio conseil refonte, ${priceOf("choix-techno-ia", "fr")} HT : une heure en visio, un avis écrit sous 48 h, rester, découpler ou refonder. Déduite à 100 % du devis si un projet démarre sous ${CREDIT_WINDOW_DAYS} jours.`,
-      en: `Redesign advisory call, ${priceOf("choix-techno-ia", "en")} excl. VAT: one hour on a call, a written opinion within 48h, stay, decouple or rebuild. Fully deducted from the quote if a project starts within ${CREDIT_WINDOW_DAYS} days.`,
+      fr: "Échange de 15 minutes, gratuit : vous exposez votre situation, je vous dis par où commencer, sans engagement.",
+      en: "15-minute call, free: you lay out your situation, I tell you where to start, no commitment.",
     },
     {
       fr: `Audit + roadmap, ${priceOf("architecture-projet-ia", "fr")} HT : rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes, exploitables même si la refonte est confiée à quelqu'un d'autre.`,
       en: `Audit + roadmap, ${priceOf("architecture-projet-ia", "en")} excl. VAT: audit report (performance, security, technical debt, plugins, hosting), costed recommendations and a step-by-step roadmap, usable even if the redesign goes to someone else.`,
     },
     {
-      fr: `Expert technique externalisé, ${lowerFirst(CTO_PRICE.fr.amount)} ${CTO_PRICE.fr.period} : la seule offre récurrente, pour les décisions techniques qui reviennent tous les mois. Elle est présentée ici et détaillée sur sa page dédiée ; tout accompagnement démarre par l'audit + roadmap.`,
-      en: `Outsourced technical expert, ${lowerFirst(CTO_PRICE.en.amount)} ${CTO_PRICE.en.period}: the only recurring line, for technical decisions that come up every month. It is presented here and detailed on its own page; every retainer starts with the audit + roadmap.`,
+      fr: `Quand les décisions techniques reviennent tous les mois, l'expert technique externalisé prend le relais : une direction technique à temps partagé, ${lowerFirst(CTO_PRICE.fr.amount)} ${CTO_PRICE.fr.period}, présentée sur sa page dédiée. Tout accompagnement démarre par l'audit + roadmap.`,
+      en: `When technical decisions come up every month, the outsourced technical expert takes over: technical direction on shared time, ${lowerFirst(CTO_PRICE.en.amount)} ${CTO_PRICE.en.period}, presented on its own page. Every retainer starts with the audit + roadmap.`,
     },
   ],
 };
@@ -257,22 +240,12 @@ export interface FaqItem {
 export const FAQ: FaqItem[] = [
   {
     fr: {
-      q: "Visio à 150 € ou audit à 650 € : lequel choisir ?",
-      a: "La visio tranche une direction en une heure : rester, découpler ou refonder, avec un avis écrit sous 48 h. L'audit + roadmap va au fond : rapport d'audit, préconisations chiffrées et plan par étapes, remis en livrables. Si vous hésitez encore sur la trajectoire, commencez par la visio ; si la décision engage un budget, l'audit la sécurise.",
+      q: "Échange de 15 minutes ou audit : par où commencer ?",
+      a: "Par l'échange : il est gratuit et sert à poser la situation. En quinze minutes, je vous dis si l'analyse du site suffit, si la décision mérite un audit + roadmap, ou si l'on peut passer directement au devis. L'audit va au fond : rapport d'audit, préconisations chiffrées et plan par étapes, remis en livrables.",
     },
     en: {
-      q: "€150 call or €650 audit: which one should I pick?",
-      a: "The call settles a direction in one hour: stay, decouple or rebuild, with a written opinion within 48h. The audit + roadmap goes deeper: audit report, costed recommendations and a step-by-step plan, handed over as deliverables. If you are still weighing the trajectory, start with the call; if the decision commits a budget, the audit secures it.",
-    },
-  },
-  {
-    fr: {
-      q: "Pourquoi payer un avis avant un projet ?",
-      a: "Parce que le coût d'une mauvaise trajectoire se compte en mois : une refonte à refaire, une dépendance à un prestataire, un référencement perdu. L'avis coûte 150 €, il est indépendant, et il est déduit du devis si un projet suit.",
-    },
-    en: {
-      q: "Why pay for advice before a project?",
-      a: "Because the cost of a wrong trajectory is counted in months: a redesign to redo, dependency on a vendor, lost search visibility. The advice costs €150, it is independent, and it is deducted from the quote if a project follows.",
+      q: "15-minute call or audit: where should I start?",
+      a: "With the call: it is free and lays out the situation. In fifteen minutes, I tell you whether the site analysis is enough, whether the decision deserves an audit + roadmap, or whether we can go straight to a quote. The audit goes deeper: audit report, costed recommendations and a step-by-step plan, handed over as deliverables.",
     },
   },
   {
@@ -288,11 +261,11 @@ export const FAQ: FaqItem[] = [
   {
     fr: {
       q: "Le conseil inclut-il de la correction technique ?",
-      a: "Non. Le conseil aide à décider, prioriser et réduire le risque. Les corrections et la refonte relèvent des trois trajectoires de développement : consolider, découpler ou refonder.",
+      a: `Non. Le conseil aide à décider, prioriser et réduire le risque. Les corrections et la refonte relèvent des trois prestations de développement : ${prestations("fr")}.`,
     },
     en: {
       q: "Does advice include technical fixes?",
-      a: "No. Advice helps decide, prioritize and reduce risk. Fixes and the redesign itself belong to the three development trajectories: consolidate, decouple or rebuild.",
+      a: `No. Advice helps decide, prioritize and reduce risk. Fixes and the redesign itself belong to the three development services: ${prestations("en")}.`,
     },
   },
   {
@@ -301,46 +274,31 @@ export const FAQ: FaqItem[] = [
     // lecteur part du ponctuel et découvre le récurrent, là-bas l'inverse.
     fr: {
       q: "Et si les décisions techniques reviennent tous les mois ?",
-      a: `Alors un avis ponctuel n'est pas le bon format : vous en rachèteriez un tous les mois. C'est le rôle de l'expert technique externalisé, présenté plus haut : une direction technique à temps partagé, ${lowerFirst(CTO_PRICE.fr.amount)} ${CTO_PRICE.fr.period}, avec un comité de pilotage mensuel, vos devis relus et une roadmap tenue à jour. Le détail des deux paliers, des livrables et du périmètre est sur sa page dédiée. La visio conseil et l'audit restent les bons points d'entrée si une seule décision est à trancher.`,
+      a: `Alors un avis ponctuel n'est pas le bon format : vous en rachèteriez un tous les mois. C'est le rôle de l'expert technique externalisé : une direction technique à temps partagé, ${lowerFirst(CTO_PRICE.fr.amount)} ${CTO_PRICE.fr.period}, avec un comité de pilotage mensuel, vos devis relus et une roadmap tenue à jour. Le détail des deux paliers, des livrables et du périmètre est sur sa page dédiée. L'échange de 15 minutes et l'audit restent les bons points d'entrée si une seule décision est à trancher.`,
     },
     en: {
       q: "What if technical decisions come up every month?",
-      a: `Then a one-off opinion is the wrong format: you would buy one every month. That is what the outsourced technical expert is for, shown above: technical direction on shared time, ${lowerFirst(CTO_PRICE.en.amount)} ${CTO_PRICE.en.period}, with a monthly steering committee, your quotes reviewed and a roadmap kept up to date. The detail of the two tiers, the deliverables and the scope lives on its own page. The advisory call and the audit remain the right entry points when a single decision has to be settled.`,
+      a: `Then a one-off opinion is the wrong format: you would buy one every month. That is what the outsourced technical expert is for: technical direction on shared time, ${lowerFirst(CTO_PRICE.en.amount)} ${CTO_PRICE.en.period}, with a monthly steering committee, your quotes reviewed and a roadmap kept up to date. The detail of the two tiers, the deliverables and the scope lives on its own page. The 15-minute call and the audit remain the right entry points when a single decision has to be settled.`,
     },
   },
   {
-    // Questions de logistique ajoutées à la passe SEO/GEO : ce sont des
-    // formulations de prospect (People Also Ask) dont la réponse est déjà
-    // affichée sur la page, en § 03 (bandeau de réassurance) et en § 07
-    // (« Comment ça marche »). Rien d'inventé : la FAQ ne fait que rendre
-    // citable ce que la page dit déjà.
     fr: {
-      q: "Comment se réserve la visio conseil, et peut-on la reporter ?",
-      a: "La réservation et le paiement se font en ligne, avec confirmation immédiate. La visio se tient en vrai partage d'écran, pas par chat. Vous pouvez la reporter ou l'annuler jusqu'à 24 h avant.",
+      q: "Comment se réserve l'échange de 15 minutes ?",
+      a: "En ligne, avec confirmation immédiate : vous choisissez un créneau, sans paiement. L'échange se tient en visio. Vous pouvez le reporter ou l'annuler à tout moment depuis le lien de confirmation.",
     },
     en: {
-      q: "How do I book the advisory call, and can I reschedule it?",
-      a: "Booking and payment happen online, with immediate confirmation. The call is a real video call with screen sharing, not a chat. You can reschedule or cancel it up to 24h beforehand.",
+      q: "How do I book the 15-minute call?",
+      a: "Online, with immediate confirmation: you pick a slot, no payment. The call takes place on video. You can reschedule or cancel it at any time from the confirmation link.",
     },
   },
   {
     fr: {
-      q: "Que faut-il préparer avant la visio ou l'audit ?",
-      a: "Envoyez le contexte à l'avance : l'adresse du site, le devis ou la proposition en cours, et vos notes de projet s'il y en a. Cela sert à préparer les bonnes questions et à consacrer l'heure à la décision plutôt qu'à la découverte.",
+      q: "Que faut-il préparer avant l'échange ou l'audit ?",
+      a: "L'adresse du site, le devis ou la proposition en cours, et vos notes de projet s'il y en a. Les quinze minutes servent alors à la décision plutôt qu'à la découverte.",
     },
     en: {
       q: "What should I prepare before the call or the audit?",
-      a: "Send the context ahead of time: the site address, the quote or proposal on the table, and your project notes if you have any. It is what makes the questions relevant, and keeps the hour focused on the decision rather than on discovery.",
-    },
-  },
-  {
-    fr: {
-      q: "Le montant est-il déduit si un projet suit ?",
-      a: "La visio conseil refonte (150 €) est déduite à 100 % du devis si un projet démarre sous 30 jours. L'audit + roadmap est une prestation à part entière : sa valeur est dans les livrables, pas dans un remboursement.",
-    },
-    en: {
-      q: "Is the amount deducted if a project follows?",
-      a: "The redesign advisory call (€150) is fully deducted from the quote if a project starts within 30 days. The audit + roadmap is a standalone service: its value lies in the deliverables, not in a refund.",
+      a: "The site address, the quote or proposal on the table, and your project notes if you have any. The fifteen minutes then go to the decision rather than to discovery.",
     },
   },
 ];

@@ -5,10 +5,13 @@ import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/json-ld";
 import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import {
-  OFFER_PRICE_LABEL,
-  sentinellePaymentLinkUrl,
-} from "@/lib/sentinelle-offer";
+import { InscriptionSentinelle } from "@/components/sentinelle/inscription-form";
+import { OFFER_AMOUNT_CENTS, OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
+
+// Prix lu dans sa source pour la métadonnée et le JSON-LD anglais : le libellé
+// OFFER_PRICE_LABEL n'existe qu'en français.
+const OFFER_PRICE_LABEL_EN = `€${OFFER_AMOUNT_CENTS / 100}/month`;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Page d'offre du produit Sentinelle (19 €/mois, newsletter bimensuelle).
@@ -17,6 +20,15 @@ import {
 // page de vente : elle a besoin du header, du footer, de l'i18n et du SEO du
 // site. Le groupe (sentinelle) est réservé au produit lui-même (scan, admin,
 // espace client), qui est en noindex.
+//
+// Contenu réécrit le 2026-09-27 (demande d'Agathe) : h1 « La veille techno de votre
+// site web », et une page qui dit vite et concrètement ce qu'est
+// la lettre. Ce qu'elle promet suit la structure réelle d'un numéro
+// (src/sentinelle/lettre/schema.ts) : douze points passés en revue, chacun
+// conclu par agir, surveiller ou non concerné ; trois actions au plus ; les
+// scénarios, l'échéancier et les questions. La liste des douze points est
+// recopiée de AXES : la vitrine n'importe pas @sentinelle/* (règle
+// d'isolation, docs/sentinelle/CLAUDE.md). Si AXES change, changer POINTS.
 //
 // ⚠️ AVANT_LANCEMENT : le produit n'est pas encore livré (scanner en phase 2,
 // paiement en phase 5). Tant que ce drapeau est à true, la page est en noindex
@@ -33,11 +45,13 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 const AVANT_LANCEMENT = false;
 
-// Sentinelle retirée du SEO/GEO sur décision (2026-09-04) : la page reste
-// accessible en direct, mais n'est plus indexée, plus dans le sitemap, ni citée
-// dans llms.txt / llms-full.txt. Repasser ce drapeau à false pour la réexposer
-// (penser alors à réintégrer l'entrée sitemap et les bullets llms).
-const RETIREE_DU_SEO = true;
+// Sentinelle avait été retirée du SEO/GEO le 2026-09-04. Elle y revient le
+// 2026-09-27 (ADR-012) : elle revient dans l'index. Le même jour (ADR-013),
+// elle sort du catalogue d'offres : elle se vend depuis le rapport de
+// l'analyse du site et reste incluse dans le suivi et maintenance. Cette page
+// reste sa fiche produit. Entrée sitemap et lignes llms conservées. Repasser ce
+// drapeau à true pour la retirer de nouveau (et retirer ces entrées).
+const RETIREE_DU_SEO = false;
 
 export const revalidate = 86400;
 
@@ -51,25 +65,25 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Sentinelle: personalized tech watch and decision support, €19/month"
-      : "Sentinelle : veille techno personnalisée et aide à la décision, 19 €/mois",
+      ? `Sentinelle: the tech watch letter for your website, ${OFFER_PRICE_LABEL_EN}`
+      : `Sentinelle : la lettre de veille techno de votre site web, ${OFFER_PRICE_LABEL}`,
     description: isEn
-      ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: consolidate, evolve or rebuild. Two letters a month, alerts when it matters, human-reviewed before sending. €19/month."
-      : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, des alertes quand ça compte, relues par un humain avant envoi. 19 €/mois.",
+      ? `Twice a month, a letter on your site: what changed around it, what it means for you, what to do. Plus an alert when a flaw hits a component you run. Reviewed before sending. ${OFFER_PRICE_LABEL_EN}.`
+      : `Deux fois par mois, une lettre sur votre site : ce qui a changé autour de lui, ce que ça change pour vous, quoi faire. Plus une alerte quand une faille touche un composant installé chez vous. Relue avant envoi. ${OFFER_PRICE_LABEL}.`,
     path: "/sentinelle",
     keywords: isEn
       ? [
+          "website tech watch letter",
           "WordPress monitoring",
           "website vulnerability alerts",
-          "WordPress plugin security watch",
-          "website maintenance alternative",
+          "website component watch",
         ]
       : [
+          "lettre de veille techno",
+          "veille techno site web",
           "surveillance site WordPress",
           "alerte faille plugin WordPress",
-          "veille sécurité site web",
-          "maintenance WordPress alternative",
-          "mise à jour WordPress prévenir",
+          "veille composants site web",
           "refonte ou maintenance site web",
           "quand refondre son site",
         ],
@@ -82,54 +96,81 @@ export async function generateMetadata({
   });
 }
 
-const CE_QUE_VOUS_RECEVEZ = [
+/** La lettre en quatre faits : quand, sur quoi, par qui, combien. */
+const EN_BREF = [
+  { terme: "Quand", valeur: "Le 1er et le 15 de chaque mois, par e-mail." },
+  { terme: "Sur quoi", valeur: "Votre site : les composants qu'il utilise vraiment, croisés avec l'actualité de la quinzaine." },
+  { terme: "Par qui", valeur: "Préparée avec l'IA, relue et corrigée par moi avant chaque envoi." },
+  { terme: "Combien", valeur: `${OFFER_PRICE_LABEL}, sans engagement.` },
+];
+
+/** Ce que contient un numéro, dans l'ordre de lecture. */
+const DANS_LA_LETTRE = [
   {
     index: "01",
-    titre: "Une alerte quand ça vous concerne",
+    titre: "Ce qui a changé autour de vous",
     corps:
-      "Une faille est publiée chaque jour sur un plugin WordPress. La plupart ne vous concernent pas. Vous ne recevez que celles qui touchent un composant réellement installé chez vous, dans une version réellement affectée.",
+      "Les faits de la quinzaine dans votre écosystème : une faille, une fin de support, une nouvelle règle, ce que font vos concurrents. Chacun est daté et porte sa source.",
   },
   {
     index: "02",
-    titre: "Deux lettres par mois",
+    titre: "Votre site en douze points",
     corps:
-      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes — du socle technique à la visibilité, aux coûts et à la réversibilité. Chaque axe conclut : agir, surveiller, ou non concerné — et « non concerné » se dit, c'est souvent l'information la plus rassurante.",
+      "Chaque fait est rapporté à votre site et à vos enjeux : sécurité, hébergement, visibilité, coûts… Chaque point se conclut par un mot : agir, surveiller ou non concerné.",
   },
   {
     index: "03",
-    titre: "Un cap : consolider, évoluer ou refondre",
+    titre: "Quoi faire",
     corps:
-      "Chaque lettre se termine par trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre — avec leur ordre de coût et leur condition de déclenchement, un échéancier à six mois et trois questions à poser à votre prestataire. La veille ne vaut que si elle aide à décider.",
+      "Trois actions au plus, par ordre d'urgence. Pour chacune : ce que ça change chez vous, et si vous pouvez la faire seul.",
+  },
+  {
+    index: "04",
+    titre: "La suite",
+    corps:
+      "Consolider, faire évoluer ou refondre : trois scénarios avec leur ordre de coût, un échéancier à six mois et trois questions à poser à votre prestataire.",
   },
 ];
 
-const CE_QUI_CHANGE = [
+/** Les douze points, recopiés de AXES (src/sentinelle/lettre/schema.ts). */
+const POINTS = [
+  "Socle technique et architecture",
+  "Sécurité et maintenance",
+  "Hébergement, infrastructure et souveraineté",
+  "Visibilité, recherche et acquisition",
+  "IA intégrée au projet",
+  "Réglementaire et conformité",
+  "Données, mesure et consentement",
+  "Expérience, performance et accessibilité",
+  "Contenu, éditorial et confiance",
+  "Coûts, prestataires et marché",
+  "Dépendance fournisseur et réversibilité",
+  "Gouvernance du projet et contractuel",
+];
+
+const GARANTIES = [
   {
-    titre: "Un verdict, pas une liste",
-    corps:
-      "Vert, orange ou rouge. Vert veut dire « rien à faire » et je le dis sans détour : c'est aussi une information utile.",
+    titre: "Écrite pour vous",
+    corps: "« Votre formulaire de contact », pas « le endpoint REST du plugin ».",
   },
   {
-    titre: "Écrit pour vous, pas pour un développeur",
-    corps:
-      "« Votre formulaire de contact », pas « le endpoint REST du plugin ». Chaque alerte dit ce que ça change concrètement chez vous.",
+    titre: "Des faits vérifiés",
+    corps: "Un fait sans date ni source ne peut pas entrer dans la lettre : le code le bloque.",
   },
   {
-    titre: "Vous saurez si vous pouvez le faire seul",
-    corps:
-      "Deux clics, un quart d'heure, ou une intervention. C'est écrit à chaque fois — y compris quand la réponse est « vous n'avez besoin de personne ».",
+    titre: "Relue avant envoi",
+    corps: "Rien ne part automatiquement. Je relis, je corrige, puis j'envoie.",
   },
   {
-    titre: "Rien ne part sans relecture",
-    corps:
-      "Aucune alerte, aucun numéro n'est envoyé automatiquement. La lettre n'affirme que des faits datés et sourcés — le code le vérifie — et le modèle me signale ses hypothèses dans des notes de production. Je relis, je corrige, puis j'envoie. C'est plus lent qu'un robot, et c'est le but.",
+    titre: "Pas de fausse alerte",
+    corps: "Une alerte ne part que si votre version est réellement touchée et la faille jugée sévère.",
   },
 ];
 
 const LIMITES = [
-  "L'analyse se fonde sur les éléments publics de votre site. Elle voit ce qu'un visiteur voit, rien de plus : aucun test d'intrusion, aucune tentative d'accès.",
-  "Un scan public détecte en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation — c'est là que la surveillance devient exacte.",
-  "Sentinelle prévient et conseille, elle n'intervient pas. Ce n'est ni un antivirus, ni un contrat de maintenance, ni une infogérance : quand une refonte ou une intervention s'impose, vous décidez — avec le prestataire de votre choix.",
+  "La lettre part de ce que votre site montre publiquement : aucun test d'intrusion, aucun accès demandé.",
+  "Une analyse publique repère en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation.",
+  "Sentinelle prévient, elle n'intervient pas. Pour qu'on intervienne sur votre site, le suivi et maintenance inclut Sentinelle.",
 ];
 
 export default async function SentinellePage({
@@ -146,140 +187,166 @@ export default async function SentinellePage({
     { name: "Sentinelle", url: "/sentinelle" },
   ];
 
-  // Le bouton d'abonnement n'apparaît que si le Payment Link est réellement
-  // configuré. Sinon la page bascule sur son parcours d'attente : mieux vaut
-  // pas de bouton qu'un bouton mort.
-  const lienPaiement = sentinellePaymentLinkUrl();
-
   // TODO lancement : repointer le CTA froid sur /scan quand le scanner existe
   // (phase 2). D'ici là, /contact est le seul parcours qui aboutit.
   const ctaFroid = AVANT_LANCEMENT ? "/contact" : "/scan";
   const ctaFroidLibelle = AVANT_LANCEMENT
     ? "Être prévenu du lancement"
-    : "Analyser mon site — gratuit, 2 min";
+    : "Analysez votre site en 2 minutes";
 
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
-      {/* Schéma Service aligné sur le contenu visible : la veille personnalisée,
+      {/* Schéma Service aligné sur le contenu visible : la lettre de veille,
           19 €/mois (source unique du tarif : lib/sentinelle-offer.ts). */}
       <ServiceJsonLd
         locale={locale}
         name={
           isEn
-            ? "Sentinelle: personalized tech watch on your site"
-            : "Sentinelle : veille techno personnalisée de votre site"
+            ? "Sentinelle: the tech watch letter for your website"
+            : "Sentinelle : la lettre de veille techno de votre site web"
         }
         description={
           isEn
-            ? "Sentinelle watches the components your site actually runs, crosses that with tech news and helps you decide: consolidate, evolve or rebuild. Two letters a month, targeted alerts, human-reviewed before sending. €19/month, no commitment."
-            : "Sentinelle surveille les composants que votre site utilise vraiment, les croise avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, alertes ciblées, relues par un humain avant envoi. 19 €/mois, sans engagement."
+            ? `A letter on your site on the 1st and 15th of each month: what changed around it, twelve points each concluded by act, watch or not concerned, three actions at most and the options ahead (consolidate, evolve or rebuild). An alert between two letters when a severe flaw hits a component you run. Reviewed by a human before sending. ${OFFER_PRICE_LABEL_EN}, no commitment.`
+            : `Une lettre sur votre site le 1er et le 15 de chaque mois : ce qui a changé autour de lui, douze points conclus chacun par agir, surveiller ou non concerné, trois actions au plus et les scénarios pour la suite (consolider, faire évoluer ou refondre). Une alerte entre deux lettres quand une faille sévère touche un composant installé chez vous. Relue par un humain avant envoi. ${OFFER_PRICE_LABEL}, sans engagement.`
         }
         serviceType={isEn ? "Technology watch" : "Veille technologique"}
         url="/sentinelle"
       />
 
-      {/* ── Héros : la douleur avant le produit ─────────────────────────── */}
+      {/* ── Héros : ce qu'est la lettre, en deux phrases ─────────────────── */}
       <BlueprintSection ticks innerClassName="px-6 py-16 lg:px-12 lg:py-24">
         <SectionHeading
           index="№ 00"
+          as="h1"
           kicker="Sentinelle"
           title={
             <>
-              Votre lettre de veille{" "}
-              <em className="font-normal not-italic text-accent-secondary">
-                personnalisée
-              </em>
+              La veille techno de{" "}
+              <em className="font-normal not-italic text-accent-secondary">votre site web</em>
             </>
           }
-          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème — et vous dit ce que ça change pour la suite : consolider, faire évoluer, ou refondre."
+          description="Deux fois par mois, une lettre sur votre site : ce qui a changé autour de lui, ce que ça change pour vous, et quoi faire. Entre deux lettres, une alerte si une faille touche un composant installé chez vous."
         />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+          <a
+            href={CTA_ECHANGE.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
+          >
+            {CTA_ECHANGE.label.fr}
+          </a>
           <Link
             href={ctaFroid}
-            className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
           >
             {ctaFroidLibelle}
           </Link>
           <Link
-            href="#ce-que-vous-recevez"
+            href="#dans-la-lettre"
             className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
           >
-            Voir ce que je reçois
+            Voir ce qu'elle contient
           </Link>
         </div>
 
-        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
-          19 €/mois · sans engagement · relu par un humain avant envoi
-        </p>
+        <dl className="mt-12 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-4">
+          {EN_BREF.map((item) => (
+            <div key={item.terme} className="bg-obsidian p-5">
+              <dt className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
+                {item.terme}
+              </dt>
+              <dd className="mt-2 font-inter-tight text-base leading-relaxed text-foreground/85">
+                {item.valeur}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </BlueprintSection>
 
-      {/* ── Ce que vous recevez : deux choses, pas dix ───────────────────── */}
+      {/* ── Ce que contient un numéro ────────────────────────────────────── */}
       <BlueprintSection
-        id="ce-que-vous-recevez"
+        id="dans-la-lettre"
         tone="jet"
         className="border-t border-dark-gray"
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
           index="№ 01"
-          kicker="Ce que vous recevez"
-          title="Trois choses, et rien d'autre"
-          description="Sentinelle ne cherche pas à remplacer votre prestataire ni à remplir votre boîte mail."
+          kicker="Dans chaque lettre · quatre parties"
+          title="La veille de votre écosystème, rapportée à votre site"
+          description="Sentinelle suit l'actualité technique et stratégique de ce qui entoure votre site : ses technologies, votre secteur, vos concurrents. Chaque lettre ne garde que ce qui vous touche, et le traduit en enjeux pour votre site."
         />
 
-        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-3">
-          {CE_QUE_VOUS_RECEVEZ.map((bloc) => (
-            <div key={bloc.index} className="bg-jet p-8">
+        <ol className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2 lg:grid-cols-4">
+          {DANS_LA_LETTRE.map((bloc) => (
+            <li key={bloc.index} className="bg-jet p-6 lg:p-8">
               <span className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
-                № {bloc.index}
+                {bloc.index}
               </span>
-              <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
-                {bloc.titre}
-              </h3>
-              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
-                {bloc.corps}
-              </p>
-            </div>
+              <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">{bloc.titre}</h3>
+              <p className="mt-3 font-inter-tight text-base leading-relaxed text-mid-gray">{bloc.corps}</p>
+            </li>
           ))}
-        </div>
+        </ol>
+
+        {/* Les douze points : détail en accordéon natif, présent dans le HTML. */}
+        <details className="group mt-8 border border-dark-gray">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-mono text-2xs uppercase tracking-[0.14em] text-foreground hover:bg-obsidian [&::-webkit-details-marker]:hidden">
+            Les douze points passés en revue
+            <span aria-hidden="true" className="text-lg font-light text-mid-gray transition-transform group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <ol className="grid gap-x-8 gap-y-2 px-6 pb-6 sm:grid-cols-2 lg:grid-cols-3">
+            {POINTS.map((point, i) => (
+              <li key={point} className="flex gap-3 font-inter-tight text-base text-mid-gray">
+                <span className="font-mono text-2xs leading-6 text-accent-secondary">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {point}
+              </li>
+            ))}
+          </ol>
+        </details>
       </BlueprintSection>
 
-      {/* ── La preuve : pourquoi une alerte Sentinelle est lisible ───────── */}
+      {/* ── Un exemple : à quoi ressemble un point ───────────────────────── */}
       <BlueprintSection
         className="border-t border-dark-gray"
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
           index="№ 02"
-          kicker="Ce qui change"
-          title="Une alerte qu'on peut lire sans être développeur"
-          description="La plupart des outils de veille produisent une liste de CVE. Une liste de CVE ne dit pas quoi faire."
+          kicker="Exemple"
+          title="À quoi ressemble un point"
+          description="Exemple fictif, au format d'une lettre réelle."
         />
 
-        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2">
-          {CE_QUI_CHANGE.map((bloc) => (
-            <div key={bloc.titre} className="bg-obsidian p-8">
-              <h3 className="text-lg font-medium tracking-tight text-foreground">
-                {bloc.titre}
-              </h3>
-              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
-                {bloc.corps}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-8 max-w-2xl border-l-2 border-accent-secondary/60 pl-4 font-inter-tight text-base leading-relaxed text-foreground/80">
-          En cas de doute, Sentinelle se tait. Un verdict rouge n'est envoyé que
-          si votre version est réellement dans la plage affectée et que la source
-          qualifie la faille de sévère. Un service de veille qui crie au loup ne
-          sert plus à rien au troisième message.
-        </p>
+        <figure className="mt-10 max-w-3xl border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 p-6 lg:p-8">
+          <p className="flex flex-wrap items-center gap-3 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            <span>02 · Sécurité et maintenance</span>
+            <span className="border border-accent-secondary/60 bg-accent-secondary/10 px-2 py-0.5 text-accent-secondary">
+              Agir
+            </span>
+          </p>
+          <p className="mt-4 font-inter-tight text-base leading-relaxed text-foreground/90 md:text-lg">
+            Une faille a été publiée le 12 sur l&apos;extension qui gère votre formulaire de
+            contact. Votre version est concernée ; la suivante la corrige. Mise à jour
+            depuis votre administration, un quart d&apos;heure avec la vérification du
+            formulaire : vous pouvez la faire seul.
+          </p>
+          <p className="mt-3 font-mono text-2xs tracking-[0.06em] text-mid-gray">
+            Source : l&apos;avis de sécurité, lien et date dans la lettre.
+          </p>
+        </figure>
       </BlueprintSection>
 
-      {/* ── Prix : une décision, une ligne ───────────────────────────────── */}
+      {/* ── Comment elle est faite ───────────────────────────────────────── */}
       <BlueprintSection
         tone="jet"
         className="border-t border-dark-gray"
@@ -287,63 +354,55 @@ export default async function SentinellePage({
       >
         <SectionHeading
           index="№ 03"
-          kicker="Tarif"
-          title="19 € par mois"
-          description="Un seul tarif. Les alertes et les deux lettres mensuelles sont comprises — il n'y a pas de version supérieure à vous vendre ensuite. Résiliable à tout moment, sans préavis."
+          kicker="Comment elle est faite"
+          title="Lisible sans être développeur"
         />
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          {lienPaiement ? (
-            // Lien externe vers la page de paiement Stripe : <a> et non <Link>,
-            // il ne s'agit pas d'une route localisée du site.
-            <a
-              href={lienPaiement}
-              className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
-            >
-              S'abonner — {OFFER_PRICE_LABEL}
-            </a>
-          ) : (
-            <Link
-              href={ctaFroid}
-              className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
-            >
-              {ctaFroidLibelle}
-            </Link>
-          )}
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-foreground"
-          >
-            Poser une question
-          </Link>
+        <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2 lg:grid-cols-4">
+          {GARANTIES.map((bloc) => (
+            <div key={bloc.titre} className="bg-jet p-6">
+              <h3 className="text-lg font-light tracking-tight text-foreground">{bloc.titre}</h3>
+              <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">{bloc.corps}</p>
+            </div>
+          ))}
         </div>
-
-        {lienPaiement && (
-          <p className="mt-6 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
-            Paiement sécurisé par Stripe. Carte bancaire ou paiement en un clic
-            avec Link. L'adresse de votre site vous est demandée au moment du
-            règlement : c'est elle qui déclenche la surveillance.
-          </p>
-        )}
       </BlueprintSection>
 
-      {/* ── Limites : dites avant, pas après ─────────────────────────────── */}
+      {/* ── Prix et inscription : une décision ───────────────────────────
+          Plus de paiement en ligne (2026-09-27) : une demande d'inscription,
+          validée à la main, puis une facture. L'ancre #inscription est la
+          cible des liens « s'inscrire » de l'espace abonné. */}
       <BlueprintSection
+        id="inscription"
         className="border-t border-dark-gray"
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
           index="№ 04"
-          kicker="Ce que ce n'est pas"
-          title="Les limites, dites avant"
-          description="Mieux vaut les lire maintenant que les découvrir dans trois mois."
+          kicker="Tarif et inscription"
+          title="19 € par mois"
+          description="Les deux lettres mensuelles et les alertes sont comprises. Facturé chaque mois, sans engagement : un message suffit pour arrêter."
         />
 
-        <ul className="mt-10 max-w-3xl space-y-6">
+        <p className="mt-8 max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray">
+          Laissez vos coordonnées : je valide votre inscription, je vous envoie la
+          facture, et un e-mail vous ouvre votre espace. Une question avant de
+          vous lancer ?{" "}
+          <Link href="/contact" className="underline underline-offset-4 hover:text-foreground">
+            Écrivez-moi
+          </Link>
+          .
+        </p>
+
+        <div className="mt-8">
+          <InscriptionSentinelle />
+        </div>
+
+        <ul className="mt-12 max-w-3xl space-y-4">
           {LIMITES.map((limite) => (
             <li
               key={limite}
-              className="border-l border-dark-gray pl-5 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray"
+              className="border-l border-dark-gray pl-5 font-inter-tight text-base leading-relaxed text-mid-gray"
             >
               {limite}
             </li>

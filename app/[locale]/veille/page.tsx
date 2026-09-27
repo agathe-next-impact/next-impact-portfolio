@@ -12,8 +12,9 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { DerniereLettre } from "@/components/veille/derniere-lettre";
-import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-strip";
+import { HeroNavCards, type HeroNavCard } from "@/components/aspect/hero-nav-cards";
 import { Sonar } from "@/components/visuals/sonar";
 import {
   Radar,
@@ -29,16 +30,15 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 // Page « Veille techno » — la veille pour décideurs, sans le jargon.
 //
-// Le héros et le corps présentent trois façons d'avancer, toutes gratuites :
-//   – la lettre gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
-//     (Substack : une synthèse mensuelle + un focus hebdo sur le marché web & IA) ;
-//   – les ressources de fond (choisir sa techno, être trouvé par l'IA, lire un devis) ;
-//   – les outils de diagnostic (techno, visibilité IA, réparer ou refaire, devis).
+// Page d'arrivée de l'entrée de nav « La veille ». Ordre voulu par Agathe :
+//   1. Sentinelle, la veille personnalisée de votre site (payante) — en premier ;
+//   2. la lettre gratuite « Quelle techno pour mon site web à l'heure de l'IA ? »
+//      (Substack : une synthèse mensuelle + un focus hebdo sur le marché web & IA) ;
+//   3. en secondaire : les ressources de fond, puis les outils de diagnostic.
 //
-// Sentinelle (veille personnalisée payante) n'est PAS présentée ici : elle a sa
-// propre page /sentinelle, accessible depuis la navigation. La section comparatif
-// est commentée plus bas et n'est pas rendue — la métadonnée et le JSON-LD de
-// cette page ne doivent donc décrire QUE la veille gratuite et les ressources.
+// Sentinelle reste hors catalogue (ADR-013) : elle se présente ici comme la
+// veille de votre site, pas comme une carte d'offre, et renvoie vers
+// /sentinelle (CTA « La veille personnalisée »). La section comparatif est commentée plus bas et n'est pas rendue.
 //
 // Contenu FR uniquement (locale EN en noindex), comme /sentinelle.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -57,20 +57,24 @@ export async function generateMetadata({
 
   return generatePageMetadata({
     title: isEn
-      ? "Tech watch for decision-makers: the free newsletter, no jargon"
-      : "Veille techno pour décideurs : la lettre gratuite, sans jargon",
+      ? "Tech watch for decision-makers: Sentinelle and the free newsletter"
+      : "Veille techno pour décideurs : Sentinelle et la lettre gratuite",
     description: isEn
-      ? "The free newsletter on the web & AI market: one digest a month, one focus a week. Plus resources and tools to help you decide, without becoming a developer."
-      : "La lettre gratuite sur le marché web & IA : une synthèse par mois, un focus par semaine. Des ressources et des outils pour décider, sans devenir développeur.",
+      ? "Sentinelle watches your site: its real components cross-checked with the news, two letters a month, an alert when it concerns you. Plus the free web & AI newsletter, resources and tools."
+      : "Sentinelle veille sur votre site : ses composants réels croisés avec l'actualité, deux lettres par mois, une alerte quand ça vous concerne. Et la lettre gratuite web & IA, des ressources et des outils.",
     path: "/veille",
     keywords: isEn
       ? [
+          "personalized website watch",
+          "website vulnerability alerts",
           "web technology newsletter",
           "tech watch for decision-makers",
           "AI web trends newsletter",
           "free website diagnostic tools",
         ]
       : [
+          "veille personnalisée site web",
+          "alertes failles site WordPress",
           "newsletter techno web",
           "veille technologique",
           "newsletter web IA",
@@ -86,63 +90,52 @@ export async function generateMetadata({
   });
 }
 
-// Aperçu dans le héros : la lettre gratuite, les ressources et les outils —
-// les trois façons d'avancer proposées par la page (ancres vers les sections).
-const VEILLE_OFFERS: HeroOffer[] = [
+// Colonne droite du héros (page mère) : ses deux offres enfants, et elles
+// seules, dans l'ordre de la page : Sentinelle d'abord, vers sa page, la
+// lettre gratuite ensuite, qui n'a pas de page à elle : sa carte mène à la
+// section où l'on s'abonne.
+const HERO_CARDS: HeroNavCard[] = [
   {
-    name: "Lettre gratuite",
-    price: "0 €",
-    benefit: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
-    href: NEWSLETTER_SUBSCRIBE_URL,
-    external: true,
+    label: "Sentinelle",
+    value: OFFER_PRICE_LABEL,
+    detail: "Deux lettres par mois, une alerte quand votre site est concerné.",
+    href: "/sentinelle",
   },
   {
-    name: "Ressources",
-    benefit: "Choisir sa techno, être trouvé par l'IA, lire un devis — sans jargon.",
-    href: "#ressources",
-  },
-  {
-    name: "Outils",
-    benefit: "Diagnostiquez votre site en quelques minutes : techno, visibilité, devis.",
-    href: "#outils",
+    label: "Lettre gratuite",
+    value: "0 €",
+    detail: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
+    href: "#gratuite",
   },
 ];
 
+// Deux sections volontairement courtes : un titre, une phrase, trois (ou deux)
+// arguments d'une ligne, un CTA. Le détail vit sur /sentinelle et sur Substack.
 const LETTRE_GRATUITE = [
   {
-    index: "01",
     titre: "Une synthèse par mois",
     corps:
-      "Ce qui a réellement compté le mois passé — modèles IA, CMS, outils, réglementation — trié selon une seule question : est-ce que cela change une décision pour votre site ? Ce qui n'en change aucune n'y figure pas.",
+      "Ce qui a compté le mois passé, trié selon une question : est-ce que ça change une décision pour votre site ?",
   },
   {
-    index: "02",
     titre: "Un focus par semaine",
-    corps:
-      "Un sujet chaud de l'actualité, pris à part et décrypté : ce que c'est, qui est concerné, ce que je ferais à votre place. Cinq minutes de lecture, sans jargon.",
+    corps: "Un sujet d'actualité décrypté en cinq minutes, sans jargon.",
   },
 ];
 
 const SENTINELLE = [
   {
-    titre: "Des alertes qui vous concernent",
+    titre: "Des alertes ciblées",
     corps:
-      "Une faille est publiée chaque jour sur un plugin WordPress. Vous ne recevez que celles qui touchent un composant réellement installé chez vous, dans une version réellement affectée.",
+      "Seulement les failles qui touchent un composant installé chez vous, dans la version affectée.",
   },
   {
     titre: "Deux lettres par mois",
-    corps:
-      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes — du socle technique à la visibilité, aux coûts et à la réversibilité. Et en synthèse : trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre.",
+    corps: "Le 1er et le 15 : ce qui change pour votre site, en trois actions au plus.",
   },
   {
-    titre: "Un statut, pas du jargon",
-    corps:
-      "Chaque axe conclut : agir, surveiller, ou non concerné. Écrit pour un décideur, pas pour un développeur — chaque enjeu technique est traduit en argent, risque, délai ou visibilité. « Non concerné » est aussi une information, souvent la plus rassurante.",
-  },
-  {
-    titre: "Relu par un humain",
-    corps:
-      "Rien ne part automatiquement. La lettre n'affirme que des faits datés et sourcés — le code le vérifie — et le modèle consigne ses hypothèses dans des notes de production que je relis. Je vérifie, je corrige, puis j'envoie : chaque alerte et chaque numéro passent par moi.",
+    titre: "Relue par un humain",
+    corps: "Chaque alerte et chaque lettre passent par moi avant envoi.",
   },
 ];
 
@@ -270,20 +263,19 @@ export default async function VeillePage({
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
-      {/* Schéma Service aligné sur le contenu visible : la veille gratuite pour
-          décideurs (lettre Substack, ressources et outils). Sentinelle a sa
-          propre page /sentinelle et n'est pas décrite ici. */}
+      {/* Schéma Service aligné sur le contenu visible, dans l'ordre de la page :
+          Sentinelle, la lettre gratuite, puis les ressources et les outils. */}
       <ServiceJsonLd
         locale={locale}
         name={
           isEn
-            ? "Tech watch for decision-makers: free newsletter, resources and tools"
-            : "Veille techno pour décideurs : lettre gratuite, ressources et outils"
+            ? "Tech watch for decision-makers: Sentinelle and the free newsletter"
+            : "Veille techno pour décideurs : Sentinelle et la lettre gratuite"
         }
         description={
           isEn
-            ? "A free newsletter on the web & AI market (one digest a month, one focus a week), plus free resources and tools to understand and decide, without jargon."
-            : "La lettre gratuite sur le marché web & IA (une synthèse par mois, un focus par semaine), des ressources et des outils gratuits pour comprendre et décider, sans jargon."
+            ? "Sentinelle, the personalised watch on your site (two letters a month, alerts when a component is affected), plus a free newsletter on the web & AI market, resources and tools to decide without jargon."
+            : "Sentinelle, la veille personnalisée de votre site (deux lettres par mois, une alerte quand un composant est touché), plus la lettre gratuite sur le marché web & IA, des ressources et des outils pour décider sans jargon."
         }
         serviceType={isEn ? "Technology watch" : "Veille technologique"}
         url="/veille"
@@ -301,41 +293,82 @@ export default async function VeillePage({
         }
         title={
           <>
-            La veille techno,{" "}
-            <em className="font-normal not-italic text-accent-secondary">
-              pour décideurs
-            </em>
+            La veille techno de{" "}
+            <em className="font-normal not-italic text-accent-secondary">votre site web</em>
           </>
         }
         description={
           <>
-            La lettre gratuite suit le marché web & IA : une synthèse par mois, un
-            focus par semaine. Et des ressources et des outils pour comprendre et
-            trancher — sans devenir développeur.
+            Sentinelle veille sur votre site : ses composants réels croisés avec
+            l'actualité, et une alerte quand ça vous concerne. La lettre gratuite
+            suit le marché web & IA. Des ressources et des outils pour trancher —
+            sans devenir développeur.
           </>
         }
         actions={
           <>
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
+              {CTA_ECHANGE.label.fr}
+            </a>
+            <a href="#sentinelle" className={BTN_SECONDARY}>
+              La veille personnalisée
+            </a>
             <a
               href={NEWSLETTER_SUBSCRIBE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className={BTN_PRIMARY}
+              className={BTN_SECONDARY}
             >
               La lettre gratuite — Substack
             </a>
-            <a href="#outils" className={BTN_SECONDARY}>
-              Les outils gratuits
-            </a>
           </>
         }
-        note="Gratuit · désinscription en un clic"
+        note={`Sentinelle ${OFFER_PRICE_LABEL}, sans engagement · lettre gratuite`}
+        // Cartes à leur hauteur naturelle (sans `fill`) : colonne de droite
+        // réduite, propre à ce héros.
+        aside={<HeroNavCards label="Les offres" cards={HERO_CARDS} />}
+        // Preuve que la lettre paraît vraiment — lue sur le flux Substack à
+        // chaque régénération de la page (ISR, voir revalidate). Pleine
+        // largeur, sous les deux colonnes.
+        below={<DerniereLettre />}
+      />
+
+      {/* ── Sentinelle : la veille de votre site, en premier ─────────────── */}
+      <BlueprintSection
+        id="sentinelle"
+        className="border-t border-dark-gray"
+        innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
-        <HeroOfferStrip offers={VEILLE_OFFERS} />
-        {/* Preuve que la lettre paraît vraiment — lue sur le flux Substack
-            à chaque régénération de la page (ISR, voir revalidate). */}
-        <DerniereLettre />
-      </PageHero>
+        <SectionHeading
+          index="№ 01"
+          kicker={`Sentinelle — ${OFFER_PRICE_LABEL}`}
+          title="La veille personnalisée de votre site"
+          description="Sentinelle suit les composants réellement installés sur votre site, les croise avec l'actualité et vous dit quoi faire. Analyse externe, sans accès à votre administration."
+        />
+
+        <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-3">
+          {SENTINELLE.map((bloc) => (
+            <div key={bloc.titre} className="bg-obsidian p-6 lg:p-8">
+              <h3 className="text-lg font-medium tracking-tight text-foreground">
+                {bloc.titre}
+              </h3>
+              <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
+                {bloc.corps}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Link href="/sentinelle" className={BTN_PRIMARY}>
+            La veille personnalisée
+          </Link>
+          <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            {OFFER_PRICE_LABEL} · sans engagement
+          </p>
+        </div>
+      </BlueprintSection>
 
       {/* ── La lettre gratuite : deux rendez-vous ────────────────────────── */}
       <BlueprintSection
@@ -345,22 +378,19 @@ export default async function VeillePage({
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
-          index="№ 01"
+          index="№ 02"
           kicker="La lettre gratuite"
-          title={"La newsletter techno web & IA"}
-          description="La lettre des décideurs qui doivent choisir la bonne technologie web, sans devenir développeur. Deux rendez-vous, gratuits, sur Substack."
+          title="La newsletter techno web & IA"
+          description="Le marché web & IA, trié pour les décideurs. Gratuite, sur Substack."
         />
 
-        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
+        <div className="mt-10 grid gap-px border border-dark-gray bg-dark-gray md:grid-cols-2">
           {LETTRE_GRATUITE.map((bloc) => (
-            <div key={bloc.index} className="bg-jet p-8">
-              <span className="font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
-                № {bloc.index}
-              </span>
-              <h3 className="mt-4 text-xl font-light tracking-tight text-foreground">
+            <div key={bloc.titre} className="bg-jet p-6 lg:p-8">
+              <h3 className="text-lg font-medium tracking-tight text-foreground">
                 {bloc.titre}
               </h3>
-              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
+              <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
                 {bloc.corps}
               </p>
             </div>
@@ -370,9 +400,8 @@ export default async function VeillePage({
         {/* Preuve : qui tient la veille — le diplôme légitime l'offre, en ligne
             sobre près de la promesse, jamais en accroche (même logique AGEFIPH). */}
         <p className="mt-8 max-w-2xl border-l-2 border-accent-secondary/60 pl-4 font-inter-tight text-base leading-relaxed text-foreground/80">
-          Derrière la lettre : une consultante formée à la discipline, master
-          Veille technologique et innovation (Aix-Marseille), qui pratique la
-          veille depuis 2012, du marché web aux modèles IA.
+          Tenue par une consultante diplômée en veille technologique (master,
+          Aix-Marseille), qui pratique la veille depuis 2012.
         </p>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -384,51 +413,13 @@ export default async function VeillePage({
           >
             S'abonner — gratuit
           </a>
+          <p className="font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
+            Désinscription en un clic
+          </p>
         </div>
-        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
-          Gratuit · désinscription en un clic
-        </p>
       </BlueprintSection>
 
-{/* Sentinelle : la veille personnalisée, avec le comparatif des deux lettres. 
-      <BlueprintSection
-        id="sentinelle"
-        className="border-t border-dark-gray"
-        innerClassName="px-6 py-14 lg:px-12 lg:py-20"
-      >
-        <SectionHeading
-          index="№ 02"
-          kicker={`Sentinelle — ${OFFER_PRICE_LABEL}`}
-          title="La veille personnalisée qui aide à décider"
-          description="Vous indiquez l'adresse de votre site ou de votre application. Sentinelle identifie les composants réellement utilisés — analyse externe, sans accès à votre administration — les croise avec l'actualité, et conclut : consolider, faire évoluer, ou refondre. Ce qu'elle ne peut pas observer devient une question à poser à votre prestataire, jamais une affirmation."
-        />
-
-        <div className="mt-12 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-2">
-          {SENTINELLE.map((bloc) => (
-            <div key={bloc.titre} className="bg-obsidian p-8">
-              <h3 className="text-lg font-medium tracking-tight text-foreground">
-                {bloc.titre}
-              </h3>
-              <p className="mt-3 font-inter-tight text-base md:text-lg leading-relaxed text-mid-gray">
-                {bloc.corps}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Link href="/scan" className={BTN_PRIMARY}>
-            Analyser mon site — gratuit, 2 min
-          </Link>
-          <Link href="/sentinelle" className={BTN_SECONDARY}>
-            Découvrir Sentinelle en détail
-          </Link>
-        </div>
-        <p className="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray">
-          {OFFER_PRICE_LABEL} · sans engagement · relu par un humain avant envoi
-        </p>
-      </BlueprintSection>
-
+{/* Comparatif des deux lettres (Sentinelle est rendue plus haut, section № 01).
       <BlueprintSection
         tone="jet"
         className="border-t border-dark-gray"
@@ -497,7 +488,7 @@ export default async function VeillePage({
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
-          index="№ 02"
+          index="№ 03"
           kicker="Ressources"
           title="Documentation"
           description="Des repères clairs pour choisir votre techno, être trouvé par les moteurs IA et lire un devis — sans devenir développeur."
@@ -532,7 +523,7 @@ export default async function VeillePage({
         </div>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Link href="/documentation" className={BTN_PRIMARY}>
+          <Link href="/documentation" className={BTN_SECONDARY}>
             Toutes les ressources
           </Link>
         </div>
@@ -546,7 +537,7 @@ export default async function VeillePage({
         innerClassName="px-6 py-14 lg:px-12 lg:py-20"
       >
         <SectionHeading
-          index="№ 03"
+          index="№ 04"
           kicker="Outils"
           title="Outils en ligne"
           description="Des outils gratuits pour transformer un doute en décision : quelle techno, quelle visibilité, réparer ou refaire, quel devis."
@@ -581,7 +572,7 @@ export default async function VeillePage({
         </div>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Link href="/outils" className={BTN_PRIMARY}>
+          <Link href="/outils" className={BTN_SECONDARY}>
             Tous les outils
           </Link>
         </div>

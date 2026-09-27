@@ -23,6 +23,9 @@ const NAV_LINKS = [
 // footer, il vit sur la home et certaines pages d'offre.
 const RESOURCE_LINKS = [
   { href: "/conseil", key: "visioConseil" },
+  { href: "/tarifs", key: "tarifs" },
+  { href: "/sentinelle", key: "sentinelle" },
+  { href: "/maintenance-wordpress", key: "maintenance" },
   { href: "/cto-externalise", key: "ctoExternalise" },
   { href: "/veille",        key: "veille" },
   { href: "/outils",        key: "tools" },
@@ -159,18 +162,16 @@ export default function Footer({
           {!isProduct && (
             <CookieSettingsButton className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
           )}
-          {/* Espace abonné Sentinelle. Deux points à ne pas « corriger » :
-              · balise <a> et non le Link i18n — /espace vit hors de app/[locale]/
-                (groupe produit, exclu du matcher next-intl) ; un lien localisé
-                donnerait /en/espace, qui n'existe pas ;
-              · sa place est ici, dans la ligne utilitaire, et non dans les
-                colonnes : c'est un lien pour quelqu'un qui est déjà client, pas
-                une surface de conversion. */}
+          {/* Espace client (ADR-012) : la page vitrine /espace-client aiguille
+              vers les deux connexions (accompagnements, abonnés Sentinelle).
+              Balise <a> et non le Link i18n : ce footer est aussi rendu hors de
+              app/[locale]/ (variante « product »). Sa place est ici, dans la
+              ligne utilitaire : le lien de conversion vit dans le header. */}
           <a
-            href="/espace"
+            href="/espace-client"
             className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
-            {t("subscriberArea")}
+            {t("clientArea")}
           </a>
           {!isProduct && <LocaleSwitcher />}
           {/* `#__next` était un reliquat du Pages Router : l'élément n'existe

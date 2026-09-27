@@ -20,6 +20,7 @@ export function PageHero({
   index = "№ 00",
   kicker,
   title,
+  subtitle,
   description,
   actions,
   note,
@@ -29,11 +30,14 @@ export function PageHero({
   id,
   className,
   compact = false,
+  below,
   children,
 }: {
   index?: string;
   kicker?: string;
   title: React.ReactNode;
+  /** Sous-titre visible sous le h1 (ex. la solution technique d'une prestation). */
+  subtitle?: React.ReactNode;
   description?: React.ReactNode;
   /** Rangée de CTA sous la description (HERO_BTN_PRIMARY / HERO_BTN_SECONDARY). */
   actions?: React.ReactNode;
@@ -51,6 +55,8 @@ export function PageHero({
   compact?: boolean;
   /** Contenu libre rendu après la note (champ de recherche, visuel…). */
   children?: React.ReactNode;
+  /** Contenu pleine largeur rendu sous les deux colonnes (avec `aside`). */
+  below?: React.ReactNode;
 }) {
   const body = (
     <>
@@ -59,6 +65,7 @@ export function PageHero({
         index={index}
         kicker={kicker}
         title={title}
+        subtitle={subtitle}
         description={description}
       />
       {actions && (
@@ -96,6 +103,7 @@ export function PageHero({
       ) : (
         body
       )}
+      {below}
     </BlueprintSection>
   );
 }

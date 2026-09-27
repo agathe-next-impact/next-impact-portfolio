@@ -16,7 +16,7 @@ faq:
   - question: "Quel budget prévoir pour un site professionnel en 2026 ?"
     answer: "Raisonnez en coût total sur trois ans : quelques centaines à 2 000 € par an pour du no-code, 3 000 à 10 000 € pour un WordPress professionnel, 8 000 à 25 000 € et plus pour du sur-mesure. Le poste le plus coûteux est presque toujours la reprise d'un site mal choisi."
   - question: "Comment éviter de me tromper de voie ?"
-    answer: "Vérifiez la réversibilité avant tout (contenus exportables, domaine à votre nom, code récupérable), puis arbitrez sur cinq critères : budget sur trois ans, évolutivité, propriété, SEO + GEO, délai. En cas d'hésitation, une heure d'échange avec un professionnel indépendant coûte moins cher qu'un mauvais choix."
+    answer: "Vérifiez la réversibilité avant tout (contenus exportables, domaine à votre nom, code récupérable), puis arbitrez sur cinq critères : budget sur trois ans, évolutivité, propriété, SEO + GEO, délai. En cas d'hésitation, un échange gratuit de 15 minutes avec un professionnel indépendant vaut mieux qu'un mauvais choix."
 ---
 
 **En 2026, la vraie question n'est plus « quel CMS choisir ? » mais « est-ce qu'une IA à 20 € par mois suffit, ou faut-il payer quelqu'un ? ». La réponse dépend moins de l'outil que du rôle que votre site doit jouer : prototype jetable, présence standard, ou actif commercial qui doit convaincre des inconnus — humains et machines.**
@@ -123,11 +123,11 @@ Raisonnez en coût total sur trois ans plutôt qu'en prix de création : quelque
 
 ### Comment éviter de me tromper de voie ?
 
-Vérifiez la réversibilité avant tout : contenus exportables, domaine à votre nom, code ou données récupérables. Puis passez votre projet au filtre des cinq critères — budget sur trois ans, évolutivité, propriété, SEO + GEO, délai. En cas d'hésitation entre deux voies, une heure d'échange avec un professionnel indépendant des trois options coûte moins cher qu'un mauvais choix.
+Vérifiez la réversibilité avant tout : contenus exportables, domaine à votre nom, code ou données récupérables. Puis passez votre projet au filtre des cinq critères — budget sur trois ans, évolutivité, propriété, SEO + GEO, délai. En cas d'hésitation entre deux voies, un échange gratuit de 15 minutes avec un professionnel indépendant des trois options vaut mieux qu'un mauvais choix.
 
 ---
 
-**Vous hésitez encore entre deux voies ?** C'est précisément l'objet du [conseil techno](/conseil) : une heure pour trancher votre cas précis, avec une recommandation claire et argumentée — 150 € HT, intégralement crédités si un projet démarre avec moi sous 30 jours. Pour dégrossir seul avant, le [Sélecteur techno](/outils/selecteur-techno) vous oriente en cinq minutes.
+**Vous hésitez encore entre deux voies ?** C'est précisément l'objet de l'[échange de 15 minutes](/conseil#choix-techno-ia) : gratuit et sans engagement, il sert à poser votre cas précis et à savoir par où commencer. Pour dégrossir seul avant, l'[outil de choix techno](/outils/selecteur-techno) vous oriente en cinq minutes.
 
 ## Sources
 

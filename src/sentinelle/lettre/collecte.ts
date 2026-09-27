@@ -26,9 +26,13 @@ import { renderCollecteBrief, type LettreContext } from "./context";
 
 export const COLLECTE_PROMPT = "lettre-collecte-system-prompt.md";
 
-/** Budget de la collecte, aligné sur le prompt : 30 recherches, 8 lectures. */
+/**
+ * Budget de la collecte, aligné sur le prompt : 30 recherches, 12 lectures
+ * (8 pour le site du client, 4 pour les pages d'accueil des concurrents
+ * directs, ajoutés le 2026-09-27).
+ */
 export const SEARCH_BUDGET = 30;
-export const FETCH_BUDGET = 8;
+export const FETCH_BUDGET = 12;
 
 /**
  * Plafond de lecture d'une page web (jetons). Sans lui, une page obèse entre

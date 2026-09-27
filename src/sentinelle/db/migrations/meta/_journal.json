@@ -36,6 +36,27 @@
       "when": 1790504597673,
       "tag": "0004_magical_dorian_gray",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790505250030,
+      "tag": "0005_purple_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790519082692,
+      "tag": "0006_busy_sugar_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790519903802,
+      "tag": "0007_absent_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }

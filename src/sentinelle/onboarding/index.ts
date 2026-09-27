@@ -1,4 +1,4 @@
-// Onboarding post-paiement (phase 5).
+// Onboarding à l'ouverture de l'abonnement (phase 5).
 //
 // Ce module fait passer une fiche de « ce qu'un scan a pu voir » à « ce que le
 // site contient vraiment ». C'est la promesse de la page d'offre, et c'est le

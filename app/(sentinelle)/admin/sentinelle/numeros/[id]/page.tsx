@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getDigestDetail } from "@sentinelle/admin";
+import { getDigestDetail, letterEspaceUrl } from "@sentinelle/admin";
 import { previewNewsletterEmail } from "@sentinelle/emails/render";
 import { isQuietIssue, wordCount } from "@sentinelle/lettre";
 import {
@@ -63,8 +63,10 @@ export default async function DigestPage({
         lettre,
         siteUrl: numero.client.siteUrl,
         issueDate: new Date(issue!.constate.issueDate),
+        espaceUrl: letterEspaceUrl(numero.client.plan),
       })
     : null;
+  const accompagnement = numero.client.plan === "accompagnement";
 
   const modifiable = numero.status === "draft" || numero.status === "validated";
   const calme = issue ? isQuietIssue(issue.constate) : false;
@@ -256,7 +258,14 @@ export default async function DigestPage({
             </Panel>
           )}
 
-          {numero.status === "validated" && (
+          {numero.status === "validated" && accompagnement && (
+            <p className="mt-6 max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+              Client en accompagnement : rien ne part par e-mail. Validé, le numéro
+              est publié dans son espace d&apos;accompagnement au prochain export.
+            </p>
+          )}
+
+          {numero.status === "validated" && !accompagnement && (
             <form action={envoyerNumero} className="mt-6">
               <input type="hidden" name="digestId" value={numero.id} />
               <button type="submit" className={buttonClass.primary}>

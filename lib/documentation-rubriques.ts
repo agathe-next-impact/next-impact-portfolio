@@ -4,7 +4,7 @@
 // c'est elle qui détermine son fil d'Ariane et son CTA de sortie.
 //
 // Doctrine du CTA : température FROIDE par défaut — l'outil gratuit d'abord.
-// Seule « Avant de signer » peut pousser la visio 150 € : son lecteur est déjà
+// Seule « Avant de signer » peut pousser l'échange de 15 minutes : son lecteur est déjà
 // en phase d'achat. La documentation prouve, elle ne vend pas.
 
 import type { Locale } from "@/i18n/routing";
@@ -34,7 +34,7 @@ export interface RubriqueCta {
   /** Précision sous le bouton (gratuité, durée). */
   note: Text;
   /**
-   * Relance discrète vers la visio payante. Réservée à « Avant de signer » :
+   * Relance discrète vers l'échange de 15 minutes gratuit. Réservée à « Avant de signer » :
    * partout ailleurs, l'outil gratuit reste la seule sortie.
    */
   secondary?: { label: Text; href: string };
@@ -105,10 +105,10 @@ const RUBRIQUES: Record<RubriqueSlug, Rubrique> = {
       // Unique exception à la règle du CTA froid : ce lecteur est en phase d'achat.
       secondary: {
         label: {
-          fr: "Enjeu important ? Avis indépendant en visio · 150 €",
-          en: "High stakes? Independent second opinion on a call · €150",
+          fr: "Enjeu important ? Un avis en 15 min · gratuit",
+          en: "High stakes? A 15-min opinion · free",
         },
-        href: "/conseil",
+        href: "/conseil#choix-techno-ia",
       },
     },
   },

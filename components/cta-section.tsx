@@ -266,7 +266,7 @@ export function BlocReassurance() {
           <p
             style={{
               fontFamily: "var(--sans)",
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: 15,
               color: "var(--ink)",
               marginBottom: 4,

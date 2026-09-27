@@ -11,6 +11,7 @@ const existing = (overrides: Partial<ExistingClient> = {}): ExistingClient => ({
   siteUrl: "https://client.fr/",
   sector: null,
   active: true,
+  plan: "accompagnement",
   components: 4,
   ...overrides,
 });
@@ -26,7 +27,17 @@ const active = {
 describe("planProvision", () => {
   it("crée et analyse un client inconnu", () => {
     const plan = planProvision(active, null);
-    expect(plan).toMatchObject({ kind: "create", scan: true, values: { email: "dsi@client.fr" } });
+    expect(plan).toMatchObject({
+      kind: "create",
+      scan: true,
+      values: { email: "dsi@client.fr", plan: "accompagnement" },
+    });
+  });
+
+  it("fait passer en accompagnement un abonné Sentinelle seul adopté", () => {
+    const current = existing({ siteUrl: planSite("client.fr"), plan: "veille" });
+    const plan = planProvision(active, current);
+    expect(plan).toMatchObject({ kind: "update", adopted: true, scan: false, patch: { plan: "accompagnement" } });
   });
 
   it("ne fait rien quand la fiche est déjà alignée", () => {

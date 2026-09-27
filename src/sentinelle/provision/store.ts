@@ -9,7 +9,7 @@ import { planProvision, type ExistingClient, type ProvisionRequest } from "./pla
 //
 // L'analyse du site ne se fait jamais dans la requête : elle prend des
 // secondes, et c'est la synchro de l'espace qui attend. On émet l'événement
-// d'ouverture d'abonnement (le même qu'après un paiement Stripe), sans
+// d'ouverture d'abonnement (le même qu'à l'activation d'une inscription), sans
 // bienvenue : Inngest analyse, importe, et retente en cas de panne passagère.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -27,6 +27,7 @@ async function loadExisting(where: ReturnType<typeof eq>): Promise<ExistingClien
       siteUrl: clients.siteUrl,
       sector: clients.sector,
       active: clients.active,
+      plan: clients.plan,
       // Colonnes qualifiées à la main : dans une sélection sur une seule table,
       // Drizzle les écrit sans leur table, et `client_id = id` se lirait alors
       // tout entier dans `stack_items` — zéro composant, quel que soit le client.
@@ -64,7 +65,7 @@ export async function provisionClient(request: ProvisionRequest): Promise<Provis
       return { ok: true, id: plan.id, outcome: "unchanged", scanning: false };
 
     case "deactivate":
-      // Même geste qu'une résiliation Stripe : la date fait courir la rétention.
+      // Même geste qu'une résiliation depuis l'admin : la date fait courir la rétention.
       await db()
         .update(clients)
         .set({ active: false, deactivatedAt: new Date() })

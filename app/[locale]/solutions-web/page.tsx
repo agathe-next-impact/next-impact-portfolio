@@ -1,42 +1,27 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
-import { generatePageMetadata, siteConfig } from "@/lib/metadata"
+import { generatePageMetadata, servicesMeta, siteConfig } from "@/lib/metadata"
 import { ServiceJsonLd, BreadcrumbJsonLd, JsonLd } from "@/components/json-ld"
 import ServicesClient from "@/components/services/ServicesClient"
-import { CtoExternaliseBanner } from "@/components/cto-externalise/cto-externalise-banner"
+import { TenirBanner } from "@/components/tenir/tenir-banner"
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros } from "@/lib/trajectoires"
 import type { Locale } from "@/i18n/routing"
 
+// Titre, description et mots-clés : lus dans lib/metadata.ts (`servicesMeta`),
+// qui lit lui-même le nom et le plancher de chaque prestation dans
+// lib/trajectoires.ts (charte v1.6, ADR-014). Aucun prix n'est écrit ici.
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: "servicesPage" })
+  const meta = servicesMeta(locale)
   return generatePageMetadata({
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title: meta.title,
+    description: meta.description,
     path: "/solutions-web",
-    keywords:
-      locale === "en"
-        ? [
-            "WordPress redesign price",
-            "optimized WordPress redesign",
-            "headless WordPress redesign",
-            "Headless WordPress pricing",
-            "custom web app",
-            "custom mobile application",
-            "WordPress Next.js",
-          ]
-        : [
-            "refonte site WordPress prix",
-            "refonte WordPress optimisée",
-            "refonte WordPress headless",
-            "tarifs WordPress Headless",
-            "web app sur-mesure",
-            "application mobile sur-mesure",
-            "WordPress Next.js",
-          ],
+    keywords: meta.keywords,
     locale,
   })
 }
@@ -51,6 +36,9 @@ export default async function ServicesPage({
 }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "servicesPage" })
+  const isEn = locale === "en"
+  const lang = isEn ? "en" : "fr"
+  const meta = servicesMeta(locale)
 
   const breadcrumbItems = [
     { name: t("breadcrumbHome"), url: "/" },
@@ -58,16 +46,16 @@ export default async function ServicesPage({
   ]
 
   // Nœud WebPage « speakable » : désigne aux assistants de lecture le H1 et le
-  // bloc « En bref » de la page, deux zones réellement affichées et
+  // cartouche « L'essentiel » de la page, deux zones réellement affichées et
   // autoportantes. Même dispositif que la home et la page pilier headless.
   const speakableWebPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": `${siteConfig.url}${locale === "en" ? "/en" : ""}/solutions-web#webpage`,
-    url: `${siteConfig.url}${locale === "en" ? "/en" : ""}/solutions-web`,
-    name: t("metaTitle"),
-    description: t("metaDescription"),
-    inLanguage: locale === "en" ? "en-US" : "fr-FR",
+    "@id": `${siteConfig.url}${isEn ? "/en" : ""}/solutions-web#webpage`,
+    url: `${siteConfig.url}${isEn ? "/en" : ""}/solutions-web`,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: isEn ? "en-US" : "fr-FR",
     isPartOf: { "@id": `${siteConfig.url}/#website` },
     about: { "@id": `${siteConfig.url}/#organization` },
     speakable: {
@@ -76,35 +64,61 @@ export default async function ServicesPage({
     },
   }
 
+  // Les trois prestations, telles que la page les affiche : le nom, le nom
+  // technique en sous-titre, le plancher « à partir de ». Lus dans
+  // lib/trajectoires.ts, comme les cartes.
+  const prestations = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug])
+  const prestationList = prestations
+    .map((p) => {
+      const recommended = p.recommended ? (isEn ? "recommended, " : "recommandée, ") : ""
+      return isEn
+        ? `${p.name.en} (${p.technique.en}, ${recommended}from ${formatEuros(p.priceValue, "en")} excl. VAT)`
+        : `${p.name.fr} (${p.technique.fr}, ${recommended}dès ${formatEuros(p.priceValue, "fr")} HT)`
+    })
+    .join(", ")
+
   return (
     <main>
       <BreadcrumbJsonLd locale={locale} items={breadcrumbItems} />
       <JsonLd data={speakableWebPage} />
-      {/* Schéma aligné sur le contenu réel de la page : les trois trajectoires
-          de refonte du catalogue (charte §5), prix « à partir de » affichés. */}
+      {/* Schéma aligné sur le contenu réel de la page : les trois prestations
+          du catalogue (charte §5), prix « à partir de » affichés, et la
+          première analyse de veille par laquelle chacune commence. Les packs
+          n'y figurent pas : ce sont des parcours, pas des offres. */}
       <ServiceJsonLd
         locale={locale}
         name={
-          locale === "en"
-            ? "WordPress redesign: consolidate, decouple or rebuild"
-            : "Refonte WordPress : consolider, découpler ou refonder"
+          isEn
+            ? "WordPress redesign: three services for an aging site"
+            : "Refonte WordPress : trois prestations pour un site qui vieillit"
         }
         description={
-          locale === "en"
-            ? "Three redesign trajectories for an aging WordPress site: optimized WordPress (from €2,250 excl. VAT), headless WordPress (recommended, from €4,000 excl. VAT), web app (from €6,500 excl. VAT). Price and timeline fixed before starting."
-            : "Trois trajectoires de refonte pour un site WordPress qui vieillit : WordPress optimisé (dès 2 250 € HT), WordPress headless (recommandée, dès 4 000 € HT), web app (dès 6 500 € HT). Prix et délai fixés avant de commencer."
+          isEn
+            ? `Three services for an aging WordPress site: ${prestationList}. Each service starts with a first technical and strategic watch analysis. Price and timeline in writing before starting.`
+            : `Trois prestations pour un site WordPress qui vieillit : ${prestationList}. Chaque prestation commence par une première analyse de veille technique et stratégique. Prix et délai écrits avant de commencer.`
         }
-        serviceType={locale === "en" ? "Web redesign and development" : "Refonte et développement web"}
+        serviceType={isEn ? "Web redesign and development" : "Refonte et développement web"}
         url="/solutions-web"
+        offerCatalog={{
+          name: isEn ? "The three services" : "Les trois prestations",
+          items: prestations.map((p) => ({
+            name: `${p.name[lang]}${isEn ? ": " : " : "}${p.technique[lang]}`,
+            // La phrase « en clair » de la carte (ADR-015), lue dans la source.
+            description: p.enClair[lang],
+            url: p.href,
+            minPrice: p.priceValue,
+          })),
+        }}
       />
       {/* La FAQ visible et son schéma FAQPage sont portés par ServicesClient →
           ServicesFAQ → FaqSchema (profile-aware, schéma = contenu affiché). Pas
           de FAQJsonLd ici : cela créerait un second FAQPage divergent du visible. */}
       <ServicesClient />
-      {/* Des décisions qui reviennent tous les mois → pilotage récurrent. Renvoi
-          vers la page dédiée plutôt qu'une ancre de cette page : l'offre est
-          récurrente, elle ne rentre pas dans les trois trajectoires forfaitaires. */}
-      <CtoExternaliseBanner tone="jet" />
+      {/* Après la livraison : les deux abonnements du moment « Gérer » (suivi
+          et maintenance, expert technique externalisé), Sentinelle en mention
+          incluse (ADR-013). Récurrents, ils ne rentrent pas dans les trois
+          prestations au forfait. */}
+      <TenirBanner tone="jet" />
     </main>
   )
 }

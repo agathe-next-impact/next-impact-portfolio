@@ -3,7 +3,7 @@ import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import { missingForValidation, parseAlertContent, serializeAlertContent } from "@sentinelle/admin/content";
 import { renderAlertEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
+import { planMailReason, sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
 import { configurationIssue } from "./client";
 import {
   createAlertPage,
@@ -132,6 +132,7 @@ async function loadSendable(notionPageId: string) {
       sentAt: alerts.sentAt,
       clientEmail: clients.email,
       clientActive: clients.active,
+      clientPlan: clients.plan,
       clientSite: clients.siteUrl,
       componentLabel: stackItems.label,
       componentVersion: stackItems.version,
@@ -149,7 +150,7 @@ async function loadSendable(notionPageId: string) {
  * Envoie une alerte validée dans Notion, si rien ne s'y oppose.
  *
  * Miroir exact des refus qu'`admin/actions.ts` opposait avant : abonnement
- * résilié, adresse injoignable, déjà envoyée. Un refus ne change ni Notion ni
+ * résilié, adresse injoignable, déjà envoyée, client en accompagnement. Un refus ne change ni Notion ni
  * Postgres — l'alerte reste Validée, et sera retentée à la prochaine passe.
  * C'est le même choix qu'avant pour l'ordre d'écriture : `sentAt` ne s'écrit
  * qu'après l'envoi réel.
@@ -183,6 +184,10 @@ async function trySend(
     console.warn(`[sentinelle] alerte ${record.pageId} validée mais envoi bloqué — ${injoignable}`);
     return { sent: false, blocked: true };
   }
+  // Client en accompagnement : rien ne part par e-mail. Ce n'est pas un blocage —
+  // l'alerte reste Validée, le miroir la reprend, et l'export la publie dans
+  // l'espace d'accompagnement.
+  if (planMailReason(loaded.clientPlan)) return { sent: false, blocked: false };
 
   const mail = await renderAlertEmail({
     content: record.content,

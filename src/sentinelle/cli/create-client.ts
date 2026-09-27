@@ -1,25 +1,24 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { clients, stackItems } from "../db/schema";
-import { upsertSubscriber } from "../billing";
+import { upsertSubscriber } from "../inscriptions/store";
 import { importScannedStack, sendWelcome } from "../onboarding";
 import { scanSite } from "../scanner";
 import { normalizeSiteUrl } from "../url";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Création manuelle d'un client Sentinelle, sans passer par Stripe.
+// Création manuelle d'un client Sentinelle en accompagnement.
 //
 //   npm run sentinelle:client -- --email dsi@client.fr --nom "Prénom Nom" \
 //     --site https://client.fr [--entreprise "Client SAS"] [--secteur "…"] \
 //     [--notes "…"] [--sans-scan] [--avec-bienvenue] [--a-blanc]
 //
 // Sert aux accompagnements Expert technique externalisé : leur veille technique
-// est comprise dans l'accompagnement, il n'y a pas d'abonnement à payer. La
-// commande fait ce que le parcours Stripe fait après un paiement, moins le
-// paiement :
+// est comprise dans l'accompagnement, il n'y a pas d'abonnement à facturer. La
+// commande fait ce que fait l'activation d'une demande d'inscription, en
+// formule `accompagnement` (aucun e-mail de veille) :
 //
-//   1. la fiche `clients` (même écriture que le webhook, `upsertSubscriber`),
-//      sans identifiant Stripe ;
+//   1. la fiche `clients` (même écriture que l'activation, `upsertSubscriber`) ;
 //   2. le scan passif du site, puis l'import des composants détectés dans
 //      `stack_items` (comme `onClientSubscribed`) ;
 //   3. l'e-mail de bienvenue Sentinelle, SEULEMENT avec `--avec-bienvenue` :
@@ -96,12 +95,12 @@ async function main(): Promise<void> {
     console.log(
       existing
         ? `La fiche ${existing.id} existe déjà pour ${options.email} : elle serait réactivée et complétée.`
-        : `Une fiche serait créée pour ${options.email} (${options.siteUrl}), sans abonnement Stripe.`,
+        : `Une fiche serait créée pour ${options.email} (${options.siteUrl}), en accompagnement.`,
     );
     return;
   }
 
-  // 1. La fiche. Même écriture que le webhook : un rejeu ne duplique rien, une
+  // 1. La fiche. Même écriture que l'activation : un rejeu ne duplique rien, une
   //    fiche existante est réactivée sans perdre ce qui a été déclaré.
   const row = await upsertSubscriber({
     email: options.email,
@@ -110,8 +109,7 @@ async function main(): Promise<void> {
     siteUrl: options.siteUrl,
     sector: options.sector,
     notes: options.notes,
-    stripeCustomerId: null,
-    stripeSubscriptionId: null,
+    plan: "accompagnement",
   });
   if (!row) throw new Error("La fiche n'a pas pu être écrite.");
 

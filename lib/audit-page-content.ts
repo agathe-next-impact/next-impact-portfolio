@@ -1,5 +1,13 @@
 import type { Locale } from "@/i18n/routing";
 import type { AuditObjective, AxisKey } from "./audit/quick-audit-types";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type Lang } from "@/lib/trajectoires";
+
+// Les trois prestations sous leur seul nom, lu dans lib/trajectoires.ts (charte
+// v1.6, ADR-014) : « Optimisation, Refonte ou Évolution ».
+const prestations = (lang: Lang) => {
+  const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[lang]);
+  return `${names.slice(0, -1).join(", ")} ${lang === "en" ? "or" : "ou"} ${names.at(-1)}`;
+};
 
 // ─── Contenu de la page /audit-site-web ───────────────────────────────────────
 // Convention du repo (cf. lib/homepage-profiles.ts, lib/case-studies-data.ts) :
@@ -152,8 +160,7 @@ export interface AuditPageContent {
 const AUDIT_PAGE_FR: AuditPageContent = {
   hero: {
     title: "Voyez ce qui ralentit votre site en 2 minutes",
-    subtitle:
-      "Une adresse, un rapport : votre site analysé selon 4 axes (performance, référencement, accessibilité, conversion), puis une orientation concrète vers l'une des trois trajectoires : consolider, découpler ou refonder.",
+    subtitle: `Une adresse, un rapport : votre site analysé selon 4 axes (performance, référencement, accessibilité, conversion), puis une orientation concrète vers l'une des trois prestations : ${prestations("fr")}.`,
     ctaPrimary: "Analyser mon site",
     reassurance:
       "Résultat immédiat, sans inscription. Vos coordonnées ne servent qu'à votre audit gratuit, si vous le demandez.",
@@ -380,8 +387,7 @@ const AUDIT_PAGE_FR: AuditPageContent = {
 const AUDIT_PAGE_EN: AuditPageContent = {
   hero: {
     title: "See what slows your site down in 2 minutes",
-    subtitle:
-      "One address, one report: your site analyzed across 4 axes (performance, search visibility, accessibility, conversion), then a concrete direction toward one of the three trajectories: consolidate, decouple or rebuild.",
+    subtitle: `One address, one report: your site analyzed across 4 axes (performance, search visibility, accessibility, conversion), then a concrete direction toward one of the three services: ${prestations("en")}.`,
     ctaPrimary: "Analyze my site",
     reassurance:
       "Instant result, no sign-up. Your details are only used for your free audit, if you ask for it.",

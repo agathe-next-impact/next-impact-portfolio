@@ -7,7 +7,8 @@ import { COLORS, FONTS, styles } from "./theme";
 // Gabarit d'un numéro de la lettre de veille.
 //
 // Onze parties, dans l'ordre du prompt de rédaction : titre → méthode → chapeau
-// → le site en une phrase → les douze axes → les tendances → la synthèse →
+// → le site en une phrase → les douze axes → les tendances (concurrents
+// compris) → la synthèse →
 // l'échéancier → les trois questions → les sources → le périmètre.
 //
 // Deux choses ne sont jamais rendues ici, et c'est délibéré :
@@ -35,6 +36,13 @@ export interface NewsletterEmailProps {
    * `rapportUrl` ramène au rapport en ligne quand la lettre part par e-mail.
    */
   echantillon?: { rapportUrl?: string | null };
+  /**
+   * Espace abonné, ouvert à l'abonnement. Présent pour un abonné Sentinelle
+   * seul : la lettre y renvoie deux fois (une ligne sous le chapeau, un encart
+   * avant la clôture). Absent pour un client en accompagnement, qui ne reçoit
+   * rien par e-mail et lit sa veille dans l'espace d'accompagnement.
+   */
+  espaceUrl?: string;
 }
 
 const STATUT_STYLE: Record<Lettre["axes"][number]["statut"], { label: string; color: string }> = {
@@ -86,7 +94,15 @@ function Partie({ numero, titre }: { numero: string; titre: string }) {
   );
 }
 
-export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: NewsletterEmailProps) {
+export function NewsletterEmail({
+  lettre,
+  siteUrl,
+  issueDate,
+  echantillon,
+  espaceUrl,
+}: NewsletterEmailProps) {
+  // Jamais sur un échantillon : le prospect n'a pas d'espace.
+  const espace = echantillon ? undefined : espaceUrl;
   const aAgir = lettre.axes.filter((axe) => axe.statut === "agir").length;
 
   return (
@@ -114,6 +130,16 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
           {lettre.ligneContexte}
         </Text>
         <Prose texte={lettre.chapeau} />
+        {espace && (
+          <Text style={{ ...styles.muted, margin: "6px 0 0" }}>
+            Ce numéro, les précédents, vos alertes et les archives de la lettre
+            gratuite sont aussi dans votre espace :{" "}
+            <Link href={espace} style={styles.link}>
+              ouvrir mon espace
+            </Link>
+            .
+          </Text>
+        )}
       </Section>
 
       <Hr style={styles.rule} />
@@ -230,6 +256,22 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
               <Text key={index} style={{ ...styles.muted, margin: "0 0 6px" }}>
                 {invariant}
               </Text>
+            ))}
+          </>
+        )}
+
+        {lettre.tendances.concurrence.length > 0 && (
+          <>
+            <Hr style={{ ...styles.rule, margin: "20px 0" }} />
+            <Text style={styles.label}>Vos concurrents</Text>
+            {lettre.tendances.concurrence.map((entree, index) => (
+              <Section key={index} style={{ margin: "0 0 14px" }}>
+                <Text style={{ ...styles.paragraph, color: COLORS.fg, margin: "0 0 2px" }}>
+                  {entree.concurrent}
+                </Text>
+                <Text style={{ ...styles.muted, margin: "0 0 4px" }}>{entree.mouvement}</Text>
+                <Text style={{ ...styles.paragraph, margin: 0 }}>{entree.pourVous}</Text>
+              </Section>
             ))}
           </>
         )}
@@ -399,6 +441,30 @@ export function NewsletterEmail({ lettre, siteUrl, issueDate, echantillon }: New
                 .
               </Text>
             )}
+          </Section>
+        </>
+      )}
+
+      {espace && (
+        <>
+          <Hr style={styles.rule} />
+          <Section style={styles.section}>
+            <Text style={styles.label}>Votre espace Sentinelle</Text>
+            <Section style={styles.panel}>
+              <Text style={{ ...styles.paragraph, color: COLORS.fg }}>
+                Tout ce que Sentinelle sait de votre site, au même endroit : vos
+                numéros et vos alertes, votre fiche technique (à compléter pour
+                que la surveillance devienne exacte) et les archives de la
+                lettre gratuite sur le web et l&apos;IA.
+              </Text>
+              <Link href={espace} style={styles.button}>
+                Ouvrir mon espace
+              </Link>
+              <Text style={{ ...styles.footer, margin: "16px 0 0" }}>
+                Pas de mot de passe : saisissez votre adresse, un lien de
+                connexion vous arrive.
+              </Text>
+            </Section>
           </Section>
         </>
       )}

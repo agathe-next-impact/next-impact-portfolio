@@ -72,13 +72,13 @@ interface TitledItem {
 }
 
 /**
- * Bloc « En bref » (TL;DR) : résumé autoportant, cible de citation pour les
+ * Cartouche « L'essentiel » (TL;DR, ADR-024) : résumé autoportant, cible de citation pour les
  * moteurs de réponse (GEO). Chaque ligne doit pouvoir être citée seule. Reprend
  * la définition en une phrase de la synthèse d'offre (§1), découpée en unités
  * citables et débarrassée des tirets cadratins.
  */
 export const CTO_TLDR: { label: Bilingual; lines: { fr: string; en: string }[] } = {
-  label: { fr: "En bref", en: "In short" },
+  label: { fr: "L'essentiel", en: "Key points" },
   lines: [
     {
       fr: "L'expert technique externalisé est une direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé.",
@@ -606,11 +606,11 @@ export const CTO_FAQ: CtoFaqItem[] = [
   {
     fr: {
       q: "Je préfère un avis ponctuel. C'est possible ?",
-      a: "Oui, et c'est souvent le bon point de départ. La visio conseil refonte (150 € HT) tranche une direction en une heure, avec un avis écrit sous 48 h. L'audit + roadmap (650 € HT) documente l'existant et remet une feuille de route. L'accompagnement récurrent n'a de sens que si les décisions reviennent tous les mois.",
+      a: "Oui, et c'est souvent le bon point de départ. L'échange de 15 minutes, gratuit, pose la situation. L'audit + roadmap (650 € HT) documente l'existant et remet une feuille de route. L'accompagnement récurrent n'a de sens que si les décisions reviennent tous les mois.",
     },
     en: {
       q: "I would rather have a one-off opinion. Is that possible?",
-      a: "Yes, and it is often the right starting point. The redesign advisory call (€150 excl. VAT) settles a direction in one hour, with a written opinion within 48h. The audit + roadmap (€650 excl. VAT) documents what exists and delivers a plan. The recurring retainer only makes sense if decisions come up every month.",
+      a: "Yes, and it is often the right starting point. The 15-minute call, free, lays out the situation. The audit + roadmap (€650 excl. VAT) documents what exists and delivers a plan. The recurring retainer only makes sense if decisions come up every month.",
     },
   },
 ];

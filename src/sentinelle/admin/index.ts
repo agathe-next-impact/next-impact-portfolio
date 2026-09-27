@@ -46,6 +46,7 @@ export {
 
 export {
   getDigestDetail,
+  letterEspaceUrl,
   listDigests,
   parseLettreDraft,
   requestDigestRebuild,

@@ -47,7 +47,12 @@ export function HeroOfferStrip({
           {label}
         </p>
       )}
-      <ul className="mt-3 grid gap-px border border-dark-gray bg-dark-gray sm:grid-cols-3">
+      <ul
+        className={
+          "mt-3 grid gap-px border border-dark-gray bg-dark-gray " +
+          (offers.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3")
+        }
+      >
         {offers.map((offer) => {
           const isAnchor = offer.href.startsWith("#");
           const cardClass =

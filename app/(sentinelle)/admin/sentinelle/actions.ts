@@ -9,6 +9,11 @@ import {
   sendDigest,
   validateDigest,
 } from "@sentinelle/admin";
+import {
+  activateSubscriptionRequest,
+  deactivateClient,
+  dismissSubscriptionRequest,
+} from "@sentinelle/inscriptions";
 import { requireSession } from "../session";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -109,4 +114,39 @@ export async function refabriquerNumero(formData: FormData): Promise<void> {
     resultat,
     "Refabrication lancée. Comptez quelques minutes, puis rechargez la page.",
   );
+}
+
+// ─── Inscriptions et résiliation (2026-09-27) ────────────────────────────────
+//
+// Plus de paiement en ligne : l'abonnement commence par une demande (opt-in)
+// que l'admin active, et se termine par une résiliation faite ici.
+
+/** Active une demande : fiche créée, puis analyse, espace et bienvenue en fond. */
+export async function activerInscription(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const resultat = await activateSubscriptionRequest(String(formData.get("requestId")));
+  retour(
+    "/admin/sentinelle/inscriptions",
+    resultat,
+    resultat.ok
+      ? `Inscription activée pour ${resultat.value.email} : analyse et e-mail de bienvenue en cours.`
+      : "",
+  );
+}
+
+export async function ecarterInscription(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const resultat = await dismissSubscriptionRequest(String(formData.get("requestId")));
+  retour("/admin/sentinelle/inscriptions", resultat, "Demande écartée.");
+}
+
+/** Résilie une fiche : plus aucun envoi, effacement à l'échéance de rétention. */
+export async function resilierClient(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const clientId = String(formData.get("clientId"));
+  const resultat = await deactivateClient(clientId);
+  retour(`/admin/sentinelle/clients/${clientId}`, resultat, "Abonnement résilié.");
 }

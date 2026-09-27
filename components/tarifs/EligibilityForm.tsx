@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import { MeterBar } from "@/components/visuals/charts";
 import type { Locale } from "@/i18n/routing";
+import { trajectoirePriceHT } from "@/lib/trajectoires";
 
 const CALENDAR_LINK = "https://calendar.app.google/RwZqaabSR5aDMnk46";
 
@@ -121,7 +122,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   mobileApp: {
     fr: {
       title: "Application mobile (Voie D)",
-      amount: "Sur devis",
+      amount: trajectoirePriceHT("forfait-webapp", "fr"),
       message:
         "Votre projet appelle une application mobile PWA : Next.js + service worker, installable sur smartphone sans passer par les stores, fonctionnement hors-ligne et géolocalisation native si besoin.",
       highlight:
@@ -129,7 +130,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
     },
     en: {
       title: "Mobile application (Path D)",
-      amount: "On quote",
+      amount: trajectoirePriceHT("forfait-webapp", "en"),
       message:
         "Your project calls for a mobile PWA: Next.js + service worker, installable on smartphones without going through app stores, with offline operation and native geolocation if needed.",
       highlight:
@@ -139,7 +140,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   webApp: {
     fr: {
       title: "Plateforme sur-mesure (Voie C)",
-      amount: "Sur devis",
+      amount: trajectoirePriceHT("forfait-webapp", "fr"),
       message:
         "Votre projet appelle une web app sur-mesure : Next.js + base PostgreSQL serverless, comptes utilisateurs, logique métier propre et admin autonome conçu pour votre activité.",
       highlight:
@@ -147,7 +148,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
     },
     en: {
       title: "Custom platform (Path C)",
-      amount: "On quote",
+      amount: trajectoirePriceHT("forfait-webapp", "en"),
       message:
         "Your project calls for a custom web app: Next.js + serverless PostgreSQL database, user accounts, dedicated business logic and an autonomous admin built for your activity.",
       highlight:
@@ -157,7 +158,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   headless: {
     fr: {
       title: "Headless — Site Headless (Voie B)",
-      amount: "À partir de 4 000 €",
+      amount: trajectoirePriceHT("forfait-headless", "fr"),
       message:
         "Votre projet a tout intérêt à passer en WordPress Headless + Next.js : performance front maximale, hydratation partielle, Core Web Vitals au vert et SEO préservé.",
       highlight:
@@ -165,7 +166,7 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
     },
     en: {
       title: "Headless — Headless site (Path B)",
-      amount: "From €4,000",
+      amount: trajectoirePriceHT("forfait-headless", "en"),
       message:
         "Your project will benefit from Headless WordPress + Next.js: maximum front-end performance, partial hydration, green Core Web Vitals and preserved SEO.",
       highlight:
@@ -175,14 +176,14 @@ const RESULTS: Record<"mobileApp" | "webApp" | "headless" | "wpClassic", Record<
   wpClassic: {
     fr: {
       title: "Classique — WordPress (Voie A)",
-      amount: "À partir de 2 250 €",
+      amount: trajectoirePriceHT("forfait-classique", "fr"),
       message:
         "Un WordPress classique optimisé suffit largement à votre projet : thème custom moderne, sécurité durcie, mise en ligne rapide. Coût maîtrisé, autonomie totale via l'admin WordPress.",
       highlight: "Vous gardez l'admin que vous connaissez, je modernise tout le reste.",
     },
     en: {
       title: "Classic — WordPress (Path A)",
-      amount: "From €2,250",
+      amount: trajectoirePriceHT("forfait-classique", "en"),
       message:
         "An optimized classic WordPress is enough for your project: modern custom theme, hardened security, quick to ship. Controlled cost, full autonomy via the WordPress admin.",
       highlight: "You keep the admin you know, I modernize everything else.",

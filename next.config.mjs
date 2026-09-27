@@ -67,11 +67,9 @@ const nextConfig = {
     ])
 
     return [
-      {
-        source: '/tarifs',
-        destination: '/solutions-web',
-        permanent: true,
-      },
+      // /tarifs redevient une page (charte v1.4, ADR-012) : le récapitulatif de
+      // toutes les offres et de leurs paliers, par moment. Seul l'ancien sous-
+      // chemin /tarifs/eligibilite reste redirigé.
       {
         source: '/tarifs/eligibilite',
         destination: '/solutions-web/eligibilite',
@@ -134,29 +132,32 @@ const nextConfig = {
         permanent: true,
       },
       // Retrait du sas d'audit automatique (outil déjà mocké, lib/audit/runAudit) :
-      // /audit-site-web et son alias historique /audit-site-ia redirigent
-      // désormais directement vers la prise de RDV Calendly. S'applique à tout
-      // le trafic, y compris les CTA internes du site qui pointaient vers cette
-      // page (footer, header, home, études de cas, doc…) — décision 2026-09-10.
+      // /audit-site-web et son alias historique /audit-site-ia redirigeaient
+      // vers la prise de RDV Calendly (décision 2026-09-10). Depuis l'ADR-012
+      // (2026-09-27), ils redirigent vers l'analyse du site (/scan), le CTA
+      // froid unique du site : tous les CTA internes qui pointent encore vers
+      // /audit-site-web (footer, études de cas, doc…) retrouvent un diagnostic
+      // gratuit au lieu d'une demande de rendez-vous. /scan est en français
+      // seulement : la variante /en y mène aussi.
       {
         source: '/audit-site-web',
-        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
-        permanent: true,
+        destination: '/scan',
+        permanent: false,
       },
       {
         source: '/en/audit-site-web',
-        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
-        permanent: true,
+        destination: '/scan',
+        permanent: false,
       },
       {
         source: '/audit-site-ia',
-        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
-        permanent: true,
+        destination: '/scan',
+        permanent: false,
       },
       {
         source: '/en/audit-site-ia',
-        destination: 'https://calendly.com/agathe-next-impact/prise-de-contact-conseil',
-        permanent: true,
+        destination: '/scan',
+        permanent: false,
       },
       // ── Élagage vague 5 : consolidation du stock WordPress headless ──
       // 25 articles doc → 15 ; les 10 slugs fusionnés redirigent vers leur

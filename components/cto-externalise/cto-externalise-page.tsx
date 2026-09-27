@@ -2,7 +2,8 @@
 
 // Page « Expert technique externalisé » — offre récurrente de direction technique à temps
 // partagé. Ordre de conviction de la charte (§5) : douleur, promesse, rôle
-// expliqué, paliers, livrables, périmètre, bannière « Commencer », FAQ.
+// expliqué, paliers, livrables, périmètre, bannière « Commencer »,
+// « L'essentiel » (TL;DR, ADR-024), FAQ.
 // Tout le texte vient de lib/cto-externalise.ts (source unique) ; seul l'habillage vit ici.
 // Tokens DS Blueprint uniquement, i18n inline, a11y.
 
@@ -10,7 +11,9 @@ import { useLocale } from "next-intl";
 import { ArrowRight, Check, Plus } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
+import { EnBref } from "@/components/en-bref";
 import {
   PageHero,
   HERO_BTN_PRIMARY,
@@ -72,9 +75,18 @@ export default function CtoExternalisePage() {
         }
         actions={
           <>
-            <Link href={CTO_CONTACT_HREF} className={"group " + HERO_BTN_PRIMARY}>
-              {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+            <a
+              href={CTA_ECHANGE.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={"group " + HERO_BTN_PRIMARY}
+            >
+              {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            </a>
+            <Link href={CTO_CONTACT_HREF} className={HERO_BTN_SECONDARY}>
+              {isEn ? "Set up a retainer" : "Cadrer un accompagnement"}
             </Link>
             <a href="#paliers" className={HERO_BTN_SECONDARY}>
               {isEn ? "See the two tiers" : "Voir les deux paliers"}
@@ -87,31 +99,6 @@ export default function CtoExternalisePage() {
             : `${price.amount} ${price.period} · Réponse sous 48 h · Interlocutrice unique`
         }
       />
-
-      {/* § 01b — « En bref » : TL;DR autoportant, citable tel quel par les
-          moteurs de réponse (même gabarit que la home et /a-propos). Le texte
-          vient de CTO_TLDR : rendu visible et fichiers llms disent la même chose. */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
-        <Reveal
-          as="aside"
-          className="cto-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8"
-        >
-          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
-            {CTO_TLDR.label[lang]}
-          </p>
-          <ul className="flex flex-col gap-2">
-            {CTO_TLDR.lines.map((line) => (
-              <li
-                key={line.fr}
-                className="font-inter-tight text-base leading-relaxed text-mid-gray"
-              >
-                {line[lang]}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      </BlueprintSection>
-      <Separator />
 
       {/* § 02 — Ce qu'est un expert technique externalisé, montré par le COMMENT : le mois
           type en timeline, une étape par rythme. Arbitrage : la section ne
@@ -394,6 +381,16 @@ export default function CtoExternalisePage() {
           </div>
         </Reveal>
       </BlueprintSection>
+      <Separator />
+
+      {/* § 05b — « L'essentiel » : TL;DR autoportant, citable tel quel par les
+          moteurs de réponse, juste avant la FAQ (ADR-024). Le texte vient de
+          CTO_TLDR ; son prix et celui des fichiers llms sont lus aux mêmes constantes. */}
+      <EnBref
+        className="cto-tldr"
+        label={CTO_TLDR.label[lang]}
+        lines={CTO_TLDR.lines.map((line) => line[lang])}
+      />
       <Separator />
 
       {/* § 06 — FAQ. Le schéma FAQPage est porté par la route (page.tsx). */}

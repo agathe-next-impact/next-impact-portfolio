@@ -46,6 +46,11 @@ export const RETENTION = {
   cancellation: { months: 3 },
   /** Après résiliation : textes d'alertes et de numéros (preuve de prestation). */
   cancellationTexts: { months: 12 },
+  /**
+   * Demande d'inscription traitée (activée ou écartée) : la fiche client, s'il
+   * y en a une, a pris le relais ; la demande n'a plus d'usage.
+   */
+  decidedRequest: { days: 30 },
   /** Payload source d'un fait de veille — aucune donnée personnelle. */
   intelRaw: { months: 24 },
 } as const satisfies Record<string, Duration>;

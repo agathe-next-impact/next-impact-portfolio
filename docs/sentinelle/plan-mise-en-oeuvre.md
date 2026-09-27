@@ -1346,6 +1346,48 @@ les budgets réduits devraient raccourcir d'eux-mêmes l'échantillon.
 
 ---
 
+### Post-plan — e-mail pour l'abonné seul, espace pour tous (2026-09-27)
+
+Décision : ADR-025 de `docs/decisions.md`. La colonne `plan` reçoit sa
+deuxième valeur, `accompagnement` (migration 0005, un `ALTER TYPE`). Seuls les
+clients en formule `veille` reçoivent des e-mails (lettres, alertes, liens de
+connexion) ; la règle vit dans `emails/send.ts` (`planMailReason`) et chaque
+envoi la vérifie côté serveur. Le provisionnement passe les fiches qu'il crée
+ou adopte en `accompagnement`. La lettre d'un abonné seul renvoie deux fois
+vers `/espace` (lien figé dans le HTML à la validation), et l'espace affiche
+les archives de la lettre gratuite lues sur Substack.
+
+**À faire au déploiement** : `npm run db:migrate` avant la mise en ligne du
+code, sinon les lectures de `clients.plan` échouent sur la nouvelle valeur.
+Les fiches déjà provisionnées restent en `veille` jusqu'au prochain passage de
+la synchro de l'espace d'accompagnement, qui ne rappelle Sentinelle que si la
+fiche Notion a changé : les basculer une fois à la main
+(`update clients set plan = 'accompagnement' where id in (...)`).
+
+### Post-plan — fin de l'abonnement en ligne (2026-09-27)
+
+Décision : ADR-026 de `docs/decisions.md`. Stripe est retiré (module
+`billing/`, webhook, `/espace/bienvenue`, portail, dépendance npm). Nouveau
+module `inscriptions/` : table `subscription_requests` (migration 0006),
+route publique `POST /api/sentinelle/inscription` (page `/sentinelle`),
+`PATCH /api/sentinelle/scan/[id]` pour le rapport (remplace `prospects/`),
+page admin `/admin/sentinelle/inscriptions` (activer, écarter) et bouton
+« Résilier » sur la fiche client. L'activation émet `client.subscribed` avec
+bienvenue ; la purge efface les demandes traitées à 30 jours.
+
+**À faire au déploiement** : `npm run db:migrate` (migrations 0005 et 0006)
+avant la mise en ligne ; retirer les variables `STRIPE_*` de Vercel ; désactiver
+le Payment Link et le webhook dans le tableau de bord Stripe ; résilier dans
+Stripe les éventuels abonnements en cours et les facturer désormais à part.
+
+### Post-plan — les concurrents entrent dans la lettre (2026-09-27)
+
+Décision : ADR-027. `Dossier.concurrents` et `Lettre.tendances.concurrence`
+(tous deux `default([])` côté zod, pour relire les numéros déjà conservés),
+étape 3 du prompt de collecte, bloc « Vos concurrents » du prompt de
+rédaction, du gabarit e-mail et de l'export. `FETCH_BUDGET` passe de 8 à 12 :
+coût de collecte en légère hausse, à surveiller sur les premiers numéros.
+
 ## 11. Séquence de la suite (arrêtée le 2026-08-15)
 
 Trois principes de séquencement, qui expliquent l'ordre choisi :
