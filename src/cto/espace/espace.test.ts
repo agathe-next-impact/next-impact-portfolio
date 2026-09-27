@@ -8,7 +8,8 @@ import {
   hasPersonalisedWatch,
   LEGACY_SLUGS,
   SECTIONS,
-  sectionsEnSommeil,
+  sectionsSansInformation,
+  type Informations,
   visibleGroups,
   visibleSections,
   type Contents,
@@ -27,103 +28,54 @@ const EMPTY: Contents = {
 const keys = (list: { key: string }[]) => list.map((s) => s.key);
 
 describe("sections visibles", () => {
-  it("ouvre la veille technique par son service, ou par un client relié en régime historique", () => {
-    expect(keys(visibleSections([], EMPTY))).not.toContain("veille-technique");
-    expect(keys(visibleSections([], { ...EMPTY, sentinelle: true }))).not.toContain("veille-technique");
-    expect(keys(visibleSections(["veille-technique"], EMPTY))).toContain("veille-technique");
-    expect(keys(visibleSections(null, { ...EMPTY, sentinelle: true }))).toContain("veille-technique");
-    expect(keys(visibleSections(null, EMPTY))).not.toContain("veille-technique");
+  // Ouvertes à tout client depuis le 2026-09-27 : chaque client a un espace, le
+  // suivi des missions et prestations ne demande pas la direction technique, et
+  // la veille (technique comprise) est offerte à l'ouverture. Vides, elles
+  // sortent de la navigation (`sectionsSansInformation`), pas de la carte.
+  const POUR_TOUS = ["tableau", "missions", "agir", "veille", "veille-technique", "prestations", "accompagnement"];
+  const avec = (...ajouts: string[]) => {
+    const ordre = SECTIONS.map((section) => section.key as string);
+    return [...POUR_TOUS, ...ajouts].sort((a, b) => ordre.indexOf(a) - ordre.indexOf(b));
+  };
+
+  it("ouvre à tout client la vue d'ensemble, les missions en cours, la veille technique et l'accompagnement", () => {
+    expect(keys(visibleSections([], EMPTY))).toEqual(POUR_TOUS);
+    expect(keys(visibleSections(null, EMPTY))).toEqual(POUR_TOUS);
   });
 
-  it("montre toujours l'accueil, les actions et la veille, même sans aucun service", () => {
-    expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "agir", "veille"]);
+  it("ouvre en plus les entrées d'un service coché, même vides", () => {
+    expect(keys(visibleSections(["suivi-technique"], EMPTY))).toEqual(avec("site"));
   });
 
-  it("ouvre les entrées d'un service coché, même vides (état « en préparation »)", () => {
-    expect(keys(visibleSections(["suivi-technique"], EMPTY))).toEqual([
-      "tableau",
-      "site",
-      "agir",
-      "veille",
-      "accompagnement",
-    ]);
-  });
-
-  it("range la direction technique dans Pilotage (roadmap et documents compris), Votre site, Agir et Veille", () => {
-    expect(keys(visibleSections(["direction-technique"], EMPTY))).toEqual([
-      "tableau",
-      "missions",
-      "roadmap",
-      "decisions",
-      "documents",
-      "cartographie",
-      "agir",
-      "veille",
-      "accompagnement",
-    ]);
+  it("range la direction technique dans Pilotage (roadmap et documents compris) et Votre site", () => {
+    expect(keys(visibleSections(["direction-technique"], EMPTY))).toEqual(
+      avec("roadmap", "decisions", "documents", "cartographie"),
+    );
   });
 
   it("ferme une entrée non cochée même si elle a du contenu", () => {
-    expect(keys(visibleSections(["actions"], { ...EMPTY, decisions: 4 }))).toEqual([
-      "tableau",
-      "missions",
-      "roadmap",
-      "agir",
-      "veille",
-      "accompagnement",
-    ]);
+    expect(keys(visibleSections(["actions"], { ...EMPTY, decisions: 4 }))).toEqual(avec("roadmap"));
   });
 
   it("garde l'affichage historique quand la colonne n'a jamais été renseignée", () => {
-    expect(keys(visibleSections(null, { ...EMPTY, decisions: 2, roadmap: 3 }))).toEqual([
-      "tableau",
-      "missions",
-      "roadmap",
-      "decisions",
-      "agir",
-      "veille",
-      "accompagnement",
-    ]);
+    expect(keys(visibleSections(null, { ...EMPTY, decisions: 2, roadmap: 3 }))).toEqual(avec("roadmap", "decisions"));
   });
 
-  it("ouvre l'audit dans Missions pour un client audit seul", () => {
-    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "agir", "veille", "accompagnement"]);
+  it("ouvre l'audit pour un client audit seul", () => {
+    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(avec("audit"));
   });
 
-  it("montre « Votre accompagnement » dès qu'un service est souscrit, jamais à un prospect", () => {
-    expect(keys(visibleSections(["veille-personnalisee"], EMPTY))).toContain("accompagnement");
-    expect(keys(visibleSections(null, EMPTY))).toContain("accompagnement");
-    expect(keys(visibleSections([], { ...EMPTY, propositions: 1 }))).not.toContain("accompagnement");
-  });
-
-  it("montre les propositions dès qu'il y en a une, même sans aucun service", () => {
-    expect(keys(visibleSections([], { ...EMPTY, propositions: 1 }))).toEqual([
-      "tableau",
-      "agir",
-      "veille",
-      "propositions",
-    ]);
+  it("montre les propositions dès qu'il y en a une, avant les missions en cours", () => {
+    const vues = keys(visibleSections([], { ...EMPTY, propositions: 1 }));
+    expect(vues).toEqual(avec("propositions"));
+    expect(vues.slice(-3)).toEqual(["propositions", "prestations", "accompagnement"]);
     expect(keys(visibleSections(null, EMPTY))).not.toContain("propositions");
   });
 
-  it("range propositions puis missions en cours dans Contrats, en dernier", () => {
-    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual([
-      "tableau",
-      "agir",
-      "veille",
-      "prestations",
-      "accompagnement",
-    ]);
-    expect(keys(visibleSections(["prestations"], { ...EMPTY, propositions: 2 })).slice(-3)).toEqual([
-      "propositions",
-      "prestations",
-      "accompagnement",
-    ]);
-    expect(SECTIONS.find((s) => s.key === "prestations")?.group).toBe("contrats");
-    expect(SECTIONS.find((s) => s.key === "propositions")?.group).toBe("contrats");
-    // Des tarifs ne s'ouvrent jamais au contenu, régime historique compris.
-    expect(keys(visibleSections(null, EMPTY))).not.toContain("prestations");
-    expect(keys(visibleSections(["direction-technique"], EMPTY))).not.toContain("prestations");
+  it("range propositions, missions en cours et accompagnement dans Contrats", () => {
+    for (const key of ["propositions", "prestations", "accompagnement"]) {
+      expect(SECTIONS.find((s) => s.key === key)?.group).toBe("contrats");
+    }
     expect(LEGACY_SLUGS.prestations).toBeUndefined();
   });
 
@@ -157,7 +109,7 @@ describe("groupes et synthèses", () => {
   it("n'ouvre une synthèse qu'aux groupes de deux entrées ou plus", () => {
     const groupes = visibleGroups(visibleSections(["direction-technique", "veille-technique"], EMPTY));
     const synthese = Object.fromEntries(groupes.map((g) => [g.group, g.synthese]));
-    expect(synthese).toEqual({ missions: true, site: false, agir: false, veille: true, contrats: false });
+    expect(synthese).toEqual({ missions: true, site: false, agir: false, veille: true, contrats: true });
   });
 
   it("donne des adresses de synthèse uniques, relues par groupFromSlug", () => {
@@ -259,31 +211,57 @@ describe("calendrier", () => {
   });
 });
 
-describe("sections en sommeil", () => {
-  const maintenant = new Date("2026-09-27T08:00:00Z");
-  const sections = visibleSections(["direction-technique", "audit"], EMPTY);
-  const ilYa = (jours: number) => new Date(maintenant.getTime() - jours * 86_400_000).toISOString();
+describe("sections sans information", () => {
+  const RIEN: Informations = {
+    roadmap: 0,
+    decisions: 0,
+    audits: 0,
+    documents: 0,
+    cartographie: 0,
+    missions: 0,
+    actions: 0,
+    veille: 0,
+    prestations: 0,
+    releveSite: false,
+    releveSentinelle: false,
+  };
+  const sections = visibleSections(
+    ["direction-technique", "audit", "suivi-technique", "veille-technique", "prestations"],
+    EMPTY,
+  );
 
-  it("retire de la navigation une section cochée, vide depuis plus d'une semaine", () => {
-    const sommeil = sectionsEnSommeil(sections, EMPTY, { "direction-technique": ilYa(10), audit: ilYa(10) }, maintenant);
-    expect([...sommeil]).toEqual(expect.arrayContaining(["decisions", "documents", "cartographie", "audit"]));
-    expect(sommeil.has("agir")).toBe(false);
-    expect(sommeil.has("veille")).toBe(false);
-    expect(sommeil.has("accompagnement")).toBe(false);
+  it("retire toute section vide, sans délai, y compris Actions, Veille et Missions en cours", () => {
+    const vides = sectionsSansInformation(sections, RIEN);
+    expect([...vides]).toEqual(
+      expect.arrayContaining([
+        "missions",
+        "roadmap",
+        "decisions",
+        "audit",
+        "documents",
+        "site",
+        "cartographie",
+        "agir",
+        "veille",
+        "veille-technique",
+        "prestations",
+      ]),
+    );
+    expect(vides.has("tableau")).toBe(false);
   });
 
-  it("laisse sa semaine de grâce à une section tout juste ouverte", () => {
-    expect(sectionsEnSommeil(sections, EMPTY, { "direction-technique": ilYa(3), audit: ilYa(3) }, maintenant).size).toBe(0);
+  it("garde une section dès son premier contenu", () => {
+    const vides = sectionsSansInformation(sections, { ...RIEN, decisions: 1, missions: 1, veille: 2, releveSite: true });
+    expect(vides.has("decisions")).toBe(false);
+    expect(vides.has("missions")).toBe(false);
+    expect(vides.has("veille")).toBe(false);
+    expect(vides.has("site")).toBe(false);
+    expect(vides.has("documents")).toBe(true);
   });
 
-  it("réveille une section dès son premier contenu", () => {
-    const sommeil = sectionsEnSommeil(sections, { ...EMPTY, decisions: 1 }, { "direction-technique": ilYa(30) }, maintenant);
-    expect(sommeil.has("decisions")).toBe(false);
-    expect(sommeil.has("missions")).toBe(false);
-    expect(sommeil.has("documents")).toBe(true);
-  });
-
-  it("ne met rien en sommeil sans date d'ouverture connue", () => {
-    expect(sectionsEnSommeil(sections, EMPTY, {}, maintenant).size).toBe(0);
+  it("ne juge un site ou une veille technique que sur un relevé réel", () => {
+    const vides = sectionsSansInformation(sections, RIEN);
+    expect(vides.has("site")).toBe(true);
+    expect(vides.has("veille-technique")).toBe(true);
   });
 });

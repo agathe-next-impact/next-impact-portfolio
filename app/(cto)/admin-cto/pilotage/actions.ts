@@ -75,7 +75,8 @@ export async function synchroniser(_prev: RapportState, formData: FormData): Pro
 
   const dryRun = formData.get("mode") === "a-blanc";
   try {
-    const report = await syncFromNotion({ dryRun });
+    // Geste délibéré : un livrable changé de client suit sa fiche (le Cron, non).
+    const report = await syncFromNotion({ dryRun, reassign: true });
     // Au journal, sans e-mail : le rapport est sous les yeux de qui a cliqué.
     await recordSyncRun({ source: "admin", report });
     revalidatePath("/admin-cto/pilotage", "layout");

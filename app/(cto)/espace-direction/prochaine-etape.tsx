@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prochaineEtape, sitePoints, suggestionsMasquees } from "@cto/espace";
+import { prochaineEtape, sitePoints, suggestionsMasquees, veilleOfferte } from "@cto/espace";
 import { sentinelleStateFor } from "@cto/sentinelle";
 import { masquerLaSuggestion } from "./actions";
 import { livrableHref } from "./pilotage";
@@ -39,6 +39,7 @@ export async function CarteProchaineEtape({ viewer, context }: { viewer: Viewer;
     services: profil.services,
     suggestionsCoupees: profil.suggestionsCoupees,
     suiviInclusJusquau: profil.suiviInclusJusquau,
+    veilleOfferteJusquau: veilleOfferte(profil.services ?? [], profil.ouverture, maintenant).jusquau,
     propositionsEnAttente: context.actions.aValider.flatMap((action) =>
       action.item ? [{ titre: action.title, chemin: livrableHref(action.item, context, viewer.base) }] : [],
     ),

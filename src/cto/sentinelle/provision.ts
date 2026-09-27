@@ -29,8 +29,14 @@ import { redirectError, sentinelleExportConfig } from "./api";
 export interface WatchWish {
   clientId: string;
   company: string;
-  /** Le service « Veille technique » est coché et l'accompagnement n'est pas clos. */
+  /**
+   * La veille technique est voulue : service « Veille technique » coché, ou
+   * veille offerte en cours (`espace/veille-offerte.ts`), et l'accompagnement
+   * n'est pas clos.
+   */
   wanted: boolean;
+  /** Vrai quand elle n'est voulue QUE parce qu'elle est offerte : le rapport le dit autrement. */
+  offerte?: boolean;
   site: string | null;
   contact: string | null;
 }
@@ -241,7 +247,9 @@ export async function provisionSentinelle(
     }
     if (decision.kind === "incomplete") {
       warnings.push(
-        `« ${wish.company} » : service « Veille technique » coché, mais ${decision.missing.join(" et ")} manque — Sentinelle non provisionnée.`,
+        wish.offerte
+          ? `« ${wish.company} » : veille technique offerte, mais ${decision.missing.join(" et ")} manque — à renseigner sur la fiche pour qu'elle démarre.`
+          : `« ${wish.company} » : service « Veille technique » coché, mais ${decision.missing.join(" et ")} manque — Sentinelle non provisionnée.`,
       );
       continue;
     }

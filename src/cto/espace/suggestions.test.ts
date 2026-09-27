@@ -8,6 +8,7 @@ const BASE: FaitsEspace = {
   services: ["direction-technique", "actions"],
   suggestionsCoupees: false,
   suiviInclusJusquau: null,
+  veilleOfferteJusquau: null,
   propositionsEnAttente: [],
   audits: 0,
   arbitrages: 0,
@@ -30,6 +31,20 @@ describe("prochaine étape", () => {
       masquees: { proposition: maintenant.toISOString() },
     };
     expect(id(f)).toBe("proposition");
+  });
+
+  it("annonce la fin de la veille offerte une semaine avant, et la rappelle un mois après", () => {
+    expect(id({ veilleOfferteJusquau: new Date("2026-10-02T00:00:00Z") })).toBe("veille-offerte-2026-10-02");
+    expect(id({ veilleOfferteJusquau: new Date("2026-09-10T00:00:00Z") })).toBe("veille-offerte-2026-09-10");
+    expect(id({ veilleOfferteJusquau: new Date("2026-10-20T00:00:00Z") })).toBeNull();
+    expect(id({ veilleOfferteJusquau: new Date("2026-08-01T00:00:00Z") })).toBeNull();
+    // Une proposition en attente passe toujours avant.
+    expect(
+      id({
+        veilleOfferteJusquau: new Date("2026-10-02T00:00:00Z"),
+        propositionsEnAttente: [{ titre: "Refonte", chemin: "/espace-direction/propositions/x" }],
+      }),
+    ).toBe("proposition");
   });
 
   it("annonce la fin des mois de suivi inclus trente jours avant, pas plus tôt, pas après", () => {

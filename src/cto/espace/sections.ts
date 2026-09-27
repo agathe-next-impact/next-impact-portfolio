@@ -77,12 +77,6 @@ export interface Section {
    * souscrit ; une entrée vide « Propositions » n'aurait, elle, rien à dire.
    */
   siContenu?: true;
-  /**
-   * Visible dès que l'accompagnement a souscrit quelque chose (un service
-   * coché, ou le régime historique). Un prospect qui n'a qu'une proposition
-   * n'a pas encore d'accompagnement à décrire.
-   */
-  siSouscrit?: true;
 }
 
 /** Dans l'ordre de la navigation. */
@@ -98,7 +92,10 @@ export const SECTIONS: readonly Section[] = [
     slug: "missions",
     label: "Vue d'ensemble",
     group: "missions",
-    services: ["actions", "direction-technique", "audit"],
+    // Le suivi des missions et des prestations est ouvert à tout client, sans
+    // direction technique (décision du 2026-09-27). Vide, l'entrée sort de la
+    // navigation d'elle-même (`sectionsSansInformation`).
+    services: null,
   },
   { key: "roadmap", slug: "roadmap", label: "Roadmap", group: "missions", services: ["actions", "direction-technique"] },
   { key: "decisions", slug: "decisions", label: "Décisions", group: "missions", services: ["direction-technique"] },
@@ -113,16 +110,16 @@ export const SECTIONS: readonly Section[] = [
   { key: "agir", slug: "agir", label: "Actions", group: "agir", services: null },
 
   { key: "veille", slug: "veille", label: "Lettres et alertes", group: "veille", services: null },
-  // Le service « Veille technique » de la fiche Notion l'ouvre, et c'est le même
-  // service qui fait créer le client Sentinelle (`src/cto/sentinelle/provision.ts`).
-  // Régime historique (colonne Services vide) : ouverte dès qu'un client
-  // Sentinelle est relié.
+  // La veille technique est offerte à l'ouverture de l'espace, à tout client
+  // (`veille-offerte.ts`) : l'entrée ne dépend plus d'un service coché. Tant
+  // qu'aucun relevé Sentinelle n'existe, elle reste hors de la navigation ;
+  // après la fin de la veille offerte, ce qui a été reçu reste lisible.
   {
     key: "veille-technique",
     slug: "veille-technique",
     label: "Veille technique",
     group: "veille",
-    services: ["veille-technique"],
+    services: null,
   },
 
   // Contrats : le commercial, séparé du pilotage. Ce qui attend votre accord
@@ -135,7 +132,9 @@ export const SECTIONS: readonly Section[] = [
     slug: "prestations",
     label: "Missions en cours",
     group: "contrats",
-    services: ["prestations"],
+    // Ouverte à tout client qui a une prestation, sans service à cocher
+    // (décision du 2026-09-27) ; vide, elle sort de la navigation.
+    services: null,
   },
   // Ce que l'on a, ce que l'on pourrait avoir : la destination de toutes les
   // suggestions « Prochaine étape ». Sans montants (décision du 2026-09-27).
@@ -144,8 +143,8 @@ export const SECTIONS: readonly Section[] = [
     slug: "accompagnement",
     label: "Votre accompagnement",
     group: "contrats",
+    // Chaque client a un espace, et au moins la veille offerte à décrire.
     services: null,
-    siSouscrit: true,
   },
 ];
 
@@ -202,7 +201,6 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
 export function visibleSections(services: string[] | null, contents: Contents): Section[] {
   return SECTIONS.filter((section) => {
     if (section.siContenu) return hasContent(section.key, contents);
-    if (section.siSouscrit) return services === null || services.length > 0;
     if (section.services === null) return true;
     if (services === null) return hasContent(section.key, contents);
     return section.services.some((service) => services.includes(service));
@@ -306,63 +304,68 @@ export function arbitrageOuvert(sections: readonly Section[]): boolean {
   return sections.some((section) => section.key === "roadmap");
 }
 
-/** Une section cochée mais vide quitte la navigation après ce délai (décision du 2026-09-27). */
-export const SOMMEIL_JOURS = 7;
+/**
+ * Ce que l'espace mesure pour savoir si une entrée a quelque chose à montrer.
+ * Des comptes plutôt que des booléens : c'est ce que la page chargeait déjà.
+ */
+export interface Informations {
+  roadmap: number;
+  decisions: number;
+  audits: number;
+  documents: number;
+  cartographie: number;
+  /** Chantiers, décisions, audits et prestations suivis dans le pilotage. */
+  missions: number;
+  /** À traiter et à arbitrer (les propositions ont leur entrée). */
+  actions: number;
+  /** Lettres, digests et nouvelles de veille. */
+  veille: number;
+  /** Prestations signées, toutes étapes confondues. */
+  prestations: number;
+  /** Un relevé WP Umbrella existe (pas seulement un projet renseigné). */
+  releveSite: boolean;
+  /** Un export Sentinelle existe (pas seulement un client relié). */
+  releveSentinelle: boolean;
+}
 
-/** Vide, pour les sections dont l'espace sait mesurer le contenu. `null` : jamais mise en sommeil. */
-function vide(key: SectionKey, contents: Contents): boolean | null {
+/** Vrai si l'entrée n'a rien à montrer. Accueil, propositions et accompagnement ont toujours de quoi. */
+function sansInformation(key: SectionKey, infos: Informations): boolean {
   switch (key) {
     case "missions":
-      return contents.roadmap + contents.decisions + contents.audits === 0;
+      return infos.missions === 0;
     case "roadmap":
-      return contents.roadmap === 0;
+      return infos.roadmap === 0;
     case "decisions":
-      return contents.decisions === 0;
+      return infos.decisions === 0;
     case "audit":
-      return contents.audits === 0;
+      return infos.audits === 0;
     case "documents":
-      return contents.documents === 0;
+      return infos.documents === 0;
     case "cartographie":
-      return contents.cartographie === 0;
+      return infos.cartographie === 0;
     case "site":
-      return !contents.site;
+      return !infos.releveSite;
+    case "agir":
+      return infos.actions === 0;
+    case "veille":
+      return infos.veille === 0;
     case "veille-technique":
-      return contents.sentinelle !== true;
+      return !infos.releveSentinelle;
+    case "prestations":
+      return infos.prestations === 0;
     default:
-      // Accueil, Actions, Veille, Contrats : toujours utiles, ou déjà ouvertes
-      // au seul contenu. Les prestations : leur nombre n'est pas dans `Contents`.
-      return null;
+      return false;
   }
 }
 
 /**
- * Les sections « en sommeil » : ouvertes par un service coché, encore vides,
- * et ouvertes depuis plus de `SOMMEIL_JOURS`. Elles quittent la navigation —
- * une entrée qui ne mène qu'à « En préparation » est du bruit — mais restent
- * accessibles (elles figurent dans « Votre accompagnement »), et reviennent
- * d'elles-mêmes au premier contenu.
- *
- * La semaine se compte depuis l'OUVERTURE de la section (date où son service a
- * été vu coché, `servicesOuverts`), pas depuis aujourd'hui : un client tout
- * juste lancé garde ses sections le temps que le premier livrable arrive. Sans
- * date connue (régime historique), rien n'est mis en sommeil.
+ * Les sections sans information : ouvertes à l'accompagnement, mais qui ne
+ * mèneraient qu'à « En préparation » ou à une page vide. Elles quittent la
+ * barre latérale et les synthèses de groupe dès maintenant — un lien qui ne
+ * mène à rien est du bruit (décision du 2026-09-27, qui remplace la semaine
+ * de grâce). Elles restent accessibles depuis « Votre accompagnement », et
+ * reviennent d'elles-mêmes au premier contenu.
  */
-export function sectionsEnSommeil(
-  sections: readonly Section[],
-  contents: Contents,
-  ouverts: Record<string, string>,
-  maintenant: Date,
-): Set<SectionKey> {
-  const seuil = maintenant.getTime() - SOMMEIL_JOURS * 86_400_000;
-  const sommeil = new Set<SectionKey>();
-  for (const section of sections) {
-    if (!section.services || vide(section.key, contents) !== true) continue;
-    const dates = section.services
-      .map((code) => ouverts[code])
-      .filter((date): date is string => Boolean(date))
-      .map((date) => new Date(date).getTime());
-    if (dates.length === 0) continue;
-    if (Math.min(...dates) < seuil) sommeil.add(section.key);
-  }
-  return sommeil;
+export function sectionsSansInformation(sections: readonly Section[], infos: Informations): Set<SectionKey> {
+  return new Set(sections.filter((section) => sansInformation(section.key, infos)).map((section) => section.key));
 }

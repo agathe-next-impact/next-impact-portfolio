@@ -301,6 +301,7 @@ reviendront :
 | « colonne « X » absente (renommée en « Y » ?) » / « de type …, attendu … » | Le contrôle de schéma a écarté la base (ci-dessous). |
 | « l'adresse … figure sur N lignes » | Doublon dans Personnes : une ligne est retenue, les autres ignorées (§ 6). |
 | « désigne la fiche organisation de … » | Deux fiches Clients pour une organisation : la seconde est ignorée pour elle. |
+| « a changé de client dans Notion : laissé chez son accompagnement actuel » | Relation `Client` modifiée sur un livrable publié : le Cron ne le déplace pas (ci-dessous). |
 
 **Deux niveaux.** Le rapport marque « à traiter » (le `!` de la commande, le
 cadre rouge de l'écran) ce qui touche un accès ou un rattachement : accès
@@ -321,6 +322,15 @@ motif vide, et le client lisait « corrigé le… » sur chacune. Pour la base
 nouvelle dans `map.ts` demande de la déclarer dans `schema.ts` (un test le
 rappelle). Exception : `Affichage` est facultative — sans elle tout part en
 archive, et c'est le cas de la base Documents, qui ne l'a jamais eue.
+
+**Un livrable ne change pas de client en pleine nuit.** Modifier la relation
+`Client` d'une ligne déjà publiée la ferait passer d'un espace à l'autre ; par
+erreur, c'est le contenu de A ouvert à B. Le Cron ne l'applique donc pas : la
+ligne reste chez son accompagnement actuel et le point est « à traiter »
+(un e-mail, la première nuit). Le déplacement se fait depuis un balayage lancé
+à la main — `/admin-cto/pilotage` → Synchro Notion, ou `npm run cto:sync` —
+dont le rapport le dit (« passe à un autre accompagnement »). Si le changement
+était une erreur, rétablir la relation dans Notion suffit.
 
 **Qui garde quoi quand deux fiches se disputent.** Une organisation ou une
 ligne « Veille — organisation » ne se relie qu'à un accompagnement. En cas de
@@ -713,6 +723,33 @@ la forme de sa prestation. Le groupe de la roadmap, des décisions et de l'audit
 s'appelle désormais **Pilotage** (et non plus Missions) pour que le mot
 « mission » ne désigne qu'une chose.
 
+### Chaque client a un espace, la veille y est offerte
+
+Décision du 2026-09-27.
+
+- **Chaque fiche Clients ouvre un espace.** Vue d'ensemble, Missions en cours,
+  Veille technique et Votre accompagnement sont ouvertes à tout client, sans
+  service à cocher : le suivi des missions et des prestations ne demande pas
+  la direction technique. Une entrée vide reste hors de la navigation.
+- **La veille est offerte à l'ouverture de l'espace** : personnalisée (Signaux
+  Faibles) et technique (Sentinelle). Pour un client **récurrent** (Direction
+  technique, Actions en cours, Suivi technique, ou une veille cochée), elle ne
+  s'arrête pas. Pour un client **ponctuel** (audit seul, prestation seule,
+  rien encore), elle dure **un mois** à compter de la création de
+  l'accompagnement (`src/cto/espace/veille-offerte.ts`, testé).
+- **Pendant la veille offerte**, la synchro met en place Sentinelle comme si
+  le service était coché — à condition que « Site surveillé » et « Contact
+  veille » soient renseignés (le rapport le signale sinon).
+- **À la fin du mois** : Sentinelle est désactivée ; les éditions Signaux
+  Faibles datées après la fin ne deviennent plus des lettres ; celles déjà
+  reçues restent lisibles. Le rapport de synchro rappelle d'**arrêter la
+  production dans le pipeline** (fiche organisation), **sans délier** la
+  « Veille — organisation » : délier retirerait les lettres déjà reçues. La
+  carte « Prochaine étape » propose de continuer la veille (une semaine avant,
+  jusqu'à un mois après).
+- **L'espace reste ouvert** après la fin de la veille : seul l'état « clos »
+  de la fiche le ferme.
+
 ### Votre accompagnement, Prochaine étape, sections en sommeil
 
 Trois mécanismes pour inciter à l'étape suivante, **sans jamais afficher de
@@ -741,10 +778,13 @@ accompagnement suspendu, en restitution ou clos (la démo est suspendue). Les
 clics « En parler » et les masquages sont journalisés (journal de l'admin, pas
 celui des appareils du client).
 
-**Sections en sommeil** : une section cochée mais vide sort de la barre
-latérale **une semaine** après son ouverture (date où son service a été vu
-coché), et revient au premier contenu. Sa page reste ouverte et listée dans
-« Votre accompagnement ».
+**Sections sans information** (règle du 2026-09-27, remplace la semaine de
+grâce) : une section qui n'a rien à montrer sort **tout de suite** de la barre
+latérale et de la synthèse de son groupe, et revient au premier contenu. Cela
+vaut aussi pour Actions (rien à traiter ni à arbitrer), Veille (ni lettre, ni
+digest, ni nouvelle), Missions en cours (aucune prestation), l'état du site
+(aucun relevé WP Umbrella) et la veille technique (aucun export Sentinelle).
+Sa page reste ouverte et listée dans « Votre accompagnement ».
 
 **Colonnes de la fiche Clients**, toutes facultatives :
 

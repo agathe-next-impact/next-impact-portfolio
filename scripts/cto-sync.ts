@@ -97,7 +97,7 @@ async function main() {
 
   const dryRun = args.includes("--a-blanc");
   try {
-    const report = await syncFromNotion({ force: args.includes("--forcer"), dryRun });
+    const report = await syncFromNotion({ force: args.includes("--forcer"), dryRun, reassign: true });
     printReport(report);
     // Au journal, sans e-mail : le rapport vient de s'imprimer sous les yeux
     // de qui a lancé la commande. À blanc, rien ne s'inscrit.

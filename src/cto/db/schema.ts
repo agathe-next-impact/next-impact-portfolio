@@ -223,8 +223,9 @@ export const ctoClients = pgTable(
     suggestionsCoupees: boolean("suggestions_coupees").notNull().default(false),
     /**
      * Date à laquelle chaque service a été vu coché pour la première fois
-     * (code → ISO). Sert au retrait des sections vides : la semaine de grâce
-     * se compte depuis l'ouverture de la section, pas depuis aujourd'hui.
+     * (code → ISO). Servait à la semaine de grâce des sections vides,
+     * supprimée le 2026-09-27 (une section vide sort aussitôt de la
+     * navigation) ; conservé pour l'historique des ouvertures.
      * Écrit par la synchro ; un service décoché perd sa date.
      */
     servicesOuverts: jsonb("services_ouverts").$type<Record<string, string>>().notNull().default({}),

@@ -14,6 +14,10 @@
 export const MASQUAGE_JOURS = 60;
 /** La fin des mois de suivi inclus s'annonce ce nombre de jours avant. */
 export const ANNONCE_FIN_SUIVI_JOURS = 30;
+/** La fin de la veille offerte s'annonce ce nombre de jours avant… */
+export const ANNONCE_FIN_VEILLE_JOURS = 7;
+/** … et se rappelle jusqu'à ce nombre de jours après. */
+export const RAPPEL_FIN_VEILLE_JOURS = 30;
 /** À partir de combien d'opportunités en attente le palier Direction technique se justifie. */
 export const SEUIL_ARBITRAGES = 3;
 
@@ -38,6 +42,8 @@ export interface FaitsEspace {
   services: string[] | null;
   suggestionsCoupees: boolean;
   suiviInclusJusquau: Date | null;
+  /** Fin de la veille offerte (client ponctuel) ; null pour un client récurrent. */
+  veilleOfferteJusquau: Date | null;
   /** Propositions commerciales sans réponse, la plus récente d'abord. */
   propositionsEnAttente: { titre: string; chemin: string }[];
   audits: number;
@@ -69,7 +75,26 @@ const DECLENCHEURS: ((f: FaitsEspace) => Suggestion | null)[] = [
     };
   },
 
-  // 2. La fin des mois de suivi inclus dans un forfait : le moment naturel de la suite.
+  // 2. La veille offerte à l'ouverture de l'espace se termine (client ponctuel) :
+  //    annoncée une semaine avant, rappelée un mois après.
+  (f) => {
+    const fin = f.veilleOfferteJusquau;
+    if (!fin) return null;
+    const ecart = fin.getTime() - f.maintenant.getTime();
+    if (ecart > ANNONCE_FIN_VEILLE_JOURS * JOUR || ecart < -RAPPEL_FIN_VEILLE_JOURS * JOUR) return null;
+    const terminee = ecart < 0;
+    return {
+      id: `veille-offerte-${fin.toISOString().slice(0, 10)}`,
+      titre: terminee ? "Votre veille offerte s'est terminée" : "Votre veille offerte se termine",
+      fait: `Le ${jourLisible(fin)}`,
+      texte:
+        "Les lettres déjà reçues restent dans votre espace. Pour continuer à suivre votre écosystème et les alertes sur votre site, la veille peut se prolonger.",
+      action: { libelle: "En parler", vers: "contact", objet: "Continuer la veille" },
+      masquable: true,
+    };
+  },
+
+  // 3. La fin des mois de suivi inclus dans un forfait : le moment naturel de la suite.
   (f) => {
     const fin = f.suiviInclusJusquau;
     if (!fin) return null;
@@ -87,7 +112,7 @@ const DECLENCHEURS: ((f: FaitsEspace) => Suggestion | null)[] = [
     };
   },
 
-  // 3. Des failles relevées sur un site que personne ne maintient.
+  // 4. Des failles relevées sur un site que personne ne maintient.
   (f) => {
     if (f.alertesCritiques === 0 || f.services?.includes("suivi-technique")) return null;
     const n = f.alertesCritiques;
@@ -101,7 +126,7 @@ const DECLENCHEURS: ((f: FaitsEspace) => Suggestion | null)[] = [
     };
   },
 
-  // 4. Un audit remis, et personne pour dérouler sa roadmap.
+  // 5. Un audit remis, et personne pour dérouler sa roadmap.
   (f) => {
     const pilote = f.services?.some((code) => code === "actions" || code === "direction-technique");
     if (f.audits === 0 || pilote) return null;
@@ -115,7 +140,7 @@ const DECLENCHEURS: ((f: FaitsEspace) => Suggestion | null)[] = [
     };
   },
 
-  // 5. Un Référent qui ne suit plus le rythme des décisions.
+  // 6. Un Référent qui ne suit plus le rythme des décisions.
   (f) => {
     if (f.tier !== "referent" || f.arbitrages < SEUIL_ARBITRAGES) return null;
     return {

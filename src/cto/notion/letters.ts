@@ -98,6 +98,8 @@ export async function syncLetters(
   options: { dryRun: boolean },
   /** Ligne du pipeline « Veilles clients » → accompagnement (relation « Veille — organisation »). */
   clientByVeilleOrganisation: Map<string, string> = new Map(),
+  /** Fin de la veille offerte par accompagnement (null : pas de fin). Cf. `espace/veille-offerte.ts`. */
+  finVeille: Map<string, Date | null> = new Map(),
 ): Promise<{ report: LettersReport } & Findings> {
   const findings = emptyFindings();
   const { warnings } = findings;
@@ -199,6 +201,7 @@ export async function syncLetters(
     debut,
     report,
     options,
+    finVeille,
   );
   warnings.push(...editions.warnings);
   findings.alerts.push(...editions.alerts);
@@ -265,6 +268,7 @@ async function syncEditions(
   debut: Date,
   report: LettersReport,
   options: { dryRun: boolean },
+  finVeille: Map<string, Date | null> = new Map(),
 ): Promise<{ warnings: string[]; alerts: string[]; failed: boolean }> {
   const warnings: string[] = [];
   const alerts: string[] = [];
@@ -312,6 +316,10 @@ async function syncEditions(
       warnings.push(`Édition « ${titre} » sans date d'édition : impossible de la classer, ignorée.`);
       continue;
     }
+    // Veille offerte terminée : les éditions d'après n'arrivent plus. Celles
+    // d'avant restent lisibles — elles sont retenues comme avant.
+    const fin = finVeille.get(clientId);
+    if (fin && periode > fin) continue;
     if (periode.getTime() < debut.getTime()) continue;
 
     retenues.add(page.id);

@@ -20,7 +20,7 @@ import {
   SYNTHESE_SEGMENT,
   visibleGroups,
   visibleSections,
-  sectionsEnSommeil,
+  sectionsSansInformation,
   withoutPrice,
   type Actions,
   type ClientProfile,
@@ -29,6 +29,9 @@ import {
   type SectionGroup,
   type SectionKey,
 } from "@cto/espace";
+import { digestsForClient } from "@cto/digest";
+import { lettersForClient } from "@cto/letters";
+import { sentinelleStateFor } from "@cto/sentinelle";
 import { siteStateFor, type SiteState } from "@cto/site";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
@@ -79,10 +82,10 @@ export interface EspaceContext {
   missions: Mission[];
   actions: Actions;
   /**
-   * Sections ouvertes mais vides depuis plus d'une semaine : hors de la
-   * navigation, toujours accessibles (`sectionsEnSommeil`).
+   * Sections ouvertes mais sans information : hors de la barre latérale et des
+   * synthèses, toujours accessibles (`sectionsSansInformation`).
    */
-  sommeil: Set<SectionKey>;
+  sansInformation: Set<SectionKey>;
 }
 
 /**
@@ -114,16 +117,24 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
   };
   const sections = visibleSections(profile.services, contents);
 
-  const [site, prestations] = await Promise.all([
-    sections.some((section) => section.key === "site") ? siteStateFor(viewer.clientId) : null,
+  const ouverte = (key: SectionKey) => sections.some((section) => section.key === key);
+  const [site, prestations, lettres, digests, sentinelle] = await Promise.all([
+    ouverte("site") ? siteStateFor(viewer.clientId) : null,
     // Les prestations signées sont des missions comme les chantiers : elles
     // entrent dans le pilotage (cartes, frise, retards) dès que l'écran
     // Contrats est ouvert au client, sans leur tarif. `items` ne les reçoit
     // pas : notifications, historique et restitution restent sans elles.
-    sections.some((section) => section.key === "prestations") ? prestationsForClient(viewer.clientId) : [],
+    ouverte("prestations") ? prestationsForClient(viewer.clientId) : [],
+    // Pour savoir seulement si la veille et la veille technique ont de quoi
+    // montrer : leur contenu se relit sur leurs pages.
+    lettersForClient(viewer.clientId),
+    digestsForClient(viewer.clientId),
+    ouverte("veille-technique") ? sentinelleStateFor(viewer.clientId) : null,
   ]);
   const now = new Date();
   const suivis = [...items, ...prestations.map(withoutPrice)];
+  const missions = missionsOf(suivis, now);
+  const actions = actionsFor(suivis, site?.snapshot ?? null, now);
 
   return {
     profile,
@@ -132,10 +143,30 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     sections,
     since,
     site,
-    missions: missionsOf(suivis, now),
-    actions: actionsFor(suivis, site?.snapshot ?? null, now),
-    sommeil: sectionsEnSommeil(sections, contents, profile.servicesOuverts, now),
+    missions,
+    actions,
+    sansInformation: sectionsSansInformation(sections, {
+      roadmap: contents.roadmap,
+      decisions: contents.decisions,
+      audits: contents.audits,
+      documents: contents.documents,
+      cartographie: contents.cartographie,
+      missions: missions.length,
+      actions: actions.aTraiter.length + actions.aArbitrer.length,
+      veille: lettres.length + digests.length + count("veille"),
+      prestations: prestations.length,
+      releveSite: Boolean(site?.snapshot),
+      releveSentinelle: sentinelle !== null,
+    }),
   };
+}
+
+/**
+ * Les sections qui ont quelque chose à montrer : celles de la barre latérale
+ * et des synthèses de groupe. `garder` y maintient la page consultée.
+ */
+export function sectionsAvecInformation(context: EspaceContext, garder: SectionKey | null = null): Section[] {
+  return context.sections.filter((section) => !context.sansInformation.has(section.key) || section.key === garder);
 }
 
 /** Vrai si la section fait partie de celles de l'accompagnement. */
@@ -248,11 +279,9 @@ function navigation(
     badge: badgeFor(section.key, context),
   });
 
-  // Les sections en sommeil quittent la navigation ; la page reste ouverte.
-  // Celle qu'on consulte y reste, pour ne pas perdre le repère.
-  const enNavigation = context.sections.filter(
-    (section) => !context.sommeil.has(section.key) || section.key === active,
-  );
+  // Les sections sans information quittent la navigation ; la page reste
+  // ouverte. Celle qu'on consulte y reste, pour ne pas perdre le repère.
+  const enNavigation = sectionsAvecInformation(context, active);
 
   const horsGroupe: NavGroup[] = enNavigation
     .filter((section) => !section.group)

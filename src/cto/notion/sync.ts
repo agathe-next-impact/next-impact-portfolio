@@ -31,6 +31,7 @@ import { alert, emptyFindings, merge, type Findings } from "./findings";
 import { checkColumns, COLUMNS, schemaWarning } from "./schema";
 import { syncLetters, type LettersReport } from "./letters";
 import { provisionSentinelle, type ProvisionReport, type WatchWish } from "../sentinelle/provision";
+import { veilleOfferte } from "../espace/veille-offerte";
 import { syncPersons, type PersonsReport } from "./persons";
 import {
   auditActionInput,
@@ -100,6 +101,19 @@ import * as prop from "./properties";
  */
 export const MASS_WITHDRAWAL_THRESHOLD = 3;
 
+interface SweepOptions {
+  force: boolean;
+  dryRun: boolean;
+  /**
+   * Autorise un livrable à changer d'accompagnement. Faux par défaut, donc
+   * pour le Cron : une relation « Client » modifiée par erreur sur une ligne
+   * publiée ouvrirait à B le contenu de A au balayage de la nuit, sans que
+   * personne ne l'ait vu. Le déplacement est signalé, et ne s'applique que
+   * depuis un balayage lancé à la main (`/admin-cto`, `npm run cto:sync`).
+   */
+  reassign?: boolean;
+}
+
 export interface KindReport {
   kind: DeliverableKind;
   /** Pages publiées dans l'atelier et rattachables à un accompagnement. */
@@ -145,6 +159,12 @@ interface ClientResolution extends Findings {
   disabledClientIds: Set<string>;
   /** Ce que chaque fiche demande à la veille technique (Sentinelle). */
   watchWishes: WatchWish[];
+  /**
+   * Fin de la veille offerte, par accompagnement : null pour un client
+   * récurrent (pas de fin). Les éditions datées après ne deviennent pas des
+   * lettres (`letters.ts`).
+   */
+  finVeille: Map<string, Date | null>;
 }
 
 /**
@@ -189,8 +209,12 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
       syncEnabled: ctoClients.syncEnabled,
       company: ctoClients.company,
       status: ctoClients.status,
+      createdAt: ctoClients.createdAt,
     })
     .from(ctoClients);
+  const ouvertureParClient = new Map(rows.map((row) => [row.id, row.createdAt]));
+  const finVeille = new Map<string, Date | null>();
+  const maintenant = new Date();
 
   const disabledClientIds = new Set<string>();
   const idByNotionPage = new Map<string, string>();
@@ -272,11 +296,26 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     await adopterFicheOrganisation(page, id, name, findings, dryRun, byOrganisation, nomParClient);
 
     const watch = clientWatch(page);
+    // La veille est offerte à l'ouverture de l'espace (décision du
+    // 2026-09-27) : un mois pour un client ponctuel, sans fin pour un client
+    // récurrent. L'ouverture est la création de l'accompagnement ; une fiche
+    // créée à ce balayage ouvre aujourd'hui.
+    const services = clientServices(page).codes;
+    const veille = veilleOfferte(services, ouvertureParClient.get(id) ?? maintenant, maintenant);
+    finVeille.set(id, veille.jusquau);
+    if (!veille.recurrente && !veille.active && clientVeilleOrganisations(page).length > 0 && veille.jusquau) {
+      warnings.push(
+        `« ${name} » : veille offerte terminée le ${veille.jusquau.toLocaleDateString("fr-FR")}. ` +
+          "Arrêter la production Signaux Faibles dans le pipeline (fiche organisation), SANS délier la « Veille — organisation » : " +
+          "les lettres déjà reçues resteraient sinon retirées de l'espace.",
+      );
+    }
+
     watchWishes.push({
       clientId: id,
       company: name,
-      wanted:
-        clientServices(page).codes.includes("veille-technique") && clientStatus(page) !== "clos",
+      wanted: (services.includes("veille-technique") || veille.active) && clientStatus(page) !== "clos",
+      offerte: !services.includes("veille-technique"),
       site: watch.site,
       contact: watch.contact,
     });
@@ -339,7 +378,7 @@ async function resolveClients(dryRun: boolean, force = false): Promise<ClientRes
     }
   }
 
-  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, watchWishes, ...findings };
+  return { byNotionPage, byOrganisation, byVeilleOrganisation, disabledClientIds, watchWishes, finVeille, ...findings };
 }
 
 /** Deux listes de services identiques, à l'ordre près (elles arrivent triées). */
@@ -648,7 +687,7 @@ function tryMap(
 async function syncKind(
   kind: DeliverableKind,
   byNotionPage: Map<string, string>,
-  options: { force: boolean; dryRun: boolean },
+  options: SweepOptions,
   disabledClientIds: Set<string>,
   /**
    * Lignes venues d'ailleurs que de la base du type : les actions d'audit
@@ -702,7 +741,7 @@ async function applyInputs(
   inputs: DeliverableInput[],
   findings: Findings,
   disabledClientIds: Set<string>,
-  options: { force: boolean; dryRun: boolean; keep?: Set<string>; withdraw?: boolean },
+  options: SweepOptions & { keep?: Set<string>; withdraw?: boolean },
 ): Promise<KindReport> {
   const { force, dryRun } = options;
   const states = new Map((await currentStates(kind)).map((s) => [s.notionPageId, s]));
@@ -731,6 +770,22 @@ async function applyInputs(
       if (!dryRun) await appendVersion(input, 0);
       report.created += 1;
       continue;
+    }
+    if (state.clientId !== input.clientId) {
+      if (!options.reassign) {
+        alert(
+          findings,
+          `${kind} « ${input.title} » a changé de client dans Notion : laissé chez son accompagnement actuel. ` +
+            "Pour le déplacer, relancer la synchro depuis /admin-cto (ou npm run cto:sync).",
+        );
+        report.unchanged += 1;
+        continue;
+      }
+      alert(
+        findings,
+        `${kind} « ${input.title} » ${dryRun ? "passerait" : "passe"} à un autre accompagnement ` +
+          "(relation « Client » modifiée dans Notion).",
+      );
     }
     if (state.withdrawn) {
       if (!dryRun) await appendVersion(input, state.version);
@@ -797,7 +852,7 @@ interface AuditsResult extends Findings {
  */
 async function syncAudits(
   byNotionPage: Map<string, string>,
-  options: { force: boolean; dryRun: boolean },
+  options: SweepOptions,
   disabledClientIds: Set<string>,
 ): Promise<AuditsResult> {
   const { dryRun } = options;
@@ -893,7 +948,7 @@ async function syncAudits(
  */
 async function syncPropositions(
   byNotionPage: Map<string, string>,
-  options: { force: boolean; dryRun: boolean },
+  options: SweepOptions,
   disabledClientIds: Set<string>,
 ): Promise<{ report: KindReport | null } & Findings> {
   const { dryRun } = options;
@@ -1071,7 +1126,7 @@ async function attachFiles(
  * écriture, non.
  */
 export async function syncFromNotion(
-  options: { force?: boolean; dryRun?: boolean } = {},
+  options: { force?: boolean; dryRun?: boolean; reassign?: boolean } = {},
 ): Promise<SyncReport> {
   const dryRun = options.dryRun === true;
   const clients = await resolveClients(dryRun, options.force === true);
@@ -1100,7 +1155,7 @@ export async function syncFromNotion(
   try {
     audits = await syncAudits(
       clients.byNotionPage,
-      { force: options.force === true, dryRun },
+      { force: options.force === true, dryRun, reassign: options.reassign === true },
       clients.disabledClientIds,
     );
   } catch (error) {
@@ -1121,7 +1176,7 @@ export async function syncFromNotion(
     const result = await syncKind(
       kind,
       clients.byNotionPage,
-      { force: options.force === true, dryRun },
+      { force: options.force === true, dryRun, reassign: options.reassign === true },
       clients.disabledClientIds,
       kind === "roadmap" ? { inputs: audits.roadmap, complete: audits.complete } : undefined,
     );
@@ -1137,7 +1192,7 @@ export async function syncFromNotion(
     const result = await syncKind(
       kind,
       clients.byNotionPage,
-      { force: options.force === true, dryRun },
+      { force: options.force === true, dryRun, reassign: options.reassign === true },
       clients.disabledClientIds,
     );
     report.kinds.push(result.report);
@@ -1149,7 +1204,7 @@ export async function syncFromNotion(
   try {
     const propositions = await syncPropositions(
       clients.byNotionPage,
-      { force: options.force === true, dryRun },
+      { force: options.force === true, dryRun, reassign: options.reassign === true },
       clients.disabledClientIds,
     );
     if (propositions.report) report.kinds.push(propositions.report);
@@ -1167,6 +1222,7 @@ export async function syncFromNotion(
     clients.byOrganisation,
     { dryRun },
     clients.byVeilleOrganisation,
+    clients.finVeille,
   );
   report.letters = lettres.report;
   merge(report, lettres);

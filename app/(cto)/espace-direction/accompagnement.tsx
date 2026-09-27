@@ -11,6 +11,7 @@ import {
   SERVICES_A_AJOUTER,
 } from "@cto/offre";
 import Link from "next/link";
+import { veilleOfferte } from "@cto/espace";
 import { CALENDLY_URL, contactHref, Espace, sectionHref, type EspaceContext } from "./shell";
 import { buttonClass, formatDay, Label, Panel, Tag } from "./ui";
 import type { Viewer } from "./viewer";
@@ -30,6 +31,7 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
   const suivant = palierSuperieur(palier);
   const aAjouter = SERVICES_A_AJOUTER.filter((service) => !services.includes(service.code));
   const maintenant = new Date();
+  const veille = veilleOfferte(profil.services ?? [], profil.ouverture, maintenant);
 
   return (
     <Espace
@@ -50,6 +52,21 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
           Ce que vous avez
         </h2>
         <Panel className="mt-4 divide-y divide-dark-gray">
+          {/* La veille est offerte à l'ouverture de l'espace ; sa ligne dit
+              jusqu'à quand, et que l'espace reste ouvert après. */}
+          <Ligne
+            titre="Veille de votre écosystème et de votre site"
+            etiquette={veille.recurrente ? "Comprise" : veille.active ? "Offerte" : "Terminée"}
+          >
+            {veille.recurrente
+              ? "Comprise dans votre accompagnement : les lettres Signaux Faibles et les alertes sur votre site."
+              : veille.jusquau && veille.active
+                ? `Offerte à l'ouverture de votre espace, jusqu'au ${formatDay(veille.jusquau)}.`
+                : veille.jusquau
+                  ? `Offerte jusqu'au ${formatDay(veille.jusquau)}. Les lettres reçues restent dans votre espace, qui reste ouvert.`
+                  : null}
+          </Ligne>
+
           {estPalierExpert(palier) ? (
             <Ligne titre="Expert technique externalisé" etiquette={`Palier ${nomPalier(palier)}`}>
               {profil.contractStart ? engagement(profil.contractStart, maintenant) : null}
@@ -97,7 +114,7 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
                     >
                       {section.label}
                     </Link>
-                    {context.sommeil.has(section.key) ? (
+                    {context.sansInformation.has(section.key) ? (
                       <span className="text-mid-gray"> · en attente d&rsquo;un premier contenu</span>
                     ) : null}
                   </li>

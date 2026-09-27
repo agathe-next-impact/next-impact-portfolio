@@ -55,8 +55,8 @@ export {
   sectionByKey,
   SECTIONS,
   visibleSections,
-  sectionsEnSommeil,
-  SOMMEIL_JOURS,
+  sectionsSansInformation,
+  type Informations,
   type Contents,
   type Section,
   type SectionGroup,
@@ -111,3 +111,4 @@ export {
   type Suggestion,
 } from "./suggestions";
 export { masquerSuggestion, suggestionsMasquees } from "./suggestions-store";
+export { SERVICES_RECURRENTS, VEILLE_OFFERTE_MOIS, veilleOfferte, type VeilleOfferte } from "./veille-offerte";

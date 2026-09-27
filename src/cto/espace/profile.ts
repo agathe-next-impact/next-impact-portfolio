@@ -29,6 +29,8 @@ export interface ClientProfile {
   suggestionsCoupees: boolean;
   /** Date d'ouverture de chaque service coché (code → ISO). */
   servicesOuverts: Record<string, string>;
+  /** Ouverture de l'espace (création de l'accompagnement) : départ du mois de veille offerte. */
+  ouverture: Date;
 }
 
 export async function clientProfile(clientId: string): Promise<ClientProfile> {
@@ -44,6 +46,7 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
       suiviInclusJusquau: ctoClients.suiviInclusJusquau,
       suggestionsCoupees: ctoClients.suggestionsCoupees,
       servicesOuverts: ctoClients.servicesOuverts,
+      createdAt: ctoClients.createdAt,
     })
     .from(ctoClients)
     .where(eq(ctoClients.id, clientId))
@@ -60,5 +63,6 @@ export async function clientProfile(clientId: string): Promise<ClientProfile> {
     suiviInclusJusquau: row?.suiviInclusJusquau ?? null,
     suggestionsCoupees: row?.suggestionsCoupees ?? false,
     servicesOuverts: row?.servicesOuverts ?? {},
+    ouverture: row?.createdAt ?? new Date(),
   };
 }

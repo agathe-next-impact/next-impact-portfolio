@@ -20,7 +20,7 @@ import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor, type SentinelleVerdict } from "@cto/sentinelle";
 import { auditPath, sortCartographie, sortRecentFirst, sortRoadmap } from "./livrables";
 import { ActionTag, actionMeta, CarteReponse, LigneCarte, LigneVide, livrableHref } from "./pilotage";
-import { Espace, sectionHref, type EspaceContext } from "./shell";
+import { Espace, sectionHref, sectionsAvecInformation, type EspaceContext } from "./shell";
 import { formatDay, Tag, type Tone } from "./ui";
 import { CarteActions, CarteMissions, CarteSite, CarteVeille } from "./vues";
 import type { Viewer } from "./viewer";
@@ -33,7 +33,8 @@ import type { Viewer } from "./viewer";
 // la porte vers le détail. Même grammaire que l'accueil (`CarteReponse`) :
 // l'accueil répond pour tout l'espace, la synthèse pour un groupe.
 //
-// Seules les entrées ouvertes à l'accompagnement ont leur carte ; un groupe
+// Seules les entrées ouvertes à l'accompagnement ET qui ont une information ont
+// leur carte (`sectionsAvecInformation`, comme la barre latérale) ; un groupe
 // d'une seule entrée n'a pas de synthèse (cf. `visibleGroups`).
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -41,7 +42,7 @@ const pluriel = (n: number, un: string, plusieurs: string) => (n > 1 ? plusieurs
 
 /** Le groupe tel que l'accompagnement le voit, s'il a une synthèse. */
 export function groupeAvecSynthese(context: EspaceContext, group: SectionGroup): VisibleGroup | null {
-  const groupe = visibleGroups(context.sections).find((candidate) => candidate.group === group);
+  const groupe = visibleGroups(sectionsAvecInformation(context)).find((candidate) => candidate.group === group);
   return groupe?.synthese ? groupe : null;
 }
 
