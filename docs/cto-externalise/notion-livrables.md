@@ -231,6 +231,7 @@ CTO_NOTION_DB_PRESTATIONS=…
 CTO_NOTION_DB_EDITIONS=…
 CTO_NOTION_DB_AUDITS=…
 CTO_NOTION_DB_PROPOSITIONS=…
+CTO_NOTION_DB_PAIEMENTS=…
 ```
 
 **Une base facultative n'arrête rien.** Toute base ajoutée après la mise en
@@ -457,6 +458,32 @@ calendrier), `Montant`, `Avancement` (0 à 1, vide = non suivi), `Devis` (lien),
 (append-only, corrections datées). Distincte de la Roadmap à dessein : un
 chantier est ce que le système demande, une prestation est ce que le client a
 commandé.
+
+Le client lit ses prestations dans **Contrats → Prestations**, ouvert par le
+service « Prestations en cours » de sa fiche (et par lui seul : jamais au
+contenu, régime historique compris). C'est le même écran que
+`/admin-cto/pilotage/prestations` (`espace-direction/prestations.tsx`) : tarifs,
+avancement, devis, règlements et reste à régler ; l'administration y ajoute le
+nom de l'accompagnement et le lien Notion. Les prestations restent hors des
+notifications, de l'historique et du dossier de restitution.
+
+### Paiements : l'échéancier d'une prestation
+
+Une prestation peut se régler en plusieurs fois (acompte, situations, solde).
+La base **Paiements** (même page) porte un règlement par ligne : `Paiement`
+(le libellé, « Acompte 50 % »), `Prestation` (une seule), `Montant` (HT),
+`Date` (d'encaissement si reçu, prévue sinon), `Statut` (Prévu / Reçu). La
+colonne `Paiements`, côté Prestations, en est le miroir.
+
+- Pas de case `Publié` : un règlement suit sa prestation. Il se lit avec
+  elle, dans l'administration comme dans Contrats → Prestations du client :
+  règlements, réglé, reste dû, et « Reste à régler » en tête.
+- Encaisser un règlement = passer son statut à Reçu et dater. La prestation
+  écrit alors une version de plus, comme pour toute correction.
+- Base facultative (`CTO_NOTION_DB_PAIEMENTS`). Illisible un tour : les
+  prestations ne sont ni écrites ni retirées ce tour-là, plutôt que d'effacer
+  les échéanciers. Une prestation sans règlement saisi n'entre pas dans le
+  reste à encaisser.
 
 ## 8. Les éditions du pipeline « Veilles clients »
 

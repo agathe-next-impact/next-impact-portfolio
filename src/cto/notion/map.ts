@@ -7,6 +7,7 @@ import type {
   DeliverableInput,
   DeliverableKind,
   DocumentPayload,
+  Paiement,
   PrestationPayload,
   PropositionPayload,
   RoadmapPayload,
@@ -117,6 +118,17 @@ export const PROPS = {
     progress: "Avancement",
     quote: "Devis",
     detail: "Détail",
+  },
+  /**
+   * Base « Paiements » : l'échéancier des prestations, une ligne par
+   * règlement. Pas un livrable — elle se greffe sur la prestation liée.
+   */
+  paiement: {
+    title: "Paiement",
+    prestation: "Prestation",
+    amount: "Montant",
+    date: "Date",
+    status: "Statut",
   },
   /**
    * Base « Audits » de l'atelier : une ligne par audit remis, qui pointe la
@@ -381,6 +393,40 @@ export function auditActionInput(
     occurredAt: null,
     featured: false,
   };
+}
+
+/**
+ * Une ligne de la base Paiements, rattachée à sa prestation.
+ *
+ * `null` si elle ne pointe pas exactement une prestation : un règlement
+ * partagé entre deux prestations ne saurait être compté deux fois, ni coupé en
+ * deux au hasard.
+ */
+export function paymentOf(page: NotionPage): { prestationId: string; paiement: Paiement } | null {
+  const links = p.relation(page, PROPS.paiement.prestation);
+  if (links.length !== 1) return null;
+  const date = p.date(page, PROPS.paiement.date);
+  return {
+    prestationId: links[0],
+    paiement: {
+      libelle: p.text(page, PROPS.paiement.title) ?? UNTITLED,
+      montant: p.number(page, PROPS.paiement.amount),
+      date: date ? date.toISOString() : null,
+      statut: p.select(page, PROPS.paiement.status),
+    },
+  };
+}
+
+/**
+ * Les règlements d'une prestation dans l'ordre où ils tombent. Sans date en
+ * fin de liste, puis par libellé : l'ordre doit rester le même d'un balayage à
+ * l'autre, sans quoi l'empreinte bougerait et écrirait une version pour rien.
+ */
+export function sortPayments(paiements: Paiement[]): Paiement[] {
+  return [...paiements].sort(
+    (a, b) =>
+      (a.date ?? "￿").localeCompare(b.date ?? "￿") || a.libelle.localeCompare(b.libelle, "fr"),
+  );
 }
 
 function labelled(label: string, value: string | null): string | null {

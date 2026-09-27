@@ -15,7 +15,8 @@ import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
 
 /**
  * L'entrée de la barre latérale qui porte un livrable. Les prestations n'en ont
- * pas : elles ne sont lues que dans l'administration (`ADMIN_ONLY_KINDS`).
+ * pas ici : hors de `listForClient` (`ADMIN_ONLY_KINDS`), elles ne se lisent que
+ * sur leur propre écran, Contrats → Prestations (`prestations.tsx`).
  */
 const SECTION_OF_KIND: Partial<Record<Deliverable["kind"], SectionKey>> = {
   roadmap: "missions",

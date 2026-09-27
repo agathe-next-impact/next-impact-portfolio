@@ -86,10 +86,13 @@ describe("sections visibles", () => {
     expect(keys(visibleSections(null, EMPTY))).not.toContain("propositions");
   });
 
-  it("n'ouvre rien côté client pour le service Prestations, réservé à l'administration", () => {
-    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "a-traiter", "veille"]);
-    expect(SECTIONS.some((s) => s.slug === "prestations")).toBe(false);
-    expect(LEGACY_SLUGS.prestations).toBe("missions");
+  it("ouvre Contrats → Prestations par le seul service Prestations, en dernier", () => {
+    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "a-traiter", "veille", "prestations"]);
+    expect(SECTIONS.find((s) => s.key === "prestations")?.group).toBe("contrats");
+    // Des tarifs ne s'ouvrent jamais au contenu, régime historique compris.
+    expect(keys(visibleSections(null, EMPTY))).not.toContain("prestations");
+    expect(keys(visibleSections(["direction-technique"], EMPTY))).not.toContain("prestations");
+    expect(LEGACY_SLUGS.prestations).toBeUndefined();
   });
 
   it("donne une section existante à chaque ancienne adresse", () => {

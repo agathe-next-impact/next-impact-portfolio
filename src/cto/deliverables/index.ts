@@ -14,6 +14,7 @@ export {
   listForClient,
   listPrestations,
   livraisonsForClient,
+  prestationsForClient,
   setPlacement,
   type DeliverableState,
 } from "./store";
@@ -31,6 +32,7 @@ export type {
   DocumentPayload,
   Livraison,
   PayloadByKind,
+  Paiement,
   PrestationPayload,
   PropositionPayload,
   RoadmapPayload,

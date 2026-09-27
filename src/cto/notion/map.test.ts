@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { NotionPage } from "./api";
 import { mapPage, PROPS, UNTITLED } from "./map";
 import { clientPageIds, personEmail, personName, personRevoked, personRole, spaceId } from "./map";
+import { paymentOf, sortPayments } from "./map";
 import * as p from "./properties";
 import type { CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
 
@@ -218,5 +219,45 @@ describe("mapPage — roadmap et cartographie", () => {
     expect(payload.coutAnnuel).toBe(180);
     expect(payload.criticite).toBe("Critique");
     expect(payload.detenteur).toBe("Direction financière");
+  });
+});
+
+describe("échéancier des prestations", () => {
+  const PRESTATION = "3e8fe829-ce71-81a3-9571-dda8e03041ec";
+
+  it("lit un règlement rattaché à une prestation", () => {
+    const row = page({
+      Paiement: title("Acompte 50 %"),
+      Prestation: relation(PRESTATION),
+      Montant: number(1700),
+      Date: date("2026-02-06"),
+      Statut: select("Reçu"),
+    });
+    expect(paymentOf(row)).toEqual({
+      prestationId: PRESTATION,
+      paiement: { libelle: "Acompte 50 %", montant: 1700, date: "2026-02-06T00:00:00.000Z", statut: "Reçu" },
+    });
+  });
+
+  it("ignore un règlement sans prestation ou partagé entre deux", () => {
+    expect(paymentOf(page({ Paiement: title("Orphelin") }))).toBeNull();
+    expect(paymentOf(page({ Prestation: relation(PRESTATION, CLIENT) }))).toBeNull();
+  });
+
+  it("garde un règlement incomplet plutôt que de le perdre", () => {
+    const payment = paymentOf(page({ Prestation: relation(PRESTATION) }));
+    expect(payment?.paiement).toEqual({ libelle: UNTITLED, montant: null, date: null, statut: null });
+  });
+
+  it("trie par date, les règlements sans date en dernier, de façon stable", () => {
+    const solde = { libelle: "Solde", montant: 1700, date: null, statut: "Prévu" };
+    const acompte = { libelle: "Acompte", montant: 1700, date: "2026-02-06T00:00:00.000Z", statut: "Reçu" };
+    const situation = { libelle: "Situation", montant: 500, date: "2026-05-01T00:00:00.000Z", statut: "Prévu" };
+    expect(sortPayments([solde, situation, acompte]).map((x) => x.libelle)).toEqual([
+      "Acompte",
+      "Situation",
+      "Solde",
+    ]);
+    expect(sortPayments([situation, solde, acompte])).toEqual(sortPayments([acompte, solde, situation]));
   });
 });

@@ -28,9 +28,8 @@ export type ServiceCode =
   | "actions"
   | "veille-personnalisee"
   | "veille-technique"
-  // Coché dans la fiche Notion, il n'ouvre plus rien côté client : le suivi
-  // des prestations et de leur tarif vit dans l'administration
-  // (`/admin-cto/pilotage/prestations`).
+  // « Prestations en cours » dans la fiche Notion : ouvre le groupe Contrats
+  // (prestations, tarifs, règlements — le même écran que l'administration).
   | "prestations";
 
 export type SectionKey =
@@ -46,15 +45,17 @@ export type SectionKey =
   | "propositions"
   | "veille"
   | "veille-technique"
-  | "documents";
+  | "documents"
+  | "prestations";
 
-export type SectionGroup = "missions" | "site" | "agir" | "veille";
+export type SectionGroup = "missions" | "site" | "agir" | "veille" | "contrats";
 
 export const GROUP_LABELS: Record<SectionGroup, string> = {
   missions: "Missions",
   site: "Votre site",
   agir: "Agir",
   veille: "Veille",
+  contrats: "Contrats",
 };
 
 export interface Section {
@@ -118,6 +119,10 @@ export const SECTIONS: readonly Section[] = [
     services: ["veille-technique"],
   },
   { key: "documents", slug: "documents", label: "Documents", group: "veille", services: ["direction-technique"] },
+
+  // Ce qui a été commandé, son tarif et ses règlements. En dernier : ça se
+  // consulte, ça ne se suit pas au quotidien.
+  { key: "prestations", slug: "prestations", label: "Prestations", group: "contrats", services: ["prestations"] },
 ];
 
 /** Ce qui existe dans l'espace d'un accompagnement, pour le régime historique. */
@@ -155,6 +160,10 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
       return contents.propositions > 0;
     case "veille-technique":
       return contents.sentinelle === true;
+    // Des tarifs ne s'ouvrent pas « parce qu'il y a du contenu » : seul le
+    // service coché dans la fiche les montre, régime historique compris.
+    case "prestations":
+      return false;
     default:
       return true;
   }
@@ -197,6 +206,4 @@ export const LEGACY_SLUGS: Record<string, SectionKey> = {
   "direction-technique": "decisions",
   actions: "missions",
   "suivi-technique": "site",
-  // Les prestations et leur tarif sont passées dans l'administration.
-  prestations: "missions",
 };

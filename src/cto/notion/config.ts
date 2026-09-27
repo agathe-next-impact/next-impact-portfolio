@@ -52,6 +52,8 @@ const ENV_LETTRES = "CTO_NOTION_DB_LETTRES";
 const ENV_PERSONNES = "CTO_NOTION_DB_PERSONNES";
 /** Facultative : la base « Éditions de veille » du pipeline Veilles clients. */
 const ENV_EDITIONS = "CTO_NOTION_DB_EDITIONS";
+/** Facultative : l'échéancier des prestations. */
+const ENV_PAIEMENTS = "CTO_NOTION_DB_PAIEMENTS";
 
 function read(name: string): string {
   const value = process.env[name]?.trim();
@@ -99,6 +101,14 @@ export function envNameFor(kind: DeliverableKind): string {
  */
 export function editionsDatabaseId(): string | null {
   return process.env[ENV_EDITIONS]?.trim() || null;
+}
+
+/**
+ * Identifiant de la base « Paiements », ou `null` si la variable n'est pas
+ * posée : les prestations se synchronisent alors sans échéancier.
+ */
+export function paymentsDatabaseId(): string | null {
+  return process.env[ENV_PAIEMENTS]?.trim() || null;
 }
 
 /**

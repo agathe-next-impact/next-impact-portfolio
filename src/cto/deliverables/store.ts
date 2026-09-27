@@ -175,10 +175,11 @@ export async function setPlacement(notionPageId: string, featured: boolean): Pro
  * Les types de livrables que seule l'administration lit.
  *
  * Une prestation porte son tarif : c'est du suivi commercial, pas un livrable
- * à montrer au client. Elle est synchronisée comme les autres (même table, même
- * historique), mais aucune lecture côté client ne la rend — ni l'espace, ni
- * les notifications, ni le dossier de restitution, qui passent tous par
- * `listForClient` ou `history`. Le filtre est ici, et pas dans chaque écran,
+ * comme les autres. Elle est synchronisée comme eux (même table, même
+ * historique), mais ni les écrans de livrables, ni les notifications, ni le
+ * dossier de restitution ne la rendent — ils passent tous par `listForClient`
+ * ou `history`. Le client ne la lit que sur son écran Contrats → Prestations,
+ * par `prestationsForClient`. Le filtre est ici, et pas dans chaque écran,
  * pour la même raison que la garde `clientId` de `history()`.
  */
 export const ADMIN_ONLY_KINDS: readonly DeliverableKind[] = ["prestation"];
@@ -202,6 +203,20 @@ export async function listForClient(clientId: string): Promise<Deliverable[]> {
  */
 export async function listPrestations(): Promise<Deliverable<"prestation">[]> {
   return (await currentDeliverables(eq(ctoDeliverables.kind, "prestation"))) as Deliverable<"prestation">[];
+}
+
+/**
+ * Les prestations d'UN accompagnement, pour son écran « Contrats ».
+ *
+ * L'exception assumée à `ADMIN_ONLY_KINDS` : le client voit ses propres
+ * prestations, tarif et règlements compris, sur cet écran et nul autre. Elles
+ * restent hors de `listForClient` — donc hors des notifications, de l'historique
+ * et du dossier de restitution. La garde `clientId` est ici, comme partout.
+ */
+export async function prestationsForClient(clientId: string): Promise<Deliverable<"prestation">[]> {
+  return (await currentDeliverables(
+    and(eq(ctoDeliverables.clientId, clientId), eq(ctoDeliverables.kind, "prestation")),
+  )) as Deliverable<"prestation">[];
 }
 
 /**

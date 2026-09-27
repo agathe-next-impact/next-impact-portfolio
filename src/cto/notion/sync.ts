@@ -12,6 +12,8 @@ import {
   type DeliverableKind,
   type DeliverableInput,
   type DeliverableState,
+  type Paiement,
+  type PrestationPayload,
 } from "../deliverables";
 import { FileTooLargeError, importFile } from "../files";
 import { fetchPage, queryDatabase, publishedFilter, type NotionPage } from "./api";
@@ -21,6 +23,7 @@ import {
   envNameFor,
   isConfigured,
   OPTIONAL_KINDS,
+  paymentsDatabaseId,
   SYNCED_KINDS,
 } from "./config";
 import { importAnnex, readAuditTree } from "./audit";
@@ -42,7 +45,9 @@ import {
   companyName,
   documentFiles,
   mapPage,
+  paymentOf,
   propositionPageId,
+  sortPayments,
   spaceId,
   PROPS,
   UNTITLED,
@@ -485,6 +490,11 @@ async function syncKind(
   const pages = await queryDatabase(databaseIdFor(kind), publishedFilter(PROPS.published));
   const { inputs, warnings } = resolvePages(kind, pages, byNotionPage, disabledClientIds);
   if (kind === "document") await attachFiles(inputs, pages, warnings, options.dryRun);
+  if (kind === "prestation" && !(await attachPayments(inputs, warnings))) {
+    // Échéancier illisible : écrire les prestations sans lui changerait leur
+    // empreinte et daterait une version « sans paiement » qui n'a jamais existé.
+    return { report: emptyReport(kind, inputs.length), warnings };
+  }
   inputs.push(...extra.inputs);
 
   if (!extra.complete) {
@@ -757,6 +767,57 @@ async function syncPropositions(
  * Un échec de téléchargement dégrade la ligne (publiée sans pièce, signalée),
  * il n'arrête pas le balayage : les autres documents n'y sont pour rien.
  */
+function emptyReport(kind: DeliverableKind, published: number): KindReport {
+  return { kind, published, featured: 0, created: 0, updated: 0, restored: 0, unchanged: 0, withdrawn: 0 };
+}
+
+/**
+ * Greffe l'échéancier (base « Paiements ») sur les prestations publiées.
+ *
+ * La base se lit en entier, sans filtre de publication : un règlement n'est
+ * visible que dans l'administration, sa prestation décide seule de ce qui
+ * paraît. Rend `false` si la base est posée mais illisible — la synchro des
+ * prestations saute alors ce tour-ci plutôt que d'effacer les échéanciers.
+ */
+async function attachPayments(inputs: DeliverableInput[], warnings: string[]): Promise<boolean> {
+  const databaseId = paymentsDatabaseId();
+  if (!databaseId) return true;
+
+  let pages: NotionPage[];
+  try {
+    pages = await queryDatabase(databaseId);
+  } catch (error) {
+    warnings.push(
+      `Paiements illisibles (${error instanceof Error ? error.message : "erreur"}) : ` +
+        "prestations ni écrites ni retirées ce tour-ci.",
+    );
+    return false;
+  }
+
+  const byPrestation = new Map<string, Paiement[]>();
+  for (const page of pages) {
+    const payment = paymentOf(page);
+    if (!payment) {
+      warnings.push(
+        `Paiement « ${prop.text(page, PROPS.paiement.title) ?? UNTITLED} » : rattaché à aucune ` +
+          "ou à plusieurs prestations, ignoré.",
+      );
+      continue;
+    }
+    const list = byPrestation.get(payment.prestationId) ?? [];
+    list.push(payment.paiement);
+    byPrestation.set(payment.prestationId, list);
+  }
+
+  for (const input of inputs) {
+    const paiements = byPrestation.get(input.notionPageId);
+    // Pas de clé du tout sans règlement : l'empreinte des prestations sans
+    // échéancier reste celle d'avant son arrivée, aucune version pour rien.
+    if (paiements?.length) (input.payload as PrestationPayload).paiements = sortPayments(paiements);
+  }
+  return true;
+}
+
 async function attachFiles(
   inputs: DeliverableInput[],
   pages: NotionPage[],

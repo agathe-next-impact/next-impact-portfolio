@@ -121,12 +121,29 @@ export interface PrestationPayload {
   avancement: number | null;
   devis: string | null;
   detail: string | null;
+  /**
+   * L'échéancier : acompte, situations, solde — un règlement par ligne de la
+   * base « Paiements ». Absent quand la prestation n'en a aucun, et sur les
+   * versions écrites avant l'échéancier : les deux se lisent « non suivi ».
+   */
+  paiements?: Paiement[];
+}
+
+/** Un règlement d'une prestation, prévu ou encaissé. */
+export interface Paiement {
+  libelle: string;
+  /** HT. `null` si la case est vide dans l'atelier. */
+  montant: number | null;
+  /** ISO. Date d'encaissement si reçu, date prévue sinon. */
+  date: string | null;
+  /** « Reçu » ou « Prévu » ; tout autre libellé se lit comme prévu. */
+  statut: string | null;
 }
 
 /**
- * Ce que le client voit d'une prestation : une date de livraison dans son
- * calendrier. Ni tarif, ni devis, ni détail — ceux-là restent dans
- * l'administration (cf. `ADMIN_ONLY_KINDS`).
+ * Ce que le calendrier du client montre d'une prestation : une date de
+ * livraison. Tarif, devis, détail et règlements ne se lisent que sur l'écran
+ * Contrats → Prestations (cf. `prestationsForClient`).
  */
 export interface Livraison {
   title: string;

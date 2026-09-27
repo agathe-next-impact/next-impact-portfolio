@@ -27,6 +27,7 @@ import {
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
+  Receipt,
   Scale,
   Search,
   ShieldCheck,
@@ -76,7 +77,8 @@ export type NavIconName =
   | "propositions"
   | "veille"
   | "veille-technique"
-  | "documents";
+  | "documents"
+  | "prestations";
 
 const ICONS: Record<NavIconName, LucideIcon> = {
   tableau: House,
@@ -92,6 +94,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   veille: BookOpen,
   "veille-technique": ShieldCheck,
   documents: Folder,
+  prestations: Receipt,
 };
 
 export type BadgeTone = "neutre" | "attention" | "alerte" | "nouveau";
@@ -522,8 +525,9 @@ function tonDe(items: NavItem[]): BadgeTone | null {
 
 /**
  * Les onglets du bas : l'accueil, puis un onglet par groupe (Missions, Votre
- * site, Agir, Veille) — cinq au plus, la limite au-delà de laquelle un
- * libellé ne tient plus sur un téléphone de 320 px. Un onglet mène à la
+ * site, Agir, Veille, Contrats). Cinq tiennent sur un téléphone de 320 px ;
+ * le sixième n'arrive qu'au client qui a à la fois le suivi technique et des
+ * prestations, et les libellés se tronquent alors plutôt que de déborder. Un onglet mène à la
  * première entrée de son groupe ; les autres sont dans les sous-onglets.
  */
 function BarreDuBas({ groups }: { groups: NavGroup[] }) {

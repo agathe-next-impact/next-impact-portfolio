@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { LEGACY_SLUGS, sectionByKey } from "@cto/espace";
 import { kindFromSlug } from "../../../../../../espace-direction/livrables";
+import { VuePrestations } from "../../../../../../espace-direction/prestations";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
 import {
@@ -91,6 +92,8 @@ export default async function EspaceAdminPage({
         return <VueDocuments viewer={viewer} context={context} />;
       case "lettres":
         return <VueLettres viewer={viewer} context={context} />;
+      case "prestations":
+        return <VuePrestations viewer={viewer} context={context} />;
     }
     // Anciennes adresses : la supervision suit la même carte que le client.
     const nouvelle = LEGACY_SLUGS[tete];
