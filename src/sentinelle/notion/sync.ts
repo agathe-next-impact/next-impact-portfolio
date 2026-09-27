@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
-import { missingForValidation, serializeAlertContent } from "@sentinelle/admin/content";
+import { missingForValidation, parseAlertContent, serializeAlertContent } from "@sentinelle/admin/content";
 import { renderAlertEmail } from "@sentinelle/emails/render";
 import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
 import { configurationIssue } from "./client";
@@ -9,6 +9,7 @@ import {
   createAlertPage,
   listAlertPages,
   markSent,
+  writeDraftContent,
   type AlertPageRecord,
 } from "./alerts";
 import { alertKey, VERDICT_LABEL } from "./schema";
@@ -49,9 +50,20 @@ export interface AlertSyncReport {
  * qui aurait fait échouer cette création — sans lui, un tel brouillon resterait
  * invisible pour toujours, `onConflictDoNothing` empêchant le matching de le
  * retenter au passage suivant.
+ *
+ * Sert aussi, une fois, au passage de tout le stock d'alertes antérieur à
+ * Notion (2026-09) : celles qui portaient déjà un texte (`generatedText`) le
+ * reçoivent tout de suite, pour ne pas les faire réapparaître « à rédiger »
+ * dans Notion alors que la rédaction est déjà passée.
  */
 export async function backfillMissingPages(): Promise<{ backfilled: number; warnings: string[] }> {
   const warnings: string[] = [];
+
+  // Constaté en réel (2026-09) : la page se crée, puis l'écriture de
+  // `notion_page_id` échoue (coupure réseau entre les deux appels). Sans ce
+  // rattrapage, le passage suivant retrouverait la ligne toujours sans page et
+  // en recréerait une seconde — la même alerte en double dans Notion.
+  const existantes = new Map((await listAlertPages()).map((page) => [page.key, page.pageId]));
 
   const rows = await db()
     .select({
@@ -61,6 +73,7 @@ export async function backfillMissingPages(): Promise<{ backfilled: number; warn
       clientName: clients.name,
       siteUrl: clients.siteUrl,
       verdict: alerts.verdict,
+      generatedText: alerts.generatedText,
       component: stackItems.label,
       componentVersion: stackItems.version,
       intelSource: intelItems.source,
@@ -76,17 +89,27 @@ export async function backfillMissingPages(): Promise<{ backfilled: number; warn
   let backfilled = 0;
 
   for (const row of rows) {
+    const key = alertKey(row.clientId, row.intelItemId);
+
     try {
-      const pageId = await createAlertPage({
-        clientId: row.clientId,
-        clientLabel: row.clientLabel ?? row.clientName,
-        siteUrl: row.siteUrl,
-        component: row.componentVersion ? `${row.component} v${row.componentVersion}` : row.component,
-        verdict: row.verdict ?? "info",
-        source: row.intelSource,
-        severity: row.severity,
-        key: alertKey(row.clientId, row.intelItemId),
-      });
+      const deja = existantes.get(key);
+      const pageId =
+        deja ??
+        (await createAlertPage({
+          clientId: row.clientId,
+          clientLabel: row.clientLabel ?? row.clientName,
+          siteUrl: row.siteUrl,
+          component: row.componentVersion ? `${row.component} v${row.componentVersion}` : row.component,
+          verdict: row.verdict ?? "info",
+          source: row.intelSource,
+          severity: row.severity,
+          key,
+        }));
+
+      if (!deja) {
+        const preexistant = parseAlertContent(row.generatedText);
+        if (preexistant) await writeDraftContent(pageId, preexistant);
+      }
 
       await db().update(alerts).set({ notionPageId: pageId }).where(eq(alerts.id, row.alertId));
       backfilled++;

@@ -25,19 +25,19 @@ e-mail, site), pas par une relation Notion.
 3. **Partager la base** avec l'intégration (menu `•••` → *Connexions*) — sans
    ce geste, l'API répond 404 sur tout.
 4. **Poser les deux variables** (`.env.local` puis Vercel) :
-   `SENTINELLE_NOTION_TOKEN` (le jeton de l'intégration) et
+   `SENTINELLE_NOTION_SECRET` (le jeton de l'intégration) et
    `SENTINELLE_NOTION_DB_ALERTES` (l'identifiant dans l'URL de la base).
 
 ## Les colonnes
 
 | Colonne | Type | Qui l'écrit | Rôle |
 | --- | --- | --- | --- |
-| `Titre` | Titre | matching (placeholder), rédaction | Ce que l'admin liste, l'objet de l'e-mail |
+| `Nom` | Titre | matching (placeholder), rédaction | Ce que l'admin liste, l'objet de l'e-mail |
 | `Client` | Texte | matching | Raison sociale ou nom — lecture seule pour un humain |
 | `Site` | URL | matching | Le site surveillé |
 | `Composant` | Texte | matching | Le composant concerné et sa version |
 | `Verdict` | Select : `Rouge` `Orange` `Vert` `Info` | matching (proposé), **relecture humaine** | Gravité annoncée au client |
-| `Statut` | Select : `Brouillon` `Validée` `Envoyée` `Écartée` | matching (Brouillon), **relecture humaine** | Commande tout : voir plus bas |
+| `Statut` | Select : `Brouillon` `Validée` `Envoyée` `Ecartée` | matching (Brouillon), **relecture humaine** | Commande tout : voir plus bas |
 | `Corps` | Texte enrichi | rédaction, **relecture humaine** | Le message |
 | `Ce que ça change` | Texte enrichi | rédaction, **relecture humaine** | Ce que ça change pour ce client |
 | `Action recommandée` | Texte enrichi | rédaction, **relecture humaine** | Doit commencer par un verbe |
@@ -47,7 +47,7 @@ e-mail, site), pas par une relation Notion.
 | `Sévérité` | Texte | matching | Telle que la source l'écrit (low/medium/high/critical) |
 | `Envoyée le` | Date | la synchro, à l'envoi | Jamais à la main |
 | `Clé` | Texte | matching | Rapprochement technique (`clientId:intelItemId`) — ne pas modifier |
-| `Id client` | Texte | matching | UUID Postgres du client — ne pas modifier, sert à l'envoi |
+| `Id Client` | Texte | matching | UUID Postgres du client — ne pas modifier, sert à l'envoi |
 
 Les noms sont lus **exactement tels quels** (`src/sentinelle/notion/schema.ts`,
 `PROPS`). Une colonne renommée ne fait pas planter la synchro — elle se met à
@@ -74,11 +74,11 @@ select :
 - **Envoyée** — écrit par la synchro, jamais par un humain. `Envoyée le` se
   remplit au même moment. Toute correction après ce point n'a plus d'effet :
   l'e-mail est déjà parti.
-- **Écartée** — posé par un humain : l'alerte ne partira pas. Pour vingt-neuf
+- **Ecartée** — posé par un humain : l'alerte ne partira pas. Pour vingt-neuf
   CVE sur le même paquet, Notion permet de sélectionner les lignes et de
   changer leur Statut d'un coup — pas besoin d'un geste dédié côté produit.
 
-Remettre une alerte Envoyée ou Écartée à Validée la refait retenter à la passe
+Remettre une alerte Envoyée ou Ecartée à Validée la refait retenter à la passe
 suivante — il n'y a pas de statut « figé ».
 
 ## Ce que l'admin du site montre encore

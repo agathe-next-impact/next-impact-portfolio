@@ -48,10 +48,10 @@ export class NotionError extends Error {
 }
 
 function token(): string {
-  const value = process.env.SENTINELLE_NOTION_TOKEN?.trim();
+  const value = process.env.SENTINELLE_NOTION_SECRET?.trim();
   if (!value) {
     throw new NotionError(
-      "SENTINELLE_NOTION_TOKEN manquante. Créer une intégration interne dédiée sur " +
+      "SENTINELLE_NOTION_SECRET manquante. Créer une intégration interne dédiée sur " +
         "notion.so/profile/integrations (jamais celle du CTO), puis la partager sur la base " +
         "« Sentinelle — Alertes » (menu ••• → Connexions). Voir docs/sentinelle/notion-alertes.md.",
     );
@@ -73,7 +73,7 @@ export function alertsDatabaseId(): string {
 
 /** Ce qui manque pour que le module puisse fonctionner, en une phrase, ou null. */
 export function configurationIssue(): string | null {
-  const missing = ["SENTINELLE_NOTION_TOKEN", "SENTINELLE_NOTION_DB_ALERTES"].filter(
+  const missing = ["SENTINELLE_NOTION_SECRET", "SENTINELLE_NOTION_DB_ALERTES"].filter(
     (name) => !process.env[name]?.trim(),
   );
   if (missing.length === 0) return null;

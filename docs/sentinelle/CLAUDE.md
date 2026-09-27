@@ -74,7 +74,7 @@ reste statique et performant.
 - Pas de nouvelle lib UI : réutiliser le design system du site existant
 - Notion (`src/sentinelle/notion/`) pour la rédaction et la validation des
   alertes — voir la règle 4 ci-dessus. Intégration propre à Sentinelle
-  (`SENTINELLE_NOTION_TOKEN`/`SENTINELLE_NOTION_DB_ALERTES`), jamais celle du
+  (`SENTINELLE_NOTION_SECRET`/`SENTINELLE_NOTION_DB_ALERTES`), jamais celle du
   CTO : même principe d'isolation que le SMTP.
 
 ## Conventions

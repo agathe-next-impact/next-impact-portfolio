@@ -6,7 +6,7 @@ describe("statusFromLabel", () => {
     expect(statusFromLabel("Brouillon")).toBe("draft");
     expect(statusFromLabel("Validée")).toBe("validated");
     expect(statusFromLabel("Envoyée")).toBe("sent");
-    expect(statusFromLabel("Écartée")).toBe("dismissed");
+    expect(statusFromLabel("Ecartée")).toBe("dismissed");
   });
 
   it("retombe sur brouillon pour un select vide ou méconnu", () => {

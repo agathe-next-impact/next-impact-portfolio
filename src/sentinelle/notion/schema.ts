@@ -10,7 +10,7 @@ import type { AlertStatus, Verdict } from "@sentinelle/types";
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const PROPS = {
-  title: "Titre",
+  title: "Nom",
   client: "Client",
   site: "Site",
   component: "Composant",
@@ -27,7 +27,7 @@ export const PROPS = {
   /** Clé de rapprochement `${clientId}:${intelItemId}` — lecture humaine, pas d'écran dédié. */
   key: "Clé",
   /** UUID du client Sentinelle (Postgres) — nécessaire à l'envoi, invisible pour un humain. */
-  clientId: "Id client",
+  clientId: "Id Client",
 } as const;
 
 /**
@@ -41,7 +41,10 @@ export const STATUS_LABEL: Record<Exclude<AlertStatus, "resolved">, string> = {
   draft: "Brouillon",
   validated: "Validée",
   sent: "Envoyée",
-  dismissed: "Écartée",
+  // Sans accent sur le E : c'est ainsi que l'option existe réellement dans la
+  // base Notion. Le code compare du texte, pas un identifiant — mieux vaut se
+  // plier à l'orthographe déjà choisie que la faire deviner à chaque relecture.
+  dismissed: "Ecartée",
 };
 
 const STATUS_BY_LABEL = new Map(

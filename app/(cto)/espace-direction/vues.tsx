@@ -342,7 +342,10 @@ export async function VueTableau({
   erreur?: string | null;
 }) {
   const lettres = await lettersForClient(viewer.clientId);
-  const missions = sectionOuverte(context, "missions");
+  // Ouverte à tous, la vue d'ensemble n'a sa carte que si elle a du contenu :
+  // vide, elle promettrait des chantiers et décisions que le client n'a pas
+  // forcément achetés, et que la barre latérale ne lui montre pas.
+  const missions = sectionOuverte(context, "missions") && !context.sansInformation.has("missions");
   const site = sectionOuverte(context, "site");
   const prenom = viewer.personName?.trim().split(/\s+/)[0];
 

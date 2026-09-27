@@ -283,7 +283,7 @@ Deux points tranchés en cours de chantier, faute de précédent dans le code :
    du CTO (souscription en libre-service, sans accompagnement) : la base
    « Sentinelle — Alertes » identifie son client par du texte simple (nom,
    e-mail, site), jamais par une relation Notion, et sa propre intégration
-   (`SENTINELLE_NOTION_TOKEN`) reste isolée de celle du CTO — même principe que
+   (`SENTINELLE_NOTION_SECRET`) reste isolée de celle du CTO — même principe que
    le transport SMTP propre à Sentinelle.
 
 Conséquences :
