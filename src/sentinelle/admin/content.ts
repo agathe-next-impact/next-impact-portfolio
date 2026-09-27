@@ -2,11 +2,17 @@ import { z } from "zod";
 import type { DraftedAlert } from "@sentinelle/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Contenu d'une alerte, entre la base et le formulaire de relecture.
+// Contenu d'une alerte : le contrat de champs partagé par la rédaction,
+// l'e-mail et — depuis 2026-09 — la synchro Notion.
 //
 // `alerts.generated_text` porte la sortie brute du modèle (JSON snake_case, tel
-// que le décrit le prompt système) ; `alerts.final_text` porte **le même objet
-// après relecture**, sérialisé en JSON camelCase.
+// que le décrit le prompt système), écrite une fois par la rédaction et jamais
+// réécrite ensuite : c'est la trace d'audit de ce que le LLM a proposé.
+// `alerts.final_text` porte **le même objet tel qu'il se lit ACTUELLEMENT dans
+// Notion**, sérialisé en JSON camelCase et resynchronisé à chaque passe
+// (`notion/sync.ts`) — ce n'est plus ici qu'un humain corrige, seulement où le
+// digest et la lettre bimensuelle lisent vite un contenu validé sans dépendre
+// de Notion à l'instant de leur propre fabrication.
 //
 // Pourquoi du JSON dans une colonne nommée « text » : le gabarit d'e-mail a
 // besoin de champs séparés (verdict, titre, corps, ce que ça change, action,
@@ -15,8 +21,9 @@ import type { DraftedAlert } from "@sentinelle/types";
 // deviner. Le contrat est ici, à un seul endroit, et il est testé.
 //
 // La lecture est **tolérante par conception** : elle accepte les deux
-// vocabulaires (celui du prompt et celui du modèle TypeScript) parce que le même
-// formulaire s'amorce depuis `generated_text` et se relit depuis `final_text`.
+// vocabulaires (celui du prompt et celui du modèle TypeScript), parce que
+// `initialContent` sert aussi bien à afficher `generated_text` (une alerte dont
+// la relecture Notion n'a encore rien changé) qu'à afficher `final_text`.
 // L'écriture, elle, n'a qu'une forme.
 // ─────────────────────────────────────────────────────────────────────────────
 

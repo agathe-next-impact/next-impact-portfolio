@@ -60,8 +60,9 @@ de l'extraction, c'est une ligne à changer.
 | `billing/` | abonnement via Payment Link Stripe + webhook | ✔ (portail client en 5) |
 | `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 ✔ |
 | `redaction/` | appel API Claude, garde zod sur la sortie | 3 ✔ |
+| `notion/` | rédaction et validation des ALERTES dans Notion, synchro + envoi | 4 ✔ (2026-09) |
 | `emails/` | transport SMTP Google, gabarits React Email, rendu HTML + texte | 4 ✔ |
-| `admin/` | session, file de validation, cycle draft → validated → sent | 4 ✔ |
+| `admin/` | session, file (lecture seule pour les alertes), cycle de la lettre | 4 ✔ |
 | `access/` | liens de connexion à usage unique, session de l'espace client | 5 ✔ |
 | `onboarding/` | fiche déclarative, amorçage depuis un scan, bienvenue | 5 ✔ |
 | `espace/` | lectures de l'espace abonné, portail de facturation Stripe | 5 ✔ |
@@ -104,14 +105,28 @@ Trois pièges qui ne se voient qu'en production, et que le code traite :
 Un numéro resté sans lettre se refabrique depuis l'admin (`rebuildIssue`, fonction
 `issue-rebuild`) : le cron ne repasse pas sur une période écoulée.
 
+`notion/` mérite sa propre note, parce qu'il porte depuis 2026-09 ce que
+`admin/actions.ts` portait avant pour les alertes : la règle 4 (« aucune alerte
+ne part sans validation humaine »). Le matching crée la page d'une alerte tout
+juste matchée (`createAlertPage`), la rédaction y dépose le texte
+(`writeDraftContent`) — et c'est tout ce que le produit écrit sans un humain.
+Le reste — texte, verdict, et le champ `Statut` qui commande tout
+(Brouillon → Validée → Envoyée, ou Écartée) — se corrige **dans la page**, pas
+dans une base Postgres ni dans l'admin du site. `notion/sync.ts` relit toute la
+base à chaque passage (fonction Inngest `sentinelle-alert-sync`, toutes les
+30 min), mirroir chaque page dans `alerts` — pour que le digest CTO et la
+lettre bimensuelle n'aient jamais à dépendre de Notion pour lire une alerte
+déjà validée — et envoie ce qui est passé à Validée. Schéma exact de la base :
+`docs/sentinelle/notion-alertes.md`. Deux abonnements Notion distincts et
+volontairement séparés : celui-ci n'a rien à voir avec l'intégration du CTO
+(`@cto/notion`), pour la même raison que Sentinelle a son propre SMTP.
+
 `admin/` mérite une note : `session.ts` et `content.ts` sont **purs et testés**
-(signature de jeton, contrat de contenu), `queue.ts` et `actions.ts` touchent la
-base, et la glue Next — cookies, redirections, formulaires — vit dans
-`app/(sentinelle)/admin/`. La règle 4 (« aucune alerte ne part sans validation
-humaine ») est implémentée dans `actions.ts` sous forme de refus, pas de
-consigne : on ne valide pas un contenu incomplet, on n'envoie que ce qui est
-`validated`, jamais deux fois, jamais à une fiche résiliée, effacée ou de
-démonstration.
+(signature de jeton, contrat de contenu), `queue.ts` touche la base en lecture
+seule pour l'écran de suivi des alertes, `digests.ts` (numéros de la lettre
+bimensuelle, qui eux se valident toujours ici) touche la base en écriture, et
+la glue Next — cookies, redirections, formulaires — vit dans
+`app/(sentinelle)/admin/`.
 
 Deux points à ne pas « harmoniser » :
 

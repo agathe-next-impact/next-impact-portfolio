@@ -260,3 +260,46 @@ Conséquences :
 - Coût : une centaine de requêtes Notion par audit publié et par balayage
   (environ 30 s). Acceptable à quelques audits ; à revoir au-delà de cinq ou six
   audits publiés en même temps (le Cron a 300 s).
+
+## ADR-012 — 2026-09-27 — Les alertes Sentinelle se rédigent et se valident dans Notion
+
+Décision explicite d'Agathe : « les alertes ne doivent pas être en base mais
+dans Notion ». Revient sur la règle 4 de `docs/sentinelle/CLAUDE.md` telle
+qu'implémentée jusque-là (admin `/admin/sentinelle`, cycle draft → validated →
+sent tenu par des actions serveur sur Postgres) — la règle elle-même ne change
+pas, seul l'endroit où elle s'exécute change.
+
+Deux points tranchés en cours de chantier, faute de précédent dans le code :
+
+1. **Le digest CTO et la lettre bimensuelle continuent de lire un miroir
+   Postgres**, pas Notion en direct. La doctrine Notion du CTO
+   (`docs/cto-externalise/notion-livrables.md` §1) l'interdit déjà pour ses
+   propres livrables : « l'espace ne doit pas dépendre de Notion ». Une alerte
+   se rédige et se valide dans sa page ; la table `alerts` n'est plus éditée
+   que par le matching et la rédaction, et redevient un miroir en lecture pour
+   tout le reste — resynchronisé toutes les demi-heures.
+2. **Nouvelle base Notion dédiée à Sentinelle, séparée de celle du CTO.** La
+   plupart des abonnés Sentinelle n'ont pas de fiche dans la base « Clients »
+   du CTO (souscription en libre-service, sans accompagnement) : la base
+   « Sentinelle — Alertes » identifie son client par du texte simple (nom,
+   e-mail, site), jamais par une relation Notion, et sa propre intégration
+   (`SENTINELLE_NOTION_TOKEN`) reste isolée de celle du CTO — même principe que
+   le transport SMTP propre à Sentinelle.
+
+Conséquences :
+
+- `src/sentinelle/notion/` (nouveau module) : client HTTP Notion propre à
+  Sentinelle, mapping des propriétés, synchro + envoi
+  (`syncAlertsFromNotion`, fonction Inngest `sentinelle-alert-sync`, toutes les
+  30 min). Schéma de la base : `docs/sentinelle/notion-alertes.md`.
+- `alerts.notion_page_id` (migration 0004) relie chaque ligne à sa page.
+  L'unicité `(client_id, intel_item_id)` reste l'idempotence du matching —
+  inchangée, elle ne devait rien à l'endroit où le texte se rédige.
+- L'admin du site (`/admin/sentinelle`) perd toute action d'édition/validation/
+  envoi/écartement pour les alertes : `saveAlertContent`, `validateAlert`,
+  `sendAlert`, `dismissAlert`, `reopenAlert`, `dismissComponent` supprimées.
+  Les pages restantes sont un tableau de bord en lecture seule, chaque ligne
+  renvoyant vers sa page Notion. Le geste « écarter vingt-neuf alertes sur le
+  même paquet » se fait par une sélection multiple native dans Notion.
+- La lettre bimensuelle (`digests.ts`, `/admin/sentinelle/numeros`) n'est pas
+  concernée : elle continue de se valider dans l'admin du site.

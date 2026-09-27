@@ -2,16 +2,21 @@ import { and, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import type { NewAlert } from "@sentinelle/types";
+import { alertKey, createAlertPage } from "@sentinelle/notion";
 import { decide, type MatchableIntel, type MatchableStackItem } from "./match";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Passe de matching — le pilote. Il ne décide rien : il charge les paires
-// candidates, applique `decide()` et écrit les brouillons.
+// candidates, applique `decide()`, écrit les brouillons et leur crée leur page
+// dans Notion — c'est elle, depuis 2026-09, que la rédaction complète et
+// qu'un humain relit et valide (règle 4, désormais tenue par Notion, pas par
+// l'admin).
 //
 // L'unicité `(client_id, intel_item_id)` fait le travail d'idempotence : deux
 // passes le même jour, ou un cron rejoué, ne peuvent pas produire deux alertes
 // sur le même fait. La garantie est dans le moteur de base, pas dans du code
-// applicatif qui pourrait l'oublier.
+// applicatif qui pourrait l'oublier — et elle protège aussi Notion : sans elle,
+// une alerte matchée deux fois y aurait deux pages.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -64,6 +69,13 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
         title: intelItems.title,
         publishedAt: intelItems.publishedAt,
       },
+      // Le strict nécessaire pour créer la page Notion de l'alerte, si elle
+      // matche : la rédaction n'a pas encore de texte à y déposer.
+      client: {
+        company: clients.company,
+        name: clients.name,
+        siteUrl: clients.siteUrl,
+      },
     })
     .from(stackItems)
     .innerJoin(clients, and(eq(clients.id, stackItems.clientId), eq(clients.active, true)))
@@ -88,6 +100,10 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
   };
 
   const drafts: NewAlert[] = [];
+  // Retrouver, après l'insertion en lot, de quelle paire vient chaque alerte
+  // effectivement créée : `onConflictDoNothing` ne dit que le résultat, pas la
+  // provenance, et c'est cette provenance qu'il faut pour écrire sa page Notion.
+  const byPairKey = new Map<string, (typeof rows)[number]>();
 
   for (const row of rows) {
     const decision = decide(
@@ -115,6 +131,7 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
       status: "draft",
       verdict: decision.verdict,
     });
+    byPairKey.set(`${row.stack.clientId}:${row.intel.id}`, row);
   }
 
   if (drafts.length > 0) {
@@ -123,9 +140,37 @@ export async function runMatching(now: Date = new Date()): Promise<MatchReport> 
       .values(drafts)
       // Un client n'est alerté qu'une fois par fait : le rejeu ne produit rien.
       .onConflictDoNothing({ target: [alerts.clientId, alerts.intelItemId] })
-      .returning({ id: alerts.id });
+      .returning({ id: alerts.id, clientId: alerts.clientId, intelItemId: alerts.intelItemId, verdict: alerts.verdict });
 
     report.created = created.length;
+
+    // La page Notion, tout de suite : c'est elle que la rédaction complétera et
+    // qu'un humain relira. Un échec ici n'interrompt pas les autres alertes de
+    // la passe — `notion/sync.ts` répare au passage suivant (`backfillMissingPages`).
+    for (const row of created) {
+      const source = byPairKey.get(`${row.clientId}:${row.intelItemId}`);
+      if (!source) continue; // ne devrait pas arriver : la clé vient d'être posée ci-dessus
+
+      try {
+        const pageId = await createAlertPage({
+          clientId: row.clientId,
+          clientLabel: source.client.company ?? source.client.name,
+          siteUrl: source.client.siteUrl,
+          component: source.stack.version
+            ? `${source.stack.label} v${source.stack.version}`
+            : source.stack.label,
+          verdict: row.verdict ?? "info",
+          source: source.intel.source,
+          severity: source.intel.severity,
+          key: alertKey(row.clientId, row.intelItemId),
+        });
+
+        await db().update(alerts).set({ notionPageId: pageId }).where(eq(alerts.id, row.id));
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "erreur";
+        console.warn(`[sentinelle] alerte ${row.id} : page Notion pas créée (${message}) — réparée demain`);
+      }
+    }
   }
 
   if (report.truncated) {

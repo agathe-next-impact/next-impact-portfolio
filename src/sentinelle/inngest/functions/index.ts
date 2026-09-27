@@ -1,3 +1,4 @@
+import { alertSync } from "./alert-sync";
 import { onClientSubscribed } from "./client-subscribed";
 import { collectDaily } from "./collect-daily";
 import { healthcheck } from "./healthcheck";
@@ -12,6 +13,7 @@ export const functions = [
   scanAsync,
   retentionDaily,
   collectDaily,
+  alertSync,
   newsletterBuild,
   issueRebuild,
   onClientSubscribed,

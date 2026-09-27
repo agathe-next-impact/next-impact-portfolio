@@ -1,51 +1,30 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAlertDetail, nextOpenAlertId, VERDICTS } from "@sentinelle/admin";
+import { getAlertDetail, nextOpenAlertId } from "@sentinelle/admin";
 import { previewAlertEmail } from "@sentinelle/emails/render";
 import {
-  ecarterAlerte,
-  enregistrerAlerte,
-  envoyerAlerte,
-  rouvrirAlerte,
-  validerAlerte,
-} from "../../actions";
-import {
   BackLink,
-  buttonClass,
   formatDateTime,
   Label,
-  Notice,
+  NotionLink,
   Panel,
   StatusBadge,
   VerdictBadge,
-  VERDICT_LABEL,
 } from "../../../ui";
 
 export const dynamic = "force-dynamic";
 
-const champ =
-  "mt-2 w-full border border-dark-gray bg-transparent px-4 py-3 font-inter-tight text-base text-foreground focus:border-accent-secondary focus:outline-none";
-
 /**
- * Relecture d'une alerte.
+ * Vue d'une alerte — lecture seule.
  *
- * Trois colonnes de lecture, dans l'ordre du geste : ce que dit la source (on ne
- * relit pas un texte sans savoir d'où il vient), le texte à corriger, et
- * l'aperçu de ce que recevra le client.
- *
- * L'aperçu montre **ce qui est enregistré**, pas ce qui est en train d'être
- * tapé : c'est une page serveur, sans JavaScript. Dit autrement, on voit ce qui
- * partirait si on envoyait maintenant — ce qui est exactement la question posée.
+ * Depuis 2026-09, une alerte ne se relit ni ne se valide plus ici : c'est dans
+ * sa page Notion, où elle a été rédigée, que ce geste se fait — le lien y mène
+ * en un clic. Cette page reste utile pour ce qu'elle seule sait montrer : le
+ * fait de veille qui l'a déclenchée, et l'aperçu du gabarit d'e-mail avec le
+ * contenu tel que la dernière synchro l'a lu.
  */
-export default async function AlertPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ ok?: string; erreur?: string }>;
-}) {
+export default async function AlertPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { ok, erreur } = await searchParams;
 
   const alerte = await getAlertDetail(id);
   if (!alerte) notFound();
@@ -58,18 +37,11 @@ export default async function AlertPage({
     sentAt: new Date(),
   });
 
-  const retourClient = `/admin/sentinelle/clients/${alerte.client.id}`;
-  const modifiable = alerte.status === "draft" || alerte.status === "validated";
-
   return (
     <main className="pt-10">
-      <BackLink href={retourClient}>{alerte.client.company ?? alerte.client.name}</BackLink>
-
-      {(ok || erreur) && (
-        <div className="mt-6">
-          <Notice tone={ok ? "ok" : "erreur"} message={ok ?? erreur ?? ""} />
-        </div>
-      )}
+      <BackLink href={`/admin/sentinelle/clients/${alerte.client.id}`}>
+        {alerte.client.company ?? alerte.client.name}
+      </BackLink>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <VerdictBadge verdict={alerte.verdict} />
@@ -81,11 +53,14 @@ export default async function AlertPage({
         {suivante && (
           <Link
             href={`/admin/sentinelle/alertes/${suivante}`}
-            className="ml-auto font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary"
+            className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary"
           >
             Alerte suivante →
           </Link>
         )}
+        <span className="ml-auto">
+          <NotionLink pageId={alerte.notionPageId} />
+        </span>
       </div>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_minmax(320px,420px)]">
@@ -127,160 +102,26 @@ export default async function AlertPage({
             </p>
           </Panel>
 
-          <form className="mt-8">
-            <input type="hidden" name="alertId" value={alerte.id} />
-
-            <Label>Verdict</Label>
-            <div className="mt-2 flex flex-wrap gap-4">
-              {VERDICTS.map((verdict) => (
-                <label
-                  key={verdict}
-                  className="flex items-center gap-2 font-inter-tight text-sm text-foreground"
-                >
-                  <input
-                    type="radio"
-                    name="verdict"
-                    value={verdict}
-                    defaultChecked={alerte.content.verdict === verdict}
-                    className="accent-accent-secondary"
-                  />
-                  {VERDICT_LABEL[verdict]}
-                </label>
-              ))}
-            </div>
-
-            <div className="mt-6">
-              <label htmlFor="title">
-                <Label>Titre</Label>
-              </label>
-              <input
-                id="title"
-                name="title"
-                defaultValue={alerte.content.title}
-                className={champ}
-                maxLength={120}
-              />
-            </div>
-
-            <div className="mt-6">
-              <label htmlFor="body">
-                <Label>Corps · deux à cinq phrases</Label>
-              </label>
-              <textarea
-                id="body"
-                name="body"
-                rows={7}
-                defaultValue={alerte.content.body}
-                className={`${champ} leading-relaxed`}
-              />
-            </div>
-
-            <div className="mt-6">
-              <label htmlFor="whatItChanges">
-                <Label>Ce que ça change pour ce client</Label>
-              </label>
-              <textarea
-                id="whatItChanges"
-                name="whatItChanges"
-                rows={3}
-                defaultValue={alerte.content.whatItChanges}
-                className={`${champ} leading-relaxed`}
-              />
-            </div>
-
-            <div className="mt-6">
-              <label htmlFor="recommendedAction">
-                <Label>Action recommandée · commence par un verbe</Label>
-              </label>
-              <input
-                id="recommendedAction"
-                name="recommendedAction"
-                defaultValue={alerte.content.recommendedAction}
-                className={champ}
-              />
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-end gap-6">
-              <label className="flex items-center gap-3 font-inter-tight text-sm text-foreground">
-                <input
-                  type="checkbox"
-                  name="diyPossible"
-                  defaultChecked={alerte.content.diyPossible}
-                  className="accent-accent-secondary"
-                />
-                Faisable par le client seul
-              </label>
-
-              <div className="flex-1">
-                <label htmlFor="effortEstimate">
-                  <Label>Effort</Label>
-                </label>
-                <input
-                  id="effortEstimate"
-                  name="effortEstimate"
-                  defaultValue={alerte.content.effortEstimate}
-                  placeholder="15 min · 0,5 j de prestation"
-                  className={champ}
-                />
-              </div>
-            </div>
-
-            {modifiable ? (
-              <div className="mt-8 flex flex-wrap gap-3">
-                <button type="submit" formAction={enregistrerAlerte} className={buttonClass.ghost}>
-                  Enregistrer
-                </button>
-                <button type="submit" formAction={validerAlerte} className={buttonClass.primary}>
-                  Enregistrer et valider
-                </button>
-              </div>
-            ) : (
-              <p className="mt-8 font-inter-tight text-sm text-mid-gray">
-                Alerte {alerte.status === "sent" ? "envoyée" : "close"} : le texte n'est plus
-                modifiable.
+          <Panel className="mt-6 p-5">
+            <Label>Le texte · dernière version connue</Label>
+            <p className="mt-3 font-inter-tight text-lg text-foreground">
+              {alerte.content.title || "(pas encore rédigé)"}
+            </p>
+            {alerte.content.body && (
+              <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+                {alerte.content.body}
               </p>
             )}
-          </form>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            {alerte.status === "validated" && (
-              <form action={envoyerAlerte}>
-                <input type="hidden" name="alertId" value={alerte.id} />
-                <input type="hidden" name="retour" value={`/admin/sentinelle/alertes/${id}`} />
-                <button type="submit" className={buttonClass.primary}>
-                  Envoyer à {alerte.client.email}
-                </button>
-              </form>
+            {alerte.content.recommendedAction && (
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+                Action recommandée : <span className="text-foreground">{alerte.content.recommendedAction}</span>
+              </p>
             )}
-
-            {modifiable && (
-              <form action={ecarterAlerte}>
-                <input type="hidden" name="alertId" value={alerte.id} />
-                <input type="hidden" name="retour" value={retourClient} />
-                <button type="submit" className={buttonClass.danger}>
-                  Écarter
-                </button>
-              </form>
-            )}
-
-            {(alerte.status === "dismissed" || alerte.status === "resolved") && (
-              <form action={rouvrirAlerte}>
-                <input type="hidden" name="alertId" value={alerte.id} />
-                <input type="hidden" name="retour" value={`/admin/sentinelle/alertes/${id}`} />
-                <button type="submit" className={buttonClass.ghost}>
-                  Remettre dans la file
-                </button>
-              </form>
-            )}
-          </div>
-
-          {alerte.status === "draft" && (
-            <p className="mt-4 max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
-              L'envoi n'apparaît qu'une fois l'alerte validée. Ce n'est pas une
-              étape de confort : c'est la règle 4 du produit, et elle est aussi
-              vérifiée côté serveur.
+            <p className="mt-6 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              Toute correction — texte, verdict, statut — se fait dans la page Notion, pas ici.
+              La prochaine synchro (toutes les demi-heures) répercute ce qui y aura changé.
             </p>
-          )}
+          </Panel>
 
           {alerte.generatedText && (
             <details className="mt-8 border border-dark-gray p-4">
@@ -295,7 +136,7 @@ export default async function AlertPage({
         </div>
 
         <aside>
-          <Label>Aperçu · dernière version enregistrée</Label>
+          <Label>Aperçu · dernière version synchronisée</Label>
           <iframe
             title="Aperçu de l'e-mail"
             srcDoc={apercu}
@@ -303,8 +144,8 @@ export default async function AlertPage({
             className="mt-3 h-[720px] w-full border border-dark-gray bg-obsidian"
           />
           <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
-            Enregistrez pour rafraîchir l'aperçu. C'est bien ce document qui
-            partira : le même gabarit, le même rendu.
+            C'est bien ce document qui partira si l'alerte est validée dans Notion : le même
+            gabarit, le même rendu.
           </p>
         </aside>
       </div>

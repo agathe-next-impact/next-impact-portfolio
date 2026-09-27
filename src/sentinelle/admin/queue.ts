@@ -115,6 +115,8 @@ export interface QueueAlert {
   intelKind: string;
   intelSource: string;
   severity: string | null;
+  /** Sa page dans la base « Sentinelle — Alertes » — c'est là qu'elle se relit. */
+  notionPageId: string | null;
 }
 
 export interface ComponentGroup {
@@ -178,6 +180,7 @@ export async function getClientDossier(clientId: string): Promise<ClientDossier 
       generatedText: alerts.generatedText,
       createdAt: alerts.createdAt,
       sentAt: alerts.sentAt,
+      notionPageId: alerts.notionPageId,
       stackItemId: stackItems.id,
       label: stackItems.label,
       slug: stackItems.slug,
@@ -213,6 +216,7 @@ export async function getClientDossier(clientId: string): Promise<ClientDossier 
       intelKind: row.intelKind,
       intelSource: row.intelSource,
       severity: row.severity,
+      notionPageId: row.notionPageId,
     };
 
     if (row.status !== "draft" && row.status !== "validated") {
@@ -263,6 +267,8 @@ export interface AlertDetail {
   reviewed: boolean;
   createdAt: Date;
   sentAt: Date | null;
+  /** Sa page dans la base « Sentinelle — Alertes », ou null si pas encore créée. */
+  notionPageId: string | null;
   client: {
     id: string;
     name: string;
@@ -294,6 +300,7 @@ export async function getAlertDetail(alertId: string): Promise<AlertDetail | nul
       generatedText: alerts.generatedText,
       createdAt: alerts.createdAt,
       sentAt: alerts.sentAt,
+      notionPageId: alerts.notionPageId,
       clientId: clients.id,
       clientName: clients.name,
       clientEmail: clients.email,
@@ -330,6 +337,7 @@ export async function getAlertDetail(alertId: string): Promise<AlertDetail | nul
     reviewed: Boolean(row.finalText),
     createdAt: row.createdAt,
     sentAt: row.sentAt,
+    notionPageId: row.notionPageId,
     client: {
       id: row.clientId,
       name: row.clientName,

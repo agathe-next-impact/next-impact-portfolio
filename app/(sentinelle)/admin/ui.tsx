@@ -102,6 +102,33 @@ export function Notice({ message, tone }: { message: string; tone: "ok" | "erreu
   );
 }
 
+/**
+ * Lien vers la page Notion d'une alerte — c'est là qu'elle se relit, se corrige
+ * et se valide depuis 2026-09. `null` tant que sa page n'a pas encore été créée
+ * (juste après le matching, ou pendant une panne Notion réparée au prochain
+ * passage).
+ */
+export function NotionLink({ pageId }: { pageId: string | null }) {
+  if (!pageId) {
+    return (
+      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mid-gray">
+        page Notion pas encore créée
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={`https://notion.so/${pageId.replace(/-/g, "")}`}
+      target="_blank"
+      rel="noreferrer"
+      className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary underline decoration-accent-secondary/40 underline-offset-4 transition-colors hover:decoration-accent-secondary"
+    >
+      Ouvrir dans Notion →
+    </a>
+  );
+}
+
 /** Date courte, heure de Paris — l'admin se lit depuis la France. */
 export function formatDateTime(date: Date): string {
   return new Intl.DateTimeFormat("fr-FR", {

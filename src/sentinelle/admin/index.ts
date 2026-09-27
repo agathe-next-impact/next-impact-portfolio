@@ -1,8 +1,10 @@
 // API publique de l'admin de validation (phase 4).
 //
 // La règle 4 du CLAUDE.md — « aucune alerte ne part sans validation humaine » —
-// est implémentée dans `actions.ts`, sous forme de refus. `queue.ts` ne fait que
-// lire, et regroupe par composant : c'est ce qui rend trente alertes relisibles.
+// est, pour les alertes, tenue par Notion depuis 2026-09 (voir `@sentinelle/notion`
+// et docs/sentinelle/notion-alertes.md) ; `queue.ts` ne fait ici que LIRE le
+// miroir Postgres pour l'écran de suivi, regroupé par composant. Elle reste
+// implémentée en refus dans `actions.ts`/`digests.ts` pour la lettre bimensuelle.
 // `session.ts` et `content.ts` sont purs et testés ; la glue Next (cookies,
 // redirections, formulaires) vit dans `app/(sentinelle)/admin/`.
 
@@ -55,13 +57,4 @@ export {
   type DigestSummary,
 } from "./digests";
 
-export {
-  dismissAlert,
-  dismissComponent,
-  reopenAlert,
-  saveAlertContent,
-  sendAlert,
-  validateAlert,
-  type ActionResult,
-  type SendOutcome,
-} from "./actions";
+export { type ActionResult } from "./actions";

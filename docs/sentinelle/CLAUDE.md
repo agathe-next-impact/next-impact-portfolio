@@ -39,6 +39,18 @@ reste statique et performant.
    > emploient le même mot ; seule la relecture humaine (règle 4) les distingue.
 4. **Aucune alerte ne part sans validation humaine.** Statut obligatoire :
    draft → validated → sent. L'envoi automatique direct est interdit au MVP.
+
+   > **Depuis 2026-09, la relecture et la validation d'une ALERTE (CVE, fin de
+   > support) vivent dans Notion, pas dans l'admin du site** — voir
+   > `docs/sentinelle/notion-alertes.md` et `src/sentinelle/notion/`. C'est
+   > l'exception délibérée à la règle « Postgres pour tout » ci-dessous : la
+   > table `alerts` reste écrite par le matching et la rédaction, mais devient
+   > un MIROIR en lecture pour tout le reste (digest CTO, lettre bimensuelle) —
+   > jamais l'endroit où l'on édite. La règle 4 elle-même ne change pas : c'est
+   > le champ `Statut` de la page Notion qui commande draft → validated → sent,
+   > à la place d'un clic dans l'admin. La lettre bimensuelle, elle, continue
+   > de se valider dans l'admin du site (`admin/digests.ts`) — cette exception
+   > ne la concerne pas.
 5. **Scan passif uniquement.** Le scanner ne lit que les éléments publics
    (HTML, headers, endpoints publics WP). Aucun test actif de vulnérabilité,
    aucun brute-force de chemins au-delà de la liste blanche définie dans les specs.
@@ -60,6 +72,10 @@ reste statique et performant.
 - Paiement : **Stripe** (Checkout + customer portal + webhooks)
 - Validation runtime : **zod** sur toutes les entrées externes (API, webhooks, réponses LLM)
 - Pas de nouvelle lib UI : réutiliser le design system du site existant
+- Notion (`src/sentinelle/notion/`) pour la rédaction et la validation des
+  alertes — voir la règle 4 ci-dessus. Intégration propre à Sentinelle
+  (`SENTINELLE_NOTION_TOKEN`/`SENTINELLE_NOTION_DB_ALERTES`), jamais celle du
+  CTO : même principe d'isolation que le SMTP.
 
 ## Conventions
 

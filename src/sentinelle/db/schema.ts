@@ -258,21 +258,33 @@ export const alerts = pgTable(
       .notNull()
       .references(() => intelItems.id),
     status: alertStatusEnum("status").notNull().default("draft"),
-    verdict: verdictEnum("verdict"), // proposé par le LLM, éditable
-    generatedText: text("generated_text"), // sortie LLM brute (audit)
-    finalText: text("final_text"), // texte validé/édité — celui envoyé
+    verdict: verdictEnum("verdict"), // proposé par le LLM, éditable dans Notion
+    generatedText: text("generated_text"), // sortie LLM brute (audit) — jamais réécrite
+    // Depuis le passage de la relecture dans Notion (2026-09) : un instantané du
+    // contenu ACTUEL de la page, resynchronisé à chaque passe. Ce n'est plus ici
+    // qu'on édite — c'est ici qu'on lit vite, pour le digest et la lettre, sans
+    // dépendre de la disponibilité ou de la limite de débit de Notion. Même
+    // format qu'avant (`serializeAlertContent`) : les lecteurs ne changent pas.
+    finalText: text("final_text"),
     recommendedAction: text("recommended_action"),
     sentAt: timestamp("sent_at"),
     resolvedAt: timestamp("resolved_at"), // pour le suivi "recos passées"
     createdAt: timestamp("created_at").notNull().defaultNow(),
+    // La page Notion où cette alerte se rédige et se valide — la relecture n'a
+    // plus d'écran ici. Null le temps très court entre l'écriture du brouillon
+    // par le matching et la création de sa page ; `notion/sync.ts` comble tout
+    // brouillon resté sans page d'une passe à l'autre.
+    notionPageId: text("notion_page_id"),
   },
   (t) => [
     // Un client n'est alerté qu'une fois par fait. C'est cet index qui garantit
     // qu'un bug de matching ne se traduit pas par un doublon dans la boîte du
-    // client — la garantie est dans le moteur, pas dans le code applicatif.
+    // client — la garantie est dans le moteur, pas dans du code applicatif, et
+    // elle reste ici : Notion n'a pas de contrainte d'unicité à lui confier.
     uniqueIndex("alert_client_intel").on(t.clientId, t.intelItemId),
     // File de validation de l'admin.
     index("alert_status_created_at").on(t.status, t.createdAt),
+    uniqueIndex("alert_notion_page").on(t.notionPageId),
   ],
 );
 

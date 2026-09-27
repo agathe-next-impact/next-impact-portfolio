@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getClientDossier } from "@sentinelle/admin";
-import { ecarterComposant, validerAlerte } from "../../actions";
 import {
   BackLink,
-  buttonClass,
   formatDateTime,
   Label,
-  Notice,
+  NotionLink,
   Panel,
   StatusBadge,
   VerdictBadge,
@@ -19,35 +17,23 @@ export const dynamic = "force-dynamic";
  * Dossier d'un client : ses alertes ouvertes, **groupées par composant**.
  *
  * C'est la leçon du lot 2 : vingt-neuf alertes sur le même paquet npm ne se
- * relisent pas une par une. Le groupe porte donc sa propre décision — « écarter
- * tout ce composant » — et ce qui reste se relit à l'unité.
+ * relisent pas une par une. Depuis 2026-09, « écarter tout ce composant » se
+ * fait en sélectionnant ces lignes dans Notion et en changeant leur Statut d'un
+ * coup — Notion le sait faire nativement, ce que cet écran de lecture n'a plus
+ * à reproduire.
  */
-export default async function ClientPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ ok?: string; erreur?: string }>;
-}) {
+export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { ok, erreur } = await searchParams;
 
   const dossier = await getClientDossier(id);
   if (!dossier) notFound();
 
   const { client, groups, closed } = dossier;
   const ouvertes = groups.reduce((sum, group) => sum + group.alerts.length, 0);
-  const retour = `/admin/sentinelle/clients/${id}`;
 
   return (
     <main className="pt-10">
       <BackLink href="/admin/sentinelle">File de validation</BackLink>
-
-      {(ok || erreur) && (
-        <div className="mt-6">
-          <Notice tone={ok ? "ok" : "erreur"} message={ok ?? erreur ?? ""} />
-        </div>
-      )}
 
       <div className="mt-6">
         <Label>
@@ -84,14 +70,6 @@ export default async function ClientPage({
                   {group.ecosystem ? ` · ${group.ecosystem}` : ""}
                 </span>
               </div>
-
-              <form action={ecarterComposant}>
-                <input type="hidden" name="clientId" value={client.id} />
-                <input type="hidden" name="stackItemId" value={group.stackItemId} />
-                <button type="submit" className={buttonClass.danger}>
-                  Écarter les {group.alerts.length}
-                </button>
-              </form>
             </div>
 
             <ul className="divide-y divide-dark-gray/60">
@@ -109,11 +87,6 @@ export default async function ClientPage({
                           sans texte
                         </span>
                       )}
-                      {alerte.reviewed && (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary">
-                          relu
-                        </span>
-                      )}
                     </div>
                     <Link
                       href={`/admin/sentinelle/alertes/${alerte.id}`}
@@ -128,15 +101,7 @@ export default async function ClientPage({
                     </p>
                   </div>
 
-                  {alerte.status === "draft" && alerte.hasText && (
-                    <form action={validerAlerte}>
-                      <input type="hidden" name="alertId" value={alerte.id} />
-                      <input type="hidden" name="retour" value={retour} />
-                      <button type="submit" className={buttonClass.ghost}>
-                        Valider
-                      </button>
-                    </form>
-                  )}
+                  <NotionLink pageId={alerte.notionPageId} />
                 </li>
               ))}
             </ul>
