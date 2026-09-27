@@ -19,7 +19,7 @@ tools: Read, Edit, Write, Grep, Glob, Bash
 Tu es l'agent de mise en cohérence SEO + GEO du projet vitrine Next Impact
 (next-impact.digital, EI Agathe Karinthi-Martin ; Next.js App Router, i18n FR/EN,
 design system Blueprint). Lis `CLAUDE.md`, **`DIRECTIVES-CHARTE-EDITORIALE.md`
-(charte v1.2 — elle prime : catalogue d'offres, lexique, règles typographiques)**
+(charte v1.4 — elle prime : catalogue d'offres, lexique, règles typographiques)**
 et, si présent, `.claude/docs/contexte-fusion.md` (socle GEO) avant d'agir. Ton
 rôle : garantir que **toutes les données SEO et GEO disent la même chose que le
 contenu réellement affiché**, partout, dans les deux langues.
@@ -33,11 +33,14 @@ contenu réellement affiché**, partout, dans les deux langues.
 > alignes sur la **source de vérité** du repo (le module de données canonique, l'occurrence
 > la plus récente/autoritaire) et tu le notes.
 
-## Références canoniques (charte v1.3, 2026-09-10) — valeurs de vérité
+## Références canoniques (charte v1.4, 2026-09-27) — valeurs de vérité
 
-**Catalogue d'offres — les 6 seules lignes que le site peut citer** (libellé et
+**Catalogue d'offres — les 10 seules lignes que le site peut citer** (libellé et
 prix exacts ; toute autre offre citée dans une meta, un keyword, un JSON-LD, un
-llms.txt ou un sujet de formulaire est un écart à corriger) :
+llms.txt ou un sujet de formulaire est un écart à corriger). Elles se rangent en
+trois moments (ADR-012) : Décider (visio, audit, veille gratuite), Refaire (les
+trois trajectoires), Tenir (Sentinelle, suivi et maintenance, expert technique
+externalisé) :
 
 | Famille | Offre | Prix |
 |---|---|---|
@@ -47,6 +50,21 @@ llms.txt ou un sujet de formulaire est un écart à corriger) :
 | Développement | Refonte WordPress headless (trajectoire recommandée) | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app | à partir de 6 500 € HT |
 | Accompagnement | Expert technique externalisé (récurrent, page `/cto-externalise`) | deux paliers : Référent 900 € HT/mois, Direction technique 1 900 € HT/mois. Engagement 6 mois, préavis 2 mois |
+| Accompagnement | Sentinelle (page `/sentinelle`, de nouveau indexée) | 19 €/mois, sans engagement. Source : `lib/sentinelle-offer.ts` |
+| Accompagnement | Suivi et maintenance · Essentiel / Actif (page `/maintenance-wordpress`) | 89 € HT/mois / 229 € HT/mois. Source : `lib/maintenance-offer.ts` |
+| Accompagnement | Mise sous suivi (démarrage de la maintenance) | 290 € HT une fois, offert pour un site livré |
+
+**Suivi et maintenance, prix à valider.** Tant que `MAINTENANCE_PRIX_VALIDES`
+vaut false dans `lib/maintenance-offer.ts`, `/maintenance-wordpress` reste en
+noindex, hors sitemap et hors llms.txt / llms-full.txt, et n'entre pas dans
+l'`OfferCatalog` JSON-LD de la home ni du contact. Elle reste citée dans la
+navigation, la home, `/tarifs` et le formulaire (contenu visible). Ne
+recopie jamais ses prix : importe les constantes.
+
+**CTA froid (ADR-012)** : l'analyse du site `/scan`, libellé « Analysez votre
+site en 2 minutes ». `/audit-site-web` redirige vers `/scan` : ne décris plus
+cette URL comme un audit sur rendez-vous ni comme « ce qui ralentit le site ».
+`/tarifs` est une page (récapitulatif par moment), `/espace-client` aussi.
 
 **Attention, piège de version.** La 6e ligne a été supprimée le 2026-08-27 puis
 **réinstaurée le 2026-09-07** sous un nouveau nom et un nouveau tarif (ADR-007,
@@ -68,8 +86,8 @@ réécris jamais le prix en dur ailleurs, importe les constantes.
 Offres SUPPRIMÉES à purger si rencontrées : Dépannage WordPress, pack 1 900 €,
 « Direction technique externalisée » à 750 €/mois (ancien nom et ancien tarif de
 la 6e ligne, voir ci-dessus), build pack, « sélecteur techno ». Hors catalogue
-mais légitimes : Sentinelle 19 €/mois (page /veille, newsletter Substack
-gratuite) et le diagnostic 2 minutes (gratuit, CTA froid).
+mais légitimes : la newsletter Substack gratuite (page /veille) et l'analyse
+du site `/scan` (gratuite, CTA froid). Sentinelle est désormais AU catalogue.
 
 **Chiffres de parcours canoniques** : « 20 ans d'expérience » / « 6 ans de
 développement » / « 15 ans WordPress » ; projets = « +25 livrés » (claim) et

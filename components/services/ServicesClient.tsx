@@ -141,6 +141,7 @@ export default function ServicesClient() {
                   "Decouple, the recommended trajectory: headless WordPress redesign, from €4,000 excl. VAT. Your editors publish in the same back office, your visitors see a fast, modern site.",
                   "Rebuild: web app, platform or mobile application, from €6,500 excl. VAT, when the site has become a working tool.",
                   "Price and timeline in writing before we start, performance measured before and after, a single point of contact from quote to launch.",
+                  "No site yet? Same packages, same timelines: we start from a blank page instead of the existing one. Every package includes three months of care after launch.",
                 ]
               : [
                   "Trois trajectoires pour un site WordPress qui vieillit : consolider, découpler ou refonder. La vraie question n'est pas WordPress ou pas WordPress, c'est ce que vous gardez et ce que vous changez.",
@@ -148,6 +149,7 @@ export default function ServicesClient() {
                   "Découpler, la trajectoire recommandée : refonte WordPress headless, à partir de 4 000 € HT. Vos rédacteurs publient dans le même back-office, vos visiteurs voient un site rapide et moderne.",
                   "Refonder : web app, plateforme ou application mobile, à partir de 6 500 € HT, quand le site est devenu un outil de travail.",
                   "Prix et délai écrits avant de commencer, performance mesurée avant et après, une interlocutrice unique du devis à la mise en ligne.",
+                  "Pas encore de site ? Mêmes forfaits, mêmes délais : on part d'une page blanche au lieu de l'existant. Chaque forfait inclut trois mois de suivi après la mise en ligne.",
                 ]
             ).map((line) => (
               <li

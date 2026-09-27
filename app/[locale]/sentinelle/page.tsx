@@ -33,11 +33,11 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 const AVANT_LANCEMENT = false;
 
-// Sentinelle retirée du SEO/GEO sur décision (2026-09-04) : la page reste
-// accessible en direct, mais n'est plus indexée, plus dans le sitemap, ni citée
-// dans llms.txt / llms-full.txt. Repasser ce drapeau à false pour la réexposer
-// (penser alors à réintégrer l'entrée sitemap et les bullets llms).
-const RETIREE_DU_SEO = true;
+// Sentinelle avait été retirée du SEO/GEO le 2026-09-04. Elle y revient le
+// 2026-09-27 (ADR-012) : elle entre au catalogue comme première marche du
+// moment « Tenir ». Entrée sitemap et lignes llms réintégrées. Repasser ce
+// drapeau à true pour la retirer de nouveau (et retirer ces entrées).
+const RETIREE_DU_SEO = false;
 
 export const revalidate = 86400;
 
@@ -54,21 +54,21 @@ export async function generateMetadata({
       ? "Sentinelle: personalized tech watch and decision support, €19/month"
       : "Sentinelle : veille techno personnalisée et aide à la décision, 19 €/mois",
     description: isEn
-      ? "Sentinelle watches the components your site actually runs, crosses that with what is moving in web technology, and helps you decide: consolidate, evolve or rebuild. Two letters a month, alerts when it matters, human-reviewed before sending. €19/month."
-      : "Sentinelle surveille les composants que votre site utilise vraiment, croise ce qu'elle voit avec l'actualité techno et vous aide à décider : consolider, faire évoluer ou refondre. Deux lettres par mois, des alertes quand ça compte, relues par un humain avant envoi. 19 €/mois.",
+      ? "Sentinelle watches the components your site runs, alerts you when one becomes a problem and helps you decide. Two letters a month, reviewed before sending. €19/month."
+      : "Sentinelle surveille les composants de votre site, vous alerte quand l'un d'eux devient un problème et vous aide à décider. Deux lettres par mois, relues avant envoi. 19 €/mois.",
     path: "/sentinelle",
     keywords: isEn
       ? [
           "WordPress monitoring",
           "website vulnerability alerts",
           "WordPress plugin security watch",
-          "website maintenance alternative",
+          "website component watch",
         ]
       : [
           "surveillance site WordPress",
           "alerte faille plugin WordPress",
           "veille sécurité site web",
-          "maintenance WordPress alternative",
+          "veille composants site web",
           "mise à jour WordPress prévenir",
           "refonte ou maintenance site web",
           "quand refondre son site",
@@ -93,13 +93,13 @@ const CE_QUE_VOUS_RECEVEZ = [
     index: "02",
     titre: "Deux lettres par mois",
     corps:
-      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes — du socle technique à la visibilité, aux coûts et à la réversibilité. Chaque axe conclut : agir, surveiller, ou non concerné — et « non concerné » se dit, c'est souvent l'information la plus rassurante.",
+      "Le 1er et le 15 : votre site croisé avec l'actualité de la période, lu selon douze axes, du socle technique à la visibilité, aux coûts et à la réversibilité. Chaque axe conclut : agir, surveiller, ou non concerné. Et « non concerné » se dit, c'est souvent l'information la plus rassurante.",
   },
   {
     index: "03",
     titre: "Un cap : consolider, évoluer ou refondre",
     corps:
-      "Chaque lettre se termine par trois actions au plus, trois scénarios — consolider, faire évoluer par blocs, ou refondre — avec leur ordre de coût et leur condition de déclenchement, un échéancier à six mois et trois questions à poser à votre prestataire. La veille ne vaut que si elle aide à décider.",
+      "Chaque lettre se termine par trois actions au plus, trois scénarios (consolider, faire évoluer par blocs, ou refondre) avec leur ordre de coût et leur condition de déclenchement, un échéancier à six mois et trois questions à poser à votre prestataire. La veille ne vaut que si elle aide à décider.",
   },
 ];
 
@@ -117,19 +117,19 @@ const CE_QUI_CHANGE = [
   {
     titre: "Vous saurez si vous pouvez le faire seul",
     corps:
-      "Deux clics, un quart d'heure, ou une intervention. C'est écrit à chaque fois — y compris quand la réponse est « vous n'avez besoin de personne ».",
+      "Deux clics, un quart d'heure, ou une intervention. C'est écrit à chaque fois, y compris quand la réponse est « vous n'avez besoin de personne ».",
   },
   {
     titre: "Rien ne part sans relecture",
     corps:
-      "Aucune alerte, aucun numéro n'est envoyé automatiquement. La lettre n'affirme que des faits datés et sourcés — le code le vérifie — et le modèle me signale ses hypothèses dans des notes de production. Je relis, je corrige, puis j'envoie. C'est plus lent qu'un robot, et c'est le but.",
+      "Aucune alerte, aucun numéro n'est envoyé automatiquement. La lettre n'affirme que des faits datés et sourcés (le code le vérifie), et le modèle me signale ses hypothèses dans des notes de production. Je relis, je corrige, puis j'envoie. C'est plus lent qu'un robot, et c'est le but.",
   },
 ];
 
 const LIMITES = [
   "L'analyse se fonde sur les éléments publics de votre site. Elle voit ce qu'un visiteur voit, rien de plus : aucun test d'intrusion, aucune tentative d'accès.",
-  "Un scan public détecte en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation — c'est là que la surveillance devient exacte.",
-  "Sentinelle prévient et conseille, elle n'intervient pas. Ce n'est ni un antivirus, ni un contrat de maintenance, ni une infogérance : quand une refonte ou une intervention s'impose, vous décidez — avec le prestataire de votre choix.",
+  "Un scan public détecte en général 50 à 70 % des extensions installées. Votre fiche est complétée avec vous à l'activation : c'est là que la surveillance devient exacte.",
+  "Sentinelle prévient et conseille, elle n'intervient pas : quand une intervention s'impose, vous décidez, avec le prestataire de votre choix. Si vous voulez que quelqu'un intervienne pour vous, c'est le suivi et maintenance, qui inclut Sentinelle.",
 ];
 
 export default async function SentinellePage({
@@ -156,7 +156,7 @@ export default async function SentinellePage({
   const ctaFroid = AVANT_LANCEMENT ? "/contact" : "/scan";
   const ctaFroidLibelle = AVANT_LANCEMENT
     ? "Être prévenu du lancement"
-    : "Analyser mon site — gratuit, 2 min";
+    : "Analysez votre site en 2 minutes";
 
   return (
     <main>
@@ -192,7 +192,7 @@ export default async function SentinellePage({
               </em>
             </>
           }
-          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran — jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème — et vous dit ce que ça change pour la suite : consolider, faire évoluer, ou refondre."
+          description="Une extension cesse d'être maintenue, une faille est publiée, une version arrive en fin de vie. Rien ne change à l'écran, jusqu'au jour où si. Sentinelle surveille les composants que votre site ou votre application utilise vraiment, vous prévient quand l'un d'eux devient un problème, et vous dit ce que ça change pour la suite : consolider, faire évoluer, ou refondre."
         />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -289,7 +289,7 @@ export default async function SentinellePage({
           index="№ 03"
           kicker="Tarif"
           title="19 € par mois"
-          description="Un seul tarif. Les alertes et les deux lettres mensuelles sont comprises — il n'y a pas de version supérieure à vous vendre ensuite. Résiliable à tout moment, sans préavis."
+          description="Un seul tarif. Les alertes et les deux lettres mensuelles sont comprises. Résiliable à tout moment, sans préavis. Pour que quelqu'un intervienne sur votre site, le suivi et maintenance inclut Sentinelle."
         />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -300,7 +300,7 @@ export default async function SentinellePage({
               href={lienPaiement}
               className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90"
             >
-              S'abonner — {OFFER_PRICE_LABEL}
+              S'abonner · {OFFER_PRICE_LABEL}
             </a>
           ) : (
             <Link

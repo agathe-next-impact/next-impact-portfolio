@@ -143,8 +143,8 @@ export async function GET() {
       // Offre récurrente de direction technique — bilingue FR + EN, donc dans
       // les pages localisées (alternates hreflang générés).
       { path: "cto-externalise", source: "app/[locale]/cto-externalise/page.tsx", changefreq: "monthly", priority: 0.8 },
-      // audit-site-web retiré du sitemap : la route redirige désormais vers
-      // Calendly (next.config.mjs), ce n'est plus une page indexable.
+      // audit-site-web retiré du sitemap : la route redirige (vers /scan depuis
+      // l'ADR-012, next.config.mjs), ce n'est plus une page indexable.
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
       // Outils de qualification rattachés aux rubriques du hub.
@@ -173,7 +173,16 @@ export async function GET() {
       // Pages d'offre veille — FR uniquement (locale EN en noindex), donc sans
       // alternates hreflang.
       { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
-      // Sentinelle retirée du SEO/GEO (2026-09-04) : page en noindex, hors sitemap.
+      // Sentinelle : retirée du SEO/GEO le 2026-09-04, réintégrée le 2026-09-27
+      // (ADR-012) comme première marche du moment « Tenir ».
+      { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Récapitulatif de toutes les offres, par moment (ADR-012).
+      { path: "tarifs", source: "app/[locale]/tarifs/page.tsx", changefreq: "monthly", priority: 0.8 },
+      // Visite de l'espace en ligne + accès aux deux connexions (ADR-012).
+      { path: "espace-client", source: "app/[locale]/espace-client/page.tsx", changefreq: "monthly", priority: 0.5 },
+      // /maintenance-wordpress : absente tant que MAINTENANCE_PRIX_VALIDES vaut
+      // false (lib/maintenance-offer.ts, page en noindex). L'ajouter ici le jour
+      // où les prix sont validés.
       // Pages partenaires — FR uniquement (locale EN en noindex tant que la
       // traduction n'existe pas), donc sans alternates hreflang.
       { path: "apporteurs", source: "app/[locale]/apporteurs/page.tsx", changefreq: "monthly", priority: 0.5 },

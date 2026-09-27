@@ -6,6 +6,7 @@ import {
   Menu as MenuIcon,
   ChevronDown,
   ArrowUpRight,
+  KeyRound,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -19,30 +20,32 @@ import { useSamePageAnchor } from "@/hooks/use-same-page-anchor";
 
 type NavHref = Parameters<typeof Link>[0]["href"];
 
-// Nav principale — l'offre, puis À propos.
+// Nav principale — trois moments, puis la preuve et la personne.
 //
-// Le menu déroulant « Ressources » a été retiré le 2026-08-16 (l'observateur de
-// prefetch comptait son panneau masqué comme visible). Il est remplacé ici par
-// des mega menus par rubrique (Veille · Conseil · Services), dérivés de
-// lib/mega-menu.ts : le panneau n'est monté dans le DOM que lorsqu'il est ouvert,
-// ce qui évite le préchargement fantôme des destinations.
-// Nav : Veille · Conseil · Services · Études de cas · À propos.
-// La visio conseil est portée par le bouton CTA ; le diagnostic reste accessible
-// depuis le footer et la home.
-// L'expert technique externalisé (offre récurrente, /cto-externalise) n'a pas d'entrée de
-// premier niveau : il vit dans le mega menu « Conseil » (lib/mega-menu.ts) et
-// dans les bandeaux de pied de page de /conseil et /solutions-web. C'est une
-// offre de fin de parcours, pas une porte d'entrée froide.
+// Nav : Décider · Refaire · Tenir · Études de cas · À propos (charte v1.4,
+// ADR-012). Les trois moments sont des mega menus dérivés de lib/mega-menu.ts :
+// le panneau n'est monté dans le DOM que lorsqu'il est ouvert, ce qui évite le
+// préchargement fantôme des destinations (le menu « Ressources » avait été
+// retiré le 2026-08-16 pour cette raison).
+// Les abonnements (Sentinelle, suivi et maintenance, expert technique
+// externalisé) vivent dans « Tenir », toujours en dernier : offres de fin de
+// parcours, jamais en porte d'entrée froide.
+//
+// Bouton du header = le CTA froid unique du site : l'analyse du site (/scan),
+// libellé court. La prise de rendez-vous (CTA chaud) reste dans le tiroir
+// mobile et en fin de chaque page.
 
-// Les trois rubriques à mega menu (clé = clé de traduction `nav`).
-const MEGA_KEYS = ["veille", "conseil", "services"] as const;
+// Les trois moments à mega menu (clé = clé de traduction `nav`).
+const MEGA_KEYS = ["decider", "refaire", "tenir"] as const;
 
 // Les entrées de nav simples (sans panneau).
 const NAV_PLAIN_BEFORE = [{ key: "caseStudies", href: "/etudes-de-cas" }] as const;
 const NAV_AFTER = [{ key: "about", href: "/a-propos" }] as const;
 
-// Destination du CTA (desktop et mobile) : prise de rendez-vous Calendly
-// directe, plutôt qu'un renvoi vers /conseil. Lien externe (2026-09-10).
+// CTA froid : /scan vit hors de app/[locale]/ (groupe (sentinelle)) — balise
+// <a> et non le Link i18n, qui donnerait /en/scan en anglais.
+const SCAN_HREF = "/scan";
+// CTA chaud (tiroir mobile) : prise de rendez-vous Calendly directe.
 const CTA_HREF = "https://calendly.com/agathe-next-impact/prise-de-contact-conseil";
 
 export default function Header() {
@@ -92,7 +95,7 @@ export default function Header() {
             NEXT IMPACT
           </Link>
 
-          {/* Desktop nav — Veille · Conseil · Services (mega) · Études de cas · À propos */}
+          {/* Desktop nav — Décider · Refaire · Tenir (mega) · Études de cas · À propos */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {MEGA_KEYS.map((key) => {
               const section = MEGA_SECTIONS[key];
@@ -163,17 +166,26 @@ export default function Header() {
               </span>
             </div>
 
+            {/* Espace client : signale son existence au prospect, sert l'accès
+                aux clients. Page vitrine qui aiguille vers les deux connexions. */}
+            <Link
+              href="/espace-client"
+              onMouseEnter={closeMenu}
+              className="inline-flex items-center gap-1.5 px-2 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
+            >
+              <KeyRound size={14} aria-hidden />
+              {t("espaceClient")}
+            </Link>
+
             <ThemeToggle />
 
-            {/* CTA unique : prise de RDV Calendly directe. */}
+            {/* CTA froid unique : l'analyse du site. */}
             <a
-              href={CTA_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={SCAN_HREF}
               onMouseEnter={closeMenu}
               className="inline-flex h-9 items-center rounded-sm bg-accent-secondary px-4 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
             >
-              {t("visioConseil")}
+              {t("analyserSite")}
             </a>
           </div>
 
@@ -332,16 +344,32 @@ export default function Header() {
                 </button>
               )}
 
-              {/* CTA unique : prise de RDV Calendly, comme sur desktop */}
+              <Link
+                href="/espace-client"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 border-b border-dark-gray px-5 py-4 font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
+              >
+                <KeyRound size={13} aria-hidden />
+                {t("espaceClient")}
+              </Link>
+
+              {/* Deux températures : l'analyse du site (froid), le rendez-vous (chaud). */}
               <div className="flex flex-col gap-3 p-5">
+                <a
+                  href={SCAN_HREF}
+                  onClick={() => setMobileOpen(false)}
+                  className="inline-flex min-h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 py-2.5 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+                >
+                  {t("analyserSite")}
+                </a>
                 <a
                   href={CTA_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex min-h-11 items-center justify-center rounded-sm bg-accent-secondary px-4 py-2.5 font-mono text-2xs font-semibold uppercase tracking-[0.1em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
+                  className="inline-flex min-h-11 items-center justify-center rounded-sm border border-dark-gray px-4 py-2.5 font-mono text-2xs uppercase tracking-[0.1em] text-foreground no-underline transition-colors hover:bg-ebony"
                 >
-                  {t("visioConseil")}
+                  {t("prendreRdv")}
                 </a>
               </div>
             </nav>

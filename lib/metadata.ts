@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { routing, type Locale } from "@/i18n/routing";
 // Prix plancher de l'offre récurrente : importé, jamais réécrit ici
 // (lib/cto-externalise.ts est la source de vérité unique du tarif).
-import { CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 
 const OG_LOCALES: Record<Locale, string> = {
   fr: "fr_FR",
@@ -299,14 +298,15 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
 };
 
 // Aligné sur le namespace `contactPage` des messages (source vive de la page
-// /contact) : les six sujets réellement proposés par le formulaire (les cinq
-// lignes du catalogue plus l'expert technique externalisé, 6e ligne ouverte le
-// 2026-09-07, renommée le 2026-09-10, ADR-010), aucune offre disparue.
+// /contact) : les sujets réellement proposés par le formulaire, rangés par
+// moment depuis l'ADR-012 (refonte ou création, suivi et maintenance ajoutés),
+// aucune offre disparue. Pas de prix mensuel en dur : messages/*.json ne peut
+// pas importer lib/cto-externalise.ts, donc aucun des deux ne l'écrit.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Contact : conseil, audit, expert technique externalisé ou refonte",
     description:
-      `Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), projet de refonte ou diagnostic gratuit.`,
+      "Contactez Next Impact : visio conseil (150 €), audit + roadmap (650 €), refonte ou création, suivi et maintenance, expert technique externalisé, diagnostic gratuit.",
     keywords: [
       "contact conseil techno web",
       "visio conseil refonte",
@@ -320,7 +320,7 @@ const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   en: {
     title: "Contact: advice, audit, outsourced technical expert or redesign",
     description:
-      `Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), outsourced technical expert (from €${CTO_PRICE_VALUE}/month), redesign project or free diagnostic.`,
+      "Contact Next Impact: advisory call (€150), audit + roadmap (€650), redesign or new site, care and maintenance, outsourced technical expert, free diagnostic.",
     keywords: [
       "contact web technology advice",
       "redesign advisory call",

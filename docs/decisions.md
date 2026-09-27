@@ -260,3 +260,54 @@ Conséquences :
 - Coût : une centaine de requêtes Notion par audit publié et par balayage
   (environ 30 s). Acceptable à quelques audits ; à revoir au-delà de cinq ou six
   audits publiés en même temps (le Cron a 300 s).
+
+## ADR-012 — 2026-09-27 — Trois moments, dix lignes : Sentinelle et la maintenance entrent au catalogue
+
+Demande d'Agathe du 2026-09-27 : ajouter à la vitrine Sentinelle (lettre de
+veille et alertes personnalisées), une offre de monitoring et maintenance, et
+mettre en avant l'espace client, en gardant le site simple pour le visiteur.
+Parcours réfléchi, puis maquetté (canvas « Offres en trois moments »), puis
+mis en œuvre sur la branche `offres-trois-moments` (plan :
+`docs/plan-offres-trois-moments.md`). Charte amendée en v1.4.
+
+1. **Le catalogue passe de six à dix lignes**, rangées en trois moments :
+   Décider (visio 150 €, audit + roadmap 650 €, veille gratuite), Refaire (les
+   trois trajectoires, refonte ou création), Tenir (Sentinelle 19 €/mois,
+   Suivi et maintenance Essentiel et Actif, mise sous suivi, Expert technique
+   externalisé). Le visiteur ne voit les dix lignes que sur `/tarifs`.
+2. **Offre Suivi et maintenance** : source unique `lib/maintenance-offer.ts`,
+   page `/maintenance-wordpress` (aussi page d'atterrissage de « Tenir »).
+   Prix PROPOSÉS, non validés : Essentiel 89 € HT/mois, Actif 229 € HT/mois
+   (obligatoire en headless), démarrage 290 € HT (offert pour un site livré),
+   engagement 3 mois, 20 sites au maximum. Drapeau
+   `MAINTENANCE_PRIX_VALIDES = false` : page en noindex, hors sitemap, hors
+   llms, tant qu'Agathe n'a pas validé.
+3. **Trois mois de suivi Essentiel inclus dans chaque forfait**
+   (`SUIVI_INCLUS_MOIS`, mettre 0 pour le retirer de tout le site). Engagement
+   commercial proposé, à confirmer.
+4. **Sentinelle revient dans l'index** (revient sur la décision du
+   2026-09-04) : `RETIREE_DU_SEO = false`, sitemap. Tirets cadratins retirés
+   de sa page ; la limite « ni un contrat de maintenance » devient un renvoi
+   vers le suivi et maintenance.
+5. **Navigation** : Décider · Refaire · Tenir · Études de cas · À propos, lien
+   « Espace client », bouton « Analyser mon site » vers `/scan` (le bouton
+   pointait vers Calendly depuis le 2026-09-10 ; le rendez-vous reste dans le
+   tiroir mobile et en fin de page).
+6. **CTA froid unique : l'analyse du site `/scan`.** `/audit-site-web` et
+   `/audit-site-ia` redirigent vers `/scan` (307) au lieu de Calendly (revient
+   sur la décision du 2026-09-10) : la cinquantaine de liens internes vers
+   `/audit-site-web` retrouvent un diagnostic gratuit. Libellé fixe
+   « Analysez votre site en 2 minutes » : l'ancien « Voyez ce qui ralentit
+   votre site » promettait une mesure de vitesse que l'analyse ne fait pas.
+7. **`/tarifs` redevient une page** (la redirection 301 vers `/solutions-web`
+   est retirée) ; **`/espace-client`** est créée (visite de l'espace en ligne,
+   schéma sans données réelles, aiguillage vers les deux connexions) ; le
+   bandeau `CtoExternaliseBanner` de `/solutions-web` est remplacé par
+   `TenirBanner` (« Après la livraison ») et supprimé.
+8. **Formulaire de contact** : sujet `maintenance` ajouté, « Projet de refonte
+   ou de création », sujets rangés par moment.
+
+Hors périmètre, à faire ensuite : le pont vers la visio dans le rapport de
+`/scan` quand le verdict est mauvais (code Sentinelle, soumis à
+`docs/sentinelle/CLAUDE.md`) ; un service `projet` dans l'espace en ligne ; la
+version anglaise des nouvelles pages (FR d'abord, charte §3).

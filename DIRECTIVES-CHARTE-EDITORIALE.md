@@ -1,10 +1,12 @@
 # Charte éditoriale · Vitrine next-impact.digital · Refonte éditoriale
 
-> Version 1.3 · 10 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
+> Version 1.4 · 27 septembre 2026. Document de travail pour la refonte éditoriale de la vitrine. Il remplace, pour le site, la charte « Offre et site » générique et s'appuie sur l'état du site en production relevé le 27 août 2026 (version anglaise crawlée) et sur le catalogue d'offres déjà en place sur le site en développement : Visio conseil refonte 150 €, Audit + roadmap 650 €, Refonte WordPress optimisée, Refonte headless, Web app. La charte newsletter « Quelle techno pour mon site ? » reste le canon du registre informatif (page Veille, blog).
 >
 > **Amendement du 7 septembre 2026 (v1.2).** Le catalogue passe de cinq à **six lignes** : l'offre récurrente de direction technique, supprimée le 27 août, est réinstaurée sous le nom « CTO externalisé », sur sa propre page `/cto-externalise`. Trois passages de la v1.1 sont amendés en conséquence : le tableau du §1 et la phrase « ces cinq lignes », l'ordre des offres du §5, et la clause de fermeture de la page Conseil au §6. Décision tracée en ADR-007 (`docs/decisions.md`).
 >
 > **Amendement du 10 septembre 2026 (v1.3).** La sixième ligne se renomme « Expert technique externalisé » : décision explicite d'Agathe qui inverse le garde-fou du §1/§10 protégeant jusqu'ici « CTO » comme seul terme non traduit toléré en accroche. Le nouveau libellé est désormais le seul toléré, en français comme en anglais (« Outsourced technical expert »), partout où l'offre est nommée. L'URL `/cto-externalise` et les identifiants techniques ne changent pas. Décision tracée en ADR-010 (`docs/decisions.md`).
+>
+> **Amendement du 27 septembre 2026 (v1.4).** Le catalogue passe de six à **dix lignes**, rangées en **trois moments** que le visiteur reconnaît sans lire le catalogue : **Décider** (visio, audit + roadmap, veille gratuite), **Refaire** (les trois trajectoires, refonte ou création), **Tenir** (Sentinelle, Suivi et maintenance en deux paliers avec un état des lieux de démarrage, Expert technique externalisé). Sentinelle revient dans l'index ; l'espace en ligne devient une preuve visible. La navigation devient Décider · Refaire · Tenir · Études de cas · À propos ; le CTA froid unique devient l'analyse du site (`/scan`), libellé « Analysez votre site en 2 minutes » ; `/tarifs` redevient une page. Amendés : §1, §5, §6, §7, §10. Décision tracée en ADR-012 (`docs/decisions.md`). Les prix de l'offre Suivi et maintenance sont des propositions à valider (`MAINTENANCE_PRIX_VALIDES` dans `lib/maintenance-offer.ts`).
 
 ---
 
@@ -48,10 +50,24 @@ Catalogue de référence (site en dev), le seul que le site mentionne :
 | Développement | Refonte WordPress headless : back-office conservé, front moderne | à partir de 4 000 € HT |
 | Développement | Refonte vers une web app : plateforme web et/ou mobile | à partir de 6 500 € HT |
 | Accompagnement | Expert technique externalisé : direction technique à temps partagé, deux paliers (Référent, Direction technique) | à partir de 900 € HT par mois |
+| Accompagnement | Sentinelle : lettre de veille et alertes personnalisées sur les composants du site | 19 € par mois, sans engagement |
+| Accompagnement | Suivi et maintenance · Essentiel : surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel, Sentinelle incluse | à partir de 89 € HT par mois (à valider) |
+| Accompagnement | Suivi et maintenance · Actif : mises à jour hebdomadaires, 2 h d'intervention par mois, obligatoire en headless | 229 € HT par mois (à valider) |
+| Accompagnement | Mise sous suivi : état des lieux de démarrage, offert pour un site livré par Next Impact | 290 € HT, une fois (à valider) |
 
-Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces six lignes, avec ce libellé et ce prix.
+Toute page, tout formulaire, toute métadonnée qui cite une offre cite l'une de ces dix lignes, avec ce libellé et ce prix. Source unique de chaque prix : `lib/visio-conseil.ts`, `components/services/PricingCards.tsx` (`getTiers`), `lib/cto-externalise.ts`, `lib/sentinelle-offer.ts`, `lib/maintenance-offer.ts`.
 
-Les cinq premières lignes se vendent au forfait, une fois. La sixième est un abonnement : elle ne remplace aucune des cinq, elle répond au cas où la décision revient tous les mois. Elle n'apparaît jamais en accroche de la home ni dans un héros : c'est une offre de fin de parcours, pour un lecteur qui a déjà compris ce qu'il achète.
+Les cinq premières lignes se vendent au forfait, une fois. Les autres sont des abonnements (la mise sous suivi en est le démarrage) : ils ne remplacent aucune des cinq, ils répondent à la question « qui tient le site une fois en ligne ? ». Ils n'apparaissent jamais en accroche de la home ni dans un héros : ce sont des offres de fin de parcours, pour un lecteur qui a déjà compris ce qu'il achète.
+
+**Les trois moments (v1.4).** Le visiteur ne voit jamais les dix lignes d'un coup, sauf sur `/tarifs`. Partout ailleurs, il se situe dans un moment et y voit trois choix au plus, dont un seul mis en avant :
+
+| Moment | Question du visiteur | Offres | Page d'atterrissage |
+|---|---|---|---|
+| Décider | « Je ne sais pas quoi faire, ou j'ai un devis à juger » | Visio conseil refonte · Audit + roadmap · veille gratuite | `/conseil` |
+| Refaire | « Mon site vieillit, ou je n'en ai pas encore » | Consolider · Découpler (recommandée) · Refonder | `/solutions-web` |
+| Tenir | « Mon site tourne, je veux qu'il le reste » | Sentinelle · Suivi et maintenance · Expert technique externalisé | `/maintenance-wordpress` |
+
+Chaque offre se présente sur une carte au même gabarit : pour vous si (la situation), vous obtenez (le résultat), un prix « à partir de », une action. Les paliers ne s'affichent que sur la page de l'offre et sur `/tarifs`. Ce qui est inclus (Sentinelle dans la maintenance, trois mois de suivi dans chaque forfait, l'espace en ligne) se dit en pastille, jamais comme une offre. La création d'un site n'est pas une ligne à part : mêmes forfaits, point de départ différent.
 
 ## 2. Objectif directeur et lecteur
 
@@ -119,7 +135,7 @@ Les trois trajectoires, nommées par bénéfice, la techno en sous-titre :
 
 En amont : Visio conseil refonte (150 € HT) et Audit + roadmap (650 € HT). Ce sont les portes d'entrée payantes ; le diagnostic 2 minutes est la porte d'entrée gratuite.
 
-En aval : Expert technique externalisé (deux paliers, à partir de 900 € HT par mois, engagement de 6 mois puis reconduction au mois, préavis de 2 mois). C'est la seule offre récurrente. Elle ne se propose qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid.
+En aval, le moment « Tenir », du plus léger au plus engageant : Sentinelle (19 € par mois, prévenir), Suivi et maintenance (à partir de 89 € HT par mois, entretenir ; Sentinelle incluse), Expert technique externalisé (deux paliers, à partir de 900 € HT par mois, engagement de 6 mois puis reconduction au mois, préavis de 2 mois ; décider). Ces abonnements ne se proposent qu'après la valeur, au même rang que l'AGEFIPH dans l'ordre de conviction : jamais comme premier message, jamais en CTA froid. Chaque forfait de refonte inclut trois mois de suivi Essentiel (`SUIVI_INCLUS_MOIS`) : la reconduction se propose avec le bilan du troisième mois, jamais automatiquement.
 
 ## 6. Charte page par page
 
@@ -166,7 +182,7 @@ Rôle : porte d'entrée payante à faible engagement, qui présente les TROIS li
 
 Distinction à tenir : la section de `/conseil` PRÉSENTE l'offre récurrente, elle ne la VEND pas. Son CTA (« Voir l'offre complète ») part vers `/cto-externalise`, qui reste la fiche complète — paliers détaillés, livrables, périmètre, FAQ — et la destination de l'item du mega menu. Aucun prix ni condition de l'expert technique externalisé n'est recopié sur `/conseil` : le contenu de la section dérive de `lib/cto-externalise.ts`.
 
-Garde-fous inchangés (§5) : l'offre récurrente n'ouvre jamais la page. Le héros, son titre et son CTA principal restent sur la visio conseil ; l'expert technique externalisé n'apparaît dans le bandeau d'aperçu du héros qu'en dernière position et sans mention « recommandée ». Le bandeau de renvoi `CtoExternaliseBanner` est retiré de `/conseil` (il ferait doublon avec la section) et reste en place sur `/solutions-web`. Rien d'autre ne figure sur la page : ni build pack, ni « sélecteur techno ».
+Garde-fous inchangés (§5) : l'offre récurrente n'ouvre jamais la page. Le héros, son titre et son CTA principal restent sur la visio conseil ; l'expert technique externalisé n'apparaît dans le bandeau d'aperçu du héros qu'en dernière position et sans mention « recommandée ». Le bandeau de renvoi `CtoExternaliseBanner` est retiré de `/conseil` (il ferait doublon avec la section) ; sur `/solutions-web`, il est remplacé en v1.4 par le bandeau « Après la livraison » (`TenirBanner`), qui présente les trois abonnements du moment « Tenir ». Rien d'autre ne figure sur la page : ni build pack, ni « sélecteur techno ».
 
 ### Expert technique externalisé `/cto-externalise`
 
@@ -203,9 +219,25 @@ Rôle : la présence humaine et la double culture. Ordre : la phrase « j'ai ét
 
 Rôle : le second message, orienté DAF / DRH. Titre cible : « 30 % du coût de main-d'œuvre déductibles de votre contribution AGEFIPH ». Contenu : qui est concerné (20 salariés et plus, assujettis OETH), le mécanisme en trois lignes, la base légale (art. D.5212-7 et L.5212-10-1 du Code du travail), un exemple chiffré sur un projet à 4 000 €, la phrase « un argument pour votre DAF, une fois le projet validé ». Aucun lien vers cette page depuis le héros de la home.
 
-### Diagnostic `/audit-site-web`
+### Diagnostic : l'analyse du site `/scan`
 
-Rôle : le CTA froid. Titre cible : « Voyez ce qui ralentit votre site en 2 minutes ». Promesse : une URL, un rapport, aucune inscription si possible. Le rapport oriente vers l'une des trois trajectoires et propose la visio conseil. Cette page remonte dans la navigation principale et dans le héros ; elle sort du footer.
+Rôle : le CTA froid unique (v1.4). `/audit-site-web` et `/audit-site-ia` redirigent vers `/scan` (redirection temporaire). Libellé fixe : « Analysez votre site en 2 minutes » (version courte : « Analyser mon site »). L'ancien libellé « Voyez ce qui ralentit votre site » est abandonné : l'analyse liste les composants du site et ceux qui sont à risque, elle ne mesure pas la vitesse. Promesse : une adresse, un rapport, aucun accès demandé. À venir (code Sentinelle, hors vitrine) : le rapport oriente vers un seul moment selon le verdict (bon état vers Tenir, fragile vers la visio, à refaire vers les trajectoires).
+
+### Suivi et maintenance `/maintenance-wordpress` (v1.4)
+
+Rôle : page d'offre de la maintenance ET page d'atterrissage du moment « Tenir ». Titre : « Une mise à jour ratée ne devrait pas se découvrir par un client ». Ordre : douleur ; ce qui est surveillé (les cinq mesures que l'espace en ligne affiche déjà : disponibilité, sauvegardes, mises à jour, failles, vitesse ; ne rien promettre que l'espace ne sache montrer) ; les deux paliers et le démarrage ; l'échelle Prévenir · Entretenir · Décider ; FAQ ; deux CTA. Positionnement : les autres font les mises à jour, je dis ce qu'elles changent et quand réparer ne suffit plus. Ne jamais la présenter comme une intervention ponctuelle (l'offre Dépannage WordPress reste supprimée). Tant que `MAINTENANCE_PRIX_VALIDES` vaut false : noindex, hors sitemap, hors llms.
+
+### Sentinelle `/sentinelle` (v1.4)
+
+De retour dans l'index (retirée le 4 septembre, réintégrée le 27). Première marche de « Tenir » : elle prévient, elle n'intervient pas, et renvoie vers le suivi et maintenance pour qui veut qu'on intervienne. `/veille` reste la page de la veille gratuite, sans prix.
+
+### Espace client `/espace-client` (v1.4)
+
+Rôle double : preuve pour le prospect (ce qu'il verra chaque mois), accès pour le client (lien « Espace client » du header et du footer, aiguillage vers `/espace-direction` et vers l'espace abonné Sentinelle). Nom dans le texte : « espace en ligne ». Aucune capture de vrai client : un schéma présenté comme tel. Arguments : rangé par question (Missions, Votre site, Agir, Veille), ce que chaque offre y ouvre, connexion sans mot de passe, tout se télécharge.
+
+### Tarifs `/tarifs` (v1.4)
+
+La seule page qui liste les dix lignes et leurs paliers, par moment. Elle sert le prospect qui vérifie ; elle est reliée depuis la home et le footer.
 
 ### Contact `/contact`
 
@@ -221,9 +253,9 @@ Hors cible prospect froid. Même voix, argument unique : forfait, délai, une in
 
 ## 7. CTA et navigation
 
-- Navigation principale : Diagnostic · Services · Conseil · Études de cas · À propos. Le diagnostic prend la place du bouton « Contactez-moi » ; le contact reste accessible dans le footer et en fin de chaque page.
-- Chaque page d'offre se termine par deux CTA : froid (diagnostic) en principal, chaud (rendez-vous) en secondaire. Jamais un seul CTA d'une seule température.
-- Libellés fixes : « Voyez ce qui ralentit votre site en 2 minutes » (froid), « Discutons de votre projet » (chaud), « Voir l'étude de cas » (preuve).
+- Navigation principale (v1.4) : Décider · Refaire · Tenir · Études de cas · À propos, puis un lien « Espace client » et le bouton « Analyser mon site » (`/scan`). Chaque moment ouvre un mega menu de trois cases (`lib/mega-menu.ts`). Le rendez-vous reste dans le tiroir mobile, le footer et en fin de chaque page.
+- Chaque page d'offre se termine par deux CTA : froid (analyse du site) en principal, chaud (rendez-vous) en secondaire. Jamais un seul CTA d'une seule température.
+- Libellés fixes : « Analysez votre site en 2 minutes » (froid), « Discutons de votre projet » (chaud), « Voir l'étude de cas » (preuve).
 
 ## 8. Éléments de langage prêts à l'emploi
 
@@ -261,6 +293,9 @@ Quick wins (contenu, ordre, typographie) : points 1, 2, 3, 8, 9. Chantiers (prod
 - Ne pas créer de catalogue de sites ou de packs : commoditise et érode l'argument AGEFIPH.
 - Ne pas laisser un seul CTA d'une seule température sur une page.
 - Ne pas laisser cohabiter deux chiffres pour la même réalité (années, projets, délais).
+- Ne pas afficher les dix lignes ailleurs que sur `/tarifs` : ailleurs, trois choix au plus par moment, un seul mis en avant.
+- Ne pas recopier un prix : chaque prix se lit dans sa source unique (§1).
+- Ne pas présenter la maintenance comme une intervention ponctuelle ni rouvrir l'offre Dépannage WordPress.
 - Ne pas laisser subsister une mention des anciennes offres IA au format d'origine (build pack, « direction technique fractionnée », sélecteur techno) sur aucune page, formulaire ou métadonnée. Exception cadrée : l'**Expert technique externalisé** (à partir de 900 € HT par mois), offre de conseil récurrente du catalogue §1, sous ce seul libellé — ne pas réintroduire « CTO externalisé » ni « CTO » (ADR-010).
 - Ne pas traduire en anglais avant que le français soit figé.
 

@@ -11,6 +11,7 @@ import {
   CTO_BILLING_UNIT_CODE,
   CTO_MIN_MONTHS,
 } from "@/lib/cto-externalise";
+import { OFFER_AMOUNT_CENTS, OFFER_CURRENCY } from "@/lib/sentinelle-offer";
 
 type SchemaLocale = "fr" | "en";
 
@@ -61,7 +62,9 @@ function localePath(locale: SchemaLocale, path: string): string {
 }
 
 /**
- * Catalogue d'offres de l'entité — les six lignes de la charte v1.2 (§1).
+ * Catalogue d'offres de l'entité : les lignes indexables de la charte v1.4
+ * (§1), soit les six historiques plus Sentinelle ; le suivi et maintenance
+ * n'y entre qu'avec MAINTENANCE_PRIX_VALIDES (lib/maintenance-offer.ts).
  * Déclaré UNE SEULE FOIS : les deux `hasOfferCatalog` du site (ContactPage et
  * le nœud LocalBusiness de la home) le réutilisent, donc un seul endroit à
  * corriger quand le catalogue bouge.
@@ -89,8 +92,8 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
   return {
     "@type": "OfferCatalog",
     name: isEn
-      ? "Next Impact advisory and redesign services"
-      : "Conseil et refonte Next Impact",
+      ? "Next Impact advisory, redesign and ongoing care"
+      : "Conseil, refonte et suivi Next Impact",
     itemListElement: [
       {
         "@type": "Offer",
@@ -147,6 +150,31 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
         priceCurrency: "EUR",
         priceSpecification: FROM_PRICE(6500),
         url: url("/solutions-web"),
+      },
+      // Sentinelle, première marche du moment « Tenir » (charte v1.4,
+      // ADR-012). Prix unique et mensuel, lu dans lib/sentinelle-offer.ts (la
+      // même source que le webhook de paiement). Page FR uniquement (locale EN
+      // en noindex) : l'URL pointe toujours la version française.
+      // Le suivi et maintenance n'est PAS déclaré ici tant que
+      // MAINTENANCE_PRIX_VALIDES vaut false (lib/maintenance-offer.ts).
+      {
+        "@type": "Offer",
+        name: "Sentinelle",
+        description: isEn
+          ? "Watch on the components your site actually runs: an alert when one of them becomes a problem, two letters a month reviewed by a human before sending, and what it changes for what comes next. Cancel at any time."
+          : "Surveillance des composants que votre site utilise vraiment : une alerte quand l'un d'eux devient un problème, deux lettres par mois relues avant envoi, et ce que ça change pour la suite. Résiliable à tout moment.",
+        priceCurrency: OFFER_CURRENCY.toUpperCase(),
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          priceCurrency: OFFER_CURRENCY.toUpperCase(),
+          price: OFFER_AMOUNT_CENTS / 100,
+          referenceQuantity: {
+            "@type": "QuantitativeValue",
+            value: 1,
+            unitCode: "MON",
+          },
+        },
+        url: `${siteConfig.url}/sentinelle`,
       },
       CTO_OFFER(locale),
     ],
@@ -625,8 +653,8 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
     description: isEn
-      ? `Talk about a redesign project: advisory call (€150), audit + roadmap (€650), outsourced technical expert (from €${CTO_PRICE_VALUE}/month), WordPress, headless or web app redesign, or a free diagnostic.`
-      : `Parler d'un projet de refonte : visio conseil (150 €), audit + roadmap (650 €), expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), refonte WordPress, headless ou web app, ou diagnostic gratuit.`,
+      ? `Talk about a redesign or a new site: advisory call (€150), audit + roadmap (€650), WordPress, headless or web app project, care and maintenance, outsourced technical expert (from €${CTO_PRICE_VALUE}/month), or a free diagnostic.`
+      : `Parler d'une refonte ou d'une création : visio conseil (150 €), audit + roadmap (650 €), projet WordPress, headless ou web app, suivi et maintenance, expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), ou diagnostic gratuit.`,
     url: `${siteConfig.url}${localePath(lang, "/contact")}`,
     inLanguage: isEn ? "en-US" : "fr-FR",
     mainEntity: {
@@ -685,8 +713,8 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
           name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
           target: `${siteConfig.url}${localePath(lang, "/contact")}`,
           description: isEn
-            ? "Redesign advisory call, audit + roadmap, outsourced technical expert, redesign project (WordPress, headless or web app) or free diagnostic"
-            : "Visio conseil refonte, audit + roadmap, expert technique externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+            ? "Redesign advisory call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
+            : "Visio conseil refonte, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
         },
       ],
       hasOfferCatalog: OFFER_CATALOG(lang),
@@ -1012,8 +1040,8 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
             name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
             target: `${baseUrl}${localePath(lang, "/contact")}`,
             description: isEn
-              ? "Redesign advisory call, audit + roadmap, outsourced technical expert, redesign project (WordPress, headless or web app) or free diagnostic"
-              : "Visio conseil refonte, audit + roadmap, expert technique externalisé, projet de refonte (WordPress, headless ou web app) ou diagnostic gratuit",
+              ? "Redesign advisory call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
+              : "Visio conseil refonte, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
           },
         ],
       },

@@ -2,11 +2,12 @@
 
 > PRIORITAIRE : pour tout travail éditorial sur la vitrine (contenus, titres,
 > offres, CTA, métadonnées, navigation), lire et suivre
-> ./DIRECTIVES-CHARTE-EDITORIALE.md (charte v1.3, 2026-09-10) — elle prime sur
-> le présent fichier et fixe le catalogue d'offres de référence (6 lignes,
-> dont l'Expert technique externalisé récurrent), le lexique, les règles
+> ./DIRECTIVES-CHARTE-EDITORIALE.md (charte v1.4, 2026-09-27) — elle prime sur
+> le présent fichier et fixe le catalogue d'offres de référence (10 lignes en
+> trois moments : Décider · Refaire · Tenir), le lexique, les règles
 > typographiques et les garde-fous. Journal des arbitrages : ./docs/decisions.md
-> (ADR-007 pour la 6e ligne, ADR-010 pour son renommage).
+> (ADR-007/ADR-010 pour l'Expert technique externalisé, ADR-012 pour les trois
+> moments, Sentinelle et le suivi et maintenance).
 
 > PRIORITAIRE : pour tout travail sur les études de cas, lire et suivre
 > ./DIRECTIVES-ETUDES-DE-CAS.md — il prime sur le présent fichier.
