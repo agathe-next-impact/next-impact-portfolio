@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { dayKey, monthGrid, upcoming, type CalendarEvent, type EventKind } from "@cto/espace";
-import { formatDay, Panel, Suite, Tag, type Tone } from "./ui";
+import { formatDay, Legende, Panel, Suite, Tag, type Tone } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le calendrier du tableau de bord.
@@ -45,17 +45,12 @@ export function Calendrier({ events, now = new Date() }: { events: CalendarEvent
   }).format(now);
 
   return (
-    <section aria-labelledby="calendrier-titre" className="mt-12">
-      <div className="flex items-baseline justify-between gap-4 border-b border-dark-gray pb-3">
-        <h2 id="calendrier-titre" className="font-sans text-lg font-light text-foreground">
-          Calendrier
-        </h2>
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
-          90 prochains jours
-        </span>
-      </div>
+    <section aria-labelledby="calendrier-titre" className="mt-10">
+      <Legende id="calendrier-titre" aside="90 prochains jours">
+        Calendrier
+      </Legende>
 
-      <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
+      <div className="mt-1 grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
         <Panel className="order-2 p-4 lg:order-1">
           <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-foreground">{titreMois}</p>
           <table className="mt-3 w-full table-fixed border-collapse text-center">

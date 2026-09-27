@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { veilleOfferte } from "@cto/espace";
 import { CALENDLY_URL, contactHref, Espace, sectionHref, type EspaceContext } from "./shell";
-import { buttonClass, formatDay, Label, Panel, Tag } from "./ui";
+import { buttonClass, formatDay, Label, Legende, Panel, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -39,19 +39,11 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
       context={context}
       active="accompagnement"
       title="Votre accompagnement"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce que comprend votre accompagnement aujourd&rsquo;hui, et ce qui peut s&rsquo;y ajouter quand vos
-          besoins évoluent.
-        </p>
-      }
     >
       {/* ── Ce que vous avez ─────────────────────────────────────────── */}
       <section aria-labelledby="actuel-titre" className="mt-10">
-        <h2 id="actuel-titre" className="font-sans text-lg font-light text-foreground">
-          Ce que vous avez
-        </h2>
-        <Panel className="mt-4 divide-y divide-dark-gray">
+        <Legende id="actuel-titre">Ce que vous avez</Legende>
+        <Panel className="mt-1 divide-y divide-dark-gray">
           {/* La veille est offerte à l'ouverture de l'espace ; sa ligne dit
               jusqu'à quand, et que l'espace reste ouvert après. */}
           <Ligne
@@ -126,15 +118,13 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
 
       {/* ── L'étape d'après ──────────────────────────────────────────── */}
       {suivant === "direction" ? (
-        <section aria-labelledby="palier-titre" className="mt-12">
-          <h2 id="palier-titre" className="font-sans text-lg font-light text-foreground">
-            Ce que le palier Direction technique ajoute
-          </h2>
-          <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
-            Pour les périodes où les décisions techniques se rapprochent : plusieurs prestataires, une
-            refonte, des échéances qui se chevauchent.
-          </p>
-          <Panel className="mt-4 divide-y divide-dark-gray">
+        <section aria-labelledby="palier-titre" className="mt-10">
+          <Legende id="palier-titre">Ce que le palier Direction technique ajoute</Legende>
+          <Panel className="mt-1 divide-y divide-dark-gray">
+            <p className="px-5 py-4 font-inter-tight text-sm text-mid-gray">
+              Pour les périodes où les décisions techniques se rapprochent : plusieurs prestataires, une
+              refonte, des échéances qui se chevauchent.
+            </p>
             {apportsDirection().map((apport) => (
               <div key={apport.critere} className="grid gap-1 px-5 py-3 sm:grid-cols-[12rem_1fr_1fr] sm:gap-4">
                 <p className="font-inter-tight text-sm text-foreground">{apport.critere}</p>
@@ -151,14 +141,12 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
           </Panel>
         </section>
       ) : suivant === "referent" ? (
-        <section aria-labelledby="palier-titre" className="mt-12">
-          <h2 id="palier-titre" className="font-sans text-lg font-light text-foreground">
-            Après l&rsquo;audit : le palier Référent
-          </h2>
-          <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
-            L&rsquo;audit dit quoi faire. Le palier Référent vous accompagne pour le faire, mois après mois.
-          </p>
-          <Panel className="mt-4 divide-y divide-dark-gray">
+        <section aria-labelledby="palier-titre" className="mt-10">
+          <Legende id="palier-titre">Après l&rsquo;audit : le palier Référent</Legende>
+          <Panel className="mt-1 divide-y divide-dark-gray">
+            <p className="px-5 py-4 font-inter-tight text-sm text-mid-gray">
+              L&rsquo;audit dit quoi faire. Le palier Référent vous accompagne pour le faire, mois après mois.
+            </p>
             {contenuPalier("referent").map((ligne) => (
               <div key={ligne.critere} className="grid gap-1 px-5 py-3 sm:grid-cols-[12rem_1fr] sm:gap-4">
                 <p className="font-inter-tight text-sm text-foreground">{ligne.critere}</p>
@@ -170,11 +158,9 @@ export async function VueAccompagnement({ viewer, context }: { viewer: Viewer; c
       ) : null}
 
       {/* ── À ajouter ────────────────────────────────────────────────── */}
-      <section aria-labelledby="ajouter-titre" className="mt-12">
-        <h2 id="ajouter-titre" className="font-sans text-lg font-light text-foreground">
-          À ajouter
-        </h2>
-        <Panel className="mt-4 divide-y divide-dark-gray">
+      <section aria-labelledby="ajouter-titre" className="mt-10">
+        <Legende id="ajouter-titre">À ajouter</Legende>
+        <Panel className="mt-1 divide-y divide-dark-gray">
           {aAjouter.map((service) => (
             <Ligne key={service.code} titre={service.nom}>
               {service.apport}

@@ -131,12 +131,15 @@ export type RoleScenario =
   | "resolus"
   | "restants"
   | "resume"
+  | "reponse"
   | "detail";
 
 /** Le rôle d'une colonne d'un tableau de scénarios ; « detail » pour tout le reste (risques, conditions…). */
 export function roleColonneScenario(entete: string, index: number): RoleScenario {
   if (index === 0) return "nom";
   const t = sansAccents(entete);
+  // La réponse du client à la proposition née du scénario (`notion/scenarios.ts`), pas une donnée de comparaison.
+  if (/^reponse/.test(t)) return "reponse";
   if (/^(statut|decision|verdict)$/.test(t)) return "statut";
   if (/^note|score/.test(t)) return "note";
   if (/cout|budget|prix|montant/.test(t)) {

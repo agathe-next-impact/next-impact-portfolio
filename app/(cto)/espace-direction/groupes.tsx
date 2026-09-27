@@ -8,7 +8,6 @@ import {
   type RoadmapPayload,
 } from "@cto/deliverables";
 import {
-  GROUP_QUESTIONS,
   sectionByKey,
   visibleGroups,
   type SectionGroup,
@@ -425,7 +424,6 @@ export async function VueGroupe({
       active={null}
       activeGroup={groupe.group}
       title={groupe.label}
-      intro={<p className="max-w-prose font-inter-tight text-base text-mid-gray">{GROUP_QUESTIONS[groupe.group]}</p>}
     >
       <section
         aria-label={`Synthèse : ${groupe.label}`}

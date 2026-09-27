@@ -83,28 +83,47 @@ export function BackLink({ href, children }: { href: string; children: ReactNode
 }
 
 /**
- * En-tête de page : le nom de l'entreprise cliente, puis le titre de l'écran.
+ * En-tête de page : le surtitre (le nom de l'entreprise cliente), puis le
+ * titre de l'écran. Rien d'autre : ni sous-titre ni chapô, le contenu suit.
  *
  * L'ordre compte. Trois personnes de trois entreprises peuvent ouvrir cet
  * espace ; la première chose à confirmer est « je suis bien chez moi ».
  */
-export function PageHeader({
-  company,
-  title,
-  children,
-}: {
-  company: string;
-  title: string;
-  children?: ReactNode;
-}) {
+export function PageHeader({ company, title }: { company: string; title: string }) {
   return (
     <header className="border-b border-dark-gray pb-6">
       <Label>{company}</Label>
       <h1 className="mt-2 font-sans text-2xl font-light text-foreground sm:text-3xl">
         {title}
       </h1>
-      {children ? <div className="mt-4">{children}</div> : null}
     </header>
+  );
+}
+
+/**
+ * La légende d'un bloc de contenu (« En cours · 3 », « Alertes »).
+ *
+ * Pas un titre intermédiaire : une ligne mono, du corps du résumé d'un
+ * `Groupe`, pour que listes ouvertes et listes repliées se lisent pareil.
+ * Reste un `<h2>` pour le plan de la page au lecteur d'écran.
+ */
+export function Legende({
+  id,
+  aside,
+  children,
+}: {
+  id?: string;
+  /** À droite : un lien « tout voir », une période. */
+  aside?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex items-baseline justify-between gap-4 border-t border-dark-gray py-3">
+      <h2 id={id} className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+        {children}
+      </h2>
+      {aside ? <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">{aside}</span> : null}
+    </div>
   );
 }
 

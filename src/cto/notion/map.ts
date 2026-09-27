@@ -149,6 +149,8 @@ export const PROPS = {
     date: "Date des mesures",
     site: "Site",
     annex: "Annexe",
+    /** Cochée : les scénarios de l'audit deviennent des propositions (`scenarios.ts`). */
+    validated: "Validé",
   },
   /**
    * Base « Propositions » de l'atelier : une ligne par proposition envoyée,
@@ -300,6 +302,11 @@ export function documentFiles(page: NotionPage): p.NotionFile[] {
 }
 
 /** Les pièces de la colonne « Annexe » d'un audit. */
+/** Case « Validé » de la base Audits. Absente ou décochée : l'audit reste une lecture. */
+export function auditValide(page: NotionPage): boolean {
+  return p.checkbox(page, PROPS.audit.validated);
+}
+
 export function auditAnnexFiles(page: NotionPage): p.NotionFile[] {
   return p.files(page, PROPS.audit.annex);
 }

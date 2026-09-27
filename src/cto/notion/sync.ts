@@ -27,6 +27,7 @@ import {
   SYNCED_KINDS,
 } from "./config";
 import { importAnnex, readAuditTree } from "./audit";
+import { isScenarioProposition, scenarioPropositions } from "./scenarios";
 import { alert, emptyFindings, merge, type Findings } from "./findings";
 import { checkColumns, COLUMNS, schemaWarning } from "./schema";
 import { syncLetters, type LettersReport } from "./letters";
@@ -37,6 +38,7 @@ import {
   auditActionInput,
   auditAnnexFiles,
   auditPageId,
+  auditValide,
   clientInPreparation,
   clientPageIds,
   clientServices,
@@ -741,7 +743,12 @@ async function applyInputs(
   inputs: DeliverableInput[],
   findings: Findings,
   disabledClientIds: Set<string>,
-  options: SweepOptions & { keep?: Set<string>; withdraw?: boolean },
+  options: SweepOptions & {
+    keep?: Set<string>;
+    withdraw?: boolean;
+    /** Restreint le retrait aux livrables que ce filtre accepte ; les autres restent tels quels. */
+    withdrawable?: (notionPageId: string) => boolean;
+  },
 ): Promise<KindReport> {
   const { force, dryRun } = options;
   const states = new Map((await currentStates(kind)).map((s) => [s.notionPageId, s]));
@@ -808,6 +815,7 @@ async function applyInputs(
     // sont, par construction, absentes de `inputs` ce tour-ci.
     if (disabledClientIds.has(state.clientId)) continue;
     if (options.keep?.has(state.notionPageId)) continue;
+    if (options.withdrawable && !options.withdrawable(state.notionPageId)) continue;
     if (!state.withdrawn && !stillPublished.has(state.notionPageId)) toWithdraw.push(state);
   }
 
@@ -837,6 +845,8 @@ interface AuditsResult extends Findings {
   report: KindReport | null;
   /** Les actions d'audit engagées, à verser dans la roadmap. */
   roadmap: DeliverableInput[];
+  /** Les scénarios des audits validés, à verser dans les propositions. */
+  propositions: DeliverableInput[];
   /** Faux si un audit n'a pas pu être lu en entier : la roadmap ne retire rien. */
   complete: boolean;
 }
@@ -862,6 +872,7 @@ async function syncAudits(
       warnings: [`Base « audit » ignorée : ${envNameFor("audit")} n'est pas posée.`],
       alerts: [],
       roadmap: [],
+      propositions: [],
       complete: true,
     };
   }
@@ -873,7 +884,7 @@ async function syncAudits(
   if (await schemaBroken("audit", databaseId, "audit", findings)) {
     // `complete: false` : les actions d'audit déjà versées dans la roadmap
     // n'ont pas été relues, la roadmap ne doit donc pas les retirer.
-    return { report: null, ...findings, roadmap: [], complete: false };
+    return { report: null, ...findings, roadmap: [], propositions: [], complete: false };
   }
 
   const pages = await queryDatabase(databaseId, publishedFilter(PROPS.published));
@@ -883,6 +894,7 @@ async function syncAudits(
   const keep = new Set<string>();
   const inputs: DeliverableInput[] = [];
   const roadmap: DeliverableInput[] = [];
+  const propositions: DeliverableInput[] = [];
   let complete = true;
 
   for (const input of resolved.inputs) {
@@ -932,10 +944,28 @@ async function syncAudits(
       const action = auditActionInput(row, input.clientId, input.title);
       if (action) roadmap.push(action);
     }
+
+    if (auditValide(page)) {
+      const scenarios = scenarioPropositions({
+        notionPageId: input.notionPageId,
+        clientId: input.clientId,
+        title: input.title,
+        occurredAt: input.occurredAt,
+        synthese: tree.synthese,
+        sections: tree.sections,
+      });
+      if (scenarios.length === 0) {
+        warnings.push(
+          `audit « ${input.title} » validé, mais aucun tableau de scénarios reconnu ` +
+            "(première colonne « Scénario ») : aucune proposition publiée.",
+        );
+      }
+      propositions.push(...scenarios);
+    }
   }
 
   const report = await applyInputs("audit", inputs, findings, disabledClientIds, { ...options, keep });
-  return { report, ...findings, roadmap, complete };
+  return { report, ...findings, roadmap, propositions, complete };
 }
 
 /**
@@ -945,19 +975,30 @@ async function syncAudits(
  *
  * Même doctrine que les audits : une proposition illisible ce tour-ci n'est ni
  * publiée ni retirée, sa version en ligne reste telle quelle.
+ *
+ * `extra` porte les scénarios des audits validés (`scenarios.ts`). Ils passent
+ * DANS le même balayage, sinon le retrait des lignes absentes de la base les
+ * effacerait à chaque passage. Base Propositions non posée : ils sont publiés
+ * seuls. Lecture des audits incomplète : aucun d'eux n'est retiré.
  */
 async function syncPropositions(
   byNotionPage: Map<string, string>,
   options: SweepOptions,
   disabledClientIds: Set<string>,
+  extra: { inputs: DeliverableInput[]; complete: boolean } = { inputs: [], complete: true },
 ): Promise<{ report: KindReport | null } & Findings> {
   const { dryRun } = options;
+  // Seuls les scénarios d'un audit relu en entier peuvent être retirés.
+  const scenariosRetirables = (id: string) => extra.complete && isScenarioProposition(id);
+
   if (!isConfigured("proposition")) {
-    return {
-      report: null,
-      warnings: [`Base « proposition » ignorée : ${envNameFor("proposition")} n'est pas posée.`],
-      alerts: [],
-    };
+    const findings = emptyFindings();
+    findings.warnings.push(`Base « proposition » ignorée : ${envNameFor("proposition")} n'est pas posée.`);
+    const report = await applyInputs("proposition", extra.inputs, findings, disabledClientIds, {
+      ...options,
+      withdrawable: scenariosRetirables,
+    });
+    return { report, ...findings };
   }
 
   const findings = emptyFindings();
@@ -1006,8 +1047,13 @@ async function syncPropositions(
     payload.fichiers = tree.fichiers;
     inputs.push(input);
   }
+  inputs.push(...extra.inputs);
 
-  const report = await applyInputs("proposition", inputs, findings, disabledClientIds, { ...options, keep });
+  const report = await applyInputs("proposition", inputs, findings, disabledClientIds, {
+    ...options,
+    keep,
+    withdrawable: (id) => !isScenarioProposition(id) || scenariosRetirables(id),
+  });
   return { report, ...findings };
 }
 
@@ -1167,6 +1213,7 @@ export async function syncFromNotion(
       ],
       alerts: [],
       roadmap: [],
+      propositions: [],
       complete: false,
     };
   }
@@ -1206,6 +1253,7 @@ export async function syncFromNotion(
       clients.byNotionPage,
       { force: options.force === true, dryRun, reassign: options.reassign === true },
       clients.disabledClientIds,
+      { inputs: audits.propositions, complete: audits.complete },
     );
     if (propositions.report) report.kinds.push(propositions.report);
     merge(report, propositions);

@@ -152,13 +152,24 @@ export async function sentinelleStateFor(
   clientId: string,
 ): Promise<{ data: SentinelleExport; fetchedAt: Date; error: string | null } | null> {
   const [row] = await db()
-    .select()
+    .select({
+      data: ctoSentinelleSnapshots.data,
+      fetchedAt: ctoSentinelleSnapshots.fetchedAt,
+      error: ctoSentinelleSnapshots.error,
+      relie: ctoClients.sentinelleClientId,
+    })
     .from(ctoSentinelleSnapshots)
+    .innerJoin(ctoClients, eq(ctoClients.id, ctoSentinelleSnapshots.clientId))
     .where(eq(ctoSentinelleSnapshots.clientId, clientId))
     .limit(1);
   if (!row) return null;
   // Une ligne écrite sur échec avant tout succès porte `{}` : pas d'export.
   const parsed = SentinelleExportSchema.safeParse(row.data);
   if (!parsed.success) return null;
+  // Le relevé doit être celui du client Sentinelle relié AUJOURD'HUI. Après un
+  // changement de rattachement (deux fiches qui partageaient un client, réparé
+  // le 2026-09-27), l'ancien relevé reste en base jusqu'au passage suivant de
+  // l'import : il montrerait le site d'un autre. On ne l'affiche pas.
+  if (!row.relie || parsed.data.client.id !== row.relie) return null;
   return { data: parsed.data, fetchedAt: row.fetchedAt, error: row.error };
 }

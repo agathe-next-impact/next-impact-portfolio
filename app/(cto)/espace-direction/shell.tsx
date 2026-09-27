@@ -432,7 +432,6 @@ export async function Espace({
   active,
   activeGroup = null,
   title,
-  intro,
   children,
 }: {
   viewer: Viewer;
@@ -441,7 +440,6 @@ export async function Espace({
   /** La synthèse de groupe affichée, le cas échéant : son intitulé est alors l'entrée courante. */
   activeGroup?: SectionGroup | null;
   title: string;
-  intro?: ReactNode;
   children: ReactNode;
 }) {
   const rail = (await cookies()).get(NAV_COOKIE)?.value === "rail";
@@ -504,9 +502,7 @@ export async function Espace({
             </div>
           ) : null}
 
-          <PageHeader company={viewer.company} title={title}>
-            {intro}
-          </PageHeader>
+          <PageHeader company={viewer.company} title={title} />
 
           {horsServices ? (
             <div className="mt-8">

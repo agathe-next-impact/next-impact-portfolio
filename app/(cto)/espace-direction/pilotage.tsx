@@ -5,7 +5,7 @@ import { STATUT_PROPOSITION } from "@cto/espace";
 import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, SectionKey, Verdict } from "@cto/espace";
 import { auditPath, categoriePath, CATEGORIES, propositionPath, propositionTone, type CategorieKind } from "./livrables";
 import { contactHref, sectionOuverte, type EspaceContext } from "./shell";
-import { Dot, formatAmount, formatDay, Label, Tag, type Tone } from "./ui";
+import { Dot, formatAmount, formatDay, Label, Legende, Tag, type Tone } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // L'affichage des trois réponses : missions, site, actions.
@@ -186,10 +186,10 @@ export function ListeMissions({
   vide: string;
 }) {
   if (missions.length === 0) {
-    return <p className="mt-4 border border-dark-gray bg-jet/40 px-5 py-4 font-inter-tight text-sm text-mid-gray">{vide}</p>;
+    return <p className="mt-1 border border-dark-gray bg-jet/40 px-5 py-4 font-inter-tight text-sm text-mid-gray">{vide}</p>;
   }
   return (
-    <ul className="mt-4 divide-y divide-dark-gray border border-dark-gray bg-jet/40">
+    <ul className="mt-1 divide-y divide-dark-gray border border-dark-gray bg-jet/40">
       {missions.map((mission) => (
         <LigneCarte
           key={mission.item.id}
@@ -377,24 +377,22 @@ export function Frise({
   const marques = frise.lanes.flatMap((lane) => lane.rows.flat().map((mark) => ({ lane: lane.label, mark })));
 
   return (
-    <section aria-labelledby="frise-titre" className="mt-12">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-dark-gray pb-3">
-        <h2 id="frise-titre" className="font-sans text-lg font-light text-foreground">
-          {titre}
-        </h2>
-        <span className={ETIQUETTE}>
-          {formatMois(frise.start)} → {formatMois(new Date(frise.end.getTime() - 86_400_000))}
-        </span>
-      </div>
+    <section aria-labelledby="frise-titre" className="mt-10">
+      <Legende
+        id="frise-titre"
+        aside={`${formatMois(frise.start)} → ${formatMois(new Date(frise.end.getTime() - 86_400_000))}`}
+      >
+        {titre}
+      </Legende>
 
       {frise.count === 0 ? (
-        <p className="mt-5 border border-dark-gray bg-jet/40 px-5 py-4 font-inter-tight text-sm text-mid-gray">
+        <p className="mt-1 border border-dark-gray bg-jet/40 px-5 py-4 font-inter-tight text-sm text-mid-gray">
           Rien de daté sur ces sept mois. Les décisions, missions et échéances de contrats s&rsquo;y
           placeront dès leur publication.
         </p>
       ) : (
         <>
-          <div className="mt-5 overflow-x-auto border border-dark-gray bg-jet/40" aria-hidden>
+          <div className="mt-1 overflow-x-auto border border-dark-gray bg-jet/40" aria-hidden>
             <div className="min-w-[640px] px-4 pb-4 pt-3">
               <div className="relative ml-[92px] h-5">
                 {frise.months.map((mois) => (

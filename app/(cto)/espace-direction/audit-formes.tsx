@@ -511,7 +511,7 @@ function Scenarios({ bloc, entetes }: { bloc: TableBlock; entetes: string[] }) {
     <section className="mt-6" aria-label={bloc.title || "Scénarios"}>
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
-          {scenarios.length} scénarios comparés
+          {scenarios.length > 1 ? `${scenarios.length} scénarios comparés` : "Le scénario"}
         </p>
         {scenarios.some((s) => s.note !== null) ? (
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">Note pondérée sur 10</p>

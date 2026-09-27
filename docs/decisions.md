@@ -303,3 +303,23 @@ Conséquences :
   même paquet » se fait par une sélection multiple native dans Notion.
 - La lettre bimensuelle (`digests.ts`, `/admin/sentinelle/numeros`) n'est pas
   concernée : elle continue de se valider dans l'admin du site.
+
+## ADR-013 — 2026-09-27 — Les scénarios d'un audit validé deviennent des propositions
+
+Demande d'Agathe : les résultats d'un audit validé doivent créer des
+propositions dans l'espace client, une par scénario.
+
+- Nouvelle colonne facultative **« Validé »** (case à cocher) sur la base
+  Audits. Décochée ou absente : l'audit reste une lecture, rien ne change.
+- Cochée : chaque ligne de chaque tableau de scénarios de l'audit (première
+  colonne « Scénario », « Option » ou « Piste ») devient une proposition,
+  **écartés compris** (la proposition dit en tête ce que l'audit recommande).
+  Aucune ressaisie dans la base Propositions (`src/cto/notion/scenarios.ts`).
+- Le corps reprend la ligne sous les mêmes en-têtes, rendue en carte comme
+  dans l'audit. Le statut se lit dans une colonne facultative « Réponse
+  client » du tableau ; vide, la proposition attend une réponse et remonte dans
+  « À valider ».
+- Identifiant déduit (`scenario-<ligne Audits>-<nom>`) : retoucher un chiffre
+  écrit une version datée, renommer le scénario retire l'ancienne proposition.
+  Décocher « Validé » les retire toutes ; une lecture d'audit incomplète n'en
+  retire aucune.

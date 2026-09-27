@@ -281,12 +281,6 @@ export async function VuePrestations({ viewer, context }: { viewer: Viewer; cont
       context={context}
       active="prestations"
       title="Missions en cours"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce que vous avez signé : tarif, avancement, livraison et règlements. Les propositions qui
-          attendent encore votre accord sont dans Contrats → Propositions.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>

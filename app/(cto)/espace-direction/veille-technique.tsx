@@ -2,7 +2,7 @@ import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor, type SentinelleAlert, type SentinelleVerdict } from "@cto/sentinelle";
 import { CarteLettre } from "./lettre";
 import { EnPreparation, Espace, type EspaceContext } from "./shell";
-import { Dot, formatDay, Groupe, Label, Notice, Panel, SectionNav, Stat, Suite, Tag, type Tone } from "./ui";
+import { Dot, formatDay, Groupe, Label, Legende, Notice, Panel, SectionNav, Stat, Suite, Tag, type Tone } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -76,16 +76,9 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
   ]);
   const lettresTechniques = lettres.filter((lettre) => lettre.source === "sentinelle");
 
-  const intro = (
-    <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-      Ce qui est surveillé sur votre site, ce qui a été signalé et ce qu&rsquo;il faut faire. Chaque
-      alerte a été relue avant de vous parvenir.
-    </p>
-  );
-
   if (!state) {
     return (
-      <Espace viewer={viewer} context={context} active="veille-technique" title="Veille technique" intro={intro}>
+      <Espace viewer={viewer} context={context} active="veille-technique" title="Veille technique">
         <EnPreparation>
           La surveillance de votre site est en cours de mise en place. Les alertes, la fiche technique et
           les lettres de veille apparaîtront ici après le premier relevé.
@@ -109,7 +102,7 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
   const prochaine = radar.find((entry) => entry.daysLeft >= 0) ?? null;
 
   return (
-    <Espace viewer={viewer} context={context} active="veille-technique" title="Veille technique" intro={intro}>
+    <Espace viewer={viewer} context={context} active="veille-technique" title="Veille technique">
       {state.error ? (
         <div className="mt-6">
           <Notice tone="erreur">
@@ -145,8 +138,8 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         ]}
       />
 
-      <section id="alertes" className="mt-12 scroll-mt-24">
-        <h2 className="mb-5 font-sans text-lg font-light text-foreground">Alertes</h2>
+      <section id="alertes" aria-labelledby="alertes-titre" className="mt-10 scroll-mt-24">
+        <Legende id="alertes-titre">{`Alertes (${alertes.length})`}</Legende>
         {alertes.length === 0 ? (
           <Panel className="px-5 py-6">
             <p className="font-inter-tight text-base text-mid-gray">
@@ -173,8 +166,8 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         )}
       </section>
 
-      <section id="fins-de-support" className="mt-12 scroll-mt-24">
-        <h2 className="mb-5 font-sans text-lg font-light text-foreground">Fins de support à venir</h2>
+      <section id="fins-de-support" aria-labelledby="fins-de-support-titre" className="mt-10 scroll-mt-24">
+        <Legende id="fins-de-support-titre">{`Fins de support à venir (${radar.length})`}</Legende>
         {radar.length === 0 ? (
           <Panel className="px-5 py-6">
             <p className="font-inter-tight text-base text-mid-gray">
@@ -236,8 +229,8 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         </p>
       </Groupe>
 
-      <section id="lettres" className="mt-12 scroll-mt-24">
-        <h2 className="mb-5 font-sans text-lg font-light text-foreground">Lettres de veille technique</h2>
+      <section id="lettres" aria-labelledby="lettres-titre" className="mt-10 scroll-mt-24">
+        <Legende id="lettres-titre">{`Lettres de veille technique (${lettresTechniques.length})`}</Legende>
         {lettresTechniques.length === 0 ? (
           <Panel className="px-5 py-6">
             <p className="font-inter-tight text-base text-mid-gray">

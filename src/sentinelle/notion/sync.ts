@@ -1,4 +1,4 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, notInArray } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import { missingForValidation, parseAlertContent, serializeAlertContent } from "@sentinelle/admin/content";
@@ -39,6 +39,8 @@ export interface AlertSyncReport {
   blocked: number;
   backfilled: number;
   orphans: number;
+  /** Alertes dont la page a disparu de Notion (archivée ou supprimée par un humain). */
+  removed: number;
   warnings: string[];
 }
 
@@ -240,7 +242,7 @@ async function mirror(record: AlertPageRecord): Promise<boolean> {
 export async function syncAlertsFromNotion(now: Date = new Date()): Promise<AlertSyncReport> {
   const issue = configurationIssue();
   if (issue) {
-    return { mirrored: 0, sent: 0, blocked: 0, backfilled: 0, orphans: 0, warnings: [issue] };
+    return { mirrored: 0, sent: 0, blocked: 0, backfilled: 0, orphans: 0, removed: 0, warnings: [issue] };
   }
 
   const report: AlertSyncReport = {
@@ -249,6 +251,7 @@ export async function syncAlertsFromNotion(now: Date = new Date()): Promise<Aler
     blocked: 0,
     backfilled: 0,
     orphans: 0,
+    removed: 0,
     warnings: [],
   };
 
@@ -280,11 +283,38 @@ export async function syncAlertsFromNotion(now: Date = new Date()): Promise<Aler
     );
   }
 
+  // Une page archivée ou supprimée dans Notion sort du résultat de la requête,
+  // silencieusement — constaté en réel (2026-09) : un nettoyage dans Notion a
+  // fait disparaître un lot de pages sans qu'aucune erreur ne le signale.
+  // Sans ceci, leur ligne restait « draft » pour toujours, et la rédaction
+  // aurait retenté (donc payé) leur texte chaque nuit sans jamais y parvenir —
+  // `writeDraftContent` échoue sur une page archivée. On lit la suppression
+  // d'une page comme l'aurait fait un humain qui l'écarte.
+  //
+  // Ne s'applique jamais à une alerte déjà envoyée (état terminal) ni déjà
+  // écartée (déjà traitée à un passage précédent — sans cette exclusion, la
+  // même page disparue se recompterait « écartée » à chaque synchro, pour
+  // toujours).
+  const visibles = records.map((record) => record.pageId);
+  if (visibles.length > 0) {
+    const removed = await db()
+      .update(alerts)
+      .set({ status: "dismissed" })
+      .where(
+        and(
+          isNotNull(alerts.notionPageId),
+          notInArray(alerts.notionPageId, visibles),
+          notInArray(alerts.status, ["sent", "dismissed"]),
+        ),
+      )
+      .returning({ id: alerts.id });
+    report.removed = removed.length;
+  }
+
   console.info(
     `[sentinelle] synchro alertes : ${report.mirrored} mirrorée(s), ${report.sent} envoyée(s), ` +
-      `${report.blocked} bloquée(s), ${report.backfilled} page(s) réparée(s)${
-        report.orphans > 0 ? `, ${report.orphans} orpheline(s)` : ""
-      }`,
+      `${report.blocked} bloquée(s), ${report.backfilled} page(s) réparée(s), ${report.removed} écartée(s)` +
+      `${report.orphans > 0 ? `, ${report.orphans} orpheline(s)` : ""}`,
   );
 
   return report;

@@ -74,7 +74,7 @@ import {
 import { SyntheseAudit } from "./synthese-audit";
 import { PartieAccordeons, partieEnAccordeons } from "./partie-accordeons";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
-import { BackLink, buttonClass, Dot, formatDay, Groupe, Label, Notice, Panel, SectionNav, Suite, Tag } from "./ui";
+import { BackLink, buttonClass, Dot, formatDay, Groupe, Label, Legende, Notice, Panel, SectionNav, Suite, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -409,32 +409,9 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
     now,
     context.livraisons,
   );
-  const roadmap = context.items.some((item) => item.kind === "roadmap");
 
   return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="missions"
-      title="Pilotage"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce qui a été fait, ce qui avance et ce qui arrive, sur une seule ligne de temps.
-          {roadmap ? (
-            <>
-              {" "}La roadmap complète, avec ce qui a été écarté, reste{" "}
-              <Link
-                href={categoriePath("roadmap", viewer.base)}
-                className="text-foreground underline underline-offset-4 hover:text-accent-secondary"
-              >
-                consultable ici
-              </Link>
-              .
-            </>
-          ) : null}
-        </p>
-      }
-    >
+    <Espace viewer={viewer} context={context} active="missions" title="Pilotage">
       {context.missions.length === 0 ? (
         <EnPreparation>
           Les chantiers décidés, les décisions et les audits
@@ -452,17 +429,13 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
 
           <Frise frise={buildFrise(context.missions, context.items, now)} context={context} base={viewer.base} />
 
-          <section id="en-cours" aria-labelledby="en-cours-titre" className="mt-12 scroll-mt-20">
-            <h2 id="en-cours-titre" className="font-sans text-lg font-light text-foreground">
-              En cours <span className="text-mid-gray">· {enCours.length}</span>
-            </h2>
+          <section id="en-cours" aria-labelledby="en-cours-titre" className="mt-10 scroll-mt-20">
+            <Legende id="en-cours-titre">{`En cours (${enCours.length})`}</Legende>
             <ListeMissions missions={enCours} context={context} base={viewer.base} vide="Rien en cours pour l'instant." />
           </section>
 
-          <section id="a-venir" aria-labelledby="a-venir-titre" className="mt-12 scroll-mt-20">
-            <h2 id="a-venir-titre" className="font-sans text-lg font-light text-foreground">
-              À venir <span className="text-mid-gray">· {aVenir.length}</span>
-            </h2>
+          <section id="a-venir" aria-labelledby="a-venir-titre" className="mt-10 scroll-mt-20">
+            <Legende id="a-venir-titre">{`À venir (${aVenir.length})`}</Legende>
             <ListeMissions missions={aVenir} context={context} base={viewer.base} vide="Rien de programmé pour l'instant." />
           </section>
 
@@ -487,11 +460,6 @@ export async function VueDecisions({ viewer, context }: { viewer: Viewer; contex
       context={context}
       active="decisions"
       title="Décisions"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce qui a été tranché, quand, pourquoi, et ce qui a été écarté.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>
@@ -523,12 +491,6 @@ export async function VueAudit({ viewer, context }: { viewer: Viewer; context: E
       context={context}
       active="audit"
       title="Audit"
-      intro={
-        <p className="font-inter-tight text-base text-mid-gray">
-          L'état de votre site mesuré à une date donnée, les constats qui le fondent, et la
-          feuille de route qui en découle.
-        </p>
-      }
     >
       {audits.length === 0 ? (
         <EnPreparation>
@@ -565,12 +527,6 @@ export async function VueLectureAudit({
       context={context}
       active={sectionOuverte(context, "audit") ? "audit" : null}
       title={audit.title}
-      intro={
-        <Label>
-          {audit.occurredAt ? `Mesures du ${formatDay(audit.occurredAt)}` : "Audit"}
-          {audit.version > 1 ? ` · corrigé le ${formatDay(audit.recordedAt)}` : ""}
-        </Label>
-      }
     >
       {plusieurs ? (
         <div className="mt-8">
@@ -579,7 +535,16 @@ export async function VueLectureAudit({
       ) : null}
 
       <Panel className="mt-8 px-5 py-5">
-        <dl className="grid gap-4 sm:grid-cols-3">
+        <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div>
+            <dt><Label>Mesures du</Label></dt>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
+              {formatDay(audit.occurredAt)}
+              {audit.version > 1 ? (
+                <span className="text-mid-gray">{` · corrigé le ${formatDay(audit.recordedAt)}`}</span>
+              ) : null}
+            </dd>
+          </div>
           <div>
             <dt><Label>Site audité</Label></dt>
             <dd className="mt-1.5 break-words font-inter-tight text-sm text-foreground">
@@ -681,11 +646,6 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
       context={context}
       active="site"
       title="État du site"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Disponibilité, failles connues, sauvegardes et maintenance de votre site. Relevé chaque nuit.
-        </p>
-      }
     >
       {state ? (
         <>
@@ -750,11 +710,6 @@ export async function VueRoadmap({ viewer, context }: { viewer: Viewer; context:
       context={context}
       active="roadmap"
       title="Roadmap"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Tous les chantiers, rangés par statut, y compris ce qui a été écarté et pourquoi.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>
@@ -778,12 +733,6 @@ export async function VueCartographie({ viewer, context }: { viewer: Viewer; con
       context={context}
       active="cartographie"
       title="Cartographie"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les systèmes dont dépend votre activité : qui les détient, ce qu&rsquo;ils coûtent, quand
-          ils se renouvellent.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>
@@ -811,7 +760,7 @@ function ListeActions({
   context: EspaceContext;
 }) {
   return (
-    <ul className="mt-10 divide-y divide-dark-gray border border-dark-gray bg-jet/40">
+    <ul className="mt-1 divide-y divide-dark-gray border border-dark-gray bg-jet/40">
       {actions.map((action) => (
         <ActionLigne key={action.id} action={action} company={viewer.company} context={context} base={viewer.base} />
       ))}
@@ -836,12 +785,6 @@ export async function VueAgir({ viewer, context }: { viewer: Viewer; context: Es
       context={context}
       active="agir"
       title="Actions"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce qui demande une intervention, puis ce qui attend votre arbitrage. Chaque ligne a son
-          bouton pour en parler. Les propositions commerciales, elles, sont dans Contrats.
-        </p>
-      }
     >
       {arbitrage ? (
         <SectionNav
@@ -853,11 +796,14 @@ export async function VueAgir({ viewer, context }: { viewer: Viewer; context: Es
       ) : null}
 
       <section id="a-traiter" aria-labelledby="a-traiter-titre" className="mt-10 scroll-mt-20">
-        <h2 id="a-traiter-titre" className="font-sans text-lg font-light text-foreground">
-          À traiter <span className="text-mid-gray">· {aTraiter.length}</span>
-        </h2>
+        <Legende
+          id="a-traiter-titre"
+          aside={urgentes > 0 ? `dont ${urgentes} ${pluriel(urgentes, "urgent", "urgents")}` : undefined}
+        >
+          {`À traiter (${aTraiter.length})`}
+        </Legende>
         {aTraiter.length === 0 ? (
-          <Panel className="mt-5 px-5 py-6">
+          <Panel className="mt-1 px-5 py-6">
             <Label>Rien d&rsquo;urgent</Label>
             <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
               Aucun point du site à corriger, aucune échéance dans les 60 jours, aucune mission en
@@ -865,26 +811,13 @@ export async function VueAgir({ viewer, context }: { viewer: Viewer; context: Es
             </p>
           </Panel>
         ) : (
-          <>
-            {urgentes > 0 ? (
-              <p className="mt-2 font-inter-tight text-sm text-mid-gray">
-                {`Dont ${urgentes} ${pluriel(urgentes, "urgent", "urgents")}.`}
-              </p>
-            ) : null}
-            <ListeActions actions={aTraiter} viewer={viewer} context={context} />
-          </>
+          <ListeActions actions={aTraiter} viewer={viewer} context={context} />
         )}
       </section>
 
       {arbitrage ? (
-        <section id="a-arbitrer" aria-labelledby="a-arbitrer-titre" className="mt-14 scroll-mt-20">
-          <h2 id="a-arbitrer-titre" className="font-sans text-lg font-light text-foreground">
-            À arbitrer <span className="text-mid-gray">· {aArbitrer.length}</span>
-          </h2>
-          <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
-            Les opportunités repérées pour votre système, avec l&rsquo;effort, l&rsquo;effet attendu
-            et le budget. Rien ne se lance sans votre accord.
-          </p>
+        <section id="a-arbitrer" aria-labelledby="a-arbitrer-titre" className="mt-10 scroll-mt-20">
+          <Legende id="a-arbitrer-titre">{`À arbitrer (${aArbitrer.length})`}</Legende>
           {aArbitrer.length === 0 ? (
             <EnPreparation>
               Aucune opportunité en attente de décision. Celles repérées en comité ou en veille
@@ -915,12 +848,6 @@ export async function VuePropositions({ viewer, context }: { viewer: Viewer; con
       context={context}
       active="propositions"
       title="Propositions"
-      intro={
-        <p className="font-inter-tight text-base text-mid-gray">
-          Les propositions chiffrées qui vous ont été remises : scénarios, volumes, recommandation.
-          Une fois signée, une proposition devient une mission, dans Contrats → Missions en cours.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>Aucune proposition remise pour l&rsquo;instant.</EnPreparation>
@@ -971,12 +898,6 @@ export async function VueLectureProposition({
       context={context}
       active={sectionOuverte(context, "propositions") ? "propositions" : null}
       title={proposition.title}
-      intro={
-        <Label>
-          {proposition.occurredAt ? `Remise le ${formatDay(proposition.occurredAt)}` : "Proposition"}
-          {proposition.version > 1 ? ` · corrigée le ${formatDay(proposition.recordedAt)}` : ""}
-        </Label>
-      }
     >
       {plusieurs ? (
         <div className="mt-8">
@@ -994,7 +915,12 @@ export async function VueLectureProposition({
           </div>
           <div>
             <dt><Label>Remise le</Label></dt>
-            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">{formatDay(proposition.occurredAt)}</dd>
+            <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
+              {formatDay(proposition.occurredAt)}
+              {proposition.version > 1 ? (
+                <span className="text-mid-gray">{` · corrigée le ${formatDay(proposition.recordedAt)}`}</span>
+              ) : null}
+            </dd>
           </div>
           <div>
             <dt><Label>Versions</Label></dt>
@@ -1079,11 +1005,6 @@ export async function VueDocuments({ viewer, context }: { viewer: Viewer; contex
       context={context}
       active="documents"
       title="Documents"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les documents relus pour vous : devis, notes de comité, plans de continuité.
-        </p>
-      }
     >
       {items.length === 0 ? (
         <EnPreparation>
@@ -1125,11 +1046,6 @@ export async function VueVeille({
       context={context}
       active="veille"
       title="Lettres et alertes"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce qui change dans votre environnement numérique, et ce que ça implique pour vous.
-        </p>
-      }
     >
       {digest ? (
         <DigestSemaine
@@ -1142,27 +1058,26 @@ export async function VueVeille({
       {/* La veille dédiée en entier ici (six d'emblée, la suite se déplie) :
           c'est désormais sa seule page. */}
       {nouvelles.length > 0 ? (
-        <section className="mt-12">
-          <h2 className="font-sans text-lg font-light text-foreground">
-            Veille dédiée <span className="text-mid-gray">· {nouvelles.length}</span>
-          </h2>
+        <section aria-labelledby="veille-dediee-titre" className="mt-10">
+          <Legende id="veille-dediee-titre">{`Veille dédiée (${nouvelles.length})`}</Legende>
           <Veille items={nouvelles} visibles={6} since={since} base={viewer.base} bare />
         </section>
       ) : null}
 
       {/* Les trois dernières lettres ; les archives ont leur page. */}
-      <section className="mt-12">
-        <div className="mb-5 flex items-baseline justify-between gap-4">
-          <h2 className="font-sans text-lg font-light text-foreground">Lettres de veille</h2>
-          {lettres.length > 3 ? (
-            <Link
-              href={lettresPath(viewer.base)}
-              className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
-            >
-              {`Toutes les lettres · ${lettres.length} →`}
-            </Link>
-          ) : null}
-        </div>
+      <section aria-labelledby="lettres-titre" className="mt-10">
+        <Legende
+          id="lettres-titre"
+          aside={
+            lettres.length > 3 ? (
+              <Link href={lettresPath(viewer.base)} className="transition-colors hover:text-accent-secondary">
+                {`Toutes les lettres · ${lettres.length} →`}
+              </Link>
+            ) : undefined
+          }
+        >
+          Lettres de veille
+        </Legende>
         <ListeLettres
           lettres={lettres.slice(0, 3)}
           base={viewer.base}
@@ -1201,16 +1116,14 @@ export async function VueHistorique({
       context={context}
       active={null}
       title={courante.title}
-      intro={
+    >
+      <div className="mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <BackLink href={categoriePath(kind, viewer.base)}>{CATEGORIES[kind].titre}</BackLink>
         <Label>
           {versions.length > 1
-            ? `${versions.length} versions — la plus récente date du ${formatDay(courante.recordedAt)}`
+            ? `${versions.length} versions · la plus récente date du ${formatDay(courante.recordedAt)}`
             : "Une seule version"}
         </Label>
-      }
-    >
-      <div className="mt-8">
-        <BackLink href={categoriePath(kind, viewer.base)}>{CATEGORIES[kind].titre}</BackLink>
       </div>
       <Historique versions={versions} />
     </Espace>
@@ -1226,11 +1139,6 @@ export async function VueLettres({ viewer, context }: { viewer: Viewer; context:
       context={context}
       active="veille"
       title="Votre veille"
-      intro={
-        <Label>
-          {lettres.length} {lettres.length > 1 ? "éditions accessibles" : "édition accessible"}
-        </Label>
-      }
     >
       <div className="mt-10">
         <ListeLettres lettres={lettres} base={viewer.base} />
@@ -1265,40 +1173,29 @@ export async function VueLettre({
   // sa source (atelier, Signaux Faibles, Sentinelle, et les suivantes) : c'est
   // `structureLettre` qui juge sur le corps. Sinon, le texte suivi.
   const structure = structureLettre(lettre.body, lettre.period);
+  // La date et la source de la lettre, en face du retour : ce qui la situe,
+  // sans sous-titre sous le titre.
   const repere = (
-    <Label>
-      {dateLettre(lettre)} · {libelleLettre(lettre)}
-    </Label>
+    <div className="mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+      <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>
+      <Label>
+        {dateLettre(lettre)} · {libelleLettre(lettre)}
+      </Label>
+    </div>
   );
 
   if (structure) {
     return (
-      <Espace
-        viewer={viewer}
-        context={context}
-        active="veille"
-        title={lettre.title}
-        intro={repere}
-      >
-        <div className="mt-8">
-          <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>
-        </div>
+      <Espace viewer={viewer} context={context} active="veille" title={lettre.title}>
+        {repere}
         <LettreEnGrille structure={structure} chapo={lettre.chapo} base={viewer.base} />
       </Espace>
     );
   }
 
   return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="veille"
-      title={lettre.title}
-      intro={repere}
-    >
-      <div className="mt-8">
-        <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>
-      </div>
+    <Espace viewer={viewer} context={context} active="veille" title={lettre.title}>
+      {repere}
       {lettre.chapo ? (
         <p className="mt-8 max-w-[68ch] border-l-2 border-l-accent-secondary pl-4 font-inter-tight text-base leading-relaxed text-foreground">
           {lettre.chapo}

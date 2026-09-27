@@ -189,13 +189,10 @@ export function DigestSemaine({
 
   return (
     <section aria-labelledby="digest-titre" className="mt-10">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-dark-gray pb-3">
-        <div>
-          <Label>Digest de la semaine</Label>
-          <h2 id="digest-titre" className="mt-2 font-sans text-xl font-light text-foreground">
-            {weekLabel(content.week)}
-          </h2>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dark-gray py-3">
+        <h2 id="digest-titre" className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+          {`Digest · ${weekLabel(content.week)}`}
+        </h2>
         {semaines.length > 1 ? (
           <nav aria-label="Semaines précédentes" className="flex flex-wrap gap-2">
             {semaines.slice(0, 6).map((semaine) => {
@@ -219,7 +216,7 @@ export function DigestSemaine({
         ) : null}
       </div>
 
-      <Panel className="mt-5 grid grid-cols-1 sm:grid-cols-3">
+      <Panel className="mt-1 grid grid-cols-1 sm:grid-cols-3">
         {sentinelle ? (
           <Stat
             label="Veille technique"
