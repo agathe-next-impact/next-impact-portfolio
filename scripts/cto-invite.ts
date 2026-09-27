@@ -17,6 +17,8 @@
  * pour deux choses que la synchro ne fait jamais : envoyer le premier lien de
  * connexion (la synchro n'envoie aucun e-mail, voir l'en-tête de
  * `src/cto/notion/sync.ts`) et créer un accès en local sans toucher Notion.
+ * En production, le premier lien part normalement du bouton « Envoyer
+ * l'invitation » de `/admin-cto` (`sendAccessLink`, `src/cto/admin/actions.ts`).
  *
  * Un accompagnement créé ici (`--entreprise`) sans fiche Notion correspondante
  * reste un accompagnement à part entière ; la synchro l'ADOPTE si une fiche

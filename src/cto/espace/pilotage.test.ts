@@ -185,9 +185,13 @@ describe("propositions", () => {
   const proposition = (id: string, statut: string | null) =>
     item({ notionPageId: id, kind: "proposition", title: id, occurredAt: new Date("2026-09-20"), payload: { statut, corps: [], sections: [], fichiers: [] } });
 
-  it("met les propositions sans réponse à arbitrer, avant les opportunités, et jamais dans les missions", () => {
+  it("met les propositions sans réponse à valider, à part des opportunités, et jamais dans les missions", () => {
     const items = [proposition("envoyee", "Envoyée"), proposition("acceptee", "Acceptée"), roadmap("ia", "Ouvert", null, "opportunite")];
-    expect(actionsFor(items, null, now).aArbitrer.map((a) => a.id)).toEqual(["proposition-envoyee", "opportunite-ia"]);
+    const actions = actionsFor(items, null, now);
+    expect(actions.aValider.map((a) => a.id)).toEqual(["proposition-envoyee"]);
+    expect(actions.aArbitrer.map((a) => a.id)).toEqual(["opportunite-ia"]);
+    // Le verdict de « Que pouvez-vous faire ? » ne compte pas les propositions.
+    expect(actionsVerdict({ ...actions, aArbitrer: [] }).headline).toBe("Rien d'urgent");
     expect(missionsOf(items, now)).toEqual([]);
   });
 });

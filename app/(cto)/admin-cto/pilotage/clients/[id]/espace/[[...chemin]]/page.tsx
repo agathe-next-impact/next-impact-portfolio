@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { LEGACY_SLUGS, sectionByKey } from "@cto/espace";
-import { kindFromSlug } from "../../../../../../espace-direction/livrables";
+import { categoriePath, kindFromSlug } from "../../../../../../espace-direction/livrables";
 import { VuePrestations } from "../../../../../../espace-direction/prestations";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
 import {
-  VueAArbitrer,
-  VueATraiter,
+  VueAgir,
   VueAudit,
   VueCartographie,
-  VueCategorie,
   VueDecisions,
   VueDocuments,
   VueHistorique,
@@ -20,7 +18,7 @@ import {
   VueLectureProposition,
   VueMissions,
   VuePropositions,
-  VueRapports,
+  VueRoadmap,
   VueSite,
   VueTableau,
   VueVeille,
@@ -68,20 +66,18 @@ export default async function EspaceAdminPage({
     switch (tete) {
       case "missions":
         return <VueMissions viewer={viewer} context={context} />;
+      case "roadmap":
+        return <VueRoadmap viewer={viewer} context={context} />;
       case "decisions":
         return <VueDecisions viewer={viewer} context={context} />;
       case "audit":
         return <VueAudit viewer={viewer} context={context} />;
       case "site":
         return <VueSite viewer={viewer} context={context} />;
-      case "rapports":
-        return <VueRapports viewer={viewer} context={context} />;
       case "cartographie":
         return <VueCartographie viewer={viewer} context={context} />;
-      case "a-traiter":
-        return <VueATraiter viewer={viewer} context={context} />;
-      case "a-arbitrer":
-        return <VueAArbitrer viewer={viewer} context={context} />;
+      case "agir":
+        return <VueAgir viewer={viewer} context={context} />;
       case "propositions":
         return <VuePropositions viewer={viewer} context={context} />;
       case "veille":
@@ -122,7 +118,8 @@ export default async function EspaceAdminPage({
   if (tete === "livrables") {
     const kind = kindFromSlug(suite ?? "");
     if (!kind) notFound();
-    if (chemin.length === 2) return <VueCategorie viewer={viewer} context={context} kind={kind} />;
+    // L'ancienne page de catégorie mène à sa section, comme côté client.
+    if (chemin.length === 2) redirect(categoriePath(kind, viewer.base));
     if (chemin.length === 3) {
       const vue = await VueHistorique({ viewer, context, kind, id: fin });
       if (!vue) notFound();

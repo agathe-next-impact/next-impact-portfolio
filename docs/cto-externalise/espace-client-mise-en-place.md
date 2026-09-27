@@ -1,12 +1,15 @@
 # Espace client CTO — mise en place, local et production
 
 Procédure d'installation et d'exploitation de la couche d'accès de l'espace
-« CTO externalisé » (`src/cto/`, `app/(cto)/espace-direction`, `app/api/cto/`).
+« Expert technique externalisé » — ex-« CTO externalisé », renommée par
+l'ADR-010 ; l'URL `/cto-externalise` et les identifiants `cto` du code sont
+inchangés (`src/cto/`, `app/(cto)/espace-direction`, `app/api/cto/`).
 
 Périmètre : **l'accès** — identités par personne, passkeys, sessions, journal —,
 **l'ouverture d'un accompagnement** (§ 3.1), **la notification** des clients
 (§ 3.4), **la supervision** (§ 5), **les sections de l'espace et le suivi
-technique** (§ 6) et **le dossier de restitution** (§ 7). Les livrables
+technique** (§ 6), **le dossier de restitution** (§ 7) et **le digest
+hebdomadaire de la veille** (§ 8). Les livrables
 (atelier Notion, synchronisation, affichage) ont leur propre document :
 `notion-livrables.md`.
 
@@ -19,10 +22,11 @@ technique** (§ 6) et **le dossier de restitution** (§ 7). Les livrables
 | Base Postgres | Neon (`DATABASE_URL`, `DATABASE_URL_UNPOOLED`) | oui, partagée avec Sentinelle |
 | Envoi d'e-mails | SMTP Google (`NODEMAILER_*`) | oui, celui du site |
 
-L'espace CTO n'ajoute **aucun service** : il pose dix-sept tables préfixées
-`cto_` dans la base existante (treize pour l'espace client — dont
-`cto_files` pour les pièces jointes et `cto_site_*` pour le suivi technique —,
-quatre `cto_admin_*` pour la supervision) et envoie ses e-mails par le
+L'espace CTO n'ajoute **aucun service** : il pose dix-neuf tables préfixées
+`cto_` dans la base existante (quinze pour l'espace client — dont
+`cto_files` pour les pièces jointes, `cto_site_*` pour le suivi technique,
+`cto_sentinelle_snapshots` pour la veille technique et `cto_digests` pour le
+digest hebdomadaire —, quatre `cto_admin_*` pour la supervision) et envoie ses e-mails par le
 transport du site. WP Umbrella est lu par le Cron, jamais pendant une requête
 client (§ 6). La
 synchronisation des livrables ajoute une dépendance à l'API Notion, en lecture
@@ -122,10 +126,10 @@ Vercel → Settings → Environment Variables, **portée `Production` uniquement
 | `CTO_RP_ID` | *(ne pas définir)* | défaut : `next-impact.digital` |
 | `CTO_ORIGIN` | *(ne pas définir)* | déduit : `https://next-impact.digital` et `https://www.…` |
 | `CRON_SECRET` | un secret au hasard | arme le balayage quotidien (§ 4) |
-| `CTO_NOTION_*` | neuf obligatoires (le jeton et huit bases) + deux facultatives (`…_PRESTATIONS`, `…_EDITIONS`) | synchro des accompagnements, des personnes et des livrables (`notion-livrables.md`) |
+| `CTO_NOTION_*` | neuf obligatoires (le jeton et huit bases) + cinq facultatives (`…_PRESTATIONS`, `…_PAIEMENTS`, `…_EDITIONS`, `…_AUDITS`, `…_PROPOSITIONS`) | synchro des accompagnements, des personnes et des livrables (`notion-livrables.md`) |
 | `WP_UMBRELLA_TOKEN` | jeton d'**API publique** WP Umbrella | suivi technique (§ 6). Facultatif : absent, la section affiche « en préparation » |
 | `SENTINELLE_EXPORT_SECRET` | un secret au hasard, **le même** côté Sentinelle et côté espace | ouvre l'export en lecture seule `/api/sentinelle/export/<id>`. Absent : la route répond 503 et la veille technique n'est pas balayée |
-| `SENTINELLE_EXPORT_URL` | `https://next-impact.digital` | racine du site qui sert l'export. Facultatif avec la précédente : les deux posées, ou ni l'une ni l'autre |
+| `SENTINELLE_EXPORT_URL` | `https://www.next-impact.digital` | racine du site qui sert l'export, **adresse finale sans redirection** (l'apex redirige vers `www`, et le jeton ne suit pas une redirection). Facultatif avec la précédente : les deux posées, ou ni l'une ni l'autre |
 
 `/admin-cto` n'a pas de variable à lui : voir § 5.
 
@@ -160,7 +164,7 @@ Depuis votre poste, avec les chaînes de connexion de production dans
 npm run db:cto:migrate
 ```
 
-Vérifier ensuite dans Neon que les dix-sept tables `cto_*` existent. À refaire
+Vérifier ensuite dans Neon que les dix-neuf tables `cto_*` existent. À refaire
 à chaque nouvelle migration du dossier `src/cto/db/migrations/`, **avant** de
 déployer le code qui l'utilise : une colonne attendue par le code mais absente
 de la base fait échouer la synchro au premier balayage.
@@ -197,30 +201,31 @@ En navigation privée, sur `https://www.next-impact.digital/espace-direction` :
 
 **L'accompagnement naît de sa fiche Notion.** Toute fiche de la base *Clients*
 qu'aucun accompagnement ne revendique encore en crée un au balayage suivant
-(`resolveClients`, `src/cto/notion/sync.ts`). Le rattachement se fait ensuite
-par l'identifiant de la page Notion, conservé en base (`notion_page_id`) : il
-n'y a plus d'UUID à recopier à la main.
+(`resolveClients`, `src/cto/notion/sync.ts`) — **sauf si son `État` vaut
+`préparation`** : la synchro l'ignore alors, et le dit au rapport. Le
+rattachement se fait ensuite par l'identifiant de la page Notion, conservé en
+base (`notion_page_id`) : il n'y a plus d'UUID à recopier à la main.
 
-Dans l'ordre :
+Dans l'ordre, sans terminal :
 
-1. **Créer la fiche** dans *Clients* : raison sociale, `Palier`, `État` à
-   `actif`, relation `Organisation` vers sa fiche organisation, et
-   `Lien vers l'espace` (`notion-livrables.md`, § 2).
-2. **Synchroniser**, à blanc d'abord :
-   ```bash
-   npm run cto:sync -- --a-blanc   # « nouvel accompagnement — rien créé »
-   npm run cto:sync                # « nouvel accompagnement créé (<uuid>) »
-   ```
-   Ou attendre le balayage de 4 h. L'UUID imprimé est celui de l'accompagnement.
-3. **Inviter la première personne** avec cet UUID :
-   ```bash
-   npm run cto:invite -- \
-     --client <uuid imprimé par la synchro> \
-     --email dirigeant@client.fr \
-     --nom "Prénom Nom" \
-     --role "Dirigeant"
-   ```
-   Elle reçoit son lien de connexion par e-mail.
+1. **Créer la fiche** dans *Clients* depuis le modèle « Nouveau client » :
+   elle naît en `préparation`, palier `direction`, `Lien vers l'espace`
+   rempli, avec la liste de contrôle dans son corps.
+2. **La compléter** jusqu'à ce que la colonne **`À compléter`** soit vide :
+   `Palier`, `Organisation`, au moins une ligne dans *Personnes*, et ce que
+   demandent les services cochés (ID WP Umbrella, site et contact de veille,
+   ligne du pipeline de veille). La vue **Onboarding** de la base liste les
+   fiches en cours.
+3. **Passer `État` à `actif`.**
+4. **`/admin-cto/pilotage` → Synchro Notion** : « À blanc » (« nouvel
+   accompagnement — rien créé »), puis « Synchroniser » (« nouvel
+   accompagnement créé », « nouvel accès créé »). Ou attendre le balayage de 4 h.
+5. **Fiche de l'accompagnement → « Envoyer l'invitation »** sur chaque
+   personne : elle reçoit son lien de connexion.
+
+Voie de secours en ligne de commande, identique : `npm run cto:sync -- --a-blanc`,
+`npm run cto:sync`, puis `npm run cto:invite -- --client <uuid> --email … --nom "…"`
+(qui crée la personne si elle n'existe pas encore).
 
 **Ne jamais utiliser `--entreprise` pour un client réel.** Cette option crée un
 accompagnement sans fiche Notion ; la fiche créée ensuite en créerait un
@@ -228,8 +233,8 @@ second, et les livrables iraient dans celui-là. Si c'est déjà fait, coller
 l'UUID du premier dans la colonne `ID espace` de la fiche **avant** la
 synchro suivante : elle l'adopte au lieu d'en créer un autre.
 
-Corollaire : une fiche de test dans *Clients* crée un vrai accompagnement.
-Tester sur une branche Neon (§ 1.2), pas dans l'atelier de production.
+Corollaire : une fiche de test dans *Clients* crée un vrai accompagnement
+dès qu'elle quitte `préparation`. Tester sur une branche Neon (§ 1.2), pas dans l'atelier de production.
 
 ### 3.2 Ajouter une personne à un accompagnement existant
 
@@ -239,12 +244,15 @@ suivant — voir `notion-livrables.md` § 6. C'est la voie normale, et c'est ce
 qui remplace la commande ci-dessous pour tout accès qui n'est pas le tout
 premier de l'accompagnement.
 
-**`cto:invite` garde deux rôles, et seulement deux : envoyer le premier lien
-de connexion, et créer un accès en local.** La synchro n'envoie jamais
+**Le premier lien part de `/admin-cto`.** La synchro n'envoie jamais
 d'e-mail (§ 3.4) ; une ligne Notion crée donc l'accès, mais quelqu'un doit
-encore prévenir la personne. Deux façons d'y arriver : elle se présente
-elle-même sur `/espace-direction` avec son adresse, ou on lui envoie le
-premier lien avec cette même commande, pointée sur l'accompagnement existant :
+encore prévenir la personne. Sur la fiche de l'accompagnement, chaque personne
+jamais connectée porte un bouton **« Envoyer l'invitation »** (« Renvoyer un
+lien » une fois qu'elle s'est connectée). La personne peut aussi se présenter
+elle-même sur `/espace-direction` avec son adresse.
+
+`cto:invite` reste la voie de secours, et l'outil du local : pointée sur
+l'accompagnement existant, elle crée la personne si besoin et envoie le lien :
 
 ```bash
 npm run cto:invite -- \
@@ -315,6 +323,9 @@ npm run cto:notify -- --a-blanc   # dit qui serait notifié, n'envoie rien
 npm run cto:notify                # envoie
 ```
 
+Même geste depuis `/admin-cto/pilotage` → **Prévenir les clients** (« À
+blanc », puis « Prévenir »), qui appelle la même fonction.
+
 Pour chaque accompagnement `actif`, la commande cherche ce qui a été publié ou
 corrigé depuis **sa** dernière notification (`cto_clients.last_notified_at`), et
 envoie un seul e-mail par personne active. Il annonce des nombres par catégorie
@@ -363,7 +374,8 @@ update cto_sessions set revoked_at = now() where person_id = '<uuid>' and revoke
 ## 4. Le balayage quotidien
 
 `/api/cto/cron`, déclarée dans `vercel.json`, tourne tous les jours à 4 h UTC et
-fait deux travaux sans rapport entre eux :
+enchaîne cinq étapes, chacune isolée des autres (un échec n'empêche pas la
+suivante) :
 
 - `purgeExpiredAccess()` et `purgeExpiredAdminAccess()` suppriment les liens
   échus ou servis, les défis expirés et les sessions mortes, côté client puis
@@ -373,8 +385,13 @@ fait deux travaux sans rapport entre eux :
   et services, rapatrie les pièces jointes et publie les livrables de
   l'atelier (`notion-livrables.md`). Il n'envoie aucun e-mail (§ 3.4).
 - `syncSites()` relève chaque site suivi chez WP Umbrella et archive les
-  rapports mensuels (§ 6). Il passe en dernier et ne dépend pas de Notion : une
-  synchro de l'atelier en échec ne prive pas le client de son relevé.
+  rapports mensuels (§ 6). Il ne dépend pas de Notion : une synchro de
+  l'atelier en échec ne prive pas le client de son relevé.
+- `syncSentinelle()` relit l'export Sentinelle de chaque client relié
+  (veille technique, § 6).
+- `assembleWeek()` assemble les brouillons du digest de la dernière semaine
+  complète (§ 8). Il passe en tout dernier : il lit ce que les étapes
+  précédentes viennent d'écrire. Il n'envoie rien.
 
 Le ménage passe en premier et passe **quoi qu'il arrive** : il ne dépend que de
 la base, là où la synchro dépend en plus de Notion. L'inverse ferait qu'une
@@ -397,7 +414,7 @@ appeler la route en local.
 
 ### Lire son résultat
 
-Vercel → Observability → Crons montre le corps de la réponse. Trois cas :
+Vercel → Observability → Crons montre le corps de la réponse :
 
 | Réponse | Ce que ça veut dire |
 | --- | --- |
@@ -405,7 +422,7 @@ Vercel → Observability → Crons montre le corps de la réponse. Trois cas :
 | 200, `synchro: { ignoree }` | Les variables Notion ne sont pas posées sur Vercel. La purge, elle, a bien eu lieu. |
 | 200, `suivi: { ignoree }` | `WP_UMBRELLA_TOKEN` n'est pas posée. Le reste a tourné. |
 | 200, `veilleTechnique: { ignoree }` | `SENTINELLE_EXPORT_URL` ou `SENTINELLE_EXPORT_SECRET` n'est pas posée : pas de veille technique, le digest ne porte que Signaux Faibles. |
-| 500 | Une des purges (`purge`, `purgeAdmin`), la synchro ou le suivi a échoué ; le corps dit lequel et pourquoi. |
+| 500 | Une des étapes (`purge`, `purgeAdmin`, `synchro`, `suivi`, `veilleTechnique`, `digest`) a échoué ; le corps dit laquelle et pourquoi. |
 
 Le cas « ignorée » rend 200 délibérément : un Cron rouge tous les jours pour une
 raison connue et acceptée finit par ne plus être lu, et c'est le vrai incident
@@ -433,13 +450,28 @@ signalées « non souscrite ». Les téléchargements de pièces et le PDF passe
 par des routes propres à l'admin, qui vérifient elles-mêmes la session admin
 (un Route Handler n'hérite d'aucun layout).
 
-**Un seul bouton : mettre la synchro en pause.** Sur le détail d'un
+**Exploitation, sans terminal.** En tête de `/admin-cto/pilotage`, deux
+panneaux lancent la synchro Notion (§ 4, `synchroniser`) et la notification
+(§ 3.4, `prevenir`), chacun « à blanc » d'abord ; le rapport s'affiche sous les
+boutons, avec les points à regarder. Mêmes fonctions que `cto:sync` et
+`cto:notify` ; la page porte `maxDuration = 300`, comme le Cron. Sur la fiche
+d'un accompagnement, **« Envoyer l'invitation »** envoie le lien de connexion
+d'une personne (§ 3.2, `sendAccessLink`) : refusé pour une personne révoquée
+ou un accompagnement clos, plafonné comme l'écran de connexion.
+
+**Un bouton par accompagnement : mettre la synchro en pause.** Sur le détail d'un
 accompagnement, « Mettre en pause » (`basculerSynchro`,
 `app/(cto)/admin-cto/pilotage/actions.ts`) gèle ses livrables : le balayage ne
 crée, ne corrige ni ne retire plus rien chez lui, et le signale dans son
 rapport. Utile pendant une reprise de l'atelier pour ce seul client. La pause
 ne gèle ni `État` ni `Palier`, qui continuent de suivre la fiche Notion.
 « Réactiver la synchro » rattrape tout au balayage suivant.
+
+**Deux écrans transverses.** `/admin-cto/pilotage/prestations` liste les
+prestations de tous les accompagnements, leurs tarifs et leurs règlements —
+le même écran que Contrats → Missions en cours chez le client, en lecture seule.
+`/admin-cto/pilotage/digests` sert à relire, puis valider et envoyer, les
+digests de la semaine (§ 8).
 
 **Pourquoi rien de plus.** `scripts/cto-invite.ts` explique déjà pourquoi il
 n'existe pas de back-office de création : à l'échelle de `CTO_TERMS` (quatre
@@ -475,26 +507,31 @@ la ferme immédiatement, sans attendre son échéance.
 ### Ce que voit le client
 
 L'espace (refonte du 2026-09-26, « option C ») est rangé par **question du
-client**, dans une **barre latérale rétractable** : « Où en sont les
-missions ? », « Comment va le site ? », « Que puis-je faire ? », plus la
-veille. Chaque entrée reste commandée par la colonne **`Services`** de la fiche
+client**, dans une **barre latérale rétractable** : « Où en est mon
+système ? » (Pilotage), « Comment va le site ? » (Votre site), « Que puis-je
+faire ? » (Agir), la Veille, et « Qu'ai-je signé, que me propose-t-on ? »
+(Contrats). Le groupe s'appelait « Missions » : il est devenu « Pilotage »
+pour réserver « missions » aux prestations signées (clé de code `missions`
+inchangée). Chaque entrée reste commandée par la colonne **`Services`** de la fiche
 Notion (`notion-livrables.md` § 2) ; une entrée s'ouvre dès qu'UN de ses
 services est coché (`src/cto/espace/sections.ts`).
 
 | Groupe | Entrée | Contenu | Visible |
 | --- | --- | --- | --- |
-| — | Accueil | nouveautés depuis la dernière connexion, **trois cartes-réponses** (missions, site, actions, chacune résumée en une phrase), **frise** de 7 mois (3 derrière, 3 devant : fait / missions / échéances), à la une, dernière lettre, contact | toujours |
-| Missions | Vue d'ensemble | frise + listes En cours / À venir / Fait (chantiers, prestations, décisions, audits confondus) + calendrier des 90 prochains jours | Actions, Prestations, Direction technique ou Audit |
-| Missions | Prestations | missions commandées, avancement, livraison | Prestations en cours |
-| Missions | Décisions | relevé de décisions | Direction technique |
-| Missions | Audit | lecture de l'audit | Audit |
+| — | Accueil | nouveautés depuis la dernière connexion, **trois cartes-réponses** (pilotage, site, actions, chacune résumée en une phrase), **bloc Contrats** (propositions en attente d'accord à gauche, missions signées à droite), **frise** de 7 mois (3 derrière, 3 devant : fait / missions / échéances), à la une, dernière lettre, contact | toujours |
+| Pilotage | Vue d'ensemble | frise + listes En cours / À venir / Fait (chantiers, prestations sans leur tarif, décisions, audits confondus) + calendrier des 90 prochains jours | Actions, Direction technique ou Audit |
+| Pilotage | Décisions | relevé de décisions | Direction technique |
+| Pilotage | Audit | lecture de l'audit (`notion-livrables.md` § 9) | Audit |
 | Votre site | État du site | verdict + points à corriger, relevé WP Umbrella | Suivi technique |
 | Votre site | Rapports | rapports mensuels de maintenance (PDF) | Suivi technique |
 | Votre site | Cartographie | systèmes, détenteurs, coûts, renouvellements | Direction technique |
 | Agir | À traiter | points du site à corriger, échéances de contrats à **moins de 60 jours** (ou échues), missions en retard, chacun avec « En parler » (e-mail au sujet prérempli) | toujours (vide = « rien d'urgent ») |
 | Agir | À arbitrer | opportunités de la roadmap non tranchées (nature Opportunité, statut Ouvert ou vide) : effort, effet, budget | Actions ou Direction technique |
-| Veille | Lettres et alertes | dernières nouvelles (base Veille) + lettres | toujours |
+| Veille | Lettres et alertes | digest de la semaine (§ 8), dernières nouvelles (base Veille) + lettres | toujours |
+| Veille | Veille technique | relevé Sentinelle du site surveillé | Veille technique |
 | Veille | Documents | documents relus, pièces téléchargeables | Direction technique |
+| Contrats | Propositions | propositions chiffrées remises, en attente d'accord (`notion-livrables.md` § 10) | dès qu'une proposition est publiée, quels que soient les services |
+| Contrats | Missions en cours | prestations signées : tarifs, avancement, devis, règlements et reste à régler | Prestations en cours (seul ce service l'ouvre, régime historique compris) |
 
 Règles des verdicts (pures et testées, `src/cto/espace/pilotage.ts`) : une
 sauvegarde réussie de **plus de 7 jours**, une faille connue, un site sans
@@ -573,15 +610,44 @@ ou relié. Voie de secours hors Notion : `npm run sentinelle:client`.
 
 « Exporter mon dossier (PDF) », en pied de chaque page, génère à la demande
 (`/espace-direction/restitution`) un PDF qui rassemble tout ce qui est publié :
-décisions, roadmap, cartographie, documents, prestations, veille, lettres (sans
-la fenêtre de six mois), rapports de maintenance, et l'historique de chaque
-livrable corrigé, version par version.
+décisions, roadmap, cartographie, documents, veille, lettres (sans la fenêtre
+de six mois), rapports de maintenance, audits (en entier), et l'historique de
+chaque livrable corrigé, version par version. Les prestations et leurs
+règlements n'y figurent pas : ce sont des données contractuelles, pas des
+livrables.
 
 Ouvert à toute personne connectée, quel que soit l'état (`actif`, `suspendu`,
 `restitution`) : un client n'a pas à attendre la fin du contrat pour emporter ce
 qu'il a payé. Un espace `clos` n'a plus de session, donc plus d'export — c'est
 la fin de la fenêtre de restitution. Les pièces jointes ne sont pas incluses
 dans le PDF ; il renvoie à l'espace pour les télécharger tant qu'il est ouvert.
+
+---
+
+## 8. Le digest hebdomadaire de la veille
+
+Chaque semaine, un digest court réunit par accompagnement la veille technique
+(Sentinelle, quinze lignes au plus) et Signaux Faibles (deux éditions, huit
+lignes chacune), assemblés sans modèle de langage (`src/cto/digest/`).
+
+- **Assemblage** : le Cron (§ 4) réassemble chaque jour les brouillons de la
+  dernière semaine complète. Un digest validé ne bouge plus.
+- **Relecture et envoi** : `/admin-cto/pilotage/digests`, semaine par semaine
+  (« Réassembler », « Valider et envoyer »). Rien ne part sans ce geste.
+- **Chez le client** : en tête de Veille → Lettres et alertes. L'e-mail
+  d'envoi porte le contenu du digest : exception assumée à la règle « aucun
+  contenu par courrier » du § 3.4.
+- **Voie de secours**, et test d'un assemblage sur une semaine passée :
+
+```bash
+npm run cto:digest -- --a-blanc             # dit ce qui serait assemblé, n'écrit rien
+npm run cto:digest                          # assemble la dernière semaine complète
+npm run cto:digest -- --semaine 2026-W39    # … une semaine donnée
+npm run cto:digest -- --envoyer             # valide ET envoie les brouillons de la semaine
+```
+
+Sans `SENTINELLE_EXPORT_URL` et `SENTINELLE_EXPORT_SECRET`, le digest ne porte
+que Signaux Faibles.
 
 ---
 
@@ -602,9 +668,11 @@ dans le PDF ; il renvoie à l'espace pour les télécharger tant qu'il est ouver
 | Balayage quotidien | `app/api/cto/cron/route.ts` |
 | Supervision (requêtes) | `src/cto/admin/overview.ts` |
 | Supervision (identité, lien, passkeys) | `src/cto/admin/identity.ts`, `src/cto/admin/passkeys.ts` |
-| Supervision (pause de synchro) | `app/(cto)/admin-cto/pilotage/actions.ts` |
+| Supervision (pause, synchro, notification, invitation) | `app/(cto)/admin-cto/pilotage/actions.ts`, `outils.tsx`, `src/cto/admin/actions.ts`, `src/cto/admin/rapport.ts` |
 | Supervision (écrans) | `app/(cto)/admin-cto/` |
 | Sections et calendrier (logique pure, testée) | `src/cto/espace/` |
 | Gabarit et navigation de l'espace | `app/(cto)/espace-direction/shell.tsx` |
 | Suivi technique (API, normalisation, balayage) | `src/cto/site/`, `scripts/cto-site.ts` |
 | Dossier de restitution (collecte, PDF) | `src/cto/restitution/`, `app/(cto)/espace-direction/restitution/route.ts` |
+| Digest hebdomadaire (assemblage, e-mail) | `src/cto/digest/`, `scripts/cto-digest.ts` |
+| Supervision (digests, prestations) | `app/(cto)/admin-cto/pilotage/digests/`, `app/(cto)/admin-cto/pilotage/prestations/` |

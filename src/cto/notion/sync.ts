@@ -34,6 +34,7 @@ import {
   auditActionInput,
   auditAnnexFiles,
   auditPageId,
+  clientInPreparation,
   clientPageIds,
   clientServices,
   clientStatus,
@@ -187,6 +188,20 @@ async function resolveClients(dryRun: boolean): Promise<ClientResolution> {
           await db().update(ctoClients).set({ notionPageId: page.id }).where(eq(ctoClients.id, id));
         }
       }
+    }
+
+    // « préparation » : la fiche se remplit, l'accompagnement n'existe pas
+    // encore. Ni création, ni rattachement : ses lignes (personnes, livrables)
+    // attendent le passage à « actif ». Sur une fiche déjà rattachée, la valeur
+    // n'a pas d'équivalent en base et reste sans effet — dit au rapport.
+    if (clientInPreparation(page)) {
+      if (!id) {
+        warnings.push(`« ${name} » : en préparation — aucun accompagnement créé tant que l'état n'est pas « actif ».`);
+        continue;
+      }
+      warnings.push(
+        `« ${name} » : « préparation » ignorée, l'accompagnement existe déjà. Pour le geler, utiliser « suspendu ».`,
+      );
     }
 
     if (!id) {

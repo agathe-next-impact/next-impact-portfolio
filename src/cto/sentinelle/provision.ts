@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "../db/client";
 import { ctoClients, ctoPersons } from "../db/schema";
-import { sentinelleExportConfig } from "./api";
+import { redirectError, sentinelleExportConfig } from "./api";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sentinelle pilotée depuis Notion.
@@ -111,7 +111,10 @@ async function callSentinelle(body: ProvisionBody): Promise<ProvisionResponse> {
     body: JSON.stringify(body),
     cache: "no-store",
     signal: AbortSignal.timeout(20_000),
+    redirect: "manual",
   });
+  const redirect = redirectError(response, config.url);
+  if (redirect) throw redirect;
   const json = (await response.json().catch(() => ({}))) as Partial<ProvisionResponse> & { error?: string };
   if (!response.ok || typeof json.id !== "string") {
     throw new Error(json.error ?? `HTTP ${response.status}`);

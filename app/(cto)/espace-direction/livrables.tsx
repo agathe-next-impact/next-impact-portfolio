@@ -9,7 +9,7 @@ import type {
   VeillePayload,
 } from "@cto/deliverables";
 import Link from "next/link";
-import { Dot, formatAmount, formatDay, Label, Panel, Tag, type Tone } from "./ui";
+import { Dot, formatAmount, formatDay, Label, Panel, Repli, Suite, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 /**
@@ -20,13 +20,13 @@ import { ESPACE_PATH } from "./session";
  * nom du type), `decisions` au pluriel côté URL (c'est une collection).
  */
 export const CATEGORIES = {
-  decision: { slug: "decisions", titre: "Relevé de décisions" },
-  roadmap: { slug: "roadmap", titre: "Roadmap" },
-  cartographie: { slug: "cartographie", titre: "Cartographie du système" },
-  veille: { slug: "veille", titre: "Veille dédiée" },
-  document: { slug: "documents", titre: "Documents" },
-  audit: { slug: "audits", titre: "Audits" },
-  proposition: { slug: "propositions", titre: "Propositions" },
+  decision: { slug: "decisions", titre: "Relevé de décisions", section: "decisions" },
+  roadmap: { slug: "roadmap", titre: "Roadmap", section: "roadmap" },
+  cartographie: { slug: "cartographie", titre: "Cartographie du système", section: "cartographie" },
+  veille: { slug: "veille", titre: "Veille dédiée", section: "veille" },
+  document: { slug: "documents", titre: "Documents", section: "documents" },
+  audit: { slug: "audits", titre: "Audits", section: "audit" },
+  proposition: { slug: "propositions", titre: "Propositions", section: "propositions" },
 } as const;
 
 /** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */
@@ -36,8 +36,18 @@ export function fichierPath(fileId: string, base: string = ESPACE_PATH): string 
 
 export type CategorieKind = keyof typeof CATEGORIES;
 
+/**
+ * Où se lit une catégorie en entier : sa section. Les anciennes pages
+ * `/livrables/<catégorie>` répétaient la section à l'identique ; elles
+ * redirigent désormais ici.
+ */
 export function categoriePath(kind: CategorieKind, base: string = ESPACE_PATH): string {
-  return `${base}/livrables/${CATEGORIES[kind].slug}`;
+  return `${base}/${CATEGORIES[kind].section}`;
+}
+
+/** L'historique des versions d'un livrable, seule page restée sous `/livrables`. */
+export function historiquePath(kind: CategorieKind, notionPageId: string, base: string = ESPACE_PATH): string {
+  return `${base}/livrables/${CATEGORIES[kind].slug}/${notionPageId}`;
 }
 
 /** Retrouve le type depuis le segment d'URL. Rend null sur un segment inconnu. */
@@ -156,135 +166,6 @@ export function sortCartographie(items: Deliverable[]): Deliverable[] {
 
 export function sortRecentFirst(items: Deliverable[]): Deliverable[] {
   return [...items].sort((a, b) => byDate(a, b, -1));
-}
-
-/**
- * Ce qui a bougé depuis la connexion précédente.
- *
- * Le repère qui manquait le plus : sur un espace ouvert deux fois par mois, la
- * première question n'est pas « qu'y a-t-il ? » mais « qu'est-ce qui est
- * nouveau ? ». Sans réponse, le client relit tout ou ne relit rien.
- *
- * Rien ne s'affiche à la première visite, ni quand rien n'a changé : un bandeau
- * qui annonce « 0 nouveauté » occupe la place sans rien apprendre.
- */
-export function DepuisLaDerniereFois({
-  base = ESPACE_PATH,
-  items,
-  since,
-}: {
-  base?: string;
-  items: Deliverable[];
-  since: Date | null;
-}) {
-  if (!since) return null;
-
-  const nouveaux = items.filter((item) => nouveaute(item, since) === "nouveau");
-  const corriges = items.filter((item) => nouveaute(item, since) === "corrige");
-  if (nouveaux.length + corriges.length === 0) return null;
-
-  const morceaux = [
-    nouveaux.length > 0
-      ? `${nouveaux.length} ${nouveaux.length > 1 ? "nouveautés" : "nouveauté"}`
-      : null,
-    corriges.length > 0
-      ? `${corriges.length} ${corriges.length > 1 ? "corrections" : "correction"}`
-      : null,
-  ].filter(Boolean);
-
-  return (
-    <section className="mt-10">
-      <Panel className="border-l-2 border-l-accent-secondary px-5 py-4">
-        <Label>Depuis votre dernière connexion — {formatDay(since)}</Label>
-        <p className="mt-2 font-inter-tight text-base text-foreground">
-          {morceaux.join(" et ")}.
-        </p>
-        <ul className="mt-3 space-y-1.5">
-          {[...nouveaux, ...corriges].slice(0, 6).map((item) => (
-            <li key={item.id} className="flex flex-wrap items-baseline gap-2">
-              <Nouveaute item={item} since={since} />
-              <Link
-                href={categoriePath(item.kind as CategorieKind, base)}
-                className="font-inter-tight text-sm text-foreground underline underline-offset-4 hover:text-accent-secondary"
-              >
-                {item.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Panel>
-    </section>
-  );
-}
-
-/**
- * Une catégorie complète, pour sa page dédiée.
- *
- * Aucune notion de « à la une » ici : la page de catégorie montre tout ce qui
- * est publié, mis en avant ou non. C'est l'endroit où le client vient chercher,
- * pas celui où on lui présente.
- */
-export function Categorie({
-  base = ESPACE_PATH,
-  kind,
-  items,
-  since,
-}: {
-  base?: string;
-  kind: CategorieKind;
-  items: Deliverable[];
-  since: Date | null;
-}) {
-  const now = Date.now();
-
-  if (items.length === 0) {
-    return (
-      <Panel className="mt-6 px-5 py-6">
-        <p className="font-inter-tight text-base text-mid-gray">
-          Rien de publié dans cette catégorie pour l'instant.
-        </p>
-      </Panel>
-    );
-  }
-
-  if (kind === "roadmap") {
-    const tri = [...items].sort(
-      (a, b) =>
-        rank(STATUS_ORDER, (a.payload as RoadmapPayload).statut) -
-          rank(STATUS_ORDER, (b.payload as RoadmapPayload).statut) || byDate(a, b, 1),
-    );
-    return <Roadmap items={tri} now={now} since={since} bare base={base} />;
-  }
-
-  if (kind === "decision") {
-    return (
-      <Decisions items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare base={base} />
-    );
-  }
-
-  if (kind === "veille") {
-    return <Veille items={[...items].sort((a, b) => byDate(a, b, -1))} since={since} bare base={base} />;
-  }
-
-  if (kind === "document") {
-    return <Documents items={sortRecentFirst(items)} since={since} bare base={base} />;
-  }
-
-  if (kind === "audit") {
-    return <Audits items={sortRecentFirst(items)} since={since} base={base} />;
-  }
-
-  if (kind === "proposition") {
-    return <Propositions items={sortRecentFirst(items)} since={since} base={base} />;
-  }
-
-  const tri = [...items].sort(
-    (a, b) =>
-      rank(CRITICALITY_ORDER, (a.payload as CartographiePayload).criticite) -
-        rank(CRITICALITY_ORDER, (b.payload as CartographiePayload).criticite) ||
-      byDate(a, b, 1),
-  );
-  return <Cartographie items={tri} now={now} since={since} bare base={base} />;
 }
 
 /**
@@ -535,65 +416,75 @@ export function Decisions({
         />
       )}
       <ol className="mt-5">
-        {items.map((item) => {
-          const payload = item.payload as DecisionPayload;
-
-          return (
-            <li key={item.id} className="flex gap-4 sm:gap-6">
-              <div className="w-24 shrink-0 pt-5 text-right sm:w-32">
-                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                  {item.occurredAt ? formatDay(item.occurredAt) : "sans date"}
-                </p>
-              </div>
-
-              <div className="relative flex-1 border-l border-dark-gray pb-8 pl-5 pt-5 sm:pl-6">
-                <span
-                  aria-hidden
-                  className={`absolute -left-[4.5px] top-[26px] h-2 w-2 ${
-                    payload.nature === "ecartee" ? "bg-mid-gray/50" : "bg-accent-secondary"
-                  }`}
-                />
-                <h3 className="font-inter-tight text-base leading-snug text-foreground">
-                  {item.title}
-                </h3>
-
-                {payload.nature === "ecartee" ||
-                payload.portee.length > 0 ||
-                nouveaute(item, since) ? (
-                  <div className="mt-2.5 flex flex-wrap gap-1.5">
-                    <Nouveaute item={item} since={since} />
-                    {payload.nature === "ecartee" ? <Tag>Proposition écartée</Tag> : null}
-                    {payload.portee.map((scope) => (
-                      <Tag key={scope}>{scope}</Tag>
-                    ))}
-                  </div>
-                ) : null}
-
-                {payload.motif ? (
-                  <p className="mt-3 font-inter-tight text-sm leading-relaxed text-foreground/90">
-                    {payload.motif}
-                  </p>
-                ) : null}
-
-                {payload.optionEcartee ? (
-                  <details className="group mt-3">
-                    <summary className="cursor-pointer list-none font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-accent-secondary">
-                      <span className="group-open:hidden">+ Ce qui a été écarté</span>
-                      <span className="hidden group-open:inline">− Ce qui a été écarté</span>
-                    </summary>
-                    <p className="mt-2 border-l border-dark-gray pl-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
-                      {payload.optionEcartee}
-                    </p>
-                  </details>
-                ) : null}
-
-                <Correction item={item} base={base} />
-              </div>
-            </li>
-          );
-        })}
+        {items.slice(0, DECISIONS_VISIBLES).map((item) => (
+          <DecisionEntree key={item.id} item={item} since={since} base={base} />
+        ))}
       </ol>
+      <Suite count={items.length - DECISIONS_VISIBLES} className="border-t border-dark-gray">
+        <ol>
+          {items.slice(DECISIONS_VISIBLES).map((item) => (
+            <DecisionEntree key={item.id} item={item} since={since} base={base} />
+          ))}
+        </ol>
+      </Suite>
     </section>
+  );
+}
+
+/** Les décisions les plus récentes, avant « Voir les N autres ». */
+const DECISIONS_VISIBLES = 8;
+
+function DecisionEntree({ item, since, base }: { item: Deliverable; since: Date | null; base: string }) {
+  const payload = item.payload as DecisionPayload;
+
+  return (
+    <li className="flex gap-4 sm:gap-6">
+      <div className="w-24 shrink-0 pt-5 text-right sm:w-32">
+        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+          {item.occurredAt ? formatDay(item.occurredAt) : "sans date"}
+        </p>
+      </div>
+
+      <div className="relative flex-1 border-l border-dark-gray pb-8 pl-5 pt-5 sm:pl-6">
+        <span
+          aria-hidden
+          className={`absolute -left-[4.5px] top-[26px] h-2 w-2 ${
+            payload.nature === "ecartee" ? "bg-mid-gray/50" : "bg-accent-secondary"
+          }`}
+        />
+        <h3 className="font-inter-tight text-base leading-snug text-foreground">
+          {item.title}
+        </h3>
+
+        {payload.nature === "ecartee" ||
+        payload.portee.length > 0 ||
+        nouveaute(item, since) ? (
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            <Nouveaute item={item} since={since} />
+            {payload.nature === "ecartee" ? <Tag>Proposition écartée</Tag> : null}
+            {payload.portee.map((scope) => (
+              <Tag key={scope}>{scope}</Tag>
+            ))}
+          </div>
+        ) : null}
+
+        {/* Le titre dit la décision ; le motif et l'option écartée la
+            justifient, et se lisent à la demande. */}
+        {payload.motif || payload.optionEcartee ? (
+          <Repli resume={payload.optionEcartee ? "Motif et option écartée" : "Motif"}>
+            {payload.motif ? <p>{payload.motif}</p> : null}
+            {payload.optionEcartee ? (
+              <div className="mt-3 border-l border-dark-gray pl-4 text-mid-gray">
+                <Label>Ce qui a été écarté</Label>
+                <p className="mt-1.5">{payload.optionEcartee}</p>
+              </div>
+            ) : null}
+          </Repli>
+        ) : null}
+
+        <Correction item={item} base={base} />
+      </div>
+    </li>
   );
 }
 
@@ -726,11 +617,7 @@ function ElementRow({
           {cost ? <Tag>{`${cost} / an`}</Tag> : null}
           {payload.detenteur ? <Tag>{`Détenu par ${payload.detenteur}`}</Tag> : null}
         </div>
-        {payload.risque ? (
-          <p className="mt-2.5 font-inter-tight text-xs leading-relaxed text-mid-gray">
-            {payload.risque}
-          </p>
-        ) : null}
+        {payload.risque ? <Repli resume="Risque">{payload.risque}</Repli> : null}
         <Correction item={item} base={base} />
       </div>
     </article>
@@ -756,12 +643,15 @@ export function Veille({
   total,
   since = null,
   bare = false,
+  visibles,
 }: {
   base?: string;
   items: Deliverable[];
   total?: number;
   since?: Date | null;
   bare?: boolean;
+  /** Combien d'entrées d'emblée ; la suite se déplie. Tout, si absent. */
+  visibles?: number;
 }) {
   if (!bare && items.length === 0) {
     return (
@@ -788,62 +678,74 @@ export function Veille({
         />
       )}
       <Panel className="mt-5 divide-y divide-dark-gray">
-        {items.map((item) => {
-          const payload = item.payload as VeillePayload;
-
-          return (
-            <article key={item.id} className="px-5 py-5">
-              <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h3 className="font-inter-tight text-base leading-snug text-foreground">
-                  {item.title}
-                </h3>
-                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                  {formatDay(item.occurredAt)}
-                </p>
-              </header>
-
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
-                <Nouveaute item={item} since={since} />
-                {payload.nature === "alerte" ? <Tag tone="alerte">Alerte</Tag> : null}
-                {payload.themes.map((theme) => (
-                  <Tag key={theme}>{theme}</Tag>
-                ))}
-              </div>
-
-              {payload.fait ? (
-                <p className="mt-3 font-inter-tight text-sm leading-relaxed text-foreground/90">
-                  {payload.fait}
-                </p>
-              ) : null}
-
-              {payload.implication ? (
-                <div className="mt-3 border-l-2 border-l-accent-secondary pl-4">
-                  <Label>Ce que ça implique pour vous</Label>
-                  <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-foreground">
-                    {payload.implication}
-                  </p>
-                </div>
-              ) : null}
-
-              {payload.source ? (
-                <p className="mt-3">
-                  <a
-                    href={payload.source}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
-                  >
-                    Source ↗
-                  </a>
-                </p>
-              ) : null}
-
-              <Correction item={item} base={base} />
-            </article>
-          );
-        })}
+        {items.slice(0, visibles ?? items.length).map((item) => (
+          <VeilleEntree key={item.id} item={item} since={since} base={base} />
+        ))}
+        <Suite count={items.length - (visibles ?? items.length)}>
+          <div className="divide-y divide-dark-gray border-t border-dark-gray">
+            {items.slice(visibles ?? items.length).map((item) => (
+              <VeilleEntree key={item.id} item={item} since={since} base={base} />
+            ))}
+          </div>
+        </Suite>
       </Panel>
     </section>
+  );
+}
+
+function VeilleEntree({ item, since, base }: { item: Deliverable; since: Date | null; base: string }) {
+  const payload = item.payload as VeillePayload;
+
+  return (
+    <article className="px-5 py-5">
+      <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h3 className="font-inter-tight text-base leading-snug text-foreground">
+          {item.title}
+        </h3>
+        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
+          {formatDay(item.occurredAt)}
+        </p>
+      </header>
+
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        <Nouveaute item={item} since={since} />
+        {payload.nature === "alerte" ? <Tag tone="alerte">Alerte</Tag> : null}
+        {payload.themes.map((theme) => (
+          <Tag key={theme}>{theme}</Tag>
+        ))}
+      </div>
+
+      {/* L'implication reste visible : c'est la seule partie propre à ce
+          client. Le fait et sa source, qui la fondent, se déplient. */}
+      {payload.implication ? (
+        <div className="mt-3 border-l-2 border-l-accent-secondary pl-4">
+          <Label>Ce que ça implique pour vous</Label>
+          <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-foreground">
+            {payload.implication}
+          </p>
+        </div>
+      ) : null}
+
+      {payload.fait || payload.source ? (
+        <Repli resume="Le fait et sa source">
+          {payload.fait ? <p>{payload.fait}</p> : null}
+          {payload.source ? (
+            <p className="mt-2">
+              <a
+                href={payload.source}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+              >
+                Source ↗
+              </a>
+            </p>
+          ) : null}
+        </Repli>
+      ) : null}
+
+      <Correction item={item} base={base} />
+    </article>
   );
 }
 
@@ -864,7 +766,7 @@ function Correction({ item, base = ESPACE_PATH }: { item: Deliverable; base?: st
     <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray">
       Corrigé le {formatDay(item.recordedAt)} ·{" "}
       <Link
-        href={`${categoriePath(item.kind as CategorieKind, base)}/${item.notionPageId}`}
+        href={historiquePath(item.kind as CategorieKind, item.notionPageId, base)}
         className="underline underline-offset-4 transition-colors hover:text-accent-secondary"
       >
         voir les {item.version} versions
@@ -945,14 +847,9 @@ export function Documents({
                 {payload.prestataire ? <Tag>{payload.prestataire}</Tag> : null}
                 {montant ? <Tag>{`${montant} HT`}</Tag> : null}
               </div>
-              {payload.alternative ? (
-                <div className="mt-3 border-l-2 border-l-accent-secondary pl-4">
-                  <Label>Alternative chiffrée</Label>
-                  <p className="mt-1.5 font-inter-tight text-sm leading-relaxed text-foreground">
-                    {payload.alternative}
-                  </p>
-                </div>
-              ) : null}
+              {/* Le verdict, en étiquette, est la réponse ; l'alternative en est
+                  la justification, dépliée à la demande. */}
+              {payload.alternative ? <Repli resume="Alternative chiffrée">{payload.alternative}</Repli> : null}
               {payload.fichier ? (
                 <p className="mt-3">
                   <a

@@ -6,9 +6,13 @@ import { listAdminCredentials, listClients, recentAccessLog } from "@cto/admin";
 import { Dot, formatDate, Label, Panel, Stat, Tag, type Tone } from "../../espace-direction/ui";
 import { AdminPasskeyEnrollButton } from "../passkey";
 import { PILOTAGE_LARGEUR } from "./largeur";
+import { OutilsExploitation } from "./outils";
 
 export const metadata: Metadata = { title: "Tous les accompagnements" };
 export const dynamic = "force-dynamic";
+// Les actions « Synchroniser » et « Prévenir » s'exécutent dans cette route :
+// même plafond que le Cron (un balayage avec audits dépasse la minute).
+export const maxDuration = 300;
 
 const STATUS_LABEL: Record<string, string> = {
   actif: "Actif",
@@ -91,6 +95,13 @@ export default async function PilotagePage() {
           hint={refusRecents > 0 ? "Voir le journal ci-dessous" : undefined}
         />
       </Panel>
+
+      <section className="mt-12">
+        <Label>Exploitation</Label>
+        <div className="mt-4">
+          <OutilsExploitation />
+        </div>
+      </section>
 
       <section className="mt-12">
         <Label>Accompagnements ({clients.length})</Label>

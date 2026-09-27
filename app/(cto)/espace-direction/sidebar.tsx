@@ -11,7 +11,7 @@ import {
   BookOpen,
   CalendarPlus,
   Download,
-  FileText,
+  Milestone,
   Gauge,
   Flag,
   Folder,
@@ -28,7 +28,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Receipt,
-  Scale,
   Search,
   ShieldCheck,
   Sun,
@@ -67,13 +66,12 @@ import { viderPagesHorsLigne } from "./pwa";
 export type NavIconName =
   | "tableau"
   | "missions"
+  | "roadmap"
   | "decisions"
   | "audit"
   | "site"
-  | "rapports"
   | "cartographie"
-  | "a-traiter"
-  | "a-arbitrer"
+  | "agir"
   | "propositions"
   | "veille"
   | "veille-technique"
@@ -83,13 +81,12 @@ export type NavIconName =
 const ICONS: Record<NavIconName, LucideIcon> = {
   tableau: House,
   missions: Flag,
+  roadmap: Milestone,
   decisions: Gavel,
   audit: Search,
   site: Activity,
-  rapports: FileText,
   cartographie: Layers,
-  "a-traiter": ListChecks,
-  "a-arbitrer": Scale,
+  agir: ListChecks,
   propositions: Handshake,
   veille: BookOpen,
   "veille-technique": ShieldCheck,

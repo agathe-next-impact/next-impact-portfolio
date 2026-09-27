@@ -115,6 +115,8 @@ export interface AdminPersonRow {
   revokedAt: Date | null;
   createdAt: Date;
   openSessions: number;
+  /** Dernière connexion réussie (lien ou passkey) ; `null` = jamais entrée, invitation à envoyer. */
+  lastLoginAt: Date | null;
 }
 
 export interface ClientDetail {
@@ -137,7 +139,7 @@ export async function clientDetail(
   const [client] = await db().select().from(ctoClients).where(eq(ctoClients.id, clientId)).limit(1);
   if (!client) return null;
 
-  const [persons, sessionCounts] = await Promise.all([
+  const [persons, sessionCounts, logins] = await Promise.all([
     db()
       .select({
         id: ctoPersons.id,
@@ -166,9 +168,25 @@ export async function clientDetail(
         ),
       )
       .groupBy(ctoSessions.personId),
+
+    db()
+      .select({
+        personId: ctoAccessLog.personId,
+        last: sql<string>`max(${ctoAccessLog.at})`,
+      })
+      .from(ctoAccessLog)
+      .innerJoin(ctoPersons, eq(ctoAccessLog.personId, ctoPersons.id))
+      .where(
+        and(
+          eq(ctoPersons.clientId, clientId),
+          inArray(ctoAccessLog.event, ["connexion_lien", "connexion_passkey"]),
+        ),
+      )
+      .groupBy(ctoAccessLog.personId),
   ]);
 
   const sessions = new Map(sessionCounts.map((row) => [row.personId, row.count]));
+  const lastLogins = new Map(logins.map((row) => [row.personId, new Date(row.last)]));
 
   return {
     id: client.id,
@@ -182,6 +200,7 @@ export async function clientDetail(
     persons: persons.map((person) => ({
       ...person,
       openSessions: sessions.get(person.id) ?? 0,
+      lastLoginAt: lastLogins.get(person.id) ?? null,
     })),
   };
 }

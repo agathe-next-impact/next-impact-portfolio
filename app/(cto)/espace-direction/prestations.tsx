@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { prestationsForClient, type Deliverable } from "@cto/deliverables";
 import { deadlineTone } from "./livrables";
 import { EnPreparation, Espace, type EspaceContext } from "./shell";
-import { formatAmount, formatDay, Label, Panel, Stat, Tag, type Tone } from "./ui";
+import { formatAmount, formatDay, Groupe, Label, Panel, Repli, Stat, Tag, type Tone } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -93,26 +93,21 @@ export function TableauPrestations({
   const aEncaisser = resteDu(items.filter((item) => item.payload.statut !== "Suspendue"));
   const suivies = items.filter((item) => item.payload.paiements?.length).length;
 
+  // Trois chiffres, pas cinq : ce qui court, ce qui a été signé en tout, ce
+  // qui reste à régler. Le détail par statut est dans les groupes dessous.
   return (
     <>
-      <Panel className="mt-8 grid grid-cols-2 sm:grid-cols-5">
+      <Panel className="mt-8 grid grid-cols-2 sm:grid-cols-3">
         <Stat
           label="En cours"
           value={montantOuZero(somme(enCours))}
           hint={`${pluriel(enCours.length)} · HT`}
           tone={enCours.length > 0 ? "attention" : "neutre"}
         />
-        <Stat label="À venir" value={montantOuZero(somme(aVenir))} hint={`${pluriel(aVenir.length)} · HT`} />
         <Stat
-          label="Terminées"
-          value={montantOuZero(somme(terminees))}
-          hint={`${pluriel(terminees.length)} · HT`}
-          tone={terminees.length > 0 ? "fait" : "neutre"}
-        />
-        <Stat
-          label="Total"
+          label="Total signé"
           value={montantOuZero(somme(items))}
-          hint={`${pluriel(items.length)} · HT, suspendues comprises`}
+          hint={`${aVenir.length} à venir · ${terminees.length} terminée${terminees.length > 1 ? "s" : ""} · HT`}
         />
         <Stat
           label="Reste à régler"
@@ -122,21 +117,22 @@ export function TableauPrestations({
         />
       </Panel>
 
+      {/* Ce qui court ou arrive est ouvert ; le terminé, le suspendu et
+          l'inclassable se replient derrière leur compteur. */}
       {groupes.map((groupe) => (
-        <section key={groupe.statut} className="mt-12">
-          <div className="flex items-baseline justify-between gap-4">
-            <Label>
-              {groupe.statut} ({groupe.items.length})
-            </Label>
-            <span className="font-mono text-[11px] text-mid-gray">{montantOuZero(somme(groupe.items))} HT</span>
-          </div>
-
-          <div className="mt-4 divide-y divide-dark-gray border border-dark-gray">
+        <Groupe
+          key={groupe.statut}
+          titre={groupe.statut}
+          count={groupe.items.length}
+          aside={`${montantOuZero(somme(groupe.items))} HT`}
+          ouvert={groupe.statut === "En cours" || groupe.statut === "À venir"}
+        >
+          <div className="mt-2 divide-y divide-dark-gray border border-dark-gray">
             {groupe.items.map((item) => (
               <LignePrestation key={item.id} item={item} now={now} admin={admin} />
             ))}
           </div>
-        </section>
+        </Groupe>
       ))}
     </>
   );
@@ -204,7 +200,7 @@ function LignePrestation({
       {payload.paiements?.length ? <Echeancier item={item} /> : null}
 
       {payload.detail ? (
-        <p className="mt-3 max-w-prose font-inter-tight text-sm leading-relaxed text-mid-gray">{payload.detail}</p>
+        <Repli resume="Détail de la mission">{payload.detail}</Repli>
       ) : null}
 
       {payload.devis || admin ? (
@@ -224,6 +220,7 @@ function Echeancier({ item }: { item: Prestation }) {
   const total = item.payload.montant;
   const reste = typeof total === "number" ? Math.max(0, total - recu) : null;
 
+  // La ligne de synthèse se lit sans ouvrir ; le détail des règlements se déplie.
   return (
     <div className="mt-4 max-w-md">
       <div className="flex items-baseline justify-between gap-4">
@@ -232,6 +229,7 @@ function Echeancier({ item }: { item: Prestation }) {
           {`${montantOuZero(recu)} réglé${reste !== null ? ` · reste ${montantOuZero(reste)}` : ""}`}
         </span>
       </div>
+      <Repli resume={`Détail des ${paiements.length} règlement${paiements.length > 1 ? "s" : ""}`}>
       <ul className="mt-1.5 divide-y divide-dark-gray border border-dark-gray">
         {paiements.map((paiement, index) => {
           const estRecu = paiement.statut === "Reçu";
@@ -250,6 +248,7 @@ function Echeancier({ item }: { item: Prestation }) {
           );
         })}
       </ul>
+      </Repli>
     </div>
   );
 }
@@ -281,10 +280,11 @@ export async function VuePrestations({ viewer, context }: { viewer: Viewer; cont
       viewer={viewer}
       context={context}
       active="prestations"
-      title="Prestations"
+      title="Missions en cours"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce que vous avez commandé, son tarif, son avancement et vos règlements.
+          Ce que vous avez signé : tarif, avancement, livraison et règlements. Les propositions qui
+          attendent encore votre accord sont dans Contrats → Propositions.
         </p>
       }
     >

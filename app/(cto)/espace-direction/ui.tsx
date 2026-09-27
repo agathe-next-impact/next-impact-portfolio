@@ -246,3 +246,87 @@ export function SectionNav({ items }: { items: { href: string; label: string; co
     </nav>
   );
 }
+
+// ─── Repli ───────────────────────────────────────────────────────────────────
+//
+// La règle de lecture de tout l'espace : le résumé en tête, la liste plafonnée,
+// le détail replié. Trois briques, toutes en `<details>` natif : sans
+// JavaScript, accessibles au clavier et au lecteur d'écran, et rendues côté
+// serveur comme le reste. Jamais de coupe silencieuse : ce qui est replié dit
+// combien il y en a.
+
+const SIGNE = (
+  <span aria-hidden className="shrink-0 font-mono text-sm text-mid-gray group-open:text-accent-secondary">
+    <span className="group-open:hidden">+</span>
+    <span className="hidden group-open:inline">−</span>
+  </span>
+);
+
+/** Le détail d'une ligne (motif, risque, alternative…), ouvert à la demande. */
+export function Repli({ resume = "Détail", children }: { resume?: string; children: ReactNode }) {
+  return (
+    <details className="group mt-2">
+      <summary className="inline-flex cursor-pointer list-none items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+        {SIGNE}
+        <span className="group-open:hidden">{resume}</span>
+        <span className="hidden group-open:inline">Replier</span>
+      </summary>
+      <div className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">{children}</div>
+    </details>
+  );
+}
+
+/**
+ * La suite d'une liste plafonnée : « Voir les N autres ». À placer après les
+ * premiers éléments, avec les suivants pour enfants. Rien si la suite est vide.
+ */
+export function Suite({ count, children, className = "" }: { count: number; children: ReactNode; className?: string }) {
+  if (count <= 0) return null;
+  return (
+    <details className={`group ${className}`}>
+      <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+        {SIGNE}
+        <span className="group-open:hidden">{`Voir ${count > 1 ? `les ${count} autres` : "l'autre"}`}</span>
+        <span className="hidden group-open:inline">Replier</span>
+      </summary>
+      {children}
+    </details>
+  );
+}
+
+/**
+ * Un groupe entier replié derrière son titre et son compteur : les missions
+ * faites, les prestations terminées, les blocs techniques du site. `ouvert`
+ * pour ce qui doit se lire d'emblée (une alerte, par exemple).
+ */
+export function Groupe({
+  titre,
+  count,
+  aside,
+  ouvert = false,
+  id,
+  children,
+}: {
+  titre: string;
+  count: number;
+  /** À droite du titre : un total, une date. */
+  aside?: ReactNode;
+  ouvert?: boolean;
+  id?: string;
+  children: ReactNode;
+}) {
+  return (
+    <details id={id} open={ouvert} className="group mt-10 scroll-mt-8 border-t border-dark-gray">
+      <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 py-3 transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+        <span className="flex items-baseline gap-3">
+          {SIGNE}
+          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray group-open:text-foreground">
+            {`${titre} (${count})`}
+          </span>
+        </span>
+        {aside ? <span className="font-mono text-[11px] text-mid-gray">{aside}</span> : null}
+      </summary>
+      <div className="pb-2">{children}</div>
+    </details>
+  );
+}

@@ -22,6 +22,7 @@ import { siteStateFor, type SiteState } from "@cto/site";
 import { auditPath, nouveaute, sortRecentFirst } from "./livrables";
 import { NAV_COOKIE } from "./nav";
 import { BanniereInstallation, EtatReseau } from "./pwa";
+import { OuvrirAncre } from "./ouvrir-ancre";
 import { RetourHaut } from "./retour-haut";
 import { Sidebar, type NavBadge, type NavGroup, type Situation, type SituationLigne } from "./sidebar";
 import { buttonClass, Label, Notice, PageHeader, Panel } from "./ui";
@@ -167,21 +168,30 @@ function badgeFor(key: SectionKey, context: EspaceContext): NavBadge | null {
         tone: alertes > 0 ? "alerte" : "attention",
       };
     }
-    case "a-traiter": {
-      const n = context.actions.aTraiter.length;
+    case "agir": {
+      // Une pastille pour la page entière : l'urgent donne le ton, l'arbitrage
+      // s'ajoute au compte sans le durcir.
+      const { aTraiter, aArbitrer } = context.actions;
+      const n = aTraiter.length + aArbitrer.length;
       if (n === 0) return null;
-      const urgent = context.actions.aTraiter.some((action) => action.tone === "alerte");
-      return { text: String(n), description: `${n} à traiter`, tone: urgent ? "alerte" : "attention" };
+      const urgent = aTraiter.some((action) => action.tone === "alerte");
+      const morceaux = [
+        aTraiter.length > 0 ? `${aTraiter.length} à traiter` : null,
+        aArbitrer.length > 0 ? `${aArbitrer.length} à arbitrer` : null,
+      ].filter(Boolean);
+      return {
+        text: String(n),
+        description: morceaux.join(", "),
+        tone: urgent ? "alerte" : aTraiter.length > 0 ? "attention" : "nouveau",
+      };
     }
+    case "roadmap":
+      return nouveautes(context, ["roadmap"]);
     case "propositions": {
-      const n = context.actions.aArbitrer.filter((action) => action.kind === "proposition").length;
+      const n = context.actions.aValider.length;
       return n === 0
         ? null
         : { text: String(n), description: `${n} en attente de votre réponse`, tone: "nouveau" };
-    }
-    case "a-arbitrer": {
-      const n = context.actions.aArbitrer.length;
-      return n === 0 ? null : { text: String(n), description: `${n} à arbitrer`, tone: "nouveau" };
     }
     default:
       return null;
@@ -434,6 +444,7 @@ export async function Espace({
         </div>
       </main>
 
+      <OuvrirAncre />
       <RetourHaut />
       {viewer.admin ? null : <BanniereInstallation />}
     </div>

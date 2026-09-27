@@ -14,6 +14,23 @@ export class SentinelleExportError extends Error {}
 /** Délai maximal d'une lecture : le balayage ne doit pas rester pendu sur un client. */
 const TIMEOUT_MS = 20_000;
 
+/**
+ * Une redirection, dite en clair.
+ *
+ * Les appels partent avec `redirect: "manual"` : un `fetch` qui suit une
+ * redirection vers une autre origine (http → https, apex → www) retire
+ * l'en-tête `Authorization`, et Sentinelle répond alors « non autorisé » alors
+ * que le jeton est bon. On préfère nommer la vraie cause.
+ */
+export function redirectError(response: Response, url: string): SentinelleExportError | null {
+  if (response.status < 300 || response.status >= 400) return null;
+  const location = response.headers.get("location") ?? "?";
+  return new SentinelleExportError(
+    `${url} redirige vers ${location} (HTTP ${response.status}) : poser SENTINELLE_EXPORT_URL sur l'adresse finale, ` +
+      "le jeton ne suit pas une redirection",
+  );
+}
+
 export function sentinelleExportConfig(): { url: string; secret: string } | null {
   const url = process.env.SENTINELLE_EXPORT_URL?.trim();
   const secret = process.env.SENTINELLE_EXPORT_SECRET?.trim();
@@ -31,8 +48,12 @@ export async function fetchSentinelleExport(sentinelleClientId: string): Promise
       headers: { authorization: `Bearer ${config.secret}` },
       cache: "no-store",
       signal: AbortSignal.timeout(TIMEOUT_MS),
+      redirect: "manual",
     },
   );
+
+  const redirect = redirectError(response, config.url);
+  if (redirect) throw redirect;
 
   if (!response.ok) {
     throw new SentinelleExportError(`export Sentinelle : HTTP ${response.status}`);

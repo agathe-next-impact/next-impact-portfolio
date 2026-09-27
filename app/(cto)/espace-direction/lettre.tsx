@@ -54,6 +54,11 @@ function formatJour(date: Date | null): string {
 }
 
 /** Ce qu'est la lettre, en un mot : sa veille d'origine avant sa portée. */
+/** La date d'une lettre telle qu'on la lit : le mois pour une lettre d'atelier, le jour sinon. */
+export function dateLettre(lettre: Pick<LetterSummary, "source" | "period">): string {
+  return lettre.source === "atelier" ? formatPeriode(lettre.period) : formatJour(lettre.period);
+}
+
 export function libelleLettre(lettre: Pick<LetterSummary, "source" | "label" | "scope">): string {
   if (lettre.source === "sentinelle") return "Veille technique";
   if (lettre.source === "signaux-faibles") return `Signaux faibles${lettre.label ? ` · ${lettre.label}` : ""}`;
@@ -308,50 +313,16 @@ export function CarteLettre({
   );
 }
 
-/**
- * Le bloc « veille » de l'accueil : la dernière lettre, et le chemin des archives.
- *
- * Une seule lettre en avant. Le client vient lire celle du mois ; lui en
- * présenter six revient à ne rien mettre en avant du tout.
- */
-export function DerniereLettre({
-  lettres,
-  base = ESPACE_PATH,
-}: {
-  lettres: LetterSummary[];
-  base?: string;
-}) {
-  if (lettres.length === 0) return null;
-
-  const [derniere, ...archives] = lettres;
-
-  return (
-    <section className="mt-12">
-      <div className="flex items-baseline justify-between gap-4 border-b border-dark-gray pb-3">
-        <h2 className="font-sans text-lg font-light text-foreground">Votre veille</h2>
-        {archives.length > 0 ? (
-          <Link
-            href={lettresPath(base)}
-            className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
-          >
-            Archives · {archives.length + 1} éditions →
-          </Link>
-        ) : null}
-      </div>
-      <Panel className="mt-5">
-        <CarteLettre lettre={derniere} principale base={base} />
-      </Panel>
-    </section>
-  );
-}
-
 /** La liste des archives, la plus récente en tête. */
 export function ListeLettres({
   lettres,
   base = ESPACE_PATH,
+  libelle = "Six derniers mois",
 }: {
   lettres: LetterSummary[];
   base?: string;
+  /** Le repère au-dessus de la liste : la fenêtre des archives, ou « Les plus récentes ». */
+  libelle?: string;
 }) {
   if (lettres.length === 0) {
     return (
@@ -365,7 +336,7 @@ export function ListeLettres({
 
   return (
     <>
-      <Label>Six derniers mois</Label>
+      <Label>{libelle}</Label>
       <Panel className="mt-3 divide-y divide-dark-gray">
         {lettres.map((lettre) => (
           <CarteLettre key={lettre.notionPageId} lettre={lettre} base={base} />

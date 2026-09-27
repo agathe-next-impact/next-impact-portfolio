@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Deliverable } from "../deliverables";
 import { buildEvents, dayKey, monthGrid, upcoming } from "./calendar";
-import { hasPersonalisedWatch, LEGACY_SLUGS, SECTIONS, visibleSections, type Contents } from "./sections";
+import { arbitrageOuvert, hasPersonalisedWatch, LEGACY_SLUGS, SECTIONS, visibleSections, type Contents } from "./sections";
 
 const EMPTY: Contents = {
   decisions: 0,
@@ -24,30 +24,29 @@ describe("sections visibles", () => {
     expect(keys(visibleSections(null, EMPTY))).not.toContain("veille-technique");
   });
 
-  it("montre toujours l'accueil, « À traiter » et la veille, même sans aucun service", () => {
-    expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "a-traiter", "veille"]);
+  it("montre toujours l'accueil, les actions et la veille, même sans aucun service", () => {
+    expect(keys(visibleSections([], EMPTY))).toEqual(["tableau", "agir", "veille"]);
   });
 
   it("ouvre les entrées d'un service coché, même vides (état « en préparation »)", () => {
     expect(keys(visibleSections(["suivi-technique"], EMPTY))).toEqual([
       "tableau",
       "site",
-      "rapports",
-      "a-traiter",
+      "agir",
       "veille",
     ]);
   });
 
-  it("range la direction technique dans Missions, Votre site, Agir et Veille", () => {
+  it("range la direction technique dans Pilotage (roadmap et documents compris), Votre site, Agir et Veille", () => {
     expect(keys(visibleSections(["direction-technique"], EMPTY))).toEqual([
       "tableau",
       "missions",
+      "roadmap",
       "decisions",
-      "cartographie",
-      "a-traiter",
-      "a-arbitrer",
-      "veille",
       "documents",
+      "cartographie",
+      "agir",
+      "veille",
     ]);
   });
 
@@ -55,8 +54,8 @@ describe("sections visibles", () => {
     expect(keys(visibleSections(["actions"], { ...EMPTY, decisions: 4 }))).toEqual([
       "tableau",
       "missions",
-      "a-traiter",
-      "a-arbitrer",
+      "roadmap",
+      "agir",
       "veille",
     ]);
   });
@@ -65,34 +64,48 @@ describe("sections visibles", () => {
     expect(keys(visibleSections(null, { ...EMPTY, decisions: 2, roadmap: 3 }))).toEqual([
       "tableau",
       "missions",
+      "roadmap",
       "decisions",
-      "a-traiter",
-      "a-arbitrer",
+      "agir",
       "veille",
     ]);
   });
 
   it("ouvre l'audit dans Missions pour un client audit seul", () => {
-    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "a-traiter", "veille"]);
+    expect(keys(visibleSections(["audit"], EMPTY))).toEqual(["tableau", "missions", "audit", "agir", "veille"]);
   });
 
   it("montre les propositions dès qu'il y en a une, même sans aucun service", () => {
     expect(keys(visibleSections([], { ...EMPTY, propositions: 1 }))).toEqual([
       "tableau",
-      "a-traiter",
-      "propositions",
+      "agir",
       "veille",
+      "propositions",
     ]);
     expect(keys(visibleSections(null, EMPTY))).not.toContain("propositions");
   });
 
-  it("ouvre Contrats → Prestations par le seul service Prestations, en dernier", () => {
-    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "a-traiter", "veille", "prestations"]);
+  it("range propositions puis missions en cours dans Contrats, en dernier", () => {
+    expect(keys(visibleSections(["prestations"], EMPTY))).toEqual(["tableau", "agir", "veille", "prestations"]);
+    expect(keys(visibleSections(["prestations"], { ...EMPTY, propositions: 2 })).slice(-2)).toEqual([
+      "propositions",
+      "prestations",
+    ]);
     expect(SECTIONS.find((s) => s.key === "prestations")?.group).toBe("contrats");
+    expect(SECTIONS.find((s) => s.key === "propositions")?.group).toBe("contrats");
     // Des tarifs ne s'ouvrent jamais au contenu, régime historique compris.
     expect(keys(visibleSections(null, EMPTY))).not.toContain("prestations");
     expect(keys(visibleSections(["direction-technique"], EMPTY))).not.toContain("prestations");
     expect(LEGACY_SLUGS.prestations).toBeUndefined();
+  });
+
+  it("réunit à traiter et à arbitrer, et renvoie les rapports vers l'état du site", () => {
+    expect(LEGACY_SLUGS["a-traiter"]).toBe("agir");
+    expect(LEGACY_SLUGS["a-arbitrer"]).toBe("agir");
+    expect(LEGACY_SLUGS.rapports).toBe("site");
+    // L'arbitrage suit la roadmap : ouvert par ses services, fermé sans eux.
+    expect(arbitrageOuvert(visibleSections(["actions"], EMPTY))).toBe(true);
+    expect(arbitrageOuvert(visibleSections(["audit"], EMPTY))).toBe(false);
   });
 
   it("donne une section existante à chaque ancienne adresse", () => {

@@ -2,7 +2,7 @@ import { lettersForClient } from "@cto/letters";
 import { sentinelleStateFor, type SentinelleAlert, type SentinelleVerdict } from "@cto/sentinelle";
 import { CarteLettre } from "./lettre";
 import { EnPreparation, Espace, type EspaceContext } from "./shell";
-import { Dot, formatDay, Label, Notice, Panel, SectionNav, Stat, Tag, type Tone } from "./ui";
+import { Dot, formatDay, Groupe, Label, Notice, Panel, SectionNav, Stat, Suite, Tag, type Tone } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -98,6 +98,11 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
   const alertes = [...data.alerts].sort(
     (a, b) => RANG[a.verdict ?? "info"] - RANG[b.verdict ?? "info"] || b.at.localeCompare(a.at),
   );
+  // D'emblée : les alertes des trente derniers jours, et toute alerte critique
+  // quel que soit son âge. Le reste des six mois se déplie.
+  const seuil = Date.now() - 30 * 86_400_000;
+  const enTete = alertes.filter((a) => a.verdict === "red" || new Date(a.at).getTime() >= seuil);
+  const plusAnciennes = alertes.filter((a) => !enTete.includes(a));
   const critiques = alertes.filter((a) => a.verdict === "red").length;
   const aSurveiller = alertes.filter((a) => a.verdict === "orange").length;
   const radar = [...data.radar].sort((a, b) => a.daysLeft - b.daysLeft);
@@ -150,9 +155,20 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
           </Panel>
         ) : (
           <Panel className="divide-y divide-dark-gray">
-            {alertes.map((alert) => (
-              <CarteAlerte key={alert.id} alert={alert} />
-            ))}
+            {enTete.length === 0 ? (
+              <p className="px-5 py-4 font-inter-tight text-sm text-mid-gray">
+                Aucune alerte ces trente derniers jours.
+              </p>
+            ) : (
+              enTete.map((alert) => <CarteAlerte key={alert.id} alert={alert} />)
+            )}
+            <Suite count={plusAnciennes.length}>
+              <div className="divide-y divide-dark-gray border-t border-dark-gray">
+                {plusAnciennes.map((alert) => (
+                  <CarteAlerte key={alert.id} alert={alert} />
+                ))}
+              </div>
+            </Suite>
           </Panel>
         )}
       </section>
@@ -188,8 +204,8 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         )}
       </section>
 
-      <section id="fiche" className="mt-12 scroll-mt-24">
-        <h2 className="mb-2 font-sans text-lg font-light text-foreground">Fiche technique</h2>
+      {/* L'inventaire se consulte pour vérifier ; il se replie derrière son compteur. */}
+      <Groupe id="fiche" titre="Fiche technique" count={data.stack.components.length}>
         <p className="mb-5 max-w-prose font-inter-tight text-sm text-mid-gray">
           Ce que la surveillance connaît de votre site, relevé depuis ses éléments publics.
           {data.stack.withoutVersion > 0
@@ -218,7 +234,7 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
         <p className="mt-3 font-inter-tight text-xs text-mid-gray">
           Relevé du {formatDay(state.fetchedAt)} · {data.client.siteUrl}
         </p>
-      </section>
+      </Groupe>
 
       <section id="lettres" className="mt-12 scroll-mt-24">
         <h2 className="mb-5 font-sans text-lg font-light text-foreground">Lettres de veille technique</h2>
@@ -230,9 +246,16 @@ export async function VueVeilleTechnique({ viewer, context }: { viewer: Viewer; 
           </Panel>
         ) : (
           <Panel className="divide-y divide-dark-gray">
-            {lettresTechniques.map((lettre) => (
+            {lettresTechniques.slice(0, 3).map((lettre) => (
               <CarteLettre key={lettre.notionPageId} lettre={lettre} base={viewer.base} />
             ))}
+            <Suite count={lettresTechniques.length - 3}>
+              <div className="divide-y divide-dark-gray border-t border-dark-gray">
+                {lettresTechniques.slice(3).map((lettre) => (
+                  <CarteLettre key={lettre.notionPageId} lettre={lettre} base={viewer.base} />
+                ))}
+              </div>
+            </Suite>
           </Panel>
         )}
       </section>

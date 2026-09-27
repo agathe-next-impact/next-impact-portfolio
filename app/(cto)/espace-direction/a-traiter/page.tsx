@@ -1,21 +1,12 @@
-import type { Metadata } from "next";
-import { loadEspace } from "../shell";
-import { requireSession } from "../session";
-import { viewerFromSession } from "../viewer";
-import { VueATraiter } from "../vues";
-
-export const metadata: Metadata = {
-  title: "À traiter",
-  robots: { index: false, follow: false },
-};
+import { redirect } from "next/navigation";
+import { ESPACE_PATH } from "../session";
 
 export const dynamic = "force-dynamic";
 
-/** Ce qui demande une intervention. Toujours visible : vide, la page dit « rien d'urgent ». L'écran vit dans `../vues.tsx`, partagé avec la vue admin. */
-export default async function Page() {
-  const session = await requireSession();
-  const viewer = viewerFromSession(session);
-  const context = await loadEspace(viewer);
-
-  return <VueATraiter viewer={viewer} context={context} />;
+/**
+ * Ancienne adresse, gardée pour les favoris et les anciens e-mails : « À traiter » fait désormais partie de la page Actions.
+ * (cf. `LEGACY_SLUGS` dans `@cto/espace`).
+ */
+export default function Page() {
+  redirect(`${ESPACE_PATH}/agir#a-traiter`);
 }

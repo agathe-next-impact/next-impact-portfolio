@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { NotionPage } from "./api";
 import { mapPage, PROPS, UNTITLED } from "./map";
 import { clientPageIds, personEmail, personName, personRevoked, personRole, spaceId } from "./map";
+import { clientInPreparation, clientStatus } from "./map";
 import { paymentOf, sortPayments } from "./map";
 import * as p from "./properties";
 import type { CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
@@ -77,6 +78,17 @@ describe("base Clients", () => {
 
     const ligne = page({ [PROPS.client]: relation("aaa", "bbb") });
     expect(clientPageIds(ligne)).toEqual(["aaa", "bbb"]);
+  });
+
+  it("reconnaît une fiche en préparation, accents et casse ignorés", () => {
+    expect(clientInPreparation(page({ [PROPS.clients.status]: select("préparation") }))).toBe(true);
+    expect(clientInPreparation(page({ [PROPS.clients.status]: select("Preparation") }))).toBe(true);
+    expect(clientInPreparation(page({ [PROPS.clients.status]: select("actif") }))).toBe(false);
+    expect(clientInPreparation(page({}))).toBe(false);
+  });
+
+  it("n'invente aucun état en base pour « préparation »", () => {
+    expect(clientStatus(page({ [PROPS.clients.status]: select("préparation") }))).toBeNull();
   });
 });
 

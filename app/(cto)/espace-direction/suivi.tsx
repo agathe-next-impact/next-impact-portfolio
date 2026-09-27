@@ -1,7 +1,7 @@
 import type { SiteReport, SiteSnapshot, SiteState } from "@cto/site";
 import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
-import { formatDate, formatDay, Label, Notice, Panel, Stat, Tag, type Tone } from "./ui";
+import { formatDate, formatDay, Groupe, Label, Notice, Panel, Stat, Tag, type Tone } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le suivi technique du site : ce que WP Umbrella mesure, remis en français.
@@ -89,17 +89,27 @@ export function IndicateursSite({ snapshot }: { snapshot: SiteSnapshot }) {
   );
 }
 
-function Bloc({ titre, compte, children }: { titre: string; compte?: number; children: React.ReactNode }) {
+/**
+ * Un bloc de détail technique, replié derrière son titre et son compteur : les
+ * quatre repères du haut répondent déjà à « mon site va-t-il bien ? ». Ouvert
+ * d'office quand il porte une alerte (les failles). Replié, il peut tout
+ * montrer : plus de liste coupée sans le dire.
+ */
+function Bloc({
+  titre,
+  compte,
+  ouvert = false,
+  children,
+}: {
+  titre: string;
+  compte: number;
+  ouvert?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <section className="mt-12">
-      <div className="flex items-baseline justify-between gap-4 border-b border-dark-gray pb-3">
-        <h2 className="font-sans text-lg font-light text-foreground">{titre}</h2>
-        {typeof compte === "number" ? (
-          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">{compte}</span>
-        ) : null}
-      </div>
+    <Groupe titre={titre} count={compte} ouvert={ouvert}>
       {children}
-    </section>
+    </Groupe>
   );
 }
 
@@ -171,9 +181,9 @@ export function SuiviTechnique({ state }: { state: SiteState }) {
           </section>
 
           {snapshot.vulnerabilities.items.length > 0 ? (
-            <Bloc titre="Failles connues" compte={snapshot.vulnerabilities.items.length}>
-              <Panel className="mt-5 divide-y divide-dark-gray">
-                {snapshot.vulnerabilities.items.slice(0, 15).map((v, i) => (
+            <Bloc titre="Failles connues" compte={snapshot.vulnerabilities.items.length} ouvert>
+              <Panel className="mt-2 divide-y divide-dark-gray">
+                {snapshot.vulnerabilities.items.map((v, i) => (
                   <div key={i} className="px-4 py-3">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <p className="font-inter-tight text-sm text-foreground">{v.title}</p>
@@ -196,7 +206,7 @@ export function SuiviTechnique({ state }: { state: SiteState }) {
               titre="Mises à jour en attente"
               compte={snapshot.updates.plugins.length + snapshot.updates.themes.length}
             >
-              <Panel className="mt-5 divide-y divide-dark-gray">
+              <Panel className="mt-2 divide-y divide-dark-gray">
                 {[...snapshot.updates.plugins, ...snapshot.updates.themes].map((u, i) => (
                   <div key={i} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-4 py-3">
                     <p className="font-inter-tight text-sm text-foreground">{u.name}</p>
@@ -211,8 +221,8 @@ export function SuiviTechnique({ state }: { state: SiteState }) {
 
           {snapshot.maintenance.recent.length > 0 ? (
             <Bloc titre="Interventions récentes" compte={snapshot.maintenance.recent.length}>
-              <Panel className="mt-5 divide-y divide-dark-gray">
-                {snapshot.maintenance.recent.slice(0, 12).map((t, i) => (
+              <Panel className="mt-2 divide-y divide-dark-gray">
+                {snapshot.maintenance.recent.map((t, i) => (
                   <div key={i} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-4 py-3">
                     <p className="font-inter-tight text-sm text-foreground">
                       {t.label}
@@ -230,8 +240,8 @@ export function SuiviTechnique({ state }: { state: SiteState }) {
 
           {snapshot.uptime.incidents.length > 0 ? (
             <Bloc titre="Incidents de disponibilité" compte={snapshot.uptime.incidents.length}>
-              <Panel className="mt-5 divide-y divide-dark-gray">
-                {snapshot.uptime.incidents.slice(0, 10).map((incident, i) => (
+              <Panel className="mt-2 divide-y divide-dark-gray">
+                {snapshot.uptime.incidents.map((incident, i) => (
                   <div key={i} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-4 py-3">
                     <p className="font-inter-tight text-sm text-foreground">
                       {formatDate(new Date(incident.startedAt))}
@@ -247,7 +257,7 @@ export function SuiviTechnique({ state }: { state: SiteState }) {
 
           {snapshot.backups.recent.length > 0 ? (
             <Bloc titre="Sauvegardes" compte={snapshot.backups.recent.length}>
-              <Panel className="mt-5 divide-y divide-dark-gray">
+              <Panel className="mt-2 divide-y divide-dark-gray">
                 {snapshot.backups.recent.map((b, i) => (
                   <div key={i} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-4 py-3">
                     <p className="font-inter-tight text-sm text-foreground">{formatDate(new Date(b.date))}</p>

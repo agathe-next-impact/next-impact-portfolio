@@ -1,0 +1,23 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { loadEspace, sectionOuverte } from "../shell";
+import { ESPACE_PATH, requireSession } from "../session";
+import { viewerFromSession } from "../viewer";
+import { VueRoadmap } from "../vues";
+
+export const metadata: Metadata = {
+  title: "Roadmap",
+  robots: { index: false, follow: false },
+};
+
+export const dynamic = "force-dynamic";
+
+/** Pilotage → Roadmap. L'écran vit dans `../vues.tsx`, partagé avec la vue admin. */
+export default async function Page() {
+  const session = await requireSession();
+  const viewer = viewerFromSession(session);
+  const context = await loadEspace(viewer);
+  if (!sectionOuverte(context, "roadmap")) redirect(ESPACE_PATH);
+
+  return <VueRoadmap viewer={viewer} context={context} />;
+}

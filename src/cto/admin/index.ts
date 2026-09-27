@@ -1,7 +1,7 @@
 // API publique de l'admin de supervision de l'espace CTO (src/cto/admin/).
 //
-// Lecture seule, à une exception près : voir `overview.ts` pour ce que ça veut
-// dire et pourquoi, et `actions.ts` pour la seule écriture. L'identité et
+// Lecture seule, à deux exceptions près : voir `overview.ts` pour ce que ça veut
+// dire et pourquoi, et `actions.ts` pour les écritures (pause, invitation). L'identité et
 // l'accès (`identity.ts`, `store.ts`, `passkeys.ts`) sont adressés à
 // agathe@next-impact.digital, la seule personne à pouvoir entrer ici ; la glue
 // Next (cookies, redirections) vit dans `app/(cto)/admin-cto/session.ts`.
@@ -47,5 +47,7 @@ export {
   type JournalOverviewRow,
 } from "./overview";
 
-// Seule écriture de ce module — voir son en-tête pour la raison de l'exception.
-export { setSyncEnabled } from "./actions";
+// Les écritures de ce module — voir son en-tête pour la raison des exceptions.
+export { sendAccessLink, setSyncEnabled, type AccessLinkOutcome } from "./actions";
+
+export { summarizeNotify, summarizeSync, type ReportSummary } from "./rapport";

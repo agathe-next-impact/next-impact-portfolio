@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { history, type AuditPayload, type PropositionPayload } from "@cto/deliverables";
+import { history, type AuditPayload, type Deliverable, type PropositionPayload } from "@cto/deliverables";
 import {
   actionsVerdict,
+  arbitrageOuvert,
+  ordreDeLecture,
   buildEvents,
   isPendingProposition,
   buildFrise,
@@ -14,27 +16,31 @@ import {
   siteVerdict,
   type Action,
 } from "@cto/espace";
-import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre } from "@cto/letters";
+import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre, type LetterSummary } from "@cto/letters";
 import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
 import { Calendrier } from "./calendrier";
+import { CarteContrats } from "./contrats";
 import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
+import { Chapitre, LectureLongue } from "./lecture";
 import { LettreEnGrille } from "./lettre-grille";
-import { CorpsLettre, DerniereLettre, formatPeriode, grandsTitres, lettresPath, ListeLettres } from "./lettre";
+import { CorpsLettre, dateLettre, formatPeriode, lettresPath, libelleLettre, ListeLettres } from "./lettre";
 import {
   Audits,
   CATEGORIES,
   Cartographie,
-  Categorie,
+  historiquePath,
   categoriePath,
   Decisions,
-  DepuisLaDerniereFois,
   Documents,
   Nouveaute,
+  nouveaute,
   Propositions,
+  Roadmap,
   propositionTone,
   sortCartographie,
+  sortRoadmap,
   sortRecentFirst,
   tailleLisible,
   fichierPath,
@@ -67,7 +73,7 @@ import {
 import { SyntheseAudit } from "./synthese-audit";
 import { PartieAccordeons, partieEnAccordeons } from "./partie-accordeons";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
-import { BackLink, buttonClass, Dot, formatDay, Label, Notice, Panel, SectionNav, Tag } from "./ui";
+import { BackLink, buttonClass, Dot, formatDay, Groupe, Label, Notice, Panel, SectionNav, Suite, Tag } from "./ui";
 import type { Viewer } from "./viewer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -103,44 +109,97 @@ const KIND_TITRES: Record<string, string> = {
   audit: "Audit",
 };
 
+/** Combien de lignes « Nouveau pour vous » montre avant « Voir les N autres ». */
+const NOUVEAU_VISIBLES = 5;
+
 /**
- * Ce qui a été mis à la une, toutes sections confondues.
+ * « Nouveau pour vous » : ce qui a bougé depuis la dernière connexion, puis ce
+ * que l'atelier a mis à la une (colonne « Affichage »), sans doublon.
  *
- * La mise en avant se décide dans l'atelier (colonne « Affichage ») ; l'accueil
- * la respecte sans la réinterpréter. Une ligne par entrée, qui mène à sa
- * section : le détail vit là-bas, pas ici.
+ * Réunit les deux anciens blocs « Depuis votre dernière connexion » et « À la
+ * une », qui répondaient à la même question — « que dois-je regarder ? » — à
+ * deux endroits de la page. Cinq lignes, le reste replié. Chaque ligne mène à
+ * sa section, là où le détail se lit.
  */
-function ALaUne({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const items = context.items.filter((item) => item.featured);
+function NouveauPourVous({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const since = context.since;
+  const recents = since ? context.items.filter((item) => nouveaute(item, since) !== null) : [];
+  const vus = new Set(recents.map((item) => item.id));
+  const items = [...sortRecentFirst(recents), ...context.items.filter((item) => item.featured && !vus.has(item.id))];
   if (items.length === 0) return null;
 
-  return (
-    <section aria-labelledby="une-titre" className="mt-12">
-      <div className="border-b border-dark-gray pb-3">
-        <h2 id="une-titre" className="font-sans text-lg font-light text-foreground">
-          À la une
-        </h2>
+  const ligne = (item: Deliverable) => (
+    <li key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+      <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+        <Nouveaute item={item} since={since} />
+        <Link
+          href={livrableHref(item, context, viewer.base)}
+          className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+        >
+          {item.title}
+        </Link>
       </div>
-      <Panel className="mt-5 divide-y divide-dark-gray">
-        {items.slice(0, 8).map((item) => (
-          <div key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
-            <div className="flex min-w-0 flex-wrap items-baseline gap-2">
-              <Nouveaute item={item} since={context.since} />
-              <Link
-                href={livrableHref(item, context, viewer.base)}
-                className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-              >
-                {item.title}
-              </Link>
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-              {KIND_TITRES[item.kind] ?? item.kind}
-              {item.occurredAt ? ` · ${formatDay(item.occurredAt)}` : ""}
-            </span>
-          </div>
-        ))}
+      <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+        {KIND_TITRES[item.kind] ?? item.kind}
+        {item.occurredAt ? ` · ${formatDay(item.occurredAt)}` : ""}
+      </span>
+    </li>
+  );
+
+  return (
+    <section aria-labelledby="nouveau-titre" className="mt-10">
+      <Panel className="border-l-2 border-l-accent-secondary">
+        <div className="px-4 pb-1 pt-4">
+          <h2 id="nouveau-titre">
+            <Label>
+              {recents.length > 0 && since
+                ? `Nouveau pour vous · depuis le ${formatDay(since)}`
+                : "Nouveau pour vous · à la une"}
+            </Label>
+          </h2>
+        </div>
+        <ul className="divide-y divide-dark-gray">{items.slice(0, NOUVEAU_VISIBLES).map(ligne)}</ul>
+        <Suite count={items.length - NOUVEAU_VISIBLES} className="border-t border-dark-gray">
+          <ul className="divide-y divide-dark-gray border-t border-dark-gray">
+            {items.slice(NOUVEAU_VISIBLES).map(ligne)}
+          </ul>
+        </Suite>
       </Panel>
     </section>
+  );
+}
+
+/**
+ * « Qu'est-ce qui change autour de vous ? » : les trois dernières lettres, en
+ * une ligne chacune. Remplace le grand bloc de la dernière lettre : sur
+ * l'accueil, le titre suffit à décider de la lire.
+ */
+function CarteVeille({ viewer, lettres }: { viewer: Viewer; lettres: LetterSummary[] }) {
+  const [derniere] = lettres;
+  const verdict = derniere
+    ? { headline: `Dernière lettre ${dateLettre(derniere)}`, tone: "neutre" as const }
+    : { headline: "Première lettre en préparation", tone: "neutre" as const };
+
+  return (
+    <CarteReponse
+      question="Qu'est-ce qui change autour de vous ?"
+      verdict={verdict}
+      pied={{ href: sectionHref(sectionByKey("veille"), viewer.base), label: "Toute la veille" }}
+    >
+      {lettres.length === 0 ? (
+        <LigneVide>Vos lettres de veille arriveront ici dès la première parution.</LigneVide>
+      ) : (
+        lettres.slice(0, 3).map((lettre) => (
+          <LigneCarte
+            key={lettre.notionPageId}
+            titre={lettre.title}
+            href={`${lettresPath(viewer.base)}/${lettre.notionPageId}`}
+            tag={<Tag>{libelleLettre(lettre)}</Tag>}
+            meta={dateLettre(lettre)}
+          />
+        ))
+      )}
+    </CarteReponse>
   );
 }
 
@@ -155,12 +214,12 @@ function CarteMissions({ viewer, context }: { viewer: Viewer; context: EspaceCon
 
   return (
     <CarteReponse
-      question="Où en sont les missions ?"
+      question="Où en sont les chantiers ?"
       verdict={missionsVerdict(context.missions)}
-      pied={lien ? { href: lien, label: "Toutes les missions" } : null}
+      pied={lien ? { href: lien, label: "Tout le pilotage" } : null}
     >
       {lignes.length === 0 ? (
-        <LigneVide>Les missions apparaîtront ici dès leur première publication.</LigneVide>
+        <LigneVide>Les chantiers et décisions apparaîtront ici dès leur première publication.</LigneVide>
       ) : (
         lignes.map((mission) => (
           <LigneCarte
@@ -238,27 +297,22 @@ function CarteSite({ viewer, context }: { viewer: Viewer; context: EspaceContext
 
 /** « Que pouvez-vous faire ? » : l'urgent d'abord, puis ce qui attend votre arbitrage. */
 function CarteActions({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  // Sans les propositions : elles ont leur bloc à part, Contrats (`CarteContrats`).
   const { aTraiter, aArbitrer } = context.actions;
-  const traiter = href(viewer, context, "a-traiter");
-  const arbitrer = href(viewer, context, "a-arbitrer");
+  const agir = href(viewer, context, "agir");
+  const traiter = agir ? `${agir}#a-traiter` : null;
+  const arbitrer = agir ? `${agir}#a-arbitrer` : null;
   const lignes: { action: Action; href: string | null }[] = [
     ...aTraiter.map((action) => ({ action, href: traiter })),
-    // Une proposition mène à sa page : un prospect n'a pas forcément « À arbitrer ».
-    ...aArbitrer.map((action) => ({
-      action,
-      href: action.kind === "proposition" && action.item ? livrableHref(action.item, context, viewer.base) : arbitrer,
-    })),
+    ...aArbitrer.map((action) => ({ action, href: arbitrer })),
   ].slice(0, 3);
 
-  const propositions = href(viewer, context, "propositions");
   const pied =
     aTraiter.length > 0 && traiter
       ? { href: traiter, label: "Voir et en parler" }
       : aArbitrer.length > 0 && arbitrer
         ? { href: arbitrer, label: "Voir et en parler" }
-        : aArbitrer.some((action) => action.kind === "proposition") && propositions
-          ? { href: propositions, label: "Voir les propositions" }
-          : null;
+        : null;
 
   return (
     <CarteReponse question="Que pouvez-vous faire ?" verdict={actionsVerdict(context.actions)} pied={pied}>
@@ -287,10 +341,8 @@ export async function VueTableau({
   erreur?: string | null;
 }) {
   const lettres = await lettersForClient(viewer.clientId);
-  const now = new Date();
   const missions = sectionOuverte(context, "missions");
   const site = sectionOuverte(context, "site");
-  const cartes = 1 + (missions ? 1 : 0) + (site ? 1 : 0);
   const prenom = viewer.personName?.trim().split(/\s+/)[0];
 
   return (
@@ -308,26 +360,19 @@ export async function VueTableau({
         </div>
       ) : null}
 
-      <DepuisLaDerniereFois items={context.items} since={context.since} base={viewer.base} />
+      {/* Trois blocs, pas plus : ce qui est nouveau, l'essentiel en questions,
+          les contrats. La frise vit dans Pilotage, le contact dans la barre
+          latérale : les répéter ici n'apprenait rien de plus. */}
+      <NouveauPourVous viewer={viewer} context={context} />
 
-      <section
-        aria-label="L'essentiel en trois questions"
-        className={`mt-10 grid gap-4 ${cartes === 3 ? "md:grid-cols-2 xl:grid-cols-3" : cartes === 2 ? "md:grid-cols-2" : "max-w-xl"}`}
-      >
+      <section aria-label="L'essentiel en quelques questions" className="mt-10 grid gap-4 md:grid-cols-2">
         {missions ? <CarteMissions viewer={viewer} context={context} /> : null}
         {site ? <CarteSite viewer={viewer} context={context} /> : null}
         <CarteActions viewer={viewer} context={context} />
+        <CarteVeille viewer={viewer} lettres={lettres} />
       </section>
 
-      {missions || context.items.some((item) => item.kind === "cartographie") ? (
-        <Frise frise={buildFrise(context.missions, context.items, now)} context={context} base={viewer.base} />
-      ) : null}
-
-      <ALaUne viewer={viewer} context={context} />
-
-      <DerniereLettre lettres={lettres} base={viewer.base} />
-
-      <ContactCta company={viewer.company} />
+      <CarteContrats viewer={viewer} context={context} />
     </Espace>
   );
 }
@@ -365,7 +410,7 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
       viewer={viewer}
       context={context}
       active="missions"
-      title="Missions"
+      title="Pilotage"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
           Ce qui a été fait, ce qui avance et ce qui arrive, sur une seule ligne de temps.
@@ -415,12 +460,10 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
             <ListeMissions missions={aVenir} context={context} base={viewer.base} vide="Rien de programmé pour l'instant." />
           </section>
 
-          <section id="fait" aria-labelledby="fait-titre" className="mt-12 scroll-mt-20">
-            <h2 id="fait-titre" className="font-sans text-lg font-light text-foreground">
-              Fait <span className="text-mid-gray">· {fait.length}</span>
-            </h2>
+          {/* Le fait se consulte, il ne se suit plus : replié derrière son compteur. */}
+          <Groupe id="fait" titre="Fait" count={fait.length}>
             <ListeMissions missions={fait} context={context} base={viewer.base} vide="Rien de terminé pour l'instant." />
-          </section>
+          </Groupe>
         </>
       )}
 
@@ -567,7 +610,7 @@ export async function VueLectureAudit({
             <dt><Label>Versions</Label></dt>
             <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
               <Link
-                href={`${categoriePath("audit", viewer.base)}/${audit.notionPageId}`}
+                href={historiquePath("audit", audit.notionPageId, viewer.base)}
                 className="underline underline-offset-4 hover:text-accent-secondary"
               >
                 {audit.version > 1 ? `${audit.version} versions, voir ce qui a changé` : "Version d'origine"}
@@ -581,71 +624,38 @@ export async function VueLectureAudit({
         </p>
       </Panel>
 
-      {payload.sections.length > 0 ? (
-        <nav aria-label="Parties de l'audit" className="mt-10">
-          <Label>Sommaire</Label>
-          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-            {payload.synthese.length > 0 ? (
-              <li>
-                <a href="#synthese" className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline">
-                  Synthèse
-                </a>
-              </li>
-            ) : null}
-            {payload.sections.map((partie) => (
-              <li key={partie.id}>
-                <a
-                  href={`#partie-${partie.id}`}
-                  className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                >
-                  {partie.icone ? `${partie.icone} ` : ""}
-                  {partie.titre}
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
+      {/* La synthèse ouverte, chaque partie repliée derrière son titre ; le
+          sommaire reste en vue et ouvre la partie qu'il vise. */}
+      <LectureLongue
+        label="Parties de l'audit"
+        sommaire={[
+          ...(payload.synthese.length > 0 ? [{ href: "#synthese", texte: "Synthèse" }] : []),
+          ...payload.sections.map((partie) => ({
+            href: `#partie-${partie.id}`,
+            texte: `${partie.icone ? `${partie.icone} ` : ""}${partie.titre}`,
+          })),
+        ]}
+      >
+        {payload.synthese.length > 0 ? (
+          <Chapitre id="synthese" titre="Synthèse" ouvert>
+            <SyntheseAudit blocks={payload.synthese} base={viewer.base} />
+          </Chapitre>
+        ) : null}
 
-      {payload.synthese.length > 0 ? (
-        <section id="synthese" aria-labelledby="synthese-titre" className="mt-12 scroll-mt-8">
-          <h2 id="synthese-titre" className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground">
-            Synthèse
-          </h2>
-          <SyntheseAudit blocks={payload.synthese} base={viewer.base} />
-        </section>
-      ) : null}
-
-      {payload.sections.map((partie) => (
-        <section
-          key={partie.id}
-          id={`partie-${partie.id}`}
-          aria-labelledby={`titre-${partie.id}`}
-          className="mt-16 scroll-mt-8"
-        >
-          <h2
-            id={`titre-${partie.id}`}
-            className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground"
-          >
-            {partie.icone ? <span aria-hidden>{partie.icone} </span> : null}
-            {partie.titre}
-          </h2>
-          {partie.corps.length > 0 ? (
-            partieEnAccordeons(partie.titre) ? (
-              <PartieAccordeons corps={partie.corps} base={viewer.base} />
+        {payload.sections.map((partie) => (
+          <Chapitre key={partie.id} id={`partie-${partie.id}`} titre={partie.titre} icone={partie.icone}>
+            {partie.corps.length > 0 ? (
+              partieEnAccordeons(partie.titre) ? (
+                <PartieAccordeons corps={partie.corps} base={viewer.base} />
+              ) : (
+                <CorpsLettre body={partie.corps} large base={viewer.base} />
+              )
             ) : (
-              <CorpsLettre body={partie.corps} large base={viewer.base} />
-            )
-          ) : (
-            <p className="mt-4 font-inter-tight text-sm text-mid-gray">Partie vide.</p>
-          )}
-          <p className="mt-6">
-            <a href="#top" className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 hover:text-accent-secondary">
-              Haut de page ↑
-            </a>
-          </p>
-        </section>
-      ))}
+              <p className="mt-4 font-inter-tight text-sm text-mid-gray">Partie vide.</p>
+            )}
+          </Chapitre>
+        ))}
+      </LectureLongue>
     </Espace>
   );
 }
@@ -656,7 +666,8 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
   const state = context.site;
   const verdict = siteVerdict(state);
   const points = state?.snapshot ? sitePoints(state.snapshot) : [];
-  const traiter = href(viewer, context, "a-traiter");
+  const traiter = href(viewer, context, "agir");
+  const reports = await siteReportsFor(viewer.clientId);
 
   return (
     <Espace
@@ -696,7 +707,7 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
                   href={traiter}
                   className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-accent-secondary hover:text-foreground"
                 >
-                  En parler depuis « À traiter » →
+                  En parler depuis « Actions » →
                 </Link>
               ) : null}
             </Panel>
@@ -709,28 +720,45 @@ export async function VueSite({ viewer, context }: { viewer: Viewer; context: Es
           (disponibilité, mises à jour, sauvegardes) apparaîtra ici dès qu&rsquo;elle sera branchée.
         </EnPreparation>
       )}
+
+      {/* Les rapports mensuels, autrefois une entrée à part : on vient les
+          chercher pour les transmettre, ils se déplient en bas de l'état. */}
+      <Groupe id="rapports" titre="Rapports mensuels (PDF)" count={reports.length}>
+        <RapportsMaintenance reports={reports} base={viewer.base} />
+      </Groupe>
     </Espace>
   );
 }
 
-export async function VueRapports({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const reports = await siteReportsFor(viewer.clientId);
+/**
+ * La roadmap complète, en colonnes par statut, écartés compris. Elle n'était
+ * accessible que par un lien au fil d'une phrase ; c'est désormais une entrée
+ * de Pilotage.
+ */
+export async function VueRoadmap({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRoadmap(context.items.filter((item) => item.kind === "roadmap"));
 
   return (
     <Espace
       viewer={viewer}
       context={context}
-      active="rapports"
-      title="Rapports de maintenance"
+      active="roadmap"
+      title="Roadmap"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les rapports mensuels de maintenance de votre site, en PDF, à transmettre tels quels.
+          Tous les chantiers, rangés par statut, y compris ce qui a été écarté et pourquoi.
         </p>
       }
     >
-      <div className="mt-6">
-        <RapportsMaintenance reports={reports} base={viewer.base} />
-      </div>
+      {items.length === 0 ? (
+        <EnPreparation>
+          La roadmap de votre système apparaîtra ici dès le premier chantier publié.
+        </EnPreparation>
+      ) : (
+        <div className="mt-10">
+          <Roadmap items={items} now={Date.now()} since={context.since} bare base={viewer.base} />
+        </div>
+      )}
     </Espace>
   );
 }
@@ -785,67 +813,82 @@ function ListeActions({
   );
 }
 
-export async function VueATraiter({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const actions = context.actions.aTraiter;
-  const urgentes = actions.filter((action) => action.tone === "alerte").length;
+/**
+ * Actions : une seule page pour « que puis-je faire ? ». D'abord ce qui est à
+ * traiter (l'urgent), puis ce qui est à arbitrer (les opportunités de la
+ * roadmap), si l'accompagnement le prévoit. Les deux anciennes pages
+ * répondaient à la même question depuis deux entrées de menu.
+ */
+export async function VueAgir({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const { aTraiter, aArbitrer } = context.actions;
+  const urgentes = aTraiter.filter((action) => action.tone === "alerte").length;
+  const arbitrage = arbitrageOuvert(context.sections) || aArbitrer.length > 0;
 
   return (
     <Espace
       viewer={viewer}
       context={context}
-      active="a-traiter"
-      title="À traiter"
+      active="agir"
+      title="Actions"
       intro={
         <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Ce qui demande une intervention : points du site à corriger, échéances de contrats dans
-          les 60 jours, missions en retard.
-          {actions.length > 0
-            ? ` ${actions.length} ${pluriel(actions.length, "point", "points")}, dont ${urgentes} ${pluriel(urgentes, "urgent", "urgents")}.`
-            : ""}
+          Ce qui demande une intervention, puis ce qui attend votre arbitrage. Chaque ligne a son
+          bouton pour en parler. Les propositions commerciales, elles, sont dans Contrats.
         </p>
       }
     >
-      {actions.length === 0 ? (
-        <Panel className="mt-10 px-5 py-6">
-          <Label>Rien d&rsquo;urgent</Label>
-          <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
-            Aucun point du site à corriger, aucune échéance dans les 60 jours, aucune mission en
-            retard.
+      {arbitrage ? (
+        <SectionNav
+          items={[
+            { href: "#a-traiter", label: "À traiter", count: aTraiter.length },
+            { href: "#a-arbitrer", label: "À arbitrer", count: aArbitrer.length },
+          ]}
+        />
+      ) : null}
+
+      <section id="a-traiter" aria-labelledby="a-traiter-titre" className="mt-10 scroll-mt-20">
+        <h2 id="a-traiter-titre" className="font-sans text-lg font-light text-foreground">
+          À traiter <span className="text-mid-gray">· {aTraiter.length}</span>
+        </h2>
+        {aTraiter.length === 0 ? (
+          <Panel className="mt-5 px-5 py-6">
+            <Label>Rien d&rsquo;urgent</Label>
+            <p className="mt-2 font-inter-tight text-base leading-relaxed text-mid-gray">
+              Aucun point du site à corriger, aucune échéance dans les 60 jours, aucune mission en
+              retard.
+            </p>
+          </Panel>
+        ) : (
+          <>
+            {urgentes > 0 ? (
+              <p className="mt-2 font-inter-tight text-sm text-mid-gray">
+                {`Dont ${urgentes} ${pluriel(urgentes, "urgent", "urgents")}.`}
+              </p>
+            ) : null}
+            <ListeActions actions={aTraiter} viewer={viewer} context={context} />
+          </>
+        )}
+      </section>
+
+      {arbitrage ? (
+        <section id="a-arbitrer" aria-labelledby="a-arbitrer-titre" className="mt-14 scroll-mt-20">
+          <h2 id="a-arbitrer-titre" className="font-sans text-lg font-light text-foreground">
+            À arbitrer <span className="text-mid-gray">· {aArbitrer.length}</span>
+          </h2>
+          <p className="mt-2 max-w-prose font-inter-tight text-sm text-mid-gray">
+            Les opportunités repérées pour votre système, avec l&rsquo;effort, l&rsquo;effet attendu
+            et le budget. Rien ne se lance sans votre accord.
           </p>
-        </Panel>
-      ) : (
-        <ListeActions actions={actions} viewer={viewer} context={context} />
-      )}
-      <ContactCta company={viewer.company} />
-    </Espace>
-  );
-}
-
-export async function VueAArbitrer({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
-  const actions = context.actions.aArbitrer;
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      active="a-arbitrer"
-      title="À arbitrer"
-      intro={
-        <p className="max-w-prose font-inter-tight text-base text-mid-gray">
-          Les propositions qui attendent votre réponse, puis les opportunités repérées pour vous,
-          avec l&rsquo;effort, l&rsquo;effet attendu et le budget. Rien ne se lance sans votre accord.
-        </p>
-      }
-    >
-      {actions.length === 0 ? (
-        <EnPreparation>
-          Aucune opportunité en attente de décision. Celles repérées en comité ou en veille
-          apparaîtront ici, chiffrées.
-        </EnPreparation>
-      ) : (
-        <ListeActions actions={actions} viewer={viewer} context={context} />
-      )}
-      <ContactCta company={viewer.company} />
+          {aArbitrer.length === 0 ? (
+            <EnPreparation>
+              Aucune opportunité en attente de décision. Celles repérées en comité ou en veille
+              apparaîtront ici, chiffrées.
+            </EnPreparation>
+          ) : (
+            <ListeActions actions={aArbitrer} viewer={viewer} context={context} />
+          )}
+        </section>
+      ) : null}
     </Espace>
   );
 }
@@ -869,6 +912,7 @@ export async function VuePropositions({ viewer, context }: { viewer: Viewer; con
       intro={
         <p className="font-inter-tight text-base text-mid-gray">
           Les propositions chiffrées qui vous ont été remises : scénarios, volumes, recommandation.
+          Une fois signée, une proposition devient une mission, dans Contrats → Missions en cours.
         </p>
       }
     >
@@ -904,8 +948,11 @@ export async function VueLectureProposition({
   const payload = proposition.payload as PropositionPayload;
   const plusieurs = context.items.filter((item) => item.kind === "proposition").length > 1;
   const enAttente = isPendingProposition(proposition);
+  // Le corps découpé à chaque grand titre. Ce qui résume (synthèse,
+  // recommandation) passe en tête, ouvert ; le détail chiffré suit, replié.
+  const { preambule, ouverts: enTete, replies: detail } = ordreDeLecture(payload.corps);
   const sommaire = [
-    ...grandsTitres(payload.corps).map((titre) => ({ href: `#${titre.id}`, texte: titre.texte })),
+    ...[...enTete, ...detail].map((chapitre) => ({ href: `#${chapitre.id}`, texte: chapitre.titre })),
     ...payload.sections.map((partie) => ({
       href: `#partie-${partie.id}`,
       texte: `${partie.icone ? `${partie.icone} ` : ""}${partie.titre}`,
@@ -947,7 +994,7 @@ export async function VueLectureProposition({
             <dt><Label>Versions</Label></dt>
             <dd className="mt-1.5 font-inter-tight text-sm text-foreground">
               <Link
-                href={`${categoriePath("proposition", viewer.base)}/${proposition.notionPageId}`}
+                href={historiquePath("proposition", proposition.notionPageId, viewer.base)}
                 className="underline underline-offset-4 hover:text-accent-secondary"
               >
                 {proposition.version > 1 ? `${proposition.version} versions, voir ce qui a changé` : "Version d'origine"}
@@ -955,47 +1002,44 @@ export async function VueLectureProposition({
             </dd>
           </div>
         </dl>
+        {/* Répondre se fait dès l'ouverture, sans devoir lire jusqu'au bout. */}
+        {enAttente ? (
+          <div className="mt-5 flex flex-wrap gap-3 border-t border-dark-gray pt-5">
+            <a href={contactHref(viewer.company, `Proposition : ${proposition.title}`)} className={buttonClass.primary}>
+              Répondre à la proposition
+            </a>
+            <a href={CALENDLY_URL} target="_blank" rel="noreferrer noopener" className={buttonClass.ghost}>
+              En discuter de vive voix ↗
+            </a>
+          </div>
+        ) : null}
       </Panel>
 
-      {sommaire.length > 1 ? (
-        <nav aria-label="Parties de la proposition" className="mt-10">
-          <Label>Sommaire</Label>
-          <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-            {sommaire.map((entree) => (
-              <li key={entree.href}>
-                <a
-                  href={entree.href}
-                  className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                >
-                  {entree.texte}
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
+      <LectureLongue label="Parties de la proposition" sommaire={sommaire}>
+        {preambule.length > 0 ? (
+          <div className="mb-6">
+            <CorpsLettre body={preambule} large base={viewer.base} />
+          </div>
+        ) : null}
 
-      <article className="mt-6">
-        <CorpsLettre body={payload.corps} large ancres base={viewer.base} />
-      </article>
+        {enTete.map((chapitre) => (
+          <Chapitre key={chapitre.id} id={chapitre.id} titre={chapitre.titre} ouvert>
+            <CorpsLettre body={chapitre.blocs} large base={viewer.base} />
+          </Chapitre>
+        ))}
 
-      {payload.sections.map((partie) => (
-        <section
-          key={partie.id}
-          id={`partie-${partie.id}`}
-          aria-labelledby={`titre-partie-${partie.id}`}
-          className="mt-16 scroll-mt-8"
-        >
-          <h2
-            id={`titre-partie-${partie.id}`}
-            className="border-b border-dark-gray pb-3 font-sans text-xl font-light text-foreground"
-          >
-            {partie.icone ? <span aria-hidden>{partie.icone} </span> : null}
-            {partie.titre}
-          </h2>
-          <CorpsLettre body={partie.corps} large base={viewer.base} />
-        </section>
-      ))}
+        {detail.map((chapitre) => (
+          <Chapitre key={chapitre.id} id={chapitre.id} titre={chapitre.titre}>
+            <CorpsLettre body={chapitre.blocs} large base={viewer.base} />
+          </Chapitre>
+        ))}
+
+        {payload.sections.map((partie) => (
+          <Chapitre key={partie.id} id={`partie-${partie.id}`} titre={partie.titre} icone={partie.icone}>
+            <CorpsLettre body={partie.corps} large base={viewer.base} />
+          </Chapitre>
+        ))}
+      </LectureLongue>
 
       {/* La réponse attendue, au bout de la lecture : c'est là qu'on la donne. */}
       <section aria-labelledby="reponse-titre" className="mt-16">
@@ -1089,69 +1133,41 @@ export async function VueVeille({
         />
       ) : null}
 
+      {/* La veille dédiée en entier ici (six d'emblée, la suite se déplie) :
+          c'est désormais sa seule page. */}
       {nouvelles.length > 0 ? (
-        <Veille items={nouvelles.slice(0, 6)} total={nouvelles.length} since={since} base={viewer.base} />
+        <section className="mt-12">
+          <h2 className="font-sans text-lg font-light text-foreground">
+            Veille dédiée <span className="text-mid-gray">· {nouvelles.length}</span>
+          </h2>
+          <Veille items={nouvelles} visibles={6} since={since} base={viewer.base} bare />
+        </section>
       ) : null}
 
+      {/* Les trois dernières lettres ; les archives ont leur page. */}
       <section className="mt-12">
-        <h2 className="mb-5 font-sans text-lg font-light text-foreground">Lettres de veille</h2>
-        <ListeLettres lettres={lettres} base={viewer.base} />
-        <p className="mt-6 font-inter-tight text-sm text-mid-gray">
-          Les archives couvrent les {ARCHIVE_MONTHS} derniers mois. Les éditions antérieures vous
-          sont restituées avec le reste en fin d&rsquo;accompagnement.
-        </p>
+        <div className="mb-5 flex items-baseline justify-between gap-4">
+          <h2 className="font-sans text-lg font-light text-foreground">Lettres de veille</h2>
+          {lettres.length > 3 ? (
+            <Link
+              href={lettresPath(viewer.base)}
+              className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray transition-colors hover:text-accent-secondary"
+            >
+              {`Toutes les lettres · ${lettres.length} →`}
+            </Link>
+          ) : null}
+        </div>
+        <ListeLettres
+          lettres={lettres.slice(0, 3)}
+          base={viewer.base}
+          libelle={lettres.length > 3 ? "Les plus récentes" : `${ARCHIVE_MONTHS} derniers mois`}
+        />
       </section>
     </Espace>
   );
 }
 
 // ─── Pages de détail ─────────────────────────────────────────────────────
-
-/** L'onglet de navigation auquel une catégorie appartient. */
-const SECTION_OF = {
-  decision: "decisions",
-  cartographie: "cartographie",
-  document: "documents",
-  roadmap: "missions",
-  veille: "veille",
-  audit: "audit",
-  proposition: "propositions",
-} as const;
-
-export async function VueCategorie({
-  viewer,
-  context,
-  kind,
-}: {
-  viewer: Viewer;
-  context: EspaceContext;
-  kind: CategorieKind;
-}) {
-  const since = context.since;
-  const items = context.items.filter((item) => item.kind === kind);
-  const section = SECTION_OF[kind];
-
-  return (
-    <Espace
-      viewer={viewer}
-      context={context}
-      // L'onglet n'est marqué que si la section fait partie de l'accompagnement :
-      // une catégorie consultée hors services reste lisible, sans prétendre être
-      // un onglet qui n'existe pas.
-      active={sectionOuverte(context, section) ? section : null}
-      title={CATEGORIES[kind].titre}
-      intro={
-        <Label>
-          {items.length} {items.length > 1 ? "entrées publiées" : "entrée publiée"}
-        </Label>
-      }
-    >
-      <div className="mt-10">
-        <Categorie kind={kind} items={items} since={since} base={viewer.base} />
-      </div>
-    </Espace>
-  );
-}
 
 /**
  * L'historique d'un livrable. `null` si l'identifiant n'appartient pas à cet

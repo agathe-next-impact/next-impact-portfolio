@@ -11,6 +11,7 @@ export {
   type MonthDay,
 } from "./calendar";
 export { clientProfile, type ClientProfile } from "./profile";
+export { chapitresDuCorps, ordreDeLecture, resume, type ChapitreCorps } from "./lecture";
 export {
   actionsFor,
   actionsVerdict,
@@ -42,6 +43,7 @@ export {
   GROUP_LABELS,
   hasPersonalisedWatch,
   LEGACY_SLUGS,
+  arbitrageOuvert,
   sectionByKey,
   SECTIONS,
   visibleSections,

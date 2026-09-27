@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EVENT_LABELS, listForClient } from "@cto/access";
 import { clientDetail } from "@cto/admin";
-import { BackLink, Dot, buttonClass, formatDate, Label, Panel, Tag, type Tone } from "../../../../espace-direction/ui";
+import { BackLink, Dot, buttonClass, formatDate, Label, Notice, Panel, Tag, type Tone } from "../../../../espace-direction/ui";
 import { adminEspacePath } from "../../../../espace-direction/viewer";
-import { basculerSynchro } from "../../actions";
+import { basculerSynchro, envoyerLien } from "../../actions";
 import { PILOTAGE_LARGEUR } from "../../largeur";
 
 export const dynamic = "force-dynamic";
@@ -42,10 +42,13 @@ export async function generateMetadata({
 
 export default async function ClientDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ message?: string; erreur?: string }>;
 }) {
   const { id } = await params;
+  const { message, erreur } = await searchParams;
   const [detail, journal] = await Promise.all([clientDetail(id), listForClient(id, 100)]);
 
   if (!detail) notFound();
@@ -69,6 +72,12 @@ export default async function ClientDetailPage({
           {formatDate(detail.createdAt)}
         </p>
       </header>
+
+      {message || erreur ? (
+        <div className="mt-6">
+          <Notice tone={erreur ? "erreur" : "succes"}>{erreur ?? message}</Notice>
+        </div>
+      ) : null}
 
       <section className="mt-10">
         <Panel className="flex flex-wrap items-center justify-between gap-4 border-l-2 border-l-accent-secondary p-5">
@@ -138,17 +147,36 @@ export default async function ClientDetailPage({
                   {person.role ? <span className="text-mid-gray"> — {person.role}</span> : null}
                 </p>
                 <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
-                  {person.email} · arrivée le {formatDate(person.createdAt)}
+                  {person.email} · arrivée le {formatDate(person.createdAt)} ·{" "}
+                  {person.lastLoginAt
+                    ? `dernière connexion le ${formatDate(person.lastLoginAt)}`
+                    : "jamais connectée"}
                 </p>
               </div>
 
-              {person.revokedAt ? (
-                <Tag>Révoquée le {formatDate(person.revokedAt)}</Tag>
-              ) : (
-                <Tag tone={person.openSessions > 0 ? "fait" : "neutre"}>
-                  {person.openSessions} session{person.openSessions !== 1 ? "s" : ""}
-                </Tag>
-              )}
+              <div className="flex flex-wrap items-center gap-2">
+                {person.revokedAt ? (
+                  <Tag>Révoquée le {formatDate(person.revokedAt)}</Tag>
+                ) : (
+                  <>
+                    <Tag tone={person.openSessions > 0 ? "fait" : "neutre"}>
+                      {person.openSessions} session{person.openSessions !== 1 ? "s" : ""}
+                    </Tag>
+                    {detail.status !== "clos" ? (
+                      <form action={envoyerLien}>
+                        <input type="hidden" name="clientId" value={detail.id} />
+                        <input type="hidden" name="personId" value={person.id} />
+                        <button
+                          type="submit"
+                          className={person.lastLoginAt ? buttonClass.quiet : buttonClass.primary}
+                        >
+                          {person.lastLoginAt ? "Renvoyer un lien" : "Envoyer l'invitation"}
+                        </button>
+                      </form>
+                    ) : null}
+                  </>
+                )}
+              </div>
             </div>
           ))}
 
@@ -195,7 +223,8 @@ export default async function ClientDetailPage({
         <Panel className="p-4">
           <Label>Modifier le statut, ajouter ou révoquer une personne</Label>
           <p className="mt-2 font-inter-tight text-sm text-mid-gray">
-            Volontairement absent de cet écran — voir « Exploitation courante » dans{" "}
+            Dans l&rsquo;atelier Notion (colonne « État » de la fiche Clients, base Personnes), puis
+            « Synchroniser » sur la vue d&rsquo;ensemble. Détail : « Exploitation courante » dans{" "}
             <code className="font-mono text-[12px]">
               docs/cto-externalise/espace-client-mise-en-place.md
             </code>

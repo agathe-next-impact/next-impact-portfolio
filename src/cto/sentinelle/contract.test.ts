@@ -15,3 +15,16 @@ describe("lecture de l'export Sentinelle", () => {
     expect(SentinelleExportSchema.safeParse({ ...exemple, version: 2 }).success).toBe(false);
   });
 });
+
+import { redirectError } from "./api";
+
+describe("redirectError", () => {
+  it("nomme une redirection au lieu de la laisser passer pour un refus d'accès", () => {
+    const response = new Response(null, { status: 308, headers: { location: "https://next-impact.digital/x" } });
+    expect(redirectError(response, "http://next-impact.digital")?.message).toMatch(/redirige vers https:\/\/next-impact\.digital\/x/);
+  });
+
+  it("ne dit rien d'une réponse directe", () => {
+    expect(redirectError(new Response(null, { status: 401 }), "https://www.next-impact.digital")).toBeNull();
+  });
+});

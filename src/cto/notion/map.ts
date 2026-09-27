@@ -228,6 +228,18 @@ export function clientStatus(page: NotionPage): ClientStatus | null {
   return (CLIENT_STATUSES as readonly string[]).includes(value ?? "") ? (value as ClientStatus) : null;
 }
 
+/**
+ * Vrai si la fiche est « en préparation » (colonne « État »).
+ *
+ * Valeur propre à l'atelier, sans équivalent dans `cto_clients.status` : elle
+ * dit à la synchro de ne PAS encore créer l'accompagnement. On remplit la
+ * fiche, les services, les personnes à son rythme, puis on passe à `actif`.
+ * Accents et casse ignorés : « Préparation » et « preparation » se valent.
+ */
+export function clientInPreparation(page: NotionPage): boolean {
+  return normalize(p.select(page, PROPS.clients.status)) === "preparation";
+}
+
 /** Le palier souscrit (colonne « Palier »). Mêmes valeurs que `cto_clients.tier`, aucun mapping. */
 export function clientTier(page: NotionPage): string | null {
   return p.select(page, PROPS.clients.tier);

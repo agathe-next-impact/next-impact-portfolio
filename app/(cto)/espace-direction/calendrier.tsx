@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { dayKey, monthGrid, upcoming, type CalendarEvent, type EventKind } from "@cto/espace";
-import { formatDay, Panel, Tag, type Tone } from "./ui";
+import { formatDay, Panel, Suite, Tag, type Tone } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Le calendrier du tableau de bord.
@@ -134,41 +134,51 @@ export function Calendrier({ events, now = new Date() }: { events: CalendarEvent
             </Panel>
           ) : (
             <Panel className="divide-y divide-dark-gray">
-              {prochains.slice(0, 10).map((event, index) => (
-                <div key={index} className="flex gap-3 px-4 py-3">
-                  <span className={`mt-[7px] h-2 w-2 shrink-0 ${KIND_FILL[event.kind]}`} aria-hidden />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                      {event.href ? (
-                        <Link
-                          href={event.href}
-                          className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
-                        >
-                          {event.title}
-                        </Link>
-                      ) : (
-                        <span className="font-inter-tight text-sm text-foreground">{event.title}</span>
-                      )}
-                      <Tag tone={tone(event)}>
-                        {event.overdue ? "En retard · " : ""}
-                        {formatDay(event.date)}
-                      </Tag>
-                    </div>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                      {KIND_LABEL[event.kind]}
-                    </p>
-                  </div>
-                </div>
+              {prochains.slice(0, PROCHAINS_VISIBLES).map((event, index) => (
+                <Evenement key={index} event={event} />
               ))}
-              {prochains.length > 10 ? (
-                <p className="px-4 py-3 font-inter-tight text-xs text-mid-gray">
-                  Et {prochains.length - 10} autre{prochains.length - 10 > 1 ? "s" : ""} sur la période.
-                </p>
-              ) : null}
+              {/* La suite se déplie sur place, au lieu d'un « Et N autres » sans issue. */}
+              <Suite count={prochains.length - PROCHAINS_VISIBLES}>
+                <div className="divide-y divide-dark-gray border-t border-dark-gray">
+                  {prochains.slice(PROCHAINS_VISIBLES).map((event, index) => (
+                    <Evenement key={index} event={event} />
+                  ))}
+                </div>
+              </Suite>
             </Panel>
           )}
         </div>
       </div>
     </section>
+  );
+}
+
+/** Les échéances des trois prochains mois montrées d'emblée ; la suite se déplie. */
+const PROCHAINS_VISIBLES = 10;
+
+function Evenement({ event }: { event: CalendarEvent }) {
+  return (
+    <div className="flex gap-3 px-4 py-3">
+      <span className={`mt-[7px] h-2 w-2 shrink-0 ${KIND_FILL[event.kind]}`} aria-hidden />
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          {event.href ? (
+            <Link
+              href={event.href}
+              className="font-inter-tight text-sm text-foreground underline-offset-4 hover:text-accent-secondary hover:underline"
+            >
+              {event.title}
+            </Link>
+          ) : (
+            <span className="font-inter-tight text-sm text-foreground">{event.title}</span>
+          )}
+          <Tag tone={tone(event)}>
+            {event.overdue ? "En retard · " : ""}
+            {formatDay(event.date)}
+          </Tag>
+        </div>
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">{KIND_LABEL[event.kind]}</p>
+      </div>
+    </div>
   );
 }

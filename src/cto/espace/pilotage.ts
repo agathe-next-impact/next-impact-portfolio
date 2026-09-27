@@ -307,8 +307,15 @@ export interface Action {
 export interface Actions {
   /** Ce qui demande une intervention : site, échéances proches, retards. */
   aTraiter: Action[];
-  /** Les propositions en attente de réponse, puis les opportunités ouvertes : ce qui attend une décision du client. */
+  /** Les opportunités ouvertes de la roadmap : ce qui attend une décision du client sur son système. */
   aArbitrer: Action[];
+  /**
+   * Les propositions commerciales en attente de réponse. À part, et jamais
+   * mêlées à `aArbitrer` : une proposition engage un contrat, une opportunité
+   * engage un chantier — le client doit voir la différence d'un coup d'œil
+   * (groupe Contrats, pas Agir).
+   */
+  aValider: Action[];
 }
 
 const TONE_RANK: Record<Tone, number> = { alerte: 0, attention: 1, neutre: 2, fait: 3 };
@@ -392,11 +399,14 @@ export function actionsFor(
     }))
     .sort((a, b) => compareDates(a.date, b.date) || a.title.localeCompare(b.title, "fr"));
 
-  return { aTraiter, aArbitrer: [...propositions, ...opportunites] };
+  return { aTraiter, aArbitrer: opportunites, aValider: propositions };
 }
 
-/** « Que pouvez-vous faire ? », en une phrase. */
-export function actionsVerdict(actions: Actions): Verdict {
+/**
+ * « Que pouvez-vous faire ? », en une phrase. Les propositions n'y comptent
+ * pas : elles ont leur propre bloc, Contrats, sur l'accueil.
+ */
+export function actionsVerdict(actions: Pick<Actions, "aTraiter" | "aArbitrer">): Verdict {
   const total = actions.aTraiter.length + actions.aArbitrer.length;
   if (total === 0) return { headline: "Rien d'urgent", tone: "fait" };
   const urgent = actions.aTraiter.some((action) => action.tone === "alerte");

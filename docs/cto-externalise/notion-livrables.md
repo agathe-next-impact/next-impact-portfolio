@@ -1,15 +1,16 @@
 # Livrables CTO — l'atelier Notion et son raccordement
 
-Où s'écrivent les livrables de l'offre « CTO externalisé », et par quel chemin
+Où s'écrivent les livrables de l'offre « Expert technique externalisé »
+(ex-« CTO externalisé », ADR-010 ; identifiants `cto` du code inchangés), et par quel chemin
 ils arrivent dans l'espace client (`app/(cto)/espace-direction`).
 
 Périmètre : le modèle, le raccordement et la synchronisation, en place pour la
 base Clients (création, état, services des accompagnements), la base Personnes
 (qui a accès, § 6), les bases de livrables — dont Documents avec leurs pièces
-jointes et Prestations (§ 7) —, les lettres de veille et les éditions du
-pipeline « Veilles clients » (§ 8). Le Cron
+jointes, Prestations et Paiements (§ 7) —, les lettres de veille, les éditions du
+pipeline « Veilles clients » (§ 8), les audits (§ 9) et les propositions (§ 10). Le Cron
 quotidien est branché (§ 4 de `espace-client-mise-en-place.md`). Procédure
-d'accès, suivi technique et dossier de restitution :
+d'accès, suivi technique, dossier de restitution et digest hebdomadaire :
 `espace-client-mise-en-place.md`.
 
 ---
@@ -64,11 +65,13 @@ un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alert
 | **Veille** | les signaux isolés, entre deux lettres | alerte à chaud |
 | **Lettres** | les lettres de veille, corps compris | note mensuelle, veille dédiée |
 | **Documents** | pièces opposables | revue de devis, plan de continuité, dossier de restitution |
-| **Prestations** | missions commandées, avancement, livraison | — (§ 7) |
+| **Prestations** | missions commandées, tarif, avancement, livraison | — (§ 7) |
+| **Paiements** | l'échéancier de chaque prestation | — (§ 7) |
 | **Personnes** | qui a accès à quel espace | — (§ 6) |
 | **Audits** | un audit remis par ligne, qui pointe sa page de mission | audit complet (§ 9) |
+| **Propositions** | une proposition remise par ligne, qui pointe sa page | — (§ 10) |
 
-Huit livrables pour sept bases de contenu : trois regroupements portent une décision. Clients et Personnes ne portent pas de livrable, elles décident qui voit quoi.
+Huit livrables pour sept bases de contenu : trois regroupements portent une décision. Clients et Personnes ne portent pas de livrable, elles décident qui voit quoi ; Paiements suit ses prestations.
 
 **Décisions absorbe le registre des évolutions.** Un arbitrage rendu et une
 proposition écartée ont la même forme — un objet, une date, un motif, une
@@ -117,8 +120,18 @@ relation `Client` de chaque ligne jusqu'à sa fiche, et sait dans quel espace la
 déposer. Procédure complète d'ouverture : § 3.1 de
 `espace-client-mise-en-place.md`.
 
-Conséquence : une fiche créée pour essayer crée un vrai accompagnement. On
-n'essaie pas dans l'atelier de production.
+Conséquence : une fiche créée pour essayer crée un vrai accompagnement — sauf
+en **`préparation`**. Cette valeur d'`État`, propre à l'atelier et sans
+équivalent en base, dit à la synchro d'attendre : ni accompagnement, ni
+personnes, ni livrables tant qu'elle n'est pas passée à `actif`. Sur une fiche
+déjà rattachée, elle est sans effet (le rapport le dit) : pour geler un
+accompagnement existant, c'est `suspendu`.
+
+**`À compléter`** (formule) liste ce qui manque à une fiche : `Palier`,
+`Organisation`, une personne, et ce que chaque service coché exige (ID WP
+Umbrella pour Suivi technique, site et contact pour Veille technique, ligne du
+pipeline pour Veille personnalisée). La vue **Onboarding** montre les fiches en
+préparation ou incomplètes. La synchro ne lit pas cette colonne.
 
 **`ID espace` n'est plus qu'un raccord.** Cette colonne texte servait autrefois
 à coller l'UUID imprimé par `npm run cto:invite`. Elle ne sert plus qu'à une
@@ -128,11 +141,11 @@ second. Sur une fiche déjà rattachée, elle est ignorée.
 
 **`Services` compose l'espace.** Colonne à choix multiple : Direction
 technique, Suivi technique, Actions en cours, Veille personnalisée,
-Prestations en cours. Recopiée dans `cto_clients.services` (valeurs de code,
+Prestations en cours, Audit, Veille technique. Recopiée dans `cto_clients.services` (valeurs de code,
 `SERVICE_CODES` dans `map.ts`), elle décide des entrées de la barre latérale
 (`src/cto/espace/sections.ts`, une entrée peut dépendre de plusieurs
 services). L'accueil, « À traiter », la veille générale et le contact sont
-toujours visibles. **Vide = affichage historique** : l'espace
+toujours visibles ; « Propositions » dès qu'une proposition est publiée. **Vide = affichage historique** : l'espace
 montre alors toute section qui a du contenu, comme avant les services — c'est
 ce qui permet d'ajouter la colonne sans que les accompagnements existants
 perdent leurs sections. Un service coché mais encore vide s'affiche avec un
@@ -145,7 +158,7 @@ personnalisées (§ 8).
 **`État`, `Palier` et `ID projet WP Umbrella` commandent.** À chaque balayage,
 leurs valeurs sont recopiées dans `cto_clients` dès qu'elles diffèrent, et un
 changement d'état est daté. Les deux premières reprennent les valeurs
-techniques (`referent` / `direction`, `actif` / `suspendu` / `restitution` /
+techniques (`referent` / `direction` / `audit`, `actif` / `suspendu` / `restitution` /
 `clos`) : pas de table de correspondance à écrire, et rien à retraduire en
 lisant. Suspendre, restituer ou clore un accompagnement se fait donc ici
 (§ 3.3 de `espace-client-mise-en-place.md`). Une colonne vide laisse la base
@@ -172,8 +185,8 @@ Notion. À coller à la main sur toute nouvelle fiche.
 confondre serait tentant et faux : une ligne peut mériter d'être consultable
 sans mériter la page d'accueil.
 
-`Publié` est le seul interrupteur de visibilité, sur les quatre bases de
-contenu. Décochée, la ligne n'existe pas pour le client. Décochée **après**
+`Publié` est le seul interrupteur de visibilité, sur chaque base de
+contenu (Paiements exceptée, § 7). Décochée, la ligne n'existe pas pour le client. Décochée **après**
 publication, elle quitte l'espace à la synchro suivante — retirée, pas effacée :
 l'historique versionné la conserve. C'est le geste de rétractation, et il ne
 demande rien d'autre.
@@ -207,11 +220,13 @@ client voit.
    capacité **lecture de contenu seule** : la synchro ne réécrit jamais dans
    Notion. Le jeton commence par `ntn_`.
 2. **Partager la page mère** — sur « Direction technique — clients », menu `•••`
-   → *Connexions* → l'intégration. Les huit bases héritent du partage. Sans ce
+   → *Connexions* → l'intégration. Toutes les bases de la page héritent du partage (pas « Audits et Roadmap »,
+« Veilles clients » ni CRM → Propositions, à partager à part : § 8 à 10). Sans ce
    geste l'API répond 404 sur tout : chez Notion, le partage n'est jamais
    implicite.
 3. **Poser les variables** — neuf obligatoires (le jeton et huit bases), plus
-   deux facultatives (Prestations, Éditions de veille), listées avec leurs
+   cinq facultatives (Prestations, Paiements, Éditions de veille, Audits,
+   Propositions), listées avec leurs
    valeurs sur la page Notion elle-même. Les identifiants de base ne sont pas des secrets, mais ils
    n'ont pas leur place dans le dépôt : ils vivent dans `.env.local` et dans
    Vercel, portée Production.
@@ -291,8 +306,10 @@ de tourner sans faire enfler l'historique.
 
 **Le Cron fait le même travail, tout seul.** `/api/cto/cron` appelle
 `syncFromNotion()` chaque nuit à 4 h UTC, en même temps que le ménage des accès
-(§ 4 de `espace-client-mise-en-place.md`). La commande reste utile pour publier
-tout de suite après un comité, sans attendre la nuit.
+(§ 4 de `espace-client-mise-en-place.md`). Pour publier tout de suite après un
+comité : `/admin-cto/pilotage` → **Synchro Notion** (« À blanc », puis
+« Synchroniser »), ou la commande. Le bouton n'expose pas `--forcer` : un
+retrait de masse reste un geste de terminal.
 
 **Mettre un client en pause.** Sur `/admin-cto`, « Mettre en pause » gèle ses
 livrables : rien n'est créé, corrigé ni retiré chez lui tant que la pause dure.
@@ -409,7 +426,7 @@ par `ID espace`, appliqué à l'adresse plutôt qu'à un identifiant collé.
 
 **`Révoquée` va dans les deux sens.** Cocher coupe l'accès au balayage
 suivant : sessions fermées, passkeys refusées, comme la révocation manuelle
-(§ 3.3 de `espace-client-mise-en-place.md`), dont elle est désormais une
+(§ 3.5 de `espace-client-mise-en-place.md`), dont elle est désormais une
 seconde porte. Décocher restaure l'accès — symétrique, à la manière du retour
 d'un accompagnement à `actif` après une suspension. ⚠️ Corollaire assumé :
 un décochage accidentel dans Notion rouvre un accès aussi silencieusement
@@ -426,7 +443,7 @@ signale ; rien ne bouge tout seul. Un transfert reste un geste SQL délibéré.
 accompagnement dont la fiche disparaîtrait (§ 2) : ni l'absence de ligne ni sa
 suppression ne pilotent l'accès, seule la case le fait.
 
-## 7. Documents et prestations
+## 7. Documents, prestations et paiements
 
 ### Documents : la pièce est rapatriée
 
@@ -459,7 +476,7 @@ calendrier), `Montant`, `Avancement` (0 à 1, vide = non suivi), `Devis` (lien),
 chantier est ce que le système demande, une prestation est ce que le client a
 commandé.
 
-Le client lit ses prestations dans **Contrats → Prestations**, ouvert par le
+Le client lit ses prestations dans **Contrats → Missions en cours**, ouvert par le
 service « Prestations en cours » de sa fiche (et par lui seul : jamais au
 contenu, régime historique compris). C'est le même écran que
 `/admin-cto/pilotage/prestations` (`espace-direction/prestations.tsx`) : tarifs,
@@ -476,7 +493,7 @@ La base **Paiements** (même page) porte un règlement par ligne : `Paiement`
 colonne `Paiements`, côté Prestations, en est le miroir.
 
 - Pas de case `Publié` : un règlement suit sa prestation. Il se lit avec
-  elle, dans l'administration comme dans Contrats → Prestations du client :
+  elle, dans l'administration comme dans Contrats → Missions en cours du client :
   règlements, réglé, reste dû, et « Reste à régler » en tête.
 - Encaisser un règlement = passer son statut à Reçu et dater. La prestation
   écrit alors une version de plus, comme pour toute correction.
@@ -608,15 +625,37 @@ ailleurs (hors de cette page) doit être partagée à part.
 
 ### Ce que voit le client
 
-- L'entrée **Agir → Propositions** apparaît dès qu'une proposition est publiée
-  pour lui, **quels que soient ses services** — un prospect n'a rien souscrit.
-  Elle ouvre la proposition directement si elle est seule.
-- La lecture : statut, date de remise, versions, sommaire des grands titres,
-  le document en entier, puis « Votre réponse » (e-mail au sujet prérempli,
-  ou créneau).
+- L'entrée **Contrats → Propositions** apparaît dès qu'une proposition est
+  publiée pour lui, **quels que soient ses services** — un prospect n'a rien
+  souscrit. Elle ouvre la proposition directement si elle est seule.
+- La lecture : statut, date de remise, versions et, tant qu'elle attend une
+  réponse, les boutons « Répondre » et « En discuter » dès l'en-tête. Puis le
+  document découpé à chaque **grand titre (H1)** de la page : les chapitres
+  qui résument (titre contenant synthèse, recommandation, chiffrage, total,
+  budget) passent **en tête, ouverts** ; les autres suivent, **repliés**. Un
+  document court (moins de 25 lignes, un tableau comptant pour ses lignes) se
+  lit d'un trait, dans son ordre. Un sommaire reste en vue dans la marge
+  (`src/cto/espace/lecture.ts`). « Votre réponse » est redite à la fin.
+- Pour écrire une proposition lisible : un H1 par chapitre, et un titre qui
+  dit « Synthèse » ou « Recommandation » pour ce qui doit se lire d'abord.
 - Tant que le `Statut` n'est pas Acceptée, Signée, Déclinée ou Refusée, la
-  proposition compte comme **à arbitrer** : carte « Que pouvez-vous faire ? »
-  de l'accueil, page À arbitrer, pastille dans la barre latérale.
+  proposition est **à valider** : colonne « À valider » du bloc Contrats de
+  l'accueil, pastille sur Propositions. Elle n'est **jamais** mêlée à « À
+  arbitrer » ni à « Que pouvez-vous faire ? », qui ne portent que les
+  opportunités de la roadmap : une proposition engage un contrat, une
+  opportunité un chantier.
+
+### Contrats : propositions et missions en cours
+
+Le groupe **Contrats** de l'espace sépare le commercial du pilotage :
+**Propositions** (ce qui attend l'accord du client) puis **Missions en cours**
+(les prestations signées : tarif, avancement, règlements — ouvert par le
+service « Prestations en cours »). Sur l'accueil, le bloc Contrats les met en
+deux colonnes, « À valider » et « En cours ». La frontière est la signature :
+une proposition acceptée quitte la colonne de gauche et revient à droite sous
+la forme de sa prestation. Le groupe de la roadmap, des décisions et de l'audit
+s'appelle désormais **Pilotage** (et non plus Missions) pour que le mot
+« mission » ne désigne qu'une chose.
 
 ## Fichiers
 

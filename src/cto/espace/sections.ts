@@ -2,8 +2,9 @@
 // Quelles sections un accompagnement voit, et dans quel groupe.
 //
 // Pur, testé. La navigation est rangée par QUESTION du client, pas par base
-// Notion : « où en sont les missions ? » (Missions), « comment va mon site ? »
-// (Votre site), « que puis-je faire ? » (Agir), plus la Veille. Chaque entrée
+// Notion : « où en est mon système ? » (Pilotage), « comment va mon site ? »
+// (Votre site), « que puis-je faire ? » (Agir), la Veille, et « qu'ai-je
+// signé, que me propose-t-on ? » (Contrats). Chaque entrée
 // garde son interrupteur de service — c'est toujours la fiche Notion qui décide
 // de ce qu'un client voit, entrée par entrée.
 //
@@ -35,13 +36,12 @@ export type ServiceCode =
 export type SectionKey =
   | "tableau"
   | "missions"
+  | "roadmap"
   | "decisions"
   | "audit"
   | "site"
-  | "rapports"
   | "cartographie"
-  | "a-traiter"
-  | "a-arbitrer"
+  | "agir"
   | "propositions"
   | "veille"
   | "veille-technique"
@@ -51,7 +51,10 @@ export type SectionKey =
 export type SectionGroup = "missions" | "site" | "agir" | "veille" | "contrats";
 
 export const GROUP_LABELS: Record<SectionGroup, string> = {
-  missions: "Missions",
+  // « Pilotage » et non plus « Missions » : le mot désigne désormais, dans
+  // Contrats, les prestations signées. Un même mot pour deux choses était
+  // précisément la confusion à lever. Le code garde la clé `missions`.
+  missions: "Pilotage",
   site: "Votre site",
   agir: "Agir",
   veille: "Veille",
@@ -79,9 +82,10 @@ export interface Section {
 export const SECTIONS: readonly Section[] = [
   { key: "tableau", slug: "", label: "Accueil", group: null, services: null },
 
-  // Missions : d'abord la vue d'ensemble (passé, présent, avenir), puis le
-  // détail par nature. L'audit ferme le groupe : c'est le point de départ, il
-  // se consulte plus qu'il ne se suit.
+  // Pilotage : d'abord la vue d'ensemble (passé, présent, avenir), puis le
+  // détail par nature — la roadmap complète, les décisions, l'audit, et les
+  // documents (revues de devis, notes de comité), qui relèvent du pilotage et
+  // non de la veille.
   {
     key: "missions",
     slug: "missions",
@@ -89,22 +93,17 @@ export const SECTIONS: readonly Section[] = [
     group: "missions",
     services: ["actions", "direction-technique", "audit"],
   },
+  { key: "roadmap", slug: "roadmap", label: "Roadmap", group: "missions", services: ["actions", "direction-technique"] },
   { key: "decisions", slug: "decisions", label: "Décisions", group: "missions", services: ["direction-technique"] },
   { key: "audit", slug: "audit", label: "Audit", group: "missions", services: ["audit"] },
+  { key: "documents", slug: "documents", label: "Documents", group: "missions", services: ["direction-technique"] },
 
   { key: "site", slug: "site", label: "État du site", group: "site", services: ["suivi-technique"] },
-  { key: "rapports", slug: "rapports", label: "Rapports", group: "site", services: ["suivi-technique"] },
   { key: "cartographie", slug: "cartographie", label: "Cartographie", group: "site", services: ["direction-technique"] },
 
-  { key: "a-traiter", slug: "a-traiter", label: "À traiter", group: "agir", services: null },
-  {
-    key: "a-arbitrer",
-    slug: "a-arbitrer",
-    label: "À arbitrer",
-    group: "agir",
-    services: ["actions", "direction-technique"],
-  },
-  { key: "propositions", slug: "propositions", label: "Propositions", group: "agir", services: null, siContenu: true },
+  // Une seule page pour agir : ce qui est à traiter, puis ce qui est à
+  // arbitrer (ouvert par les mêmes services que la roadmap, cf. `arbitrageOuvert`).
+  { key: "agir", slug: "agir", label: "Actions", group: "agir", services: null },
 
   { key: "veille", slug: "veille", label: "Lettres et alertes", group: "veille", services: null },
   // Le service « Veille technique » de la fiche Notion l'ouvre, et c'est le même
@@ -118,11 +117,19 @@ export const SECTIONS: readonly Section[] = [
     group: "veille",
     services: ["veille-technique"],
   },
-  { key: "documents", slug: "documents", label: "Documents", group: "veille", services: ["direction-technique"] },
 
-  // Ce qui a été commandé, son tarif et ses règlements. En dernier : ça se
-  // consulte, ça ne se suit pas au quotidien.
-  { key: "prestations", slug: "prestations", label: "Prestations", group: "contrats", services: ["prestations"] },
+  // Contrats : le commercial, séparé du pilotage. Ce qui attend votre accord
+  // (propositions), puis ce qui est signé et court (prestations, avec tarif et
+  // règlements). Les propositions s'ouvrent au contenu : un prospect n'a encore
+  // rien souscrit ; les prestations, au seul service coché.
+  { key: "propositions", slug: "propositions", label: "Propositions", group: "contrats", services: null, siContenu: true },
+  {
+    key: "prestations",
+    slug: "prestations",
+    label: "Missions en cours",
+    group: "contrats",
+    services: ["prestations"],
+  },
 ];
 
 /** Ce qui existe dans l'espace d'un accompagnement, pour le régime historique. */
@@ -148,11 +155,10 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
     case "audit":
       return contents.audits > 0;
     case "site":
-    case "rapports":
       return contents.site;
     case "cartographie":
       return contents.cartographie > 0;
-    case "a-arbitrer":
+    case "roadmap":
       return contents.roadmap > 0;
     case "documents":
       return contents.documents > 0;
@@ -206,4 +212,17 @@ export const LEGACY_SLUGS: Record<string, SectionKey> = {
   "direction-technique": "decisions",
   actions: "missions",
   "suivi-technique": "site",
+  // Les rapports vivent en bas de l'état du site ; à traiter et à arbitrer
+  // sont réunis sur une seule page.
+  rapports: "site",
+  "a-traiter": "agir",
+  "a-arbitrer": "agir",
 };
+
+/**
+ * La partie « À arbitrer » de la page Actions est-elle souscrite ? Mêmes
+ * services que la roadmap, dont elle arbitre les opportunités.
+ */
+export function arbitrageOuvert(sections: readonly Section[]): boolean {
+  return sections.some((section) => section.key === "roadmap");
+}
