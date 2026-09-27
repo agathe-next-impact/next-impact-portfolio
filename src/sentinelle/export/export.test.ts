@@ -24,6 +24,7 @@ function lettre(overrides: Partial<Lettre> = {}): Lettre {
       signauxDeDemande: [],
       deFond: [],
       ceQuiNeChangePas: [],
+      concurrence: [],
     },
     synthese: {
       actions: [{ action: "Mettre à jour PHP.", horizon: "cette semaine", pourquoi: "Fin de support." }],

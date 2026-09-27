@@ -16,7 +16,7 @@ export default function SummaryTable({ rows }: SummaryTableProps) {
         <tbody>
           {rows.map((row, idx) => (
             <tr key={idx} style={{ background: idx % 2 === 0 ? "var(--paper)" : "var(--paper-2)" }}>
-              <td style={{ padding: "10px 16px", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: "var(--ink)", borderBottom: "1px solid var(--rule)" }}>{row.critere}</td>
+              <td style={{ padding: "10px 16px", fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500, color: "var(--ink)", borderBottom: "1px solid var(--rule)" }}>{row.critere}</td>
               <td style={{ padding: "10px 16px", fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)", borderBottom: "1px solid var(--rule)" }}>{row.valeur}</td>
             </tr>
           ))}

@@ -14,8 +14,17 @@ import { FloatingContact } from '@/components/floating-contact'
 import { ThemeProvider } from '@/components/theme-provider'
 import { MotionProvider } from '@/components/motion-provider'
 import { routing } from '@/i18n/routing'
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type Lang } from '@/lib/trajectoires'
 
 const SITE_URL = 'https://www.next-impact.digital'
+
+// « Optimisation, Refonte ou Évolution » : les trois prestations sous leur seul
+// nom, lu dans lib/trajectoires.ts (charte v1.6, ADR-014).
+function prestationNames(lang: Lang): string {
+  const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[lang])
+  const last = names.pop()
+  return `${names.join(', ')} ${lang === 'en' ? 'or' : 'ou'} ${last}`
+}
 
 // Valeurs par défaut (fallback) du site, déclinées par locale.
 // Chaque page surcharge ces métadonnées via generatePageMetadata ;
@@ -26,8 +35,7 @@ const LAYOUT_META = {
     description:
       'Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée.',
     ogTitle: 'Next Impact · Refonte de site WordPress',
-    ogDescription:
-      'Rapide et moderne, sans tout reconstruire : consolider, découpler ou refonder. Prix et délai annoncés, performance mesurée avant et après.',
+    ogDescription: `Rapide et moderne, sans tout reconstruire. Trois prestations : ${prestationNames('fr')}. Prix et délai annoncés, performance mesurée avant et après.`,
     ogLocale: 'fr_FR',
     altOgLocale: 'en_US',
   },
@@ -36,12 +44,11 @@ const LAYOUT_META = {
     description:
       'Is your WordPress site aging badly? Optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks. Displayed prices, measured performance.',
     ogTitle: 'Next Impact · WordPress site redesign',
-    ogDescription:
-      'Fast and modern, without rebuilding everything: consolidate, decouple or rebuild. Price and timeline announced, performance measured before and after.',
+    ogDescription: `Fast and modern, without rebuilding everything. Three services: ${prestationNames('en')}. Price and timeline announced, performance measured before and after.`,
     ogLocale: 'en_US',
     altOgLocale: 'fr_FR',
   },
-} as const
+}
 
 export async function generateMetadata({
   params,

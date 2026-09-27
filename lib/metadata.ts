@@ -1,8 +1,31 @@
 import { Metadata } from "next";
 import { routing, type Locale } from "@/i18n/routing";
-// Prix plancher de l'offre récurrente : importé, jamais réécrit ici
-// (lib/cto-externalise.ts est la source de vérité unique du tarif).
-import { CTO_PRICE_VALUE } from "@/lib/cto-externalise";
+// Nom et plancher des trois prestations : lus dans lib/trajectoires.ts (charte
+// v1.6, ADR-014), jamais réécrits ici. Module sans dépendance.
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros } from "@/lib/trajectoires";
+// Prix des deux offres de conseil : lus dans lib/visio-conseil.ts. Ce module
+// n'est importé que côté serveur (pages et JSON-LD) : rien ne part au client.
+import { OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
+
+const conseilPrice = (id: string, locale: Locale): string =>
+  CONSEIL_OFFERS.find((offer) => offer.id === id)!.tiers[0].price[locale];
+
+/** « Optimisation, Refonte ou Évolution » : les trois prestations, sous leur seul nom. */
+function prestationNames(locale: Locale): string {
+  const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[locale]);
+  const last = names.pop();
+  return `${names.join(", ")} ${locale === "en" ? "or" : "ou"} ${last}`;
+}
+
+/** « Optimisation dès 2 250 € HT, Refonte dès 4 000 € HT, … » : nom et plancher de chaque prestation. */
+function prestationPrices(locale: Locale): string {
+  return TRAJECTOIRE_ORDER.map((slug) => {
+    const { name, priceValue } = TRAJECTOIRES[slug];
+    return locale === "en"
+      ? `${name.en} from ${formatEuros(priceValue, "en")} excl. VAT`
+      : `${name.fr} dès ${formatEuros(priceValue, "fr")} HT`;
+  }).join(", ");
+}
 
 const OG_LOCALES: Record<Locale, string> = {
   fr: "fr_FR",
@@ -59,9 +82,13 @@ function buildLocalizedPaths(
 export const siteConfig = {
   name: "Next Impact",
   title: "Next Impact",
+  // Description d'entité, reprise par les nœuds Organization, WebSite, Person
+  // et LocalBusiness du JSON-LD. Les trois prestations y portent leur seul nom
+  // (lib/trajectoires.ts) ; la veille technique et stratégique, qui distingue
+  // chaque offre, y est dite (ADR-014).
   description:
     "Refonte de site WordPress : rapide, moderne, sans tout reconstruire. " +
-    "Consolider, découpler ou refonder : prix affichés, délai annoncé, performance mesurée avant et après.",
+    `Trois prestations, ${prestationNames("fr")} : prix affichés, délai annoncé, performance mesurée avant et après, veille technique et stratégique à chaque étape.`,
   url: "https://www.next-impact.digital",
   ogImage: "/img/desktop-screen-next-impact.png",
   defaultImage: {
@@ -243,10 +270,14 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     title: "Refonte de site WordPress : rapide, moderne, sans tout reconstruire · Next Impact",
     description:
       "Votre site WordPress vieillit mal ? Refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines. Prix affichés, performance mesurée avant et après.",
+    // Anti-cannibalisation (ADR-014) : la requête de SITUATION « site
+    // WordPress lent » appartient à la page de pack /packs/site-wordpress-lent.
+    // La home garde la requête d'ensemble : la refonte d'un site qui vieillit.
+    // « second avis devis web » est conservé (exception consignée).
     keywords: [
       "refonte site WordPress",
       "refonte WordPress headless",
-      "site WordPress lent",
+      "site WordPress qui vieillit",
       "moderniser site WordPress",
       "refonte site web forfait",
       "second avis devis web",
@@ -260,7 +291,7 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
     keywords: [
       "WordPress site redesign",
       "headless WordPress redesign",
-      "slow WordPress site",
+      "aging WordPress site",
       "modernize WordPress site",
       "fixed price website redesign",
       "web quote second opinion",
@@ -269,28 +300,34 @@ const HOME_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   },
 };
 
+// Page /solutions-web, page d'atterrissage du moment « Évoluer » : la requête
+// d'OFFRE (« refonte WordPress prix », « refonte WordPress headless »). Le nom
+// et le plancher de chaque prestation sont lus dans lib/trajectoires.ts.
+// Source unique de la page : app/[locale]/solutions-web/page.tsx lit
+// `servicesMeta`, plus le namespace `servicesPage` des messages, qui ne peut
+// pas importer de TypeScript.
 const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
-    title: "Refonte WordPress : consolider, découpler ou refonder",
-    description:
-      "Trois trajectoires pour un site WordPress qui vieillit : optimisé dès 2 250 € HT, headless dès 4 000 € HT, web app dès 6 500 € HT. Prix et délai fixés.",
+    title: "Refonte WordPress : trois prestations pour un site qui vieillit",
+    description: `Site WordPress qui vieillit : ${prestationPrices("fr")}. Prix et délai écrits, veille incluse.`,
     keywords: [
       "refonte site WordPress prix",
       "refonte WordPress optimisée",
       "refonte WordPress headless",
+      "tarifs WordPress headless",
       "création site WordPress optimisé",
       "web app sur-mesure",
       "outil métier sur-mesure",
     ],
   },
   en: {
-    title: "WordPress redesign: consolidate, decouple or rebuild",
-    description:
-      "Three trajectories for an aging WordPress site: optimized from €2,250, headless from €4,000, web app from €6,500. Price and timeline fixed upfront.",
+    title: "WordPress redesign: three services for an aging site",
+    description: `Aging WordPress site: ${prestationPrices("en")}. Price and timeline in writing, watch analysis included.`,
     keywords: [
       "WordPress redesign price",
       "optimized WordPress redesign",
       "headless WordPress redesign",
+      "headless WordPress pricing",
       "optimized WordPress build",
       "custom web app",
       "custom business tool",
@@ -298,36 +335,42 @@ const SERVICES_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   },
 };
 
-// Aligné sur le namespace `contactPage` des messages (source vive de la page
-// /contact) : les six sujets réellement proposés par le formulaire (les cinq
-// lignes du catalogue plus l'expert technique externalisé, 6e ligne ouverte le
-// 2026-09-07, renommée le 2026-09-10, ADR-010), aucune offre disparue.
+/** Titre, description et mots-clés de /solutions-web, pour la page et son JSON-LD. */
+export function servicesMeta(locale: Locale = routing.defaultLocale): LocalizedMeta {
+  return SERVICES_BY_LOCALE[locale];
+}
+
+// Source de la page /contact (app/[locale]/contact/page.tsx lit
+// `pageMetadata.contact`) : les sujets réellement proposés par le formulaire,
+// rangés par moment depuis l'ADR-012 (refonte ou création, suivi et maintenance
+// ajoutés), aucune offre disparue. Les deux prix du conseil sont lus dans
+// lib/visio-conseil.ts ; aucun prix mensuel n'est écrit. Description calibrée
+// pour l'affichage SERP (≤ 160 caractères), promesse de réponse en fin.
+//
+// Anti-cannibalisation : les mots-clés restent sur l'intention de CONTACT. Les
+// requêtes d'offre (« conseil refonte », « expert technique
+// externalisé », « audit et roadmap ») appartiennent à /conseil et à
+// /cto-externalise.
 const CONTACT_BY_LOCALE: Record<Locale, LocalizedMeta> = {
   fr: {
     title: "Contact : conseil, audit, expert technique externalisé ou refonte",
-    description:
-      `Contactez Next Impact : visio conseil refonte (150 €), audit + roadmap (650 €), expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), projet de refonte ou diagnostic gratuit.`,
+    description: `Échange de 15 minutes gratuit, audit + roadmap (${conseilPrice("architecture-projet-ia", "fr")}), refonte, suivi et maintenance, expert technique externalisé, diagnostic gratuit : réponse sous 24 h.`,
     keywords: [
       "contact conseil techno web",
-      "visio conseil refonte",
-      "expert technique externalisé",
-      "audit et roadmap site web",
-      "contact expert technique externalisé",
       "contact refonte WordPress",
+      "contact expert technique externalisé",
+      "contact maintenance WordPress",
       "diagnostic gratuit site web",
     ],
   },
   en: {
     title: "Contact: advice, audit, outsourced technical expert or redesign",
-    description:
-      `Contact Next Impact: redesign advisory call (€150), audit + roadmap (€650), outsourced technical expert (from €${CTO_PRICE_VALUE}/month), redesign project or free diagnostic.`,
+    description: `Free 15-minute call, audit + roadmap (${conseilPrice("architecture-projet-ia", "en")}), redesign, care and maintenance, outsourced technical expert, free diagnostic: reply within 24h.`,
     keywords: [
       "contact web technology advice",
-      "redesign advisory call",
-      "outsourced technical expert",
-      "website audit and roadmap",
-      "outsourced technical expert contact",
       "WordPress redesign contact",
+      "outsourced technical expert contact",
+      "WordPress maintenance contact",
       "free website diagnostic",
     ],
   },
@@ -408,22 +451,25 @@ export const pageMetadata = {
     });
   },
 
-  // Aligné sur le namespace `auditPage` des messages (source vive de la page).
+  // Aligné sur le namespace `auditPage` des messages. /audit-site-web redirige
+  // vers l'analyse du site (/scan, ADR-012) : ces métadonnées décrivent donc
+  // l'analyse, plus « ce qui ralentit le site » (l'analyse liste les
+  // composants, elle ne mesure pas la vitesse).
   audit: (locale: Locale = routing.defaultLocale): Metadata =>
     generatePageMetadata({
       title:
         locale === "en"
-          ? "See what slows your site down in 2 minutes"
-          : "Voyez ce qui ralentit votre site en 2 minutes",
+          ? "Analyze your site in 2 minutes"
+          : "Analysez votre site en 2 minutes",
       description:
         locale === "en"
-          ? "One address, one report, no sign-up: see what slows your site down and which trajectory fits, consolidate, decouple or rebuild."
-          : "Une adresse, un rapport, aucune inscription : voyez ce qui ralentit votre site et quelle trajectoire suivre, consolider, découpler ou refonder.",
+          ? "One address, one report, no access requested: what your site is made of, and which components are at risk."
+          : "Une adresse, un rapport, aucun accès demandé : de quoi votre site est fait, et quels composants sont à risque.",
       path: "/audit-site-web",
       keywords:
         locale === "en"
-          ? ["free website diagnostic", "slow WordPress site", "website audit", "redesign trajectory"]
-          : ["diagnostic site web gratuit", "site WordPress lent", "audit site web", "trajectoire de refonte"],
+          ? ["free website analysis", "website components at risk", "free website diagnostic"]
+          : ["analyse de site web gratuite", "composants de site à risque", "diagnostic site web gratuit"],
       locale,
     }),
 

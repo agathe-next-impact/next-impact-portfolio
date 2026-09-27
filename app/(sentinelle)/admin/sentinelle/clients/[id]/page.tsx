@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getClientDossier } from "@sentinelle/admin";
+import { resilierClient } from "../../actions";
 import {
   BackLink,
+  buttonClass,
   formatDateTime,
   Label,
   NotionLink,
@@ -51,6 +53,16 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
           <p className="mt-3 max-w-2xl border-l-2 border-dark-gray pl-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
             {client.notes}
           </p>
+        )}
+        {/* Plus de résiliation en ligne : l'abonné la demande, elle se fait ici.
+            La fiche reste consultable trois mois, puis la purge l'efface. */}
+        {client.active && (
+          <form action={resilierClient} className="mt-5">
+            <input type="hidden" name="clientId" value={client.id} />
+            <button type="submit" className={buttonClass.danger}>
+              Résilier l&apos;abonnement
+            </button>
+          </form>
         )}
       </div>
 

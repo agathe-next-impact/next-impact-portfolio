@@ -20,6 +20,7 @@
 
 import { ArrowRight, CheckCircle2, Shield, Users, Repeat, Mail } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
@@ -136,9 +137,13 @@ export default function ApporteursClient() {
             vous touchez une commission à l'encaissement.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href="#contact-apporteur" className={BTN_PRIMARY}>
-              Discutons de comment travailler ensemble
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
+              {CTA_ECHANGE.label.fr}
               <ArrowRight size={14} aria-hidden="true" />
+            </a>
+            <a href="#contact-apporteur" className={BTN_GHOST}>
+              Discutons de comment travailler ensemble
             </a>
             <a href="#comment-ca-marche" className={BTN_GHOST}>
               Comment ça marche

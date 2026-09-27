@@ -29,6 +29,7 @@ export {
   contextFromScan,
   healthFromScan,
   periodeSemaine,
+  plafondDepasse,
   ECHANTILLON_JOURS,
   ECHANTILLON_LECTURES,
   ECHANTILLON_RECHERCHES,

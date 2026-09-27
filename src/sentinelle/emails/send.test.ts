@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { MailConfig } from "./config";
-import { sendSentinelleMail, verifyMailTransport, type MailTransport } from "./send";
+import { planMailReason, sendSentinelleMail, verifyMailTransport, type MailTransport } from "./send";
+
+describe("planMailReason", () => {
+  it("seul l'abonné Sentinelle seul reçoit par e-mail", () => {
+    expect(planMailReason("veille")).toBeNull();
+    expect(planMailReason("accompagnement")).toMatch(/espace d'accompagnement/);
+  });
+});
 
 const config: MailConfig = {
   host: "smtp.gmail.com",

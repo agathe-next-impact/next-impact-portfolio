@@ -31,6 +31,12 @@ export interface PreviousIssue {
   actions: string[];
   /** Les échéances annoncées, pour ne pas les réannoncer à l'identique. */
   echeances: string[];
+  /**
+   * Les concurrents suivis la fois précédente : la collecte les reprend plutôt
+   * que d'en chercher d'autres à chaque numéro. Optionnel : les numéros
+   * antérieurs au 2026-09-27 n'en ont pas.
+   */
+  concurrents?: string[];
 }
 
 function line(label: string, value: string | null): string {
@@ -113,6 +119,10 @@ export function renderConstate(context: LettreContext): string {
       ...(context.previousIssue.echeances.length > 0
         ? context.previousIssue.echeances.map((echeance) => `- ${echeance}`)
         : ["- aucune"]),
+      "Concurrents suivis :",
+      ...(context.previousIssue.concurrents && context.previousIssue.concurrents.length > 0
+        ? context.previousIssue.concurrents.map((nom) => `- ${nom}`)
+        : ["- aucun"]),
     );
   }
 
@@ -126,7 +136,8 @@ export function renderCollecteBrief(context: LettreContext): string {
     "",
     "# Ta mission",
     "Rassemble le dossier de ce numéro : l'actualité de la période sur les cinq champs,",
-    "puis l'observation du site sur ce que la fiche ne couvre pas. Ne rédige pas la lettre.",
+    "l'observation du site sur ce que la fiche ne couvre pas, puis ses concurrents directs.",
+    "Ne rédige pas la lettre.",
   ].join("\n");
 }
 
@@ -156,6 +167,11 @@ export function renderRedactionBrief(context: LettreContext, dossier: Dossier): 
       `- ${public_.nom} — vient chercher : ${public_.cherche} ; le site doit obtenir : ${public_.attenduDuSite} ; niveau de réponse actuel : ${public_.niveauDeReponse}`,
   );
 
+  const concurrents = dossier.concurrents.map(
+    (concurrent) =>
+      `- ${concurrent.nom} (${concurrent.site}) — ${concurrent.pourquoi} — [${concurrent.statut}] ${concurrent.constat}`,
+  );
+
   const aConfirmer = dossier.aConfirmer.map(
     (entry) => `- ${entry.point} (à vérifier : ${entry.sourceAVerifier})`,
   );
@@ -172,6 +188,9 @@ export function renderRedactionBrief(context: LettreContext, dossier: Dossier): 
     "# Publics reconstitués",
     ...(publics.length > 0 ? publics : ["- aucun public reconstitué"]),
     "",
+    "# Concurrents directs — les seuls que la lettre peut nommer",
+    ...(concurrents.length > 0 ? concurrents : ["- aucun concurrent confirmé"]),
+    "",
     "# À confirmer — ne pas affirmer dans la lettre",
     ...(aConfirmer.length > 0 ? aConfirmer : ["- rien"]),
     dossier.siteInjoignable.trim() !== ""
@@ -179,7 +198,7 @@ export function renderRedactionBrief(context: LettreContext, dossier: Dossier): 
       : "",
     "",
     "# Ta mission",
-    "Écris la lettre : les douze axes, les tendances qualifiées pour ce site, la synthèse.",
+    "Écris la lettre : les douze axes, les tendances et les concurrents qualifiés pour ce site, la synthèse.",
     "Tout ce que tu affirmes vient de ce qui précède.",
   ]
     .filter((section) => section !== "")
@@ -192,5 +211,6 @@ export function previousIssueFrom(lettre: Lettre, periodLabel: string): Previous
     periodLabel,
     actions: lettre.synthese.actions.map((action) => `${action.action} (${action.horizon})`),
     echeances: lettre.echeancier.map((entry) => `${entry.date} — ${entry.echeance}`),
+    concurrents: [...new Set(lettre.tendances.concurrence.map((entree) => entree.concurrent))],
   };
 }

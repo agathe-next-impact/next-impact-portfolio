@@ -410,7 +410,7 @@ export default function ArticleAttestationTIH() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                   {faqItems.map((f, i) => (
                     <div key={i} style={{ borderTop: i > 0 ? "1px solid var(--rule)" : "none", paddingTop: i > 0 ? 20 : 0 }}>
-                      <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--ink)", marginBottom: 8 }}>
+                      <h3 style={{ fontSize: 17, fontWeight: 500, color: "var(--ink)", marginBottom: 8 }}>
                         {f.question}
                       </h3>
                       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--ink-2)" }}>

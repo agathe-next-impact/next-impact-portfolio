@@ -2,7 +2,11 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
-import { envoyerLettreEchantillon } from "@sentinelle/apercu";
+import {
+  notifierDemande,
+  parseSubscriptionRequest,
+  recordSubscriptionRequest,
+} from "@sentinelle/inscriptions";
 import type { ScanResult } from "@sentinelle/types";
 
 export const runtime = "nodejs";
@@ -45,17 +49,14 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
   });
 }
 
-const LeadBody = z.object({
-  email: z.string().email().max(320),
-});
-
 /**
- * Capture de l'e-mail pour recevoir la lettre-échantillon.
+ * Demande d'inscription à Sentinelle depuis le rapport (2026-09-27).
  *
- * Écrit `scans.leadEmail`, puis tente l'envoi : si la lettre est déjà rédigée
- * elle part tout de suite, sinon c'est la fin de la rédaction (Inngest) qui
- * l'expédiera. Idempotent : renvoyer le formulaire deux fois met à jour
- * l'adresse plutôt que de créer un doublon — mais la lettre ne part qu'une fois.
+ * Même opt-in que la page d'offre : la demande attend la validation d'Agathe,
+ * avec ce rapport comme origine (il amorcera la fiche à l'activation). Les
+ * coordonnées restent aussi sur la ligne du scan, pour que le rapport sache
+ * qu'une demande est faite. Idempotent : renvoyer le formulaire met la demande
+ * à jour ; Agathe n'est prévenue qu'à la première demande d'une adresse.
  */
 export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
@@ -70,24 +71,30 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
     return Response.json({ error: "corps de requête illisible" }, { status: 400 });
   }
 
-  const parsed = LeadBody.safeParse(payload);
-  if (!parsed.success) {
-    return Response.json({ error: "Adresse e-mail invalide." }, { status: 400 });
-  }
+  const parsed = parseSubscriptionRequest(
+    payload && typeof payload === "object" ? { ...payload, scanId: id } : payload,
+  );
+  if (!parsed.ok) return Response.json({ error: parsed.message }, { status: 400 });
 
-  const rows = await db()
-    .update(scans)
-    .set({ leadEmail: parsed.data.email.trim().toLowerCase() })
-    .where(eq(scans.id, id))
-    .returning({ id: scans.id });
-
-  if (rows.length === 0) {
+  const [scan] = await db().select({ id: scans.id }).from(scans).where(eq(scans.id, id));
+  if (!scan) {
     return Response.json({ error: "analyse introuvable" }, { status: 404 });
   }
 
-  // « Lettre pas prête » n'est pas un échec : l'envoi se fera à la fin de la
-  // rédaction. On ne fait donc pas dépendre la réponse du résultat.
-  const envoi = await envoyerLettreEchantillon(id);
+  const demande = parsed.value;
+  await db()
+    .update(scans)
+    .set({
+      leadEmail: demande.email,
+      leadName: demande.name,
+      leadOrganisation: demande.organisation,
+      leadSiteUrl: demande.siteUrl,
+    })
+    .where(eq(scans.id, id));
 
-  return Response.json({ ok: true, sent: envoi.sent });
+  const { isNew } = await recordSubscriptionRequest(demande);
+  // La notification suit l'enregistrement et n'en conditionne pas la réponse.
+  if (isNew) await notifierDemande(demande);
+
+  return Response.json({ ok: true });
 }

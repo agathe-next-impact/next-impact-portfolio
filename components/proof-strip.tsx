@@ -24,24 +24,34 @@ type ProofItem = {
  * (page pilier /wordpress-headless ; retirée de la home le 2026-09-04, où la
  * preuve vit désormais dans le hero — logos clients — et la section
  * réalisation phare). Chaque chiffre est vérifiable au clic : le 45 → 98
- * renvoie à l'étude de cas Proditec, les 26 projets aux études de cas
- * (source : lib/case-studies-data.ts, statut « publie »), la citation presse
- * à l'article source. Aucun chiffre non démontrable.
+ * renvoie à l'étude de cas Proditec, les projets documentés aux études de cas,
+ * la citation presse à l'article source. Aucun chiffre non démontrable.
+ *
+ * `documented` est le nombre d'études de cas publiées : la page serveur qui
+ * pose la bande le lit dans lib/case-studies-data.ts (statut « publie ») et le
+ * passe ici. Il n'est jamais écrit en dur : c'est le même nombre que celui de
+ * llms.txt, et il suit la publication d'une nouvelle étude.
  */
-export function ProofStrip({ className = "" }: { className?: string }) {
+export function ProofStrip({
+  className = "",
+  documented,
+}: {
+  className?: string;
+  documented: number;
+}) {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
 
   const items: ProofItem[] = isEn
     ? [
         { value: "45 → 98", label: "Google speed score, before and after redesign", href: "/etudes-de-cas/proditec" },
-        { value: "26", count: { end: 26 }, label: "documented projects", href: "/etudes-de-cas" },
+        { value: String(documented), count: { end: documented }, label: "documented projects", href: "/etudes-de-cas" },
         { value: "CWV", label: "the three Google speed measures, live on this site" },
         { value: "Le Figaro", label: "featured · May 2026", href: FIGARO_URL, external: true },
       ]
     : [
         { value: "45 → 98", label: "score de vitesse Google, avant et après refonte", href: "/etudes-de-cas/proditec" },
-        { value: "26", count: { end: 26 }, label: "projets documentés", href: "/etudes-de-cas" },
+        { value: String(documented), count: { end: documented }, label: "projets documentés", href: "/etudes-de-cas" },
         { value: "CWV", label: "les trois mesures de vitesse Google, en direct sur ce site" },
         { value: "Le Figaro", label: "cité · mai 2026", href: FIGARO_URL, external: true },
       ];

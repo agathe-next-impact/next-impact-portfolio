@@ -5,11 +5,13 @@ import { Phone, Video, Mail, Newspaper, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
+import { ECHANGE_URL } from "@/lib/visio-conseil";
 
 const PHONE = "0673981638";
 const PHONE_DISPLAY = "06 73 98 16 38";
 const EMAIL = "agathe@next-impact.digital";
-const VISIO_URL = "https://calendar.app.google/Cw7TGQBzeZ1szKU86";
+// L'échange de 15 minutes, gratuit (ADR-023) : un seul agenda sur le site.
+const VISIO_URL = ECHANGE_URL;
 
 type OptionKey = "phone" | "visio" | "email" | "newsletter";
 

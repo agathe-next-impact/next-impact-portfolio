@@ -15,7 +15,7 @@ export default function GeminiSearchHomepage() {
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 12 }}>
-      <label htmlFor="gemini_url_home" style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+      <label htmlFor="gemini_url_home" style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
         URL WordPress à analyser
       </label>
       <input

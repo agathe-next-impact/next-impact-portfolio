@@ -191,6 +191,12 @@ export default async function PrivacyPolicy({
 
           <h3>8.2 Surveillance contractuelle (abonnement)</h3>
           <p>
+            L&apos;abonnement commence par une demande d&apos;inscription (nom,
+            organisation, e-mail, adresse du site), que je valide avant d&apos;ouvrir
+            votre espace. <strong>Base légale</strong> : mesure précontractuelle, à votre
+            demande.
+          </p>
+          <p>
             Pour un abonné, je conserve la fiche client (nom, e-mail, société, adresse du
             site, secteur, notes d'échange) et l'inventaire technique du site surveillé,
             ainsi que les alertes et les lettres d'information produites.{" "}
@@ -216,13 +222,13 @@ export default async function PrivacyPolicy({
           <p>
             <strong>Neon</strong> (base de données, UE), <strong>Inngest</strong>{" "}
             (exécution des tâches planifiées), <strong>Google</strong> (envoi des e-mails
-            de veille, protection anti-spam reCAPTCHA de la page d'analyse),<strong>Anthropic</strong> (rédaction assistée des alertes) et{" "}
-            <strong>Stripe</strong> (paiement et facturation). Deux précisions qui me
+            de veille, protection anti-spam reCAPTCHA de la page d'analyse) et{" "}
+            <strong>Anthropic</strong> (rédaction assistée des alertes). Deux précisions qui me
             semblent devoir être écrites plutôt que sous-entendues : le modèle de langage
             qui aide à rédiger une alerte <strong>ne reçoit jamais votre nom ni votre
             adresse e-mail</strong> — il travaille sur le fait technique, le secteur et le
-            contexte du site ; et aucune donnée de facturation ne descend dans la base
-            Sentinelle, elle reste chez Stripe.
+            contexte du site ; et aucune donnée de facturation n&apos;entre dans la base
+            Sentinelle : la facturation se fait à part, hors ligne.
           </p>
 
           <h3>8.5 Durées de conservation</h3>
@@ -241,6 +247,11 @@ export default async function PrivacyPolicy({
               dernier échange — même régime que le formulaire de contact.
             </li>
             <li>
+              Demande d&apos;inscription : <strong>30 jours</strong> après qu&apos;elle a
+              été traitée ; sans réponse, <strong>3 ans</strong> comme une adresse laissée
+              sur un rapport.
+            </li>
+            <li>
               Fiche client et inventaire technique : <strong>3 mois</strong> après la
               résiliation (fenêtre de réactivation), puis effacement.
             </li>
@@ -253,7 +264,7 @@ export default async function PrivacyPolicy({
               Liens de connexion à l'espace abonné : <strong>15 minutes</strong>, stockés
               sous forme d'empreinte, supprimés dès l'usage.
             </li>
-            <li>Facturation : <strong>10 ans</strong>, chez Stripe (obligation comptable).</li>
+            <li>Factures : <strong>10 ans</strong>, hors de la base Sentinelle (obligation comptable).</li>
           </ul>
           <p>
             Ces durées sont appliquées par une purge automatique quotidienne, pas

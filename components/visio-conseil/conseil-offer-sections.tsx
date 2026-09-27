@@ -10,12 +10,12 @@ import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 import { OFFERS, type ConseilOffer } from "@/lib/visio-conseil";
 
-// Index affiché (№ 0X) de chaque section d'offre, dans l'ordre du catalogue
-// Conseil : les deux offres ponctuelles, puis l'accompagnement récurrent. Les
-// sections servent d'ancres au mega menu et au bandeau du héros
-// (#choix-techno-ia, #architecture-projet-ia, #cto-externalise) : toute
-// renumérotation ici doit rester cohérente avec lib/mega-menu.ts.
-const SECTION_INDEX = ["№ 04", "№ 05", "№ 06"];
+// Les sections d'offre n'ont plus de numéro propre : elles font partie de la
+// § 02 de /conseil, « 15 min pour cadrer, l'audit pour orienter », dont elles
+// sont le détail (fusion du 2026-09-27). Elles gardent leurs ancres, qui
+// servent au mega menu et au bandeau du héros (#choix-techno-ia,
+// #architecture-projet-ia). L'ancre #cto-externalise est portée par le
+// bandeau de renvoi, plus par une section d'offre.
 
 function OfferSection({
   offer,
@@ -24,7 +24,8 @@ function OfferSection({
   isEn,
 }: {
   offer: ConseilOffer;
-  index: string;
+  /** Numéro affiché (№ 0X) ; absent quand la section est le détail d'une autre. */
+  index?: string;
   tone: "obsidian" | "jet";
   isEn: boolean;
 }) {
@@ -69,8 +70,12 @@ function OfferSection({
       <Reveal className="flex flex-col gap-6 border-b border-dark-gray px-6 py-12 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-16">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 font-mono text-2xs uppercase tracking-[0.14em] text-accent-secondary">
-            <span>{index}</span>
-            <span className="h-px w-6 bg-accent-secondary/50" />
+            {index && (
+              <>
+                <span>{index}</span>
+                <span className="h-px w-6 bg-accent-secondary/50" />
+              </>
+            )}
             {copy.tag && <span className="text-mid-gray">{copy.tag}</span>}
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -80,11 +85,6 @@ function OfferSection({
             {offer.credited && (
               <span className="inline-flex items-center border border-accent-secondary/60 bg-accent-secondary/10 px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-accent-secondary">
                 {isEn ? "Deducted from your quote" : "Déduit du devis"}
-              </span>
-            )}
-            {offer.recurring && (
-              <span className="inline-flex items-center border border-dark-gray px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-mid-gray">
-                {isEn ? "Monthly retainer" : "Abonnement mensuel"}
               </span>
             )}
           </div>
@@ -154,8 +154,8 @@ function OfferSection({
 
 // Une section par offre du catalogue Conseil, dans l'ordre d'engagement
 // croissant. Chaque section porte l'id (#choix-techno-ia /
-// #architecture-projet-ia / #cto-externalise) qui sert d'ancre au mega menu et
-// au bandeau du héros. Les fonds alternent jet / obsidian pour que deux
+// #architecture-projet-ia) qui sert d'ancre au mega menu et au bandeau du
+// héros. Les fonds alternent jet / obsidian pour que deux
 // sections voisines ne se confondent pas.
 export function ConseilOfferSections() {
   const locale = useLocale() as Locale;
@@ -168,7 +168,6 @@ export function ConseilOfferSections() {
           {i > 0 && <Separator />}
           <OfferSection
             offer={offer}
-            index={SECTION_INDEX[i] ?? `№ ${4 + i}`}
             tone={i % 2 === 0 ? "jet" : "obsidian"}
             isEn={isEn}
           />

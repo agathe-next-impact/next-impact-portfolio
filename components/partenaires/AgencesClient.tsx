@@ -20,6 +20,7 @@
 
 import { ArrowRight, Lock, ArrowUpRight, CheckCircle2, Mail } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
@@ -128,9 +129,13 @@ export default function AgencesClient() {
             gardez la relation client — je prends la technique.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href="#contact-agence" className={BTN_PRIMARY}>
-              Parlons d'un premier projet test
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
+              {CTA_ECHANGE.label.fr}
               <ArrowRight size={14} aria-hidden="true" />
+            </a>
+            <a href="#contact-agence" className={BTN_GHOST}>
+              Parlons d'un premier projet test
             </a>
             <a href="#comment-on-travaille" className={BTN_GHOST}>
               Comment on travaille

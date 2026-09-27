@@ -1,4 +1,4 @@
-// Espace client (phase 5) — lectures et facturation.
+// Espace client (phase 5) — lectures.
 //
 // Ce module ne montre que ce qui a été envoyé : ni brouillon, ni alerte
 // écartée, ni numéro en attente de relecture. La règle 4 (« rien ne part sans
@@ -16,5 +16,3 @@ export {
   type ReceivedAlert,
   type ReceivedIssue,
 } from "./history";
-
-export { openBillingPortal, type PortalOutcome } from "./portal";

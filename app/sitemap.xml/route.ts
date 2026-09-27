@@ -3,6 +3,8 @@ import path from "path";
 import { NextResponse } from "next/server";
 import { getAllSlugs } from "@/lib/case-studies-data";
 import { getHubThemeSlugs } from "@/lib/hub-themes";
+import { MAINTENANCE_PATH, MAINTENANCE_PRIX_VALIDES } from "@/lib/maintenance-offer";
+import { PACKS_PATH, getSituationSlugs, packHref } from "@/lib/situations";
 
 const baseUrl = "https://www.next-impact.digital";
 const contentRoots = ["content", path.join("content", "en")];
@@ -143,8 +145,8 @@ export async function GET() {
       // Offre récurrente de direction technique — bilingue FR + EN, donc dans
       // les pages localisées (alternates hreflang générés).
       { path: "cto-externalise", source: "app/[locale]/cto-externalise/page.tsx", changefreq: "monthly", priority: 0.8 },
-      // audit-site-web retiré du sitemap : la route redirige désormais vers
-      // Calendly (next.config.mjs), ce n'est plus une page indexable.
+      // audit-site-web retiré du sitemap : la route redirige (vers /scan depuis
+      // l'ADR-012, next.config.mjs), ce n'est plus une page indexable.
       { path: "outils", source: "app/[locale]/outils/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "outils/audit-pwa", source: "app/[locale]/outils/audit-pwa/page.tsx", changefreq: "monthly", priority: 0.6 },
       // Outils de qualification rattachés aux rubriques du hub.
@@ -170,10 +172,55 @@ export async function GET() {
       // `vous-etes` est volontairement `noindex` (robots.index=false) → exclu du sitemap.
       { path: "articles/reduire-contribution-agefiph-sous-traitance-tih", source: "app/[locale]/articles/reduire-contribution-agefiph-sous-traitance-tih/page.tsx", changefreq: "monthly", priority: 0.7 },
       { path: "articles/attestation-deductibilite-tih-guide-entreprises", source: "app/[locale]/articles/attestation-deductibilite-tih-guide-entreprises/page.tsx", changefreq: "monthly", priority: 0.7 },
-      // Pages d'offre veille — FR uniquement (locale EN en noindex), donc sans
-      // alternates hreflang.
+      // Page veille (Sentinelle en tête, puis la lettre gratuite, ressources,
+      // outils) — FR uniquement (locale EN en noindex), donc sans alternates hreflang.
       { path: "veille", source: "app/[locale]/veille/page.tsx", changefreq: "monthly", priority: 0.8 },
-      // Sentinelle retirée du SEO/GEO (2026-09-04) : page en noindex, hors sitemap.
+      // Sentinelle : retirée du SEO/GEO le 2026-09-04, de retour dans l'index le
+      // 2026-09-27 (ADR-012). Hors catalogue depuis l'ADR-013 : elle se vend
+      // depuis le rapport de l'analyse du site, sa page reste sa fiche produit.
+      { path: "sentinelle", source: "app/[locale]/sentinelle/page.tsx", changefreq: "monthly", priority: 0.7 },
+      // Récapitulatif de toutes les offres, par moment (ADR-012).
+      { path: "tarifs", source: "app/[locale]/tarifs/page.tsx", changefreq: "monthly", priority: 0.8 },
+      // Visite de l'espace en ligne + accès aux deux connexions (ADR-012).
+      { path: "espace-client", source: "app/[locale]/espace-client/page.tsx", changefreq: "monthly", priority: 0.5 },
+      // Suivi et maintenance, page d'atterrissage du moment « Gérer » : au
+      // sitemap seulement quand MAINTENANCE_PRIX_VALIDES vaut true
+      // (lib/maintenance-offer.ts). Tant que le drapeau vaut false, la page est
+      // en noindex et reste hors sitemap. Le même drapeau commande le noindex
+      // de la page, les lignes llms et l'entrée du catalogue JSON-LD.
+      ...(MAINTENANCE_PRIX_VALIDES
+        ? ([
+            {
+              path: MAINTENANCE_PATH,
+              source: "app/[locale]/maintenance-wordpress/page.tsx",
+              changefreq: "monthly",
+              priority: 0.8,
+            },
+          ] as const)
+        : []),
+      // L'offre par situation (charte v1.6, ADR-014) : l'index /packs et une
+      // page par situation, lues dans lib/situations.ts. FR uniquement (locale
+      // EN en noindex), donc en URL simple, sans alternates hreflang. Ces pages
+      // affichent un budget de suivi : elles suivent le même drapeau que
+      // /maintenance-wordpress et sortent du sitemap s'il repasse à false.
+      ...(MAINTENANCE_PRIX_VALIDES
+        ? [
+            {
+              path: PACKS_PATH,
+              source: "app/[locale]/packs/page.tsx",
+              changefreq: "monthly" as const,
+              priority: 0.8,
+            },
+            ...getSituationSlugs().map((slug) => ({
+              path: packHref(slug),
+              // Le contenu d'une page de pack vit dans lib/situations.ts : c'est
+              // sa date de modification qui fait foi, pas celle du gabarit.
+              source: "lib/situations.ts",
+              changefreq: "monthly" as const,
+              priority: 0.8,
+            })),
+          ]
+        : []),
       // Pages partenaires — FR uniquement (locale EN en noindex tant que la
       // traduction n'existe pas), donc sans alternates hreflang.
       { path: "apporteurs", source: "app/[locale]/apporteurs/page.tsx", changefreq: "monthly", priority: 0.5 },

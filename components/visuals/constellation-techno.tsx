@@ -218,7 +218,7 @@ export function ConstellationTechno({
             animation: "ct-spinrev 24s linear infinite",
           }}
         />
-        <text x="500" y="324" textAnchor="middle" style={{ fill: "hsl(var(--foreground))", fontWeight: 600, fontSize: 19, letterSpacing: 4 }}>
+        <text x="500" y="324" textAnchor="middle" style={{ fill: "hsl(var(--foreground))", fontWeight: 500, fontSize: 19, letterSpacing: 4 }}>
           PROJET
         </text>
         <text x="500" y="352" textAnchor="middle" style={{ fill: "hsl(var(--accent-2))", fontWeight: 500, fontSize: 14, letterSpacing: 7 }}>
@@ -247,7 +247,7 @@ export function ConstellationTechno({
                 x={n.x}
                 y={ln.y}
                 textAnchor="middle"
-                style={{ fill: ln.accent ? "hsl(var(--accent-2))" : "hsl(var(--foreground))", fontWeight: ln.accent ? 500 : 600, fontSize: ln.size, letterSpacing: ln.ls }}
+                style={{ fill: ln.accent ? "hsl(var(--accent-2))" : "hsl(var(--foreground))", fontWeight: ln.accent ? 500 : 500, fontSize: ln.size, letterSpacing: ln.ls }}
               >
                 {ln.text}
               </text>

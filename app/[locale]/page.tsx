@@ -9,7 +9,8 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { getHomeContent } from "@/lib/home-content";
-import { getDerniereLettre } from "@/lib/substack";
+import { getAllSlugs } from "@/lib/case-studies-data";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER } from "@/lib/trajectoires";
 import type { Locale } from "@/i18n/routing";
 
 // Revalidate toutes les heures
@@ -32,9 +33,14 @@ export default async function Home({
   const { locale } = await params;
   const isEn = locale === "en";
   const { faq } = getHomeContent(locale);
-  // Le héros est un composant client : il ne peut pas lire le flux Substack
-  // lui-même. On le lit ici et on descend le résultat en props.
-  const derniereLettre = await getDerniereLettre();
+  // Nombre d'études de cas publiées, pour la bande de preuve sous le héros :
+  // lu dans la source, jamais écrit en dur.
+  const documented = getAllSlugs().length;
+
+  // Les trois prestations sous leur seul nom, lu dans lib/trajectoires.ts
+  // (charte v1.6, ADR-014) : « Optimisation, Refonte ou Évolution ».
+  const names = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name[isEn ? "en" : "fr"]);
+  const prestations = `${names.slice(0, -1).join(", ")} ${isEn ? "or" : "ou"} ${names.at(-1)}`;
 
   return (
     <>
@@ -50,8 +56,8 @@ export default async function Home({
         }
         description={
           isEn
-            ? "An aging WordPress site made fast and modern again without rebuilding everything: optimized, headless or web app redesign, at a fixed price, in 6 to 10 weeks, performance measured before and after."
-            : "Un site WordPress qui vieillit redevient rapide et moderne sans tout reconstruire : refonte optimisée, headless ou web app, en forfait, en 6 à 10 semaines, performance mesurée avant et après."
+            ? `An aging WordPress site made fast and modern again without rebuilding everything. Three services at a fixed price, ${prestations}, in 6 to 10 weeks, performance measured before and after, with a technical and strategic watch at every step.`
+            : `Un site WordPress qui vieillit redevient rapide et moderne sans tout reconstruire. Trois prestations au forfait, ${prestations}, en 6 à 10 semaines, performance mesurée avant et après, avec une veille technique et stratégique à chaque étape.`
         }
         serviceType={isEn ? "Web consulting and development" : "Conseil et développement web"}
         url="/solutions-web"
@@ -62,7 +68,7 @@ export default async function Home({
           answer: f.answer,
         }))}
       />
-      <HomeClient derniereLettre={derniereLettre} />
+      <HomeClient documented={documented} />
     </>
   );
 }

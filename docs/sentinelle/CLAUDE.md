@@ -69,7 +69,9 @@ reste statique et performant.
   Google qui sert déjà au site envoie aussi la veille. L'isolation, elle, ne
   bouge pas — `src/sentinelle/emails/` a ses propres variables
   (`SENTINELLE_SMTP_*`) et n'appelle jamais `lib/sendMail.ts`.
-- Paiement : **Stripe** (Checkout + customer portal + webhooks)
+- Paiement : **aucun en ligne** depuis le 2026-09-27. L'abonnement est un
+  opt-in validé par Agathe (`src/sentinelle/inscriptions/`), facturé hors ligne.
+  Stripe (Checkout, portail, webhooks) a été retiré ; voir ADR-026.
 - Validation runtime : **zod** sur toutes les entrées externes (API, webhooks, réponses LLM)
 - Pas de nouvelle lib UI : réutiliser le design system du site existant
 - Notion (`src/sentinelle/notion/`) pour la rédaction et la validation des

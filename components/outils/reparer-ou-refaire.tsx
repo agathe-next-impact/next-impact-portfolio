@@ -3,7 +3,7 @@
 // Réparer ou refaire ? — outil « Réparer ou refaire » du hub. Checklist sur
 // l'état d'un site (WordPress) → score de santé /100 et verdict à 3 voies :
 // réparer / optimiser / refondre, avec une CTA adaptée (contact si réparable,
-// Services/Visio si fin de vie). Doctrine : réparer quand c'est
+// Services/échange de 15 minutes gratuit si fin de vie). Doctrine : réparer quand c'est
 // suffisant, refaire seulement quand c'est justifié. Modèle : decrypteur-devis.
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -231,11 +231,11 @@ function getCtas(tier: Tier) {
   if (tier === "optimiser")
     return {
       primary: { fr: "Optimiser mon site", en: "Optimize my site", href: "/contact" },
-      secondary: { fr: "Décider en visio · 150 €", en: "Decide on a call · €150", href: "/conseil" },
+      secondary: { fr: "Décider · 15 min, gratuit", en: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
     };
   return {
     primary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
-    secondary: { fr: "Décider en visio · 150 €", en: "Decide on a call · €150", href: "/conseil" },
+    secondary: { fr: "Décider · 15 min, gratuit", en: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
   };
 }
 
@@ -396,8 +396,8 @@ export default function ReparerOuRefaire() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "Repair when it's enough, rebuild only when it's justified. This is a self-check — an audit or a decision call confirms the diagnosis on your real site before you spend."
-                : "Réparer quand c'est suffisant, refaire seulement quand c'est justifié. Ceci est une auto-évaluation — un audit ou une visio confirme le diagnostic sur votre site réel avant d'investir."}
+                ? "Repair when it's enough, rebuild only when it's justified. This is a self-check. An audit confirms the diagnosis on your real site before you spend, and a free 15-minute call helps you decide."
+                : "Réparer quand c'est suffisant, refaire seulement quand c'est justifié. Ceci est une auto-évaluation. Un audit confirme le diagnostic sur votre site réel avant d'investir, et un échange de 15 minutes, gratuit, aide à décider."}
             </p>
           </StaggerItem>
 

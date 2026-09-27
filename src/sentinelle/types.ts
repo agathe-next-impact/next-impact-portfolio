@@ -143,6 +143,146 @@ export function isApercuLettre(
   return "lettre" in apercu;
 }
 
+/**
+ * Ce que la page d'accueil dit et comment elle est servie, lu sur la réponse
+ * déjà obtenue par le scanner (scanner/signals.ts). Matière première de la
+ * grille de diagnostic ; absent des scans d'avant le 2026-09-27.
+ */
+export interface SiteSignals {
+  title: string | null;
+  description: string | null;
+  lang: string | null;
+  h1: string[];
+  h2: string[];
+  /** Nom déclaré en JSON-LD Organization, à défaut og:site_name. */
+  siteName: string | null;
+  schemaTypes: string[];
+  socialLinks: string[];
+  navLabels: string[];
+  /** Début du texte visible, borné. */
+  excerpt: string;
+  wordCount: number;
+  /** Preuves repérées dans le texte : « témoignages », « chiffres clés »… */
+  proofs: string[];
+  /** Libellés des appels à l'action (« Demander un devis »…). */
+  callsToAction: string[];
+  /** Formulaires hors recherche. */
+  formCount: number;
+  /** Liens tel: et mailto:. */
+  contactLinks: number;
+  htmlBytes: number;
+  /** Temps jusqu'aux en-têtes de la page d'accueil, en ms. */
+  responseMs: number | null;
+  imageCount: number;
+  imagesWithoutAlt: number;
+  scriptCount: number;
+  /** Domaines tiers qui servent des scripts. */
+  thirdPartyHosts: string[];
+  hasViewport: boolean;
+  hasCanonical: boolean;
+  hasOpenGraph: boolean;
+  https: boolean;
+  securityHeaders: { hsts: boolean; csp: boolean; xFrameOptions: boolean };
+}
+
+/** Couleur d'une case de constat : c'est elle qui colore la grille. */
+export type DiagnosticTonalite = "solide" | "a_renforcer" | "fragile" | "indetermine";
+
+/** Les trois suites possibles — les trois prestations du catalogue. */
+/**
+ * Les trois prestations du catalogue (charte v1.6, lib/trajectoires.ts), sous
+ * leur seul nom : Optimisation, Refonte, Évolution. Le rapport les examine
+ * toutes les trois et en recommande une. Audit, maintenance et pilotage ne se
+ * recommandent pas ici : le rapport les propose en ligne discrète.
+ */
+export type DiagnosticIssue = "optimisation" | "refonte" | "evolution";
+
+/** La réponse à la question du dirigeant : faut-il le faire ? */
+export type DiagnosticBesoin = "necessaire" | "utile" | "pas_prioritaire";
+
+/** L'examen d'une prestation, justifié par ses objectifs. */
+export interface DiagnosticExamen {
+  prestation: DiagnosticIssue;
+  besoin: DiagnosticBesoin;
+  /** Objectif stratégique servi (image, position, risque…), vingt mots au plus. */
+  strategique: string;
+  /** Objectif commercial servi (demandes, conversion, clients…), vingt mots au plus. */
+  commercial: string;
+}
+
+export interface DiagnosticCase {
+  tonalite: DiagnosticTonalite;
+  /** Deux phrases au plus (garde-fou : diagnostic/guards.ts). */
+  lignes: string[];
+}
+
+/**
+ * Un concurrent du site analysé : nommé par la collecte (source vérifiée),
+ * puis mesuré par le même scanner passif, page d'accueil seulement. Les
+ * chiffres sont donc comparables à ceux du site analysé, et déterministes.
+ */
+export interface DiagnosticConcurrent {
+  nom: string;
+  url: string;
+  /** Pourquoi c'est un concurrent direct, selon la collecte. */
+  motif: string;
+  plateforme: string | null;
+  /** Libellés des composants structurants détectés (plateforme, thème…). */
+  composants: string[];
+  titre: string | null;
+  h1: string | null;
+  responseMs: number | null;
+  htmlKo: number;
+  scripts: number;
+  domainesTiers: number;
+  https: boolean;
+  hsts: boolean;
+  donneesStructurees: string[];
+  /** Signaux commerciaux, lus comme pour le site analysé. */
+  preuves: string[];
+  appelsAction: string[];
+}
+
+/**
+ * La grille en quatre cases du rapport de scan : organisation et positionnement
+ * stratégique, positionnement web dans l'écosystème, dispositif site web, puis
+ * la conclusion qui relie les trois (optimiser, refondre, évoluer).
+ *
+ * Fabriquée en deux passes (src/sentinelle/diagnostic/) : collecte web sourcée,
+ * puis rédaction sans outils. Non relue par un humain — le rapport le dit.
+ */
+export type ScanDiagnostic =
+  | { status: "pending" }
+  | { status: "none"; reason?: string }
+  | {
+      status: "done";
+      /** Secteur d'activité établi par la collecte ; null si introuvable. */
+      secteur?: string | null;
+      /** Concurrents réellement joints et mesurés. */
+      concurrents?: DiagnosticConcurrent[];
+      organisation: DiagnosticCase;
+      ecosysteme: DiagnosticCase;
+      dispositif: DiagnosticCase;
+      conclusion: {
+        issue: DiagnosticIssue;
+        besoin: DiagnosticBesoin;
+        /** L'objectif business que la prestation sert, en une phrase. */
+        objectif: string;
+        lignes: string[];
+      };
+      /** Les trois prestations examinées, dans l'ordre du catalogue. */
+      examens?: DiagnosticExamen[];
+      /** URLs des faits externes retenus — affichées sous la grille. */
+      sources: string[];
+      genereLe: string;
+      consommation?: {
+        recherches: number;
+        jetonsEntree: number;
+        jetonsSortie: number;
+        dureeMs: number;
+      };
+    };
+
 /** Résultat sérialisé dans `scans.result`. */
 export interface ScanResult {
   url: string;
@@ -161,6 +301,10 @@ export interface ScanResult {
   scannedAt: string;
   /** Aperçu de veille (post-plan, 2026-08-16) — absent sur les anciens scans. */
   apercu?: ScanApercu;
+  /** Signaux de la page d'accueil (2026-09-27) — absent sur les anciens scans. */
+  site?: SiteSignals;
+  /** Grille de diagnostic en quatre cases (2026-09-27). */
+  diagnostic?: ScanDiagnostic;
 }
 
 /**

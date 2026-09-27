@@ -8,12 +8,22 @@ import {
   ABOUT_PAGE_VARIANTS_EN,
   EXPANDABLE_CARDS_VARIANTS_EN,
 } from "@/lib/homepage-profiles-en";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER } from "@/lib/trajectoires";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
+
+// Les trois prestations sous leur seul nom, lu dans lib/trajectoires.ts (charte
+// v1.6, ADR-014) : « Optimisation, Refonte, Évolution ».
+const PRESTATIONS = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name.fr);
+const PRESTATIONS_LISTE = PRESTATIONS.join(", ");
+const PRESTATIONS_OU = `${PRESTATIONS.slice(0, -1).join(", ")} ou ${PRESTATIONS.at(-1)}`;
 
 // ─── Variantes Hero ─────────────────────────────────────────────────────────
 
 export interface HeroVariant {
   headline: string;
   subHeadline: string;
+  /** Sous-titre court, sous le h1 (home, charte v1.7). */
+  tagline?: string;
   description: string;
   valueProposition: string;
   ctaPrimary: { label: string; href: string };
@@ -25,18 +35,24 @@ export interface HeroVariant {
 
 export const HERO_VARIANTS: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Experte",
-    subHeadline: "des projets web",
-    description:
-      "Refonte, headless ou web app : prix et délai annoncés, performance mesurée, 6 à 10 semaines.",
+    // Héros de la charte v1.7 (ADR-019) : les trois idées, pas la douleur.
+    // `headline` + `subHeadline` forment le h1, `tagline` le sous-titre ; la
+    // description porte le mesurable.
+    headline: "Pilotage de",
+    subHeadline: "votre projet web",
+    tagline: "Surveiller, maintenir, réaliser.",
+    description: `Un avis tranché avant d'engager un budget, puis ${PRESTATIONS_OU} au forfait : prix et délai écrits avant de commencer, performance mesurée avant et après, veille technique et stratégique à chaque étape.`,
     valueProposition:
       "Un avis indépendant avant d'engager un budget, puis une refonte en forfait : prix et délai écrits avant de commencer, performance mesurée avant et après.",
-    ctaPrimary: { label: "Réparer ou refaire ? Faites le test", href: "/outils/reparer-ou-refaire" },
-    ctaSecondary: { label: "Discutons de votre projet", href: "/contact" },
+    // Bouton froid unique du site (charte §7, ADR-013) : l'analyse du site,
+    // libellé fixe. Le test « Réparer ou refaire ? » reste un outil de /outils.
+    // Premier bouton de chaque héros : l'échange gratuit (Calendly) ; l'analyse
+    // du site passe en second.
+    ctaPrimary: { label: CTA_ECHANGE.label.fr, href: CTA_ECHANGE.href },
+    ctaSecondary: { label: "Analysez votre site en 2 minutes", href: "/scan" },
     auditTitle: "Qu'est-ce qui ralentit votre site ?",
     auditSubtitle: "Diagnostic en 2 minutes",
-    auditDescription:
-      "Une adresse, un rapport : voyez ce qui ralentit votre site et laquelle des trois trajectoires (consolider, découpler, refonder) correspond à votre situation.",
+    auditDescription: `Une adresse, un rapport : voyez ce qui ralentit votre site et laquelle des trois prestations (${PRESTATIONS_LISTE}) correspond à votre situation.`,
   },
   decideur: {
     headline: "Votre projet digital",
@@ -116,8 +132,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
 > = {
   default: {
     titre: "Solutions pour une refonte",
-    sousTitre:
-      "La vraie question n'est pas WordPress ou pas WordPress : c'est ce que vous gardez et ce que vous changez. Consolider, découpler ou refonder : prix affichés, délai annoncé, performance mesurée.",
+    sousTitre: `La vraie question n'est pas WordPress ou pas WordPress : c'est ce que vous gardez et ce que vous changez. Trois prestations, ${PRESTATIONS_OU} : prix affichés, délai annoncé, performance mesurée.`,
     carouselLabel: "Pourquoi Next Impact ?",
     budgetTitle: "Quel niveau d'investissement pour votre projet ?",
     budgetCards: {
@@ -130,7 +145,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
       right: {
         title: "Plateforme à fort enjeu",
         description:
-          "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes : architecture WordPress headless + Next.js, ISR/SSR et CI/CD complet.",
+          "Pour une plateforme à forte volumétrie, multisites ou intégrations complexes : application Next.js avec administration sur mesure, sans WordPress, ISR/SSR et CI/CD complet.",
         highlight:
           "Une architecture évolutive, pensée pour grandir avec votre activité.",
       },
@@ -144,7 +159,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
       {
         question: "Est-ce que je pourrai toujours modifier mes textes ?",
         answer:
-          "Oui, pour les trois trajectoires. Vous conservez l'interface WordPress que vous connaissez pour gérer tous vos contenus, images et pages. Aucune compétence technique n'est requise.",
+          "Oui. Avec l'Optimisation et la Refonte, vous gardez l'interface WordPress que vous connaissez pour gérer vos contenus, images et pages. L'Évolution remplace WordPress par une administration sur mesure, pensée pour votre métier, avec formation incluse. Aucune compétence technique n'est requise.",
       },
       {
         question: "Le Headless est-il plus cher à maintenir ?",
@@ -277,7 +292,7 @@ export const SERVICES_PAGE_VARIANTS: Record<
       right: {
         title: "Web app (Headless complexe ou Next.js + PostgreSQL)",
         description:
-          "WordPress headless + Next.js App Router, ISR/SSR hybride, multisites, API custom, intégrations tierces, CI/CD complet. Architecture pensée pour l'évolutivité.",
+          "Next.js App Router et PostgreSQL, administration sur mesure sans WordPress, ISR/SSR hybride, multisites, API custom, intégrations tierces, CI/CD complet. Architecture pensée pour l'évolutivité.",
         highlight:
           "Accès au repo Git, documentation technique complète, et support prioritaire 12 mois.",
       },

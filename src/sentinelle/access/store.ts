@@ -1,6 +1,6 @@
 import { and, eq, gte, lt, or, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { clients, magicLinks } from "@sentinelle/db/schema";
+import { clients, magicLinks, type Plan } from "@sentinelle/db/schema";
 import { sentinelleBaseUrl } from "@sentinelle/url";
 import {
   createMagicToken,
@@ -35,6 +35,7 @@ export interface Recipient {
   email: string;
   name: string;
   active: boolean;
+  plan: Plan;
 }
 
 /**
@@ -54,6 +55,7 @@ export async function findRecipient(email: string): Promise<Recipient | null> {
       email: clients.email,
       name: clients.name,
       active: clients.active,
+      plan: clients.plan,
     })
     .from(clients)
     .where(eq(sql`lower(${clients.email})`, normalized))

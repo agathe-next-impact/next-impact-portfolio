@@ -143,10 +143,17 @@ export default async function AlertPage({ params }: { params: Promise<{ id: stri
             sandbox=""
             className="mt-3 h-[720px] w-full border border-dark-gray bg-obsidian"
           />
-          <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
-            C'est bien ce document qui partira si l'alerte est validée dans Notion : le même
-            gabarit, le même rendu.
-          </p>
+          {alerte.client.plan === "accompagnement" ? (
+            <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              Client en accompagnement : rien ne part par e-mail. Validée dans Notion,
+              l&apos;alerte est publiée dans son espace d&apos;accompagnement au prochain export.
+            </p>
+          ) : (
+            <p className="mt-3 font-inter-tight text-sm leading-relaxed text-mid-gray">
+              C'est bien ce document qui partira si l'alerte est validée dans Notion : le même
+              gabarit, le même rendu.
+            </p>
+          )}
         </aside>
       </div>
     </main>

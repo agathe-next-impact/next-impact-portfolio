@@ -69,15 +69,16 @@ export async function GET(req: NextRequest) {
 
   // Sous-ensemble de glyphes à charger = tout le texte affiché.
   const fontText = `${title}${desc}${eyebrow}Next Impact${SITE_DOMAIN}№—↗`;
-  const [regular, semibold] = await Promise.all([
+  // Graisse maximale du site : 500 (ADR-017), image de partage comprise.
+  const [regular, medium] = await Promise.all([
     loadGoogleFont("Figtree", 400, fontText),
-    loadGoogleFont("Figtree", 600, fontText),
+    loadGoogleFont("Figtree", 500, fontText),
   ]);
 
   const fonts = [
     regular && { name: "Figtree", data: regular, weight: 400 as const, style: "normal" as const },
-    semibold && { name: "Figtree", data: semibold, weight: 600 as const, style: "normal" as const },
-  ].filter(Boolean) as { name: string; data: ArrayBuffer; weight: 400 | 600; style: "normal" }[];
+    medium && { name: "Figtree", data: medium, weight: 500 as const, style: "normal" as const },
+  ].filter(Boolean) as { name: string; data: ArrayBuffer; weight: 400 | 500; style: "normal" }[];
 
   const fontFamily = fonts.length ? "Figtree" : "sans-serif";
 
@@ -145,7 +146,7 @@ export async function GET(req: NextRequest) {
                 style={{
                   marginLeft: "16px",
                   fontSize: "26px",
-                  fontWeight: 600,
+                  fontWeight: 500,
                   letterSpacing: "-0.01em",
                 }}
               >
@@ -181,7 +182,7 @@ export async function GET(req: NextRequest) {
               style={{
                 display: "flex",
                 fontSize: `${titleSize(title.length)}px`,
-                fontWeight: 600,
+                fontWeight: 500,
                 lineHeight: 1.05,
                 letterSpacing: "-0.02em",
                 maxWidth: "920px",

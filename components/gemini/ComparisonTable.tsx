@@ -19,7 +19,7 @@ export default function ComparisonTable({ headers, rows }: ComparisonTableProps)
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: "var(--ink)",
-                fontWeight: 600,
+                fontWeight: 500,
                 textAlign: "left",
                 borderBottom: "1px solid var(--rule)",
               }}>

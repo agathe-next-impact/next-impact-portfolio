@@ -8,16 +8,15 @@ import { inngest } from "../client";
 import { clientSubscribed as clientSubscribedEvent } from "../events";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Ce qui suit un paiement.
+// Ce qui suit l'ouverture d'un abonnement.
 //
-// Le webhook Stripe fait une seule chose — écrire la fiche — puis rend la main.
-// Tout le reste vit ici : amorcer le stack, souhaiter la bienvenue. Deux
-// raisons de ne pas le faire dans la requête webhook : un scan de site prend
-// des secondes que Stripe ne donne pas, et un envoi d'e-mail qui échoue ne doit
-// pas faire retenter un paiement.
+// L'activation d'une demande d'inscription (admin) ou le provisionnement
+// (espace d'accompagnement) écrit la fiche, puis rend la main. Tout le reste
+// vit ici : amorcer le stack, souhaiter la bienvenue. Un scan de site prend des
+// secondes qu'une requête ne doit pas faire attendre, et un envoi d'e-mail qui
+// échoue ne doit pas faire échouer l'activation.
 //
-// Chaque étape est idempotente séparément. Un rejeu (Stripe retente, Inngest
-// retente) reprend là où ça a cassé sans rien dupliquer : l'import est un
+// Chaque étape est idempotente séparément. Un rejeu (Inngest retente) reprend là où ça a cassé sans rien dupliquer : l'import est un
 // upsert, la bienvenue est protégée par une écriture conditionnelle.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -44,7 +43,7 @@ export const onClientSubscribed = inngest.createFunction(
     });
 
     if (!client) {
-      // La fiche a été effacée entre le paiement et ici : rien à faire, et
+      // La fiche a été effacée entre l'activation et ici : rien à faire, et
       // surtout pas une erreur qui ferait retenter indéfiniment.
       console.warn(`[sentinelle] abonnement ${clientId} : fiche introuvable, abandon`);
       return { clientId, imported: 0, welcome: "fiche introuvable" };

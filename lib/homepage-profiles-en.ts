@@ -6,23 +6,30 @@ import type {
   AboutPageVariant,
   ExpandableCardVariant,
 } from "@/lib/homepage-profiles";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER } from "@/lib/trajectoires";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
+
+// The three services under their single name, read from lib/trajectoires.ts
+// (charter v1.6, ADR-014): "Optimization, Redesign, Evolution".
+const SERVICES = TRAJECTOIRE_ORDER.map((slug) => TRAJECTOIRES[slug].name.en);
+const SERVICES_LIST = SERVICES.join(", ");
+const SERVICES_OR = `${SERVICES.slice(0, -1).join(", ")} or ${SERVICES.at(-1)}`;
 
 // ─── Hero variants ───────────────────────────────────────────────────────────
 
 export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
   default: {
-    headline: "Consulting and Services,",
-    subHeadline: "for WordPress redesigns",
-    description:
-      "Redesign, headless or web app: price and timeline announced, performance measured, 6 to 10 weeks.",
+    headline: "Leading",
+    subHeadline: "your web project",
+    tagline: "Monitor, maintain, deliver.",
+    description: `A clear-cut opinion before you commit a budget, then ${SERVICES_OR} at a fixed price: price and timeline in writing before we start, performance measured before and after, a technical and strategic watch at every step.`,
     valueProposition:
       "An independent opinion before you commit a budget, then a fixed-price redesign: price and timeline in writing before we start, performance measured before and after.",
-    ctaPrimary: { label: "Repair or rebuild? Take the test", href: "/outils/reparer-ou-refaire" },
-    ctaSecondary: { label: "Let's talk about your project", href: "/contact" },
+    ctaPrimary: { label: CTA_ECHANGE.label.en, href: CTA_ECHANGE.href },
+    ctaSecondary: { label: "Analyze your site in 2 minutes", href: "/scan" },
     auditTitle: "What is slowing your site down?",
     auditSubtitle: "2-minute diagnostic",
-    auditDescription:
-      "One address, one report: see what slows your site down and which of the three trajectories (consolidate, decouple, rebuild) matches your situation.",
+    auditDescription: `One address, one report: see what slows your site down and which of the three services (${SERVICES_LIST}) matches your situation.`,
   },
   decideur: {
     headline: "Your digital project,",
@@ -72,9 +79,8 @@ export const HERO_VARIANTS_EN: Record<ProfileId | "default", HeroVariant> = {
 
 export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPageVariant> = {
   default: {
-    titre: "Three trajectories for an aging WordPress site",
-    sousTitre:
-      "The real question is not WordPress or not WordPress: it is what you keep and what you change. Consolidate, decouple or rebuild: displayed prices, committed timeline, measured performance.",
+    titre: "Three services for an aging WordPress site",
+    sousTitre: `The real question is not WordPress or not WordPress: it is what you keep and what you change. Three services, ${SERVICES_OR}: displayed prices, committed timeline, measured performance.`,
     carouselLabel: "Why Next Impact?",
     budgetTitle: "What investment level fits your project?",
     budgetCards: {
@@ -87,7 +93,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       right: {
         title: "High-stakes platform",
         description:
-          "For high-traffic platforms, multisite setups or complex integrations: WordPress headless + Next.js architecture, ISR/SSR and full CI/CD.",
+          "For high-traffic platforms, multisite setups or complex integrations: a Next.js application with a bespoke admin, no WordPress, ISR/SSR and full CI/CD.",
         highlight:
           "A scalable architecture, built to grow with your business.",
       },
@@ -101,7 +107,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       {
         question: "Will I still be able to edit my own copy?",
         answer:
-          "Yes, on all three trajectories. You keep the WordPress interface you already know to manage all your content, images and pages. No technical skills required.",
+          "Yes. With Optimization and Redesign, you keep the WordPress interface you already know to manage your content, images and pages. Evolution replaces WordPress with a bespoke admin built around your business, with training included. No technical skills required.",
       },
       {
         question: "Is headless more expensive to maintain?",
@@ -234,7 +240,7 @@ export const SERVICES_PAGE_VARIANTS_EN: Record<ProfileId | "default", ServicesPa
       right: {
         title: "Web app (complex Headless or Next.js + PostgreSQL)",
         description:
-          "WordPress headless + Next.js App Router, hybrid ISR/SSR, multisite, custom APIs, third-party integrations, full CI/CD. Architecture built for scalability.",
+          "Next.js App Router and PostgreSQL, bespoke admin with no WordPress, hybrid ISR/SSR, multisite, custom APIs, third-party integrations, full CI/CD. Architecture built for scalability.",
         highlight:
           "Git repo access, complete technical documentation, and 12-month priority support.",
       },

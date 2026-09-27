@@ -5,7 +5,7 @@
 // 10 questions → score global /100 + 4 axes (accès robots IA, citabilité,
 // structure/données, autorité externe), verdict par palier et 3 actions
 // concrètes. Escalier de CTA par température : froid → rubrique etre-trouve,
-// tiède → visio conseil 150 €, chaud → audit complet 650 €. Doctrine : le résultat
+// tiède → échange de 15 minutes gratuit, chaud → audit complet 650 €. Doctrine : le résultat
 // est utile sans rien acheter. Scoring pur dans lib/visibilite-ia.ts (testé).
 // Modèle : reparer-ou-refaire.
 
@@ -72,17 +72,17 @@ function getCtas(tier: Tier) {
         href: "/documentation/etre-trouve",
       },
       secondary: {
-        fr: "Affiner en visio · 150 €",
-        en: "Fine-tune on a call · €150",
-        href: "/conseil",
+        fr: "Affiner · 15 min, gratuit",
+        en: "Fine-tune · 15 min, free",
+        href: "/conseil#choix-techno-ia",
       },
     };
   if (tier === "partiel")
     return {
       primary: {
-        fr: "Prioriser mes actions en visio · 150 €",
-        en: "Prioritize my actions on a call · €150",
-        href: "/conseil",
+        fr: "Prioriser mes actions · 15 min, gratuit",
+        en: "Prioritize my actions · 15 min, free",
+        href: "/conseil#choix-techno-ia",
       },
       secondary: {
         fr: "Explorer la rubrique Être trouvé",
@@ -313,8 +313,8 @@ export default function VisibiliteIa() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "This is a declarative self-check: it reflects your answers, not a crawl of your site. The actions above can be done without any provider — a call helps prioritize and verify on the real site."
-                : "Auto-diagnostic déclaratif : il reflète vos réponses, pas un crawl de votre site. Les actions ci-dessus se mènent sans prestataire — une visio sert à prioriser et vérifier sur le site réel."}
+                ? "This is a declarative self-check: it reflects your answers, not a crawl of your site. The actions above can be done without any provider. A free 15-minute call helps prioritize them for the real site."
+                : "Auto-diagnostic déclaratif : il reflète vos réponses, pas un crawl de votre site. Les actions ci-dessus se mènent sans prestataire. Un échange de 15 minutes, gratuit, aide à les prioriser sur le site réel."}
             </p>
           </StaggerItem>
 

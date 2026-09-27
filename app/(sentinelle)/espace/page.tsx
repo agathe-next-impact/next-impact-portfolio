@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { sendLoginLink } from "@sentinelle/access";
-import { listReceivedAlerts, listReceivedIssues, openBillingPortal, periodLabel } from "@sentinelle/espace";
+import { listReceivedAlerts, listReceivedIssues, periodLabel } from "@sentinelle/espace";
 import { getFiche, watchedCount } from "@sentinelle/onboarding";
+import { NEWSLETTER_NAME, NEWSLETTER_PUBLICATION_URL } from "@/lib/newsletter";
+import { getDernieresLettres } from "@/lib/substack";
 import {
   buttonClass,
   formatDate,
@@ -54,31 +56,15 @@ export default async function EspacePage({
     return <Connexion envoye={false} erreur="fiche-absente" />;
   }
 
-  const [alertes, numeros] = await Promise.all([
+  const [alertes, numeros, lettresGratuites] = await Promise.all([
     listReceivedAlerts(clientId),
     listReceivedIssues(clientId),
+    // Flux tiers : une panne Substack rend une liste vide, jamais une erreur.
+    getDernieresLettres(12),
   ]);
 
   const suivis = watchedCount(fiche.components);
   const host = fiche.client.siteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
-
-  async function ouvrirFacturation() {
-    "use server";
-
-    // Une action serveur est une URL publique : elle revérifie la session pour
-    // son propre compte, sans faire confiance à l'écran qui l'a affichée.
-    const id = await currentClientId();
-    if (!id) redirect(ESPACE_PATH);
-
-    const courant = await getFiche(id);
-    const outcome = await openBillingPortal(courant?.client.stripeCustomerId ?? null);
-
-    redirect(
-      outcome.ok
-        ? outcome.url
-        : `${ESPACE_PATH}?message=${encodeURIComponent(outcome.reason)}&erreur=1`,
-    );
-  }
 
   async function seDeconnecter() {
     "use server";
@@ -181,6 +167,58 @@ export default async function EspacePage({
       </section>
 
       <section className="mt-14">
+        <Label>La lettre gratuite · archives</Label>
+        <p className="mt-4 font-inter-tight text-base leading-relaxed text-mid-gray">
+          «&nbsp;{NEWSLETTER_NAME}&nbsp;» Vos numéros Sentinelle parlent de votre site ;
+          la lettre gratuite parle du marché du web et de l&apos;IA autour de lui.
+        </p>
+
+        {lettresGratuites.length === 0 ? (
+          <p className="mt-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
+            Les archives ne se chargent pas pour le moment.{" "}
+            <a
+              href={`${NEWSLETTER_PUBLICATION_URL}/archive`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4"
+            >
+              Les lire sur Substack
+            </a>
+            .
+          </p>
+        ) : (
+          <>
+            <ul className="mt-5 divide-y divide-dark-gray border-y border-dark-gray">
+              {lettresGratuites.map((lettre) => (
+                <li key={lettre.url} className="flex items-baseline justify-between gap-4 py-4">
+                  <a
+                    href={lettre.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-inter-tight text-base text-foreground underline-offset-4 hover:underline"
+                  >
+                    {lettre.etiquette ? `${lettre.etiquette} · ` : ""}
+                    {lettre.titreCourt}
+                  </a>
+                  <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+                    {formatDate(new Date(lettre.date))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={`${NEWSLETTER_PUBLICATION_URL}/archive`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${buttonClass.ghost} mt-5`}
+            >
+              Toutes les archives
+            </a>
+          </>
+        )}
+      </section>
+
+      <section className="mt-14">
         <Label>Votre fiche</Label>
         <p className="mt-4 font-inter-tight text-base leading-relaxed text-mid-gray">
           {fiche.components.length} composant{fiche.components.length > 1 ? "s" : ""} en
@@ -195,16 +233,14 @@ export default async function EspacePage({
       <section className="mt-14 border-t border-dark-gray pt-8">
         <Label>Abonnement</Label>
         <p className="mt-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
-          Factures, moyen de paiement, résiliation : tout se fait depuis la page de
-          facturation Stripe. Résilier prend deux clics et ne demande d&apos;écrire à
-          personne.
+          Factures, changement d&apos;adresse, résiliation : répondez à n&apos;importe
+          quelle lettre, ou écrivez-moi. L&apos;abonnement est sans engagement : un
+          message suffit pour le résilier.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <form action={ouvrirFacturation}>
-            <button type="submit" className={buttonClass.ghost}>
-              Gérer mon abonnement
-            </button>
-          </form>
+          <a href="/contact" className={buttonClass.ghost}>
+            M&apos;écrire
+          </a>
           <form action={seDeconnecter}>
             <button type="submit" className={buttonClass.quiet}>
               Se déconnecter
@@ -274,7 +310,7 @@ function Connexion({ envoye, erreur }: { envoye: boolean; erreur?: string }) {
               </p>
               <p className="mt-4 font-inter-tight text-sm leading-relaxed text-mid-gray">
                 Rien reçu&nbsp;? Regardez dans les indésirables, puis réessayez avec
-                l&apos;adresse utilisée au moment du paiement.
+                l&apos;adresse donnée à l&apos;inscription.
               </p>
               <Link href={ESPACE_PATH} className={`${buttonClass.ghost} mt-6`}>
                 Réessayer
@@ -307,8 +343,8 @@ function Connexion({ envoye, erreur }: { envoye: boolean; erreur?: string }) {
 
       <p className="mt-8 font-inter-tight text-sm leading-relaxed text-mid-gray">
         Pas encore abonné&nbsp;?{" "}
-        <a href="/sentinelle" className="underline underline-offset-4">
-          Découvrir Sentinelle
+        <a href="/sentinelle#inscription" className="underline underline-offset-4">
+          Demander votre inscription
         </a>
         .
       </p>
