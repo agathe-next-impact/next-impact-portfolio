@@ -93,6 +93,12 @@ export function renderLettre(lettre: Lettre): ExportBlock[] {
     out.push(h3("Ce qui ne change pas"));
     for (const item of tendances.ceQuiNeChangePas) out.push(li(t(item)));
   }
+  if (tendances.concurrence.length > 0) {
+    out.push(h2("Vos concurrents"));
+    for (const item of tendances.concurrence) {
+      out.push(li(t(item.concurrent, { b: true }), t(` : ${item.mouvement} ${item.pourVous}`)));
+    }
+  }
 
   const { synthese } = lettre;
   out.push(h2("Ce qui compte ce mois-ci"));

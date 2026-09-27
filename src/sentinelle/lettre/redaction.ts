@@ -76,9 +76,10 @@ const CONSIGNES = {
     "d'autre : les tendances et la synthèse font l'objet d'appels séparés.",
   tendances:
     "Écris maintenant **les tendances** (étape 4) : les tendances du mois, le marché des " +
-    "solutions par famille, les signaux de demande, les tendances de fond et ce qui ne " +
-    "change pas. Chaque tendance est qualifiée pour CE site, à partir du profil que tes " +
-    "axes viennent d'établir.",
+    "solutions par famille, les signaux de demande, les tendances de fond, ce qui ne " +
+    "change pas, et vos concurrents (un par concurrent direct du dossier, rien d'autre). " +
+    "Chaque tendance est qualifiée pour CE site, à partir du profil que tes axes viennent " +
+    "d'établir.",
   synthese:
     "Écris maintenant **la synthèse et la clôture** (étape 5) : les trois actions au plus, " +
     "les trois scénarios, ce qu'il faut différer, la méthode de budget, comment décider, " +

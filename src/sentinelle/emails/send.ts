@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import type { Plan } from "@sentinelle/db/schema";
 import { isAnonymizedEmail } from "@sentinelle/retention/purge";
 import { resolveMailConfig, type MailConfig } from "./config";
 
@@ -61,6 +62,21 @@ export function undeliverableReason(email: string): string | null {
   }
 
   return null;
+}
+
+/**
+ * Raison de ne rien envoyer à ce client du fait de sa formule, ou `null` s'il
+ * reçoit la veille par e-mail.
+ *
+ * Seuls les abonnés Sentinelle seuls (`veille`) reçoivent lettres, alertes et
+ * liens de connexion. Un client en accompagnement lit sa veille dans l'espace
+ * d'accompagnement : lui écrire aussi doublerait chaque numéro, et le lien vers
+ * l'espace abonné l'enverrait dans un espace qui n'est pas le sien.
+ */
+export function planMailReason(plan: Plan): string | null {
+  return plan === "accompagnement"
+    ? "Client en accompagnement : sa veille se lit dans l'espace d'accompagnement, rien ne part par e-mail."
+    : null;
 }
 
 type Deps = { transport?: MailTransport; config?: MailConfig };

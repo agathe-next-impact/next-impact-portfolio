@@ -30,6 +30,10 @@ do/don't §9). Puis lis le(s) fichier(s) à auditer.
    sections collées, dernière colonne avec bordure droite parasite.
 6. **Typo hors-DS** : titres `font-bold` lourds au lieu de fins `tracking-tight` ; corps
    sans `.font-inter-tight` ; serif résiduel (`.ni-serif`/`font-serif`/Instrument Serif).
+   **Graisse maximale : 500** (ADR-017). Toute graisse au-dessus est un écart : classe
+   arbitraire entre crochets, `fontWeight` en ligne, `font-weight` en CSS. Pour 500, la
+   classe juste est `font-regular` ; `font-medium`, `font-semibold` et `font-bold` sont
+   plafonnées à 500 dans `tailwind.config.ts`, ne pas relever ces valeurs.
 7. **Accent mal utilisé** : lavande « star » résiduel ; vermillon en aplat de surface ;
    vermillon décoratif là où il devrait ponctuer.
 8. **Reduced-motion** : `framer-motion` brut sans passer par `<Reveal>`/MotionProvider, ou

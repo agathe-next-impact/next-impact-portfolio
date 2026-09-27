@@ -102,6 +102,24 @@ export const DOSSIER_JSON_SCHEMA = object(
         ["nom", "cherche", "attenduDuSite", "niveauDeReponse"],
       ),
     ),
+    // Concurrents directs (2026-09-27) : la veille porte sur l'écosystème du
+    // site, concurrents compris. Leurs mouvements datés vont dans `faits`
+    // (famille « Concurrence ») ; ici, qui ils sont et ce que montre leur site.
+    concurrents: arrayOf(
+      object(
+        {
+          nom: { type: "string", description: "Nom de l'organisation concurrente." },
+          site: { type: "string", description: "URL de son site, ouverte et lue." },
+          pourquoi: { type: "string", description: "Pourquoi c'est un concurrent direct, en une phrase." },
+          constat: {
+            type: "string",
+            description: "Ce que son site fait que celui du client ne fait pas, ou l'inverse.",
+          },
+          statut: { type: "string", enum: [...OBSERVATION_STATUSES] },
+        },
+        ["nom", "site", "pourquoi", "constat", "statut"],
+      ),
+    ),
     aConfirmer: arrayOf(
       object({ point: str, sourceAVerifier: str }, ["point", "sourceAVerifier"]),
     ),
@@ -117,6 +135,7 @@ export const DOSSIER_JSON_SCHEMA = object(
     "faits",
     "observations",
     "publics",
+    "concurrents",
     "aConfirmer",
     "pagesAnalysees",
     "pagesNonAnalysees",
@@ -154,6 +173,18 @@ export const DossierSchema = z.object({
       niveauDeReponse: z.string(),
     }),
   ),
+  // `default([])` : les dossiers conservés avant le 2026-09-27 n'en ont pas.
+  concurrents: z
+    .array(
+      z.object({
+        nom: z.string(),
+        site: z.string(),
+        pourquoi: z.string(),
+        constat: z.string(),
+        statut: z.enum(OBSERVATION_STATUSES),
+      }),
+    )
+    .default([]),
   aConfirmer: z.array(z.object({ point: z.string(), sourceAVerifier: z.string() })),
   pagesAnalysees: z.array(z.string()),
   pagesNonAnalysees: z.array(z.object({ url: z.string(), raison: z.string() })),
@@ -241,8 +272,21 @@ export const LETTRE_TENDANCES_SCHEMA = object(
           ]),
         ),
         ceQuiNeChangePas: strArray,
+        concurrence: arrayOf(
+          object(
+            {
+              concurrent: { type: "string", description: "Nom, tel qu'il figure au dossier." },
+              mouvement: {
+                type: "string",
+                description: "Ce qu'il fait ou a fait, daté quand c'est un fait de la période.",
+              },
+              pourVous: { type: "string", description: "Ce que ça change pour ce site et ses enjeux." },
+            },
+            ["concurrent", "mouvement", "pourVous"],
+          ),
+        ),
       },
-      ["duMois", "marche", "signauxDeDemande", "deFond", "ceQuiNeChangePas"],
+      ["duMois", "marche", "signauxDeDemande", "deFond", "ceQuiNeChangePas", "concurrence"],
     ),
   },
   ["tendances"],
@@ -374,6 +418,10 @@ export const LettreSchema = z.object({
       z.object({ mouvement: z.string(), faitDate: z.string(), qualification: z.string() }),
     ),
     ceQuiNeChangePas: z.array(z.string()),
+    // `default([])` : les lettres conservées avant le 2026-09-27 n'en ont pas.
+    concurrence: z
+      .array(z.object({ concurrent: z.string(), mouvement: z.string(), pourVous: z.string() }))
+      .default([]),
   }),
   synthese: z.object({
     actions: z.array(

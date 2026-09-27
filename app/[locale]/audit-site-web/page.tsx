@@ -181,7 +181,7 @@ export default async function AuditSiteIaPage({
           <AuditFaq index="№ 08" content={c.faq} />
           <Separator />
           {/* Upsell tiède : la preuve gratuite vient d'être livrée → l'étage
-              au-dessus est la visio conseil payante (déduite du devis). */}
+              au-dessus est l'échange de 15 minutes, puis l'audit + roadmap. */}
           <VisioConseilBanner tone="jet" />
           <Separator />
           <CtaFinal index="№ 09" content={c.ctaFinal} />

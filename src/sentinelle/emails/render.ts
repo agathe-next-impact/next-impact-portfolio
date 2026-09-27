@@ -73,7 +73,7 @@ export async function renderAlertEmail(props: AlertEmailProps): Promise<Rendered
 }
 
 /**
- * Bienvenue — envoyé une seule fois, juste après le paiement.
+ * Bienvenue — envoyé une seule fois, à l'activation de l'abonnement.
  *
  * L'objet nomme le site : c'est la seule chose que le destinataire cherche des
  * yeux dans une boîte pleine, et ça prouve du premier coup d'œil qu'on parle

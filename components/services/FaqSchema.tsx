@@ -52,6 +52,7 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
       <Stagger>
         {faqs.map((faq, idx) => {
           const isOpen = open === idx;
+          const panelId = `${sectionId}-reponse-${idx}`;
           return (
             <StaggerItem
               key={idx}
@@ -64,6 +65,7 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
                 type="button"
                 onClick={() => setOpen(isOpen ? null : idx)}
                 aria-expanded={isOpen}
+                aria-controls={panelId}
                 className="grid w-full grid-cols-[40px_1fr_24px] items-baseline gap-5 px-6 py-6 text-left lg:px-8"
               >
                 <span className="font-mono text-2xs tracking-[0.08em] text-accent-secondary">
@@ -81,11 +83,17 @@ const FaqSchema: React.FC<FaqSchemaProps> = ({
                   )}
                 />
               </button>
-              {isOpen && (
-                <div className="px-6 pb-6 pl-[60px] font-inter-tight text-base leading-relaxed text-mid-gray lg:px-8 lg:pl-[60px]">
-                  {faq.answer}
-                </div>
-              )}
+              {/* La réponse reste dans le HTML, repliée (`hidden`) : le schéma
+                  FAQPage ci-dessous ne déclare rien que la page ne contienne.
+                  Rendue seulement à l'ouverture, elle était absente du HTML
+                  servi, donc du contenu que lisent les moteurs. */}
+              <div
+                id={panelId}
+                hidden={!isOpen}
+                className="px-6 pb-6 pl-[60px] font-inter-tight text-base leading-relaxed text-mid-gray lg:px-8 lg:pl-[60px]"
+              >
+                {faq.answer}
+              </div>
             </StaggerItem>
           );
         })}

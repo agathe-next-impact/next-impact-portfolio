@@ -40,7 +40,13 @@ export function loadPrompt(filename: string): string {
   const memo = cache.get(filename);
   if (memo) return memo;
 
-  const raw = readFileSync(path.join(process.cwd(), PROMPT_DIR, filename), "utf8");
+  // Fins de ligne ramenées à LF : sur un poste Windows, Git extrait ces
+  // fichiers en CRLF, le séparateur `\n---\n` n'était plus trouvé et le
+  // préambule humain partait dans le contexte du modèle.
+  const raw = readFileSync(path.join(process.cwd(), PROMPT_DIR, filename), "utf8").replace(
+    /\r\n/g,
+    "\n",
+  );
   const separator = raw.indexOf("\n---\n");
   const body = separator === -1 ? raw : raw.slice(separator + 5);
 

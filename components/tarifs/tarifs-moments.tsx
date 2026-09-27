@@ -3,27 +3,40 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
-import { getTiers } from "@/components/services/PricingCards";
-import { OFFERS as CONSEIL_OFFERS, CREDIT_WINDOW_DAYS } from "@/lib/visio-conseil";
+import { SituationRow } from "@/components/packs/pack-parts";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 import { CTO_COMMITMENT, CTO_PATH, CTO_TIERS } from "@/lib/cto-externalise";
 import {
   MAINTENANCE_COMMITMENT,
+  MAINTENANCE_GRID_COLUMNS,
   MAINTENANCE_ONBOARDING,
   MAINTENANCE_PATH,
   MAINTENANCE_TIERS,
   SUIVI_INCLUS_LABEL,
   SUIVI_INCLUS_MOIS,
+  maintenancePriceLabel,
 } from "@/lib/maintenance-offer";
+import { BESOINS, situationsDuBesoin } from "@/lib/situations";
+import { TRAJECTOIRES, trajectoirePrice, type TrajectoireSlug } from "@/lib/trajectoires";
+import { CTA_CHAUD } from "@/lib/visio-conseil";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// /tarifs — la seule page qui liste TOUTES les offres et leurs paliers, rangées
-// par moment (Décider · Refaire · Tenir). Elle sert le prospect qui vérifie ;
-// partout ailleurs, une carte n'affiche qu'un prix « à partir de ».
+// /tarifs : la seule page qui montre à la fois les PACKS et le CATALOGUE (charte
+// v1.6, ADR-014). D'abord les sept packs, rangés par besoin : le budget d'une
+// situation. Ensuite les SEPT lignes du catalogue et leurs paliers, rangées par
+// moment (Évoluer · Gérer, ADR-013) : les prix publics dont chaque budget est
+// la somme. La section Diagnostiquer a été retirée le 2026-09-27 à la demande
+// d'Agathe (ADR-022) : l'échange gratuit et l'audit + roadmap se lisent, avec
+// leur prix, dans leurs lignes de la section 01. Elle sert le prospect qui
+// vérifie.
 //
-// Composant client parce que les prix des trajectoires vivent dans
-// PricingCards.getTiers (module client). Aucun prix recopié ici : chaque ligne
-// lit sa source unique. Contenu FR (locale EN en noindex).
+// On compte les offres, pas les paliers : le démarrage du suivi est une
+// condition, dite dans le détail de la ligne. Sentinelle n'est plus une ligne :
+// elle est incluse dans le suivi et se vend depuis l'analyse du site. Son prix
+// reste lisible ici, en note, pour le prospect qui vérifie.
+//
+// Aucun prix recopié ici : chaque ligne lit sa source unique. Contenu FR
+// (locale EN en noindex).
 // ─────────────────────────────────────────────────────────────────────────────
 
 type Href = Parameters<typeof Link>[0]["href"];
@@ -34,6 +47,8 @@ type Row = {
   prix: string[];
   href: string;
   recommandee?: boolean;
+  /** Offre gratuite : mise en avant, comme une recommandation. */
+  gratuite?: boolean;
 };
 
 function Moment({
@@ -69,9 +84,9 @@ function Moment({
               <span className="text-lg font-light tracking-tight text-foreground group-hover:text-accent-secondary">
                 {r.offre}
               </span>
-              {r.recommandee && (
+              {(r.recommandee || r.gratuite) && (
                 <span className="rounded-full bg-accent-secondary px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em] text-obsidian">
-                  Recommandée
+                  {r.gratuite ? "Gratuit, sans engagement" : "Recommandée"}
                 </span>
               )}
             </span>
@@ -90,67 +105,38 @@ function Moment({
 }
 
 export function TarifsMoments() {
-  const tiers = getTiers(false);
-  const tier = (slug: string) => tiers.find((t) => t.slug === slug)!;
-  const visio = CONSEIL_OFFERS.find((o) => o.id === "choix-techno-ia")!.tiers[0];
-  const audit = CONSEIL_OFFERS.find((o) => o.id === "architecture-projet-ia")!.tiers[0];
-
-  const decider: Row[] = [
-    {
-      offre: "Visio conseil refonte",
-      detail: "Une heure en visio, un avis écrit sous 48 h : garder, faire évoluer ou refaire.",
-      prix: [`${visio.price.fr} HT`],
-      href: "/conseil#choix-techno-ia",
-    },
-    {
-      offre: "Audit + roadmap",
-      detail: "Rapport d'audit, préconisations chiffrées et roadmap, remis dans votre espace en ligne.",
-      prix: [`${audit.price.fr} HT`],
-      href: "/conseil#architecture-projet-ia",
-    },
-    {
-      offre: "Veille et ressources",
-      detail: "La lettre gratuite, les ressources pour décider et les outils de diagnostic.",
-      prix: ["Gratuit"],
-      href: "/veille",
-    },
-  ];
-
+  const prestation = (slug: TrajectoireSlug, detail: string): Row => ({
+    offre: TRAJECTOIRES[slug].name.fr,
+    detail,
+    prix: [`${trajectoirePrice(slug, "fr")} HT`],
+    href: TRAJECTOIRES[slug].href,
+    recommandee: TRAJECTOIRES[slug].recommended,
+  });
   const refaire: Row[] = [
-    {
-      offre: "Consolider",
-      detail: "Refonte WordPress optimisée : thème sur mesure, extensions réduites, sécurité durcie.",
-      prix: [`${tier("forfait-classique").price} HT`],
-      href: "/solutions-web#forfait-classique",
-    },
-    {
-      offre: "Découpler",
-      detail: "Refonte WordPress headless : vos rédacteurs publient dans WordPress, vos visiteurs voient un site rapide et moderne.",
-      prix: [`${tier("forfait-headless").price} HT`],
-      href: "/solutions-web#forfait-headless",
-      recommandee: true,
-    },
-    {
-      offre: "Refonder",
-      detail: "Web app, plateforme ou application mobile, reliée à vos outils.",
-      prix: [`${tier("forfait-webapp").price} HT`],
-      href: "/solutions-web#forfait-webapp",
-    },
+    prestation(
+      "forfait-classique",
+      "WordPress optimisé : thème sur mesure, extensions réduites, sécurité durcie.",
+    ),
+    prestation(
+      "forfait-headless",
+      "WordPress headless : vos rédacteurs publient dans WordPress, vos visiteurs voient un site rapide et moderne.",
+    ),
+    prestation("forfait-webapp", "Web app, plateforme ou application mobile, reliée à vos outils."),
   ];
+
+  // Le prix du suivi dépend du type de site : une ligne par palier et par colonne
+  // de la grille (lib/maintenance-offer.ts).
+  const prixSuivi = MAINTENANCE_GRID_COLUMNS.flatMap((col) =>
+    MAINTENANCE_TIERS.map(
+      (t) => `${col.label.fr} · ${t.name.fr} · ${maintenancePriceLabel(t.id, col.kind, "fr")}`,
+    ),
+  );
 
   const tenir: Row[] = [
     {
-      offre: "Sentinelle",
-      detail: "Lettre de veille deux fois par mois et alertes sur les composants installés sur votre site. Sans engagement.",
-      prix: [OFFER_PRICE_LABEL],
-      href: "/sentinelle",
-    },
-    {
       offre: "Suivi et maintenance",
-      detail: `Surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel, Sentinelle incluse. ${MAINTENANCE_COMMITMENT.fr}`,
-      prix: MAINTENANCE_TIERS.map((t) => `${t.name.fr} · ${t.price.fr}`).concat(
-        `Démarrage · ${MAINTENANCE_ONBOARDING.fr.price}`,
-      ),
+      detail: `Surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel, veille en continu avec Sentinelle incluse. ${MAINTENANCE_COMMITMENT.fr} Le suivi démarre par un état des lieux : ${MAINTENANCE_ONBOARDING.fr.price}, offert pour un site que j'ai livré.`,
+      prix: prixSuivi,
       href: MAINTENANCE_PATH,
     },
     {
@@ -163,53 +149,76 @@ export function TarifsMoments() {
 
   return (
     <>
-      <Moment
-        index="№ 01"
-        kicker="Décider"
-        title={
-          <>
-            Avant d&apos;engager un budget, <span className="text-accent-secondary">un avis tranché</span>.
-          </>
-        }
-        description="Les deux portes d'entrée payantes, et ce qui est gratuit."
-        rows={decider}
-        note={`La visio est déduite du devis si un projet démarre sous ${CREDIT_WINDOW_DAYS} jours.`}
-      />
+      {/* Les packs : le budget d'une situation, par besoin. */}
+      <BlueprintSection id="packs">
+        <div className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-14">
+          <SectionHeading
+            index="№ 02"
+            kicker="Les parcours, par besoin"
+            title={
+              <>
+                Votre situation, <span className="text-accent-secondary">son budget</span>.
+              </>
+            }
+            description="Un parcours met les offres du catalogue dans l'ordre : avant, pendant, après. Il ne crée ni prix ni remise : son budget est la somme des prix publics listés plus bas."
+          />
+        </div>
+        {BESOINS.map((b) => (
+          <div key={b.key}>
+            <p className="border-b border-dark-gray bg-jet px-6 py-3 font-mono text-2xs uppercase tracking-[0.14em] text-mid-gray lg:px-8">
+              {b.index} · {b.moment.fr} · « {b.phrase.fr} »
+            </p>
+            {situationsDuBesoin(b.key).map((s) => (
+              <SituationRow key={s.slug} situation={s} lang="fr" prix="budget" />
+            ))}
+          </div>
+        ))}
+      </BlueprintSection>
       <Separator />
       <Moment
-        index="№ 02"
-        kicker="Refaire"
+        index="№ 03"
+        kicker="Évoluer"
         title={
           <>
-            Trois trajectoires, <span className="text-accent-secondary">au forfait</span>.
+            Trois prestations, <span className="text-accent-secondary">au forfait</span>.
           </>
         }
         description="Refonte ou création : mêmes forfaits, prix et délai écrits avant de commencer, 6 à 10 semaines."
         rows={refaire}
-        note={
+        note={`Chaque prestation comprend une première analyse de veille technique et stratégique.${
           SUIVI_INCLUS_MOIS > 0
-            ? `Chaque forfait inclut ${SUIVI_INCLUS_LABEL.fr.replace(/ inclus$/, "")} Essentiel après la mise en ligne.`
-            : undefined
-        }
-        tone="jet"
+            ? ` Chaque forfait inclut ${SUIVI_INCLUS_LABEL.fr.replace(/ inclus$/, "")} Essentiel après la mise en ligne.`
+            : ""
+        }`}
       />
       <Separator />
       <Moment
-        index="№ 03"
-        kicker="Tenir"
+        index="№ 04"
+        kicker="Gérer"
         title={
           <>
-            Prévenir, entretenir, <span className="text-accent-secondary">décider</span>.
+            Entretenir, <span className="text-accent-secondary">piloter</span>.
           </>
         }
-        description="Les trois abonnements, du plus léger au plus engageant. Chacun se suit dans votre espace en ligne."
+        description="Les deux abonnements, du plus léger au plus engageant. Tous deux portent une veille en continu, et se suivent dans votre espace en ligne."
         rows={tenir}
+        tone="jet"
+        note={
+          <>
+            Sentinelle, la lettre de veille et les alertes sur les composants de votre site, est incluse dans le
+            suivi et maintenance. Seule, elle se souscrit depuis l&apos;analyse de votre site : {OFFER_PRICE_LABEL},
+            sans engagement.{" "}
+            <Link href="/sentinelle" className="text-accent-secondary no-underline hover:text-foreground">
+              Voir Sentinelle →
+            </Link>
+          </>
+        }
       />
       <Separator />
-      <BlueprintSection tone="jet" innerClassName="px-6 py-14 lg:px-8 lg:py-20">
+      <BlueprintSection innerClassName="px-6 py-14 lg:px-8 lg:py-20">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            index="№ 04"
+            index="№ 05"
             kicker="Par où commencer"
             title={
               <>
@@ -226,12 +235,14 @@ export function TarifsMoments() {
               Analysez votre site en 2 minutes
               <ArrowRight size={14} />
             </a>
-            <Link
-              href="/contact"
+            <a
+              href={CTA_CHAUD.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-mid-gray no-underline transition-colors hover:text-foreground"
             >
               Discutons de votre projet
-            </Link>
+            </a>
           </div>
         </div>
       </BlueprintSection>

@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
+import { alerts, clients, intelItems, stackItems, type Plan } from "@sentinelle/db/schema";
 import type { AlertStatus, DraftedAlert, Verdict } from "@sentinelle/types";
 import { initialContent } from "./content";
 
@@ -270,6 +270,7 @@ export interface AlertDetail {
     siteUrl: string;
     company: string | null;
     active: boolean;
+    plan: Plan;
   };
   component: { label: string; slug: string; version: string | null; type: string };
   intel: {
@@ -300,6 +301,7 @@ export async function getAlertDetail(alertId: string): Promise<AlertDetail | nul
       clientSite: clients.siteUrl,
       clientCompany: clients.company,
       clientActive: clients.active,
+      clientPlan: clients.plan,
       label: stackItems.label,
       slug: stackItems.slug,
       version: stackItems.version,
@@ -337,6 +339,7 @@ export async function getAlertDetail(alertId: string): Promise<AlertDetail | nul
       siteUrl: row.clientSite,
       company: row.clientCompany,
       active: row.clientActive,
+      plan: row.clientPlan,
     },
     component: {
       label: row.label,

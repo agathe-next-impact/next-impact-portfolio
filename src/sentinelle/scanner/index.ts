@@ -6,9 +6,11 @@ import { FINGERPRINTS } from "./fingerprints";
 import { createBudget, fetchPage, type Budget } from "./fetch";
 import { detectWordPressComponents } from "./detectors/wordpress";
 import { buildNotes, detectPlatform } from "./platform";
+import { buildSignals } from "./signals";
 import type { PageEvidence } from "./types";
 
 export { detect } from "./detect";
+export { buildSignals } from "./signals";
 export { buildEvidence } from "./evidence";
 export { FINGERPRINTS } from "./fingerprints";
 export { ALLOWED_PATHS, REQUEST_BUDGET, USER_AGENT, createBudget } from "./fetch";
@@ -144,6 +146,7 @@ export async function scanSite(rawUrl: string): Promise<ScanOutcome> {
       components: ordered(components),
       notes: buildNotes(components),
       scannedAt: new Date().toISOString(),
+      site: buildSignals(evidence, home.response.elapsedMs ?? null),
     },
   };
 }

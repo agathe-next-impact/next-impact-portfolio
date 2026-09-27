@@ -1,30 +1,50 @@
+import {
+  citer,
+  estGratuit,
+  getBesoin,
+  packPrixEntree,
+  situationHref,
+  packNom,
+  situationsDuBesoin,
+  type BesoinKey,
+  type Situation,
+} from "@/lib/situations";
 import { NEWSLETTER_SUBSCRIBE_URL } from "@/lib/newsletter";
-import { CTO_PATH, CTO_PRICE_VALUE } from "@/lib/cto-externalise";
-import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
-import { MAINTENANCE_PATH, MAINTENANCE_PRICE_SHORT } from "@/lib/maintenance-offer";
+import { OFFER_AMOUNT_CENTS, OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
+import { formatEuros, trajectoireDuNom, type Lang } from "@/lib/trajectoires";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Données du mega menu — Décider · Refaire · Tenir (charte v1.4, ADR-012).
+// Données du mega menu : l'offre par situation (charte v1.6, ADR-014). Les
+// entrées de nav gardent le nom du moment (Diagnostiquer · Évoluer · Gérer,
+// ADR-013) ; le panneau qu'elles ouvrent porte le BESOIN, dit à la première
+// personne, et ses cases sont des parcours, désignés par leur seul nom, sans
+// le mot « pack » (ADR-016, ADR-022).
 //
-// Le visiteur ne choisit pas dans un catalogue : il se situe dans un des trois
-// moments. Chaque entrée de nav (clé = clé de traduction `nav`) ouvre un
-// panneau plein largeur (style « Blueprint ») réduit à TROIS cases :
-//   – Décider (/conseil)        : visio, audit + roadmap, puis la veille
-//                                 gratuite (on s'informe pour décider). Les
-//                                 deux offres ponctuelles pointent vers leur
-//                                 SECTION de /conseil (ancres = id des
-//                                 sections dans OFFERS, lib/visio-conseil.ts).
-//   – Refaire (/solutions-web)  : les trois trajectoires (consolider,
-//                                 découpler, refonder). Refonte ou création.
-//   – Tenir (/maintenance-wordpress) : les trois abonnements, du plus léger au
-//                                 plus engageant : Sentinelle, suivi et
-//                                 maintenance, expert technique externalisé.
-//                                 Toujours en dernier : offres de fin de
-//                                 parcours (charte §5).
+// Chaque case mène à la page du parcours : le nom en titre, la solution
+// technique (Évoluer) ou la situation en sous-titre, le prix en bas, le statut
+// (gratuit, recommandé) en pastille. Trois cases
+// au plus par panneau :
+//   – « Je veux pouvoir décider »            : deux offres (Arbitrage,
+//                                              gratuit, puis Audit), sans le
+//                                              mot « pack » ; la gratuite est
+//                                              mise en avant (featured).
+//   – « Je veux faire évoluer mon site web » : trois situations, une par
+//                                              prestation. Refonte ou création.
+//   – « Je veux agir dans la durée »         : deux situations, entretenir puis
+//                                              piloter. Toujours en dernier :
+//                                              offres de fin de parcours
+//                                              (charte §5).
 //
-// Bilingue en ligne (fr/en) — même pattern que lib/visio-conseil.ts et
-// PricingCards, pour ne pas gonfler messages/*.json. Les prix viennent de
-// leur source unique dans lib/.
+// L'entrée de nav ouvre le panneau au survol et au focus, et mène à la page
+// mère au clic ; la ligne supérieure du panneau (le besoin + « Voir la page
+// … ») y mène aussi (ADR-022, points 14 et 16). Dans les trois moments, Sentinelle n'est pas une
+// case : elle est incluse dans le suivi. Elle a sa case dans le panneau
+// « La veille » (VEILLE_SECTION, plus bas).
+//
+// Les clés techniques (`decider`, `refaire`, `tenir`) ne changent pas. Aucun
+// texte ni prix n'est écrit ici pour les situations : tout vient de
+// lib/situations.ts. Bilingue en ligne (fr/en), pour ne pas gonfler
+// messages/*.json.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface MegaItem {
@@ -32,123 +52,109 @@ export interface MegaItem {
   desc: { fr: string; en: string };
   href: string;
   external?: boolean;
+  /** Prix et statut en une ligne : accordéon mobile. */
   badge?: { fr: string; en: string };
+  /** Prix seul, en bas de case (desktop). */
+  price?: { fr: string; en: string };
+  /** Statut en pastille pleine : « Gratuit, sans engagement », « Recommandé ». */
+  tag?: { fr: string; en: string };
+  /** Offre gratuite ou recommandée : case mise en avant. */
+  featured?: boolean;
 }
 
 export interface MegaSection {
-  /** Clé de traduction `nav` — sert aussi de clé d'état côté header. */
+  /** Clé de traduction `nav` : sert aussi de clé d'état côté header. */
   key: string;
-  /** Page d'atterrissage de la rubrique (le libellé de nav reste cliquable). */
+  /** Page mère : l'entrée de nav et la ligne supérieure du panneau y mènent (ADR-022). */
   href: string;
-  /** Titre de la rubrique (accessibilité / libellé). */
+  /** Le besoin, dit par le visiteur : titre du panneau. */
   heading: { fr: string; en: string };
-  /** Exactement trois cases, une par offre. */
+  /** Deux ou trois cases, une par situation. */
   items: MegaItem[];
 }
 
+/** Parcours mis en avant dans le menu, en plus des offres gratuites et recommandées (demande d'Agathe du 2026-09-27). */
+const MIS_EN_AVANT: Situation["slug"][] = ["decisions-techniques"];
+
+function situationItem(s: Situation): MegaItem {
+  const gratuit = estGratuit(s);
+  // Le sous-titre d'une prestation est sa solution technique (demande d'Agathe
+  // du 2026-09-27). Le prix est le prix d'entrée publié, calculé au même endroit
+  // que celui des cartes de la home et des listes : packPrixEntree.
+  const t = trajectoireDuNom(s.offre.fr);
+  const prix = (lang: Lang) => packPrixEntree(s, lang);
+  const tag = gratuit
+    ? { fr: "Gratuit, sans engagement", en: "Free, no commitment" }
+    : s.recommended
+      ? { fr: "Recommandé", en: "Recommended" }
+      : undefined;
+  const price = gratuit ? undefined : { fr: prix("fr"), en: prix("en") };
+  const join = (lang: Lang) => [price?.[lang], tag?.[lang]].filter(Boolean).join(" · ");
+  return {
+    label: { fr: packNom(s, "fr"), en: packNom(s, "en") },
+    desc: t
+      ? { fr: t.technique.fr, en: t.technique.en }
+      : s.sousTitre ?? { fr: citer(s.phrase, "fr"), en: citer(s.phrase, "en") },
+    // Pack sans page (Arbitrage) : la case ouvre son lien externe, la
+    // réservation Calendly, dans un nouvel onglet.
+    href: situationHref(s),
+    ...(s.lienExterne ? { external: true } : {}),
+    badge: { fr: join("fr"), en: join("en") },
+    price,
+    tag,
+    featured: gratuit || s.recommended || MIS_EN_AVANT.includes(s.slug),
+  };
+}
+
+function section(key: BesoinKey, extra: MegaItem[] = []): MegaSection {
+  const besoin = getBesoin(key);
+  return {
+    key,
+    href: besoin.href,
+    heading: besoin.phrase,
+    items: [...situationsDuBesoin(key).map(situationItem), ...extra],
+  };
+}
+
+// « La veille » (clé technique `surveiller`) : hors moments, donc hors
+// lib/situations.ts. Deux cases, demandées par Agathe : la lettre gratuite puis
+// Sentinelle. Le prix de Sentinelle vient de sa source unique.
+const SENTINELLE_PRIX_EN = `${formatEuros(OFFER_AMOUNT_CENTS / 100, "en")}/month`;
+const VEILLE_SECTION: MegaSection = {
+  key: "surveiller",
+  href: "/veille",
+  heading: { fr: "Je veux suivre ce qui change", en: "I want to keep up with what changes" },
+  items: [
+    {
+      label: { fr: "Lettre de veille", en: "Tech watch newsletter" },
+      desc: {
+        fr: "Le marché web & IA : une synthèse par mois, un focus par semaine.",
+        en: "The web & AI market: one digest a month, one focus a week.",
+      },
+      // Inscription Substack dans un nouvel onglet (demande d'Agathe, 2026-09-27).
+      href: NEWSLETTER_SUBSCRIBE_URL,
+      external: true,
+      badge: { fr: "Gratuit", en: "Free" },
+      tag: { fr: "Gratuit", en: "Free" },
+    },
+    {
+      label: { fr: "Sentinelle", en: "Sentinelle" },
+      desc: {
+        fr: "La veille personnalisée de votre site : alertes ciblées, deux lettres par mois.",
+        en: "A personalised watch on your site: targeted alerts, two letters a month.",
+      },
+      href: "/sentinelle",
+      badge: { fr: `${OFFER_PRICE_LABEL}, sans engagement`, en: `${SENTINELLE_PRIX_EN}, no commitment` },
+      price: { fr: OFFER_PRICE_LABEL, en: SENTINELLE_PRIX_EN },
+      // Mise en avant demandée par Agathe (2026-09-27).
+      featured: true,
+    },
+  ],
+};
+
 export const MEGA_SECTIONS: Record<string, MegaSection> = {
-  decider: {
-    key: "decider",
-    href: "/conseil",
-    heading: { fr: "Décider", en: "Decide" },
-    items: [
-      {
-        label: { fr: "Visio conseil refonte", en: "Redesign advisory call" },
-        desc: {
-          fr: "Garder, faire évoluer ou refaire : un avis écrit sous 48 h, après une heure en visio.",
-          en: "Keep, evolve or rebuild: a written opinion within 48 h, after a one-hour call.",
-        },
-        href: "/conseil#choix-techno-ia",
-        badge: { fr: "150 € HT", en: "€150" },
-      },
-      {
-        label: { fr: "Audit + roadmap", en: "Audit + roadmap" },
-        desc: {
-          fr: "Rapport, préconisations et roadmap, remis dans votre espace en ligne.",
-          en: "Report, recommendations and roadmap, delivered in your online workspace.",
-        },
-        href: "/conseil#architecture-projet-ia",
-        badge: { fr: "650 € HT", en: "€650" },
-      },
-      {
-        label: { fr: "Veille et ressources", en: "Watch and resources" },
-        desc: {
-          fr: "La lettre gratuite, les ressources et les outils pour décider sans jargon.",
-          en: "The free newsletter, resources and tools to decide without jargon.",
-        },
-        href: "/veille",
-        badge: { fr: "Gratuit", en: "Free" },
-      },
-    ],
-  },
-
-  refaire: {
-    key: "refaire",
-    href: "/solutions-web",
-    heading: { fr: "Refaire", en: "Rebuild" },
-    items: [
-      {
-        label: { fr: "Consolider", en: "Consolidate" },
-        desc: {
-          fr: "Refonte WordPress optimisée : un WordPress assaini et plus rapide.",
-          en: "Optimized WordPress redesign: a cleaned-up, faster WordPress.",
-        },
-        href: "/solutions-web#forfait-classique",
-        badge: { fr: "dès 2 250 € HT", en: "from €2,250" },
-      },
-      {
-        label: { fr: "Découpler", en: "Decouple" },
-        desc: {
-          fr: "Refonte WordPress headless : un site rapide, votre équipe publie comme avant.",
-          en: "Headless WordPress redesign: a fast site, your team publishes as before.",
-        },
-        href: "/solutions-web#forfait-headless",
-        badge: { fr: "dès 4 000 € HT · Recommandée", en: "from €4,000 · Recommended" },
-      },
-      {
-        label: { fr: "Refonder", en: "Rebuild" },
-        desc: {
-          fr: "Web app ou plateforme, quand le site est devenu un outil de travail.",
-          en: "Web app or platform, when the site has become a work tool.",
-        },
-        href: "/solutions-web#forfait-webapp",
-        badge: { fr: "dès 6 500 € HT", en: "from €6,500" },
-      },
-    ],
-  },
-
-  tenir: {
-    key: "tenir",
-    href: MAINTENANCE_PATH,
-    heading: { fr: "Tenir", en: "Keep it running" },
-    items: [
-      {
-        label: { fr: "Sentinelle", en: "Sentinelle" },
-        desc: {
-          fr: "Lettre de veille et alertes sur les composants réellement installés sur votre site.",
-          en: "Watch letter and alerts on the components actually installed on your site.",
-        },
-        href: "/sentinelle",
-        badge: { fr: OFFER_PRICE_LABEL, en: "€19/mo" },
-      },
-      {
-        label: { fr: "Suivi et maintenance", en: "Care and maintenance" },
-        desc: {
-          fr: "Surveillance, sauvegardes, mises à jour vérifiées, rapport chaque mois.",
-          en: "Monitoring, backups, checked updates, a report every month.",
-        },
-        href: MAINTENANCE_PATH,
-        badge: MAINTENANCE_PRICE_SHORT,
-      },
-      {
-        label: { fr: "Expert technique externalisé", en: "Outsourced technical expert" },
-        desc: {
-          fr: "Une direction technique à temps partagé, sans recruter.",
-          en: "Shared-time technical leadership, without hiring.",
-        },
-        href: CTO_PATH,
-        badge: { fr: `dès ${CTO_PRICE_VALUE} € HT/mois`, en: `from €${CTO_PRICE_VALUE}/mo` },
-      },
-    ],
-  },
+  decider: section("decider"),
+  refaire: section("refaire"),
+  tenir: section("tenir"),
+  surveiller: VEILLE_SECTION,
 };

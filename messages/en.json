@@ -19,9 +19,10 @@
     "conseil": "Advisory",
     "ctoExternalise": "Outsourced technical expert",
     "veille": "Tech watch",
-    "decider": "Decide",
-    "refaire": "Rebuild",
-    "tenir": "Keep it running",
+    "decider": "Audit",
+    "refaire": "Services",
+    "surveiller": "Tech watch",
+    "tenir": "Steering",
     "analyserSite": "Analyze my site",
     "espaceClient": "Client area",
     "prendreRdv": "Book a call",
@@ -60,7 +61,7 @@
     "resources": "Resources",
     "freeAiAudit": "Web & AI diagnostic",
     "wordpressHeadlessPillar": "Headless WordPress",
-    "visioConseil": "Advisory call",
+    "visioConseil": "15-minute call",
     "ctoExternalise": "Outsourced technical expert",
     "tarifs": "Prices",
     "sentinelle": "Sentinelle",
@@ -85,7 +86,7 @@
     "subtitle": "Pick the channel that suits you — reply within 24h.",
     "phone": "Phone",
     "video": "Video call",
-    "videoDescription": "Book a 15-min call",
+    "videoDescription": "15-minute call, free",
     "email": "Email",
     "newsletter": "Newsletter",
     "newsletterDescription": "Subscribe on Substack",
@@ -129,9 +130,9 @@
   },
   "contactPage": {
     "metaTitle": "Contact: advice, audit, outsourced technical expert or redesign",
-    "metaDescription": "Contact Next Impact: advisory call (€150), audit + roadmap (€650), redesign or new site, care and maintenance, outsourced technical expert, free diagnostic.",
+    "metaDescription": "Free 15-minute call, audit + roadmap, redesign, care and maintenance, outsourced technical expert, free diagnostic: reply within 24h.",
     "title": "Contact",
-    "subtitle": "Advisory call, audit + roadmap, outsourced technical expert, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
+    "subtitle": "Free 15-minute call, audit + roadmap, outsourced technical expert, redesign project or free diagnostic: pick the right entry point and I will reply within 24h.",
     "breadcrumbHome": "Home",
     "breadcrumbContact": "Contact"
   },
@@ -234,8 +235,8 @@
     "breadcrumbRoi": "ROI simulator"
   },
   "auditPage": {
-    "metaTitle": "See what slows your site down in 2 minutes",
-    "metaDescription": "One address, one report, no sign-up: see what slows your site down and which trajectory fits, consolidate, decouple or rebuild.",
+    "metaTitle": "Analyze your site in 2 minutes",
+    "metaDescription": "One address, one report, no access requested: what your site is made of, and which components are at risk.",
     "breadcrumbHome": "Home",
     "breadcrumbAudit": "Website audit"
   },
@@ -352,7 +353,7 @@
       "stepBuild": "The build",
       "arbitrageFallback": "Choosing the right approach before building.",
       "conseilLink": {
-        "selecteur-techno": "This trade-off is exactly what the redesign advisory call covers ({price})",
+        "selecteur-techno": "This trade-off is exactly what the 15-minute call covers ({price})",
         "architecture-ia": "This trade-off is what the audit + roadmap covers ({price})",
         "pack-ia": "This trade-off is what the audit + roadmap covers ({price})",
         "direction-technique": "This trade-off is what the audit + roadmap covers ({price})"
@@ -374,10 +375,10 @@
     }
   },
   "servicesPage": {
-    "metaTitle": "WordPress redesign: consolidate, decouple or rebuild",
-    "metaDescription": "Three trajectories for an aging WordPress site: optimized from €2,250, headless from €4,000, web app from €6,500. Price and timeline fixed upfront.",
+    "metaTitle": "WordPress redesign: three services for an aging site",
+    "metaDescription": "Three services for an aging WordPress site: Optimization, Redesign (recommended) or Evolution. Price and timeline in writing before starting, watch analysis included.",
     "breadcrumbHome": "Home",
-    "breadcrumbServices": "Web solutions & Pricing",
+    "breadcrumbServices": "Web solutions",
     "calculateGain": {
       "title": "Calculate your gain",
       "description": "Estimate whether optimizing, fixing, rebuilding or building can actually pay off.",

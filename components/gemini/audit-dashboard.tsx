@@ -61,7 +61,7 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
             <Gauge size={14} />
             {isEn ? "Modernity index" : "Indice de Modernité"}
           </div>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 48, fontWeight: 700, color: scoreColor, lineHeight: 1 }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 48, fontWeight: 500, color: scoreColor, lineHeight: 1 }}>
             {score}<span style={{ fontSize: 16, opacity: 0.6 }}>/10</span>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function AuditDashboard({ markdown }: AuditDashboardProps) {
             <Activity size={14} />
             {isEn ? "Strategic verdict" : "Verdict Stratégique"}
           </div>
-          <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: "var(--ink)", textAlign: "center" }}>
+          <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: "var(--ink)", textAlign: "center" }}>
             {verdict}
           </div>
           <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted-color)" }}>

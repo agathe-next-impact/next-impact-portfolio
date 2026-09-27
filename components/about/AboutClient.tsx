@@ -13,6 +13,7 @@ import {
   SectionHeading,
   Separator,
 } from "@/components/aspect/section";
+import { EnBref } from "@/components/en-bref";
 import { PageHero } from "@/components/aspect/page-hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { SignalPaths } from "@/components/visuals/signal-paths";
@@ -159,27 +160,6 @@ export default function AboutClient() {
           {t("hero.subtext")}
         </p>
       </PageHero>
-
-      {/* En bref — TL;DR citable par les moteurs IA (GEO) */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
-        <Reveal className="about-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
-          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
-            {about.tldr.label}
-          </p>
-          <ul className="flex flex-col gap-2">
-            {about.tldr.lines.map((line) => (
-              <li
-                key={line}
-                className="font-inter-tight text-base leading-relaxed text-mid-gray"
-              >
-                {line}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      </BlueprintSection>
-
-      <Separator />
 
       {/* № 02 — Le parcours */}
       <BlueprintSection tone="obsidian">
@@ -335,6 +315,12 @@ export default function AboutClient() {
         {/* Témoignages — emplacement réservé (chantier). Prioriser un témoignage
             client nominatif chiffré (ex. Panorama Pub) avant mise en ligne. */}
       </BlueprintSection>
+
+      <Separator />
+
+      {/* « L'essentiel » — TL;DR citable par les moteurs IA (GEO), juste avant
+          la FAQ (ADR-024). */}
+      <EnBref className="about-tldr" label={about.tldr.label} lines={about.tldr.lines} />
 
       <Separator />
 

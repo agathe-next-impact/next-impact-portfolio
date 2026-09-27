@@ -73,6 +73,7 @@ export function clientText(lettre: Lettre): string {
   parts.push(...lettre.tendances.signauxDeDemande);
   for (const f of lettre.tendances.deFond) parts.push(f.mouvement, f.faitDate, f.qualification);
   parts.push(...lettre.tendances.ceQuiNeChangePas);
+  for (const c of lettre.tendances.concurrence) parts.push(c.concurrent, c.mouvement, c.pourVous);
 
   const { synthese } = lettre;
   for (const a of synthese.actions) parts.push(a.action, a.horizon, a.pourquoi);
@@ -144,6 +145,9 @@ export function allowedVocabulary(
     ...dossier.publics.map(
       (public_) => `${public_.nom} ${public_.cherche} ${public_.attenduDuSite} ${public_.niveauDeReponse}`,
     ),
+    // Comparer le site à ses concurrents oblige à nommer leurs outils : ce qui a
+    // été constaté sur leur site pendant la collecte n'est pas inventé.
+    ...dossier.concurrents.map((concurrent) => `${concurrent.pourquoi} ${concurrent.constat}`),
     clientContext,
   ].join("\n");
 
@@ -160,7 +164,12 @@ export function guardLettre(
   const warnings: string[] = [];
 
   // ── Régime 1 : sourçage ────────────────────────────────────────────────
-  const known = new Set(input.dossier.faits.map((fait) => normalizeUrl(fait.source)));
+  // Les sites des concurrents lus pendant la collecte sont des sources au même
+  // titre que les faits : la lettre peut y renvoyer.
+  const known = new Set([
+    ...input.dossier.faits.map((fait) => normalizeUrl(fait.source)),
+    ...input.dossier.concurrents.map((concurrent) => normalizeUrl(concurrent.site)),
+  ]);
   const inventedUrls = [...new Set(urlsIn(clientText(lettre)))].filter(
     (url) => url !== "" && !known.has(url),
   );
@@ -177,6 +186,19 @@ export function guardLettre(
 
   if (lettre.sources.length === 0 && input.dossier.faits.length > 0) {
     violations.push("aucune source citée alors que le dossier en contient");
+  }
+
+  // ── Concurrents : seulement ceux que la collecte a identifiés ───────────
+  // Nommer une organisation comme concurrente est une affirmation sur un
+  // tiers : elle doit venir du dossier, où la collecte l'a justifiée.
+  const identifies = new Set(
+    input.dossier.concurrents.map((concurrent) => concurrent.nom.trim().toLowerCase()),
+  );
+  const inconnus = lettre.tendances.concurrence
+    .map((entree) => entree.concurrent.trim())
+    .filter((nom) => !identifies.has(nom.toLowerCase()));
+  if (inconnus.length > 0) {
+    violations.push(`concurrent(s) absent(s) du dossier : ${[...new Set(inconnus)].join(", ")}`);
   }
 
   // ── Régime 2 : vocabulaire, sur ce qui est dit du site ──────────────────
@@ -259,6 +281,10 @@ export function guardLettre(
     warnings.push(
       "aucun axe en « non concerné » : vérifier qu'aucun ne l'est vraiment, c'est une information",
     );
+  }
+
+  if (input.dossier.concurrents.length > 0 && lettre.tendances.concurrence.length === 0) {
+    warnings.push("le dossier identifie des concurrents, la lettre n'en dit rien");
   }
 
   if (input.dossier.siteInjoignable.trim() !== "") {

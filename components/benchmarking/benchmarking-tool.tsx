@@ -264,7 +264,7 @@ function ScoreGauge({
           <span
             style={{
               fontFamily: "var(--mono)",
-              fontWeight: 700,
+              fontWeight: 500,
               fontSize: size === "lg" ? 28 : 14,
               color: arcColor,
               lineHeight: 1,
@@ -729,7 +729,7 @@ export default function BenchmarkingTool() {
               style={{
                 fontFamily: "var(--sans)",
                 fontSize: 13,
-                fontWeight: 600,
+                fontWeight: 500,
                 color: "var(--ink-2)",
               }}
             >
@@ -782,7 +782,7 @@ export default function BenchmarkingTool() {
                 style={{
                   fontFamily: "var(--sans)",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: 500,
                   color: "var(--ink-2)",
                 }}
               >
@@ -853,7 +853,7 @@ export default function BenchmarkingTool() {
                           justifyContent: "center",
                           fontFamily: "var(--mono)",
                           fontSize: 11,
-                          fontWeight: 700,
+                          fontWeight: 500,
                           color: "var(--paper)",
                           flexShrink: 0,
                           pointerEvents: "none",
@@ -1132,7 +1132,7 @@ export default function BenchmarkingTool() {
                   style={{ width: 18, height: 18, color: "#b85c09", flexShrink: 0, marginTop: 2 }}
                 />
                 <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: "var(--ink-2)" }}>
-                  <p style={{ fontWeight: 600, color: "#b85c09", margin: "0 0 4px" }}>
+                  <p style={{ fontWeight: 500, color: "#b85c09", margin: "0 0 4px" }}>
                     {result.competitors.length === 0
                       ? isEn ? "Your site could not be analyzed" : "Votre site n'a pas pu être analysé"
                       : isEn ? "Some sites could not be analyzed" : "Certains sites n'ont pas pu être analysés"}
@@ -1323,7 +1323,7 @@ export default function BenchmarkingTool() {
                             style={{
                               fontFamily: "var(--mono)",
                               fontSize: 22,
-                              fontWeight: 700,
+                              fontWeight: 500,
                               color: STATUS_CSS_COLORS[status],
                               margin: "0 0 4px",
                             }}
@@ -1614,7 +1614,7 @@ export default function BenchmarkingTool() {
                           style={{
                             fontFamily: "var(--sans)",
                             fontSize: 13,
-                            fontWeight: 600,
+                            fontWeight: 500,
                             color: "var(--accent-color)",
                             margin: "0 0 12px",
                             display: "flex",
@@ -1672,7 +1672,7 @@ export default function BenchmarkingTool() {
                           style={{
                             fontFamily: "var(--sans)",
                             fontSize: 13,
-                            fontWeight: 600,
+                            fontWeight: 500,
                             color: "#2a7a2a",
                             margin: "0 0 12px",
                             display: "flex",

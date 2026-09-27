@@ -4,6 +4,13 @@ Branche `offres-trois-moments`, partie de `dev` (b610a6d) le 2026-09-27.
 Maquette de référence : canvas « Offres en trois moments » (claude.ai).
 Décision tracée : ADR-012 (`docs/decisions.md`). Charte amendée en v1.4.
 
+> Amendé le 2026-09-27 par l'ADR-013 (charte v1.5). Les moments s'appellent
+> désormais Diagnostiquer · Évoluer · Gérer. Le catalogue compte sept lignes.
+> Sentinelle sort du catalogue, « Gérer » présente deux offres, la home ne
+> montre en cartes que les trois trajectoires. Ce plan reste le relevé de ce
+> qui a été fait pour l'ADR-012 ; les principes 1 et 5 ci-dessous se lisent
+> avec ces amendements.
+
 ## Objectif
 
 Rendre le catalogue lisible pour un prospect froid alors qu'il passe de six à

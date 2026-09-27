@@ -243,7 +243,14 @@ export default async function AlertPage({
           </form>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            {alerte.status === "validated" && (
+            {alerte.status === "validated" && alerte.client.plan === "accompagnement" && (
+              <p className="max-w-xl font-inter-tight text-sm leading-relaxed text-mid-gray">
+                Client en accompagnement : rien ne part par e-mail. Validée, l&apos;alerte
+                est publiée dans son espace d&apos;accompagnement au prochain export.
+              </p>
+            )}
+
+            {alerte.status === "validated" && alerte.client.plan !== "accompagnement" && (
               <form action={envoyerAlerte}>
                 <input type="hidden" name="alertId" value={alerte.id} />
                 <input type="hidden" name="retour" value={`/admin/sentinelle/alertes/${id}`} />

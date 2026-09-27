@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   index,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Schéma de référence : docs/sentinelle/specs/data-model.md.
@@ -36,11 +37,18 @@ import {
 // envois par mois) + alertes au fil de l'eau. Remplace la grille 29 €/79 € de
 // specs/architecture.md (décision du 2026-08-15).
 //
-// La colonne `plan` est conservée bien qu'elle n'ait qu'une valeur : elle est
-// le point d'accroche documenté du modèle et ajouter une valeur plus tard est
-// un simple ALTER TYPE. En revanche, tant qu'il n'y a qu'un palier, aucun code
-// ne doit brancher dessus — ce serait du code mort.
-export const planEnum = pgEnum("plan", ["veille"]);
+// Deux valeurs depuis le 2026-09-27, qui disent par où passe la veille :
+//  - `veille` : abonné Sentinelle seul (inscription validée). Lettres et
+//    alertes partent par e-mail, et l'e-mail renvoie vers l'espace abonné
+//    (/espace), ouvert à l'abonnement ;
+//  - `accompagnement` : Sentinelle incluse dans un accompagnement (suivi et
+//    maintenance), fiche créée par le provisionnement. Rien ne part par
+//    e-mail : les numéros validés se lisent dans l'espace d'accompagnement,
+//    qui les récupère par l'export.
+// L'activation d'une demande d'inscription remet la fiche à `veille` ; le
+// provisionnement la passe à `accompagnement`.
+export const planEnum = pgEnum("plan", ["veille", "accompagnement"]);
+export type Plan = (typeof planEnum.enumValues)[number];
 // Taxonomie volontairement agnostique : la veille doit pouvoir suivre n'importe
 // quelle technologie, pas seulement WordPress. Le pack d'origine typait
 // « wp_core / wp_plugin / wp_theme / php / frontend » ; ces valeurs disaient à
@@ -98,6 +106,13 @@ export const scans = pgTable(
     status: text("status").notNull().default("pending"), // pending|running|done|failed
     result: jsonb("result"), // ScanResult sérialisé (composants détectés)
     leadEmail: text("lead_email"), // rempli à la capture — nullable
+    // Inscription à la lettre de veille personnalisée (2026-09-27) : un opt-in
+    // qui sert à recontacter, rien n'est généré automatiquement. Supprimés avec
+    // la ligne par la purge des prospects (trois ans).
+    leadName: text("lead_name"),
+    leadOrganisation: text("lead_organisation"),
+    /** L'adresse du site déclarée par le prospect, qui peut différer de `url`. */
+    leadSiteUrl: text("lead_site_url"),
     // Quand la lettre-échantillon est partie à leadEmail. La mise à jour
     // conditionnelle (is null) fait office de verrou entre les deux
     // déclencheurs (capture d'e-mail / fin de rédaction) — même principe que
@@ -123,6 +138,9 @@ export const clients = pgTable("clients", {
   sector: text("sector"), // contexte pour la rédaction LLM
   notes: text("notes"), // mémoire libre (échanges, contexte)
   plan: planEnum("plan").notNull().default("veille"),
+  // Historique : l'abonnement en ligne par Stripe a été retiré le 2026-09-27
+  // (facturation hors ligne). Colonnes gardées, jamais écrites, pour ne pas
+  // perdre la trace des premiers abonnés ; la purge les efface avec la fiche.
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   active: boolean("active").notNull().default(true),
@@ -130,17 +148,17 @@ export const clients = pgTable("clients", {
   // pas implémentable : `active: false` dit qu'un abonnement s'est arrêté, pas
   // quand. Remise à NULL en cas de réabonnement.
   deactivatedAt: timestamp("deactivated_at"),
-  // Scan à l'origine de l'abonnement, quand le parcours est passé par le
-  // rapport public (`client_reference_id` du Payment Link). C'est lui qui amorce
+  // Scan à l'origine de l'abonnement, quand la demande d'inscription est partie
+  // du rapport public (`subscription_requests.origin_scan_id`). C'est lui qui amorce
   // la fiche : sans ce lien, un abonné démarrerait avec un stack vide alors
   // qu'on venait de le détecter. `set null` et non `cascade` : la purge des
   // scans à 30 jours ne doit pas emporter la fiche d'un client payant.
   originScanId: uuid("origin_scan_id").references(() => scans.id, {
     onDelete: "set null",
   }),
-  // E-mail de bienvenue parti — l'idempotence du parcours post-paiement tient à
-  // cette colonne, pas à un compteur : Stripe rejoue ses webhooks, et personne
-  // ne doit recevoir deux fois le même message de bienvenue.
+  // E-mail de bienvenue parti — l'idempotence de l'activation tient à cette
+  // colonne, pas à un compteur : Inngest rejoue ses étapes, et personne ne doit
+  // recevoir deux fois le même message de bienvenue.
   welcomeSentAt: timestamp("welcome_sent_at"),
   // Fiche complétée au moins une fois par le client. Distingue « rien déclaré
   // parce qu'il n'a rien à déclarer » de « jamais passé par l'onboarding ».
@@ -176,6 +194,48 @@ export const magicLinks = pgTable(
     // Purge des jetons échus, et comptage des demandes récentes d'un client
     // (le seul frein possible à l'envoi en boucle de liens de connexion).
     index("magic_link_client_created_at").on(t.clientId, t.createdAt),
+  ],
+);
+
+// ─── Demandes d'inscription ──────────────────────────────────────────────
+//
+// Depuis le 2026-09-27, on ne s'abonne plus en ligne : l'abonnement commence
+// par un opt-in (nom, organisation, e-mail, site), depuis la page /sentinelle
+// ou depuis le rapport d'analyse. La demande attend ici qu'Agathe la valide ;
+// l'activation crée la fiche `clients`, ouvre l'espace et envoie la bienvenue.
+// La facturation (19 €/mois) se fait hors ligne.
+//
+// Une seule demande en attente par adresse (index unique partiel) : renvoyer
+// le formulaire met la demande à jour au lieu d'en empiler une seconde.
+export const subscriptionRequestStatusEnum = pgEnum("subscription_request_status", [
+  "pending",
+  "activated",
+  "dismissed",
+]);
+
+export const subscriptionRequests = pgTable(
+  "subscription_requests",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    name: text("name").notNull(),
+    organisation: text("organisation").notNull(),
+    siteUrl: text("site_url").notNull(),
+    // Rapport d'analyse d'où vient la demande, quand elle en vient : il amorce
+    // la fiche à l'activation. `set null` : la purge des scans à 30 jours ne
+    // doit pas emporter une demande.
+    originScanId: uuid("origin_scan_id").references(() => scans.id, { onDelete: "set null" }),
+    status: subscriptionRequestStatusEnum("status").notNull().default("pending"),
+    // Fiche créée ou réactivée par l'activation.
+    clientId: uuid("client_id").references(() => clients.id, { onDelete: "set null" }),
+    decidedAt: timestamp("decided_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("subscription_request_pending_email")
+      .on(t.email)
+      .where(sql`${t.status} = 'pending'`),
+    index("subscription_request_status_created_at").on(t.status, t.createdAt),
   ],
 );
 

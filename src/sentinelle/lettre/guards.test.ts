@@ -27,6 +27,7 @@ function dossier(overrides: Partial<Dossier> = {}): Dossier {
       },
     ],
     publics: [],
+    concurrents: [],
     aConfirmer: [],
     pagesAnalysees: ["https://exemple.fr/"],
     pagesNonAnalysees: [],
@@ -74,6 +75,7 @@ function lettre(overrides: Partial<Lettre> = {}): Lettre {
         qualification: "Neutre pour ce site.",
       })),
       ceQuiNeChangePas: ["Un site lisible reste un site lisible.", "La sauvegarde reste la base."],
+      concurrence: [],
       ...overrides.tendances,
     },
     synthese: {
@@ -333,5 +335,51 @@ describe("signalements", () => {
   it("compte les mots du texte destiné au client, pas de l'encart de production", () => {
     const avecNotes = lettre({ notesDeProduction: "mot ".repeat(500) });
     expect(wordCount(avecNotes)).toBe(wordCount(lettre()));
+  });
+});
+
+describe("concurrents", () => {
+  const RIVAL = {
+    nom: "Atelier Voisin",
+    site: "https://atelier-voisin.fr/",
+    pourquoi: "Même offre, même région.",
+    constat: "Son site affiche ses tarifs ; celui du client non.",
+    statut: "constate" as const,
+  };
+
+  function avecConcurrence(concurrent: string, mouvement = "A publié ses tarifs.") {
+    const base = lettre();
+    return lettre({
+      tendances: {
+        ...base.tendances,
+        concurrence: [{ concurrent, mouvement, pourVous: "Vos prix restent invisibles." }],
+      },
+    });
+  }
+
+  it("accepte un concurrent identifié par la collecte, et un renvoi vers son site", () => {
+    const outcome = guardLettre(
+      avecConcurrence("Atelier Voisin", "Voir https://atelier-voisin.fr/ : tarifs affichés."),
+      { dossier: dossier({ concurrents: [RIVAL] }), ficheNames: FICHE, quiet: true },
+    );
+    expect(outcome.violations).toEqual([]);
+  });
+
+  it("refuse un concurrent que le dossier ne contient pas", () => {
+    const outcome = guardLettre(avecConcurrence("Studio Inventé"), {
+      dossier: dossier({ concurrents: [RIVAL] }),
+      ficheNames: FICHE,
+      quiet: true,
+    });
+    expect(outcome.violations.join(" ")).toMatch(/concurrent\(s\) absent\(s\) du dossier : Studio Inventé/);
+  });
+
+  it("signale une lettre muette sur des concurrents identifiés", () => {
+    const outcome = guardLettre(lettre(), {
+      dossier: dossier({ concurrents: [RIVAL] }),
+      ficheNames: FICHE,
+      quiet: true,
+    });
+    expect(outcome.warnings.join(" ")).toMatch(/la lettre n'en dit rien/);
   });
 });

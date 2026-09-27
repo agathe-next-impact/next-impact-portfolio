@@ -1,6 +1,6 @@
 "use client";
 
-// Bandeau « Visio conseil » — band pleine largeur, drop-in bas de funnel sur la
+// Bandeau « Conseil » : bande pleine largeur, drop-in bas de funnel sur la
 // home, la page services, la page contact et en fin d'audit gratuit. Offre TIÈDE :
 // ne jamais la placer dans un héros ni en CTA froid. Tokens DS uniquement, i18n
 // inline, reduced-motion via <Reveal>.
@@ -15,16 +15,16 @@ import { Reveal } from "@/components/ui/reveal";
 const COPY = {
   fr: {
     eyebrow: "Conseil refonte",
-    title: "Un doute sur la trajectoire de votre site ?",
+    title: "Un doute sur la direction à donner à votre site ?",
     subtitle:
-      "Visio conseil refonte (150 € HT, avis écrit sous 48 h) ou audit + roadmap (650 € HT, livrables) : un avis indépendant avant d'engager un budget. Rester, découpler ou refonder.",
+      "Un échange gratuit de 15 minutes pour poser la situation, puis, si la décision engage un budget, l'audit + roadmap : un avis indépendant avant d'engager quoi que ce soit. Garder, faire évoluer ou refaire.",
     cta: "Voir le conseil",
   },
   en: {
     eyebrow: "Redesign advice",
-    title: "Unsure about your site's trajectory?",
+    title: "Unsure which direction your site should take?",
     subtitle:
-      "Redesign advisory call (€150 excl. VAT, written opinion within 48h) or audit + roadmap (€650 excl. VAT, deliverables): an independent opinion before you commit a budget. Stay, decouple or rebuild.",
+      "A free 15-minute call to lay out the situation, then, if the decision commits a budget, the audit + roadmap: an independent opinion before you commit to anything. Keep, evolve or rebuild.",
     cta: "See the advice",
   },
 };

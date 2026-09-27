@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { CTO_PATH } from "@/lib/cto-externalise";
 import { MAINTENANCE_PATH } from "@/lib/maintenance-offer";
+import { CTA_CHAUD, CTA_ECHANGE } from "@/lib/visio-conseil";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Page « Espace client » — la visite de l'espace en ligne, et l'aiguillage vers
@@ -183,7 +184,12 @@ export default async function EspaceClientPage({
         description="Chaque prestation se suit dans un espace en ligne : l'audit, l'état de votre site, les rapports, les décisions, la veille. Vous y voyez ce qui a été fait, ce qui reste à décider, et vous pouvez tout télécharger."
         actions={
           <>
-            <a href={ESPACE_ACCOMPAGNEMENT} className={HERO_BTN_PRIMARY}>
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly).
+                Les deux connexions suivent, en filet. */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
+              {CTA_ECHANGE.label.fr}
+            </a>
+            <a href={ESPACE_ACCOMPAGNEMENT} className={HERO_BTN_SECONDARY}>
               <KeyRound size={14} aria-hidden />
               Me connecter
             </a>
@@ -294,9 +300,9 @@ export default async function EspaceClientPage({
               Analysez votre site en 2 minutes
               <ArrowRight size={14} />
             </a>
-            <Link href="/contact" className={HERO_BTN_SECONDARY}>
+            <a href={CTA_CHAUD.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_SECONDARY}>
               Discutons de votre projet
-            </Link>
+            </a>
           </div>
         </div>
       </BlueprintSection>

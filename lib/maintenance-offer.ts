@@ -1,10 +1,20 @@
+import { formatEuros, type Lang, type SiteKind } from "@/lib/trajectoires";
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Offre « Suivi et maintenance » — source unique (charte v1.4, ADR-012).
+// Offre « Suivi et maintenance » : source unique (charte v1.6, ADR-012 amendé
+// par l'ADR-013 puis l'ADR-014).
 //
-// Deuxième marche du moment « Tenir », entre Sentinelle (prévenir, 19 €/mois)
-// et l'Expert technique externalisé (décider, lib/cto-externalise.ts). Page
-// d'offre : /maintenance-wordpress. Tout ce qui cite l'offre (home, mega menu,
-// /tarifs, bandeaux, JSON-LD, llms) lit ce fichier : aucun prix recopié.
+// Première marche du moment « Gérer » (entretenir), avant l'Expert technique
+// externalisé (piloter, lib/cto-externalise.ts). UNE ligne du catalogue, deux
+// paliers ; la mise sous suivi est sa condition de démarrage, pas une offre.
+// Sentinelle y est incluse et se dit en pastille. Page d'offre :
+// /maintenance-wordpress. Tout ce qui cite l'offre (home, mega menu, /tarifs,
+// packs, bandeaux, JSON-LD, llms) lit ce fichier : aucun prix recopié.
+//
+// Le prix dépend du type de site (ADR-014) : un site headless ou une web app
+// compte deux environnements à tenir, d'où une grille plus haute. Cette grille
+// remplace l'ancienne règle « palier Actif obligatoire en headless » : les deux
+// paliers existent pour chaque type de site.
 //
 // Ce qui est surveillé correspond à ce que l'espace en ligne sait déjà montrer
 // (section « État du site » + « Rapports », alimentées par WP Umbrella) :
@@ -16,48 +26,80 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * ⚠️ Les prix ci-dessous sont des HYPOTHÈSES proposées le 2026-09-27, pas des
- * tarifs validés. Tant que ce drapeau vaut false, /maintenance-wordpress est en
- * noindex, hors sitemap et hors llms.txt / llms-full.txt. Le passer à true
- * (après validation d'Agathe) réexpose la page ; penser alors à réintégrer
- * l'entrée sitemap et les lignes llms (cf. ADR-012).
+ * Prix des deux paliers validés par Agathe le 2026-09-27 (ADR-014). La page
+ * /maintenance-wordpress est indexable, présente au sitemap et dans llms.txt.
+ * Repasser ce drapeau à false la remet en noindex, et avec elle les pages de
+ * pack qui affichent un budget de suivi. Mise sous suivi (290 € HT) validée le
+ * même jour (ADR-018).
  */
-export const MAINTENANCE_PRIX_VALIDES = false;
+export const MAINTENANCE_PRIX_VALIDES = true;
 
 export const MAINTENANCE_PATH = "/maintenance-wordpress";
 
 /** Deep-link du formulaire de contact, pré-sélectionne le sujet dédié. */
 export const MAINTENANCE_CONTACT_HREF = "/contact?sujet=maintenance";
 
-/** Plancher de la gamme (palier Essentiel), en valeur brute (JSON-LD, llms). */
-export const MAINTENANCE_PRICE_VALUE = 89;
+export type MaintenanceTierId = "essentiel" | "actif";
+
+/** Grille mensuelle, en euros hors taxes, par type de site et par palier. */
+export const MAINTENANCE_GRID: Record<SiteKind, Record<MaintenanceTierId, number>> = {
+  wordpress: { essentiel: 89, actif: 249 },
+  headless: { essentiel: 129, actif: 299 },
+  webapp: { essentiel: 129, actif: 299 },
+};
+
+/** Les deux colonnes affichées : headless et web app partagent la même grille. */
+export const MAINTENANCE_GRID_COLUMNS: { kind: SiteKind; label: Record<Lang, string> }[] = [
+  { kind: "wordpress", label: { fr: "Site WordPress", en: "WordPress site" } },
+  { kind: "headless", label: { fr: "Site headless ou web app", en: "Headless site or web app" } },
+];
+
+/** Prix mensuel d'un palier pour un type de site. */
+export function maintenanceMonthly(tier: MaintenanceTierId, kind: SiteKind): number {
+  return MAINTENANCE_GRID[kind][tier];
+}
+
+/** Le même prix, formaté (« 129 € HT par mois »). */
+export function maintenancePriceLabel(tier: MaintenanceTierId, kind: SiteKind, lang: Lang): string {
+  const amount = formatEuros(maintenanceMonthly(tier, kind), lang);
+  return lang === "en" ? `${amount} excl. VAT per month` : `${amount} HT par mois`;
+}
+
+/** Plancher de la gamme (palier Essentiel, site WordPress), en valeur brute (JSON-LD, llms). */
+export const MAINTENANCE_PRICE_VALUE = MAINTENANCE_GRID.wordpress.essentiel;
 export const MAINTENANCE_PRICE_CURRENCY = "EUR";
 /** Unité de facturation UN/CEFACT : « MON » = par mois. */
 export const MAINTENANCE_BILLING_UNIT_CODE = "MON";
 
 /** Prix d'entrée formaté, toujours « à partir de ». */
 export const MAINTENANCE_PRICE = {
-  fr: { amount: "À partir de 89 € HT", period: "par mois" },
-  en: { amount: "From €89 excl. VAT", period: "per month" },
+  fr: { amount: `À partir de ${formatEuros(MAINTENANCE_PRICE_VALUE, "fr")} HT`, period: "par mois" },
+  en: { amount: `From ${formatEuros(MAINTENANCE_PRICE_VALUE, "en")} excl. VAT`, period: "per month" },
 } as const;
 
 /** Libellé court pour les pastilles et badges (« dès 89 € HT/mois »). */
 export const MAINTENANCE_PRICE_SHORT = {
-  fr: "dès 89 € HT/mois",
-  en: "from €89/mo",
+  fr: `dès ${formatEuros(MAINTENANCE_PRICE_VALUE, "fr")} HT/mois`,
+  en: `from ${formatEuros(MAINTENANCE_PRICE_VALUE, "en")}/mo`,
 } as const;
 
-/** Mise sous suivi : état des lieux d'entrée, facturé une fois. */
+/** Montant de la mise sous suivi, en euros hors taxes (validé, ADR-018). */
+export const MAINTENANCE_ONBOARDING_VALUE = 290;
+
+/**
+ * Mise sous suivi : état des lieux d'entrée, facturé une fois. Condition de
+ * démarrage du suivi et maintenance, jamais présentée comme une offre (ADR-013).
+ */
 export const MAINTENANCE_ONBOARDING = {
   fr: {
     title: "Démarrage : l'état des lieux de votre site",
-    price: "290 € HT, une fois",
-    body: "Inventaire des composants, première sauvegarde, rattrapage des mises à jour, fiche du site dans votre espace en ligne. Offert pour un site que j'ai livré. Si le site n'est pas maintenable en l'état, l'état des lieux le dit, et vous oriente vers la trajectoire adaptée.",
+    price: `${formatEuros(MAINTENANCE_ONBOARDING_VALUE, "fr")} HT, une fois`,
+    body: "Inventaire des composants, première sauvegarde, rattrapage des mises à jour, fiche du site dans votre espace en ligne. Offert pour un site que j'ai livré. Si le site n'est pas maintenable en l'état, l'état des lieux le dit, et vous oriente vers la prestation adaptée.",
   },
   en: {
     title: "Getting started: a review of your site",
-    price: "€290 excl. VAT, once",
-    body: "Component inventory, first backup, pending updates applied, your site's record in your online workspace. Free for a site I delivered. If the site cannot be maintained as it stands, the review says so and points to the right trajectory.",
+    price: `${formatEuros(MAINTENANCE_ONBOARDING_VALUE, "en")} excl. VAT, once`,
+    body: "Component inventory, first backup, pending updates applied, your site's record in your online workspace. Free for a site I delivered. If the site cannot be maintained as it stands, the review says so and points to the right service.",
   },
 } as const;
 
@@ -69,6 +111,9 @@ export const SUIVI_INCLUS_LABEL = {
   en: `${SUIVI_INCLUS_MOIS} months of care included`,
 } as const;
 
+/** Mois offerts quand le suivi est payé à l'année. */
+export const MAINTENANCE_ANNUAL_FREE_MONTHS = 2;
+
 export const MAINTENANCE_COMMITMENT = {
   fr: "Engagement de 3 mois, puis au mois. Paiement à l'année : deux mois offerts.",
   en: "Three-month commitment, then monthly. Paid yearly: two months free.",
@@ -78,8 +123,9 @@ export const MAINTENANCE_COMMITMENT = {
 export const MAINTENANCE_MAX_SITES = 20;
 
 export interface MaintenanceTier {
-  id: "essentiel" | "actif";
+  id: MaintenanceTierId;
   name: { fr: string; en: string };
+  /** Prix pour un site WordPress, le plancher du palier. Les autres types de site : `maintenancePriceLabel`. */
   price: { fr: string; en: string };
   priceValue: number;
   forWhom: { fr: string; en: string };
@@ -91,11 +137,14 @@ export const MAINTENANCE_TIERS: MaintenanceTier[] = [
   {
     id: "essentiel",
     name: { fr: "Essentiel", en: "Essential" },
-    price: { fr: "89 € HT par mois", en: "€89 excl. VAT per month" },
-    priceValue: 89,
+    price: {
+      fr: maintenancePriceLabel("essentiel", "wordpress", "fr"),
+      en: maintenancePriceLabel("essentiel", "wordpress", "en"),
+    },
+    priceValue: MAINTENANCE_GRID.wordpress.essentiel,
     forWhom: {
-      fr: "Un site vitrine WordPress qui doit tourner sans que vous y pensiez.",
-      en: "A WordPress showcase site that must run without you thinking about it.",
+      fr: "Un site qui doit tourner sans que vous y pensiez.",
+      en: "A site that must run without you thinking about it.",
     },
     items: {
       fr: [
@@ -104,7 +153,7 @@ export const MAINTENANCE_TIERS: MaintenanceTier[] = [
         "Mises à jour chaque mois, vérifiées après passage",
         "Faille critique corrigée sous 72 h",
         "Rapport mensuel dans votre espace en ligne",
-        "Sentinelle incluse : lettres de veille et alertes",
+        "Veille en continu sur vos composants : alertes et lettres, Sentinelle incluse",
         "30 minutes d'intervention par mois",
       ],
       en: [
@@ -113,7 +162,7 @@ export const MAINTENANCE_TIERS: MaintenanceTier[] = [
         "Monthly updates, checked after they run",
         "Critical vulnerability fixed within 72 h",
         "Monthly report in your online workspace",
-        "Sentinelle included: watch letters and alerts",
+        "Continuous watch on your components: alerts and letters, Sentinelle included",
         "30 minutes of work per month",
       ],
     },
@@ -121,11 +170,14 @@ export const MAINTENANCE_TIERS: MaintenanceTier[] = [
   {
     id: "actif",
     name: { fr: "Actif", en: "Active" },
-    price: { fr: "229 € HT par mois", en: "€229 excl. VAT per month" },
-    priceValue: 229,
+    price: {
+      fr: maintenancePriceLabel("actif", "wordpress", "fr"),
+      en: maintenancePriceLabel("actif", "wordpress", "en"),
+    },
+    priceValue: MAINTENANCE_GRID.wordpress.actif,
     forWhom: {
-      fr: "Un site qui compte : demandes de contact, formulaires, contenus publiés chaque semaine. Obligatoire pour un site headless.",
-      en: "A site that matters: leads, forms, content published weekly. Required for a headless site.",
+      fr: "Un site qui compte : demandes de contact, formulaires, contenus publiés chaque semaine.",
+      en: "A site that matters: leads, forms, content published weekly.",
     },
     items: {
       fr: [

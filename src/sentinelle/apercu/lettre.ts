@@ -60,6 +60,28 @@ function plafondQuotidien(): number {
   return Number.isFinite(value) && value > 0 ? value : LETTRES_PAR_JOUR;
 }
 
+/**
+ * Le motif du refus quand le plafond global est dépassé (ou invérifiable),
+ * `null` sinon. Partagé avec le diagnostic en quatre cases : même scan, même
+ * borne de dépense.
+ */
+export async function plafondDepasse(now: Date): Promise<string | null> {
+  try {
+    const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const [row] = await db()
+      .select({ count: sql<number>`count(*)::int` })
+      .from(scans)
+      .where(gte(scans.createdAt, dayAgo));
+
+    return (row?.count ?? 0) > plafondQuotidien()
+      ? `plafond quotidien atteint (${row?.count} scans / 24 h)`
+      : null;
+  } catch (error) {
+    console.error("[sentinelle] plafond quotidien invérifiable", error);
+    return "plafond invérifiable";
+  }
+}
+
 function partiesParis(date: Date): { day: string; month: string; year: string } {
   const parts = new Intl.DateTimeFormat("fr-FR", {
     day: "numeric",
@@ -202,22 +224,10 @@ export async function buildLettreEchantillon(
 
   // Le plafond global avant tout appel payant. Le rapport de scan, lui, est
   // déjà servi — seule la lettre est refusée.
-  try {
-    const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    const [row] = await db()
-      .select({ count: sql<number>`count(*)::int` })
-      .from(scans)
-      .where(gte(scans.createdAt, dayAgo));
-
-    if ((row?.count ?? 0) > plafondQuotidien()) {
-      console.warn(
-        `[sentinelle] échantillon : plafond quotidien atteint (${row?.count} scans / 24 h)`,
-      );
-      return { status: "none", reason: "plafond quotidien de lettres atteint" };
-    }
-  } catch (error) {
-    console.error("[sentinelle] échantillon : plafond invérifiable", error);
-    return { status: "none", reason: "plafond invérifiable" };
+  const refus = await plafondDepasse(now);
+  if (refus) {
+    console.warn(`[sentinelle] échantillon : ${refus}`);
+    return { status: "none", reason: refus };
   }
 
   let context: LettreContext;

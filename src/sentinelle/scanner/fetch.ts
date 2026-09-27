@@ -147,6 +147,7 @@ function describeFailure(error: unknown): { reason: string; transient: boolean }
 async function attempt(url: string): Promise<Attempt> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const started = Date.now();
 
   try {
     const response = await fetch(url, {
@@ -158,6 +159,9 @@ async function attempt(url: string): Promise<Attempt> {
         "accept-language": "fr-FR,fr;q=0.9,en;q=0.8",
       },
     });
+    // Temps jusqu'aux en-têtes, redirections comprises : ce qu'attend un
+    // visiteur avant le premier octet utile. Le corps n'est pas compté.
+    const elapsedMs = Date.now() - started;
 
     const headers: Record<string, string> = {};
     response.headers.forEach((value, name) => {
@@ -180,6 +184,7 @@ async function attempt(url: string): Promise<Attempt> {
         headers,
         setCookies,
         html: await readCapped(response),
+        elapsedMs,
       },
     };
   } catch (error) {

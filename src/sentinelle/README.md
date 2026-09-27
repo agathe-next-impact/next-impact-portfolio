@@ -23,14 +23,16 @@ visible :
 | `@/components/theme-provider` | `app/(sentinelle)/layout.tsx` | à copier (une trentaine de lignes autour de next-themes) |
 | `app/globals.css` | `app/(sentinelle)/layout.tsx` | à copier (tokens du design system Blueprint) |
 | `@/components/ui/*` | pages produit (phase 2+) | à copier, ou à extraire en paquet partagé |
-| `@/lib/sentinelle-offer` | `billing/offer.ts` | à déplacer dans `billing/` — la page marketing restera côté vitrine |
+| `@/lib/sentinelle-offer` | `app/(sentinelle)/scan/[id]/report.tsx` (tarif affiché) | à copier — la page marketing restera côté vitrine |
+| `@/lib/substack`, `@/lib/newsletter` | `app/(sentinelle)/espace/page.tsx` (archives de la lettre gratuite) | à copier (lecture de l'archive JSON Substack, sans dépendance) |
 
 Ce dernier mérite une explication : les faits publics de l'offre (montant,
-libellé, URL du Payment Link) vivent côté vitrine **exprès**. La page `/sentinelle`
-est une page marketing, elle ne peut pas importer le code du produit sans violer
-la règle ci-dessus. La dépendance est donc inversée : c'est `billing/offer.ts`
-qui lit `lib/sentinelle-offer.ts`. Résultat, le montant affiché sur la page et
-celui vérifié par le webhook ne peuvent pas diverger.
+libellé) vivent côté vitrine **exprès**. La page `/sentinelle` est une page
+marketing, elle ne peut pas importer le code du produit sans violer la règle
+ci-dessus. La dépendance est donc inversée : c'est le produit qui lit
+`lib/sentinelle-offer.ts`. Il n'y a plus de paiement en ligne depuis le
+2026-09-27 (voir `inscriptions/`) : la page vitrine envoie sa demande par HTTP à
+`/api/sentinelle/inscription`, sans rien importer.
 
 Ce qui n'est **jamais** partagé : `lib/sendMail.ts` et `lib/email-template.ts`.
 Sentinelle envoie par le même fournisseur que la vitrine — SMTP Google — mais
@@ -57,14 +59,14 @@ de l'extraction, c'est une ligne à changer.
 | `retention/` | politique de conservation et purge | 2 |
 | `newsletter/` | cadence du 1er et du 15, constaté d'un numéro | 1 ✔ / 4 ✔ |
 | `lettre/` | lettre de veille bimensuelle : collecte web puis rédaction | 4 ✔ (refonte) |
-| `billing/` | abonnement via Payment Link Stripe + webhook | ✔ (portail client en 5) |
+| `inscriptions/` | opt-in d'abonnement, validation par l'admin, activation, résiliation (remplace `billing/` et Stripe, 2026-09-27) | ✔ |
 | `collectors/` | WPScan/Wordfence, api.wordpress.org, endoflife.date | 3 ✔ |
 | `redaction/` | appel API Claude, garde zod sur la sortie | 3 ✔ |
 | `emails/` | transport SMTP Google, gabarits React Email, rendu HTML + texte | 4 ✔ |
 | `admin/` | session, file de validation, cycle draft → validated → sent | 4 ✔ |
 | `access/` | liens de connexion à usage unique, session de l'espace client | 5 ✔ |
 | `onboarding/` | fiche déclarative, amorçage depuis un scan, bienvenue | 5 ✔ |
-| `espace/` | lectures de l'espace abonné, portail de facturation Stripe | 5 ✔ |
+| `espace/` | lectures de l'espace abonné | 5 ✔ |
 
 `lettre/` mérite la note la plus longue, parce que sa forme est son garde-fou.
 Le numéro n'est plus un relevé de surveillance mais une lettre de consultant :

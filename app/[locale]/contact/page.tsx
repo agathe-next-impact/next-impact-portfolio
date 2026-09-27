@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { generatePageMetadata } from "@/lib/metadata";
+import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/json-ld";
 import MultiSubjectContactForm from "@/components/contact/multi-subject-form";
 import { ContactDirectInfo } from "@/components/contact/contact-direct-info";
@@ -19,32 +19,11 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "contactPage" });
-  return generatePageMetadata({
-    title: t("metaTitle"),
-    description: t("metaDescription"),
-    path: "/contact",
-    image: "/img/contact-facilitation.jpg",
-    keywords:
-      locale === "en"
-        ? [
-            "contact web technology advice",
-            "redesign advisory call",
-            "outsourced technical expert",
-            "website audit and roadmap",
-            "WordPress redesign contact",
-            "free website diagnostic",
-          ]
-        : [
-            "contact conseil techno web",
-            "visio conseil refonte",
-            "expert technique externalisé",
-            "audit et roadmap site web",
-            "contact refonte WordPress",
-            "diagnostic gratuit site web",
-          ],
-    locale,
-  });
+  // Titre, description et mots-clés : lus dans lib/metadata.ts
+  // (`pageMetadata.contact`), qui lit les prix du conseil dans
+  // lib/visio-conseil.ts. messages/*.json ne peut pas importer de TypeScript :
+  // un prix y serait recopié.
+  return pageMetadata.contact(locale);
 }
 
 export default async function ContactPage({
@@ -104,7 +83,7 @@ export default async function ContactPage({
         </div>
       </BlueprintSection>
 
-      {/* Pas prêt pour un projet, juste une décision à trancher → visio conseil. */}
+      {/* Pas prêt pour un projet, juste une décision à trancher : l'échange de 15 minutes. */}
       <VisioConseilBanner tone="obsidian" />
     </main>
   );

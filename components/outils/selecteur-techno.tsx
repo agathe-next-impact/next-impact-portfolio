@@ -4,7 +4,7 @@
 // (besoin, usage, autonomie, budget, maintenance, données, évolutivité,
 // time-to-value) → une famille recommandée parmi 6, puis routage vers l'outil
 // spécialisé et l'offre adaptée. Anti-cannibalisation : l'outil donne le signal,
-// la visio l'applique au cas réel. Modèle : components/outils/audit-pwa.tsx.
+// l'échange de 15 minutes (gratuit) l'applique au cas réel. Modèle : components/outils/audit-pwa.tsx.
 // Tokens DS uniquement, bilingue inline, client-side (zéro API).
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -78,10 +78,10 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "Tight budget, standard need, fast launch: no-code can be enough. Stay mindful of SEO, data ownership and the ceilings you'll hit as the need grows.",
     links: [
-      { labelFr: "En parler en visio", labelEn: "Talk it through on a call", href: "/conseil" },
+      { labelFr: "En parler 15 min · gratuit", labelEn: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Valider en visio · 150 €", labelEn: "Validate on a call · €150", href: "/conseil" },
+    next: { labelFr: "Valider mon choix · 15 min, gratuit", labelEn: "Validate my choice · 15 min, free", href: "/conseil#choix-techno-ia" },
   },
   headless: {
     labelFr: "Headless WordPress + Next.js",
@@ -104,10 +104,10 @@ const FAMILIES: Record<Family, FamilyInfo> = {
     summaryEn:
       "If an existing tool already covers most of the need, buying it is often far cheaper than building it. The right reflex: compare before you develop.",
     links: [
-      { labelFr: "Un avis indépendant", labelEn: "Get an independent opinion", href: "/conseil" },
+      { labelFr: "Un avis en 15 min · gratuit", labelEn: "A 15-min opinion · free", href: "/conseil#choix-techno-ia" },
       { labelFr: "Le blog techno", labelEn: "The tech blog", href: "/blog" },
     ],
-    next: { labelFr: "Sécuriser le choix — avis indépendant", labelEn: "Secure the choice — independent opinion", href: "/conseil" },
+    next: { labelFr: "Sécuriser le choix · 15 min, gratuit", labelEn: "Secure the choice · 15 min, free", href: "/conseil#choix-techno-ia" },
   },
   surmesure: {
     labelFr: "Plateforme métier / sur-mesure",
@@ -429,8 +429,8 @@ export default function SelecteurTechno() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "This signal points you in a direction — it doesn't replace a decision for your exact case. A decision call applies the selector to your real budget, data and constraints, and is credited back if a project follows."
-                : "Ce signal vous oriente — il ne remplace pas une décision pour votre cas précis. Une visio de choix de techno applique le Sélecteur à votre budget réel, vos données et vos contraintes, et se déduit d'un projet si vous le lancez."}
+                ? "This signal points you in a direction. It doesn't replace a decision for your exact case: a free 15-minute call applies the selector to your real budget, data and constraints."
+                : "Ce signal vous oriente. Il ne remplace pas une décision pour votre cas précis : un échange de 15 minutes, gratuit, applique le Sélecteur à votre budget réel, vos données et vos contraintes."}
             </p>
           </StaggerItem>
 
@@ -443,9 +443,9 @@ export default function SelecteurTechno() {
               {isEn ? info.next.labelEn : info.next.labelFr}
               <ArrowRight size={14} />
             </Link>
-            {info.next.href !== "/conseil" && (
-              <Link href="/conseil" className={BTN_GHOST}>
-                {isEn ? "Book a tech choice call · €150" : "Réserver une visio · 150 €"}
+            {!info.next.href.startsWith("/conseil") && (
+              <Link href="/conseil#choix-techno-ia" className={BTN_GHOST}>
+                {isEn ? "Talk it through · 15 min, free" : "En parler 15 min · gratuit"}
                 <ArrowRight
                   size={13}
                   className="transition-transform group-hover:translate-x-0.5"

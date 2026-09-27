@@ -5,6 +5,25 @@ import PageLayout from "@/components/page-layout";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, formatEuros, trajectoirePrice } from "@/lib/trajectoires";
+
+// Les trois prestations, nom, technique et plancher lus dans lib/trajectoires.ts
+// (charte v1.6, ADR-014) : « Optimisation (WordPress optimisé, à partir de … HT) ».
+const PRESTATIONS = TRAJECTOIRE_ORDER.map((slug) => {
+  const { name, technique } = TRAJECTOIRES[slug];
+  const prix = trajectoirePrice(slug, "fr");
+  return `${name.fr} (${technique.fr}, ${prix.charAt(0).toLowerCase()}${prix.slice(1)} HT)`;
+}).join(", ");
+
+// Exemple chiffré : une Refonte au prix d'entrée publié (lib/trajectoires.ts).
+// Tout le calcul en découle : déduction TIH de 30 %, contribution nette, coût réel.
+const EXEMPLE_TH_MANQUANTS = 4;
+const EXEMPLE_CONTRIBUTION_PAR_TH = 4752;
+const EXEMPLE_REFONTE = TRAJECTOIRES["forfait-headless"];
+const EXEMPLE_MONTANT = EXEMPLE_REFONTE.priceValue;
+const EXEMPLE_DEDUCTION = Math.round(EXEMPLE_MONTANT * 0.3);
+const EXEMPLE_BRUTE = EXEMPLE_TH_MANQUANTS * EXEMPLE_CONTRIBUTION_PAR_TH;
+const eur = (value: number) => formatEuros(value, "fr");
 
 export async function generateMetadata({
   params,
@@ -309,7 +328,9 @@ export default function ArticleReduireAgefiph() {
                 <p style={{ color: "var(--ink-2)", lineHeight: 1.7, marginBottom: 32 }}>
                   Prenons l&apos;exemple d&apos;une PME de 80 salariés qui
                   n&apos;emploie aucun travailleur handicapé et qui confie la
-                  refonte de son site web à Next Impact pour 6 500 € HT.
+                  refonte de son site web à Next Impact (prestation{" "}
+                  {EXEMPLE_REFONTE.name.fr}, {EXEMPLE_REFONTE.technique.fr}) pour{" "}
+                  {eur(EXEMPLE_MONTANT)} HT.
                 </p>
 
                 {/* Calculation table */}
@@ -322,10 +343,22 @@ export default function ArticleReduireAgefiph() {
                 >
                   {[
                     { label: "Obligation OETH (6% de 80)", value: "4 TH", accent: false },
-                    { label: "TH manquants", value: "4", accent: true },
-                    { label: "Contribution brute (4 × 4 752 €)", value: "19 008 €", accent: true },
-                    { label: "Déduction TIH (30% de 6 500 €)", value: "− 1 950 €", accent: true },
-                    { label: "Contribution après déduction", value: "17 058 €", accent: false },
+                    { label: "TH manquants", value: String(EXEMPLE_TH_MANQUANTS), accent: true },
+                    {
+                      label: `Contribution brute (${EXEMPLE_TH_MANQUANTS} × ${eur(EXEMPLE_CONTRIBUTION_PAR_TH)})`,
+                      value: eur(EXEMPLE_BRUTE),
+                      accent: true,
+                    },
+                    {
+                      label: `Déduction TIH (30% de ${eur(EXEMPLE_MONTANT)})`,
+                      value: `− ${eur(EXEMPLE_DEDUCTION)}`,
+                      accent: true,
+                    },
+                    {
+                      label: "Contribution après déduction",
+                      value: eur(EXEMPLE_BRUTE - EXEMPLE_DEDUCTION),
+                      accent: false,
+                    },
                   ].map((row, i) => (
                     <div
                       key={i}
@@ -361,7 +394,7 @@ export default function ArticleReduireAgefiph() {
                       background: "var(--paper-2)",
                     }}
                   >
-                    <span style={{ color: "var(--ink)", fontWeight: 600 }}>
+                    <span style={{ color: "var(--ink)", fontWeight: 500 }}>
                       Coût réel du site web
                     </span>
                     <span
@@ -369,19 +402,19 @@ export default function ArticleReduireAgefiph() {
                       style={{
                         color: "var(--accent-color)",
                         fontSize: "clamp(20px, 2vw, 26px)",
-                        fontWeight: 600,
+                        fontWeight: 500,
                       }}
                     >
-                      4 550 €
+                      {eur(EXEMPLE_MONTANT - EXEMPLE_DEDUCTION)}
                     </span>
                   </div>
                 </div>
 
                 <p style={{ color: "var(--ink-2)", lineHeight: 1.7 }}>
-                  L&apos;entreprise économise 1 950 € sur sa contribution
-                  AGEFIPH et obtient un site web performant pour un coût
-                  réel de 4 550 €, soit une réduction de 30 % du montant HT
-                  facturé.
+                  L&apos;entreprise économise {eur(EXEMPLE_DEDUCTION)} sur sa
+                  contribution AGEFIPH et obtient un site web performant pour un
+                  coût réel de {eur(EXEMPLE_MONTANT - EXEMPLE_DEDUCTION)}, soit une
+                  réduction de 30 % du montant HT facturé.
                 </p>
               </div>
             </div>
@@ -476,7 +509,7 @@ export default function ArticleReduireAgefiph() {
                     "Un site web performant, mesuré avant et après (moins d'une seconde de chargement visé, SEO natif, sécurité renforcée)",
                     "30% du coût de main-d'œuvre déductible de votre contribution AGEFIPH",
                     "Une attestation de déductibilité conforme à l'article D.5212-7 du Code du travail",
-                    "Trois trajectoires de refonte : WordPress optimisée (à partir de 2 250 € HT), WordPress headless (à partir de 4 000 € HT), web app (à partir de 6 500 € HT), toutes éligibles à la déduction OETH",
+                    `Trois prestations : ${PRESTATIONS}, toutes éligibles à la déduction OETH`,
                   ].map((item, i) => (
                     <li
                       key={i}
@@ -530,7 +563,7 @@ export default function ArticleReduireAgefiph() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                   {faqItems.map((f, i) => (
                     <div key={i} style={{ borderTop: i > 0 ? "1px solid var(--rule)" : "none", paddingTop: i > 0 ? 20 : 0 }}>
-                      <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--ink)", marginBottom: 8 }}>
+                      <h3 style={{ fontSize: 17, fontWeight: 500, color: "var(--ink)", marginBottom: 8 }}>
                         {f.question}
                       </h3>
                       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--ink-2)" }}>

@@ -11,7 +11,16 @@ import {
   CTO_BILLING_UNIT_CODE,
   CTO_MIN_MONTHS,
 } from "@/lib/cto-externalise";
-import { OFFER_AMOUNT_CENTS, OFFER_CURRENCY } from "@/lib/sentinelle-offer";
+import {
+  MAINTENANCE_BILLING_UNIT_CODE,
+  MAINTENANCE_PATH,
+  MAINTENANCE_PRICE_CURRENCY,
+  MAINTENANCE_PRICE_VALUE,
+  MAINTENANCE_PRIX_VALIDES,
+} from "@/lib/maintenance-offer";
+import { TRAJECTOIRES, TRAJECTOIRE_ORDER, type TrajectoireSlug } from "@/lib/trajectoires";
+import { OFFERS as CONSEIL_OFFERS, ECHANGE_URL } from "@/lib/visio-conseil";
+import { VEILLE_TITRE } from "@/lib/situations";
 
 type SchemaLocale = "fr" | "en";
 
@@ -21,7 +30,7 @@ function schemaLocale(locale?: string): SchemaLocale {
 }
 
 /**
- * Offre récurrente « Expert technique externalisé » (6e ligne du catalogue,
+ * Offre récurrente « Expert technique externalisé » (moment « Gérer »,
  * arbitrage du 2026-09-07 ; renommée « CTO externalisé » → « Expert technique
  * externalisé » le 2026-09-10, ADR-010). Déclarée une seule fois : les deux
  * OfferCatalog du site (ContactPage et LocalBusiness de la home) la
@@ -39,8 +48,8 @@ const CTO_OFFER = (locale: SchemaLocale) =>
     name: locale === "en" ? "Outsourced technical expert" : "Expert technique externalisé",
     description:
       locale === "en"
-        ? `Technical direction on shared time for a mid-sized company's customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided. Two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month. ${CTO_MIN_MONTHS}-month commitment, then rolling monthly.`
-        : `Direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé. Deux paliers, à partir de ${CTO_PRICE_VALUE} € HT par mois. Engagement de ${CTO_MIN_MONTHS} mois, puis reconduction au mois.`,
+        ? `Technical direction on shared time for a mid-sized company's customer-facing digital estate: someone who decides, writes it down, steers your vendors and answers for what is decided, with a dedicated continuous watch. Two tiers, from €${CTO_PRICE_VALUE} excl. VAT per month. ${CTO_MIN_MONTHS}-month commitment, then rolling monthly.`
+        : `Direction technique à temps partagé pour le numérique visible d'une PME : quelqu'un qui décide, l'écrit, pilote vos prestataires et répond de ce qui est décidé, avec une veille dédiée en continu. Deux paliers, à partir de ${CTO_PRICE_VALUE} € HT par mois. Engagement de ${CTO_MIN_MONTHS} mois, puis reconduction au mois.`,
     priceCurrency: CTO_PRICE_CURRENCY,
     priceSpecification: {
       "@type": "UnitPriceSpecification",
@@ -62,18 +71,107 @@ function localePath(locale: SchemaLocale, path: string): string {
 }
 
 /**
- * Catalogue d'offres de l'entité : les lignes indexables de la charte v1.4
- * (§1), soit les six historiques plus Sentinelle ; le suivi et maintenance
- * n'y entre qu'avec MAINTENANCE_PRIX_VALIDES (lib/maintenance-offer.ts).
+ * Offre « Suivi et maintenance » (moment « Gérer »). Elle n'entre au catalogue
+ * que si MAINTENANCE_PRIX_VALIDES vaut true : tant que les prix ne sont pas
+ * validés, la page est en noindex et le schéma ne la déclare pas. Plancher
+ * mensuel lu dans lib/maintenance-offer.ts, jamais recopié. La mise sous
+ * suivi, condition de démarrage, n'est pas une offre : elle n'est pas déclarée.
+ * Page en français seulement (locale EN en noindex) : l'URL pointe toujours la
+ * version française.
+ */
+const MAINTENANCE_OFFER = (locale: SchemaLocale) =>
+  ({
+    "@type": "Offer",
+    name: locale === "en" ? "Care and maintenance" : "Suivi et maintenance",
+    description:
+      locale === "en"
+        ? "Monitoring, backups, checked updates and a report every month in your online workspace. Two tiers, a price grid by type of site, continuous watch with Sentinelle included."
+        : "Surveillance, sauvegardes, mises à jour vérifiées et rapport chaque mois dans votre espace en ligne. Deux paliers, une grille par type de site, veille en continu avec Sentinelle incluse.",
+    priceCurrency: MAINTENANCE_PRICE_CURRENCY,
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      priceCurrency: MAINTENANCE_PRICE_CURRENCY,
+      minPrice: MAINTENANCE_PRICE_VALUE,
+      valueAddedTaxIncluded: false,
+      referenceQuantity: {
+        "@type": "QuantitativeValue",
+        value: 1,
+        unitCode: MAINTENANCE_BILLING_UNIT_CODE,
+      },
+    },
+    url: `${siteConfig.url}${MAINTENANCE_PATH}`,
+  }) as const;
+
+/**
+ * Ce que chacune des trois prestations est, dans les mots de sa carte d'offre.
+ * Rien n'est écrit ici de ce que la carte affiche : le NOM, le nom TECHNIQUE, la
+ * phrase EN CLAIR (ADR-015) et le PLANCHER sont lus dans lib/trajectoires.ts.
+ * Le schéma suit donc la carte, quelle que soit sa rédaction. S'y ajoutent deux
+ * faits que la carte dit aussi : la prestation recommandée, et la première
+ * analyse de veille technique et stratégique par laquelle chaque prestation
+ * commence (ADR-014).
+ */
+const trajectoireDescription = (slug: TrajectoireSlug, locale: SchemaLocale): string => {
+  const trajectoire = TRAJECTOIRES[slug];
+  const isEn = locale === "en";
+  const recommended = trajectoire.recommended
+    ? isEn
+      ? " This is the recommended service."
+      : " C'est la prestation recommandée."
+    : "";
+  const veille = isEn
+    ? " It starts with a first technical and strategic watch analysis."
+    : " Elle commence par une première analyse de veille technique et stratégique.";
+  return `${trajectoire.enClair[locale]}${recommended}${veille}`;
+};
+
+/** Les deux offres du moment « Diagnostiquer » (échange de 15 minutes gratuit, ADR-023, puis audit) : nom et prix lus dans lib/visio-conseil.ts. */
+const conseilOffer = (id: string) => CONSEIL_OFFERS.find((offer) => offer.id === id)!;
+const VISIO = conseilOffer("choix-techno-ia");
+const AUDIT = conseilOffer("architecture-projet-ia");
+
+/**
+ * Types de service de l'entité, dans l'ordre des trois moments : Diagnostiquer,
+ * Évoluer, Gérer (ADR-013). Déclarés UNE SEULE FOIS : OrganizationJsonLd et le
+ * nœud LocalBusiness de la home lisent cette liste. Les trois prestations y
+ * portent leur nom et leur nom technique, lus dans lib/trajectoires.ts
+ * (ADR-014). La veille technique et stratégique, caractéristique de toutes les
+ * offres, y figure sous son nom (lib/situations.ts). Le suivi et maintenance
+ * n'y figure qu'une fois ses prix validés ; Sentinelle, hors catalogue, n'y
+ * figure pas. Un pack n'est pas un type de service : il n'y figure pas.
+ */
+const SERVICE_TYPES: string[] = [
+  "Conseil refonte de site WordPress",
+  "Audit de site web et roadmap",
+  ...TRAJECTOIRE_ORDER.map(
+    (slug) => `${TRAJECTOIRES[slug].name.fr} : ${TRAJECTOIRES[slug].technique.fr}`,
+  ),
+  "Refonte de site WordPress",
+  "Migration WordPress vers Headless",
+  "Création de sites web WordPress",
+  "Création d'applications web sur-mesure",
+  "Création d'applications mobiles (PWA)",
+  "Développement Next.js",
+  VEILLE_TITRE.fr,
+  ...(MAINTENANCE_PRIX_VALIDES ? ["Suivi et maintenance de site web"] : []),
+  "Expert technique externalisé (direction technique à temps partagé)",
+];
+
+/**
+ * Catalogue d'offres de l'entité : les lignes du catalogue de la charte (§1),
+ * dans l'ordre des trois moments, Diagnostiquer, Évoluer, Gérer (ADR-013).
+ * Sentinelle n'y figure pas : hors catalogue, elle garde le schéma propre à sa
+ * page /sentinelle. Le suivi et maintenance n'y entre qu'avec
+ * MAINTENANCE_PRIX_VALIDES (lib/maintenance-offer.ts).
  * Déclaré UNE SEULE FOIS : les deux `hasOfferCatalog` du site (ContactPage et
  * le nœud LocalBusiness de la home) le réutilisent, donc un seul endroit à
  * corriger quand le catalogue bouge.
  *
  * Sémantique des prix, alignée sur ce que la charte et les pages affichent :
- * les deux offres de conseil ont un prix EXACT (`price`), les trois refontes et
- * l'abonnement sont des planchers « à partir de » (`minPrice` dans une
- * `UnitPriceSpecification`). Déclarer 2250 en `price` laissait entendre un
- * forfait ferme, que la page ne promet pas.
+ * les deux offres de conseil ont un prix EXACT (`price`), les trois
+ * forfaits et les abonnements sont des planchers « à partir de »
+ * (`minPrice` dans une `UnitPriceSpecification`). Déclarer 2250 en `price`
+ * laissait entendre un forfait ferme, que la page ne promet pas.
  *
  * Le catalogue suit la langue de la page : les libellés anglais sont ceux que
  * la version anglaise du site affiche réellement (cartes d'offre, formulaire de
@@ -97,85 +195,48 @@ const OFFER_CATALOG = (locale: SchemaLocale) => {
     itemListElement: [
       {
         "@type": "Offer",
-        name: isEn ? "Redesign advisory call" : "Visio conseil refonte",
+        name: VISIO[locale].name,
         description: isEn
-          ? "One hour on a call, a written opinion sent within 48h: stay, decouple or rebuild, and why."
-          : "Une heure en visio, un avis écrit envoyé dans les 48 h : rester, découpler ou refonder, et pourquoi.",
-        price: "150",
+          ? "Fifteen minutes on a video call to lay out your situation and know where to start. Free, no commitment."
+          : "Quinze minutes en visio pour poser votre situation et savoir par où commencer. Gratuit, sans engagement.",
+        price: String(VISIO.tiers[0].value),
         priceCurrency: "EUR",
         // Ancre de la section d'offre (§ 04) plutôt que la page nue : un moteur
         // de réponse cite alors l'endroit exact où le prix est affiché.
-        url: url("/conseil#choix-techno-ia"),
+        url: url(`/conseil#${VISIO.id}`),
       },
       {
         "@type": "Offer",
-        name: "Audit + roadmap",
+        name: AUDIT[locale].name,
         description: isEn
-          ? "Audit report (performance, security, technical debt, plugins, hosting), costed recommendations and a step-by-step roadmap."
-          : "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), préconisations chiffrées et roadmap par étapes.",
-        price: "650",
+          ? "Audit report (performance, security, technical debt, plugins, hosting), a first technical and strategic watch analysis, costed recommendations, a step-by-step roadmap and a 1-hour debrief by video call."
+          : "Rapport d'audit (performance, sécurité, dette technique, plugins, hébergement), première analyse de veille technique et stratégique, préconisations chiffrées, roadmap par étapes et 1 h de restitution en visio.",
+        price: String(AUDIT.tiers[0].value),
         priceCurrency: "EUR",
-        url: url("/conseil#architecture-projet-ia"),
+        url: url(`/conseil#${AUDIT.id}`),
       },
-      {
-        "@type": "Offer",
-        name: isEn
-          ? "Optimized WordPress redesign"
-          : "Refonte WordPress optimisée",
-        description: isEn
-          ? "Theme, plugins and optimization of the existing site: a fast site without changing the publishing tool."
-          : "Thème, plugins et optimisation de l'existant : un site rapide sans changer d'outil de publication.",
-        priceCurrency: "EUR",
-        priceSpecification: FROM_PRICE(2250),
-        url: url("/solutions-web"),
-      },
-      {
-        "@type": "Offer",
-        name: isEn
-          ? "Headless WordPress redesign"
-          : "Refonte WordPress headless",
-        description: isEn
-          ? "WordPress back office kept, modern front end: your editors publish as before, your visitors see a fast site."
-          : "Back-office WordPress conservé, front moderne : vos rédacteurs publient comme avant, vos visiteurs voient un site rapide.",
-        priceCurrency: "EUR",
-        priceSpecification: FROM_PRICE(4000),
-        url: url("/wordpress-headless"),
-      },
-      {
-        "@type": "Offer",
-        name: isEn ? "Web app redesign" : "Refonte vers une web app",
-        description: isEn
-          ? "Web and/or mobile platform when the site has become a working tool."
-          : "Plateforme web et/ou mobile quand le site est devenu un outil de travail.",
-        priceCurrency: "EUR",
-        priceSpecification: FROM_PRICE(6500),
-        url: url("/solutions-web"),
-      },
-      // Sentinelle, première marche du moment « Tenir » (charte v1.4,
-      // ADR-012). Prix unique et mensuel, lu dans lib/sentinelle-offer.ts (la
-      // même source que le webhook de paiement). Page FR uniquement (locale EN
-      // en noindex) : l'URL pointe toujours la version française.
-      // Le suivi et maintenance n'est PAS déclaré ici tant que
-      // MAINTENANCE_PRIX_VALIDES vaut false (lib/maintenance-offer.ts).
-      {
-        "@type": "Offer",
-        name: "Sentinelle",
-        description: isEn
-          ? "Watch on the components your site actually runs: an alert when one of them becomes a problem, two letters a month reviewed by a human before sending, and what it changes for what comes next. Cancel at any time."
-          : "Surveillance des composants que votre site utilise vraiment : une alerte quand l'un d'eux devient un problème, deux lettres par mois relues avant envoi, et ce que ça change pour la suite. Résiliable à tout moment.",
-        priceCurrency: OFFER_CURRENCY.toUpperCase(),
-        priceSpecification: {
-          "@type": "UnitPriceSpecification",
-          priceCurrency: OFFER_CURRENCY.toUpperCase(),
-          price: OFFER_AMOUNT_CENTS / 100,
-          referenceQuantity: {
-            "@type": "QuantitativeValue",
-            value: 1,
-            unitCode: "MON",
-          },
-        },
-        url: `${siteConfig.url}/sentinelle`,
-      },
+      // Évoluer : les trois prestations. Le nom affiché sur la carte vient en
+      // tête, le nom technique le suit, pour que le schéma nomme l'offre comme
+      // la page qui la vend. Nom et plancher lus dans lib/trajectoires.ts.
+      // L'URL est l'ancre de la section de /solutions-web où le prix est
+      // affiché. Les packs ne sont PAS déclarés ici (ADR-014) : un pack assemble
+      // des lignes du catalogue, il n'en est pas une.
+      ...TRAJECTOIRE_ORDER.map((slug) => {
+        const trajectoire = TRAJECTOIRES[slug];
+        return {
+          "@type": "Offer",
+          name: `${trajectoire.name[locale]}${isEn ? ": " : " : "}${trajectoire.technique[locale]}`,
+          description: trajectoireDescription(slug, locale),
+          priceCurrency: "EUR",
+          priceSpecification: FROM_PRICE(trajectoire.priceValue),
+          url: url(trajectoire.href),
+        };
+      }),
+      // Gérer : les deux abonnements, du plus léger au plus engageant.
+      // Sentinelle n'est plus déclarée ici (ADR-013) : hors catalogue, elle se
+      // vend depuis le rapport de l'analyse du site et garde le schéma de sa
+      // page /sentinelle.
+      ...(MAINTENANCE_PRIX_VALIDES ? [MAINTENANCE_OFFER(locale)] : []),
       CTO_OFFER(locale),
     ],
   } as const;
@@ -254,20 +315,7 @@ export function OrganizationJsonLd() {
       email: "agathe@next-impact.digital",
       availableLanguage: ["French", "English"],
     },
-    serviceType: [
-      "Conseil refonte de site WordPress",
-      "Audit de site web et roadmap",
-      "Expert technique externalisé (direction technique à temps partagé)",
-      "Refonte WordPress optimisée",
-      "Refonte WordPress headless",
-      "Création de sites web WordPress",
-      "Création de sites WordPress Headless + Next.js",
-      "Création d'applications web sur-mesure",
-      "Création d'applications mobiles (PWA)",
-      "Migration WordPress vers Headless",
-      "Audit de site web",
-      "Développement Next.js",
-    ],
+    serviceType: SERVICE_TYPES,
     priceRange: "€€",
     knowsAbout: [
       "WordPress",
@@ -290,6 +338,8 @@ export function OrganizationJsonLd() {
       "Performance web",
       "SEO technique",
       "Veille technologique",
+      VEILLE_TITRE.fr,
+      ...(MAINTENANCE_PRIX_VALIDES ? ["Maintenance de site web"] : []),
       "Direction technique à temps partagé",
     ],
     sameAs: [
@@ -652,9 +702,12 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     name: "Contact · Next Impact Digital",
+    // Prix lus dans leurs sources (lib/visio-conseil.ts, lib/cto-externalise.ts).
+    // Le suivi et maintenance n'est cité que si ses prix sont validés, comme
+    // dans le formulaire de la page.
     description: isEn
-      ? `Talk about a redesign or a new site: advisory call (€150), audit + roadmap (€650), WordPress, headless or web app project, care and maintenance, outsourced technical expert (from €${CTO_PRICE_VALUE}/month), or a free diagnostic.`
-      : `Parler d'une refonte ou d'une création : visio conseil (150 €), audit + roadmap (650 €), projet WordPress, headless ou web app, suivi et maintenance, expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), ou diagnostic gratuit.`,
+      ? `Talk about a redesign or a new site: a free 15-minute call, audit + roadmap (${AUDIT.tiers[0].price.en}), WordPress, headless or web app project, ${MAINTENANCE_PRIX_VALIDES ? "care and maintenance, " : ""}outsourced technical expert (from €${CTO_PRICE_VALUE}/month), or a free diagnostic.`
+      : `Parler d'une refonte ou d'une création : un échange gratuit de 15 minutes, audit + roadmap (${AUDIT.tiers[0].price.fr}), projet WordPress, headless ou web app, ${MAINTENANCE_PRIX_VALIDES ? "suivi et maintenance, " : ""}expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois), ou diagnostic gratuit.`,
     url: `${siteConfig.url}${localePath(lang, "/contact")}`,
     inLanguage: isEn ? "en-US" : "fr-FR",
     mainEntity: {
@@ -701,20 +754,20 @@ export function ContactPageJsonLd({ locale }: { locale?: string } = {}) {
         {
           "@type": "ReserveAction",
           name: isEn
-            ? "Book a redesign advisory call"
-            : "Réserver une visio conseil refonte",
-          target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-une-refonte",
+            ? "Book a free 15-minute call"
+            : "Réserver l'échange gratuit de 15 minutes",
+          target: ECHANGE_URL,
           description: isEn
-            ? "One hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why"
-            : "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
+            ? "Fifteen minutes on a video call to lay out your situation and know where to start. Free, no commitment"
+            : "Quinze minutes en visio pour poser votre situation et savoir par où commencer. Gratuit, sans engagement",
         },
         {
           "@type": "CommunicateAction",
           name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
           target: `${siteConfig.url}${localePath(lang, "/contact")}`,
           description: isEn
-            ? "Redesign advisory call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
-            : "Visio conseil refonte, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
+            ? "Free 15-minute call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
+            : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
         },
       ],
       hasOfferCatalog: OFFER_CATALOG(lang),
@@ -862,7 +915,7 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
   const data = {
     "@context": "https://schema.org",
     "@graph": [
-      // — WebPage (Speakable : cible le H1 et le bloc « En bref » pour les
+      // — WebPage (Speakable : cible le H1 et le cartouche « L'essentiel » pour les
       //   assistants vocaux / lecture IA). Les sélecteurs pointent du contenu visible. —
       {
         "@type": "WebPage",
@@ -873,10 +926,10 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
         isPartOf: { "@id": `${baseUrl}/#website` },
         about: { "@id": `${baseUrl}/#organization` },
         primaryImageOfPage: `${baseUrl}${siteConfig.ogImage}`,
-        // Dernier remaniement éditorial substantiel de la home : logos clients
-        // dans le hero, strip technos sous le TL;DR, retrait du bandeau de
-        // preuve (2026-09-04).
-        dateModified: "2026-09-04",
+        // Dernier remaniement éditorial substantiel de la home : l'offre s'y
+        // lit par situation, en trois colonnes, une par besoin, et la veille
+        // technique et stratégique y est dite (2026-09-27, ADR-014).
+        dateModified: "2026-09-27",
         speakable: {
           "@type": "SpeakableSpecification",
           cssSelector: ["h1", ".home-tldr"],
@@ -994,20 +1047,7 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
           opens: "09:00",
           closes: "18:00",
         },
-        serviceType: [
-          "Conseil refonte de site WordPress",
-          "Audit de site web et roadmap",
-          "Expert technique externalisé (direction technique à temps partagé)",
-          "Refonte WordPress optimisée",
-          "Refonte WordPress headless",
-          "Création de sites web WordPress",
-          "Création de sites WordPress Headless + Next.js",
-          "Création d'applications web sur-mesure",
-          "Création d'applications mobiles (PWA)",
-          "Migration WordPress vers Headless",
-          "Audit de site web",
-          "Développement Next.js",
-        ],
+        serviceType: SERVICE_TYPES,
         knowsAbout: [
           "WordPress",
           "Conseil techno web",
@@ -1022,26 +1062,28 @@ export function HomepageJsonLd({ locale }: { locale?: string } = {}) {
           "TypeScript",
           "PostgreSQL",
           "PWA",
+          "Refonte de site WordPress",
+          VEILLE_TITRE.fr,
         ],
         hasOfferCatalog: OFFER_CATALOG(lang),
         potentialAction: [
           {
             "@type": "ReserveAction",
             name: isEn
-              ? "Book a redesign advisory call"
-              : "Réserver une visio conseil refonte",
-            target: "https://calendly.com/agathe-next-impact/conseil-de-choix-de-techno-pour-une-refonte",
+              ? "Book a free 15-minute call"
+              : "Réserver l'échange gratuit de 15 minutes",
+            target: ECHANGE_URL,
             description: isEn
-              ? "One hour on a call, a written opinion within 48h: stay, decouple or rebuild, and why"
-              : "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder, et pourquoi",
+              ? "Fifteen minutes on a video call to lay out your situation and know where to start. Free, no commitment"
+              : "Quinze minutes en visio pour poser votre situation et savoir par où commencer. Gratuit, sans engagement",
           },
           {
             "@type": "CommunicateAction",
             name: isEn ? "Talk about a redesign project" : "Parler d'un projet de refonte",
             target: `${baseUrl}${localePath(lang, "/contact")}`,
             description: isEn
-              ? "Redesign advisory call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
-              : "Visio conseil refonte, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
+              ? "Free 15-minute call, audit + roadmap, redesign or new site project (WordPress, headless or web app), care and maintenance, outsourced technical expert or free diagnostic"
+              : "Échange de 15 minutes gratuit, audit + roadmap, projet de refonte ou de création (WordPress, headless ou web app), suivi et maintenance, expert technique externalisé ou diagnostic gratuit",
           },
         ],
       },

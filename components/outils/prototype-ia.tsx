@@ -3,7 +3,7 @@
 // Prototype IA : jetable ou maintenable ? — outil « IA & code » du hub. L'IA
 // produit vite un prototype ; le rendre fiable, sûr et maintenable est un autre
 // métier. Checklist 9 facteurs → enjeu de production /100 et verdict directionnel
-// à 3 paliers : proto OK / à cadrer / à reconstruire. CTA adaptée (Visio / Roadmap).
+// à 3 paliers : proto OK / à cadrer / à reconstruire. CTA adaptée (échange de 15 minutes gratuit / Roadmap).
 // Verdict rendu via une échelle 3 paliers (pas un score bon/mauvais). Modèle :
 // components/outils/reparer-ou-refaire.tsx.
 
@@ -224,12 +224,12 @@ function statusBorderClass(status: Status) {
 function getCtas(tier: 0 | 1 | 2) {
   if (tier === 0)
     return {
-      primary: { fr: "En parler en visio", en: "Talk it through on a call", href: "/conseil" },
+      primary: { fr: "En parler 15 min · gratuit", en: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       secondary: { fr: "Choisir avec le Sélecteur", en: "Choose with the selector", href: "/outils/selecteur-techno" },
     };
   if (tier === 1)
     return {
-      primary: { fr: "Cadrer en visio · 150 €", en: "Scope on a call · €150", href: "/conseil" },
+      primary: { fr: "Cadrer mon projet · 15 min, gratuit", en: "Scope my project · 15 min, free", href: "/conseil#choix-techno-ia" },
       secondary: { fr: "Voir les solutions web", en: "See the web solutions", href: "/solutions-web" },
     };
   return {
@@ -430,8 +430,8 @@ export default function PrototypeIa() {
             <Info size={14} className="mt-0.5 shrink-0 text-mid-gray" />
             <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
               {isEn
-                ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you — a call (or architecture advice) frames the move from prototype to product."
-                : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente — une visio (ou un conseil architecture) cadre le passage du prototype au produit."}
+                ? "AI produces a prototype fast. Making it reliable, secure and maintainable is another craft. This signal orients you. A free 15-minute call, or architecture advice, frames the move from prototype to product."
+                : "L'IA produit vite un prototype. Le rendre fiable, sûr et maintenable est un autre métier. Ce signal vous oriente. Un échange de 15 minutes, gratuit, ou un conseil architecture cadre le passage du prototype au produit."}
             </p>
           </StaggerItem>
 

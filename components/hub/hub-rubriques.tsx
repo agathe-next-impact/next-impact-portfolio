@@ -71,7 +71,7 @@ const COPY: Record<
           { label: "Quiz WordPress ou Headless", href: "/documentation/wordpress-headless" },
           { label: "Simulateur de tarifs", href: "/solutions-web" },
         ],
-        next: { label: "Trancher en visio · 150 €", href: "/conseil" },
+        next: { label: "Trancher · 15 min, gratuit", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "ia-et-code",
@@ -83,7 +83,7 @@ const COPY: Record<
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
           { label: "Le blog techno", href: "/blog" },
         ],
-        next: { label: "En parler en visio", href: "/conseil" },
+        next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "reparer",
@@ -106,7 +106,7 @@ const COPY: Record<
           { label: "Générer un cahier des charges", href: "/cahier-des-charges" },
           { label: "Simulateur de tarifs", href: "/solutions-web" },
         ],
-        next: { label: "Un avis indépendant", href: "/conseil" },
+        next: { label: "Un avis en 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "outils-metier",
@@ -129,7 +129,7 @@ const COPY: Record<
           { label: "Le Sélecteur techno web & IA", href: "/outils/selecteur-techno" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio · 150 €", href: "/conseil" },
+        next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "etre-trouve",
@@ -141,7 +141,7 @@ const COPY: Record<
           { label: "Les fondamentaux SEO", href: "/documentation/seo" },
           { label: "Diagnostic Web & IA", href: "/audit-site-web" },
         ],
-        next: { label: "En parler en visio · 150 €", href: "/conseil" },
+        next: { label: "En parler 15 min · gratuit", href: "/conseil#choix-techno-ia" },
       },
     ],
   },
@@ -176,7 +176,7 @@ const COPY: Record<
           { label: "WordPress or Headless quiz", href: "/documentation/wordpress-headless" },
           { label: "Pricing simulator", href: "/solutions-web" },
         ],
-        next: { label: "Decide on a call · €150", href: "/conseil" },
+        next: { label: "Decide · 15 min, free", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "ia-et-code",
@@ -188,7 +188,7 @@ const COPY: Record<
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
           { label: "The tech blog", href: "/blog" },
         ],
-        next: { label: "Talk it through on a call", href: "/conseil" },
+        next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "reparer",
@@ -211,7 +211,7 @@ const COPY: Record<
           { label: "Generate a project brief", href: "/cahier-des-charges" },
           { label: "Pricing simulator", href: "/solutions-web" },
         ],
-        next: { label: "Get an independent opinion", href: "/conseil" },
+        next: { label: "A 15-min opinion · free", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "outils-metier",
@@ -234,7 +234,7 @@ const COPY: Record<
           { label: "The web & AI tech selector", href: "/outils/selecteur-techno" },
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
         ],
-        next: { label: "Talk it through on a call", href: "/conseil" },
+        next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       },
       {
         id: "etre-trouve",
@@ -246,7 +246,7 @@ const COPY: Record<
           { label: "SEO fundamentals", href: "/documentation/seo" },
           { label: "Web & AI diagnostic", href: "/audit-site-web" },
         ],
-        next: { label: "Talk it through on a call", href: "/conseil" },
+        next: { label: "Talk it through · 15 min, free", href: "/conseil#choix-techno-ia" },
       },
     ],
   },

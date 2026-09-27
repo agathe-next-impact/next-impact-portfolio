@@ -1,218 +1,126 @@
 "use client";
 
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { SectionHeading } from "@/components/aspect/section";
-import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
+import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
-import { getTiers } from "@/components/services/PricingCards";
-import { OFFERS as CONSEIL_OFFERS, CREDIT_WINDOW_DAYS } from "@/lib/visio-conseil";
-import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
-import { CTO_PATH, CTO_PRICE } from "@/lib/cto-externalise";
+import { SUIVI_INCLUS_LABEL, SUIVI_INCLUS_MOIS } from "@/lib/maintenance-offer";
 import {
-  MAINTENANCE_PATH,
-  MAINTENANCE_PRICE,
-  SUIVI_INCLUS_LABEL,
-  SUIVI_INCLUS_MOIS,
-} from "@/lib/maintenance-offer";
+  BESOINS,
+  citer,
+  estGratuit,
+  packPrixEntree,
+  situationsDuBesoin,
+  type BesoinKey,
+  type Situation,
+} from "@/lib/situations";
+import { trajectoireDuNom, type Lang } from "@/lib/trajectoires";
+import { PackLink } from "@/components/packs/pack-link";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Home § 02 — les offres en trois moments : Décider · Refaire · Tenir
-// (charte v1.4, ADR-012 ; maquette « Offres en trois moments »).
+// Home § 02 : l'offre par famille, en onglets (charte v1.7).
 //
-// Le visiteur ne choisit pas dans un catalogue : il se situe dans une colonne.
-// Trois offres au plus par colonne, une seule mise en avant (Découpler).
-// « Refaire » est au centre et plus large ; « Tenir » (les abonnements) vient
-// en dernier et plus discret : offres de fin de parcours (charte §5).
+// Un onglet par famille, dans l'ordre Diagnostiquer, Évoluer, Gérer ; Évoluer
+// est ouvert par défaut, c'est la décision que la home veut faire prendre.
+// Chaque onglet montre le besoin, puis ses parcours en cartouches pleine largeur,
+// réduits à l'essentiel : le nom seul, sans le mot « pack » (ADR-016, ADR-022), ce que c'est
+// techniquement (ADR-015) ou l'offre au centre, la situation en ligne « pour
+// qui », le budget et un lien. Le détail vit sur la page du pack.
 //
-// Chaque carte suit le même gabarit : situation, résultat, un prix « à partir
-// de », une action. Aucun prix recopié : chacun est lu dans sa source unique
-// (PricingCards.getTiers, lib/visio-conseil, lib/sentinelle-offer,
-// lib/maintenance-offer, lib/cto-externalise). Les paliers vivent sur /tarifs
-// et sur la page de chaque offre.
+// Les trois panneaux sont rendus dans le HTML (`hidden` sur les inactifs) :
+// tous les packs restent lisibles par les moteurs et sans JavaScript. Onglets
+// au clavier : flèches, Origine, Fin (motif ARIA « tabs »).
+//
+// Sous les onglets, les deux boutons. La veille, qui distingue chaque pack,
+// est la section suivante (home-veille.tsx, § 03).
+//
+// Aucun prix recopié : chaque cartouche affiche le prix d'entrée publié de son
+// offre (packPrixEntree), le même que le menu et /solutions-web ; le budget du
+// parcours reste sur la page du pack. Tout vient de lib/situations.ts, qui lit chaque montant
+// dans sa source et calcule le budget de chaque pack.
 // ─────────────────────────────────────────────────────────────────────────────
 
-type Href = Parameters<typeof Link>[0]["href"];
 
-type Card = {
-  kicker?: string;
-  name: string;
-  situation: string;
-  result?: string;
-  price: string;
-  href: string;
-  cta: string;
-  recommended?: boolean;
-  recommendedLabel?: string;
-};
+const ONGLET_PAR_DEFAUT: BesoinKey = "refaire";
 
-const HT = { fr: " HT", en: " excl. VAT" };
-
-function useContent(locale: Locale) {
-  const isEn = locale === "en";
-  const tiers = getTiers(isEn);
-  const tier = (slug: string) => tiers.find((t) => t.slug === slug)!;
-  const visio = CONSEIL_OFFERS.find((o) => o.id === "choix-techno-ia")!.tiers[0];
-  const audit = CONSEIL_OFFERS.find((o) => o.id === "architecture-projet-ia")!.tiers[0];
-  const l = isEn ? "en" : "fr";
-
-  const decider: Card[] = [
-    {
-      name: isEn ? "Redesign advisory call" : "Visio conseil refonte",
-      situation: isEn
-        ? "For you if you are torn between keeping, evolving or rebuilding."
-        : "Pour vous si vous hésitez entre garder, faire évoluer ou refaire.",
-      result: isEn
-        ? "A written opinion within 48 h, after a one-hour call."
-        : "Un avis écrit sous 48 h, après une heure en visio.",
-      price: visio.price[l] + HT[l],
-      href: "/conseil#choix-techno-ia",
-      cta: isEn ? "Book" : "Réserver",
-    },
-    {
-      name: "Audit + roadmap",
-      situation: isEn
-        ? "For you if you want a costed plan before committing a budget."
-        : "Pour vous si vous voulez un plan chiffré avant d'engager un budget.",
-      result: isEn
-        ? "Report, recommendations and roadmap, delivered in your online workspace."
-        : "Rapport, préconisations et roadmap, remis dans votre espace en ligne.",
-      price: audit.price[l] + HT[l],
-      href: "/conseil#architecture-projet-ia",
-      cta: isEn ? "See the offer" : "Voir l'offre",
-    },
-  ];
-
-  const refaire: Card[] = [
-    {
-      kicker: isEn ? "Consolidate" : "Consolider",
-      name: isEn ? "Optimized WordPress redesign" : "Refonte WordPress optimisée",
-      situation: isEn
-        ? "For you if the problem is the theme and the plugin pile-up."
-        : "Pour vous si le problème, c'est le thème et l'empilement d'extensions.",
-      result: isEn
-        ? "A cleaned-up, faster WordPress, fewer updates to watch."
-        : "Un WordPress assaini et plus rapide, moins de mises à jour à surveiller.",
-      price: tier("forfait-classique").price + HT[l],
-      href: "/solutions-web#forfait-classique",
-      cta: isEn ? "See the trajectory" : "Voir la trajectoire",
-    },
-    {
-      kicker: isEn ? "Decouple" : "Découpler",
-      name: isEn ? "Headless WordPress redesign" : "Refonte WordPress headless",
-      situation: isEn
-        ? "For you if the site is slow and your team already publishes in WordPress."
-        : "Pour vous si le site est lent et que votre équipe publie déjà dans WordPress.",
-      result: isEn
-        ? "A fast, modern site. Your team publishes as before."
-        : "Un site rapide et moderne. Votre équipe publie comme avant.",
-      price: tier("forfait-headless").price + HT[l],
-      href: "/solutions-web#forfait-headless",
-      cta: isEn ? "See the trajectory" : "Voir la trajectoire",
-      recommended: true,
-      recommendedLabel: isEn ? "Recommended" : "Recommandée",
-    },
-    {
-      kicker: isEn ? "Rebuild" : "Refonder",
-      name: isEn ? "Redesign as a web app" : "Refonte vers une web app",
-      situation: isEn
-        ? "For you if the site has become a work tool."
-        : "Pour vous si le site est devenu un outil de travail.",
-      result: isEn
-        ? "A web or mobile platform, connected to your tools."
-        : "Une plateforme web ou mobile, reliée à vos outils.",
-      price: tier("forfait-webapp").price + HT[l],
-      href: "/solutions-web#forfait-webapp",
-      cta: isEn ? "See the trajectory" : "Voir la trajectoire",
-    },
-  ];
-
-  const tenir: Card[] = [
-    {
-      kicker: isEn ? "Prevent" : "Prévenir",
-      name: "Sentinelle",
-      situation: isEn
-        ? "Two letters a month and an alert when a component of your site becomes a risk."
-        : "Deux lettres par mois et une alerte quand un composant de votre site devient un risque.",
-      price: isEn ? "€19/month" : OFFER_PRICE_LABEL,
-      href: "/sentinelle",
-      cta: isEn ? "See" : "Voir",
-    },
-    {
-      kicker: isEn ? "Maintain" : "Entretenir",
-      name: isEn ? "Care and maintenance" : "Suivi et maintenance",
-      situation: isEn
-        ? "Monitoring, backups, checked updates, a report every month."
-        : "Surveillance, sauvegardes, mises à jour vérifiées, rapport chaque mois.",
-      price: `${MAINTENANCE_PRICE[l].amount} ${MAINTENANCE_PRICE[l].period}`,
-      href: MAINTENANCE_PATH,
-      cta: isEn ? "See" : "Voir",
-    },
-    {
-      kicker: isEn ? "Decide every month" : "Décider chaque mois",
-      name: isEn ? "Outsourced technical expert" : "Expert technique externalisé",
-      situation: isEn
-        ? "Shared-time technical leadership, without hiring."
-        : "Une direction technique à temps partagé, sans recruter.",
-      price: `${CTO_PRICE[l].amount} ${CTO_PRICE[l].period}`,
-      href: CTO_PATH,
-      cta: isEn ? "See" : "Voir",
-    },
-  ];
-
-  return { decider, refaire, tenir };
-}
-
-function OfferCard({ card, compact, surface }: { card: Card; compact?: boolean; surface: "obsidian" | "jet" }) {
+/**
+ * Un parcours en cartouche pleine largeur : nom, technique, pour qui, budget.
+ * Deux gabarits, pour que la liste ne soit pas un bloc uniforme : la cartouche
+ * mise en avant (gratuite ou recommandée) est grande, bordée d'accent, avec sa
+ * pastille ; les autres sont plus compactes et plus discrètes.
+ */
+function PackCartouche({ situation, lang }: { situation: Situation; lang: Lang }) {
+  const isEn = lang === "en";
+  const prestation = trajectoireDuNom(situation.offre.fr);
+  // Sous le nom : la technique pour une prestation, sinon l'offre au centre.
+  // Rien quand l'offre porte déjà le nom (« Audit + roadmap »).
+  const sousTitre = prestation
+    ? prestation.technique[lang]
+    : situation.sousTitre
+      ? situation.sousTitre[lang]
+      : situation.offre[lang] !== situation.nom[lang]
+      ? situation.offre[lang]
+      : null;
+  const gratuit = estGratuit(situation);
+  const enAvant = situation.recommended || gratuit;
   return (
-    <Link
-      href={card.href as Href}
+    <PackLink situation={situation}
       className={cn(
-        "group relative flex flex-col gap-2.5 rounded-md border p-5 no-underline transition-colors lg:p-6",
-        surface === "obsidian" ? "bg-obsidian" : "bg-jet",
-        card.recommended
-          ? "border-accent-secondary shadow-[0_0_0_4px_hsl(var(--accent-2)/0.12)]"
-          : "border-charcoal hover:border-mid-gray",
+        "group grid items-center gap-3 rounded-md border no-underline transition-colors md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_auto] md:gap-8",
+        enAvant
+          ? "border-accent-secondary bg-jet px-5 py-6 shadow-[0_0_0_4px_hsl(var(--accent-2)/0.12)] lg:px-7 lg:py-8"
+          : "border-charcoal bg-transparent px-5 py-4 hover:border-mid-gray hover:bg-jet lg:px-7",
       )}
     >
-      {(card.kicker || card.recommended) && (
-        <div className="flex items-center justify-between gap-3">
-          {card.kicker && (
-            <span
-              className={cn(
-                "font-mono text-2xs uppercase tracking-[0.14em]",
-                card.recommended ? "text-accent-secondary" : "text-mid-gray",
-              )}
-            >
-              {card.kicker}
-            </span>
+      <span className="flex flex-col gap-1">
+        {enAvant && (
+          <span className="mb-1 self-start rounded-full bg-accent-secondary px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em] text-obsidian">
+            {gratuit
+              ? isEn ? "Free, no commitment" : "Gratuit, sans engagement"
+              : isEn ? "Recommended" : "Recommandé"}
+          </span>
+        )}
+        <span
+          className={cn(
+            "font-normal leading-tight tracking-tight",
+            enAvant ? "text-3xl text-accent-secondary lg:text-4xl" : "text-xl text-foreground lg:text-2xl",
           )}
-          {card.recommended && (
-            <span className="rounded-full bg-accent-secondary px-2.5 py-1 font-mono text-2xs uppercase tracking-[0.12em] text-obsidian">
-              {card.recommendedLabel}
-            </span>
-          )}
-        </div>
-      )}
-      <h4 className={cn("font-medium tracking-tight text-foreground", compact ? "text-lg" : "text-xl")}>
-        {card.name}
-      </h4>
-      <p className="font-inter-tight text-base leading-relaxed text-mid-gray">{card.situation}</p>
-      {card.result && (
-        <p className="font-inter-tight text-base leading-relaxed text-foreground/85">{card.result}</p>
-      )}
-      <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <span className={cn("tracking-tight text-foreground", compact ? "text-base" : "text-lg")}>
-          {card.price}
+        >
+          {situation.nom[lang]}
+        </span>
+        {sousTitre && (
+          <span
+            className={cn(
+              "font-inter-tight leading-snug",
+              enAvant ? "text-base text-foreground/85" : "text-sm text-mid-gray",
+            )}
+          >
+            {sousTitre}
+          </span>
+        )}
+      </span>
+      <span
+        className={cn(
+          "font-inter-tight leading-relaxed",
+          enAvant ? "text-base text-foreground/80" : "text-sm text-mid-gray",
+        )}
+      >
+        {citer(situation.phrase, lang)}
+      </span>
+      <span className="flex flex-row flex-wrap items-baseline justify-between gap-x-4 gap-y-1 md:flex-col md:items-end md:text-right">
+        <span className={cn("tracking-tight text-foreground", enAvant ? "text-xl" : "text-base")}>
+          {packPrixEntree(situation, lang)}
         </span>
         <span className="inline-flex items-center gap-1 font-mono text-2xs uppercase tracking-[0.08em] text-accent-secondary transition-colors group-hover:text-foreground">
-          {card.cta}
+          {isEn ? "See the offer" : "Voir l'offre"}
           <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
-      </div>
-    </Link>
+      </span>
+    </PackLink>
   );
 }
 
@@ -224,15 +132,24 @@ function Pill({ children }: { children: React.ReactNode }) {
   );
 }
 
-function MomentHead({ index, label, question, highlight }: { index: string; label: string; question: string; highlight?: boolean }) {
+/** Une ligne sous les cartouches, propre à chaque famille. */
+function PiedOnglet({ besoin, lang }: { besoin: BesoinKey; lang: Lang }) {
+  const isEn = lang === "en";
+  if (besoin === "decider") return null;
+  if (besoin === "refaire") {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {SUIVI_INCLUS_MOIS > 0 && <Pill>{SUIVI_INCLUS_LABEL[lang]}</Pill>}
+        <Pill>{isEn ? "Price and timeline in writing before we start" : "Prix et délai écrits avant de commencer"}</Pill>
+        <Pill>{isEn ? "No site yet? Same offers" : "Pas encore de site ? Mêmes offres"}</Pill>
+      </div>
+    );
+  }
   return (
-    <div className="mb-2 flex flex-col gap-3">
-      <p className={cn("font-mono text-2xs uppercase tracking-[0.14em]", highlight ? "text-accent-secondary" : "text-mid-gray")}>
-        {index} · {label}
-      </p>
-      <h3 className={cn("font-light leading-snug tracking-tight text-foreground", highlight ? "text-2xl" : "text-xl")}>
-        « {question} »
-      </h3>
+    <div className="flex flex-wrap gap-2">
+      <Link href="/espace-client" className="no-underline">
+        <Pill>{isEn ? "Tracked in your online workspace →" : "Suivi dans votre espace en ligne →"}</Pill>
+      </Link>
     </div>
   );
 }
@@ -240,136 +157,133 @@ function MomentHead({ index, label, question, highlight }: { index: string; labe
 export default function HomeOffres() {
   const locale = useLocale() as Locale;
   const isEn = locale === "en";
-  const l = isEn ? "en" : "fr";
-  const { decider, refaire, tenir } = useContent(locale);
+  const l: Lang = isEn ? "en" : "fr";
+
+  const [tab, setTab] = useState<BesoinKey>(ONGLET_PAR_DEFAUT);
+
+  // Indicateur d'onglet glissant : mesuré (domAnimation ne gère pas `layout`).
+  const tabRefs = useRef<Partial<Record<BesoinKey, HTMLButtonElement | null>>>({});
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    const measure = () => {
+      const el = tabRefs.current[tab];
+      if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+    // locale change → largeur des libellés différente
+  }, [tab, locale]);
+
+  const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const last = BESOINS.length - 1;
+    const next =
+      e.key === "ArrowRight" ? (i === last ? 0 : i + 1)
+      : e.key === "ArrowLeft" ? (i === 0 ? last : i - 1)
+      : e.key === "Home" ? 0
+      : e.key === "End" ? last
+      : null;
+    if (next === null) return;
+    e.preventDefault();
+    const key = BESOINS[next].key;
+    setTab(key);
+    tabRefs.current[key]?.focus();
+  };
 
   return (
     <section className="relative overflow-hidden bg-obsidian px-2.5 lg:px-0">
       <div className="relative mx-auto w-full max-w-[1200px] border-x border-dark-gray">
         {/* En-tête */}
-        <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
+        <Reveal className="border-b border-dark-gray px-6 pt-12 lg:px-8 lg:pt-16">
           <SectionHeading
             index="№ 02"
-            kicker={isEn ? "Decide · Rebuild · Keep it running" : "Décider · Refaire · Tenir"}
+            kicker={isEn ? "Your need · your offer" : "Votre besoin · votre offre"}
             title={
               isEn ? (
-                <>Where does your site stand? <span className="text-accent-secondary">Three ways forward.</span></>
+                <>One need = <span className="text-accent-secondary">one offer</span></>
               ) : (
-                <>Où en est votre site ? <span className="text-accent-secondary">Trois façons d'avancer.</span></>
+                <>Un besoin = <span className="text-accent-secondary">une offre</span></>
               )
             }
-            description={
-              isEn
-                ? "You do not have to pick from a catalogue. Find your column, or start by analyzing your site."
-                : "Vous n'avez pas à choisir dans un catalogue. Situez-vous dans l'une des trois colonnes, ou commencez par analyser votre site."
-            }
           />
+
+          {/* Onglets : une famille par onglet */}
+          <div
+            role="tablist"
+            aria-label={isEn ? "Choose a family of offers" : "Choisir une famille d'offres"}
+            className="relative mt-8 flex overflow-x-auto lg:mt-10"
+          >
+            {BESOINS.map((b, i) => {
+              const selected = b.key === tab;
+              return (
+                <button
+                  key={b.key}
+                  id={`offres-tab-${b.key}`}
+                  ref={(el) => {
+                    tabRefs.current[b.key] = el;
+                  }}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  aria-controls={`offres-panel-${b.key}`}
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => setTab(b.key)}
+                  onKeyDown={(e) => onTabKeyDown(e, i)}
+                  className={cn(
+                    "flex shrink-0 items-baseline gap-2 px-4 py-4 font-mono text-sm font-regular uppercase tracking-[0.06em] transition-colors duration-200 sm:px-6 sm:text-base",
+                    selected ? "text-accent-secondary" : "text-mid-gray hover:text-foreground",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "text-xs font-normal transition-colors duration-200",
+                      selected ? "text-accent-secondary" : "text-mid-gray/70",
+                    )}
+                  >
+                    {b.index} ·
+                  </span>
+                  {b.moment[l]}
+                </button>
+              );
+            })}
+            {/* Indicateur glissant : trait épais */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-0 h-[3px] bg-accent-secondary transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
+              style={{ left: indicator.left, width: indicator.width }}
+            />
+          </div>
         </Reveal>
 
-        <Stagger className="grid lg:grid-cols-[1fr_1.45fr_1fr]">
-          {/* 01 · Décider */}
-          <StaggerItem className="flex flex-col gap-4 border-b border-dark-gray p-6 lg:border-b-0 lg:border-r lg:p-7">
-            <MomentHead
-              index="01"
-              label={isEn ? "Decide" : "Décider"}
-              question={isEn ? "I don't know what to do, or I have a quote to assess." : "Je ne sais pas quoi faire, ou j'ai un devis à juger."}
-            />
-            {decider.map((c) => (
-              <OfferCard key={c.name} card={c} compact surface="jet" />
+        {/* Panneaux : tous rendus, un seul visible */}
+        {BESOINS.map((b) => (
+          <div
+            key={b.key}
+            id={`offres-panel-${b.key}`}
+            role="tabpanel"
+            aria-labelledby={`offres-tab-${b.key}`}
+            hidden={b.key !== tab}
+            className={cn(
+              // `flex` l'emporterait sur l'attribut `hidden` : classe conditionnelle.
+              b.key === tab ? "flex" : "hidden",
+              "flex-col gap-4 p-6 duration-300 animate-in fade-in-0 slide-in-from-bottom-1 motion-reduce:animate-none lg:p-8",
+            )}
+          >
+            <h3 className="text-xl font-light leading-snug tracking-tight text-foreground lg:text-2xl">
+              {citer(b.phrase, l)}
+            </h3>
+            {situationsDuBesoin(b.key).map((s) => (
+              <PackCartouche key={s.slug} situation={s} lang={l} />
             ))}
-            <p className="font-inter-tight text-sm leading-relaxed text-mid-gray">
-              {isEn
-                ? `The call is deducted from the quote if a project starts within ${CREDIT_WINDOW_DAYS} days.`
-                : `La visio est déduite du devis si un projet démarre sous ${CREDIT_WINDOW_DAYS} jours.`}{" "}
-              <Link href="/veille" className="text-accent-secondary no-underline hover:text-foreground">
-                {isEn ? "Free newsletter and resources →" : "Lettre gratuite et ressources →"}
-              </Link>
-            </p>
-          </StaggerItem>
-
-          {/* 02 · Refaire — au centre, mis en avant */}
-          <StaggerItem className="flex flex-col gap-4 border-b border-dark-gray bg-jet p-6 lg:border-b-0 lg:border-r lg:p-8">
-            <MomentHead
-              index="02"
-              label={isEn ? "Rebuild" : "Refaire"}
-              question={isEn ? "My site is aging, or I don't have one yet." : "Mon site vieillit, ou je n'en ai pas encore."}
-              highlight
-            />
-            {refaire.map((c) => (
-              <OfferCard key={c.name} card={c} surface="obsidian" />
-            ))}
-            <div className="flex flex-wrap gap-2">
-              {SUIVI_INCLUS_MOIS > 0 && <Pill>{SUIVI_INCLUS_LABEL[l]}</Pill>}
-              <Pill>{isEn ? "Price and timeline in writing before we start" : "Prix et délai écrits avant de commencer"}</Pill>
-              <Pill>{isEn ? "6 to 10 weeks" : "6 à 10 semaines"}</Pill>
-            </div>
-            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
-              {isEn
-                ? "No site yet? Same packages, same timelines: we start from a blank page instead of the existing one."
-                : "Pas encore de site ? Mêmes forfaits, mêmes délais : on part d'une page blanche au lieu de l'existant."}
-            </p>
-          </StaggerItem>
-
-          {/* 03 · Tenir — les abonnements, en dernier */}
-          <StaggerItem className="flex flex-col gap-3.5 p-6 lg:p-7">
-            <MomentHead
-              index="03"
-              label={isEn ? "Keep it running" : "Tenir"}
-              question={isEn ? "My site works, I want it to stay that way." : "Mon site tourne, je veux qu'il le reste."}
-            />
-            {tenir.map((c) => (
-              <OfferCard key={c.name} card={c} compact surface="jet" />
-            ))}
-            <div className="flex flex-wrap gap-2">
-              <Pill>{isEn ? "Sentinelle included from maintenance up" : "Sentinelle incluse dès la maintenance"}</Pill>
-              <Link href="/espace-client" className="no-underline">
-                <Pill>{isEn ? "Tracked in your online workspace →" : "Suivi dans votre espace en ligne →"}</Pill>
-              </Link>
-            </div>
-          </StaggerItem>
-        </Stagger>
-
-        {/* Bandeau : les deux températures */}
-        <div className="flex flex-col gap-6 border-t border-dark-gray px-6 py-10 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div className="flex max-w-xl flex-col gap-2">
-            <p className="text-2xl font-light leading-snug tracking-tight text-foreground">
-              {isEn ? (
-                <>Not sure? <span className="text-accent-secondary">Start by analyzing your site.</span></>
-              ) : (
-                <>Vous hésitez ? <span className="text-accent-secondary">Commencez par analyser votre site.</span></>
-              )}
-            </p>
-            <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
-              {isEn
-                ? "One address, two minutes, no access required: you see what your site is made of and what is at risk."
-                : "Une adresse, deux minutes, aucun accès demandé : vous voyez de quoi votre site est fait et ce qui est à risque."}
-            </p>
+            <PiedOnglet besoin={b.key} lang={l} />
           </div>
-          <div className="flex flex-col gap-3 lg:items-end">
-            <div className="flex flex-wrap gap-3">
-              {/* /scan vit hors de app/[locale]/ : balise <a>, pas le Link i18n. */}
-              <a
-                href="/scan"
-                className="inline-flex min-h-11 items-center gap-2 rounded-sm bg-accent-secondary px-5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-obsidian no-underline transition-colors hover:bg-accent-secondary/85"
-              >
-                {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
-                <ArrowRight size={14} />
-              </a>
-              <Link
-                href="/contact"
-                className="inline-flex min-h-11 items-center rounded-sm border border-dark-gray px-5 font-mono text-xs uppercase tracking-[0.08em] text-foreground no-underline transition-colors hover:bg-ebony"
-              >
-                {isEn ? "Let's talk about your project" : "Discutons de votre projet"}
-              </Link>
-            </div>
-            <Link
-              href="/tarifs"
-              className="font-mono text-2xs tracking-[0.06em] text-mid-gray no-underline transition-colors hover:text-foreground"
-            >
-              {isEn ? "All prices, tiers included →" : "Tous les tarifs, paliers compris →"}
-            </Link>
-          </div>
-        </div>
+        ))}
+
+        {/* Bandeau vidé à la demande d'Agathe (2026-09-27) : conservé comme
+            respiration sous les onglets, à mi-hauteur de l'ancien bandeau
+            « Vous hésitez ? ». Les deux CTA de la home sont ceux du héros. */}
+        <div aria-hidden="true" className="border-t border-dark-gray py-10" />
       </div>
     </section>
   );

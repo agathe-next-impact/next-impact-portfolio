@@ -8,10 +8,11 @@ import { TarifsMoments } from "@/components/tarifs/tarifs-moments";
 import type { Locale } from "@/i18n/routing";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// /tarifs — récapitulatif de toutes les offres et de leurs paliers, par moment
-// (charte v1.4, ADR-012). Jusqu'au 2026-09-27 cette URL redirigeait vers
-// /solutions-web ; elle redevient une page, la seule qui liste le catalogue
-// entier. Les prix sont lus dans leurs sources (voir TarifsMoments).
+// /tarifs : la seule page qui montre à la fois les packs et le catalogue (charte
+// v1.6, ADR-014). D'abord les sept packs, par besoin, avec leur budget ; ensuite
+// les sept lignes du catalogue et leurs paliers, par moment (ADR-013). Jusqu'au
+// 2026-09-27 cette URL redirigeait vers /solutions-web. Les prix sont lus dans
+// leurs sources (voir TarifsMoments).
 // Contenu FR uniquement (locale EN en noindex).
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -29,9 +30,11 @@ export async function generateMetadata({
     title: isEn
       ? "Prices: advice, redesign and ongoing care"
       : "Tarifs : conseil, refonte et suivi de votre site",
+    // La page affiche les packs puis le catalogue : la description dit les
+    // deux, dans cet ordre. Aucun prix ici : ils sont sur la page.
     description: isEn
-      ? "All Next Impact prices in one page: advisory call and audit, three redesign packages, then watch, maintenance and technical leadership."
-      : "Tous les tarifs sur une page : visio conseil et audit, trois forfaits de refonte, puis veille, maintenance et direction technique. Prix affichés, paliers compris.",
+      ? "Every price on one page: the budget of each path, by situation, then the catalogue: advice, three services, care and maintenance, technical expert."
+      : "Tous les tarifs sur une page : le budget de chaque parcours, par situation, puis le catalogue : conseil, trois prestations, suivi et maintenance, expert technique.",
     path: "/tarifs",
     keywords: isEn
       ? ["website redesign prices", "WordPress maintenance price"]
@@ -61,14 +64,14 @@ export default async function TarifsPage({
         ]}
       />
       <PageHero
-        index="№ 00"
+        index="№ 01"
         kicker="Tarifs"
         title={
           <>
             Tous les prix, <em className="font-normal not-italic text-accent-secondary">avant tout rendez-vous</em>.
           </>
         }
-        description="Chaque offre, chaque palier, rangés en trois moments : décider, refaire, tenir. Prix hors taxes, écrits avant de commencer."
+        description="Chaque offre, chaque palier, rangés en trois moments : diagnostiquer, faire évoluer, gérer. Prix hors taxes, écrits avant de commencer."
       />
       <Separator />
       <TarifsMoments />

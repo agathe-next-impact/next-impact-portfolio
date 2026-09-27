@@ -4,7 +4,7 @@ import { clients } from "@sentinelle/db/schema";
 import { issueMagicLink } from "@sentinelle/access";
 import { sourcesFor } from "@sentinelle/collectors/catalog";
 import { renderWelcomeEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails/send";
+import { planMailReason, sendSentinelleMail, undeliverableReason } from "@sentinelle/emails/send";
 import { sentinelleBaseUrl } from "@sentinelle/url";
 import { getFiche, markWelcomeSent, type FicheComponent } from "./store";
 
@@ -68,6 +68,8 @@ export async function sendWelcome(
   // écritures pour un envoi qui n'aura jamais lieu.
   const injoignable = undeliverableReason(fiche.client.email);
   if (injoignable) return { sent: false, reason: injoignable };
+  const horsCanal = planMailReason(fiche.client.plan);
+  if (horsCanal) return { sent: false, reason: horsCanal };
 
   const claimed = await markWelcomeSent(clientId, now);
   if (!claimed) return { sent: false, reason: "bienvenue déjà envoyée" };

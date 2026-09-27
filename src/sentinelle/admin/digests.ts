@@ -1,8 +1,9 @@
 import { desc, eq } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { clients, digests } from "@sentinelle/db/schema";
+import { clients, digests, type Plan } from "@sentinelle/db/schema";
 import { renderNewsletterEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
+import { planMailReason, sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
+import { sentinelleBaseUrl } from "@sentinelle/url";
 import {
   missingForIssue,
   parseIssue,
@@ -91,7 +92,24 @@ export interface DigestDetail {
   issue: IssueContent | null;
   finalHtml: string | null;
   sentAt: Date | null;
-  client: { id: string; name: string; company: string | null; email: string; siteUrl: string; active: boolean };
+  client: {
+    id: string;
+    name: string;
+    company: string | null;
+    email: string;
+    siteUrl: string;
+    active: boolean;
+    plan: Plan;
+  };
+}
+
+/**
+ * Adresse de l'espace abonné que la lettre met en avant, ou `undefined` quand
+ * le numéro ne part pas par e-mail (client en accompagnement : son espace est
+ * celui de l'accompagnement, et le rendu figé y est relu par l'export).
+ */
+export function letterEspaceUrl(plan: Plan): string | undefined {
+  return planMailReason(plan) ? undefined : `${sentinelleBaseUrl()}/espace`;
 }
 
 export async function getDigestDetail(digestId: string): Promise<DigestDetail | null> {
@@ -109,6 +127,7 @@ export async function getDigestDetail(digestId: string): Promise<DigestDetail | 
       email: clients.email,
       siteUrl: clients.siteUrl,
       active: clients.active,
+      plan: clients.plan,
     })
     .from(digests)
     .innerJoin(clients, eq(digests.clientId, clients.id))
@@ -131,6 +150,7 @@ export async function getDigestDetail(digestId: string): Promise<DigestDetail | 
       email: row.email,
       siteUrl: row.siteUrl,
       active: row.active,
+      plan: row.plan,
     },
   };
 }
@@ -226,6 +246,7 @@ export async function validateDigest(
     lettre: issue.lettre,
     siteUrl: loaded.detail.client.siteUrl,
     issueDate: new Date(issue.constate.issueDate),
+    espaceUrl: letterEspaceUrl(loaded.detail.client.plan),
   });
 
   await db()
@@ -266,11 +287,14 @@ export async function sendDigest(
   if (!detail.issue?.lettre) return refuse("Numéro sans lettre : rien à envoyer.");
   const injoignable = undeliverableReason(detail.client.email);
   if (injoignable) return refuse(injoignable);
+  const horsCanal = planMailReason(detail.client.plan);
+  if (horsCanal) return refuse(horsCanal);
 
   const mail = await renderNewsletterEmail({
     lettre: detail.issue.lettre,
     siteUrl: detail.client.siteUrl,
     issueDate: new Date(detail.issue.constate.issueDate),
+    espaceUrl: letterEspaceUrl(detail.client.plan),
   });
 
   const { messageId } = await sendSentinelleMail({

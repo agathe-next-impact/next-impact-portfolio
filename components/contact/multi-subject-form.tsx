@@ -20,6 +20,11 @@ import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 import { CTO_PRICE_VALUE } from "@/lib/cto-externalise";
 import { MAINTENANCE_PRICE_VALUE } from "@/lib/maintenance-offer";
+import { OFFERS as CONSEIL_OFFERS } from "@/lib/visio-conseil";
+import { formatEuros } from "@/lib/trajectoires";
+
+// Prix de l'audit + roadmap, lu dans sa source (lib/visio-conseil.ts).
+const AUDIT_VALUE = CONSEIL_OFFERS.find((o) => o.id === "architecture-projet-ia")!.tiers[0].value;
 import { getRecaptchaToken } from "@/lib/recaptcha-client";
 
 type SubjectKey =
@@ -38,16 +43,17 @@ interface SubjectConfig {
 }
 
 const SUBJECTS: Record<SubjectKey, SubjectConfig> = {
-  "decision-techno": { icon: CalendarClock, fr: { label: "Visio conseil refonte (150 €)", description: "Une heure en visio, un avis écrit sous 48 h : rester, découpler ou refonder", placeholder: "Décrivez votre site, ce qui vous gêne aujourd'hui et la décision à trancher : je prépare la visio à partir de votre situation réelle." }, en: { label: "Redesign advisory call (€150)", description: "One hour on a call, a written opinion within 48h: stay, decouple or rebuild", placeholder: "Describe your site, what bothers you today and the decision to settle: I prepare the call from your actual situation." } },
-  architecture: { icon: Layers, fr: { label: "Audit + roadmap (650 €)", description: "Rapport d'audit, préconisations chiffrées et roadmap par étapes", placeholder: "Décrivez le site, l'existant technique si vous le connaissez et vos échéances : j'audite, je préconise et je livre la roadmap." }, en: { label: "Audit + roadmap (€650)", description: "Audit report, costed recommendations and a step-by-step roadmap", placeholder: "Describe the site, the technical setup if you know it and your deadlines: I audit, recommend and deliver the roadmap." } },
-  "cto-externalise": { icon: CalendarClock, fr: { label: `Expert technique externalisé (dès ${CTO_PRICE_VALUE} €/mois)`, description: "Direction technique à temps partagé : pilotage mensuel, devis relus, roadmap tenue à jour", placeholder: "Décrivez votre parc, les décisions en attente et les prestataires en place : je vous dis si un accompagnement mensuel est la bonne réponse." }, en: { label: `Outsourced technical expert (from €${CTO_PRICE_VALUE}/month)`, description: "Shared-time technical direction: monthly steering, quotes reviewed, roadmap kept current", placeholder: "Describe your systems, the pending decisions and the vendors in place: I tell you whether a monthly retainer is the right answer." } },
+  "decision-techno": { icon: CalendarClock, fr: { label: "Une décision à trancher", description: "Garder, faire évoluer ou refaire : je vous réponds, ou réservez directement l'échange gratuit de 15 minutes", placeholder: "Décrivez votre site, ce qui vous gêne aujourd'hui et la décision à trancher : je vous réponds à partir de votre situation réelle." }, en: { label: "A decision to settle", description: "Keep, evolve or rebuild: I reply, or book the free 15-minute call directly", placeholder: "Describe your site, what bothers you today and the decision to settle: I reply from your actual situation." } },
+  architecture: { icon: Layers, fr: { label: `Audit + roadmap (${formatEuros(AUDIT_VALUE, "fr")} HT)`, description: "Rapport d'audit, préconisations chiffrées et roadmap par étapes", placeholder: "Décrivez le site, l'existant technique si vous le connaissez et vos échéances : j'audite, je préconise et je livre la roadmap." }, en: { label: `Audit + roadmap (${formatEuros(AUDIT_VALUE, "en")} excl. VAT)`, description: "Audit report, costed recommendations and a step-by-step roadmap", placeholder: "Describe the site, the technical setup if you know it and your deadlines: I audit, recommend and deliver the roadmap." } },
+  "cto-externalise": { icon: CalendarClock, fr: { label: `Expert technique externalisé (dès ${formatEuros(CTO_PRICE_VALUE, "fr")} HT/mois)`, description: "Direction technique à temps partagé : pilotage mensuel, devis relus, roadmap tenue à jour", placeholder: "Décrivez votre parc, les décisions en attente et les prestataires en place : je vous dis si un accompagnement mensuel est la bonne réponse." }, en: { label: `Outsourced technical expert (from ${formatEuros(CTO_PRICE_VALUE, "en")} excl. VAT/month)`, description: "Shared-time technical direction: monthly steering, quotes reviewed, roadmap kept current", placeholder: "Describe your systems, the pending decisions and the vendors in place: I tell you whether a monthly retainer is the right answer." } },
   "mise-en-oeuvre": { icon: Globe, fr: { label: "Projet de refonte ou de création", description: "WordPress optimisé, headless ou web app : prix et délai fixés avant de commencer", placeholder: "Décrivez votre site actuel, ce que vous voulez garder, ce que vous voulez changer, et vos contraintes de budget et de délai." }, en: { label: "Redesign or new site project", description: "Optimized WordPress, headless or web app: price and timeline fixed upfront", placeholder: "Describe your current site, what you want to keep, what you want to change, and your budget and timing constraints." } },
-  maintenance: { icon: ShieldCheck, fr: { label: `Suivi et maintenance (dès ${MAINTENANCE_PRICE_VALUE} €/mois)`, description: "Surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel", placeholder: "Indiquez l'adresse de votre site, qui l'a réalisé et ce qui vous inquiète (mises à jour, pannes, sécurité) : je vous dis quel palier convient." }, en: { label: `Care and maintenance (from €${MAINTENANCE_PRICE_VALUE}/month)`, description: "Monitoring, backups, checked updates, monthly report", placeholder: "Share your site address, who built it and what worries you (updates, outages, security): I tell you which tier fits." } },
+  maintenance: { icon: ShieldCheck, fr: { label: `Suivi et maintenance (dès ${formatEuros(MAINTENANCE_PRICE_VALUE, "fr")} HT/mois)`, description: "Surveillance, sauvegardes, mises à jour vérifiées, rapport mensuel", placeholder: "Indiquez l'adresse de votre site, qui l'a réalisé et ce qui vous inquiète (mises à jour, pannes, sécurité) : je vous dis quel palier convient." }, en: { label: `Care and maintenance (from ${formatEuros(MAINTENANCE_PRICE_VALUE, "en")} excl. VAT/month)`, description: "Monitoring, backups, checked updates, monthly report", placeholder: "Share your site address, who built it and what worries you (updates, outages, security): I tell you which tier fits." } },
   diagnostic: { icon: SearchCheck, fr: { label: "Diagnostic gratuit de mon site", description: "Je regarde votre site et je vous oriente : gratuit, sans engagement", placeholder: "Indiquez l'adresse de votre site et ce qui vous préoccupe (lenteur, pannes, référencement, image) : je vous réponds avec une première orientation." }, en: { label: "Free diagnostic of my site", description: "I look at your site and point you the right way: free, no commitment", placeholder: "Share your site address and what worries you (speed, outages, search visibility, image): I reply with a first direction." } },
   autre: { icon: MessageCircle, fr: { label: "Autre", description: "Toute autre demande", placeholder: "Dites-moi en plus sur votre demande…" }, en: { label: "Other", description: "Any other request", placeholder: "Tell me more about your request…" } },
 };
 
-// Rangés par moment (ADR-012) : décider, refaire, tenir, puis le reste.
+// Rangés par moment (ADR-012, renommés par l'ADR-013) : diagnostiquer,
+// évoluer, gérer, puis le reste.
 const SUBJECT_ORDER: SubjectKey[] = [
   "decision-techno",
   "architecture",
@@ -143,8 +149,8 @@ export default function MultiSubjectContactForm() {
         </p>
         <p className="font-inter-tight text-base leading-relaxed text-mid-gray">
           {isEn
-            ? "Pick the topic: advisory call, audit + roadmap, redesign or new site project, care and maintenance, outsourced technical expert or free diagnostic."
-            : "Choisissez le sujet : visio conseil, audit + roadmap, projet de refonte ou de création, suivi et maintenance, expert technique externalisé ou diagnostic gratuit."}
+            ? "Pick the topic: a decision to settle, audit + roadmap, redesign or new site project, care and maintenance, outsourced technical expert or free diagnostic."
+            : "Choisissez le sujet : une décision à trancher, audit + roadmap, projet de refonte ou de création, suivi et maintenance, expert technique externalisé ou diagnostic gratuit."}
         </p>
       </div>
 

@@ -2,7 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import { alerts, clients, intelItems, stackItems } from "@sentinelle/db/schema";
 import { renderAlertEmail } from "@sentinelle/emails/render";
-import { sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
+import { planMailReason, sendSentinelleMail, undeliverableReason } from "@sentinelle/emails";
 import type { AlertStatus, DraftedAlert } from "@sentinelle/types";
 import { initialContent, missingForValidation, serializeAlertContent } from "./content";
 
@@ -45,6 +45,7 @@ async function loadAlert(alertId: string) {
       clientId: clients.id,
       clientEmail: clients.email,
       clientActive: clients.active,
+      clientPlan: clients.plan,
       clientSite: clients.siteUrl,
       componentLabel: stackItems.label,
       componentVersion: stackItems.version,
@@ -207,6 +208,8 @@ export async function sendAlert(
   // dans `emails/send.ts`.
   const injoignable = undeliverableReason(alert.clientEmail);
   if (injoignable) return refuse(injoignable);
+  const horsCanal = planMailReason(alert.clientPlan);
+  if (horsCanal) return refuse(horsCanal);
 
   const content = initialContent(alert);
   const manques = missingForValidation(content);

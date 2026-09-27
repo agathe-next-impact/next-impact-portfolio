@@ -1,6 +1,14 @@
 import { and, eq, inArray, lt, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
-import { alerts, clients, digests, intelItems, scans, stackItems } from "@sentinelle/db/schema";
+import {
+  alerts,
+  clients,
+  digests,
+  intelItems,
+  scans,
+  stackItems,
+  subscriptionRequests,
+} from "@sentinelle/db/schema";
 import { purgeExpiredMagicLinks } from "@sentinelle/access/store";
 import {
   anonymizableAlerts,
@@ -39,6 +47,7 @@ export interface PurgeReport {
   digestTextsPurged: number;
   intelRawPurged: number;
   magicLinksPurged: number;
+  subscriptionRequestsDeleted: number;
 }
 
 export const EMPTY_REPORT: PurgeReport = {
@@ -51,6 +60,7 @@ export const EMPTY_REPORT: PurgeReport = {
   digestTextsPurged: 0,
   intelRawPurged: 0,
   magicLinksPurged: 0,
+  subscriptionRequestsDeleted: 0,
 };
 
 /**
@@ -275,6 +285,10 @@ export async function deleteAllDataFor(
     .where(eq(sql`lower(${scans.leadEmail})`, email))
     .returning({ id: scans.id });
 
+  await db()
+    .delete(subscriptionRequests)
+    .where(eq(sql`lower(${subscriptionRequests.email})`, email));
+
   // Cascade sur stack_items, alerts et digests : voir les clés étrangères du
   // schéma. C'est voulu — un effacement demandé n'est pas un effacement partiel.
   const removedClients = await db()
@@ -300,6 +314,24 @@ export async function purgeMagicLinks(now: Date): Promise<Partial<PurgeReport>> 
   return { magicLinksPurged: await purgeExpiredMagicLinks(now) };
 }
 
+/**
+ * Demandes d'inscription : traitées, 30 jours après la décision ; jamais
+ * traitées, au bout du régime des prospects (3 ans), comme une adresse laissée
+ * sur un rapport.
+ */
+export async function purgeSubscriptionRequests(now: Date): Promise<Partial<PurgeReport>> {
+  const limit = cutoffs(now);
+  const deleted = await db()
+    .delete(subscriptionRequests)
+    .where(
+      sql`(${subscriptionRequests.status} <> 'pending' and ${subscriptionRequests.decidedAt} < ${limit.decidedRequest})
+        or (${subscriptionRequests.status} = 'pending' and ${subscriptionRequests.createdAt} < ${limit.lead})`,
+    )
+    .returning({ id: subscriptionRequests.id });
+
+  return { subscriptionRequestsDeleted: deleted.length };
+}
+
 /** Passe complète, dans l'ordre. Utilisée par le cron `retention-daily`. */
 export async function runRetention(now: Date = new Date()): Promise<PurgeReport> {
   return {
@@ -309,6 +341,7 @@ export async function runRetention(now: Date = new Date()): Promise<PurgeReport>
     ...(await purgeWrittenTexts(now)),
     ...(await purgeIntelRaw(now)),
     ...(await purgeMagicLinks(now)),
+    ...(await purgeSubscriptionRequests(now)),
   };
 }
 

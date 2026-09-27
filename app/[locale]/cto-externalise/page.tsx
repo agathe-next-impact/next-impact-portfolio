@@ -11,6 +11,7 @@ import {
   CTO_PRICE_VALUE,
   CTO_PRICE_CURRENCY,
   CTO_BILLING_UNIT_CODE,
+  CTO_MIN_MONTHS,
 } from "@/lib/cto-externalise";
 import type { Locale } from "@/i18n/routing";
 
@@ -31,8 +32,8 @@ export async function generateMetadata({
     // version longue précédente était tronquée avant l'engagement, qui est
     // l'objection n° 1 sur une offre récurrente.
     description: isEn
-      ? "Shared-time technical direction, from €900 excl. VAT a month: monthly steering, quotes reviewed, roadmap kept current. No hiring, six-month commitment."
-      : "Direction technique à temps partagé, dès 900 € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement 6 mois.",
+      ? `Shared-time technical direction, from €${CTO_PRICE_VALUE} excl. VAT a month: monthly steering, quotes reviewed, roadmap kept current. No hiring, ${CTO_MIN_MONTHS}-month commitment.`
+      : `Direction technique à temps partagé, dès ${CTO_PRICE_VALUE} € HT par mois : pilotage mensuel, devis relus, roadmap tenue à jour. Sans embaucher, engagement ${CTO_MIN_MONTHS} mois.`,
     path: CTO_PATH,
     keywords: isEn
       ? [

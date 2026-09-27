@@ -44,6 +44,8 @@ Tu es un agent de migration UI spécialisé dans la refonte visuelle du portfoli
    - En-tête de section : kicker `label-mono text-vermilion` + `h2 text-3xl tracking-tight` +
      sous-titre `font-inter-tight text-mid-gray`.
    - Titres **fins + `tracking-tight`** (pas `font-bold` systématique). Corps en `.font-inter-tight`.
+   - **Graisse maximale : 500** (ADR-017). Pour 500, écrire `font-regular`. Aucun `fontWeight`
+     en ligne ni `font-weight` en CSS au-dessus de 500.
    - Visuels dans un cadre `bg-overlay-gray rounded-md p-2 md:p-4`.
    - Boutons via `components/ui/button.tsx` (variante `primary` vermillon pour CTA fort).
 4. **Anime discrètement** : `<Reveal>`/`<Stagger>` à l'entrée ; si pertinent, propose un

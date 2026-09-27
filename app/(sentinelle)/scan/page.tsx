@@ -3,7 +3,7 @@ import { BlueprintSection, SectionHeading } from "@/components/aspect/section";
 import { ScanForm } from "./scan-form";
 
 export const metadata: Metadata = {
-  title: "Sentinelle — analyser mon site",
+  title: "Sentinelle · analyser mon site",
 };
 
 export default function ScanPage() {
@@ -14,7 +14,7 @@ export default function ScanPage() {
           index="№ 00"
           kicker="Sentinelle"
           title="Qu'est-ce qui tourne sur votre site ?"
-          description="Deux minutes pour savoir de quoi votre site est fait : CMS, extensions, serveur, bibliothèques. C'est le point de départ de toute surveillance — on ne peut pas veiller sur ce qu'on ne connaît pas."
+          description="Deux minutes pour savoir de quoi votre site est fait : CMS, extensions, serveur, bibliothèques. C'est le point de départ de toute surveillance : on ne peut pas veiller sur ce qu'on ne connaît pas."
         />
 
         <ScanForm />

@@ -35,6 +35,8 @@ export function BlueprintSection({
       className={cn(
         "relative overflow-hidden px-2.5 lg:px-0",
         tone === "jet" ? "bg-jet" : "bg-obsidian",
+        // Ancre : la section s'arrête sous l'en-tête collant (h-16).
+        id && "scroll-mt-16",
         className,
       )}
     >
@@ -75,6 +77,7 @@ export function SectionHeading({
   index,
   kicker,
   title,
+  subtitle,
   description,
   align = "left",
   as: Tag = "h2",
@@ -83,6 +86,8 @@ export function SectionHeading({
   index?: string;
   kicker?: string;
   title: React.ReactNode;
+  /** Sous-titre visible, entre le titre et la description (hors du titre). */
+  subtitle?: React.ReactNode;
   description?: React.ReactNode;
   align?: "left" | "center";
   as?: "h1" | "h2";
@@ -106,6 +111,9 @@ export function SectionHeading({
       <Tag className="max-w-3xl text-3xl font-light tracking-tight text-foreground md:text-4xl lg:text-5xl">
         {title}
       </Tag>
+      {subtitle && (
+        <p className="max-w-3xl text-xl font-light tracking-tight text-foreground/80 md:text-2xl">{subtitle}</p>
+      )}
       {description && (
         <p className="max-w-2xl font-inter-tight text-base leading-relaxed text-mid-gray md:text-lg">
           {description}

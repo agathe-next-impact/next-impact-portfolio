@@ -49,6 +49,7 @@ function lettre(): Lettre {
         },
       ],
       ceQuiNeChangePas: ["La sauvegarde reste la base."],
+      concurrence: [],
     },
     synthese: {
       actions: [
@@ -124,5 +125,29 @@ describe("NewsletterEmail — les deux modes", () => {
   it("l'iframe du rapport n'a pas de lien vers elle-même", async () => {
     const html = await render(NewsletterEmail({ ...PROPS, echantillon: {} }));
     expect(html).not.toContain("revoir votre rapport");
+  });
+});
+
+describe("NewsletterEmail — renvoi vers l'espace abonné", () => {
+  const ESPACE = "https://next-impact.digital/espace";
+
+  it("un numéro abonné invite deux fois à ouvrir l'espace", async () => {
+    const html = await render(NewsletterEmail({ ...PROPS, espaceUrl: ESPACE }));
+    const text = await render(NewsletterEmail({ ...PROPS, espaceUrl: ESPACE }), { plainText: true });
+
+    expect(html.split(`href="${ESPACE}"`).length - 1).toBe(2);
+    expect(text).toContain("Votre espace Sentinelle");
+    expect(text).toContain("archives de la lettre gratuite");
+  });
+
+  it("sans espace (client en accompagnement), aucune invitation", async () => {
+    const text = await render(NewsletterEmail(PROPS), { plainText: true });
+    expect(text).not.toContain("Votre espace Sentinelle");
+    expect(text).not.toContain("ouvrir mon espace");
+  });
+
+  it("l'échantillon n'invite jamais à un espace que le prospect n'a pas", async () => {
+    const html = await render(NewsletterEmail({ ...PROPS, espaceUrl: ESPACE, echantillon: {} }));
+    expect(html).not.toContain(ESPACE);
   });
 });

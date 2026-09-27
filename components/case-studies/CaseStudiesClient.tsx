@@ -10,7 +10,8 @@ import { getCaseStudiesPageVariants } from "@/lib/homepage-profiles";
 import type { CaseStudyCard } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
-import { PageHero, HERO_BTN_PRIMARY } from "@/components/aspect/page-hero";
+import { PageHero, HERO_BTN_PRIMARY, HERO_BTN_SECONDARY } from "@/components/aspect/page-hero";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
 import { Reveal } from "@/components/ui/reveal";
 import { NeonArcs } from "@/components/visuals/neon-arcs";
 
@@ -44,11 +45,17 @@ export default function CaseStudiesClient({ cards }: { cards: CaseStudyCard[] })
         title={variant.titre}
         description={variant.sousTitre}
         actions={
-          /* Preuve avant demande : la démo vidéo se consulte sans engagement. */
-          <Link href="/demo" className={HERO_BTN_PRIMARY}>
-            <Play size={14} fill="currentColor" aria-hidden="true" />
-            {isEn ? "Watch the demos in video" : "Voir les démos en vidéo"}
-          </Link>
+          <>
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
+              {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
+            </a>
+            {/* Preuve avant demande : la démo vidéo se consulte sans engagement. */}
+            <Link href="/demo" className={HERO_BTN_SECONDARY}>
+              <Play size={14} fill="currentColor" aria-hidden="true" />
+              {isEn ? "Watch the demos in video" : "Voir les démos en vidéo"}
+            </Link>
+          </>
         }
         backdrop={
           <div className="absolute inset-0 opacity-50">

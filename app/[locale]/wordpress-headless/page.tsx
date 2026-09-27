@@ -13,7 +13,16 @@ import {
 import { BlueprintSection, SectionHeading, Separator } from "@/components/aspect/section";
 import { Reveal } from "@/components/ui/reveal";
 import { ProofStrip } from "@/components/proof-strip";
+import { getAllSlugs } from "@/lib/case-studies-data";
 import type { Locale } from "@/i18n/routing";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
+import { TRAJECTOIRES, formatEuros, type Lang, type TrajectoireSlug } from "@/lib/trajectoires";
+
+// Prix des prestations, lus dans lib/trajectoires.ts : montant seul (« 4 000 € »)
+// ou « à partir de », hors taxes (« 4 000 € HT »).
+const prix = (slug: TrajectoireSlug, lang: Lang) => formatEuros(TRAJECTOIRES[slug].priceValue, lang);
+const prixHT = (slug: TrajectoireSlug, lang: Lang) =>
+  `${prix(slug, lang)}${lang === "en" ? " excl. VAT" : " HT"}`;
 
 // Revalidate toutes les 24h — page evergreen.
 export const revalidate = 86400;
@@ -85,7 +94,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
       },
       {
         q: "How much does a headless WordPress site cost in 2026?",
-        a: "At Next Impact, a standard headless WordPress + Next.js site starts at €4,000 (4–6 weeks). A more complex headless platform with custom integrations or multisite ranges from €6,500 to €15,000+ (6–10 weeks). Classic WordPress remains available from €2,250 if headless isn't justified.",
+        a: `At Next Impact, a standard headless WordPress + Next.js site (the ${TRAJECTOIRES["forfait-headless"].name.en} service) starts at ${prixHT("forfait-headless", "en")} (4–6 weeks). A more complex headless platform with custom integrations or multisite falls under the ${TRAJECTOIRES["forfait-webapp"].name.en} service, from ${prixHT("forfait-webapp", "en")} (6–10 weeks). Optimized WordPress (${TRAJECTOIRES["forfait-classique"].name.en}) remains available from ${prixHT("forfait-classique", "en")} if headless isn't justified.`,
       },
       {
         q: "Does headless WordPress break my SEO?",
@@ -128,7 +137,7 @@ function getFaq(isEn: boolean): Array<{ q: string; a: string }> {
     },
     {
       q: "Combien coûte un site WordPress headless en 2026 ?",
-      a: "Chez Next Impact, un site WordPress Headless + Next.js standard démarre à 4 000 € (4 à 6 semaines). Une plateforme headless plus complexe avec intégrations sur-mesure ou multisite va de 6 500 € à 15 000 €+ (6 à 10 semaines). Le WordPress classique reste proposé à partir de 2 250 € si le headless n'est pas justifié.",
+      a: `Chez Next Impact, un site WordPress headless + Next.js standard (prestation ${TRAJECTOIRES["forfait-headless"].name.fr}) démarre à ${prixHT("forfait-headless", "fr")} (4 à 6 semaines). Une plateforme headless plus complexe, avec intégrations sur mesure ou multisite, relève de la prestation ${TRAJECTOIRES["forfait-webapp"].name.fr}, à partir de ${prixHT("forfait-webapp", "fr")} (6 à 10 semaines). Le WordPress optimisé (${TRAJECTOIRES["forfait-classique"].name.fr}) reste proposé à partir de ${prixHT("forfait-classique", "fr")} si le headless n'est pas justifié.`,
     },
     {
       q: "Le passage au headless casse-t-il le SEO ?",
@@ -306,9 +315,13 @@ export default async function WordPressHeadlessPillarPage({
               {definition}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/audit-site-web" className={BTN_PRIMARY}>
-                {isEn ? "Free site audit" : "Audit gratuit du site"}
+              {/* Premier bouton de chaque héros : l'échange gratuit (Calendly). */}
+              <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
+                {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
                 <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link href="/audit-site-web" className={BTN_SECONDARY}>
+                {isEn ? "Free site audit" : "Audit gratuit du site"}
               </Link>
               <Link href="/solutions-web" className={BTN_SECONDARY}>
                 {isEn ? "See offers and pricing" : "Voir les offres et tarifs"}
@@ -317,8 +330,10 @@ export default async function WordPressHeadlessPillarPage({
           </Reveal>
         </BlueprintSection>
 
-        {/* Bande de preuve chiffrée — crédibilise la page avant le contenu. */}
-        <ProofStrip />
+        {/* Bande de preuve chiffrée : crédibilise la page avant le contenu. Le
+            nombre de projets documentés est celui des études de cas publiées,
+            lu dans lib/case-studies-data.ts, comme dans llms.txt. */}
+        <ProofStrip documented={getAllSlugs().length} />
 
         <Separator />
 
@@ -340,14 +355,14 @@ export default async function WordPressHeadlessPillarPage({
                   "Next.js renders the public site. Pages are pre-rendered (SSG/ISR) and served from a CDN.",
                   "The two halves talk via an API — usually WPGraphQL, sometimes the REST API.",
                   "Performance: Core Web Vitals consistently in the green, often impossible with a heavy classic theme.",
-                  "Pricing: from €4,000 for a standard site, 4 to 6 weeks. Migration possible without breaking SEO.",
+                  `Pricing: from ${prixHT("forfait-headless", "en")} for a standard site, 4 to 6 weeks. Migration possible without breaking SEO.`,
                 ]
               : [
                   "WordPress reste le back-end éditorial. Les éditeurs gardent leur admin, leurs articles, leurs plugins.",
                   "Next.js rend le site public. Les pages sont pré-rendues (SSG/ISR) et servies depuis un CDN.",
                   "Les deux moitiés communiquent par API — généralement WPGraphQL, parfois l'API REST.",
                   "Performance : Core Web Vitals au vert de façon stable, souvent impossible avec un thème classique chargé.",
-                  "Tarifs : à partir de 4 000 € pour un site standard, 4 à 6 semaines. Migration possible sans casser le SEO.",
+                  `Tarifs : à partir de ${prixHT("forfait-headless", "fr")} pour un site standard, 4 à 6 semaines. Migration possible sans casser le SEO.`,
                 ]
             ).map((point, i) => (
               <li
@@ -473,7 +488,7 @@ export default async function WordPressHeadlessPillarPage({
                       ["Hosting", "1 host (PHP/MySQL)", "2 hosts (WP + JAMstack platform)"],
                       ["Build complexity", "Low", "Medium"],
                       ["Setup time", "2–4 weeks", "4–6 weeks"],
-                      ["Entry price (Next Impact)", "€2,250", "€4,000"],
+                      ["Entry price (Next Impact, excl. VAT)", prix("forfait-classique", "en"), prix("forfait-headless", "en")],
                       ["Best for", "Brochure sites, small editorial teams", "Performance-critical sites, image-conscious brands, multi-channel content"],
                     ]
                   : [
@@ -484,7 +499,7 @@ export default async function WordPressHeadlessPillarPage({
                       ["Hébergement", "1 hébergeur (PHP/MySQL)", "2 hébergeurs (WP + plateforme JAMstack)"],
                       ["Complexité de build", "Faible", "Moyenne"],
                       ["Délai de mise en place", "2 à 4 semaines", "4 à 6 semaines"],
-                      ["Tarif d'entrée (Next Impact)", "2 250 €", "4 000 €"],
+                      ["Tarif d'entrée (Next Impact, HT)", prix("forfait-classique", "fr"), prix("forfait-headless", "fr")],
                       ["Idéal pour", "Sites vitrines, petites équipes éditoriales", "Sites à forte exigence perf, marques soucieuses d'image, contenu multi-canal"],
                     ]
                 ).map(([crit, classic, headless], i) => (
@@ -613,11 +628,11 @@ export default async function WordPressHeadlessPillarPage({
                 icon: Layers,
               },
               {
-                value: isEn ? "€4,000" : "4 000 €",
+                value: prix("forfait-headless", isEn ? "en" : "fr"),
                 label: isEn ? "Entry price, Next Impact" : "Tarif d'entrée, Next Impact",
                 sub: isEn
-                  ? "Fixed budget agreed up-front. Classic from €2,250."
-                  : "Budget fixé dès le départ. Classique à partir de 2 250 €.",
+                  ? `Fixed budget agreed up-front, excl. VAT. ${TRAJECTOIRES["forfait-classique"].name.en} from ${prix("forfait-classique", "en")}.`
+                  : `Budget fixé dès le départ, hors taxes. ${TRAJECTOIRES["forfait-classique"].name.fr} à partir de ${prix("forfait-classique", "fr")}.`,
                 icon: Shield,
               },
             ].map((stat, i) => {

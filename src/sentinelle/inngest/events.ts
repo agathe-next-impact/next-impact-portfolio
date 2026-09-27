@@ -31,11 +31,11 @@ export const scanRequested = eventType("sentinelle/scan.requested", {
 });
 
 /**
- * Un abonnement vient d'être encaissé (phase 5).
+ * Un abonnement vient d'être ouvert (phase 5).
  *
- * Émis par le webhook Stripe, jamais par une page : le retour du navigateur
- * après paiement n'est pas garanti (onglet fermé, redirection perdue), le
- * webhook si. `scanId` est présent quand le parcours est passé par le rapport
+ * Émis par l'activation d'une demande d'inscription (admin) et par le
+ * provisionnement, jamais par une page publique (jusqu'au 2026-09-27, par le
+ * webhook Stripe). `scanId` est présent quand la demande est partie du rapport
  * public — c'est lui qui amorce la fiche sans refaire d'analyse.
  */
 export const clientSubscribed = eventType("sentinelle/client.subscribed", {

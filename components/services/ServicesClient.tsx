@@ -1,13 +1,12 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
 import { FileText, Globe, Leaf, ArrowRight, Palette, Sparkles, Accessibility, type LucideIcon } from "lucide-react";
-import { PricingCards } from "@/components/services/PricingCards";
 import { OfferSections } from "@/components/services/OfferSections";
 import AppsSection from "@/components/services/AppsSection";
 import Process from "@/components/process";
 import ServicesFAQ from "@/components/services/ServicesFAQ";
 import HomePerf from "@/components/home-perf";
+import { EnBref } from "@/components/en-bref";
 import { useLocale, useTranslations } from "next-intl";
 import { useDocumentationMode } from "@/contexts/documentation-mode-context";
 import { getServicesPageVariants } from "@/lib/homepage-profiles";
@@ -18,26 +17,14 @@ import {
   HERO_BTN_PRIMARY,
   HERO_BTN_SECONDARY,
 } from "@/components/aspect/page-hero";
-import { HeroOfferStrip, type HeroOffer } from "@/components/aspect/hero-offer-strip";
+import { HeroNavCards, heroCardsEnfants } from "@/components/aspect/hero-nav-cards";
+import { MEGA_SECTIONS } from "@/lib/mega-menu";
+import { CTA_ECHANGE } from "@/lib/visio-conseil";
+import { BesoinTitle } from "@/components/aspect/besoin-title";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { BlueprintGrid } from "@/components/visuals/blueprint-grid";
-
-// Titre du hero en bichromie : la portion saillante passe à l'accent (bleu),
-// selon la convention de PageHero (`<em>` accent-secondary). Le titre vient de
-// homepage-profiles (chaîne simple), on colore le segment ciblé par locale.
-function heroTitle(titre: string, marker: string): React.ReactNode {
-  const idx = titre.toLowerCase().indexOf(marker.toLowerCase());
-  if (idx === -1) return titre;
-  return (
-    <>
-      {titre.slice(0, idx)}
-      <em className="font-normal not-italic text-accent-secondary">
-        {titre.slice(idx, idx + marker.length)}
-      </em>
-      {titre.slice(idx + marker.length)}
-    </>
-  );
-}
+import { SUIVI_INCLUS_MOIS } from "@/lib/maintenance-offer";
+import { TRAJECTOIRES, trajectoirePrice, type TrajectoireSlug } from "@/lib/trajectoires";
 
 export default function ServicesClient() {
   const { profileId } = useDocumentationMode();
@@ -47,58 +34,33 @@ export default function ServicesClient() {
   const t = useTranslations("servicesPage");
   const isEn = locale === "en";
 
-  // Aperçu des trois trajectoires dans le héros — ancres vers les cartes tarifs.
-  const heroOffers: HeroOffer[] = isEn
-    ? [
-        {
-          name: "Simple showcase site",
-          price: "from €2,250",
-          benefit: "Consolidate: bespoke theme, controlled cost.",
-          href: "#forfait-classique",
-        },
-        {
-          name: "Complex site",
-          price: "from €4,000",
-          benefit: "Decouple: back office kept, fast modern front end.",
-          href: "#forfait-headless",
-          recommended: true,
-        },
-        {
-          name: "Platform & app",
-          price: "from €6,500",
-          benefit: "Rebuild: platform, multisite, business tool.",
-          href: "#forfait-webapp",
-        },
-      ]
-    : [
-        {
-          name: "Vitrine simple",
-          price: "dès 2 250 €",
-          benefit: "Consolider : thème sur-mesure, coût maîtrisé.",
-          href: "#forfait-classique",
-        },
-        {
-          name: "Site complexe",
-          price: "dès 4 000 €",
-          benefit: "Découpler : back-office conservé, front rapide et moderne.",
-          href: "#forfait-headless",
-          recommended: true,
-        },
-        {
-          name: "Plateforme et app",
-          price: "dès 6 500 €",
-          benefit: "Refonder : plateforme, multisite, outil métier.",
-          href: "#forfait-webapp",
-        },
-      ];
+  const l = isEn ? "en" : "fr";
+
+  // Nom et prix de chaque prestation : lus dans lib/trajectoires.ts (charte
+  // v1.6, ADR-014), jamais recopiés.
+  const nom = (slug: TrajectoireSlug) => TRAJECTOIRES[slug].name[l];
+  const aPartirDe = (slug: TrajectoireSlug) =>
+    `${trajectoirePrice(slug, l).replace(/^./, (c) => c.toLowerCase())} ${isEn ? "excl. VAT" : "HT"}`;
+
+  // Colonne droite du héros (page mère) : ses pages enfants, et elles seules,
+  // les parcours du panneau « Évoluer » du menu.
+  const heroCards = heroCardsEnfants(MEGA_SECTIONS.refaire, l);
 
   return (
     <main>
       {/* § 01 — Héros (harmonisé /veille) */}
       <PageHero
         index="№ 01"
-        kicker={isEn ? "Redesign · Three trajectories" : "Refonte · Trois trajectoires"}
-        title={heroTitle(variant.titre, isEn ? "for an aging WordPress site" : "pour une refonte")}
+        kicker={isEn ? "Evolve · Three services" : "Évoluer · Trois prestations"}
+        // h1 fixé par Agathe le 2026-09-27 (ADR-022, puis reformulé le même
+        // jour), identique pour tous les profils. Il ne reprend plus le titre
+        // du panneau du mega menu.
+        title={
+          <BesoinTitle
+            phrase={isEn ? "Delivering web projects" : "Réalisation de projets web"}
+            accent={isEn ? "web projects" : "projets web"}
+          />
+        }
         description={variant.sousTitre}
         backdrop={
           /* Quadrillage blueprint : le plan de construction — la métaphore des
@@ -107,63 +69,30 @@ export default function ServicesClient() {
         }
         actions={
           <>
-            <Link href="/solutions-web/eligibilite" className={HERO_BTN_PRIMARY}>
-              {isEn ? "Run the diagnostic: 2 min" : "Lancer le diagnostic : 2 min"}
+            {/* Premier bouton de chaque héros : l'échange gratuit (Calendly, nouvel
+                onglet). Puis le bouton froid, l'analyse (/scan), libellé fixe :
+                /scan vit hors de app/[locale]/, balise <a>, pas le Link i18n. */}
+            <a href={CTA_ECHANGE.href} target="_blank" rel="noopener noreferrer" className={HERO_BTN_PRIMARY}>
+              {isEn ? CTA_ECHANGE.label.en : CTA_ECHANGE.label.fr}
               <ArrowRight size={14} />
-            </Link>
+            </a>
+            <a href="/scan" className={HERO_BTN_SECONDARY}>
+              {isEn ? "Analyze your site in 2 minutes" : "Analysez votre site en 2 minutes"}
+            </a>
             <a href="#tarifs" className={HERO_BTN_SECONDARY}>
               {isEn ? "See pricing" : "Voir les tarifs"}
             </a>
           </>
         }
-      >
-        <HeroOfferStrip
-          label={isEn ? "Three trajectories" : "Trois trajectoires"}
-          offers={heroOffers}
-        />
-      </PageHero>
-
-      {/* « En bref » : résumé autoportant des trois trajectoires, citable tel
-          quel par un moteur de réponse (GEO). Intention distincte du TL;DR de
-          la home, qui présente l'offre d'ensemble : ici, le détail par
-          trajectoire. Chaque chiffre est celui affiché plus bas (PricingCards).
-          La classe `.services-tldr` est la cible du SpeakableSpecification. */}
-      <BlueprintSection tone="obsidian" innerClassName="px-6 py-8 lg:px-10 lg:py-10">
-        <Reveal className="services-tldr border border-l-[3px] border-dark-gray border-l-accent-secondary bg-jet/40 px-6 py-5 lg:px-8">
-          <p className="mb-3 font-mono text-2xs uppercase tracking-[0.18em] text-accent-secondary">
-            {isEn ? "In short" : "En bref"}
-          </p>
-          <ul className="flex flex-col gap-2">
-            {(isEn
-              ? [
-                  "Three trajectories for an aging WordPress site: consolidate, decouple or rebuild. The real question is not WordPress or not WordPress, it is what you keep and what you change.",
-                  "Consolidate: optimized WordPress redesign, bespoke theme and a cleaned-up plugin stack, from €2,250 excl. VAT. You keep WordPress, you change what slows it down.",
-                  "Decouple, the recommended trajectory: headless WordPress redesign, from €4,000 excl. VAT. Your editors publish in the same back office, your visitors see a fast, modern site.",
-                  "Rebuild: web app, platform or mobile application, from €6,500 excl. VAT, when the site has become a working tool.",
-                  "Price and timeline in writing before we start, performance measured before and after, a single point of contact from quote to launch.",
-                  "No site yet? Same packages, same timelines: we start from a blank page instead of the existing one. Every package includes three months of care after launch.",
-                ]
-              : [
-                  "Trois trajectoires pour un site WordPress qui vieillit : consolider, découpler ou refonder. La vraie question n'est pas WordPress ou pas WordPress, c'est ce que vous gardez et ce que vous changez.",
-                  "Consolider : refonte WordPress optimisée, thème sur-mesure et empilement de plugins assaini, à partir de 2 250 € HT. Vous gardez WordPress, vous changez ce qui le ralentit.",
-                  "Découpler, la trajectoire recommandée : refonte WordPress headless, à partir de 4 000 € HT. Vos rédacteurs publient dans le même back-office, vos visiteurs voient un site rapide et moderne.",
-                  "Refonder : web app, plateforme ou application mobile, à partir de 6 500 € HT, quand le site est devenu un outil de travail.",
-                  "Prix et délai écrits avant de commencer, performance mesurée avant et après, une interlocutrice unique du devis à la mise en ligne.",
-                  "Pas encore de site ? Mêmes forfaits, mêmes délais : on part d'une page blanche au lieu de l'existant. Chaque forfait inclut trois mois de suivi après la mise en ligne.",
-                ]
-            ).map((line) => (
-              <li
-                key={line}
-                className="font-inter-tight text-base leading-relaxed text-mid-gray"
-              >
-                {line}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      </BlueprintSection>
-
-      <Separator />
+        aside={
+          <HeroNavCards
+            label={isEn ? "The services" : "Les prestations"}
+            cards={heroCards}
+            recommendedLabel={isEn ? "Recommended" : "Recommandée"}
+            fill
+          />
+        }
+      />
 
       {/* § 02 — Avantage : UI/UX moderne */}
       <BlueprintSection tone="obsidian">
@@ -230,21 +159,21 @@ export default function ServicesClient() {
 
       <Separator />
 
-      {/* § 03 — Aperçu des trois trajectoires (prix · pour quand · inclus) */}
-      <PricingCards />
+      {/* § 03–05 — Une section par offre (ancres du mega menu). La section
+          « Construire sur le besoin » (PricingCards) est supprimée (demande
+          d'Agathe, 2026-09-27) : l'ancre #tarifs du bouton « Voir les tarifs »
+          mène désormais ici, où chaque offre porte son prix. */}
+      <div id="tarifs" className="scroll-mt-24">
+        <OfferSections />
+      </div>
 
       <Separator />
 
-      {/* § 04–06 — Une section par offre (ancres du mega menu) */}
-      <OfferSections />
-
-      <Separator />
-
-      {/* § 07 — Comment je choisis votre stack */}
+      {/* § 06 — Comment je choisis votre stack */}
       <BlueprintSection tone="obsidian">
         <Reveal className="border-b border-dark-gray px-6 py-12 lg:px-8 lg:py-16">
           <SectionHeading
-            index="№ 07"
+            index="№ 06"
             kicker={t("stackMethod.label")}
             title={t("stackMethod.title")}
           />
@@ -280,19 +209,54 @@ export default function ServicesClient() {
 
       <Separator />
 
-      {/* § 08 — Preuve de performance (socle technique) */}
-      <HomePerf index="№ 08" />
+      {/* § 07 — Preuve de performance (socle technique) */}
+      <HomePerf index="№ 07" />
 
       <Separator />
 
-      {/* § 09 — Méthode */}
+      {/* § 08 — Méthode */}
       <BlueprintSection tone="obsidian" innerClassName="border-t border-dark-gray px-6 py-16 lg:px-8 lg:py-20">
-        <Process index="№ 09" />
+        <Process index="№ 08" />
       </BlueprintSection>
 
       <Separator />
 
-      {/* § 10 — FAQ */}
+      {/* « L'essentiel » : résumé autoportant des trois prestations, citable
+          tel quel par un moteur de réponse (GEO), juste avant la FAQ (ADR-024).
+          Intention distincte du TL;DR de la home, qui présente l'offre
+          d'ensemble : ici, le détail par prestation. Chaque chiffre est celui
+          affiché plus haut (OfferSections). La classe `.services-tldr` est la
+          cible du SpeakableSpecification. */}
+      <EnBref
+        className="services-tldr"
+        label={isEn ? "Key points" : "L'essentiel"}
+        lines={
+          (isEn
+            ? [
+                `Three services for an aging WordPress site: ${nom("forfait-classique")}, ${nom("forfait-headless")} or ${nom("forfait-webapp")}. The real question is not WordPress or not WordPress, it is what you keep and what you change.`,
+                `${nom("forfait-classique")}: optimized WordPress, bespoke theme and a cleaned-up plugin stack, ${aPartirDe("forfait-classique")}. You keep WordPress, you change what slows it down.`,
+                `${nom("forfait-headless")}, the recommended service: headless WordPress, ${aPartirDe("forfait-headless")}. Your editors publish in the same back office, your visitors see a fast, modern site.`,
+                `${nom("forfait-webapp")}: web app, platform or mobile application, ${aPartirDe("forfait-webapp")}, when the site has become a working tool.`,
+                "Every service starts with a first technical and strategic watch analysis: what is moving around your site, and what the context makes possible.",
+                "Price and timeline in writing before we start, performance measured before and after, a single point of contact from quote to launch.",
+                `No site yet? Same packages, same timelines: we start from a blank page instead of the existing one. Every package includes ${SUIVI_INCLUS_MOIS} months of care after launch.`,
+              ]
+            : [
+                `Trois prestations pour un site WordPress qui vieillit : ${nom("forfait-classique")}, ${nom("forfait-headless")} ou ${nom("forfait-webapp")}. La vraie question n'est pas WordPress ou pas WordPress, c'est ce que vous gardez et ce que vous changez.`,
+                `${nom("forfait-classique")} : WordPress optimisé, thème sur-mesure et empilement de plugins assaini, ${aPartirDe("forfait-classique")}. Vous gardez WordPress, vous changez ce qui le ralentit.`,
+                `${nom("forfait-headless")}, la prestation recommandée : WordPress headless, ${aPartirDe("forfait-headless")}. Vos rédacteurs publient dans le même back-office, vos visiteurs voient un site rapide et moderne.`,
+                `${nom("forfait-webapp")} : web app, plateforme ou application mobile, ${aPartirDe("forfait-webapp")}, quand le site est devenu un outil de travail.`,
+                "Chaque prestation commence par une première analyse de veille technique et stratégique : ce qui bouge autour de votre site, et ce que le contexte rend possible.",
+                "Prix et délai écrits avant de commencer, performance mesurée avant et après, une interlocutrice unique du devis à la mise en ligne.",
+                `Pas encore de site ? Mêmes forfaits, mêmes délais : on part d'une page blanche au lieu de l'existant. Chaque forfait inclut ${SUIVI_INCLUS_MOIS} mois de suivi après la mise en ligne.`,
+              ]
+          )
+        }
+      />
+
+      <Separator />
+
+      {/* § 09 — FAQ */}
       <ServicesFAQ faqs={variant.faqs} />
     </main>
   );

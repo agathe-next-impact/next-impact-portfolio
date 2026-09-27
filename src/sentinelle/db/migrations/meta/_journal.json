@@ -29,6 +29,27 @@
       "when": 1787021277056,
       "tag": "0003_last_zaran",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790505250030,
+      "tag": "0004_purple_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790519082692,
+      "tag": "0005_busy_sugar_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790519903802,
+      "tag": "0006_absent_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }
