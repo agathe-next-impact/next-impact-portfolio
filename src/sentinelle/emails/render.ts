@@ -5,6 +5,7 @@ import type { DraftedAlert } from "@sentinelle/types";
 import { alertSubject } from "@sentinelle/admin/content";
 import { AlertEmail, type AlertEmailProps } from "./AlertEmail";
 import { ApercuEmail, type ApercuEmailProps } from "./ApercuEmail";
+import { AuditEmail, type AuditEmailProps } from "./AuditEmail";
 import { NewsletterEmail, type NewsletterEmailProps } from "./NewsletterEmail";
 import { WelcomeEmail, type WelcomeEmailProps } from "./WelcomeEmail";
 import { LoginEmail, type LoginEmailProps } from "./LoginEmail";
@@ -159,4 +160,16 @@ export async function renderEchantillonEmail(
   return { subject: echantillonSubject(props.siteUrl), html, text };
 }
 
-export type { DraftedAlert, LoginEmailProps, WelcomeEmailProps };
+/** L'audit du scan public : l'objet nomme le site, c'est ce qu'on cherche. */
+export async function renderAuditEmail(props: AuditEmailProps): Promise<RenderedMail> {
+  const element = AuditEmail(props);
+
+  const [html, text] = await Promise.all([
+    render(element),
+    render(element, { plainText: true }),
+  ]);
+
+  return { subject: `Audit de ${props.nom} : votre diagnostic`, html, text };
+}
+
+export type { AuditEmailProps, DraftedAlert, LoginEmailProps, WelcomeEmailProps };

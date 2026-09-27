@@ -79,7 +79,7 @@ export default function DemoClient({
                   href="https://calendar.app.google/Cw7TGQBzeZ1szKU86"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn primary"
+                  className="btn primary !border-accent-secondary !bg-accent-secondary hover:!border-[var(--ink)] hover:!bg-[var(--ink)]"
                 >
                   {isEn ? "Book a video call" : "Réserver une visio"}
                 </a>
@@ -90,7 +90,7 @@ export default function DemoClient({
                     fontSize: 11,
                     letterSpacing: "0.08em",
                     textTransform: "uppercase",
-                    color: "var(--accent-color)",
+                    color: "hsl(var(--accent-2))",
                     textDecoration: "none",
                     display: "inline-flex",
                     alignItems: "center",
@@ -187,7 +187,7 @@ export default function DemoClient({
                         fontSize: 11,
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
-                        color: "var(--accent-color)",
+                        color: "hsl(var(--accent-2))",
                         textDecoration: "none",
                         display: "inline-flex",
                         alignItems: "center",

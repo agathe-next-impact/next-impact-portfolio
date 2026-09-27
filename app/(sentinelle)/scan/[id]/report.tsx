@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   DetectedComponent,
   DiagnosticBesoin,
@@ -10,6 +10,11 @@ import type {
   ScanDiagnostic,
   ScanResult,
 } from "@sentinelle/types";
+import {
+  ECHANGE_URL,
+  PAGE_PRESTATIONS,
+  PRESTATIONS,
+} from "@sentinelle/audit/prestations";
 import { OFFER_PRICE_LABEL } from "@/lib/sentinelle-offer";
 
 // Libellés lisibles des familles de composants. Le modèle est agnostique, le
@@ -47,7 +52,9 @@ const DELAI_MAX_MS = 10_000;
 // Au-delà, on cesse d'interroger : ce n'est plus une attente, c'est une panne.
 // Sans cette borne, un onglet oublié sur un scan bloqué appelle l'API
 // indéfiniment.
-const ABANDON_MS = 120_000;
+// Porté à quatre minutes (2026-09-27) : le diagnostic en prend une à deux après
+// le scan, et le popup « audit prêt » dépend de cette interrogation.
+const ABANDON_MS = 240_000;
 
 function delaiApres(tentative: number): number {
   return DELAIS_MS[tentative] ?? DELAI_MAX_MS;
@@ -58,6 +65,9 @@ interface Etat {
   result: ScanResult | { error: string } | null;
   url: string;
   hasLead: boolean;
+  /** Une adresse a été laissée pour recevoir l'audit par e-mail. */
+  auditDemande?: boolean;
+  auditEnvoye?: boolean;
 }
 
 /**
@@ -88,9 +98,38 @@ function estResultat(value: unknown): value is ScanResult {
   return typeof value === "object" && value !== null && "components" in value;
 }
 
+/** L'audit n'est pas encore lisible : scan en cours ou diagnostic en rédaction. */
+function enAttente(etat: Etat): boolean {
+  if (etat.status === "pending" || etat.status === "running") return true;
+  return (
+    etat.status === "done" &&
+    estResultat(etat.result) &&
+    etat.result.diagnostic?.status === "pending"
+  );
+}
+
 export function ScanReport({ scanId }: { scanId: string }) {
   const [etat, setEtat] = useState<Etat | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  // L'adresse laissée pendant l'attente : le popup de fin n'a alors plus à la
+  // demander. Initialisée par l'API (rechargement de la page), puis locale.
+  const [auditDemande, setAuditDemande] = useState(false);
+  // Le popup ne s'ouvre que si le visiteur a VU l'attente : rouvrir un rapport
+  // déjà prêt ne doit pas l'interrompre.
+  const aAttendu = useRef(false);
+  const [popupOuvert, setPopupOuvert] = useState(false);
+
+  useEffect(() => {
+    if (!etat) return;
+    if (etat.auditDemande) setAuditDemande(true);
+    const diagnostic = estResultat(etat.result) ? etat.result.diagnostic : undefined;
+    if (enAttente(etat)) {
+      aAttendu.current = true;
+    } else if (aAttendu.current && diagnostic?.status === "done") {
+      aAttendu.current = false;
+      setPopupOuvert(true);
+    }
+  }, [etat]);
 
   useEffect(() => {
     let vivant = true;
@@ -171,9 +210,15 @@ export function ScanReport({ scanId }: { scanId: string }) {
             Analyse en cours
           </p>
           <p className="mt-3 font-inter-tight text-base text-mid-gray">
-            Lecture de la page d'accueil et des en-têtes. Quelques secondes.
+            Lecture de la page d'accueil et des en-têtes, puis rédaction du
+            diagnostic. Comptez une à deux minutes.
           </p>
         </div>
+        <AttenteAudit
+          scanId={scanId}
+          demande={auditDemande}
+          onDemande={() => setAuditDemande(true)}
+        />
       </>
     );
   }
@@ -215,6 +260,24 @@ export function ScanReport({ scanId }: { scanId: string }) {
         <GrilleDiagnostic
           diagnostic={resultat.diagnostic}
           resultat={resultat}
+        />
+
+        {resultat.diagnostic?.status === "pending" && (
+          <div className="mb-12">
+            <AttenteAudit
+              scanId={scanId}
+              demande={auditDemande}
+              onDemande={() => setAuditDemande(true)}
+            />
+          </div>
+        )}
+
+        <AuditPret
+          ouvert={popupOuvert}
+          onFermer={() => setPopupOuvert(false)}
+          scanId={scanId}
+          demande={auditDemande}
+          onDemande={() => setAuditDemande(true)}
         />
 
         {/* Le détail technique, replié : le dirigeant lit la grille, le détail
@@ -335,38 +398,8 @@ const TONALITES: Record<
   },
 };
 
-// Les trois prestations du catalogue (lib/trajectoires.ts) : seul nom, nom
-// technique en sous-titre, et page du pack pour qui veut vérifier. Liens en
-// dur : Sentinelle n'importe pas le catalogue de la vitrine.
-const PRESTATIONS: Record<
-  DiagnosticIssue,
-  { nom: string; technique: string; href: string }
-> = {
-  optimisation: {
-    nom: "Optimisation",
-    technique: "WordPress optimisé",
-    href: "/packs/site-wordpress-ingerable",
-  },
-  refonte: {
-    nom: "Refonte",
-    technique: "WordPress headless",
-    href: "/packs/site-wordpress-lent",
-  },
-  evolution: {
-    nom: "Évolution",
-    technique: "Web app ou plateforme",
-    href: "/packs/site-outil-de-travail",
-  },
-};
-
-/**
- * Le bouton chaud « Discutons de votre projet » réserve l'échange de 15 minutes
- * (ADR-022). Copie en dur de CTA_CHAUD / ECHANGE_URL de lib/visio-conseil.ts :
- * Sentinelle n'importe pas la vitrine (docs/sentinelle/CLAUDE.md, règle 2) :
- * si le lien change là-bas, il change ici aussi.
- */
-const ECHANGE_URL =
-  "https://calendly.com/agathe-next-impact/prise-de-contact-conseil";
+// Les trois prestations et le lien de rendez-vous vivent dans
+// src/sentinelle/audit/prestations.ts : l'e-mail de l'audit les partage.
 
 /** Les autres offres, hors des trois prestations : une ligne discrète. */
 const AUTRES_OFFRES = [
@@ -1077,5 +1110,235 @@ function InscriptionVeille({
         </form>
       )}
     </section>
+  );
+}
+
+// ── Attente de l'audit ─────────────────────────────────────────────────────
+// Une à deux minutes : de quoi lire les prestations (bannière) ou partir en
+// laissant son adresse (l'audit arrive par e-mail).
+
+/** Le champ e-mail, partagé par la page d'attente et le popup de fin. */
+function FormulaireAudit({
+  scanId,
+  onDemande,
+  idChamp,
+}: {
+  scanId: string;
+  onDemande: () => void;
+  idChamp: string;
+}) {
+  const [email, setEmail] = useState("");
+  const [enCours, setEnCours] = useState(false);
+  const [erreur, setErreur] = useState<string | null>(null);
+
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (enCours) return;
+    setErreur(null);
+    setEnCours(true);
+    try {
+      const response = await fetch(`/api/sentinelle/scan/${scanId}/audit`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        setErreur(payload.error ?? "Envoi impossible.");
+        return;
+      }
+      onDemande();
+    } catch {
+      setErreur("Connexion interrompue.");
+    } finally {
+      setEnCours(false);
+    }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mt-4">
+      <label
+        htmlFor={idChamp}
+        className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray"
+      >
+        Votre e-mail
+      </label>
+      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+        <input
+          id={idChamp}
+          required
+          type="email"
+          autoComplete="email"
+          placeholder="vous@exemple.fr"
+          maxLength={320}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          aria-invalid={erreur ? true : undefined}
+          aria-describedby={erreur ? `${idChamp}-erreur` : undefined}
+          className="min-w-0 flex-1 border border-dark-gray bg-transparent px-4 py-3 font-inter-tight text-base text-foreground placeholder:text-mid-gray/60 focus:border-accent-secondary focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={enCours}
+          className="inline-flex items-center justify-center border border-accent-secondary bg-accent-secondary px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 disabled:opacity-60"
+        >
+          {enCours ? "Envoi…" : "Recevoir l'audit"}
+        </button>
+      </div>
+      <p className="mt-2 font-inter-tight text-sm text-mid-gray">
+        Un seul envoi, cet audit et rien d'autre.{" "}
+        <a href="/confidentialite" className="underline underline-offset-4">
+          Confidentialité
+        </a>
+      </p>
+      {erreur && (
+        <p
+          id={`${idChamp}-erreur`}
+          role="alert"
+          className="mt-2 font-inter-tight text-sm text-accent-secondary"
+        >
+          {erreur}
+        </p>
+      )}
+    </form>
+  );
+}
+
+function AttenteAudit({
+  scanId,
+  demande,
+  onDemande,
+}: {
+  scanId: string;
+  demande: boolean;
+  onDemande: () => void;
+}) {
+  return (
+    <div className="mt-8 grid gap-4 md:grid-cols-2">
+      {/* Bannière : les prestations, pour occuper l'attente utilement. */}
+      <a
+        href={PAGE_PRESTATIONS}
+        target="_blank"
+        rel="noopener"
+        className="group flex flex-col justify-between border border-dark-gray border-l-4 border-l-accent-secondary p-5 no-underline transition-colors hover:border-accent-secondary"
+      >
+        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          En attendant
+        </span>
+        <span className="mt-3 block font-inter-tight text-lg font-light tracking-tight text-foreground">
+          Mes prestations, présentées par situation : site lent, site
+          ingérable, site devenu outil de travail.
+        </span>
+        <span className="mt-4 font-mono text-xs uppercase tracking-[0.14em] text-foreground group-hover:text-accent-secondary">
+          Voir les prestations{" "}
+          <span aria-hidden="true">→</span>
+          <span className="sr-only"> (nouvel onglet)</span>
+        </span>
+      </a>
+
+      <div className="border border-dark-gray p-5" aria-live="polite">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
+          Inutile d'attendre ici
+        </p>
+        {demande ? (
+          <p className="mt-3 font-inter-tight text-base text-foreground">
+            C'est noté : l'audit part à votre adresse dès qu'il est prêt. Vous
+            pouvez fermer cette page.
+          </p>
+        ) : (
+          <>
+            <p className="mt-3 font-inter-tight text-base text-mid-gray">
+              Laissez votre adresse : l'audit vous est envoyé par e-mail dès
+              qu'il est prêt, sans garder cette page ouverte.
+            </p>
+            <FormulaireAudit
+              scanId={scanId}
+              onDemande={onDemande}
+              idChamp="audit-email-attente"
+            />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Le popup de fin : l'audit est prêt. Ouvert seulement si le visiteur a vu
+ * l'attente. `<dialog>` natif : focus piégé, Échap et rendu du focus gérés par
+ * le navigateur.
+ */
+function AuditPret({
+  ouvert,
+  onFermer,
+  scanId,
+  demande,
+  onDemande,
+}: {
+  ouvert: boolean;
+  onFermer: () => void;
+  scanId: string;
+  demande: boolean;
+  onDemande: () => void;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (ouvert && !dialog.open) dialog.showModal();
+    if (!ouvert && dialog.open) dialog.close();
+  }, [ouvert]);
+
+  return (
+    <dialog
+      ref={ref}
+      onClose={onFermer}
+      // Un clic sur le fond (le dialog lui-même, hors du contenu) ferme.
+      onClick={(event) => {
+        if (event.target === ref.current) ref.current?.close();
+      }}
+      aria-labelledby="audit-pret-titre"
+      className="fixed inset-0 m-auto h-fit w-[calc(100%-2rem)] max-w-lg border border-dark-gray bg-obsidian p-0 text-foreground backdrop:bg-black/70"
+    >
+      <div className="p-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-secondary">
+          Audit terminé
+        </p>
+        <h2
+          id="audit-pret-titre"
+          className="mt-2 text-2xl font-light tracking-tight text-foreground"
+        >
+          Votre audit est prêt
+        </h2>
+
+        {demande ? (
+          <p className="mt-3 font-inter-tight text-base text-mid-gray">
+            Il part aussi à l'adresse que vous avez indiquée : vous le
+            retrouverez dans votre boîte de réception.
+          </p>
+        ) : (
+          <>
+            <p className="mt-3 font-inter-tight text-base text-mid-gray">
+              Recevez-le aussi par e-mail, pour le relire ou le transmettre.
+            </p>
+            <FormulaireAudit
+              scanId={scanId}
+              onDemande={onDemande}
+              idChamp="audit-email-popup"
+            />
+          </>
+        )}
+
+        <button
+          type="button"
+          autoFocus
+          onClick={() => ref.current?.close()}
+          className="mt-6 inline-flex w-full items-center justify-center border border-dark-gray px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-secondary"
+        >
+          Voir l'audit
+        </button>
+      </div>
+    </dialog>
   );
 }

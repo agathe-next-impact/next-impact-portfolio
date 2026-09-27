@@ -184,16 +184,17 @@ export default function Header() {
               </span>
             </div>
 
-            {/* Espace client : signale son existence au prospect, sert l'accès
-                aux clients. Page vitrine qui aiguille vers les deux connexions. */}
-            <Link
-              href="/espace-client"
+            {/* Espace client : accès direct à l'espace des accompagnements.
+                Balise <a> : /espace-direction vit hors de app/[locale]/, le
+                Link i18n la préfixerait en /en/… */}
+            <a
+              href="/espace-direction"
               onMouseEnter={closeMenu}
               className="inline-flex items-center gap-1.5 px-2 py-2 text-sm text-mid-gray no-underline transition-colors hover:text-foreground"
             >
               <KeyRound size={14} aria-hidden />
               {t("espaceClient")}
-            </Link>
+            </a>
 
             <ThemeToggle />
 
@@ -410,14 +411,14 @@ export default function Header() {
                 </button>
               )}
 
-              <Link
-                href="/espace-client"
+              <a
+                href="/espace-direction"
                 onClick={() => setMobileOpen(false)}
                 className="flex min-h-12 items-center gap-2 px-5 font-inter-tight text-sm text-mid-gray no-underline"
               >
                 <KeyRound size={14} aria-hidden />
                 {t("espaceClient")}
-              </Link>
+              </a>
             </nav>
 
             {/* Deux températures, toujours visibles : l'analyse (froid), l'échange (chaud). */}

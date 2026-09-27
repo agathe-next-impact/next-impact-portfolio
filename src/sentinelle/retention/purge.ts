@@ -1,4 +1,4 @@
-import { and, eq, inArray, lt, sql } from "drizzle-orm";
+import { and, eq, inArray, lt, or, sql } from "drizzle-orm";
 import { db } from "@sentinelle/db/client";
 import {
   alerts,
@@ -282,7 +282,12 @@ export async function deleteAllDataFor(
 
   const removedScans = await db()
     .delete(scans)
-    .where(eq(sql`lower(${scans.leadEmail})`, email))
+    .where(
+      or(
+        eq(sql`lower(${scans.leadEmail})`, email),
+        eq(sql`lower(${scans.auditEmail})`, email),
+      ),
+    )
     .returning({ id: scans.id });
 
   await db()

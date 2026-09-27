@@ -5,7 +5,7 @@ import { scans } from "@sentinelle/db/schema";
 import { inngest, scanRequested } from "@sentinelle/inngest";
 import { normalizeSiteUrl, isPubliclyScannable } from "@sentinelle/url";
 import { checkRateLimit, clientIp, hashIp } from "@sentinelle/scanner/rate-limit";
-import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
+import { requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,13 +34,19 @@ export async function POST(req: Request) {
     return Response.json({ error: "adresse manquante" }, { status: 400 });
   }
 
+  // reCAPTCHA ne bloque plus ce scan : c'est l'outil gratuit qui sert de porte
+  // d'entrée au prospect froid (règle d'or du site), et un faux positif ici
+  // coûte un prospect. Le score reste journalisé pour garder trace d'un abus
+  // éventuel ; l'anti-abus réel est le plafond d'une analyse par heure et par
+  // adresse ci-dessous (checkRateLimit), qui protège le coût du scan sans
+  // jamais refuser un vrai visiteur isolé.
   const captcha = await verifyRecaptcha(
     parsed.data.recaptchaToken,
     "sentinelle_scan",
     requestIp(req.headers),
   );
   if (!captcha.ok) {
-    return Response.json({ error: recaptchaErrorMessage(false) }, { status: 403 });
+    console.warn(`[recaptcha] scan laissé passer malgré un jeton refusé (${captcha.reason})`);
   }
 
   const url = normalizeSiteUrl(parsed.data.url);

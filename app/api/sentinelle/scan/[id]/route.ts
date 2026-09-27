@@ -30,6 +30,8 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
       // On ne renvoie jamais l'e-mail capturé ni l'empreinte d'IP : l'URL d'un
       // rapport n'est pas secrète, seulement difficile à deviner.
       hasLead: scans.leadEmail,
+      hasAuditEmail: scans.auditEmail,
+      auditSentAt: scans.auditSentAt,
       createdAt: scans.createdAt,
     })
     .from(scans)
@@ -45,6 +47,9 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
     status: scan.status,
     result: (scan.result as ScanResult | { error: string } | null) ?? null,
     hasLead: Boolean(scan.hasLead),
+    // L'audit est-il demandé par e-mail, et parti ? Jamais l'adresse elle-même.
+    auditDemande: Boolean(scan.hasAuditEmail),
+    auditEnvoye: Boolean(scan.auditSentAt),
     createdAt: scan.createdAt,
   });
 }

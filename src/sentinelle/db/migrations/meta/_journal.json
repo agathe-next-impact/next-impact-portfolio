@@ -57,6 +57,13 @@
       "when": 1790522568756,
       "tag": "0007_absent_brother_voodoo",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790523980799,
+      "tag": "0008_marvelous_jasper_sitwell",
+      "breakpoints": true
     }
   ]
 }

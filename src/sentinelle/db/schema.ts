@@ -118,6 +118,14 @@ export const scans = pgTable(
     // déclencheurs (capture d'e-mail / fin de rédaction) — même principe que
     // les liens de connexion à usage unique.
     leadSentAt: timestamp("lead_sent_at"),
+    // Envoi de l'audit (diagnostic en quatre cases) par e-mail, demandé depuis
+    // la page d'attente ou le popup de fin (2026-09-27). Distinct de leadEmail :
+    // demander l'audit n'est pas s'inscrire à la veille, et la ligne reste
+    // « anonyme » pour la purge (supprimée à 30 jours avec l'adresse).
+    // `auditSentAt` sert de verrou entre les deux déclencheurs, comme
+    // `leadSentAt`.
+    auditEmail: text("audit_email"),
+    auditSentAt: timestamp("audit_sent_at"),
     // Écart spec : anti-abus du scanner public. SHA-256(ip + SCAN_IP_SALT),
     // jamais l'IP. Remis à NULL par la purge à 24 h.
     ipHash: text("ip_hash"),

@@ -3,6 +3,7 @@ import { db } from "@sentinelle/db/client";
 import { scans } from "@sentinelle/db/schema";
 import { scanSite } from "@sentinelle/scanner";
 import { buildDiagnostic } from "@sentinelle/diagnostic";
+import { envoyerAudit } from "@sentinelle/audit";
 import { inngest } from "../client";
 import { scanRequested } from "../events";
 
@@ -69,6 +70,11 @@ export const scanAsync = inngest.createFunction(
           .set({ result: { ...outcome.result, diagnostic } })
           .where(eq(scans.id, scanId));
       });
+
+      // L'audit part à l'adresse laissée pendant l'attente, s'il y en a une.
+      // Sans adresse, rien ne se passe : la saisie ultérieure (popup) déclenche
+      // l'envoi elle-même. Le verrou `audit_sent_at` évite le doublon.
+      await step.run("send-audit", async () => envoyerAudit(scanId));
     }
 
     return {

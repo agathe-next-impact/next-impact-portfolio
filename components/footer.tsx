@@ -162,13 +162,12 @@ export default function Footer({
           {!isProduct && (
             <CookieSettingsButton className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray transition-colors hover:text-foreground" />
           )}
-          {/* Espace client (ADR-012) : la page vitrine /espace-client aiguille
-              vers les deux connexions (accompagnements, abonnés Sentinelle).
-              Balise <a> et non le Link i18n : ce footer est aussi rendu hors de
-              app/[locale]/ (variante « product »). Sa place est ici, dans la
-              ligne utilitaire : le lien de conversion vit dans le header. */}
+          {/* Espace client : accès direct à l'espace des accompagnements.
+              Balise <a> et non le Link i18n : /espace-direction vit hors de
+              app/[locale]/, et ce footer est aussi rendu hors de app/[locale]/
+              (variante « product »). */}
           <a
-            href="/espace-client"
+            href="/espace-direction"
             className="font-mono text-2xs uppercase tracking-[0.1em] text-mid-gray no-underline transition-colors hover:text-foreground"
           >
             {t("clientArea")}

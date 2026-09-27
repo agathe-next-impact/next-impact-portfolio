@@ -1,5 +1,5 @@
 import { sendMail } from "@/lib/sendMail";
-import { recaptchaErrorMessage, requestIp, verifyRecaptcha } from "@/lib/recaptcha";
+import { requestIp, verifyRecaptcha } from "@/lib/recaptcha";
 import {
   EMAIL,
   emailCard,
@@ -35,8 +35,14 @@ export async function POST(req: Request) {
   const { email, source, locale, recaptchaToken } = body;
   const isEn = locale === "en";
 
+  // reCAPTCHA ne bloque plus l'inscription : elle apparaît dans le résultat des
+  // outils, au moment où un visiteur vient de s'engager — un faux positif ici
+  // coûte un lead pour éviter, au pire, deux e-mails à une adresse de spam. Le
+  // verdict reste journalisé.
   const captcha = await verifyRecaptcha(recaptchaToken, "newsletter", requestIp(req.headers));
-  if (!captcha.ok) return new Response(recaptchaErrorMessage(isEn), { status: 403 });
+  if (!captcha.ok) {
+    console.warn(`[recaptcha] inscription newsletter laissée passer malgré un jeton refusé (${captcha.reason})`);
+  }
 
   if (!email || typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
     return new Response(isEn ? "Invalid email" : "Email invalide", { status: 400 });
