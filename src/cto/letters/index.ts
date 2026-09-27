@@ -28,6 +28,7 @@ export {
   type Carte,
   type Chantier,
   type Echeance,
+  type Intensite,
   type LettreStructuree,
   type Pression,
   type Section,

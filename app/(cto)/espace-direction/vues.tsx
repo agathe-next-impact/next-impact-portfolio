@@ -25,7 +25,7 @@ import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
 import { Chapitre, LectureLongue } from "./lecture";
 import { LettreEnGrille } from "./lettre-grille";
-import { CorpsLettre, dateLettre, formatPeriode, lettresPath, libelleLettre, ListeLettres } from "./lettre";
+import { CorpsLettre, dateLettre, lettresPath, libelleLettre, ListeLettres } from "./lettre";
 import {
   Audits,
   CATEGORIES,
@@ -1255,9 +1255,15 @@ export async function VueLettre({
   const lettre = await letterForClient(id, viewer.clientId);
   if (!lettre) return null;
 
-  // Les lettres de l'atelier (générale, sectorielle, personnalisée) passent en
-  // grille quand leur gabarit est reconnu. Les autres gardent le texte suivi.
-  const structure = lettre.source === "atelier" ? structureLettre(lettre.body, lettre.period) : null;
+  // Toute lettre passe en grille quand sa forme est reconnue, quelle que soit
+  // sa source (atelier, Signaux Faibles, Sentinelle, et les suivantes) : c'est
+  // `structureLettre` qui juge sur le corps. Sinon, le texte suivi.
+  const structure = structureLettre(lettre.body, lettre.period);
+  const repere = (
+    <Label>
+      {dateLettre(lettre)} · {libelleLettre(lettre)}
+    </Label>
+  );
 
   if (structure) {
     return (
@@ -1266,7 +1272,7 @@ export async function VueLettre({
         context={context}
         active="veille"
         title={lettre.title}
-        intro={<Label>{formatPeriode(lettre.period)}</Label>}
+        intro={repere}
       >
         <div className="mt-8">
           <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>
@@ -1282,7 +1288,7 @@ export async function VueLettre({
       context={context}
       active="veille"
       title={lettre.title}
-      intro={<Label>{formatPeriode(lettre.period)}</Label>}
+      intro={repere}
     >
       <div className="mt-8">
         <BackLink href={lettresPath(viewer.base)}>Votre veille</BackLink>

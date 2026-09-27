@@ -9,20 +9,38 @@ import type { Block, Span } from "../notion/blocks";
 // questions au prestataire. Ce gabarit n'est écrit NULLE PART en colonnes : il
 // vit dans les titres et les attaques en gras du texte.
 //
-// Deux variantes s'y ajoutent pour les lettres personnalisées : les éditions du
-// pipeline « Veilles clients » (axes « 1. Nom · Tendance : ↑ » suivis de leurs
-// rubriques) et les lettres rédigées à la main (« À décider », points titrés
-// en h3, « Où en sont vos chantiers » avec leur avancement en pourcentage).
-//
 // Ce module le retrouve, pour que la page puisse le montrer en grille (niveaux
 // de pression, urgences, frise des échéances) au lieu d'un long texte continu.
-// Il ne devine rien qu'il ne puisse vérifier : une section dont la forme ne
-// correspond pas redevient de la prose, et une lettre sans aucune section
-// reconnue garde son rendu linéaire (`structureLettre` renvoie null).
+//
+// Il ne connaît pas les SOURCES des lettres (atelier, Signaux Faibles,
+// Sentinelle, et celles qui viendront) : il connaît des FORMES, et toute lettre
+// passe par le même découpage. Les formes reconnues aujourd'hui :
+//
+//  - sections en h2, ou en h1 quand le corps en compte plusieurs (les éditions
+//    Signaux Faibles titrent leurs rubriques en h1, leurs thèmes en h2) ;
+//  - un niveau de signal en fin de titre (« Actualité secteur — FORT ») ou en
+//    tête d'attaque (« **Impact MOYEN. Titre** »), et « RAS » ;
+//  - des axes : paragraphes à attaque en gras, « 1. Nom · Tendance : ↑ » suivis
+//    de leurs rubriques, ou h3 numérotés (« 1. Commercial ») avec leur verdict
+//    « **À traiter** · … » ;
+//  - des actions : un h3 par action (lettres rédigées à la main : « À décider »),
+//    ou une attaque en gras par action dans une section « À faire », « Action
+//    suggérée », « Le geste »… ;
+//  - des cartes (attaques en gras, h3), leurs lignes « Source : » rattachées ;
+//  - des chantiers chiffrés en pourcentage, un échéancier, des questions.
+//
+// Une lettre d'un format nouveau profite donc de tout ce qu'elle partage avec
+// les autres, sans code à ajouter. Rien n'est deviné qui ne puisse se vérifier :
+// une section dont la forme ne correspond pas redevient de la prose, et une
+// lettre sans aucune section reconnue garde son rendu linéaire
+// (`structureLettre` renvoie null).
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Le niveau de pression d'un axe, tel que la phrase d'attaque le qualifie. */
-export type Pression = "hausse" | "surveiller" | "stable" | "baisse" | "inconnue";
+export type Pression = "traiter" | "hausse" | "surveiller" | "stable" | "baisse" | "inconnue";
+
+/** L'intensité d'un signal, telle que l'annonce un titre (« — FORT ») ou une attaque (« Impact MOYEN. »). */
+export type Intensite = "fort" | "moyen" | "faible" | "ras";
 
 export interface Axe {
   numero: number;
@@ -57,6 +75,11 @@ export interface Action {
 export interface Carte {
   titre: string;
   texte: Span[];
+  signal?: Intensite;
+  /** Les paragraphes qui prolongent la carte jusqu'à sa ligne « Source : ». */
+  suite?: Span[][];
+  /** Les lignes « Source : … » qui suivent la carte. */
+  sources?: Span[][];
 }
 
 /** Un chantier et son avancement (« **Formulaire de devis** : 40 %. … »). */
@@ -76,15 +99,21 @@ export interface Echeance {
   texte: Span[];
 }
 
-export type Section =
+/**
+ * Une section typée. `chapeau` : ce qui précède la première carte ou action,
+ * rendu au-dessus de la grille ; `blocs` : ce qui ne s'y range pas, rendu
+ * dessous. `signal` : le niveau annoncé en fin de titre, retiré du titre.
+ */
+export type Section = (
   | { kind: "prose"; titre: Span[] | null; blocs: Block[] }
   | { kind: "axes"; titre: Span[]; axes: Axe[] }
-  | { kind: "actions"; titre: Span[]; actions: Action[]; blocs: Block[] }
-  | { kind: "options"; titre: Span[]; options: Carte[]; blocs: Block[] }
-  | { kind: "cartes"; titre: Span[]; cartes: Carte[]; blocs: Block[] }
-  | { kind: "avancement"; titre: Span[]; chantiers: Chantier[]; blocs: Block[] }
+  | { kind: "actions"; titre: Span[]; actions: Action[]; chapeau: Block[]; blocs: Block[] }
+  | { kind: "options"; titre: Span[]; options: Carte[]; chapeau: Block[]; blocs: Block[] }
+  | { kind: "cartes"; titre: Span[]; cartes: Carte[]; chapeau: Block[]; blocs: Block[] }
+  | { kind: "avancement"; titre: Span[]; chantiers: Chantier[]; chapeau: Block[]; blocs: Block[] }
   | { kind: "echeancier"; titre: Span[]; echeances: Echeance[]; blocs: Block[] }
-  | { kind: "questions"; titre: Span[]; questions: Span[][]; blocs: Block[] };
+  | { kind: "questions"; titre: Span[]; questions: Span[][]; blocs: Block[] }
+) & { signal?: Intensite };
 
 export interface LettreStructuree {
   /** Ce qui précède la première section (accroche). */
@@ -126,8 +155,52 @@ export function attaque(spans: Span[]): { titre: string; reste: Span[] } | null 
   if (!titre) return null;
 
   const reste = spans.slice(fin + 1).map((span) => ({ ...span }));
-  if (reste[0]) reste[0].t = reste[0].t.replace(/^[\s.:]+/, "");
+  // « **À traiter** · Cette semaine », « **Impact FORT. Titre** — Source » :
+  // le séparateur tient au titre, pas au texte.
+  if (reste[0]) reste[0].t = reste[0].t.replace(/^[\s.:·—–]+/, "");
   return { titre, reste: reste.filter((span) => span.t !== "") };
+}
+
+/** Les spans jusqu'au caractère `fin` exclu. */
+function tronque(spans: Span[], fin: number): Span[] {
+  const out: Span[] = [];
+  let restant = fin;
+  for (const span of spans) {
+    if (restant <= 0) break;
+    out.push({ ...span, t: span.t.slice(0, restant) });
+    restant -= span.t.length;
+  }
+  return out.filter((span) => span.t !== "");
+}
+
+// ─── Niveaux de signal ───────────────────────────────────────────────────────
+
+/** « Actualité secteur — FORT » : en capitales seulement, pour ne rien lire dans un titre ordinaire. */
+const SIGNAL_FIN_TITRE = /\s+[—–-]\s+(FORT|MOYEN|FAIBLE|RAS)\s*$/;
+const SIGNAL_TETE = /^impact\s+(fort|moyen|faible)\b\s*[.:·—–-]?\s*/i;
+const SIGNAL_RAS = /\s*[:—–-]\s*RAS$/;
+
+function intensite(mot: string): Intensite {
+  return normaliser(mot) as Intensite;
+}
+
+/** Le titre d'une section sans son niveau de signal, et ce niveau. */
+function signalDuTitre(titre: Span[]): { titre: Span[]; signal?: Intensite } {
+  const match = SIGNAL_FIN_TITRE.exec(texteDe(titre));
+  if (!match) return { titre };
+  return { titre: tronque(titre, match.index), signal: intensite(match[1]) };
+}
+
+/** Une carte, son niveau de signal lu dans l'attaque (« Impact FORT. », « … : RAS »). */
+function carte(titre: string, texte: Span[]): Carte {
+  const tete = SIGNAL_TETE.exec(titre);
+  if (tete) {
+    const reste = titre.slice(tete[0].length).trim();
+    return { titre: reste.charAt(0).toUpperCase() + reste.slice(1), texte, signal: intensite(tete[1]) };
+  }
+  const ras = SIGNAL_RAS.exec(titre);
+  if (ras) return { titre: titre.slice(0, ras.index).trim(), texte, signal: "ras" };
+  return { titre, texte };
 }
 
 /** Coupe des spans après la première phrase. */
@@ -154,6 +227,7 @@ function premierePhrase(spans: Span[]): { phrase: string; reste: Span[] } {
 /** Le niveau de pression d'une phrase-verdict. L'ordre des tests compte. */
 export function pressionDe(verdict: string): Pression {
   const v = normaliser(verdict);
+  if (/^(a traiter|a corriger|urgent|critique)\b/.test(v)) return "traiter";
   if (/\b(en baisse|recule|se detend|retombe|s'apaise|diminue)\b/.test(v)) return "baisse";
   if (/\b(en hausse|monte|se tend|s'intensifie|augmente|s'accelere|forte pression)\b/.test(v))
     return "hausse";
@@ -236,6 +310,50 @@ function lireAxesTendance(blocs: Block[]): Axe[] | null {
   return axes;
 }
 
+/**
+ * Variante à h3 numérotés (Sentinelle) : « 1. Commercial : offre, conversion »
+ * puis ses paragraphes, dont un verdict en attaque (« **À traiter** · Cette
+ * semaine : … »). Un h3 non numéroté clôt les axes : ce qui suit est rendu par
+ * l'appelant comme une section à part.
+ */
+function lireAxesNumerotes(blocs: Block[]): { axes: Axe[]; suite: Block[] } | null {
+  const axes: Axe[] = [];
+  let index = 0;
+  for (; index < blocs.length; index++) {
+    const bloc = blocs[index];
+    if (bloc.k === "h3") {
+      const tete = /^(\d+)\s*[.)]\s*(.+)$/.exec(texteDe(bloc.s).trim());
+      if (!tete) break;
+      const [nom, ...precision] = tete[2].split(/\s+:\s+/);
+      axes.push({
+        numero: Number(tete[1]),
+        nom: nom.trim(),
+        pression: "inconnue",
+        verdict: "",
+        detail: precision.length > 0 ? [{ t: precision.join(" : ") }] : [],
+        rubriques: [],
+      });
+      continue;
+    }
+    const courant = axes[axes.length - 1];
+    if (!courant || !("s" in bloc)) return null;
+    const a = attaque(bloc.s);
+    const pression = a ? pressionDe(a.titre) : "inconnue";
+    if (a && pression !== "inconnue" && !courant.verdict) {
+      courant.pression = pression;
+      // Le verdict sans son attaque : la pastille de pression la porte déjà.
+      courant.verdict = texteDe(a.reste).trim();
+    } else {
+      courant.rubriques.push({ titre: "", texte: bloc.s });
+    }
+  }
+  if (axes.length < 3) return null;
+  for (const axe of axes) {
+    if (!axe.verdict && axe.rubriques[0]) axe.verdict = premierePhrase(axe.rubriques[0].texte).phrase;
+  }
+  return { axes, suite: blocs.slice(index) };
+}
+
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 function urgenceDe(echeance: string): Urgence {
@@ -264,8 +382,9 @@ function echeanceDe(titre: string): string | null {
 function lireActions(
   blocs: Block[],
   defaut: string | null = null,
-): { actions: Action[]; reste: Block[] } | null {
+): { actions: Action[]; chapeau: Block[]; reste: Block[] } | null {
   const actions: Action[] = [];
+  const chapeau: Block[] = [];
   const reste: Block[] = [];
   let courante: Action | null = null;
 
@@ -287,7 +406,7 @@ function lireActions(
       continue;
     }
     if (!courante) {
-      reste.push(bloc);
+      chapeau.push(bloc);
       continue;
     }
     if (bloc.k === "li" || bloc.k === "oli") {
@@ -331,37 +450,179 @@ function lireActions(
     }
   }
 
-  return actions.length > 0 ? { actions, reste } : null;
+  return actions.length > 0 ? { actions, chapeau, reste } : null;
+}
+
+/** Les attaques qui ouvrent une rubrique d'action, et non une action nouvelle. */
+const RUBRIQUE_ACTION =
+  /^(pourquoi|c'est fait quand|qui|quand|comment|cout|budget|delai|duree|ce qui|ce que|pour qui|a faire|a decider|attention|note|methode|sources?)\b/;
+
+/** Ce qui, dans une attaque, dit quand agir (« Immédiat, avant le 1er août »). */
+const QUAND = /(immediat|cette semaine|ce mois|avant le|avant fin|d'ici|au plus tard|sans attendre|aujourd'hui)/;
+
+/**
+ * « Immédiat, avant le 1er août : s'inscrire… » → échéance et titre. Sans
+ * préfixe, une date « avant le … » citée dans le titre sert d'échéance et le
+ * titre reste entier.
+ */
+function echeanceDansTitre(titre: string): { titre: string; echeance: string | null } {
+  const prefixe = /^([^:]{3,45}?)\s*:\s*(.+)$/.exec(titre);
+  if (prefixe && QUAND.test(normaliser(prefixe[1]))) {
+    const reste = prefixe[2].trim();
+    return { titre: reste.charAt(0).toUpperCase() + reste.slice(1), echeance: prefixe[1].trim() };
+  }
+  const avant =
+    /\b(avant le (?:[a-zé]+ )?\d{1,2}(?:er)?\s+[a-zéû]+(?:\s+20\d{2})?|d'ici (?:le |au )?(?:[a-zé]+ )?\d{1,2}(?:er)?\s+[a-zéû]+|(?:avant|d'ici) (?:la )?fin (?:de |d')?[a-zéû]+)/i.exec(
+      titre,
+    );
+  if (avant) return { titre, echeance: avant[1].charAt(0).toUpperCase() + avant[1].slice(1) };
+  return { titre, echeance: null };
+}
+
+const JOUR = 86_400_000;
+
+/** L'urgence d'une échéance, mesurée depuis l'édition quand elle porte une date. */
+function urgenceDatee(echeance: string | null, periode: Date | null): Urgence {
+  if (!echeance) return "plus-tard";
+  const e = normaliser(echeance);
+  if (/semaine|immediat|aujourd'hui|sans attendre|urgent/.test(e)) return "semaine";
+  const date = dateEcheance(echeance, periode);
+  if (date && periode) {
+    const jours = (date.getTime() - periode.getTime()) / JOUR;
+    return jours <= 10 ? "semaine" : jours <= 40 ? "mois" : "plus-tard";
+  }
+  return urgenceDe(echeance);
+}
+
+/**
+ * Les actions d'une section sans h3 : une attaque en gras par action. Les
+ * attaques de rubrique (« Pourquoi cette semaine », « C'est fait quand ») et
+ * les étapes numérotées se rangent dans l'action en cours.
+ */
+function lireActionsEnAttaques(
+  blocs: Block[],
+  defaut: string | null,
+  periode: Date | null,
+): { actions: Action[]; chapeau: Block[]; reste: Block[] } | null {
+  const actions: Action[] = [];
+  const chapeau: Block[] = [];
+  const reste: Block[] = [];
+  let courante: Action | null = null;
+  let etape = 0;
+
+  for (const bloc of blocs) {
+    const a = bloc.k === "p" || bloc.k === "li" ? attaque(bloc.s) : null;
+    const rubriqueAction = a !== null && RUBRIQUE_ACTION.test(normaliser(a.titre));
+
+    if (a && !rubriqueAction) {
+      const lu = echeanceDansTitre(a.titre);
+      const echeance = lu.echeance ?? defaut;
+      courante = {
+        numero: actions.length + 1,
+        titre: lu.titre,
+        periode: null,
+        sources: [],
+        axes: numerosAxes(texteDe(a.reste)),
+        urgence: urgenceDatee(echeance, periode),
+        echeance,
+        aFaire: null,
+        contexte: a.reste.length > 0 ? [{ titre: "", texte: a.reste }] : [],
+      };
+      actions.push(courante);
+      etape = 0;
+      continue;
+    }
+    if (!courante) {
+      chapeau.push(bloc);
+      continue;
+    }
+    if (a && /^a (faire|decider)/.test(normaliser(a.titre))) {
+      courante.aFaire = a.reste;
+      continue;
+    }
+    if (a) {
+      courante.contexte.push({ titre: a.titre, texte: a.reste });
+      continue;
+    }
+    if (bloc.k === "oli") {
+      etape += 1;
+      courante.contexte.push({ titre: "", texte: [{ t: `${etape}. ` }, ...bloc.s] });
+      continue;
+    }
+    if (bloc.k === "p" || bloc.k === "li") {
+      courante.contexte.push({ titre: "", texte: bloc.s });
+      continue;
+    }
+    reste.push(bloc);
+  }
+
+  return actions.length > 0 ? { actions, chapeau, reste } : null;
 }
 
 // ─── Cartes (paragraphes à attaque en gras) ──────────────────────────────────
 
+/** « Source : … », « Sources (rappel de contexte) : … ». */
+const LIGNE_SOURCE = /^sources?\b[^:]{0,80}:/i;
+
 /**
  * Deux formes de carte : un paragraphe ou une puce à attaque en gras, ou un h3
- * suivi de ses paragraphes (une carte par h3).
+ * suivi de ses paragraphes (une carte par h3). Une ligne « Source : » se
+ * rattache à la carte qui la précède.
  */
-function lireCartes(blocs: Block[]): { cartes: Carte[]; reste: Block[] } | null {
+function lireCartes(blocs: Block[]): { cartes: Carte[]; chapeau: Block[]; reste: Block[] } | null {
   const cartes: Carte[] = [];
+  const chapeau: Block[] = [];
   const reste: Block[] = [];
   let sousTitre: Carte | null = null;
+  let derniere: Carte | null = null;
+  // Les paragraphes sans attaque qui suivent une carte : ils la prolongent si
+  // une ligne « Source : » les ferme, sinon ils concluent la section.
+  let enAttente: Block[] = [];
+  const horsCarte = () => {
+    (cartes.length === 0 ? chapeau : reste).push(...enAttente);
+    enAttente = [];
+  };
 
   for (const bloc of blocs) {
     if (bloc.k === "h3") {
+      horsCarte();
       sousTitre = { titre: texteDe(bloc.s).trim(), texte: [] };
       cartes.push(sousTitre);
+      derniere = sousTitre;
       continue;
     }
-    if (sousTitre && (bloc.k === "p" || bloc.k === "li")) {
+    const enLigne =
+      bloc.k === "p" || bloc.k === "li" || bloc.k === "oli" || bloc.k === "callout" || bloc.k === "quote";
+    if (enLigne && derniere && LIGNE_SOURCE.test(texteDe(bloc.s).trim())) {
+      const suite = enAttente.map((b) => (b as { s: Span[] }).s);
+      if (suite.length > 0) derniere.suite = [...(derniere.suite ?? []), ...suite];
+      enAttente = [];
+      derniere.sources = [...(derniere.sources ?? []), bloc.s];
+      continue;
+    }
+    if (sousTitre && (bloc.k === "p" || bloc.k === "li" || bloc.k === "oli")) {
       if (sousTitre.texte.length > 0) sousTitre.texte.push({ t: " " });
       sousTitre.texte.push(...bloc.s);
       continue;
     }
     sousTitre = null;
-    const a = bloc.k === "p" || bloc.k === "li" ? attaque(bloc.s) : null;
-    if (a) cartes.push({ titre: a.titre, texte: a.reste });
-    else reste.push(bloc);
+    const a = enLigne ? attaque(bloc.s) : null;
+    if (a) {
+      horsCarte();
+      derniere = carte(a.titre, a.reste);
+      cartes.push(derniere);
+    } else if (derniere && enLigne) {
+      enAttente.push(bloc);
+    } else {
+      horsCarte();
+      (cartes.length === 0 ? chapeau : reste).push(bloc);
+    }
   }
-  return cartes.length >= 2 ? { cartes, reste } : null;
+  horsCarte();
+
+  // Une carte seule ne fait une grille que si elle porte un niveau ou une source.
+  const suffit = cartes.length >= 2 || cartes.some((c) => c.signal || c.sources);
+  return cartes.length > 0 && suffit ? { cartes, chapeau, reste } : null;
 }
 
 // ─── Avancement des chantiers ────────────────────────────────────────────────
@@ -383,8 +644,12 @@ function nettoieTete(spans: Span[]): Span[] {
   return out;
 }
 
-/** Des cartes dont au moins une porte un pourcentage deviennent des chantiers. */
-function enChantiers(cartes: Carte[]): Chantier[] | null {
+/**
+ * Des cartes chiffrées en pourcentage deviennent des chantiers : sous un titre
+ * qui l'annonce, dès qu'une l'est ; ailleurs, seulement si la plupart le sont
+ * et qu'aucune n'est un signal (« 35 % des séminaires… » est une actualité).
+ */
+function enChantiers(cartes: Carte[], titre: string): Chantier[] | null {
   const chantiers = cartes.map((carte): Chantier => {
     const texte = texteDe(carte.texte);
     const pct = /^\D{0,15}?(\d{1,3})\s*%/.exec(texte);
@@ -396,7 +661,10 @@ function enChantiers(cartes: Carte[]): Chantier[] | null {
       statut: pourcentage === null ? statutDe(texte) : pourcentage >= 100 ? "Livré" : "En cours",
     };
   });
-  return chantiers.some((c) => c.pourcentage !== null) ? chantiers : null;
+  const chiffres = chantiers.filter((c) => c.pourcentage !== null).length;
+  if (chiffres === 0) return null;
+  if (/chantier|avancement|ou en (sont|est)|projets? en cours/.test(normaliser(titre))) return chantiers;
+  return chiffres * 2 >= chantiers.length && !cartes.some((c) => c.signal) ? chantiers : null;
 }
 
 // ─── Échéancier ──────────────────────────────────────────────────────────────
@@ -433,6 +701,12 @@ function moisDe(date: Date): { mois: number; annee: number } {
  * à la date de l'édition ; une année écrite dans le libellé l'emporte.
  */
 export function dateEcheance(libelle: string, periode: Date | null): Date | null {
+  // « 2026-08-27 », « 27/08/2026 » : la date est entière, rien à déduire.
+  const iso = /\b(20\d{2})-(\d{2})-(\d{2})\b/.exec(libelle);
+  if (iso) return new Date(Date.UTC(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]), 12));
+  const fr = /\b(\d{1,2})\/(\d{1,2})\/(20\d{2})\b/.exec(libelle);
+  if (fr) return new Date(Date.UTC(Number(fr[3]), Number(fr[2]) - 1, Number(fr[1]), 12));
+
   const l = normaliser(libelle);
   const mois = MOIS.findIndex((m) => new RegExp(`\\b${m}\\b`).test(l));
   if (mois < 0) return null;
@@ -485,6 +759,15 @@ function lireEcheancier(
       reste.push(bloc);
       continue;
     }
+    // Une date machine (« 2026-08-27 ») se lit en toutes lettres.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(libelle.trim())) {
+      libelle = new Intl.DateTimeFormat("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(date);
+    }
     echeances.push({ libelle, date, texte });
   }
 
@@ -515,19 +798,45 @@ function sansFilets(blocs: Block[]): Block[] {
   return blocs.filter((bloc) => bloc.k !== "hr");
 }
 
+/** Les titres de section qui annoncent des actions. */
+const SECTION_ACTIONS = /^(a faire|a decider|actions?\b|(le |les )?gestes?\b|ce qui suit|prochaines? etapes?)/;
+
+/** L'échéance que porte le titre d'une section d'actions, quand l'action n'en dit pas. */
+function echeanceDeSection(titre: string): string | null {
+  const t = normaliser(titre);
+  if (t.startsWith("a decider")) return echeanceDe(titre.trim());
+  if (/\bsemaine\b/.test(t)) return "Cette semaine";
+  if (/\bmois\b/.test(t)) return "Ce mois-ci";
+  return null;
+}
+
 /**
- * Découpe une section h2. Le titre choisit la forme attendue ; si la forme
+ * Découpe une section. Le titre choisit la forme attendue ; si la forme
  * n'est pas au rendez-vous, la section reste de la prose.
  */
-function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Section[] {
+function lireSection(titreBrut: Span[], blocs: Block[], periode: Date | null): Section[] {
+  const { titre, signal } = signalDuTitre(titreBrut);
+  const sections = formeDe(titre, sansFilets(blocs), periode);
+  if (signal && sections[0]) sections[0] = { ...sections[0], signal };
+  return sections;
+}
+
+function formeDe(titre: Span[], contenu: Block[], periode: Date | null): Section[] {
   const t = normaliser(texteDe(titre));
-  const contenu = sansFilets(blocs);
   const prose: Section = { kind: "prose", titre, blocs: contenu };
 
   if (/\baxes\b/.test(t)) {
     // Variante « Veilles clients » : les axes ont leur propre section.
     const axes = lireAxesTendance(contenu) ?? lireAxes(contenu);
     if (axes) return [{ kind: "axes", titre, axes }];
+    const numerotes = lireAxesNumerotes(contenu);
+    if (numerotes) {
+      const [suivant, ...suite] = numerotes.suite;
+      return [
+        { kind: "axes", titre, axes: numerotes.axes },
+        ...(suivant?.k === "h3" ? lireSection(suivant.s, suite, periode) : []),
+      ];
+    }
   }
 
   if (t.startsWith("lecture")) {
@@ -543,12 +852,15 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
     ];
   }
 
-  if (t.startsWith("a faire") || t.startsWith("a decider")) {
-    const lu = lireActions(contenu, t.startsWith("a decider") ? echeanceDe(texteDe(titre).trim()) : null);
-    return lu ? [{ kind: "actions", titre, actions: lu.actions, blocs: lu.reste }] : [prose];
+  if (SECTION_ACTIONS.test(t)) {
+    const defaut = echeanceDeSection(texteDe(titre));
+    const lu = lireActions(contenu, defaut) ?? lireActionsEnAttaques(contenu, defaut, periode);
+    return lu
+      ? [{ kind: "actions", titre, actions: lu.actions, chapeau: lu.chapeau, blocs: lu.reste }]
+      : [prose];
   }
 
-  if (t.startsWith("echeancier") || t.startsWith("calendrier") || t.startsWith("echeances")) {
+  if (/^(echeancier|calendrier|echeances|(l')?agenda|dates a retenir)/.test(t)) {
     const lu = lireEcheancier(contenu, periode);
     return lu ? [{ kind: "echeancier", titre, echeances: lu.echeances, blocs: lu.reste }] : [prose];
   }
@@ -568,23 +880,28 @@ function lireSection(titre: Span[], blocs: Block[], periode: Date | null): Secti
 
   const lu = lireCartes(contenu);
   if (!lu) return [prose];
-  const chantiers = enChantiers(lu.cartes);
-  if (chantiers) return [{ kind: "avancement", titre, chantiers, blocs: lu.reste }];
+  const chantiers = enChantiers(lu.cartes, texteDe(titre));
+  if (chantiers) return [{ kind: "avancement", titre, chantiers, chapeau: lu.chapeau, blocs: lu.reste }];
   const options = lu.cartes.every((c) => /^(a considerer|a differer|a eviter|ordre de cout)/.test(normaliser(c.titre)));
   return options
-    ? [{ kind: "options", titre, options: lu.cartes, blocs: lu.reste }]
-    : [{ kind: "cartes", titre, cartes: lu.cartes, blocs: lu.reste }];
+    ? [{ kind: "options", titre, options: lu.cartes, chapeau: lu.chapeau, blocs: lu.reste }]
+    : [{ kind: "cartes", titre, cartes: lu.cartes, chapeau: lu.chapeau, blocs: lu.reste }];
 }
 
 /**
- * La lettre découpée en sections typées, ou null si rien du gabarit n'y est
- * reconnu (la page garde alors son rendu linéaire).
+ * La lettre découpée en sections typées, ou null si rien n'y est reconnu (la
+ * page garde alors son rendu linéaire).
  *
- * Le grand titre (h1) de tête est retiré de l'accroche : il redit le titre de
- * la page.
+ * Les sections s'ouvrent sur les h2. Un h1 unique est le grand titre de la
+ * lettre : il est retiré de l'accroche, puisqu'il redit le titre de la page.
+ * Plusieurs h1 sont des rubriques : ils ouvrent des sections eux aussi, et les
+ * h2 qu'ils contiennent en deviennent les sous-sections.
  */
 export function structureLettre(body: Block[], periode: Date | null): LettreStructuree | null {
-  const premier = body.findIndex((bloc) => bloc.k === "h2");
+  const rubriquesH1 = body.filter((bloc) => bloc.k === "h1").length >= 2;
+  const ouvre = (bloc: Block) => bloc.k === "h2" || (rubriquesH1 && bloc.k === "h1");
+
+  const premier = body.findIndex(ouvre);
   if (premier < 0) return null;
 
   const intro = sansFilets(body.slice(0, premier)).filter((bloc) => bloc.k !== "h1");
@@ -597,9 +914,9 @@ export function structureLettre(body: Block[], periode: Date | null): LettreStru
   };
 
   for (const bloc of body.slice(premier)) {
-    if (bloc.k === "h2") {
+    if (ouvre(bloc)) {
       fermer();
-      titre = bloc.s;
+      titre = (bloc as { s: Span[] }).s;
       blocs = [];
     } else {
       blocs.push(bloc);

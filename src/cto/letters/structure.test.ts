@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Block } from "../notion/blocks";
-import { attaque, dateEcheance, pressionDe, structureLettre } from "./structure";
+import { attaque, dateEcheance, pressionDe, structureLettre, texteDe } from "./structure";
 
 const p = (t: string): Block => ({ k: "p", s: [{ t }] });
 const pb = (gras: string, t: string): Block => ({ k: "p", s: [{ t: gras, b: true }, { t }] });
@@ -210,5 +210,176 @@ describe("lettres personnalisées", () => {
     ]);
     expect(avancement.chantiers[0].texte.map((s) => s.t).join("")).toBe("Livraison le 30 octobre.");
     expect(avancement.blocs).toEqual([p("Prochain comité : mercredi 7 octobre.")]);
+  });
+});
+
+describe("toutes sources : la forme décide, pas l'origine", () => {
+  // Une édition Signaux Faibles du 14 septembre 2026, lue à Paris.
+  const EDITION = new Date("2026-09-13T22:00:00.000Z");
+
+  it("découpe sur les h1 quand ils sont plusieurs, et lit leur niveau de signal", () => {
+    const lettre = structureLettre(
+      [
+        pb("Format", " : veille hebdomadaire."),
+        h("h1", "Actualité secteur — FORT"),
+        pb("Impact FORT. La RSE devient un critère", " — Événements & Conventions, 16/07/2026. Mesure carbone."),
+        pb("Impact MOYEN. Budgets sous tension", " — étude MICE 2026."),
+        h("h1", "Actualité acteurs — RAS"),
+        pb("Veille réputation : RAS.", " Aucune retombée presse."),
+        pb("Abbaye de Belval.", " Signal de fragilité."),
+        h("h1", "Action suggérée de la semaine"),
+        pb("Immédiat, avant le 1er août : s'inscrire au Festival Oasis.", " Une occasion unique."),
+        pb("Chantier à ouvrir dans la foulée :", " audit des pages."),
+      ],
+      EDITION,
+    )!;
+
+    expect(lettre.intro).toHaveLength(1);
+    expect(lettre.sections.map((s) => [s.kind, texteDe(s.titre!), s.signal])).toEqual([
+      ["cartes", "Actualité secteur", "fort"],
+      ["cartes", "Actualité acteurs", "ras"],
+      ["actions", "Action suggérée de la semaine", undefined],
+    ]);
+
+    const secteur = lettre.sections[0];
+    if (secteur.kind !== "cartes") throw new Error("cartes absentes");
+    expect(secteur.cartes.map((c) => [c.titre, c.signal])).toEqual([
+      ["La RSE devient un critère", "fort"],
+      ["Budgets sous tension", "moyen"],
+    ]);
+    expect(texteDe(secteur.cartes[0].texte)).toBe("Événements & Conventions, 16/07/2026. Mesure carbone.");
+
+    const acteurs = lettre.sections[1];
+    if (acteurs.kind !== "cartes") throw new Error("cartes absentes");
+    expect(acteurs.cartes[0]).toMatchObject({ titre: "Veille réputation", signal: "ras" });
+
+    const actions = lettre.sections[2];
+    if (actions.kind !== "actions") throw new Error("actions absentes");
+    expect(actions.actions.map((a) => [a.titre, a.echeance, a.urgence])).toEqual([
+      ["S'inscrire au Festival Oasis", "Immédiat, avant le 1er août", "semaine"],
+      ["Chantier à ouvrir dans la foulée", "Cette semaine", "semaine"],
+    ]);
+  });
+
+  it("h1 de rubrique et h2 de thème : chaque thème est une section, ses sources suivent la carte", () => {
+    const lettre = structureLettre(
+      [
+        pb("Note de méthode.", " Fenêtre élargie à 7 jours."),
+        h("h1", "L'essentiel du jour"),
+        { k: "li", s: [{ t: "La rentrée s'ouvre " }, { t: "sans opérateur national", b: true }] },
+        h("h1", "Actualités par thème"),
+        h("h2", "① Politique publique & financement — MOYEN"),
+        pb("La doctrine de l'après-guichet.", " Le socle reste la réponse du ministère."),
+        p("Ce que cela change pour vous : rien avant le PLF."),
+        p("Source : Sénat, question écrite n°307984"),
+        h("h2", "② Lieux emblématiques — RAS"),
+        p("RAS vérifiable cette semaine."),
+      ],
+      EDITION,
+    )!;
+
+    expect(lettre.sections.map((s) => [s.kind, s.titre ? texteDe(s.titre) : null, s.signal])).toEqual([
+      ["prose", "L'essentiel du jour", undefined],
+      ["prose", "Actualités par thème", undefined],
+      ["cartes", "① Politique publique & financement", "moyen"],
+      ["prose", "② Lieux emblématiques", "ras"],
+    ]);
+    const theme = lettre.sections[2];
+    if (theme.kind !== "cartes") throw new Error("cartes absentes");
+    expect(theme.cartes).toHaveLength(1);
+    expect(theme.cartes[0].suite?.map(texteDe)).toEqual(["Ce que cela change pour vous : rien avant le PLF."]);
+    expect(theme.cartes[0].sources?.map(texteDe)).toEqual(["Source : Sénat, question écrite n°307984"]);
+    expect(theme.blocs).toEqual([]);
+  });
+
+  it("une actualité chiffrée en pourcentage n'est pas un chantier", () => {
+    const lettre = structureLettre(
+      [
+        h("h1", "Actualité secteur — FORT"),
+        pb("Impact FORT. Séminaires.", " 35 % des événements."),
+        pb("Impact MOYEN. Budgets.", " 12 % de baisse."),
+        h("h1", "Actualité acteurs — MOYEN"),
+        pb("Belval.", " Fragile."),
+        pb("Neuville.", " Muette."),
+      ],
+      EDITION,
+    )!;
+    expect(lettre.sections.map((s) => s.kind)).toEqual(["cartes", "cartes"]);
+  });
+
+  it("le geste de la période : une action, ses rubriques et ses étapes", () => {
+    const lettre = structureLettre(
+      [
+        h("h1", "L'essentiel"),
+        p("Une semaine calme."),
+        h("h1", "Le geste de la période"),
+        pb("Vérifier notre raccordement avant le lundi 14 septembre.", " Une demi-journée."),
+        { k: "oli", s: [{ t: "Identifier l'interlocuteur." }] },
+        { k: "oli", s: [{ t: "Lui demander la plateforme." }] },
+        pb("Pourquoi cette semaine", " : l'obligation court."),
+        pb("C'est fait quand", " vous avez trois réponses."),
+      ],
+      new Date("2026-09-06T22:00:00.000Z"),
+    )!;
+    const geste = lettre.sections[1];
+    if (geste.kind !== "actions") throw new Error("actions absentes");
+    expect(geste.actions).toHaveLength(1);
+    const [action] = geste.actions;
+    expect(action.echeance).toBe("Avant le lundi 14 septembre");
+    expect(action.urgence).toBe("semaine");
+    expect(action.contexte.map((c) => [c.titre, texteDe(c.texte)])).toEqual([
+      ["", "Une demi-journée."],
+      ["", "1. Identifier l'interlocuteur."],
+      ["", "2. Lui demander la plateforme."],
+      ["Pourquoi cette semaine", "l'obligation court."],
+      ["C'est fait quand", "vous avez trois réponses."],
+    ]);
+  });
+
+  it("Sentinelle : axes en h3 numérotés, verdict « À traiter », échéancier en dates ISO", () => {
+    const lettre = structureLettre(
+      [
+        h("h2", "Les douze axes"),
+        h("h3", "1. Commercial : offre, conversion, tunnel"),
+        p("Un visiteur peut-il demander un devis ?"),
+        pb("À traiter", " · Cette semaine : vérifier le formulaire."),
+        h("h3", "2. Marketing : acquisition"),
+        p("Mon contenu paraît-il vivant ?"),
+        pb("À surveiller", " · Réexamen mi-septembre."),
+        h("h3", "3. Technique : socle"),
+        p("Mon socle est-il à jour ?"),
+        h("h3", "Ce qui ne change pas"),
+        { k: "li", s: [{ t: "Aucune fin de support connue." }] },
+        h("h2", "Échéancier à six mois"),
+        { k: "li", s: [{ t: "2026-08-27", b: true }, { t: " · Vérifier le formulaire (axe 1)" }] },
+        { k: "li", s: [{ t: "2026-09-15", b: true }, { t: " · Réexaminer les contenus (axe 2)" }] },
+      ],
+      new Date("2026-08-19T22:00:00.000Z"),
+    )!;
+
+    expect(lettre.sections.map((s) => s.kind)).toEqual(["axes", "prose", "echeancier"]);
+    const axes = lettre.sections[0];
+    if (axes.kind !== "axes") throw new Error("axes absents");
+    expect(axes.axes.map((a) => [a.numero, a.nom, a.pression, a.verdict])).toEqual([
+      [1, "Commercial", "traiter", "Cette semaine : vérifier le formulaire."],
+      [2, "Marketing", "surveiller", "Réexamen mi-septembre."],
+      [3, "Technique", "inconnue", "Mon socle est-il à jour ?"],
+    ]);
+    expect(texteDe(lettre.sections[1].titre!)).toBe("Ce qui ne change pas");
+
+    const echeancier = lettre.sections[2];
+    if (echeancier.kind !== "echeancier") throw new Error("échéancier absent");
+    expect(
+      echeancier.echeances.map((e) => [e.libelle, e.date?.toISOString().slice(0, 10), texteDe(e.texte)]),
+    ).toEqual([
+      ["27 août 2026", "2026-08-27", "Vérifier le formulaire (axe 1)"],
+      ["15 septembre 2026", "2026-09-15", "Réexaminer les contenus (axe 2)"],
+    ]);
+  });
+
+  it("un h1 unique reste le grand titre, retiré de l'accroche", () => {
+    const lettre = structureLettre(LETTRE, PERIODE)!;
+    expect(lettre.intro.some((b) => b.k === "h1")).toBe(false);
+    expect(lettre.sections[0].titre && texteDe(lettre.sections[0].titre)).toBe("Lecture du mois");
   });
 });

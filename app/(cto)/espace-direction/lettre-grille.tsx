@@ -6,6 +6,7 @@ import type {
   Carte,
   Chantier,
   Echeance,
+  Intensite,
   LettreStructuree,
   Pression,
   Section,
@@ -18,7 +19,9 @@ import { Label, Panel, Stat, Tag, type Tone } from "./ui";
 import { ESPACE_PATH } from "./session";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Une lettre de l'atelier (générale, sectorielle ou personnalisée), en grille.
+// Une lettre de veille en grille, quelle que soit sa source (atelier, Signaux
+// Faibles, Sentinelle) : la grille ne connaît que les formes que
+// `structureLettre` a reconnues.
 //
 // Le texte est le même que dans le rendu linéaire (`CorpsLettre`), mot pour
 // mot : seule la mise en page change. Ce qui se compare (la pression des douze
@@ -32,6 +35,7 @@ import { ESPACE_PATH } from "./session";
 // ─────────────────────────────────────────────────────────────────────────────
 
 const PRESSION: Record<Pression, { label: string; tone: Tone }> = {
+  traiter: { label: "À traiter", tone: "alerte" },
   hausse: { label: "En hausse", tone: "alerte" },
   surveiller: { label: "À surveiller", tone: "attention" },
   stable: { label: "Stable", tone: "neutre" },
@@ -39,7 +43,19 @@ const PRESSION: Record<Pression, { label: string; tone: Tone }> = {
   inconnue: { label: "Non qualifié", tone: "neutre" },
 };
 
-const ORDRE_PRESSION: Pression[] = ["hausse", "surveiller", "stable", "baisse", "inconnue"];
+const ORDRE_PRESSION: Pression[] = ["traiter", "hausse", "surveiller", "stable", "baisse", "inconnue"];
+
+const INTENSITE: Record<Intensite, { label: string; tone: Tone }> = {
+  fort: { label: "Signal fort", tone: "alerte" },
+  moyen: { label: "Signal moyen", tone: "attention" },
+  faible: { label: "Signal faible", tone: "neutre" },
+  ras: { label: "RAS", tone: "neutre" },
+};
+
+function Signal({ signal }: { signal?: Intensite }) {
+  if (!signal) return null;
+  return <Pastille tone={INTENSITE[signal].tone}>{INTENSITE[signal].label}</Pastille>;
+}
 
 const URGENCE_TONE: Record<Urgence, Tone> = {
   semaine: "alerte",
@@ -87,13 +103,28 @@ function Pastille({ tone, children }: { tone: Tone; children: ReactNode }) {
   );
 }
 
-function TitreSection({ id, titre, sousTitre }: { id: string; titre: Span[]; sousTitre?: ReactNode }) {
+function TitreSection({
+  id,
+  titre,
+  sousTitre,
+  signal,
+}: {
+  id: string;
+  titre: Span[];
+  sousTitre?: ReactNode;
+  signal?: Intensite;
+}) {
   return (
     <div className="mt-14 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-dark-gray pb-3">
       <h2 id={id} className="scroll-mt-8 font-sans text-xl font-light text-foreground">
         <Texte spans={titre} />
       </h2>
-      {sousTitre ? <Label>{sousTitre}</Label> : null}
+      {sousTitre || signal ? (
+        <div className="flex flex-wrap items-center gap-3">
+          {sousTitre ? <Label>{sousTitre}</Label> : null}
+          <Signal signal={signal} />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -182,7 +213,11 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
   const questions = trouve("questions");
   const avancement = trouve("avancement");
 
-  const enHausse = axes?.axes.filter((a) => a.pression === "hausse").length ?? 0;
+  const enHausse = axes?.axes.filter((a) => a.pression === "hausse" || a.pression === "traiter").length ?? 0;
+  const signalees = structure.sections.filter((s) => s.signal);
+  const fortes = signalees.filter((s) => s.signal === "fort").length;
+  const moyennes = signalees.filter((s) => s.signal === "moyen").length;
+  const titreActions = actions ? normaliserTitre(actions.titre) : "";
   const urgentes = actions?.actions.filter((a) => a.urgence === "semaine").length ?? 0;
   const prochaine = echeancier?.echeances
     .filter((e) => e.date && e.date.getTime() >= maintenant.getTime() - JOUR)
@@ -194,17 +229,33 @@ function CoupDOeil({ structure, maintenant }: { structure: LettreStructuree; mai
     stats.push(
       <Stat
         key="axes"
-        label="Axes en hausse"
+        label={axes.axes.some((a) => a.pression === "traiter") ? "Axes à traiter" : "Axes en hausse"}
         value={`${enHausse} / ${axes.axes.length}`}
         tone={enHausse > axes.axes.length / 2 ? "alerte" : enHausse > 0 ? "attention" : "neutre"}
-        hint="La pression monte sur ces sujets ce mois-ci"
+        hint="La pression monte sur ces sujets"
+      />,
+    );
+  if (signalees.length >= 2)
+    stats.push(
+      <Stat
+        key="signaux"
+        label="Rubriques en signal fort"
+        value={`${fortes} / ${signalees.length}`}
+        tone={fortes > 0 ? "alerte" : moyennes > 0 ? "attention" : "neutre"}
+        hint={moyennes > 0 ? `et ${moyennes} en signal moyen` : undefined}
       />,
     );
   if (actions)
     stats.push(
       <Stat
         key="actions"
-        label={normaliserTitre(actions.titre).startsWith("a decider") ? "À décider" : "Actions sur l'existant"}
+        label={
+          titreActions.startsWith("a decider")
+            ? "À décider"
+            : titreActions.startsWith("a faire sur")
+              ? "Actions sur l'existant"
+              : "Actions"
+        }
         value={String(actions.actions.length)}
         tone={urgentes > 0 ? "alerte" : actions.actions.some((a) => a.urgence === "mois") ? "attention" : "neutre"}
         hint={
@@ -491,13 +542,34 @@ function GrilleChantiers({ chantiers }: { chantiers: Chantier[] }) {
 
 function GrilleCartes({ cartes }: { cartes: Carte[] }) {
   return (
-    <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+    <div className={`mt-6 grid gap-3 ${cartes.length > 1 ? "sm:grid-cols-2 xl:grid-cols-3" : ""}`}>
       {cartes.map((carte, index) => (
-        <Carreau key={index}>
+        <Carreau key={index} className={carte.signal === "fort" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
+          {carte.signal ? (
+            <div className="mb-3">
+              <Signal signal={carte.signal} />
+            </div>
+          ) : null}
           <h3 className="font-sans text-base font-normal leading-snug text-foreground">{carte.titre}</h3>
-          <p className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
-            <Texte spans={carte.texte} />
-          </p>
+          {carte.texte.length > 0 ? (
+            <p className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
+              <Texte spans={carte.texte} />
+            </p>
+          ) : null}
+          {carte.suite?.map((spans, i) => (
+            <p key={i} className="mt-2 font-inter-tight text-sm leading-relaxed text-foreground/85">
+              <Texte spans={spans} />
+            </p>
+          ))}
+          {carte.sources ? (
+            <div className="mt-auto space-y-1 pt-4">
+              {carte.sources.map((spans, i) => (
+                <p key={i} className="font-inter-tight text-xs leading-relaxed text-mid-gray">
+                  <Texte spans={spans} />
+                </p>
+              ))}
+            </div>
+          ) : null}
         </Carreau>
       ))}
     </div>
@@ -668,19 +740,20 @@ function RenduSection({
   base: string;
 }) {
   const id = ancreSection(index);
+  const signal = section.signal;
 
   switch (section.kind) {
     case "prose":
       return (
         <section aria-labelledby={section.titre ? id : undefined}>
-          {section.titre ? <TitreSection id={id} titre={section.titre} /> : null}
+          {section.titre ? <TitreSection id={id} titre={section.titre} signal={signal} /> : null}
           <CorpsLettre body={section.blocs} base={base} />
         </section>
       );
     case "axes":
       return (
         <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} sousTitre={`${section.axes.length} axes`} />
+          <TitreSection id={id} titre={section.titre} sousTitre={`${section.axes.length} axes`} signal={signal} />
           <GrilleAxes axes={section.axes} />
         </section>
       );
@@ -691,10 +764,12 @@ function RenduSection({
           <TitreSection
             id={id}
             titre={section.titre}
+            signal={signal}
             sousTitre={`${section.actions.length} ${
               normaliserTitre(section.titre).startsWith("a decider") ? "point" : "action"
             }${section.actions.length > 1 ? "s" : ""}${urgentes > 0 ? ` · ${urgentes} cette semaine` : ""}`}
           />
+          <Reste blocs={section.chapeau} base={base} />
           <div className="mt-6 grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
             {section.actions.map((action) => (
               <CarteAction key={action.numero} action={action} axes={axes} />
@@ -707,7 +782,8 @@ function RenduSection({
     case "options":
       return (
         <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} />
+          <TitreSection id={id} titre={section.titre} signal={signal} />
+          <Reste blocs={section.chapeau} base={base} />
           <GrilleOptions options={section.options} />
           <Reste blocs={section.blocs} base={base} />
         </section>
@@ -718,8 +794,10 @@ function RenduSection({
           <TitreSection
             id={id}
             titre={section.titre}
+            signal={signal}
             sousTitre={`${section.chantiers.length} chantier${section.chantiers.length > 1 ? "s" : ""}`}
           />
+          <Reste blocs={section.chapeau} base={base} />
           <GrilleChantiers chantiers={section.chantiers} />
           <Reste blocs={section.blocs} base={base} />
         </section>
@@ -727,7 +805,8 @@ function RenduSection({
     case "cartes":
       return (
         <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} />
+          <TitreSection id={id} titre={section.titre} signal={signal} />
+          <Reste blocs={section.chapeau} base={base} />
           <GrilleCartes cartes={section.cartes} />
           <Reste blocs={section.blocs} base={base} />
         </section>
@@ -738,6 +817,7 @@ function RenduSection({
           <TitreSection
             id={id}
             titre={section.titre}
+            signal={signal}
             sousTitre={`${section.echeances.length} échéance${section.echeances.length > 1 ? "s" : ""}`}
           />
           <Echeancier echeances={section.echeances} maintenant={maintenant} />
@@ -747,7 +827,7 @@ function RenduSection({
     case "questions":
       return (
         <section aria-labelledby={id}>
-          <TitreSection id={id} titre={section.titre} />
+          <TitreSection id={id} titre={section.titre} signal={signal} />
           <Questions questions={section.questions} />
           <Reste blocs={section.blocs} base={base} />
         </section>

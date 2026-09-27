@@ -694,6 +694,7 @@ s'appelle désormais **Pilotage** (et non plus Missions) pour que le mot
 | Lettres — blocs Notion | `src/cto/notion/blocks.ts` |
 | Lettres — balayage | `src/cto/notion/letters.ts` |
 | Lettres — affichage | `app/(cto)/espace-direction/lettre.tsx` |
+| Lettres — grille (toutes sources : formes reconnues dans le corps) | `src/cto/letters/structure.ts`, `app/(cto)/espace-direction/lettre-grille.tsx` |
 | Affichage | `app/(cto)/espace-direction/livrables.tsx` |
 | Historique d'un livrable | `app/(cto)/espace-direction/historique.tsx` |
 | Personnes — balayage | `src/cto/notion/persons.ts` |
