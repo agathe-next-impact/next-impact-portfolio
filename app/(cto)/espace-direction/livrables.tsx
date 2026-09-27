@@ -27,6 +27,7 @@ export const CATEGORIES = {
   document: { slug: "documents", titre: "Documents", section: "documents" },
   audit: { slug: "audits", titre: "Audits", section: "audit" },
   proposition: { slug: "propositions", titre: "Propositions", section: "propositions" },
+  apercu: { slug: "apercus", titre: "Versions de travail", section: "apercus" },
 } as const;
 
 /** L'adresse où télécharger une pièce jointe. La route vérifie session ET appartenance. */

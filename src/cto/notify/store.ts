@@ -28,6 +28,7 @@ const KIND_LABELS: Record<DeliverableKind, string> = {
   prestation: "prestations",
   audit: "audit",
   proposition: "propositions",
+  apercu: "maquettes et versions de test",
 };
 
 export interface NotifyReport {

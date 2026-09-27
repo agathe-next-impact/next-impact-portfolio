@@ -93,6 +93,7 @@ describe("colonnes déclarées", () => {
     ["paiement", PROPS.paiement],
     ["audit", PROPS.audit],
     ["proposition", PROPS.proposition],
+    ["apercu", PROPS.apercu],
   ];
 
   it.each(LUES)("%s : chaque colonne de PROPS a son type attendu", (base, props) => {
@@ -110,6 +111,7 @@ describe("colonnes déclarées", () => {
       "prestation",
       "audit",
       "proposition",
+      "apercu",
     ];
     for (const base of contenu) {
       const declarees = COLUMNS[base].map((colonne) => colonne.name);

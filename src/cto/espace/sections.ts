@@ -40,6 +40,7 @@ export type SectionKey =
   | "decisions"
   | "audit"
   | "site"
+  | "apercus"
   | "cartographie"
   | "agir"
   | "propositions"
@@ -103,6 +104,10 @@ export const SECTIONS: readonly Section[] = [
   { key: "documents", slug: "documents", label: "Documents", group: "missions", services: ["direction-technique"] },
 
   { key: "site", slug: "site", label: "État du site", group: "site", services: ["suivi-technique"] },
+  // Les maquettes et le site en développement, avec leur accès : ouverts dès
+  // qu'une version est publiée, sans service à cocher. Un site en refonte
+  // n'attend pas un abonnement pour être montré.
+  { key: "apercus", slug: "apercus", label: "Versions de travail", group: "site", services: null, siContenu: true },
   { key: "cartographie", slug: "cartographie", label: "Cartographie", group: "site", services: ["direction-technique"] },
 
   // Une seule page pour agir : ce qui est à traiter, puis ce qui est à
@@ -156,6 +161,8 @@ export interface Contents {
   roadmap: number;
   audits: number;
   propositions: number;
+  /** Maquettes et sites en développement publiés. Absent : aucun. */
+  apercus?: number;
   /** Vrai si un projet WP Umbrella est renseigné. */
   site: boolean;
   /** Vrai si un client Sentinelle est relié. */
@@ -180,6 +187,8 @@ function hasContent(key: SectionKey, contents: Contents): boolean {
       return contents.documents > 0;
     case "propositions":
       return contents.propositions > 0;
+    case "apercus":
+      return (contents.apercus ?? 0) > 0;
     case "veille-technique":
       return contents.sentinelle === true;
     // Des tarifs ne s'ouvrent pas « parce qu'il y a du contenu » : seul le

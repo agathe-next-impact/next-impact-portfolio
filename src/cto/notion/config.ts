@@ -30,7 +30,7 @@ export const SYNCED_KINDS: DeliverableKind[] = [
  * que quelqu'un pense à poser la variable sur Vercel, livrables existants
  * compris. Une base nouvelle doit pouvoir arriver sans rien casser.
  */
-export const OPTIONAL_KINDS: DeliverableKind[] = ["prestation"];
+export const OPTIONAL_KINDS: DeliverableKind[] = ["prestation", "apercu"];
 
 const ENV_BY_KIND: Record<DeliverableKind, string> = {
   decision: "CTO_NOTION_DB_DECISIONS",
@@ -45,6 +45,7 @@ const ENV_BY_KIND: Record<DeliverableKind, string> = {
   audit: "CTO_NOTION_DB_AUDITS",
   // Même régime que les audits : facultative, lue comme un arbre de pages.
   proposition: "CTO_NOTION_DB_PROPOSITIONS",
+  apercu: "CTO_NOTION_DB_APERCUS",
 };
 
 const ENV_CLIENTS = "CTO_NOTION_DB_CLIENTS";

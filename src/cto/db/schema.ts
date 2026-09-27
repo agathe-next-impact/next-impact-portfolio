@@ -550,6 +550,8 @@ export const ctoDeliverableKindEnum = pgEnum("cto_deliverable_kind", [
   "audit",
   // Une proposition commerciale, lue dans sa page (CRM → Propositions).
   "proposition",
+  // Une maquette ou un site en développement, avec son accès (base Aperçus).
+  "apercu",
 ]);
 
 /**

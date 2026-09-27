@@ -22,6 +22,7 @@ export {
 
 export type {
   AttachedFile,
+  ApercuPayload,
   AuditPayload,
   AuditSection,
   CartographiePayload,

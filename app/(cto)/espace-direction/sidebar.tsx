@@ -8,6 +8,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   Activity,
+  AppWindow,
   BookOpen,
   CalendarPlus,
   ChevronRight,
@@ -81,6 +82,7 @@ export type NavIconName =
   | "decisions"
   | "audit"
   | "site"
+  | "apercus"
   | "cartographie"
   | "agir"
   | "propositions"
@@ -97,6 +99,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   decisions: Gavel,
   audit: Search,
   site: Activity,
+  apercus: AppWindow,
   cartographie: Layers,
   agir: ListChecks,
   propositions: Handshake,

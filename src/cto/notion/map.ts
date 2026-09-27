@@ -1,6 +1,7 @@
 import type { NotionPage } from "./api";
 import * as p from "./properties";
 import type {
+  ApercuPayload,
   AuditPayload,
   CartographiePayload,
   DecisionPayload,
@@ -162,6 +163,19 @@ export const PROPS = {
     page: "Page de la proposition",
     date: "Date",
     status: "Statut",
+  },
+  /**
+   * Base « Aperçus » de l'atelier : une maquette ou un site en développement
+   * par ligne, avec l'accès de son adresse de test.
+   */
+  apercu: {
+    title: "Aperçu",
+    nature: "Nature",
+    url: "Lien",
+    login: "Identifiant",
+    password: "Mot de passe",
+    date: "Date",
+    note: "Note",
   },
   /**
    * La base inline ROADMAP d'une page d'audit (modèle « Audit technique
@@ -577,6 +591,13 @@ function roadmapNature(page: NotionPage): RoadmapPayload["nature"] {
   return null;
 }
 
+function apercuNature(page: NotionPage): ApercuPayload["nature"] {
+  const value = normalize(p.select(page, PROPS.apercu.nature));
+  if (value === "maquette") return "maquette";
+  if (value === "site en developpement") return "developpement";
+  return null;
+}
+
 function veilleNature(page: NotionPage): VeillePayload["nature"] {
   const value = normalize(p.select(page, PROPS.veille.nature));
   if (value === "note mensuelle") return "note";
@@ -750,6 +771,25 @@ export function mapPage(
         title: p.text(page, PROPS.prestation.title) ?? UNTITLED,
         payload,
         occurredAt: p.date(page, PROPS.prestation.due),
+        featured: isFeatured(page),
+      };
+    }
+    case "apercu": {
+      const payload: ApercuPayload = {
+        nature: apercuNature(page),
+        url: p.url(page, PROPS.apercu.url),
+        identifiant: p.text(page, PROPS.apercu.login),
+        motDePasse: p.text(page, PROPS.apercu.password),
+        note: p.text(page, PROPS.apercu.note),
+      };
+      return {
+        clientId,
+        notionPageId: page.id,
+        kind,
+        title: p.text(page, PROPS.apercu.title) ?? UNTITLED,
+        payload,
+        // La date de mise en ligne de cette version : la plus récente en tête.
+        occurredAt: p.date(page, PROPS.apercu.date),
         featured: isFeatured(page),
       };
     }

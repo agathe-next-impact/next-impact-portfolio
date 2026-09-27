@@ -76,7 +76,18 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
   proposition: {
     statut: "Statut",
   },
+  // Le mot de passe n'y est pas : l'historique dit qu'il a changé
+  // (`SECRETS`), jamais ce qu'il valait.
+  apercu: {
+    nature: "Nature",
+    url: "Lien",
+    identifiant: "Identifiant",
+    note: "Note",
+  },
 };
+
+/** Les champs dont un changement se signale sans montrer aucune des deux valeurs. */
+const SECRETS: Record<string, string> = { motDePasse: "Mot de passe" };
 
 const VIDE = "—";
 
@@ -163,6 +174,10 @@ function comparer(precedent: Deliverable, suivant: Deliverable): Changement[] {
   const a = precedent.payload as unknown as Record<string, unknown>;
   const b = suivant.payload as unknown as Record<string, unknown>;
   for (const cle of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    if (SECRETS[cle]) {
+      if (lisible(a[cle]) !== lisible(b[cle])) changements.push({ champ: SECRETS[cle], avant: null, apres: "modifié" });
+      continue;
+    }
     const label = labels[cle];
     if (!label) continue;
     const avant = lisible(a[cle]);

@@ -70,6 +70,7 @@ un dirigeant qui décide dessus. `Nature` distingue la note mensuelle de l'alert
 | **Personnes** | qui a accès à quel espace | — (§ 6) |
 | **Audits** | un audit remis par ligne, qui pointe sa page de mission | audit complet (§ 9) |
 | **Propositions** | une proposition remise par ligne, qui pointe sa page | — (§ 10) |
+| **Aperçus** | une maquette ou un site en développement par ligne, avec son accès | — (§ 11) |
 
 Huit livrables pour sept bases de contenu : trois regroupements portent une décision. Clients et Personnes ne portent pas de livrable, elles décident qui voit quoi ; Paiements suit ses prestations.
 
@@ -795,6 +796,44 @@ Sa page reste ouverte et listée dans « Votre accompagnement ».
 | Fin du suivi inclus | déclencheur 2 |
 | Sans suggestions | coupe la carte pour ce client (négociation en cours…) |
 
+## 11. Les aperçus — maquettes et sites en développement
+
+La base **Aperçus** (sous « Direction technique — clients ») porte ce que le
+client peut déjà regarder : une maquette, ou le site en cours de
+développement sur son adresse de test. Une ligne par version.
+
+| Colonne | Type | Rôle |
+| --- | --- | --- |
+| Aperçu | titre | ce que le client ouvre (« Maquette de l'accueil », « Site de recette ») |
+| Client | relation | l'accompagnement |
+| Nature | sélection | `Maquette` ou `Site en développement` ; autre valeur : pas d'étiquette |
+| Lien | URL | l'adresse à ouvrir |
+| Identifiant | texte | l'identifiant de la protection de l'adresse de test, s'il y en a un |
+| Mot de passe | texte | le mot de passe de cette protection |
+| Date | date | mise en ligne de cette version ; la plus récente passe en tête |
+| Note | texte | ce qu'il y a à regarder, ce qui n'est pas encore branché |
+| Publié | case | comme partout |
+| Affichage | sélection | facultative, comme partout (« À la une » remonte sur l'accueil) |
+
+Base facultative (`CTO_NOTION_DB_APERCUS`), balayée comme Prestations.
+
+**Ce que voit le client.** Une entrée **Votre site → Versions de travail**,
+ouverte dès qu'une ligne est publiée, sans service à cocher, et absente
+sinon. Chaque version y montre son lien (bouton « Ouvrir »), l'identifiant et
+le mot de passe masqué (« Afficher », « Copier »). Une nouvelle version entre
+dans « Nouveau pour vous » et dans l'e-mail de notification, qui ne cite que
+la catégorie (« maquettes et versions de test »), jamais le lien ni l'accès.
+
+**Le mot de passe.** Seulement celui de la *protection* de l'adresse de test
+(accès HTTP, page protégée par mot de passe), fait pour être transmis. Jamais
+un accès d'administration, d'hébergement ou de base : il est stocké en clair
+dans Notion et en base. L'historique d'une version dit « Mot de passe :
+modifié » sans montrer aucune des deux valeurs ; le dossier de restitution ne
+reprend pas les aperçus.
+
+**Une version remplacée se retire** (décocher « Publié ») : un lien mort ou un
+mot de passe périmé laissés en ligne feraient douter du reste de l'espace.
+
 ## Fichiers
 
 | Rôle | Fichier |
@@ -820,6 +859,7 @@ Sa page reste ouverte et listée dans « Votre accompagnement ».
 | Lettres — grille (toutes sources : formes reconnues dans le corps) | `src/cto/letters/structure.ts`, `app/(cto)/espace-direction/lettre-grille.tsx` |
 | Affichage | `app/(cto)/espace-direction/livrables.tsx` |
 | Historique d'un livrable | `app/(cto)/espace-direction/historique.tsx` |
+| Aperçus — écran et accès masqué | `app/(cto)/espace-direction/apercus.tsx`, `acces.tsx` |
 | Personnes — balayage | `src/cto/notion/persons.ts` |
 | Personnes — schéma | `src/cto/db/schema.ts` — `cto_persons.notion_page_id` |
 | Invitation (voie de secours) | `scripts/cto-invite.ts` |

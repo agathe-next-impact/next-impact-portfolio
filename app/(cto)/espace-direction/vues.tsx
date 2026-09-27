@@ -108,6 +108,7 @@ const KIND_TITRES: Record<string, string> = {
   document: "Document",
   prestation: "Prestation",
   audit: "Audit",
+  apercu: "Version de travail",
 };
 
 /** Combien de lignes « Nouveau pour vous » montre avant « Voir les N autres ». */

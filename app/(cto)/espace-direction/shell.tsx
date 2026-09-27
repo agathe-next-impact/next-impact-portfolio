@@ -112,6 +112,7 @@ export async function loadEspace(viewer: Viewer): Promise<EspaceContext> {
     roadmap: count("roadmap"),
     audits: count("audit"),
     propositions: count("proposition"),
+    apercus: count("apercu"),
     site: profile.hasSite,
     sentinelle: profile.hasSentinelle,
   };
@@ -219,6 +220,8 @@ function badgeFor(key: SectionKey, context: EspaceContext): NavBadge | null {
       return nouveautes(context, ["document"]);
     case "veille":
       return nouveautes(context, ["veille"]);
+    case "apercus":
+      return nouveautes(context, ["apercu"]);
     case "site": {
       if (!context.site?.snapshot) return null;
       const points = sitePoints(context.site.snapshot);

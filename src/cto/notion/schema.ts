@@ -187,6 +187,16 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.proposition.date, "date"),
     column(PROPS.proposition.status, "select"),
   ],
+  apercu: [
+    ...CONTENT,
+    column(PROPS.apercu.title, "title"),
+    column(PROPS.apercu.nature, "select"),
+    column(PROPS.apercu.url, "url"),
+    column(PROPS.apercu.login, "rich_text"),
+    column(PROPS.apercu.password, "rich_text"),
+    column(PROPS.apercu.date, "date"),
+    column(PROPS.apercu.note, "rich_text"),
+  ],
   // La base du pipeline « Veilles clients » : seules les colonnes reprises dans
   // une lettre personnalisée. Le reste appartient au pipeline.
   editions: [

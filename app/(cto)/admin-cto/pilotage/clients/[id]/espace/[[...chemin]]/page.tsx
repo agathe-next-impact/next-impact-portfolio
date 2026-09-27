@@ -4,6 +4,7 @@ import { groupFromSlug, LEGACY_SLUGS, sectionByKey, SYNTHESE_SEGMENT } from "@ct
 import { groupeAvecSynthese, VueGroupe } from "../../../../../../espace-direction/groupes";
 import { categoriePath, kindFromSlug } from "../../../../../../espace-direction/livrables";
 import { VueAccompagnement } from "../../../../../../espace-direction/accompagnement";
+import { VueApercus } from "../../../../../../espace-direction/apercus";
 import { VuePrestations } from "../../../../../../espace-direction/prestations";
 import { loadEspace } from "../../../../../../espace-direction/shell";
 import { VueVeilleTechnique } from "../../../../../../espace-direction/veille-technique";
@@ -76,6 +77,8 @@ export default async function EspaceAdminPage({
         return <VueAudit viewer={viewer} context={context} />;
       case "site":
         return <VueSite viewer={viewer} context={context} />;
+      case "apercus":
+        return <VueApercus viewer={viewer} context={context} />;
       case "cartographie":
         return <VueCartographie viewer={viewer} context={context} />;
       case "agir":

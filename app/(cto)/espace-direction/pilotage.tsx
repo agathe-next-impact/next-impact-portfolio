@@ -29,6 +29,7 @@ const SECTION_OF_KIND: Partial<Record<Deliverable["kind"], SectionKey>> = {
   document: "documents",
   veille: "veille",
   proposition: "propositions",
+  apercu: "apercus",
 };
 
 /**

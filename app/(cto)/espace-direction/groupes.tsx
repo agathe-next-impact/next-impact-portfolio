@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import {
   prestationsForClient,
+  type ApercuPayload,
   type CartographiePayload,
   type DecisionPayload,
   type Deliverable,
@@ -202,6 +203,35 @@ function CarteDocuments({ viewer, context }: { viewer: Viewer; context: EspaceCo
 
 // ─── Votre site ──────────────────────────────────────────────────────────
 
+function CarteApercus({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
+  const items = sortRecentFirst(context.items.filter((item) => item.kind === "apercu"));
+  const verdict: Verdict = {
+    headline: `${items.length} ${pluriel(items.length, "version à consulter", "versions à consulter")}`,
+    tone: "neutre",
+  };
+
+  return (
+    <CarteReponse
+      question="Que pouvez-vous déjà regarder ?"
+      verdict={verdict}
+      pied={{ href: lienSection(viewer, "apercus"), label: "Liens et accès" }}
+    >
+      {items.slice(0, LIGNES).map((item) => {
+        const nature = (item.payload as ApercuPayload).nature;
+        return (
+          <LigneCarte
+            key={item.id}
+            titre={item.title}
+            href={livrableHref(item, context, viewer.base)}
+            tag={nature ? <Tag>{nature === "maquette" ? "Maquette" : "Site en développement"}</Tag> : null}
+            meta={item.occurredAt ? formatDay(item.occurredAt) : null}
+          />
+        );
+      })}
+    </CarteReponse>
+  );
+}
+
 function CarteCartographie({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const items = sortCartographie(context.items.filter((item) => item.kind === "cartographie"));
   const critiques = items.filter((item) => (item.payload as CartographiePayload).criticite === "Critique").length;
@@ -387,6 +417,8 @@ async function carte(key: SectionKey, viewer: Viewer, context: EspaceContext): P
       return <CarteDocuments viewer={viewer} context={context} />;
     case "site":
       return <CarteSite viewer={viewer} context={context} />;
+    case "apercus":
+      return <CarteApercus viewer={viewer} context={context} />;
     case "cartographie":
       return <CarteCartographie viewer={viewer} context={context} />;
     case "agir":

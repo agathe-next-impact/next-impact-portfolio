@@ -17,7 +17,8 @@ export type DeliverableKind =
   | "document"
   | "prestation"
   | "audit"
-  | "proposition";
+  | "proposition"
+  | "apercu";
 
 /**
  * Un arbitrage rendu, ou une option proposée puis écartée.
@@ -208,6 +209,26 @@ export interface PropositionPayload {
   fichiers: string[];
 }
 
+/**
+ * Une version de travail à consulter : une maquette, ou le site en cours de
+ * développement sur son adresse de test.
+ *
+ * L'identifiant et le mot de passe sont ceux de la PROTECTION de l'adresse de
+ * test (accès HTTP, page protégée), faits pour être transmis au client — pas
+ * un accès d'administration. Ils sont stockés en clair, comme dans Notion,
+ * et ne sortent de l'espace que vers le client connecté : ni l'historique ni
+ * le dossier de restitution ne les affichent.
+ */
+export interface ApercuPayload {
+  /** Maquette ou site en développement ; `null` si la colonne est vide. */
+  nature: "maquette" | "developpement" | null;
+  url: string | null;
+  identifiant: string | null;
+  motDePasse: string | null;
+  /** Ce qu'il y a à regarder, ce qui n'est pas encore branché. */
+  note: string | null;
+}
+
 export interface PayloadByKind {
   decision: DecisionPayload;
   roadmap: RoadmapPayload;
@@ -217,6 +238,7 @@ export interface PayloadByKind {
   prestation: PrestationPayload;
   audit: AuditPayload;
   proposition: PropositionPayload;
+  apercu: ApercuPayload;
 }
 
 export type DeliverablePayload = PayloadByKind[DeliverableKind];

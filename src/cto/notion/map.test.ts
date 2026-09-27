@@ -5,7 +5,7 @@ import { clientPageIds, personEmail, personName, personRevoked, personRole, spac
 import { clientInPreparation, clientStatus } from "./map";
 import { paymentOf, servicesOuverts, sortPayments } from "./map";
 import * as p from "./properties";
-import type { CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
+import type { ApercuPayload, CartographiePayload, DecisionPayload, RoadmapPayload } from "../deliverables";
 
 // Ce que ces tests protègent : le seul endroit du dépôt qui connaisse les noms
 // des colonnes de l'atelier. Une colonne renommée dans Notion doit produire un
@@ -283,5 +283,48 @@ describe("dates d'ouverture des services", () => {
       actions: "2026-06-01T00:00:00.000Z",
       prestations: "2026-09-27T08:00:00.000Z",
     });
+  });
+});
+
+describe("aperçus", () => {
+  const url = (value: string) => ({ type: "url", url: value });
+
+  it("lit la version de travail, son lien et son accès", () => {
+    const livrable = mapPage(
+      "apercu",
+      page({
+        [PROPS.apercu.title]: title("Maquette de la page d'accueil"),
+        [PROPS.apercu.nature]: select("Site en développement"),
+        [PROPS.apercu.url]: url("https://recette.exemple.fr"),
+        [PROPS.apercu.login]: richText("client"),
+        [PROPS.apercu.password]: richText("s3cret-recette"),
+        [PROPS.apercu.date]: date("2026-09-20"),
+        [PROPS.apercu.note]: richText("Le formulaire n'est pas encore branché."),
+      }),
+      CLIENT,
+    );
+    expect(livrable.kind).toBe("apercu");
+    expect(livrable.title).toBe("Maquette de la page d'accueil");
+    expect(livrable.occurredAt?.toISOString().slice(0, 10)).toBe("2026-09-20");
+    expect(livrable.payload as ApercuPayload).toEqual({
+      nature: "developpement",
+      url: "https://recette.exemple.fr",
+      identifiant: "client",
+      motDePasse: "s3cret-recette",
+      note: "Le formulaire n'est pas encore branché.",
+    });
+  });
+
+  it("reconnaît une maquette, et laisse vide une nature inconnue", () => {
+    const nature = (valeur: string) =>
+      (mapPage("apercu", page({ [PROPS.apercu.nature]: select(valeur) }), CLIENT).payload as ApercuPayload).nature;
+    expect(nature("Maquette")).toBe("maquette");
+    expect(nature("Prototype")).toBeNull();
+  });
+
+  it("publie sans accès une version ouverte à tous", () => {
+    const payload = mapPage("apercu", page({ [PROPS.apercu.title]: title("Figma") }), CLIENT).payload as ApercuPayload;
+    expect(payload.identifiant).toBeNull();
+    expect(payload.motDePasse).toBeNull();
   });
 });
