@@ -1,4 +1,5 @@
 import type { Block, Span } from "@cto/letters";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   estColonneGravite,
@@ -28,6 +29,12 @@ import {
 import { BadgeGravite } from "./gravite";
 import { CorpsLettre, Texte } from "./lettre";
 import { formatAmount, Label } from "./ui";
+
+/**
+ * Retrouve la proposition publiée pour un scénario, par son nom : son adresse
+ * et sa réponse. Null quand rien n'est publié (audit pas encore validé).
+ */
+export type PropositionDeScenario = (nomScenario: string) => { href: string; statut: string | null } | null;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Les formes d'un audit, pensées pour une lecture « situation → solutions
@@ -138,11 +145,13 @@ export function Encadre({
   large,
   base,
   marge = true,
+  propositions,
 }: {
   bloc: BoxBlock;
   large: boolean;
   base: string;
   marge?: boolean;
+  propositions?: PropositionDeScenario;
 }) {
   const registre = registreBox(bloc);
   const style = registre ? REGISTRE[registre] : null;
@@ -166,7 +175,7 @@ export function Encadre({
         </p>
       ) : null}
       <div className="pb-4">
-        <CorpsLettre body={bloc.c} large={large} base={base} />
+        <CorpsLettre body={bloc.c} large={large} base={base} propositions={propositions} />
       </div>
     </div>
   );
@@ -178,16 +187,18 @@ export function PaireEncadres({
   solution,
   large,
   base,
+  propositions,
 }: {
   situation: BoxBlock;
   solution: BoxBlock;
   large: boolean;
   base: string;
+  propositions?: PropositionDeScenario;
 }) {
   return (
     <div className="mt-6 grid items-stretch gap-3 lg:grid-cols-2">
-      <Encadre bloc={situation} large={large} base={base} marge={false} />
-      <Encadre bloc={solution} large={large} base={base} marge={false} />
+      <Encadre bloc={situation} large={large} base={base} marge={false} propositions={propositions} />
+      <Encadre bloc={solution} large={large} base={base} marge={false} propositions={propositions} />
     </div>
   );
 }
@@ -227,17 +238,17 @@ const RANG: Record<Gravite, number> = { critique: 0, eleve: 1, modere: 2, faible
  * constats en cartes ; sinon il reste un tableau, gravité en tête et scores
  * en jauges.
  */
-export function TableauAudit({ bloc }: { bloc: TableBlock }) {
+export function TableauAudit({ bloc, propositions }: { bloc: TableBlock; propositions?: PropositionDeScenario }) {
   const entetes = (bloc.head ?? []).map(texteDe);
   const colGravite = entetes.findIndex(estColonneGravite);
   const colSolution = entetes.findIndex(estColonneSolution);
 
   if (bloc.head && estTableauScenarios(entetes) && bloc.rows.length > 0) {
-    return <Scenarios bloc={bloc} entetes={entetes} />;
+    return <Scenarios bloc={bloc} entetes={entetes} propositions={propositions} />;
   }
 
   const plan = bloc.head ? lirePlanAction(entetes, bloc.rows.map((ligne) => ligne.map(texteDe))) : null;
-  if (plan) return <PlanActionGroupe bloc={bloc} entetes={entetes} plan={plan} />;
+  if (plan) return <PlanActionGroupe bloc={bloc} entetes={entetes} plan={plan} propositions={propositions} />;
 
   if (bloc.head && colSolution >= 0 && bloc.rows.length > 0) {
     return <Constats bloc={bloc} entetes={entetes} colGravite={colGravite} colSolution={colSolution} />;
@@ -259,7 +270,54 @@ export function TableauAudit({ bloc }: { bloc: TableBlock }) {
       {bloc.rows.length === 0 ? (
         <p className="font-inter-tight text-sm text-mid-gray">Aucune ligne.</p>
       ) : (
-        <div className="overflow-x-auto border border-dark-gray">
+        <>
+        {/* Mobile : une ligne = un accordéon. Le tableau défilant ne se lisait
+            pas sur un écran étroit ; replié, chaque ligne montre son intitulé
+            (et sa gravité), les autres colonnes s'empilent dessous. */}
+        <ul className="divide-y divide-dark-gray border border-dark-gray sm:hidden">
+          {bloc.rows.map((ligne, index) => {
+            const colTitre = colGravite === 0 ? 1 : 0;
+            const texteGravite = colGravite >= 0 ? texteDe(ligne[colGravite]) : "";
+            const gravite = texteGravite ? lireGravite(texteGravite) : null;
+            const autres = ordre(ligne.length).filter((colonne) => colonne !== colTitre && colonne !== colGravite);
+            return (
+              <li key={index}>
+                <details className="group">
+                  <summary className="flex cursor-pointer list-none flex-col items-start gap-2 px-4 py-3 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
+                    {gravite ? <BadgeGravite gravite={gravite} /> : null}
+                    <span className="flex w-full items-start justify-between gap-3">
+                      <span className="min-w-0 font-inter-tight text-sm leading-snug text-foreground">
+                        <Texte spans={ligne[colTitre] ?? []} />
+                      </span>
+                      <span aria-hidden className="shrink-0 font-mono text-sm text-mid-gray group-open:text-accent-secondary">
+                        <span className="group-open:hidden">+</span>
+                        <span className="hidden group-open:inline">−</span>
+                      </span>
+                    </span>
+                  </summary>
+                  <dl className="space-y-3 px-4 pb-4">
+                    {autres.map((colonne) => {
+                      const cellule = ligne[colonne];
+                      const texte = texteDe(cellule);
+                      if (!texte.trim()) return null;
+                      return (
+                        <div key={colonne}>
+                          <dt className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                            {bloc.head ? <Texte spans={bloc.head[colonne] ?? []} /> : null}
+                          </dt>
+                          <dd className="mt-1 font-inter-tight text-[13px] leading-relaxed text-foreground/90">
+                            {scores.has(colonne) ? <Score valeur={texte} /> : <Texte spans={cellule} />}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </details>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="hidden overflow-x-auto border border-dark-gray sm:block">
           <table className="w-full min-w-[36rem] border-collapse text-left font-inter-tight text-[13px] leading-relaxed">
             {bloc.head ? (
               <thead className="bg-jet/50">
@@ -302,6 +360,7 @@ export function TableauAudit({ bloc }: { bloc: TableBlock }) {
             </tbody>
           </table>
         </div>
+        </>
       )}
       {scores.size > 0 ? (
         <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
@@ -353,20 +412,25 @@ function Constats({
 
           return (
             <li key={index} className="border border-dark-gray bg-jet/40">
-              <header className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-dark-gray px-5 py-3">
+              {/* Mobile : gravité, intitulé, puis étiquettes, empilés ; en ligne dès `sm`. */}
+              <header className="flex flex-col items-start gap-2 border-b border-dark-gray px-5 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
                 {gravite ? <BadgeGravite gravite={gravite} /> : null}
-                <h4 className="min-w-0 flex-1 font-sans text-base font-normal text-foreground">
+                <h4 className="min-w-0 font-sans text-base font-normal text-foreground sm:flex-1">
                   <Texte spans={ligne[colTitre] ?? []} />
                 </h4>
-                {etiquettes.map(({ colonne, texte }) => (
-                  <span
-                    key={colonne}
-                    title={entetes[colonne]}
-                    className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray"
-                  >
-                    {texte}
+                {etiquettes.length > 0 ? (
+                  <span className="flex flex-wrap gap-1.5 sm:contents">
+                    {etiquettes.map(({ colonne, texte }) => (
+                      <span
+                        key={colonne}
+                        title={entetes[colonne]}
+                        className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray"
+                      >
+                        {texte}
+                      </span>
+                    ))}
                   </span>
-                ))}
+                ) : null}
               </header>
               <div className="grid md:grid-cols-2">
                 <div className="px-5 py-4">
@@ -387,7 +451,7 @@ function Constats({
                   )}
                 </div>
                 <div className="border-t border-dark-gray bg-accent-secondary/[0.06] px-5 py-4 md:border-l md:border-t-0">
-                  <p className="flex flex-wrap items-center gap-2">
+                  <p className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                     <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent-secondary">
                       → Solution préconisée
                     </span>
@@ -437,7 +501,20 @@ function Totaux({ heures, cout }: { heures: { ponctuel: number; mensuel: number 
  * d'œil ; puis chaque proposition et ses tâches, triées par axe. La première
  * est ouverte, les autres se déplient.
  */
-function PlanActionGroupe({ bloc, entetes, plan }: { bloc: TableBlock; entetes: string[]; plan: PlanAction }) {
+function PlanActionGroupe({
+  bloc,
+  entetes,
+  plan,
+  propositions,
+}: {
+  bloc: TableBlock;
+  entetes: string[];
+  plan: PlanAction;
+  propositions?: PropositionDeScenario;
+}) {
+  // Groupé par proposition : chaque groupe mène à la sienne, quand elle est publiée.
+  const parProposition = /^propos/i.test(entetes[plan.colGroupe] ?? "");
+  const lien = (nom: string) => (parProposition && propositions ? propositions(nom) : null);
   const pris = new Set([0, plan.colGroupe, plan.colAxe, plan.colHeures, plan.colFrequence, plan.colCout]);
   const autres = entetes.map((_, i) => i).filter((i) => !pris.has(i));
 
@@ -461,6 +538,7 @@ function PlanActionGroupe({ bloc, entetes, plan }: { bloc: TableBlock; entetes: 
                 {groupe.lignes.length} {groupe.lignes.length > 1 ? "actions" : "action"}
               </span>
             </p>
+            {lien(groupe.nom) ? <LienProposition {...lien(groupe.nom)!} className="mt-2 inline-block" /> : null}
           </li>
         ))}
       </ul>
@@ -468,16 +546,17 @@ function PlanActionGroupe({ bloc, entetes, plan }: { bloc: TableBlock; entetes: 
       <div className="mt-3 grid gap-3">
         {plan.groupes.map((groupe, rang) => (
           <details key={groupe.nom} open={rang === 0} className="group border border-dark-gray bg-jet/30">
-            <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
-              <span className="min-w-0 flex-1 font-sans text-base text-foreground">{groupe.nom}</span>
+            {/* Mobile : l'intitulé (et son +), puis les totaux, puis le nombre d'actions, empilés. */}
+            <summary className="flex cursor-pointer list-none flex-col items-start gap-1.5 px-5 py-3 transition-colors hover:bg-jet/70 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1 [&::-webkit-details-marker]:hidden">
+              <span className="flex w-full min-w-0 items-start justify-between gap-3 sm:w-auto sm:flex-1">
+                <span className="min-w-0 font-sans text-base text-foreground">{groupe.nom}</span>
+                <SigneRepli className="sm:hidden" />
+              </span>
               <Totaux heures={groupe.heures} cout={groupe.cout} />
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
                 {groupe.lignes.length} {groupe.lignes.length > 1 ? "actions" : "action"}
               </span>
-              <span aria-hidden className="font-mono text-sm text-mid-gray group-open:text-accent-secondary">
-                <span className="group-open:hidden">+</span>
-                <span className="hidden group-open:inline">−</span>
-              </span>
+              <SigneRepli className="hidden sm:inline" />
             </summary>
             <ol className="divide-y divide-dark-gray border-t border-dark-gray">
               {groupe.lignes.map((index) => {
@@ -487,28 +566,54 @@ function PlanActionGroupe({ bloc, entetes, plan }: { bloc: TableBlock; entetes: 
                 const heures = lireNombre(cellule(plan.colHeures));
                 const cout = lireNombre(cellule(plan.colCout));
                 const suffixe = mensuel ? " / mois" : "";
-                return (
-                  <li key={index} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-2.5">
-                    <span className="min-w-0 flex-1 basis-64 font-inter-tight text-sm leading-relaxed text-foreground/90">
-                      <Texte spans={ligne[0] ?? []} />
+                const axe = cellule(plan.colAxe) ? (
+                  <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                    {cellule(plan.colAxe)}
+                  </span>
+                ) : null;
+                const courtes = autres.map((col) =>
+                  cellule(col) && cellule(col).length <= 40 ? (
+                    <span key={col} title={entetes[col]} className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                      {cellule(col)}
                     </span>
-                    {cellule(plan.colAxe) ? (
-                      <span className="border border-dark-gray px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                        {cellule(plan.colAxe)}
-                      </span>
-                    ) : null}
-                    {autres.map((col) =>
-                      cellule(col) && cellule(col).length <= 40 ? (
-                        <span key={col} title={entetes[col]} className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                          {cellule(col)}
-                        </span>
-                      ) : null,
-                    )}
-                    <span className="ml-auto whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-foreground">
+                  ) : null,
+                );
+                const chiffre =
+                  heures !== null || cout !== null ? (
+                    <span className="whitespace-nowrap font-mono text-[11px] tabular-nums text-foreground sm:ml-auto sm:text-right">
                       {heures !== null ? `${nombreFr(heures)} h${suffixe}` : null}
                       {heures !== null && cout !== null ? " · " : null}
                       {cout !== null ? `${formatAmount(cout)}${suffixe}` : null}
                     </span>
+                  ) : null;
+                return (
+                  <li key={index}>
+                    {/* Mobile : l'action en accordéon, son axe et son chiffrage empilés dessous. */}
+                    <details className="group/tache sm:hidden">
+                      <summary className="flex cursor-pointer list-none items-start justify-between gap-3 px-5 py-2.5 transition-colors hover:bg-jet/70 [&::-webkit-details-marker]:hidden">
+                        <span className="min-w-0 font-inter-tight text-sm leading-relaxed text-foreground/90">
+                          <Texte spans={ligne[0] ?? []} />
+                        </span>
+                        <span aria-hidden className="shrink-0 pt-0.5 font-mono text-sm text-mid-gray group-open/tache:text-accent-secondary">
+                          <span className="group-open/tache:hidden">+</span>
+                          <span className="hidden group-open/tache:inline">−</span>
+                        </span>
+                      </summary>
+                      <div className="flex flex-col items-start gap-1.5 px-5 pb-3">
+                        {axe}
+                        {courtes}
+                        {chiffre}
+                      </div>
+                    </details>
+                    {/* Grand écran : une ligne, le chiffrage calé à droite. */}
+                    <div className="hidden flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-2.5 sm:flex">
+                      <span className="min-w-0 flex-1 basis-64 font-inter-tight text-sm leading-relaxed text-foreground/90">
+                        <Texte spans={ligne[0] ?? []} />
+                      </span>
+                      {axe}
+                      {courtes}
+                      {chiffre}
+                    </div>
                   </li>
                 );
               })}
@@ -600,7 +705,7 @@ function Repere({ label, children, large = false }: { label: string; children: R
  * tranche (statut, note, coût, délai, constats résolus) ; le résumé ensuite ;
  * les textes longs (conditions de choix, risques) repliés en accordéons.
  */
-function Scenarios({ bloc, entetes }: { bloc: TableBlock; entetes: string[] }) {
+function Scenarios({ bloc, entetes, propositions }: { bloc: TableBlock; entetes: string[]; propositions?: PropositionDeScenario }) {
   const roles = entetes.map(roleColonneScenario);
   const col = (role: RoleScenario) => roles.indexOf(role);
   const nombre = (ligne: Span[][], role: RoleScenario) => (col(role) >= 0 ? lireNombre(texteDe(ligne[col(role)])) : null);
@@ -634,6 +739,7 @@ function Scenarios({ bloc, entetes }: { bloc: TableBlock; entetes: string[] }) {
       <ol className="grid items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
         {scenarios.map(({ ligne, index, nom, statut, libelle, note }) => {
           const style = statut ? STATUT_SCENARIO[statut] : null;
+          const lien = propositions && nom ? propositions(nom) : null;
           const cout =
             fourchette(nombre(ligne, "cout-min"), nombre(ligne, "cout-max")) ??
             (col("cout") >= 0 ? texteDe(ligne[col("cout")]).trim() || null : null);
@@ -753,11 +859,39 @@ function Scenarios({ bloc, entetes }: { bloc: TableBlock; entetes: string[] }) {
                   )}
                 </Accordeon>
               ))}
+
+              {lien ? (
+                <div className="mt-auto border-t border-dark-gray px-5 py-3">
+                  <LienProposition {...lien} />
+                </div>
+              ) : null}
             </li>
           );
         })}
       </ol>
     </section>
+  );
+}
+
+/** Le « + » / « − » d'un repli. */
+function SigneRepli({ className = "" }: { className?: string }) {
+  return (
+    <span aria-hidden className={`shrink-0 font-mono text-sm text-mid-gray group-open:text-accent-secondary ${className}`}>
+      <span className="group-open:hidden">+</span>
+      <span className="hidden group-open:inline">−</span>
+    </span>
+  );
+}
+
+/** Le lien d'un scénario ou d'un groupe du plan vers sa proposition, réponse comprise. */
+function LienProposition({ href, statut, className = "" }: { href: string; statut: string | null; className?: string }) {
+  return (
+    <Link
+      href={href}
+      className={`font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary ${className}`}
+    >
+      {`Voir la proposition${statut ? ` · ${statut}` : ""} →`}
+    </Link>
   );
 }
 

@@ -490,31 +490,48 @@ export interface Frise {
   count: number;
 }
 
+/** Durée moyenne d'un mois, pour une fenêtre symétrique au jour près. */
+const MOIS = 30.4375 * JOUR;
+
 /**
  * La frise de l'accueil : trois mois en arrière, trois mois devant.
  *
  * Trois couloirs — ce qui a été fait (jalons), ce qui court (missions),
  * ce qui tombe (échéances de contrats). Le passé et l'avenir sur un seul axe,
  * avec aujourd'hui au milieu : la réponse visuelle à « où en est-on ? ».
+ *
+ * Deux fenêtres :
+ * - `mois` (grand écran) : du 1er du mois, trois mois avant, à la fin du
+ *   troisième mois après — sept mois pleins, aujourd'hui un peu après le milieu ;
+ * - `centree` (mobile) : trois mois de part et d'autre d'aujourd'hui, pile au
+ *   milieu, pour que la frise qui défile s'ouvre sur la date du jour.
  */
 export function buildFrise(
   missions: Mission[],
   items: Deliverable[],
   now: Date = new Date(),
-  monthsBefore = 3,
-  monthsAfter = 3,
+  { monthsBefore = 3, monthsAfter = 3, fenetre = "mois" }: { monthsBefore?: number; monthsAfter?: number; fenetre?: "mois" | "centree" } = {},
 ): Frise {
   const [y, m] = dayKey(now).split("-").map(Number);
-  const start = new Date(Date.UTC(y, m - 1 - monthsBefore, 1));
-  const end = new Date(Date.UTC(y, m + monthsAfter, 1));
+  const start =
+    fenetre === "centree"
+      ? new Date(now.getTime() - monthsBefore * MOIS)
+      : new Date(Date.UTC(y, m - 1 - monthsBefore, 1));
+  const end =
+    fenetre === "centree"
+      ? new Date(now.getTime() + monthsAfter * MOIS)
+      : new Date(Date.UTC(y, m + monthsAfter, 1));
   const span = end.getTime() - start.getTime();
   const at = (date: Date) => ((date.getTime() - start.getTime()) / span) * 100;
   const inside = (value: number) => value >= 0 && value <= 100;
 
+  // Un repère au 1er de chaque mois compris dans la fenêtre.
   const months: Frise["months"] = [];
   const format = new Intl.DateTimeFormat("fr-FR", { month: "short", timeZone: "UTC" });
-  for (let i = 0; i < monthsBefore + monthsAfter + 1; i += 1) {
-    const date = new Date(Date.UTC(y, m - 1 - monthsBefore + i, 1));
+  const [ys, ms] = dayKey(start).split("-").map(Number);
+  for (let i = fenetre === "centree" ? 1 : 0; ; i += 1) {
+    const date = new Date(Date.UTC(ys, ms - 1 + i, 1));
+    if (date >= end) break;
     months.push({ label: format.format(date), at: at(date) });
   }
 

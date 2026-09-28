@@ -11,6 +11,7 @@ import {
 } from "@cto/espace";
 import { couperFin } from "./audit-formes";
 import { BadgeGravite, GRAVITE_FOND, GRAVITE_TEXTE } from "./gravite";
+import type { PropositionDeScenario } from "./audit-formes";
 import { CorpsLettre, Texte } from "./lettre";
 import { formatAmount, Label } from "./ui";
 
@@ -127,7 +128,7 @@ function etiqueter(point: Point) {
   return { domaine, gravite, texte: coupe > 0 ? couperFin(point.texte, coupe) : point.texte };
 }
 
-function CarteRubrique({ rubrique, base }: { rubrique: Rubrique; base: string }) {
+function CarteRubrique({ rubrique, base, propositions }: { rubrique: Rubrique; base: string; propositions?: PropositionDeScenario }) {
   const nombre = rubrique.phases?.length ?? rubrique.points.length;
   const etiquetee = RUBRIQUE_ETIQUETEE.test(
     rubrique.titre.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(),
@@ -197,16 +198,16 @@ function CarteRubrique({ rubrique, base }: { rubrique: Rubrique; base: string })
 
       {rubrique.autres.length > 0 ? (
         <div className="px-5 pb-5">
-          <CorpsLettre body={rubrique.autres} large base={base} />
+          <CorpsLettre body={rubrique.autres} large base={base} propositions={propositions} />
         </div>
       ) : null}
     </article>
   );
 }
 
-export function SyntheseAudit({ blocks, base }: { blocks: Block[]; base: string }) {
+export function SyntheseAudit({ blocks, base, propositions }: { blocks: Block[]; base: string; propositions?: PropositionDeScenario }) {
   const synthese = lireSynthese(blocks);
-  if (!synthese) return <CorpsLettre body={blocks} large base={base} />;
+  if (!synthese) return <CorpsLettre body={blocks} large base={base} propositions={propositions} />;
 
   return (
     <>
@@ -214,10 +215,10 @@ export function SyntheseAudit({ blocks, base }: { blocks: Block[]; base: string 
       {synthese.severites ? <Gravites severites={synthese.severites} /> : null}
       <div className="mt-6 grid gap-6">
         {synthese.rubriques.map((rubrique) => (
-          <CarteRubrique key={rubrique.titre} rubrique={rubrique} base={base} />
+          <CarteRubrique key={rubrique.titre} rubrique={rubrique} base={base} propositions={propositions} />
         ))}
       </div>
-      {synthese.reste.length > 0 ? <CorpsLettre body={synthese.reste} large base={base} /> : null}
+      {synthese.reste.length > 0 ? <CorpsLettre body={synthese.reste} large base={base} propositions={propositions} /> : null}
     </>
   );
 }

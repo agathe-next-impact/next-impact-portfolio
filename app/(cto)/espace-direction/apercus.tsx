@@ -43,7 +43,7 @@ function CarteApercu({ item, since, base }: { item: Apercu; since: Date | null; 
           </span>
         ) : null}
       </div>
-      <h2 className="mt-3 font-inter-tight text-base leading-snug text-foreground">{item.title}</h2>
+      <h2 className="mt-3 break-words font-inter-tight text-base leading-snug text-foreground">{item.title}</h2>
       {note ? (
         <p className="mt-2 max-w-prose whitespace-pre-line font-inter-tight text-sm leading-relaxed text-mid-gray">
           {note}
@@ -54,14 +54,19 @@ function CarteApercu({ item, since, base }: { item: Apercu; since: Date | null; 
         <Acces identifiant={identifiant} motDePasse={motDePasse} />
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-x-5">
         {url ? (
           <>
             {/* `noreferrer` : l'adresse de l'espace ne part pas vers le serveur de test. */}
-            <a href={url} target="_blank" rel="noreferrer noopener" className={buttonClass.primary}>
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className={`${buttonClass.primary} w-full sm:w-auto sm:shrink-0`}
+            >
               {libelles?.ouvrir ?? "Ouvrir ↗"}
             </a>
-            <span className="break-all font-mono text-[11px] text-mid-gray">{adresse(url)}</span>
+            <span className="min-w-0 break-all font-mono text-[11px] text-mid-gray">{adresse(url)}</span>
           </>
         ) : (
           <span className="font-inter-tight text-sm text-mid-gray">Lien pas encore renseigné.</span>
@@ -125,21 +130,33 @@ export function CarteApercus({ viewer, context }: { viewer: Viewer; context: Esp
         {items.slice(0, APERCUS_ACCUEIL).map((item) => {
           const libelles = item.payload.nature ? NATURES[item.payload.nature] : null;
           return (
-            <div key={item.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-              <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-2">
-                {libelles ? <Tag>{libelles.tag}</Tag> : null}
-                <Nouveaute item={item} since={context.since} />
-                <Link href={section} className="font-inter-tight text-sm underline-offset-4 hover:underline">
+            // Sur mobile : étiquettes, puis intitulé, puis bouton pleine largeur.
+            // En ligne unique, le libellé long du bouton écrasait l'intitulé.
+            <div key={item.id} className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-4 sm:py-3">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  {libelles ? <Tag>{libelles.tag}</Tag> : null}
+                  <Nouveaute item={item} since={context.since} />
+                  {item.occurredAt ? (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
+                      {formatDay(item.occurredAt)}
+                    </span>
+                  ) : null}
+                </div>
+                <Link
+                  href={section}
+                  className="mt-2 block break-words font-inter-tight text-sm underline-offset-4 hover:underline"
+                >
                   {item.title}
                 </Link>
-                {item.occurredAt ? (
-                  <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mid-gray">
-                    {formatDay(item.occurredAt)}
-                  </span>
-                ) : null}
               </div>
               {item.payload.url ? (
-                <a href={item.payload.url} target="_blank" rel="noreferrer noopener" className={buttonClass.ghost}>
+                <a
+                  href={item.payload.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className={`${buttonClass.ghost} w-full sm:w-auto sm:shrink-0`}
+                >
                   {libelles?.ouvrir ?? "Ouvrir ↗"}
                 </a>
               ) : null}

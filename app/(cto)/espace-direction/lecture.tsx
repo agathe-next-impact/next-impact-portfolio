@@ -14,6 +14,8 @@ import { Label } from "./ui";
 export interface EntreeSommaire {
   href: string;
   texte: string;
+  /** Une icône devant l'entrée, décorative. */
+  icone?: ReactNode;
 }
 
 /** Le document et son sommaire. Le sommaire suit la lecture sur grand écran. */
@@ -35,9 +37,10 @@ export function LectureLongue({
         <li key={entree.href}>
           <a
             href={entree.href}
-            className="block font-inter-tight text-sm leading-snug text-mid-gray underline-offset-4 transition-colors hover:text-accent-secondary hover:underline"
+            className="flex items-start gap-2 font-inter-tight text-sm leading-snug text-mid-gray underline-offset-4 transition-colors hover:text-accent-secondary hover:underline"
           >
-            {entree.texte}
+            {entree.icone ? <span className="mt-[0.2em] flex">{entree.icone}</span> : null}
+            <span>{entree.texte}</span>
           </a>
         </li>
       ))}
@@ -86,16 +89,21 @@ export function Chapitre({
 }: {
   id: string;
   titre: string;
-  icone?: string | null;
+  /** Un émoji (propositions) ou une icône (audit). */
+  icone?: ReactNode;
   ouvert?: boolean;
   children: ReactNode;
 }) {
   return (
     <details id={id} open={ouvert} className="group mt-6 scroll-mt-8 border-b border-dark-gray first:mt-0">
       <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
-        <h2 className="font-sans text-xl font-light text-foreground">
-          {icone ? <span aria-hidden>{icone} </span> : null}
-          {titre}
+        <h2 className="flex items-baseline gap-2.5 font-sans text-xl font-light text-foreground">
+          {icone ? (
+            <span aria-hidden className="relative top-[0.1em] flex text-mid-gray">
+              {icone}
+            </span>
+          ) : null}
+          <span>{titre}</span>
         </h2>
         <span aria-hidden className="shrink-0 font-mono text-sm text-mid-gray group-open:text-accent-secondary">
           <span className="group-open:hidden">+</span>

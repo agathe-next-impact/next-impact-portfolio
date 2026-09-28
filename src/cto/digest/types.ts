@@ -71,4 +71,10 @@ export interface DigestContent {
    * n'est parue cette semaine : le digest le dit au lieu de se taire.
    */
   signauxAttendus: boolean;
+  /**
+   * Date ISO de la dernière retouche faite dans l'admin. Un digest retouché
+   * n'est plus réassemblé par le balayage : la relecture ne se perd pas.
+   * Absent ou null : tel qu'assemblé.
+   */
+  modifieLe?: string | null;
 }

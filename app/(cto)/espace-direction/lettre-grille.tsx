@@ -189,9 +189,9 @@ function BarrePression({ axes }: { axes: Axe[] }) {
               href={`#${ancreAxe(axe.numero)}`}
               title={`${axe.numero}. ${axe.nom} — ${label}`}
               aria-label={`Axe ${axe.numero}, ${axe.nom} : ${label}`}
-              className={`flex h-9 min-w-0 flex-1 items-center justify-center font-mono text-[10px] transition-opacity first:rounded-l-[4px] last:rounded-r-[4px] hover:opacity-80 ${FOND[tone]} ${
-                tone === "neutre" ? "text-foreground" : "text-obsidian"
-              }`}
+              // Chiffre blanc sur toutes les gravités ; la légère ombre le
+              // détache des fonds clairs (jaune, vert).
+              className={`cto-lien-plein flex h-9 min-w-0 flex-1 items-center justify-center font-mono text-[10px] text-white transition-opacity [text-shadow:0_1px_1px_rgb(0_0_0/0.45)] first:rounded-l-[4px] last:rounded-r-[4px] hover:opacity-80 ${FOND[tone]}`}
             >
               {axe.numero}
             </a>
@@ -216,15 +216,15 @@ const ancreAction = (section: number, numero: number) => `action-${section}-${nu
 const ancreCarte = (section: number, carte: number) => `carte-${section}-${carte}`;
 const ancreEcheance = (section: number, rang: number) => `echeance-${section}-${rang}`;
 
-/** Une ligne de l'essentiel : un repère, un libellé qui mène à son détail. */
+/** Une ligne de l'essentiel : un repère, puis dessous le libellé qui mène à son détail. */
 function LigneEssentiel({ href, repere, children }: { href: string; repere: ReactNode; children: ReactNode }) {
   return (
     <li>
       <a
         href={href}
-        className="group flex items-start gap-3 py-2.5 transition-colors hover:text-accent-secondary"
+        className="group flex flex-col items-start gap-1.5 py-2.5 transition-colors hover:text-accent-secondary"
       >
-        <span className="shrink-0 pt-0.5">{repere}</span>
+        <span>{repere}</span>
         <span className="font-inter-tight text-sm leading-snug text-foreground group-hover:text-accent-secondary">
           {children}
         </span>
@@ -286,6 +286,9 @@ function Essentiel({
   base: string;
 }) {
   const prio = priorites(structure, maintenant);
+  // Les signaux de « L'essentiel du jour » sont déjà lus juste au-dessus, en
+  // liste sans ancre : les reprendre donnerait des liens morts.
+  const signaux = prio.signaux.filter((s) => s.index !== lu.enBref?.index);
   const axesSection = structure.sections.find((s): s is Extract<Section, { kind: "axes" }> => s.kind === "axes");
 
   const colonnes: ReactNode[] = [];
@@ -303,10 +306,10 @@ function Essentiel({
         ))}
       </ColonneEssentiel>,
     );
-  if (prio.signaux.length > 0)
+  if (signaux.length > 0)
     colonnes.push(
       <ColonneEssentiel key="signaux" titre="Ce qui pèse">
-        {prio.signaux.map((s, i) => (
+        {signaux.map((s, i) => (
           <LigneEssentiel
             key={i}
             href={`#${s.carte === null ? ancreSection(s.index) : ancreCarte(s.index, s.carte)}`}
@@ -370,11 +373,9 @@ function Essentiel({
           </div>
         ) : null}
         {colonnes.length > 0 ? (
-          <div
-            className={`grid divide-y divide-dark-gray md:divide-x md:divide-y-0 ${lu.enBref ? "border-t border-dark-gray" : ""} ${
-              colonnes.length >= 3 ? "md:grid-cols-3" : colonnes.length === 2 ? "md:grid-cols-2" : ""
-            }`}
-          >
+          // Empilées, jamais côte à côte : en colonnes, les libellés longs se
+          // coupaient à chaque mot.
+          <div className={`divide-y divide-dark-gray ${lu.enBref ? "border-t border-dark-gray" : ""}`}>
             {colonnes}
           </div>
         ) : null}
@@ -458,7 +459,7 @@ function GrilleAxes({ axes }: { axes: Axe[] }) {
         const { label, tone } = PRESSION[axe.pression];
         return (
           <Carreau key={axe.numero} id={ancreAxe(axe.numero)}>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col items-start gap-2">
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
                 Axe {String(axe.numero).padStart(2, "0")}
               </p>
@@ -503,7 +504,7 @@ function CarteAction({ action, axes, id }: { action: Action; axes: Map<number, s
 
   return (
     <Carreau id={id} className={tone === "alerte" ? "border-t-2 border-t-[#ff8a7a]/70" : ""}>
-      <div className="flex flex-wrap items-start justify-between gap-2">
+      <div className="flex flex-col items-start gap-2">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
           {action.aFaire || action.periode ? `Action ${action.numero}` : `Point ${action.numero}`}
           {action.periode ? ` · ${action.periode}` : ""}
@@ -603,11 +604,11 @@ function GrilleChantiers({ chantiers }: { chantiers: Chantier[] }) {
     <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {chantiers.map((chantier, index) => (
         <Carreau key={index}>
-          <div className="flex items-start justify-between gap-3">
-            <h4 className="font-sans text-base font-normal leading-snug text-foreground">{chantier.titre}</h4>
+          <div className="flex flex-col items-start gap-2">
             {chantier.statut ? (
               <Pastille tone={chantier.statut === "Livré" ? "fait" : "neutre"}>{chantier.statut}</Pastille>
             ) : null}
+            <h4 className="font-sans text-base font-normal leading-snug text-foreground">{chantier.titre}</h4>
           </div>
           {chantier.pourcentage !== null ? (
             <div className="mt-4">
@@ -775,7 +776,7 @@ function Frise({
               href={`#${ancreEcheance(section, index + 1)}`}
               title={`${e.libelle}${passee ? " (passée)" : ""}`}
               aria-label={`Échéance ${index + 1} : ${e.libelle}${passee ? ", passée" : ""}`}
-              className={`absolute flex h-5 w-5 -translate-x-1/2 items-center justify-center font-mono text-[10px] transition-opacity hover:opacity-80 ${
+              className={`cto-lien-plein absolute flex h-5 w-5 -translate-x-1/2 items-center justify-center font-mono text-[10px] transition-opacity hover:opacity-80 ${
                 passee
                   ? "border border-dark-gray bg-obsidian text-mid-gray"
                   : "bg-accent-secondary text-obsidian"
@@ -813,7 +814,7 @@ function Echeancier({
           return (
             <li key={index} id={ancreEcheance(section, index + 1)} className="scroll-mt-8">
               <Carreau className={`h-full ${passee ? "opacity-70" : ""}`}>
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col items-start gap-2">
                   <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
                     <span
                       aria-hidden

@@ -40,7 +40,7 @@ export default async function CtoRootLayout({
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`scroll-smooth ${figtree.variable} ${interTight.variable} ${geistMono.variable}`}
+      className={`cto-defilement scroll-smooth ${figtree.variable} ${interTight.variable} ${geistMono.variable}`}
     >
       <body>
         {children}

@@ -8,8 +8,9 @@ import { formatDay, Legende, Panel, Suite, Tag, type Tone } from "./ui";
 // Deux lectures du même axe, côte à côte sur grand écran : la GRILLE du mois
 // montre la densité (« le 14 est chargé »), la LISTE des quatre-vingt-dix jours
 // dit quoi. La grille seule oblige à survoler chaque case ; la liste seule
-// perd la sensation du mois. Sur mobile, la liste passe devant : c'est elle
-// qui répond à la question.
+// perd la sensation du mois. En dessous de `lg`, elles s'empilent et la grille
+// prend toute la largeur ; la liste passe devant : c'est elle qui répond à la
+// question.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const KIND_LABEL: Record<EventKind, string> = {
@@ -53,7 +54,10 @@ export function Calendrier({ events, now = new Date() }: { events: CalendarEvent
       <div className="mt-1 grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
         <Panel className="order-2 p-4 lg:order-1">
           <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-foreground">{titreMois}</p>
-          <table className="mt-3 w-full table-fixed border-collapse text-center">
+          {/* `table` : sous 640 px, globals.css passe les tableaux en `display: block`
+              (défilement des tableaux larges) ; la grille du mois, elle, doit rester
+              un vrai tableau pour que `table-fixed` répartisse les sept colonnes. */}
+          <table className="mt-3 table w-full table-fixed border-collapse text-center">
             <thead>
               <tr>
                 {WEEKDAYS.map((day, index) => (
@@ -80,7 +84,7 @@ export function Calendrier({ events, now = new Date() }: { events: CalendarEvent
                         <div
                           title={libelle}
                           aria-label={libelle}
-                          className={`flex h-9 flex-col items-center justify-start pt-1 ${
+                          className={`flex h-9 flex-col items-center justify-start pt-1 sm:h-14 lg:h-9 ${
                             day.isToday ? "border border-accent-secondary" : ""
                           }`}
                         >

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Block, LetterSummary, Span } from "@cto/letters";
-import { Encadre, PaireEncadres, PuceAudit, registreBox, TableauAudit } from "./audit-formes";
+import { estRubriqueEnListe, phrasesEnListe } from "@cto/espace";
+import { Encadre, PaireEncadres, PuceAudit, registreBox, TableauAudit, type PropositionDeScenario } from "./audit-formes";
 import { Label, Panel, Tag } from "./ui";
 import { fichierPath } from "./livrables";
 import { ESPACE_PATH } from "./session";
@@ -73,7 +74,14 @@ export function Texte({ spans }: { spans: Span[] }) {
         if (span.c) contenu = <code className="bg-jet/60 px-1 py-0.5 text-[0.9em]">{contenu}</code>;
         if (span.b) contenu = <strong className="font-medium text-foreground">{contenu}</strong>;
         if (span.i) contenu = <em>{contenu}</em>;
-        if (span.h) {
+        if (span.h?.startsWith("/")) {
+          // Un lien vers une page de l'espace s'ouvre sur place, pas dans un onglet.
+          contenu = (
+            <Link href={span.h} className="underline underline-offset-4 transition-colors hover:text-accent-secondary">
+              {contenu}
+            </Link>
+          );
+        } else if (span.h) {
           contenu = (
             <a
               href={span.h}
@@ -116,12 +124,15 @@ export function CorpsLettre({
   large = false,
   base = ESPACE_PATH,
   ancres = false,
+  propositions,
 }: {
   body: Block[];
   large?: boolean;
   base?: string;
   /** Donne une ancre à chaque grand titre, pour un sommaire (cf. `grandsTitres`). */
   ancres?: boolean;
+  /** Dans un audit : lie chaque scénario à sa proposition publiée. */
+  propositions?: PropositionDeScenario;
 }) {
   const rendus: React.ReactNode[] = [];
   let liste: { ordonnee: boolean; items: Span[][] } | null = null;
@@ -148,6 +159,8 @@ export function CorpsLettre({
 
   // Un encadré « situation » suivi d'un encadré « solutions » : rendus en paire.
   const apparie = new Set<number>();
+  // Dans un audit, sous un grand titre d'inventaire (« Architecture et fichiers »).
+  let rubriqueEnListe = false;
 
   body.forEach((bloc, index) => {
     if (apparie.has(index)) return;
@@ -162,6 +175,8 @@ export function CorpsLettre({
     }
 
     viderListe(index);
+
+    if (bloc.k === "h1") rubriqueEnListe = large && estRubriqueEnListe(bloc.s);
 
     switch (bloc.k) {
       case "h1":
@@ -220,14 +235,14 @@ export function CorpsLettre({
         const suivant = body[index + 1];
         if (large && registreBox(bloc) === "situation" && suivant?.k === "box" && registreBox(suivant) === "solution") {
           apparie.add(index + 1);
-          rendus.push(<PaireEncadres key={index} situation={bloc} solution={suivant} large={large} base={base} />);
+          rendus.push(<PaireEncadres key={index} situation={bloc} solution={suivant} large={large} base={base} propositions={propositions} />);
         } else {
-          rendus.push(<Encadre key={index} bloc={bloc} large={large} base={base} />);
+          rendus.push(<Encadre key={index} bloc={bloc} large={large} base={base} propositions={propositions} />);
         }
         break;
       }
       case "table":
-        rendus.push(<TableauAudit key={index} bloc={bloc} />);
+        rendus.push(<TableauAudit key={index} bloc={bloc} propositions={propositions} />);
         break;
       case "img":
         rendus.push(
@@ -247,15 +262,33 @@ export function CorpsLettre({
           </figure>,
         );
         break;
-      default:
+      default: {
+        // Sur mobile, un paragraphe d'inventaire se lit en liste, un constat
+        // par ligne ; à partir de `sm`, il reste le paragraphe écrit.
+        const phrases = rubriqueEnListe ? phrasesEnListe(bloc) : null;
         rendus.push(
           <p
             key={index}
-            className="mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground/90"
+            className={`mt-4 font-inter-tight text-[15px] leading-relaxed text-foreground/90 ${phrases ? "hidden sm:block" : ""}`}
           >
             <Texte spans={bloc.s} />
           </p>,
         );
+        if (phrases) {
+          rendus.push(
+            <ul
+              key={`${index}-liste`}
+              className="mt-4 list-disc space-y-2 pl-5 font-inter-tight text-[15px] leading-relaxed text-foreground/90 sm:hidden"
+            >
+              {phrases.map((phrase, i) => (
+                <li key={i} className="pl-1">
+                  {phrase}
+                </li>
+              ))}
+            </ul>,
+          );
+        }
+      }
     }
   });
 
@@ -276,11 +309,13 @@ export function CarteLettre({
 }) {
   return (
     <article className={principale ? "px-5 py-6" : "px-5 py-5"}>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      {/* Empilé : la nature de la lettre, puis sa date, puis le titre. Côte à côte,
+          l'étiquette longue écrasait la date sur les cartes étroites. */}
+      <div className="flex flex-col items-start gap-2">
+        <Tag>{libelleLettre(lettre)}</Tag>
         <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-mid-gray">
           {lettre.source === "atelier" ? formatPeriode(lettre.period) : formatJour(lettre.period)}
         </p>
-        <Tag>{libelleLettre(lettre)}</Tag>
       </div>
 
       <h3

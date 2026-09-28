@@ -1353,12 +1353,13 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
 /* ── Espace client : les liens en bleu ─────────────────────────────────────
    Dans le contenu de l'espace direction (`main.cto-liens`, shell.tsx), tout
    lien est bleu (accent-2), soulignement au survol. Restent hors de la règle :
-   les boutons (`cto-bouton`, ui.tsx) et les liens encadrés, qui sont des
-   étiquettes ou des repères de frise. La barre latérale n'est pas concernée. */
-.cto-liens a:not(.cto-bouton):not([class*="border"]) {
+   les boutons (`cto-bouton`, ui.tsx), les liens encadrés, qui sont des
+   étiquettes ou des repères de frise, et les liens pleins (`cto-lien-plein`,
+   cases colorées dont le texte a sa propre couleur). La barre latérale n'est pas concernée. */
+.cto-liens a:not(.cto-bouton):not(.cto-lien-plein):not([class*="border"]) {
   color: hsl(var(--accent-2));
 }
-.cto-liens a:not(.cto-bouton):not([class*="border"]):hover {
+.cto-liens a:not(.cto-bouton):not(.cto-lien-plein):not([class*="border"]):hover {
   text-decoration-line: underline;
 }
 
@@ -1411,4 +1412,31 @@ a[class^="bg-orange"] *,     a[class*=" bg-orange"] * {
   color: #ffffff;
   text-decoration-line: underline;
   text-underline-offset: 4px;
+}
+
+/* Espace client et supervision (`app/(cto)/layout.tsx`) : barres de défilement
+   bleu électrique, à angles vifs, comme le reste de l'interface. Chrome, Edge
+   et Safari lisent les pseudo-éléments WebKit (seuls à garantir l'angle vif) ;
+   Firefox, `scrollbar-color`, réservé à lui : Chrome 121+ ignorerait les
+   pseudo-éléments dès que `scrollbar-color` est posé. */
+@supports (-moz-appearance: none) {
+  .cto-defilement,
+  .cto-defilement * {
+    scrollbar-color: hsl(var(--accent-2)) transparent;
+    scrollbar-width: thin;
+  }
+}
+.cto-defilement ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.cto-defilement ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cto-defilement ::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent-2));
+  border-radius: 0;
+}
+.cto-defilement ::-webkit-scrollbar-corner {
+  background: transparent;
 }

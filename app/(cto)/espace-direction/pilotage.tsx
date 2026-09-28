@@ -5,6 +5,7 @@ import { STATUT_PROPOSITION } from "@cto/espace";
 import type { Action, Frise as FriseData, FriseMark, FriseTone, Mission, SectionKey, Verdict } from "@cto/espace";
 import { auditPath, categoriePath, CATEGORIES, propositionPath, propositionTone, type CategorieKind } from "./livrables";
 import { contactHref, sectionOuverte, type EspaceContext } from "./shell";
+import { DefilementCentre } from "./defilement-centre";
 import { Dot, formatAmount, formatDay, Label, Legende, Tag, type Tone } from "./ui";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -100,13 +101,32 @@ export function LigneCarte({
   tag,
   meta,
   avancement,
+  empile = false,
 }: {
   titre: string;
   href?: string | null;
   tag?: ReactNode;
   meta?: string | null;
   avancement?: number | null;
+  /** L'étiquette au-dessus de l'intitulé plutôt qu'à sa droite (étiquettes longues). */
+  empile?: boolean;
 }) {
+  if (empile) {
+    return (
+      <li className="flex flex-col items-start gap-1.5 px-4 py-3">
+        {tag}
+        {href ? (
+          <Link href={href} className={`min-w-0 ${LIEN}`}>
+            {titre}
+          </Link>
+        ) : (
+          <span className="min-w-0 font-inter-tight text-sm text-foreground">{titre}</span>
+        )}
+        {meta ? <p className="font-inter-tight text-xs text-mid-gray">{meta}</p> : null}
+      </li>
+    );
+  }
+
   return (
     <li className="px-4 py-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -369,18 +389,23 @@ export function Frise({
   context,
   base,
   titre = "Passé, présent, à venir",
+  idTitre = "frise-titre",
+  className = "",
 }: {
   frise: FriseData;
   context: EspaceContext;
   base: string;
   titre?: string;
+  /** Unique dans la page : la frise mobile et celle de grand écran coexistent. */
+  idTitre?: string;
+  className?: string;
 }) {
   const marques = frise.lanes.flatMap((lane) => lane.rows.flat().map((mark) => ({ lane: lane.label, mark })));
 
   return (
-    <section aria-labelledby="frise-titre" className="mt-10">
+    <section aria-labelledby={idTitre} className={`mt-10 ${className}`}>
       <Legende
-        id="frise-titre"
+        id={idTitre}
         aside={`${formatMois(frise.start)} → ${formatMois(new Date(frise.end.getTime() - 86_400_000))}`}
       >
         {titre}
@@ -388,12 +413,12 @@ export function Frise({
 
       {frise.count === 0 ? (
         <p className="mt-1 border border-dark-gray bg-jet/40 px-5 py-4 font-inter-tight text-sm text-mid-gray">
-          Rien de daté sur ces sept mois. Les décisions, missions et échéances de contrats s&rsquo;y
+          Rien de daté sur cette période. Les décisions, missions et échéances de contrats s&rsquo;y
           placeront dès leur publication.
         </p>
       ) : (
         <>
-          <div className="mt-1 overflow-x-auto border border-dark-gray bg-jet/40" aria-hidden>
+          <DefilementCentre className="mt-1 border border-dark-gray bg-jet/40" aria-hidden>
             <div className="min-w-[640px] px-4 pb-4 pt-3">
               <div className="relative ml-[92px] h-5">
                 {frise.months.map((mois) => (
@@ -414,7 +439,11 @@ export function Frise({
                       {frise.months.map((mois) => (
                         <span key={mois.at} className="absolute inset-y-0 w-px bg-dark-gray/50" style={{ left: `${mois.at}%` }} />
                       ))}
-                      <span className="absolute -bottom-px -top-px w-0.5 bg-accent-secondary" style={{ left: `${frise.today}%` }} />
+                      <span
+                        data-centre={laneIndex === 0 && rowIndex === 0 ? "" : undefined}
+                        className="absolute -bottom-px -top-px w-0.5 bg-accent-secondary"
+                        style={{ left: `${frise.today}%` }}
+                      />
                       {laneIndex === 0 && rowIndex === 0 ? (
                         <span
                           className="absolute top-0.5 ml-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-accent-secondary"
@@ -444,7 +473,7 @@ export function Frise({
                 ))}
               </ul>
             </div>
-          </div>
+          </DefilementCentre>
 
           {/* La frise est un dessin : son contenu, pour qui ne la voit pas. */}
           <ul className="sr-only">

@@ -1,3 +1,4 @@
+import type { Block, Span } from "../notion/blocks";
 import { lireGravite, type Gravite } from "./synthese";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -360,4 +361,141 @@ export function etatVersion(actuelle: string, derniere: string): EtatVersion {
   if (/a jour|alignee|sans canal/.test(d) || (va && vd && va === vd)) return "a-jour";
   if (va && vd) return "en-retard";
   return "inconnu";
+}
+
+// ── Efforts : la base ROADMAP fait foi ───────────────────────────────────────
+
+/** Le code d'une action en tête de son intitulé : « SEC-02 : Suppression… ». */
+const CODE_ACTION = /^([A-Z]{2,6}-\d{2,3})\b/;
+
+/**
+ * Les efforts de la base inline ROADMAP d'un audit, par code d'action :
+ * « SEC-02 » → « 1 à 3 h ». Vide si l'audit n'a pas de ROADMAP chiffrée.
+ */
+export function effortsRoadmap(blocs: Block[]): Map<string, string> {
+  const efforts = new Map<string, string>();
+  const lire = (liste: Block[]) => {
+    for (const bloc of liste) {
+      if (bloc.k === "box") lire(bloc.c);
+      if (bloc.k !== "table" || !bloc.head || sansAccents(bloc.title ?? "") !== "roadmap") continue;
+      const entetes = bloc.head.map((cellule) => sansAccents(texteCellule(cellule)));
+      const colMin = entetes.findIndex((e) => /^effort min/.test(e));
+      const colMax = entetes.findIndex((e) => /^effort max/.test(e));
+      if (colMin < 0 && colMax < 0) continue;
+      for (const ligne of bloc.rows) {
+        const code = texteCellule(ligne[0]).match(CODE_ACTION)?.[1];
+        if (!code) continue;
+        const min = colMin >= 0 ? texteCellule(ligne[colMin]) : "";
+        const max = colMax >= 0 ? texteCellule(ligne[colMax]) : "";
+        const effort = min && max && min !== max ? `${min} à ${max} h` : min || max ? `${min || max} h` : null;
+        if (effort) efforts.set(code, effort);
+      }
+    }
+  };
+  lire(blocs);
+  return efforts;
+}
+
+/** « (SEC-02, 1 à 3 h) », « (PERF-01 : 3 h) » : un code suivi de son effort, entre parenthèses. */
+const MENTION_EFFORT = /\(([A-Z]{2,6}-\d{2,3})(\s*[,:–-]\s*)\d+(?:[.,]\d+)?(?:\s*(?:à|-|–)\s*\d+(?:[.,]\d+)?)?\s*h\)/g;
+
+/**
+ * Réécrit, dans tout le texte de l'audit, chaque effort cité à côté d'un code
+ * d'action avec celui de la base ROADMAP. Le texte de l'audit recopie ces
+ * heures à la main ; la base, elle, est tenue à jour. Un code absent de la base
+ * garde le texte tel qu'il est écrit. Pur : rien n'est réécrit dans Notion.
+ */
+export function alignerEfforts<T extends { synthese: Block[]; sections: { corps: Block[] }[] }>(audit: T): T {
+  const efforts = effortsRoadmap([...audit.synthese, ...audit.sections.flatMap((section) => section.corps)]);
+  if (efforts.size === 0) return audit;
+
+  return transformerSpans(audit, (s) => {
+    const t = s.t.replace(MENTION_EFFORT, (mention, code: string, sep: string) =>
+      efforts.has(code) ? `(${code}${sep}${efforts.get(code)})` : mention,
+    );
+    return [t === s.t ? s : { ...s, t }];
+  });
+}
+
+/** « proposition », « propositions », en mot entier, sans casse. */
+const MENTION_PROPOSITION = /\bpropositions?\b/gi;
+
+/**
+ * Fait de chaque mention d'une proposition dans le texte de l'audit un lien
+ * vers les propositions de l'espace (`href`), où le client y répond. Un texte
+ * déjà lié (un lien écrit dans Notion) reste tel quel. Pur.
+ */
+export function lierPropositions<T extends { synthese: Block[]; sections: { corps: Block[] }[] }>(audit: T, href: string): T {
+  return transformerSpans(audit, (s) => {
+    if (s.h || s.c || !MENTION_PROPOSITION.test(s.t)) return [s];
+    MENTION_PROPOSITION.lastIndex = 0;
+    const out: Span[] = [];
+    let debut = 0;
+    for (const m of s.t.matchAll(MENTION_PROPOSITION)) {
+      if (m.index > debut) out.push({ ...s, t: s.t.slice(debut, m.index) });
+      out.push({ ...s, t: m[0], h: href });
+      debut = m.index + m[0].length;
+    }
+    if (debut < s.t.length) out.push({ ...s, t: s.t.slice(debut) });
+    return out;
+  });
+}
+
+/**
+ * Applique `fn` à chaque morceau de texte de l'audit : paragraphes, encadrés,
+ * cellules de tableau (pas les en-têtes, qui nomment des colonnes).
+ */
+function transformerSpans<T extends { synthese: Block[]; sections: { corps: Block[] }[] }>(
+  audit: T,
+  fn: (span: Span) => Span[],
+): T {
+  const spans = (liste: Span[]) => liste.flatMap(fn);
+  const bloc = (b: Block): Block => {
+    switch (b.k) {
+      case "box":
+        return { ...b, s: spans(b.s), c: b.c.map(bloc) };
+      case "table":
+        return { ...b, rows: b.rows.map((ligne) => ligne.map(spans)) };
+      case "hr":
+      case "code":
+      case "img":
+        return b;
+      default:
+        return { ...b, s: spans(b.s) };
+    }
+  };
+  return {
+    ...audit,
+    synthese: audit.synthese.map(bloc),
+    sections: audit.sections.map((section) => ({ ...section, corps: section.corps.map(bloc) })),
+  };
+}
+
+function texteCellule(cellule: Span[] | undefined): string {
+  return (cellule ?? []).map((s) => s.t).join("").trim();
+}
+
+// ── Rubriques d'inventaire : le détail en liste (mobile) ─────────────────────
+
+/** Rubriques (grands titres) dont les paragraphes énumèrent des constats. */
+const RUBRIQUES_EN_LISTE = ["architecture et fichiers"];
+
+/** Une fin de phrase suivie d'une majuscule ou d'un chiffre : « …(74 fonctions). Le thème… ». */
+const FIN_DE_PHRASE = /(?<=[.!?])\s+(?=[A-ZÀ-Ý0-9])/;
+
+/** Le grand titre ouvre-t-il une rubrique d'inventaire (« Architecture et fichiers ») ? */
+export function estRubriqueEnListe(titre: Span[]): boolean {
+  return RUBRIQUES_EN_LISTE.includes(sansAccents(texteCellule(titre)));
+}
+
+/**
+ * Les constats d'un paragraphe d'inventaire, un par phrase — pour le lire en
+ * liste sur un écran étroit, où un bloc de six phrases ne se parcourt pas.
+ * Null s'il n'y a qu'une phrase, ou si le paragraphe porte un lien ou une mise
+ * en forme, qui se perdraient à la coupe.
+ */
+export function phrasesEnListe(bloc: Block): string[] | null {
+  if (bloc.k !== "p" || !bloc.s.every((span) => !span.h && !span.b && !span.i && !span.c)) return null;
+  const phrases = texteCellule(bloc.s).split(FIN_DE_PHRASE).filter(Boolean);
+  return phrases.length >= 2 ? phrases : null;
 }

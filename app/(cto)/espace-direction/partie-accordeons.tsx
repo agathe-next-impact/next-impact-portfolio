@@ -1,5 +1,6 @@
 import type { Block, Span } from "@cto/letters";
 import { EtatVersionFiche } from "./audit-formes";
+import type { PropositionDeScenario } from "./audit-formes";
 import { CorpsLettre, Texte } from "./lettre";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -71,7 +72,7 @@ function decouper(corps: Block[]): Section[] {
   return sections;
 }
 
-export function PartieAccordeons({ corps, base }: { corps: Block[]; base: string }) {
+export function PartieAccordeons({ corps, base, propositions }: { corps: Block[]; base: string; propositions?: PropositionDeScenario }) {
   return (
     <>
       {decouper(corps).map((section, index) => (
@@ -81,7 +82,7 @@ export function PartieAccordeons({ corps, base }: { corps: Block[]; base: string
               <Texte spans={section.titre} />
             </h3>
           ) : null}
-          {section.intro.length > 0 ? <CorpsLettre body={section.intro} large base={base} /> : null}
+          {section.intro.length > 0 ? <CorpsLettre body={section.intro} large base={base} propositions={propositions} /> : null}
           {section.cases.length > 0 ? (
             <div className="mt-5 grid items-start gap-3 lg:grid-cols-2">
               {section.cases.map((c, i) =>
@@ -107,7 +108,7 @@ export function PartieAccordeons({ corps, base }: { corps: Block[]; base: string
                       </span>
                     </summary>
                     <div className="border-t border-dark-gray px-5 pb-5 [&>div>*:first-child]:mt-4">
-                      <CorpsLettre body={c.corps} large base={base} />
+                      <CorpsLettre body={c.corps} large base={base} propositions={propositions} />
                     </div>
                   </details>
                 ),

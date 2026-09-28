@@ -255,12 +255,19 @@ describe("propositions", () => {
 });
 
 describe("frise", () => {
-  it("place aujourd'hui au milieu d'une fenêtre de sept mois", () => {
+  it("cale la fenêtre de grand écran sur sept mois pleins", () => {
     const frise = buildFrise([], [], now);
     expect(frise.months).toHaveLength(7);
     expect(frise.months[0].label).toBe("juin");
     expect(frise.today).toBeGreaterThan(50);
     expect(frise.today).toBeLessThan(60);
+  });
+
+  it("centre la fenêtre mobile de six mois sur aujourd'hui", () => {
+    const frise = buildFrise([], [], now, { fenetre: "centree" });
+    expect(frise.today).toBeCloseTo(50, 5);
+    // 26 juin → 26 décembre : un repère au 1er de juillet à décembre.
+    expect(frise.months.map((mois) => mois.label)).toEqual(["juil.", "août", "sept.", "oct.", "nov.", "déc."]);
   });
 
   it("met le passé en jalons, les prestations en barres, les contrats en échéances", () => {

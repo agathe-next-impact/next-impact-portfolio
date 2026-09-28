@@ -10,6 +10,7 @@ import type {
   RoadmapPayload,
   VeillePayload,
 } from "../deliverables";
+import { alignerEfforts } from "../espace/lecture-audit";
 import type { RestitutionData } from "./collect";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -391,7 +392,8 @@ export function renderRestitutionPdf(data: RestitutionData): Uint8Array {
     w.paragraph("Aucun audit publié.", { muted: true, size: 9 });
   }
   for (const audit of audits) {
-    const p = audit.payload as AuditPayload;
+    // Les heures citées dans le texte suivent la base ROADMAP, comme à l'écran.
+    const p = alignerEfforts(audit.payload as AuditPayload);
     w.subheading(audit.title, 12);
     w.paragraph(
       [

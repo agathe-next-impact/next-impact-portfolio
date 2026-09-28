@@ -1,26 +1,32 @@
 /**
- * Digest hebdomadaire de la veille — assemblage et envoi, en ligne de commande.
+ * Digest hebdomadaire de la veille — assemblage, en ligne de commande.
  *
  *   npm run cto:digest                          # assemble les brouillons de la dernière semaine complète
  *   npm run cto:digest -- --semaine 2026-W39    # … d'une semaine donnée
  *   npm run cto:digest -- --a-blanc             # dit ce qui serait assemblé, n'écrit rien
- *   npm run cto:digest -- --envoyer             # valide ET envoie les brouillons de la semaine
  *
- * Le balayage quotidien (`/api/cto/cron`) assemble déjà les brouillons ; la
- * relecture et l'envoi se font normalement depuis `/admin-cto/digests`. Cette
- * commande sert de voie de secours, et à tester un assemblage sur une semaine
- * passée. Lancer `npm run cto:sync` avant si les éditions viennent de paraître.
+ * Le balayage quotidien (`/api/cto/cron`) assemble déjà les brouillons. La
+ * retouche, la validation et l'envoi se font UNIQUEMENT depuis
+ * `/admin-cto/pilotage/digests`, un digest à la fois : aucun envoi en lot, ni
+ * d'ici ni d'ailleurs. Cette commande sert à tester un assemblage sur une
+ * semaine passée. Lancer `npm run cto:sync` avant si les éditions viennent de
+ * paraître.
  */
 
 import "./load-env";
 
-import { assembleWeek, parseWeek, previousWeek, validateAndSend } from "../src/cto/digest";
+import { assembleWeek, parseWeek, previousWeek } from "../src/cto/digest";
 import { syncSentinelle } from "../src/cto/sentinelle";
 
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--a-blanc");
-  const envoyer = args.includes("--envoyer");
+  if (args.includes("--envoyer")) {
+    throw new Error(
+      "L'envoi en ligne de commande est retiré : chaque digest se relit, se valide et s'envoie " +
+        "un par un depuis /admin-cto/pilotage/digests.",
+    );
+  }
   const index = args.indexOf("--semaine");
   const week = index >= 0 ? args[index + 1] : previousWeek(new Date());
   if (!parseWeek(week)) throw new Error(`Semaine invalide : ${week} (attendu : 2026-W39).`);
@@ -39,13 +45,6 @@ async function main() {
     `\n${week}${dryRun ? " (à blanc)" : ""} : ${report.created} créé(s), ${report.refreshed} réassemblé(s), ` +
       `${report.frozen} déjà validé(s), ${report.empty} sans contenu, sur ${report.clients} accompagnement(s) actif(s).`,
   );
-
-  if (envoyer && !dryRun) {
-    const base = process.env.CTO_ORIGIN?.split(",")[0]?.trim() || "https://next-impact.digital";
-    const sent = await validateAndSend(week, { url: `${base}/espace-direction/veille?semaine=${week}` });
-    console.log(`\nEnvoi : ${sent.validated} validé(s), ${sent.sent} envoyé(s).`);
-    for (const warning of sent.warnings) console.log(`  · ${warning}`);
-  }
 }
 
 main()

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  lierPropositions,
+  estRubriqueEnListe,
+  phrasesEnListe,
+  alignerEfforts,
+  effortsRoadmap,
   estColonneScore,
   estColonneSolution,
   estTableauScenarios,
@@ -214,5 +219,80 @@ describe("plan d'action chiffré", () => {
     expect(lirePlanAction(["Nom", "Heures"], [["a", "1"]])).toBeNull();
     expect(lirePlanAction(["Nom", "Proposition"], [["a", "P1"], ["b", "P2"]])).toBeNull();
     expect(lirePlanAction(entetes, lignes.map((l) => [...l.slice(0, 4), "Proposition 1"]))).toBeNull();
+  });
+});
+
+describe("efforts de la ROADMAP", () => {
+  const c = (t: string) => (t ? [{ t }] : []);
+  const roadmap = {
+    k: "table" as const,
+    title: "ROADMAP",
+    head: ["Action", "Effort min (h)", "Effort max (h)"].map(c),
+    rows: [
+      ["SEC-02 : Suppression des extensions", "1", "4"].map(c),
+      ["CODE-01 : Extraction du code métier", "16", "16"].map(c),
+    ],
+  };
+  const audit = (texte: string) => ({
+    synthese: [{ k: "p" as const, s: [{ t: texte }] }],
+    sections: [{ corps: [roadmap] }],
+  });
+
+  it("lit les efforts par code d'action", () => {
+    expect(Object.fromEntries(effortsRoadmap([roadmap]))).toEqual({ "SEC-02": "1 à 4 h", "CODE-01": "16 h" });
+  });
+
+  it("réécrit l'effort cité dans le texte avec celui de la base", () => {
+    const aligne = alignerEfforts(audit("Extensions retirées (SEC-02, 1 à 3 h). Code extrait (CODE-01, 16 à 32 h)."));
+    expect(aligne.synthese[0]).toEqual({ k: "p", s: [{ t: "Extensions retirées (SEC-02, 1 à 4 h). Code extrait (CODE-01, 16 h)." }] });
+  });
+
+  it("laisse un code absent de la base tel qu'il est écrit", () => {
+    const texte = "Mesure (MES-01, 2 à 4 h).";
+    expect(alignerEfforts(audit(texte)).synthese[0]).toEqual({ k: "p", s: [{ t: texte }] });
+  });
+});
+
+describe("rubriques en liste", () => {
+  const p = (t: string) => ({ k: "p" as const, s: [{ t }] });
+
+  it("reconnaît la rubrique « Architecture et fichiers », sans casse ni accents", () => {
+    expect(estRubriqueEnListe([{ t: "Architecture et fichiers" }])).toBe(true);
+    expect(estRubriqueEnListe([{ t: "Bonnes pratiques" }])).toBe(false);
+  });
+
+  it("découpe un paragraphe en une phrase par point", () => {
+    expect(phrasesEnListe(p("Redux 3.5.4 est embarqué. 97 contenus en dépendent (data/30.json)."))).toEqual([
+      "Redux 3.5.4 est embarqué.",
+      "97 contenus en dépendent (data/30.json).",
+    ]);
+  });
+
+  it("ne découpe ni une phrase seule, ni un paragraphe mis en forme", () => {
+    expect(phrasesEnListe(p("Une seule phrase."))).toBeNull();
+    expect(phrasesEnListe({ k: "p", s: [{ t: "Deux. " }, { t: "Phrases.", b: true }] })).toBeNull();
+  });
+});
+
+describe("mentions de proposition", () => {
+  const audit = (s: { t: string; h?: string }[]) => ({ synthese: [{ k: "p" as const, s }], sections: [] });
+
+  it("fait de chaque mention un lien vers les propositions", () => {
+    const lie = lierPropositions(audit([{ t: "Voir la proposition 1 et les Propositions suivantes." }]), "/espace/propositions");
+    expect(lie.synthese[0]).toEqual({
+      k: "p",
+      s: [
+        { t: "Voir la " },
+        { t: "proposition", h: "/espace/propositions" },
+        { t: " 1 et les " },
+        { t: "Propositions", h: "/espace/propositions" },
+        { t: " suivantes." },
+      ],
+    });
+  });
+
+  it("laisse un texte déjà lié tel quel", () => {
+    const s = [{ t: "proposition", h: "https://exemple.fr" }];
+    expect(lierPropositions(audit(s), "/espace/propositions").synthese[0]).toEqual({ k: "p", s });
   });
 });

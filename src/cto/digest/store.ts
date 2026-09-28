@@ -5,6 +5,7 @@ import { activePersons } from "../access";
 import type { Block } from "../notion/blocks";
 import { sentinelleLetterKey, sentinelleStateFor } from "../sentinelle";
 import { assembleDigest, type EditionInput } from "./assemble";
+import { appliquerRetouches, type DigestEdits } from "./edit";
 import { sendDigestEmail } from "./email";
 import { DIGEST_VERSION, type DigestContent } from "./types";
 import { weekRange } from "./week";
@@ -15,9 +16,11 @@ import { weekRange } from "./week";
 // Trois gestes séparés, comme pour les alertes Sentinelle :
 //  - l'ASSEMBLAGE tourne avec le balayage quotidien et réécrit les brouillons
 //    de la semaine écoulée (une édition parue en retard les rejoint) ;
-//  - la VALIDATION est un geste humain, depuis l'admin ;
-//  - l'ENVOI suit la validation, et l'index (client, semaine) garantit qu'un
-//    rejeu n'envoie rien deux fois.
+//  - la VALIDATION est un geste humain, depuis l'admin, un digest à la fois,
+//    après retouche éventuelle (`edit.ts`) — un digest retouché n'est plus
+//    réassemblé ;
+//  - l'ENVOI est un second geste, un digest à la fois, et seulement validé.
+//    Rien ne part en lot, rien ne part tout seul.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ARCHIVE_MONTHS = 6;
@@ -104,11 +107,12 @@ export async function assembleWeek(
     report.clients += 1;
 
     const [existing] = await db()
-      .select({ id: ctoDigests.id, status: ctoDigests.status })
+      .select({ id: ctoDigests.id, status: ctoDigests.status, content: ctoDigests.content })
       .from(ctoDigests)
       .where(and(eq(ctoDigests.clientId, client.id), eq(ctoDigests.week, week)))
       .limit(1);
-    if (existing && existing.status !== "draft") {
+    // Validé, envoyé, ou retouché à la main : on n'y touche plus.
+    if (existing && (existing.status !== "draft" || asContent(existing.content)?.modifieLe)) {
       report.frozen += 1;
       continue;
     }
@@ -195,72 +199,92 @@ export async function digestsOfWeek(week: string): Promise<AdminDigest[]> {
 }
 
 export interface SendReport {
-  validated: number;
-  sent: number;
+  sent: boolean;
   warnings: string[];
 }
 
-/**
- * Valide et envoie les brouillons désignés (tous ceux de la semaine si `ids`
- * est absent). Un brouillon sans personne active est validé mais pas envoyé :
- * il partira au prochain appel, quand quelqu'un aura rejoint l'espace.
- */
-export async function validateAndSend(
-  week: string,
-  options: { ids?: string[]; url: string },
-): Promise<SendReport> {
-  const report: SendReport = { validated: 0, sent: 0, warnings: [] };
-
-  const conditions = [eq(ctoDigests.week, week), inArray(ctoDigests.status, ["draft", "validated"])];
-  if (options.ids && options.ids.length > 0) conditions.push(inArray(ctoDigests.id, options.ids));
-
-  const rows = await db()
-    .select({ id: ctoDigests.id, clientId: ctoDigests.clientId, status: ctoDigests.status, content: ctoDigests.content })
+async function digestById(id: string) {
+  const [row] = await db()
+    .select({ id: ctoDigests.id, clientId: ctoDigests.clientId, week: ctoDigests.week, status: ctoDigests.status, content: ctoDigests.content })
     .from(ctoDigests)
-    .where(and(...conditions));
+    .where(eq(ctoDigests.id, id))
+    .limit(1);
+  const content = row ? asContent(row.content) : null;
+  if (!row || !content) throw new Error("Digest introuvable ou illisible.");
+  return { ...row, content };
+}
 
-  for (const row of rows) {
-    const content = asContent(row.content);
-    if (!content) {
-      report.warnings.push(`Digest ${row.id} : contenu illisible, ignoré.`);
-      continue;
-    }
+/** Retouche un brouillon (texte des lignes, action de la semaine). Un digest validé se repasse d'abord en brouillon. */
+export async function editDigest(id: string, edits: DigestEdits): Promise<void> {
+  const digest = await digestById(id);
+  if (digest.status !== "draft") throw new Error("Seul un brouillon se retouche : repassez-le d'abord en brouillon.");
+  await db()
+    .update(ctoDigests)
+    .set({ content: appliquerRetouches(digest.content, edits), updatedAt: new Date() })
+    .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "draft")));
+}
 
-    if (row.status === "draft") {
-      await db()
-        .update(ctoDigests)
-        .set({ status: "validated", validatedAt: new Date() })
-        .where(and(eq(ctoDigests.id, row.id), eq(ctoDigests.status, "draft")));
-      report.validated += 1;
-    }
+/** Abandonne les retouches : le brouillon redevient celui qu'assemblent les sources. */
+export async function resetDigest(id: string): Promise<void> {
+  const digest = await digestById(id);
+  if (digest.status !== "draft") throw new Error("Seul un brouillon se rétablit.");
+  await db()
+    .update(ctoDigests)
+    .set({ content: { ...digest.content, modifieLe: null }, updatedAt: new Date() })
+    .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "draft")));
+  await assembleWeek(digest.week);
+}
 
-    const persons = await activePersons(row.clientId);
-    if (persons.length === 0) {
-      report.warnings.push(`Digest ${row.id} : aucune personne active, validé sans envoi.`);
-      continue;
-    }
+/** Valide un brouillon : il est figé, prêt à partir. Rien n'est envoyé. */
+export async function validateDigest(id: string): Promise<void> {
+  const [row] = await db()
+    .update(ctoDigests)
+    .set({ status: "validated", validatedAt: new Date() })
+    .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "draft")))
+    .returning({ id: ctoDigests.id });
+  if (!row) throw new Error("Ce digest n'est plus un brouillon.");
+}
 
-    let delivered = 0;
-    for (const person of persons) {
-      try {
-        await sendDigestEmail(person, content, options.url);
-        delivered += 1;
-      } catch (error) {
-        console.error("[cto] envoi du digest impossible", error);
-        report.warnings.push(`Digest non envoyé à ${person.email} : l'envoi a échoué.`);
-      }
-    }
+/** Repasse un digest validé, pas encore envoyé, en brouillon, pour le retoucher. */
+export async function reopenDigest(id: string): Promise<void> {
+  const [row] = await db()
+    .update(ctoDigests)
+    .set({ status: "draft", validatedAt: null })
+    .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "validated")))
+    .returning({ id: ctoDigests.id });
+  if (!row) throw new Error("Seul un digest validé et non envoyé repasse en brouillon.");
+}
 
-    if (delivered > 0) {
-      await db()
-        .update(ctoDigests)
-        .set({ status: "sent", sentAt: new Date() })
-        .where(eq(ctoDigests.id, row.id));
-      report.sent += 1;
+/**
+ * Envoie UN digest validé à chaque personne active de l'accompagnement. Un
+ * brouillon ne part pas : la validation est un geste distinct, fait avant.
+ */
+export async function sendDigest(id: string, url: string): Promise<SendReport> {
+  const digest = await digestById(id);
+  if (digest.status !== "validated") throw new Error("Seul un digest validé s'envoie.");
+
+  const persons = await activePersons(digest.clientId);
+  if (persons.length === 0) return { sent: false, warnings: ["Aucune personne active : rien n'est parti."] };
+
+  const warnings: string[] = [];
+  let delivered = 0;
+  for (const person of persons) {
+    try {
+      await sendDigestEmail(person, digest.content, url);
+      delivered += 1;
+    } catch (error) {
+      console.error("[cto] envoi du digest impossible", error);
+      warnings.push(`Non envoyé à ${person.email} : l'envoi a échoué.`);
     }
   }
 
-  return report;
+  if (delivered > 0) {
+    await db()
+      .update(ctoDigests)
+      .set({ status: "sent", sentAt: new Date() })
+      .where(and(eq(ctoDigests.id, id), eq(ctoDigests.status, "validated")));
+  }
+  return { sent: delivered > 0, warnings };
 }
 
 export interface ClientDigest {

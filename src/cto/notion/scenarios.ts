@@ -49,6 +49,15 @@ function slug(texte: string): string {
   );
 }
 
+/**
+ * L'identifiant de la proposition née d'un scénario : l'audit, puis le nom du
+ * scénario (sans son statut). L'audit s'en sert aussi pour lier chaque scénario
+ * à sa proposition : un seul calcul, pour que le lien ne dérive jamais.
+ */
+export function idPropositionScenario(auditId: string, nomScenario: string): string {
+  return `${PREFIXE_SCENARIO}${auditId}-${slug(nomScenario)}`;
+}
+
 /** Les tableaux de scénarios, dans l'ordre de lecture, encadrés compris. */
 function tableauxScenarios(blocs: Block[]): Extract<Block, { k: "table" }>[] {
   const out: Extract<Block, { k: "table" }>[] = [];
@@ -106,7 +115,7 @@ export function scenarioPropositions(audit: AuditValide): DeliverableInput<"prop
   }
 
   const out: DeliverableInput<"proposition">[] = [];
-  for (const [cle, { tableau, ligne, nom, statut }] of retenus) {
+  for (const { tableau, ligne, nom, statut } of retenus.values()) {
     const roles = (tableau.head ?? []).map(texteDe).map(roleColonneScenario);
     const colStatut = roles.indexOf("statut");
     const colReponse = roles.indexOf("reponse");
@@ -127,7 +136,7 @@ export function scenarioPropositions(audit: AuditValide): DeliverableInput<"prop
     };
     out.push({
       clientId: audit.clientId,
-      notionPageId: `${PREFIXE_SCENARIO}${audit.notionPageId}-${cle}`,
+      notionPageId: idPropositionScenario(audit.notionPageId, nom),
       kind: "proposition",
       title: `${nom} · ${audit.title}`,
       payload,

@@ -7,6 +7,9 @@ import {
   ordreDeLecture,
   buildEvents,
   isPendingProposition,
+  lireNomScenario,
+  alignerEfforts,
+  lierPropositions,
   buildFrise,
   byPhase,
   lastSuccessfulBackup,
@@ -19,12 +22,15 @@ import {
 import { ARCHIVE_MONTHS, letterForClient, lettersForClient, structureLettre, type LetterSummary } from "@cto/letters";
 import { digestsForClient } from "@cto/digest";
 import { siteReportsFor } from "@cto/site";
+import { idPropositionScenario } from "@cto/notion/scenarios";
+import type { PropositionDeScenario } from "./audit-formes";
 import { Calendrier } from "./calendrier";
 import { CarteApercus } from "./apercus";
 import { CarteContrats } from "./contrats";
 import { CarteProchaineEtape } from "./prochaine-etape";
 import { DigestSemaine } from "./digest";
 import { Historique } from "./historique";
+import { IconePartie } from "./icone-partie";
 import { Chapitre, LectureLongue } from "./lecture";
 import { LettreEnGrille } from "./lettre-grille";
 import { CorpsLettre, dateLettre, lettresPath, libelleLettre, ListeLettres } from "./lettre";
@@ -41,6 +47,7 @@ import {
   OngletsPropositions,
   Roadmap,
   propositionTone,
+  propositionPath,
   sortCartographie,
   sortRoadmap,
   sortRecentFirst,
@@ -213,6 +220,7 @@ export function CarteVeille({ viewer, lettres, libelle = "Toute la veille" }: { 
             href={`${lettresPath(viewer.base)}/${lettre.notionPageId}`}
             tag={<Tag>{libelleLettre(lettre)}</Tag>}
             meta={dateLettre(lettre)}
+            empile
           />
         ))
       )}
@@ -466,7 +474,21 @@ export async function VueMissions({ viewer, context }: { viewer: Viewer; context
             ]}
           />
 
-          <Frise frise={buildFrise(context.missions, context.items, now)} context={context} base={viewer.base} />
+          {/* Mobile : fenêtre centrée sur aujourd'hui, ouverte défilée jusqu'à lui.
+              Grand écran : les sept mois pleins, qui tiennent sans défiler. */}
+          <Frise
+            frise={buildFrise(context.missions, context.items, now, { fenetre: "centree" })}
+            context={context}
+            base={viewer.base}
+            idTitre="frise-titre-mobile"
+            className="lg:hidden"
+          />
+          <Frise
+            frise={buildFrise(context.missions, context.items, now)}
+            context={context}
+            base={viewer.base}
+            className="hidden lg:block"
+          />
 
           <section id="en-cours" aria-labelledby="en-cours-titre" className="mt-10 scroll-mt-20">
             <Legende id="en-cours-titre">{`En cours (${enCours.length})`}</Legende>
@@ -556,9 +578,37 @@ export async function VueLectureAudit({
 }) {
   const audit = context.items.find((item) => item.kind === "audit" && item.notionPageId === id);
   if (!audit) return null;
-  const payload = audit.payload as AuditPayload;
+  // Les heures citées dans le texte suivent la base ROADMAP, qui fait foi ;
+  // chaque mention d'une proposition mène aux propositions de l'espace.
+  const aligne = alignerEfforts(audit.payload as AuditPayload);
+  const estPartie = (titre: string, motif: string) =>
+    titre.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().includes(motif);
+  const partieScenarios = aligne.sections.find((partie) => estPartie(partie.titre, "scenario")) ?? null;
+  const payload = sectionOuverte(context, "propositions")
+    ? lierPropositions(aligne, sectionHref(sectionByKey("propositions"), viewer.base))
+    : aligne;
   const plusieurs = context.items.filter((item) => item.kind === "audit").length > 1;
   const section = sectionByKey("audit");
+
+  // Un audit validé publie une proposition par scénario : chaque scénario (et
+  // chaque groupe du plan d'action) y mène. Seulement si la proposition est
+  // bien publiée et sa section ouverte : jamais de lien vers une page absente.
+  const publiees = sectionOuverte(context, "propositions")
+    ? new Map(
+        context.items
+          .filter((item) => item.kind === "proposition")
+          .map((item) => [item.notionPageId, item] as const),
+      )
+    : new Map<string, Deliverable>();
+  const propositions: PropositionDeScenario = (nomScenario) => {
+    const nom = lireNomScenario(nomScenario).nom;
+    const proposition = nom ? publiees.get(idPropositionScenario(audit.notionPageId, nom)) : undefined;
+    if (!proposition) return null;
+    return {
+      href: propositionPath(proposition.notionPageId, viewer.base),
+      statut: (proposition.payload as PropositionPayload).statut ?? null,
+    };
+  };
 
   return (
     <Espace
@@ -640,25 +690,45 @@ export async function VueLectureAudit({
         label="Parties de l'audit"
         sommaire={[
           ...(payload.synthese.length > 0 ? [{ href: "#synthese", texte: "Synthèse" }] : []),
+          // Une icône au trait par partie, pas l'émoji de la page Notion.
           ...payload.sections.map((partie) => ({
             href: `#partie-${partie.id}`,
-            texte: `${partie.icone ? `${partie.icone} ` : ""}${partie.titre}`,
+            texte: partie.titre,
+            icone: <IconePartie titre={partie.titre} />,
           })),
         ]}
       >
         {payload.synthese.length > 0 ? (
           <Chapitre id="synthese" titre="Synthèse" ouvert>
-            <SyntheseAudit blocks={payload.synthese} base={viewer.base} />
+            <SyntheseAudit blocks={payload.synthese} base={viewer.base} propositions={propositions} />
           </Chapitre>
         ) : null}
 
         {payload.sections.map((partie) => (
-          <Chapitre key={partie.id} id={`partie-${partie.id}`} titre={partie.titre} icone={partie.icone}>
+          <Chapitre
+            key={partie.id}
+            id={`partie-${partie.id}`}
+            titre={partie.titre}
+            icone={<IconePartie titre={partie.titre} />}
+          >
+            {/* La roadmap chiffre un chemin ; la comparaison complète des
+                scénarios (note, constats résolus, coût sur 3 ans) est dans sa
+                partie. L'ancre l'ouvre et y mène (`OuvrirAncre`). */}
+            {partieScenarios && partieScenarios.id !== partie.id && estPartie(partie.titre, "roadmap") ? (
+              <p className="mt-4">
+                <a
+                  href={`#partie-${partieScenarios.id}`}
+                  className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground underline underline-offset-4 transition-colors hover:text-accent-secondary"
+                >
+                  Voir les scénarios comparés ↓
+                </a>
+              </p>
+            ) : null}
             {partie.corps.length > 0 ? (
               partieEnAccordeons(partie.titre) ? (
-                <PartieAccordeons corps={partie.corps} base={viewer.base} />
+                <PartieAccordeons corps={partie.corps} base={viewer.base} propositions={propositions} />
               ) : (
-                <CorpsLettre body={partie.corps} large base={viewer.base} />
+                <CorpsLettre body={partie.corps} large base={viewer.base} propositions={propositions} />
               )
             ) : (
               <p className="mt-4 font-inter-tight text-sm text-mid-gray">Partie vide.</p>

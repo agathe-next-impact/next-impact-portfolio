@@ -12,12 +12,17 @@ export {
   readAxisTitle,
   type EditionInput,
 } from "./assemble";
+export { appliquerRetouches, retouchesDuFormulaire, type DigestEdits } from "./edit";
 export { digestEmailHtml, sendDigestEmail } from "./email";
 export {
   assembleWeek,
   digestsForClient,
   digestsOfWeek,
-  validateAndSend,
+  editDigest,
+  reopenDigest,
+  resetDigest,
+  sendDigest,
+  validateDigest,
   type AdminDigest,
   type ClientDigest,
   type DigestAssembleReport,
