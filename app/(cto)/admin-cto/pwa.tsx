@@ -126,7 +126,7 @@ export function InstallationAdmin() {
       className="mt-6 border border-dark-gray bg-jet/60 px-4 py-3 sm:max-w-xl"
     >
       <div className="flex items-start gap-3">
-        <img src="/pwa/admin-192.png" alt="" width={40} height={40} className="h-10 w-10 shrink-0 border border-dark-gray" />
+        <img src="/pwa/admin-bleu-192.png" alt="" width={40} height={40} className="h-10 w-10 shrink-0 border border-dark-gray" />
         <div className="min-w-0 flex-1">
           <p className="font-sans text-sm font-medium text-foreground">Installer la supervision</p>
           {mode === "native" ? (

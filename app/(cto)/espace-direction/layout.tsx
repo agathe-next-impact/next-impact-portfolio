@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
   },
   icons: {
-    apple: [{ url: "/pwa/espace-apple-180.png", sizes: "180x180" }],
+    apple: [{ url: "/pwa/espace-bleu-apple-180.png", sizes: "180x180" }],
   },
   formatDetection: { telephone: false },
 };

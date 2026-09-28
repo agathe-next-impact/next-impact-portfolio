@@ -196,7 +196,7 @@ export function BanniereInstallation() {
       className="fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 border border-dark-gray bg-jet/95 px-4 py-3 shadow-2xl backdrop-blur sm:left-auto sm:w-[380px] lg:hidden"
     >
       <div className="flex items-start gap-3">
-        <img src="/pwa/espace-192.png" alt="" width={40} height={40} className="h-10 w-10 shrink-0 border border-dark-gray" />
+        <img src="/pwa/espace-bleu-192.png" alt="" width={40} height={40} className="h-10 w-10 shrink-0 border border-dark-gray" />
         <div className="min-w-0 flex-1">
           <p className="font-sans text-sm font-medium text-foreground">Installer l&rsquo;espace</p>
           {mode === "native" ? (

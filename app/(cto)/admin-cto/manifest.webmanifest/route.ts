@@ -26,9 +26,9 @@ const MANIFEST = {
   theme_color: "#050505",
   categories: ["business", "productivity"],
   icons: [
-    { src: "/pwa/admin-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
-    { src: "/pwa/admin-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
-    { src: "/pwa/admin-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    { src: "/pwa/admin-bleu-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+    { src: "/pwa/admin-bleu-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+    { src: "/pwa/admin-bleu-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
   ],
 };
 
