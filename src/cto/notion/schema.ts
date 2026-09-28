@@ -159,7 +159,10 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.prestation.due, "date"),
     column(PROPS.prestation.amount, "number"),
     column(PROPS.prestation.progress, "number"),
-    column(PROPS.prestation.quote, "url"),
+    // Facultative : le lien a cédé la place aux PDF de « Devis (PDF) ».
+    facultative(PROPS.prestation.quote, "url"),
+    facultative(PROPS.prestation.quoteFile, "files"),
+    facultative(PROPS.prestation.invoices, "files"),
     column(PROPS.prestation.detail, "rich_text"),
   ],
   paiement: [
@@ -188,6 +191,7 @@ export const COLUMNS: Record<SchemaBase, Column[]> = {
     column(PROPS.proposition.page, "url", "rich_text"),
     column(PROPS.proposition.date, "date"),
     column(PROPS.proposition.status, "select"),
+    facultative(PROPS.proposition.quoteFile, "files"),
   ],
   apercu: [
     ...CONTENT,

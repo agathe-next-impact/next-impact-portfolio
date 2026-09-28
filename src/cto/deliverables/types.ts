@@ -128,6 +128,19 @@ export interface PrestationPayload {
    * versions écrites avant l'échéancier : les deux se lisent « non suivi ».
    */
   paiements?: Paiement[];
+  /**
+   * Les devis en PDF (colonne « Devis (PDF) »), autant qu'il y en a. Absent
+   * sans devis : `devis` reste le lien, ceux-ci sont les pièces téléchargeables.
+   */
+  devisFichiers?: AttachedFile[];
+  /** Les factures en PDF (colonne « Factures »). Absent sans facture. */
+  factures?: AttachedFile[];
+  /**
+   * Les identifiants de toutes les pièces de la prestation — devis et
+   * factures — pour le contrôle d'accès (`fileBelongsTo`), comme un audit.
+   * Absent sans pièce.
+   */
+  fichiers?: string[];
 }
 
 /** Un règlement d'une prestation, prévu ou encaissé. */
@@ -210,8 +223,16 @@ export interface PropositionPayload {
   /** Le corps de la page, hors sous-pages. */
   corps: Block[];
   sections: AuditSection[];
-  /** Empreintes des images rapatriées, pour le contrôle d'appartenance des fichiers. */
+  /**
+   * Empreintes des images rapatriées et des devis, pour le contrôle
+   * d'appartenance des fichiers.
+   */
   fichiers: string[];
+  /**
+   * Les devis en PDF (colonne « Devis (PDF) »). Absent sans devis, et sur les
+   * propositions tirées d'un scénario d'audit, qui n'ont pas de ligne.
+   */
+  devisFichiers?: AttachedFile[];
 }
 
 /**

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { prestationsForClient, type Deliverable } from "@cto/deliverables";
-import { deadlineTone } from "./livrables";
+import { prestationsForClient, type AttachedFile, type Deliverable } from "@cto/deliverables";
+import { deadlineTone, fichierPath, tailleLisible } from "./livrables";
 import { EnPreparation, Espace, type EspaceContext } from "./shell";
 import { formatAmount, formatDay, Groupe, Label, Panel, Repli, Stat, Tag, type Tone } from "./ui";
 import type { Viewer } from "./viewer";
@@ -15,6 +15,13 @@ import type { Viewer } from "./viewer";
 // ─────────────────────────────────────────────────────────────────────────────
 
 type Prestation = Deliverable<"prestation">;
+
+/**
+ * La base des adresses de fichiers d'une ligne : l'espace du client, ou son
+ * miroir dans l'administration — la route de téléchargement y revérifie
+ * l'appartenance de la pièce.
+ */
+type BaseFichiers = (item: Prestation) => string;
 
 /** Ordre de lecture : ce qui est en cours d'abord. */
 const STATUTS = ["En cours", "À venir", "Suspendue", "Terminée"] as const;
@@ -66,9 +73,12 @@ const pluriel = (n: number) => `${n} prestation${n > 1 ? "s" : ""}`;
 export function TableauPrestations({
   items,
   admin,
+  base,
 }: {
   items: Prestation[];
   admin?: { accompagnement?: (item: Prestation) => ReactNode };
+  /** D'où servir le devis et les factures PDF de chaque ligne. */
+  base: BaseFichiers;
 }) {
   const now = Date.now();
 
@@ -129,7 +139,7 @@ export function TableauPrestations({
         >
           <div className="mt-2 divide-y divide-dark-gray border border-dark-gray">
             {groupe.items.map((item) => (
-              <LignePrestation key={item.id} item={item} now={now} admin={admin} />
+              <LignePrestation key={item.id} item={item} now={now} admin={admin} base={base(item)} />
             ))}
           </div>
         </Groupe>
@@ -142,10 +152,12 @@ function LignePrestation({
   item,
   now,
   admin,
+  base,
 }: {
   item: Prestation;
   now: number;
   admin?: { accompagnement?: (item: Prestation) => ReactNode };
+  base: string;
 }) {
   const payload = item.payload;
   const prix = formatAmount(payload.montant);
@@ -199,13 +211,23 @@ function LignePrestation({
 
       {payload.paiements?.length ? <Echeancier item={item} /> : null}
 
+      {payload.devisFichiers?.length ? (
+        <Pieces titre="Devis" pieces={payload.devisFichiers} base={base} />
+      ) : null}
+      {payload.factures?.length ? (
+        <Pieces titre={payload.factures.length > 1 ? "Factures" : "Facture"} pieces={payload.factures} base={base} />
+      ) : null}
+
       {payload.detail ? (
         <Repli resume="Détail de la mission">{payload.detail}</Repli>
       ) : null}
 
-      {payload.devis || admin ? (
+      {/* Le lien « Devis » ne sert plus qu'à défaut de PDF déposé. */}
+      {(payload.devis && !payload.devisFichiers?.length) || admin ? (
         <p className="mt-3 flex flex-wrap gap-4">
-          {payload.devis ? <LienExterne href={payload.devis}>Voir le devis ↗</LienExterne> : null}
+          {payload.devis && !payload.devisFichiers?.length ? (
+            <LienExterne href={payload.devis}>Voir le devis ↗</LienExterne>
+          ) : null}
           {admin ? <LienExterne href={notionHref(item.notionPageId)}>Ouvrir dans Notion ↗</LienExterne> : null}
         </p>
       ) : null}
@@ -271,6 +293,44 @@ function LienExterne({ href, children }: { href: string; children: ReactNode }) 
   );
 }
 
+/** Les devis ou les factures de la prestation, dans l'ordre où ils ont été déposés. */
+export function Pieces({ titre, pieces, base }: { titre: string; pieces: AttachedFile[]; base: string }) {
+  return (
+    <div className="mt-4 max-w-md">
+      <Label>{pieces.length > 1 ? `${titre} · ${pieces.length}` : titre}</Label>
+      <ul className="mt-1.5 divide-y divide-dark-gray border border-dark-gray">
+        {pieces.map((piece) => (
+          <li key={piece.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
+            <span className="min-w-0 truncate font-inter-tight text-sm text-foreground">
+              {piece.name.replace(/\.pdf$/i, "")}
+            </span>
+            <LienPdf fichier={piece} base={base}>Ouvrir</LienPdf>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/**
+ * Un devis ou une facture : s'ouvre dans le lecteur PDF du navigateur (la
+ * route sert les PDF en `inline`), dans un nouvel onglet pour ne pas perdre
+ * l'écran.
+ */
+export function LienPdf({ fichier, base, children }: { fichier: AttachedFile; base: string; children: ReactNode }) {
+  return (
+    <a
+      href={fichierPath(fichier.id, base)}
+      target="_blank"
+      rel="noopener"
+      title={fichier.name}
+      className="font-mono text-[10px] uppercase tracking-[0.12em] text-mid-gray underline underline-offset-4 transition-colors hover:text-accent-secondary"
+    >
+      {children} · PDF {tailleLisible(fichier.size)}
+    </a>
+  );
+}
+
 /** Contrats → Prestations, dans l'espace du client. */
 export async function VuePrestations({ viewer, context }: { viewer: Viewer; context: EspaceContext }) {
   const items = await prestationsForClient(viewer.clientId);
@@ -288,7 +348,7 @@ export async function VuePrestations({ viewer, context }: { viewer: Viewer; cont
           échéancier de règlement.
         </EnPreparation>
       ) : (
-        <TableauPrestations items={items} />
+        <TableauPrestations items={items} base={() => viewer.base} />
       )}
     </Espace>
   );

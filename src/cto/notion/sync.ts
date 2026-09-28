@@ -7,6 +7,7 @@ import {
   currentStates,
   digestOf,
   setPlacement,
+  type AttachedFile,
   type AuditPayload,
   type PropositionPayload,
   type DeliverableKind,
@@ -15,7 +16,7 @@ import {
   type Paiement,
   type PrestationPayload,
 } from "../deliverables";
-import { FileTooLargeError, importFile } from "../files";
+import { FileTooLargeError, importFile, mimeFromName } from "../files";
 import { fetchPage, NotionError, queryDatabase, publishedFilter, type NotionPage } from "./api";
 import {
   clientsDatabaseId,
@@ -54,6 +55,9 @@ import {
   documentFiles,
   mapPage,
   paymentOf,
+  prestationInvoiceFiles,
+  propositionQuoteFiles,
+  prestationQuoteFiles,
   propositionPageId,
   sortPayments,
   spaceId,
@@ -711,10 +715,14 @@ async function syncKind(
   merge(findings, resolved);
   const { inputs } = resolved;
   if (kind === "document") await attachFiles(inputs, pages, warnings, options.dryRun);
-  if (kind === "prestation" && !(await attachPayments(inputs, findings))) {
-    // Échéancier illisible : écrire les prestations sans lui changerait leur
-    // empreinte et daterait une version « sans paiement » qui n'a jamais existé.
-    return { report: emptyReport(kind, inputs.length), ...findings };
+  if (kind === "prestation") {
+    await attachPrestationFiles(inputs, pages, warnings, options.dryRun);
+    if (!(await attachPayments(inputs, findings))) {
+      // Échéancier illisible : écrire les prestations sans lui changerait leur
+      // empreinte et daterait une version « sans paiement » qui n'a jamais existé.
+      return { report: emptyReport(kind, inputs.length), ...findings };
+    }
+    indexPrestationFiles(inputs);
   }
   inputs.push(...extra.inputs);
 
@@ -1044,7 +1052,15 @@ async function syncPropositions(
     const payload = input.payload as PropositionPayload;
     payload.corps = tree.synthese;
     payload.sections = tree.sections;
-    payload.fichiers = tree.fichiers;
+
+    const devis: AttachedFile[] = [];
+    for (const fichier of page ? propositionQuoteFiles(page) : []) {
+      const ref = await importPdf(fichier, `proposition « ${input.title} » (devis)`, warnings, dryRun);
+      if (ref) devis.push(ref);
+    }
+    // Pas de clé sans devis : l'empreinte des propositions d'avant ne bouge pas.
+    if (devis.length > 0) payload.devisFichiers = devis;
+    payload.fichiers = [...new Set([...tree.fichiers, ...devis.map((ref) => ref.id)])];
     inputs.push(input);
   }
   inputs.push(...extra.inputs);
@@ -1123,6 +1139,93 @@ async function attachPayments(inputs: DeliverableInput[], findings: Findings): P
     if (paiements?.length) (input.payload as PrestationPayload).paiements = sortPayments(paiements);
   }
   return true;
+}
+
+/**
+ * Rapatrie une pièce PDF.
+ *
+ * Seul le PDF passe — un devis ou une facture se lit tel qu'il a été remis,
+ * pas dans un tableur modifiable. `null` si la pièce est écartée ; la ligne
+ * est alors publiée sans elle, et la synchro le dit.
+ */
+async function importPdf(
+  fichier: prop.NotionFile,
+  label: string,
+  warnings: string[],
+  dryRun: boolean,
+): Promise<AttachedFile | null> {
+  if (!estPdf(fichier)) {
+    warnings.push(`${label} : « ${fichier.name} » n'est pas un PDF, pièce ignorée.`);
+    return null;
+  }
+  try {
+    return await importFile(fichier.url, fichier.name, { dryRun, mime: "application/pdf" });
+  } catch (error) {
+    warnings.push(
+      error instanceof FileTooLargeError
+        ? `${label} : ${error.message}, publié sans la pièce.`
+        : `${label} : pièce impossible à rapatrier (${error instanceof Error ? error.message : "erreur"}), publié sans elle.`,
+    );
+    return null;
+  }
+}
+
+/** Un PDF d'après son nom, ou le chemin de son lien (un lien externe garde souvent son adresse pour nom). */
+function estPdf(fichier: prop.NotionFile): boolean {
+  if (mimeFromName(fichier.name) === "application/pdf") return true;
+  try {
+    return mimeFromName(new URL(fichier.url).pathname) === "application/pdf";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Les pièces de chaque prestation : ses devis (colonne « Devis (PDF) ») et ses
+ * factures (colonne « Factures »), toutes, dans l'ordre de l'atelier.
+ */
+async function attachPrestationFiles(
+  inputs: DeliverableInput[],
+  pages: NotionPage[],
+  warnings: string[],
+  dryRun: boolean,
+): Promise<void> {
+  const pageById = new Map(pages.map((page) => [page.id, page]));
+  for (const input of inputs) {
+    const page = pageById.get(input.notionPageId);
+    if (!page) continue;
+    const payload = input.payload as PrestationPayload;
+
+    const importer = async (fichiers: prop.NotionFile[], nature: string): Promise<AttachedFile[]> => {
+      const refs: AttachedFile[] = [];
+      for (const fichier of fichiers) {
+        const ref = await importPdf(fichier, `prestation « ${input.title} » (${nature})`, warnings, dryRun);
+        if (ref) refs.push(ref);
+      }
+      return refs;
+    };
+
+    // Pas de clé sans pièce : l'empreinte des prestations d'avant ne bouge pas.
+    const devis = await importer(prestationQuoteFiles(page), "devis");
+    if (devis.length > 0) payload.devisFichiers = devis;
+    const factures = await importer(prestationInvoiceFiles(page), "facture");
+    if (factures.length > 0) payload.factures = factures;
+  }
+}
+
+/**
+ * Range les identifiants du devis et des factures dans `payload.fichiers` :
+ * c'est là que `fileBelongsTo` cherche à qui appartient une pièce.
+ */
+function indexPrestationFiles(inputs: DeliverableInput[]): void {
+  for (const input of inputs) {
+    const payload = input.payload as PrestationPayload;
+    const ids = [
+      ...(payload.devisFichiers ?? []).map((devis) => devis.id),
+      ...(payload.factures ?? []).map((facture) => facture.id),
+    ].filter((id): id is string => Boolean(id));
+    if (ids.length > 0) payload.fichiers = [...new Set(ids)];
+  }
 }
 
 async function attachFiles(

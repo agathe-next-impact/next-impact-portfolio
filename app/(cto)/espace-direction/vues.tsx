@@ -72,6 +72,7 @@ import {
   sectionOuverte,
   type EspaceContext,
 } from "./shell";
+import { Pieces } from "./prestations";
 import { SyntheseAudit } from "./synthese-audit";
 import { PartieAccordeons, partieEnAccordeons } from "./partie-accordeons";
 import { RapportsMaintenance, SuiviTechnique } from "./suivi";
@@ -972,6 +973,11 @@ export async function VueLectureProposition({
             </dd>
           </div>
         </dl>
+        {payload.devisFichiers?.length ? (
+          <div className="mt-5 border-t border-dark-gray pt-1">
+            <Pieces titre="Devis" pieces={payload.devisFichiers} base={viewer.base} />
+          </div>
+        ) : null}
         {/* Répondre se fait dès l'ouverture, sans devoir lire jusqu'au bout. */}
         {enAttente ? (
           <div className="mt-5 flex flex-wrap gap-3 border-t border-dark-gray pt-5">

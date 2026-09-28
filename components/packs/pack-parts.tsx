@@ -124,8 +124,13 @@ export function SituationRow({
   prix?: "entree" | "budget";
 }) {
   const isEn = lang === "en";
-  // L'offre au centre, seulement quand elle ne porte pas déjà le nom du pack.
-  const offre = situation.offre[lang] !== situation.nom[lang] ? situation.offre[lang] : null;
+  // L'offre au centre, seulement quand elle ne porte pas déjà le nom du pack ;
+  // sinon le sous-titre du parcours, quand il en a un (Expert technique
+  // externalisé : « Direction technique sans embaucher », 2026-09-28).
+  const offre =
+    situation.offre[lang] !== situation.nom[lang]
+      ? situation.offre[lang]
+      : (situation.sousTitre?.[lang] ?? null);
   return (
     <PackLink situation={situation}
       className="group grid gap-2 border-b border-dark-gray px-6 py-5 no-underline transition-colors hover:bg-jet md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.3fr)_minmax(0,1fr)] md:gap-8 lg:px-8"

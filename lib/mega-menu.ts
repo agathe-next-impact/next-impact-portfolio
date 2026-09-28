@@ -84,18 +84,6 @@ export interface MegaSection {
 /** Parcours mis en avant dans le menu, en plus des offres gratuites et recommandées (demande d'Agathe du 2026-09-27). */
 const MIS_EN_AVANT: Situation["slug"][] = ["decisions-techniques"];
 
-/**
- * Libellés propres au menu (demande d'Agathe du 2026-09-28) : la case du
- * parcours Pilotage porte le nom de l'offre et une promesse en sous-titre. Le
- * parcours garde son nom ailleurs (/packs, /tarifs).
- */
-const LIBELLES_MENU: Partial<Record<Situation["slug"], Pick<MegaItem, "label" | "desc">>> = {
-  "decisions-techniques": {
-    label: { fr: "Expert technique externalisé", en: "Outsourced technical expert" },
-    desc: { fr: "Direction technique sans embaucher", en: "Technical leadership without hiring" },
-  },
-};
-
 function situationItem(s: Situation): MegaItem {
   const gratuit = estGratuit(s);
   // Le sous-titre d'une prestation est sa solution technique (demande d'Agathe
@@ -123,7 +111,6 @@ function situationItem(s: Situation): MegaItem {
     price,
     tag,
     featured: gratuit || s.recommended || MIS_EN_AVANT.includes(s.slug),
-    ...LIBELLES_MENU[s.slug],
   };
 }
 

@@ -48,6 +48,24 @@ describe("propositions issues des scénarios d'un audit", () => {
     expect(avant[0].notionPageId).toBe("scenario-1b34b0bf-ee9c-4b8c-819f-000000000009-optimisation");
   });
 
+  it("ne fait qu'une proposition d'un scénario repris dans un récapitulatif", () => {
+    const recap: Block = {
+      k: "table",
+      head: row("Scénario", "Coût", "Délai"),
+      rows: [row("Optimisation", "2 500", "3 semaines"), row("Refonte headless", "—", "6 mois")],
+    };
+    // Le récapitulatif est lu avant la base complète : c'est quand même elle qui fait foi.
+    const out = scenarioPropositions(audit([], [
+      { id: "roadmap", titre: "Roadmap", icone: null, corps: [recap] },
+      { id: "scenarios", titre: "Scénarios", icone: null, corps: [tableau] },
+    ]));
+    expect(out.map((p) => p.notionPageId)).toEqual([
+      "scenario-1b34b0bf-ee9c-4b8c-819f-000000000009-optimisation",
+      "scenario-1b34b0bf-ee9c-4b8c-819f-000000000009-refonte-headless",
+    ]);
+    expect(out[1].payload.statut).toBe("Acceptée");
+  });
+
   it("lit la réponse du client, et la laisse en attente sinon", () => {
     const [optimisation, refonte] = scenarioPropositions(audit([tableau]));
     expect(optimisation.payload.statut).toBeNull();
@@ -73,8 +91,9 @@ describe("propositions issues des scénarios d'un audit", () => {
     expect(scenarioPropositions(audit([autre]))).toEqual([]);
   });
 
-  it("garde distincts deux scénarios homonymes", () => {
+  it("fusionne deux scénarios homonymes en une seule proposition", () => {
     const ids = scenarioPropositions(audit([tableau, tableau])).map((p) => p.notionPageId);
-    expect(new Set(ids).size).toBe(4);
+    expect(ids).toHaveLength(2);
+    expect(new Set(ids).size).toBe(2);
   });
 });

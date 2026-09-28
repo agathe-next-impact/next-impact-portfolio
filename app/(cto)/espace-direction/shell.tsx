@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
+import { Mail } from "lucide-react";
 import { previousLoginAt } from "@cto/access";
 import {
   listForClient,
@@ -53,8 +54,9 @@ import type { Viewer } from "./viewer";
 // session : une section décochée dans Notion disparaît au balayage suivant,
 // sans attendre que la personne se reconnecte.
 //
-// Le contact, les appareils, l'export et la déconnexion vivent en bas de la
-// barre latérale : présents sur chaque page sans occuper le bas de chacune.
+// Le contact vit en haut à droite de chaque page, à côté de la bascule de
+// thème. Les appareils, l'export et la déconnexion restent en bas de la barre
+// latérale.
 // Sous 1024 px, la barre latérale laisse place à une barre d'onglets en bas
 // d'écran (cf. `sidebar.tsx`) : le contenu réserve sa hauteur.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -394,8 +396,8 @@ function situationFor(context: EspaceContext, base: string): Situation | null {
  * Deux voies, parce qu'un client en cours d'accompagnement n'a pas les mêmes
  * besoins qu'un prospect : écrire directement (une question, un devis à relire)
  * ou réserver un créneau. Pas de formulaire de contact générique — il
- * mettrait le client dans la file des inconnus. La barre latérale en garde une
- * version compacte sur toutes les autres pages.
+ * mettrait le client dans la file des inconnus. L'en-tête de chaque page en
+ * garde une version compacte, en haut à droite.
  */
 export function ContactCta({ company }: { company: string }) {
   return (
@@ -481,7 +483,6 @@ export async function Espace({
               }
             : null
         }
-        contact={{ mailto: contactHref(viewer.company), calendly: CALENDLY_URL }}
         appareilsHref={viewer.admin ? null : `${ESPACE_PATH}/appareils`}
         restitution={{
           href: `${viewer.base}/restitution`,
@@ -506,7 +507,23 @@ export async function Espace({
             </div>
           ) : null}
 
-          <PageHeader company={viewer.company} title={title} aside={<BasculeTheme />} />
+          <PageHeader
+            company={viewer.company}
+            title={title}
+            aside={
+              <div className="flex items-center gap-2">
+                <a
+                  href={contactHref(viewer.company)}
+                  className="inline-flex h-9 items-center gap-2 border border-accent-secondary bg-accent-secondary px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-obsidian transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-secondary focus-visible:ring-offset-2"
+                >
+                  <Mail aria-hidden className="h-4 w-4 shrink-0" strokeWidth={1.7} />
+                  <span className="hidden sm:inline">Écrire à Agathe</span>
+                  <span className="sm:hidden">Contact</span>
+                </a>
+                <BasculeTheme />
+              </div>
+            }
+          />
 
           {horsServices ? (
             <div className="mt-8">

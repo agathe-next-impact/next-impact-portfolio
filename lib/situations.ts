@@ -1181,7 +1181,9 @@ export const SITUATIONS: Situation[] = [
   {
     slug: "decisions-techniques",
     besoin: "tenir",
-    nom: { fr: "Pilotage", en: "Steering" },
+    // Renommé le 2026-09-28 (demande d'Agathe) : le parcours porte le nom de
+    // l'offre, avec une promesse en sous-titre ; ex-« Pilotage ».
+    nom: { fr: "Expert technique externalisé", en: "Outsourced technical expert" },
     phrase: {
       fr: "Des décisions techniques reviennent tous les mois, personne pour les trancher",
       en: "Technical decisions come up every month, nobody to settle them",
@@ -1223,11 +1225,11 @@ export const SITUATIONS: Situation[] = [
     ],
     budget: BUDGET_EXPERT,
     mensuel: REFERENT.price,
-    // Le nom officiel de l'offre (ADR-010), repris dans le menu (demande
-    // d'Agathe du 2026-09-27).
+    // Le nom est désormais celui de l'offre (ADR-010) ; le sous-titre est la
+    // promesse (demande d'Agathe du 2026-09-28).
     sousTitre: {
-      fr: "Expert technique externalisé",
-      en: "Outsourced technical expert",
+      fr: "Direction technique sans embaucher",
+      en: "Technical leadership without hiring",
     },
     page: {
       h1: "Expert technique externalisé",

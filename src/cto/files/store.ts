@@ -142,7 +142,8 @@ export async function fileBelongsTo(fileId: string, clientId: string): Promise<b
   // Les documents et audits du client qui ont porté ce fichier, dans n'importe
   // quelle version — puis l'état COURANT de chacun : s'il est un retrait, la
   // pièce ne sort plus. Un audit liste ses pièces (images, annexe) dans
-  // `payload.fichiers`, faute de pouvoir les chercher dans ses blocs.
+  // `payload.fichiers`, faute de pouvoir les chercher dans ses blocs ; une
+  // prestation y range son devis et ses factures.
   const porteurs = await db()
     .selectDistinct({ notionPageId: ctoDeliverables.notionPageId })
     .from(ctoDeliverables)
@@ -155,7 +156,7 @@ export async function fileBelongsTo(fileId: string, clientId: string): Promise<b
             sql`${ctoDeliverables.payload} -> 'fichier' ->> 'id' = ${fileId}`,
           ),
           and(
-            inArray(ctoDeliverables.kind, ["audit", "proposition"]),
+            inArray(ctoDeliverables.kind, ["audit", "proposition", "prestation"]),
             sql`${ctoDeliverables.payload} -> 'fichiers' @> jsonb_build_array(${fileId}::text)`,
           ),
         ),

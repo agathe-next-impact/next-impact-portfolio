@@ -65,6 +65,8 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
     montant: "Montant",
     avancement: "Avancement",
     devis: "Devis",
+    devisFichiers: "Devis (PDF)",
+    factures: "Factures",
     detail: "Détail",
   },
   // Les blocs ne se comparent pas ici champ à champ : voir `partiesModifiees`.
@@ -75,6 +77,7 @@ const FIELD_LABELS: Record<DeliverableKind, Record<string, string>> = {
   },
   proposition: {
     statut: "Statut",
+    devisFichiers: "Devis (PDF)",
   },
   // Le mot de passe n'y est pas : l'historique dit qu'il a changé
   // (`SECRETS`), jamais ce qu'il valait.

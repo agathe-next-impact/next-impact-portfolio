@@ -126,6 +126,10 @@ export const PROPS = {
     amount: "Montant",
     progress: "Avancement",
     quote: "Devis",
+    /** Les devis eux-mêmes, en PDF, autant qu'il y en a. Facultative, à côté du lien « Devis ». */
+    quoteFile: "Devis (PDF)",
+    /** Les factures de la prestation, en PDF, autant qu'il y en a. Facultative. */
+    invoices: "Factures",
     detail: "Détail",
   },
   /**
@@ -165,6 +169,8 @@ export const PROPS = {
     page: "Page de la proposition",
     date: "Date",
     status: "Statut",
+    /** Les devis qui accompagnent la proposition, en PDF. Facultative. */
+    quoteFile: "Devis (PDF)",
   },
   /**
    * Base « Aperçus » de l'atelier : une maquette ou un site en développement
@@ -315,6 +321,21 @@ export function clientVeilleOrganisations(page: NotionPage): string[] {
 /** Les pièces jointes d'un document, dans l'ordre de l'atelier. */
 export function documentFiles(page: NotionPage): p.NotionFile[] {
   return p.files(page, PROPS.document.file);
+}
+
+/** Les devis PDF d'une prestation (colonne « Devis (PDF) »), dans l'ordre de l'atelier. */
+export function prestationQuoteFiles(page: NotionPage): p.NotionFile[] {
+  return p.files(page, PROPS.prestation.quoteFile);
+}
+
+/** Les devis PDF d'une proposition (colonne « Devis (PDF) »), dans l'ordre de l'atelier. */
+export function propositionQuoteFiles(page: NotionPage): p.NotionFile[] {
+  return p.files(page, PROPS.proposition.quoteFile);
+}
+
+/** Les factures PDF d'une prestation (colonne « Factures »), dans l'ordre de l'atelier. */
+export function prestationInvoiceFiles(page: NotionPage): p.NotionFile[] {
+  return p.files(page, PROPS.prestation.invoices);
 }
 
 /** Les pièces de la colonne « Annexe » d'un audit. */

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { listClients } from "@cto/admin";
 import { listPrestations } from "@cto/deliverables";
 import { TableauPrestations } from "../../../espace-direction/prestations";
+import { adminEspacePath } from "../../../espace-direction/viewer";
 import { BackLink, Label, Panel } from "../../../espace-direction/ui";
 import { PILOTAGE_LARGEUR } from "../largeur";
 
@@ -76,6 +77,7 @@ export default async function PrestationsPage({
       ) : (
         <TableauPrestations
           items={items}
+          base={(item) => adminEspacePath(item.clientId)}
           admin={{
             // Le nom de l'accompagnement n'a de sens que si la liste en mélange plusieurs.
             accompagnement: client

@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { NotionPage } from "./api";
-import { clientServices, clientVeilleOrganisations, documentFiles, mapPage, PROPS, UNTITLED } from "./map";
+import {
+  clientServices,
+  clientVeilleOrganisations,
+  documentFiles,
+  mapPage,
+  prestationInvoiceFiles,
+  prestationQuoteFiles,
+  PROPS,
+  UNTITLED,
+} from "./map";
 import * as p from "./properties";
 import type { DocumentPayload, PrestationPayload } from "../deliverables";
 
@@ -116,5 +125,41 @@ describe("prestations", () => {
     const input = mapPage("prestation", page({}), CLIENT);
     expect(input.title).toBe(UNTITLED);
     expect((input.payload as PrestationPayload).avancement).toBeNull();
+  });
+});
+
+describe("devis et factures PDF", () => {
+  const pdf = (name: string) => ({
+    type: "files",
+    files: [{ name, type: "file", file: { url: `https://s3/${name}?sig=1` } }],
+  });
+
+  it("lit le devis et les factures PDF d'une prestation", () => {
+    expect(prestationQuoteFiles(page({ [PROPS.prestation.quoteFile]: pdf("devis-042.pdf") }))).toEqual([
+      { name: "devis-042.pdf", url: "https://s3/devis-042.pdf?sig=1", hosted: true },
+    ]);
+    const factures = page({
+      [PROPS.prestation.invoices]: {
+        type: "files",
+        files: [
+          { name: "F-2026-11.pdf", type: "file", file: { url: "https://s3/F-2026-11.pdf?sig=1" } },
+          { name: "F-2026-12.pdf", type: "file", file: { url: "https://s3/F-2026-12.pdf?sig=1" } },
+        ],
+      },
+    });
+    expect(prestationInvoiceFiles(factures).map((fichier) => fichier.name)).toEqual(["F-2026-11.pdf", "F-2026-12.pdf"]);
+  });
+
+  it("ne touche pas au payload d'une prestation : la pièce arrive à la synchro", () => {
+    const input = mapPage("prestation", page({ [PROPS.prestation.quoteFile]: pdf("devis.pdf") }), CLIENT);
+    const payload = input.payload as PrestationPayload;
+    expect(payload.devisFichiers).toBeUndefined();
+    expect(payload.factures).toBeUndefined();
+    expect(payload.fichiers).toBeUndefined();
+  });
+
+  it("colonnes absentes : aucune pièce, rien ne casse", () => {
+    expect(prestationQuoteFiles(page({}))).toEqual([]);
+    expect(prestationInvoiceFiles(page({}))).toEqual([]);
   });
 });

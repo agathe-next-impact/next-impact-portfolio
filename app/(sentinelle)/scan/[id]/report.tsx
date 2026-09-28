@@ -215,11 +215,7 @@ export function ScanReport({ scanId }: { scanId: string }) {
             diagnostic. Comptez une à deux minutes.
           </p>
         </div>
-        <AttenteAudit
-          scanId={scanId}
-          demande={auditDemande}
-          onDemande={() => setAuditDemande(true)}
-        />
+        <AttenteAudit demande={auditDemande} />
       </>
     );
   }
@@ -265,11 +261,7 @@ export function ScanReport({ scanId }: { scanId: string }) {
 
         {resultat.diagnostic?.status === "pending" && (
           <div className="mb-12">
-            <AttenteAudit
-              scanId={scanId}
-              demande={auditDemande}
-              onDemande={() => setAuditDemande(true)}
-            />
+            <AttenteAudit demande={auditDemande} />
           </div>
         )}
 
@@ -1132,10 +1124,11 @@ function InscriptionVeille({
 }
 
 // ── Attente de l'audit ─────────────────────────────────────────────────────
-// Une à deux minutes : de quoi découvrir l'audit + roadmap (bannière) ou partir en
-// laissant son adresse (l'audit arrive par e-mail).
+// Une à deux minutes : la mention de l'envoi par e-mail, et une bannière vers
+// l'audit + roadmap (2026-09-28). Le champ e-mail qui y figurait est retiré :
+// l'adresse est donnée au premier écran de /scan.
 
-/** Le champ e-mail, partagé par la page d'attente et le popup de fin. */
+/** Le champ e-mail du popup de fin (la page d'attente ne le porte plus). */
 function FormulaireAudit({
   scanId,
   onDemande,
@@ -1222,19 +1215,23 @@ function FormulaireAudit({
   );
 }
 
-function AttenteAudit({
-  scanId,
-  demande,
-  onDemande,
-}: {
-  scanId: string;
-  demande: boolean;
-  onDemande: () => void;
-}) {
+function AttenteAudit({ demande }: { demande: boolean }) {
   return (
-    <div className="mt-8 grid gap-4 md:grid-cols-2">
-      {/* Bannière : l'audit + roadmap, l'étape au-dessus de l'analyse gratuite
-          (demande d'Agathe du 2026-09-28). */}
+    <div className="mt-8 flex flex-col gap-4">
+      {/* La mention très visible (demande d'Agathe du 2026-09-28) : l'adresse
+          est donnée au premier écran, le résultat part par e-mail. */}
+      {demande && (
+        <p
+          role="status"
+          className="flex items-center gap-3 border border-accent-secondary bg-accent-secondary/10 px-5 py-4 font-inter-tight text-xl font-light tracking-tight text-foreground md:text-2xl"
+        >
+          <span aria-hidden="true" className="text-accent-secondary">✉</span>
+          Votre résultat d'audit arrive par mail.
+        </p>
+      )}
+
+      {/* Une seule bannière, avec son CTA : l'audit + roadmap, l'étape
+          au-dessus de l'analyse gratuite. */}
       <a
         href={AUDIT_ROADMAP.href}
         target="_blank"
@@ -1255,30 +1252,6 @@ function AttenteAudit({
           <span className="sr-only"> (nouvel onglet)</span>
         </span>
       </a>
-
-      <div className="border border-dark-gray p-5" aria-live="polite">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mid-gray">
-          Inutile d'attendre ici
-        </p>
-        {demande ? (
-          <p className="mt-3 font-inter-tight text-base text-foreground">
-            C'est noté : l'audit part à votre adresse dès qu'il est prêt. Vous
-            pouvez fermer cette page.
-          </p>
-        ) : (
-          <>
-            <p className="mt-3 font-inter-tight text-base text-mid-gray">
-              Laissez votre adresse : l'audit vous est envoyé par e-mail dès
-              qu'il est prêt, sans garder cette page ouverte.
-            </p>
-            <FormulaireAudit
-              scanId={scanId}
-              onDemande={onDemande}
-              idChamp="audit-email-attente"
-            />
-          </>
-        )}
-      </div>
     </div>
   );
 }

@@ -957,6 +957,9 @@ propositions dans l'espace client, une par scénario.
   écrit une version datée, renommer le scénario retire l'ancienne proposition.
   Décocher « Validé » les retire toutes ; une lecture d'audit incomplète n'en
   retire aucune.
+- Amendé le 2026-09-28 : **une proposition par scénario**, même s'il figure
+  dans plusieurs tableaux (base des scénarios et récapitulatif de la roadmap,
+  cas de l'audit Lean France). Le tableau le plus complet fait foi.
 
 ## ADR-031 — 2026-09-28 — La Refonte se livre en WordPress sur mesure ou en headless
 

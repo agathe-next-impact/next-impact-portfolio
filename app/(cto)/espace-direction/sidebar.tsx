@@ -9,7 +9,6 @@ import {
   Activity,
   AppWindow,
   BookOpen,
-  CalendarPlus,
   ChevronRight,
   Compass,
   Download,
@@ -26,7 +25,6 @@ import {
   Layers,
   ListChecks,
   LogOut,
-  Mail,
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
@@ -64,7 +62,7 @@ import { viderPagesHorsLigne } from "./pwa";
 //    synthèse), sous-onglets du groupe courant (Synthèse puis ses entrées)
 //    sous la barre du haut, et une feuille
 //    « Plus » (Radix Dialog : focus piégé, Échap, clic sur le fond) pour la
-//    situation, le contact et les réglages — refermée à chaque navigation.
+//    situation et les réglages — refermée à chaque navigation.
 //
 // L'état replié vit dans un COOKIE, pas dans le localStorage : le serveur le lit
 // et rend la page directement dans le bon état. Un localStorage ne se lit
@@ -192,7 +190,6 @@ export interface SidebarProps {
   initialCollapsed: boolean;
   /** Le signal de la barre du haut sur mobile (« 2 à traiter »), s'il y a lieu. */
   signal: NavBadge | null;
-  contact: { mailto: string; calendly: string };
   appareilsHref: string | null;
   restitution: { href: string; label: string };
   /** Vue de supervision : ni appareils ni déconnexion — ce ne sont pas les siens. */
@@ -663,35 +660,7 @@ function Contenu({
       </div>
 
       <div className="border-t border-dark-gray px-2 py-3">
-        {collapsed ? (
-          <div className="space-y-0.5">
-            <Outil collapsed icon={Mail} label="Écrire à Agathe" href={props.contact.mailto} />
-            <Outil collapsed icon={CalendarPlus} label="Réserver un créneau" href={props.contact.calendly} />
-          </div>
-        ) : (
-          <div className="mx-1 mb-3 border border-dark-gray px-3 py-3">
-            <p className="font-inter-tight text-xs leading-snug text-mid-gray">
-              Une question, un devis à relire, une décision à prendre ?
-            </p>
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              <a
-                href={props.contact.mailto}
-                className="border border-accent-secondary bg-accent-secondary px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-obsidian hover:opacity-90"
-              >
-                Écrire
-              </a>
-              <a
-                href={props.contact.calendly}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="border border-dark-gray px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground hover:border-accent-secondary"
-              >
-                Réserver ↗
-              </a>
-            </div>
-          </div>
-        )}
-        <div className="mt-1 space-y-0.5">
+        <div className="space-y-0.5">
           {props.appareilsHref ? (
             <Outil collapsed={collapsed} icon={KeyRound} label="Mes appareils" href={props.appareilsHref} />
           ) : null}
@@ -885,7 +854,7 @@ export function Sidebar(props: SidebarProps) {
           ) : null}
           <Dialog.Root open={ouvert} onOpenChange={setOuvert}>
             <Dialog.Trigger asChild>
-              <button type="button" aria-label="Situation, contact et réglages" className={coin}>
+              <button type="button" aria-label="Situation et réglages" className={coin}>
                 <Menu aria-hidden className="h-5 w-5" strokeWidth={1.7} />
               </button>
             </Dialog.Trigger>
@@ -895,7 +864,7 @@ export function Sidebar(props: SidebarProps) {
                 aria-describedby={undefined}
                 className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] flex-col border-t border-dark-gray bg-jet pb-[env(safe-area-inset-bottom)] text-foreground shadow-2xl sm:inset-x-auto sm:inset-y-0 sm:right-0 sm:max-h-none sm:w-[380px] sm:border-l sm:border-t-0 lg:hidden"
               >
-                <Dialog.Title className="sr-only">Situation, contact et réglages</Dialog.Title>
+                <Dialog.Title className="sr-only">Situation et réglages</Dialog.Title>
                 <Contenu
                   props={props}
                   collapsed={false}
